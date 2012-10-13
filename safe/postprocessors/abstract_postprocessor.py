@@ -18,10 +18,13 @@ __date__ = '10/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 
 from safe.common.utilities import ugettext as tr  # pylint: disable=W0611
 
 from safe.common.exceptions import PostprocessorError
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class AbstractPostprocessor():
@@ -64,6 +67,9 @@ class AbstractPostprocessor():
         if message is None:
             message = 'Postprocessor error'
         raise PostprocessorError(message)
+
+    def _log_message(self, message):
+        LOGGER.debug(message)
 
     def _append_result(self, name, result, metadata=None):
         if metadata is None:

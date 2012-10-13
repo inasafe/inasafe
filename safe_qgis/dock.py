@@ -1157,39 +1157,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return
 
     def _startPostprocessors(self):
-        myResults = dict()
-        myAttribute = self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']]
-        if myAttribute is None:
-            aggrAttrTitle = self.tr('Aggregation unit')
-        else:
-            aggrAttrTitle = myAttribute
-
-#TODO (MB)  remove
-#        #open table
-#        myHTML = ('<table class="table table-striped condensed">'
-#                    '  <tbody>'
-#                    '    <tr>'
-#                    '       <td colspan="100%">'
-#                    '         <strong>'
-#                    + self.tr('Detailed report') +
-#                    '         </strong>'
-#                    '       </td>'
-#                    '    </tr>'
-#                    '    <tr>'
-#                    '      <th width="25%">'
-#                    + aggrAttrTitle +
-#                    '      </th>'
-#                    '      <th>'
-#                    + self.tr('Sum') +
-#                    '      </th>'
-#                    '      <th>'
-#                    'TOT FEM'
-#                    '      </th>'
-#                    '      <th>'
-#                    'HYGENE PACKS'
-#                    '      </th>'
-#                    '    </tr>')
-
         #instantiate postprocessors if they are requested by the function
         try:
             myRequestedPostprocessors = self.functionParams['postprocessors']
@@ -1201,13 +1168,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myPostprocessors = {}
         LOGGER.debug('Running this postprocessors: ' + str(myPostprocessors))
 
-        myNameFieldIndex = self.postprocLayer.fieldNameIndex(
-            myAttribute)
 
+        myFeatureNameAttribute = self.postprocAttributes[self.defaults[
+                                                         'AGGR_ATTR_KEY']]
+        if myFeatureNameAttribute is None:
+            aggrAttrTitle = self.tr('Aggregation unit')
+        else:
+            aggrAttrTitle = myFeatureNameAttribute
+
+        myNameFieldIndex = self.postprocLayer.fieldNameIndex(
+            myFeatureNameAttribute)
         mySumFieldIndex = self.postprocLayer.fieldNameIndex(
             self.getAggregationFieldNameSum())
 
         if 'Gender' in myPostprocessors:
+            #look if we need to look for a variable female ratio in a layer
             myFemRatioIsVariable = False
             try:
                 myFemRatioField = self.postprocAttributes[self.defaults[
@@ -1220,7 +1195,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myFemRatio = self.keywordIO.readKeywords(self.postprocLayer,
                     self.defaults['FEM_RATIO_DEFAULT_KEY'])
 
-        #iterate features
+        #iterate zone features
         provider = self.postprocLayer.dataProvider()
         allAttrs = provider.attributeIndexes()
         # start data retreival: fetch no geometry and all attributes for each
@@ -1228,7 +1203,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         provider.select(allAttrs, QgsRectangle(), False)
         feat = QgsFeature()
         while provider.nextFeature(feat):
+            #get all attributes of a feature
             attrMap = feat.attributeMap()
+
+            #if a feature has no field called
             if myNameFieldIndex == -1:
                 name = str(feat.id())
             else:
@@ -1239,11 +1217,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # is implemented
                 # mySumFieldIndex is -1 if no aggregation happened (like when
                 # we have vector impact layers
-                LOGGER.debug(mySumFieldIndex)
                 aggrSum = attrMap[mySumFieldIndex].toString()
                 aggrSum = int(round(float(aggrSum)))
-                myParams = {'population_total': aggrSum}
+                myGeneralParams = {'population_total': aggrSum}
                 for n, p in myPostprocessors.iteritems():
+                    myParams = myGeneralParams
+                    try:
+                        myParams.update(
+                            self.functionParams['postprocessors'][n]['params']
+                        )
+                    except KeyError:
+                        pass
+
                     if n == 'Gender':
                         if myFemRatioIsVariable:
                             myFemRatio, _ = attrMap[

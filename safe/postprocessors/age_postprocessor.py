@@ -21,6 +21,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
+from safe.defaults import (DEFAULT_YOUTH_RATIO,
+                           DEFAULT_ADULT_RATIO,
+                           DEFAULT_ELDER_RATIO)
+
+
 class AgePostprocessor(AbstractPostprocessor):
     """
     https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
@@ -29,9 +34,6 @@ class AgePostprocessor(AbstractPostprocessor):
     15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
     65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
     """
-    DEFAULT_YOUTH_RATIO = 0.263
-    DEFAULT_ADULT_RATIO = 0.659
-    DEFAULT_ELDER_RATIO = 0.079
 
     def __init__(self):
         AbstractPostprocessor.__init__(self)
@@ -43,16 +45,18 @@ class AgePostprocessor(AbstractPostprocessor):
             self._raise_error('clear needs to be called before setup')
 
         self.population_total = params['population_total']
-
+        self._log_message(str(params))
         try:
             #either all 3 ratio are custom set or we use defaults
             self.youth_ratio = params['youth_ratio']
             self.adult_ratio = params['adult_ratio']
             self.elder_ratio = params['elder_ratio']
         except KeyError:
-            self.youth_ratio = self.DEFAULT_YOUTH_RATIO
-            self.adult_ratio = self.DEFAULT_ADULT_RATIO
-            self.elder_ratio = self.DEFAULT_ELDER_RATIO
+            self._log_message('either all 3 age ratio are custom set or we'
+                              ' use defaults')
+            self.youth_ratio = DEFAULT_YOUTH_RATIO
+            self.adult_ratio = DEFAULT_ADULT_RATIO
+            self.elder_ratio = DEFAULT_ELDER_RATIO
 
     def process(self):
         AbstractPostprocessor.process(self)

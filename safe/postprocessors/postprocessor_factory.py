@@ -56,7 +56,6 @@ class PostprocessorFactory():
             return postprocessor_instances
 
         for name, values in requested_postprocessors.iteritems():
-            LOGGER.debug(name + ': ' + str(values))
             constr_id = name + 'Postprocessor'
             if values['on']:
                 if name in self.AVAILABLE_POSTPTOCESSORS:

@@ -7,6 +7,9 @@ from safe.storage.raster import Raster
 from safe.common.utilities import ugettext as tr
 from safe.common.utilities import verify
 from safe.common.tables import Table, TableRow
+from safe.defaults import (DEFAULT_YOUTH_RATIO,
+                           DEFAULT_ADULT_RATIO,
+                           DEFAULT_ELDER_RATIO)
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -26,13 +29,18 @@ class FloodEvacuationFunction(FunctionProvider):
     """
 
     title = tr('Need evacuation')
-    parameters = {'thresholds': [0.3, 0.5, 1.0],
-                  'postprocessors': {'Gender': {'on': True},
-                                     'Age': {'on': True,
-                                             'params': {}
-                                            }
-                                    }
-                 }
+    parameters = {
+        'thresholds': [0.3, 0.5, 1.0],
+        'postprocessors':
+          {'Gender': {'on': True},
+                         'Age': {'on': True,
+                                 'params': {'youth_ratio': DEFAULT_YOUTH_RATIO,
+                                            'adult_ratio': DEFAULT_ADULT_RATIO,
+                                            'elder_ratio': DEFAULT_ELDER_RATIO
+                                 }
+                         }
+          }
+    }
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

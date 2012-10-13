@@ -24,6 +24,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # total population: 1.01 male(s)/female (2011 est.)
 FEM_RATIO_DEFAULT = 0.50
 
+# https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
+# Age structure:
+# 0-14 years: 26.3% (male 944,987,919/female 884,268,378)
+# 15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
+# 65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
+DEFAULT_YOUTH_RATIO = 0.263
+DEFAULT_ADULT_RATIO = 0.659
+DEFAULT_ELDER_RATIO = 0.079
+
 #Keywords key names
 FEM_RATIO_ATTR_KEY = 'female ratio attribute'
 FEM_RATIO_DEFAULT_KEY = 'female ratio default'
