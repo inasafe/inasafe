@@ -32,7 +32,7 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-from safe_qgis.safe_interface import temp_dir, unique_filename
+from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundException
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
@@ -147,6 +147,7 @@ class Map():
         if myImpactTitleHeight:
             myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
         self.drawLegend(myTopOffset)
+        self.drawHostAndTime(myTopOffset)
         self.drawDisclaimer()
 
     def renderComposition(self):
@@ -658,6 +659,69 @@ class Map():
         myItem.setOffset(theLeftOffset / myScaleFactor,
                          theTopOffset / myScaleFactor)
         return myItem
+
+    def drawHostAndTime(self, theTopOffset):
+        """Add a disclaimer to the composition.
+
+        Args:
+            theTopOffset - vertical offset at which to begin drawing
+        Returns:
+            None
+        Raises:
+            None
+        """
+        LOGGER.debug('InaSAFE Map drawDisclaimer called')
+        #elapsed_time: 11.612545
+        #user: timlinux
+        #host_name: ultrabook
+        #time_stamp: 2012-10-13_23:10:31
+        myUser = self.keywordIO.readKeywords(self.layer, 'user')
+        myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
+        myDateTime = self.keywordIO.readKeywords(self.layer, 'time_stamp')
+        myTokens = myDateTime.split('_')
+        myDate = myTokens[0]
+        myTime = myTokens[1]
+        myElapsedTime = self.keywordIO.readKeywords(self.layer, 'elapsed_time')
+        myLongVersion = get_version()
+        myTokens = myLongVersion.split('.')
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1],myTokens[2])
+        myLabelText = self.tr('Assessment carried out on host "%s" by user "%s"'
+                         ' using InaSAFE release %s (QGIS plugin version).\n'
+                         'Date and time of assessment: %s %s\n'
+                         'Elapsed time for assessment calculation: %s\n'
+                         'Special note: This assessment is a guide - we '
+                         'strongly recommend that you ground truth the '
+                         'results shown here before deploying resources '
+                         'and / or personnel.' % (
+                         myHost,
+                         myUser,
+                         myVersion,
+                         myDate,
+                         myTime,
+                         myElapsedTime
+                         )
+        )
+        myFontSize = 8
+        myFontWeight = QtGui.QFont.Normal
+        myItalicsFlag = True
+        myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
+        myLabel = QgsComposerLabel(self.composition)
+        myLabel.setFont(myFont)
+        myLabel.setText(myLabelText)
+        myLabel.adjustSizeToText()
+        myLabelHeight = 50.0  # mm determined using qgis map composer
+        myLabelWidth = (self.pageWidth / 2) - self.pageMargin
+        myLeftOffset = self.pageWidth / 2 # put in right half of page
+        myLabel.setItemPosition(myLeftOffset,
+                                theTopOffset,
+                                myLabelWidth,
+                                myLabelHeight,
+                                )
+        myLabel.setFrame(self.showFramesFlag)
+        self.composition.addItem(myLabel)
 
     def drawDisclaimer(self):
         """Add a disclaimer to the composition.

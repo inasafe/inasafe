@@ -112,15 +112,9 @@ class MapTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        # .. note:: Template writing is experimental
-        myPath = unique_filename(prefix='composerTemplate',
-                                 suffix='.qpt',
-                                 dir=temp_dir('test'))
-        myMap.writeTemplate(myPath)
-        LOGGER.debug(myPath)
-        myExpectedHashes = ['a7e58a5527cbe29ce056ee7b8e88cb6a',  # ub12.04-64
+        myExpectedHashes = ['fd97a43acc39e555c1fbac9b59a30ccd',  # ub12.04-64
                             '']
-        assertHashesForFile(myExpectedHashes, myPath)
+        assertHashesForFile(myExpectedHashes, myImagePath)
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""

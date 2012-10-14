@@ -134,6 +134,6 @@ class HtmlRendererTest(unittest.TestCase):
         assertHashesForFile(myExpectedHashes, myPath)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(MapTest, 'test')
+    suite = unittest.makeSuite(HtmlRendererTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
