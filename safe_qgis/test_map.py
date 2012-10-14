@@ -112,7 +112,7 @@ class MapTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        myExpectedHashes = ['67c28d3fad411cfb66331176edc31504',  # ub12.04-64
+        myExpectedHashes = ['9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
                             '']
         assertHashesForFile(myExpectedHashes, myImagePath)
 

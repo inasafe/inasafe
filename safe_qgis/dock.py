@@ -1911,6 +1911,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 self.tr('Please select a valid impact layer'
                                         ' before trying to print.'))
             return
+
+        self.showBusy(self.tr('Map Creator'),
+                      self.tr('Preparing map and report'),
+                      theProgress=20)
+
         myMap.setImpactLayer(self.iface.activeLayer())
         LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
         myMapFilename = QtGui.QFileDialog.getSaveFileName(self,
@@ -1930,9 +1935,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMapPdfPath = myMap.printToPdf(myMapFilename)
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Your PDF was created....opening using '
-                                  'the default PDF viewer on your system.'
-                                  'The generated pdfs were saved as: %s and'
-                                  '%s' % (myMapPdfPath, myHtmlPdfPath)),
+                                  'the default PDF viewer on your system.>'
+                                  'The generated pdfs were saved as:%(br)s'
+                                  '%(map)s%(br)sand%(br)s%(table)s'
+                                   % {
+                                    'br': '<br/>',
+                                    'map': myMapPdfPath,
+                                    'table': myHtmlPdfPath}),
                           theProgress=80)
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl('file:///' + myTableFilename,
