@@ -27,6 +27,7 @@ from safe_qgis.utilities import (htmlHeader,
                                  mmToPoints,
                                  setupPrinter)
 from safe_interface import unique_filename, temp_dir
+from safe_qgis.exceptions import KeywordNotFoundException
 from keyword_io import KeywordIO
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -243,15 +244,26 @@ class HtmlRenderer():
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 
         myKeywordIO = KeywordIO()
-        mySummaryTable = myKeywordIO.readKeywords(
-            theLayer, 'impact_summary')
-        myFullTable = myKeywordIO.readKeywords(
-            theLayer, 'impact_table')
-        myAggregationTable = myKeywordIO.readKeywords(
-            theLayer, 'postprocessing_report')
+        try:
+            mySummaryTable = myKeywordIO.readKeywords(
+                theLayer, 'impact_summary')
+        except KeywordNotFoundException:
+            mySummaryTable = None
+
+        try:
+            myFullTable = myKeywordIO.readKeywords(
+                theLayer, 'impact_table')
+        except KeywordNotFoundException:
+            myFullTable = None
+
+        try:
+            myAggregationTable = myKeywordIO.readKeywords(
+                theLayer, 'postprocessing_report')
+        except:
+            myAggregationTable = None
 
         myHtml = ''
-        if mySummaryTable != myFullTable:
+        if mySummaryTable != myFullTable and mySummaryTable is not None:
             myHtml = '<h2>%s</h2>' % self.tr('Summary Table')
             myHtml += mySummaryTable
             if myAggregationTable is not None:
@@ -261,7 +273,8 @@ class HtmlRenderer():
         else:
             if myAggregationTable is not None:
                 myHtml = myAggregationTable
-            myHtml += myFullTable
+            if myFullTable is not None:
+                myHtml += myFullTable
 
         # myNewFilePath should be the same as myFilePath
         myNewFilePath = self.printToPdf(myHtml, myFilePath)
