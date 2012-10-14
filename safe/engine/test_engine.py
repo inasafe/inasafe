@@ -1148,24 +1148,31 @@ class Test_Engine(unittest.TestCase):
         # Do interpolation using underlying library
         # This was to debug this test failing under Windows
         I = interpolate_raster_vector_points(H, E)
+        key = 'Tsunami Ma'
+
         for feature in I.get_data():
+            msg = '%s not found in field list:\n%s' % (
+                key, str(feature.keys())
+                )
+            assert key in feature.keys(), msg
             if (feature['LONGITUDE'] == 150.1787 and
                 feature['LATITUDE'] == -35.70413):
-                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+                msg = ''
+                assert numpy.isnan(feature[key])
             elif (feature['LONGITUDE'] == 150.1793 and
                   feature['LATITUDE'] == -35.70632):
-                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+                assert numpy.isnan(feature[key])
             elif (feature['LONGITUDE'] == 150.18208 and
                   feature['LATITUDE'] == -35.70996):
-                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+                assert numpy.isnan(feature[key])
             elif (feature['LONGITUDE'] == 150.18664 and
                   feature['LATITUDE'] == -35.70253):
-                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+                assert numpy.isnan(feature[key])
             elif (feature['LONGITUDE'] == 150.18487 and
                   feature['LATITUDE'] == -35.70561):
-                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+                assert numpy.isnan(feature[key])
             else:
-                assert not numpy.isnan(feature['Tsunami Max Inundation Geo'])
+                assert not numpy.isnan(feature[key])
 
         # Run main test
         plugin_name = 'Tsunami Building Loss Function'
