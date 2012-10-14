@@ -27,7 +27,7 @@ from safe.common.numerics import nanallclose
 from safe.common.utilities import VerificationError, unique_filename
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
-from safe.impact_functions import get_plugins
+from safe.impact_functions import get_plugins, get_plugin
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
@@ -532,6 +532,43 @@ class Test_Engine(unittest.TestCase):
             i += 1
 
     test_jakarta_flood_study.slow = True
+
+    def test_volcano_population_evacuation_impact(self):
+        """Population impact from volcanic hazard is computed correctly
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/donut.shp' % TESTDATA
+        exposure_filename = ('%s/pop_merapi_clip.tif' % TESTDATA)
+        # Slow
+        # FIXME (Ole): Results are different - check!
+        #exposure_filename = ('%s/population_indonesia_2010_BNPB_BPS.asc' % EXPDATA)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_name = 'Volcano Polygon Hazard Population'
+        IF = get_plugin(plugin_name)
+        print 'Calculating'
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)
+        calculated_result = I.get_data()
+
+        keywords = I.get_keywords()
+
+        # Check for expected results:
+        for value in ['Merapi', 192055, 56514, 68568, 66971]:
+            x = str(value)
+            msg = 'Did not find expected value %s in summary' % x
+            assert str(x) in keywords['impact_summary'], msg
+
+        # FIXME (Ole): Should also have test for concentric circle
+        #              evacuation zones
 
     def test_polygon_hazard_and_raster_exposure_big(self):
         """Rasters can be converted to points and clipped by polygons
