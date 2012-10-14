@@ -13,7 +13,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                               setRasterStyle,
                               qgisVersion,
                               mmToPoints,
-                              pointsToMM)
+                              pointsToMM,
+                              humaniseSeconds)
 from safe_qgis.utilities_test import (unitTestDataPath,
                                      loadLayer,
                                      getQgisTestApp)
@@ -252,6 +253,15 @@ class UtilitiesTest(unittest.TestCase):
         myResult = mmToPoints(myMM, myDpi)
         myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
         assert myResult == myPixels, myMessage
+
+    def test_humaniseSeconds(self):
+        """Test that humanise seconds works."""
+        self.assertEqual(humaniseSeconds(5), '5 seconds')
+        self.assertEqual(humaniseSeconds(65), 'a minute')
+        self.assertEqual(humaniseSeconds(3605), 'over an hour')
+        self.assertEqual(humaniseSeconds(9000), '2 hours and 30 minutes')
+        self.assertEqual(humaniseSeconds(432232),
+                         '5 days, 0 hours and 3 minutes')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

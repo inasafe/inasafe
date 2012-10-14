@@ -36,7 +36,10 @@ from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundException
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
-from safe_qgis.utilities import setupPrinter, pointsToMM, mmToPoints
+from safe_qgis.utilities import (setupPrinter,
+                                 pointsToMM,
+                                 mmToPoints,
+                                 humaniseSeconds)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -682,6 +685,7 @@ class Map():
         myDate = myTokens[0]
         myTime = myTokens[1]
         myElapsedTime = self.keywordIO.readKeywords(self.layer, 'elapsed_time')
+        myElapsedTime = humaniseSeconds(myElapsedTime)
         myLongVersion = get_version()
         myTokens = myLongVersion.split('.')
         myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1],myTokens[2])

@@ -38,4 +38,5 @@ from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,
                                    ugettext as safe_tr)
+from safe.common.version import get_version
 # pylint: enable=W0611

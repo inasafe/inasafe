@@ -729,3 +729,41 @@ def setupPrinter(theFilename,
     myPrinter.setColorMode(QtGui.QPrinter.Color)
     myPrinter.setResolution(theResolution)
     return myPrinter
+
+def humaniseSeconds(theSeconds):
+    """Utility function to humanise seconds value into e.g. 10 seconds ago.
+
+    The function will try to make a nice phrase of the seconds count
+    provided.
+
+    .. note:: Currently theSeconds that amount to days are not supported.
+
+    Args:
+        theSeconds: int - mandatory seconds value e.g. 1100
+
+    Returns:
+        str: A humanised version of the seconds count.
+
+    Raises:
+        None
+    """
+    myDays = theSeconds / (3600 * 24)
+    myDayModulus = theSeconds % (3600 * 24)
+    myHours = myDayModulus / 3600
+    myHourModulus = myDayModulus % 3600
+    myMinutes = myHourModulus / 60
+
+    if theSeconds < 60:
+        return tr('%i seconds' % theSeconds)
+    if theSeconds < 120:
+        return  tr('a minute')
+    if theSeconds < 3600:
+        return tr('minutes' % myMinutes)
+    if theSeconds < 7200:
+        return tr('over an hour')
+    if theSeconds < 86400:
+        return tr('%i hours and %i minutes' % (myHours, myMinutes))
+    else:
+        # If all else fails...
+        return tr('%i days, %i hours and %i minutes' % (
+            myDays, myHours, myMinutes))
