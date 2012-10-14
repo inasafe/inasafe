@@ -5,7 +5,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-
+from safe.common.utilities import get_defaults
 
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
@@ -20,6 +20,20 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
     target_field = 'INUNDATED'
     title = tr('Be flooded')
+    defaults = get_defaults()
+    parameters = {
+        'thresholds': [0.3, 0.5, 1.0],
+        'postprocessors':
+            {'Gender': {'on': True},
+             'Age': {'on': True,
+                     'params': {
+                         'youth_ratio': defaults['YOUTH_RATIO'],
+                         'adult_ratio': defaults['ADULT_RATIO'],
+                         'elder_ratio': defaults['ELDER_RATIO']
+                     }
+             }
+            }
+    }
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
@@ -232,6 +246,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    name=tr('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'target_field': self.target_field},
                    style_info=style_info)
         return V

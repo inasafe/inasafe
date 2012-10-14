@@ -80,6 +80,7 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
+    title = tr('Die or be displaced')
     defaults = get_defaults()
     parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
                       # Rates of people displaced for each MMI level
@@ -98,7 +99,6 @@ class ITBFatalityFunction(FunctionProvider):
                               }
                       }
                       )
-    title = tr('Die or be displaced')
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model

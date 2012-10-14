@@ -26,8 +26,8 @@ class FloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    defaults = get_defaults()
     title = tr('Need evacuation')
+    defaults = get_defaults()
     parameters = {
         'thresholds': [0.3, 0.5, 1.0],
         'postprocessors':

@@ -1166,6 +1166,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 myQgisImpactLayer.type())
             raise ReadLayerError(myMessage)
 
+        if self.showPostProcLayers:
+            QgsMapLayerRegistry.instance().addMapLayer(
+                self.postprocLayer)
+
     def _aggregateResultsVector(self, myQgisImpactLayer):
         """
         Performs Aggregation postprocessing step on vectorial impact layers
@@ -1176,8 +1180,60 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
-        LOGGER.debug('Vector aggregation not implemented yet. Called on'
+        try:
+            myTargetField = self.keywordIO.readKeywords(myQgisImpactLayer,
+                'target_field')
+        except HashNotFoundException:
+            LOGGER.debug('No "target_field" keyword found in the impact layer '
+                         'keywords. the impact function should define this.'
+                         'Skipping detailed report. Called on'
+                         ' %s' % myQgisImpactLayer.name())
+            return
+        myProvider = myQgisImpactLayer.dataProvider()
+        myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
+        #if a feature has no field called
+        if myTargetFieldIndex == -1:
+            LOGGER.debug('No %s found in the impact layer attribute table'
+                         ' the impact function should define this correctly.'
+                         'Skipping detailed report. Called on'
+                         ' %s' % (myTargetField, myQgisImpactLayer.name()))
+            return
+        # start data retreival: fetch no geometry and all attributes for each
+        # feature
+        allAttrs = myProvider.attributeIndexes()
+        myProvider.select([myTargetFieldIndex], QgsRectangle(), False)
+        myFeat = QgsFeature()
+
+        if self.doZonalAggregation:
+            LOGGER.debug('Vector aggregation not implemented yet. Called on'
                            ' %s' % myQgisImpactLayer.name())
+            return
+        else:
+            myTotal = 0
+            #iterate throug all features and add the values of the target_field
+            #FIXME (MB) this is WAY TO SLOW
+            # a solution could be to have the impact function write the totals
+            # to the keyword system and use it her without having to iterate.
+            while myProvider.nextFeature(myFeat):
+                myTotal += myFeat.attributeMap()[0].toInt()[0]
+                myMessage = 'ID: ' + str(myFeat.id()) + ' tot:' + str(myTotal)
+                self.showBusy(self.tr('Summing data'), myMessage, 88)
+
+            #add the total to the postprocLayer
+            myProvider = self.postprocLayer.dataProvider()
+            self.postprocLayer.startEditing()
+            myAggrField = self.getAggregationFieldNameSum()
+            myProvider.addAttributes([QgsField(myAggrField,
+                QtCore.QVariant.Int)])
+            self.postprocLayer.commitChanges()
+            myAggrFieldIndex = self.postprocLayer.fieldNameIndex(
+                myAggrField)
+            attrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+            myFID = 0
+            self.postprocLayer.startEditing()
+            myProvider.changeAttributeValues({myFID: attrs})
+            self.postprocLayer.commitChanges()
+
         return
 
     def _aggregateResultsRaster(self, myQgisImpactLayer):
@@ -1204,9 +1260,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-        if self.showPostProcLayers:
-            QgsMapLayerRegistry.instance().addMapLayer(
-                self.postprocLayer)
+
         return
 
     def _startPostprocessors(self):
@@ -1264,47 +1318,37 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 zoneName = attrMap[myNameFieldIndex].toString()
 
-            # FIXME, get rid of this if/else when polygon aggregation
-            # is implemented
-            # mySumFieldIndex is -1 if no aggregation happened (like when
-            # we have vector impact layers
-            if mySumFieldIndex == -1:
-                #fixme find hack to fix this
-                LOGGER.debug('No totals availables on vector impact layer')
-                myEngineImpactLayer = self.runner.impactLayer()
-                myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-                myImpactSummary = self.keywordIO.readKeywords(
-                    myQgisImpactLayer, 'impact_summary')
-                LOGGER.debug(myImpactSummary)
-            else:
-                aggrSum = attrMap[mySumFieldIndex].toString()
-                aggrSum = int(round(float(aggrSum)))
-                myGeneralParams = {'population_total': aggrSum}
-                for n, p in myPostprocessors.iteritems():
-                    myParams = myGeneralParams
-                    try:
-                        myParams.update(
-                            self.functionParams['postprocessors'][n]['params']
-                        )
-                    except KeyError:
-                        pass
+            aggrSum = attrMap[mySumFieldIndex].toString()
+            aggrSum = int(round(float(aggrSum)))
+            myGeneralParams = {'population_total': aggrSum}
+            for n, p in myPostprocessors.iteritems():
+                myParams = myGeneralParams
+                try:
+                    myParams.update(
+                        self.functionParams['postprocessors'][n]['params']
+                    )
+                except KeyError:
+                    pass
 
-                    if n == 'Gender':
-                        if myFemRatioIsVariable:
-                            myFemRatio, _ = attrMap[
-                                            myFemRatioFieldIndex].toDouble()
-                        myParams['female_ratio'] = myFemRatio
+                if n == 'Gender':
+                    if myFemRatioIsVariable:
+                        myFemRatio, success = attrMap[
+                                        myFemRatioFieldIndex].toDouble()
+                        if not success:
+                            myFemRatio = self.defaults['FEM_RATIO_DEFAULT']
+                        LOGGER.debug(success)
+                    myParams['female_ratio'] = myFemRatio
 
-                    p.setup(myParams)
-                    p.process()
-                    myResults = p.results()
-                    p.clear()
-                    LOGGER.debug(myResults)
-                    try:
-                        self.postprocOutput[n].append((zoneName, myResults))
-                    except KeyError:
-                        self.postprocOutput[n] = []
-                        self.postprocOutput[n].append((zoneName, myResults))
+                p.setup(myParams)
+                p.process()
+                myResults = p.results()
+                p.clear()
+                LOGGER.debug(myResults)
+                try:
+                    self.postprocOutput[n].append((zoneName, myResults))
+                except KeyError:
+                    self.postprocOutput[n] = []
+                    self.postprocOutput[n].append((zoneName, myResults))
 
     def _checkPostprocAttributes(self):
         """checks if the postprocessing layer has all attribute
