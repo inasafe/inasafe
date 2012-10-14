@@ -21,9 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
-from safe.defaults import (DEFAULT_YOUTH_RATIO,
-                           DEFAULT_ADULT_RATIO,
-                           DEFAULT_ELDER_RATIO)
+from safe.common.utilities import get_defaults
 
 
 class AgePostprocessor(AbstractPostprocessor):
@@ -53,9 +51,10 @@ class AgePostprocessor(AbstractPostprocessor):
         except KeyError:
             self._log_message('either all 3 age ratio are custom set or we'
                               ' use defaults')
-            self.youth_ratio = DEFAULT_YOUTH_RATIO
-            self.adult_ratio = DEFAULT_ADULT_RATIO
-            self.elder_ratio = DEFAULT_ELDER_RATIO
+            defaults = get_defaults()
+            self.youth_ratio = defaults['YOUTH_RATIO']
+            self.adult_ratio = defaults['ADULT_RATIO']
+            self.elder_ratio = defaults['ELDER_RATIO']
 
     def process(self):
         AbstractPostprocessor.process(self)

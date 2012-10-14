@@ -43,7 +43,7 @@ from qgis.core import (QGis,
 from safe_interface import temp_dir
 from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
-import safe.defaults
+from safe.defaults import DEFAULTS
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
@@ -729,31 +729,34 @@ def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
         return None, None
 
 
-def getDefaults():
+def getDefaults(theDefault=None):
     """returns a dictionary of defaults values to be used
+        it takes the DEFAULTS from safe and modifies them according to qgis
+        QSettings
 
     Args:
-       * None
+       * theDefault: a key of the defaults dictionary
 
     Returns:
        * A dictionary of defaults values to be used
+       * or the default value if a key is passed
+       * or None if the requested default value is not valid
     Raises:
        no exceptions explicitly raised
     """
     mySettings = QtCore.QSettings()
-    myDefaults = {}
+    myDefaults = DEFAULTS
 
     myDefaults['FEM_RATIO_DEFAULT'] = mySettings.value(
-        'inasafe/defaultFemaleRatio', safe.defaults.FEM_RATIO_DEFAULT
+        'inasafe/defaultFemaleRatio', DEFAULTS['FEM_RATIO_DEFAULT']
         ).toDouble()[0]
-    myDefaults['FEM_RATIO_DEFAULT_KEY'] = \
-        safe.defaults.FEM_RATIO_DEFAULT_KEY
-    myDefaults['FEM_RATIO_ATTR_KEY'] = \
-        safe.defaults.FEM_RATIO_ATTR_KEY
-    myDefaults['AGGR_ATTR_KEY'] = \
-        safe.defaults.AGGR_ATTR_KEY
 
-    return myDefaults
+    if theDefault is None:
+        return myDefaults
+    elif theDefault in myDefaults:
+        return myDefaults[theDefault]
+    else:
+        return None
 
 
 #def copyInMemory(vLayer, copyName=''):

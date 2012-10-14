@@ -36,7 +36,6 @@ from qgis.core import (QgsRasterLayer,
                        QgsRectangle)
 
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
-from safe.defaults import AGGR_ATTR_KEY
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
@@ -52,7 +51,8 @@ from safe_qgis.utilities_test import (getQgisTestApp,
 
 from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
-                          qgisVersion)
+                          qgisVersion,
+                          getDefaults)
 
 from unittest import expectedFailure
 
@@ -501,7 +501,8 @@ class DockTest(unittest.TestCase):
                       'kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
-        myAttribute = DOCK.postprocAttributes[AGGR_ATTR_KEY]
+        myAttrKey = getDefaults('AGGR_ATTR_KEY')
+        myAttribute = DOCK.postprocAttributes[myAttrKey]
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
