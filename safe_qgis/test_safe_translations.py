@@ -36,7 +36,10 @@ class SafeTranslationsTest(unittest.TestCase):
         """
 
         plugins_dict = get_plugins()
-        func = plugins_dict['Volcano Function Vector Hazard']
+        myPluginName = 'Volcano Building Impact'
+        myMessage = '%s not found in %s' % (myPluginName, str(plugins_dict))
+        assert myPluginName in plugins_dict, myMessage
+        func = plugins_dict[myPluginName]
 
         # English
         func_title = getFunctionTitle(func)
