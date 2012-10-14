@@ -18,7 +18,7 @@ from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 from safe.common.polygon import separate_points_by_polygon
-from safe.common.polygon import is_inside_polygon
+from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from safe.common.polygon import line_dictionary_to_geometry
 from safe.common.interpolation2d import interpolate_raster
@@ -569,6 +569,80 @@ class Test_Engine(unittest.TestCase):
 
         # FIXME (Ole): Should also have test for concentric circle
         #              evacuation zones
+
+    # This one currently fails because the clipped input data has
+    # different resolution to the full data. Issue #344
+    #
+    # This test is not finished, but must wait 'till #344 has been sorted
+    @unittest.expectedFailure
+    def test_polygon_hazard_raster_exposure_clipped_grids(self):
+        """Rasters clipped by polygons irrespective of pre-clipping
+
+        Double check that a raster clipped by the QGIS front-end
+        produces the same results as when full raster is used.
+        """
+
+        # Read test files
+        hazard_filename = '%s/donut.shp' % TESTDATA
+        exposure_filename_clip = ('%s/pop_merapi_clip.tif' % TESTDATA)
+        exposure_filename_full = ('%s/population_indonesia_2010_BNPB_BPS.asc'
+                                  % EXPDATA)
+
+        H = read_layer(hazard_filename)
+        E_clip = read_layer(exposure_filename_clip)
+        E_full = read_layer(exposure_filename_full)
+
+        # Establish whether full and clipped grids coincide
+        # in clipped area
+        gt_clip = E_clip.get_geotransform()
+        gt_full = E_full.get_geotransform()
+
+        msg = ('Resolutions were different. Geotransform full grid: %s, '
+               'clipped grid: %s' % (gt_full, gt_clip))
+        assert numpy.allclose(gt_clip[1], gt_full[1]), msg
+        assert numpy.allclose(gt_clip[5], gt_full[5]), msg
+
+        polygons = H.get_geometry(as_geometry_objects=True)
+        outer_rings = [p.outer_ring for p in polygons]
+        inner_rings = [p.inner_rings for p in polygons]
+
+        # Clip
+        res_clip = clip_grid_by_polygons(E_clip.get_data(),
+                                         E_clip.get_geotransform(),
+                                         outer_rings,
+                                         inner_rings=inner_rings)
+
+        print res_clip
+        print len(res_clip)
+
+        res_full = clip_grid_by_polygons(E_full.get_data(),
+                                         E_full.get_geotransform(),
+                                         outer_rings,
+                                         inner_rings=inner_rings)
+
+        assert len(res_clip) == len(res_full)
+
+        for i in range(len(res_clip)):
+            print
+            x = res_clip[i][0]
+            y = res_full[i][0]
+
+            print x
+            print y
+            msg = ('Got len(x) == %i, len(y) == %i. Should be the same'
+                   % (len(x), len(y)))
+            assert len(x) == len(y), msg
+
+            # Check that they are inside the respective polygon
+            P = polygons[i]
+            idx = inside_polygon(x,
+                                 P.outer_ring,
+                                 holes=P.inner_rings)
+            print idx
+
+            msg = ('Expected point locations to be the same in clipped '
+                   'and full grids, Got %s and %s' % (x, y))
+            assert numpy.allclose(x, y)
 
     def test_polygon_hazard_and_raster_exposure_big(self):
         """Rasters can be converted to points and clipped by polygons

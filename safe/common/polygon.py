@@ -1253,6 +1253,9 @@ def intersection(line0, line1):
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
+
+# FIXME (Ole): I think this should take list of polygon objects as input
+#              rather than specifying inner rings separately
 def clip_grid_by_polygons(A, geotransform, polygons, inner_rings=None):
     """Clip raster grid by polygon
 
