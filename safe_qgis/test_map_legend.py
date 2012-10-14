@@ -139,7 +139,9 @@ class MapLegendTest(unittest.TestCase):
                                  dir=temp_dir('test'))
         myMapLegend.getLegend().save(myPath, 'PNG')
         LOGGER.debug(myPath)
-        myExpectedHashes = ['850ed7ad9e8f992e96c5449701ba5434']
+        myExpectedHashes = ['850ed7ad9e8f992e96c5449701ba5434',  # ub 12.04 64
+                            '3d4d9f196fb2fe1e18d54a8d6ab4a349',
+                            ''# ]
         assertHashesForFile(myExpectedHashes, myPath)
 
     def test_addClassToLegend(self):
@@ -175,6 +177,7 @@ class MapLegendTest(unittest.TestCase):
                             '944cee3eb9d916816b60ef41e8069683',  # binary read
                             'de3ceb6547ffc6c557d031c0b7ee9e75',  # wVistaSP2-32
                             '91177a81bee4400be4e85789e3be1e91',  # ub12.04-64
+                            'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
                             ''
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
