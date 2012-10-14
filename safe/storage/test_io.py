@@ -2410,6 +2410,27 @@ class Test_IO(unittest.TestCase):
         assert N == R1.columns, msg
         # More...
 
+    def test_compatible_projections(self):
+        """Projections that are compatible but not identical are recognised
+
+        This is a test for issue #304
+        """
+
+        # Read two layers with compatible projections
+        hazard_filename = '%s/donut.shp' % TESTDATA
+        exposure_filename = ('%s/population_indonesia_2010_'
+                             'BNPB_BPS.asc' % EXPDATA)
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        # Verify that their projection strings are different
+        assert H.get_projection() != E.get_projection()
+        assert H.get_projection(proj4=True) != E.get_projection(proj4=True)
+
+        # But the InaSAFE comparison does pass
+        assert H.projection == E.projection
+
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
