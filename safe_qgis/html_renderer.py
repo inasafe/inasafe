@@ -243,15 +243,25 @@ class HtmlRenderer():
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 
         myKeywordIO = KeywordIO()
-        mySummaryTable = myKeywordIO.readKeywords(theLayer, 'impact_summary')
-        myFullTable = myKeywordIO.readKeywords(theLayer, 'impact_table')
+        mySummaryTable = myKeywordIO.readKeywords(
+            theLayer, 'impact_summary')
+        myFullTable = myKeywordIO.readKeywords(
+            theLayer, 'impact_table')
+        myAggregationTable = myKeywordIO.readKeywords(
+            theLayer, 'postprocessing_report')
+
+        myHtml = ''
         if mySummaryTable != myFullTable:
             myHtml = '<h2>%s</h2>' % self.tr('Summary Table')
             myHtml += mySummaryTable
+            if myAggregationTable is not None:
+                myHtml += myAggregationTable
             myHtml += '<h2>%s</h2>' % self.tr('Detailed Table')
             myHtml += myFullTable
         else:
-            myHtml = myFullTable
+            if myAggregationTable is not None:
+                myHtml = myAggregationTable
+            myHtml += myFullTable
 
         # myNewFilePath should be the same as myFilePath
         myNewFilePath = self.printToPdf(myHtml, myFilePath)
