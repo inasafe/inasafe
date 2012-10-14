@@ -14,12 +14,11 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'final'  # beta, final etc will be shown in dock title
+__type__ = 'beta'  # beta, final etc will be shown in dock title
 
 import os
 import numpy
@@ -53,7 +52,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getBufferedExtent,
                                       getSafeImpactFunctions,
                                       writeKeywordsToFile,
-                                      safeTr)
+                                      safeTr,
+                                      get_version)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -106,8 +106,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
+        myLongVersion = get_version()
+        myTokens = myLongVersion.split('.')
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
+        myVersionType = myTokens[3].split('2')[0]
+        # Allowed version names: ('alpha', 'beta', 'rc', 'final')
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
-                                __version__, __type__)))
+            myVersion, myVersionType)))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
@@ -1939,7 +1944,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                   'The generated pdfs were saved as:%(br)s'
                                   '%(map)s%(br)sand%(br)s%(table)s'
                                    % {
-                                    'br': '<br/>',
+                                    'br': '<br>',
                                     'map': myMapPdfPath,
                                     'table': myHtmlPdfPath}),
                           theProgress=80)
