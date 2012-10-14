@@ -35,7 +35,7 @@ class FloodRoadImpactFunction(FunctionProvider):
 
         # Interpolate hazard level to building locations
         H = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name='flood_level')
+                                             attribute_name='flood_lev')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
@@ -55,7 +55,7 @@ class FloodRoadImpactFunction(FunctionProvider):
         difference = (max_value - min_value) / num_classes
 
         for i in range(N):
-            dep = float(depth[i]['flood_level'])
+            dep = float(depth[i]['flood_lev'])
             affected = classes[0]
             for level in classes:
                 normalized_depth = dep - min_value

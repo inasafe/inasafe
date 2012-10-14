@@ -18,6 +18,7 @@ __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
 import sys
 import traceback
 import logging
@@ -25,6 +26,7 @@ import math
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
+
 from qgis.core import (QGis,
                        QgsRasterLayer,
                        QgsMapLayer,
@@ -37,23 +39,16 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency,
                        )
-from safe_qgis.exceptions import StyleError
+
+from safe_interface import temp_dir
+from safe_qgis.exceptions import StyleError, MethodUnavailableError
+
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
-
-try:
-    #available from qgis 1.8
-    from qgis.core import QgsMessageLog
-
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
-except MethodUnavailableError:
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
@@ -519,161 +514,260 @@ def qgisVersion():
     myVersion = int(myVersion)
     return myVersion
 
-try:
-    # Available from qgis 1.8
-    from qgis.core import QgsMessageLog  # pylint: disable=E0611
-except ImportError:
 
-    # Define vanilla version
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
-else:
+# TODO: move this to its own file? TS
+class QgsLogHandler(logging.Handler):
+    """A logging handler that will log messages to the QGIS logging console."""
 
-    # Use QGIS message log from versions >= 1.8
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self)
 
+    def emit(self, theRecord):
+        """Try to log the message to QGIS if available, otherwise do nothing.
 
-#def copyInMemory(vLayer, copyName=''):
-#    """Return a memory copy of a layer
-#
-#    Input
-#        origLayer: layer
-#        copyName: the name of the copy
-#    Output
-#        memory copy of a layer
-#
-#    """
-#
-#    if copyName is '':
-#        copyName = vLayer.name() + ' TMP'
-#
-#    if vLayer.type() == QgsMapLayer.VectorLayer:
-#        vType = vLayer.geometryType()
-#        if vType == QGis.Point:
-#            typeStr = 'Point'
-#        elif vType == QGis.Line:
-#            typeStr = 'Line'
-#        elif vType == QGis.Polygon:
-#            typeStr = 'Polygon'
-#        else:
-#            raise memoryLayerCreationError('Layer is whether Point or '
-#                                           'Line or Polygon')
-#    else:
-#        raise memoryLayerCreationError('Layer is not a VectorLayer')
-#
-#    crs = vLayer.crs().authid().toLower()
-#    uri = typeStr + '?crs=' + crs + '&index=yes'
-#    memLayer = QgsVectorLayer(uri, copyName, 'memory')
-#    memProvider = memLayer.dataProvider()
-#
-#    vProvider = vLayer.dataProvider()
-#    vAttrs = vProvider.attributeIndexes()
-#    vFields = vProvider.fields()
-#
-#    fields = []
-#    for i in vFields:
-#        fields.append(vFields[i])
-#
-#    memProvider.addAttributes(fields)
-#
-#    vProvider.select(vAttrs)
-#    ft = QgsFeature()
-#    while vProvider.nextFeature(ft):
-#        memProvider.addFeatures([ft])
-#
-#    # Next two lines a workaround for a QGIS bug (lte 1.8)
-#    # preventing mem layer attributes being saved to shp.
-#    memLayer.startEditing()
-#    memLayer.commitChanges()
-#
-#    return memLayer
+        Args:
+            theRecord: logging record containing whatever info needs to be
+                logged.
+        Returns:
+            None
+        Raises:
+            None
+        """
+        try:
+            #available from qgis 1.8
+            from qgis.core import QgsMessageLog
+            # Check logging.LogRecord properties for lots of other goodies
+            # like line number etc. you can get from the log message.
+            QgsMessageLog.logMessage(theRecord.getMessage(), 'InaSAFE', 0)
+
+        except (MethodUnavailableError, ImportError):
+            pass
 
 
-#def memoryLayerToShapefile(theFileName,
-#                           theFilePath,
-#                           theMemoryLayer,
-#                           theForceFlag=False,
-#                           mySourceQmlPath=''):
-#    """Write a memory layer to a shapefile.
-#
-#    .. note:: The file will be saved into the theFilePath dir  If a qml
-#        matching theFileName.qml can be found it will automatically copied
-#        over to the output dir.
-#        Any existing shp by the same name will be
-#        overridden if theForceFlag is True, otherwise the existing file will
-#        be returned.
-#
-#    Args:
-#        theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
-#        theMemoryLayer: QGIS memory layer instance.
-#        theForceFlag: bool (Optional). Whether to force the overwrite
-#            of any existing data. Defaults to False.
-#        mySourceQmlPath: str (Optional). Copy the qml file
-#        mySourceQmlPath/theFileName.qml to theFilePath.
-#
-#    Returns: str Path to the created shapefile
-#
-#    Raises: ShapefileCreationError
-#    """
-#    LOGGER.debug('memoryLayerToShapefile requested.')
-#
-#    LOGGER.debug(str(theMemoryLayer.dataProvider().attributeIndexes()))
-#    if theMemoryLayer.featureCount() < 1:
-#        raise ShapefileCreationError('Memory layer has no features')
-#
-#    myGeoCrs = QgsCoordinateReferenceSystem()
-#    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-#
-#    myOutputFileBase = os.path.join(theFilePath,
-#        '%s.' % theFileName)
-#    myOutputFile = myOutputFileBase + 'shp'
-#    if os.path.exists(myOutputFile) and theForceFlag is not True:
-#        return myOutputFile
-#    elif os.path.exists(myOutputFile):
-#        try:
-#            os.remove(myOutputFileBase + 'shp')
-#            os.remove(myOutputFileBase + 'shx')
-#            os.remove(myOutputFileBase + 'dbf')
-#            os.remove(myOutputFileBase + 'prj')
-#        except OSError:
-#            LOGGER.exception('Old shape files not deleted'
-#                             ' - this may indicate a file permissions issue.')
-#
-#    # Next two lines a workaround for a QGIS bug (lte 1.8)
-#    # preventing mem layer attributes being saved to shp.
-#    theMemoryLayer.startEditing()
-#    theMemoryLayer.commitChanges()
-#
-#    LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
-#    # Explicitly giving all options, not really needed but nice for clarity
-#    myErrorMessage = QtCore.QString()
-#    myOptions = QtCore.QStringList()
-#    myLayerOptions = QtCore.QStringList()
-#    mySelectedOnlyFlag = False
-#    mySkipAttributesFlag = False
-#    myResult = QgsVectorFileWriter.writeAsVectorFormat(
-#        theMemoryLayer,
-#        myOutputFile,
-#        'utf-8',
-#        myGeoCrs,
-#        "ESRI Shapefile",
-#        mySelectedOnlyFlag,
-#        myErrorMessage,
-#        myOptions,
-#        myLayerOptions,
-#        mySkipAttributesFlag)
-#
-#    if myResult == QgsVectorFileWriter.NoError:
-#        LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
-#    else:
-#        raise ShapefileCreationError(
-#            'Failed with error: %s' % myResult)
-#
-#    # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-#    if mySourceQmlPath is not '':
-#        myQmlPath = os.path.join(theFilePath, '%s.qml' % theFileName)
-#        mySourceQml = os.path.join(mySourceQmlPath, '%s.qml' % theFileName)
-#        shutil.copyfile(mySourceQml, myQmlPath)
-#
-#    return myOutputFile
+def addLoggingHanderOnce(theLogger, theHandler):
+    """A helper to add a handler to a logger, ensuring there are no duplicates.
+
+    Args:
+        * theLogger: logging.logger instance
+        * theHandler: logging.Handler instance to be added. It will not be
+            added if an instance of that Handler subclass already exists.
+
+    Returns:
+        bool: True if the logging handler was added
+
+    Raises:
+        None
+    """
+    myClassName = theHandler.__class__.__name__
+    for myHandler in theLogger.handlers:
+        if myHandler.__class__.__name__ == myClassName:
+            return False
+
+    theLogger.addHandler(theHandler)
+    return True
+
+
+def setupLogger():
+    """Run once when the module is loaded and enable logging
+
+    Args: None
+
+    Returns: None
+
+    Raises: None
+
+    Borrowed heavily from this:
+    http://docs.python.org/howto/logging-cookbook.html
+
+    Use this to first initialise the logger (see safe/__init__.py)::
+
+       from safe_qgis import utilities
+       utilities.setupLogger()
+
+    You would typically only need to do the above once ever as the
+    safe modle is initialised early and will set up the logger
+    globally so it is available to all packages / subpackages as
+    shown below.
+
+    In a module that wants to do logging then use this example as
+    a guide to get the initialised logger instance::
+
+       # The LOGGER is intialised in utilities.py by init
+       import logging
+       LOGGER = logging.getLogger('InaSAFE')
+
+    Now to log a message do::
+
+       LOGGER.debug('Some debug message')
+
+    .. note:: The file logs are written to the inasafe user tmp dir e.g.:
+       /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
+
+    """
+    myLogger = logging.getLogger('InaSAFE')
+    myLogger.setLevel(logging.DEBUG)
+    myDefaultHanderLevel = logging.DEBUG
+    # create formatter that will be added to the handlers
+    myFormatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # create syslog handler which logs even debug messages
+    # (ariel): Make this log to /var/log/safe.log instead of
+    #               /var/log/syslog
+    # (Tim) Ole and I discussed this - we prefer to log into the
+    # user's temporary working directory.
+    myTempDir = temp_dir('logs')
+    myFilename = os.path.join(myTempDir, 'inasafe.log')
+    myFileHandler = logging.FileHandler(myFilename)
+    myFileHandler.setLevel(myDefaultHanderLevel)
+    # create console handler with a higher log level
+    myConsoleHandler = logging.StreamHandler()
+    myConsoleHandler.setLevel(logging.ERROR)
+
+    myQgisHandler = QgsLogHandler()
+    myFileHandler.setLevel(myDefaultHanderLevel)
+
+    # TODO: User opt in before we enable email based logging.
+    # Email handler for errors
+    #myEmailServer = 'localhost'
+    #myEmailServerPort = 25
+    #mySenderAddress = 'logs@inasafe.org'
+    #myRecipientAddresses = ['tim@linfiniti.com']
+    #mySubject = 'Error'
+    #myEmailHandler = logging.handlers.SMTPHandler(
+    #    (myEmailServer, myEmailServerPort),
+    #                                      mySenderAddress,
+    #                                      myRecipientAddresses,
+    #                                      mySubject)
+    #myEmailHandler.setLevel(logging.ERROR)
+
+    # Sentry handler - this is optional hence the localised import
+    # It will only log if pip install raven. If raven is available
+    # logging messages will be sent to http://sentry.linfiniti.com
+    # We will log exceptions only there. Only if you have the env var
+    # 'INSAFE_SENTRY=1' present (value can be anything) will this be enabled.
+    if 'INASAFE_SENTRY' in os.environ:
+        try:
+            from raven.handlers.logging import SentryHandler
+            from raven import Client
+
+            myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
+                              'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
+                              '4')
+            mySentryHandler = SentryHandler(myClient)
+            mySentryHandler.setFormatter(myFormatter)
+            mySentryHandler.setLevel(logging.ERROR)
+            if addLoggingHanderOnce(myLogger, mySentryHandler):
+                myLogger.debug('Sentry logging enabled')
+        except ImportError:
+            myLogger.debug('Sentry logging disabled')
+
+    #Set formatters
+    myFileHandler.setFormatter(myFormatter)
+    myConsoleHandler.setFormatter(myFormatter)
+    #myEmailHandler.setFormatter(myFormatter)
+    myQgisHandler.setFormatter(myFormatter)
+
+    # add the handlers to the logger
+    addLoggingHanderOnce(myLogger, myFileHandler)
+    addLoggingHanderOnce(myLogger, myConsoleHandler)
+    #addLoggingHanderOnce(myLogger, myEmailHandler)
+    addLoggingHanderOnce(myLogger, myQgisHandler)
+
+
+def mmToPoints(theMM, theDpi):
+    """Convert measurement in points to one in mm.
+
+    Args:
+        * theMM: int - distance in millimeters
+        * theDpi: int - dots per inch in the print / display medium
+    Returns:
+        mm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myPoints = (theMM * theDpi) / myInchAsMM
+    return myPoints
+
+
+def pointsToMM(thePoints, theDpi):
+    """Convert measurement in points to one in mm.
+
+    Args:
+        * thePoints: int - number of points in display / print medium
+        * theDpi: int - dots per inch in the print / display medium
+    Returns:
+        mm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myMM = (float(thePoints) / theDpi) * myInchAsMM
+    return myMM
+
+
+def setupPrinter(theFilename,
+                 theResolution=300,
+                 thePageHeight=297,
+                 thePageWidth=210):
+    """Create a QPrinter instance defaulted to print to an A4 portrait pdf
+
+    Args:
+        theFilename - filename for pdf generated using this printer
+    Returns:
+        None
+    Raises:
+        None
+    """
+    #
+    # Create a printer device (we are 'printing' to a pdf
+    #
+    LOGGER.debug('InaSAFE Map setupPrinter called')
+    myPrinter = QtGui.QPrinter()
+    myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
+    myPrinter.setOutputFileName(theFilename)
+    myPrinter.setPaperSize(QtCore.QSizeF(thePageWidth, thePageHeight),
+                            QtGui.QPrinter.Millimeter)
+    myPrinter.setFullPage(True)
+    myPrinter.setColorMode(QtGui.QPrinter.Color)
+    myPrinter.setResolution(theResolution)
+    return myPrinter
+
+
+def humaniseSeconds(theSeconds):
+    """Utility function to humanise seconds value into e.g. 10 seconds ago.
+
+    The function will try to make a nice phrase of the seconds count
+    provided.
+
+    .. note:: Currently theSeconds that amount to days are not supported.
+
+    Args:
+        theSeconds: int - mandatory seconds value e.g. 1100
+
+    Returns:
+        str: A humanised version of the seconds count.
+
+    Raises:
+        None
+    """
+    myDays = theSeconds / (3600 * 24)
+    myDayModulus = theSeconds % (3600 * 24)
+    myHours = myDayModulus / 3600
+    myHourModulus = myDayModulus % 3600
+    myMinutes = myHourModulus / 60
+
+    if theSeconds < 60:
+        return tr('%i seconds' % theSeconds)
+    if theSeconds < 120:
+        return  tr('a minute')
+    if theSeconds < 3600:
+        return tr('minutes' % myMinutes)
+    if theSeconds < 7200:
+        return tr('over an hour')
+    if theSeconds < 86400:
+        return tr('%i hours and %i minutes' % (myHours, myMinutes))
+    else:
+        # If all else fails...
+        return tr('%i days, %i hours and %i minutes' % (
+            myDays, myHours, myMinutes))

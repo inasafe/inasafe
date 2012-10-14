@@ -161,7 +161,7 @@ def check_data_integrity(layer_objects):
                    '' % (layer, layer.projection, reference_projection))
             verify(reference_projection == layer.projection, msg)
 
-        #FIXME(Ariel): Make this configurable by the frontend choice?
+        # FIXME (Ariel): Make this configurable by the frontend choice?
         # Relax tolerance requirements to have GeoNode compatibility
         # tolerance = 10e-12
         tolerance = 10e-7

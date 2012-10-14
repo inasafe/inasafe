@@ -6,9 +6,9 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 
-from safe.common.utilities import verify
+from safe.common.utilities import (verify,
+                                   ugettext as safe_tr)
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
-from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -28,7 +28,7 @@ class Raster(Layer):
     """
 
     def __init__(self, data=None, projection=None, geotransform=None,
-                 name='', keywords=None, style_info=None):
+                 name=None, keywords=None, style_info=None):
         """Initialise object with either data or filename
 
         Args:
@@ -44,8 +44,7 @@ class Raster(Layer):
                              top left y, rotation, n-s pixel resolution).
                             See e.g. http://www.gdal.org/gdal_tutorial.html
                             Only used if data is provide as a numeric array,
-            * name: Optional name for layer.
-                    Only used if data is provide as a numeric array,
+            * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                         layer. When the layer is stored, these keywords will
                         be written into an associated file with extension
@@ -185,15 +184,15 @@ class Raster(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            if title in internationalised_titles:
-                title = internationalised_titles[title]
+            title = safe_tr(title)
 
             rastername = title
         else:
             # Use basename without leading directories as name
             rastername = os.path.split(basename)[-1]
 
-        self.name = rastername
+        if self.name is None:
+            self.name = rastername
         self.filename = filename
 
         self.projection = Projection(self.fid.GetProjection())

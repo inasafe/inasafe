@@ -11,9 +11,13 @@ from safe.api import bbox_intersection
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                               setVectorStyle,
                               setRasterStyle,
-                              qgisVersion)
-from safe_qgis.utilities_test import unitTestDataPath
-from safe_qgis.utilities_test import (loadLayer, getQgisTestApp)
+                              qgisVersion,
+                              mmToPoints,
+                              pointsToMM,
+                              humaniseSeconds)
+from safe_qgis.utilities_test import (unitTestDataPath,
+                                     loadLayer,
+                                     getQgisTestApp)
 from safe_qgis.exceptions import StyleError
 from safe.common.exceptions import BoundingBoxError
 
@@ -236,6 +240,28 @@ class UtilitiesTest(unittest.TestCase):
         myVersion = qgisVersion()
         myMessage = 'Got version %s of QGIS, but at least 107000 is needed'
         assert myVersion > 10700, myMessage
+
+    def test_mmPointConversion(self):
+        """Test that conversions between pixel and page dimensions work."""
+
+        myDpi = 300
+        myPixels = 300
+        myMM = 25.4  # 1 inch
+        myResult = pointsToMM(myPixels, myDpi)
+        myMessage = "Expected: %s\nGot: %s" % (myMM, myResult)
+        assert myResult == myMM, myMessage
+        myResult = mmToPoints(myMM, myDpi)
+        myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
+        assert myResult == myPixels, myMessage
+
+    def test_humaniseSeconds(self):
+        """Test that humanise seconds works."""
+        self.assertEqual(humaniseSeconds(5), '5 seconds')
+        self.assertEqual(humaniseSeconds(65), 'a minute')
+        self.assertEqual(humaniseSeconds(3605), 'over an hour')
+        self.assertEqual(humaniseSeconds(9000), '2 hours and 30 minutes')
+        self.assertEqual(humaniseSeconds(432232),
+                         '5 days, 0 hours and 3 minutes')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

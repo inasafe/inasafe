@@ -1,10 +1,10 @@
 import numpy
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import get_question, get_function_title
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 
 
@@ -24,7 +24,7 @@ class WBFloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    title = _('Need evacuation')
+    title = tr('Need evacuation')
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -87,45 +87,45 @@ class WBFloodEvacuationFunction(FunctionProvider):
 
         # Generate impact report for the pdf map
         table_body = [question,
-                      TableRow([_('People needing evacuation'),
+                      TableRow([tr('People needing evacuation'),
                                 '%i' % evacuated],
                                header=True),
-                      TableRow(_('Map shows population density needing '
+                      TableRow(tr('Map shows population density needing '
                                  'evacuation'))]
                       #,
-##                      TableRow([_('People in 50cm to 1m of water '),
+##                      TableRow([tr('People in 50cm to 1m of water '),
 ##                                '%i' % medium],
 ##                               header=True),
-##                      TableRow([_('People in 30cm to 50cm of water'),
+##                      TableRow([tr('People in 30cm to 50cm of water'),
 ##                                '%i' % low],
 ##                               header=True)]
-##                      TableRow([_('Needs per week'), _('Total')],
+##                      TableRow([tr('Needs per week'), tr('Total')],
 ##                               header=True),
-##                      [_('Rice [kg]'), int(rice)],
-##                      [_('Drinking Water [l]'), int(drinking_water)],
-##                      [_('Clean Water [l]'), int(water)],
-##                      [_('Family Kits'), int(family_kits)],
-##                      [_('Toilets'), int(toilets)]]
+##                      [tr('Rice [kg]'), int(rice)],
+##                      [tr('Drinking Water [l]'), int(drinking_water)],
+##                      [tr('Clean Water [l]'), int(water)],
+##                      [tr('Family Kits'), int(family_kits)],
+##                      [tr('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(_('Notes:'), header=True),
-                           _('Total population: %i') % total,
-                           _('People need evacuation if flood levels '
+        table_body.extend([TableRow(tr('Notes:'), header=True),
+                           tr('Total population: %i') % total,
+                           tr('People need evacuation if flood levels '
                              'exceed %(eps)i m') % {'eps': threshold},
-                           _('People in 50cm to 1m of water: %i') % medium,
-                           _('People in 30cm to 50cm of water: %i') % low])
-##                           _('Minimum needs are defined in BNPB '
+                           tr('People in 50cm to 1m of water: %i') % medium,
+                           tr('People in 30cm to 50cm of water: %i') % low])
+##                           tr('Minimum needs are defined in BNPB '
 ##                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = _('People in need of evacuation')
-        style_info['legend_title'] = _('Population Density')
+        map_title = tr('People in need of evacuation')
+        style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name=_('Population which %s') % get_function_title(self),
+                   name=tr('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

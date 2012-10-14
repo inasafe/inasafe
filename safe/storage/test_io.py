@@ -33,7 +33,7 @@ from safe.common.numerics import nanallclose
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
-from safe.common.utilities import ugettext as _, unique_filename
+from safe.common.utilities import ugettext as tr, unique_filename
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
 from safe.common.exceptions import VerificationError, InaSAFEError
@@ -62,12 +62,12 @@ class Test_IO(unittest.TestCase):
         """
 
         v = Vector(None)
-        assert v.get_name().startswith('')
+        assert v.get_name() is None
         assert v.is_inasafe_spatial_object
         assert str(v).startswith('Vector data')
 
         r = Raster(None)
-        assert r.get_name().startswith('')
+        assert r.get_name() is None
         assert r.is_inasafe_spatial_object
         assert str(r).startswith('Raster data')
 
@@ -273,7 +273,10 @@ class Test_IO(unittest.TestCase):
                 if vectorname == 'test_buildings.shp':
                     L = layer.get_topN(attribute='FLOOR_AREA', N=N)
                     assert len(L) == N
-                    assert L.get_projection() == layer.get_projection()
+
+                    msg = ('Got projection %s, expected %s' %
+                           (L.projection, layer.projection))
+                    assert L.projection == layer.projection, msg
                     #print [a['FLOOR_AREA'] for a in L.attributes]
                 elif vectorname == 'tsunami_building_exposure.shp':
                     L = layer.get_topN(attribute='STR_VALUE', N=N)
@@ -394,7 +397,6 @@ class Test_IO(unittest.TestCase):
 
         v_ref = Vector(geometry=[P], geometry_type='polygon')
         v_ref.write_to_file(tmp_filename)
-        print 'Written to', tmp_filename
         v_file = read_layer(tmp_filename)
         for i in range(len(v_ref)):
             x = v_ref.get_geometry()[i]
@@ -422,11 +424,10 @@ class Test_IO(unittest.TestCase):
             y = v_file.get_geometry()[i]
             msg = 'Read geometry %s, but expected %s' % (y, x)
             assert numpy.allclose(x, y), msg
-
         assert v_file == v_ref
         assert v_ref == v_file
-        assert v_file.is_polygon_data
-        assert v_file.geometry_type == 3
+        assert v_ref.is_polygon_data
+        assert v_ref.geometry_type == 3
 
         # Self intersecting polygon (in this case order will be flipped)
         P = numpy.array([[106.79, -6.23],
@@ -434,7 +435,6 @@ class Test_IO(unittest.TestCase):
                          [106.78, -6.23],
                          [106.79, -6.22],
                          [106.77, -6.21]])
-
         v_ref = Vector(geometry=[P], geometry_type='polygon')
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
@@ -452,6 +452,8 @@ class Test_IO(unittest.TestCase):
 
     def test_vector_class_geometry_types(self):
         """Admissible geometry types work in vector class
+
+        Also check that reported bounding boxes are correct
         """
 
         # So far the admissible classes are Point, Line and Polygon
@@ -511,6 +513,7 @@ class Test_IO(unittest.TestCase):
         v_ref = Vector(geometry=test_data[0])
         assert v_ref.is_point_data
         assert v_ref.geometry_type == 1
+        data_bbox = v_ref.get_bounding_box()
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
@@ -518,6 +521,8 @@ class Test_IO(unittest.TestCase):
         assert v_ref == v_file
         assert v_file.is_point_data
         assert v_file.geometry_type == 1
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data[0], geometry_type='point')
         assert v.is_point_data
@@ -531,6 +536,7 @@ class Test_IO(unittest.TestCase):
         v_ref = Vector(geometry=test_data, geometry_type='line')
         assert v_ref.is_line_data
         assert v_ref.geometry_type == 2
+        data_bbox = v_ref.get_bounding_box()
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
@@ -538,6 +544,8 @@ class Test_IO(unittest.TestCase):
         assert v_ref == v_file
         assert v_file.is_line_data
         assert v_file.geometry_type == 2
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type=2)
         assert v == v_ref
@@ -546,6 +554,7 @@ class Test_IO(unittest.TestCase):
         v_ref = Vector(geometry=test_data)
         assert v_ref.is_polygon_data
         assert v_ref.geometry_type == 3
+        data_bbox = v_ref.get_bounding_box()
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
@@ -553,6 +562,8 @@ class Test_IO(unittest.TestCase):
         assert v_ref == v_file
         assert v_file.is_polygon_data
         assert v_file.geometry_type == 3
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type='polygon')
         assert v == v_ref
@@ -616,6 +627,7 @@ class Test_IO(unittest.TestCase):
 
         v_ref = Vector(geometry=polygons)
         assert v_ref.is_polygon_data
+        data_bbox = v_ref.get_bounding_box()
 
         # Check data from Vector object
         geometry = v_ref.get_geometry(as_geometry_objects=True)
@@ -635,6 +647,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_file.is_polygon_data
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         # Check data from file
         geometry = v_file.get_geometry(as_geometry_objects=True)
@@ -1383,24 +1397,24 @@ class Test_IO(unittest.TestCase):
         attributes = V.get_data()
 
         # Store it for visual inspection e.g. with QGIS
-        out_filename = unique_filename(suffix='.shp')
-        V.write_to_file(out_filename)
+        #out_filename = unique_filename(suffix='.shp')
+        #V.write_to_file(out_filename)
         #print 'Written to ', out_filename
 
         # Check against cells that were verified manually using QGIS
-        assert numpy.allclose(geometry[5, :], [96.97137053, -5.34965715])
+        assert numpy.allclose(geometry[5], [96.97137053, -5.34965715])
         assert numpy.allclose(attributes[5]['value'], 3)
         assert numpy.allclose(attributes[5]['value'], A[1, 0])
 
-        assert numpy.allclose(geometry[11, :], [97.0021116, -5.38039821])
+        assert numpy.allclose(geometry[11], [97.0021116, -5.38039821])
         assert numpy.allclose(attributes[11]['value'], -50.6014, rtol=1.0e-6)
         assert numpy.allclose(attributes[11]['value'], A[2, 1], rtol=1.0e-6)
 
-        assert numpy.allclose(geometry[16, :], [97.0021116, -5.411139276])
+        assert numpy.allclose(geometry[16], [97.0021116, -5.411139276])
         assert numpy.allclose(attributes[16]['value'], -15, rtol=1.0e-6)
         assert numpy.allclose(attributes[16]['value'], A[3, 1], rtol=1.0e-6)
 
-        assert numpy.allclose(geometry[23, :], [97.06359372, -5.44188034])
+        assert numpy.allclose(geometry[23], [97.06359372, -5.44188034])
         assert numpy.isnan(attributes[23]['value'])
         assert numpy.isnan(A[4, 3])
 
@@ -1440,7 +1454,10 @@ class Test_IO(unittest.TestCase):
             for n, lon in enumerate(longitudes):  # The fastest varying dim
 
                 # Test location
-                assert numpy.allclose(geometry[i, :], [lon, lat])
+                x = geometry[i]
+                y = [lon, lat]
+                msg = 'Got %s but expected %s' % (x, y)
+                assert numpy.allclose(x, y), msg
 
                 # Test value
                 assert numpy.allclose(attributes[i]['value'],
@@ -1448,7 +1465,6 @@ class Test_IO(unittest.TestCase):
 
                 i += 1
 
-    @unittest.expectedFailure
     def test_get_bounding_box(self):
         """Bounding box is correctly extracted from file.
 
@@ -1694,7 +1710,15 @@ class Test_IO(unittest.TestCase):
                    keywords=keywords)
         assert keywords['impact_summary'] == V.get_impact_summary()
         for key, val in V.get_keywords().items():
-            assert keywords[key] == val
+            msg = ('Expected keywords[%s] to be "%s" but '
+                   'got "%s"' % (key, keywords[key], val))
+
+            assert keywords[key] == val, msg
+            #if key in [' preceding_ws', 'with spaces']:
+            #    # Accept that surrounding whitespace may be stripped
+            #    assert keywords[key].strip() == val, msg
+            #else:
+            #    assert keywords[key] == val, msg
 
     def test_empty_keywords_file(self):
         """Empty keywords can be handled
@@ -2296,7 +2320,7 @@ class Test_IO(unittest.TestCase):
 
         #must be after above
         string1 = 'Hello!'
-        out1 = _(string1)
+        out1 = tr(string1)
         expected1 = 'Hello!'
         msg = 'Expected %s, got %s' % (expected1, out1)
         assert string1 == expected1, msg
@@ -2306,7 +2330,7 @@ class Test_IO(unittest.TestCase):
         os.environ['LC_ALL'] = 'id_ID.UTF-8'
 
         #must be after above
-        indoout1 = _(string1)  # translate as 'Hi'
+        indoout1 = tr(string1)  # translate as 'Hi'
         indoexpected1 = 'Hi!'
         msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
         assert indoout1 == indoexpected1, msg
@@ -2321,10 +2345,14 @@ class Test_IO(unittest.TestCase):
             read_layer(hazard_filename)
         except ReadLayerError, e:
             msg = 'Wrong error message: %s' % e
-            assert 'convert multipart' in str(e), msg
-        else:
-            msg = 'Multipart polygon should have raised exception'
-            raise Exception(msg)
+            assert 'convert multipart' not in str(e), msg
+        # I (Sunni) added function for forcing multipolygon to be
+        # single polygon. So it will not raise any exception
+        #======================================================================
+        # else:
+        #    msg = 'Multipart polygon should not have raised exception'
+        #    raise Exception(msg)
+        #======================================================================
 
     def test_projection_comparisons(self):
         """Projection information can be correctly compared
@@ -2381,6 +2409,27 @@ class Test_IO(unittest.TestCase):
         assert M == R1.rows, msg
         assert N == R1.columns, msg
         # More...
+
+    def test_compatible_projections(self):
+        """Projections that are compatible but not identical are recognised
+
+        This is a test for issue #304
+        """
+
+        # Read two layers with compatible projections
+        hazard_filename = '%s/donut.shp' % TESTDATA
+        exposure_filename = ('%s/population_indonesia_2010_'
+                             'BNPB_BPS.asc' % EXPDATA)
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        # Verify that their projection strings are different
+        assert H.get_projection() != E.get_projection()
+        assert H.get_projection(proj4=True) != E.get_projection(proj4=True)
+
+        # But the InaSAFE comparison does pass
+        assert H.projection == E.projection
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')

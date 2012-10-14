@@ -12,14 +12,13 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'oz@tanoshiistudio.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
-__date__ = '17/09/2012'
+__date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import ast
-from PyQt4 import (QtGui, QtCore)
+from PyQt4 import QtGui, QtCore
 from configurable_impact_functions_dialog_base import (
             Ui_configurableImpactFunctionsDialogBase)
 
@@ -29,6 +28,8 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 
+# FIXME (Tim and Ole): Change to ConfigurationDialog throughout
+#                      Maybe also change filename and Base name accordingly.
 class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
                 Ui_configurableImpactFunctionsDialogBase):
     """ConfigurableImpactFunctions Dialog for InaSAFE."""
@@ -48,6 +49,7 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         """
         QtGui.QDialog.__init__(self, theParent)
         self.setupUi(self)
+        self.setWindowTitle(self.tr('Impact function configuration'))
 
     def buildFormFromImpactFunctionsParameter(self, theFunction, params):
         """we build a form from impact functions parameter
@@ -69,22 +71,54 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
     def _addFormItem(self, key, data):
         label = QtGui.QLabel(self.formLayoutWidget)
         label.setObjectName(_fromUtf8(key + "Label"))
-        label.setText(key)
+        tKey = key
+        tKey = tKey.replace('_', ' ')
+        tKey = tKey.capitalize()
+        label.setText(tKey)
+        label.setToolTip(str(type(data)))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.LabelRole, label)
         lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
         lineEdit.setText(str(data))
-        lineEdit.setObjectName(_fromUtf8(key + "LineEdit"))
+        lineEdit.setObjectName(_fromUtf8(key + 'LineEdit'))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.FieldRole, lineEdit)
         self.formItemCounters += 1
 
+    def setDialogInfo(self, theFunctionID):
+        myText = ''
+        impactFunctionName = theFunctionID
+        myText += self.tr('Parameters for impact function "%1" that can be '
+                          'modified are:').arg(impactFunctionName)
+        label = self.impFuncConfLabel
+        label.setText(myText)
+
     def accept(self):
+        """Override the default accept function
+
+        .. note:: see http://tinyurl.com/pyqt-differences
+
+        Args:
+           theFunction - theFunction to be modified
+           params - parameters to be edited
+        Returns:
+           not applicable
+        """
+        noError = False
         func = self.theFunction
         for key in self.keys:
-            lineEdit = self.findChild(QtGui.QLineEdit,
-                                      _fromUtf8(key + "LineEdit"))
-            lineEditText = lineEdit.text()
-            convText = str(lineEditText)
-            func.parameters[key] = ast.literal_eval(convText)
-        self.close()
+            try:
+                lineEdit = self.findChild(QtGui.QLineEdit,
+                                          _fromUtf8(key + "LineEdit"))
+                lineEditText = lineEdit.text()
+                convText = str(lineEditText)
+                func.parameters[key] = ast.literal_eval(convText)
+            except ValueError:
+                text = ("Unexpected error: ValueError" +
+                ". Please consult Python language reference for correct " +
+                "format of data type.")
+                label = self.impFuncConfErrLabel
+                label.setText(text)
+                noError = True
+        if (not noError):
+            self.close()

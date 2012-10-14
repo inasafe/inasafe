@@ -59,7 +59,7 @@ class PluginTest(unittest.TestCase):
     def test_ImpactFunctionI18n(self):
         """Library translations are working."""
         # Import this late so that i18n setup is already in place
-        from safe.common.utilities import ugettext as _
+        from safe.common.utilities import ugettext as tr
         myUntranslatedString = 'Temporarily Closed'
 
         # Test indonesian too
@@ -69,7 +69,7 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
         myExpectedString = 'Ditutup sementara'
-        myTranslation = _(myUntranslatedString)
+        myTranslation = tr(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
                             myUntranslatedString,
                             myTranslation,
@@ -92,10 +92,10 @@ class PluginTest(unittest.TestCase):
         # (see http://effbot.org/zone/metaclass-plugins.htm)
         # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
-        from safe.common.utilities import ugettext as _
+        from safe.common.utilities import ugettext as tr
         myUntranslatedString = 'Temporarily Closed'
         myExpectedString = 'Tydelik gesluit'  # afrikaans
-        myTranslation = _(myUntranslatedString)
+        myTranslation = tr(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
                             myUntranslatedString,
                             myTranslation,
