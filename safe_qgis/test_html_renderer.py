@@ -29,6 +29,7 @@ from safe_qgis.html_renderer import HtmlRenderer
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class HtmlRendererTest(unittest.TestCase):
     """Test the InaSAFE Html Renderer"""
     def setUp(self):
@@ -80,7 +81,7 @@ class HtmlRendererTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myNewPath).st_size
-        myExpectedSize = 18708 # as rendered on linux ub 12.04 64
+        myExpectedSize = 18708  # as rendered on linux ub 12.04 64
         myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
             myExpectedSize, mySize)
         assert mySize >= myExpectedSize, myMessage
@@ -106,7 +107,7 @@ class HtmlRendererTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
-        myExpectedSize = 20936 # as rendered on linux ub 12.04 64
+        myExpectedSize = 20936  # as rendered on linux ub 12.04 64
         myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
             myExpectedSize, mySize
             )

@@ -18,7 +18,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import time
 import logging
 
 from PyQt4 import QtCore, QtGui, QtXml
@@ -116,7 +115,7 @@ class Map():
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
         self.composition = QgsComposition(myRenderer)
-        self.composition.setPlotStyle(QgsComposition.Print) # or preview
+        self.composition.setPlotStyle(QgsComposition.Print)  # or preview
         self.composition.setPaperSize(self.pageWidth, self.pageHeight)
         self.composition.setPrintResolution(self.pageDpi)
         self.composition.setPrintAsRaster(True)
@@ -212,11 +211,9 @@ class Map():
             # We need to cast to python string in case we receive a QString
             myMapPdfPath = str(theFilename)
 
-        myTablePath = os.path.splitext(myMapPdfPath)[0] + '_table.pdf'
-
         self.composeMap()
         self.printer = setupPrinter(myMapPdfPath)
-        myImagePath, myImage, myRectangle = self.renderComposition()
+        _, myImage, myRectangle = self.renderComposition()
         myPainter = QtGui.QPainter(self.printer)
         myPainter.drawImage(myRectangle, myImage, myRectangle)
         myPainter.end()
@@ -688,9 +685,10 @@ class Map():
         myElapsedTime = humaniseSeconds(myElapsedTime)
         myLongVersion = get_version()
         myTokens = myLongVersion.split('.')
-        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1],myTokens[2])
-        myLabelText = self.tr('Assessment carried out on host "%s" by user "%s"'
-                         ' using InaSAFE release %s (QGIS plugin version).\n'
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
+        myLabelText = self.tr('Assessment carried out on host "%s"'
+                         'by user "%s" using InaSAFE release %s (QGIS '
+                         'plugin version).\n'
                          'Date and time of assessment: %s %s\n'
                          'Elapsed time for assessment calculation: %s\n'
                          'Special note: This assessment is a guide - we '
@@ -718,7 +716,7 @@ class Map():
         myLabel.adjustSizeToText()
         myLabelHeight = 50.0  # mm determined using qgis map composer
         myLabelWidth = (self.pageWidth / 2) - self.pageMargin
-        myLeftOffset = self.pageWidth / 2 # put in right half of page
+        myLeftOffset = self.pageWidth / 2  # put in right half of page
         myLabel.setItemPosition(myLeftOffset,
                                 theTopOffset,
                                 myLabelWidth,
@@ -794,7 +792,6 @@ class Map():
         myView = QgsComposerView(self.iface.mainWindow())
         myView.show()
 
-
     def writeTemplate(self, theTemplateFilePath):
         """Write the current composition as a template that can be
         re-used in QGIS."""
@@ -833,4 +830,4 @@ class Map():
             if myNodeList.size() > 0:
                 myElement = myNodeList.at(0).toElement()
                 self.composition.readXML(myElement, myDocument)
-        self.printToPdf()
+        self.printToPdf(theOutputFilePath)

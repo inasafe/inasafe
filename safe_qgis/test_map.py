@@ -48,7 +48,7 @@ class MapTest(unittest.TestCase):
     def setUp(self):
         """Setup fixture run before each tests"""
         myRegistry = QgsMapLayerRegistry.instance()
-        myRegistry.removeAllMapLayers ()
+        myRegistry.removeAllMapLayers()
 
     def test_printToPdf(self):
         """Test making a pdf of the map - this is the most typical use of map.
@@ -75,7 +75,7 @@ class MapTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
-        myExpectedSize = 352798 # as rendered on linux ub 12.04 64
+        myExpectedSize = 352798  # as rendered on linux ub 12.04 64
         myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
             myExpectedSize, mySize
         )
@@ -192,7 +192,6 @@ class MapTest(unittest.TestCase):
             # Same drawing using our drawPixmap Helper
             myWidthMM = 1
             myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
-
 
         myImagePath, _, _ = myMap.renderComposition()
         LOGGER.debug('Artifacts image path: %s' % myImagePath)

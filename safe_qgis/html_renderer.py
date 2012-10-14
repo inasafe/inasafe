@@ -30,6 +30,7 @@ from safe_interface import unique_filename, temp_dir
 from keyword_io import KeywordIO
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class HtmlRenderer():
     """A class for creating a map."""
     def __init__(self, thePageDpi):
@@ -147,7 +148,7 @@ class HtmlRenderer():
         self.printer = setupPrinter(theOutputFilePath)
         self.webView.print_(self.printer)
 
-        return #self.htmlPrintedFlag
+        return  # self.htmlPrintedFlag
 
     def printToPdf(self, theHtml, theFilename=None):
         """Render an html snippet into the printer, paginating as needed.

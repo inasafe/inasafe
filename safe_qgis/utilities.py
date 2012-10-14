@@ -673,6 +673,7 @@ def setupLogger():
     #addLoggingHanderOnce(myLogger, myEmailHandler)
     addLoggingHanderOnce(myLogger, myQgisHandler)
 
+
 def mmToPoints(theMM, theDpi):
     """Convert measurement in points to one in mm.
 
@@ -688,6 +689,7 @@ def mmToPoints(theMM, theDpi):
     myPoints = (theMM * theDpi) / myInchAsMM
     return myPoints
 
+
 def pointsToMM(thePoints, theDpi):
     """Convert measurement in points to one in mm.
 
@@ -702,6 +704,7 @@ def pointsToMM(thePoints, theDpi):
     myInchAsMM = 25.4
     myMM = (float(thePoints) / theDpi) * myInchAsMM
     return myMM
+
 
 def setupPrinter(theFilename,
                  theResolution=300,
@@ -729,6 +732,7 @@ def setupPrinter(theFilename,
     myPrinter.setColorMode(QtGui.QPrinter.Color)
     myPrinter.setResolution(theResolution)
     return myPrinter
+
 
 def humaniseSeconds(theSeconds):
     """Utility function to humanise seconds value into e.g. 10 seconds ago.
