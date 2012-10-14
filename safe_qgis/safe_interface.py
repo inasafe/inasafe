@@ -52,8 +52,9 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   StyleInfoNotFoundException,
                                   InvalidParameterException,
                                   InsufficientOverlapException)
+
+from safe.common.exceptions import BoundingBoxError, ReadLayerError
 LOGGER = logging.getLogger('InaSAFE')
-from safe.common.exceptions import BoundingBoxError
 
 
 def tr(theText):

@@ -56,10 +56,9 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getOptimalExtent,
                                       getBufferedExtent,
                                       getSafeImpactFunctions,
-                                      writeKeywordsToFile,
                                       safeTr,
                                       get_version,
-									  ReadLayerError)
+                                      temp_dir)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -115,8 +114,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
+        myLongVersion = get_version()
+        myTokens = myLongVersion.split('.')
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
+        myVersionType = myTokens[3].split('2')[0]
+        # Allowed version names: ('alpha', 'beta', 'rc', 'final')
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
-                                __version__, __type__)))
+            myVersion, myVersionType)))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
@@ -855,7 +859,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProvider = myLayer.dataProvider()
             myLayer.startEditing()
             myAttrName = self.tr('Area')
-            myProvider.addAttributes([QgsField(myAttrName, QVariant.String)])
+            myProvider.addAttributes([QgsField(myAttrName,
+                QtCore.QVariant.String)])
             myLayer.commitChanges()
 
             self.postprocLayer = myLayer
@@ -1103,7 +1108,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 QgsPoint(impactLayerBB[0], impactLayerBB[1]),
                 QgsPoint(impactLayerBB[2], impactLayerBB[3])
             )))
-            myFeat.setAttributeMap({0: QVariant(self.tr('Entire area'))})
+            myFeat.setAttributeMap({0: QtCore.QVariant(
+                self.tr('Entire area'))})
             myProvider.addFeatures([myFeat])
             self.postprocLayer.commitChanges()
 
