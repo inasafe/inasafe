@@ -113,6 +113,7 @@ class MapTest(unittest.TestCase):
         assert os.path.exists(myImagePath), myMessage
 
         myExpectedHashes = ['9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
+                            'ddf3cd2e9059e85c9d5b525d9f00c7dd',  # Jenkins
                             '']
         assertHashesForFile(myExpectedHashes, myImagePath)
 

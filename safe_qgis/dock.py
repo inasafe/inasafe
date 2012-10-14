@@ -12,14 +12,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'final'  # beta, final etc will be shown in dock title
+__type__ = 'beta'  # beta, final etc will be shown in dock title
 
 import os
 import numpy
@@ -60,8 +58,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getSafeImpactFunctions,
                                       writeKeywordsToFile,
                                       safeTr,
-									  tempDir,
-                                      ReadLayerError)
+                                      get_version,
+									  ReadLayerError)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
