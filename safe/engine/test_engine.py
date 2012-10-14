@@ -542,7 +542,8 @@ class Test_Engine(unittest.TestCase):
         exposure_filename = ('%s/pop_merapi_clip.tif' % TESTDATA)
         # Slow
         # FIXME (Ole): Results are different - check!
-        #exposure_filename = ('%s/population_indonesia_2010_BNPB_BPS.asc' % EXPDATA)
+        #exposure_filename = ('%s/population_indonesia_2010_BNPB_BPS.asc'
+        #                     % EXPDATA)
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -557,7 +558,6 @@ class Test_Engine(unittest.TestCase):
         impact_filename = impact_layer.get_filename()
 
         I = read_layer(impact_filename)
-        calculated_result = I.get_data()
 
         keywords = I.get_keywords()
 
