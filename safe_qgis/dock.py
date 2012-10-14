@@ -11,15 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.common.utilities import temp_dir
-
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'beta'  # beta, final etc will be shown in dock title
-
 import os
 import numpy
 import logging
@@ -38,7 +34,7 @@ from qgis.core import (QgsMapLayer,
                        QgsRectangle)
 from qgis.analysis import QgsZonalStatistics
 
-# TODO: Rather impor via safe_interface.py TS
+# TODO: Rather import via safe_interface.py TS
 from safe.api import write_keywords, read_keywords, ReadLayerError
 
 from safe_qgis.dock_base import Ui_DockBase
@@ -53,7 +49,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getSafeImpactFunctions,
                                       writeKeywordsToFile,
                                       safeTr,
-                                      get_version)
+                                      get_version,
+                                      temp_dir)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
