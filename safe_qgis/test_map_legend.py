@@ -141,7 +141,7 @@ class MapLegendTest(unittest.TestCase):
         LOGGER.debug(myPath)
         myExpectedHashes = ['850ed7ad9e8f992e96c5449701ba5434',  # ub 12.04 64
                             '3d4d9f196fb2fe1e18d54a8d6ab4a349',
-                            ''# ]
+                            '']
         assertHashesForFile(myExpectedHashes, myPath)
 
     def test_addClassToLegend(self):
