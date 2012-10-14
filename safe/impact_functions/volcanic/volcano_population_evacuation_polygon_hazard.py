@@ -10,8 +10,8 @@ from safe.engine.interpolation import make_circular_polygon
 from safe.common.exceptions import InaSAFEError
 
 
-class VolcanoFunctionVectorHazard(FunctionProvider):
-    """Risk plugin for flood evacuation
+class VolcanoPolygonHazardPopulation(FunctionProvider):
+    """Impact function for volcano hazard zones impact on population
 
     :author AIFDR
     :rating 4
@@ -28,8 +28,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
     title = tr('Be affected')
     target_field = 'population'
 
-    parameters = dict(distances=[1000, 2000, 3000, 5000, 10000],
-                      volcano_name='All')
+    parameters = dict(distances=[3000, 5000, 10000])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -144,7 +143,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
             evacuated += pop
 
         # Count totals
-        total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
+        total = int(numpy.sum(E.get_data(nan=0)))
 
 ##        # Don't show digits less than a 1000
 ##        if total > 1000:

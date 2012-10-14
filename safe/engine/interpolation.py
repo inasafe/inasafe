@@ -318,6 +318,8 @@ def interpolate_polygon_raster(source, target,
 
     # FIXME (Ole): Perhaps refactor so that polygon_geometry can
     # be passed in directly
+    # FIXME (Ole): Not sure if needed, but explicitly make sure
+    # exposure raster is *never* scaled here
     outer_rings = [p.outer_ring for p in polygon_geometry]
     inner_rings = [p.inner_rings for p in polygon_geometry]
     polygon_attributes = source.get_data()
