@@ -4,7 +4,6 @@ from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
-from safe.common.dynamic_translations import names as internationalised_values
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
@@ -155,11 +154,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 building_type = usage.replace('_', ' ')
 
                 # Lookup internationalised value if available
-                if building_type in internationalised_values:
-                    building_type = internationalised_values[building_type]
-                else:
-                    print ('WARNING: %s could not be translated'
-                           % building_type)
+                building_type = tr(building_type)
+                #==============================================================
+                # print ('WARNING: %s could not be translated'
+                #        % building_type)
+                #==============================================================
 
                 building_list.append([building_type.capitalize(),
                                       affected_buildings[usage],

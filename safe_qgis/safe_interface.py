@@ -25,34 +25,35 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # Standard modules
 import os
 import unicodedata
-
-from PyQt4.QtCore import QCoreApplication
+import logging
 
 # SAFE functionality - passed on to QGIS modules
 # pylint: disable=W0611
-from safe.api import get_admissible_plugins
-from safe.api import get_function_title
-from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_keywords, bbox_intersection
-from safe.api import write_keywords as safe_write_keywords
-from safe.api import read_layer as safe_read_layer
-from safe.api import (buffered_bounding_box,
+from safe.api import (get_admissible_plugins,
+                      get_function_title,
+                      get_plugins as safe_get_plugins,
+                      read_keywords, bbox_intersection,
+                      write_keywords as safe_write_keywords,
+                      read_layer as safe_read_layer,
+                      buffered_bounding_box,
                       verify as verify_util,
-                      VerificationError)
-from safe.api import temp_dir as tempDir
-from safe.api import (calculate_impact as safe_calculate_impact,
-                      internationalisedNames)
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
-
-from safe.common.utilities import temp_dir, unique_filename
+                      VerificationError,
+                      temp_dir,
+                      unique_filename,
+                      safe_tr as safeTr,
+                      calculate_impact as safe_calculate_impact,
+                      BoundingBoxError,
+                      get_plugins, get_version)
 # pylint: enable=W0611
 
 # InaSAFE GUI specific functionality
-
+from PyQt4.QtCore import QCoreApplication
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                   StyleInfoNotFoundException,
                                   InvalidParameterException,
                                   InsufficientOverlapException)
+LOGGER = logging.getLogger('InaSAFE')
+from safe.common.exceptions import BoundingBoxError
 
 
 def tr(theText):

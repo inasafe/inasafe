@@ -30,13 +30,14 @@ sys.path.append(pardir)
 
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
+
 from qgis.core import (QgsRasterLayer,
                        QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
 
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
-from qgis.gui import QgsMapCanvasLayer
+
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
                                 setPadangGeoExtent,
@@ -54,7 +55,6 @@ from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion,
                           getDefaults)
 
-from unittest import expectedFailure
 
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
@@ -295,7 +295,6 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     # Now go ahead and load our layers
     myExposureLayerCount = 0
     myHazardLayerCount = 0
-    myCanvasLayers = []
 
     # Now create our new layers
     for myFile in theLayerList:
@@ -309,46 +308,10 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
         # in qgis_interface will also ensure it gets added to the canvas
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
-        # Create Map Canvas Layer Instance and add to list
-        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-
-    # Quickly add any existing CANVAS layers to our list first
-    for myLayer in CANVAS.layers():
-        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-    # now load all these layers in the CANVAS
-    CANVAS.setLayerSet(myCanvasLayers)
     DOCK.getLayers()
 
     # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount
-
-
-#def loadLayer(theLayerFile):
-#    """Helper to load and return a single QGIS layer"""
-#    # Extract basename and absolute path
-#    myBaseName, myExt = os.path.splitext(theLayerFile)
-#    myPath = os.path.join(TESTDATA, theLayerFile)
-#    myKeywordPath = myPath[:-4] + '.keywords'
-#    # Determine if layer is hazard or exposure
-#    myKeywords = read_keywords(myKeywordPath)
-#    myType = 'undefined'
-#    if 'category' in myKeywords:
-#        myType = myKeywords['category']
-#    myMessage = 'Could not read %s' % myKeywordPath
-#    assert myKeywords is not None, myMessage#
-#
-#    # Create QGis Layer Instance
-#    if myExt in ['.asc', '.tif']:
-#        myLayer = QgsRasterLayer(myPath, myBaseName)
-#    elif myExt in ['.shp']:
-#        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
-#    else:
-#        myMessage = 'File %s had illegal extension' % myPath
-#        raise Exception(myMessage)#
-#
-#    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
-#    assert myLayer.isValid(), myMessage
-#    return myLayer, myType
 
 
 class DockTest(unittest.TestCase):
@@ -356,6 +319,7 @@ class DockTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
+        os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
         loadStandardLayers()
         DOCK.cboHazard.setCurrentIndex(0)
@@ -1311,6 +1275,5 @@ class DockTest(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

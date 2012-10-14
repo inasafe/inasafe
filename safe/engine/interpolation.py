@@ -94,7 +94,7 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
 
     # Make sure attribute name can be stored in a shapefile
     if attribute_name is not None and len(attribute_name) > 10:
-        msg = ('Specfied attribute name "%s"\
+        msg = ('Specified attribute name "%s"\
          has length = %i. '
                'To fit into a shapefile it must be at most 10 characters '
                'long. How about naming it "%s"?' % (attribute_name,
@@ -318,6 +318,8 @@ def interpolate_polygon_raster(source, target,
 
     # FIXME (Ole): Perhaps refactor so that polygon_geometry can
     # be passed in directly
+    # FIXME (Ole): Not sure if needed, but explicitly make sure
+    # exposure raster is *never* scaled here
     outer_rings = [p.outer_ring for p in polygon_geometry]
     inner_rings = [p.inner_rings for p in polygon_geometry]
     polygon_attributes = source.get_data()
@@ -402,6 +404,8 @@ def interpolate_raster_vector_points(source, target,
     N = len(target)
     if attribute_name is None:
         attribute_name = source.get_name()
+        # FIXME (Ole): Launder for shape files
+        attribute_name = str(attribute_name[:10])
 
     try:
         values = interpolate_raster(longitudes, latitudes, A,

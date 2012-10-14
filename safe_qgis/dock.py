@@ -12,13 +12,14 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'alpha'  # beta, final etc will be shown in dock title
+__type__ = 'final'  # beta, final etc will be shown in dock title
 
 import os
 import numpy
@@ -26,14 +27,8 @@ import logging
 import uuid
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSlot, QVariant
-from safe_qgis.dock_base import Ui_DockBase
+from PyQt4.QtCore import pyqtSlot
 
-from safe_qgis.help import Help
-from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 getWGS84resolution,
-                                 isLayerPolygonal,
-                                 getLayerAttributeNames)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -41,6 +36,7 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
+                       QGis,
                        QgsFeature,
                        QgsRectangle,
                        QgsPoint,
@@ -48,19 +44,23 @@ from qgis.core import (QgsMapLayer,
 from qgis.analysis import QgsZonalStatistics
 
 # TODO: Rather impor via safe_interface.py TS
+from safe.api import write_keywords, read_keywords, ReadLayerError
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 getWGS84resolution)
+                                 getWGS84resolution,
+                                 isLayerPolygonal,
+                                 getLayerAttributeNames)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
                                       getOptimalExtent,
                                       getBufferedExtent,
-                                      internationalisedNames,
                                       getSafeImpactFunctions,
-                                      tempDir,
+                                      writeKeywordsToFile,
+                                      safeTr,
+									  tempDir,
                                       ReadLayerError)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
@@ -70,6 +70,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
+from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
@@ -596,8 +597,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
-                if myTitle in internationalisedNames:
-                    myTitle = internationalisedNames[myTitle]
+                myTitle = safeTr(myTitle)
             # Register title with layer
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
@@ -1875,9 +1875,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myValue = myKeywords[myKeyword]
 
                         # Translate titles explicitly if possible
-                        if myKeyword == 'title' and \
-                                myValue in internationalisedNames:
-                            myValue = internationalisedNames[myValue]
+                        if myKeyword == 'title':
+                            myValue = safeTr(myValue)
 
                         # Add this keyword to report
                         myReport += ('<tr>'
@@ -1985,28 +1984,52 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         myMap = Map(self.iface)
-        myFilename = QtGui.QFileDialog.getSaveFileName(self,
-                            self.tr('Write to PDF'),
-                            tempDir() + os.sep + myMap.getMapTitle() + '.pdf',
-                            self.tr('Pdf File (*.pdf)'))
-        myMap.setImpactLayer(self.iface.activeLayer())
+        if self.iface.activeLayer() is None:
+            QtGui.QMessageBox.warning(self,
+                                self.tr('InaSAFE'),
+                                self.tr('Please select a valid impact layer'
+                                        ' before trying to print.'))
+            return
+
         self.showBusy(self.tr('Map Creator'),
-                      self.tr('Generating your map as a PDF document...'),
+                      self.tr('Preparing map and report'),
                       theProgress=20)
+
+        myMap.setImpactLayer(self.iface.activeLayer())
+        LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
+        myMapFilename = QtGui.QFileDialog.getSaveFileName(self,
+                            self.tr('Write to PDF'),
+                            os.path.join(temp_dir(),
+                                         myMap.getMapTitle() + '.pdf'),
+                            self.tr('Pdf File (*.pdf)'))
+        myMapFilename = str(myMapFilename)
+
+        myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
+        myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myHtmlPdfPath = myHtmlRenderer.printImpactTable(
+            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+        QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myHtmlPdfPath,
+                                                   QtCore.QUrl.TolerantMode))
         try:
-            myMap.makePdf(myFilename)
+            myMapPdfPath = myMap.printToPdf(myMapFilename)
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Your PDF was created....opening using '
-                                  'the default PDF viewer on your system.'
-                                  'The generated pdf is saved as: %s' %
-                                  myFilename),
+                                  'the default PDF viewer on your system.>'
+                                  'The generated pdfs were saved as:%(br)s'
+                                  '%(map)s%(br)sand%(br)s%(table)s'
+                                   % {
+                                    'br': '<br/>',
+                                    'map': myMapPdfPath,
+                                    'table': myHtmlPdfPath}),
                           theProgress=80)
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
-                                 QtCore.QUrl.TolerantMode))
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl('file:///' + myTableFilename,
+                QtCore.QUrl.TolerantMode))
+
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Processing complete.'
-                                  'The generated pdf is saved as: %s' %
-                                  myFilename),
+                                  'The generated pdfs were saved as: %s and'
+                                  '%s' % (myMapPdfPath, myHtmlPdfPath)),
                           theProgress=100)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests

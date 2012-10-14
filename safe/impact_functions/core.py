@@ -65,10 +65,13 @@ def get_function_title(func):
         otherwise what is returned by the function pretty_function_name.
     """
 
+    myTitle = None
     if hasattr(func, 'title'):
-        return func.title
+        myTitle = func.title
     else:
-        return pretty_function_name(func)
+        myTitle = pretty_function_name(func)
+
+    return tr(myTitle)
 
 
 def get_plugins(name=None):
@@ -115,6 +118,7 @@ def get_plugin(name):
     return impact_function
 
 
+# FIXME (Ole): Deprecate this function
 def pretty_function_name(func):
     """Return a human readable name for the function
     if the function has a func.plugin_name use this
