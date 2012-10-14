@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.6.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -46,7 +46,7 @@ def qgisMinimumVersion():
 
 
 def icon():
-    """Icon path for the plugin - metadata.txt it will override this"""
+    """Icon path for the plugin - metadata.txt will override this"""
     return os.path.join(os.path.dirname(__file__), 'safe_qgis', 'resources',
                         'img', 'icon.png')
 
@@ -54,24 +54,9 @@ def icon():
 def classFactory(iface):
     """Load Plugin class from file Plugin"""
 
-    # setup the logging
-    #import logging
-    #logger = logging.getLogger('risiko')
-
-    # TODO (TD): Change to read from a log file see
-    # http://docs.python.org/howto/logging-cookbook.html#logging-cookbook
-    # FIXME (TD): Logger is working at this level but not in the impact
-    #functions!!
-    #logger.setLevel(logging.DEBUG)
-    #ch = logging.FileHandler('risiko.log')
-    #fmt_str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    #formatter = logging.Formatter(fmt_str)
-    #ch.setFormatter(formatter)
-    #logger.addHandler(ch)
-
     # Try loading the FunctionProvider
-    #from impact_functions.core import FunctionProvider
-    # FIXME (TD): reload doesn't seem to reload the plugins anything
+    # from impact_functions.core import FunctionProvider
+    # FIXME (TD): reload doesn't seem to reload the plugins
 
     #logger.debug("reload core 3")
     from safe_qgis.plugin import Plugin

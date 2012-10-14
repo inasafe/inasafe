@@ -103,8 +103,12 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxHideExposure.setChecked(myFlag)
 
         myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+                            'inasafe/clipToViewport', True).toBool()
         self.cbxClipToViewport.setChecked(myFlag)
+
+        myFlag = mySettings.value(
+                            'inasafe/showPostProcessingLayers', False).toBool()
+        self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
@@ -132,6 +136,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxHideExposure.isChecked())
         mySettings.setValue('inasafe/clipToViewport',
                             self.cbxClipToViewport.isChecked())
+        mySettings.setValue('inasafe/showPostProcessingLayers',
+            self.cbxShowPostprocessingLayers.isChecked())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
 
@@ -139,7 +145,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """Load the help text for the options safe_qgis"""
         if not self.helpDialog:
             self.helpDialog = Help(self.iface.mainWindow(), 'options')
-        self.helpDialog.showMe()
 
     def accept(self):
         """Method invoked when ok button is clicked

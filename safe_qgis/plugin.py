@@ -31,15 +31,7 @@ from PyQt4.QtCore import (QObject,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
 from safe_qgis.exceptions import TranslationLoadException
-
-
-# See if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
+import utilities
 
 
 class Plugin:
@@ -72,6 +64,7 @@ class Plugin:
         self.translator = None
         self.setupI18n()
         #print self.tr('InaSAFE')
+        utilities.setupLogger()
 
     def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
@@ -150,6 +143,7 @@ class Plugin:
         # pylint: disable=W0201
         self.actionDock = QAction(QIcon(':/plugins/inasafe/icon.png'),
                     self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
+        self.actionDock.setObjectName('InaSAFEDockToggle')
         self.actionDock.setStatusTip(self.tr(
                             'Show/hide InaSAFE dock widget'))
         self.actionDock.setWhatsThis(self.tr(
@@ -247,11 +241,11 @@ class Plugin:
         self.dockWidget = Dock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
+
         if myLegendTab:
             self.iface.mainWindow().tabifyDockWidget(
                                             myLegendTab, self.dockWidget)
             self.dockWidget.raise_()
-
         #
         # Hook up a slot for when the current layer is changed
         #

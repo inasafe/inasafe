@@ -3,7 +3,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -23,7 +23,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     datatype=='density'
     """
 
-    title = _('Need evacuation')
+    title = tr('Need evacuation')
     target_field = 'population'
 
     def run(self, layers):
@@ -110,39 +110,39 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Generate impact report for the pdf map
         table_body = [question,
-                      TableRow([_('People needing evacuation'),
+                      TableRow([tr('People needing evacuation'),
                                 '%i' % evacuated],
                                header=True),
-                      TableRow(_('Map shows population affected in each flood '
-                                 'prone area ')),
-                      TableRow([_('Needs per week'), _('Total')],
+                      TableRow(tr('Map shows population affected in each flood'
+                                 ' prone area ')),
+                      TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
-                      [_('Rice [kg]'), int(rice)],
-                      [_('Drinking Water [l]'), int(drinking_water)],
-                      [_('Clean Water [l]'), int(water)],
-                      [_('Family Kits'), int(family_kits)],
-                      [_('Toilets'), int(toilets)]]
+                      [tr('Rice [kg]'), int(rice)],
+                      [tr('Drinking Water [l]'), int(drinking_water)],
+                      [tr('Clean Water [l]'), int(water)],
+                      [tr('Family Kits'), int(family_kits)],
+                      [tr('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
-        table_body.append(TableRow(_('Action Checklist:'), header=True))
-        table_body.append(TableRow(_('How will warnings be disseminated?')))
-        table_body.append(TableRow(_('How will we reach stranded people?')))
-        table_body.append(TableRow(_('Do we have enough relief items?')))
-        table_body.append(TableRow(_('If yes, where are they located and how '
+        table_body.append(TableRow(tr('Action Checklist:'), header=True))
+        table_body.append(TableRow(tr('How will warnings be disseminated?')))
+        table_body.append(TableRow(tr('How will we reach stranded people?')))
+        table_body.append(TableRow(tr('Do we have enough relief items?')))
+        table_body.append(TableRow(tr('If yes, where are they located and how '
                                      'will we distribute them?')))
-        table_body.append(TableRow(_('If no, where can we obtain additional '
+        table_body.append(TableRow(tr('If no, where can we obtain additional '
                                      'relief items from and how will we '
                                      'transport them to here?')))
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(_('Notes'), header=True),
-                           _('Total population: %i') % total,
-                           _('People need evacuation if in area identified '
+        table_body.extend([TableRow(tr('Notes'), header=True),
+                           tr('Total population: %i') % total,
+                           tr('People need evacuation if in area identified '
                              'as "Flood Prone"'),
-                           _('Minimum needs are defined in BNPB '
+                           tr('Minimum needs are defined in BNPB '
                              'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = _('People affected by flood prone areas')
+        map_title = tr('People affected by flood prone areas')
 
         # Define classes for legend for flooded population counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -159,9 +159,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             hi = cls[i + 1]
 
             if i == 0:
-                label = _('0')
+                label = tr('0')
             else:
-                label = _('%i - %i') % (lo, hi)
+                label = tr('%i - %i') % (lo, hi)
 
             entry = dict(label=label, colour=colour, min=lo, max=hi,
                          transparency=0, size=1)
@@ -170,13 +170,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Override style info with new classes and name
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
-                          legend_title=_('Population Count'))
+                          legend_title=tr('Population Count'))
 
         # Create vector layer and return
         V = Vector(data=new_attributes,
                    projection=H.get_projection(),
                    geometry=H.get_geometry(),
-                   name=_('Population affected by flood prone areas'),
+                   name=tr('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

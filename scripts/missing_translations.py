@@ -31,6 +31,7 @@ if __name__ == '__main__':
         for key in files:
             filename = files[key] % (root, locale)
             cmd = commands[key] % filename
+            # messages.mo is generated when called Popen
             p = Popen(cmd, shell=True,
                       stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
@@ -67,4 +68,7 @@ if __name__ == '__main__':
                 msg += status
                 print msg
 
-            #print msg
+    # Deleted messages.mo generated file, not so good approach actually
+    fname = root + '/messages.mo'
+    if os.path.isfile(fname):
+        os.remove(fname)

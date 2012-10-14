@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-28 00:56+0200\n"
+"POT-Creation-Date: 2012-10-14 19:57+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,9 +36,8 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:182
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:124
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Buildings"
 msgstr ""
 
@@ -94,13 +93,11 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:139
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:182
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:124
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:139
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
-#: safe/impact_functions/inundation/flood_population_evacuation.py:111
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
+#: safe/impact_functions/inundation/flood_population_evacuation.py:108
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Total"
 msgstr ""
 
@@ -144,11 +141,8 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:99
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:141
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:105
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:130
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:183
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:126
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:105
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:141
+#: safe/impact_functions/volcanic/volcano_building_impact.py:135
+#: safe/impact_functions/volcanic/volcano_building_impact.py:135
 msgid "All"
 msgstr ""
 
@@ -191,12 +185,6 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:204
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:128
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:146
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:131
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:139
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:185
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:204
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:128
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:146
 msgid "Low damage"
 msgstr ""
 
@@ -232,12 +220,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_building_impact_model.py:204
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:127
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:146
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:132
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:141
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:186
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:206
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:129
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:148
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:132
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:141
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:186
@@ -286,12 +268,6 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:208
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:130
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:150
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:133
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:143
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:187
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:208
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:130
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:150
 msgid "High damage"
 msgstr ""
 
@@ -318,10 +294,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_building_impact_model.py:200
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:125
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:142
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:184
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:202
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:127
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:144
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:184
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:202
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:127
@@ -399,8 +371,6 @@ msgstr ""
 #: scripts/inasafe-dev/extras/retired_impact_functions/tsunami_building_impact.py:120
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_building_impact_model.py:187
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:189
-#: extras/retired_impact_functions/tsunami_building_impact.py:120
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:189
 msgid "Assumption"
 msgstr ""
 
@@ -441,7 +411,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:207
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:210
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:233
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:233
 msgid "Estimated buildings affected"
 msgstr ""
 
@@ -481,11 +450,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:111
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:104
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:117
-#: extras/retired_impact_functions/tsunami_building_impact.py:103
-#: extras/retired_impact_functions/tsunami_building_impact.py:130
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:104
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:117
-#: safe/impact_functions/styles.py:23 safe/impact_functions/styles.py:68
 msgid "Low"
 msgstr ""
 
@@ -522,11 +486,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:113
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:103
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:119
-#: extras/retired_impact_functions/tsunami_building_impact.py:104
-#: extras/retired_impact_functions/tsunami_building_impact.py:131
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:103
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:119
-#: safe/impact_functions/styles.py:27
 msgid "Medium"
 msgstr ""
 
@@ -560,11 +519,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:115
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:102
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:121
-#: extras/retired_impact_functions/tsunami_building_impact.py:105
-#: extras/retired_impact_functions/tsunami_building_impact.py:132
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:102
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:121
-#: safe/impact_functions/styles.py:31 safe/impact_functions/styles.py:78
 msgid "High"
 msgstr ""
 
@@ -597,7 +551,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:198
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:198
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:201
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:224
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:224
 msgid "Flooded"
 msgstr ""
@@ -710,9 +663,8 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/core.py:640 safe/impact_functions/core.py:587
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
-#: safe/impact_functions/core.py:587
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 msgid "Category"
 msgstr ""
 
@@ -722,14 +674,12 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_building_impact.py:77
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:94
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
 msgid "Affected"
 msgstr ""
 
 #: impact_functions/experimental/tsunami_building_impact.py:25
 #: extras/retired_impact_functions/tsunami_building_impact.py:25
 #: scripts/inasafe-dev/extras/retired_impact_functions/tsunami_building_impact.py:25
-#: extras/retired_impact_functions/tsunami_building_impact.py:25
 msgid "Be affected by tsunami"
 msgstr ""
 
@@ -739,8 +689,6 @@ msgstr ""
 #: extras/retired_impact_functions/tsunami_building_impact.py:129
 #: scripts/inasafe-dev/extras/retired_impact_functions/tsunami_building_impact.py:102
 #: scripts/inasafe-dev/extras/retired_impact_functions/tsunami_building_impact.py:129
-#: extras/retired_impact_functions/tsunami_building_impact.py:102
-#: extras/retired_impact_functions/tsunami_building_impact.py:129
 msgid "Impact"
 msgstr ""
 
@@ -752,7 +700,6 @@ msgstr ""
 #: impact_functions/inundation/flood_generic_building_impact.py:60
 #: extras/retired_impact_functions/tsunami_building_impact.py:102
 #: scripts/inasafe-dev/extras/retired_impact_functions/tsunami_building_impact.py:102
-#: extras/retired_impact_functions/tsunami_building_impact.py:102
 msgid "Number of buildings"
 msgstr ""
 
@@ -763,7 +710,6 @@ msgstr ""
 #: impact_functions/experimental/tsunami_building_impact.py:129
 #: extras/retired_impact_functions/tsunami_building_impact.py:129
 #: scripts/inasafe-dev/extras/retired_impact_functions/tsunami_building_impact.py:129
-#: extras/retired_impact_functions/tsunami_building_impact.py:129
 msgid "Tsunami height"
 msgstr ""
 
@@ -800,7 +746,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:134
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:134
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:137
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:137
 msgid "Building type"
 msgstr ""
 
@@ -816,7 +761,6 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:22
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:22
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:22
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
 msgid "Be temporarily closed"
 msgstr ""
@@ -852,9 +796,7 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:29
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:28
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:27
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:27
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:26
-#: safe/impact_functions/inundation/flood_population_evacuation.py:29
+#: safe/impact_functions/inundation/flood_population_evacuation.py:28
 msgid "Need evacuation"
 msgstr ""
 
@@ -951,7 +893,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:184
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:187
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:210
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:210
 msgid "Buildings are said to be flooded when "
 msgstr ""
 
@@ -973,7 +914,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:186
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:186
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:189
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:212
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:212
 #, python-format
 msgid "flood levels exceed %.1f m"
@@ -998,7 +938,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:188
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:191
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:214
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:214
 msgid "in areas marked as flood prone"
 msgstr ""
 
@@ -1020,7 +959,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:196
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:196
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:199
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:222
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:222
 msgid "Not Flooded"
 msgstr ""
@@ -1063,10 +1001,9 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:106
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:115
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:113
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:113
-#: safe/impact_functions/inundation/flood_population_evacuation.py:106
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:120
+#: safe/impact_functions/inundation/flood_population_evacuation.py:103
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:124
 msgid "People needing evacuation"
 msgstr ""
 
@@ -1085,8 +1022,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:115
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:113
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:120
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:120
-#: safe/impact_functions/inundation/flood_population_evacuation.py:113
+#: safe/impact_functions/inundation/flood_population_evacuation.py:110
 msgid "Rice [kg]"
 msgstr ""
 
@@ -1105,8 +1041,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:116
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:114
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:121
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:121
-#: safe/impact_functions/inundation/flood_population_evacuation.py:114
+#: safe/impact_functions/inundation/flood_population_evacuation.py:111
 msgid "Drinking Water [l]"
 msgstr ""
 
@@ -1125,8 +1060,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:117
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:115
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:122
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:122
-#: safe/impact_functions/inundation/flood_population_evacuation.py:115
+#: safe/impact_functions/inundation/flood_population_evacuation.py:112
 msgid "Clean Water [l]"
 msgstr ""
 
@@ -1145,8 +1079,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:116
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:123
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:123
-#: safe/impact_functions/inundation/flood_population_evacuation.py:116
+#: safe/impact_functions/inundation/flood_population_evacuation.py:113
 msgid "Family Kits"
 msgstr ""
 
@@ -1165,8 +1098,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:119
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:117
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:124
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:124
-#: safe/impact_functions/inundation/flood_population_evacuation.py:117
+#: safe/impact_functions/inundation/flood_population_evacuation.py:114
 msgid "Toilets"
 msgstr ""
 
@@ -1221,7 +1153,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
 #: safe/impact_functions/inundation/flood_population_evacuation.py:112
 #: scripts/inasafe-dev/extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:112
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:112
 msgid "Notes:"
 msgstr ""
 
@@ -1256,8 +1187,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:143
 #: safe/impact_functions/inundation/flood_population_evacuation.py:135
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:142
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:142
-#: safe/impact_functions/inundation/flood_population_evacuation.py:135
+#: safe/impact_functions/inundation/flood_population_evacuation.py:132
 msgid "Minimum needs are defined in BNPB regulation 7/2008"
 msgstr ""
 
@@ -1276,8 +1206,7 @@ msgstr ""
 #: scripts/inasafe-dev/extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:121
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:139
 #: safe/impact_functions/inundation/flood_population_evacuation.py:149
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:121
-#: safe/impact_functions/inundation/flood_population_evacuation.py:149
+#: safe/impact_functions/inundation/flood_population_evacuation.py:146
 msgid "People in need of evacuation"
 msgstr ""
 
@@ -1303,9 +1232,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:164
 #: safe/impact_functions/generic/categorised_hazard_population.py:138
 #: safe/impact_functions/generic/categorised_hazard_population.py:141
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:122
-#: safe/impact_functions/generic/categorised_hazard_population.py:141
-#: safe/impact_functions/inundation/flood_population_evacuation.py:164
+#: safe/impact_functions/inundation/flood_population_evacuation.py:161
 msgid "Population Density"
 msgstr ""
 
@@ -1331,9 +1258,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:170
 #: safe/impact_functions/generic/categorised_hazard_population.py:144
 #: safe/impact_functions/generic/categorised_hazard_population.py:147
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:128
-#: safe/impact_functions/generic/categorised_hazard_population.py:147
-#: safe/impact_functions/inundation/flood_population_evacuation.py:170
+#: safe/impact_functions/inundation/flood_population_evacuation.py:167
 #, python-format
 msgid "Population which %s"
 msgstr ""
@@ -1355,7 +1280,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:122
 #: safe/impact_functions/inundation/flood_population_evacuation.py:123
 #: scripts/inasafe-dev/extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:114
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:114
 #, python-format
 msgid "People need evacuation if flood levels exceed %(eps)i m"
 msgstr ""
@@ -1375,8 +1299,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:113
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:111
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
-#: safe/impact_functions/inundation/flood_population_evacuation.py:111
+#: safe/impact_functions/inundation/flood_population_evacuation.py:108
 msgid "Needs per week"
 msgstr ""
 
@@ -1401,7 +1324,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:193
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:193
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:196
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:219
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:219
 msgid "Buildings inundated"
 msgstr ""
@@ -1432,10 +1354,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:139
 #: safe/impact_functions/generic/categorised_hazard_population.py:119
 #: safe/impact_functions/generic/categorised_hazard_population.py:122
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:113
-#: safe/impact_functions/generic/categorised_hazard_population.py:122
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:139
-#: safe/impact_functions/inundation/flood_population_evacuation.py:132
+#: safe/impact_functions/inundation/flood_population_evacuation.py:129
 #, python-format
 msgid "Total population: %i"
 msgstr ""
@@ -1464,8 +1383,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:134
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:199
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:136
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:199
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:136
 msgid ""
 "Unreinforced masonry is assumed where no structural information is available."
 msgstr ""
@@ -1474,7 +1391,6 @@ msgstr ""
 #: impact_functions/earthquake/padang_building_impact_model.py:139
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:139
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:139
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:141
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:141
 msgid "Earthquake damage to buildings"
 msgstr ""
@@ -1492,8 +1408,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:58
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:84
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:59
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:84
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:59
 msgid "Be damaged depending on building type"
 msgstr ""
 
@@ -1507,8 +1421,6 @@ msgstr ""
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:131
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_building_impact_model.py:194
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/padang_building_impact_model.py:131
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:196
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:133
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:196
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:133
 msgid ""
@@ -1556,8 +1468,7 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:119
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:199
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:209
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:119
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:209
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:210
 msgid "Number of fatalities"
 msgstr ""
 
@@ -1580,8 +1491,7 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:142
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:221
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:231
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:142
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:231
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:235
 msgid "Fatality model is from Institute of Teknologi Bandung 2012."
 msgstr ""
 
@@ -1604,8 +1514,7 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:147
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:227
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:237
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:147
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:237
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:241
 msgid "Earthquake impact to population"
 msgstr ""
 
@@ -1614,7 +1523,6 @@ msgstr ""
 #: storage/dynamic_translations.py:51 common/dynamic_translations.py:51
 #: safe/common/dynamic_translations.py:51
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:51
-#: safe/common/dynamic_translations.py:51
 msgid "DKI buildings"
 msgstr ""
 
@@ -1627,8 +1535,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:53
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:52
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:53
-#: safe/common/dynamic_translations.py:52
-#: safe/common/dynamic_translations.py:53
 msgid "Jakarta 2007 flood"
 msgstr ""
 
@@ -1638,7 +1544,6 @@ msgstr ""
 #: common/dynamic_translations.py:54 common/dynamic_translations.py:56
 #: safe/common/dynamic_translations.py:56
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:56
-#: safe/common/dynamic_translations.py:56
 msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
 msgstr ""
 
@@ -1648,7 +1553,6 @@ msgstr ""
 #: storage/dynamic_translations.py:62 common/dynamic_translations.py:62
 #: common/dynamic_translations.py:65 safe/common/dynamic_translations.py:65
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:65
-#: safe/common/dynamic_translations.py:65
 msgid "Sea wall collapse at Pluit"
 msgstr ""
 
@@ -1658,7 +1562,6 @@ msgstr ""
 #: storage/dynamic_translations.py:63 common/dynamic_translations.py:63
 #: common/dynamic_translations.py:66 safe/common/dynamic_translations.py:66
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:66
-#: safe/common/dynamic_translations.py:66
 msgid "Jakarta flood prone areas"
 msgstr ""
 
@@ -1668,7 +1571,6 @@ msgstr ""
 #: storage/dynamic_translations.py:64 common/dynamic_translations.py:64
 #: common/dynamic_translations.py:71 safe/common/dynamic_translations.py:71
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:71
-#: safe/common/dynamic_translations.py:71
 msgid "Population Jakarta"
 msgstr ""
 
@@ -1679,7 +1581,6 @@ msgstr ""
 #: common/dynamic_translations.py:74 safe/common/dynamic_translations.py:74
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:74
 #: safe/common/dynamic_translations.py:75
-#: safe/common/dynamic_translations.py:75
 msgid "Flood Depth (design) Jakarta"
 msgstr ""
 
@@ -1689,7 +1590,6 @@ msgstr ""
 #: storage/dynamic_translations.py:68 common/dynamic_translations.py:68
 #: common/dynamic_translations.py:75 safe/common/dynamic_translations.py:75
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:75
-#: safe/common/dynamic_translations.py:76
 #: safe/common/dynamic_translations.py:76
 msgid "Flood Depth (current) Jakarta"
 msgstr ""
@@ -1707,7 +1607,6 @@ msgstr ""
 #: storage/dynamic_translations.py:70 common/dynamic_translations.py:70
 #: common/dynamic_translations.py:79 safe/common/dynamic_translations.py:79
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:79
-#: safe/common/dynamic_translations.py:80
 #: safe/common/dynamic_translations.py:80
 msgid "Indonesian Earthquake Hazard Map"
 msgstr ""
@@ -1743,7 +1642,6 @@ msgstr ""
 #: common/dynamic_translations.py:102 safe/common/dynamic_translations.py:102
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:102
 #: safe/common/dynamic_translations.py:103
-#: safe/common/dynamic_translations.py:103
 msgid "OSM building footprints"
 msgstr ""
 
@@ -1755,7 +1653,6 @@ msgstr ""
 #: common/dynamic_translations.py:104 common/dynamic_translations.py:105
 #: safe/common/dynamic_translations.py:105
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:105
-#: safe/common/dynamic_translations.py:106
 #: safe/common/dynamic_translations.py:106
 msgid "AIBEP schools"
 msgstr ""
@@ -1769,7 +1666,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:106
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:106
 #: safe/common/dynamic_translations.py:107
-#: safe/common/dynamic_translations.py:107
 msgid "Population density (5kmx5km)"
 msgstr ""
 
@@ -1778,7 +1674,6 @@ msgstr ""
 #: storage/dynamic_translations.py:58 common/dynamic_translations.py:58
 #: common/dynamic_translations.py:60 safe/common/dynamic_translations.py:60
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:60
-#: safe/common/dynamic_translations.py:60
 msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
 msgstr ""
 
@@ -1797,7 +1692,6 @@ msgstr ""
 #: common/dynamic_translations.py:108 safe/common/dynamic_translations.py:108
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:108
 #: safe/common/dynamic_translations.py:109
-#: safe/common/dynamic_translations.py:109
 msgid "Office buildings Jakarta"
 msgstr ""
 
@@ -1809,7 +1703,6 @@ msgstr ""
 #: common/dynamic_translations.py:109 safe/common/dynamic_translations.py:109
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:109
 #: safe/common/dynamic_translations.py:110
-#: safe/common/dynamic_translations.py:110
 msgid "Hospitals and clinics Jakarta"
 msgstr ""
 
@@ -1820,7 +1713,6 @@ msgstr ""
 #: common/dynamic_translations.py:95 common/dynamic_translations.py:112
 #: common/dynamic_translations.py:113 safe/common/dynamic_translations.py:113
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:113
-#: safe/common/dynamic_translations.py:114
 #: safe/common/dynamic_translations.py:114
 msgid "Schools Jakarta"
 msgstr ""
@@ -1834,7 +1726,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:115
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:115
 #: safe/common/dynamic_translations.py:116
-#: safe/common/dynamic_translations.py:116
 msgid "Industrial buildings Jakarta"
 msgstr ""
 
@@ -1846,7 +1737,6 @@ msgstr ""
 #: common/dynamic_translations.py:115 common/dynamic_translations.py:116
 #: safe/common/dynamic_translations.py:116
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:116
-#: safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:117
 msgid "Industrial areas Jakarta"
 msgstr ""
@@ -1860,7 +1750,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:117
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:118
-#: safe/common/dynamic_translations.py:118
 msgid "Commercial areas Jakarta"
 msgstr ""
 
@@ -1873,7 +1762,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:118
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:118
 #: safe/common/dynamic_translations.py:119
-#: safe/common/dynamic_translations.py:119
 msgid "Hospitals Jakarta"
 msgstr ""
 
@@ -1884,7 +1772,6 @@ msgstr ""
 #: common/dynamic_translations.py:96 common/dynamic_translations.py:113
 #: common/dynamic_translations.py:114 safe/common/dynamic_translations.py:114
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:114
-#: safe/common/dynamic_translations.py:115
 #: safe/common/dynamic_translations.py:115
 msgid "Schools"
 msgstr ""
@@ -1897,7 +1784,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:104
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:104
 #: safe/common/dynamic_translations.py:105
-#: safe/common/dynamic_translations.py:105
 msgid "OSM buildings"
 msgstr ""
 
@@ -1909,7 +1795,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:121
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:121
 #: safe/common/dynamic_translations.py:122
-#: safe/common/dynamic_translations.py:122
+#: safe/common/dynamic_translations.py:123
 msgid "office"
 msgstr ""
 
@@ -1921,7 +1807,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:122
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:122
 #: safe/common/dynamic_translations.py:123
-#: safe/common/dynamic_translations.py:123
+#: safe/common/dynamic_translations.py:124
 msgid "clinic"
 msgstr ""
 
@@ -1933,7 +1819,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:123
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:124
-#: safe/common/dynamic_translations.py:124
+#: safe/common/dynamic_translations.py:125
 msgid "terrace"
 msgstr ""
 
@@ -1945,7 +1831,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:124
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:124
 #: safe/common/dynamic_translations.py:125
-#: safe/common/dynamic_translations.py:125
+#: safe/common/dynamic_translations.py:126
 msgid "police"
 msgstr ""
 
@@ -1957,7 +1843,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:125
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:126
-#: safe/common/dynamic_translations.py:126
+#: safe/common/dynamic_translations.py:127
 msgid "residential"
 msgstr ""
 
@@ -1969,7 +1855,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:126
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:126
 #: safe/common/dynamic_translations.py:127
-#: safe/common/dynamic_translations.py:127
+#: safe/common/dynamic_translations.py:128
 msgid "kindergarten"
 msgstr ""
 
@@ -1981,7 +1867,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:127
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:128
-#: safe/common/dynamic_translations.py:128
+#: safe/common/dynamic_translations.py:129
 msgid "bank"
 msgstr ""
 
@@ -1993,7 +1879,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:128
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:128
 #: safe/common/dynamic_translations.py:129
-#: safe/common/dynamic_translations.py:129
+#: safe/common/dynamic_translations.py:130
 msgid "place of worship"
 msgstr ""
 
@@ -2005,7 +1891,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:129
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:130
-#: safe/common/dynamic_translations.py:130
+#: safe/common/dynamic_translations.py:131
 msgid "school"
 msgstr ""
 
@@ -2017,7 +1903,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:130
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:130
 #: safe/common/dynamic_translations.py:131
-#: safe/common/dynamic_translations.py:131
+#: safe/common/dynamic_translations.py:132
 msgid "university"
 msgstr ""
 
@@ -2029,7 +1915,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:131
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:131
 #: safe/common/dynamic_translations.py:132
-#: safe/common/dynamic_translations.py:132
+#: safe/common/dynamic_translations.py:133
 msgid "apartments"
 msgstr ""
 
@@ -2041,7 +1927,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:132
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:132
 #: safe/common/dynamic_translations.py:133
-#: safe/common/dynamic_translations.py:133
+#: safe/common/dynamic_translations.py:134
 msgid "college"
 msgstr ""
 
@@ -2053,7 +1939,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:133
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:133
 #: safe/common/dynamic_translations.py:134
-#: safe/common/dynamic_translations.py:134
+#: safe/common/dynamic_translations.py:135
 msgid "commercial"
 msgstr ""
 
@@ -2065,7 +1951,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:134
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:134
 #: safe/common/dynamic_translations.py:135
-#: safe/common/dynamic_translations.py:135
+#: safe/common/dynamic_translations.py:136
 msgid "hospital"
 msgstr ""
 
@@ -2077,7 +1963,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:135
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:135
 #: safe/common/dynamic_translations.py:136
-#: safe/common/dynamic_translations.py:136
+#: safe/common/dynamic_translations.py:137
 msgid "industrial"
 msgstr ""
 
@@ -2089,7 +1975,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:136
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:136
 #: safe/common/dynamic_translations.py:137
-#: safe/common/dynamic_translations.py:137
+#: safe/common/dynamic_translations.py:138
 msgid "civic"
 msgstr ""
 
@@ -2101,7 +1987,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:137
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:137
 #: safe/common/dynamic_translations.py:138
-#: safe/common/dynamic_translations.py:138
+#: safe/common/dynamic_translations.py:139
 msgid "church"
 msgstr ""
 
@@ -2113,7 +1999,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:138
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:138
 #: safe/common/dynamic_translations.py:139
-#: safe/common/dynamic_translations.py:139
+#: safe/common/dynamic_translations.py:140
 msgid "hotel"
 msgstr ""
 
@@ -2125,7 +2011,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:139
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:139
 #: safe/common/dynamic_translations.py:140
-#: safe/common/dynamic_translations.py:140
+#: safe/common/dynamic_translations.py:141
 msgid "public building"
 msgstr ""
 
@@ -2137,7 +2023,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:140
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:140
 #: safe/common/dynamic_translations.py:141
-#: safe/common/dynamic_translations.py:141
+#: safe/common/dynamic_translations.py:142
 msgid "other"
 msgstr ""
 
@@ -2149,7 +2035,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:141
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:141
 #: safe/common/dynamic_translations.py:142
-#: safe/common/dynamic_translations.py:142
+#: safe/common/dynamic_translations.py:143
 msgid "fire station"
 msgstr ""
 
@@ -2183,8 +2069,7 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:158
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:258
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:268
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:158
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:268
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:272
 msgid "Estimated fatalities"
 msgstr ""
 
@@ -2212,8 +2097,7 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:124
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:204
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:214
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:124
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:214
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:216
 msgid "Number of people displaced"
 msgstr ""
 
@@ -2245,11 +2129,8 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:120
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:222
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:134
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:222
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:188
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
-#: safe/impact_functions/inundation/flood_population_evacuation.py:120
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:226
+#: safe/impact_functions/inundation/flood_population_evacuation.py:117
 msgid "Action Checklist:"
 msgstr ""
 
@@ -2273,7 +2154,6 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:80
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:80
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:80
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:83
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:83
 #, python-format
 msgid "Unknown hazard type %s. Must be either \"depth\" or \"floodprone\""
@@ -2317,7 +2197,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:135
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:135
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:138
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:138
 msgid "Temporarily closed"
 msgstr ""
 
@@ -2332,7 +2211,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:180
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:183
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:189
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:189
 msgid "Are the critical facilities still open?"
 msgstr ""
 
@@ -2346,7 +2224,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:172
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:175
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:181
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:181
 msgid "Breakdown by building type"
 msgstr ""
 
@@ -2358,21 +2235,18 @@ msgstr ""
 #: impact_functions/earthquake/earthquake_impact_on_women.py:128
 #: safe/impact_functions/earthquake/earthquake_impact_on_women.py:127
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:127
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:127
 msgid "Number of women displaced"
 msgstr ""
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:131
 #: safe/impact_functions/earthquake/earthquake_impact_on_women.py:130
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:130
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:130
 msgid "Number of pregnant women displaced"
 msgstr ""
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:136
 #: safe/impact_functions/earthquake/earthquake_impact_on_women.py:135
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:135
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:135
 #, python-format
 msgid "Are enough shelters available for %i women?"
 msgstr ""
@@ -2380,7 +2254,6 @@ msgstr ""
 #: impact_functions/earthquake/earthquake_impact_on_women.py:138
 #: safe/impact_functions/earthquake/earthquake_impact_on_women.py:137
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:137
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:137
 #, python-format
 msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr ""
@@ -2389,7 +2262,6 @@ msgstr ""
 #: impact_functions/styles.py:61 impact_functions/styles.py:73
 #: safe/impact_functions/styles.py:73
 #: scripts/inasafe-dev/safe/impact_functions/styles.py:73
-#: safe/impact_functions/styles.py:73
 msgid "Mid"
 msgstr ""
 
@@ -2397,7 +2269,6 @@ msgstr ""
 #: storage/dynamic_translations.py:65 common/dynamic_translations.py:65
 #: common/dynamic_translations.py:72 safe/common/dynamic_translations.py:72
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:72
-#: safe/common/dynamic_translations.py:72
 msgid "People"
 msgstr ""
 
@@ -2405,7 +2276,6 @@ msgstr ""
 #: storage/dynamic_translations.py:66 common/dynamic_translations.py:66
 #: common/dynamic_translations.py:73 safe/common/dynamic_translations.py:73
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:73
-#: safe/common/dynamic_translations.py:73
 msgid "people"
 msgstr ""
 
@@ -2415,7 +2285,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:209
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:209
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:219
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:219
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:223
 msgid "Total number of people"
 msgstr ""
 
@@ -2427,7 +2297,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:223
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:223
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:233
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:233
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:237
 msgid "Population numbers rounded to nearest 1000."
 msgstr ""
 
@@ -2435,14 +2305,13 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:81
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:81
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:88
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:88
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:89
 msgid "Die"
 msgstr ""
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:40
 #: safe/impact_functions/earthquake/earthquake_impact_on_women.py:39
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/earthquake_impact_on_women.py:39
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:39
 msgid "Suffer because of gender"
 msgstr ""
 
@@ -2451,7 +2320,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:214
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:214
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:224
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:224
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:228
 #, python-format
 msgid "Are there enough victim identification units available for %i people?"
 msgstr ""
@@ -2461,7 +2330,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:217
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:217
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:227
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:227
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:231
 #, python-format
 msgid "Are there enough shelters available for %i people?"
 msgstr ""
@@ -2482,9 +2351,9 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:245
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:250
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:255
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:245
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:250
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:255
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:249
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:254
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:259
 #, python-format
 msgid "%.2f people/cell"
 msgstr ""
@@ -2497,8 +2366,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:109
 #: scripts/inasafe-dev/extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:93
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:109
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:93
-#: safe/impact_functions/inundation/flood_population_evacuation.py:109
+#: safe/impact_functions/inundation/flood_population_evacuation.py:106
 msgid "Map shows population density needing evacuation"
 msgstr ""
 
@@ -2508,7 +2376,6 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:116
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:116
 #: scripts/inasafe-dev/extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:116
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:116
 #, python-format
 msgid "People in 50cm to 1m of water: %i"
 msgstr ""
@@ -2519,7 +2386,6 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:117
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:117
 #: scripts/inasafe-dev/extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:117
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:117
 #, python-format
 msgid "People in 30cm to 50cm of water: %i"
 msgstr ""
@@ -2539,7 +2405,7 @@ msgstr ""
 #: impact_functions/core.py:338 safe/impact_functions/core.py:353
 #: safe/impact_functions/core.py:351
 #: scripts/inasafe-dev/safe/impact_functions/core.py:351
-#: safe/impact_functions/core.py:352 safe/impact_functions/core.py:352
+#: safe/impact_functions/core.py:352
 #, python-format
 msgid ""
 "In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
@@ -2551,6 +2417,7 @@ msgstr ""
 #: scripts/inasafe-dev/safe/storage/interpolation.py:240
 #: safe/storage/interpolation.py:277 safe/storage/interpolation.py:246
 #: safe/engine/interpolation.py:392 safe/engine/interpolation.py:393
+#: safe/engine/interpolation.py:399
 #, python-format
 msgid ""
 "Could not interpolate from raster layer %(raster)s to vector layer "
@@ -2579,8 +2446,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:160
 #: safe/impact_functions/generic/categorised_hazard_population.py:134
 #: safe/impact_functions/generic/categorised_hazard_population.py:137
-#: safe/impact_functions/generic/categorised_hazard_population.py:137
-#: safe/impact_functions/inundation/flood_population_evacuation.py:160
+#: safe/impact_functions/inundation/flood_population_evacuation.py:157
 #, python-format
 msgid "Low [%i people/cell]"
 msgstr ""
@@ -2597,8 +2463,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:161
 #: safe/impact_functions/generic/categorised_hazard_population.py:135
 #: safe/impact_functions/generic/categorised_hazard_population.py:138
-#: safe/impact_functions/generic/categorised_hazard_population.py:138
-#: safe/impact_functions/inundation/flood_population_evacuation.py:161
+#: safe/impact_functions/inundation/flood_population_evacuation.py:158
 #, python-format
 msgid "Medium [%i people/cell]"
 msgstr ""
@@ -2615,27 +2480,23 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:162
 #: safe/impact_functions/generic/categorised_hazard_population.py:136
 #: safe/impact_functions/generic/categorised_hazard_population.py:139
-#: safe/impact_functions/generic/categorised_hazard_population.py:139
-#: safe/impact_functions/inundation/flood_population_evacuation.py:162
+#: safe/impact_functions/inundation/flood_population_evacuation.py:159
 #, python-format
 msgid "High [%i people/cell]"
 msgstr ""
 
 #: common/dynamic_translations.py:54 safe/common/dynamic_translations.py:54
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:54
-#: safe/common/dynamic_translations.py:54
 msgid "A flood in Jakarta like in 2007"
 msgstr ""
 
 #: common/dynamic_translations.py:63 safe/common/dynamic_translations.py:63
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:63
-#: safe/common/dynamic_translations.py:63
 msgid "A flood in Jakarta like in 2007 but with structural improvements"
 msgstr ""
 
 #: common/dynamic_translations.py:68 safe/common/dynamic_translations.py:68
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:68
-#: safe/common/dynamic_translations.py:68
 msgid "A flood in Jakarta in RW areas identified as flood prone"
 msgstr ""
 
@@ -2646,14 +2507,11 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:97
 #: safe/common/dynamic_translations.py:77
 #: safe/common/dynamic_translations.py:98
-#: safe/common/dynamic_translations.py:77
-#: safe/common/dynamic_translations.py:98
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr ""
 
 #: common/dynamic_translations.py:81 safe/common/dynamic_translations.py:81
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:81
-#: safe/common/dynamic_translations.py:82
 #: safe/common/dynamic_translations.py:82
 msgid "A tsunami in Maumere (Mw 8.1)"
 msgstr ""
@@ -2662,14 +2520,12 @@ msgstr ""
 #: safe/common/dynamic_translations.py:83
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:83
 #: safe/common/dynamic_translations.py:84
-#: safe/common/dynamic_translations.py:84
 msgid "An earthquake at the Sumatran fault (Mw 7.8)"
 msgstr ""
 
 #: common/dynamic_translations.py:88 common/dynamic_translations.py:89
 #: safe/common/dynamic_translations.py:89
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:89
-#: safe/common/dynamic_translations.py:90
 #: safe/common/dynamic_translations.py:90
 msgid "An earthquake at the Mentawai fault (Mw 9.0)"
 msgstr ""
@@ -2678,7 +2534,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:95
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:95
 #: safe/common/dynamic_translations.py:96
-#: safe/common/dynamic_translations.py:96
 msgid "An earthquake in Padang like in 2009"
 msgstr ""
 
@@ -2686,13 +2541,11 @@ msgstr ""
 #: safe/common/dynamic_translations.py:100
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:100
 #: safe/common/dynamic_translations.py:101
-#: safe/common/dynamic_translations.py:101
 msgid "An earthquake at the Lembang fault"
 msgstr ""
 
 #: common/dynamic_translations.py:82 safe/common/dynamic_translations.py:82
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:82
-#: safe/common/dynamic_translations.py:83
 #: safe/common/dynamic_translations.py:83
 msgid "A tsunami in Padang (Mw 8.8)"
 msgstr ""
@@ -2702,7 +2555,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:25
 #: safe/impact_functions/generic/categorised_hazard_population.py:26
 #: safe/impact_functions/generic/categorised_hazard_population.py:29
-#: safe/impact_functions/generic/categorised_hazard_population.py:29
 msgid "be impacted"
 msgstr ""
 
@@ -2710,7 +2562,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_population.py:92
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:92
 #: safe/impact_functions/generic/categorised_hazard_population.py:93
-#: safe/impact_functions/generic/categorised_hazard_population.py:96
 #: safe/impact_functions/generic/categorised_hazard_population.py:96
 msgid "People impacted "
 msgstr ""
@@ -2720,7 +2571,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:95
 #: safe/impact_functions/generic/categorised_hazard_population.py:96
 #: safe/impact_functions/generic/categorised_hazard_population.py:99
-#: safe/impact_functions/generic/categorised_hazard_population.py:99
 msgid "People in high hazard area "
 msgstr ""
 
@@ -2728,7 +2578,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_population.py:98
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:98
 #: safe/impact_functions/generic/categorised_hazard_population.py:99
-#: safe/impact_functions/generic/categorised_hazard_population.py:102
 #: safe/impact_functions/generic/categorised_hazard_population.py:102
 msgid "People in medium hazard area "
 msgstr ""
@@ -2738,7 +2587,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:101
 #: safe/impact_functions/generic/categorised_hazard_population.py:102
 #: safe/impact_functions/generic/categorised_hazard_population.py:105
-#: safe/impact_functions/generic/categorised_hazard_population.py:105
 msgid "People in low hazard area"
 msgstr ""
 
@@ -2746,7 +2594,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_population.py:116
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:116
 #: safe/impact_functions/generic/categorised_hazard_population.py:117
-#: safe/impact_functions/generic/categorised_hazard_population.py:120
 #: safe/impact_functions/generic/categorised_hazard_population.py:120
 msgid "Map shows population density in high or medium hazard area"
 msgstr ""
@@ -2756,7 +2603,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:122
 #: safe/impact_functions/generic/categorised_hazard_population.py:123
 #: safe/impact_functions/generic/categorised_hazard_population.py:126
-#: safe/impact_functions/generic/categorised_hazard_population.py:126
 msgid "People in high hazard areas"
 msgstr ""
 
@@ -2765,7 +2611,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:117
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:111
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:109
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:116
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:116
 msgid "Map shows population affected in each flood prone area "
 msgstr ""
@@ -2777,7 +2622,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:123
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:141
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:140
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:140
 msgid "People need evacuation if in area identified as \"Flood Prone\""
 msgstr ""
 
@@ -2787,7 +2631,6 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:130
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:128
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:146
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:145
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:145
 msgid "People affected by flood prone areas"
 msgstr ""
@@ -2808,8 +2651,9 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:168
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:174
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:175
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:176
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
 msgid "Population Count"
 msgstr ""
 
@@ -2821,21 +2665,20 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:170
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:180
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:179
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:179
 msgid "Population affected by flood prone areas"
 msgstr ""
 
 #: safe/impact_functions/core.py:526 safe/impact_functions/core.py:538
 #: scripts/inasafe-dev/safe/impact_functions/core.py:538
 #: safe/impact_functions/core.py:539 safe/impact_functions/core.py:640
-#: safe/impact_functions/core.py:587 safe/impact_functions/core.py:587
+#: safe/impact_functions/core.py:587
 msgid "Title"
 msgstr ""
 
 #: safe/impact_functions/core.py:526 safe/impact_functions/core.py:538
 #: scripts/inasafe-dev/safe/impact_functions/core.py:538
 #: safe/impact_functions/core.py:539 safe/impact_functions/core.py:640
-#: safe/impact_functions/core.py:587 safe/impact_functions/core.py:587
+#: safe/impact_functions/core.py:587
 msgid "ID"
 msgstr ""
 
@@ -2848,7 +2691,7 @@ msgstr ""
 #: safe/impact_functions/core.py:560 safe/impact_functions/core.py:572
 #: scripts/inasafe-dev/safe/impact_functions/core.py:572
 #: safe/impact_functions/core.py:574 safe/impact_functions/core.py:709
-#: safe/impact_functions/core.py:656 safe/impact_functions/core.py:656
+#: safe/impact_functions/core.py:656
 msgid "Available Impact Functions"
 msgstr ""
 
@@ -2881,15 +2724,12 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_population.py:116
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
 #: safe/impact_functions/generic/categorised_hazard_population.py:119
-#: safe/impact_functions/earthquake/earthquake_impact_on_women.py:140
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:230
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:132
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
-#: safe/impact_functions/generic/categorised_hazard_population.py:119
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:209
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:138
-#: safe/impact_functions/inundation/flood_population_evacuation.py:131
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:142
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:234
+#: safe/impact_functions/inundation/flood_population_evacuation.py:128
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:148
+#: safe/impact_functions/volcanic/volcano_building_impact.py:148
+#: safe/impact_functions/volcanic/volcano_building_impact.py:148
 msgid "Notes"
 msgstr ""
 
@@ -2897,7 +2737,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:129
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:129
 #: safe/impact_functions/inundation/flood_population_evacuation.py:139
-#: safe/impact_functions/inundation/flood_population_evacuation.py:139
+#: safe/impact_functions/inundation/flood_population_evacuation.py:136
 msgid "Detailed breakdown"
 msgstr ""
 
@@ -2910,7 +2750,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:123
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:123
 #: safe/impact_functions/inundation/flood_population_evacuation.py:133
-#: safe/impact_functions/inundation/flood_population_evacuation.py:133
+#: safe/impact_functions/inundation/flood_population_evacuation.py:130
 #, python-format
 msgid "People need evacuation if flood levels exceed %(eps).1f m"
 msgstr ""
@@ -2918,12 +2758,11 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:132
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:132
 #: safe/impact_functions/inundation/flood_population_evacuation.py:142
-#: safe/impact_functions/inundation/flood_population_evacuation.py:142
+#: safe/impact_functions/inundation/flood_population_evacuation.py:139
 #, python-format
 msgid "People in %(lo).1f m to %(hi).1f m of water: %(val)i"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:74
 #: safe/common/dynamic_translations.py:74
 msgid "People in Jakarta"
 msgstr ""
@@ -2933,8 +2772,11 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:157
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:163
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:162
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:162
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:164
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:165
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
+#: safe/impact_functions/volcanic/volcano_building_impact.py:171
+#: safe/impact_functions/volcanic/volcano_building_impact.py:171
 msgid "0"
 msgstr ""
 
@@ -2943,37 +2785,40 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:159
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:165
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:164
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:164
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:166
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:167
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:173
+#: safe/impact_functions/volcanic/volcano_building_impact.py:173
+#: safe/impact_functions/volcanic/volcano_building_impact.py:173
 #, python-format
 msgid "%i - %i"
 msgstr ""
 
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:24
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
+#: safe/impact_functions/volcanic/volcano_building_impact.py:27
+#: safe/impact_functions/volcanic/volcano_building_impact.py:27
 msgid "Be affected"
 msgstr ""
 
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:102
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:108
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:108
 msgid "Categorised hazard has only 3 classes, high, medium and low."
 msgstr ""
 
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:113
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:113
 msgid "Categorised hazard impact on buildings"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
 msgid "be affected"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:130
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:136
 msgid "Map shows population affected in each of volcano hazard polygons."
 msgstr ""
 
@@ -2985,46 +2830,46 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:137
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:144
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:145
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:151
 msgid "People need evacuation if they are within the volcanic hazard zones."
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:140
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:147
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:148
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:154
 msgid "People affected by volcanic hazard zone"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:174
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:188
 msgid "Population affected by volcanic hazard zone"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:191
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:191
 msgid "Which structures have warning capacity (eg. sirens, speakers, etc.)?"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:193
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:193
 msgid "Which buildings will be evacuation centres?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:195
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:195
 msgid "Where will we locate the operations centre?"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:197
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:197
 msgid "Where will we locate warehouse and/or distribution centres?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:200
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:200
 #, python-format
 msgid "Where will the students from the %d closed schools go to study?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:204
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:204
 #, python-format
 msgid ""
@@ -3035,61 +2880,109 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
 #: safe/impact_functions/inundation/flood_population_evacuation.py:121
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:128
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:128
-#: safe/impact_functions/inundation/flood_population_evacuation.py:121
+#: safe/impact_functions/inundation/flood_population_evacuation.py:118
 msgid "How will warnings be disseminated?"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:130
 #: safe/impact_functions/inundation/flood_population_evacuation.py:122
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
-#: safe/impact_functions/inundation/flood_population_evacuation.py:122
+#: safe/impact_functions/inundation/flood_population_evacuation.py:119
 msgid "How will we reach stranded people?"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
 #: safe/impact_functions/inundation/flood_population_evacuation.py:123
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:130
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:130
-#: safe/impact_functions/inundation/flood_population_evacuation.py:123
+#: safe/impact_functions/inundation/flood_population_evacuation.py:120
 msgid "Do we have enough relief items?"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:132
 #: safe/impact_functions/inundation/flood_population_evacuation.py:124
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
-#: safe/impact_functions/inundation/flood_population_evacuation.py:124
+#: safe/impact_functions/inundation/flood_population_evacuation.py:121
 msgid "If yes, where are they located and how will we distribute them?"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:134
 #: safe/impact_functions/inundation/flood_population_evacuation.py:126
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:133
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:133
-#: safe/impact_functions/inundation/flood_population_evacuation.py:126
+#: safe/impact_functions/inundation/flood_population_evacuation.py:123
 msgid ""
 "If no, where can we obtain additional relief items from and how will we "
 "transport them to here?"
 msgstr ""
 
 #: safe/impact_functions/core.py:641 safe/impact_functions/core.py:588
-#: safe/impact_functions/core.py:588
 msgid "Sub Category"
 msgstr ""
 
 #: safe/impact_functions/core.py:641 safe/impact_functions/core.py:588
-#: safe/impact_functions/core.py:588
 msgid "Layer type"
 msgstr ""
 
 #: safe/impact_functions/core.py:641 safe/impact_functions/core.py:588
-#: safe/impact_functions/core.py:588
 msgid "Data type"
 msgstr ""
 
 #: safe/impact_functions/core.py:642 safe/impact_functions/core.py:589
-#: safe/impact_functions/core.py:589
 msgid "Unit"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:143
+#, python-format
+msgid "Total population %i in in the viewable area"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:143
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:149
+#, python-format
+msgid "Total population %i in the viewable area"
+msgstr ""
+
+#: safe/impact_functions/generic/categorised_hazard_population.py:29
+msgid "Be impacted"
+msgstr ""
+
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
+msgid "Be flooded"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:120
+msgid "An eruption"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+msgid "Cumulative"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:143
+#: safe/impact_functions/volcanic/volcano_building_impact.py:143
+msgid "Map shows buildings affected in each of volcano hazard polygons."
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:149
+#: safe/impact_functions/volcanic/volcano_building_impact.py:149
+#, python-format
+msgid "Total number of buildings %i in the viewable area"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:151
+#: safe/impact_functions/volcanic/volcano_building_impact.py:151
+msgid "Only buildings available in Open Street Mapare considered."
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:154
+#: safe/impact_functions/volcanic/volcano_building_impact.py:188
+#: safe/impact_functions/volcanic/volcano_building_impact.py:154
+#: safe/impact_functions/volcanic/volcano_building_impact.py:188
+msgid "Buildings affected by volcanic hazard zone"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:182
+#: safe/impact_functions/volcanic/volcano_building_impact.py:182
+msgid "Building Count"
 msgstr ""

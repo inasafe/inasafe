@@ -11,28 +11,18 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.common.utilities import temp_dir
-
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'final'  # beta, final etc will be shown in dock title
-
-import numpy
 import os
+import numpy
+import logging
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
-from safe_qgis.dock_base import Ui_DockBase
-from safe_qgis.aggregation_attribute_dialog_base import\
-    Ui_AggregationAttributeDialogBase
 
-from safe_qgis.help import Help
-from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 getWGS84resolution,
-                                 logOnQgsMessageLog)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -43,13 +33,24 @@ from qgis.core import (QgsMapLayer,
                        QgsFeature,
                        QgsRectangle)
 from qgis.analysis import QgsZonalStatistics
+
+# TODO: Rather import via safe_interface.py TS
+from safe.api import write_keywords, read_keywords, ReadLayerError
+
+from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.help import Help
+from safe_qgis.utilities import (getExceptionWithStacktrace,
+                                 getWGS84resolution)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
                                       getOptimalExtent,
                                       getBufferedExtent,
-                                      internationalisedNames,
-                                      writeKeywordsToFile)
+                                      getSafeImpactFunctions,
+                                      writeKeywordsToFile,
+                                      safeTr,
+                                      get_version,
+                                      temp_dir)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -58,25 +59,21 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
-from safe.api import write_keywords, read_keywords, ReadLayerError
+from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
-
+from safe_qgis.configurable_impact_functions_dialog import (
+   ConfigurableImpactFunctionsDialog)
+from safe_qgis.keywords_dialog import KeywordsDialog
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
 
-#see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Dock(QtGui.QDockWidget, Ui_DockBase):
@@ -106,8 +103,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
+        myLongVersion = get_version()
+        myTokens = myLongVersion.split('.')
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
+        myVersionType = myTokens[3].split('2')[0]
+        # Allowed version names: ('alpha', 'beta', 'rc', 'final')
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
-                                __version__, __type__)))
+            myVersion, myVersionType)))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
@@ -180,8 +182,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to clip hazard and exposure layers to the viewport
         myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+                            'inasafe/clipToViewport', True).toBool()
         self.clipToViewport = myFlag
+
+        # whether to show or not postprocessing generated layers
+        myFlag = mySettings.value(
+                            'inasafe/showPostProcessingLayers', False).toBool()
+        self.showPostProcessingLayers = myFlag
 
         self.getLayers()
 
@@ -382,11 +389,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
+    @pyqtSlot(QtCore.QString)
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
-
-        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
         Args:
            None.
@@ -395,11 +401,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            None.
 
         Raises:
-           no exceptions explicitly raised.
-
-    """
+           no exceptions explicitly raised."""
         # Add any other logic you mught like here...
-        del theIndex
+        if not theIndex.isNull or not theIndex == '':
+            myFunctionID = self.getFunctionID()
+
+            myFunctions = getSafeImpactFunctions(myFunctionID)
+            self.myFunction = myFunctions[0][myFunctionID]
+            self.functionParams = None
+            if hasattr(self.myFunction, 'parameters'):
+                self.functionParams = self.myFunction.parameters
+
+            self.setToolFunctionOptionsButton()
+        else:
+            del theIndex
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
@@ -418,6 +433,42 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myButton.setEnabled(myFlag)
         if myMessage is not '':
             self.displayHtml(myMessage)
+
+    def setToolFunctionOptionsButton(self):
+        """Helper function to set the tool function button
+        status if there is function parameters to configure
+        then enable it, otherwise disable it.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        # Check if functionParams intialized
+        if self.functionParams is None:
+            self.toolFunctionOptions.setEnabled(False)
+        else:
+            self.toolFunctionOptions.setEnabled(True)
+
+    @pyqtSlot()
+    def on_toolFunctionOptions_clicked(self):
+        """Automatic slot executed when the tool button for configuring
+        impact functions is clicked (when available) to open the dialog
+
+        Args:
+           None.
+
+        Returns:
+           None.
+
+        Raises:
+           no exceptions explicitly raised."""
+        conf = ConfigurableImpactFunctionsDialog(self)
+        conf.setDialogInfo(self.getFunctionID())
+        conf.buildFormFromImpactFunctionsParameter(self.myFunction,
+                                                   self.functionParams)
+        conf.showNormal()
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
@@ -524,8 +575,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myLayer not in myCanvasLayers):
                 continue
 
-         # .. todo:: check raster is single band
-         #    store uuid in user property of list widget for layers
+        # .. todo:: check raster is single band
+        #    store uuid in user property of list widget for layers
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
@@ -538,8 +589,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
-                if myTitle in internationalisedNames:
-                    myTitle = internationalisedNames[myTitle]
+                myTitle = safeTr(myTitle)
             # Register title with layer
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
@@ -696,6 +746,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFilename = myEngineImpactLayer.get_filename()
         myName = myEngineImpactLayer.get_name()
 
+        myQgisLayer = None
         # Read layer
         if myEngineImpactLayer.is_vector:
             myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
@@ -1021,7 +1072,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
             myMessage = self.tr('Could not remove the unneded fields')
-            logOnQgsMessageLog(myMessage)
+            LOGGER.debug(myMessage)
         del toDel, vProvider, vFields
 
         writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
@@ -1046,7 +1097,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
-        logOnQgsMessageLog('Vector aggregation not implemented yet. Called on'
+        LOGGER.debug('Vector aggregation not implemented yet. Called on'
                            ' %s' % myQgisImpactLayer.name())
         return
 
@@ -1074,7 +1125,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+        if self.showPostProcessingLayers:
+            QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         return
 
     def _parseAggregationResults(self):
@@ -1168,24 +1220,35 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myKeywordFilePath = os.path.splitext(str(
             self.aggregationLayer.source()))[0]
         myKeywordFilePath += '.keywords'
-        if not os.path.isfile(myKeywordFilePath):
-            self._promptForAggregationAttribute(self.aggregationLayer,
-                myKeywordFilePath, None)
-        else:
+
+        try:
             keywords = read_keywords(myKeywordFilePath)
+        # pylint: disable=W0703
+        except Exception:
+            keywords = dict()
+        # pylint: disable=W0703
 
-            if 'aggregation attribute' in keywords:
-                try:
-                    myValue = keywords['aggregation attribute']
-                except:
-                    raise
-            else:
-                myValue = self._promptForAggregationAttribute(self
-                .aggregationLayer, myKeywordFilePath, keywords)
-            return myValue
+        if ('category' in keywords and
+            keywords['category'] == 'postprocessing' and
+            'subcategory' in keywords and
+            keywords['subcategory'] == 'aggregation' and
+            'aggregation attribute' in keywords):
+            #keywords are already complete
+            myValue = keywords['aggregation attribute']
+        else:
+            #set the default values by writing to the keywords
+            keywords['category'] = 'postprocessing'
+            keywords['subcategory'] = 'aggregation'
+            write_keywords(keywords, myKeywordFilePath)
 
-    def _promptForAggregationAttribute(self, myLayer, myKeywordFilePath,
-                                       myKeywords):
+            #prompt uset for a choice
+            myValue = self._promptForAggregationAttribute(myKeywordFilePath)
+            keywords['aggregation attribute'] = myValue
+            write_keywords(keywords, myKeywordFilePath)
+
+        return myValue
+
+    def _promptForAggregationAttribute(self, myKeywordFilePath):
         """prompt user for a decision on which attribute has to be the key
         attribute for the aggregated data and writes the keywords file
         This could be swapped to a call to the keyword editor
@@ -1197,10 +1260,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises: Propagates any error
         """
-        if myKeywords is None:
-            myKeywords = dict()
 
-        vProvider = myLayer.dataProvider()
+        vProvider = self.aggregationLayer.dataProvider()
         vFields = vProvider.fields()
         fields = []
         for i in vFields:
@@ -1213,12 +1274,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #there is no usable attribute, use None
         if len(fields) == 0:
             aggrAttribute = None
-            logOnQgsMessageLog(
-                'there is no usable attribute, use None')
+            LOGGER.debug('there is no usable attribute, use None')
         #there is only one usable attribute, use it
         elif len(fields) == 1:
             aggrAttribute = fields[0]
-            logOnQgsMessageLog('there is only one usable attribute, '
+            LOGGER.debug('there is only one usable attribute, '
                                'use it: ' + str(aggrAttribute))
         #there are multiple usable attribute, prompt for an answer
         elif len(fields) > 1:
@@ -1229,33 +1289,36 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProgress = 1
             self.showBusy(myTitle, myMessage, myProgress)
 
-            #open a AggregationAttributeDialog
-            dialog = QtGui.QDialog()
-            #remove all windows hints to avoid allowing for cancelling the
-            # dialog
-            dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
-            dialogGui = Ui_AggregationAttributeDialogBase()
-            dialogGui.setupUi(dialog)
-            cboAggr = dialogGui.cboAggregationAttributes
-            cboAggr.clear()
-            cboAggr.addItems(fields)
-            cboAggr.setCurrentIndex(0)
             self.disableBusyCursor()
 
-            if dialog.exec_() == QtGui.QDialog.Accepted:
-                aggrAttribute = cboAggr.currentText()
-                logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
-                                   ' as aggregation attribute')
+            self.aggregationAttributeDialog = KeywordsDialog(
+                self.iface.mainWindow(),
+                self.iface,
+                self,
+                self.aggregationLayer)
+
+            aggrAttribute = fields[0]
+            if self.aggregationAttributeDialog.exec_() == \
+               QtGui.QDialog.Accepted:
+                keywords = read_keywords(myKeywordFilePath)
+                try:
+                    aggrAttribute = keywords['aggregation attribute']
+                    LOGGER.debug('User selected: ' + str(aggrAttribute) +
+                                       ' as aggregation attribute')
+                # pylint: disable=W0703
+                except Exception:
+                    LOGGER.debug('User Accepted but did not select a '
+                                       'value. Using default : '
+                                       + str(aggrAttribute) +
+                                       ' as aggregation attribute')
+                # pylint: disable=W0703
             else:
-                #the user cancelled, use the first attribute as default
-                aggrAttribute = fields[0]
-#                myMessage = self.tr(
-#                    'You have to select an aggregation attribute')
-#                raise InvalidParameterException(myMessage)
+                # The user cancelled, use the first attribute as default
+                LOGGER.debug('User cancelled, using default: '
+                                   + str(aggrAttribute) +
+                                   ' as aggregation attribute')
 
         self.enableBusyCursor()
-        myKeywords['aggregation attribute'] = aggrAttribute
-        write_keywords(myKeywords, myKeywordFilePath)
         return aggrAttribute
 
     def _completed(self):
@@ -1277,7 +1340,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 99
         self.showBusy(myTitle, myMessage, myProgress)
 
+        # FIXME (Ole): Marco and Ole saw situation where self.runner was None.
+        # Could not be reproduced, but maybe an idea to put an error
+        # message in that case
         myMessage = self.runner.result()
+
         # FIXME (Ole): This branch is not covered by the tests
         myEngineImpactLayer = self.runner.impactLayer()
 
@@ -1342,7 +1409,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #append postprocessing report
         myReport += self.getPostprocessingOutput()
 
-        # Return text to display in report pane
+        # append properties of the result layer
+        myReport += ('<table class="table table-striped condensed'
+                        ' bordered-table">')
+        # Add this keyword to report
+        myReport += ('<tr>'
+                        '<th>' + self.tr('Time stamp')
+                        + '</th>'
+                        '</tr>'
+                        '<tr>'
+                        '<td>' + str(myKeywords['time_stamp']) + '</td>'
+                        '</tr>')
+        myReport += ('<tr>'
+                        '<th>' + self.tr('Elapsed time')
+                        + '</th>'
+                        '</tr>'
+                        '<tr>'
+                        '<td>' + str(myKeywords['elapsed_time'])
+                        + ' ' + self.tr('seconds') + '</td>'
+                        '</tr>')
+        myReport += '</table>'
+        # Return text to display in report panel
         return myReport
 
     def showHelp(self):
@@ -1351,7 +1438,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             del self.helpDialog
         self.helpDialog = Help(theParent=self.iface.mainWindow(),
                                theContext='dock')
-        self.helpDialog.showMe()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
@@ -1480,17 +1566,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (MB): This branch is not covered by the tests
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
-                   'and / or the layers and the viewport. Please select '
+                   'and / or the layers and the viewable area. Please select '
                    'two overlapping layers and zoom or pan to them or disable'
-                   ' viewport clipping in the options dialog'
+                   ' viewable area clipping in the options dialog'
                    '. Full details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
                    '<p>Hazard: %1</p>'
                    '<p>Exposure: %2</p>'
-                   '<p>Viewport Geo Extent: %3</p>'
+                   '<p>Viewable area Geo Extent: %3</p>'
                    '<p>Hazard Geo Extent: %4</p>'
                    '<p>Exposure Geo Extent: %5</p>'
-                   '<p>Viewport clipping enabled: %6</p>'
+                   '<p>Viewable area clipping enabled: %6</p>'
                    '<p>Details: %7</p>').arg(
                         myHazardLayer.source()).arg(
                         myExposureLayer.source()).arg(
@@ -1679,21 +1765,41 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if theLayer is not None:
             try:
                 myKeywords = self.keywordIO.readKeywords(theLayer)
+
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
+                            # append properties of the result layer
+                    myReport += ('<table class="table table-striped condensed'
+                                    ' bordered-table">')
+                    # Add this keyword to report
+                    myReport += ('<tr>'
+                            '<th>' + self.tr('Time stamp')
+                            + '</th>'
+                            '</tr>'
+                            '<tr>'
+                            '<td>' + str(myKeywords['time_stamp']) + '</td>'
+                            '</tr>')
+                    myReport += ('<tr>'
+                            '<th>' + self.tr('Elapsed time')
+                            + '</th>'
+                            '</tr>'
+                            '<tr>'
+                            '<td>' + str(myKeywords['elapsed_time'])
+                            + ' ' + self.tr('seconds') + '</td>'
+                            '</tr>')
+                    myReport += '</table>'
                     self.pbnPrint.setEnabled(True)
 
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
-                        myValue = str(myKeywords[myKeyword])
+                        myValue = myKeywords[myKeyword]
 
                         # Translate titles explicitly if possible
-                        if myKeyword == 'title' and \
-                                myValue in internationalisedNames:
-                            myValue = internationalisedNames[myValue]
+                        if myKeyword == 'title':
+                            myValue = safeTr(myValue)
 
                         # Add this keyword to report
                         myReport += ('<tr>'
@@ -1703,7 +1809,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                        + '</th>'
                                      '</tr>'
                                      '<tr>'
-                                       '<td>' + myValue + '</td>'
+                                       '<td>' + str(myValue) + '</td>'
                                      '</tr>')
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException,
@@ -1800,29 +1906,53 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
-        myFilename = QtGui.QFileDialog.getSaveFileName(self,
-                            self.tr('Write to PDF'),
-                            temp_dir(),
-                            self.tr('Pdf File (*.pdf)'))
         myMap = Map(self.iface)
-        myMap.setImpactLayer(self.iface.activeLayer())
+        if self.iface.activeLayer() is None:
+            QtGui.QMessageBox.warning(self,
+                                self.tr('InaSAFE'),
+                                self.tr('Please select a valid impact layer'
+                                        ' before trying to print.'))
+            return
+
         self.showBusy(self.tr('Map Creator'),
-                      self.tr('Generating your map as a PDF document...'),
+                      self.tr('Preparing map and report'),
                       theProgress=20)
+
+        myMap.setImpactLayer(self.iface.activeLayer())
+        LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
+        myMapFilename = QtGui.QFileDialog.getSaveFileName(self,
+                            self.tr('Write to PDF'),
+                            os.path.join(temp_dir(),
+                                         myMap.getMapTitle() + '.pdf'),
+                            self.tr('Pdf File (*.pdf)'))
+        myMapFilename = str(myMapFilename)
+
+        myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
+        myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myHtmlPdfPath = myHtmlRenderer.printImpactTable(
+            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+        QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myHtmlPdfPath,
+                                                   QtCore.QUrl.TolerantMode))
         try:
-            myMap.makePdf(myFilename)
+            myMapPdfPath = myMap.printToPdf(myMapFilename)
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Your PDF was created....opening using '
-                                  'the default PDF viewer on your system.'
-                                  'The generated pdf is saved as: %s' %
-                                  myFilename),
+                                  'the default PDF viewer on your system.>'
+                                  'The generated pdfs were saved as:%(br)s'
+                                  '%(map)s%(br)sand%(br)s%(table)s'
+                                   % {
+                                    'br': '<br>',
+                                    'map': myMapPdfPath,
+                                    'table': myHtmlPdfPath}),
                           theProgress=80)
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
-                                 QtCore.QUrl.TolerantMode))
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl('file:///' + myTableFilename,
+                QtCore.QUrl.TolerantMode))
+
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Processing complete.'
-                                  'The generated pdf is saved as: %s' %
-                                  myFilename),
+                                  'The generated pdfs were saved as: %s and'
+                                  '%s' % (myMapPdfPath, myHtmlPdfPath)),
                           theProgress=100)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests

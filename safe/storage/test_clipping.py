@@ -1,12 +1,17 @@
 import unittest
 import numpy
+import os
 from os.path import join
 
 from safe.common.testing import TESTDATA
-from safe.common.polygon import is_inside_polygon, inside_polygon
+from safe.common.polygon import (is_inside_polygon, inside_polygon,
+                                 populate_polygon,
+                                 generate_random_points_in_bbox)
 from safe.storage.vector import Vector
 from safe.storage.core import read_layer
 from safe.storage.clipping import clip_raster_by_polygons
+from safe.storage.geometry import Polygon
+from safe.common.utilities import unique_filename
 
 
 # FIXME (Ole): Move this along with contents of clipping.py to
@@ -165,7 +170,10 @@ class Test_Clipping(unittest.TestCase):
             values = [{'value': x} for x in C[i][1]]
             point_layer = Vector(data=values, geometry=points,
                                  projection=P.get_projection())
-            assert point_layer.is_point_data
+
+            if len(point_layer) > 0:
+                # Geometry is only defined for layers that are not degenerate
+                assert point_layer.is_point_data
 
             polygon_layer = Vector(geometry=[polygon],
                                    projection=P.get_projection())
@@ -177,6 +185,145 @@ class Test_Clipping(unittest.TestCase):
                 polygon_layer.write_to_file('polygon_%i.shp' % i)
 
     test_clip_raster_by_polygons.slow = True
+
+    def test_clip_points_by_polygons_with_holes0(self):
+        """Points can be clipped by polygons with holes
+        """
+
+        # Define an outer ring
+        outer_ring = numpy.array([[106.79, -6.233],
+                                  [106.80, -6.24],
+                                  [106.78, -6.23],
+                                  [106.77, -6.21],
+                                  [106.79, -6.233]])
+
+        # Define inner rings
+        inner_rings = [numpy.array([[106.77827, -6.2252],
+                                    [106.77775, -6.22378],
+                                    [106.78, -6.22311],
+                                    [106.78017, -6.22530],
+                                    [106.77827, -6.2252]])[::-1],
+                       numpy.array([[106.78652, -6.23215],
+                                    [106.78642, -6.23075],
+                                    [106.78746, -6.23143],
+                                    [106.78831, -6.23307],
+                                    [106.78652, -6.23215]])[::-1]]
+
+        v = Vector(geometry=[Polygon(outer_ring=outer_ring,
+                                     inner_rings=inner_rings)])
+        assert v.is_polygon_data
+
+        # Write it to file
+        tmp_filename = unique_filename(suffix='.shp')
+        v.write_to_file(tmp_filename)
+
+        # Read polygon it back
+        L = read_layer(tmp_filename)
+        P = L.get_geometry(as_geometry_objects=True)[0]
+
+        outer_ring = P.outer_ring
+        inner_ring0 = P.inner_rings[0]
+        inner_ring1 = P.inner_rings[1]
+
+        # Make some test points
+        points = generate_random_points_in_bbox(outer_ring, 1000, seed=13)
+
+        # Clip to outer ring, excluding holes
+        indices = inside_polygon(points, P.outer_ring, holes=P.inner_rings)
+
+        # Sanity
+        for point in points[indices, :]:
+            # Must be inside outer ring
+            assert is_inside_polygon(point, outer_ring)
+
+            # But not in any of the inner rings
+            assert not is_inside_polygon(point, inner_ring0)
+            assert not is_inside_polygon(point, inner_ring1)
+
+        if False:
+            # Store for visual check
+            pol = Vector(geometry=[P])
+            tmp_filename = unique_filename(suffix='.shp')
+            pol.write_to_file(tmp_filename)
+            print 'Polygon with holes written to %s' % tmp_filename
+
+            pts = Vector(geometry=points[indices, :])
+            tmp_filename = unique_filename(suffix='.shp')
+            pts.write_to_file(tmp_filename)
+            print 'Clipped points written to %s' % tmp_filename
+
+    def test_clip_points_by_polygons_with_holes_real(self):
+        """Points can be clipped by polygons with holes (real data)
+        """
+
+        # Read real polygon with holes
+        filename = '%s/%s' % (TESTDATA, 'donut.shp')
+        L = read_layer(filename)
+
+        # --------------------------------------------
+        # Pick one polygon that has 2 inner rings
+        P = L.get_geometry(as_geometry_objects=True)[1]
+
+        outer_ring = P.outer_ring
+        inner_ring0 = P.inner_rings[0]
+        inner_ring1 = P.inner_rings[1]
+
+        # Make some test points
+        points_in_bbox = generate_random_points_in_bbox(outer_ring, 1000)
+        points_in_inner_ring0 = populate_polygon(inner_ring0, 2, seed=13)
+        points_in_inner_ring1 = populate_polygon(inner_ring1, 2, seed=17)
+        points = numpy.concatenate((points_in_bbox,
+                                    points_in_inner_ring0,
+                                    points_in_inner_ring1))
+
+        # Clip
+        indices = inside_polygon(points, P.outer_ring, holes=P.inner_rings)
+
+        # Sanity
+        for point in points[indices, :]:
+            # Must be inside outer ring
+            assert is_inside_polygon(point, outer_ring)
+
+            # But not in any of the inner rings
+            assert not is_inside_polygon(point, inner_ring0)
+            assert not is_inside_polygon(point, inner_ring1)
+
+        # ---------------------------------------------------------
+        # Pick a polygon that has 1 inner ring (nice visualisation)
+        P = L.get_geometry(as_geometry_objects=True)[9]
+
+        outer_ring = P.outer_ring
+        inner_ring = P.inner_rings[0]
+
+        # Make some test points
+        points = generate_random_points_in_bbox(outer_ring, 500)
+
+        # Clip
+        indices = inside_polygon(points, P.outer_ring, holes=P.inner_rings)
+
+        # Sanity
+        for point in points[indices, :]:
+            # Must be inside outer ring
+            assert is_inside_polygon(point, outer_ring)
+
+            # But not in the inner ring
+            assert not is_inside_polygon(point, inner_ring)
+
+        # Store for visual check (nice one!)
+        # Uncomment os.remove if you want see the layers
+        pol = Vector(geometry=[P])
+        tmp_filename = unique_filename(suffix='.shp')
+        pol.write_to_file(tmp_filename)
+        #print 'Polygon with holes written to %s' % tmp_filename
+        os.remove(tmp_filename)
+
+        pts = Vector(geometry=points[indices, :])
+        tmp_filename = unique_filename(suffix='.shp')
+        pts.write_to_file(tmp_filename)
+        #print 'Clipped points written to %s' % tmp_filename
+        os.remove(tmp_filename)
+
+    test_clip_points_by_polygons_with_holes_real.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Clipping, 'test')

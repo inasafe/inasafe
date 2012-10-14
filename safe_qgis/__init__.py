@@ -5,6 +5,5 @@ import sys
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-import safe
-from safe.common.utilities import setup_logger
-setup_logger()
+from utilities import setupLogger
+setupLogger()

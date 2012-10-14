@@ -7,6 +7,30 @@ from osgeo import osr
 DEFAULT_PROJECTION = '+proj=longlat +datum=WGS84 +no_defs'
 
 
+def proj4_to_dict(P):
+    """Helper to turn a proj4 string into a dictionary for ease of comparison
+    See issue #304
+
+    Args:
+        P: proj4 string, such as +proj=longlat +ellps=WGS84 +no_defs
+
+    Returns
+        dictionary of individual elements, e.g. {'+proj': 'longlat',
+                                                 '+ellps': 'WGS84',
+                                                 '+no_defs': ''}
+    """
+
+    D = {}
+    for e in P.split():
+        fields = e.strip().split('=')
+        if len(fields) > 1:
+            val = fields[1]
+        else:
+            val = ''
+        D[fields[0]] = val
+    return D
+
+
 class Projection:
     """Represents projections associated with layers
     """
@@ -109,16 +133,48 @@ class Projection:
             raise TypeError(msg)
 
         if self.spatial_reference.IsSame(other.spatial_reference):
-            # Native comparison checks out
+            # OSR comparison checks out
             return True
         else:
             # We have seen cases where the native comparison didn't work
             # for projections that should be identical. See e.g.
-            # https://github.com/AIFDR/riab/issues/160
-            # Hence do a secondary check using the proj4 string
+            # https://github.com/AIFDR/inasafe/issues/304
 
-            return (self.get_projection(proj4=True) ==
-                    other.get_projection(proj4=True))
+            # FIXME (Ole): Someone, please find out how to robustly compare
+            #              projections
+
+            # For now we do a secondary check using the proj4 string:
+            # Pull +proj and +ellips fields and compare
+
+            # Attempt to compare strings like this. This is non trivial
+            # as the proj4 format does not always have the same parameters
+            # conf e.g. +towgs84 or +ellps vs +datum (tsk tsk):
+            # +proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs
+            # +proj=longlat +ellps=WGS84 +no_defs
+            #
+            # And even worse:
+            # +proj=longlat +datum=WGS84 +no_defs
+            # +proj=longlat +ellps=WGS84 +no_defs
+
+            # Get proj4 representations
+            P1 = self.get_projection(proj4=True)
+            P2 = other.get_projection(proj4=True)
+            if P1 == P2:
+                # Direct comparison of proj4 strings match
+                return True
+            else:
+                # Check key elements
+                D1 = proj4_to_dict(P1)
+                D2 = proj4_to_dict(P2)
+
+                result = True
+                for key in D1:
+                    # Only compare keys that appear in both (see above)
+                    if key in D2:
+                        if D1[key] != D2[key]:
+                            result = False
+                            break
+                return result
 
     def __ne__(self, other):
         """Override '!=' to allow comparison with other projection objecs

@@ -20,18 +20,23 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
-
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
+import logging
+from unittest import expectedFailure
 
 from os.path import join
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
+
 from qgis.core import (QgsRasterLayer,
+                       QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
-from qgis.gui import QgsMapCanvasLayer
+
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
                                 setPadangGeoExtent,
@@ -48,9 +53,7 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
-from unittest import expectedFailure
 
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
 # pylint: disable=W0611
@@ -59,12 +62,7 @@ from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # pylint: enable=W0611
 
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError, e:
-    print 'Debugging was disabled'
+LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = Dock(IFACE)
@@ -154,7 +152,8 @@ def combosToString(ui):
 
 
 def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
-                  theOkButtonFlag=True, theAggregation=None):
+                  theOkButtonFlag=True, theAggregation=None,
+                  theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.
 
     Args:
@@ -208,6 +207,12 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
         if myIndex == -1:
             return False, myMessage
         DOCK.cboAggregation.setCurrentIndex(myIndex)
+
+    if theAggregationEnabledFlag is not None:
+        if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
+            myMessage = ('The aggregation combobox should be %s' %
+                ('enabled' if theAggregationEnabledFlag else 'disabled'))
+            return False, myMessage
 
     # Check that layers and impact function are correct
     myDict = getUiState(DOCK)
@@ -267,15 +272,14 @@ def loadStandardLayers():
                   join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
                   join(EXPDATA, 'DKI_buildings.shp'),
+                  join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
-                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')
-                  ]
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
-    #FIXME (MB) -1 is until we add the aggregation category because of
-    # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
-    if join(TESTDATA, 'kabupaten_jakarta_singlepart.shp') in myFileList:
-        assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
+    #FIXME (MB) -1 is untill we add the aggregation category because of
+    # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
+    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
 
     return myHazardLayerCount, myExposureLayerCount
 
@@ -284,13 +288,11 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     """Helper function to load layers as defined in a python list."""
     # First unload any layers that may already be loaded
     if theClearFlag:
-        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
-            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
 
     # Now go ahead and load our layers
     myExposureLayerCount = 0
     myHazardLayerCount = 0
-    myCanvasLayers = []
 
     # Now create our new layers
     for myFile in theLayerList:
@@ -300,49 +302,14 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
             myHazardLayerCount += 1
         elif myType == 'exposure':
             myExposureLayerCount += 1
-        # Add layer to the registry (that QGis knows about)
+        # Add layer to the registry (that QGis knows about) a slot
+        # in qgis_interface will also ensure it gets added to the canvas
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
-        # Create Map Canvas Layer Instance and add to list
-        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-
-    # Quickly add any existing CANVAS layers to our list first
-    for myLayer in CANVAS.layers():
-        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-    # now load all these layers in the CANVAS
-    CANVAS.setLayerSet(myCanvasLayers)
     DOCK.getLayers()
 
     # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount
-
-
-#def loadLayer(theLayerFile):
-#    """Helper to load and return a single QGIS layer"""
-#    # Extract basename and absolute path
-#    myBaseName, myExt = os.path.splitext(theLayerFile)
-#    myPath = os.path.join(TESTDATA, theLayerFile)
-#    myKeywordPath = myPath[:-4] + '.keywords'
-#    # Determine if layer is hazard or exposure
-#    myKeywords = read_keywords(myKeywordPath)
-#    myType = 'undefined'
-#    if 'category' in myKeywords:
-#        myType = myKeywords['category']
-#    myMessage = 'Could not read %s' % myKeywordPath
-#    assert myKeywords is not None, myMessage#
-#
-#    # Create QGis Layer Instance
-#    if myExt in ['.asc', '.tif']:
-#        myLayer = QgsRasterLayer(myPath, myBaseName)
-#    elif myExt in ['.shp']:
-#        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
-#    else:
-#        myMessage = 'File %s had illegal extension' % myPath
-#        raise Exception(myMessage)#
-#
-#    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
-#    assert myLayer.isValid(), myMessage
-#    return myLayer, myType
 
 
 class DockTest(unittest.TestCase):
@@ -350,6 +317,7 @@ class DockTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
+        os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
         loadStandardLayers()
         DOCK.cboHazard.setCurrentIndex(0)
@@ -360,6 +328,7 @@ class DockTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
+        DOCK.showPostProcessingLayers = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -426,9 +395,8 @@ class DockTest(unittest.TestCase):
     def test_cboAggregationLoadedProject(self):
 
         myLayerList = [DOCK.tr('No aggregation'),
-                       DOCK.tr('A flood in Jakarta in RW areas identified as '
-                               'flood prone'),
-                       DOCK.tr('DKI buildings'),
+                       DOCK.tr('A flood in Jakarta'),
+                       DOCK.tr('Essential buildings'),
                        DOCK.tr('kabupaten jakarta singlepart'),
                        DOCK.tr('OSM Building Polygons')]
         currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(DOCK
@@ -438,7 +406,8 @@ class DockTest(unittest.TestCase):
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
-    #FIXME (MB) this is actually wrong
+    #FIXME (MB) this is actually wrong, when calling the test directly it works
+    # in nosetest it fails at the second assert
     @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
@@ -448,24 +417,21 @@ class DockTest(unittest.TestCase):
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            theFunctionId='Flood Evacuation Function',
+            theAggregationEnabledFlag=True)
+        myMessage += ' when the when hazard and exposure layer are raster'
         assert myResult, myMessage
-
-        assert DOCK.cboAggregation.isEnabled(), 'The aggregation combobox ' \
-                'should be enabled when hazard and exposure layer are raster'
 
         #vector hazard
         #raster exposure
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta in RW areas identified'
-                       ' as flood prone'),
+            theHazard=('A flood in Jakarta'),
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard')
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is vector and exposure is raster'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-            'combobox should be disabled when hazard layer is vectorial'
 
         #raster hazard
         #vector exposure
@@ -473,25 +439,21 @@ class DockTest(unittest.TestCase):
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is raster and exposure is vector'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-                'combobox should be disabled when exposure layer is vectorial'
 
         #vector hazard
         #vector exposure
         myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta in RW areas identified'
-                      ' as flood prone',
-            theExposure='DKI buildings',
+            theHazard='A flood in Jakarta',
+            theExposure='Essential buildings',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard and exposure layer are vector'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-                'combobox should be disabled when hazard and exposure layer' \
-                ' are vectorial'
 
     def test_checkAggregationAttribute(self):
         myRunButton = DOCK.pbnRunStop
@@ -532,20 +494,20 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
 
+        #TODO: MOVE to test_keywords_dialog.py
         # with 3 good aggregation attribute using
         # kabupaten_jakarta_singlepart_3_good_attr.shp
-        myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 3 good attr')
-        assert myResult, myMessage
-        # Press RUN
+#        myResult, myMessage = setupScenario(
+#            theHazard='A flood in Jakarta like in 2007',
+#            theExposure='People',
+#            theFunction='Need evacuation',
+#            theFunctionId='Flood Evacuation Function',
+#            theAggregation='kabupaten jakarta singlepart 3 good attr')
+#        assert myResult, myMessage
+#        # Press RUN
 #        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
 #        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
 #                     (DOCK.aggregationAttribute))
-#        #TODO (MB) automate the selection of the second attribute in gui
 #
 #        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
@@ -578,6 +540,46 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
+
+    def test_checkPostProcessingLayersVisibility(self):
+        myRunButton = DOCK.pbnRunStop
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart',
+            theOkButtonFlag=True)
+        assert myResult, myMessage
+        myBeforeCount = len(CANVAS.layers())
+        #LOGGER.info("Canvas list before:\n%s" % canvasList())
+        LOGGER.info("Registry list before:\n%s" %
+                    len(QgsMapLayerRegistry.instance().mapLayers()))
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myAfterCount = len(CANVAS.layers())
+        LOGGER.info("Registry list after:\n%s" %
+                    len(QgsMapLayerRegistry.instance().mapLayers()))
+        #LOGGER.info("Canvas list after:\n%s" % canvasList())
+        myMessage = ('Expected %s items in canvas, got %s' %
+                     (myBeforeCount + 1, myAfterCount))
+        assert myBeforeCount + 1 == myAfterCount, myMessage
+
+        # Now run again showing intermediate layers
+
+        DOCK.showPostProcessingLayers = True
+        myBeforeCount = len(CANVAS.layers())
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myAfterCount = len(CANVAS.layers())
+        LOGGER.info("Canvas list after:\n %s" % canvasList())
+        myMessage = ('Expected %s items in canvas, got %s' %
+                     (myBeforeCount + 2, myAfterCount))
+        # We expect two more since we enabled showing intermedate layers
+        assert myBeforeCount + 2 == myAfterCount, myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -767,7 +769,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
-            theFunction='Be temporarily closed',
+            theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function')
         assert myResult, myMessage
 
@@ -857,8 +859,7 @@ class DockTest(unittest.TestCase):
            Uses population raster exposure layer"""
 
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta in RW areas identified'
-                      ' as flood prone'),
+            theHazard=('A flood in Jakarta'),
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard')
@@ -883,7 +884,7 @@ class DockTest(unittest.TestCase):
 
         myResult, myMessage = setupScenario(
             theHazard='Flood in Jakarta',
-            theExposure='DKI buildings',
+            theExposure='Essential buildings',
             theFunction='Be affected',
             theFunctionId='Categorised Hazard Building Impact Function')
         assert myResult, myMessage
@@ -1177,7 +1178,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='multipart_polygons_osm_4326',
             theExposure='buildings_osm_4326',
-            theFunction='Be temporarily closed',
+            theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function')
         assert myResult, myMessage
 
@@ -1272,6 +1273,20 @@ class DockTest(unittest.TestCase):
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
 
+    def test_newLayersShowInCanvas(self):
+        """Check that when we add a layer we can see it in the canvas list."""
+        LOGGER.info("Canvas list before:\n%s" % canvasList())
+        myBeforeCount = len(CANVAS.layers())
+        myPath = join(TESTDATA, 'polygon_0.shp')
+        myLayer = QgsVectorLayer(myPath, 'foo', 'ogr')
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+        myAfterCount = len(CANVAS.layers())
+        LOGGER.info("Canvas list after:\n%s" % canvasList())
+        myMessage = ('Layer was not added to canvas (%s before, %s after)' %
+                     (myBeforeCount, myAfterCount))
+        assert myBeforeCount == myAfterCount - 1, myMessage
+        QgsMapLayerRegistry.instance().removeMapLayer(myLayer.id())
+
     def test_issue317(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
@@ -1285,11 +1300,7 @@ class DockTest(unittest.TestCase):
         DOCK.getFunctions()
         assert myResult, myMessage
 
-
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    #suite = unittest.makeSuite(DockTest,
-    #                    'test_cboAggregationToggle')
-
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
