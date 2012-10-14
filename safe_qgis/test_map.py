@@ -111,8 +111,11 @@ class MapTest(unittest.TestCase):
 
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
-
-        myExpectedHashes = ['9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
+        # Note these hashes will be affected every time get_version
+        # changes due to the version being embeded in the pdf
+        myExpectedHashes = [
+                            '0109d8bac8fd27677d373ebf66546d19',
+                            '9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
                             'ddf3cd2e9059e85c9d5b525d9f00c7dd',  # Jenkins
                             '']
         assertHashesForFile(myExpectedHashes, myImagePath)
