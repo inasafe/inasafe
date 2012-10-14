@@ -131,7 +131,9 @@ class HtmlRendererTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
         myExpectedHashes = ['1b4ef78f93581086af944340a7d1dacc',  # ub12.04-64
-                            '']
+                            'aa110b049db7d6305b212543c2167383',  # ub12.04 xvfb
+                            ''
+        ]
         assertHashesForFile(myExpectedHashes, myPath)
 
 if __name__ == '__main__':
