@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-12 16:28+0700\n"
+"POT-Creation-Date: 2012-10-14 19:57+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,7 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Buildings"
 msgstr ""
@@ -96,6 +97,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:108
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Total"
 msgstr ""
 
@@ -139,6 +141,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:99
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:141
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:105
+#: safe/impact_functions/volcanic/volcano_building_impact.py:135
 #: safe/impact_functions/volcanic/volcano_building_impact.py:135
 msgid "All"
 msgstr ""
@@ -2726,6 +2729,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:128
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:148
 #: safe/impact_functions/volcanic/volcano_building_impact.py:148
+#: safe/impact_functions/volcanic/volcano_building_impact.py:148
 msgid "Notes"
 msgstr ""
 
@@ -2772,6 +2776,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:165
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_building_impact.py:171
+#: safe/impact_functions/volcanic/volcano_building_impact.py:171
 msgid "0"
 msgstr ""
 
@@ -2784,6 +2789,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:167
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:173
 #: safe/impact_functions/volcanic/volcano_building_impact.py:173
+#: safe/impact_functions/volcanic/volcano_building_impact.py:173
 #, python-format
 msgid "%i - %i"
 msgstr ""
@@ -2791,6 +2797,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:24
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
+#: safe/impact_functions/volcanic/volcano_building_impact.py:27
 #: safe/impact_functions/volcanic/volcano_building_impact.py:27
 msgid "Be affected"
 msgstr ""
@@ -2948,27 +2955,34 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Cumulative"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:143
+#: safe/impact_functions/volcanic/volcano_building_impact.py:143
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:149
 #: safe/impact_functions/volcanic/volcano_building_impact.py:149
 #, python-format
 msgid "Total number of buildings %i in the viewable area"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:151
+#: safe/impact_functions/volcanic/volcano_building_impact.py:151
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:154
 #: safe/impact_functions/volcanic/volcano_building_impact.py:188
+#: safe/impact_functions/volcanic/volcano_building_impact.py:154
+#: safe/impact_functions/volcanic/volcano_building_impact.py:188
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:182
 #: safe/impact_functions/volcanic/volcano_building_impact.py:182
 msgid "Building Count"
 msgstr ""
