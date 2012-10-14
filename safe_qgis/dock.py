@@ -115,9 +115,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         myLongVersion = get_version()
+        LOGGER.debug('Version: %s' % myLongVersion)
         myTokens = myLongVersion.split('.')
         myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
-        myVersionType = myTokens[3].split('2')[0]
+        try:
+            myVersionType = myTokens[3].split('2')[0]
+        except IndexError:
+            myVersionType = 'final'
         # Allowed version names: ('alpha', 'beta', 'rc', 'final')
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
             myVersion, myVersionType)))

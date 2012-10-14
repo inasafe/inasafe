@@ -259,7 +259,7 @@ class HtmlRenderer():
         try:
             myAggregationTable = myKeywordIO.readKeywords(
                 theLayer, 'postprocessing_report')
-        except:
+        except KeywordNotFoundException:
             myAggregationTable = None
 
         myHtml = ''

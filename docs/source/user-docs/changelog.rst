@@ -7,8 +7,16 @@ Changelog for version 0.5.0
 ---------------------------
 
 * Better documentation. See http://inasafe.org/contents.html
+* Time stamp and other metadata added to generated map PDF.
+* Initial support for parameterisation of impact functions.
+* Updated logging infrastructure including support for logging to the
+  QGIS log panel.
+* Fixed missing InaSAFE icon in QGIS plugin manager.
+* Fixes for help system under windows.
+* Multi-page support for generated report PDF (which is now created as a
+  separate document).
 * Ability to combine polygon hazard  (such as flood prone areas) with
-  population density (see attached screenshot).
+  population density.
 * Option to use entire intersection of hazard and exposure instead of clipping
   to the somewhat arbitrary viewport (the training revealed that this was a bit
   confusing)
