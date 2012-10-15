@@ -41,7 +41,8 @@ class GenderPostprocessor(AbstractPostprocessor):
             self._raise_error('setup needs to be called before process')
         self._calculate_total()
         self._calculate_females()
-        self._calculate_female_weekly_hygene_packs()
+        self._calculate_weekly_hygene_packs()
+        self._calculate_weekly_increased_calories()
 
     def clear(self):
         AbstractPostprocessor.clear(self)
@@ -55,16 +56,29 @@ class GenderPostprocessor(AbstractPostprocessor):
         self._append_result(myName, myResult)
 
     def _calculate_females(self):
-        myName = self.tr('Females count')
+        myName = self.tr('Female population')
         myResult = self.population_total * self.female_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
-    def _calculate_female_weekly_hygene_packs(self):
-        myName = self.tr('Females weekly hygiene packs')
+    def _calculate_weekly_hygene_packs(self):
+        myName = self.tr('Weekly hygiene packs')
         myMeta = {'description': 'Females hygiene packs for weekly use'}
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         myResult = self.population_total * self.female_ratio * 0.7937 * (7 / 7)
+        myResult = int(round(myResult))
+        self._append_result(myName, myResult, myMeta)
+
+    def _calculate_weekly_increased_calories(self):
+        myName = self.tr('Additional weekly rice kg for pregnant and lactating'
+                         ' women')
+        myMeta = {'description': 'Additional rice kg per week for pregnant and'
+                                 ' lactating women'}
+        #weekly Kg rice =
+        # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
+        myLactKg = self.population_total * self.female_ratio * 2 * 0.033782
+        myPregKg = self.population_total * self.female_ratio * 2 * 0.01281
+        myResult = myLactKg + myPregKg
         myResult = int(round(myResult))
         self._append_result(myName, myResult, myMeta)
