@@ -80,6 +80,7 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
                                         QtGui.QFormLayout.LabelRole, label)
         lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
         lineEdit.setText(str(data))
+        lineEdit.setCursorPosition(0)
         lineEdit.setObjectName(_fromUtf8(key + 'LineEdit'))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.FieldRole, lineEdit)
