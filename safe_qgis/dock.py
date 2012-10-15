@@ -2049,34 +2049,38 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
             theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
-        QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myHtmlPdfPath,
-                                                   QtCore.QUrl.TolerantMode))
+
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)
-            self.showBusy(self.tr('Map Creator'),
-                          self.tr('Your PDF was created....opening using '
-                                  'the default PDF viewer on your system.>'
-                                  'The generated pdfs were saved as:%(br)s'
-                                  '%(map)s%(br)sand%(br)s%(table)s'
-                                   % {
-                                    'br': '<br/>',
-                                    'map': myMapPdfPath,
-                                    'table': myHtmlPdfPath}),
-                          theProgress=80)
-            QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl('file:///' + myTableFilename,
-                QtCore.QUrl.TolerantMode))
-
-            self.showBusy(self.tr('Map Creator'),
-                          self.tr('Processing complete.'
-                                  'The generated pdfs were saved as: %s and'
-                                  '%s' % (myMapPdfPath, myHtmlPdfPath)),
-                          theProgress=100)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
+
+        myStatus = self.tr('Your PDF was created....opening using '
+                           'the default PDF viewer on your system.>'
+                           'The generated pdfs were saved as:%(br)s'
+                           '%(map)s%(br)s and %(br)s%(table)s'
+                           % {
+            'br': '<br>',
+            'map': myMapPdfPath,
+            'table': myHtmlPdfPath})
+
+        self.showBusy(self.tr('Map Creator'),
+                      myStatus,
+                      theProgress=80)
+
+        QtGui.QDesktopServices.openUrl(
+            QtCore.QUrl('file:///' + myHtmlPdfPath,
+            QtCore.QUrl.TolerantMode))
+        QtGui.QDesktopServices.openUrl(
+            QtCore.QUrl('file:///' + myMapPdfPath,
+            QtCore.QUrl.TolerantMode))
+
+        self.showBusy(self.tr('Map Creator'),
+                      myStatus,
+                      theProgress=100)
 
         self.hideBusy()
         myMap.showComposer()
