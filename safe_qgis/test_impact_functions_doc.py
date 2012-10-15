@@ -109,10 +109,10 @@ class ImpactFunctionsDocTest(unittest.TestCase):
                                             QtGui.QDialogButtonBox.Reset)
         QTest.mouseClick(resetButton, QtCore.Qt.LeftButton)
         realTableReset = myDialog.if_table.toNewlineFreeString()
-        msgFilter = "It should be different table because it's filtered."
+        msgFilter = 'It should be different table because it is filtered.'
         assert expectedTable != realTableFilter, msgFilter
-        msgReset = "It should be the same table because reset button is\
-pressed."
+        msgReset = ('It should be the same table because reset button '
+                    'is pressed.')
         assert expectedTable == realTableReset, msgReset
 
     def test_showHelp(self):

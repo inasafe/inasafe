@@ -49,11 +49,11 @@ but never import this module or the functions in it!
 
 from safe.common.utilities import ugettext as tr
 
-
 # Don't call this function
 def dynamic_translations():
     """These listed here so they get translated apriori to loading data.
     """
+    return tr('Hello world')
     # Bangunan DKI
     tr('DKI buildings')
     # Banjir seperti 2007
