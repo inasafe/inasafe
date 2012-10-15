@@ -1212,6 +1212,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                            ' %s' % myQgisImpactLayer.name())
             return
         else:
+            #loop over all features in impact layer
             while myImpactProvider.nextFeature(myFeat):
                 myVal, ok = myFeat.attributeMap()[myTargetFieldIndex].toInt()
                 if ok:
