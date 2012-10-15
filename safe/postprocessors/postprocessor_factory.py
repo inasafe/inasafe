@@ -27,47 +27,34 @@ from age_postprocessor import AgePostprocessor
 
 LOGGER = logging.getLogger('InaSAFE')
 
-
-class PostprocessorFactory():
-    """Factory class that returns a list of post processor instances
-        this is the class to be used by clients that want to have access to
-        all the postprocessors.
+def get_post_processors(requested_postprocessors):
     """
-
+    Creates a dictionary of applicable postprocessors
+    :param requested_postprocessors: dictionary of requested
+        postprocessors such as {'Gender': True, 'Age': False}
+    :return: dict of postprocessors instances
+        e.g. {'Gender':GenderPostprocessors instance}
+    """
     #this _must_reflect the imported classes above
     AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age']
+    postprocessor_instances = {}
 
-    def __init__(self):
-        LOGGER.debug('Postprocessors factory started, available '
-                     'postprocessors: ' + str(self.AVAILABLE_POSTPTOCESSORS))
+    if requested_postprocessors is None or requested_postprocessors == {}:
+        return postprocessor_instances
 
-    def get(self, requested_postprocessors):
-        """
-        Creates a dictionary of applicable postprocessors
-        :param requested_postprocessors: dictionary of requested
-            postprocessors such as {'Gender': True, 'Age': False}
-        :return: dict of postprocessors instances
-            e.g. {'Gender':GenderPostprocessors instance}
-        """
-
-        postprocessor_instances = {}
-
-        if requested_postprocessors is None or requested_postprocessors == {}:
-            return postprocessor_instances
-
-        for name, values in requested_postprocessors.iteritems():
-            constr_id = name + 'Postprocessor'
-            if values['on']:
-                if name in self.AVAILABLE_POSTPTOCESSORS:
-                    #http://stackoverflow.com/a/554462
-                    constr = globals()[constr_id]
-                    instance = constr()
-                    postprocessor_instances[name] = instance
-                else:
-                    LOGGER.debug(constr_id + ' is not a valid Postprocessor,'
+    for name, values in requested_postprocessors.iteritems():
+        constr_id = name + 'Postprocessor'
+        if values['on']:
+            if name in AVAILABLE_POSTPTOCESSORS:
+                #http://stackoverflow.com/a/554462
+                constr = globals()[constr_id]
+                instance = constr()
+                postprocessor_instances[name] = instance
+            else:
+                LOGGER.debug(constr_id + ' is not a valid Postprocessor,'
                                          ' skipping it')
 
-            else:
-                LOGGER.debug(constr_id + ' user disabled, skipping it')
+        else:
+            LOGGER.debug(constr_id + ' user disabled, skipping it')
 
-        return postprocessor_instances
+    return postprocessor_instances

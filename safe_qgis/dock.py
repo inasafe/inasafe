@@ -75,7 +75,7 @@ from safe_qgis.configurable_impact_functions_dialog import (
    ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe.postprocessors import PostprocessorFactory
+from safe.postprocessors.postprocessor_factory import get_post_processors
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -1260,8 +1260,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #instantiate postprocessors if they are requested by the function
         try:
             myRequestedPostprocessors = self.functionParams['postprocessors']
-            myFactory = PostprocessorFactory()
-            myPostprocessors = myFactory.get(myRequestedPostprocessors)
+            myPostprocessors = get_post_processors(myRequestedPostprocessors)
         except (TypeError, KeyError):
             # TypeError is for when functionParams is none
             # KeyError is for when ['postprocessors'] is unavailable
