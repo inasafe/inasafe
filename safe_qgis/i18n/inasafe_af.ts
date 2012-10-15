@@ -373,7 +373,7 @@
     </message>
     <message>
         <location filename="dock.py" line="1942"/>
-        <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)sand%(br)s%(table)sbr&lt;br&gt;</source>
+        <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)s and %(br)s%(table)sbr&lt;br&gt;</source>
         <comment>map</comment>
         <translation type="unfinished"></translation>
     </message>
