@@ -1213,7 +1213,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
         else:
             while myImpactProvider.nextFeature(myFeat):
-                myAttr = myFeat.attributeMap()
                 myVal, ok = myFeat.attributeMap()[myTargetFieldIndex].toInt()
                 if ok:
                     myTotal += myVal
