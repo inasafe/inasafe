@@ -139,8 +139,9 @@ class MapLegendTest(unittest.TestCase):
                                  dir=temp_dir('test'))
         myMapLegend.getLegend().save(myPath, 'PNG')
         LOGGER.debug(myPath)
-        myExpectedHashes = ['850ed7ad9e8f992e96c5449701ba5434',  # ub 12.04 64
+        myExpectedHashes = ['850ed7ad9e8f992e96c5449701ba5434',  # ub 12.04-64
                             '3d4d9f196fb2fe1e18d54a8d6ab4a349',
+                            'e8ef2222f90fc2f95dc86f416de2579e',  # ub 11.04-64
                             '']
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -169,7 +170,6 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
                             '67c0f45792318298664dd02cc0ac94c3',  # ub12.04xiner
-                            'ea0702782c2ed5d950c427fbe1743858',  # ub11.04-64
                             '53e0ba1144e071ad41756595d29bf444',  # ub12.04
                             '0681c3587305074bc9272f456fb4dd09',  # ub12.04 xvfb
                             'a37443d70604bdc8c279576b424a158c',  # ub12.04-64
@@ -178,7 +178,7 @@ class MapLegendTest(unittest.TestCase):
                             'de3ceb6547ffc6c557d031c0b7ee9e75',  # wVistaSP2-32
                             '91177a81bee4400be4e85789e3be1e91',  # ub12.04-64
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
-                            ''
+                            'b94cfd8a10d709ff28466ada425f24c8',  # ub11.04-64
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 

@@ -76,9 +76,8 @@ class MapTest(unittest.TestCase):
         # size check.
         mySize = os.stat(myPath).st_size
         myExpectedSize = 352798  # as rendered on linux ub 12.04 64
-        myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
-            myExpectedSize, mySize
-        )
+        myMessage = ('Expected rendered map pdf to be at least %s, got %s'
+                     % (myExpectedSize, mySize))
         assert mySize >= myExpectedSize, myMessage
 
     def test_renderComposition(self):
@@ -104,20 +103,20 @@ class MapTest(unittest.TestCase):
                         myTargetArea.bottom(),
                         myTargetArea.right()]
         myExpectedDimensions = [0.0, 0.0, 3507.0, 2480.0]
-        myMessage = 'Expected target area to be %s, got %s' % (
-            str(myExpectedDimensions), str(myDimensions)
-        )
+        myMessage = ('Expected target area to be %s, got %s'
+                     % (str(myExpectedDimensions), str(myDimensions)))
         assert myExpectedDimensions == myDimensions, myMessage
 
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
         # Note these hashes will be affected every time get_version
         # changes due to the version being embeded in the pdf
-        myExpectedHashes = [
-                            '0109d8bac8fd27677d373ebf66546d19',
+        myExpectedHashes = ['0109d8bac8fd27677d373ebf66546d19',
                             '9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
                             'ddf3cd2e9059e85c9d5b525d9f00c7dd',  # Jenkins
-                            '']
+                            '003575ca10d3533a4ccf2f64d96c36a6',  # ub11.04-64
+                            '7d308ea9d88ef55a101766adaabf179f',  # ub11.04-64
+                            ]
         assertHashesForFile(myExpectedHashes, myImagePath)
 
     def test_getMapTitle(self):
