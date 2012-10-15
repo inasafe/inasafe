@@ -34,15 +34,11 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
-                       QGis,
                        QgsFeature,
                        QgsRectangle,
                        QgsPoint,
                        QgsField)
 from qgis.analysis import QgsZonalStatistics
-
-# TODO: Rather impor via safe_interface.py TS
-from safe.api import write_keywords, read_keywords, ReadLayerError
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
@@ -58,7 +54,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getSafeImpactFunctions,
                                       safeTr,
                                       get_version,
-                                      temp_dir)
+                                      temp_dir,
+                                      ReadLayerError)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -877,7 +874,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # attributes that will not be deleted from the postprocessing layer
         # attribute table
-        self.postprocAttributes = dict()
+        self.postprocAttributes = {}
 
         self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']] = (
             self.keywordIO.readKeywords(self.postprocLayer,
@@ -1005,7 +1002,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: None
         """
 
-        self.postprocOutput = dict()
+        self.postprocOutput = {}
         self.postprocLayer = self.getPostprocLayer()
         myCurrentFunction = self.getFunctionID()
         if (self.postprocLayer is not None and
@@ -1202,9 +1199,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                          'Skipping detailed report. Called on'
                          ' %s' % (myTargetField, myQgisImpactLayer.name()))
             return
-        # start data retreival: fetch no geometry and all attributes for each
-        # feature
-        allAttrs = myProvider.attributeIndexes()
+        # start data retreival: fetch no geometry and 1 attr for each feature
         myProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myFeat = QgsFeature()
 
@@ -1216,7 +1211,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myTotal = 0
             while myProvider.nextFeature(myFeat):
                 myTotal += myFeat.attributeMap()[0].toInt()[0]
-                myMessage = 'ID: ' + str(myFeat.id()) + ' tot:' + str(myTotal)
 
             #add the total to the postprocLayer
             myProvider = self.postprocLayer.dataProvider()
@@ -1365,7 +1359,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myKeywords = self.keywordIO.readKeywords(self.postprocLayer)
         #discussed with tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
-            myKeywords = dict()
+            myKeywords = {}
 
         #myKeywords are already complete
         if ('category' in myKeywords and

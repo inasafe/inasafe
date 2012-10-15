@@ -5,7 +5,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.common.utilities import get_defaults
+
 
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data

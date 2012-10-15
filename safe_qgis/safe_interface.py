@@ -43,6 +43,7 @@ from safe.api import (get_admissible_plugins,
                       safe_tr as safeTr,
                       calculate_impact as safe_calculate_impact,
                       BoundingBoxError,
+                      ReadLayerError,
                       get_plugins, get_version)
 # pylint: enable=W0611
 
