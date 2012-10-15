@@ -700,9 +700,7 @@ class Map():
                          myVersion,
                          myDate,
                          myTime,
-                         myElapsedTime
-                         )
-        )
+                         myElapsedTime))
         myFontSize = 8
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = True
