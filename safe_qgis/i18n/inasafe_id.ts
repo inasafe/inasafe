@@ -70,32 +70,32 @@
     <message>
         <location filename="utilities.py" line="761"/>
         <source>%i seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>%i detik</translation>
     </message>
     <message>
         <location filename="utilities.py" line="763"/>
         <source>a minute</source>
-        <translation type="unfinished"></translation>
+        <translation>satu menit</translation>
     </message>
     <message>
         <location filename="utilities.py" line="765"/>
         <source>minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>menit</translation>
     </message>
     <message>
         <location filename="utilities.py" line="767"/>
         <source>over an hour</source>
-        <translation type="unfinished"></translation>
+        <translation>lebih dari satu jam</translation>
     </message>
     <message>
         <location filename="utilities.py" line="769"/>
         <source>%i hours and %i minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>%i jam dan %i menit</translation>
     </message>
     <message>
         <location filename="utilities.py" line="772"/>
         <source>%i days, %i hours and %i minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>%i hari, %i jam dan %i menit</translation>
     </message>
 </context>
 <context>
@@ -354,28 +354,31 @@
     <message>
         <location filename="dock.py" line="1909"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation>InaSAFE</translation>
     </message>
     <message>
         <location filename="dock.py" line="1909"/>
         <source>Please select a valid impact layer before trying to print.</source>
-        <translation type="unfinished"></translation>
+        <translation>Silahkan pilih lapisan dampak yang valid sebelum mencetaknya</translation>
+
     </message>
     <message>
         <location filename="dock.py" line="1915"/>
         <source>Preparing map and report</source>
-        <translation type="unfinished"></translation>
+        <translation>Mempersiapkan peta dan laporan</translation>
     </message>
     <message>
         <location filename="dock.py" line="1936"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)sand%(br)s%(table)sbr&lt;br/&gt;</source>
         <comment>map</comment>
-        <translation type="unfinished"></translation>
+        <translation>PDF Anda telah dibuat... Membuka dengan aplikasi pembaca PDF default di sistem Anda.&gt;Berkas PDF disimpan sebagai:%(br)s%(map)s%(br)sand%(br)s%(table)sbr&lt;br/&gt;</translation>
+
     </message>
     <message>
         <location filename="dock.py" line="1950"/>
         <source>Processing complete.The generated pdfs were saved as: %s and%s</source>
-        <translation type="unfinished"></translation>
+        <translation>Pemrosesan selesai. PDF yang dibuat disimpan sebagai: %s dan %s</translation>
+
     </message>
 </context>
 <context>
