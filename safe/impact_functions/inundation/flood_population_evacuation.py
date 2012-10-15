@@ -31,14 +31,14 @@ class FloodEvacuationFunction(FunctionProvider):
     parameters = {
         'thresholds': [0.3, 0.5, 1.0],
         'postprocessors':
-          {'Gender': {'on': True},
-                         'Age': {'on': True,
-                                 'params': {
-                                     'youth_ratio': defaults['YOUTH_RATIO'],
-                                     'adult_ratio': defaults['ADULT_RATIO'],
-                                     'elder_ratio': defaults['ELDER_RATIO']
-                                 }
-                         }
+            {'Gender': {'on': True},
+             'Age': {'on': True,
+                     'params': {
+                         'youth_ratio': defaults['YOUTH_RATIO'],
+                         'adult_ratio': defaults['ADULT_RATIO'],
+                         'elder_ratio': defaults['ELDER_RATIO']
+                     }
+             }
           }
     }
 
