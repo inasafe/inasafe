@@ -1214,14 +1214,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
         else:
             myTotal = 0
-            #iterate throug all features and add the values of the target_field
-            #FIXME (MB) this is WAY TO SLOW
-            # a solution could be to have the impact function write the totals
-            # to the keyword system and use it her without having to iterate.
             while myProvider.nextFeature(myFeat):
                 myTotal += myFeat.attributeMap()[0].toInt()[0]
                 myMessage = 'ID: ' + str(myFeat.id()) + ' tot:' + str(myTotal)
-                self.showBusy(self.tr('Summing data'), myMessage, 88)
 
             #add the total to the postprocLayer
             myProvider = self.postprocLayer.dataProvider()
