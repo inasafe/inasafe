@@ -26,6 +26,9 @@ from age_postprocessor import AgePostprocessor
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
+#this _must_reflect the imported classes above
+AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age']
+
 
 def get_post_processors(requested_postprocessors):
     """
@@ -35,8 +38,7 @@ def get_post_processors(requested_postprocessors):
     :return: dict of postprocessors instances
         e.g. {'Gender':GenderPostprocessors instance}
     """
-    #this _must_reflect the imported classes above
-    AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age']
+
     postprocessor_instances = {}
 
     if requested_postprocessors is None or requested_postprocessors == {}:

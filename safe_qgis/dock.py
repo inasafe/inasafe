@@ -75,7 +75,7 @@ from safe_qgis.configurable_impact_functions_dialog import (
    ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe.postprocessors.postprocessor_factory import get_post_processors
+from safe.postprocessors import get_post_processors
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
