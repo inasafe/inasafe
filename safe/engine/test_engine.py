@@ -585,7 +585,7 @@ class Test_Engine(unittest.TestCase):
         # Read test files
         hazard_filename = '%s/donut.shp' % TESTDATA
         exposure_filename_clip = ('%s/pop_merapi_clip.tif' % TESTDATA)
-        exposure_filename_full = ('%s/population_indonesia_2010_BNPB_BPS.asc'
+        exposure_filename_full = ('%s/pop_merapi_prj_problem.asc'
                                   % EXPDATA)
 
         H = read_layer(hazard_filename)
@@ -851,7 +851,7 @@ class Test_Engine(unittest.TestCase):
 
         # Name input files
         polyhazard = join(TESTDATA, 'donut.shp')
-        population = join(EXPDATA, 'population_indonesia_2010_BNPB_BPS.asc')
+        population = join(TESTDATA, 'pop_merapi_clip.tif')
 
         # Get layers using API
         H = read_layer(polyhazard)
@@ -888,9 +888,9 @@ class Test_Engine(unittest.TestCase):
         attributes = P.get_data()[26]
         #geometry = P.get_geometry()[26]
         assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
-        assert attributes['polygon_id'] == 7
+        assert attributes['polygon_id'] == 4
 
-    test_polygon_hazard_with_holes_and_raster_exposure.slow = True
+    test_polygon_hazard_with_holes_and_raster_exposure.slow = False
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works
@@ -3080,6 +3080,6 @@ if __name__ == '__main__':
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
     #                            '_jakarta_flood_merged'))
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_polygon_hazard_with_holes_and_raster_exposure')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
