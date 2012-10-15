@@ -527,7 +527,7 @@ class DockTest(unittest.TestCase):
                      (myAttribute))
         assert myAttribute is None, myMessage
 
-    def test_checkPostProcessingLayersVisibility(self):
+    def Xtest_checkPostProcessingLayersVisibility(self):
         myRunButton = DOCK.pbnRunStop
 
         # with KAB_NAME aggregation attribute defined in .keyword using
