@@ -1151,9 +1151,8 @@ class Test_Engine(unittest.TestCase):
         key = 'Tsunami Ma'
 
         for feature in I.get_data():
-            msg = '%s not found in field list:\n%s' % (
-                key, str(feature.keys())
-                )
+            msg = ('%s not found in field list:\n%s'
+                   % (key, str(feature.keys())))
             assert key in feature.keys(), msg
             if (feature['LONGITUDE'] == 150.1787 and
                 feature['LATITUDE'] == -35.70413):

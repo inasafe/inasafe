@@ -81,11 +81,11 @@ class HtmlRendererTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myNewPath).st_size
-        myExpectedSize = 18682  # as rendered on linux ub 12.04 64 Jenkinss
+        myExpectedSize = 18449  # as rendered on linux ub 11.04-64
         myMessage = ('Expected rendered map pdf to be at least %s, got %s. '
                      'Please update myExpectedSize if the rendered output '
-                     'is acceptible on your system.' % (
-            myExpectedSize, mySize))
+                     'is acceptible on your system.'
+                     % (myExpectedSize, mySize))
         assert mySize >= myExpectedSize, myMessage
 
     def test_printImpactTable(self):
@@ -110,9 +110,8 @@ class HtmlRendererTest(unittest.TestCase):
         # size check.
         mySize = os.stat(myPath).st_size
         myExpectedSize = 20936  # as rendered on linux ub 12.04 64
-        myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
-            myExpectedSize, mySize
-            )
+        myMessage = ('Expected rendered map pdf to be at least %s, got %s'
+                     % (myExpectedSize, mySize))
         assert mySize >= myExpectedSize, myMessage
 
     def test_renderHtmlToPixmap(self):
@@ -134,8 +133,10 @@ class HtmlRendererTest(unittest.TestCase):
         assert os.path.exists(myPath), myMessage
         myExpectedHashes = ['1b4ef78f93581086af944340a7d1dacc',  # ub12.04-64
                             'aa110b049db7d6305b212543c2167383',  # ub12.04 xvfb
-                            ''
-        ]
+                            '8e626bda4310f174d40a076af65c6023',  # ub11.04-64
+                            '869bb116ebebc1497ee9881eece0efc3',  # ub11.10-64
+                            '',
+                            ]
         assertHashesForFile(myExpectedHashes, myPath)
 
 if __name__ == '__main__':
