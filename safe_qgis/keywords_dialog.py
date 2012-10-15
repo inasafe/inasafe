@@ -23,7 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
-from safe.third_party.odict import OrderedDict
+from third_party.odict import OrderedDict
 from safe.common.exceptions import InaSAFEError
 
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
