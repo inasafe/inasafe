@@ -52,19 +52,26 @@ from safe.common.utilities import ugettext as tr
 
 # Don't call this function
 def dynamic_translations():
-    tr('DKI buildings')       # Bangunan DKI
-    tr('Jakarta 2007 flood')  # Banjir seperti 2007
+    """These listed here so they get translated apriori to loading data.
+    """
+    # Bangunan DKI
+    tr('DKI buildings')
+    # Banjir seperti 2007
+    tr('Jakarta 2007 flood')
     tr('Jakarta 2007 flood')
     tr('A flood in Jakarta like in 2007')
     tr('Jakarta flood like 2007 with pump failure at Pluit Ancol and Sunter')
     # Banjir 2007 tanpa pompa di Pluit, Ancol dan Sunter
     tr('Jakarta flood like 2007 with pump failure at Pluit and Ancol')
     tr('A flood in Jakarta like in 2007 but with structural improvements')
-    tr('Sea wall collapse at Pluit')  # Dam Pluit Runtuh
-    tr('Jakarta flood prone areas')  # Daerah Rawan Banjir
+    # Dam Pluit Runtuh
+    tr('Sea wall collapse at Pluit')
+    # Daerah Rawan Banjir
+    tr('Jakarta flood prone areas')
     tr('A flood in Jakarta in RW areas identified as flood prone')
     # Daerah Rawan Banjir
-    tr('Population Jakarta')  # Penduduk Jakarta
+    # Penduduk Jakarta
+    tr('Population Jakarta')
     tr('People')
     tr('people')
     tr('People in Jakarta')
@@ -81,12 +88,16 @@ def dynamic_translations():
     tr('An earthquake in Padang like in 2009')
     tr('An earthquake in Yogyakarta like in 2006')
     tr('An earthquake at the Lembang fault')
-    tr('OSM building footprints')  # Bangunan OSM
-    tr('OSM buildings')  # Bangunan OSM
+    # Bangunan OSM
+    tr('OSM building footprints')
+    # Bangunan OSM
+    tr('OSM buildings')
     tr('AIBEP schools')
-    tr('Population density (5kmx5km)')  # Perkiraan penduduk
+    # Perkiraan penduduk
+    tr('Population density (5kmx5km)')
     tr('Office buildings Jakarta')
-    tr('Hospitals and clinics Jakarta')  # Puskesmas dan rumah sakit
+    # Puskesmas dan rumah sakit
+    tr('Hospitals and clinics Jakarta')
     tr('Schools Jakarta')
     tr('Schools')
     tr('Industrial buildings Jakarta')
