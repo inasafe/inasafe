@@ -868,6 +868,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.keywordIO.appendKeywords(self.postprocLayer, {self.defaults[
                                                 'AGGR_ATTR_KEY']: myAttrName})
 
+        LOGGER.debug('Do zonal aggregation: ' + str(self.doZonalAggregation))
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them
         self._checkPostprocAttributes()
@@ -1190,7 +1191,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                          'Skipping detailed report. Called on'
                          ' %s' % myQgisImpactLayer.name())
             return
-        myProvider = myQgisImpactLayer.dataProvider()
+        myImpactProvider = myQgisImpactLayer.dataProvider()
         myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
@@ -1199,24 +1200,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                          'Skipping detailed report. Called on'
                          ' %s' % (myTargetField, myQgisImpactLayer.name()))
             return
-        # start data retreival: fetch no geometry and 1 attr for each feature
-        myProvider.select([myTargetFieldIndex], QgsRectangle(), False)
+
+        # start data retreival: fetch no geometry and
+        # 1 attr for each feature
+        myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myFeat = QgsFeature()
+        myTotal = 0
 
         if self.doZonalAggregation:
             LOGGER.debug('Vector aggregation not implemented yet. Called on'
                            ' %s' % myQgisImpactLayer.name())
             return
         else:
-            myTotal = 0
-            while myProvider.nextFeature(myFeat):
-                myTotal += myFeat.attributeMap()[0].toInt()[0]
+            while myImpactProvider.nextFeature(myFeat):
+                myAttr = myFeat.attributeMap()
+                myVal, ok = myFeat.attributeMap()[myTargetFieldIndex].toInt()
+                if ok:
+                    myTotal += myVal
 
             #add the total to the postprocLayer
-            myProvider = self.postprocLayer.dataProvider()
+            myPostprocessorProvider = self.postprocLayer.dataProvider()
             self.postprocLayer.startEditing()
             myAggrField = self.getAggregationFieldNameSum()
-            myProvider.addAttributes([QgsField(myAggrField,
+            myPostprocessorProvider.addAttributes([QgsField(myAggrField,
                 QtCore.QVariant.Int)])
             self.postprocLayer.commitChanges()
             myAggrFieldIndex = self.postprocLayer.fieldNameIndex(
@@ -1224,7 +1230,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             attrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
             myFID = 0
             self.postprocLayer.startEditing()
-            myProvider.changeAttributeValues({myFID: attrs})
+            myPostprocessorProvider.changeAttributeValues({myFID: attrs})
             self.postprocLayer.commitChanges()
 
         return
@@ -1435,6 +1441,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
             self.cboAggregation.setEnabled(True)
         else:
+            self.cboAggregation.setCurrentIndex(0)
             self.cboAggregation.setEnabled(False)
 
     def _completed(self):
