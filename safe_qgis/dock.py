@@ -1937,26 +1937,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
         QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myHtmlPdfPath,
                                                    QtCore.QUrl.TolerantMode))
+        myStatus = self.tr('Your PDF was created....opening using '
+                           'the default PDF viewer on your system.>'
+                           'The generated pdfs were saved as:%(br)s'
+                           '%(map)s%(br)s and %(br)s%(table)s'
+                           % {
+                              'br': '<br>',
+                              'map': myMapPdfPath,
+                              'table': myHtmlPdfPath})
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)
             self.showBusy(self.tr('Map Creator'),
-                          self.tr('Your PDF was created....opening using '
-                                  'the default PDF viewer on your system.>'
-                                  'The generated pdfs were saved as:%(br)s'
-                                  '%(map)s%(br)s and %(br)s%(table)s'
-                                   % {
-                                    'br': '<br>',
-                                    'map': myMapPdfPath,
-                                    'table': myHtmlPdfPath}),
+                          myStatus,
                           theProgress=80)
             QtGui.QDesktopServices.openUrl(
-                QtCore.QUrl('file:///' + myTableFilename,
+                QtCore.QUrl('file:///' + myMapPdfPath,
                 QtCore.QUrl.TolerantMode))
 
             self.showBusy(self.tr('Map Creator'),
-                          self.tr('Processing complete.'
-                                  'The generated pdfs were saved as: %s and'
-                                  '%s' % (myMapPdfPath, myHtmlPdfPath)),
+                          myStatus,
                           theProgress=100)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
