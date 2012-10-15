@@ -24,7 +24,7 @@ from safe.common.utilities import ugettext as tr  # pylint: disable=W0611
 
 from safe.common.exceptions import PostprocessorError
 
-from safe.common.odict import OrderedDict
+from safe.third_party.odict import OrderedDict
 
 LOGGER = logging.getLogger('InaSAFE')
 
