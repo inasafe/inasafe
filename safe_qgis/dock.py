@@ -1943,7 +1943,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                           self.tr('Your PDF was created....opening using '
                                   'the default PDF viewer on your system.>'
                                   'The generated pdfs were saved as:%(br)s'
-                                  '%(map)s%(br)sand%(br)s%(table)s'
+                                  '%(map)s%(br)s and %(br)s%(table)s'
                                    % {
                                     'br': '<br>',
                                     'map': myMapPdfPath,
