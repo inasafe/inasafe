@@ -221,7 +221,7 @@ The graphical user interface for keyword editing is divided into two parts:
 
 An example of the keywords editor in minimal mode is shown below.
 
-.. figure:: ../_static/keyword-editor-simple.jpeg
+.. figure:: ../static/keyword-editor-simple.jpeg
    :align:   center
 
 2) **Advanced mode**: In this mode several extra options are provided in
@@ -246,7 +246,7 @@ An example of the keywords editor in minimal mode is shown below.
 
 An example of the keywords editor in advanced mode is shown below.
 
-.. figure:: ../_static/keyword-editor-advanced.jpeg
+.. figure:: ../static/keyword-editor-advanced.jpeg
    :align:   center
 
 Invoking the keywords editor
@@ -258,7 +258,7 @@ QGIS layers list, and then using the plugin menu to start the editor
 Alternatively, you may use the keywords editor icon on the
 plugins toolbar as illustrated below.
 
-.. figure:: ../_static/keyword-editor-icon.png
+.. figure:: ../static/keyword-editor-icon.png
    :align:   center
 
 Saving your edits
@@ -288,14 +288,14 @@ options dialog can be launched by clicking on the InaSAFE plugin toolbar's
 options icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE
 --> InaSAFE Options`.
 
-.. figure:: ../_static/inasafe-options-icon.png
+.. figure:: ../static/inasafe-options-icon.png
    :align:   center
 
 When the options dialog is opened, the keywords database path can be specified
 using the :guilabel:`keyword cache for remote datasources` option as shown
 below. 
 
-.. figure:: ../_static/options-keyword-db-path.png
+.. figure:: ../static/options-keyword-db-path.png
    :align:   center
 
 .. note:: (1) Support for remote and non-file based layers was added in

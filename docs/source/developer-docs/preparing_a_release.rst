@@ -85,7 +85,7 @@ Branching is requred for Major and Minor releases. The process of branching
 is described in :doc:`version_control` whose accompanying illustration is
 repeated below for your convenience:
 
-.. figure:: ../_static/release-workflow.png
+.. figure:: ../static/release-workflow.png
    :align:   center
 
 The purpose of creating a branch is to isolate incompatible and possibly
@@ -133,7 +133,7 @@ Under the Eclipse/PyDev IDE, there is also on the fly checking support which
 can be enabled and that will notify you of any compliance issues as illutrated
 in the screenshot below.
 
-.. figure:: ../_static/pep8-highlighting.jpeg
+.. figure:: ../static/pep8-highlighting.jpeg
    :align:   center
 
 
