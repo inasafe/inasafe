@@ -15,14 +15,14 @@ are provided in |project_name|. After you have installed the |project_name|
 plugin, the dock panel will automatically load in QGIS, appearing on the left
 hand side of the screen.
 
-.. figure:: ../_static/inasafe-dock-panel.png
+.. figure:: ../static/inasafe-dock-panel.png
    :align:   center
 
 You can drag and drop the dock panel to reposition it in the user interface.
 For example, dragging the panel towards the right margin of the QGIS application
 will dock it to the right side of the screen.
 
-.. figure:: ../_static/docked-right.png
+.. figure:: ../static/docked-right.png
    :align:   center
 
 There are 3 main areas to the panel:
@@ -95,7 +95,7 @@ The :guilabel:`Results` area is used to display various useful feedback items
 to the user. Once an impact scenario has been run (see next section below),
 a summary table will be shown.
 
-.. figure:: ../_static/scenario-results.png
+.. figure:: ../static/scenario-results.png
    :align:   center
 
 If you select an **impact layer** (i.e. a layer that was produced using an
@@ -106,7 +106,7 @@ When you select a **hazard** or **exposure** layer in the QGIS layers list,
 the keywords for that layer will be shown in the :guilabel:`Results` area,
 making it easy to understand what metadata exists for that layer.
 
-.. figure:: ../_static/keywords-for-active-layer.png
+.. figure:: ../static/keywords-for-active-layer.png
    :align:   center
 
 The :guilabel:`Results` area is also used to display status information. For
@@ -116,19 +116,19 @@ example, when a suitable combination of **hazard**
 area will be updated to indicate that you can proceed to run the impact
 scenario calculation.
 
-.. figure:: ../_static/status-ready.png
+.. figure:: ../static/status-ready.png
    :align:   center
 
 While a scenario is being computed, the :guilabel:`Results` area displays the
 current progress of the analysis.
 
-.. figure:: ../_static/calculation-progress.png
+.. figure:: ../static/calculation-progress.png
    :align:   center
 
 Finally, the :guilabel:`Results` area is also used to display any error
 messages so that the user is informed as to what went wrong and why.
 
-.. figure:: ../_static/error-display.png
+.. figure:: ../static/error-display.png
    :align:   center
 
 .. note:: At the bottom of error display you may see button like this: 

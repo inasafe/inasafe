@@ -97,13 +97,13 @@ QGIS log console under a tab labelled 'InaSAFE'. You can view these messages by
 clicking on the small triangular icon in the bottom right corner of the QGIS
 main window.
 
-.. figure:: ../_static/log-notifications.png
+.. figure:: ../static/log-notifications.png
    :align:   center
 
 Clicking on the triangle indicated in red above will open the log dock window
 in QGIS from where you can browse log messages conveniently.
 
-.. figure:: ../_static/log-view.png
+.. figure:: ../static/log-view.png
    :align:   center
 
 .. note:: QGIS 1.8 or greater is required for this functionality.

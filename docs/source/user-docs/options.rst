@@ -8,12 +8,12 @@ options dialog can be launched by clicking on the InaSAFE plugin toolbar's
 options icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE
 --> InaSAFE Options`.
 
-.. figure:: ../_static/inasafe-options-icon.png
+.. figure:: ../static/inasafe-options-icon.png
    :align:   center
 
 Then the dialog will appear, looking something like this:
 
-.. figure:: ../_static/inasafe-options-dialog.png
+.. figure:: ../static/inasafe-options-dialog.png
    :align:   center
 
 .. note:: You can click on the :guilabel:`Help` button at any time and it 

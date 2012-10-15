@@ -1273,6 +1273,19 @@ class DockTest(unittest.TestCase):
         assert myBeforeCount == myAfterCount - 1, myMessage
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer.id())
 
+    def test_issue317(self):
+        """Points near the edge of a raster hazard layer are interpolated OK"""
+
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='OSM Building Polygons',
+            theFunction='Be temporarily closed',
+            theFunctionId='Flood Building Impact Function')
+        DOCK.getFunctions()
+        assert myResult, myMessage
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
