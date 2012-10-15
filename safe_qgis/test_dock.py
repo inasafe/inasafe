@@ -438,7 +438,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
-            theFunction='Be temporarily closed',
+            theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function',
             theAggregationEnabledFlag=False)
         myMessage += ' when the when hazard is raster and exposure is vector'
@@ -449,7 +449,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta',
             theExposure='Essential buildings',
-            theFunction='Be temporarily closed',
+            theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function',
             theAggregationEnabledFlag=False)
         myMessage += ' when the when hazard and exposure layer are vector'
@@ -1295,7 +1295,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
             theExposure='OSM Building Polygons',
-            theFunction='Be temporarily closed',
+            theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function')
         DOCK.getFunctions()
         assert myResult, myMessage
