@@ -13,6 +13,7 @@ VERSION=$1
 #replace _type_ = 'alpha' or 'beta' with final
 
 #regenerate docs
+rm -rf docs/_build
 make docs
 
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
@@ -40,10 +41,7 @@ cd /tmp/
 rm ${OUT}
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
               ${DIR}/docs/source\* \
-              ${DIR}/docs/*.jpeg\
-              ${DIR}/docs/*.jpg\
               ${DIR}/docs/*.odf\
-              ${DIR}/docs/*.png\
               ${DIR}/docs/build/doctrees\* \
               ${DIR}/docs/build/html\.buildinfo\* \
               ${DIR}/docs/cloud_sptheme\* \
@@ -66,6 +64,9 @@ zip -r ${OUT} ${DIR} --exclude \*.pyc \
               ${DIR}/\*.bat \
               ${DIR}/\*.xcf \
               ${DIR}/~ 
+              #${DIR}/docs/*.jpg\
+              #${DIR}/docs/*.jpeg\
+              #${DIR}/docs/*.png\
               
 popd
 
