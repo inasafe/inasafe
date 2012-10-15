@@ -134,6 +134,7 @@ class HtmlRendererTest(unittest.TestCase):
         myExpectedHashes = ['1b4ef78f93581086af944340a7d1dacc',  # ub12.04-64
                             'aa110b049db7d6305b212543c2167383',  # ub12.04 xvfb
                             '8e626bda4310f174d40a076af65c6023',  # ub11.04-64
+                            '869bb116ebebc1497ee9881eece0efc3',  # ub11.10-64
                             '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
