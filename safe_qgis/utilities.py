@@ -900,7 +900,7 @@ def humaniseSeconds(theSeconds):
     if theSeconds < 60:
         return tr('%i seconds' % theSeconds)
     if theSeconds < 120:
-        return  tr('a minute')
+        return tr('a minute')
     if theSeconds < 3600:
         return tr('minutes' % myMinutes)
     if theSeconds < 7200:

@@ -22,7 +22,6 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 from safe_qgis.utilities_test import (unitTestDataPath,
                                      loadLayer,
                                      getQgisTestApp)
-                              qgisVersion)
 from safe_qgis.exceptions import StyleError
 from safe.common.exceptions import BoundingBoxError
 from safe_qgis.test_keywords_dialog import (makePolygonLayer,
@@ -315,7 +314,7 @@ class UtilitiesTest(unittest.TestCase):
             myDefaults, myExpectedDefaults)
         assert (myDefaults == myExpectedDefaults), myMessage
 
-	def test_mmPointConversion(self):
+    def test_mmPointConversion(self):
         """Test that conversions between pixel and page dimensions work."""
 
         myDpi = 300
@@ -328,7 +327,7 @@ class UtilitiesTest(unittest.TestCase):
         myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
         assert myResult == myPixels, myMessage
 
-	def test_humaniseSeconds(self):
+    def test_humaniseSeconds(self):
         """Test that humanise seconds works."""
         self.assertEqual(humaniseSeconds(5), '5 seconds')
         self.assertEqual(humaniseSeconds(65), 'a minute')
