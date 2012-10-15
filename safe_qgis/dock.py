@@ -2051,6 +2051,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             self.tr('Pdf File (*.pdf)'))
         myMapFilename = str(myMapFilename)
 
+        if myMapFilename is None:
+            self.showBusy(self.tr('Map Creator'),
+                          self.tr('Printing cancelled!'),
+                          theProgress=100)
+            self.hideBusy()
+            return
+
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
@@ -2089,7 +2096,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                       theProgress=100)
 
         self.hideBusy()
-        myMap.showComposer()
+        #myMap.showComposer()
 
     def addComboItemInOrder(self, theCombo, theItemText, theItemData=None):
         """Although QComboBox allows you to set an InsertAlphabetically enum
