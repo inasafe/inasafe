@@ -40,8 +40,7 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
        * attribute_name:
              If hazard layer is of type raster, this is the name for new
              attribute in the result containing the hazard level.
-             If None (default) the name of hazard is used
-
+             If None (default) the name of hazard is used.
              If hazard layer is of type vector, it is the name of the
              attribute to transfer from the hazard layer into the result.
              If None (default) all attributes are transferred.
