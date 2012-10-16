@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Wed Oct 10 09:47:37 2012
+# Created: Tue Oct 16 18:07:20 2012
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -193,7 +193,7 @@ class Ui_KeywordsDialogBase(object):
         self.verticalLayout.addWidget(self.grpAdvanced)
         self.buttonBox = QtGui.QDialogButtonBox(KeywordsDialogBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Save)
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setCenterButtons(False)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.verticalLayout.addWidget(self.buttonBox)
