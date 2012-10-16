@@ -98,7 +98,7 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         if myDatatype == 'sigab':
             verifyColumn(myDialog.if_table, 5, myDatatype, 'included')
 
-    def testRestButton(self):
+    def XtestRestButton(self):
         """Test when reset button is pressed."""
         myDialog = ImpactFunctionsDoc(PARENT)
         expectedTable = myDialog.if_table.toNewlineFreeString()
@@ -115,7 +115,7 @@ class ImpactFunctionsDocTest(unittest.TestCase):
                     'is pressed.')
         assert expectedTable == realTableReset, msgReset
 
-    def test_showHelp(self):
+    def Xtest_showHelp(self):
         """Test that help button works"""
         myDialog = ImpactFunctionsDoc(PARENT)
         myButton = myDialog.myButtonBox.button(QtGui.QDialogButtonBox.Help)
