@@ -286,7 +286,8 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_on_cboSubcategory_currentIndexChanged(self):
         """Test subcategory combo change event works"""
-        myDialog = KeywordsDialog(PARENT, IFACE)
+        myLayer = QgsVectorLayer()
+        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
         myButton = myDialog.radHazard
         myButton.setChecked(True)
         myButton = myDialog.radExposure
@@ -299,6 +300,7 @@ class KeywordsDialogTest(unittest.TestCase):
                      'to the keywords list for %s' %
                      myCombo.currentText())
         myKey = myDialog.getValueForKey('subcategory')
+
         assert myKey is not None, myMessage
         assert myKey in str(myCombo.currentText()), myMessage
 

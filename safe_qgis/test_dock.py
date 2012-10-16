@@ -110,15 +110,15 @@ def canvasList():
     return myListString
 
 
-def combosToString(ui):
+def combosToString(theUi):
     """Helper to return a string showing the state of all combos (all their
     entries"""
 
     myString = 'Hazard Layers\n'
     myString += '-------------------------\n'
-    myCurrentId = ui.cboHazard.currentIndex()
-    for myCount in range(0, ui.cboHazard.count()):
-        myItemText = ui.cboHazard.itemText(myCount)
+    myCurrentId = theUi.cboHazard.currentIndex()
+    for myCount in range(0, theUi.cboHazard.count()):
+        myItemText = theUi.cboHazard.itemText(myCount)
         if myCount == myCurrentId:
             myString += '>> '
         else:
@@ -127,9 +127,9 @@ def combosToString(ui):
     myString += '\n'
     myString += 'Exposure Layers\n'
     myString += '-------------------------\n'
-    myCurrentId = ui.cboExposure.currentIndex()
-    for myCount in range(0, ui.cboExposure.count()):
-        myItemText = ui.cboExposure.itemText(myCount)
+    myCurrentId = theUi.cboExposure.currentIndex()
+    for myCount in range(0, theUi.cboExposure.count()):
+        myItemText = theUi.cboExposure.itemText(myCount)
         if myCount == myCurrentId:
             myString += '>> '
         else:
@@ -139,15 +139,27 @@ def combosToString(ui):
     myString += '\n'
     myString += 'Functions\n'
     myString += '-------------------------\n'
-    myCurrentId = ui.cboFunction.currentIndex()
-    for myCount in range(0, ui.cboFunction.count()):
-        myItemText = ui.cboFunction.itemText(myCount)
+    myCurrentId = theUi.cboFunction.currentIndex()
+    for myCount in range(0, theUi.cboFunction.count()):
+        myItemText = theUi.cboFunction.itemText(myCount)
         if myCount == myCurrentId:
             myString += '>> '
         else:
             myString += '   '
         myString += '%s (Function ID: %s)\n' % (
             str(myItemText), DOCK.getFunctionID(myCurrentId))
+
+    myString += '\n'
+    myString += 'Aggregation Layers\n'
+    myString += '-------------------------\n'
+    myCurrentId = theUi.cboAggregation.currentIndex()
+    for myCount in range(0, theUi.cboAggregation.count()):
+        myItemText = theUi.cboAggregation.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += str(myItemText) + '\n'
 
     myString += '\n\n >> means combo item is selected'
     return myString
@@ -204,7 +216,7 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
 
     if theAggregation is not None:
         myIndex = DOCK.cboAggregation.findText(theAggregation)
-        myMessage = ('\Aggregation layer Not Found: %s\n Combo State:\n%s' %
+        myMessage = ('Aggregation layer Not Found: %s\n Combo State:\n%s' %
                      (theAggregation, combosToString(DOCK)))
         if myIndex == -1:
             return False, myMessage
@@ -410,7 +422,7 @@ class DockTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-    @expectedFailure
+#    @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard
@@ -457,16 +469,12 @@ class DockTest(unittest.TestCase):
         myMessage += ' when the when hazard and exposure layer are vector'
         assert myResult, myMessage
 
-    def Xtest_checkAggregationAttribute(self):
+    def test_checkAggregationAttributeInKW(self):
+        """Aggregation attribute is chosen correctly when present
+            in kezwords."""
         myRunButton = DOCK.pbnRunStop
-        myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_1_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_3_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_with_None_keyword.shp']
-        #add additional layers
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
         myAttrKey = getDefaults('AGGR_ATTR_KEY')
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
@@ -474,13 +482,25 @@ class DockTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart')
+            theAggregation='kabupaten jakarta singlepart',
+            theAggregationEnabledFlag=True)
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKWDialog.accept()
+        myAttribute = DOCK.postprocAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (myAttribute))
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
+
+    def test_checkAggregationAttribute1Attr(self):
+        """Aggregation attribute is chosen correctly when there is only
+        one attr available."""
+        myRunButton = DOCK.pbnRunStop
+        myFileList = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
+        #add additional layers
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        myAttrKey = getDefaults('AGGR_ATTR_KEY')
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
@@ -493,10 +513,21 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKWDialog.accept()
+        myAttribute = DOCK.postprocAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (myAttribute))
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
+    def test_checkAggregationAttributeNoAttr(self):
+        """Aggregation attribute is chosen correctly when there is no
+        attr available."""
+
+        myRunButton = DOCK.pbnRunStop
+        myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
+        #add additional layers
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        myAttrKey = getDefaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         myResult, myMessage = setupScenario(
@@ -508,10 +539,21 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKWDialog.accept()
+        myAttribute = DOCK.postprocAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
                      (myAttribute))
         assert myAttribute is None, myMessage
 
+    def test_checkAggregationAttributeNoneAttr(self):
+        """Aggregation attribute is chosen correctly when there None in the
+            kezwords"""
+
+        myRunButton = DOCK.pbnRunStop
+        myFileList = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
+        #add additional layers
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        myAttrKey = getDefaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
         myResult, myMessage = setupScenario(
@@ -523,11 +565,15 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKWDialog.accept()
+        myAttribute = DOCK.postprocAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
                      (myAttribute))
         assert myAttribute is None, myMessage
 
-    def Xtest_checkPostProcessingLayersVisibility(self):
+    #the generated layers are not added to the map registry
+    @expectedFailure
+    def test_checkPostProcessingLayersVisibility(self):
         myRunButton = DOCK.pbnRunStop
 
         # with KAB_NAME aggregation attribute defined in .keyword using
@@ -542,6 +588,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         myBeforeCount = len(CANVAS.layers())
         #LOGGER.info("Canvas list before:\n%s" % canvasList())
+        print [str(l.name()) for  l in
+               QgsMapLayerRegistry.instance().mapLayers().values()]
         LOGGER.info("Registry list before:\n%s" %
                     len(QgsMapLayerRegistry.instance().mapLayers()))
         # Press RUN
@@ -549,6 +597,7 @@ class DockTest(unittest.TestCase):
         myAfterCount = len(CANVAS.layers())
         LOGGER.info("Registry list after:\n%s" %
                     len(QgsMapLayerRegistry.instance().mapLayers()))
+        print [str(l.name()) for  l in QgsMapLayerRegistry.instance().mapLayers().values()]
         #LOGGER.info("Canvas list after:\n%s" % canvasList())
         myMessage = ('Expected %s items in canvas, got %s' %
                      (myBeforeCount + 1, myAfterCount))
