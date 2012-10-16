@@ -59,7 +59,7 @@ pep8: compile
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude help_base.py,dock_base.py,resources.py,resources_rc.py .
+	pep8 --repeat --ignore=E203 --exclude help_base.py,dock_base.py,configurable_impact_functions_dialog_base.py, resources.py,resources_rc.py .
 
 # Run test suite only
 test_suite: compile

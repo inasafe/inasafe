@@ -19,8 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ast
 from PyQt4 import QtGui, QtCore
-from configurable_impact_functions_dialog_base import (
-            Ui_configurableImpactFunctionsDialogBase)
+from function_options_dialog_base import (
+            Ui_FunctionOptionsDialogBase)
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -30,8 +30,8 @@ except AttributeError:
 
 # FIXME (Tim and Ole): Change to ConfigurationDialog throughout
 #                      Maybe also change filename and Base name accordingly.
-class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
-                Ui_configurableImpactFunctionsDialogBase):
+class FunctionOptionsDialog(QtGui.QDialog,
+                Ui_FunctionOptionsDialogBase):
     """ConfigurableImpactFunctions Dialog for InaSAFE."""
 
     def __init__(self, theParent=None):
@@ -51,7 +51,7 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         self.setupUi(self)
         self.setWindowTitle(self.tr('Impact function configuration'))
 
-    def buildFormFromImpactFunctionsParameter(self, theFunction, params):
+    def buildForm(self, theFunction, params):
         """we build a form from impact functions parameter
 
         .. note:: see http://tinyurl.com/pyqt-differences
@@ -67,22 +67,38 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         self.keys = params.keys()
         for key in self.keys:
             self._addFormItem(key, params[key])
+        self.activeFunction
 
-    def _addFormItem(self, key, data):
-        label = QtGui.QLabel(self.formLayoutWidget)
-        label.setObjectName(_fromUtf8(key + "Label"))
-        tKey = key
-        tKey = tKey.replace('_', ' ')
-        tKey = tKey.capitalize()
-        label.setText(tKey)
-        label.setToolTip(str(type(data)))
+    def _addFormItem(self, theParameterKey, theParameterValue):
+        """Add a new form element dynamically from a key value pair.
+
+        Args:
+            * theParameterKey: str Mandatory string referencing the key in the
+                function configurable parameters dictionary.
+            * theParameterValue: object Mandatory representing the value
+                referenced by the key.
+
+        Returns:
+            None
+
+        Raises:
+            None
+
+        """
+        myLabel = QtGui.QLabel(self.formLayoutWidget)
+        myLabel.setObjectName(_fromUtf8(theParameterKey + "Label"))
+        myKey = theParameterKey
+        myKey = myKey.replace('_', ' ')
+        myKey = myKey.capitalize()
+        myLabel.setText(myKey)
+        myLabel.setToolTip(str(type(theParameterValue)))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
-                                        QtGui.QFormLayout.LabelRole, label)
-        lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
-        lineEdit.setText(str(data))
-        lineEdit.setObjectName(_fromUtf8(key + 'LineEdit'))
+                                        QtGui.QFormLayout.LabelRole, myLabel)
+        myLineEdit = QtGui.QLineEdit(self.formLayoutWidget)
+        myLineEdit.setText(str(theParameterValue))
+        myLineEdit.setObjectName(_fromUtf8(theParameterKey + 'LineEdit'))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
-                                        QtGui.QFormLayout.FieldRole, lineEdit)
+                                        QtGui.QFormLayout.FieldRole, myLineEdit)
         self.formItemCounters += 1
 
     def setDialogInfo(self, theFunctionID):
@@ -90,8 +106,8 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         impactFunctionName = theFunctionID
         myText += self.tr('Parameters for impact function "%1" that can be '
                           'modified are:').arg(impactFunctionName)
-        label = self.impFuncConfLabel
-        label.setText(myText)
+        myLabel = self.impFuncConfLabel
+        myLabel.setText(myText)
 
     def accept(self):
         """Override the default accept function
@@ -105,14 +121,14 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
            not applicable
         """
         noError = False
-        func = self.theFunction
+        myFunction = self.theFunction
         for key in self.keys:
             try:
                 lineEdit = self.findChild(QtGui.QLineEdit,
                                           _fromUtf8(key + "LineEdit"))
                 lineEditText = lineEdit.text()
                 convText = str(lineEditText)
-                func.parameters[key] = ast.literal_eval(convText)
+                myFunction.parameters[key] = ast.literal_eval(convText)
             except ValueError:
                 text = ("Unexpected error: ValueError" +
                 ". Please consult Python language reference for correct " +
