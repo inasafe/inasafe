@@ -13,11 +13,25 @@ VERSION=$1
 #replace _type_ = 'alpha' or 'beta' with final
 
 #regenerate docs
-rm -rf docs/_build
+rm -rf docs/build
 make docs
 
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
 DIR=${PWD##*/}
+
+# For some reason sphinx copies image resources both into build/_static and build/images
+# _static should hold just theme based resources
+# _images should contain all document referenced resources - sphinx flattens the dir structure
+# Normally we wouldn't care but we want to bundle this as documentation so we do care about size
+pushd .
+cd docs/build/html
+for FILE in `ls _images/` 
+do 
+  echo "Deleting $FILE from _static"
+  rm _static/${FILE}
+done
+popd
+
 OUT="/tmp/${DIR}.${1}.zip"
 
 rm -rf /tmp/${DIR}
@@ -42,6 +56,7 @@ rm ${OUT}
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
               ${DIR}/docs/source\* \
               ${DIR}/docs/*.odf\
+              ${DIR}/docs/*.odg\
               ${DIR}/docs/build/doctrees\* \
               ${DIR}/docs/build/html\.buildinfo\* \
               ${DIR}/docs/cloud_sptheme\* \
