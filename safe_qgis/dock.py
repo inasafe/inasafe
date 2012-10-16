@@ -24,6 +24,8 @@ import numpy
 import logging
 import uuid
 
+from functools import partial
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 
@@ -870,10 +872,37 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                 'AGGR_ATTR_KEY']: myAttrName})
 
         LOGGER.debug('Do zonal aggregation: ' + str(self.doZonalAggregation))
-        # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them
-        self._checkPostprocAttributes()
 
+        self.runtimeKWDialog = KeywordsDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self,
+            self.postprocLayer)
+
+        QtCore.QObject.connect(self.runtimeKWDialog,
+            QtCore.SIGNAL('accepted()'),
+            self.run)
+
+        myPostprocLayerKwords = self.keywordIO.readKeywords(self.postprocLayer)
+        LOGGER.debug(myPostprocLayerKwords)
+        QtCore.QObject.connect(self.runtimeKWDialog,
+            QtCore.SIGNAL('rejected()'),
+            partial(self.acceptCancelled, myPostprocLayerKwords))
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them. if a prompt is shown myContinue will be false
+        # and the run method is called by the accepted signal
+        myContinue = self._checkPostprocAttributes()
+        if myContinue:
+            self.run()
+
+    def acceptCancelled(self, theOldKeywords):
+        self.keywordIO.writeKeywords(self.postprocLayer, theOldKeywords)
+        self.hideBusy()
+        self.setOkButtonStatus()
+
+    def run(self):
+        """Execute analysis when ok button on settings is clicked."""
+        self.enableBusyCursor()
         # attributes that will not be deleted from the postprocessing layer
         # attribute table
         self.postprocAttributes = {}
@@ -1378,7 +1407,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.defaults['FEM_RATIO_DEFAULT_KEY'] in myKeywords
                 )
             ):
-            return
+            return True
         #some keywords are needed
         else:
             #set the default values by writing to the myKeywords
@@ -1391,8 +1420,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr('Use default')
             myKeywords[self.defaults['FEM_RATIO_DEFAULT_KEY']] = \
                 self.defaults['FEM_RATIO_DEFAULT']
-            self.keywordIO.writeKeywords(self.postprocLayer, myKeywords)
-
+            delete = self.keywordIO.deleteKeyword(self.postprocLayer, 'subcategory')
+            LOGGER.debug('Deleted: ' + str(delete))
+            self.keywordIO.appendKeywords(self.postprocLayer, myKeywords)
             if self.doZonalAggregation:
                 #prompt user for a choice
                 myTitle = self.tr(
@@ -1403,20 +1433,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.showBusy(myTitle, myMessage, myProgress)
 
                 self.disableBusyCursor()
-
-                myDialog = KeywordsDialog(
-                    self.iface.mainWindow(),
-                    self.iface,
-                    self,
-                    self.postprocLayer)
-
+                self.runtimeKWDialog.setLayer(self.postprocLayer)
                 #disable gui elements that should not be applicable for this
-                myDialog.radExposure.setEnabled(False)
-                myDialog.radHazard.setEnabled(False)
-                myDialog.pbnAdvanced.setEnabled(False)
-                myDialog.exec_()
+                self.runtimeKWDialog.radExposure.setEnabled(False)
+                self.runtimeKWDialog.radHazard.setEnabled(False)
+                self.runtimeKWDialog.pbnAdvanced.setEnabled(False)
+                self.runtimeKWDialog.setModal(True)
+                self.runtimeKWDialog.show()
 
-                self.enableBusyCursor()
+                return False
+            else:
+                return True
 
     def _toggleCboAggregation(self):
         """Helper function to toggle the aggregation combo depending on the
