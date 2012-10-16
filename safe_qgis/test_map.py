@@ -117,6 +117,7 @@ class MapTest(unittest.TestCase):
                             '0109d8bac8fd27677d373ebf66546d19',
                             '9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
                             'ddf3cd2e9059e85c9d5b525d9f00c7dd',  # Jenkins
+                            '7d308ea9d88ef55a101766adaabf179f',  # ub11.10-64
                             '']
         assertHashesForFile(myExpectedHashes, myImagePath)
 
