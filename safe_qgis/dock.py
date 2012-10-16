@@ -71,7 +71,8 @@ from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
-                                 qgisVersion)
+                                 qgisVersion,
+                                 getDefaults)
 from safe_qgis.function_options_dialog import (
    FunctionOptionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
@@ -146,8 +147,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
         self.activeFunction = None
-
-        self.initPostprocessingOutput()
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
