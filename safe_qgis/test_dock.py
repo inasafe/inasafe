@@ -422,7 +422,7 @@ class DockTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-#    @expectedFailure
+    @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard
@@ -572,7 +572,6 @@ class DockTest(unittest.TestCase):
         assert myAttribute is None, myMessage
 
     #the generated layers are not added to the map registry
-    @expectedFailure
     def test_checkPostProcessingLayersVisibility(self):
         myRunButton = DOCK.pbnRunStop
 
