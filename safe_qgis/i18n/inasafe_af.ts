@@ -177,7 +177,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1974"/>
+        <location filename="dock.py" line="1967"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>

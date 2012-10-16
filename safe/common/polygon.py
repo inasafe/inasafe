@@ -15,7 +15,7 @@
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
 __license__ = "GPL"
@@ -508,8 +508,6 @@ def in_and_outside_polygon(points, polygon,
 
             # Add holde indices to outside
             outside = numpy.concatenate((outside, in_hole))
-
-        outside.sort()
 
     return inside, outside
 
@@ -1253,10 +1251,7 @@ def intersection(line0, line1):
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
-
-# FIXME (Ole): I think this should take list of polygon objects as input
-#              rather than specifying inner rings separately
-def clip_grid_by_polygons(A, geotransform, polygons, inner_rings=None):
+def clip_grid_by_polygons(A, geotransform, polygons):
     """Clip raster grid by polygon
 
     Input
@@ -1264,8 +1259,7 @@ def clip_grid_by_polygons(A, geotransform, polygons, inner_rings=None):
         geotransform: 6-tuple used to locate A geographically
                       (top left x, w-e pixel resolution, rotation,
                        top left y, rotation, n-s pixel resolution)
-        polygons: list of polygons, each an array of vertices
-        inner_rings: list of list of holes - each an array of vertices
+        polygons: list of polygon geometry objects or list of polygon arrays
 
     Output
         points_covered: List of (points, values) - one per input polygon.
@@ -1291,16 +1285,19 @@ def clip_grid_by_polygons(A, geotransform, polygons, inner_rings=None):
     remaining_points = points
     remaining_values = values
 
-    for i, polygon in enumerate(polygons):
+    for polygon in polygons:
         #print 'Remaining points', len(remaining_points)
 
-        if inner_rings is None:
-            holes = None
+        if hasattr(polygon, 'outer_ring'):
+            outer_ring = polygon.outer_ring
+            inner_rings = polygon.inner_rings
         else:
-            holes = inner_rings[i]
+            # Assume it is an array
+            outer_ring = polygon
+
         inside, outside = in_and_outside_polygon(remaining_points,
-                                                 polygon,
-                                                 holes=holes,
+                                                 outer_ring,
+                                                 holes=inner_rings,
                                                  closed=True,
                                                  check_input=False)
         # Add features inside this polygon

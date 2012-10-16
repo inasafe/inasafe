@@ -7,7 +7,7 @@
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
 __license__ = "GPL"

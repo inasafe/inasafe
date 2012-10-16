@@ -2418,8 +2418,7 @@ class Test_IO(unittest.TestCase):
 
         # Read two layers with compatible projections
         hazard_filename = '%s/donut.shp' % TESTDATA
-        exposure_filename = ('%s/population_indonesia_2010_'
-                             'BNPB_BPS.asc' % EXPDATA)
+        exposure_filename = ('%s/pop_merapi_prj_problem.asc' % TESTDATA)
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 

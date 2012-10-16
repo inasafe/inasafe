@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-15 16:34+0700\n"
+"POT-Creation-Date: 2012-10-16 10:27+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,7 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Buildings"
 msgstr ""
@@ -96,6 +97,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:108
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Total"
 msgstr ""
 
@@ -139,6 +141,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:99
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:141
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:105
+#: safe/impact_functions/volcanic/volcano_building_impact.py:135
 #: safe/impact_functions/volcanic/volcano_building_impact.py:135
 msgid "All"
 msgstr ""
@@ -1520,7 +1523,6 @@ msgstr ""
 #: storage/dynamic_translations.py:51 common/dynamic_translations.py:51
 #: safe/common/dynamic_translations.py:51
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:51
-#: safe/common/dynamic_translations.py:58
 msgid "DKI buildings"
 msgstr ""
 
@@ -1533,8 +1535,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:53
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:52
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:53
-#: safe/common/dynamic_translations.py:60
-#: safe/common/dynamic_translations.py:61
 msgid "Jakarta 2007 flood"
 msgstr ""
 
@@ -1553,7 +1553,6 @@ msgstr ""
 #: storage/dynamic_translations.py:62 common/dynamic_translations.py:62
 #: common/dynamic_translations.py:65 safe/common/dynamic_translations.py:65
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:65
-#: safe/common/dynamic_translations.py:68
 msgid "Sea wall collapse at Pluit"
 msgstr ""
 
@@ -1563,7 +1562,6 @@ msgstr ""
 #: storage/dynamic_translations.py:63 common/dynamic_translations.py:63
 #: common/dynamic_translations.py:66 safe/common/dynamic_translations.py:66
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:66
-#: safe/common/dynamic_translations.py:70
 msgid "Jakarta flood prone areas"
 msgstr ""
 
@@ -1573,7 +1571,6 @@ msgstr ""
 #: storage/dynamic_translations.py:64 common/dynamic_translations.py:64
 #: common/dynamic_translations.py:71 safe/common/dynamic_translations.py:71
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:71
-#: safe/common/dynamic_translations.py:74
 msgid "Population Jakarta"
 msgstr ""
 
@@ -1584,7 +1581,6 @@ msgstr ""
 #: common/dynamic_translations.py:74 safe/common/dynamic_translations.py:74
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:74
 #: safe/common/dynamic_translations.py:75
-#: safe/common/dynamic_translations.py:78
 msgid "Flood Depth (design) Jakarta"
 msgstr ""
 
@@ -1595,7 +1591,6 @@ msgstr ""
 #: common/dynamic_translations.py:75 safe/common/dynamic_translations.py:75
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:75
 #: safe/common/dynamic_translations.py:76
-#: safe/common/dynamic_translations.py:79
 msgid "Flood Depth (current) Jakarta"
 msgstr ""
 
@@ -1613,7 +1608,6 @@ msgstr ""
 #: common/dynamic_translations.py:79 safe/common/dynamic_translations.py:79
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:79
 #: safe/common/dynamic_translations.py:80
-#: safe/common/dynamic_translations.py:81
 msgid "Indonesian Earthquake Hazard Map"
 msgstr ""
 
@@ -1648,7 +1642,6 @@ msgstr ""
 #: common/dynamic_translations.py:102 safe/common/dynamic_translations.py:102
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:102
 #: safe/common/dynamic_translations.py:103
-#: safe/common/dynamic_translations.py:92
 msgid "OSM building footprints"
 msgstr ""
 
@@ -1661,7 +1654,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:105
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:105
 #: safe/common/dynamic_translations.py:106
-#: safe/common/dynamic_translations.py:95
 msgid "AIBEP schools"
 msgstr ""
 
@@ -1674,7 +1666,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:106
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:106
 #: safe/common/dynamic_translations.py:107
-#: safe/common/dynamic_translations.py:97
 msgid "Population density (5kmx5km)"
 msgstr ""
 
@@ -1683,7 +1674,6 @@ msgstr ""
 #: storage/dynamic_translations.py:58 common/dynamic_translations.py:58
 #: common/dynamic_translations.py:60 safe/common/dynamic_translations.py:60
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:60
-#: safe/common/dynamic_translations.py:65
 msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
 msgstr ""
 
@@ -1702,7 +1692,6 @@ msgstr ""
 #: common/dynamic_translations.py:108 safe/common/dynamic_translations.py:108
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:108
 #: safe/common/dynamic_translations.py:109
-#: safe/common/dynamic_translations.py:98
 msgid "Office buildings Jakarta"
 msgstr ""
 
@@ -1714,7 +1703,6 @@ msgstr ""
 #: common/dynamic_translations.py:109 safe/common/dynamic_translations.py:109
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:109
 #: safe/common/dynamic_translations.py:110
-#: safe/common/dynamic_translations.py:100
 msgid "Hospitals and clinics Jakarta"
 msgstr ""
 
@@ -1726,7 +1714,6 @@ msgstr ""
 #: common/dynamic_translations.py:113 safe/common/dynamic_translations.py:113
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:113
 #: safe/common/dynamic_translations.py:114
-#: safe/common/dynamic_translations.py:101
 msgid "Schools Jakarta"
 msgstr ""
 
@@ -1739,7 +1726,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:115
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:115
 #: safe/common/dynamic_translations.py:116
-#: safe/common/dynamic_translations.py:103
 msgid "Industrial buildings Jakarta"
 msgstr ""
 
@@ -1752,7 +1738,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:116
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:116
 #: safe/common/dynamic_translations.py:117
-#: safe/common/dynamic_translations.py:104
 msgid "Industrial areas Jakarta"
 msgstr ""
 
@@ -1765,7 +1750,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:117
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:118
-#: safe/common/dynamic_translations.py:105
 msgid "Commercial areas Jakarta"
 msgstr ""
 
@@ -1778,7 +1762,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:118
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:118
 #: safe/common/dynamic_translations.py:119
-#: safe/common/dynamic_translations.py:106
 msgid "Hospitals Jakarta"
 msgstr ""
 
@@ -1790,7 +1773,6 @@ msgstr ""
 #: common/dynamic_translations.py:114 safe/common/dynamic_translations.py:114
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:114
 #: safe/common/dynamic_translations.py:115
-#: safe/common/dynamic_translations.py:102
 msgid "Schools"
 msgstr ""
 
@@ -1802,7 +1784,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:104
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:104
 #: safe/common/dynamic_translations.py:105
-#: safe/common/dynamic_translations.py:94
 msgid "OSM buildings"
 msgstr ""
 
@@ -1815,7 +1796,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:121
 #: safe/common/dynamic_translations.py:122
 #: safe/common/dynamic_translations.py:123
-#: safe/common/dynamic_translations.py:112
 msgid "office"
 msgstr ""
 
@@ -1828,7 +1808,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:122
 #: safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:124
-#: safe/common/dynamic_translations.py:113
 msgid "clinic"
 msgstr ""
 
@@ -1841,7 +1820,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:124
 #: safe/common/dynamic_translations.py:125
-#: safe/common/dynamic_translations.py:114
 msgid "terrace"
 msgstr ""
 
@@ -1854,7 +1832,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:124
 #: safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:126
-#: safe/common/dynamic_translations.py:115
 msgid "police"
 msgstr ""
 
@@ -1867,7 +1844,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:126
 #: safe/common/dynamic_translations.py:127
-#: safe/common/dynamic_translations.py:116
 msgid "residential"
 msgstr ""
 
@@ -1880,7 +1856,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:126
 #: safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:128
-#: safe/common/dynamic_translations.py:117
 msgid "kindergarten"
 msgstr ""
 
@@ -1893,7 +1868,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:128
 #: safe/common/dynamic_translations.py:129
-#: safe/common/dynamic_translations.py:118
 msgid "bank"
 msgstr ""
 
@@ -1906,7 +1880,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:128
 #: safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:130
-#: safe/common/dynamic_translations.py:119
 msgid "place of worship"
 msgstr ""
 
@@ -1919,7 +1892,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:130
 #: safe/common/dynamic_translations.py:131
-#: safe/common/dynamic_translations.py:120
 msgid "school"
 msgstr ""
 
@@ -1932,7 +1904,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:130
 #: safe/common/dynamic_translations.py:131
 #: safe/common/dynamic_translations.py:132
-#: safe/common/dynamic_translations.py:121
 msgid "university"
 msgstr ""
 
@@ -1945,7 +1916,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:131
 #: safe/common/dynamic_translations.py:132
 #: safe/common/dynamic_translations.py:133
-#: safe/common/dynamic_translations.py:122
 msgid "apartments"
 msgstr ""
 
@@ -1958,7 +1928,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:132
 #: safe/common/dynamic_translations.py:133
 #: safe/common/dynamic_translations.py:134
-#: safe/common/dynamic_translations.py:123
 msgid "college"
 msgstr ""
 
@@ -1971,7 +1940,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:133
 #: safe/common/dynamic_translations.py:134
 #: safe/common/dynamic_translations.py:135
-#: safe/common/dynamic_translations.py:124
 msgid "commercial"
 msgstr ""
 
@@ -1984,7 +1952,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:134
 #: safe/common/dynamic_translations.py:135
 #: safe/common/dynamic_translations.py:136
-#: safe/common/dynamic_translations.py:125
 msgid "hospital"
 msgstr ""
 
@@ -1997,7 +1964,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:135
 #: safe/common/dynamic_translations.py:136
 #: safe/common/dynamic_translations.py:137
-#: safe/common/dynamic_translations.py:126
 msgid "industrial"
 msgstr ""
 
@@ -2010,7 +1976,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:136
 #: safe/common/dynamic_translations.py:137
 #: safe/common/dynamic_translations.py:138
-#: safe/common/dynamic_translations.py:127
 msgid "civic"
 msgstr ""
 
@@ -2023,7 +1988,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:137
 #: safe/common/dynamic_translations.py:138
 #: safe/common/dynamic_translations.py:139
-#: safe/common/dynamic_translations.py:128
 msgid "church"
 msgstr ""
 
@@ -2036,7 +2000,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:138
 #: safe/common/dynamic_translations.py:139
 #: safe/common/dynamic_translations.py:140
-#: safe/common/dynamic_translations.py:129
 msgid "hotel"
 msgstr ""
 
@@ -2049,7 +2012,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:139
 #: safe/common/dynamic_translations.py:140
 #: safe/common/dynamic_translations.py:141
-#: safe/common/dynamic_translations.py:130
 msgid "public building"
 msgstr ""
 
@@ -2062,7 +2024,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:140
 #: safe/common/dynamic_translations.py:141
 #: safe/common/dynamic_translations.py:142
-#: safe/common/dynamic_translations.py:131
 msgid "other"
 msgstr ""
 
@@ -2075,7 +2036,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:141
 #: safe/common/dynamic_translations.py:142
 #: safe/common/dynamic_translations.py:143
-#: safe/common/dynamic_translations.py:132
 msgid "fire station"
 msgstr ""
 
@@ -2309,7 +2269,6 @@ msgstr ""
 #: storage/dynamic_translations.py:65 common/dynamic_translations.py:65
 #: common/dynamic_translations.py:72 safe/common/dynamic_translations.py:72
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:72
-#: safe/common/dynamic_translations.py:75
 msgid "People"
 msgstr ""
 
@@ -2317,7 +2276,6 @@ msgstr ""
 #: storage/dynamic_translations.py:66 common/dynamic_translations.py:66
 #: common/dynamic_translations.py:73 safe/common/dynamic_translations.py:73
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:73
-#: safe/common/dynamic_translations.py:76
 msgid "people"
 msgstr ""
 
@@ -2529,19 +2487,16 @@ msgstr ""
 
 #: common/dynamic_translations.py:54 safe/common/dynamic_translations.py:54
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:54
-#: safe/common/dynamic_translations.py:62
 msgid "A flood in Jakarta like in 2007"
 msgstr ""
 
 #: common/dynamic_translations.py:63 safe/common/dynamic_translations.py:63
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:63
-#: safe/common/dynamic_translations.py:66
 msgid "A flood in Jakarta like in 2007 but with structural improvements"
 msgstr ""
 
 #: common/dynamic_translations.py:68 safe/common/dynamic_translations.py:68
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:68
-#: safe/common/dynamic_translations.py:71
 msgid "A flood in Jakarta in RW areas identified as flood prone"
 msgstr ""
 
@@ -2552,8 +2507,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:97
 #: safe/common/dynamic_translations.py:77
 #: safe/common/dynamic_translations.py:98
-#: safe/common/dynamic_translations.py:80
-#: safe/common/dynamic_translations.py:89
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr ""
 
@@ -2574,7 +2527,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:89
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:89
 #: safe/common/dynamic_translations.py:90
-#: safe/common/dynamic_translations.py:86
 msgid "An earthquake at the Mentawai fault (Mw 9.0)"
 msgstr ""
 
@@ -2582,7 +2534,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:95
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:95
 #: safe/common/dynamic_translations.py:96
-#: safe/common/dynamic_translations.py:88
 msgid "An earthquake in Padang like in 2009"
 msgstr ""
 
@@ -2590,7 +2541,6 @@ msgstr ""
 #: safe/common/dynamic_translations.py:100
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:100
 #: safe/common/dynamic_translations.py:101
-#: safe/common/dynamic_translations.py:90
 msgid "An earthquake at the Lembang fault"
 msgstr ""
 
@@ -2779,6 +2729,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation.py:128
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:148
 #: safe/impact_functions/volcanic/volcano_building_impact.py:148
+#: safe/impact_functions/volcanic/volcano_building_impact.py:148
 msgid "Notes"
 msgstr ""
 
@@ -2813,7 +2764,6 @@ msgid "People in %(lo).1f m to %(hi).1f m of water: %(val)i"
 msgstr ""
 
 #: safe/common/dynamic_translations.py:74
-#: safe/common/dynamic_translations.py:77
 msgid "People in Jakarta"
 msgstr ""
 
@@ -2825,6 +2775,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:164
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:165
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
+#: safe/impact_functions/volcanic/volcano_building_impact.py:171
 #: safe/impact_functions/volcanic/volcano_building_impact.py:171
 msgid "0"
 msgstr ""
@@ -2838,6 +2789,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:167
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:173
 #: safe/impact_functions/volcanic/volcano_building_impact.py:173
+#: safe/impact_functions/volcanic/volcano_building_impact.py:173
 #, python-format
 msgid "%i - %i"
 msgstr ""
@@ -2845,6 +2797,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:24
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
+#: safe/impact_functions/volcanic/volcano_building_impact.py:27
 #: safe/impact_functions/volcanic/volcano_building_impact.py:27
 msgid "Be affected"
 msgstr ""
@@ -2997,102 +2950,39 @@ msgid "Be flooded"
 msgstr ""
 
 #: safe/common/dynamic_translations.py:120
-#: safe/common/dynamic_translations.py:107
 msgid "An eruption"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "Cumulative"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:143
+#: safe/impact_functions/volcanic/volcano_building_impact.py:143
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:149
 #: safe/impact_functions/volcanic/volcano_building_impact.py:149
 #, python-format
 msgid "Total number of buildings %i in the viewable area"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:151
+#: safe/impact_functions/volcanic/volcano_building_impact.py:151
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:154
+#: safe/impact_functions/volcanic/volcano_building_impact.py:188
 #: safe/impact_functions/volcanic/volcano_building_impact.py:154
 #: safe/impact_functions/volcanic/volcano_building_impact.py:188
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:182
+#: safe/impact_functions/volcanic/volcano_building_impact.py:182
 msgid "Building Count"
-msgstr ""
-
-#: safe/common/dynamic_translations.py:1
-msgid ""
-"Lookup table mapping layer titles to translatable strings\n"
-"\n"
-"Layer titles are kept in the associated keywords files. However,\n"
-"these files are not seen by the internationalisation system and\n"
-"can therefore not be translated.\n"
-"\n"
-"To achieve this for selected titles, we maintain a lookup table of the form\n"
-"\n"
-"{string: translatable_string}\n"
-"\n"
-"where string e.g. comes from the keywords file or attribute names/values\n"
-"in datasets and translatable_string is the string that will appear as the\n"
-"translated at runtime.\n"
-"\n"
-"e.g (using a neutral symbol)\n"
-"{'title1': tr('Jakarta 2007 flood')}\n"
-"\n"
-"or (using existing title)\n"
-"{'Schools': tr('Schools')}\n"
-"\n"
-"or (attribute value)\n"
-"{'school': tr('school')}\n"
-"\n"
-"With the underscore function, the specified string will be seen by the\n"
-"translation system and can appear in the supported languages as with\n"
-"other strings in SAFE.\n"
-"\n"
-"Note, this module does *not* provide translations! Rather it provides\n"
-"mappings between strings expected at runtime to strings seen by the\n"
-"existing translation systems.\n"
-"\n"
-"To use:\n"
-"\n"
-"This module contains words and phrases that need to be translatable but\n"
-"would not normally be available in code for example, that originate from\n"
-"a dataset or external source.\n"
-"\n"
-"Just put your translations here, and it will be available to the tr "
-"function\n"
-"but never import this module or the functions in it!\n"
-"\n"
-"\n"
-"\n"
-msgstr ""
-
-#: safe/common/dynamic_translations.py:54
-msgid ""
-"These listed here so they get translated apriori to loading data.\n"
-"    "
-msgstr ""
-
-#: safe/common/dynamic_translations.py:56
-msgid "Hello world"
-msgstr ""
-
-#: safe/common/dynamic_translations.py:63
-msgid "Jakarta flood like 2007 with pump failure at Pluit Ancol and Sunter"
-msgstr ""
-
-#: safe/common/dynamic_translations.py:108
-msgid "A volcano eruption"
-msgstr ""
-
-#: safe/common/dynamic_translations.py:109
-msgid "A volcano alert"
 msgstr ""
