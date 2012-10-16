@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -375,7 +376,7 @@
     <message>
         <location filename="dock.py" line="1935"/>
         <source>Printing cancelled!</source>
-        <translation type="unfinished"></translation>
+        <translation>Pencetakan dibatalkan!</translation>
     </message>
 </context>
 <context>
