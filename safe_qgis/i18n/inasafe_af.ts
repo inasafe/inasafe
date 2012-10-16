@@ -177,7 +177,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1967"/>
+        <location filename="dock.py" line="1965"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -366,12 +366,6 @@
         <source>Preparing map and report</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="dock.py" line="1947"/>
-        <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)s and %(br)s%(table)sbr&lt;br&gt;</source>
-        <comment>map</comment>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DockBase</name>
@@ -470,6 +464,19 @@
     <message>
         <location filename="impact_calculator_thread.py" line="172"/>
         <source>Calculation completed successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImpactFunctionsDoc</name>
+    <message>
+        <location filename="impact_functions_doc.py" line="52"/>
+        <source>InaSAFE %s Impact Functions Doc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc.py" line="54"/>
+        <source>No Filter</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

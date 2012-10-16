@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="id_ID">
+<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -178,7 +177,7 @@
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1967"/>
+        <location filename="dock.py" line="1965"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
@@ -367,12 +366,6 @@
         <source>Preparing map and report</source>
         <translation>Mempersiapkan peta dan laporan</translation>
     </message>
-    <message>
-        <location filename="dock.py" line="1947"/>
-        <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)s and %(br)s%(table)sbr&lt;br&gt;</source>
-        <comment>map</comment>
-        <translation>Berkas PDF sudah dibuat...Membuka dengan menggunakan pembaca berkas PDF default pada sistem Anda.&gt;Berkas PDF yang dihasilkan disimpan sebagai:%(br)s%(map)s%(br)s dan %(br)s%(table)sbr&lt;br&gt;</translation>
-    </message>
 </context>
 <context>
     <name>DockBase</name>
@@ -472,6 +465,19 @@
         <location filename="impact_calculator_thread.py" line="172"/>
         <source>Calculation completed successfully.</source>
         <translation>Perhitungan berhasil.</translation>
+    </message>
+</context>
+<context>
+    <name>ImpactFunctionsDoc</name>
+    <message>
+        <location filename="impact_functions_doc.py" line="52"/>
+        <source>InaSAFE %s Impact Functions Doc</source>
+        <translation>InaSAFE %s Dokumentasi Fungsi Dampak</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc.py" line="54"/>
+        <source>No Filter</source>
+        <translation>Tanpa Filter</translation>
     </message>
 </context>
 <context>
