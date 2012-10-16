@@ -230,19 +230,13 @@ class KeywordIO(QObject):
         Raises:
             Propogates exception from the underlying reader delegate.
         """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
-        myKeywords = None
 
         try:
             myKeywords = self.readKeywords(theLayer)
-        except HashNotFoundException:
-            return False
-        try:
             myKeywords.pop(theKeyword)
             self.writeKeywords(theLayer, myKeywords)
             return True
-        except KeyError:
+        except (HashNotFoundException, KeyError):
             return False
 
 # methods below here should be considered private
