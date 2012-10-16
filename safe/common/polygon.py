@@ -81,6 +81,9 @@ def separate_points_by_polygon(points, polygon,
     http://www.alienryderflex.com/polygon/
     """
 
+    # FIXME (Ole): Make sure bounding box here follows same format as
+    #              those returned by layers. Methinks they don't at the moment
+
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean or None'
@@ -508,8 +511,6 @@ def in_and_outside_polygon(points, polygon,
 
             # Add holde indices to outside
             outside = numpy.concatenate((outside, in_hole))
-
-        outside.sort()
 
     return inside, outside
 
