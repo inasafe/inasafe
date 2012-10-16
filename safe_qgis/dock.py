@@ -71,10 +71,9 @@ from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
-                                 qgisVersion,
-                                 getDefaults)
-from safe_qgis.configurable_impact_functions_dialog import (
-   ConfigurableImpactFunctionsDialog)
+                                 qgisVersion)
+from safe_qgis.function_options_dialog import (
+   FunctionOptionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 from safe.postprocessors import get_post_processors
@@ -145,6 +144,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.setOkButtonStatus()
         self._aggregationPrefix = 'aggr_'
         self.pbnPrint.setEnabled(False)
+        # used by configurable function options button
+        self.activeFunction = None
+
+        self.initPostprocessingOutput()
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -420,11 +423,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myFunctionID = self.getFunctionID()
 
             myFunctions = getSafeImpactFunctions(myFunctionID)
-            self.myFunction = myFunctions[0][myFunctionID]
+            self.activeFunction = myFunctions[0][myFunctionID]
             self.functionParams = None
-            if hasattr(self.myFunction, 'parameters'):
-                self.functionParams = self.myFunction.parameters
-
+            if hasattr(self.activeFunction, 'parameters'):
+                self.functionParams = self.activeFunction.parameters
             self.setToolFunctionOptionsButton()
         else:
             del theIndex
@@ -477,11 +479,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises:
            no exceptions explicitly raised."""
-        conf = ConfigurableImpactFunctionsDialog(self)
-        conf.setDialogInfo(self.getFunctionID())
-        conf.buildFormFromImpactFunctionsParameter(self.myFunction,
-                                                   self.functionParams)
-        conf.showNormal()
+        myDialog = FunctionOptionsDialog(self)
+        myDialog.setDialogInfo(self.getFunctionID())
+        myDialog.buildForm(self.activeFunction, self.functionParams)
+        myDialog.showNormal()
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
