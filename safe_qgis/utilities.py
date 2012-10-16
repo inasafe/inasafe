@@ -685,8 +685,11 @@ def isLayerPolygonal(theLayer):
     Raises:
        None
     """
-    return (theLayer.type() == QgsMapLayer.VectorLayer) and (
-        theLayer.geometryType() == QGis.Polygon)
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Polygon)
+    except AttributeError:
+        return False
 
 
 def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
