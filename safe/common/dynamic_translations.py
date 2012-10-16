@@ -53,7 +53,6 @@ from safe.common.utilities import ugettext as tr
 def dynamic_translations():
     """These listed here so they get translated apriori to loading data.
     """
-    return tr('Hello world')
     # Bangunan DKI
     tr('DKI buildings')
     # Banjir seperti 2007
