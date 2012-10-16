@@ -587,7 +587,7 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         myBeforeCount = len(CANVAS.layers())
         #LOGGER.info("Canvas list before:\n%s" % canvasList())
-        print [str(l.name()) for  l in
+        print [str(l.name()) for l in
                QgsMapLayerRegistry.instance().mapLayers().values()]
         LOGGER.info("Registry list before:\n%s" %
                     len(QgsMapLayerRegistry.instance().mapLayers()))
@@ -596,7 +596,8 @@ class DockTest(unittest.TestCase):
         myAfterCount = len(CANVAS.layers())
         LOGGER.info("Registry list after:\n%s" %
                     len(QgsMapLayerRegistry.instance().mapLayers()))
-        print [str(l.name()) for  l in QgsMapLayerRegistry.instance().mapLayers().values()]
+#        print [str(l.name()) for l in QgsMapLayerRegistry.instance(
+#           ).mapLayers().values()]
         #LOGGER.info("Canvas list after:\n%s" % canvasList())
         myMessage = ('Expected %s items in canvas, got %s' %
                      (myBeforeCount + 1, myAfterCount))

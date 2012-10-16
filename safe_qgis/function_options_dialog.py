@@ -99,7 +99,8 @@ class FunctionOptionsDialog(QtGui.QDialog,
         myLineEdit.setObjectName(_fromUtf8(theParameterKey + 'LineEdit'))
         myLineEdit.setCursorPosition(0)
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
-                                        QtGui.QFormLayout.FieldRole, myLineEdit)
+                                        QtGui.QFormLayout.FieldRole,
+                                        myLineEdit)
         self.formItemCounters += 1
 
     def setDialogInfo(self, theFunctionID):

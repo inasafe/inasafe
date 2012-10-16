@@ -1067,7 +1067,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         LOGGER.debug(self.postprocOutput)
-        if  self.aggregationErrorSkipPostprocessing:
+        if self.aggregationErrorSkipPostprocessing:
             myHTML = ('<table class="table table-striped condensed">'
             '    <tr>'
             '       <td>'
@@ -1079,9 +1079,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             '    <tr>'
             '       <td>'
             + self.tr('Due to a problem while processing the results,'
-                      ' the detailed postprocessing report is unavailable check'
-                      ' the log messages (view > panels > Log messages) for'
-                      ' further details') +
+                      ' the detailed postprocessing report is unavailable'
+                      ' check the log messages (view > panels > Log messages)'
+                      ' for further details') +
             '       </td>'
             '    </tr>'
             '</table>')
