@@ -509,8 +509,6 @@ def in_and_outside_polygon(points, polygon,
             # Add holde indices to outside
             outside = numpy.concatenate((outside, in_hole))
 
-        outside.sort()
-
     return inside, outside
 
 
