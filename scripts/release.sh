@@ -49,6 +49,7 @@ rm -rf /tmp/${DIR}/pylintrc
 rm -rf /tmp/${DIR}/extras
 rm -rf /tmp/${DIR}/safe/test
 rm -rf /tmp/${DIR}/safe_qgis/resources
+
 rm -rf /tmp/${DIR}/pylintrc_jenkins
 rm -rf /tmp/${DIR}/.travis.yml
 rm -rf /tmp/${DIR}/setup.py

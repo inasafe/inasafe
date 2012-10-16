@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -34,7 +34,7 @@ def description():
 
 def version():
     """Version of the plugin."""
-    return 'Version 0.5.1'
+    return 'Version 0.5.2'
 
 
 def qgisMinimumVersion():
@@ -47,8 +47,7 @@ def qgisMinimumVersion():
 
 def icon():
     """Icon path for the plugin - metadata.txt will override this"""
-    return os.path.join(os.path.dirname(__file__), 'safe_qgis', 'resources',
-                        'img', 'icon.png')
+    return os.path.join(os.path.dirname(__file__), 'icon.png')
 
 
 def classFactory(iface):

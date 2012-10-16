@@ -2,7 +2,7 @@
 ==========
 Whats new?
 ==========
-Changelog for version 0.5.1
+Changelog for version 0.5.2
 ---------------------------
 
 * This is a bugfix update to reduce the size of the InaSAFE package.
