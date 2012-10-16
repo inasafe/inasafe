@@ -829,6 +829,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # because the button click accept() function and the updating
         # of the web view after model completion are asynchronous (when
         # threading mode is enabled especially)
+
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
