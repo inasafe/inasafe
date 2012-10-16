@@ -245,6 +245,13 @@ pyflakes:
 	@echo "---------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis | wc -l
 
+indent:
+	@echo
+	@echo "---------------"
+	@echo "Check indentation is at 4 spaces (and apply fix)"
+	@echo "---------------"
+	@# sudo apt-get install python2.7-examples for reindent script
+	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point

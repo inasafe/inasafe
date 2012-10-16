@@ -18,6 +18,8 @@ gpg --keyserver keyserver.ubuntu.com --recv 1F9ADD375CA44993
 gpg --export --armor 1F9ADD375CA44993 | sudo apt-key add -
 sudo apt-get install python-software-properties
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+# for python reindent helper
+sudo apt-get install python2.7-examples
 sudo apt-get -qq update
 sudo apt-get install -q -y qgis python-qgis
 echo "Installing Ubuntu packages for development"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -437,19 +438,6 @@
     </message>
 </context>
 <context>
-    <name>HelpBase</name>
-    <message>
-        <location filename="help_base.ui" line="14"/>
-        <source>InaSAFE Help</source>
-        <translation>InaSAFE Bantuan</translation>
-    </message>
-    <message>
-        <location filename="help_base.ui" line="25"/>
-        <source>about:blank</source>
-        <translation>Perihal:kosong</translation>
-    </message>
-</context>
-<context>
     <name>ImpactCalculator</name>
     <message>
         <location filename="impact_calculator.py" line="151"/>
@@ -484,6 +472,54 @@
         <location filename="impact_calculator_thread.py" line="172"/>
         <source>Calculation completed successfully.</source>
         <translation>Perhitungan berhasil.</translation>
+    </message>
+</context>
+<context>
+    <name>ImpactFunctionsDocBase</name>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="14"/>
+        <source>InaSAFE Impact Functions</source>
+        <translation>Fungsi Dampak InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="60"/>
+        <source>Title</source>
+        <translation>Judul</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="79"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="98"/>
+        <source>Subcategory</source>
+        <translation>Sub-kategori</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="117"/>
+        <source>Category</source>
+        <translation>Kategori</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="136"/>
+        <source>Layer Type</source>
+        <translation>Jenis Lapisan</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="175"/>
+        <source>Unit</source>
+        <translation>Satuan</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="194"/>
+        <source>Data Type</source>
+        <translation>Jenis Data</translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="214"/>
+        <source>about:blank</source>
+        <translation>Perihal:kosong</translation>
     </message>
 </context>
 <context>
@@ -893,6 +929,14 @@ ke %s: %s</translation>
         <location filename="plugin.py" line="222"/>
         <source>Open InaSAFE impact functions doc</source>
         <translation>Buka dokumentasi fungsi dampak InaSAFE</translation>
+    </message>
+</context>
+<context>
+    <name>configurableImpactFunctionsDialogBase</name>
+    <message>
+        <location filename="configurable_impact_functions_dialog_base.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
     </message>
 </context>
 </TS>
