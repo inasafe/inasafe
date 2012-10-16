@@ -1041,8 +1041,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myCurrentFunction = self.getFunctionID()
         if (self.postprocLayer is not None and
             self.lastRunnedFunction != myCurrentFunction):
-            self.keywordIO.deleteKeyword(self.postprocLayer, self.defaults[
-                                                             'AGGR_ATTR_KEY'])
+            # remove category keyword so we force the keyword editor to popup
+            # see the beginning of _checkPostprocAttributes to see how the
+            # popup decision is made
+            self.keywordIO.deleteKeyword(self.postprocLayer, 'category')
         self.lastRunnedFunction = myCurrentFunction
 
     def getPostprocOutput(self, asOneBigTable=False):
