@@ -3,6 +3,7 @@ SOURCES = __init__.py \
           dock.py \
           impact_calculator.py \
           impact_calculator_thread.py \
+          impact_functions_doc.py \
           keyword_io.py \
           keywords_dialog.py \
           options_dialog.py \
