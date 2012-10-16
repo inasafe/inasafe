@@ -603,22 +603,18 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(gt_clip[5], gt_full[5]), msg
 
         polygons = H.get_geometry(as_geometry_objects=True)
-        outer_rings = [p.outer_ring for p in polygons]
-        inner_rings = [p.inner_rings for p in polygons]
 
         # Clip
         res_clip = clip_grid_by_polygons(E_clip.get_data(),
                                          E_clip.get_geotransform(),
-                                         outer_rings,
-                                         inner_rings=inner_rings)
+                                         polygons)
 
         print res_clip
         print len(res_clip)
 
         res_full = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
-                                         outer_rings,
-                                         inner_rings=inner_rings)
+                                         polygons)
 
         assert len(res_clip) == len(res_full)
 
@@ -677,7 +673,7 @@ class Test_Engine(unittest.TestCase):
         #t0 = time.time()
         res = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
-                                    H.get_geometry())
+                                    H.get_geometry(as_geometry_objects=True))
         #print 'Engine took %i seconds' % (time.time() - t0)
 
         assert len(res) == N
@@ -766,7 +762,7 @@ class Test_Engine(unittest.TestCase):
         # Run underlying clipping routine
         res0 = clip_grid_by_polygons(E.get_data(),
                                      E.get_geotransform(),
-                                     H.get_geometry())
+                                     H.get_geometry(as_geometry_objects=True))
         assert len(res0) == N
 
         # Run higher level interpolation routine
@@ -3080,6 +3076,6 @@ if __name__ == '__main__':
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
     #                            '_jakarta_flood_merged'))
-    suite = unittest.makeSuite(Test_Engine, 'test_polygon_hazard_with_holes_and_raster_exposure')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
