@@ -85,6 +85,9 @@ class SafeTranslationsTest(unittest.TestCase):
         myFailureList = []
         os.environ['LANG'] = 'id'
         myLineCount = 0
+        # exception_words is a list of words that has the same form in both
+        # English and Indonesian. For example hotel, bank
+        exception_words = ['hotel', 'bank']
         for myLine in myFile.readlines():
             myLineCount += 1
             if 'tr(' in myLine:
@@ -92,16 +95,22 @@ class SafeTranslationsTest(unittest.TestCase):
                 if myMatch:
                     myGroup = myMatch.group()
                     myCleanedLine = myGroup[2:-2]
+                    if myCleanedLine in exception_words:
+                        continue
                     myTranslation = safeTr(myCleanedLine)
                     print myTranslation, myCleanedLine
                     if myCleanedLine == myTranslation:
                         myFailureList.append(myCleanedLine)
 
         myMessage = ('Translations not found for:\n %s\n%i '
-                     'of %i untranslated' % (
+                     'of %i untranslated\n' % (
                      str(myFailureList).replace(',', '\n'),
                      len(myFailureList),
                      myLineCount))
+        myMessage += ('If you think the Indonesian word for the failed '
+                    'translations is the same form in English, i.e. "hotel", '
+                    'you can add it in exception_words in '
+                    'safe_qgis/test_safe_translations.py')
         assert len(myFailureList) == 0, myMessage
 
 if __name__ == "__main__":
