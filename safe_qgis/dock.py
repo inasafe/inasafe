@@ -840,7 +840,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         self.postprocLayer = self.getPostprocLayer()
-        myOriginalKeywords = self.keywordIO.readKeywords(self.postprocLayer)
+        try:
+            myOriginalKeywords = self.keywordIO.readKeywords(self.postprocLayer)
+        except AttributeError:
+            myOriginalKeywords = {}
 
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
@@ -983,6 +986,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def completed(self):
         """Slot activated when the process is done."""
+        
+        #save the ID of the function that just runned
+        self.lastRunnedFunction = self.getFunctionID()
 
         # Try to run completion code
         try:
@@ -1038,14 +1044,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         self.postprocOutput = {}
-        myCurrentFunction = self.getFunctionID()
-        if (self.postprocLayer is not None and
-            self.lastRunnedFunction != myCurrentFunction):
-            # remove category keyword so we force the keyword editor to popup
-            # see the beginning of _checkPostprocAttributes to see how the
-            # popup decision is made
-            self.keywordIO.deleteKeyword(self.postprocLayer, 'category')
-        self.lastRunnedFunction = myCurrentFunction
+        try:
+            if (self.postprocLayer is not None and
+                self.lastRunnedFunction != self.getFunctionID()):
+                # remove category keyword so we force the keyword editor to
+                # popup. see the beginning of _checkPostprocAttributes to see
+                # how the popup decision is made
+                self.keywordIO.deleteKeyword(self.postprocLayer, 'category')
+        except AttributeError:
+            #first run, eslf.lastRunnedFunction dors not exist yet
+            pass
+
 
     def getPostprocOutput(self, asOneBigTable=False):
         """
@@ -1418,14 +1427,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             #set the default values by writing to the myKeywords
             myKeywords['category'] = 'postprocessing'
+
             myAttrs, _ = getLayerAttributeNames(
                 self.postprocLayer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String])
-            myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttrs[0]
-            myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = \
-                self.tr('Use default')
-            myKeywords[self.defaults['FEM_RATIO_DEFAULT_KEY']] = \
-                self.defaults['FEM_RATIO_DEFAULT']
+            if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
+                myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttrs[0]
+
+            if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
+                myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr('Use default')
+
+            if self.defaults['FEM_RATIO_DEFAULT_KEY'] not in myKeywords:
+                myKeywords[self.defaults['FEM_RATIO_DEFAULT_KEY']] = self.defaults['FEM_RATIO_DEFAULT']
+
 #            delete = self.keywordIO.deleteKeyword(self.postprocLayer, 'subcategory')
 #            LOGGER.debug('Deleted: ' + str(delete))
             self.keywordIO.appendKeywords(self.postprocLayer, myKeywords)
