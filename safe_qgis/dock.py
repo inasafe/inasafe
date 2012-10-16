@@ -1022,7 +1022,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProgress = 88
             self.showBusy(myTitle, myMessage, myProgress)
             self._aggregateResults()
-            self._startPostprocessors()
+            if not self.aggregationErrorSkipPostprocessing:
+                self._startPostprocessors()
             QtGui.qApp.restoreOverrideCursor()
         except Exception, e:  # pylint: disable=W0703
             QtGui.qApp.restoreOverrideCursor()
@@ -1044,6 +1045,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         self.postprocOutput = {}
+        self.aggregationErrorSkipPostprocessing = False
         try:
             if (self.postprocLayer is not None and
                 self.lastRunnedFunction != self.getFunctionID()):
@@ -1065,8 +1067,28 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         LOGGER.debug(self.postprocOutput)
+        if  self.aggregationErrorSkipPostprocessing:
+            myHTML = ('<table class="table table-striped condensed">'
+            '    <tr>'
+            '       <td>'
+            '         <strong>'
+            + self.tr('Postprocessing report skipped') +
+            '         </strong>'
+            '       </td>'
+            '    </tr>'
+            '    <tr>'
+            '       <td>'
+            + self.tr('Due to a problem while processing the results,'
+                      ' the detailed postprocessing report is unavailable check'
+                      ' the log messages (view > panels > Log messages) for'
+                      ' further details') +
+            '       </td>'
+            '    </tr>'
+            '</table>')
+            return myHTML
+
         if asOneBigTable:
-            self._parsePostProcOutputAsOneBigTables()
+            return self._parsePostProcOutputAsOneBigTables()
         else:
             return self._parsePostProcOutputAsMultipleTables()
 
@@ -1229,11 +1251,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             myTargetField = self.keywordIO.readKeywords(myQgisImpactLayer,
                 'target_field')
-        except HashNotFoundException:
+        except KeywordNotFoundException:
             LOGGER.debug('No "target_field" keyword found in the impact layer '
                          'keywords. the impact function should define this.'
                          'Skipping detailed report. Called on'
                          ' %s' % myQgisImpactLayer.name())
+            self.aggregationErrorSkipPostprocessing = True
             return
         myImpactProvider = myQgisImpactLayer.dataProvider()
         myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
@@ -1243,6 +1266,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                          ' the impact function should define this correctly.'
                          'Skipping detailed report. Called on'
                          ' %s' % (myTargetField, myQgisImpactLayer.name()))
+            self.aggregationErrorSkipPostprocessing = False
             return
 
         # start data retreival: fetch no geometry and
@@ -1360,8 +1384,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 zoneName = attrMap[myNameFieldIndex].toString()
 
-            aggrSum = attrMap[mySumFieldIndex].toString()
-            aggrSum = int(round(float(aggrSum)))
+            aggrSum, _ = attrMap[mySumFieldIndex].toDouble()
+            try:
+                aggrSum = int(round(float(aggrSum)))
+            except ValueError:
+                self.aggregationErrorSkipPostprocessing
+                return 
             myGeneralParams = {'population_total': aggrSum}
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
