@@ -177,7 +177,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1967"/>
+        <location filename="dock.py" line="1966"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -367,14 +367,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1954"/>
-        <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)s and %(br)s%(table)sbr&lt;br&gt;</source>
-        <comment>map</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1935"/>
-        <source>Printing cancelled!</source>
+        <location filename="dock.py" line="1947"/>
+        <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:%1%2%1 and %1%3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -442,19 +436,6 @@
     </message>
 </context>
 <context>
-    <name>HelpBase</name>
-    <message>
-        <location filename="help_base.ui" line="25"/>
-        <source>about:blank</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="help_base.ui" line="14"/>
-        <source>InaSAFE Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ImpactCalculator</name>
     <message>
         <location filename="impact_calculator.py" line="151"/>
@@ -488,6 +469,67 @@
     <message>
         <location filename="impact_calculator_thread.py" line="172"/>
         <source>Calculation completed successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImpactFunctionsDoc</name>
+    <message>
+        <location filename="impact_functions_doc.py" line="52"/>
+        <source>InaSAFE %s Impact Functions Doc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc.py" line="54"/>
+        <source>No Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ImpactFunctionsDocBase</name>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="14"/>
+        <source>InaSAFE Impact Functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="60"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="79"/>
+        <source>ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="98"/>
+        <source>Subcategory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="117"/>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="136"/>
+        <source>Layer Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="175"/>
+        <source>Unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="194"/>
+        <source>Data Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_functions_doc_base.ui" line="214"/>
+        <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -894,6 +936,14 @@ to%s: %s</source>
     <message>
         <location filename="plugin.py" line="222"/>
         <source>Open InaSAFE impact functions doc</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>configurableImpactFunctionsDialogBase</name>
+    <message>
+        <location filename="configurable_impact_functions_dialog_base.ui" line="14"/>
+        <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

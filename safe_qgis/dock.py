@@ -1952,13 +1952,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.displayHtml(myReport)
 
         myStatus = self.tr('Your PDF was created....opening using '
-                           'the default PDF viewer on your system.>'
-                           'The generated pdfs were saved as:%(br)s'
-                           '%(map)s%(br)s and %(br)s%(table)s'
-                           % {
-            'br': '<br>',
-            'map': myMapPdfPath,
-            'table': myHtmlPdfPath})
+                           'the default PDF viewer on your system. '
+                           'The generated pdfs were saved as:%1'
+                           '%2%1 and %1%3').arg(
+                           '<br>').arg(QtCore.QString(
+                           myMapPdfPath)).arg(QtCore.QString(
+                           myHtmlPdfPath))
 
         self.showBusy(self.tr('Map Creator'),
                       myStatus,

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'configurable_impact_functions_dialog_base.ui'
 #
-# Created: Tue Oct  9 17:24:50 2012
+# Created: Tue Oct 16 12:12:12 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!

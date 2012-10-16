@@ -56,6 +56,8 @@ rm -rf /tmp/${DIR}/setup.py
 
 find /tmp/${DIR} -name test*.py -delete
 find /tmp/${DIR} -name *_test.py -delete
+find /tmp/${DIR} -name *.po -delete
+find /tmp/${DIR} -name *.ts -delete
 rm -rf /tmp/${DIR}/*.bat
 mkdir -p /tmp/${DIR}/docs/build
 cp -r docs/build/html /tmp/${DIR}/docs/build/html

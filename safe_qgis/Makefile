@@ -21,16 +21,34 @@
 
 PLUGINNAME = inasafe
 
-PY_FILES = plugin.py dock.py help.py options_dialog_base.py __init__.py
+PY_FILES = __init__.py \
+            clipper.py \
+            configurable_impact_functions_dialog.py \
+            dock.py \
+            exceptions.py\
+            help.py \
+            html_renderer.py \
+            impact_calculator.py \
+            impact_calculator_thread.py \
+            impact_functions_doc.py \
+            keyword_io.py \
+            keywords_dialog.py \
+            map_legend.py \
+            map.py \
+            options_dialog.py \
+            plugin.py \
+            qgis_interface.py \
+            safe_interface.py \
+            utilities.py
 
 EXTRAS = icon.png
 
 UI_FILES = dock_base.py \
-					 help_base.py \
 					 options_dialog_base.py \
 					 keywords_dialog_base.py \
-					 aggregation_attribute_dialog_base.py \
-					 configurable_impact_functions_dialog_base.py
+					 impact_functions_doc_base.py \
+           configurable_impact_functions_dialog_base.py
+
 
 RESOURCE_FILES = resources.py
 
@@ -50,26 +68,3 @@ clean: compile
 %.py : %.ui
 	pyuic4 -o $@ $<
 
-# Run the test suite followed by pep8 style checking
-test: test_suite pep8
-
-# Run pep8 style checking only
-pep8: compile
-	@echo
-	@echo "-----------"
-	@echo "PEP8 issues"
-	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude help_base.py,dock_base.py,resources.py,resources_rc.py .
-
-# Run test suite only
-test_suite: compile
-	@echo "----------------------"
-	@echo "Regresssion Test Suite"
-	@echo "----------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	-nosetests -v --with-id --with-coverage --cover-package=.
-
-indent:
-	@# sudo apt-get install python2.7-examples for reindent script
-	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
