@@ -106,8 +106,8 @@ class FunctionOptionsDialog(QtGui.QDialog,
         impactFunctionName = theFunctionID
         myText += self.tr('Parameters for impact function "%1" that can be '
                           'modified are:').arg(impactFunctionName)
-        label = self.impFuncConfLabel
-        label.setText(myText)
+        myLabel = self.impFuncConfLabel
+        myLabel.setText(myText)
 
     def accept(self):
         """Override the default accept function
