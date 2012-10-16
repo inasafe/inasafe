@@ -841,13 +841,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.postprocLayer = self.getPostprocLayer()
         try:
-            myOriginalKeywords = self.keywordIO.readKeywords(self.postprocLayer)
+            myOrigKeywords = self.keywordIO.readKeywords(self.postprocLayer)
         except AttributeError:
-            myOriginalKeywords = {}
+            myOrigKeywords = {}
 
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
-        LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
+        LOGGER.debug('my pre dialog keywords' + str(myOrigKeywords))
         self.initPostproc()
 
         self.doZonalAggregation = True
@@ -893,7 +893,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtCore.QObject.connect(self.runtimeKWDialog,
             QtCore.SIGNAL('rejected()'),
-            partial(self.acceptCancelled, myOriginalKeywords))
+            partial(self.acceptCancelled, myOrigKeywords))
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown myContinue will be false
         # and the run method is called by the accepted signal
@@ -986,8 +986,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def completed(self):
         """Slot activated when the process is done."""
-        
         #save the ID of the function that just runned
+
         self.lastRunnedFunction = self.getFunctionID()
 
         # Try to run completion code
@@ -1054,7 +1054,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except AttributeError:
             #first run, eslf.lastRunnedFunction dors not exist yet
             pass
-
 
     def getPostprocOutput(self, asOneBigTable=False):
         """
@@ -1435,12 +1434,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttrs[0]
 
             if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
-                myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr('Use default')
+                myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+                    'Use default')
 
             if self.defaults['FEM_RATIO_KEY'] not in myKeywords:
-                myKeywords[self.defaults['FEM_RATIO_KEY']] = self.defaults['FEM_RATIO']
+                myKeywords[self.defaults['FEM_RATIO_KEY']] = self.defaults[
+                                                             'FEM_RATIO']
 
-#            delete = self.keywordIO.deleteKeyword(self.postprocLayer, 'subcategory')
+#            delete = self.keywordIO.deleteKeyword(self.postprocLayer,
+#               'subcategory')
 #            LOGGER.debug('Deleted: ' + str(delete))
             self.keywordIO.appendKeywords(self.postprocLayer, myKeywords)
             if self.doZonalAggregation:
