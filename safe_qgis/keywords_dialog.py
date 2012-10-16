@@ -126,8 +126,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.layer = theLayer
         if self.layer:
-            if not isLayerPolygonal(self.layer):
-                self.radPostprocessing.setEnabled(False)
             self.loadStateFromKeywords()
 
         #add a reload from keywords button
@@ -135,6 +133,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             QtGui.QDialogButtonBox.ActionRole)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
             self.loadStateFromKeywords)
+
+    def setLayer(self, theLayer):
+        self.layer = theLayer
+        self.loadStateFromKeywords()
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
@@ -720,6 +722,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
         else:
             self.lblLayerName.setText('')
+
+        if not isLayerPolygonal(self.layer):
+            self.radPostprocessing.setEnabled(False)
 
         #adapt gui if we are in postprocessing category
         self.togglePostprocessingWidgets()
