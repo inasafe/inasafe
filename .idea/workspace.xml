@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/dynamic_translations.py" afterPath="$PROJECT_DIR$/safe/common/dynamic_translations.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_safe_translations.py" afterPath="$PROJECT_DIR$/safe_qgis/test_safe_translations.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,10 +33,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="test_safe_translations.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="test_safe_translations.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/test_safe_translations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="68" selection-start="3153" selection-end="3153" vertical-scroll-proportion="0.3989455">
+            <state line="99" column="57" selection-start="3608" selection-end="3608" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dock.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="654" column="11" selection-start="24217" selection-end="24217" vertical-scroll-proportion="-43.411247">
               <folding />
             </state>
           </provider>
@@ -641,12 +649,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/safe/engine/test_engine.py</url>
-          <line>1149</line>
+          <line>1145</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/safe/engine/test_engine.py</url>
-          <line>1130</line>
+          <line>1126</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -732,16 +740,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/test_safe_translations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="654" column="11" selection-start="24217" selection-end="24217" vertical-scroll-proportion="-3.0568628">
+        <state line="99" column="57" selection-start="3608" selection-end="3608" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/test_safe_translations.py">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="68" selection-start="3153" selection-end="3153" vertical-scroll-proportion="0.3989455">
+        <state line="654" column="11" selection-start="24217" selection-end="24217" vertical-scroll-proportion="-43.411247">
           <folding />
         </state>
       </provider>
