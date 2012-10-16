@@ -30,6 +30,8 @@ do
   echo "Deleting $FILE from _static"
   rm _static/${FILE}
 done
+rm -rf _static/screenshot*
+rm -rf _static/tutorial
 popd
 
 OUT="/tmp/${DIR}.${1}.zip"
@@ -44,6 +46,14 @@ rm -rf /tmp/${DIR}/Makefile
 rm -rf /tmp/${DIR}/.git*
 rm -rf /tmp/${DIR}/scripts
 rm -rf /tmp/${DIR}/pylintrc
+rm -rf /tmp/${DIR}/extras
+rm -rf /tmp/${DIR}/safe/test
+rm -rf /tmp/${DIR}/safe_qgis/resources
+rm -rf /tmp/${DIR}/pylintrc_jenkins
+rm -rf /tmp/${DIR}/.travis.yml
+rm -rf /tmp/${DIR}/setup.py
+
+
 find /tmp/${DIR} -name test*.py -delete
 find /tmp/${DIR} -name *_test.py -delete
 rm -rf /tmp/${DIR}/*.bat
