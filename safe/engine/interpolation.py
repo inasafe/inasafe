@@ -40,8 +40,7 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
        * attribute_name:
              If hazard layer is of type raster, this is the name for new
              attribute in the result containing the hazard level.
-             If None (default) the name of hazard is used
-
+             If None (default) the name of hazard is used.
              If hazard layer is of type vector, it is the name of the
              attribute to transfer from the hazard layer into the result.
              If None (default) all attributes are transferred.
@@ -317,16 +316,14 @@ def interpolate_polygon_raster(source, target,
     polygon_geometry = source.get_geometry(as_geometry_objects=True)
 
     # FIXME (Ole): Perhaps refactor so that polygon_geometry can
-    # be passed in directly
+    # be passed in directly. See issue #324, comment
+    #https://github.com/AIFDR/inasafe/issues/324#issuecomment-9440584
     # FIXME (Ole): Not sure if needed, but explicitly make sure
     # exposure raster is *never* scaled here
-    outer_rings = [p.outer_ring for p in polygon_geometry]
-    inner_rings = [p.inner_rings for p in polygon_geometry]
     polygon_attributes = source.get_data()
     res = clip_grid_by_polygons(target.get_data(),
                                 target.get_geotransform(),
-                                outer_rings,
-                                inner_rings=inner_rings)
+                                polygon_geometry)
 
     # Create one new point layer with interpolated attributes
     new_geometry = []

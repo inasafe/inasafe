@@ -178,7 +178,7 @@
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1956"/>
+        <location filename="dock.py" line="1974"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
@@ -368,15 +368,15 @@
         <translation>Mempersiapkan peta dan laporan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1956"/>
-        <source>Processing complete.The generated pdfs were saved as: %s and%s</source>
-        <translation>Pemrosesan selesai. Berkas PDF yang dihasilkan disimpan sebagai: %s dan %s</translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1942"/>
+        <location filename="dock.py" line="1954"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)s and %(br)s%(table)sbr&lt;br&gt;</source>
         <comment>map</comment>
         <translation>BerkasPDF sudah dibuat...Membuka dengan menggunakan pembaca berkas PDF default pada sistem Anda.&gt;Berkas PDF yang dihasilkan disimpan sebagai:%(br)s%(map)s%(br)s dan %(br)s%(table)sbr&lt;br&gt;</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1935"/>
+        <source>Printing cancelled!</source>
+        <translation>Pencetakan dibatalkan!</translation>
     </message>
 </context>
 <context>

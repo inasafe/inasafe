@@ -65,8 +65,8 @@ from safe_qgis.utilities import (htmlHeader,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
-from safe_qgis.configurable_impact_functions_dialog import (
-   ConfigurableImpactFunctionsDialog)
+from safe_qgis.function_options_dialog import (
+   FunctionOptionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -134,6 +134,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.setOkButtonStatus()
         self._aggregationPrefix = 'aggr_'
         self.pbnPrint.setEnabled(False)
+        # used by configurable function options button
+        self.activeFunction = None
 
         self.initPostprocessingOutput()
 
@@ -405,17 +407,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            None.
 
         Raises:
-           no exceptions explicitly raised."""
-        # Add any other logic you mught like here...
+           no exceptions explicitly raised.
+        """
+        # Add any other logic you might like here...
         if not theIndex.isNull or not theIndex == '':
             myFunctionID = self.getFunctionID()
 
             myFunctions = getSafeImpactFunctions(myFunctionID)
-            self.myFunction = myFunctions[0][myFunctionID]
+            self.activeFunction = myFunctions[0][myFunctionID]
             self.functionParams = None
-            if hasattr(self.myFunction, 'parameters'):
-                self.functionParams = self.myFunction.parameters
-
+            if hasattr(self.activeFunction, 'parameters'):
+                self.functionParams = self.activeFunction.parameters
             self.setToolFunctionOptionsButton()
         else:
             del theIndex
@@ -468,11 +470,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises:
            no exceptions explicitly raised."""
-        conf = ConfigurableImpactFunctionsDialog(self)
-        conf.setDialogInfo(self.getFunctionID())
-        conf.buildFormFromImpactFunctionsParameter(self.myFunction,
-                                                   self.functionParams)
-        conf.showNormal()
+        myDialog = FunctionOptionsDialog(self)
+        myDialog.setDialogInfo(self.getFunctionID())
+        myDialog.buildForm(self.activeFunction, self.functionParams)
+        myDialog.showNormal()
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
@@ -651,15 +652,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #FIXME (MB) remove hazardlayer and exposure layer type check when
         # vector aggregation is supported
-        selectedHazardLayer = self.getHazardLayer()
-        selectedExposureLayer = self.getExposureLayer()
+        mySelectedHazardLayer = self.getHazardLayer()
+        mySelectedExposureLayer = self.getExposureLayer()
 
         #more than 1 because No aggregation is always there
         if (self.cboAggregation.count() > 1 and
-           selectedHazardLayer is not None and
-           selectedExposureLayer is not None and
-           selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
-           selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
+           mySelectedHazardLayer is not None and
+           mySelectedExposureLayer is not None and
+           mySelectedHazardLayer.type() == QgsMapLayer.RasterLayer and
+           mySelectedExposureLayer.type() == QgsMapLayer.RasterLayer):
             self.cboAggregation.setEnabled(True)
         else:
             self.cboAggregation.setEnabled(False)
@@ -1931,6 +1932,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             self.tr('Pdf File (*.pdf)'))
         myMapFilename = str(myMapFilename)
 
+        if myMapFilename is None:
+            self.showBusy(self.tr('Map Creator'),
+                          self.tr('Printing cancelled!'),
+                          theProgress=100)
+            self.hideBusy()
+            return
+
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
@@ -1969,7 +1977,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                       theProgress=100)
 
         self.hideBusy()
-        myMap.showComposer()
+        #myMap.showComposer()
 
     def addComboItemInOrder(self, theCombo, theItemText, theItemData=None):
         """Although QComboBox allows you to set an InsertAlphabetically enum

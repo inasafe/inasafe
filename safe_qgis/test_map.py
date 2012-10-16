@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.6.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -117,6 +117,7 @@ class MapTest(unittest.TestCase):
                             '0109d8bac8fd27677d373ebf66546d19',
                             '9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
                             'ddf3cd2e9059e85c9d5b525d9f00c7dd',  # Jenkins
+                            '7d308ea9d88ef55a101766adaabf179f',  # ub11.10-64
                             '']
         assertHashesForFile(myExpectedHashes, myImagePath)
 

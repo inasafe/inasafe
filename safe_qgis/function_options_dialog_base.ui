@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>configurableImpactFunctionsDialogBase</class>
- <widget class="QDialog" name="configurableImpactFunctionsDialogBase">
+ <class>FunctionOptionsDialogBase</class>
+ <widget class="QDialog" name="FunctionOptionsDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="editableImpactFunctionsButtonBox">
+  <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -44,7 +44,7 @@
     </property>
    </layout>
   </widget>
-  <widget class="QLabel" name="impFuncConfLabel">
+  <widget class="QLabel" name="lblFunctionDescription">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -63,7 +63,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="impFuncConfErrLabel">
+  <widget class="QLabel" name="lblErrorMessage">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -94,9 +94,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>editableImpactFunctionsButtonBox</sender>
+   <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>configurableImpactFunctionsDialogBase</receiver>
+   <receiver>FunctionOptionsDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -110,9 +110,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>editableImpactFunctionsButtonBox</sender>
+   <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>configurableImpactFunctionsDialogBase</receiver>
+   <receiver>FunctionOptionsDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -585,7 +585,7 @@ class Test_Engine(unittest.TestCase):
         # Read test files
         hazard_filename = '%s/donut.shp' % TESTDATA
         exposure_filename_clip = ('%s/pop_merapi_clip.tif' % TESTDATA)
-        exposure_filename_full = ('%s/population_indonesia_2010_BNPB_BPS.asc'
+        exposure_filename_full = ('%s/pop_merapi_prj_problem.asc'
                                   % EXPDATA)
 
         H = read_layer(hazard_filename)
@@ -603,22 +603,18 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(gt_clip[5], gt_full[5]), msg
 
         polygons = H.get_geometry(as_geometry_objects=True)
-        outer_rings = [p.outer_ring for p in polygons]
-        inner_rings = [p.inner_rings for p in polygons]
 
         # Clip
         res_clip = clip_grid_by_polygons(E_clip.get_data(),
                                          E_clip.get_geotransform(),
-                                         outer_rings,
-                                         inner_rings=inner_rings)
+                                         polygons)
 
         print res_clip
         print len(res_clip)
 
         res_full = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
-                                         outer_rings,
-                                         inner_rings=inner_rings)
+                                         polygons)
 
         assert len(res_clip) == len(res_full)
 
@@ -677,7 +673,7 @@ class Test_Engine(unittest.TestCase):
         #t0 = time.time()
         res = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
-                                    H.get_geometry())
+                                    H.get_geometry(as_geometry_objects=True))
         #print 'Engine took %i seconds' % (time.time() - t0)
 
         assert len(res) == N
@@ -766,7 +762,7 @@ class Test_Engine(unittest.TestCase):
         # Run underlying clipping routine
         res0 = clip_grid_by_polygons(E.get_data(),
                                      E.get_geotransform(),
-                                     H.get_geometry())
+                                     H.get_geometry(as_geometry_objects=True))
         assert len(res0) == N
 
         # Run higher level interpolation routine
@@ -851,7 +847,7 @@ class Test_Engine(unittest.TestCase):
 
         # Name input files
         polyhazard = join(TESTDATA, 'donut.shp')
-        population = join(EXPDATA, 'population_indonesia_2010_BNPB_BPS.asc')
+        population = join(TESTDATA, 'pop_merapi_clip.tif')
 
         # Get layers using API
         H = read_layer(polyhazard)
@@ -888,9 +884,9 @@ class Test_Engine(unittest.TestCase):
         attributes = P.get_data()[26]
         #geometry = P.get_geometry()[26]
         assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
-        assert attributes['polygon_id'] == 7
+        assert attributes['polygon_id'] == 4
 
-    test_polygon_hazard_with_holes_and_raster_exposure.slow = True
+    test_polygon_hazard_with_holes_and_raster_exposure.slow = False
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works
@@ -1151,9 +1147,8 @@ class Test_Engine(unittest.TestCase):
         key = 'Tsunami Ma'
 
         for feature in I.get_data():
-            msg = '%s not found in field list:\n%s' % (
-                key, str(feature.keys())
-                )
+            msg = ('%s not found in field list:\n%s'
+                   % (key, str(feature.keys())))
             assert key in feature.keys(), msg
             if (feature['LONGITUDE'] == 150.1787 and
                 feature['LATITUDE'] == -35.70413):
