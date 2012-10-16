@@ -6,6 +6,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.common.utilities import get_defaults
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
@@ -25,6 +26,19 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
     title = tr('Need evacuation')
     target_field = 'population'
+    defaults = get_defaults()
+    parameters = {
+        'postprocessors':
+            {'Gender': {'on': True},
+             'Age': {'on': True,
+                     'params': {
+                         'youth_ratio': defaults['YOUTH_RATIO'],
+                         'adult_ratio': defaults['ADULT_RATIO'],
+                         'elder_ratio': defaults['ELDER_RATIO']
+                     }
+             }
+            }
+    }
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -179,6 +193,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                    name=tr('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'target_field': self.target_field},
                    style_info=style_info)
         return V

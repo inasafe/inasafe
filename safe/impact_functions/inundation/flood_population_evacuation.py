@@ -4,7 +4,8 @@ from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question, get_function_title
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   get_defaults)
 from safe.common.utilities import verify
 from safe.common.tables import Table, TableRow
 
@@ -26,7 +27,20 @@ class FloodEvacuationFunction(FunctionProvider):
     """
 
     title = tr('Need evacuation')
-    parameters = {'thresholds': [0.3, 0.5, 1.0]}
+    defaults = get_defaults()
+    parameters = {
+        'thresholds': [0.3, 0.5, 1.0],
+        'postprocessors':
+            {'Gender': {'on': True},
+             'Age': {'on': True,
+                     'params': {
+                         'youth_ratio': defaults['YOUTH_RATIO'],
+                         'adult_ratio': defaults['ADULT_RATIO'],
+                         'elder_ratio': defaults['ELDER_RATIO']
+                     }
+             }
+          }
+    }
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

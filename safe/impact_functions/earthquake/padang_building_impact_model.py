@@ -159,6 +159,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                    name='Estimated pct damage',
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'target_field': self.target_field},
                    style_info=style_info)
         return V

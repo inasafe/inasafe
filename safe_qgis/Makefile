@@ -29,8 +29,7 @@ UI_FILES = dock_base.py \
 					 help_base.py \
 					 options_dialog_base.py \
 					 keywords_dialog_base.py \
-					 aggregation_attribute_dialog_base.py \
-					 configurable_impact_functions_dialog_base.py
+					 function_options_dialog.py
 
 RESOURCE_FILES = resources.py
 

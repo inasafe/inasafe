@@ -143,14 +143,14 @@ class KeywordIOTest(unittest.TestCase):
     def test_appendKeywords(self):
         """Can we append file keywords with the generic readKeywords
         method """
-        myLaver, _ = copyMakePadangLayer()
+        myLayer, _ = copyMakePadangLayer()
         myAddKeywords = {'category': 'exposure', 'test': 'TEST'}
 
-        self.keywordIO.appendKeywords(myLaver, myAddKeywords)
+        self.keywordIO.appendKeywords(myLayer, myAddKeywords)
         myExpectedKeywords = {'category': 'exposure', 'test': 'TEST',
                               'subcategory': 'earthquake', 'unit': 'MMI',
                               'title': 'An earthquake in Padang like in 2009'}
-        myKeywords = self.keywordIO.readKeywords(myLaver)
+        myKeywords = self.keywordIO.readKeywords(myLayer)
 
         myMessage = 'Got: %s\n\nExpected %s\n' % (
             myKeywords, myExpectedKeywords)
