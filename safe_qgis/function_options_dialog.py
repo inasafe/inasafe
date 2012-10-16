@@ -121,14 +121,14 @@ class FunctionOptionsDialog(QtGui.QDialog,
            not applicable
         """
         noError = False
-        func = self.theFunction
+        myFunction = self.theFunction
         for key in self.keys:
             try:
                 lineEdit = self.findChild(QtGui.QLineEdit,
                                           _fromUtf8(key + "LineEdit"))
                 lineEditText = lineEdit.text()
                 convText = str(lineEditText)
-                func.parameters[key] = ast.literal_eval(convText)
+                myFunction.parameters[key] = ast.literal_eval(convText)
             except ValueError:
                 text = ("Unexpected error: ValueError" +
                 ". Please consult Python language reference for correct " +
