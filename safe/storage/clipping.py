@@ -23,7 +23,7 @@ def clip_raster_by_polygons(R, P):
 
     res = clip_grid_by_polygons(R.get_data(),
                                 R.get_geotransform(),
-                                P.get_geometry())
+                                P.get_geometry(as_geometry_objects=True))
 
     # Return
     return res
