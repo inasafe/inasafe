@@ -1389,7 +1389,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 aggrSum = int(round(float(aggrSum)))
             except ValueError:
                 self.aggregationErrorSkipPostprocessing
-                return 
+                return
             myGeneralParams = {'population_total': aggrSum}
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
