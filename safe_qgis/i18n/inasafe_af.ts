@@ -177,7 +177,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1956"/>
+        <location filename="dock.py" line="1967"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -367,12 +367,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1956"/>
-        <source>Processing complete.The generated pdfs were saved as: %s and%s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1942"/>
+        <location filename="dock.py" line="1947"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.&gt;The generated pdfs were saved as:%(br)s%(map)s%(br)s and %(br)s%(table)sbr&lt;br&gt;</source>
         <comment>map</comment>
         <translation type="unfinished"></translation>
