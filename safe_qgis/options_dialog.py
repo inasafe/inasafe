@@ -113,7 +113,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         myRatio = mySettings.value(
             'inasafe/defaultFemaleRatio',
-            DEFAULTS['FEM_RATIO_DEFAULT']).toDouble()
+            DEFAULTS['FEM_RATIO']).toDouble()
         self.dsbFemaleRatioDefault.setValue(myRatio[0])
 
         myPath = mySettings.value(

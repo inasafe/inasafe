@@ -25,7 +25,7 @@ DEFAULTS = dict()
 
 # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
 # total population: 1.01 male(s)/female (2011 est.)
-DEFAULTS['FEM_RATIO_DEFAULT'] = 0.50
+DEFAULTS['FEM_RATIO'] = 0.50
 
 # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
 # Age structure:
@@ -38,5 +38,5 @@ DEFAULTS['ELDER_RATIO'] = 0.079
 
 #Keywords key names
 DEFAULTS['FEM_RATIO_ATTR_KEY'] = 'female ratio attribute'
-DEFAULTS['FEM_RATIO_DEFAULT_KEY'] = 'female ratio default'
+DEFAULTS['FEM_RATIO_KEY'] = 'female ratio default'
 DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'

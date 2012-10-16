@@ -1342,7 +1342,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             except KeyError:
                 myFemRatio = self.keywordIO.readKeywords(self.postprocLayer,
-                    self.defaults['FEM_RATIO_DEFAULT_KEY'])
+                    self.defaults['FEM_RATIO_KEY'])
 
         #iterate zone features
         provider = self.postprocLayer.dataProvider()
@@ -1378,7 +1378,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myFemRatio, success = attrMap[
                                         myFemRatioFieldIndex].toDouble()
                         if not success:
-                            myFemRatio = self.defaults['FEM_RATIO_DEFAULT']
+                            myFemRatio = self.defaults['FEM_RATIO']
                         LOGGER.debug(success)
                     myParams['female_ratio'] = myFemRatio
 
@@ -1419,7 +1419,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             (
                 self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr(
                     'Use default') or
-                self.defaults['FEM_RATIO_DEFAULT_KEY'] in myKeywords
+                self.defaults['FEM_RATIO_KEY'] in myKeywords
                 )
             ):
             return True
@@ -1437,8 +1437,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
                 myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr('Use default')
 
-            if self.defaults['FEM_RATIO_DEFAULT_KEY'] not in myKeywords:
-                myKeywords[self.defaults['FEM_RATIO_DEFAULT_KEY']] = self.defaults['FEM_RATIO_DEFAULT']
+            if self.defaults['FEM_RATIO_KEY'] not in myKeywords:
+                myKeywords[self.defaults['FEM_RATIO_KEY']] = self.defaults['FEM_RATIO']
 
 #            delete = self.keywordIO.deleteKeyword(self.postprocLayer, 'subcategory')
 #            LOGGER.debug('Deleted: ' + str(delete))

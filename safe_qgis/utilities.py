@@ -747,8 +747,8 @@ def getDefaults(theDefault=None):
     mySettings = QtCore.QSettings()
     myDefaults = DEFAULTS
 
-    myDefaults['FEM_RATIO_DEFAULT'] = mySettings.value(
-        'inasafe/defaultFemaleRatio', DEFAULTS['FEM_RATIO_DEFAULT']
+    myDefaults['FEM_RATIO'] = mySettings.value(
+        'inasafe/defaultFemaleRatio', DEFAULTS['FEM_RATIO']
         ).toDouble()[0]
 
     if theDefault is None:
