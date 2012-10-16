@@ -88,7 +88,7 @@ class SafeTranslationsTest(unittest.TestCase):
         for myLine in myFile.readlines():
             myLineCount += 1
             if 'tr(' in myLine:
-                myMatch = re.search( r'\(\'(.*)\'\)', myLine, re.M|re.I)
+                myMatch = re.search(r'\(\'(.*)\'\)', myLine, re.M | re.I)
                 if myMatch:
                     myGroup = myMatch.group()
                     myCleanedLine = myGroup[2:-2]
@@ -103,8 +103,6 @@ class SafeTranslationsTest(unittest.TestCase):
                      len(myFailureList),
                      myLineCount))
         assert len(myFailureList) == 0, myMessage
-
-
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(SafeTranslationsTest, 'test')
