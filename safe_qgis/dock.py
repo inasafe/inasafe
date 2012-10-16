@@ -1420,8 +1420,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr('Use default')
             myKeywords[self.defaults['FEM_RATIO_DEFAULT_KEY']] = \
                 self.defaults['FEM_RATIO_DEFAULT']
-            delete = self.keywordIO.deleteKeyword(self.postprocLayer, 'subcategory')
-            LOGGER.debug('Deleted: ' + str(delete))
+#            delete = self.keywordIO.deleteKeyword(self.postprocLayer, 'subcategory')
+#            LOGGER.debug('Deleted: ' + str(delete))
             self.keywordIO.appendKeywords(self.postprocLayer, myKeywords)
             if self.doZonalAggregation:
                 #prompt user for a choice

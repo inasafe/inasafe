@@ -214,36 +214,36 @@ class KeywordIO(QObject):
 
         self.writeKeywords(theLayer, dict())
 
-    def deleteKeyword(self, theLayer, theKeyword):
-        """Read keywords for a datasource and return them as a dictionary.
-        This is a wrapper method that will 'do the right thing' to fetch
-        keywords for the given datasource. In particular, if the datasource
-        is remote (e.g. a database connection) it will fetch the keywords from
-        the keywords store.
-
-        Args:
-            * theLayer - A QGIS QgsMapLayer instance.
-            * theKeyword - the specified keyword will be deleted
-              from the keywords dict.
-        Returns:
-            True if the keyword was sucessfully delete. False otherwise
-        Raises:
-            Propogates exception from the underlying reader delegate.
-        """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
-        myKeywords = None
-
-        try:
-            myKeywords = self.readKeywords(theLayer)
-        except HashNotFoundException:
-            return False
-        try:
-            myKeywords.pop(theKeyword)
-            self.writeKeywords(theLayer, myKeywords)
-            return True
-        except KeyError:
-            return False
+#    def deleteKeyword(self, theLayer, theKeyword):
+#        """Read keywords for a datasource and return them as a dictionary.
+#        This is a wrapper method that will 'do the right thing' to fetch
+#        keywords for the given datasource. In particular, if the datasource
+#        is remote (e.g. a database connection) it will fetch the keywords from
+#        the keywords store.
+#
+#        Args:
+#            * theLayer - A QGIS QgsMapLayer instance.
+#            * theKeyword - the specified keyword will be deleted
+#              from the keywords dict.
+#        Returns:
+#            True if the keyword was sucessfully delete. False otherwise
+#        Raises:
+#            Propogates exception from the underlying reader delegate.
+#        """
+#        mySource = str(theLayer.source())
+#        myFlag = self.areKeywordsFileBased(theLayer)
+#        myKeywords = None
+#
+#        try:
+#            myKeywords = self.readKeywords(theLayer)
+#        except HashNotFoundException:
+#            return False
+#        try:
+#            myKeywords.pop(theKeyword)
+#            self.writeKeywords(theLayer, myKeywords)
+#            return True
+#        except KeyError:
+#            return False
 
 # methods below here should be considered private
 
