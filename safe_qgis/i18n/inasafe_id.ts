@@ -177,7 +177,7 @@
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1965"/>
+        <location filename="dock.py" line="1966"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
@@ -365,6 +365,11 @@
         <location filename="dock.py" line="1921"/>
         <source>Preparing map and report</source>
         <translation>Mempersiapkan peta dan laporan</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1947"/>
+        <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:%1%2%1 and %1%3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
