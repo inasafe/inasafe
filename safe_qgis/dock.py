@@ -839,9 +839,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
+        self.postprocLayer = self.getPostprocLayer()
+        myOriginalKeywords = self.keywordIO.readKeywords(self.postprocLayer)
+
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
+        LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
         self.initPostproc()
+
         self.doZonalAggregation = True
         if self.postprocLayer is None:
             # generate on the fly a memory layer to be used in postprocessing
@@ -883,11 +888,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.SIGNAL('accepted()'),
             self.run)
 
-        myPostprocLayerKwords = self.keywordIO.readKeywords(self.postprocLayer)
-        LOGGER.debug(myPostprocLayerKwords)
         QtCore.QObject.connect(self.runtimeKWDialog,
             QtCore.SIGNAL('rejected()'),
-            partial(self.acceptCancelled, myPostprocLayerKwords))
+            partial(self.acceptCancelled, myOriginalKeywords))
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown myContinue will be false
         # and the run method is called by the accepted signal
@@ -896,6 +899,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.run()
 
     def acceptCancelled(self, theOldKeywords):
+        LOGGER.debug('Setting old dictionary: ' + str(theOldKeywords))
         self.keywordIO.writeKeywords(self.postprocLayer, theOldKeywords)
         self.hideBusy()
         self.setOkButtonStatus()
@@ -1034,11 +1038,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         self.postprocOutput = {}
-        self.postprocLayer = self.getPostprocLayer()
         myCurrentFunction = self.getFunctionID()
         if (self.postprocLayer is not None and
             self.lastRunnedFunction != myCurrentFunction):
-            self.keywordIO.clearKeywords(self.postprocLayer)
+            self.keywordIO.deleteKeyword(self.postprocLayer, self.defaults[
+                                                             'AGGR_ATTR_KEY'])
         self.lastRunnedFunction = myCurrentFunction
 
     def getPostprocOutput(self, asOneBigTable=False):
