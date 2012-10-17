@@ -3,14 +3,13 @@ from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
-from safe.common.utilities import temp_dir
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 import logging
-import os
 
 LOGGER = logging.getLogger('InaSAFE')
+
 
 class EarthquakeBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
@@ -64,7 +63,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                                              attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
-        attribute_names = I.get_attribute_names()
+        #attribute_names = I.get_attribute_names()
         attributes = I.get_data()
 
         N = len(I)
@@ -85,19 +84,19 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
             try:
                 area = float(attributes[i]['FLOOR_AREA'])
-            except:
-                print 'Got area', attributes[i]['FLOOR_AREA']
+            except (ValueError, KeyError):
+                #print 'Got area', attributes[i]['FLOOR_AREA']
                 area = 0.0
 
             try:
                 building_cost_density = float(attributes[i]['BUILDING_C'])
-            except:
+            except (ValueError, KeyError):
                 #print 'Got bld cost', attributes[i]['BUILDING_C']
                 building_cost_density = 0.0
 
             try:
                 contents_cost_density = float(attributes[i]['CONTENTS_C'])
-            except:
+            except (ValueError, KeyError):
                 #print 'Got cont cost', attributes[i]['CONTENTS_C']
                 contents_cost_density = 0.0
 
