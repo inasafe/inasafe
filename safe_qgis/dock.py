@@ -925,7 +925,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                      myDefaultFemRatioKey)
         if (myFemRatioAttr != self.tr('Don\'t use') and
             myFemRatioAttr != self.tr('Use default')):
-            self.postprocAttributes[MyDefaultFemRatioKey] = myFemRatioAttr
+            self.postprocAttributes[myDefaultFemRatioKey] = myFemRatioAttr
 
         # Start the analysis
         try:
