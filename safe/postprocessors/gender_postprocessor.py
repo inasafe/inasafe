@@ -9,9 +9,11 @@ __date__ = '10/10/2012'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
-from safe.postprocessors.abstract_postprocessor import (
-    AbstractPostprocessor)
 
+from safe.postprocessors.abstract_postprocessor import (
+                                                    AbstractPostprocessor)
+
+from safe.common.utilities import ugettext as tr
 
 class GenderPostprocessor(AbstractPostprocessor):
     def __init__(self):
@@ -41,19 +43,19 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.female_ratio = None
 
     def _calculate_total(self):
-        myName = self.tr('Total')
+        myName = tr('Total')
         myResult = self.population_total
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_females(self):
-        myName = self.tr('Female population')
+        myName = tr('Female population')
         myResult = self.population_total * self.female_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_weekly_hygene_packs(self):
-        myName = self.tr('Weekly hygiene packs')
+        myName = tr('Weekly hygiene packs')
         myMeta = {'description': 'Females hygiene packs for weekly use'}
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
@@ -62,7 +64,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         self._append_result(myName, myResult, myMeta)
 
     def _calculate_weekly_increased_calories(self):
-        myName = self.tr('Additional weekly rice kg for pregnant and lactating'
+        myName = tr('Additional weekly rice kg for pregnant and lactating'
                          ' women')
         myMeta = {'description': 'Additional rice kg per week for pregnant and'
                                  ' lactating women'}

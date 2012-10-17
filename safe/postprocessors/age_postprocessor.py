@@ -10,10 +10,12 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
-from safe.common.utilities import get_defaults
+from safe.common.utilities import (get_defaults,
+                                   ugettext as tr)
 
 
 class AgePostprocessor(AbstractPostprocessor):
@@ -62,25 +64,25 @@ class AgePostprocessor(AbstractPostprocessor):
         self.population_total = None
 
     def _calculate_total(self):
-        myName = self.tr('Total')
+        myName = tr('Total')
         myResult = self.population_total
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_youth(self):
-        myName = self.tr('Youth count')
+        myName = tr('Youth count')
         myResult = self.population_total * self.youth_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_adult(self):
-        myName = self.tr('Adult count')
+        myName = tr('Adult count')
         myResult = self.population_total * self.adult_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_elder(self):
-        myName = self.tr('Elderly count')
+        myName = tr('Elderly count')
         myResult = self.population_total * self.elder_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)

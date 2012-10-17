@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""**Postprocessors package.**
+"""**Abstract postprocessor class, do not instantiate directly**
 
 """
 
@@ -11,8 +11,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-
-from safe.common.utilities import ugettext as tr  # pylint: disable=W0611
 
 from safe.common.exceptions import PostprocessorError
 
@@ -70,6 +68,3 @@ class AbstractPostprocessor():
             metadata = dict()
         self._results[name] = {'value': result,
                                  'metadata': metadata}
-
-    def tr(self, message):
-        return tr(message)
