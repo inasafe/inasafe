@@ -1632,26 +1632,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #append postprocessing report
         myReport += self.getPostprocOutput()
 
-        # append properties of the result layer
-        myReport += ('<table class="table table-striped condensed'
-                        ' bordered-table">')
-        # Add this keyword to report
-        myReport += ('<tr>'
-                        '<th>' + self.tr('Time stamp')
-                        + '</th>'
-                        '</tr>'
-                        '<tr>'
-                        '<td>' + str(myKeywords['time_stamp']) + '</td>'
-                        '</tr>')
-        myReport += ('<tr>'
-                        '<th>' + self.tr('Elapsed time')
-                        + '</th>'
-                        '</tr>'
-                        '<tr>'
-                        '<td>' + str(myKeywords['elapsed_time'])
-                        + ' ' + self.tr('seconds') + '</td>'
-                        '</tr>')
-        myReport += '</table>'
         # Return text to display in report panel
         return myReport
 
@@ -1996,23 +1976,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             # append properties of the result layer
                     myReport += ('<table class="table table-striped condensed'
                                     ' bordered-table">')
-                    # Add this keyword to report
-                    myReport += ('<tr>'
-                            '<th>' + self.tr('Time stamp')
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + str(myKeywords['time_stamp']) + '</td>'
-                            '</tr>')
-                    myReport += ('<tr>'
-                            '<th>' + self.tr('Elapsed time')
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + str(myKeywords['elapsed_time'])
-                            + ' ' + self.tr('seconds') + '</td>'
-                            '</tr>')
-                    myReport += '</table>'
                     self.pbnPrint.setEnabled(True)
 
                 else:
