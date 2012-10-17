@@ -134,7 +134,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.runner = None
         self.helpDialog = None
         self.state = None
-        self.lastRunnedFunction = ''
+        self.lastUsedFunction = ''
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
         self.setLayerNameFromTitleFlag = True
@@ -991,7 +991,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Slot activated when the process is done."""
         #save the ID of the function that just runned
 
-        self.lastRunnedFunction = self.getFunctionID()
+        self.lastUsedFunction = self.getFunctionID()
 
         # Try to run completion code
         try:
@@ -1068,13 +1068,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.aggregationErrorSkipPostprocessing = None
         try:
             if (self.postprocLayer is not None and
-                self.lastRunnedFunction != self.getFunctionID()):
+                self.lastUsedFunction != self.getFunctionID()):
                 # remove category keyword so we force the keyword editor to
                 # popup. see the beginning of _checkPostprocAttributes to see
                 # how the popup decision is made
                 self.keywordIO.deleteKeyword(self.postprocLayer, 'category')
         except AttributeError:
-            #first run, eslf.lastRunnedFunction dors not exist yet
+            #first run, self.lastUsedFunction does not exist yet
             pass
 
     def getPostprocOutput(self, asOneBigTable=False):
