@@ -47,7 +47,14 @@ from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  getWGS84resolution,
                                  isLayerPolygonal,
-                                 getLayerAttributeNames)
+                                 getLayerAttributeNames,
+                                 setVectorStyle,
+                                 htmlHeader,
+                                 htmlFooter,
+                                 setRasterStyle,
+                                 qgisVersion,
+                                 getDefaults)
+
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -65,15 +72,9 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InvalidParameterException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
-from safe.common.exceptions import InaSAFEError
+
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
-from safe_qgis.utilities import (htmlHeader,
-                                 htmlFooter,
-                                 setVectorStyle,
-                                 setRasterStyle,
-                                 qgisVersion,
-                                 getDefaults)
 from safe_qgis.function_options_dialog import (
    FunctionOptionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
@@ -1257,7 +1258,42 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 myQgisImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers:
+        if self.showPostProcLayers and self.doZonalAggregation:
+            myProvider = self.postprocLayer.dataProvider()
+            myAttr = self.getAggregationFieldNameSum()
+            myAttrIndex = myProvider.fieldNameIndex(myAttr)
+            myProvider.select([myAttrIndex], QgsRectangle(), False)
+            myFeat = QgsFeature()
+            myHighestVal = 0
+            while myProvider.nextFeature(myFeat):
+                myAttrMap = myFeat.attributeMap()
+                myVal, ok = myAttrMap[myAttrIndex].toInt()
+                if ok and myVal > myHighestVal:
+                    myHighestVal = myVal
+
+            myClasses = []
+            myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
+            myStep = int(myHighestVal / len(myColors))
+            LOGGER.debug(str(myHighestVal)+' - '+str(myStep))
+            myCounter = 0
+            for myColor in myColors:
+                myMin = myCounter
+                myCounter += myStep
+                myMax = myCounter
+
+                myClasses.append(
+                    {'min': myMin,
+                     'max': myMax,
+                     'colour': myColor,
+                     'transparency': 30,
+                     'label': '%s - %s' % (myMin, myMax)}
+                )
+                myCounter += 1
+
+            myStyle = {'target_field': myAttr,
+                       'style_classes': myClasses}
+
+            setVectorStyle(self.postprocLayer, myStyle)
             QgsMapLayerRegistry.instance().addMapLayer(
                 self.postprocLayer)
 
