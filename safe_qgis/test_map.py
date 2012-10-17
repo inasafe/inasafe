@@ -34,7 +34,7 @@ from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       setJakartaGeoExtent,
-                                      compareImages,
+                                      checkImages,
                                       CONTROL_IMAGE_DIR)
 from safe_qgis.utilities import setupPrinter
 from safe_qgis.map import Map
@@ -110,28 +110,13 @@ class MapTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        myAcceptibleImages = []
-        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
-                                      'renderComposition.png')
-        myAcceptibleImages.append(myControlImage)
-        # Also test with variant from the jenkins server
-        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
-                                      'renderComposition-variantJenkins.png')
-        myAcceptibleImages.append(myControlImage)
-
-        myTolerance = 1000  # to allow for version number changes in disclaimer
-        myResults = []
-        myMessages = ''
-        myPassFlag = False
-        for myControlImage in myAcceptibleImages:
-            myFlag, _, myMessage = compareImages(myControlImage,
-                                        myImagePath,
-                                        myTolerance)
-            myMessages += myMessage
-            if myFlag:
-                break
-
-        assert myFlag == True, myMessages
+        myAcceptableImages = ['renderComposition.png',
+                              'renderComposition-variantJenkins.png']
+        myTolerance = 1000
+        myFlag, myMessage = checkImages(myAcceptableImages,
+                                           myImagePath,
+                                           myTolerance)
+        assert myFlag == True, myMessage
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
@@ -214,10 +199,9 @@ class MapTest(unittest.TestCase):
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
 
-        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
-                                      'windowsArtifacts.png')
+        myControlImages = ['windowsArtifacts.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myPath, myMessage = compareImages(myControlImage,
+        myFlag, myMessage = checkImages(myControlImages,
                                                   myImagePath,
                                                   myTolerance)
         myMessage += ('\nWe want these images to match, if they dont '
