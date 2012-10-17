@@ -141,7 +141,10 @@ class KeywordIO(QObject):
         Raises:
             None
         """
-        myKeywords = self.readKeywords(theLayer)
+        try:
+            myKeywords = self.readKeywords(theLayer)
+        except HashNotFoundException:
+            myKeywords = {}
         myKeywords.update(theKeywords)
         self.writeKeywords(theLayer, myKeywords)
 
@@ -197,6 +200,45 @@ class KeywordIO(QObject):
                    (theSourceLayer.source(), myNewDestination, str(e)))
             raise Exception(myMessage)
         return
+
+    def clearKeywords(self, theLayer):
+        """convenience method to clear a files keywords
+
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+        Returns:
+            None.
+        Raises:
+            None
+        """
+
+        self.writeKeywords(theLayer, dict())
+
+    def deleteKeyword(self, theLayer, theKeyword):
+        """Read keywords for a datasource and return them as a dictionary.
+        This is a wrapper method that will 'do the right thing' to fetch
+        keywords for the given datasource. In particular, if the datasource
+        is remote (e.g. a database connection) it will fetch the keywords from
+        the keywords store.
+
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+            * theKeyword - the specified keyword will be deleted
+              from the keywords dict.
+        Returns:
+            True if the keyword was sucessfully delete. False otherwise
+        Raises:
+            Propogates exception from the underlying reader delegate.
+        """
+
+        try:
+            myKeywords = self.readKeywords(theLayer)
+            myKeywords.pop(theKeyword)
+            self.writeKeywords(theLayer, myKeywords)
+            return True
+        except (HashNotFoundException, KeyError):
+            return False
+
 # methods below here should be considered private
 
     def defaultKeywordDbPath(self):

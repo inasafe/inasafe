@@ -131,3 +131,20 @@ def unique_filename(**kwargs):
     except OSError:
         pass
     return filename
+
+try:
+    from safe_qgis.utilities import getDefaults as get_qgis_defaults
+
+    def get_defaults(default=None):
+        return get_qgis_defaults(theDefault=default)
+except ImportError:
+    #this is used when we are in safe without access to qgis (e.g. web )
+    from safe.defaults import DEFAULTS
+
+    def get_defaults(default=None):
+        if default is None:
+            return DEFAULTS
+        elif default in DEFAULTS:
+            return DEFAULTS[default]
+        else:
+            return None
