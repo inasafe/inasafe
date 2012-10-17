@@ -111,7 +111,8 @@ class MapTest(unittest.TestCase):
         assert os.path.exists(myImagePath), myMessage
 
         myAcceptableImages = ['renderComposition.png',
-                              'renderComposition-variantJenkins.png']
+                              'renderComposition-variantJenkins.png',
+							  'renderComposition-variantUB11.10-64.png']
         myTolerance = 1000
         myFlag, myMessage = checkImages(myAcceptableImages,
                                            myImagePath,
@@ -199,9 +200,10 @@ class MapTest(unittest.TestCase):
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
 
-        myControlImages = ['windowsArtifacts.png']
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'windowsArtifacts.png')
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages,
+        myFlag, myPath, myMessage = compareImages(myControlImage,
                                                   myImagePath,
                                                   myTolerance)
         myMessage += ('\nWe want these images to match, if they dont '

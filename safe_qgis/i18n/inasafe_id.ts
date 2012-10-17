@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -369,7 +370,7 @@
     <message>
         <location filename="dock.py" line="1947"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:%1%2%1 and %1%3</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas PDF Anda telah dibuat...membuka dengan menggunakan pembaca berkas PDF default pada sistem Anda. Berkas PDF yang dihasilkan disimpan sebagai %1%2%1 dan %1%3</translation>
     </message>
 </context>
 <context>
