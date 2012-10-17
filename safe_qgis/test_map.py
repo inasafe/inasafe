@@ -105,7 +105,7 @@ class MapTest(unittest.TestCase):
 
         myAcceptableImages = ['renderComposition.png',
                               'renderComposition-variantJenkins.png',
-							  'renderComposition-variantUB11.10-64.png']
+                              'renderComposition-variantUB11.10-64.png']
         myTolerance = 1000
         myFlag, myMessage = checkImages(myAcceptableImages,
                                            myImagePath,

@@ -23,7 +23,8 @@ class TestInit(unittest.TestCase):
     Based heavily on the validator class by Alessandro
     Passoti available here:
 
-    http://github.com/qgis/qgis-django/blob/master/qgis-app/plugins/validator.py
+    http://github.com/qgis/qgis-django/blob/master/qgis-app/
+             plugins/validator.py
 
     """
 
@@ -49,13 +50,13 @@ class TestInit(unittest.TestCase):
         myContent = myFile.read()
         myFile.close()
         myMetadata = []
-        myCounter=0
-        myLines=myContent.split('\n')
+        myCounter = 0
+        myLines = myContent.split('\n')
         while myCounter < len(myLines):
             if re.search('def\s+([^\(]+)', myLines[myCounter]):
-                myMatch=re.search('def\s+([^\(]+)',
+                myMatch = re.search('def\s+([^\(]+)',
                                   myLines[myCounter]).groups()[0]
-                myCounter+=1
+                myCounter += 1
                 while myCounter < len(myLines) and myLines[myCounter] != '':
                     if re.search('return\s+["\']?([^"\']+)["\']?',
                                  myLines[myCounter]):
@@ -63,8 +64,8 @@ class TestInit(unittest.TestCase):
                                 re.search('return\s+["\']?([^"\']+)["\']?',
                                 myLines[myCounter]).groups()[0]))
                         break
-                    myCounter+=1
-            myCounter+=1
+                    myCounter += 1
+            myCounter += 1
         if not len(myMetadata):
             assert False, 'Metadata could not be read'
 
