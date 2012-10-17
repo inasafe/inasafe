@@ -43,6 +43,8 @@ from qgis.core import (QGis,
 from safe_interface import temp_dir
 from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
+from safe.defaults import DEFAULTS
+
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
@@ -674,6 +676,147 @@ def setupLogger():
     addLoggingHanderOnce(myLogger, myQgisHandler)
 
 
+def isLayerPolygonal(theLayer):
+    """tell if a qgis theLayer is vectorial and d its geometries polygons
+   Args:
+       the theLayer
+    Returns:
+        bool - true if the theLayer contains polygons
+    Raises:
+       None
+    """
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Polygon)
+    except AttributeError:
+        return False
+
+
+def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
+    """iterates over self.layer and returns all the attribute names of
+       attributes that have int or string as field type and the position
+       of the theCurrentKeyword in the attribute names list
+
+    Args:
+       * theAllowedTypes: list(Qvariant) - a list of QVariants types that are
+            acceptable for the attribute.
+            e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String]
+       * theCurrentKeyword - the currently stored keyword for the attribute
+
+    Returns:
+       * all the attribute names of attributes that have int or string as
+            field type
+       * the position of the theCurrentKeyword in the attribute names list,
+            this is None if theCurrentKeyword is not in the lis of attributes
+    Raises:
+       no exceptions explicitly raised
+    """
+
+    if theLayer.type() == QgsMapLayer.VectorLayer:
+        myProvider = theLayer.dataProvider()
+        myProvider = myProvider.fields()
+        myFields = []
+        mySelectedIndex = None
+        i = 0
+        for f in myProvider:
+            # show only int or string myFields to be chosen as aggregation
+            # attribute other possible would be float
+            if myProvider[f].type() in theAllowedTypes:
+                myCurrentFieldName = myProvider[f].name()
+                myFields.append(myCurrentFieldName)
+                if theCurrentKeyword == myCurrentFieldName:
+                    mySelectedIndex = i
+                i += 1
+        return myFields, mySelectedIndex
+    else:
+        return None, None
+
+
+def getDefaults(theDefault=None):
+    """returns a dictionary of defaults values to be used
+        it takes the DEFAULTS from safe and modifies them according to qgis
+        QSettings
+
+    Args:
+       * theDefault: a key of the defaults dictionary
+
+    Returns:
+       * A dictionary of defaults values to be used
+       * or the default value if a key is passed
+       * or None if the requested default value is not valid
+    Raises:
+       no exceptions explicitly raised
+    """
+    mySettings = QtCore.QSettings()
+    myDefaults = DEFAULTS
+
+    myDefaults['FEM_RATIO'] = mySettings.value(
+        'inasafe/defaultFemaleRatio',
+        DEFAULTS['FEM_RATIO']).toDouble()[0]
+
+    if theDefault is None:
+        return myDefaults
+    elif theDefault in myDefaults:
+        return myDefaults[theDefault]
+    else:
+        return None
+
+
+#def copyInMemory(vLayer, copyName=''):
+#    """Return a memory copy of a layer
+#
+#    Input
+#        origLayer: layer
+#        copyName: the name of the copy
+#    Output
+#        memory copy of a layer
+#
+#    """
+#
+#    if copyName is '':
+#        copyName = vLayer.name() + ' TMP'
+#
+#    if vLayer.type() == QgsMapLayer.VectorLayer:
+#        vType = vLayer.geometryType()
+#        if vType == QGis.Point:
+#            typeStr = 'Point'
+#        elif vType == QGis.Line:
+#            typeStr = 'Line'
+#        elif vType == QGis.Polygon:
+#            typeStr = 'Polygon'
+#        else:
+#            raise memoryLayerCreationError('Layer is whether Point or '
+#                                           'Line or Polygon')
+#    else:
+#        raise memoryLayerCreationError('Layer is not a VectorLayer')
+#
+#    crs = vLayer.crs().authid().toLower()
+#    uri = typeStr + '?crs=' + crs + '&index=yes'
+#    memLayer = QgsVectorLayer(uri, copyName, 'memory')
+#    memProvider = memLayer.dataProvider()
+#
+#    vProvider = vLayer.dataProvider()
+#    vAttrs = vProvider.attributeIndexes()
+#    vFields = vProvider.fields()
+#
+#    fields = []
+#    for i in vFields:
+#        fields.append(vFields[i])
+#
+#    memProvider.addAttributes(fields)
+#
+#    vProvider.select(vAttrs)
+#    ft = QgsFeature()
+#    while vProvider.nextFeature(ft):
+#        memProvider.addFeatures([ft])
+#
+#    # Next two lines a workaround for a QGIS bug (lte 1.8)
+#    # preventing mem layer attributes being saved to shp.
+#    memLayer.startEditing()
+#    memLayer.commitChanges()
+#
+#    return memLayer
+
 def mmToPoints(theMM, theDpi):
     """Convert measurement in points to one in mm.
 
@@ -760,7 +903,7 @@ def humaniseSeconds(theSeconds):
     if theSeconds < 60:
         return tr('%i seconds' % theSeconds)
     if theSeconds < 120:
-        return  tr('a minute')
+        return tr('a minute')
     if theSeconds < 3600:
         return tr('minutes' % myMinutes)
     if theSeconds < 7200:

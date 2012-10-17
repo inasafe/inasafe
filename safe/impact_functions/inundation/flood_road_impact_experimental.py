@@ -101,6 +101,7 @@ class FloodRoadImpactFunctionExperimental(FunctionProvider):
                    geometry_type=I.get_geometry_type(),
                    name=tr('Estimated roads affected'),
                    keywords={'impact_summary': impact_summary,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'target_field': self.target_field},
                    style_info=style_info)
         return V

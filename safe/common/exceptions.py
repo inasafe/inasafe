@@ -60,3 +60,9 @@ class BoundsError(InaSAFEError):
 class GetDataError(InaSAFEError):
     """When layer data cannot be obtained"""
     pass
+
+
+class PostprocessorError(Exception):
+    """Raised if the requested import cannot be performed dur to qgis being
+    to old"""
+    pass

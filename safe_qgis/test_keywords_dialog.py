@@ -31,16 +31,20 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 
 from qgis.core import (QgsRasterLayer,
+                       QgsVectorLayer,
                        QgsMapLayerRegistry)
 
-from safe_qgis.odict import OrderedDict
-from safe_qgis.utilities_test import (getQgisTestApp, unitTestDataPath)
+from third_party.odict import OrderedDict
+from safe_qgis.utilities_test import (getQgisTestApp,
+                                      unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
 from safe_qgis.keywords_dialog import KeywordsDialog
+from safe_qgis.exceptions import KeywordNotFoundException
+from safe_qgis.utilities import getDefaults
 
 
 # For testing and demoing
-from safe.common.testing import HAZDATA
+from safe.common.testing import HAZDATA, TESTDATA
 
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -75,6 +79,32 @@ def copyMakePadangLayer():
     myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer, myFileName
+
+
+def makePolygonLayer():
+    """Helper function that returns a single predefined layer"""
+    myFile = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
+    myPath = os.path.join(TESTDATA, myFile)
+    try:
+        myTitle = readKeywordsFromFile(myPath, 'title')
+    except KeywordNotFoundException:
+        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
+    myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    return myLayer
+
+
+def makePointLayer():
+    """Helper function that returns a single predefined layer"""
+    myFile = 'test_buildings.shp'
+    myPath = os.path.join(TESTDATA, myFile)
+    try:
+        myTitle = readKeywordsFromFile(myPath, 'title')
+    except KeywordNotFoundException:
+        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
+    myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    return myLayer
 
 
 def removeTempFile(myFileName='temp_Shakemap_Padang_2009'):
@@ -156,6 +186,91 @@ class KeywordsDialogTest(unittest.TestCase):
                      'to the keywords list.')
         assert myDialog.getValueForKey('category') == 'hazard', myMessage
 
+    def test_on_radPostprocessing_toggled(self):
+        """Test hazard radio button toggle behaviour works"""
+        myLayer = makePolygonLayer()
+        myDefaults = getDefaults()
+        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
+        myButton = myDialog.radPostprocessing
+        myButton.setChecked(False)
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myMessage = ('Toggling the postprocessing radio did not add a '
+                     'category to the keywords list.')
+        assert myDialog.getValueForKey(
+            'category') == 'postprocessing', myMessage
+
+        myMessage = ('Toggling the postprocessing radio did not add an '
+                     'aggregation attribute to the keywords list.')
+        assert myDialog.getValueForKey(
+            myDefaults['AGGR_ATTR_KEY']) == 'KAB_NAME', myMessage
+
+        myMessage = ('Toggling the postprocessing radio did not add a '
+                     'female ratio attribute to the keywords list.')
+
+        assert myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_ATTR_KEY']) == \
+               myDialog.tr('Use default'), myMessage
+
+        myMessage = ('Toggling the postprocessing radio did not add a '
+                     'female ratio default value to the keywords list.')
+        assert float(myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_KEY'])) == \
+               myDefaults['FEM_RATIO'], myMessage
+
+    def test_on_dsbFemaleRatioDefault_valueChanged(self):
+        """Test hazard radio button toggle behaviour works"""
+        myLayer = makePolygonLayer()
+        myDefaults = getDefaults()
+        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
+        myButton = myDialog.radPostprocessing
+        myButton.setChecked(False)
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myFemaleRatioAttrBox = myDialog.cboFemaleRatioAttribute
+
+        #set to Don't use
+        myIndex = myFemaleRatioAttrBox.findText(
+            myDialog.tr('Don\'t use'))
+        myMessage = (myDialog.tr('Don\'t use') + ' not found')
+        assert (myIndex != -1), myMessage
+        myFemaleRatioAttrBox.setCurrentIndex(myIndex)
+
+        myMessage = ('Toggling the female ratio attribute combo to'
+                     ' "Don\'t use" did not add it to the keywords list.')
+        assert myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_ATTR_KEY']) ==\
+               myDialog.tr('Don\'t use'), myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to'
+                     ' "Don\'t use" did not disable dsbFemaleRatioDefault.')
+        myIsEnabled = myDialog.dsbFemaleRatioDefault.isEnabled()
+        assert not myIsEnabled, myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to'
+                     ' "Don\'t use" did not remove the keyword.')
+        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is
+            None), myMessage
+
+        #set to TEST_REAL
+        myIndex = myFemaleRatioAttrBox.findText('TEST_REAL')
+        myMessage = ('TEST_REAL not found')
+        assert (myIndex != -1), myMessage
+        myFemaleRatioAttrBox.setCurrentIndex(myIndex)
+
+        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
+                     ' did not add it to the keywords list.')
+        assert myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
+                     ' did not disable dsbFemaleRatioDefault.')
+        myIsEnabled = myDialog.dsbFemaleRatioDefault.isEnabled()
+        assert not myIsEnabled, myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
+                     ' did not remove the keyword.')
+        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is
+                None), myMessage
+
     def Xtest_on_radExposure_toggled(self):
         """Test exposure radio button toggle behaviour works"""
 
@@ -183,6 +298,7 @@ class KeywordsDialogTest(unittest.TestCase):
                      'to the keywords list for %s' %
                      myCombo.currentText())
         myKey = myDialog.getValueForKey('subcategory')
+
         assert myKey is not None, myMessage
         assert myKey in str(myCombo.currentText()), myMessage
 

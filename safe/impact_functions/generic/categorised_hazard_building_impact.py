@@ -132,7 +132,8 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                    geometry_type=E.geometry_type,
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'target_field': self.target_field},
                    name=name,
                    style_info=style_info)
         return V

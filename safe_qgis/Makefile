@@ -23,7 +23,6 @@ PLUGINNAME = inasafe
 
 PY_FILES = __init__.py \
             clipper.py \
-            configurable_impact_functions_dialog.py \
             dock.py \
             exceptions.py\
             help.py \
@@ -44,10 +43,11 @@ PY_FILES = __init__.py \
 EXTRAS = icon.png
 
 UI_FILES = dock_base.py \
+					 help_base.py \
 					 options_dialog_base.py \
 					 keywords_dialog_base.py \
 					 impact_functions_doc_base.py \
-           configurable_impact_functions_dialog_base.py
+           			 options_dialog_base.py
 
 
 RESOURCE_FILES = resources.py
@@ -67,4 +67,3 @@ clean: compile
 
 %.py : %.ui
 	pyuic4 -o $@ $<
-
