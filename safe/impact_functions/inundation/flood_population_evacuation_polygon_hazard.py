@@ -32,13 +32,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             {'Gender': {'on': True},
              'Age': {'on': True,
                      'params': {
-                         'youth_ratio': defaults['YOUTH_RATIO'],
-                         'adult_ratio': defaults['ADULT_RATIO'],
-                         'elder_ratio': defaults['ELDER_RATIO']
-                     }
-             }
-            }
-    }
+                    'youth_ratio': defaults['YOUTH_RATIO'],
+                    'adult_ratio': defaults['ADULT_RATIO'],
+                    'elder_ratio': defaults['ELDER_RATIO']}}}}
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

@@ -909,8 +909,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def run(self):
         """Execute analysis when ok button on settings is clicked."""
+
         self.enableBusyCursor()
-        # attributes that will not be deleted from the postprocessing layer
+
+        # Attributes that will not be deleted from the postprocessing layer
         # attribute table
         self.postprocAttributes = {}
 
@@ -918,14 +920,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.keywordIO.readKeywords(self.postprocLayer,
                                         self.defaults['AGGR_ATTR_KEY']))
 
-        myFemRatioAttr = self.keywordIO.readKeywords(
-            self.postprocLayer, self.defaults['FEM_RATIO_ATTR_KEY'])
+        myDefaultFemRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
+        myFemRatioAttr = self.keywordIO.readKeywords(self.postprocLayer,
+                                                     myDefaultFemRatioKey)
         if (myFemRatioAttr != self.tr('Don\'t use') and
             myFemRatioAttr != self.tr('Use default')):
-            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
-                ] = myFemRatioAttr
+            self.postprocAttributes[myDefaultFemRatioKey] = myFemRatioAttr
 
-        #start the analysis
+        # Start the analysis
         try:
             self.setupCalculator()
         except InsufficientOverlapException, e:
@@ -934,8 +936,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('An exception occurred when setting up the '
                                 'impact calculator.')
             myMessage = getExceptionWithStacktrace(e,
-                                                    html=True,
-                                                    context=myMessage)
+                                                   html=True,
+                                                   context=myMessage)
             self.displayHtml(myMessage)
             return
         try:
@@ -1127,8 +1129,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '    <tr>'
                        '      <th width="25%">'
                        + self.aggrAttrTitle +
-                       '      </th>'
-                )
+                       '      </th>')
             # add th according to the ammount of calculation done by each
             # postprocessor
             for calculationName in resList[0][1]:
@@ -1173,8 +1174,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myFeat = QgsFeature()
             myFeat.setGeometry(QgsGeometry.fromRect(QgsRectangle(
                 QgsPoint(impactLayerBB[0], impactLayerBB[1]),
-                QgsPoint(impactLayerBB[2], impactLayerBB[3])
-            )))
+                QgsPoint(impactLayerBB[2], impactLayerBB[3]))))
             myFeat.setAttributeMap({0: QtCore.QVariant(
                 self.tr('Entire area'))})
             myProvider.addFeatures([myFeat])
@@ -1400,8 +1400,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myParams = myGeneralParams
                 try:
                     myParams.update(
-                        self.functionParams['postprocessors'][n]['params']
-                    )
+                        self.functionParams['postprocessors'][n]['params'])
                 except KeyError:
                     pass
 
@@ -1448,12 +1447,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myKeywords['category'] == 'postprocessing' and
             self.defaults['AGGR_ATTR_KEY'] in myKeywords and
             self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
-            (
-                self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr(
+            (self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr(
                     'Use default') or
-                self.defaults['FEM_RATIO_KEY'] in myKeywords
-                )
-            ):
+             self.defaults['FEM_RATIO_KEY'] in myKeywords)):
             return True
         #some keywords are needed
         else:
