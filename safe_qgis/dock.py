@@ -65,6 +65,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InvalidParameterException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
+from safe.common.exceptions import InaSAFEError
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.utilities import (htmlHeader,
@@ -1016,6 +1017,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
+
+        if self.runner.impactLayer() is None:
+            # Done was emitted, but no impact layer was calculated
+
+            # FIXME (Ole): Write this into utility function
+            myMessage = self.runner.result()
+            myMessage = str(self.tr('No impact layer was calculated. '
+                                    'Error message: %s\n' % str(myMessage)))
+            if self.runner.lastTraceback() is not None:
+                myMessage += '<br/><ul>'
+                for myItem in self.runner.lastTraceback():
+                    # Replace is to tidy up windows paths a little
+                    myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
+                                  + '</li>')
+                myMessage += '</ul>'
+            raise InaSAFEError(myMessage, self.runner.lastException())
+
         try:
             myTitle = self.tr('Aggregating results...')
             myMessage = self.tr('This may take a little while - we are '
@@ -1544,6 +1562,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMessage = self.runner.result()
 
         # FIXME (Ole): This branch is not covered by the tests
+        # AND now will never be called since postprocess takes care of
         myEngineImpactLayer = self.runner.impactLayer()
 
         if myEngineImpactLayer is None:
@@ -1552,7 +1571,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if self.runner.lastTraceback() is not None:
                 myMessage += '<br/><ul>'
                 for myItem in self.runner.lastTraceback():
-                    # replace is to tidy up windows paths a little
+                    # Replace is to tidy up windows paths a little
                     myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
                                   + '</li>')
                 myMessage += '</ul>'
