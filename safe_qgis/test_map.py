@@ -196,7 +196,7 @@ class MapTest(unittest.TestCase):
         myControlImage = os.path.join(CONTROL_IMAGE_DIR,
                                       'windowsArtifacts.png')
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myPath, myMessage = compareImages(myControlImage,
+        myFlag, myPath, myMessage = checkImages(myControlImage,
                                                   myImagePath,
                                                   myTolerance)
         myMessage += ('\nWe want these images to match, if they dont '
