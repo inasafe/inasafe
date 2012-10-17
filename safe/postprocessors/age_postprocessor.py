@@ -21,13 +21,9 @@ from safe.common.utilities import (get_defaults,
 class AgePostprocessor(AbstractPostprocessor):
     """
     Postprocessor that calculates age related statistics.
+    see the _calculate_* methods to see indicator specific documentation
 
-    Default ratio are taken from:
-    https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
-    Age structure:
-    0-14 years: 26.3% (male 944,987,919/female 884,268,378)
-    15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
-    65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
+    see :mod:`safe.defaults` for default values information
     """
 
     def __init__(self):

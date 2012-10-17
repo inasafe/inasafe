@@ -16,6 +16,13 @@ from safe.postprocessors.abstract_postprocessor import (
 from safe.common.utilities import ugettext as tr
 
 class GenderPostprocessor(AbstractPostprocessor):
+    """
+    Postprocessor that calculates gender related statistics.
+    see the _calculate_* methods to see indicator specific documentation
+
+    see :mod:`safe.defaults` for default values information
+    """
+
     def __init__(self):
         AbstractPostprocessor.__init__(self)
         self.population_total = None
@@ -73,18 +80,54 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.female_ratio = None
 
     def _calculate_total(self):
+        """Total population indicator.
+
+        this indicator reports the total population
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Total')
         myResult = self.population_total
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_females(self):
+        """Female population count indicator.
+
+        this indicator reports the amount of female population according to the
+        set female_ratio
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Female population')
         myResult = self.population_total * self.female_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_weekly_hygene_packs(self):
+        """Weekly requirements of female hygiene packs indicator.
+
+        This indicator reports the weekly requirements of female hygiene packs
+        for further detail refer to the "Sample InaSAFE Actions for Vulnerable
+        Populations" [27.07.2012] paper
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Weekly hygiene packs')
         myMeta = {'description': 'Females hygiene packs for weekly use'}
         #weekly hygene packs =
@@ -94,6 +137,21 @@ class GenderPostprocessor(AbstractPostprocessor):
         self._append_result(myName, myResult, myMeta)
 
     def _calculate_weekly_increased_calories(self):
+        """Weekly additional kg of rice for pregnant and lactating women
+        indicator.
+
+        This indicator reports the weekly additional kg of rice for pregnant
+        and lactating women.
+        for further detail refer to the "Sample InaSAFE Actions for Vulnerable
+        Populations" [27.07.2012] paper
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Additional weekly rice kg for pregnant and lactating'
                          ' women')
         myMeta = {'description': 'Additional rice kg per week for pregnant and'
