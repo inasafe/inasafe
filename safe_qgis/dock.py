@@ -722,7 +722,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         myMessage = self.tr('Input argument must be a InaSAFE spatial object. '
-               'I got %1').arg(type(myEngineImpactLayer))
+               'I got %1').arg(str(type(myEngineImpactLayer)))
         if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
             raise Exception(myMessage)
         if not myEngineImpactLayer.is_inasafe_spatial_object:
