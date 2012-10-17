@@ -36,6 +36,9 @@ def version():
     """Version of the plugin."""
     return 'Version 0.5.2'
 
+def email():
+    """Email contact details."""
+    return 'ole.moller.nielsen@gmail.com'
 
 def qgisMinimumVersion():
     """Minimum version of QGIS needed to run this plugin
