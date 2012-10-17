@@ -28,10 +28,24 @@ class AgePostprocessor(AbstractPostprocessor):
     """
 
     def __init__(self):
+        """
+        Constructor for AgePostprocessor postprocessor class,
+        It takes care of defining self.population_total
+        """
         AbstractPostprocessor.__init__(self)
         self.population_total = None
 
     def setup(self, params):
+        """concrete implementation it takes care of the needed parameters being
+         initialized
+
+        Args:
+            params: dict of parameters to pass to the post processor
+        Returns:
+            None
+        Raises:
+            None
+        """
         AbstractPostprocessor.setup(self, None)
         if self.population_total is not None:
             self._raise_error('clear needs to be called before setup')
@@ -51,6 +65,16 @@ class AgePostprocessor(AbstractPostprocessor):
             self.elder_ratio = defaults['ELDER_RATIO']
 
     def process(self):
+        """concrete implementation it takes care of the needed parameters being
+         available and performs all the indicators calculations
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         AbstractPostprocessor.process(self)
         if self.population_total is None:
             self._raise_error('setup needs to be called before process')
@@ -60,6 +84,16 @@ class AgePostprocessor(AbstractPostprocessor):
         self._calculate_elder()
 
     def clear(self):
+        """concrete implementation it takes care of the needed parameters being
+         properly cleared
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         AbstractPostprocessor.clear(self)
         self.population_total = None
 

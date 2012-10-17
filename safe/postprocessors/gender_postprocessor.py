@@ -22,6 +22,16 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.female_ratio = None
 
     def setup(self, params):
+        """concrete implementation it takes care of the needed parameters being
+         initialized
+
+        Args:
+            params: Dict of parameters to pass to the post processor
+        Returns:
+            None
+        Raises:
+            None
+        """
         AbstractPostprocessor.setup(self, None)
         if self.population_total is not None or self.female_ratio is not None:
             self._raise_error('clear needs to be called before setup')
@@ -29,6 +39,16 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.female_ratio = params['female_ratio']
 
     def process(self):
+        """concrete implementation it takes care of the needed parameters being
+         available and performs all the indicators calculations
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         AbstractPostprocessor.process(self)
         if self.population_total is None or self.female_ratio is None:
             self._raise_error('setup needs to be called before process')
@@ -38,6 +58,16 @@ class GenderPostprocessor(AbstractPostprocessor):
         self._calculate_weekly_increased_calories()
 
     def clear(self):
+        """concrete implementation it takes care of the needed parameters being
+         properly cleared
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         AbstractPostprocessor.clear(self)
         self.population_total = None
         self.female_ratio = None
