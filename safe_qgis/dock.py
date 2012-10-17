@@ -1099,8 +1099,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             '    <tr>'
             '       <td>'
             + self.tr('Due to a problem while processing the results,'
-                      ' the detailed postprocessing report is unavailable.'
-                      ' (%1)').arg(self.aggregationErrorSkipPostprocessing) +
+                      ' the detailed postprocessing report is unavailable:'
+                      ' %1').arg(self.aggregationErrorSkipPostprocessing) +
             '       </td>'
             '    </tr>'
             '</table>')
@@ -1280,9 +1280,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
-            myMessage = self.tr('No %1 found in the impact layer %2 attribute '
-                                'table. The impact function should define this'
-                                'correctly.').arg(myTargetField,
+            myMessage = self.tr('No attribute "%1" was found in the attribute '
+                                'table for layer "%2". The impact function '
+                                'must define this attribute for '
+                                'postprocessing to work.').arg(myTargetField,
                                 myQgisImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
