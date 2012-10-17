@@ -62,11 +62,11 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
-        [{'opacity': 1, 'max': 1.5, 'colour': '#fecc5c',
+        [{'transparency': 1, 'max': 1.5, 'colour': '#fecc5c',
           'min': 0.5, 'label': 'Low damage', 'size' : 1},
-        {'opacity': 1, 'max': 2.5, 'colour': '#fd8d3c',
+        {'transparency': 1, 'max': 2.5, 'colour': '#fd8d3c',
          'min': 1.5, 'label': 'Medium damage', 'size' : 1},
-        {'opacity': 1, 'max': 3.5, 'colour': '#f31a1c',
+        {'transparency': 1, 'max': 3.5, 'colour': '#f31a1c',
          'min': 2.5, 'label': 'High damage', 'size' : 1}]}
 
         .. note:: The transparency and size keys are optional. Size applies
@@ -88,6 +88,7 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
             mySize = myClass['size']
         myTransparencyPercent = 0
         if 'transparency' in myClass:
+            LOGGER.debug(myClass['transparency'])
             myTransparencyPercent = myClass['transparency']
 
         if 'min' not in myClass:
@@ -141,11 +142,14 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
             pass
 
         mySymbol.setColor(myColour)
-        # .. todo:: Check that vectors use alpha as % otherwise scale TS
+        # .. todo: (MB) Check that vectors use alpha as % otherwise scale TS
+        # see issue #354
         # Convert transparency % to opacity
         # alpha = 0: transparent
         # alpha = 1: opaque
-        alpha = 1 - myTransparencyPercent / 100
+        # MB this was working wrong due to int division returning int results
+        alpha = 1 - myTransparencyPercent / 100.0
+        LOGGER.debug('%s - %s' % (myTransparencyPercent, alpha))
         mySymbol.setAlpha(alpha)
         myRange = QgsRendererRangeV2(myMin,
                                      myMax,
