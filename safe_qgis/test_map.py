@@ -1,20 +1,13 @@
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **GUI Test Cases.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+"""**Tests for map creation in QGIS plugin.**
 
 """
-__author__ = 'tim@linfiniti.com'
-__version__ = '1.0.0'
-__date__ = '10/01/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+
+__author__ = 'Tim Sutton <tim@linfiniti.com>'
+__revision__ = '$Format:%H$'
+__date__ = '01/11/2010'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 import unittest
 from unittest import expectedFailure
@@ -34,7 +27,7 @@ from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       setJakartaGeoExtent,
-                                      compareImages,
+                                      checkImages,
                                       CONTROL_IMAGE_DIR)
 from safe_qgis.utilities import setupPrinter
 from safe_qgis.map import Map
@@ -93,10 +86,10 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.composeMap()
-        myImagePath, myImage, myTargetArea = myMap.renderComposition()
+        myImagePath, myControlImage, myTargetArea = myMap.renderComposition()
         LOGGER.debug(myImagePath)
 
-        assert myImage is not None
+        assert myControlImage is not None
 
         myDimensions = [myTargetArea.left(),
                         myTargetArea.top(),
@@ -109,14 +102,14 @@ class MapTest(unittest.TestCase):
 
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
-        # Note these hashes will be affected every time get_version
-        # changes due to the version being embeded in the pdf
-        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
-                                      'renderComposition.png')
-        myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, _, myMessage = compareImages(myControlImage,
-                                        myImagePath,
-                                        myTolerance)
+
+        myAcceptableImages = ['renderComposition.png',
+                              'renderComposition-variantJenkins.png',
+                              'renderComposition-variantUB11.10-64.png']
+        myTolerance = 1000
+        myFlag, myMessage = checkImages(myAcceptableImages,
+                                           myImagePath,
+                                           myTolerance)
         assert myFlag == True, myMessage
 
     def test_getMapTitle(self):
@@ -203,7 +196,7 @@ class MapTest(unittest.TestCase):
         myControlImage = os.path.join(CONTROL_IMAGE_DIR,
                                       'windowsArtifacts.png')
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myPath, myMessage = compareImages(myControlImage,
+        myFlag, myPath, myMessage = checkImages(myControlImage,
                                                   myImagePath,
                                                   myTolerance)
         myMessage += ('\nWe want these images to match, if they dont '

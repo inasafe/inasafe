@@ -1106,8 +1106,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             '    <tr>'
             '       <td>'
             + self.tr('Due to a problem while processing the results,'
-                      ' the detailed postprocessing report is unavailable.'
-                      ' (%1)').arg(self.aggregationErrorSkipPostprocessing) +
+                      ' the detailed postprocessing report is unavailable:'
+                      ' %1').arg(self.aggregationErrorSkipPostprocessing) +
             '       </td>'
             '    </tr>'
             '</table>')
@@ -1322,9 +1322,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
-            myMessage = self.tr('No %1 found in the impact layer %2 attribute '
-                                'table. The impact function should define this'
-                                'correctly.').arg(myTargetField,
+            myMessage = self.tr('No attribute "%1" was found in the attribute '
+                                'table for layer "%2". The impact function '
+                                'must define this attribute for '
+                                'postprocessing to work.').arg(myTargetField,
                                 myQgisImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
@@ -1670,26 +1671,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #append postprocessing report
         myReport += self.getPostprocOutput()
 
-        # append properties of the result layer
-        myReport += ('<table class="table table-striped condensed'
-                        ' bordered-table">')
-        # Add this keyword to report
-        myReport += ('<tr>'
-                        '<th>' + self.tr('Time stamp')
-                        + '</th>'
-                        '</tr>'
-                        '<tr>'
-                        '<td>' + str(myKeywords['time_stamp']) + '</td>'
-                        '</tr>')
-        myReport += ('<tr>'
-                        '<th>' + self.tr('Elapsed time')
-                        + '</th>'
-                        '</tr>'
-                        '<tr>'
-                        '<td>' + str(myKeywords['elapsed_time'])
-                        + ' ' + self.tr('seconds') + '</td>'
-                        '</tr>')
-        myReport += '</table>'
         # Return text to display in report panel
         return myReport
 
@@ -2034,23 +2015,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             # append properties of the result layer
                     myReport += ('<table class="table table-striped condensed'
                                     ' bordered-table">')
-                    # Add this keyword to report
-                    myReport += ('<tr>'
-                            '<th>' + self.tr('Time stamp')
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + str(myKeywords['time_stamp']) + '</td>'
-                            '</tr>')
-                    myReport += ('<tr>'
-                            '<th>' + self.tr('Elapsed time')
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + str(myKeywords['elapsed_time'])
-                            + ' ' + self.tr('seconds') + '</td>'
-                            '</tr>')
-                    myReport += '</table>'
                     self.pbnPrint.setEnabled(True)
 
                 else:

@@ -20,10 +20,25 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
 
+#
+# Note: Don't use function docstrings more than one line - they
+#       break the plugins.qgis.org validator when uploading!
+#
+
 
 def name():
     """A user friendly name for the plugin."""
     return 'InaSAFE'
+
+
+def author():
+    """Author name."""
+    return 'Australia Indonesia Facility for Disaster Reduction'
+
+
+def email():
+    """Email contact details."""
+    return 'ole.moller.nielsen@gmail.com'
 
 
 def description():
@@ -38,17 +53,13 @@ def version():
 
 
 def qgisMinimumVersion():
-    """Minimum version of QGIS needed to run this plugin
-
-       This is currently set to 1.7
-    """
+    """Minimum version of QGIS needed to run this plugin."""
     return '1.7'
 
 
 def icon():
     """Icon path for the plugin - metadata.txt will override this"""
-    return os.path.join(os.path.dirname(__file__), 'safe_qgis', 'resources',
-                        'img', 'icon.png')
+    return 'icon.png'
 
 
 def classFactory(iface):

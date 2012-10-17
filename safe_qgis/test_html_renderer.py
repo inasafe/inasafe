@@ -23,8 +23,7 @@ import logging
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
-                                      compareImages,
-                                      CONTROL_IMAGE_DIR)
+                                      checkImages)
 from safe_qgis.html_renderer import HtmlRenderer
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -144,10 +143,10 @@ class HtmlRendererTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
 
-        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
-                                      'renderHtmlToPixmap.png')
+        myControlImages = ['renderHtmlToPixmap.png',
+                           'renderHtmlToPixmap-variantUB11.10-64.png']
         myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, myPath, myMessage = compareImages(myControlImage,
+        myFlag, myMessage = checkImages(myControlImages,
                                                   myPath,
                                                   myTolerance)
         assert myFlag == True, myMessage

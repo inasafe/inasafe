@@ -235,13 +235,48 @@ def setGeoExtent(theBoundingBox):
     CANVAS.setExtent(myRect)
 
 
-def compareImages(theControlImagePath, theTestImagePath, theTolerance):
-    """Compare two images to produce a difference image using a tolerance.
+def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
+    """Compare a test image against a collection of known good images.
+
+    Args:
+        * theControlImagePath: list of file names. Give only the basename +ext
+            as the test image path (CONTROL_IMAGE_DIR) will be prepended.
+        * theTestImagePath: The Image being checked (must have same dimensions
+            as the control image). Must be full path to image.
+        * theTolerance: How many pixels may be different between the
+            two images.
+
+    Returns:
+        (bool, str, str) where:
+        * bool is success or failure indicator
+        * str is the file path of the resulting difference image
+        * str is a message providing analysis comparison notes
+
+    Raises:
+        None
+    """
+    myMessages = ''
+    for myControlImage in theControlImages:
+        myFullPath = os.path.join(CONTROL_IMAGE_DIR,
+                                      myControlImage)
+        myFlag, myMessage = checkImage(myFullPath,
+                                          theTestImagePath,
+                                          theTolerance)
+        myMessages += myMessage
+        # As soon as one passes we are done!
+        if myFlag:
+            break
+
+    return myFlag, myMessages
+
+
+def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
+    """Compare a test image against a known good image.
 
     Args:
         * theControlImagePath: The image representing expected output
         * theTestImagePath: The Image being checked (must have same dimensions
-            as the control image.
+            as the control image).
         * theTolerance: How many pixels may be different between the
             two images.
 
@@ -257,7 +292,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
 
     try:
         if not os.path.exists(theTestImagePath):
-            raise
+            raise OSError
         myTestImage = QtGui.QImage(theTestImagePath)
     except OSError:
         myMessage = 'Test image:\n%s\ncould not be loaded' % theTestImagePath
@@ -265,7 +300,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
 
     try:
         if not os.path.exists(theControlImagePath):
-            raise
+            raise OSError
         myControlImage = QtGui.QImage(theControlImagePath)
     except OSError:
         myMessage = ('Control image:\n%s\ncould not be loaded.\n'
@@ -314,6 +349,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
 
     #allow pixel deviation of 1 percent
     myPixelCount = myImageWidth * myImageHeight
+    # FIXME (Ole): Use relative error i.e. mismatchcount/total pixels
     if myMismatchCount > theTolerance:
         mySuccessFlag = False
     else:
@@ -332,7 +368,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
                   theTestImagePath,
                   myDifferenceFilePath
                     ))
-    return mySuccessFlag, myDifferenceImage, myMessage
+    return mySuccessFlag, myMessage
 
 
 class RedirectStdStreams(object):
