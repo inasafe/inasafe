@@ -626,7 +626,6 @@ def setupLogger():
     myConsoleHandler.setLevel(logging.ERROR)
 
     myQgisHandler = QgsLogHandler()
-    myFileHandler.setLevel(myDefaultHanderLevel)
 
     # TODO: User opt in before we enable email based logging.
     # Email handler for errors
