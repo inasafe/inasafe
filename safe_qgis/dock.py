@@ -65,6 +65,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InvalidParameterException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
+from safe.common.exceptions import InaSAFEError
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.utilities import (htmlHeader,
@@ -122,8 +123,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IndexError:
             myVersionType = 'final'
         # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %1 %1').arg(
-            myVersion).arg(myVersionType))
+        self.setWindowTitle(self.tr('InaSAFE %1 %2').arg(
+            myVersion, myVersionType))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
@@ -721,8 +722,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Exception if layer is not valid
         """
 
-        myMessage = ('Input argument must be a InaSAFE spatial object. '
-               'I got %s' % type(myEngineImpactLayer))
+        myMessage = self.tr('Input argument must be a InaSAFE spatial object. '
+               'I got %1').arg(str(type(myEngineImpactLayer)))
         if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
             raise Exception(myMessage)
         if not myEngineImpactLayer.is_inasafe_spatial_object:
@@ -743,8 +744,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myQgisLayer.isValid():
             return myQgisLayer
         else:
-            myMessage = self.tr('Loaded impact layer "%s" is not'
-                                ' valid' % myFilename)
+            myMessage = self.tr('Loaded impact layer "%1" is not'
+                                ' valid').arg(myFilename)
             raise Exception(myMessage)
 
     def getHazardLayer(self):
@@ -1016,6 +1017,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
+
+        if self.runner.impactLayer() is None:
+            # Done was emitted, but no impact layer was calculated
+
+            # FIXME (Ole): Write this into utility function
+            myMessage = self.runner.result()
+            myMessage = str(self.tr('No impact layer was calculated. '
+                                    'Error message: %s\n' % str(myMessage)))
+            if self.runner.lastTraceback() is not None:
+                myMessage += '<br/><ul>'
+                for myItem in self.runner.lastTraceback():
+                    # Replace is to tidy up windows paths a little
+                    myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
+                                  + '</li>')
+                myMessage += '</ul>'
+            raise InaSAFEError(myMessage, self.runner.lastException())
+
         try:
             myTitle = self.tr('Aggregating results...')
             myMessage = self.tr('This may take a little while - we are '
@@ -1024,7 +1042,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProgress = 88
             self.showBusy(myTitle, myMessage, myProgress)
             self._aggregateResults()
-            if not self.aggregationErrorSkipPostprocessing:
+            if self.aggregationErrorSkipPostprocessing is None:
                 self._startPostprocessors()
             QtGui.qApp.restoreOverrideCursor()
         except Exception, e:  # pylint: disable=W0703
@@ -1047,7 +1065,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         self.postprocOutput = {}
-        self.aggregationErrorSkipPostprocessing = False
+        self.aggregationErrorSkipPostprocessing = None
         try:
             if (self.postprocLayer is not None and
                 self.lastRunnedFunction != self.getFunctionID()):
@@ -1069,7 +1087,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         LOGGER.debug(self.postprocOutput)
-        if self.aggregationErrorSkipPostprocessing:
+        if self.aggregationErrorSkipPostprocessing is not None:
             myHTML = ('<table class="table table-striped condensed">'
             '    <tr>'
             '       <td>'
@@ -1081,9 +1099,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             '    <tr>'
             '       <td>'
             + self.tr('Due to a problem while processing the results,'
-                      ' the detailed postprocessing report is unavailable'
-                      ' check the log messages (view > panels > Log messages)'
-                      ' for further details') +
+                      ' the detailed postprocessing report is unavailable.'
+                      ' (%1)').arg(self.aggregationErrorSkipPostprocessing) +
             '       </td>'
             '    </tr>'
             '</table>')
@@ -1122,7 +1139,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '    <tr>'
                        '       <td colspan="100%">'
                        '         <strong>'
-                       + self.tr('Detailed %s report' %
+                       + self.tr('Detailed %1 report').arg(
                                  self.tr(proc)) +
                        '         </strong>'
                        '       </td>'
@@ -1252,21 +1269,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myTargetField = self.keywordIO.readKeywords(myQgisImpactLayer,
                 'target_field')
         except KeywordNotFoundException:
-            LOGGER.debug('No "target_field" keyword found in the impact layer '
-                         'keywords. the impact function should define this.'
-                         'Skipping detailed report. Called on'
-                         ' %s' % myQgisImpactLayer.name())
-            self.aggregationErrorSkipPostprocessing = True
+            myMessage = self.tr('No "target_field" keyword found in the impact'
+                                ' layer %1 keywords. The impact function'
+                                ' should define this.').arg(
+                                myQgisImpactLayer.name())
+            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+            self.aggregationErrorSkipPostprocessing = myMessage
             return
         myImpactProvider = myQgisImpactLayer.dataProvider()
         myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
-            LOGGER.debug('No %s found in the impact layer attribute table'
-                         ' the impact function should define this correctly.'
-                         'Skipping detailed report. Called on'
-                         ' %s' % (myTargetField, myQgisImpactLayer.name()))
-            self.aggregationErrorSkipPostprocessing = False
+            myMessage = self.tr('No %1 found in the impact layer %2 attribute '
+                                'table. The impact function should define this'
+                                'correctly.').arg(myTargetField,
+                                myQgisImpactLayer.name())
+            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+            self.aggregationErrorSkipPostprocessing = myMessage
             return
 
         # start data retreival: fetch no geometry and
@@ -1276,8 +1295,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myTotal = 0
 
         if self.doZonalAggregation:
-            LOGGER.debug('Vector aggregation not implemented yet. Called on'
-                           ' %s' % myQgisImpactLayer.name())
+            myMessage = self.tr('Vector aggregation not implemented yet. '
+                                'Called on %1').arg(myQgisImpactLayer.name())
+            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+            self.aggregationErrorSkipPostprocessing = myMessage
             return
         else:
             #loop over all features in impact layer
@@ -1388,7 +1409,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             try:
                 aggrSum = int(round(float(aggrSum)))
             except ValueError:
-                self.aggregationErrorSkipPostprocessing = True
+                myMessage = ('Could not convert')
+                LOGGER.debug(myMessage)
+                self.aggregationErrorSkipPostprocessing = myMessage
                 return
             myGeneralParams = {'population_total': aggrSum}
             for n, p in myPostprocessors.iteritems():
@@ -1544,15 +1567,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMessage = self.runner.result()
 
         # FIXME (Ole): This branch is not covered by the tests
+        # AND now will never be called since postprocess takes care of
         myEngineImpactLayer = self.runner.impactLayer()
 
         if myEngineImpactLayer is None:
             myMessage = str(self.tr('No impact layer was calculated. '
-                   'Error message: %s\n' % str(myMessage)))
+                   'Error message: %1\n').arg(str(myMessage)))
             if self.runner.lastTraceback() is not None:
                 myMessage += '<br/><ul>'
                 for myItem in self.runner.lastTraceback():
-                    # replace is to tidy up windows paths a little
+                    # Replace is to tidy up windows paths a little
                     myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
                                   + '</li>')
                 myMessage += '</ul>'
@@ -1590,8 +1614,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 setRasterStyle(myQgisImpactLayer, myStyle)
 
         else:
-            myMessage = self.tr('Impact layer %s was neither a raster or a '
-                   'vector layer' % myQgisImpactLayer.source())
+            myMessage = self.tr('Impact layer %1 was neither a raster or a '
+                   'vector layer').arg(myQgisImpactLayer.source())
             raise ReadLayerError(myMessage)
         # Add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)

@@ -49,8 +49,7 @@ class HtmlRenderer():
         self.pageDpi = thePageDpi
         # Need to keep state here for loadCompleted signals
         self.webView = None
-        self.htmlPrintedFlag = False
-        self.webView = None
+        self.htmlLoadedFlag = False
 
     def tr(self, theString):
         """We implement this since we do not inherit QObject.
@@ -85,71 +84,22 @@ class HtmlRenderer():
         myBaselineDpi = 150
         myFactor = float(self.pageDpi) / myBaselineDpi
         myWidthPx = mmToPoints(theWidthMM, self.pageDpi)
-        myPage = QtWebKit.QWebPage()
-        myFrame = myPage.mainFrame()
-        myFrame.setTextSizeMultiplier(myFactor)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
 
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        myFrame.setHtml(myHtml)
+        self.loadAndWait(theHtmlSnippet=theHtml)
+        myFrame = self.webView.page().mainFrame()
+        myFrame.setTextSizeMultiplier(myFactor)
 
         mySize = myFrame.contentsSize()
         mySize.setWidth(myWidthPx)
-        myPage.setViewportSize(mySize)
+        self.webView.page().setViewportSize(mySize)
 
         myPixmap = QtGui.QPixmap(mySize)
         myPixmap.fill(QtGui.QColor(255, 255, 255))
         myPainter = QtGui.QPainter(myPixmap)
         myFrame.render(myPainter)
         myPainter.end()
+        myPixmap.save('/tmp/test.png')
         return myPixmap
-
-    def experimentalHtmlToPrinter(self, theHtml, theOutputFilePath=None):
-        """Render an html snippet into the printer, paginating as needed.
-
-        In this one we try to print directly without needing sig/slot
-        completion notification.
-
-        Currently this doesnt work in tests (which is the whole point).
-
-        Args:
-            theHtml: str A string containing an html snippet. It will have a
-                header and footer appended to it in order to make it a valid
-                html document. The header will also apply the bootstrap theme
-                to the document.
-        Returns:
-            None
-
-        Raises:
-            None
-        """
-        LOGGER.info('InaSAFE Map printToPdf called')
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        self.webView = QtWebKit.QWebView()
-        myPage = self.webView.page()
-        myFrame = myPage.mainFrame()
-
-        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        myFrame.setHtml(myHtml)
-
-        self.printer = setupPrinter(theOutputFilePath)
-        self.webView.print_(self.printer)
-
-        return  # self.htmlPrintedFlag
 
     def printToPdf(self, theHtml, theFilename=None):
         """Render an html snippet into the printer, paginating as needed.
@@ -176,58 +126,58 @@ class HtmlRenderer():
         else:
             # We need to cast to python string in case we receive a QString
             myHtmlPdfPath = str(theFilename)
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
 
         self.printer = setupPrinter(myHtmlPdfPath)
+        self.loadAndWait(theHtmlSnippet=theHtml)
+        self.webView.print_(self.printer)
+
+        return myHtmlPdfPath
+
+    def loadAndWait(self, theHtmlPath=None, theHtmlSnippet=None):
+        """Load some html to a web view and wait till it is done."""
+        if theHtmlSnippet:
+            myHeader = htmlHeader()
+            myFooter = htmlFooter()
+            myHtml = myHeader + theHtmlSnippet + myFooter
+        else:
+            myFile = file(theHtmlPath, 'rt')
+            myHtml = myFile.readlines()
+            myFile.close()
 
         self.webView = QtWebKit.QWebView()
-        self.webView.loadFinished.connect(self.readToPrintSlot)
+        myFrame = self.webView.page().mainFrame()
+        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
+                                   QtCore.Qt.ScrollBarAlwaysOff)
+        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
+                                   QtCore.Qt.ScrollBarAlwaysOff)
 
-        self.htmlPrintedFlag = False
-
-        # This is just for debugging
-        myHtmlFilePath = os.path.splitext(myHtmlPdfPath)[0] + '.html'
-        myHtmlFile = file(myHtmlFilePath, 'wt')
-        myHtmlFile.write(myHtml)
-        myHtmlFile.close()
-        LOGGER.debug('Html written to: %s' % myHtmlFilePath)
-
-        self.webView.load(QtCore.QUrl(myHtmlFilePath))
-        #self.webView.setHtml(myHtml)
-        QtCore.QCoreApplication.processEvents()
-
+        self.webView.loadFinished.connect(self.htmlLoadedSlot)
+        self.webView.setHtml(myHtml)
+        self.htmlLoadedFlag = False
         myTimeOut = 20
         myCounter = 0
         mySleepPeriod = 1
-        while not self.htmlPrintedFlag and myCounter < myTimeOut:
+        while not self.htmlLoadedFlag and myCounter < myTimeOut:
             # Block until the event loop is done printing the page
             myCounter += 1
             time.sleep(mySleepPeriod)
             QtCore.QCoreApplication.processEvents()
 
-        if not self.htmlPrintedFlag:
-            # Bodge for if signal isnt received after 10s - doesrnt really work
-            # TODO get web page printing in unit test context where there is
-            # no event loop....TS
-            LOGGER.error('Failed to make a print out, forcing')
-            #self.readToPrintSlot()
-        return myHtmlPdfPath
+        if not self.htmlLoadedFlag:
+            LOGGER.error('Failed to load html')
 
-    def readToPrintSlot(self):
-        """Slot called when the page is loaded and ready for printing.
+    def htmlLoadedSlot(self):
+        """Slot called when the page is loaded.
 
         Args: None
         Returns: None
         Raises: None
         """
-        self.htmlPrintedFlag = True
-        LOGGER.debug('readToPrintSlot slot called')
-        self.webView.print_(self.printer)
+        self.htmlLoadedFlag = True
+        LOGGER.debug('htmlLoadedSlot slot called')
         QtCore.QObject.disconnect(self.webView,
                                   QtCore.SIGNAL("loadFinished(bool)"),
-                                  self.readToPrintSlot)
+                                  self.htmlLoadedSlot)
 
     def printImpactTable(self, theLayer, theFilename=None):
         """High level table generator to print layer keywords.
