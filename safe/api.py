@@ -33,7 +33,9 @@ from safe.impact_functions import get_admissible_plugins
 from safe.engine.core import calculate_impact
 
 from safe.common.numerics import nanallclose
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
+from safe.common.exceptions import (BoundingBoxError,
+                                    ReadLayerError,
+                                    InaSAFEError)
 from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,

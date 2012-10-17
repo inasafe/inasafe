@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/safe_qgis/dialog_configurable_impact_functions.ui" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/safe_qgis/help_base.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/inasafe.pro" afterPath="$PROJECT_DIR$/safe_qgis/inasafe.pro" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/api.py" afterPath="$PROJECT_DIR$/safe/api.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/dock.py" afterPath="$PROJECT_DIR$/safe_qgis/dock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" afterPath="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/options_dialog.py" afterPath="$PROJECT_DIR$/safe_qgis/options_dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/safe_interface.py" afterPath="$PROJECT_DIR$/safe_qgis/safe_interface.py" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,10 +39,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="test_safe_translations.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/test_safe_translations.py">
+      <file leaf-file-name="options_dialog.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/options_dialog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="57" selection-start="3608" selection-end="3608" vertical-scroll-proportion="0.13181019">
+            <state line="61" column="0" selection-start="1954" selection-end="2044" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dock.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="114" column="0" selection-start="4343" selection-end="4443" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="help.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/help.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="23" column="0" selection-start="685" selection-end="685" vertical-scroll-proportion="-1.2550143">
               <folding />
             </state>
           </provider>
@@ -57,10 +79,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$USER_HOME$/.PyCharm20/system/python_stubs/-1247972723/PyQt4/QtGui.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/test_utilities.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/map.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/utilities.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_html_renderer.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_map_legend.py" />
         <option value="$PROJECT_DIR$/safe_qgis/html_renderer.py" />
@@ -70,9 +88,13 @@
         <option value="$PROJECT_DIR$/safe_qgis/function_options_dialog_base.py" />
         <option value="$PROJECT_DIR$/safe_qgis/function_options_dialog.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_safe_translations.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
         <option value="$PROJECT_DIR$/safe_qgis/inasafe.pro" />
         <option value="$PROJECT_DIR$/safe_qgis/help.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/safe_interface.py" />
+        <option value="$PROJECT_DIR$/safe/api.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/options_dialog.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
       </list>
     </option>
   </component>
@@ -152,74 +174,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="safe_qgis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="safe" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="safe" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="impact_functions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="safe" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="engine" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="safe" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -639,10 +593,10 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3685092" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3685092" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27693474" sideWeight="0.28978226" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27693474" sideWeight="0.69849247" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27693474" sideWeight="0.18257956" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27693474" sideWeight="0.43718594" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3400335" sideWeight="0.6616085" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43729904" sideWeight="0.4165402" order="11" side_tool="true" content_ui="tabs" />
@@ -747,44 +701,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/docs/source/user-docs/changelog.rst">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="17" selection-start="378" selection-end="378" vertical-scroll-proportion="0.6168831" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/test_map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="61" selection-start="4572" selection-end="4572" vertical-scroll-proportion="0.8224299" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/keywords_dialog_base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/keywords_dialog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="47" selection-start="807" selection-end="807" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/update-strings.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/Makefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.4971857">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/inasafe.pro">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="0" selection-start="560" selection-end="560" vertical-scroll-proportion="0.6344464">
@@ -834,16 +750,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/help.py">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/safe_interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="0" selection-start="685" selection-end="685" vertical-scroll-proportion="0.50087875">
+        <state line="31" column="13" selection-start="983" selection-end="986" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+    <entry file="file://$PROJECT_DIR$/safe/api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="654" column="11" selection-start="24217" selection-end="24217" vertical-scroll-proportion="-43.411247">
+        <state line="37" column="49" selection-start="1452" selection-end="1452" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/keywords_dialog_base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/keywords_dialog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="0" selection-start="2343" selection-end="2457" vertical-scroll-proportion="0.20035149">
           <folding />
         </state>
       </provider>
@@ -851,6 +781,27 @@
     <entry file="file://$PROJECT_DIR$/safe_qgis/test_safe_translations.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="99" column="57" selection-start="3608" selection-end="3608" vertical-scroll-proportion="0.13181019">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/options_dialog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="0" selection-start="1954" selection-end="2044" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="0" selection-start="4343" selection-end="4443" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/help.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="0" selection-start="685" selection-end="685" vertical-scroll-proportion="-1.2550143">
           <folding />
         </state>
       </provider>

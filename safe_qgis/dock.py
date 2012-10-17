@@ -112,8 +112,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IndexError:
             myVersionType = 'final'
         # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %s %s' % (
-            myVersion, myVersionType)))
+        self.setWindowTitle(self.tr('InaSAFE %1 %1').arg(
+            myVersion).arg(myVersionType))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template

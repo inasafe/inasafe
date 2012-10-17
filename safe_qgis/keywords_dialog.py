@@ -32,7 +32,8 @@ from safe_qgis.utilities import getExceptionWithStacktrace
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
-from safe.common.exceptions import InaSAFEError
+from safe_qgis.safe_interface import InaSAFEError, get_version
+
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -66,7 +67,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-                            'InaSAFE %s Keywords Editor') % __version__)
+                            'InaSAFE %1 Keywords Editor').arg(get_version()))
         self.keywordIO = KeywordIO()
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
