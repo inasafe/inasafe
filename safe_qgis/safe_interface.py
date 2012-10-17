@@ -45,6 +45,8 @@ from safe.api import (get_admissible_plugins,
                       BoundingBoxError,
                       ReadLayerError,
                       get_plugins, get_version)
+
+from safe.defaults import DEFAULTS
 # pylint: enable=W0611
 
 # InaSAFE GUI specific functionality

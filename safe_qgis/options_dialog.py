@@ -24,7 +24,7 @@ from PyQt4.QtCore import pyqtSignature
 from safe_qgis.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.help import Help
 from safe_qgis.keyword_io import KeywordIO
-from safe.defaults import DEFAULTS
+from safe_qgis.safe_interface import DEFAULTS
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
