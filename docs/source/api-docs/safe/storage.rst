@@ -10,6 +10,7 @@ Package::safe.storage
    storage/utilities_test
    storage/clipping
    storage/layer
+   storage/geometry
    storage/test_vector
    storage/test_utilities
    storage/raster
