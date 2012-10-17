@@ -1417,6 +1417,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
                 try:
+                    #look if params are available for this postprocessor
                     myParams.update(
                         self.functionParams['postprocessors'][n]['params'])
                 except KeyError:
