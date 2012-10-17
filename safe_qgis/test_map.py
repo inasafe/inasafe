@@ -93,10 +93,10 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.composeMap()
-        myImagePath, myImage, myTargetArea = myMap.renderComposition()
+        myImagePath, myControlImage, myTargetArea = myMap.renderComposition()
         LOGGER.debug(myImagePath)
 
-        assert myImage is not None
+        assert myControlImage is not None
 
         myDimensions = [myTargetArea.left(),
                         myTargetArea.top(),
@@ -109,15 +109,35 @@ class MapTest(unittest.TestCase):
 
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
-        # Note these hashes will be affected every time get_version
-        # changes due to the version being embeded in the pdf
+
+        myAcceptibleImages = []
         myControlImage = os.path.join(CONTROL_IMAGE_DIR,
                                       'renderComposition.png')
-        myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, _, myMessage = compareImages(myControlImage,
+        myAcceptibleImages.append(myControlImage)
+
+        # Also test with variant from the jenkins server
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'renderComposition-variantJenkins.png')
+        myAcceptibleImages.append(myControlImage)
+
+        # Also test with variant from the Shiva
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'renderComposition-variantUB11.10-64.png')
+        myAcceptibleImages.append(myControlImage)
+
+        myTolerance = 1000  # To allow for version number changes in disclaimer
+        myResults = []
+        myMessages = ''
+        myPassFlag = False
+        for myControlImage in myAcceptibleImages:
+            myFlag, _, myMessage = compareImages(myControlImage,
                                         myImagePath,
                                         myTolerance)
-        assert myFlag == True, myMessage
+            myMessages += myMessage
+            if myFlag:
+                break
+
+        assert myFlag == True, myMessages
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
