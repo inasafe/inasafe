@@ -433,6 +433,33 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
+    def _toggleCboAggregation(self):
+        """Helper function to toggle the aggregation combo depending on the
+        current dock status
+
+        Args:
+           None.
+        Returns:
+           None
+        Raises:
+           no
+        """
+        #FIXME (MB) remove hazardlayer and exposure layer type check when
+        # vector aggregation is supported
+        selectedHazardLayer = self.getHazardLayer()
+        selectedExposureLayer = self.getExposureLayer()
+
+        #more than 1 because No aggregation is always there
+        if (self.cboAggregation.count() > 1 and
+            selectedHazardLayer is not None and
+            selectedExposureLayer is not None and
+            selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
+            selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
+            self.cboAggregation.setEnabled(True)
+        else:
+            self.cboAggregation.setCurrentIndex(0)
+            self.cboAggregation.setEnabled(False)
+
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
         form is valid and disable it if it is not.
@@ -809,7 +836,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
 
-        Raises: Propogates any error from :func:optimalClip()
+        Raises: Propa
+        gates any error from :func:optimalClip()
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
@@ -987,29 +1015,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                    context=myContext)
             self.displayHtml(myMessage)
 
-    def completed(self):
-        """Slot activated when the process is done."""
-        #save the ID of the function that just runned
-
-        self.lastUsedFunction = self.getFunctionID()
-
-        # Try to run completion code
-        try:
-            myReport = self._completed()
-        except Exception, e:  # pylint: disable=W0703
-
-            # FIXME (Ole): This branch is not covered by the tests
-
-            # Display message and traceback
-            myMessage = getExceptionWithStacktrace(e, html=True)
-            self.displayHtml(myMessage)
-        else:
-            # On success, display generated report
-            self.displayHtml(myReport)
-        self.saveState()
-        # Hide hour glass
-        self.hideBusy()
-
     def postprocess(self):
         """
         Called on self.runner SIGNAL('done()') starts all postprocessing steps
@@ -1020,19 +1025,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if self.runner.impactLayer() is None:
             # Done was emitted, but no impact layer was calculated
-
-            # FIXME (Ole): Write this into utility function
-            myMessage = self.runner.result()
+            myResult = self.runner.result()
             myMessage = str(self.tr('No impact layer was calculated. '
-                                    'Error message: %s\n' % str(myMessage)))
-            if self.runner.lastTraceback() is not None:
-                myMessage += '<br/><ul>'
-                for myItem in self.runner.lastTraceback():
-                    # Replace is to tidy up windows paths a little
-                    myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
-                                  + '</li>')
-                myMessage += '</ul>'
-            raise InaSAFEError(myMessage, self.runner.lastException())
+                                    'Error message: %s\n' % str(myResult)))
+            myException = self.runner.lastException()
+            if myException is not None:
+                myContext = self.tr('An exception occurred when calculating '
+                                    'the results')
+                myMessage = getExceptionWithStacktrace(myException,
+                    html=True,
+                    context=myContext)
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            self.displayHtml(myMessage)
+            return
 
         try:
             myTitle = self.tr('Aggregating results...')
@@ -1515,32 +1521,28 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 return True
 
-    def _toggleCboAggregation(self):
-        """Helper function to toggle the aggregation combo depending on the
-        current dock status
+    def completed(self):
+        """Slot activated when the process is done."""
+        #save the ID of the function that just runned
 
-        Args:
-           None.
-        Returns:
-           None
-        Raises:
-           no
-        """
-        #FIXME (MB) remove hazardlayer and exposure layer type check when
-        # vector aggregation is supported
-        selectedHazardLayer = self.getHazardLayer()
-        selectedExposureLayer = self.getExposureLayer()
+        self.lastUsedFunction = self.getFunctionID()
 
-        #more than 1 because No aggregation is always there
-        if (self.cboAggregation.count() > 1 and
-            selectedHazardLayer is not None and
-            selectedExposureLayer is not None and
-            selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
-            selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
-            self.cboAggregation.setEnabled(True)
+        # Try to run completion code
+        try:
+            myReport = self._completed()
+        except Exception, e:  # pylint: disable=W0703
+
+            # FIXME (Ole): This branch is not covered by the tests
+
+            # Display message and traceback
+            myMessage = getExceptionWithStacktrace(e, html=True)
+            self.displayHtml(myMessage)
         else:
-            self.cboAggregation.setCurrentIndex(0)
-            self.cboAggregation.setEnabled(False)
+            # On success, display generated report
+            self.displayHtml(myReport)
+        self.saveState()
+        # Hide hour glass
+        self.hideBusy()
 
     def _completed(self):
         """Helper function for slot activated when the process is done.
