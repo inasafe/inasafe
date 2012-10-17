@@ -1600,27 +1600,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 99
         self.showBusy(myTitle, myMessage, myProgress)
 
-        # FIXME (Ole): Marco and Ole saw situation where self.runner was None.
-        # Should be fixed (MB) was a previous exception not bubbling
-        # Could not be reproduced, but maybe an idea to put an error
-        # message in that case
         myMessage = self.runner.result()
 
-        # FIXME (Ole): This branch is not covered by the tests
-        # AND now will never be called since postprocess takes care of
         myEngineImpactLayer = self.runner.impactLayer()
-
-        if myEngineImpactLayer is None:
-            myMessage = str(self.tr('No impact layer was calculated. '
-                   'Error message: %1\n').arg(str(myMessage)))
-            if self.runner.lastTraceback() is not None:
-                myMessage += '<br/><ul>'
-                for myItem in self.runner.lastTraceback():
-                    # Replace is to tidy up windows paths a little
-                    myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
-                                  + '</li>')
-                myMessage += '</ul>'
-            raise Exception(myMessage, self.runner.lastException())
 
         # Load impact layer into QGIS
         myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
