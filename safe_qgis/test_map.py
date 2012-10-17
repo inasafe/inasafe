@@ -114,12 +114,18 @@ class MapTest(unittest.TestCase):
         myControlImage = os.path.join(CONTROL_IMAGE_DIR,
                                       'renderComposition.png')
         myAcceptibleImages.append(myControlImage)
+
         # Also test with variant from the jenkins server
         myControlImage = os.path.join(CONTROL_IMAGE_DIR,
                                       'renderComposition-variantJenkins.png')
         myAcceptibleImages.append(myControlImage)
 
-        myTolerance = 1000  # to allow for version number changes in disclaimer
+        # Also test with variant from the Shiva
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'renderComposition-variantUB11.10-64.png')
+        myAcceptibleImages.append(myControlImage)
+
+        myTolerance = 1000  # To allow for version number changes in disclaimer
         myResults = []
         myMessages = ''
         myPassFlag = False

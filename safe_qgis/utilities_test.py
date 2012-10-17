@@ -314,6 +314,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
 
     #allow pixel deviation of 1 percent
     myPixelCount = myImageWidth * myImageHeight
+    # FIXME (Ole): Use relative error i.e. mismatchcount/total pixels
     if myMismatchCount > theTolerance:
         mySuccessFlag = False
     else:
