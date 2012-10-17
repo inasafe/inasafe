@@ -15,6 +15,7 @@ from safe.postprocessors.abstract_postprocessor import (
 
 from safe.common.utilities import ugettext as tr
 
+
 class GenderPostprocessor(AbstractPostprocessor):
     """
     Postprocessor that calculates gender related statistics.

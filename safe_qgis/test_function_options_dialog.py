@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from PyQt4 import QtGui
 
 __author__ = 'misugijunz@gmail.com'
 __version__ = '0.5.0'

@@ -45,8 +45,8 @@ def get_post_processors(requested_postprocessors):
             }
             with 'PostprocessorName': {'on': True} being the minimum needed to
             activate a postprocessor.
-            If asked for unimplemented postprocessors, the factory will just skip
-            it returning the valid ones
+            If asked for unimplemented postprocessors, the factory will just
+            skip it returning the valid ones
     Returns:
         dict of postprocessors instances e.g.
             {'Gender':GenderPostprocessors instance}

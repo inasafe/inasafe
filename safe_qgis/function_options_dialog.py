@@ -67,7 +67,6 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.keys = params.keys()
         for key in self.keys:
             self._addFormItem(key, params[key])
-        self.activeFunction
 
     def _addFormItem(self, theParameterKey, theParameterValue):
         """Add a new form element dynamically from a key value pair.
