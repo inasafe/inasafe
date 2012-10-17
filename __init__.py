@@ -20,37 +20,46 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
 
+#
+# Note: Don't use function docstrings more than one line - they 
+#       break the plugins.qgis.org validator when uploading! 
+# 
+
 
 def name():
     """A user friendly name for the plugin."""
     return 'InaSAFE'
 
 
+def qgisMinimumVersion():
+    """Minimum version of QGIS needed to run this plugin."""
+    return '1.7'
+
+
 def description():
     """A one line description for the plugin."""
-    return ('InaSAFE Disaster Scenario Assessment for Emergencies'
-            ' tool developed by BNPB, AusAID, World Bank')
+    return ('InaSAFE Disaster Scenario Assessment for Emergencies '
+            'tool developed by BNPB, AusAID, World Bank')
 
 
 def version():
     """Version of the plugin."""
     return 'Version 0.5.2'
 
+
+def author():
+    """Author ."""
+    return 'Australia Indonesia Facility for Disaster Reduction'
+
+
 def email():
     """Email contact details."""
     return 'ole.moller.nielsen@gmail.com'
 
-def qgisMinimumVersion():
-    """Minimum version of QGIS needed to run this plugin
-
-       This is currently set to 1.7
-    """
-    return '1.7'
-
 
 def icon():
     """Icon path for the plugin - metadata.txt will override this"""
-    return os.path.join(os.path.dirname(__file__), 'icon.png')
+    return 'icon.png'
 
 
 def classFactory(iface):
