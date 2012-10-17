@@ -20,6 +20,9 @@ from safe.common.utilities import (get_defaults,
 
 class AgePostprocessor(AbstractPostprocessor):
     """
+    Postprocessor that calculates age related statistics.
+
+    Default ratio are taken from:
     https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
     Age structure:
     0-14 years: 26.3% (male 944,987,919/female 884,268,378)
@@ -98,24 +101,71 @@ class AgePostprocessor(AbstractPostprocessor):
         self.population_total = None
 
     def _calculate_total(self):
+        """Indicator that shows total population.
+
+        this indicator reports the total population
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Total')
         myResult = self.population_total
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_youth(self):
+        """Indicator that shows population below 15 years old.
+
+        this indicator reports the amount of young population according to the
+        set youth_ratio
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Youth count')
         myResult = self.population_total * self.youth_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_adult(self):
+        """Indicator that shows population between 15 and 64 years old.
+
+        this indicator reports the amount of young population according to the
+        set adult_ratio
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Adult count')
         myResult = self.population_total * self.adult_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_elder(self):
+        """Indicator that shows population above 64 years old.
+
+        this indicator reports the amount of young population according to the
+        set elder_ratio
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
         myName = tr('Elderly count')
         myResult = self.population_total * self.elder_ratio
         myResult = int(round(myResult))
