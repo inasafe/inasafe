@@ -70,25 +70,25 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # in the combo entries.
         # .. seealso:: http://www.voidspace.org.uk/python/odict.html
         self.standardExposureList = OrderedDict([('population',
-                                                  self.tr('population')),
-                                                 ('structure', self.tr('structure')),
-                                                 ('roads', self.tr('roads')),
-                                                 ('Not Set', self.tr('Not Set'))])
+                                      self.tr('population')),
+                                     ('structure', self.tr('structure')),
+                                     ('roads', self.tr('roads')),
+                                     ('Not Set', self.tr('Not Set'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
-                                                self.tr('earthquake [MMI]')),
-                                               ('tsunami [m]', self.tr('tsunami [m]')),
-                                               ('tsunami [wet/dry]',
-                                                self.tr('tsunami [wet/dry]')),
-                                               ('tsunami [feet]',
-                                                self.tr('tsunami [feet]')),
-                                               ('flood [m]', self.tr('flood [m]')),
-                                               ('flood [wet/dry]',
-                                                self.tr('flood [wet/dry]')),
-                                               ('flood [feet]', self.tr('flood [feet]')),
-                                               ('tephra [kg2/m2]',
-                                                self.tr('tephra [kg2/m2]')),
-                                               ('volcano', self.tr('volcano')),
-                                               ('Not Set', self.tr('Not Set'))])
+                                    self.tr('earthquake [MMI]')),
+                                   ('tsunami [m]', self.tr('tsunami [m]')),
+                                   ('tsunami [wet/dry]',
+                                    self.tr('tsunami [wet/dry]')),
+                                   ('tsunami [feet]',
+                                    self.tr('tsunami [feet]')),
+                                   ('flood [m]', self.tr('flood [m]')),
+                                   ('flood [wet/dry]',
+                                    self.tr('flood [wet/dry]')),
+                                   ('flood [feet]', self.tr('flood [feet]')),
+                                   ('tephra [kg2/m2]',
+                                    self.tr('tephra [kg2/m2]')),
+                                   ('volcano', self.tr('volcano')),
+                                   ('Not Set', self.tr('Not Set'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -155,8 +155,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             currentKeyword = self.getValueForKey(
                 self.defaults['AGGR_ATTR_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
-                                                               [QtCore.QVariant.Int, QtCore.QVariant.String],
-                                                               currentKeyword)
+                               [QtCore.QVariant.Int, QtCore.QVariant.String],
+                               currentKeyword)
             theBox.addItems(fields)
             if attributePosition is None:
                 theBox.setCurrentIndex(0)
@@ -175,8 +175,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             currentKeyword = self.getValueForKey(
                 self.defaults['FEM_RATIO_ATTR_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
-                                                               [QtCore.QVariant.Double],
-                                                               currentKeyword)
+                                               [QtCore.QVariant.Double],
+                                               currentKeyword)
             fields.insert(0, self.tr('Use default'))
             fields.insert(1, self.tr('Don\'t use'))
             theBox.addItems(fields)
@@ -800,8 +800,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                          theKeywords=myKeywords)
         except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
-                                      ((self.tr('An error was encountered when saving the keywords:\n'
-                                                '%s' % str(getExceptionWithStacktrace(e))))))
+              ((self.tr('An error was encountered when saving the keywords:\n'
+                        '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:
             self.dock.getLayers()
         self.done(QtGui.QDialog.Accepted)

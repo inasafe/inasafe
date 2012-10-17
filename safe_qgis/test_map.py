@@ -114,7 +114,7 @@ class MapTest(unittest.TestCase):
         myControlImage = os.path.join(CONTROL_IMAGE_DIR,
                                       'renderComposition.png')
         myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, myPath, myMessage = compareImages(myControlImage,
+        myFlag, _, myMessage = compareImages(myControlImage,
                                         myImagePath,
                                         myTolerance)
         assert myFlag == True, myMessage

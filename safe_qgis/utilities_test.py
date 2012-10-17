@@ -32,6 +32,7 @@ GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__), 'test_images')
 
+
 def assertHashesForFile(theHashes, theFilename):
     """Assert that a files has matches one of a list of expected hashes"""
     myHash = hashForFile(theFilename)
@@ -258,7 +259,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
         if not os.path.exists(theTestImagePath):
             raise
         myTestImage = QtGui.QImage(theTestImagePath)
-    except:
+    except OSError:
         myMessage = 'Test image:\n%s\ncould not be loaded' % theTestImagePath
         return False, None, myMessage
 
@@ -266,7 +267,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
         if not os.path.exists(theControlImagePath):
             raise
         myControlImage = QtGui.QImage(theControlImagePath)
-    except:
+    except OSError:
         myMessage = ('Control image:\n%s\ncould not be loaded.\n'
                      'Test image is:\n%s\n' % (
                          theControlImagePath,
@@ -285,33 +286,34 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
                      (theTolerance,
                       theControlImagePath,
                       theTestImagePath
-                         ))
+                      ))
         return False, None, myMessage
 
     myImageWidth = myControlImage.width()
     myImageHeight = myControlImage.height()
     myMismatchCount = 0
 
-    myDifferenceImage = QtGui.QImage(
-        myImageWidth, myImageHeight, QtGui.QImage.Format_ARGB32_Premultiplied )
-    myDifferenceImage.fill( QtGui.qRgb( 152, 219, 249 ) )
+    myDifferenceImage = QtGui.QImage(myImageWidth,
+                                     myImageHeight,
+                                     QtGui.QImage.Format_ARGB32_Premultiplied)
+    myDifferenceImage.fill(QtGui.qRgb(152, 219, 249))
 
     myControlPixel = QtGui.QColor().rgb()
     myTestPixel = QtGui.QColor().rgb()
-    for myY in range( myImageHeight ):
-        for myX in range( myImageWidth ):
-            myControlPixel = myControlImage.pixel( myX, myY )
-            myTestPixel = myTestImage.pixel( myX, myY )
-            if ( myControlPixel != myTestPixel ):
+    for myY in range(myImageHeight):
+        for myX in range(myImageWidth):
+            myControlPixel = myControlImage.pixel(myX, myY)
+            myTestPixel = myTestImage.pixel(myX, myY)
+            if (myControlPixel != myTestPixel):
                 myMismatchCount = myMismatchCount + 1
-                myDifferenceImage.setPixel( myX, myY, QtGui.qRgb( 255, 0, 0 ) )
+                myDifferenceImage.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
     myDifferenceFilePath = unique_filename(prefix='difference',
                                            suffix='.png',
                                            dir=temp_dir('test'))
-    myDifferenceImage.save( myDifferenceFilePath, "PNG" )
+    myDifferenceImage.save(myDifferenceFilePath, "PNG")
 
     #allow pixel deviation of 1 percent
-    myPixelCount = myImageWidth * myImageHeight;
+    myPixelCount = myImageWidth * myImageHeight
     if myMismatchCount > theTolerance:
         mySuccessFlag = False
     else:
@@ -329,7 +331,7 @@ def compareImages(theControlImagePath, theTestImagePath, theTolerance):
                   theControlImagePath,
                   theTestImagePath,
                   myDifferenceFilePath
-                     ))
+                    ))
     return mySuccessFlag, myDifferenceImage, myMessage
 
 

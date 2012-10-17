@@ -17,7 +17,6 @@ __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
 import time
 import logging
 
