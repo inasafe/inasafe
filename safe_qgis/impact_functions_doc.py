@@ -51,7 +51,7 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
                             'InaSAFE %s Impact Functions Doc' % __version__))
-        self.no_filter = 'No Filter'
+        self.no_filter = self.tr('No Filter')
         if dict_filter is None:
             dict_filter = {'id': [],
                            'title': [],

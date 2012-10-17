@@ -18,8 +18,9 @@ from qgis_interface import QgisInterface
 
 # For testing and demoing
 from safe.common.testing import TESTDATA
-from safe_qgis.safe_interface import readKeywordsFromFile
-
+from safe_qgis.safe_interface import (readKeywordsFromFile,
+                                      temp_dir,
+                                      unique_filename)
 LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
@@ -28,6 +29,8 @@ PARENT = None
 IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
+DEVNULL = open(os.devnull, 'w')
+CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__), 'test_images')
 
 
 def assertHashesForFile(theHashes, theFilename):
@@ -232,7 +235,105 @@ def setGeoExtent(theBoundingBox):
     CANVAS.setExtent(myRect)
 
 
-DEVNULL = open(os.devnull, 'w')
+def compareImages(theControlImagePath, theTestImagePath, theTolerance):
+    """Compare two images to produce a difference image using a tolerance.
+
+    Args:
+        * theControlImagePath: The image representing expected output
+        * theTestImagePath: The Image being checked (must have same dimensions
+            as the control image.
+        * theTolerance: How many pixels may be different between the
+            two images.
+
+    Returns:
+        (bool, str, str) where:
+        * bool is success or failure indicator
+        * str is the file path of the resulting difference image
+        * str is a message providing analysis comparison notes
+
+    Raises:
+        None
+    """
+
+    try:
+        if not os.path.exists(theTestImagePath):
+            raise
+        myTestImage = QtGui.QImage(theTestImagePath)
+    except OSError:
+        myMessage = 'Test image:\n%s\ncould not be loaded' % theTestImagePath
+        return False, None, myMessage
+
+    try:
+        if not os.path.exists(theControlImagePath):
+            raise
+        myControlImage = QtGui.QImage(theControlImagePath)
+    except OSError:
+        myMessage = ('Control image:\n%s\ncould not be loaded.\n'
+                     'Test image is:\n%s\n' % (
+                         theControlImagePath,
+                         theTestImagePath))
+        return False, None, myMessage
+
+    if (myControlImage.width() != myTestImage.width()
+        or myControlImage.height() != myTestImage.height()):
+        myMessage = ('Control and test images are different sizes.\n'
+                     'Control image   : %s\n'
+                     'Test image      : %s\n'
+                     'Difference image: %s\n'
+                     'If this test has failed look at the above images '
+                     'to try to determine what may have change or '
+                     'adjust the tolerance if needed.' %
+                     (theTolerance,
+                      theControlImagePath,
+                      theTestImagePath
+                      ))
+        return False, None, myMessage
+
+    myImageWidth = myControlImage.width()
+    myImageHeight = myControlImage.height()
+    myMismatchCount = 0
+
+    myDifferenceImage = QtGui.QImage(myImageWidth,
+                                     myImageHeight,
+                                     QtGui.QImage.Format_ARGB32_Premultiplied)
+    myDifferenceImage.fill(QtGui.qRgb(152, 219, 249))
+
+    myControlPixel = QtGui.QColor().rgb()
+    myTestPixel = QtGui.QColor().rgb()
+    for myY in range(myImageHeight):
+        for myX in range(myImageWidth):
+            myControlPixel = myControlImage.pixel(myX, myY)
+            myTestPixel = myTestImage.pixel(myX, myY)
+            if (myControlPixel != myTestPixel):
+                myMismatchCount = myMismatchCount + 1
+                myDifferenceImage.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
+    myDifferenceFilePath = unique_filename(prefix='difference',
+                                           suffix='.png',
+                                           dir=temp_dir('test'))
+    myDifferenceImage.save(myDifferenceFilePath, "PNG")
+
+    #allow pixel deviation of 1 percent
+    myPixelCount = myImageWidth * myImageHeight
+    # FIXME (Ole): Use relative error i.e. mismatchcount/total pixels
+    if myMismatchCount > theTolerance:
+        mySuccessFlag = False
+    else:
+        mySuccessFlag = True
+    myMessage = ('%i of %i pixels are mismatched. Tolerance is %i.\n'
+                 'Control image   : %s\n'
+                 'Test image      : %s\n'
+                 'Difference image: %s\n'
+                 'If this test has failed look at the above images '
+                 'to try to determine what may have change or '
+                 'adjust the tolerance if needed.' %
+                 (myMismatchCount,
+                  myPixelCount,
+                  theTolerance,
+                  theControlImagePath,
+                  theTestImagePath,
+                  myDifferenceFilePath
+                    ))
+    return mySuccessFlag, myDifferenceImage, myMessage
 
 
 class RedirectStdStreams(object):

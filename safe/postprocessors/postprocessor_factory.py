@@ -28,24 +28,28 @@ AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age']
 
 def get_post_processors(requested_postprocessors):
     """
-    Creates a dictionary of applicable postprocessors
-    :param requested_postprocessors: dictionary of requested
-        postprocessors such as
-        {
-        'Gender': {'on': True},
-        'Age': {'on': True,
-                'params': {
-                    'youth_ratio': defaults['YOUTH_RATIO'],
-                    'adult_ratio': defaults['ADULT_RATIO'],
-                    'elder_ratio': defaults['ELDER_RATIO']
-                    }
-                }
-        }
+    Creates a dictionary of applicable postprocessor instances
 
-        with 'PostprocessorName': {'on': True} being the minimum needed to
-        activate a postprocessor
-    :return: dict of postprocessors instances
-        e.g. {'Gender':GenderPostprocessors instance}
+    Args:
+        * requested_postprocessors: dictionary of requested
+            postprocessors such as
+            {
+            'Gender': {'on': True},
+            'Age': {'on': True,
+                    'params': {
+                        'youth_ratio': defaults['YOUTH_RATIO'],
+                        'adult_ratio': defaults['ADULT_RATIO'],
+                        'elder_ratio': defaults['ELDER_RATIO']
+                        }
+                    }
+            }
+            with 'PostprocessorName': {'on': True} being the minimum needed to
+            activate a postprocessor.
+            If asked for unimplemented postprocessors, the factory will just skip
+            it returning the valid ones
+    Returns:
+        dict of postprocessors instances e.g.
+            {'Gender':GenderPostprocessors instance}
     """
 
     postprocessor_instances = {}
@@ -55,17 +59,20 @@ def get_post_processors(requested_postprocessors):
 
     for name, values in requested_postprocessors.iteritems():
         constr_id = name + 'Postprocessor'
-        if values['on']:
-            if name in AVAILABLE_POSTPTOCESSORS:
-                #http://stackoverflow.com/a/554462
-                constr = globals()[constr_id]
-                instance = constr()
-                postprocessor_instances[name] = instance
-            else:
-                LOGGER.debug(constr_id + ' is not a valid Postprocessor,'
-                                         ' skipping it')
+        try:
+            if values['on']:
+                if name in AVAILABLE_POSTPTOCESSORS:
+                    #http://stackoverflow.com/a/554462
+                    constr = globals()[constr_id]
+                    instance = constr()
+                    postprocessor_instances[name] = instance
+                else:
+                    LOGGER.debug(constr_id + ' is not a valid Postprocessor,'
+                                             ' skipping it')
 
-        else:
-            LOGGER.debug(constr_id + ' user disabled, skipping it')
+            else:
+                LOGGER.debug(constr_id + ' user disabled, skipping it')
+        except KeyError:
+            LOGGER.debug(constr_id + ' has no "on" key, skipping it')
 
     return postprocessor_instances

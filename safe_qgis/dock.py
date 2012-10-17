@@ -1418,6 +1418,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
                 try:
+                    #look if params are available for this postprocessor
                     myParams.update(
                         self.functionParams['postprocessors'][n]['params'])
                 except KeyError:
@@ -1632,26 +1633,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #append postprocessing report
         myReport += self.getPostprocOutput()
 
-        # append properties of the result layer
-        myReport += ('<table class="table table-striped condensed'
-                        ' bordered-table">')
-        # Add this keyword to report
-        myReport += ('<tr>'
-                        '<th>' + self.tr('Time stamp')
-                        + '</th>'
-                        '</tr>'
-                        '<tr>'
-                        '<td>' + str(myKeywords['time_stamp']) + '</td>'
-                        '</tr>')
-        myReport += ('<tr>'
-                        '<th>' + self.tr('Elapsed time')
-                        + '</th>'
-                        '</tr>'
-                        '<tr>'
-                        '<td>' + str(myKeywords['elapsed_time'])
-                        + ' ' + self.tr('seconds') + '</td>'
-                        '</tr>')
-        myReport += '</table>'
         # Return text to display in report panel
         return myReport
 
@@ -1996,23 +1977,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             # append properties of the result layer
                     myReport += ('<table class="table table-striped condensed'
                                     ' bordered-table">')
-                    # Add this keyword to report
-                    myReport += ('<tr>'
-                            '<th>' + self.tr('Time stamp')
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + str(myKeywords['time_stamp']) + '</td>'
-                            '</tr>')
-                    myReport += ('<tr>'
-                            '<th>' + self.tr('Elapsed time')
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + str(myKeywords['elapsed_time'])
-                            + ' ' + self.tr('seconds') + '</td>'
-                            '</tr>')
-                    myReport += '</table>'
                     self.pbnPrint.setEnabled(True)
 
                 else:
@@ -2171,13 +2135,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.displayHtml(myReport)
 
         myStatus = self.tr('Your PDF was created....opening using '
-                           'the default PDF viewer on your system.>'
-                           'The generated pdfs were saved as:%(br)s'
-                           '%(map)s%(br)s and %(br)s%(table)s'
-                           % {
-            'br': '<br>',
-            'map': myMapPdfPath,
-            'table': myHtmlPdfPath})
+                           'the default PDF viewer on your system. '
+                           'The generated pdfs were saved as:%1'
+                           '%2%1 and %1%3').arg(
+                           '<br>').arg(QtCore.QString(
+                           myMapPdfPath)).arg(QtCore.QString(
+                           myHtmlPdfPath))
 
         self.showBusy(self.tr('Map Creator'),
                       myStatus,

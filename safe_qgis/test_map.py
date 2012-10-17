@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.6.0'
+__version__ = '1.0.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -32,10 +32,10 @@ from qgis.core import (QgsMapLayerRegistry,
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
-                                      assertHashesForFile,
-                                      hashForFile,
                                       loadLayer,
-                                      setJakartaGeoExtent)
+                                      setJakartaGeoExtent,
+                                      compareImages,
+                                      CONTROL_IMAGE_DIR)
 from safe_qgis.utilities import setupPrinter
 from safe_qgis.map import Map
 
@@ -93,10 +93,10 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.composeMap()
-        myImagePath, myImage, myTargetArea = myMap.renderComposition()
+        myImagePath, myControlImage, myTargetArea = myMap.renderComposition()
         LOGGER.debug(myImagePath)
 
-        assert myImage is not None
+        assert myControlImage is not None
 
         myDimensions = [myTargetArea.left(),
                         myTargetArea.top(),
@@ -109,15 +109,35 @@ class MapTest(unittest.TestCase):
 
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
-        # Note these hashes will be affected every time get_version
-        # changes due to the version being embeded in the pdf
-        myExpectedHashes = [
-                            '0109d8bac8fd27677d373ebf66546d19',
-                            '9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
-                            'ddf3cd2e9059e85c9d5b525d9f00c7dd',  # Jenkins
-                            '7d308ea9d88ef55a101766adaabf179f',  # ub11.10-64
-                            '']
-        assertHashesForFile(myExpectedHashes, myImagePath)
+
+        myAcceptibleImages = []
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'renderComposition.png')
+        myAcceptibleImages.append(myControlImage)
+
+        # Also test with variant from the jenkins server
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'renderComposition-variantJenkins.png')
+        myAcceptibleImages.append(myControlImage)
+
+        # Also test with variant from the Shiva
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'renderComposition-variantUB11.10-64.png')
+        myAcceptibleImages.append(myControlImage)
+
+        myTolerance = 1000  # To allow for version number changes in disclaimer
+        myResults = []
+        myMessages = ''
+        myPassFlag = False
+        for myControlImage in myAcceptibleImages:
+            myFlag, _, myMessage = compareImages(myControlImage,
+                                        myImagePath,
+                                        myTolerance)
+            myMessages += myMessage
+            if myFlag:
+                break
+
+        assert myFlag == True, myMessages
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
@@ -197,14 +217,18 @@ class MapTest(unittest.TestCase):
             myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
 
         myImagePath, _, _ = myMap.renderComposition()
-        LOGGER.debug('Artifacts image path: %s' % myImagePath)
-        LOGGER.debug('Artifacts pdf path: %s' % myPath)
-        myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
-        myHash = hashForFile(myImagePath)
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
-        myMessage = 'Windows map render still draws with artifacts.'
-        assert myHash != myUnwantedHash, myMessage
+
+        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
+                                      'windowsArtifacts.png')
+        myTolerance = 0  # to allow for version number changes in disclaimer
+        myFlag, myPath, myMessage = compareImages(myControlImage,
+                                                  myImagePath,
+                                                  myTolerance)
+        myMessage += ('\nWe want these images to match, if they dont '
+                     'there may be rendering artifacts in windows.\n')
+        assert myFlag == True, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(MapTest, 'test')
