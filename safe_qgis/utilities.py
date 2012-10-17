@@ -751,8 +751,8 @@ def getDefaults(theDefault=None):
     myDefaults = DEFAULTS
 
     myDefaults['FEM_RATIO'] = mySettings.value(
-        'inasafe/defaultFemaleRatio', DEFAULTS['FEM_RATIO']
-        ).toDouble()[0]
+        'inasafe/defaultFemaleRatio',
+        DEFAULTS['FEM_RATIO']).toDouble()[0]
 
     if theDefault is None:
         return myDefaults

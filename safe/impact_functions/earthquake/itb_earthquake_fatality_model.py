@@ -90,15 +90,11 @@ class ITBFatalityFunction(FunctionProvider):
                       tolerance=0.01,
                       calculate_displaced_people=True,
                       postprocessors={'Gender': {'on': True},
-                              'Age': {'on': True,
-                                      'params': {
-                                      'youth_ratio': defaults['YOUTH_RATIO'],
-                                      'adult_ratio': defaults['ADULT_RATIO'],
-                                      'elder_ratio': defaults['ELDER_RATIO']
-                                      }
-                              }
-                      }
-                      )
+                          'Age': {'on': True,
+                              'params':
+                                  {'youth_ratio': defaults['YOUTH_RATIO'],
+                                   'adult_ratio': defaults['ADULT_RATIO'],
+                                   'elder_ratio': defaults['ELDER_RATIO']}}})
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model

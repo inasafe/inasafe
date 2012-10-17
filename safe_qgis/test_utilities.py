@@ -256,8 +256,7 @@ class UtilitiesTest(unittest.TestCase):
         #with good attribute name
         myAttrs, myPos = getLayerAttributeNames(myLayer,
             [QVariant.Int, QVariant.String],
-            'TEST_STRIN'
-        )
+            'TEST_STRIN')
         myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         myExpectedPos = 2
         myMessage = 'myExpectedAttrs, got %s, expected %s' % (
@@ -310,8 +309,7 @@ class UtilitiesTest(unittest.TestCase):
             'AGGR_ATTR_KEY': 'aggregation attribute',
             'YOUTH_RATIO': 0.263,
             'ELDER_RATIO': 0.079,
-            'ADULT_RATIO': 0.659
-        }
+            'ADULT_RATIO': 0.659}
         myDefaults = getDefaults()
         myMessage = 'Defaults: got %s, expected %s' % (
             myDefaults, myExpectedDefaults)

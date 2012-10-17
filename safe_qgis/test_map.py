@@ -77,8 +77,7 @@ class MapTest(unittest.TestCase):
         mySize = os.stat(myPath).st_size
         myExpectedSize = 352798  # as rendered on linux ub 12.04 64
         myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
-            myExpectedSize, mySize
-        )
+            myExpectedSize, mySize)
         assert mySize >= myExpectedSize, myMessage
 
     def test_renderComposition(self):
@@ -105,8 +104,7 @@ class MapTest(unittest.TestCase):
                         myTargetArea.right()]
         myExpectedDimensions = [0.0, 0.0, 3507.0, 2480.0]
         myMessage = 'Expected target area to be %s, got %s' % (
-            str(myExpectedDimensions), str(myDimensions)
-        )
+            str(myExpectedDimensions), str(myDimensions))
         assert myExpectedDimensions == myDimensions, myMessage
 
         myMessage = 'Rendered output does not exist'

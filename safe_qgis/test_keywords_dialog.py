@@ -212,8 +212,7 @@ class KeywordsDialogTest(unittest.TestCase):
                myDialog.tr('Use default'), myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
-                     'female ratio default value to the keywords list.'
-                    )
+                     'female ratio default value to the keywords list.')
         assert float(myDialog.getValueForKey(
             myDefaults['FEM_RATIO_KEY'])) == \
                myDefaults['FEM_RATIO'], myMessage
