@@ -1,22 +1,18 @@
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
+# -*- coding: utf-8 -*-
+"""**Postprocessors package.**
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
+.. tip::
+   import like this from safe.postprocessors import get_post_processors and
+   then call get_post_processors(requested_postprocessors)
 
 """
 
-__author__ = 'marco@opengis.ch'
+__author__ = 'Marco Bernasocchi <marco@opengis.ch>'
 __revision__ = '$Format:%H$'
-__date__ = '13/10/2012'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+__date__ = '10/10/2012'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 import logging
 
@@ -34,7 +30,20 @@ def get_post_processors(requested_postprocessors):
     """
     Creates a dictionary of applicable postprocessors
     :param requested_postprocessors: dictionary of requested
-        postprocessors such as {'Gender': True, 'Age': False}
+        postprocessors such as
+        {
+        'Gender': {'on': True},
+        'Age': {'on': True,
+                'params': {
+                    'youth_ratio': defaults['YOUTH_RATIO'],
+                    'adult_ratio': defaults['ADULT_RATIO'],
+                    'elder_ratio': defaults['ELDER_RATIO']
+                    }
+                }
+        }
+
+        with 'PostprocessorName': {'on': True} being the minimum needed to
+        activate a postprocessor
     :return: dict of postprocessors instances
         e.g. {'Gender':GenderPostprocessors instance}
     """
