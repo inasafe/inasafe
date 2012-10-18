@@ -72,11 +72,11 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         lo = 0
         me = 0
         hi = 0
-        building_costs = {}
-        contents_costs = {}
+        building_values = {}
+        contents_values = {}
         for key in range(4):
-            building_costs[key] = 0
-            contents_costs[key] = 0
+            building_values[key] = 0
+            contents_values[key] = 0
 
         for i in range(N):
             # Classify building according to shake level
@@ -89,19 +89,19 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 area = 0.0
 
             try:
-                building_cost_density = float(attributes[i]['BUILDING_C'])
+                building_value_density = float(attributes[i]['BUILDING_C'])
             except (ValueError, KeyError):
-                #print 'Got bld cost', attributes[i]['BUILDING_C']
-                building_cost_density = 0.0
+                #print 'Got bld value', attributes[i]['BUILDING_C']
+                building_value_density = 0.0
 
             try:
-                contents_cost_density = float(attributes[i]['CONTENTS_C'])
+                contents_value_density = float(attributes[i]['CONTENTS_C'])
             except (ValueError, KeyError):
-                #print 'Got cont cost', attributes[i]['CONTENTS_C']
-                contents_cost_density = 0.0
+                #print 'Got cont value', attributes[i]['CONTENTS_C']
+                contents_value_density = 0.0
 
-            building_cost = int(building_cost_density * area)
-            contents_cost = int(contents_cost_density * area)
+            building_value = int(building_value_density * area)
+            contents_value = int(contents_value_density * area)
 
             x = float(attributes[i][hazard_attribute])  # MMI
             if t0 <= x < t1:
@@ -119,26 +119,26 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
             attributes[i][self.target_field] = cls
 
-            # Accumulate costs in 1M dollar units
-            building_costs[cls] += (building_cost / 1000000)
-            contents_costs[cls] += (contents_cost / 1000000)
+            # Accumulate values in 1M dollar units
+            building_values[cls] += (building_value / 1000000)
+            contents_values[cls] += (contents_value / 1000000)
 
         # Generate simple impact report
         table_body = [question,
                       TableRow([tr('Hazard Level'),
                                 tr('Buildings Affected'),
-                                tr('Building costs'),
-                                tr('Contents costs')],
+                                tr('Buildings value ($M)'),
+                                tr('Contents value ($M)')],
                                header=True),
                       TableRow([class_1, lo,
-                                building_costs[1],
-                                contents_costs[1]]),
+                                building_values[1],
+                                contents_values[1]]),
                       TableRow([class_2, me,
-                                building_costs[2],
-                                contents_costs[2]]),
+                                building_values[2],
+                                contents_values[2]]),
                       TableRow([class_3, hi,
-                                building_costs[3],
-                                contents_costs[3]])]
+                                building_values[3],
+                                contents_values[3]])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('High hazard is defined as shake levels greater '
@@ -147,7 +147,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                              'between %i and %i on the MMI scale.') % (t1, t2))
         table_body.append(tr('Low hazard is defined as shake levels '
                              'between %i and %i on the MMI scale.') % (t0, t1))
-        table_body.append(tr('Costs are in units of 1 million Australian '
+        table_body.append(tr('Values are in units of 1 million Australian '
                              'Dollars'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
