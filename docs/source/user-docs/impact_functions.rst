@@ -61,8 +61,8 @@ Creating impact functions
 If you feel there is an important impact function which is missing, there are two
 avenues you can follow:
 
-* You can develop it yourself or with the aid of a programmer who has a good understanding
-  of the python programming language.
+* If you have basic python programming skills, you could implement a new post-
+  processor yourself,
 * You can file a ticket on our `issue tracking system <https://github.com/AIFDR/inasafe/issues>`_,
   and if time and resources allow we will implement it for you.
 
