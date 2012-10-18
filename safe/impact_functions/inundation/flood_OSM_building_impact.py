@@ -92,27 +92,28 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 usage = attributes[i]['type']
             else:
                 usage = None
-            if 'amenity' in attribute_names and (usage == None or usage == 0):
+            if 'amenity' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['amenity']
             else:
                 usage = None
-            if 'building_t' in attribute_names and (usage == None or usage == 0):
+            if ('building_t' in attribute_names and
+                    (usage is None or usage == 0)):
                 usage = attributes[i]['building_t']
             else:
                 usage = None
-            if 'office' in attribute_names and (usage == None or usage == 0):
+            if 'office' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['office']
             else:
                 usage = None
-            if 'tourism' in attribute_names and (usage == None or usage == 0):
+            if 'tourism' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['tourism']
             else:
                 usage = None
-            if 'leisure' in attribute_names and (usage == None or usage == 0):
+            if 'leisure' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['leisure']
             else:
                 usage = None
-            if 'building' in attribute_names and (usage == None or usage == 0):
+            if 'building' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['building']
                 if usage == 'yes':
                     usage = 'building'
