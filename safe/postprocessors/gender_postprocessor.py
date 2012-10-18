@@ -93,8 +93,11 @@ class GenderPostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Total')
-        myResult = self.population_total
-        myResult = int(round(myResult))
+        try:
+            myResult = self.population_total
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_females(self):
@@ -112,7 +115,10 @@ class GenderPostprocessor(AbstractPostprocessor):
         """
         myName = tr('Female population')
         myResult = self.population_total * self.female_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_weekly_hygene_packs(self):
@@ -133,8 +139,12 @@ class GenderPostprocessor(AbstractPostprocessor):
         myMeta = {'description': 'Females hygiene packs for weekly use'}
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
+
         myResult = self.population_total * self.female_ratio * 0.7937 * (7 / 7)
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult, myMeta)
 
     def _calculate_weekly_increased_calories(self):
@@ -162,5 +172,8 @@ class GenderPostprocessor(AbstractPostprocessor):
         myLactKg = self.population_total * self.female_ratio * 2 * 0.033782
         myPregKg = self.population_total * self.female_ratio * 2 * 0.01281
         myResult = myLactKg + myPregKg
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult, myMeta)
