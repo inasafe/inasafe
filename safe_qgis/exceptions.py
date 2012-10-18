@@ -127,3 +127,9 @@ class MethodUnavailableError(Exception):
     """Raised if the requested import cannot be performed dur to qgis being
     to old"""
     pass
+
+
+class CallGDALError(Exception):
+    """Raised if failed to call gdal command. Indicate by error message that is
+    not empty"""
+    pass

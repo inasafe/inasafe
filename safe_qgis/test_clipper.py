@@ -33,7 +33,7 @@ from qgis.core import (QgsVectorLayer,
 
 from safe_qgis.safe_interface import readSafeLayer
 from safe_qgis.safe_interface import getOptimalExtent
-from safe_qgis.exceptions import InvalidProjectionException
+from safe_qgis.exceptions import InvalidProjectionException, CallGDALError
 from safe_qgis.clipper import clipLayer, extentToKml, explodeMultiPartGeometry
 
 from safe_qgis.utilities_test import (getQgisTestApp,
@@ -43,7 +43,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                             GEOCRS,
                             setJakartaGeoExtent)
 
-from safe.common.testing import HAZDATA, TESTDATA
+from safe.common.testing import HAZDATA, TESTDATA, EXPDATA
 from safe.common.exceptions import GetDataError
 from safe.api import nanallclose
 
@@ -120,6 +120,33 @@ class ClipperTest(unittest.TestCase):
                'Expected: %f, Actual: %f' %
                (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
         assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, myMessage
+
+    def test_clipOnePixel(self):
+        # Create a raster layer
+        myRasterPath = os.path.join(EXPDATA, 'glp10ag.asc')
+        myTitle = 'people'
+        myRasterLayer = QgsRasterLayer(myRasterPath, myTitle)
+
+        # Create very small bounding box
+        mySmallRect = [100.3430, -0.9089, 100.3588, -0.9022]
+
+        # Clip the raster to the bbox
+        try:
+            myResult = clipLayer(myRasterLayer, mySmallRect)
+        except CallGDALError:
+            pass
+        except Exception, e:
+            raise Exception('Exception is not expected, %s' % e)
+        else:
+            myMsg = "Failed, does not raise exception"
+            raise Exception(myMsg)
+
+        # Create not very small bounding box
+        myNotSmallRect = [100.3430, -0.9089, 101.3588, -1.9022]
+
+        # Clip the raster to the bbox
+        myResult = clipLayer(myRasterLayer, myNotSmallRect)
+        assert myResult is not None, 'Should be a success clipping'
 
     def test_invalidFilenamesCaught(self):
         """Invalid filenames raise appropriate exceptions
