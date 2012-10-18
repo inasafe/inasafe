@@ -47,6 +47,7 @@ from qgis.core import (QgsPoint,
                        QgsGeometry,
                        QgsVectorLayer,
                        QgsRasterLayer,
+                       QgsRasterDataProvider,
                        QgsRectangle,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
@@ -750,9 +751,14 @@ class ShakeEvent(QObject):
         Raises:
             None
         """
+        if theMMIValue is None:
+            LOGGER.debug('Romanize passed None')
+            return ''
+
+        LOGGER.debug('Romanising %f' % float(theMMIValue))
         myRomanList = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
                        'IX', 'X', 'XI', 'XII']
-        return myRomanList[int(round(theMMIValue))]
+        return myRomanList[int(round(float(theMMIValue)))]
 
     def mmiColour(self, theMMIValue):
         """Return the colour for an mmi value.
@@ -1193,17 +1199,21 @@ class ShakeEvent(QObject):
             myNewFeature.setGeometry(myFeature.geometry())
 
             # Populate the mmi field by raster lookup
-            myResult, myRasterValues = myRasterLayer.identify(myPoint)
-            if not myResult:
+            # Get a {int, QVariant} back
+            myRasterValues = myRasterLayer.dataProvider().identify(myPoint,
+                                QgsRasterDataProvider.IdentifyFormatValue)
+            myRasterValues = myRasterValues.values()
+            if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster
                 continue
-            myValue = myRasterValues[QString('Band 1')]
-            if 'no data' not in myValue:
-                myMmi = float(myValue)
+            myValue = myRasterValues[0]  # Band 1
+            LOGGER.debug('MyValue: %s' % myValue)
+            if 'no data' not in myValue.toString():
+                myMmi = myValue.toFloat()[0]
             else:
                 myMmi = 0
 
-            LOGGER.debug('Looked up mmi of %s on raster for %ss' %
+            LOGGER.debug('Looked up mmi of %s on raster for %s' %
                          (myMmi, myPoint.toString()))
 
             myAttributeMap = {
@@ -1833,7 +1843,7 @@ class ShakeEvent(QObject):
         LOGGER.debug(myLocationInfo)
         mySubstitutionMap = {'location-info': myLocationInfo,
                              'version': self.version()}
-        mySubstitutionMap.update(self.eventDict())
+        #mySubstitutionMap.update(self.eventDict())
         LOGGER.debug(mySubstitutionMap)
         myResult = myComposition.loadFromTemplate(myDocument,
                                                   mySubstitutionMap)
@@ -1893,7 +1903,7 @@ class ShakeEvent(QObject):
         myLayerList = []
         for myLayer in myLayers:
             myLayerList.append(myLayer.id())
-        
+
         myLayerList.append(myContoursLayer.id())
         myLayerList.append(myCitiesLayer.id())
         myMapRenderer.setLayerSet(myLayerList)

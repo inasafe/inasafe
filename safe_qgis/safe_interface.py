@@ -139,7 +139,7 @@ def getOptimalExtent(theHazardGeoExtent,
     #
     myMessage = tr('theHazardGeoExtent or theExposureGeoExtent cannot be None.'
                    'Found: /ntheHazardGeoExtent: %s '
-                    '/ntheExposureGeoExtent: %s' %
+                   '/ntheExposureGeoExtent: %s' %
                    (theHazardGeoExtent, theExposureGeoExtent))
 
     if (theHazardGeoExtent is None) or (theExposureGeoExtent is None):
@@ -148,15 +148,15 @@ def getOptimalExtent(theHazardGeoExtent,
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
     myOptimalExtent = bbox_intersection(theHazardGeoExtent,
-        theExposureGeoExtent,
-        theViewportGeoExtent)
+                                        theExposureGeoExtent,
+                                        theViewportGeoExtent)
 
     if myOptimalExtent is None:
         # Bounding boxes did not overlap
         myMessage = tr('Bounding boxes of hazard data, exposure data '
-               'and viewport did not overlap, so no computation was '
-               'done. Please make sure you pan to where the data is and '
-               'that hazard and exposure data overlaps.')
+                       'and viewport did not overlap, so no computation was '
+                       'done. Please make sure you pan to where the data is and '
+                       'that hazard and exposure data overlaps.')
         raise InsufficientOverlapException(myMessage)
 
     return myOptimalExtent
@@ -247,11 +247,11 @@ def readKeywordsFromLayer(theLayer, keyword):
         myValue = theLayer.get_keywords(keyword)
     except Exception, e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
-                theLayer.get_filename(), keyword, str(e)))
+            theLayer.get_filename(), keyword, str(e)))
         raise KeywordNotFoundException(myMessage)
     if not myValue or myValue == '':
         myMessage = tr('No value was found for keyword %s in layer %s' % (
-                    theLayer.get_filename(), keyword))
+            theLayer.get_filename(), keyword))
         raise KeywordNotFoundException(myMessage)
     return myValue
 
@@ -300,7 +300,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
         myDictionary = read_keywords(myKeywordFilePath)
     except Exception, e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
-                myKeywordFilePath, theKeyword, str(e)))
+            myKeywordFilePath, theKeyword, str(e)))
         raise KeywordNotFoundException(myMessage)
 
     # if no keyword was supplied, just return the dict
@@ -308,7 +308,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
         return myDictionary
     if not theKeyword in myDictionary:
         myMessage = tr('No value was found in file %s for keyword %s' % (
-                    myKeywordFilePath, theKeyword))
+            myKeywordFilePath, theKeyword))
         raise KeywordNotFoundException(myMessage)
 
     try:
@@ -361,19 +361,19 @@ def getStyleInfo(theLayer):
 
     if not hasattr(theLayer, 'get_style_info'):
         myMessage = tr('Argument "%s" was not a valid layer instance' %
-               theLayer)
+                       theLayer)
         raise StyleInfoNotFoundException(myMessage)
 
     try:
         myValue = theLayer.get_style_info()
     except Exception, e:
         myMessage = tr('Styleinfo retrieval failed for %s\n %s' % (
-                    theLayer.get_filename(), str(e)))
+            theLayer.get_filename(), str(e)))
         raise StyleInfoNotFoundException(myMessage)
 
     if not myValue or myValue == '':
         myMessage = tr('No styleInfo was found for layer %s' % (
-                theLayer.get_filename()))
+            theLayer.get_filename()))
         raise StyleInfoNotFoundException(myMessage)
     return myValue
 

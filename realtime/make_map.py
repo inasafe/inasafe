@@ -50,10 +50,10 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 myForceFlag = False
 # Extract the event
 try:
-    myShakeEvent = ShakeEvent(theForceFlag=myForceFlag)
+    myShakeEvent = ShakeEvent(theEventId=myEventId, theForceFlag=myForceFlag)
 except BadZipfile:
     # retry with force flag true
-    myShakeEvent = ShakeEvent(theForceFlag=True)
+    myShakeEvent = ShakeEvent(theEventId=myEventId, theForceFlag=True)
 except:
     LOGGER.exception('An error occurred setting up the latest shake event.')
     exit()
