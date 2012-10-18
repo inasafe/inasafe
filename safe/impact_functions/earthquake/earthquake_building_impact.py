@@ -127,7 +127,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         for key in range(4):
             building_values[key] = int(building_values[key] / 1000000)
             contents_values[key] = int(contents_values[key] / 1000000)
-        
+
         # Generate simple impact report
         table_body = [question,
                       TableRow([tr('Hazard Level'),
