@@ -3,8 +3,8 @@
 Impact Functions
 ================
 
-This document explains the purpose of impact functions and lists the 
-different available impact function and the requirements each has to be 
+This document explains the purpose of impact functions and lists the
+different available impact function and the requirements each has to be
 used effectively.
 
 .. note:: This document is still a work in progress.
@@ -15,16 +15,16 @@ What is an impact function?
 
 In impact function is a software programme that computes a risk assessment
 given a number of inputs. The risk assessment will typically have a spatial
-component (e.g. a GIS layer which can be incorporated into a map) and a 
-non-spatial component (e.g. a list of actions you may want to consider carrying out, 
-or a list of estimates of disaster risk reduction elements such as how many 
+component (e.g. a GIS layer which can be incorporated into a map) and a
+non-spatial component (e.g. a list of actions you may want to consider carrying out,
+or a list of estimates of disaster risk reduction elements such as how many
 bags of rice to make available).
 
 Selecting an impact function
 ----------------------------
 
 Impact functions are bundled with the InaSAFE software. The graphical user interface
-(provided as a plugin for QGIS will offer a list of impact functions that can be 
+(provided as a plugin for QGIS will offer a list of impact functions that can be
 used based on the layers you have loaded and their :doc:`keywords <keywords>`.
 
 Exploring impact functions
@@ -48,6 +48,12 @@ The impact function table is simply a browser to help you to familiarise yoursel
 the functions available. For the actual usage of the functions you need to have
 layers available (i.e. loaded in QGIS) with the appropriate keywords for your target function.
 
+Configurable Impact Functions
+-----------------------------
+
+Some impact functions can be configured before use. For example if you have
+a raster flood hazard layer where each pixel represents flood depth, you can set
+depth thresholds (low / medium / high)
 
 Creating impact functions
 -------------------------
@@ -57,6 +63,6 @@ avenues you can follow:
 
 * You can develop it yourself or with the aid of a programmer who has a good understanding
   of the python programming language.
-* You can file a ticket on our `issue tracking system <https://github.com/AIFDR/inasafe/issues>`_, 
+* You can file a ticket on our `issue tracking system <https://github.com/AIFDR/inasafe/issues>`_,
   and if time and resources allow we will implement it for you.
 
