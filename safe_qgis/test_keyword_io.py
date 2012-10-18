@@ -17,7 +17,7 @@ from safe.common.testing import HAZDATA, TESTDATA
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundException
-from safe_qgis.test_keywords_dialog import copyMakePadangLayer
+from safe_qgis.test_keywords_dialog import makePadangLayerClone
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -141,20 +141,27 @@ class KeywordIOTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
     def test_appendKeywords(self):
-        """Can we append file keywords with the generic readKeywords
-        method """
-        myLayer, _ = copyMakePadangLayer()
-        myAddKeywords = {'category': 'exposure', 'test': 'TEST'}
-
-        self.keywordIO.appendKeywords(myLayer, myAddKeywords)
-        myExpectedKeywords = {'category': 'exposure', 'test': 'TEST',
-                              'subcategory': 'earthquake', 'unit': 'MMI',
-                              'title': 'An earthquake in Padang like in 2009'}
+        """Can we append file keywords with the generic readKeywords method."""
+        myLayer, _ = makePadangLayerClone()
+        myNewKeywords = {'category': 'exposure', 'test': 'TEST'}
+        self.keywordIO.appendKeywords(myLayer, myNewKeywords)
         myKeywords = self.keywordIO.readKeywords(myLayer)
 
-        myMessage = 'Got: %s\n\nExpected %s\n' % (
-            myKeywords, myExpectedKeywords)
-        assert myKeywords == myExpectedKeywords, myMessage
+        for myKey, myValue in myNewKeywords.iteritems():
+            myMessage = ('Layer keywords misses appended key: %s\n'
+                        'Layer keywords:\n%s\n'
+                        'Appended keywords:\n%s\n' %
+                        (myKey,
+                         myKeywords,
+                         myNewKeywords))
+            assert myKey in myKeywords, myMessage
+            myMessage = ('Layer keywords misses appended value: %s\n'
+                         'Layer keywords:\n%s\n'
+                         'Appended keywords:\n%s\n' %
+                         (myValue,
+                          myKeywords,
+                          myNewKeywords))
+            assert myKeywords[myKey] == myValue, myMessage
 
     def test_readDBKeywords(self):
         """Can we read sqlite keywords with the generic readKeywords method
