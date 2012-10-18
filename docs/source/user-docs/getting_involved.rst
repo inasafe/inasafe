@@ -7,6 +7,13 @@ make a robust, user friendly and useful software platform, but there is
 no substitute for having interested users participating and sharing their
 needs, problems and successes! Here are a few simple ways you can get involved:
 
+**Visit our web site!** The web site will always represent the latest
+information on how to use InaSAFE. We encourage anyone who wants to get
+involved with the project to first read the content available on the site to
+familiarise themselves with the content. The website is available at:
+
+http://inasafe.org
+
 
 **Join our mailing list!** If you would like to discuss methodologies, using
 the software or any issues you encounter, you can join our google group (you
@@ -54,6 +61,6 @@ We also welcome small improvements, translations or other fixes via the issue
 management system mentioned above.
 
 .. note:: We have strict requirements that all code submitted to InaSAFE is
-   properly :doc:`coding_standards` compliant and is unit tested. We have this
+   properly :doc:`/developer-docs/coding_standards` compliant and is unit tested. We have this
    requirement in place to ensure a good experience for our users and to
    ensure that users can have confidence in the results produced by InaSAFE.
