@@ -1,8 +1,6 @@
 Frequently Asked Questions
 ==========================
 
-
-
 I found a bug, how should I report it?
 --------------------------------------
 
@@ -84,7 +82,7 @@ Open Street Map building PostGIS mirror to InaSAFE:
  * Build query: upper(geometrytype("way")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''
 
 Another way, you can export osm data from HOT Exports:
- * Go to HOT Exports website `www.hot-export.geofabrik.de 
+ * Go to HOT Exports website `www.hot-export.geofabrik.de
    <http://hot-export.geofabrik.de>`_.
  * Go to `New Job` menu in the upper right of the page
  * Select region, currently only 3 regions are supported by HOT Export (Haiti,
