@@ -890,9 +890,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # this is needed because we always want a vectoril layer to store
             # information
             self.doZonalAggregation = False
-            crs = self.getExposureLayer().crs().authid().toLower()
+            myGeoCrs = QgsCoordinateReferenceSystem()
+            myGeoCrs.createFromEpsg(4326)
+            crs = myGeoCrs.authid().toLower()
             myUUID = str(uuid.uuid4())
-            uri = 'Polygon' + '?crs=' + crs + '&index=yes&uuid=' + myUUID
+            uri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
             myName = 'tmpPostprocessingLayer'
             myLayer = QgsVectorLayer(uri, myName, 'memory')
             LOGGER.debug('created' + myLayer.name())
