@@ -30,7 +30,8 @@ IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
-CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__), 'test_images')
+CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__),
+    'test_data/test_images')
 
 
 def assertHashesForFile(theHashes, theFilename):
