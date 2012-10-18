@@ -1466,15 +1466,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 zoneName = attrMap[myNameFieldIndex].toString()
 
-            aggrSum, _ = attrMap[mySumFieldIndex].toDouble()
-            try:
-                aggrSum = int(round(float(aggrSum)))
-            except ValueError:
-                myMessage = ('Could not convert')
-                LOGGER.debug(myMessage)
-                self.aggregationErrorSkipPostprocessing = myMessage
-                return
+            aggrSum, ok = attrMap[mySumFieldIndex].toDouble()
+            LOGGER.debug('Reading: %s %s' % (aggrSum, ok))
             myGeneralParams = {'population_total': aggrSum}
+
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
                 try:
