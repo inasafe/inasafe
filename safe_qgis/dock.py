@@ -1304,8 +1304,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                      'max': myMax,
                      'colour': myColor,
                      'transparency': 30,
-                     'label': '%s - %s' % (myMin, myMax)}
-                )
+                     'label': '%s - %s' % (myMin, myMax)})
                 myCounter += 1
 
             myStyle = {'target_field': myAttr,
