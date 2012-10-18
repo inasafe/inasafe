@@ -21,8 +21,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory=='population' and \
-                    layertype=='raster' and \
-                    datatype=='density'
+                    layertype=='raster'
     """
 
     title = tr('Be affected')
