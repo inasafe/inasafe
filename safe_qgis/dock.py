@@ -1312,8 +1312,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        'style_classes': myClasses}
 
             setVectorStyle(self.postprocLayer, myStyle)
-            QgsMapLayerRegistry.instance().addMapLayer(
-                self.postprocLayer)
+
 
     def _aggregateResultsVector(self, myQgisImpactLayer):
         """
@@ -1652,8 +1651,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('Impact layer %1 was neither a raster or a '
                    'vector layer').arg(myQgisImpactLayer.source())
             raise ReadLayerError(myMessage)
-        # Add layer to QGIS
-        QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+
+        # Add layers to QGIS
+        myLayersToAdd = []
+        if self.showPostProcLayers and self.doZonalAggregation:
+            myLayersToAdd.append(self.postprocLayer)
+        myLayersToAdd.append(myQgisImpactLayer)
+        QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
         # then zoom to it
         if self.zoomToImpactFlag:
             self.iface.zoomToActiveLayer()
