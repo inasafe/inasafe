@@ -144,12 +144,13 @@ class HtmlRendererTest(unittest.TestCase):
         assert os.path.exists(myPath), myMessage
 
         myControlImages = ['renderHtmlToPixmap.png',
+                           'renderHtmlToPixmap-variantUB11.04-64.png',
                            'renderHtmlToPixmap-variantUB11.10-64.png']
         myTolerance = 1000  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                                   myPath,
                                                   myTolerance)
-        assert myFlag == True, myMessage
+        assert myFlag, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(HtmlRendererTest, 'test')

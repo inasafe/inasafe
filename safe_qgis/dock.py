@@ -886,9 +886,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # this is needed because we always want a vectoril layer to store
             # information
             self.doZonalAggregation = False
-            crs = self.getExposureLayer().crs().authid().toLower()
+            myGeoCrs = QgsCoordinateReferenceSystem()
+            myGeoCrs.createFromEpsg(4326)
+            crs = myGeoCrs.authid().toLower()
             myUUID = str(uuid.uuid4())
-            uri = 'Polygon' + '?crs=' + crs + '&index=yes&uuid=' + myUUID
+            uri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
             myName = 'tmpPostprocessingLayer'
             myLayer = QgsVectorLayer(uri, myName, 'memory')
             LOGGER.debug('created' + myLayer.name())
@@ -1042,12 +1044,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         try:
-            myTitle = self.tr('Aggregating results...')
-            myMessage = self.tr('This may take a little while - we are '
-                                ' aggregating the hazards by %1').arg(
-                self.cboAggregation.currentText())
-            myProgress = 88
-            self.showBusy(myTitle, myMessage, myProgress)
             self._aggregateResults()
             if self.aggregationErrorSkipPostprocessing is None:
                 self._startPostprocessors()
@@ -1192,6 +1188,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         impactLayer = self.runner.impactLayer()
         impactLayerBB = impactLayer.get_bounding_box()
         #[West, South, East, North]
+
+        myTitle = self.tr('Aggregating results...')
+        myMessage = self.tr('This may take a little while - we are '
+                            ' aggregating the hazards by %1').arg(
+            self.cboAggregation.currentText())
+        myProgress = 88
+        self.showBusy(myTitle, myMessage, myProgress)
+
         if not self.doZonalAggregation:
             self.postprocLayer.startEditing()
             myProvider = self.postprocLayer.dataProvider()
@@ -1265,6 +1269,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProvider.select([myAttrIndex], QgsRectangle(), False)
             myFeat = QgsFeature()
             myHighestVal = 0
+
             while myProvider.nextFeature(myFeat):
                 myAttrMap = myFeat.attributeMap()
                 myVal, ok = myAttrMap[myAttrIndex].toInt()
@@ -1274,6 +1279,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myClasses = []
             myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
             myStep = int(myHighestVal / len(myColors))
+            LOGGER.debug('Max val %s, my step %s' % (myHighestVal, myStep))
             myCounter = 0
             for myColor in myColors:
                 myMin = myCounter

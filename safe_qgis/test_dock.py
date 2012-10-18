@@ -62,6 +62,7 @@ from safe_qgis.utilities import (setRasterStyle,
 from safe.engine.impact_functions_for_testing import allen_fatality_model
 from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+#from safe.engine.impact_functions_for_testing import error_raising_functions
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -1288,6 +1289,34 @@ class DockTest(unittest.TestCase):
         myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
         assert myFunction == myExpectation, myMessage
 
+    def test_aggregationResults(self):
+        """Aggregation results are correct."""
+        myRunButton = DOCK.pbnRunStop
+        myExpectedResult = open('test_data/test_files/'
+                                'test-aggregation-results.txt',
+                                'r').read()
+
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKWDialog.accept()
+
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
+                     (myExpectedResult, myResult))
+        self.assertEqual(myExpectedResult, myResult, myMessage)
+
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
         QGIS layers. For inasafe outputs, the table of results should be shown
@@ -1334,6 +1363,65 @@ class DockTest(unittest.TestCase):
             theFunctionId='Flood Building Impact Function')
         DOCK.getFunctions()
         assert myResult, myMessage
+
+    def Xtest_runnerExceptions(self):
+        """Test runner exceptions"""
+        myRunButton = DOCK.pbnRunStop
+
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Exception riser',
+            theFunctionId='Exception Raising Impact Function',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+#        DOCK.runtimeKWDialog.accept()
+        myExpectedResult = """Error:
+An exception occurred when calculating the results
+Problem:
+Exception : AHAHAH I got you
+Click for Diagnostic Information:
+"""
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myMessage = ('The result message should be:\n%s\nFound:\n%s' %
+                     (myExpectedResult, myResult))
+        self.assertEqual(myExpectedResult, myResult, myMessage)
+
+    def Xtest_runnerIsNone(self):
+        """Test for none runner exceptions"""
+        myRunButton = DOCK.pbnRunStop
+
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='None returner',
+            theFunctionId='None Returning Impact Function',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        #        DOCK.runtimeKWDialog.accept()
+        myExpectedResult = """Error:
+An exception occurred when calculating the results
+Problem:
+AttributeError : 'NoneType' object has no attribute 'keywords'
+Click for Diagnostic Information:
+"""
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myMessage = ('The result message should be:\n%s\nFound:\n%s' %
+                     (myExpectedResult, myResult))
+        self.assertEqual(myExpectedResult, myResult, myMessage)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
