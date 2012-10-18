@@ -382,7 +382,6 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
         del myProcess
         if myErrorMessage != '' and myErrorMessage is not None:
             raise CallGDALError(myErrorMessage)
-            return
         # myResult = call(myCommand, shell=True)
         # del myResult
     except CalledProcessError, e:
