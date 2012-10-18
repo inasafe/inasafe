@@ -50,6 +50,8 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                 GOOGLECRS,
                                 loadLayer)
 
+from safe_qgis.keyword_io import KeywordIO
+
 from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion,
@@ -1287,6 +1289,38 @@ class DockTest(unittest.TestCase):
         myFunction = DOCK.cboFunction.currentText()
         myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
         assert myFunction == myExpectation, myMessage
+
+    def test_aggregationResults(self):
+        """Aggregation attribute is chosen correctly when present
+            in kezwords."""
+        myRunButton = DOCK.pbnRunStop
+        myExpectedResult = open('/home/marco/inasafe/safe_qgis/test_data/'
+                                'test_files/test-aggregation-results.txt',
+                                'r').read()
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKWDialog.accept()
+        # Example:
+
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
+                     (myExpectedResult, myResult))
+        self.assertEqual(myExpectedResult, myResult, myMessage)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
