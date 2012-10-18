@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -26,6 +26,7 @@ import math
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
+
 from qgis.core import (QGis,
                        QgsRasterLayer,
                        QgsMapLayer,
@@ -38,24 +39,18 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency,
                        )
-from safe_qgis.exceptions import StyleError
+
 from safe_interface import temp_dir
+from safe_qgis.exceptions import StyleError, MethodUnavailableError
+
+from safe_qgis.safe_interface import DEFAULTS
+
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
-
-try:
-    #available from qgis 1.8
-    from qgis.core import QgsMessageLog
-
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
-except MethodUnavailableError:
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
@@ -67,11 +62,11 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
-        [{'opacity': 1, 'max': 1.5, 'colour': '#fecc5c',
+        [{'transparency': 1, 'max': 1.5, 'colour': '#fecc5c',
           'min': 0.5, 'label': 'Low damage', 'size' : 1},
-        {'opacity': 1, 'max': 2.5, 'colour': '#fd8d3c',
+        {'transparency': 1, 'max': 2.5, 'colour': '#fd8d3c',
          'min': 1.5, 'label': 'Medium damage', 'size' : 1},
-        {'opacity': 1, 'max': 3.5, 'colour': '#f31a1c',
+        {'transparency': 1, 'max': 3.5, 'colour': '#f31a1c',
          'min': 2.5, 'label': 'High damage', 'size' : 1}]}
 
         .. note:: The transparency and size keys are optional. Size applies
@@ -93,6 +88,7 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
             mySize = myClass['size']
         myTransparencyPercent = 0
         if 'transparency' in myClass:
+            LOGGER.debug(myClass['transparency'])
             myTransparencyPercent = myClass['transparency']
 
         if 'min' not in myClass:
@@ -146,11 +142,14 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
             pass
 
         mySymbol.setColor(myColour)
-        # .. todo:: Check that vectors use alpha as % otherwise scale TS
+        # .. todo: (MB) Check that vectors use alpha as % otherwise scale TS
+        # see issue #354
         # Convert transparency % to opacity
         # alpha = 0: transparent
         # alpha = 1: opaque
-        alpha = 1 - myTransparencyPercent / 100
+        # MB this was working wrong due to int division returning int results
+        alpha = 1 - myTransparencyPercent / 100.0
+        LOGGER.debug('%s - %s' % (myTransparencyPercent, alpha))
         mySymbol.setAlpha(alpha)
         myRange = QgsRendererRangeV2(myMin,
                                      myMax,
@@ -521,21 +520,60 @@ def qgisVersion():
     myVersion = int(myVersion)
     return myVersion
 
-try:
-    # Available from qgis 1.8
-    from qgis.core import QgsMessageLog  # pylint: disable=E0611
-except ImportError:
 
-    # Define vanilla version
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
-else:
+# TODO: move this to its own file? TS
+class QgsLogHandler(logging.Handler):
+    """A logging handler that will log messages to the QGIS logging console."""
 
-    # Use QGIS message log from versions >= 1.8
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self)
 
-def setup_logger():
+    def emit(self, theRecord):
+        """Try to log the message to QGIS if available, otherwise do nothing.
+
+        Args:
+            theRecord: logging record containing whatever info needs to be
+                logged.
+        Returns:
+            None
+        Raises:
+            None
+        """
+        try:
+            #available from qgis 1.8
+            from qgis.core import QgsMessageLog
+            # Check logging.LogRecord properties for lots of other goodies
+            # like line number etc. you can get from the log message.
+            QgsMessageLog.logMessage(theRecord.getMessage(), 'InaSAFE', 0)
+
+        except (MethodUnavailableError, ImportError):
+            pass
+
+
+def addLoggingHanderOnce(theLogger, theHandler):
+    """A helper to add a handler to a logger, ensuring there are no duplicates.
+
+    Args:
+        * theLogger: logging.logger instance
+        * theHandler: logging.Handler instance to be added. It will not be
+            added if an instance of that Handler subclass already exists.
+
+    Returns:
+        bool: True if the logging handler was added
+
+    Raises:
+        None
+    """
+    myClassName = theHandler.__class__.__name__
+    for myHandler in theLogger.handlers:
+        if myHandler.__class__.__name__ == myClassName:
+            return False
+
+    theLogger.addHandler(theHandler)
+    return True
+
+
+def setupLogger():
     """Run once when the module is loaded and enable logging
 
     Args: None
@@ -574,6 +612,10 @@ def setup_logger():
     """
     myLogger = logging.getLogger('InaSAFE')
     myLogger.setLevel(logging.DEBUG)
+    myDefaultHanderLevel = logging.DEBUG
+    # create formatter that will be added to the handlers
+    myFormatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     # create syslog handler which logs even debug messages
     # (ariel): Make this log to /var/log/safe.log instead of
     #               /var/log/syslog
@@ -582,10 +624,12 @@ def setup_logger():
     myTempDir = temp_dir('logs')
     myFilename = os.path.join(myTempDir, 'inasafe.log')
     myFileHandler = logging.FileHandler(myFilename)
-    myFileHandler.setLevel(logging.DEBUG)
+    myFileHandler.setLevel(myDefaultHanderLevel)
     # create console handler with a higher log level
     myConsoleHandler = logging.StreamHandler()
     myConsoleHandler.setLevel(logging.ERROR)
+
+    myQgisHandler = QgsLogHandler()
 
     # TODO: User opt in before we enable email based logging.
     # Email handler for errors
@@ -600,19 +644,126 @@ def setup_logger():
     #                                      myRecipientAddresses,
     #                                      mySubject)
     #myEmailHandler.setLevel(logging.ERROR)
-    # create formatter and add it to the handlers
-    myFormatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # Sentry handler - this is optional hence the localised import
+    # It will only log if pip install raven. If raven is available
+    # logging messages will be sent to http://sentry.linfiniti.com
+    # We will log exceptions only there. Only if you have the env var
+    # 'INSAFE_SENTRY=1' present (value can be anything) will this be enabled.
+    if 'INASAFE_SENTRY' in os.environ:
+        try:
+            from raven.handlers.logging import SentryHandler
+            from raven import Client
+
+            myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
+                              'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
+                              '4')
+            mySentryHandler = SentryHandler(myClient)
+            mySentryHandler.setFormatter(myFormatter)
+            mySentryHandler.setLevel(logging.ERROR)
+            if addLoggingHanderOnce(myLogger, mySentryHandler):
+                myLogger.debug('Sentry logging enabled')
+        except ImportError:
+            myLogger.debug('Sentry logging disabled')
+
+    #Set formatters
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
     #myEmailHandler.setFormatter(myFormatter)
+    myQgisHandler.setFormatter(myFormatter)
+
     # add the handlers to the logger
-    myLogger.addHandler(myFileHandler)
-    myLogger.addHandler(myConsoleHandler)
-    #myLogger.addHandler(myEmailHandler)
-    myLogger.info('Safe Logger Module Loaded')
-    myLogger.info('----------------------')
-    myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))
+    addLoggingHanderOnce(myLogger, myFileHandler)
+    addLoggingHanderOnce(myLogger, myConsoleHandler)
+    #addLoggingHanderOnce(myLogger, myEmailHandler)
+    addLoggingHanderOnce(myLogger, myQgisHandler)
+
+
+def isLayerPolygonal(theLayer):
+    """tell if a qgis theLayer is vectorial and d its geometries polygons
+   Args:
+       the theLayer
+    Returns:
+        bool - true if the theLayer contains polygons
+    Raises:
+       None
+    """
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Polygon)
+    except AttributeError:
+        return False
+
+
+def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
+    """iterates over self.layer and returns all the attribute names of
+       attributes that have int or string as field type and the position
+       of the theCurrentKeyword in the attribute names list
+
+    Args:
+       * theAllowedTypes: list(Qvariant) - a list of QVariants types that are
+            acceptable for the attribute.
+            e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String]
+       * theCurrentKeyword - the currently stored keyword for the attribute
+
+    Returns:
+       * all the attribute names of attributes that have int or string as
+            field type
+       * the position of the theCurrentKeyword in the attribute names list,
+            this is None if theCurrentKeyword is not in the lis of attributes
+    Raises:
+       no exceptions explicitly raised
+    """
+
+    if theLayer.type() == QgsMapLayer.VectorLayer:
+        myProvider = theLayer.dataProvider()
+        myProvider = myProvider.fields()
+        myFields = []
+        mySelectedIndex = None
+        i = 0
+        for f in myProvider:
+            # show only int or string myFields to be chosen as aggregation
+            # attribute other possible would be float
+            if myProvider[f].type() in theAllowedTypes:
+                myCurrentFieldName = myProvider[f].name()
+                myFields.append(myCurrentFieldName)
+                if theCurrentKeyword == myCurrentFieldName:
+                    mySelectedIndex = i
+                i += 1
+        return myFields, mySelectedIndex
+    else:
+        return None, None
+
+
+def getDefaults(theDefault=None):
+    """returns a dictionary of defaults values to be used
+        it takes the DEFAULTS from safe and modifies them according to qgis
+        QSettings
+
+    Args:
+       * theDefault: a key of the defaults dictionary
+
+    Returns:
+       * A dictionary of defaults values to be used
+       * or the default value if a key is passed
+       * or None if the requested default value is not valid
+    Raises:
+       no exceptions explicitly raised
+    """
+    mySettings = QtCore.QSettings()
+    myDefaults = DEFAULTS
+
+    myDefaults['FEM_RATIO'] = mySettings.value(
+        'inasafe/defaultFemaleRatio',
+        DEFAULTS['FEM_RATIO']).toDouble()[0]
+
+    if theDefault is None:
+        return myDefaults
+    elif theDefault in myDefaults:
+        return myDefaults[theDefault]
+    else:
+        return None
+
 
 #def copyInMemory(vLayer, copyName=''):
 #    """Return a memory copy of a layer
@@ -669,91 +820,100 @@ def setup_logger():
 #
 #    return memLayer
 
+def mmToPoints(theMM, theDpi):
+    """Convert measurement in points to one in mm.
 
-#def memoryLayerToShapefile(theFileName,
-#                           theFilePath,
-#                           theMemoryLayer,
-#                           theForceFlag=False,
-#                           mySourceQmlPath=''):
-#    """Write a memory layer to a shapefile.
-#
-#    .. note:: The file will be saved into the theFilePath dir  If a qml
-#        matching theFileName.qml can be found it will automatically copied
-#        over to the output dir.
-#        Any existing shp by the same name will be
-#        overridden if theForceFlag is True, otherwise the existing file will
-#        be returned.
-#
-#    Args:
-#        theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
-#        theMemoryLayer: QGIS memory layer instance.
-#        theForceFlag: bool (Optional). Whether to force the overwrite
-#            of any existing data. Defaults to False.
-#        mySourceQmlPath: str (Optional). Copy the qml file
-#        mySourceQmlPath/theFileName.qml to theFilePath.
-#
-#    Returns: str Path to the created shapefile
-#
-#    Raises: ShapefileCreationError
-#    """
-#    LOGGER.debug('memoryLayerToShapefile requested.')
-#
-#    LOGGER.debug(str(theMemoryLayer.dataProvider().attributeIndexes()))
-#    if theMemoryLayer.featureCount() < 1:
-#        raise ShapefileCreationError('Memory layer has no features')
-#
-#    myGeoCrs = QgsCoordinateReferenceSystem()
-#    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-#
-#    myOutputFileBase = os.path.join(theFilePath,
-#        '%s.' % theFileName)
-#    myOutputFile = myOutputFileBase + 'shp'
-#    if os.path.exists(myOutputFile) and theForceFlag is not True:
-#        return myOutputFile
-#    elif os.path.exists(myOutputFile):
-#        try:
-#            os.remove(myOutputFileBase + 'shp')
-#            os.remove(myOutputFileBase + 'shx')
-#            os.remove(myOutputFileBase + 'dbf')
-#            os.remove(myOutputFileBase + 'prj')
-#        except OSError:
-#            LOGGER.exception('Old shape files not deleted'
-#                             ' - this may indicate a file permissions issue.')
-#
-#    # Next two lines a workaround for a QGIS bug (lte 1.8)
-#    # preventing mem layer attributes being saved to shp.
-#    theMemoryLayer.startEditing()
-#    theMemoryLayer.commitChanges()
-#
-#    LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
-#    # Explicitly giving all options, not really needed but nice for clarity
-#    myErrorMessage = QtCore.QString()
-#    myOptions = QtCore.QStringList()
-#    myLayerOptions = QtCore.QStringList()
-#    mySelectedOnlyFlag = False
-#    mySkipAttributesFlag = False
-#    myResult = QgsVectorFileWriter.writeAsVectorFormat(
-#        theMemoryLayer,
-#        myOutputFile,
-#        'utf-8',
-#        myGeoCrs,
-#        "ESRI Shapefile",
-#        mySelectedOnlyFlag,
-#        myErrorMessage,
-#        myOptions,
-#        myLayerOptions,
-#        mySkipAttributesFlag)
-#
-#    if myResult == QgsVectorFileWriter.NoError:
-#        LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
-#    else:
-#        raise ShapefileCreationError(
-#            'Failed with error: %s' % myResult)
-#
-#    # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-#    if mySourceQmlPath is not '':
-#        myQmlPath = os.path.join(theFilePath, '%s.qml' % theFileName)
-#        mySourceQml = os.path.join(mySourceQmlPath, '%s.qml' % theFileName)
-#        shutil.copyfile(mySourceQml, myQmlPath)
-#
-#    return myOutputFile
+    Args:
+        * theMM: int - distance in millimeters
+        * theDpi: int - dots per inch in the print / display medium
+    Returns:
+        mm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myPoints = (theMM * theDpi) / myInchAsMM
+    return myPoints
+
+
+def pointsToMM(thePoints, theDpi):
+    """Convert measurement in points to one in mm.
+
+    Args:
+        * thePoints: int - number of points in display / print medium
+        * theDpi: int - dots per inch in the print / display medium
+    Returns:
+        mm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myMM = (float(thePoints) / theDpi) * myInchAsMM
+    return myMM
+
+
+def setupPrinter(theFilename,
+                 theResolution=300,
+                 thePageHeight=297,
+                 thePageWidth=210):
+    """Create a QPrinter instance defaulted to print to an A4 portrait pdf
+
+    Args:
+        theFilename - filename for pdf generated using this printer
+    Returns:
+        None
+    Raises:
+        None
+    """
+    #
+    # Create a printer device (we are 'printing' to a pdf
+    #
+    LOGGER.debug('InaSAFE Map setupPrinter called')
+    myPrinter = QtGui.QPrinter()
+    myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
+    myPrinter.setOutputFileName(theFilename)
+    myPrinter.setPaperSize(QtCore.QSizeF(thePageWidth, thePageHeight),
+                            QtGui.QPrinter.Millimeter)
+    myPrinter.setFullPage(True)
+    myPrinter.setColorMode(QtGui.QPrinter.Color)
+    myPrinter.setResolution(theResolution)
+    return myPrinter
+
+
+def humaniseSeconds(theSeconds):
+    """Utility function to humanise seconds value into e.g. 10 seconds ago.
+
+    The function will try to make a nice phrase of the seconds count
+    provided.
+
+    .. note:: Currently theSeconds that amount to days are not supported.
+
+    Args:
+        theSeconds: int - mandatory seconds value e.g. 1100
+
+    Returns:
+        str: A humanised version of the seconds count.
+
+    Raises:
+        None
+    """
+    myDays = theSeconds / (3600 * 24)
+    myDayModulus = theSeconds % (3600 * 24)
+    myHours = myDayModulus / 3600
+    myHourModulus = myDayModulus % 3600
+    myMinutes = myHourModulus / 60
+
+    if theSeconds < 60:
+        return tr('%i seconds' % theSeconds)
+    if theSeconds < 120:
+        return tr('a minute')
+    if theSeconds < 3600:
+        return tr('minutes' % myMinutes)
+    if theSeconds < 7200:
+        return tr('over an hour')
+    if theSeconds < 86400:
+        return tr('%i hours and %i minutes' % (myHours, myMinutes))
+    else:
+        # If all else fails...
+        return tr('%i days, %i hours and %i minutes' % (
+            myDays, myHours, myMinutes))

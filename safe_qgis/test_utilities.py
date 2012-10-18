@@ -2,6 +2,8 @@ import unittest
 import sys
 import os
 
+from PyQt4.QtCore import QVariant
+
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -11,11 +13,21 @@ from safe.api import bbox_intersection
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                               setVectorStyle,
                               setRasterStyle,
-                              qgisVersion)
-from safe_qgis.utilities_test import unitTestDataPath
-from safe_qgis.utilities_test import (loadLayer, getQgisTestApp)
+                              qgisVersion,
+                              mmToPoints,
+                              pointsToMM,
+                              humaniseSeconds,
+                              isLayerPolygonal,
+                              getLayerAttributeNames)
+from safe_qgis.utilities_test import (unitTestDataPath,
+                                     loadLayer,
+                                     getQgisTestApp)
 from safe_qgis.exceptions import StyleError
 from safe.common.exceptions import BoundingBoxError
+from safe_qgis.test_keywords_dialog import (makePolygonLayer,
+                                            makePadangLayer,
+                                            makePointLayer)
+from safe_qgis.utilities import getDefaults
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -236,6 +248,94 @@ class UtilitiesTest(unittest.TestCase):
         myVersion = qgisVersion()
         myMessage = 'Got version %s of QGIS, but at least 107000 is needed'
         assert myVersion > 10700, myMessage
+
+    def test_getLayerAttributeNames(self):
+        """Test we can get the correct attributes back"""
+        myLayer = makePolygonLayer()
+
+        #with good attribute name
+        myAttrs, myPos = getLayerAttributeNames(myLayer,
+            [QVariant.Int, QVariant.String],
+            'TEST_STRIN')
+        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        myExpectedPos = 2
+        myMessage = 'myExpectedAttrs, got %s, expected %s' % (
+            myAttrs, myExpectedAttrs)
+        assert (myAttrs == myExpectedAttrs), myMessage
+        myMessage = 'myExpectedPos, got %s, expected %s' % (
+            myPos, myExpectedPos)
+        assert (myPos == myExpectedPos), myMessage
+
+        #with inexistent attribute name
+        myAttrs, myPos = getLayerAttributeNames(myLayer,
+            [QVariant.Int, QVariant.String],
+            'MISSING_ATTR')
+        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        myExpectedPos = None
+        myMessage = 'myExpectedAttrs, got %s, expected %s' % (
+            myAttrs, myExpectedAttrs)
+        assert (myAttrs == myExpectedAttrs), myMessage
+        myMessage = 'myExpectedPos, got %s, expected %s' % (
+            myPos, myExpectedPos)
+        assert (myPos == myExpectedPos), myMessage
+
+        #with raster layer
+        myLayer = makePadangLayer()
+        myAttrs, myPos = getLayerAttributeNames(myLayer, [], '')
+        myMessage = 'Should return None, None for raster layer, got %s, %s' % (
+            myAttrs, myPos)
+        assert (myAttrs is None and myPos is None), myMessage
+
+    def test_isLayerPolygonal(self):
+        """Test we can get the correct attributes back"""
+        myLayer = makePolygonLayer()
+        myMessage = 'isLayerPolygonal, %s layer should be polygonal' % myLayer
+        assert isLayerPolygonal(myLayer), myMessage
+
+        myLayer = makePointLayer()
+        myMessage = '%s layer should be polygonal' % myLayer
+        assert not isLayerPolygonal(myLayer), myMessage
+
+        myLayer = makePadangLayer()
+        myMessage = ('%s raster layer should not be polygonal'
+                    % myLayer)
+        assert not isLayerPolygonal(myLayer), myMessage
+
+    def test_getDefaults(self):
+        myExpectedDefaults = {
+            'FEM_RATIO': 0.50,
+            'FEM_RATIO_KEY': 'female ratio default',
+            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
+            'AGGR_ATTR_KEY': 'aggregation attribute',
+            'YOUTH_RATIO': 0.263,
+            'ELDER_RATIO': 0.079,
+            'ADULT_RATIO': 0.659}
+        myDefaults = getDefaults()
+        myMessage = 'Defaults: got %s, expected %s' % (
+            myDefaults, myExpectedDefaults)
+        assert (myDefaults == myExpectedDefaults), myMessage
+
+    def test_mmPointConversion(self):
+        """Test that conversions between pixel and page dimensions work."""
+
+        myDpi = 300
+        myPixels = 300
+        myMM = 25.4  # 1 inch
+        myResult = pointsToMM(myPixels, myDpi)
+        myMessage = "Expected: %s\nGot: %s" % (myMM, myResult)
+        assert myResult == myMM, myMessage
+        myResult = mmToPoints(myMM, myDpi)
+        myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
+        assert myResult == myPixels, myMessage
+
+    def test_humaniseSeconds(self):
+        """Test that humanise seconds works."""
+        self.assertEqual(humaniseSeconds(5), '5 seconds')
+        self.assertEqual(humaniseSeconds(65), 'a minute')
+        self.assertEqual(humaniseSeconds(3605), 'over an hour')
+        self.assertEqual(humaniseSeconds(9000), '2 hours and 30 minutes')
+        self.assertEqual(humaniseSeconds(432232),
+                         '5 days, 0 hours and 3 minutes')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

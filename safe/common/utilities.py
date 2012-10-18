@@ -2,14 +2,8 @@
 """
 import os
 import gettext
-import logging
 from datetime import date
 import getpass
-
-# FIXME (Ole): For some reason this module doesn't work without this
-# pylint: disable=W0404
-import logging.handlers
-# pylint: enable=W0404
 from tempfile import mkstemp
 
 from safe.common.exceptions import VerificationError
@@ -43,6 +37,7 @@ def ugettext(s):
     t = gettext.translation(filename_prefix,
                             path, languages=[lang], fallback=True)
     return t.ugettext(s)
+
 
 def temp_dir(sub_dir='work'):
     """Obtain the temporary working directory for the operating system.
@@ -136,3 +131,20 @@ def unique_filename(**kwargs):
     except OSError:
         pass
     return filename
+
+try:
+    from safe_qgis.utilities import getDefaults as get_qgis_defaults
+
+    def get_defaults(default=None):
+        return get_qgis_defaults(theDefault=default)
+except ImportError:
+    #this is used when we are in safe without access to qgis (e.g. web )
+    from safe.defaults import DEFAULTS
+
+    def get_defaults(default=None):
+        if default is None:
+            return DEFAULTS
+        elif default in DEFAULTS:
+            return DEFAULTS[default]
+        else:
+            return None

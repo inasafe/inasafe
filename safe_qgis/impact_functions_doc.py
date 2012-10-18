@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'ismailsunni@yahoo.co.id'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -51,7 +51,7 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
                             'InaSAFE %s Impact Functions Doc' % __version__))
-        self.no_filter = 'No Filter'
+        self.no_filter = self.tr('No Filter')
         if dict_filter is None:
             dict_filter = {'id': [],
                            'title': [],
@@ -172,7 +172,6 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         if self.helpDialog:
             del self.helpDialog
         self.helpDialog = Help(self, 'impact_functions')
-        self.helpDialog.showMe()
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""

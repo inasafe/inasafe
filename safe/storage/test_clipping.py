@@ -1,5 +1,6 @@
 import unittest
 import numpy
+import os
 from os.path import join
 
 from safe.common.testing import TESTDATA
@@ -169,7 +170,10 @@ class Test_Clipping(unittest.TestCase):
             values = [{'value': x} for x in C[i][1]]
             point_layer = Vector(data=values, geometry=points,
                                  projection=P.get_projection())
-            assert point_layer.is_point_data
+
+            if len(point_layer) > 0:
+                # Geometry is only defined for layers that are not degenerate
+                assert point_layer.is_point_data
 
             polygon_layer = Vector(geometry=[polygon],
                                    projection=P.get_projection())
@@ -305,17 +309,19 @@ class Test_Clipping(unittest.TestCase):
             # But not in the inner ring
             assert not is_inside_polygon(point, inner_ring)
 
-        if False:
-            # Store for visual check
-            pol = Vector(geometry=[P])
-            tmp_filename = unique_filename(suffix='.shp')
-            pol.write_to_file(tmp_filename)
-            print 'Polygon with holes written to %s' % tmp_filename
+        # Store for visual check (nice one!)
+        # Uncomment os.remove if you want see the layers
+        pol = Vector(geometry=[P])
+        tmp_filename = unique_filename(suffix='.shp')
+        pol.write_to_file(tmp_filename)
+        #print 'Polygon with holes written to %s' % tmp_filename
+        os.remove(tmp_filename)
 
-            pts = Vector(geometry=points[indices, :])
-            tmp_filename = unique_filename(suffix='.shp')
-            pts.write_to_file(tmp_filename)
-            print 'Clipped points written to %s' % tmp_filename
+        pts = Vector(geometry=points[indices, :])
+        tmp_filename = unique_filename(suffix='.shp')
+        pts.write_to_file(tmp_filename)
+        #print 'Clipped points written to %s' % tmp_filename
+        os.remove(tmp_filename)
 
     test_clip_points_by_polygons_with_holes_real.slow = True
 

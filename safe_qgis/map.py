@@ -10,44 +10,39 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import temp_dir
-
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import logging
 
-from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
+from PyQt4 import QtCore, QtGui, QtXml
 from qgis.core import (QgsComposition,
                        QgsComposerMap,
                        QgsComposerLabel,
                        QgsComposerPicture,
                        QgsComposerScaleBar,
                        QgsComposerShape,
-                       QgsMapLayer,
                        QgsDistanceArea,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-
-from safe_qgis.exceptions import (LegendLayerException,
-                                  KeywordNotFoundException)
+from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
+from safe_qgis.exceptions import KeywordNotFoundException
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.utilities import htmlHeader, htmlFooter, qgisVersion
+from safe_qgis.map_legend import MapLegend
+from safe_qgis.utilities import (setupPrinter,
+                                 pointsToMM,
+                                 mmToPoints,
+                                 humaniseSeconds)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
-
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Map():
@@ -60,18 +55,15 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
+        LOGGER.debug('InaSAFE Map class initialised')
         self.iface = theIface
         self.layer = theIface.activeLayer()
         self.keywordIO = KeywordIO()
-        self.legend = None
-        self.header = None
-        self.footer = None
-        # how high each row of the legend should be
-        self.legendIncrement = 30
         self.printer = None
         self.composition = None
+        self.legend = None
         self.pageWidth = 210  # width in mm
         self.pageHeight = 297  # height in mm
         self.pageDpi = 300.0
@@ -85,7 +77,7 @@ class Map():
                                   ' BNPB, AusAid & the World Bank')
 
     def tr(self, theString):
-        """We implement this ourself since we do not inherit QObject.
+        """We implement this since we do not inherit QObject.
 
         Args:
            theString - string for translation.
@@ -105,291 +97,9 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         self.layer = theLayer
-
-    def writeTemplate(self, theTemplateFilePath):
-        """Write the current composition as a template that can be
-        re-used in QGIS."""
-        myDocument = QtXml.QDomDocument()
-        myElement = myDocument.createElement('Composer')
-        myDocument.appendChild(myElement)
-        self.composition.writeXML(myElement, myDocument)
-        myXml = myDocument.toByteArray()
-        myFile = file(theTemplateFilePath, 'wb')
-        myFile.write(myXml)
-        myFile.close()
-
-    def renderTemplate(self, theTemplateFilePath, theOutputFilePath):
-        """Load a QgsComposer map from a template and render it
-
-        .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
-
-        Args:
-            theTemplateFilePath - path to the template that should be loaded.
-            theOutputFilePath - path for the output pdf
-        Returns:
-            None
-        Raises:
-            None
-        """
-        self.setupComposition()
-        self.setupPrinter(theOutputFilePath)
-        if self.composition:
-            myFile = QtCore.QFile(theTemplateFilePath)
-            myDocument = QtXml.QDomDocument()
-            myDocument.setContent(myFile, False)  # .. todo:: fix magic param
-            myNodeList = myDocument.elementsByTagName('Composer')
-            if myNodeList.size() > 0:
-                myElement = myNodeList.at(0).toElement()
-                self.composition.readXML(myElement, myDocument)
-        self.renderPrintout()
-
-    def getLegend(self):
-        """Examine the classes of the impact layer associated with this print
-        job.
-
-        .. note: This is a wrapper for the rasterLegend and vectorLegend
-           methods.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            An InvalidLegendLayer will be raised if a legend cannot be
-            created from the layer.
-        """
-        if self.layer is None:
-            myMessage = self.tr('Unable to make a legend when map generator '
-                                'has no layer set.')
-            raise LegendLayerException(myMessage)
-        try:
-            self.keywordIO.readKeywords(self.layer, 'impact_summary')
-        except KeywordNotFoundException, e:
-            myMessage = self.tr('This layer does not appear to be an impact '
-                                'layer. Try selecting an impact layer in the '
-                                'QGIS layers list or creating a new impact '
-                                'scenario before using the print tool.'
-                                '\nMessage: %s' % str(e))
-            raise Exception(myMessage)
-        if self.layer.type() == QgsMapLayer.VectorLayer:
-            return self.getVectorLegend()
-        else:
-            return self.getRasterLegend()
-        return self.legend
-
-    def getVectorLegend(self):
-        """Get the legend for this layer as a graphic.
-
-        Args:
-            None
-        Returns:
-            A QImage object.
-            self.legend is also populated with the image.
-        Raises:
-            An InvalidLegendLayer will be raised if a legend cannot be
-            created from the layer.
-        """
-        if not self.layer.isUsingRendererV2():
-            myMessage = self.tr('A legend can only be generated for '
-                                'vector layers that use the "new symbology" '
-                                'implementation in QGIS.')
-            raise LegendLayerException(myMessage)
-        # new symbology - subclass of QgsFeatureRendererV2 class
-        self.legend = None
-        myRenderer = self.layer.rendererV2()
-        myType = myRenderer.type()
-        if myType == "singleSymbol":
-            mySymbol = myRenderer.symbol()
-            self.addSymbolToLegend(theLabel=self.layer.name(),
-                                   theSymbol=mySymbol)
-        elif myType == "categorizedSymbol":
-            for myCategory in myRenderer.categories():
-                mySymbol = myCategory.symbol()
-                self.addSymbolToLegend(
-                                theCategory=myCategory.value().toString(),
-                                theLabel=myCategory.label(),
-                                theSymbol=mySymbol)
-        elif myType == "graduatedSymbol":
-            for myRange in myRenderer.ranges():
-                mySymbol = myRange.symbol()
-                self.addSymbolToLegend(theMin=myRange.lowerValue(),
-                                       theMax=myRange.upperValue(),
-                                       theLabel=myRange.label(),
-                                       theSymbol=mySymbol)
-        else:
-            #type unknown
-            myMessage = self.tr('Unrecognised renderer type found for the '
-                                'impact layer. Please use one of these: '
-                                'single symbol, categorised symbol or '
-                                'graduated symbol and then try again.')
-            raise LegendLayerException(myMessage)
-        return self.legend
-
-    def getRasterLegend(self):
-        """Get the legend for a raster layer as an image.
-
-        Args:
-            None
-        Returns:
-            An image representing the layer's legend.
-            self.legend is also populated
-        Raises:
-            An InvalidLegendLayer will be raised if a legend cannot be
-            created from the layer.
-        """
-        # test if QGIS 1.8.0 or older
-        # see issue #259
-        if qgisVersion() <= 10800:
-            myShader = self.layer.rasterShader().rasterShaderFunction()
-            myRampItems = myShader.colorRampItemList()
-            myLastValue = 0  # Making an assumption here...
-            print 'Source: %s' % self.layer.source()
-            for myItem in myRampItems:
-                myValue = myItem.value
-                myLabel = myItem.label
-                myColor = myItem.color
-                print 'Value: %s Label %s' % (myValue, myLabel)
-                self.addClassToLegend(myColor,
-                          theMin=myLastValue,
-                          theMax=myValue,
-                          theLabel=myLabel)
-                myLastValue = myValue
-        else:
-            #TODO implement QGIS2.0 variant
-            #In master branch, use QgsRasterRenderer::rasterRenderer() to
-            # get/set how a raster is displayed.
-            pass
-        return self.legend
-
-    def addSymbolToLegend(self,
-                         theSymbol,
-                         theMin=None,
-                         theMax=None,
-                         theCategory=None,
-                         theLabel=None):
-        """Add a class to the current legend. If the legend is not defined,
-        a new one will be created. A legend is just an image file with nicely
-        rendered classes in it.
-
-        .. note:: This method just extracts the colour from the symbol and then
-           delegates to the addClassToLegend function.
-
-        Args:
-
-            * theSymbol - **Required** symbol for the class as a QgsSymbol
-            * theMin - Optional minimum value for the class
-            * theMax - Optional maximum value for the class\
-            * theCategory - Optional category name (will be used in lieu of
-                       min/max)
-            * theLabel - Optional text label for the class
-
-        Returns:
-            None
-        Raises:
-            Throws an exception if the class could not be added for
-            some reason..
-        """
-        myColour = theSymbol.color()
-        self.addClassToLegend(myColour,
-                              theMin=theMin,
-                              theMax=theMax,
-                              theCategory=theCategory,
-                              theLabel=theLabel)
-
-    def addClassToLegend(self,
-                         theColour,
-                         theMin=None,
-                         theMax=None,
-                         theCategory=None,
-                         theLabel=None):
-        """Add a class to the current legend. If the legend is not defined,
-        a new one will be created. A legend is just an image file with nicely
-        rendered classes in it.
-
-        Args:
-
-            * theColour - **Required** colour for the class as a QColor
-            * theMin - Optional minimum value for the class
-            * theMax - Optional maximum value for the class\
-            * theCategory - Optional category name (will be used in lieu of
-                       min/max)
-            * theLabel - Optional text label for the class
-
-        Returns:
-            None
-        Raises:
-            Throws an exception if the class could not be added for
-            some reason..
-        """
-        self.extendLegend()
-        myOffset = self.legend.height() - self.legendIncrement
-        myPainter = QtGui.QPainter(self.legend)
-        myBrush = QtGui.QBrush(theColour)
-        myPainter.setBrush(myBrush)
-        myPainter.setPen(theColour)
-        myWhitespace = 0  # white space above and below each class itcon
-        mySquareSize = self.legendIncrement - (myWhitespace * 2)
-        myLeftIndent = 10
-        myPainter.drawRect(QtCore.QRectF(myLeftIndent,
-                                         myOffset + myWhitespace,
-                                         mySquareSize, mySquareSize))
-        myPainter.setPen(QtGui.QColor(0, 0, 0))  # outline colour
-        myLabelX = myLeftIndent + mySquareSize + 10
-        myFontSize = 8
-        myFontWeight = QtGui.QFont.Normal
-        myItalicsFlag = False
-        myFont = QtGui.QFont('verdana',
-                         myFontSize,
-                         myFontWeight,
-                         myItalicsFlag)
-        myPainter.setFont(myFont)
-        myLabel = ''
-        if theLabel:
-            myLabel = theLabel
-        if theMin is not None and theMax is not None:
-            myLabel += ' [' + str(theMin) + ', ' + str(theMax) + ']'
-        if theCategory is not None:
-            myLabel = ' (' + theCategory + ')'
-        myPainter.drawText(myLabelX, myOffset + 25, myLabel)
-
-    def extendLegend(self):
-        """Grow the legend pixmap enough to accommodate one more legend entry.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        if self.legend is None:
-            self.legend = QtGui.QPixmap(300, 80)
-            self.legend.fill(QtGui.QColor(255, 255, 255))
-            myPainter = QtGui.QPainter(self.legend)
-            myFontSize = 12
-            myFontWeight = QtGui.QFont.Bold
-            myItalicsFlag = False
-            myFont = QtGui.QFont('verdana',
-                             myFontSize,
-                             myFontWeight,
-                             myItalicsFlag)
-            myPainter.setFont(myFont)
-            myPainter.drawText(10, 25, self.tr('Legend'))
-        else:
-            # extend the existing legend down for the next class
-            myPixmap = QtGui.QPixmap(300, self.legend.height() +
-                                          self.legendIncrement)
-            myPixmap.fill(QtGui.QColor(255, 255, 255))
-            myPainter = QtGui.QPainter(myPixmap)
-
-            myRect = QtCore.QRectF(0, 0,
-                                   self.legend.width(),
-                                   self.legend.height())
-            myPainter.drawPixmap(myRect, self.legend, myRect)
-            self.legend = myPixmap
 
     def setupComposition(self):
         """Set up the composition ready for drawing elements onto it.
@@ -401,72 +111,113 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map setupComposition called')
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
         self.composition = QgsComposition(myRenderer)
-        self.composition.setPlotStyle(QgsComposition.Print)
+        self.composition.setPlotStyle(QgsComposition.Print)  # or preview
         self.composition.setPaperSize(self.pageWidth, self.pageHeight)
         self.composition.setPrintResolution(self.pageDpi)
         self.composition.setPrintAsRaster(True)
 
-    def setupPrinter(self, theFilename):
-        """Create a QPrinter instance set up to print to an A4 portrait pdf
-
-        Args:
-            theFilename - filename for pdf generated using this printer
-        Returns:
-            None
-        Raises:
-            None
-        """
-        #
-        # Create a printer device (we are 'printing' to a pdf
-        #
-        self.printer = QtGui.QPrinter()
-        self.printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
-        self.printer.setOutputFileName(theFilename)
-        self.printer.setPaperSize(QtCore.QSizeF(self.pageWidth,
-                                             self.pageHeight),
-                                             QtGui.QPrinter.Millimeter)
-        self.printer.setFullPage(True)
-        self.printer.setColorMode(QtGui.QPrinter.Color)
-        myResolution = self.composition.printResolution()
-        self.printer.setResolution(myResolution)
-
-    def renderPrintout(self):
-        """Generate the printout for our final map composition.
+    def composeMap(self):
+        """Place all elements on the map ready for printing.
 
         Args:
             None
+
         Returns:
             None
+
+        Raises:
+            Any exceptions raised will be propagated.
+        """
+        self.setupComposition()
+        # Keep track of our vertical positioning as we work our way down
+        # the page placing elements on it.
+        myTopOffset = self.pageMargin
+        self.drawLogo(myTopOffset)
+        myLabelHeight = self.drawTitle(myTopOffset)
+        # Update the map offset for the next row of content
+        myTopOffset += myLabelHeight + self.verticalSpacing
+        myComposerMap = self.drawMap(myTopOffset)
+        self.drawScaleBar(myComposerMap, myTopOffset)
+        # Update the top offset for the next horizontal row of items
+        myTopOffset += self.mapHeight + self.verticalSpacing - 1
+        myImpactTitleHeight = self.drawImpactTitle(myTopOffset)
+        # Update the top offset for the next horizontal row of items
+        if myImpactTitleHeight:
+            myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
+        self.drawLegend(myTopOffset)
+        self.drawHostAndTime(myTopOffset)
+        self.drawDisclaimer()
+
+    def renderComposition(self):
+        """Render the map composition to an image and save that to disk.
+
+        Args:
+            None
+
+        Returns:
+            tuple:
+                * str: myImagePath - absolute path to png of rendered map
+                * QImage: myImage - in memory copy of rendered map
+                * QRectF: myTargetArea - dimensions of rendered map
+            str: Absolute file system path to the rendered image.
+
         Raises:
             None
         """
-        myPainter = QtGui.QPainter(self.printer)
-        self.composition.setPlotStyle(QgsComposition.Print)  # or preview
+        LOGGER.debug('InaSAFE Map renderComposition called')
+        # NOTE: we ignore self.composition.printAsRaster() and always rasterise
+        myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
+        myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
+        myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
+                               QtGui.QImage.Format_ARGB32)
+        myImage.setDotsPerMeterX(self.pageDpi / 25.4 * 1000)
+        myImage.setDotsPerMeterY(self.pageDpi / 25.4 * 1000)
+        myImage.fill(0)
+        myImagePainter = QtGui.QPainter(myImage)
+        mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
+                                     self.pageHeight)
+        myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
+        self.composition.render(myImagePainter, myTargetArea, mySourceArea)
+        myImagePainter.end()
+        myImagePath = unique_filename(prefix='mapRender_',
+                                      suffix='.png',
+                                      dir=temp_dir())
+        myImage.save(myImagePath)
+        return myImagePath, myImage, myTargetArea
 
-        if self.composition.printAsRaster():
-            myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
-            myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
-            myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
-                                   QtGui.QImage.Format_ARGB32)
-            myImage.setDotsPerMeterX(self.pageDpi / 25.4 * 1000)
-            myImage.setDotsPerMeterY(self.pageDpi / 25.4 * 1000)
-            myImage.fill(0)
-            myImagePainter = QtGui.QPainter(myImage)
-            mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
-                                                   self.pageHeight)
-            myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
-            self.composition.render(myImagePainter, myTargetArea, mySourceArea)
-            myImagePainter.end()
-            myPainter.drawImage(myTargetArea, myImage, myTargetArea)
+    def printToPdf(self, theFilename):
+        """Generate the printout for our final map.
+
+        Args:
+            theFilename: str - optional path on the file system to which the
+                pdf should be saved. If None, a generated file name will be
+                used.
+        Returns:
+            str: file name of the output file (equivalent to theFilename if
+                provided).
+        Raises:
+            None
+        """
+        LOGGER.debug('InaSAFE Map printToPdf called')
+        if theFilename is None:
+            myMapPdfPath = unique_filename(prefix='report',
+                                     suffix='.pdf',
+                                     dir=temp_dir('work'))
         else:
-            #Each composer element will be rendered as its own layer in the pdf
-            myPaperRectMM = self.printer.pageRect(QtGui.QPrinter.Millimeter)
-            myPaperRectPx = self.printer.pageRect(QtGui.QPrinter.DevicePixel)
-            self.composition.render(myPainter, myPaperRectPx, myPaperRectMM)
+            # We need to cast to python string in case we receive a QString
+            myMapPdfPath = str(theFilename)
+
+        self.composeMap()
+        self.printer = setupPrinter(myMapPdfPath)
+        _, myImage, myRectangle = self.renderComposition()
+        myPainter = QtGui.QPainter(self.printer)
+        myPainter.drawImage(myRectangle, myImage, myRectangle)
         myPainter.end()
+        return myMapPdfPath
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner
@@ -498,6 +249,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawTitle called')
         myFontSize = 14
         myFontWeight = QtGui.QFont.Bold
         myItalicsFlag = False
@@ -533,6 +285,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawMap called')
         myMapWidth = self.mapWidth
         myComposerMap = QgsComposerMap(self.composition,
                                        self.pageMargin,
@@ -595,8 +348,8 @@ class Map():
         return myComposerMap
 
     def drawGraticuleMask(self, theTopOffset):
-        """A helper funtion to mask out graticule labels on the right side
-           by overpainting a white rectangle with white border on them.
+        """A helper function to mask out graticule labels on the right side
+           by over painting a white rectangle with white border on them.
 
         Args:
             theTopOffset - vertical offset at which the map should be drawn
@@ -605,6 +358,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawGraticuleMask called')
         myLeftOffset = self.pageMargin + self.mapWidth
         myRect = QgsComposerShape(myLeftOffset + 0.5,
                                   theTopOffset,
@@ -632,8 +386,9 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
+        LOGGER.debug('InaSAFE Map drawNativeScaleBar called')
         myScaleBar = QgsComposerScaleBar(self.composition)
         myScaleBar.setStyle('Numeric')  # optionally modify the style
         myScaleBar.setComposerMap(theComposerMap)
@@ -665,8 +420,9 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
+        LOGGER.debug('InaSAFE Map drawScaleBar called')
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
         #
@@ -811,6 +567,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawImpactTitle called')
         myTitle = self.getMapTitle()
         if myTitle is None:
             myTitle = ''
@@ -849,13 +606,15 @@ class Map():
         Raises:
             None
         """
-        self.getLegend()
+        LOGGER.debug('InaSAFE Map drawLegend called')
+        myLegend = MapLegend(self.layer)
+        self.legend = myLegend.getLegend()
         myPicture1 = QgsComposerPicture(self.composition)
         myLegendFile = os.path.join(temp_dir(), 'legend.png')
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
-        myLegendHeight = self.pointsToMM(self.legend.height())
-        myLegendWidth = self.pointsToMM(self.legend.width())
+        myLegendHeight = pointsToMM(self.legend.height(), self.pageDpi)
+        myLegendWidth = pointsToMM(self.legend.width(), self.pageDpi)
         myPicture1.setItemPosition(self.pageMargin,
                                    theTopOffset,
                                    myLegendWidth,
@@ -884,12 +643,14 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawPixmap called')
         myDesiredWidthMM = theWidthMM  # mm
-        myDesiredWidthPX = self.mmToPoints(myDesiredWidthMM)
+        myDesiredWidthPX = mmToPoints(myDesiredWidthMM, self.pageDpi)
         myActualWidthPX = thePixmap.width()
         myScaleFactor = myDesiredWidthPX / myActualWidthPX
 
-        print myScaleFactor, myActualWidthPX, myDesiredWidthPX
+        LOGGER.debug('%s %s %s' % (
+            myScaleFactor, myActualWidthPX, myDesiredWidthPX))
         myTransform = QtGui.QTransform()
         myTransform.scale(myScaleFactor, myScaleFactor)
         myTransform.rotate(0.5)
@@ -899,8 +660,8 @@ class Map():
                          theTopOffset / myScaleFactor)
         return myItem
 
-    def drawImpactTable(self, theTopOffset):
-        """Render the impact table.
+    def drawHostAndTime(self, theTopOffset):
+        """Add a disclaimer to the composition.
 
         Args:
             theTopOffset - vertical offset at which to begin drawing
@@ -909,23 +670,58 @@ class Map():
         Raises:
             None
         """
-        # Draw the table
-        myTable = QgsComposerPicture(self.composition)
-        myImage = self.renderImpactTable()
-        if myImage is not None:
-            myTableFile = os.path.join(temp_dir(), 'table.png')
-            myImage.save(myTableFile, 'PNG')
-            myTable.setPictureFile(myTableFile)
-            myScaleFactor = 1
-            myTableHeight = self.pointsToMM(myImage.height()) * myScaleFactor
-            myTableWidth = self.pointsToMM(myImage.width()) * myScaleFactor
-            myLeftOffset = self.pageMargin + self.mapHeight - myTableWidth
-            myTable.setItemPosition(myLeftOffset,
-                                    theTopOffset,
-                                    myTableWidth,
-                                    myTableHeight)
-            myTable.setFrame(False)
-            self.composition.addItem(myTable)
+        LOGGER.debug('InaSAFE Map drawDisclaimer called')
+        #elapsed_time: 11.612545
+        #user: timlinux
+        #host_name: ultrabook
+        #time_stamp: 2012-10-13_23:10:31
+        myUser = self.keywordIO.readKeywords(self.layer, 'user')
+        myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
+        myDateTime = self.keywordIO.readKeywords(self.layer, 'time_stamp')
+        myTokens = myDateTime.split('_')
+        myDate = myTokens[0]
+        myTime = myTokens[1]
+        myElapsedTime = self.keywordIO.readKeywords(self.layer, 'elapsed_time')
+        myElapsedTime = humaniseSeconds(myElapsedTime)
+        myLongVersion = get_version()
+        myTokens = myLongVersion.split('.')
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
+        myLabelText = self.tr('Assessment carried out on host "%s"'
+                         'by user "%s" using InaSAFE release %s (QGIS '
+                         'plugin version).\n'
+                         'Date and time of assessment: %s %s\n'
+                         'Elapsed time for assessment calculation: %s\n'
+                         'Special note: This assessment is a guide - we '
+                         'strongly recommend that you ground truth the '
+                         'results shown here before deploying resources '
+                         'and / or personnel.' % (
+                         myHost,
+                         myUser,
+                         myVersion,
+                         myDate,
+                         myTime,
+                         myElapsedTime))
+        myFontSize = 8
+        myFontWeight = QtGui.QFont.Normal
+        myItalicsFlag = True
+        myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
+        myLabel = QgsComposerLabel(self.composition)
+        myLabel.setFont(myFont)
+        myLabel.setText(myLabelText)
+        myLabel.adjustSizeToText()
+        myLabelHeight = 50.0  # mm determined using qgis map composer
+        myLabelWidth = (self.pageWidth / 2) - self.pageMargin
+        myLeftOffset = self.pageWidth / 2  # put in right half of page
+        myLabel.setItemPosition(myLeftOffset,
+                                theTopOffset,
+                                myLabelWidth,
+                                myLabelHeight,
+                                )
+        myLabel.setFrame(self.showFramesFlag)
+        self.composition.addItem(myLabel)
 
     def drawDisclaimer(self):
         """Add a disclaimer to the composition.
@@ -937,6 +733,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawDisclaimer called')
         myFontSize = 10
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = True
@@ -960,39 +757,6 @@ class Map():
         myLabel.setFrame(self.showFramesFlag)
         self.composition.addItem(myLabel)
 
-    def makePdf(self, theFilename):
-        """Method to createa  nice little pdf map.
-
-        Args:
-            theFilename - a string containing a filename path with .pdf
-            extension
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        self.setupComposition()
-        self.setupPrinter(theFilename)
-        # Keep track of our vertical positioning as we work our way down
-        # the page placing elements on it.
-        myTopOffset = self.pageMargin
-        self.drawLogo(myTopOffset)
-        myLabelHeight = self.drawTitle(myTopOffset)
-        # Update the map offset for the next row of content
-        myTopOffset += myLabelHeight + self.verticalSpacing
-        myComposerMap = self.drawMap(myTopOffset)
-        self.drawScaleBar(myComposerMap, myTopOffset)
-        # Update the top offset for the next horizontal row of items
-        myTopOffset += self.mapHeight + self.verticalSpacing - 1
-        myImpactTitleHeight = self.drawImpactTitle(myTopOffset)
-        # Update the top offset for the next horizontal row of items
-        if myImpactTitleHeight:
-            myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
-        self.drawLegend(myTopOffset)
-        self.drawImpactTable(myTopOffset)
-        self.drawDisclaimer()
-        self.renderPrintout()
-
     def getMapTitle(self):
         """Get the map title from the layer keywords if possible.
 
@@ -1001,8 +765,9 @@ class Map():
         Returns:
             None on error, otherwise the title
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
+        LOGGER.debug('InaSAFE Map getMapTitle called')
         try:
             myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
             return myTitle
@@ -1010,121 +775,6 @@ class Map():
             return None
         except Exception:
             return None
-
-    def renderImpactTable(self):
-        """Render the table in the keywords if present. The table is an
-        html table with statistics for the impact layer.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        try:
-            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
-            return self.renderHtml(myHtml, 156)
-        except KeywordNotFoundException:
-            return None
-        except Exception:
-            return None
-
-    def renderHtml(self, theHtml, theWidthMM):
-        """Render some HTML to a pixmap.
-
-        Args:
-            * theHtml - HTML to be rendered. It is assumed that the html
-              is a snippet only, containing no body element - a standard
-              header and footer will be appended.
-            * theWidthMM- width of the table in mm - will be converted to
-              points based on the resolution of our page.
-        Returns:
-            A QPixmap
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        # Using 150dpi as the baseline, work out a standard text size
-        # multiplier so that page renders equally well at different print
-        # resolutions.
-        myBaselineDpi = 150
-        myFactor = float(self.pageDpi) / myBaselineDpi
-        myWidthPx = self.mmToPoints(theWidthMM)
-        myPage = QtWebKit.QWebPage()
-        myFrame = myPage.mainFrame()
-        myFrame.setTextSizeMultiplier(myFactor)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-
-        myHeader = self.htmlHeader()
-        myFooter = self.htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        myFrame.setHtml(myHtml)
-        #file('/tmp/report.html', 'wt').write(myHtml).close()
-        #print '\n\n\nPage:\n', myFrame.toHtml()
-        #mySize = QtCore.QSize(600, 200)
-        mySize = myFrame.contentsSize()
-        mySize.setWidth(myWidthPx)
-        myPage.setViewportSize(mySize)
-        # Disabled for now but please keep this as we may want to render using
-        # a QImage due to device constraints (eg. headless server)
-        myQImageFlag = False
-        if myQImageFlag:
-            myImage = QtGui.QImage(mySize, QtGui.QImage.Format_ARGB32)
-            myImage.fill(QtGui.QColor(255, 255, 255))
-            myPainter = QtGui.QPainter(myImage)
-            myFrame.render(myPainter)
-            myPainter.end()
-            return myImage
-        else:  # render with qpixmap rather
-            myPixmap = QtGui.QPixmap(mySize)
-            myPixmap.fill(QtGui.QColor(255, 255, 255))
-            myPainter = QtGui.QPainter(myPixmap)
-            myFrame.render(myPainter)
-            myPainter.end()
-            return myPixmap
-
-    def pointsToMM(self, thePoints):
-        """Convert measurement in points to one in mm.
-
-        Args:
-            thePoints - distance in pixels
-        Returns:
-            mm converted value
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        myInchAsMM = 25.4
-        myMM = (float(thePoints) / self.pageDpi) * myInchAsMM
-        return myMM
-
-    def mmToPoints(self, theMM):
-        """Convert measurement in points to one in mm.
-
-        Args:
-            theMM - distance in milimeters
-        Returns:
-            mm converted value
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        myInchAsMM = 25.4
-        myPoints = (theMM * self.pageDpi) / myInchAsMM
-        return myPoints
-
-    def htmlHeader(self):
-        """Get a standard html header for wrapping content in."""
-        if self.header is None:
-            self.header = htmlHeader()
-        return self.header
-
-    def htmlFooter(self):
-        """Get a standard html footer for wrapping content in."""
-        if self.footer is None:
-            self.footer = htmlFooter()
-        return self.footer
 
     def showComposer(self):
         """Show the composition in a composer view so the user can tweak it
@@ -1139,3 +789,43 @@ class Map():
         """
         myView = QgsComposerView(self.iface.mainWindow())
         myView.show()
+
+    def writeTemplate(self, theTemplateFilePath):
+        """Write the current composition as a template that can be
+        re-used in QGIS."""
+        myDocument = QtXml.QDomDocument()
+        myElement = myDocument.createElement('Composer')
+        myDocument.appendChild(myElement)
+        self.composition.writeXML(myElement, myDocument)
+        myXml = myDocument.toByteArray()
+        myFile = file(theTemplateFilePath, 'wb')
+        myFile.write(myXml)
+        myFile.close()
+
+    def renderTemplate(self, theTemplateFilePath, theOutputFilePath):
+        """Load a QgsComposer map from a template and render it
+
+        .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
+
+        Args:
+            theTemplateFilePath - path to the template that should be loaded.
+            theOutputFilePath - path for the output pdf
+        Returns:
+            None
+        Raises:
+            None
+        """
+        self.setupComposition()
+
+        myResolution = self.composition.printResolution()
+        self.printer = setupPrinter(theOutputFilePath,
+                                    theResolution=myResolution)
+        if self.composition:
+            myFile = QtCore.QFile(theTemplateFilePath)
+            myDocument = QtXml.QDomDocument()
+            myDocument.setContent(myFile, False)  # .. todo:: fix magic param
+            myNodeList = myDocument.elementsByTagName('Composer')
+            if myNodeList.size() > 0:
+                myElement = myNodeList.at(0).toElement()
+                self.composition.readXML(myElement, myDocument)
+        self.printToPdf(theOutputFilePath)

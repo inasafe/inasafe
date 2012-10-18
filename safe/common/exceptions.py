@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '17/06/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -59,4 +59,10 @@ class BoundsError(InaSAFEError):
 
 class GetDataError(InaSAFEError):
     """When layer data cannot be obtained"""
+    pass
+
+
+class PostprocessorError(Exception):
+    """Raised if the requested import cannot be performed dur to qgis being
+    to old"""
     pass

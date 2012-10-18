@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -23,22 +23,19 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
-from odict import OrderedDict
+from third_party.odict import OrderedDict
 
+from safe_qgis.safe_interface import InaSAFEError
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
-from safe_qgis.utilities import getExceptionWithStacktrace
+from safe_qgis.utilities import (getExceptionWithStacktrace,
+                                 isLayerPolygonal,
+                                 getLayerAttributeNames,
+                                 getDefaults)
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
-from safe.common.exceptions import InaSAFEError
-
-# Don't remove this even if it is flagged as unused by your ide
-# it is needed for qrc:/ url resolution. See Qt Resources docs.
-import safe_qgis.resources  # pylint: disable=W0611
-
-#see if we can import pydev - see development docs for details
 
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
@@ -66,7 +63,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-                            'InaSAFE %s Keywords Editor' % __version__))
+            'InaSAFE %s Keywords Editor' % __version__))
         self.keywordIO = KeywordIO()
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
@@ -79,22 +76,19 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                      ('Not Set', self.tr('Not Set'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
                                     self.tr('earthquake [MMI]')),
-                                     ('tsunami [m]', self.tr('tsunami [m]')),
-                                     ('tsunami [wet/dry]',
-                                      self.tr('tsunami [wet/dry]')),
-                                     ('tsunami [feet]',
-                                      self.tr('tsunami [feet]')),
-                                     ('flood [m]', self.tr('flood [m]')),
-                                     ('flood [wet/dry]',
-                                      self.tr('flood [wet/dry]')),
-                                     ('flood [feet]', self.tr('flood [feet]')),
-                                     ('tephra [kg2/m2]',
-                                      self.tr('tephra [kg2/m2]')),
-                                      ('volcano', self.tr('volcano')),
-                                     ('Not Set', self.tr('Not Set'))])
-        self.standardPostprocessingList = OrderedDict([('aggregation',
-                                    self.tr('aggregation')),
-                                    ('Not Set', self.tr('Not Set'))])
+                                   ('tsunami [m]', self.tr('tsunami [m]')),
+                                   ('tsunami [wet/dry]',
+                                    self.tr('tsunami [wet/dry]')),
+                                   ('tsunami [feet]',
+                                    self.tr('tsunami [feet]')),
+                                   ('flood [m]', self.tr('flood [m]')),
+                                   ('flood [wet/dry]',
+                                    self.tr('flood [wet/dry]')),
+                                   ('flood [feet]', self.tr('flood [feet]')),
+                                   ('tephra [kg2/m2]',
+                                    self.tr('tephra [kg2/m2]')),
+                                   ('volcano', self.tr('volcano')),
+                                   ('Not Set', self.tr('Not Set'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -111,10 +105,14 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                self.showHelp)
 
         # set some inital ui state:
+        self.defaults = getDefaults()
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
-        self.adjustSize()
+        self.dsbFemaleRatioDefault.blockSignals(True)
+        self.dsbFemaleRatioDefault.setValue(self.defaults[
+                                            'FEM_RATIO'])
+        self.dsbFemaleRatioDefault.blockSignals(False)
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
         if theLayer is None:
@@ -123,58 +121,125 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.layer = theLayer
         if self.layer:
             self.loadStateFromKeywords()
-        self.showExtraWidgets()
+
+        #add a reload from keywords button
+        myButton = self.buttonBox.addButton(self.tr('Reload'),
+                                            QtGui.QDialogButtonBox.ActionRole)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                               self.loadStateFromKeywords)
+
+    def setLayer(self, theLayer):
+        self.layer = theLayer
+        self.loadStateFromKeywords()
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
         if self.helpDialog:
             del self.helpDialog
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
-        self.helpDialog.showMe()
 
-    def showExtraWidgets(self):
-        if (self.radPostprocessing.isChecked() and
-            self.cboSubcategory.currentText() == self.tr('aggregation')):
-            self.showAggregationAttribute(True)
-        else:
-            self.showAggregationAttribute(False)
-
-        self.adjustSize()
+    def togglePostprocessingWidgets(self):
+        isPostprocessingOn = self.radPostprocessing.isChecked()
+        self.cboSubcategory.setVisible(not isPostprocessingOn)
+        self.lblSubcategory.setVisible(not isPostprocessingOn)
+        self.showAggregationAttribute(isPostprocessingOn)
+        self.showFemaleRatioAttribute(isPostprocessingOn)
+        self.showFemaleRatioDefault(isPostprocessingOn)
 
     def showAggregationAttribute(self, theFlag):
-        cboAggr = self.cboAggregationAttribute
-        cboAggr.clear()
-        fields = []
+        theBox = self.cboAggregationAttribute
+        theBox.blockSignals(True)
+        theBox.clear()
+        theBox.blockSignals(False)
         if theFlag:
-            vProvider = self.layer.dataProvider()
-            vFields = vProvider.fields()
-            currentKeyword = self.getValueForKey('aggregation attribute')
-            selectedIndex = 0
-            i = 0
-            for i in vFields:
-                # show only int or string fields to be chosen as aggregation
-                # attribute other possible would be float
-                if vFields[i].type() in [
-                    QtCore.QVariant.Int, QtCore.QVariant.String]:
-                    curentFieldName = vFields[i].name()
-                    fields.append(curentFieldName)
-                    if currentKeyword == curentFieldName:
-                        selectedIndex = i
-                    i += 1
+            currentKeyword = self.getValueForKey(
+                self.defaults['AGGR_ATTR_KEY'])
+            fields, attributePosition = getLayerAttributeNames(self.layer,
+                               [QtCore.QVariant.Int, QtCore.QVariant.String],
+                               currentKeyword)
+            theBox.addItems(fields)
+            if attributePosition is None:
+                theBox.setCurrentIndex(0)
+            else:
+                theBox.setCurrentIndex(attributePosition)
 
-            cboAggr.addItems(fields)
-            cboAggr.setCurrentIndex(selectedIndex)
-
-        self.cboAggregationAttribute.setVisible(theFlag)
+        theBox.setVisible(theFlag)
         self.lblAggregationAttribute.setVisible(theFlag)
 
-        # prevents actions being handled twice
+    def showFemaleRatioAttribute(self, theFlag):
+        theBox = self.cboFemaleRatioAttribute
+        theBox.blockSignals(True)
+        theBox.clear()
+        theBox.blockSignals(False)
+        if theFlag:
+            currentKeyword = self.getValueForKey(
+                self.defaults['FEM_RATIO_ATTR_KEY'])
+            fields, attributePosition = getLayerAttributeNames(self.layer,
+                                               [QtCore.QVariant.Double],
+                                               currentKeyword)
+            fields.insert(0, self.tr('Use default'))
+            fields.insert(1, self.tr('Don\'t use'))
+            theBox.addItems(fields)
+            if currentKeyword == self.tr('Use default'):
+                theBox.setCurrentIndex(0)
+            elif currentKeyword == self.tr('Don\'t use'):
+                theBox.setCurrentIndex(1)
+            elif attributePosition is None:
+                # currentKeyword was not found in the attribute table.
+                # Use default
+                theBox.setCurrentIndex(0)
+            else:
+                # + 2 is because we add use defaults and don't use
+                theBox.setCurrentIndex(attributePosition + 2)
+        theBox.setVisible(theFlag)
+        self.lblFemaleRatioAttribute.setVisible(theFlag)
 
+    def showFemaleRatioDefault(self, theFlag):
+        theBox = self.dsbFemaleRatioDefault
+        if theFlag:
+            currentValue = self.getValueForKey(
+                self.defaults['FEM_RATIO_KEY'])
+            if currentValue is None:
+                val = self.defaults['FEM_RATIO']
+            else:
+                val = float(currentValue)
+            theBox.setValue(val)
+
+        theBox.setVisible(theFlag)
+        self.lblFemaleRatioDefault.setVisible(theFlag)
+
+    # prevents actions being handled twice
     @pyqtSignature('int')
     def on_cboAggregationAttribute_currentIndexChanged(self, theIndex=None):
         del theIndex
-        self.addListEntry('aggregation attribute',
-        self.cboAggregationAttribute.currentText())
+        self.addListEntry(self.defaults['AGGR_ATTR_KEY'],
+                          self.cboAggregationAttribute.currentText())
+
+    # prevents actions being handled twice
+    @pyqtSignature('int')
+    def on_cboFemaleRatioAttribute_currentIndexChanged(self, theIndex=None):
+        del theIndex
+        text = self.cboFemaleRatioAttribute.currentText()
+        if text == self.tr('Use default'):
+            self.dsbFemaleRatioDefault.setEnabled(True)
+            currentDefault = self.getValueForKey(
+                self.defaults['FEM_RATIO_KEY'])
+            if currentDefault is None:
+                self.addListEntry(self.defaults['FEM_RATIO_KEY'],
+                                  self.dsbFemaleRatioDefault.value())
+        else:
+            self.dsbFemaleRatioDefault.setEnabled(False)
+            self.removeItemByKey(self.defaults['FEM_RATIO_KEY'])
+        self.addListEntry(self.defaults['FEM_RATIO_ATTR_KEY'], text)
+
+    # prevents actions being handled twice
+    @pyqtSignature('double')
+    def on_dsbFemaleRatioDefault_valueChanged(self, theValue):
+        del theValue
+        theBox = self.dsbFemaleRatioDefault
+        if theBox.isEnabled():
+            self.addListEntry(self.defaults['FEM_RATIO_KEY'],
+                              theBox.value())
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -245,7 +310,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if not theFlag:
-            self.removeItemByKey('aggregation attribute')
+            self.removeItemByKey(self.defaults['AGGR_ATTR_KEY'])
+            self.removeItemByKey(self.defaults['FEM_RATIO_ATTR_KEY'])
+            self.removeItemByKey(self.defaults['FEM_RATIO_KEY'])
             return
         self.setCategory('postprocessing')
         self.updateControlsFromList()
@@ -267,9 +334,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         del theIndex
         myItem = self.cboSubcategory.itemData(
-                            self.cboSubcategory.currentIndex()).toString()
+            self.cboSubcategory.currentIndex()).toString()
         myText = str(myItem)
-        self.showExtraWidgets()
         # I found that myText is 'Not Set' for every language
         if myText == self.tr('Not Set') or myText == 'Not Set':
             self.removeItemByKey('subcategory')
@@ -293,8 +359,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'exposure' == myCategory:
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
+        # prevents actions being handled twice
 
-    # prevents actions being handled twice
     def setSubcategoryList(self, theEntries, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
 
@@ -326,7 +392,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         mySelectedIndex = 0
         for myKey, myValue in theEntries.iteritems():
             if (myValue == theSelectedItem or
-               myKey == theSelectedItem):
+                myKey == theSelectedItem):
                 mySelectedIndex = myIndex
             myIndex += 1
             self.cboSubcategory.addItem(myValue, myKey)
@@ -345,7 +411,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if (not self.lePredefinedValue.text().isEmpty() and not
-            self.cboKeyword.currentText().isEmpty()):
+        self.cboKeyword.currentText().isEmpty()):
             myCurrentKey = self.tr(self.cboKeyword.currentText())
             myCurrentValue = self.lePredefinedValue.text()
             self.addListEntry(myCurrentKey, myCurrentValue)
@@ -473,7 +539,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if myCategory not in ['hazard', 'exposure', 'postprocessing']:
             # .. todo:: report an error to the user
             return False
-        # Special case when category changes, we start on a new slate!
+            # Special case when category changes, we start on a new slate!
 
         if myCategory == 'hazard':
             # only cause a toggle if we actually changed the category
@@ -507,8 +573,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.radPostprocessing.blockSignals(False)
             self.removeItemByKey('subcategory')
             self.addListEntry('category', 'postprocessing')
-            myList = self.standardPostprocessingList
-            self.setSubcategoryList(myList)
 
         return True
 
@@ -619,7 +683,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myLayerName = self.layer.name()
         if 'title' not in myKeywords:
             self.leTitle.setText(myLayerName)
-        self.lblLayerName.setText(myLayerName)
+        self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
         #if we have a category key, unpack it first so radio button etc get set
         if 'category' in myKeywords:
             self.setCategory(myKeywords['category'])
@@ -627,6 +691,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         for myKey in myKeywords.iterkeys():
             self.addListEntry(myKey, str(myKeywords[myKey]))
+
         # now make the rest of the safe_qgis reflect the list entries
         self.updateControlsFromList()
 
@@ -648,14 +713,20 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.leTitle.setText(myTitle)
         elif self.layer is not None:
             myLayerName = self.layer.name()
-            self.lblLayerName.setText(myLayerName)
+            self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
         else:
             self.lblLayerName.setText('')
+
+        if not isLayerPolygonal(self.layer):
+            self.radPostprocessing.setEnabled(False)
+
+        #adapt gui if we are in postprocessing category
+        self.togglePostprocessingWidgets()
 
         if self.radExposure.isChecked():
             if mySubcategory is not None and myType is not None:
                 self.setSubcategoryList(self.standardExposureList,
-                                     mySubcategory + ' [' + myType + ']')
+                                        mySubcategory + ' [' + myType + ']')
             elif mySubcategory is not None:
                 self.setSubcategoryList(self.standardExposureList,
                                         mySubcategory)
@@ -665,20 +736,14 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         elif self.radHazard.isChecked():
             if mySubcategory is not None and myUnits is not None:
                 self.setSubcategoryList(self.standardHazardList,
-                                     mySubcategory + ' [' + myUnits + ']')
+                                        mySubcategory + ' [' + myUnits + ']')
             elif mySubcategory is not None:
                 self.setSubcategoryList(self.standardHazardList,
                                         mySubcategory)
             else:
                 self.setSubcategoryList(self.standardHazardList,
                                         self.tr('Not Set'))
-        else:
-            if mySubcategory is not None:
-                self.setSubcategoryList(self.standardPostprocessingList,
-                                        mySubcategory)
-            else:
-                self.setSubcategoryList(self.standardPostprocessingList,
-                                        self.tr('Not Set'))
+        self.adjustSize()
 
     # prevents actions being handled twice
     @pyqtSignature('QString')
@@ -703,7 +768,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            dict - a dictionary of keyword reflecting the state of the dialog.
         Raises:
            no exceptions explicitly raised."""
-                #make sure title is listed
+        #make sure title is listed
         if str(self.leTitle.text()) != '':
             self.addListEntry('title', str(self.leTitle.text()))
 
@@ -735,8 +800,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                          theKeywords=myKeywords)
         except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
-            ((self.tr('An error was encountered when saving the keywords:\n'
-                      '%s' % str(getExceptionWithStacktrace(e))))))
+              ((self.tr('An error was encountered when saving the keywords:\n'
+                        '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:
             self.dock.getLayers()
         self.done(QtGui.QDialog.Accepted)

@@ -1,7 +1,7 @@
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 
 # Largely superseded by flood impact functions, but keep as it
 # will be needed to test impact on roads from both raster and polygon
@@ -22,7 +22,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'ICLASS'
-    plugin_name = _('Be affected by tsunami')
+    plugin_name = tr('Be affected by tsunami')
 
     def run(self, layers):
         """Risk plugin for tsunami population
@@ -99,10 +99,10 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                       '</table>' % (_('Impact'), _('Number of buildings'),
-                                     _('Low'), count0,
-                                     _('Medium'), count1,
-                                     _('High'), count3))
+                       '</table>' % (tr('Impact'), tr('Number of buildings'),
+                                     tr('Low'), count0,
+                                     tr('Medium'), count1,
+                                     tr('High'), count3))
         else:
             impact_summary = ('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
@@ -117,7 +117,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                                      'Semua', N))
 
         impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary += '<b>' + tr('Assumption') + '&#58;</b><br>'
         impact_summary += ('Levels of impact are defined by BNPB\'s '
                             '<i>Pengkajian Risiko Bencana</i>')
         impact_summary += ('<table border="0" width="320px">'
@@ -126,10 +126,10 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                        '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
-                       '</table>' % (_('Impact'), _('Tsunami height'),
-                                     _('Low'), '<1 m',
-                                     _('Medium'), '1-3 m',
-                                     _('High'), '>3 m'))
+                       '</table>' % (tr('Impact'), tr('Tsunami height'),
+                                     tr('Low'), '<1 m',
+                                     tr('Medium'), '1-3 m',
+                                     tr('High'), '>3 m'))
 
         # Create style
         style_classes = [dict(label='< 1 m', min=0, max=1,

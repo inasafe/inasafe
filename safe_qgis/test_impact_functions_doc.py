@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 from PyQt4 import QtGui
 
 __author__ = 'ismailsunni@yahoo.co.id'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -109,10 +109,10 @@ class ImpactFunctionsDocTest(unittest.TestCase):
                                             QtGui.QDialogButtonBox.Reset)
         QTest.mouseClick(resetButton, QtCore.Qt.LeftButton)
         realTableReset = myDialog.if_table.toNewlineFreeString()
-        msgFilter = "It should be different table because it's filtered."
+        msgFilter = 'It should be different table because it is filtered.'
         assert expectedTable != realTableFilter, msgFilter
-        msgReset = "It should be the same table because reset button is\
-pressed."
+        msgReset = ('It should be the same table because reset button '
+                    'is pressed.')
         assert expectedTable == realTableReset, msgReset
 
     def test_showHelp(self):

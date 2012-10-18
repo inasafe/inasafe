@@ -11,7 +11,7 @@ OGR C++ reference: http://www.gdal.org/ogr
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
 __license__ = "GPL"
@@ -19,13 +19,14 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import sys
 import numpy
 import logging
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.utilities import verify
-from safe.common.dynamic_translations import names as internationalised_titles
+from safe.common.utilities import (verify,
+                                   ugettext as safe_tr)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -53,8 +54,8 @@ class Vector(Layer):
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None, name='', keywords=None, style_info=None,
-                 sublayer=None):
+                 geometry_type=None, name=None, keywords=None,
+                 style_info=None, sublayer=None):
         """Initialise object with either geometry or filename
 
         Args:
@@ -72,8 +73,7 @@ class Vector(Layer):
                 Valid options are 'point', 'line', 'polygon' or
                 the ogr types: 1, 2, 3.
                 If None, a geometry_type will be inferred from the data.
-            * name: Optional name for layer.
-                Only used if geometry is provided as a numeric array.
+            * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                 layer. When the layer is stored, these keywords will
                 be written into an associated file with extension
@@ -174,7 +174,38 @@ class Vector(Layer):
                        'must be the same')
                 verify(len(geometry) == len(data), msg)
 
-            # FIXME: Need to establish extent here
+            # Establish extent
+            if len(geometry) == 0:
+                # Degenerate layer
+                self.extent = [0, 0, 0, 0]
+                return
+
+            # Compute bounding box for each geometry type
+            minx = miny = sys.maxint
+            maxx = maxy = -minx
+            if self.is_point_data:
+                A = numpy.array(self.get_geometry())
+                minx = min(A[:, 0])
+                maxx = max(A[:, 0])
+                miny = min(A[:, 1])
+                maxy = max(A[:, 1])
+            elif self.is_line_data:
+                for g in self.get_geometry():
+                    A = numpy.array(g)
+                    minx = min(minx, min(A[:, 0]))
+                    maxx = max(maxx, max(A[:, 0]))
+                    miny = min(miny, min(A[:, 1]))
+                    maxy = max(maxy, max(A[:, 1]))
+            elif self.is_polygon_data:
+                # Do outer ring only
+                for g in self.get_geometry(as_geometry_objects=False):
+                    A = numpy.array(g)
+                    minx = min(minx, min(A[:, 0]))
+                    maxx = max(maxx, max(A[:, 0]))
+                    miny = min(miny, min(A[:, 1]))
+                    maxy = max(maxy, max(A[:, 1]))
+
+            self.extent = [minx, maxx, miny, maxy]
 
     def __str__(self):
         """Render as name, number of features, geometry type
@@ -340,6 +371,11 @@ class Vector(Layer):
         * danieljlewis.org/files/2010/09/basicpythonmap.pdf
         * http://invisibleroads.com/tutorials/gdal-shapefile-points-save.html
         * http://www.packtpub.com/article/geospatial-data-python-geometry
+
+        Limitation of the Shapefile are documented in
+        http://resources.esri.com/help/9.3/ArcGISDesktop/com/Gp_ToolRef/
+        geoprocessing_tool_reference/
+        geoprocessing_considerations_for_shapefile_output.htm
         """
 
         basename = os.path.splitext(filename)[0]
@@ -354,15 +390,15 @@ class Vector(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            if title in internationalised_titles:
-                title = internationalised_titles[title]
+            title = safe_tr(title)
 
             vectorname = title
         else:
             # Use basename without leading directories as name
             vectorname = os.path.split(basename)[-1]
 
-        self.name = vectorname
+        if self.name is None:
+            self.name = vectorname
         self.filename = filename
         self.geometry_type = None  # In case there are no features
 

@@ -28,3 +28,5 @@ setup.cfg
 run_qgis.sh
 .achievements
 .idea/runConfigurations/NoseTests_Realtime.xml
+.idea/workspace.xml
+pydev

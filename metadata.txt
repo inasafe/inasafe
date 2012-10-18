@@ -12,7 +12,8 @@
 name=InaSAFE
 qgisMinimumVersion=1.7
 description=InaSAFE Disaster Scenario Assessment for Emergencies tool developed by BNPB, AusAID, World Bank
-version=0.6.0
+version=1.0.0
+# alpha, beta, rc or final
 status=alpha
 
 
@@ -29,7 +30,7 @@ tags=risk disaster flood
 homepage=http://www.inasafe.org/
 tracker=https://github.com/AIFDR/inasafe/issues
 repository=https://github.com/AIFDR/inasafe
-icon=gui/resources/img/icon.png
+icon=safe_qgis/resources/img/icon.png
 # experimental flag
 experimental=True
 

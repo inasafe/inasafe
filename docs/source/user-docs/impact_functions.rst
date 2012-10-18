@@ -35,13 +35,13 @@ that can be used. They are listed in a table with a series of pick-lists (combo 
 above which can be used to filter the functions based on different criteria as
 illustrated below.
 
-.. figure:: ../_static/impact_function_table_unfiltered.png
+.. figure:: ../static/impact_function_table_unfiltered.png
    :align:   center
 
 When applying a filter set, the list of available functions that meet those criteria is
 updated as shown below.
 
-.. figure:: ../_static/impact_function_table_filtered.png
+.. figure:: ../static/impact_function_table_filtered.png
    :align:   center
 
 The impact function table is simply a browser to help you to familiarise yourself with
