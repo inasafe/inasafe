@@ -71,7 +71,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientOverlapException,
                                   InvalidParameterException,
                                   InsufficientParametersException,
-                                  HashNotFoundException)
+                                  HashNotFoundException, CallGDALError)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
@@ -842,6 +842,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
+        except CallGDALError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            raise e
         except:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -960,6 +964,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Start the analysis
         try:
             self.setupCalculator()
+        except CallGDALError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
         except InsufficientOverlapException, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -1870,8 +1883,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'layer and the current view extents.')
         myProgress = 22
         self.showBusy(myTitle, myMessage, myProgress)
-        myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
-                                        myCellSize)
+        try:
+            myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
+                                            myCellSize)
+        except CallGDALError, e:
+            raise e
 
         myTitle = self.tr('Preparing exposure data...')
         myMessage = self.tr('We are resampling and clipping the exposure'
