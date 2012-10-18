@@ -49,7 +49,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
         QtGui.QDialog.__init__(self, theParent)
         self.setupUi(self)
-        self.setWindowTitle(self.tr('Impact function configuration'))
+        self.setWindowTitle(self.tr('InaSAFE impact function configuration'))
 
     def buildForm(self, theFunction, params):
         """we build a form from impact functions parameter
@@ -57,8 +57,8 @@ class FunctionOptionsDialog(QtGui.QDialog,
         .. note:: see http://tinyurl.com/pyqt-differences
 
         Args:
-           theFunction - theFunction to be modified
-           params - parameters to be edited
+           * theFunction - theFunction to be modified
+           * params - parameters to be edited
         Returns:
            not applicable
         """
@@ -131,7 +131,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 convText = str(lineEditText)
                 myFunction.parameters[key] = ast.literal_eval(convText)
             except ValueError:
-                text = ("Unexpected error: ValueError" +
+                text = self.tr("Unexpected error: ValueError" +
                 ". Please consult Python language reference for correct " +
                 "format of data type.")
                 label = self.impFuncConfErrLabel

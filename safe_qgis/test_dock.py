@@ -1423,6 +1423,46 @@ Click for Diagnostic Information:
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 
+    def test_hasParametersButtonDisabled(self):
+        """Function configuration button is disabled
+        when layers not compatible."""
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        #myResult, myMessage = setupScenario(
+        #    theHazard='A flood in Jakarta like in 2007',
+        #    theExposure='Essential Buildings',
+        #    theFunction='Be flooded',
+        #    theFunctionId='Flood Building Impact Function')
+        setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='Essential Buildings',
+            theFunction='Be flooded',
+            theFunctionId='Flood Building Impact Function')
+        myToolButton = DOCK.toolFunctionOptions
+        myFlag = myToolButton.isEnabled()
+        assert not myFlag, ('Expected configuration options '
+                            'button to be disabled')
+
+    def test_hasParametersButtonEnabled(self):
+        """Function configuration button is enabled when layers are compatible.
+        """
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        #myResult, myMessage = setupScenario(
+        #    theHazard='A flood in Jakarta like in 2007',
+        #    theExposure='Penduduk Jakarta',
+        #    theFunction='Need evacuation',
+        #    theFunctionId='Flood Evacuation Function')
+        setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='Penduduk Jakarta',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function')
+        myToolButton = DOCK.toolFunctionOptions
+        myFlag = myToolButton.isEnabled()
+        assert myFlag, ('Expected configuration options '
+                            'button to be enabled')
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

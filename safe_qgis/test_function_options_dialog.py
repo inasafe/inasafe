@@ -20,45 +20,23 @@ import unittest
 import sys
 import os
 import logging
-#from unittest import expectedFailure
 
-from os.path import join
+from PyQt4.QtGui import QWidget, QApplication
+
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from PyQt4 import QtCore
-from PyQt4.QtTest import QTest
+from safe.impact_functions import get_plugins
 
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
+from safe_qgis.function_options_dialog import FunctionOptionsDialog
 
-from safe_qgis.utilities_test import (getQgisTestApp,
-                                setCanvasCrs,
-                                setPadangGeoExtent,
-                                setBatemansBayGeoExtent,
-                                setJakartaGeoExtent,
-                                setYogyaGeoExtent,
-                                setJakartaGoogleExtent,
-                                setGeoExtent,
-                                GEOCRS,
-                                GOOGLECRS,
-                                loadLayer)
-
-from safe_qgis.dock import Dock
-from safe_qgis.utilities import (setRasterStyle,
-                          qgisVersion,
-                          getDefaults)
-
-
-# pylint: enable=W0611
-LOGGER = logging.getLogger('InaSAFE')
-
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
-DOCK = Dock(IFACE)
-
-
+# pylint: disable=W0611
 from safe.engine.impact_functions_for_testing.itb_fatality_model_configurable\
     import ITBFatalityFunctionConfigurable
+# pylint: enable=W0611
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class FunctionOptionsDialogTest(unittest.TestCase):
@@ -66,7 +44,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
-        os.environ['LANG'] = 'en'
         pass
 
     def tearUp(self):
@@ -77,15 +54,29 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         """Fixture run after each test"""
         pass
 
-    def test_defaults(self):
-        pass
+    def test_buildForm(self):
+        """Test that we can build a form by passing it a function and params.
+        """
+        myGuiFlag = True
+        #QGISAPP = QApplication(sys.argv, myGuiFlag)
+        QApplication(sys.argv, myGuiFlag)
+        myWidget = QWidget()
+        myFunctionId = 'I T B Fatality Function Configurable'
+        myFunctionList = get_plugins(myFunctionId)
+        assert len(myFunctionList) == 1
+        assert myFunctionList[0].keys()[0] == myFunctionId
+        myFunction = myFunctionList[0]
+        myDialog = FunctionOptionsDialog(myWidget)
+        myParameters = {'foo': 'bar'}
+        myDialog.buildForm(myFunction, myParameters)
 
-    def test_hasParametersButtonEnabled(self):
-        pass
+        # Mockup
+        myChildren = myDialog.children()
+        for myChild in myChildren:
+            LOGGER.debug('Child name:' % myChild.objectName())
 
-    def test_noParametersButtonDisabled(self):
-        pass
-
+        # For localised testing only, disable when test works!
+        myDialog.exec_()
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
