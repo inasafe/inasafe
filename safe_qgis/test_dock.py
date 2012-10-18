@@ -1364,7 +1364,7 @@ class DockTest(unittest.TestCase):
         DOCK.getFunctions()
         assert myResult, myMessage
 
-    def Xtest_runnerExceptions(self):
+    def test_runnerExceptions(self):
         """Test runner exceptions"""
         myRunButton = DOCK.pbnRunStop
 
@@ -1382,8 +1382,7 @@ class DockTest(unittest.TestCase):
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
 #        DOCK.runtimeKWDialog.accept()
-        myExpectedResult = """
-Error:
+        myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:
 Exception : AHAHAH I got you
@@ -1394,7 +1393,7 @@ Click for Diagnostic Information:
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 
-    def Xtest_runnerIsNone(self):
+    def test_runnerIsNone(self):
         """Test for none runner exceptions"""
         myRunButton = DOCK.pbnRunStop
 
@@ -1418,7 +1417,6 @@ An exception occurred when calculating the results
 Problem:
 AttributeError : 'NoneType' object has no attribute 'keywords'
 Click for Diagnostic Information:
-
 """
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
         myMessage = ('The result message should be:\n%s\nFound:\n%s' %
