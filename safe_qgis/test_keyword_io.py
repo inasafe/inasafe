@@ -51,10 +51,12 @@ class KeywordIOTest(unittest.TestCase):
                                        'datatype': 'itb',
                                        'subcategory': 'structure'}
         self.expectedRasterKeywords = {'category': 'hazard',
+                                       'source': 'USGS',
                                        'subcategory': 'earthquake',
                                        'unit': 'MMI',
                                        'title': ('An earthquake in Padang '
                                                  'like in 2009')}
+
 
     def tearDown(self):
         pass
@@ -126,7 +128,7 @@ class KeywordIOTest(unittest.TestCase):
         myKeywords = self.keywordIO.readKeywords(self.fileRasterLayer)
         myExpectedKeywords = self.expectedRasterKeywords
         mySource = self.fileRasterLayer.source()
-        myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+        myMessage = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
                     myKeywords, myExpectedKeywords, mySource)
         assert myKeywords == myExpectedKeywords, myMessage
 
