@@ -54,25 +54,35 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
-    """Set QGIS vector style based on InaSAFE style dictionary
+    """Set QGIS vector style based on InaSAFE style dictionary.
 
-    Input
-        theQgisVectorLayer: Qgis layer
-        theStyle: Dictionary of the form as in the example below
+    For **opaque** a value of **0** can be used. For **fully transparent**, a
+    value of **100** can be used. The function should take care to scale the
+    transparency level to between 0 and 100.
+
+    Args:
+        * theQgisVectorLayer: QgsMapLayer
+        * theStyle: dict - Dictionary of the form as in the example below
+
+    Returns:
+        None - Sets and saves style for theQgisVectorLayer
+
+    Raises:
+        None
+
+    Example:
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
         [{'transparency': 1, 'max': 1.5, 'colour': '#fecc5c',
           'min': 0.5, 'label': 'Low damage', 'size' : 1},
-        {'transparency': 1, 'max': 2.5, 'colour': '#fd8d3c',
+        {'transparency': 55, 'max': 2.5, 'colour': '#fd8d3c',
          'min': 1.5, 'label': 'Medium damage', 'size' : 1},
-        {'transparency': 1, 'max': 3.5, 'colour': '#f31a1c',
+        {'transparency': 80, 'max': 3.5, 'colour': '#f31a1c',
          'min': 2.5, 'label': 'High damage', 'size' : 1}]}
 
         .. note:: The transparency and size keys are optional. Size applies
            to points only.
-    Output
-        Sets and saves style for theQgisVectorLayer
 
     """
     myTargetField = theStyle['target_field']
@@ -88,7 +98,6 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
             mySize = myClass['size']
         myTransparencyPercent = 0
         if 'transparency' in myClass:
-            LOGGER.debug(myClass['transparency'])
             myTransparencyPercent = myClass['transparency']
 
         if 'min' not in myClass:
@@ -142,14 +151,11 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
             pass
 
         mySymbol.setColor(myColour)
-        # .. todo: (MB) Check that vectors use alpha as % otherwise scale TS
-        # see issue #354
+        # .. todo:: Check that vectors use alpha as % otherwise scale TS
         # Convert transparency % to opacity
         # alpha = 0: transparent
         # alpha = 1: opaque
-        # MB this was working wrong due to int division returning int results
         alpha = 1 - myTransparencyPercent / 100.0
-        LOGGER.debug('%s - %s' % (myTransparencyPercent, alpha))
         mySymbol.setAlpha(alpha)
         myRange = QgsRendererRangeV2(myMin,
                                      myMax,
@@ -171,16 +177,18 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     for the passed in layer.
 
     Args:
-        theQgsRasterLayer: Qgis layer
-        style: Dictionary of the form as in the example below
+        * theQgsRasterLayer: QgsRasterLayer
+        * style: dict - Dictionary of the form as in the example below.
+
+    Example:
         style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
-                         dict(colour='#38A800', quantity=5, transparency=1),
-                         dict(colour='#79C900', quantity=10, transparency=1),
-                         dict(colour='#CEED00', quantity=20, transparency=1),
-                         dict(colour='#FFCC00', quantity=50, transparency=1),
-                         dict(colour='#FF6600', quantity=100, transparency=1),
-                         dict(colour='#FF0000', quantity=200, transparency=1),
-                         dict(colour='#7A0000', quantity=300, transparency=1)]
+                         dict(colour='#38A800', quantity=5, transparency=50),
+                         dict(colour='#79C900', quantity=10, transparency=50),
+                         dict(colour='#CEED00', quantity=20, transparency=50),
+                         dict(colour='#FFCC00', quantity=50, transparency=34),
+                         dict(colour='#FF6600', quantity=100, transparency=77),
+                         dict(colour='#FF0000', quantity=200, transparency=24),
+                         dict(colour='#7A0000', quantity=300, transparency=22)]
 
     Returns:
         list: RangeList
@@ -203,20 +211,23 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
     for the passed in layer.
 
     Args:
-        theQgsRasterLayer: Qgis layer
-        style: Dictionary of the form as in the example below
-        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
-                         dict(colour='#38A800', quantity=5, transparency=1),
-                         dict(colour='#79C900', quantity=10, transparency=1),
-                         dict(colour='#CEED00', quantity=20, transparency=1),
-                         dict(colour='#FFCC00', quantity=50, transparency=1),
-                         dict(colour='#FF6600', quantity=100, transparency=1),
-                         dict(colour='#FF0000', quantity=200, transparency=1),
-                         dict(colour='#7A0000', quantity=300, transparency=1)]
+        * theQgsRasterLayer: QgsRasterLayer.
+        * style: dict - Dictionary of the form as in the example below.
 
     Returns:
-        list: RangeList
-        list: TransparencyList
+        * list: RangeList
+        * list: TransparencyList
+
+    Example:
+
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
+                         dict(colour='#38A800', quantity=5, transparency=50),
+                         dict(colour='#79C900', quantity=10, transparency=50),
+                         dict(colour='#CEED00', quantity=20, transparency=50),
+                         dict(colour='#FFCC00', quantity=50, transparency=34),
+                         dict(colour='#FF6600', quantity=100, transparency=77),
+                         dict(colour='#FF0000', quantity=200, transparency=24),
+                         dict(colour='#7A0000', quantity=300, transparency=22)]
 
     .. note:: There is currently a limitation in QGIS in that
        pixel transparency values can not be specified in ranges and
@@ -291,20 +302,23 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
     for the passed in layer.
 
     Args:
-        theQgsRasterLayer: Qgis layer
-        style: Dictionary of the form as in the example below
-        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
-                         dict(colour='#38A800', quantity=5, transparency=1),
-                         dict(colour='#79C900', quantity=10, transparency=1),
-                         dict(colour='#CEED00', quantity=20, transparency=1),
-                         dict(colour='#FFCC00', quantity=50, transparency=1),
-                         dict(colour='#FF6600', quantity=100, transparency=1),
-                         dict(colour='#FF0000', quantity=200, transparency=1),
-                         dict(colour='#7A0000', quantity=300, transparency=1)]
+        * theQgsRasterLayer: QgsRasterLayer
+        * style: Dictionary of the form as in the example below.
 
     Returns:
-        list: RangeList
-        list: TransparencyList
+        * list: RangeList
+        * list: TransparencyList
+
+    Example:
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
+                         dict(colour='#38A800', quantity=5, transparency=50),
+                         dict(colour='#79C900', quantity=10, transparency=50),
+                         dict(colour='#CEED00', quantity=20, transparency=50),
+                         dict(colour='#FFCC00', quantity=50, transparency=34),
+                         dict(colour='#FF6600', quantity=100, transparency=77),
+                         dict(colour='#FF0000', quantity=200, transparency=24),
+                         dict(colour='#7A0000', quantity=300, transparency=22)]
+
     """
     # Note imports here to prevent importing on unsupported QGIS versions
     # pylint: disable=E0611
