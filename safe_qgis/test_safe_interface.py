@@ -211,32 +211,49 @@ class SafeInterfaceTest(unittest.TestCase):
 
         myExpectedKeywords = {'category': 'hazard',
                               'subcategory': 'earthquake',
+                              'source': 'USGS',
                               'unit': 'MMI',
                               'title': 'An earthquake in Padang like in 2009'}
-        myMessage = 'Expected:\n%s\nGot:\n%s' % (myKeywords,
-                                                 myExpectedKeywords)
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
-        assert myKeywords == {'category': 'exposure',
+        myExpectedKeywords = {'category': 'exposure',
+                              'source': ('Center for International Earth '
+                                       'Science Information Network (CIESIN)'),
                               'subcategory': 'population',
                               'datatype': 'density',
                               'title': 'People'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
         myKeywords = readKeywordsFromFile(self.vectorPath)
-        assert myKeywords == {'category': 'exposure',
+        myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'itb',
                               'subcategory': 'structure'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
         #  tsunami example (one layer is UTM)
         myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)
-        assert myKeywords == {'title': 'Tsunami Max Inundation',
+        myExpectedKeywords = {'title': 'Tsunami Max Inundation',
                                'category': 'hazard',
                               'subcategory': 'tsunami',
                               'unit': 'm'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
+
         myKeywords = readKeywordsFromFile(self.rasterExposurePath)
-        print myKeywords == {'category': 'exposure',
-                             'subcategory': 'building'}
+        myExpectedKeywords = {'category': 'exposure',
+                              'subcategory': 'structure',
+                              'title': 'Tsunami Building Exposure'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
 
 if __name__ == '__main__':

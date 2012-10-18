@@ -61,7 +61,7 @@ def makePadangLayer():
     return myLayer
 
 
-def copyMakePadangLayer():
+def makePadangLayerClone():
     """Helper function that copies padang keyword for testing and return it."""
     mySourceFileName = 'Shakemap_Padang_2009'
     myExts = ['.asc', '.asc.aux.xml', '.keywords',
@@ -466,7 +466,8 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
-        myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
+        myExpectedKeywords = {'source': 'USGS',
+                              'title': 'An earthquake in Padang like in 2009',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
@@ -494,9 +495,10 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
                               'category': 'hazard',
+                              'source': 'USGS',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
+        myMessage = ('\nGot:\n%s\nExpected:\n%s\n' %
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
 
@@ -517,8 +519,8 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_addKeywordWhenPressOkButton(self):
         """Test add keyword when ok button is pressed."""
-        #_, myFile = copyMakePadangLayer()
-        copyMakePadangLayer()
+        #_, myFile = makePadangLayerClone()
+        makePadangLayerClone()
         myDialog = KeywordsDialog(PARENT, IFACE)
 
         myDialog.radUserDefined.setChecked(True)

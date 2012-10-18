@@ -1274,7 +1274,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myClasses = []
             myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
             myStep = int(myHighestVal / len(myColors))
-            LOGGER.debug('%s - %s' % (myHighestVal, myStep))
+            LOGGER.debug('Max val %s, my step %s' % (myHighestVal, myStep))
             myCounter = 0
             for myColor in myColors:
                 myMin = myCounter
