@@ -149,7 +149,7 @@ class HtmlRendererTest(unittest.TestCase):
         myFlag, myMessage = checkImages(myControlImages,
                                                   myPath,
                                                   myTolerance)
-        assert myFlag == True, myMessage
+        assert myFlag, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(HtmlRendererTest, 'test')

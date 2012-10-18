@@ -109,7 +109,7 @@ class MapTest(unittest.TestCase):
         myFlag, myMessage = checkImages(myAcceptableImages,
                                            myImagePath,
                                            myTolerance)
-        assert myFlag == True, myMessage
+        assert myFlag, myMessage
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
@@ -199,7 +199,7 @@ class MapTest(unittest.TestCase):
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they dont '
                      'there may be rendering artifacts in windows.\n')
-        assert myFlag == True, myMessage
+        assert myFlag, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(MapTest, 'test')
