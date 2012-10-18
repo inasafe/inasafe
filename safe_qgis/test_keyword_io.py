@@ -57,7 +57,6 @@ class KeywordIOTest(unittest.TestCase):
                                        'title': ('An earthquake in Padang '
                                                  'like in 2009')}
 
-
     def tearDown(self):
         pass
 
