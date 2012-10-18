@@ -284,7 +284,6 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
     Returns:
         (bool, str, str) where:
         * bool is success or failure indicator
-        * str is the file path of the resulting difference image
         * str is a message providing analysis comparison notes
 
     Raises:
@@ -297,7 +296,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
         myTestImage = QtGui.QImage(theTestImagePath)
     except OSError:
         myMessage = 'Test image:\n%s\ncould not be loaded' % theTestImagePath
-        return False, None, myMessage
+        return False, myMessage
 
     try:
         if not os.path.exists(theControlImagePath):
@@ -308,7 +307,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                      'Test image is:\n%s\n' % (
                          theControlImagePath,
                          theTestImagePath))
-        return False, None, myMessage
+        return False, myMessage
 
     if (myControlImage.width() != myTestImage.width()
         or myControlImage.height() != myTestImage.height()):
@@ -323,7 +322,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                       theControlImagePath,
                       theTestImagePath
                       ))
-        return False, None, myMessage
+        return False, myMessage
 
     myImageWidth = myControlImage.width()
     myImageHeight = myControlImage.height()
