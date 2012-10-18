@@ -50,8 +50,6 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                 GOOGLECRS,
                                 loadLayer)
 
-from safe_qgis.keyword_io import KeywordIO
-
 from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion,
