@@ -140,7 +140,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
             # Add calculated impact to existing attributes
             attributes[i][self.target_field] = x
-        print 'BUilding %s' % buildings
+
         # Lump small entries and 'unknown' into 'other' category
         for usage in buildings.keys():
             x = buildings[usage]
@@ -153,8 +153,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 affected_buildings['other'] += affected_buildings[usage]
                 del buildings[usage]
                 del affected_buildings[usage]
-        print 'BUilding %s' % buildings
-        print 'Affected BUilding %s' % affected_buildings
+
         # Generate csv file of results
 ##        fid = open('C:\dki_table_%s.csv' % H.get_name(), 'wb')
 ##        fid.write('%s, %s, %s\n' % (tr('Building type'),
