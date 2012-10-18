@@ -27,8 +27,7 @@ from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       setJakartaGeoExtent,
-                                      checkImages,
-                                      CONTROL_IMAGE_DIR)
+                                      checkImages)
 from safe_qgis.utilities import setupPrinter
 from safe_qgis.map import Map
 
