@@ -193,12 +193,11 @@ class MapTest(unittest.TestCase):
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
 
-        myControlImage = os.path.join(CONTROL_IMAGE_DIR,
-                                      'windowsArtifacts.png')
+        myControlImages = ['windowsArtifacts.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myPath, myMessage = checkImages(myControlImage,
-                                                  myImagePath,
-                                                  myTolerance)
+        myFlag, myMessage = checkImages(myControlImages,
+                                        myImagePath,
+                                        myTolerance)
         myMessage += ('\nWe want these images to match, if they dont '
                      'there may be rendering artifacts in windows.\n')
         assert myFlag == True, myMessage
