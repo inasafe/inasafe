@@ -100,8 +100,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 #print 'Got cont value', attributes[i]['CONTENTS_C']
                 contents_value_density = 0.0
 
-            building_value = int(building_value_density * area)
-            contents_value = int(contents_value_density * area)
+            building_value = building_value_density * area
+            contents_value = contents_value_density * area
 
             x = float(attributes[i][hazard_attribute])  # MMI
             if t0 <= x < t1:
@@ -120,8 +120,13 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             attributes[i][self.target_field] = cls
 
             # Accumulate values in 1M dollar units
-            building_values[cls] += (building_value / 1000000)
-            contents_values[cls] += (contents_value / 1000000)
+            building_values[cls] += building_value
+            contents_values[cls] += contents_value
+
+        # Convert to units of one million dollars
+        for key in range(4):
+            building_values[key] = int(building_values[key] / 1000000)
+            contents_values[key] = int(contents_values[key] / 1000000)
 
         # Generate simple impact report
         table_body = [question,

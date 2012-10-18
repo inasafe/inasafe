@@ -320,8 +320,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                      'adjust the tolerance if needed.' %
                      (theTolerance,
                       theControlImagePath,
-                      theTestImagePath
-                      ))
+                      theTestImagePath))
         return False, myMessage
 
     myImageWidth = myControlImage.width()
@@ -366,8 +365,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                   theTolerance,
                   theControlImagePath,
                   theTestImagePath,
-                  myDifferenceFilePath
-                    ))
+                  myDifferenceFilePath))
     return mySuccessFlag, myMessage
 
 

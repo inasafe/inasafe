@@ -929,6 +929,42 @@ class Test_Engine(unittest.TestCase):
 
     test_flood_building_impact_function.slow = True
 
+    def test_data_sources_are_carried_forward(self):
+        """Data sources are carried forward to to to impact layer
+        """
+
+        haz_filename = 'Flood_Current_Depth_Jakarta_geographic.asc'
+
+        # File names for hazard level and exposure
+        hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
+        exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
+                             % TESTDATA)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        H_tit = H.get_keywords()['title']
+        E_tit = E.get_keywords()['title']
+
+        H_src = H.get_keywords()['source']
+        E_src = E.get_keywords()['source']
+
+        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        impact_vector = calculate_impact(layers=[H, E],
+                                         impact_fcn=IF)
+
+        assert impact_vector.get_keywords()['hazard title'] == H_tit
+        assert impact_vector.get_keywords()['exposure title'] == E_tit
+        assert impact_vector.get_keywords()['hazard source'] == H_src
+        assert impact_vector.get_keywords()['exposure source'] == E_src
+
     def test_earthquake_damage_schools(self):
         """Lembang building damage from ground shaking works
 

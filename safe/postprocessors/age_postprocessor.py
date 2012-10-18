@@ -110,7 +110,10 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         myName = tr('Total')
         myResult = self.population_total
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_youth(self):
@@ -128,7 +131,10 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         myName = tr('Youth count')
         myResult = self.population_total * self.youth_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_adult(self):
@@ -146,7 +152,10 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         myName = tr('Adult count')
         myResult = self.population_total * self.adult_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_elder(self):
@@ -164,5 +173,8 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         myName = tr('Elderly count')
         myResult = self.population_total * self.elder_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)

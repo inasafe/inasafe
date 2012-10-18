@@ -13,6 +13,7 @@ __copyright__ += 'Disaster Reduction'
 import logging
 
 from safe.common.exceptions import PostprocessorError
+from safe.common.utilities import ugettext as tr
 
 from third_party.odict import OrderedDict
 
@@ -35,6 +36,8 @@ class AbstractPostprocessor():
     for implementation examples see AgePostprocessor which uses mandatory and
     optional parameters
     """
+
+    NO_DATA_TEXT = tr('No data')
 
     def __init__(self):
         """

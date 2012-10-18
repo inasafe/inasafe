@@ -58,7 +58,7 @@ def qgisMinimumVersion():
 
 
 def icon():
-    """Icon path for the plugin - metadata.txt will override this"""
+    """Icon path for the plugin - metadata.txt will override this."""
     return 'icon.png'
 
 
