@@ -44,9 +44,10 @@ updated as shown below.
 .. figure:: ../static/impact_function_table_filtered.png
    :align:   center
 
-The impact function table is simply a browser to help you to familiarise yourself with
-the functions available. For the actual usage of the functions you need to have
-layers available (i.e. loaded in QGIS) with the appropriate keywords for your target function.
+The impact function table is simply a browser to help you to familiarise yourself
+with the functions available. For the actual usage of the functions you need to
+have layers available (i.e. loaded in QGIS) with the appropriate keywords for
+your target function.
 
 Configurable Impact Functions
 -----------------------------
