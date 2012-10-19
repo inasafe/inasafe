@@ -18,7 +18,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                               pointsToMM,
                               humaniseSeconds,
                               isLayerPolygonal,
-                              getLayerAttributeNames)
+                              getLayerAttributeNames,
+                              impactLayerAttribution)
 from safe_qgis.utilities_test import (unitTestDataPath,
                                      loadLayer,
                                      getQgisTestApp)
@@ -336,6 +337,15 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(humaniseSeconds(9000), '2 hours and 30 minutes')
         self.assertEqual(humaniseSeconds(432232),
                          '5 days, 0 hours and 3 minutes')
+
+    def test_impactLayerAttribution(self):
+        """Test we get an attribution html snippet nicely for impact layers."""
+        myKeywords = {'hazard_title': 'Sample Hazard Title',
+                      'hazard_source': 'Sample Hazard Source',
+                      'exposure_title': 'Sample Exposure Title',
+                      'exposure_source': 'Sample Exposure Source'}
+        myHtml = impactLayerAttribution(myKeywords)
+        self.assertEqual(len(myHtml), 286)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

@@ -41,9 +41,10 @@ from qgis.core import (QGis,
                        )
 
 from safe_interface import temp_dir
+
 from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
-from safe_qgis.safe_interface import DEFAULTS
+from safe_qgis.safe_interface import DEFAULTS, safeTr
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
@@ -931,3 +932,70 @@ def humaniseSeconds(theSeconds):
         # If all else fails...
         return tr('%i days, %i hours and %i minutes' % (
             myDays, myHours, myMinutes))
+
+
+def impactLayerAttribution(theKeywords):
+    """Make a little table for attribution of data sources used in impact.
+
+    Args:
+        theKeywords: dict{} - a keywords dict for an impact layer.
+
+    Returns:
+        str: an html snippet containing attribution information for the impact
+            layer. If no keywords are present or no appropriate keywords are
+            present, None is returned.
+
+    Raises:
+        None
+    """
+    if theKeywords is None:
+        return None
+    myReport = ''
+    myJoinWords = ' - %s ' % tr('sourced from')
+    myHazardDetails = tr('Hazard details')
+    myHazardTitleKeyword = tr('hazard_title')
+    myHazardSourceKeyword = tr('hazard_source')
+    myExposureDetails = tr('Exposure details')
+    myExposureTitleKeyword = 'exposure_title'
+    myExposureSourceKeyword = 'exposure_source'
+
+    if myHazardTitleKeyword in theKeywords:
+        # We use safe translation infrastructure for this one (rather than Qt)
+        myHazardTitle = safeTr(theKeywords[myHazardTitleKeyword])
+    else:
+        myHazardTitle = tr('Hazard layer')
+
+    if myHazardSourceKeyword in theKeywords:
+        # We use safe translation infrastructure for this one (rather than Qt)
+        myHazardSource = safeTr(theKeywords[myHazardSourceKeyword])
+    else:
+        myHazardSource = tr(' an unknown source')
+
+    if myExposureTitleKeyword in theKeywords:
+        myExposureTitle = theKeywords[myExposureTitleKeyword]
+    else:
+        myExposureTitle = tr('Exposure layer')
+
+    if myExposureSourceKeyword in theKeywords:
+        myExposureSource = theKeywords[myExposureSourceKeyword]
+    else:
+        myExposureSource = tr(' an unknown source')
+
+    myReport += ('<table class="table table-striped condensed'
+                 ' bordered-table">')
+    myReport += '<tr><th>%s</th></tr>' % myHazardDetails
+    myReport += '<tr><td>%s%s%s.</td></tr>' % (
+        myHazardTitle,
+        myJoinWords,
+        myHazardSource
+        )
+    myReport += '<tr><th>%s</th></tr>' % myExposureDetails
+    myReport += '<tr><td>%s%s%s.</td></tr>' % (
+        myExposureTitle,
+        myJoinWords,
+        myExposureSource
+        )
+
+    myReport += '<tr><th>%s</th></tr>' % myExposureDetails
+    myReport += '</table>'
+    return myReport

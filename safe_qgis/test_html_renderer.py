@@ -25,6 +25,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       checkImages)
 from safe_qgis.html_renderer import HtmlRenderer
+from safe_qgis.keyword_io import KeywordIO
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
@@ -47,7 +48,8 @@ class HtmlRendererTest(unittest.TestCase):
         Raises:
             None
         """
-        myHtml = ('<table>'
+        myHtml = ('<table class="table table-striped condensed'
+                  ' bordered-table">'
                   '<thead>'
                   '<tr>'
                   '<th>Wilayah</th>'
@@ -56,7 +58,8 @@ class HtmlRendererTest(unittest.TestCase):
                   '<th>Wilayah</th>'
                   '<th>Jumlah Penduduk</th>'
                   '<th>Jumlah Penduduk yang Mungkin</th>'
-                  '</tr>')
+                  '</tr>'
+                  '</thead>')
         i = 0
         while i < theLineCount:
             i += 1
@@ -110,7 +113,9 @@ class HtmlRendererTest(unittest.TestCase):
         myPath = unique_filename(prefix='impactTable',
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
-        myPath = myHtmlRenderer.printImpactTable(myLayer,
+        myKeywordIO = KeywordIO()
+        myKeywords = myKeywordIO.readKeywords(myLayer)
+        myPath = myHtmlRenderer.printImpactTable(myKeywords,
                                                  theFilename=myPath)
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
@@ -144,6 +149,7 @@ class HtmlRendererTest(unittest.TestCase):
         assert os.path.exists(myPath), myMessage
 
         myControlImages = ['renderHtmlToPixmap.png',
+                           'renderHtmlToPixmap-variantWindosVistaSP2-32.png',
                            'renderHtmlToPixmap-variantUB11.04-64.png',
                            'renderHtmlToPixmap-variantUB11.10-64.png']
         myTolerance = 1000  # to allow for version number changes in disclaimer

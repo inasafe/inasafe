@@ -79,7 +79,6 @@ from safe_qgis.function_options_dialog import (
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 from safe.postprocessors import get_post_processors
-from safe.api import safe_tr
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -837,8 +836,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
 
-        Raises: Propa
-        gates any error from :func:optimalClip()
+        Raises: Propagates any error from :func:optimalClip()
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
@@ -1163,6 +1161,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHTML = ''
         for proc, resList in self.postprocOutput.iteritems():
+            #sorting
+            try:
+                resList = sorted(resList, key=lambda d: (
+                    -d[1]['Total']['value']))
+            except KeyError:
+                LOGGER.debug('Skipping sorting as the postprocessor did not '
+                             'have a "Total" field')
             myHTML += ('<table class="table table-striped condensed">'
                        '  <tbody>'
                        '    <tr>'
@@ -1324,8 +1329,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        'style_classes': myClasses}
 
             setVectorStyle(self.postprocLayer, myStyle)
-            QgsMapLayerRegistry.instance().addMapLayer(
-                self.postprocLayer)
+
 
     def _aggregateResultsVector(self, myQgisImpactLayer):
         """
@@ -1665,8 +1669,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('Impact layer %1 was neither a raster or a '
                    'vector layer').arg(myQgisImpactLayer.source())
             raise ReadLayerError(myMessage)
-        # Add layer to QGIS
-        QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+
+        # Add layers to QGIS
+        myLayersToAdd = []
+        if self.showPostProcLayers and self.doZonalAggregation:
+            myLayersToAdd.append(self.postprocLayer)
+        myLayersToAdd.append(myQgisImpactLayer)
+        QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
         # then zoom to it
         if self.zoomToImpactFlag:
             self.iface.zoomToActiveLayer()
@@ -2001,49 +2010,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #f.close()
         self.wvResults.setHtml(myHtml)
 
-    def impactLayerAttribution(self, theLayer):
-        """Make a little table for attribution of data sources used in impact.
-        """
-        myKeywords = self.keywordIO.readKeywords(theLayer)
-        myReport = ''
-        myJoinWords = ' - ' + self.tr('sourced from') + ' '
-        myHazardDetails = self.tr('Hazard details')
-        myHazardTitleKeyword = 'hazard_title'
-        myHazardSourceKeyword = 'hazard_source'
-        myExposureDetails = self.tr('Exposure details')
-        myExposureTitleKeyword = 'exposure_title'
-        myExposureSourceKeyword = 'exposure_source'
-        if myHazardTitleKeyword in myKeywords:
-            myHazardTitle = safe_tr(myKeywords[myHazardTitleKeyword])
-        else:
-            myHazardTitle = str(theLayer.name())
-        if myHazardSourceKeyword in myKeywords:
-            myHazardSource = myKeywords[myHazardSourceKeyword]
-        else:
-            myHazardSource = self.tr('an unknown source')
-        if myExposureTitleKeyword in myKeywords:
-            myExposureTitle = safe_tr(myKeywords[myExposureTitleKeyword])
-        else:
-            myExposureTitle = str(theLayer.name())
-        if myExposureSourceKeyword in myKeywords:
-            myExposureSource = myKeywords[myExposureSourceKeyword]
-        else:
-            myExposureSource = self.tr('an unknown source')
-        myReport += ('<table class="table table-striped condensed'
-                     ' bordered-table">')
-        myReport += '<tr><th>%s</th></tr>' % myHazardDetails
-        myReport += '<tr><td>%s%s%s.</td></tr>' % (
-            myHazardTitle,
-            myJoinWords,
-            myHazardSource)
-        myReport += '<tr><th>%s</th></tr>' % myExposureDetails
-        myReport += '<tr><td>%s%s%s.</td></tr>' % (
-            myExposureTitle,
-            myJoinWords,
-            myExposureSource)
-        myReport += '</table>'
-        return myReport
-
     def layerChanged(self, theLayer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,
@@ -2223,8 +2189,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+            myKeywords, theFilename=myTableFilename)
 
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)
