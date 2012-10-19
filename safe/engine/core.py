@@ -80,12 +80,12 @@ def calculate_impact(layers, impact_fcn):
         if 'title' in keywords:
             title = keywords['title']
         else:
-            title = 'Not specified'
+            title = tr('Not specified')
 
         if 'source' in keywords:
             source = keywords['source']
         else:
-            source = 'Not specified'
+            source = tr('Not specified')
 
         F.keywords['%s_title' % cat] = title
         F.keywords['%s_source' % cat] = source

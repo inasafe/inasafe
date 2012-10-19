@@ -79,6 +79,7 @@ from safe_qgis.function_options_dialog import (
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 from safe.postprocessors import get_post_processors
+from safe.api import safe_tr
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -2013,7 +2014,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myExposureTitleKeyword = 'exposure_title'
         myExposureSourceKeyword = 'exposure_source'
         if myHazardTitleKeyword in myKeywords:
-            myHazardTitle = myKeywords[myHazardTitleKeyword]
+            myHazardTitle = safe_tr(myKeywords[myHazardTitleKeyword])
         else:
             myHazardTitle = str(theLayer.name())
         if myHazardSourceKeyword in myKeywords:
@@ -2021,7 +2022,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myHazardSource = self.tr('an unknown source')
         if myExposureTitleKeyword in myKeywords:
-            myExposureTitle = myKeywords[myExposureTitleKeyword]
+            myExposureTitle = safe_tr(myKeywords[myExposureTitleKeyword])
         else:
             myExposureTitle = str(theLayer.name())
         if myExposureSourceKeyword in myKeywords:

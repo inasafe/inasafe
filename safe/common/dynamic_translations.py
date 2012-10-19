@@ -93,7 +93,8 @@ def dynamic_translations():
     tr('An earthquake at the Lembang fault')
     # Bangunan OSM
     tr('OSM building footprints')
-    # Bangunan OSM
+    tr('Structures')
+    tr('Structures in Jakarta')
     tr('OSM buildings')
     tr('AIBEP schools')
     # Perkiraan penduduk
