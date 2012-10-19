@@ -94,7 +94,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             else:
                 usage = None
             if 'amenity' in attribute_names and (usage is None or usage == 0):
-                    usage = attributes[i]['amenity']
+                usage = attributes[i]['amenity']
             if 'building_t' in attribute_names and (usage is None
                                                     or usage == 0):
                 usage = attributes[i]['building_t']
