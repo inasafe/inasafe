@@ -52,7 +52,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         attribute_names = I.get_attribute_names()
         attributes = I.get_data()
         N = len(I)
-        LOGGER.debug('Trolololo')
         # Calculate building impact
         count = 0
         buildings = {}
@@ -165,6 +164,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         hospital_closed = 0
         # Generate break down by building usage type is available
         list_type_attribute = ['type',
+                               'amenity',
                                'building_t',
                                'office',
                                'tourism',

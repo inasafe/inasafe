@@ -83,6 +83,7 @@ from safe.postprocessors import get_post_processors
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
+import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -836,12 +837,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
 
-        Raises: Propa
-        gates any error from :func:optimalClip()
+        Raises: Propagates any error from :func:optimalClip()
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
         except CallGDALError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            raise e
+        except IOError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             raise e
@@ -969,6 +973,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred when write clip file')
             myMessage = getExceptionWithStacktrace(e,
                                                    html=True,
                                                    context=myMessage)
@@ -1626,8 +1639,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
-        myReport += impactLayerAttribution(
-            self.keywordIO.readKeywords(myQgisImpactLayer))
+        myReport += self.impactLayerAttribution(myQgisImpactLayer)
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -1885,6 +1897,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                             myCellSize)
         except CallGDALError, e:
             raise e
+        except IOError, e:
+            raise e
 
         myTitle = self.tr('Preparing exposure data...')
         myMessage = self.tr('We are resampling and clipping the exposure'
@@ -2012,7 +2026,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
 
-                    myReport += impactLayerAttribution(myKeywords)
+                    myReport += self.impactLayerAttribution(theLayer)
 
                     self.pbnPrint.setEnabled(True)
 
@@ -2165,9 +2179,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
-        myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            theKeywords=myKeywords, theFilename=myTableFilename)
+            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
 
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)

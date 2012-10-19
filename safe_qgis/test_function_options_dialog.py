@@ -28,16 +28,15 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe.impact_functions import get_plugins
-from safe_qgis.utilities_test import getQgisTestApp
-from safe_qgis.function_options_dialog import FunctionOptionsDialog
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
-LOGGER = logging.getLogger('InaSAFE')
 
+from safe_qgis.function_options_dialog import FunctionOptionsDialog
+from safe_qgis.utilities_test import getQgisTestApp
 # pylint: disable=W0611
 from safe.engine.impact_functions_for_testing.itb_fatality_model_configurable\
     import ITBFatalityFunctionConfigurable
 # pylint: enable=W0611
 
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
 
 
