@@ -95,6 +95,8 @@ def dynamic_translations():
     tr('OSM building footprints')
     tr('Structures')
     tr('Structures in Jakarta')
+    tr('Buildings')
+    tr('Buildings in Jakarta')
     tr('OSM buildings')
     tr('AIBEP schools')
     # Perkiraan penduduk
