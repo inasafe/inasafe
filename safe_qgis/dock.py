@@ -2034,14 +2034,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport += '<tr><td>%s%s%s.</td></tr>' % (
             myHazardTitle,
             myJoinWords,
-            myHazardSource
-            )
+            myHazardSource)
         myReport += '<tr><th>%s</th></tr>' % myExposureDetails
         myReport += '<tr><td>%s%s%s.</td></tr>' % (
             myExposureTitle,
             myJoinWords,
-            myExposureSource
-            )
+            myExposureSource)
         myReport += '</table>'
         return myReport
 
