@@ -194,6 +194,7 @@ class HtmlRenderer():
 
         """
         myFilePath = theFilename
+
         if theFilename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 

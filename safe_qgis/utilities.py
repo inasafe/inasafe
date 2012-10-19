@@ -934,11 +934,13 @@ def humaniseSeconds(theSeconds):
             myDays, myHours, myMinutes))
 
 
-def impactLayerAttribution(theKeywords):
+def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     """Make a little table for attribution of data sources used in impact.
 
     Args:
-        theKeywords: dict{} - a keywords dict for an impact layer.
+        * theKeywords: dict{} - a keywords dict for an impact layer.
+        * theInaSAFEFlag: bool - whether to show a little InaSAFE promotional
+            text in the attribution output. Defaults to False.
 
     Returns:
         str: an html snippet containing attribution information for the impact
@@ -997,5 +999,14 @@ def impactLayerAttribution(theKeywords):
         )
 
     myReport += '<tr><th>%s</th></tr>' % myExposureDetails
+
+    myInaSAFEPhrase = tr('This report was created using InaSAFE '
+                              'version %s. Visit http://inasafe.org to get your'
+                              ' free copy of this software!')
+    myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
+                               ' BNPB, AusAid & the World Bank')
+    myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
+
     myReport += '</table>'
+
     return myReport

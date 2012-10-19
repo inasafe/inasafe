@@ -52,7 +52,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  htmlFooter,
                                  setRasterStyle,
                                  qgisVersion,
-                                 getDefaults)
+                                 getDefaults,
+                                 impactLayerAttribution)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -1638,7 +1639,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
-        myReport += self.impactLayerAttribution(myQgisImpactLayer)
+        myReport += impactLayerAttribution(myKeywords)
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -2025,7 +2026,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
 
-                    myReport += self.impactLayerAttribution(theLayer)
+                    myReport += impactLayerAttribution(myKeywords)
 
                     self.pbnPrint.setEnabled(True)
 
