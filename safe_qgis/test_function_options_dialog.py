@@ -58,7 +58,10 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         """Test that we can build a form by passing it a function and params.
         """
         myGuiFlag = True
+        #pylint: disable=W0612
+        # We need this even though it is unused as Dialog must have an app
         myApp = QApplication(sys.argv, myGuiFlag)
+        #pylint: enable=W0612
         myFunctionId = 'I T B Fatality Function Configurable'
         myFunctionList = get_plugins(myFunctionId)
         assert len(myFunctionList) == 1
