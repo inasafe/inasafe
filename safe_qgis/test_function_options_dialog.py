@@ -21,15 +21,17 @@ import sys
 import os
 import logging
 
-from PyQt4.QtGui import QApplication, QLineEdit
+from PyQt4.QtGui import QLineEdit
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe.impact_functions import get_plugins
-
+from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+LOGGER = logging.getLogger('InaSAFE')
 
 # pylint: disable=W0611
 from safe.engine.impact_functions_for_testing.itb_fatality_model_configurable\
@@ -57,11 +59,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
     def test_buildForm(self):
         """Test that we can build a form by passing it a function and params.
         """
-        myGuiFlag = True
-        #pylint: disable=W0612
-        # We need this even though it is unused as Dialog must have an app
-        myApp = QApplication(sys.argv, myGuiFlag)
-        #pylint: enable=W0612
         myFunctionId = 'I T B Fatality Function Configurable'
         myFunctionList = get_plugins(myFunctionId)
         assert len(myFunctionList) == 1
@@ -81,7 +78,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         # For localised testing only, disable when test works!
         # This will spawn the dialog so you can actually see its contents
         #myDialog.exec_()
-        del myApp
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
