@@ -60,7 +60,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             if hazard_attribute == 'depth':
                 # Get the interpolated depth
                 x = float(attributes[i]['depth'])
-                x = x > threshold
+                x = x >= threshold
             elif hazard_attribute == 'FLOODPRONE':
                 # Use interpolated polygon attribute
                 atts = attributes[i]
