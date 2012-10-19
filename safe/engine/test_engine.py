@@ -931,7 +931,7 @@ class Test_Engine(unittest.TestCase):
     test_flood_building_impact_function.slow = True
 
     def test_data_sources_are_carried_forward(self):
-        """Data sources are carried forward to to to impact layer
+        """Data sources are carried forward to impact layer
         """
 
         haz_filename = 'Flood_Current_Depth_Jakarta_geographic.asc'
@@ -965,6 +965,8 @@ class Test_Engine(unittest.TestCase):
         assert impact_vector.get_keywords()['exposure_title'] == E_tit
         assert impact_vector.get_keywords()['hazard_source'] == H_src
         assert impact_vector.get_keywords()['exposure_source'] == E_src
+
+    test_data_sources_are_carried_forward.slow = True
 
     def test_earthquake_damage_schools(self):
         """Lembang building damage from ground shaking works

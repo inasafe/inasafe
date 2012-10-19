@@ -1331,7 +1331,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             setVectorStyle(self.postprocLayer, myStyle)
 
-
     def _aggregateResultsVector(self, myQgisImpactLayer):
         """
         Performs Aggregation postprocessing step on vectorial impact layers
