@@ -22,7 +22,7 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (CalledProcessError, call, Popen, PIPE)
+from subprocess import (CalledProcessError, call)
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
