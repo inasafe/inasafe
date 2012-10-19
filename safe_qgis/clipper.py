@@ -22,7 +22,7 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (CalledProcessError, Popen, PIPE)
+from subprocess import (CalledProcessError, call, Popen, PIPE)
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
@@ -379,24 +379,8 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # Now run GDAL warp scottie...
     LOGGER.debug(myCommand)
     try:
-        myProcess = Popen(myCommand, shell=True, stderr=PIPE)
-        # Note: This sometimes fails on osx when in fact the
-        # process ran fine, so I am wrapping it in a try / except block (TS)
-        myErrorMessage = None
-        try:
-            _, myErrorMessage = myProcess.communicate()
-        except IOError:
-            pass
-        del myProcess
-        if myErrorMessage != '' and myErrorMessage is not None:
-            raise CallGDALError(myErrorMessage)
-        # myResult = call(myCommand, shell=True)
-        # del myResult
-    except IOError, e:
-        myMessage = tr('<p>Error while writing the clip file:'
-                       '</p><pre>%s</pre><p>Error message: %s'
-                       % (myFilename, str(e)))
-        raise IOError(myMessage)
+        myResult = call(myCommand, shell=True)
+        del myResult
     except CalledProcessError, e:
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
