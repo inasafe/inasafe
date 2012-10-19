@@ -12,6 +12,7 @@ from safe.common.utilities import unique_filename, verify
 from utilities import REQUIRED_KEYWORDS
 from datetime import datetime
 from socket import gethostname
+from safe.common.utilities import ugettext as tr
 import getpass
 
 # The LOGGER is intialised in utilities.py by init
@@ -80,12 +81,12 @@ def calculate_impact(layers, impact_fcn):
         if 'title' in keywords:
             title = keywords['title']
         else:
-            title = 'Not specified'
+            title = tr('Not specified')
 
         if 'source' in keywords:
             source = keywords['source']
         else:
-            source = 'Not specified'
+            source = tr('Not specified')
 
         F.keywords['%s_title' % cat] = title
         F.keywords['%s_source' % cat] = source

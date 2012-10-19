@@ -44,7 +44,7 @@ from safe_interface import temp_dir
 
 from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
-from safe_qgis.safe_interface import DEFAULTS
+from safe_qgis.safe_interface import DEFAULTS, safeTr
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
@@ -951,21 +951,23 @@ def impactLayerAttribution(theKeywords):
     if theKeywords is None:
         return None
     myReport = ''
-    myJoinWords = ' - sourced from '
-    myHazardDetails = 'Hazard details'
-    myHazardTitleKeyword = 'hazard_title'
-    myHazardSourceKeyword = 'hazard_source'
-    myExposureDetails = 'Exposure details'
+    myJoinWords = ' - %s ' % tr('sourced from')
+    myHazardDetails = tr('Hazard details')
+    myHazardTitleKeyword = tr('hazard_title')
+    myHazardSourceKeyword = tr('hazard_source')
+    myExposureDetails = tr('Exposure details')
     myExposureTitleKeyword = 'exposure_title'
     myExposureSourceKeyword = 'exposure_source'
 
     if myHazardTitleKeyword in theKeywords:
-        myHazardTitle = theKeywords[myHazardTitleKeyword]
+        # We use safe translation infrastructure for this one (rather than Qt)
+        myHazardTitle = safeTr(theKeywords[myHazardTitleKeyword])
     else:
         myHazardTitle = tr('Hazard layer')
 
     if myHazardSourceKeyword in theKeywords:
-        myHazardSource = theKeywords[myHazardSourceKeyword]
+        # We use safe translation infrastructure for this one (rather than Qt)
+        myHazardSource = safeTr(theKeywords[myHazardSourceKeyword])
     else:
         myHazardSource = tr(' an unknown source')
 
