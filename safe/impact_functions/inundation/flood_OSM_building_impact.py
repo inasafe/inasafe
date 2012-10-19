@@ -52,7 +52,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         attribute_names = I.get_attribute_names()
         attributes = I.get_data()
         N = len(I)
-        LOGGER.debug('Trolololo')
         # Calculate building impact
         count = 0
         buildings = {}

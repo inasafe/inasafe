@@ -102,6 +102,8 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
                 theExtraKeywords=theExtraKeywords)
         except CallGDALError, e:
             raise e
+        except IOError, e:
+            raise e
 
 
 def _clipVectorLayer(theLayer, theExtent,
@@ -384,6 +386,11 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
             raise CallGDALError(myErrorMessage)
         # myResult = call(myCommand, shell=True)
         # del myResult
+    except IOError, e:
+        myMessage = tr('<p>Error while writing the clip file:'
+                       '</p><pre>%s</pre><p>Error message: %s'
+                       % (myFilename, str(e)))
+        raise IOError(myMessage)
     except CalledProcessError, e:
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'

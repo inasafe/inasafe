@@ -845,6 +845,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             raise e
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            raise e
         except:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -969,6 +973,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred when write clip file')
             myMessage = getExceptionWithStacktrace(e,
                                                    html=True,
                                                    context=myMessage)
@@ -1882,6 +1895,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
                                             myCellSize)
         except CallGDALError, e:
+            raise e
+        except IOError, e:
             raise e
 
         myTitle = self.tr('Preparing exposure data...')
