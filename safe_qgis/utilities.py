@@ -993,5 +993,7 @@ def impactLayerAttribution(theKeywords):
         myJoinWords,
         myExposureSource
         )
+    
+    myReport += '<tr><th>%s</th></tr>' % myExposureDetails
     myReport += '</table>'
     return myReport

@@ -197,7 +197,6 @@ class HtmlRenderer():
         if theFilename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 
-
         try:
             mySummaryTable = theKeywords['impact_summary']
         except KeyError:

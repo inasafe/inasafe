@@ -1626,7 +1626,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
-        myReport += impactLayerAttribution(myQgisImpactLayer)
+        myReport += impactLayerAttribution(
+            self.keywordIO.readKeywords(myQgisImpactLayer))
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -2011,7 +2012,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
 
-                    myReport += impactLayerAttribution(theLayer)
+                    myReport += impactLayerAttribution(myKeywords)
 
                     self.pbnPrint.setEnabled(True)
 
