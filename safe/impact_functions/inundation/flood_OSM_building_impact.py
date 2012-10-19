@@ -164,6 +164,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         hospital_closed = 0
         # Generate break down by building usage type is available
         list_type_attribute = ['type',
+                               'amenity',
                                'building_t',
                                'office',
                                'tourism',
