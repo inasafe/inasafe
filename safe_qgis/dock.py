@@ -2005,11 +2005,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myKeywords = self.keywordIO.readKeywords(theLayer)
         myReport = ''
-        myJoinWords = ' - sourced from '
-        myHazardDetails = 'Hazard details'
+        myJoinWords = ' - ' + self.tr('sourced from') + ' '
+        myHazardDetails = self.tr('Hazard details')
         myHazardTitleKeyword = 'hazard_title'
         myHazardSourceKeyword = 'hazard_source'
-        myExposureDetails = 'Exposure details'
+        myExposureDetails = self.tr('Exposure details')
         myExposureTitleKeyword = 'exposure_title'
         myExposureSourceKeyword = 'exposure_source'
         if myHazardTitleKeyword in myKeywords:
@@ -2019,7 +2019,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myHazardSourceKeyword in myKeywords:
             myHazardSource = myKeywords[myHazardSourceKeyword]
         else:
-            myHazardSource = self.tr(' an unknown source')
+            myHazardSource = self.tr('an unknown source')
         if myExposureTitleKeyword in myKeywords:
             myExposureTitle = myKeywords[myExposureTitleKeyword]
         else:
@@ -2027,7 +2027,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myExposureSourceKeyword in myKeywords:
             myExposureSource = myKeywords[myExposureSourceKeyword]
         else:
-            myExposureSource = self.tr(' an unknown source')
+            myExposureSource = self.tr('an unknown source')
         myReport += ('<table class="table table-striped condensed'
                      ' bordered-table">')
         myReport += '<tr><th>%s</th></tr>' % myHazardDetails
