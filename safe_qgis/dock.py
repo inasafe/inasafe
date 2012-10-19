@@ -52,7 +52,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  htmlFooter,
                                  setRasterStyle,
                                  qgisVersion,
-                                 getDefaults)
+                                 getDefaults,
+                                 impactLayerAttribution)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -82,7 +83,6 @@ from safe.postprocessors import get_post_processors
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -1626,7 +1626,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
-        myReport += self.impactLayerAttribution(myQgisImpactLayer)
+        myReport += impactLayerAttribution(myQgisImpactLayer)
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -1985,51 +1985,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #f.close()
         self.wvResults.setHtml(myHtml)
 
-    def impactLayerAttribution(self, theLayer):
-        """Make a little table for attribution of data sources used in impact.
-        """
-        myKeywords = self.keywordIO.readKeywords(theLayer)
-        myReport = ''
-        myJoinWords = ' - sourced from '
-        myHazardDetails = 'Hazard details'
-        myHazardTitleKeyword = 'hazard_title'
-        myHazardSourceKeyword = 'hazard_source'
-        myExposureDetails = 'Exposure details'
-        myExposureTitleKeyword = 'exposure_title'
-        myExposureSourceKeyword = 'exposure_source'
-        if myHazardTitleKeyword in myKeywords:
-            myHazardTitle = myKeywords[myHazardTitleKeyword]
-        else:
-            myHazardTitle = str(theLayer.name())
-        if myHazardSourceKeyword in myKeywords:
-            myHazardSource = myKeywords[myHazardSourceKeyword]
-        else:
-            myHazardSource = self.tr(' an unknown source')
-        if myExposureTitleKeyword in myKeywords:
-            myExposureTitle = myKeywords[myExposureTitleKeyword]
-        else:
-            myExposureTitle = str(theLayer.name())
-        if myExposureSourceKeyword in myKeywords:
-            myExposureSource = myKeywords[myExposureSourceKeyword]
-        else:
-            myExposureSource = self.tr(' an unknown source')
-        myReport += ('<table class="table table-striped condensed'
-                     ' bordered-table">')
-        myReport += '<tr><th>%s</th></tr>' % myHazardDetails
-        myReport += '<tr><td>%s%s%s.</td></tr>' % (
-            myHazardTitle,
-            myJoinWords,
-            myHazardSource
-            )
-        myReport += '<tr><th>%s</th></tr>' % myExposureDetails
-        myReport += '<tr><td>%s%s%s.</td></tr>' % (
-            myExposureTitle,
-            myJoinWords,
-            myExposureSource
-            )
-        myReport += '</table>'
-        return myReport
-
     def layerChanged(self, theLayer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,
@@ -2056,7 +2011,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
 
-                    myReport += self.impactLayerAttribution(theLayer)
+                    myReport += impactLayerAttribution(theLayer)
 
                     self.pbnPrint.setEnabled(True)
 
@@ -2209,8 +2164,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+            theKeywords=myKeywords, theFilename=myTableFilename)
 
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)
