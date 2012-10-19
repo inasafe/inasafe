@@ -17,7 +17,6 @@ __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'beta'  # beta, final etc will be shown in dock title
 
 import os
 import numpy
