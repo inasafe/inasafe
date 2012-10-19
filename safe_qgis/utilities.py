@@ -44,7 +44,7 @@ from safe_interface import temp_dir
 
 from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
-from safe_qgis.safe_interface import DEFAULTS, safeTr
+from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
@@ -952,11 +952,12 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     """
     if theKeywords is None:
         return None
+    print theKeywords
     myReport = ''
     myJoinWords = ' - %s ' % tr('sourced from')
     myHazardDetails = tr('Hazard details')
-    myHazardTitleKeyword = tr('hazard_title')
-    myHazardSourceKeyword = tr('hazard_source')
+    myHazardTitleKeyword = 'hazard_title'
+    myHazardSourceKeyword = 'hazard_source'
     myExposureDetails = tr('Exposure details')
     myExposureTitleKeyword = 'exposure_title'
     myExposureSourceKeyword = 'exposure_source'
@@ -971,7 +972,7 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
         # We use safe translation infrastructure for this one (rather than Qt)
         myHazardSource = safeTr(theKeywords[myHazardSourceKeyword])
     else:
-        myHazardSource = tr(' an unknown source')
+        myHazardSource = tr('an unknown source')
 
     if myExposureTitleKeyword in theKeywords:
         myExposureTitle = theKeywords[myExposureTitleKeyword]
@@ -981,18 +982,18 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     if myExposureSourceKeyword in theKeywords:
         myExposureSource = theKeywords[myExposureSourceKeyword]
     else:
-        myExposureSource = tr(' an unknown source')
+        myExposureSource = tr('an unknown source')
 
     myReport += ('<table class="table table-striped condensed'
                  ' bordered-table">')
     myReport += '<tr><th>%s</th></tr>' % myHazardDetails
-    myReport += '<tr><td>%s%s%s.</td></tr>' % (
+    myReport += '<tr><td>%s%s %s.</td></tr>' % (
         myHazardTitle,
         myJoinWords,
         myHazardSource
         )
     myReport += '<tr><th>%s</th></tr>' % myExposureDetails
-    myReport += '<tr><td>%s%s%s.</td></tr>' % (
+    myReport += '<tr><td>%s%s %s.</td></tr>' % (
         myExposureTitle,
         myJoinWords,
         myExposureSource
@@ -1000,12 +1001,14 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
 
     myReport += '<tr><th>%s</th></tr>' % myExposureDetails
 
-    myInaSAFEPhrase = tr('This report was created using InaSAFE '
-                              'version %s. Visit http://inasafe.org to get your'
-                              ' free copy of this software!')
-    myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
+    if theInaSAFEFlag:
+        myInaSAFEPhrase = tr('This report was created using InaSAFE '
+                              'version %1. Visit http://inasafe.org to get '
+                              'your free copy of this software!').arg(
+                                get_version())
+        myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
                                ' BNPB, AusAid & the World Bank')
-    myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
+        myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
 
     myReport += '</table>'
 

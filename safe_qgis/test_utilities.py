@@ -38,7 +38,7 @@ class UtilitiesTest(unittest.TestCase):
     """
 
     def setUp(self):
-        pass
+        os.environ['LANG'] = 'en'
 
     def tearDown(self):
         pass
@@ -346,6 +346,17 @@ class UtilitiesTest(unittest.TestCase):
                       'exposure_source': 'Sample Exposure Source'}
         myHtml = impactLayerAttribution(myKeywords)
         self.assertEqual(len(myHtml), 286)
+
+    def test_localisedAttribution(self):
+        """Test we can localise attribution."""
+        os.environ['LANG'] = 'id'
+        myKeywords = {'hazard_title': 'Jakarta 2007 flood',
+                      'hazard_source': 'Sample Hazard Source',
+                      'exposure_title': 'People in Jakarta',
+                      'exposure_source': 'Sample Exposure Source'}
+        myHtml = impactLayerAttribution(myKeywords, True)
+        print myHtml
+        assert myHtml == '11'
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
