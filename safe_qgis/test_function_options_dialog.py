@@ -21,7 +21,7 @@ import sys
 import os
 import logging
 
-from PyQt4.QtGui import QApplication, QLineEdit
+from PyQt4.QtGui import QLineEdit
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
