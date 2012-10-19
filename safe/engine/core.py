@@ -78,15 +78,16 @@ def calculate_impact(layers, impact_fcn):
     for cat in ['hazard', 'exposure']:
         L = extract_layers(layers, 'category', cat)
         keywords = L[0].get_keywords()
+        not_specified = tr('Not specified')
         if 'title' in keywords:
             title = keywords['title']
         else:
-            title = tr('Not specified')
+            title = not_specified
 
         if 'source' in keywords:
             source = keywords['source']
         else:
-            source = tr('Not specified')
+            source = not_specified
 
         F.keywords['%s_title' % cat] = title
         F.keywords['%s_source' % cat] = source
