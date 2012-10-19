@@ -81,6 +81,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         # For localised testing only, disable when test works!
         # This will spawn the dialog so you can actually see its contents
         #myDialog.exec_()
+        del myApp
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
