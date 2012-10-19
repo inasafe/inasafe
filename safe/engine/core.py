@@ -87,8 +87,8 @@ def calculate_impact(layers, impact_fcn):
         else:
             source = 'Not specified'
 
-        F.keywords['%s title' % cat] = title
-        F.keywords['%s source' % cat] = source
+        F.keywords['%s_title' % cat] = title
+        F.keywords['%s_source' % cat] = source
 
     F.keywords['elapsed_time'] = elapsed_time_sec
     F.keywords['time_stamp'] = time_stamp[:19]  # remove decimal part
