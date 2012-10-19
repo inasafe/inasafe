@@ -2009,9 +2009,54 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
+
+                    myJoinWords = ' - sourced from '
+                    myHazardDetails = 'Hazard details'
+                    myHazardTitleKeyword = 'hazard title'
+                    myHazardSourceKeyword = 'hazard source'
+                    myExposureDetails = 'Exposure details'
+                    myExposureTitleKeyword = 'hazard title'
+                    myExposureSourceKeyword = 'hazard source'
+                    if myHazardTitleKeyword in myKeywords:
+                        myHazardTitle = myKeywords[myHazardTitleKeyword]
+                    else:
+                        myHazardTitle = str(theLayer.name())
+                    if myHazardSourceKeyword in myKeywords:
+                        myHazardSource = myKeywords[myHazardSourceKeyword]
+                    else:
+                        myHazardSource = self.tr(' an unknown source')
+
+                    if myExposureTitleKeyword in myKeywords:
+                        myExposureTitle = myKeywords[myExposureTitleKeyword]
+                    else:
+                        myExposureTitle = str(theLayer.name())
+                    if myExposureSourceKeyword in myKeywords:
+                        myExposureSource = myKeywords[myExposureSourceKeyword]
+                    else:
+                        myExposureSource = self.tr(' an unknown source')
+
                     myReport += ('<table class="table table-striped condensed'
-                                    ' bordered-table">')
+                                 ' bordered-table">')
+                    myReport += '<tr><th>%s</th></tr>' % myHazardDetails
+                    myReport += '<tr><td>%s%s%s.</td></tr>' % (
+                        myHazardTitle,
+                        myJoinWords,
+                        myHazardSource
+                    )
+                    myReport += '<tr><th>%s</th></tr>' % myExposureDetails
+                    myReport += '<tr><td>%s%s%s.</td></tr>' % (
+                        myHazardTitle,
+                        myJoinWords,
+                        myHazardSource
+                        )
+                    myReport += '</table>'
+
                     self.pbnPrint.setEnabled(True)
+
+                    # TODO: Shouldn't this line be in the start of the else
+                    #     block below? (TS)
+                    myReport += ('<table class="table table-striped condensed'
+                                 ' bordered-table">')
 
                 else:
                     self.pbnPrint.setEnabled(False)
