@@ -378,7 +378,13 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     LOGGER.debug(myCommand)
     try:
         myProcess = Popen(myCommand, shell=True, stderr=PIPE)
-        _, myErrorMessage = myProcess.communicate()
+        # Note: This sometimes fails on osx when in fact the
+        # process ran fine, so I am wrapping it in a try / except block (TS)
+        myErrorMessage = None
+        try:
+            _, myErrorMessage = myProcess.communicate()
+        except IOError:
+            pass
         del myProcess
         if myErrorMessage != '' and myErrorMessage is not None:
             raise CallGDALError(myErrorMessage)
