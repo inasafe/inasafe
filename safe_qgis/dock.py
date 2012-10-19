@@ -1627,7 +1627,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
         myReport += self.impactLayerAttribution(myQgisImpactLayer)
-        
+
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
 
