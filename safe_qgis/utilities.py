@@ -44,7 +44,7 @@ from safe_interface import temp_dir
 
 from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
-from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
+from safe_qgis.safe_interface import DEFAULTS, safeTr
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
@@ -952,12 +952,11 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     """
     if theKeywords is None:
         return None
-    print theKeywords
     myReport = ''
     myJoinWords = ' - %s ' % tr('sourced from')
     myHazardDetails = tr('Hazard details')
-    myHazardTitleKeyword = 'hazard_title'
-    myHazardSourceKeyword = 'hazard_source'
+    myHazardTitleKeyword = tr('hazard_title')
+    myHazardSourceKeyword = tr('hazard_source')
     myExposureDetails = tr('Exposure details')
     myExposureTitleKeyword = 'exposure_title'
     myExposureSourceKeyword = 'exposure_source'
@@ -972,7 +971,7 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
         # We use safe translation infrastructure for this one (rather than Qt)
         myHazardSource = safeTr(theKeywords[myHazardSourceKeyword])
     else:
-        myHazardSource = tr('an unknown source')
+        myHazardSource = tr(' an unknown source')
 
     if myExposureTitleKeyword in theKeywords:
         myExposureTitle = theKeywords[myExposureTitleKeyword]
@@ -982,22 +981,21 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     if myExposureSourceKeyword in theKeywords:
         myExposureSource = theKeywords[myExposureSourceKeyword]
     else:
-        myExposureSource = tr('an unknown source')
+        myExposureSource = tr(' an unknown source')
 
     myReport += ('<table class="table table-striped condensed'
                  ' bordered-table">')
     myReport += '<tr><th>%s</th></tr>' % myHazardDetails
-    myReport += '<tr><td>%s%s %s.</td></tr>' % (
+    myReport += '<tr><td>%s%s%s.</td></tr>' % (
         myHazardTitle,
         myJoinWords,
-        myHazardSource
-        )
+        myHazardSource)
+
     myReport += '<tr><th>%s</th></tr>' % myExposureDetails
-    myReport += '<tr><td>%s%s %s.</td></tr>' % (
+    myReport += '<tr><td>%s%s%s.</td></tr>' % (
         myExposureTitle,
         myJoinWords,
-        myExposureSource
-        )
+        myExposureSource)
 
     myReport += '<tr><th>%s</th></tr>' % myExposureDetails
 
