@@ -1161,6 +1161,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHTML = ''
         for proc, resList in self.postprocOutput.iteritems():
+            #sorting
+            try:
+                resList = sorted(resList, key=lambda d: (
+                    -d[1]['Total']['value']))
+            except KeyError:
+                LOGGER.debug('Skipping sorting as the postprocessor did not '
+                             'have a "Total" field')
             myHTML += ('<table class="table table-striped condensed">'
                        '  <tbody>'
                        '    <tr>'
@@ -1322,8 +1329,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        'style_classes': myClasses}
 
             setVectorStyle(self.postprocLayer, myStyle)
-            QgsMapLayerRegistry.instance().addMapLayer(
-                self.postprocLayer)
+
 
     def _aggregateResultsVector(self, myQgisImpactLayer):
         """
@@ -1663,8 +1669,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('Impact layer %1 was neither a raster or a '
                    'vector layer').arg(myQgisImpactLayer.source())
             raise ReadLayerError(myMessage)
-        # Add layer to QGIS
-        QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+
+        # Add layers to QGIS
+        myLayersToAdd = []
+        if self.showPostProcLayers and self.doZonalAggregation:
+            myLayersToAdd.append(self.postprocLayer)
+        myLayersToAdd.append(myQgisImpactLayer)
+        QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
         # then zoom to it
         if self.zoomToImpactFlag:
             self.iface.zoomToActiveLayer()
