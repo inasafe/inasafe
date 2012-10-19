@@ -12,6 +12,7 @@ from safe.common.utilities import unique_filename, verify
 from utilities import REQUIRED_KEYWORDS
 from datetime import datetime
 from socket import gethostname
+from safe.common.utilities import ugettext as tr
 import getpass
 
 # The LOGGER is intialised in utilities.py by init
