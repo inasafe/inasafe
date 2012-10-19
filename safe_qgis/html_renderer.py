@@ -24,10 +24,9 @@ from PyQt4 import QtCore, QtGui, QtWebKit
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  mmToPoints,
-                                 setupPrinter)
+                                 setupPrinter,
+                                 impactLayerAttribution)
 from safe_interface import unique_filename, temp_dir
-from safe_qgis.exceptions import KeywordNotFoundException
-from keyword_io import KeywordIO
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -178,37 +177,41 @@ class HtmlRenderer():
                                   QtCore.SIGNAL("loadFinished(bool)"),
                                   self.htmlLoadedSlot)
 
-    def printImpactTable(self, theLayer, theFilename=None):
+    def printImpactTable(self, theKeywords, theFilename=None):
         """High level table generator to print layer keywords.
 
         It gets the summary and impact table from a QgsMapLayer's keywords and
         renders to pdf, returning the resulting PDF file path.
 
         Args:
-            * theLayer: QgsMapLayer instance (required)
+            theKeywords: dic containing impact layer keywords (required)
+
+        Returns:
+            str: Path to generated pdf file.
+
+        Raises:
+            None
 
         """
         myFilePath = theFilename
         if theFilename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 
-        myKeywordIO = KeywordIO()
         try:
-            mySummaryTable = myKeywordIO.readKeywords(
-                theLayer, 'impact_summary')
-        except KeywordNotFoundException:
+            mySummaryTable = theKeywords['impact_summary']
+        except KeyError:
             mySummaryTable = None
 
+        myAttributionTable = impactLayerAttribution(theKeywords)
+
         try:
-            myFullTable = myKeywordIO.readKeywords(
-                theLayer, 'impact_table')
-        except KeywordNotFoundException:
+            myFullTable = theKeywords['impact_table']
+        except KeyError:
             myFullTable = None
 
         try:
-            myAggregationTable = myKeywordIO.readKeywords(
-                theLayer, 'postprocessing_report')
-        except KeywordNotFoundException:
+            myAggregationTable = theKeywords['postprocessing_report']
+        except KeyError:
             myAggregationTable = None
 
         myHtml = ''
@@ -217,6 +220,8 @@ class HtmlRenderer():
             myHtml += mySummaryTable
             if myAggregationTable is not None:
                 myHtml += myAggregationTable
+            if myAttributionTable is not None:
+                myHtml += myAttributionTable
             myHtml += '<h2>%s</h2>' % self.tr('Detailed Table')
             myHtml += myFullTable
         else:
@@ -224,6 +229,8 @@ class HtmlRenderer():
                 myHtml = myAggregationTable
             if myFullTable is not None:
                 myHtml += myFullTable
+            if myAttributionTable is not None:
+                myHtml += myAttributionTable
 
         # myNewFilePath should be the same as myFilePath
         myNewFilePath = self.printToPdf(myHtml, myFilePath)

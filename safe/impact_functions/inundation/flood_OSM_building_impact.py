@@ -6,6 +6,9 @@ from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
+import logging
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
@@ -49,7 +52,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         attribute_names = I.get_attribute_names()
         attributes = I.get_data()
         N = len(I)
-
         # Calculate building impact
         count = 0
         buildings = {}
@@ -58,7 +60,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             if hazard_attribute == 'depth':
                 # Get the interpolated depth
                 x = float(attributes[i]['depth'])
-                x = x > threshold
+                x = x >= threshold
             elif hazard_attribute == 'FLOODPRONE':
                 # Use interpolated polygon attribute
                 atts = attributes[i]
@@ -85,11 +87,27 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
+
             if 'type' in attribute_names:
                 usage = attributes[i]['type']
             else:
                 usage = None
-
+            if 'amenity' in attribute_names and (usage is None or usage == 0):
+                usage = attributes[i]['amenity']
+            if 'building_t' in attribute_names and (usage is None
+                                                    or usage == 0):
+                usage = attributes[i]['building_t']
+            if 'office' in attribute_names and (usage is None or usage == 0):
+                usage = attributes[i]['office']
+            if 'tourism' in attribute_names and (usage is None or usage == 0):
+                usage = attributes[i]['tourism']
+            if 'leisure' in attribute_names and (usage is None or usage == 0):
+                usage = attributes[i]['leisure']
+            if 'building' in attribute_names and (usage is None or usage == 0):
+                usage = attributes[i]['building']
+                if usage == 'yes':
+                    usage = 'building'
+            #LOGGER.debug('usage ')
             if usage is not None and usage != 0:
                 key = usage
             else:
@@ -123,7 +141,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 affected_buildings['other'] += affected_buildings[usage]
                 del buildings[usage]
                 del affected_buildings[usage]
-
         # Generate csv file of results
 ##        fid = open('C:\dki_table_%s.csv' % H.get_name(), 'wb')
 ##        fid.write('%s, %s, %s\n' % (tr('Building type'),
@@ -146,7 +163,15 @@ class FloodBuildingImpactFunction(FunctionProvider):
         school_closed = 0
         hospital_closed = 0
         # Generate break down by building usage type is available
-        if 'type' in attribute_names:
+        list_type_attribute = ['type',
+                               'amenity',
+                               'building_t',
+                               'office',
+                               'tourism',
+                               'leisure',
+                               'building']
+        intersect_type = set(attribute_names) & set(list_type_attribute)
+        if len(intersect_type) > 0:
             # Make list of building types
             building_list = []
             for usage in buildings:
@@ -159,9 +184,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 # print ('WARNING: %s could not be translated'
                 #        % building_type)
                 #==============================================================
-
+                # FIXME (Sunni) : I change affected_buildings[usage] to string
+                # because it will be replace with &nbsp in html
                 building_list.append([building_type.capitalize(),
-                                      affected_buildings[usage],
+                                      str(affected_buildings[usage]),
                                       buildings[usage]])
                 if building_type == 'school':
                     school_closed = affected_buildings[usage]

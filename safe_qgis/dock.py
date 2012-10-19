@@ -17,7 +17,6 @@ __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'beta'  # beta, final etc will be shown in dock title
 
 import os
 import numpy
@@ -837,12 +836,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
 
-        Raises: Propa
-        gates any error from :func:optimalClip()
+        Raises: Propagates any error from :func:optimalClip()
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
         except CallGDALError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            raise e
+        except IOError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             raise e
@@ -970,6 +972,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred when write clip file')
             myMessage = getExceptionWithStacktrace(e,
                                                    html=True,
                                                    context=myMessage)
@@ -1311,8 +1322,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                      'max': myMax,
                      'colour': myColor,
                      'transparency': 30,
-                     'label': '%s - %s' % (myMin, myMax)}
-                )
+                     'label': '%s - %s' % (myMin, myMax)})
                 myCounter += 1
 
             myStyle = {'target_field': myAttr,
@@ -1634,6 +1644,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
+        myReport += self.impactLayerAttribution(myQgisImpactLayer)
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -1896,6 +1907,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                             myCellSize)
         except CallGDALError, e:
             raise e
+        except IOError, e:
+            raise e
 
         myTitle = self.tr('Preparing exposure data...')
         myMessage = self.tr('We are resampling and clipping the exposure'
@@ -2022,9 +2035,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
-                    myReport += ('<table class="table table-striped condensed'
-                                    ' bordered-table">')
+
+                    myReport += self.impactLayerAttribution(theLayer)
+
                     self.pbnPrint.setEnabled(True)
+
+                    # TODO: Shouldn't this line be in the start of the else
+                    #     block below? (TS)
+                    myReport += ('<table class="table table-striped condensed'
+                                 ' bordered-table">')
 
                 else:
                     self.pbnPrint.setEnabled(False)
@@ -2170,8 +2189,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+            myKeywords, theFilename=myTableFilename)
 
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)

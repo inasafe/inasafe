@@ -22,7 +22,7 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (CalledProcessError, Popen, PIPE)
+from subprocess import (CalledProcessError, call)
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
@@ -101,6 +101,8 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
             return _clipRasterLayer(theLayer, theExtent, theCellSize,
                 theExtraKeywords=theExtraKeywords)
         except CallGDALError, e:
+            raise e
+        except IOError, e:
             raise e
 
 
@@ -377,13 +379,8 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # Now run GDAL warp scottie...
     LOGGER.debug(myCommand)
     try:
-        myProcess = Popen(myCommand, shell=True, stderr=PIPE)
-        _, myErrorMessage = myProcess.communicate()
-        del myProcess
-        if myErrorMessage != '' and myErrorMessage is not None:
-            raise CallGDALError(myErrorMessage)
-        # myResult = call(myCommand, shell=True)
-        # del myResult
+        myResult = call(myCommand, shell=True)
+        del myResult
     except CalledProcessError, e:
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
