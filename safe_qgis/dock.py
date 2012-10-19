@@ -1150,6 +1150,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHTML = ''
         for proc, resList in self.postprocOutput.iteritems():
+            #sorting
+            try:
+                resList = sorted(resList, key=lambda d: (
+                    -d[1]['Total']['value']))
+            except KeyError:
+                LOGGER.debug('Skipping sorting as the postprocessor did not '
+                             'have a "Total" field')
             myHTML += ('<table class="table table-striped condensed">'
                        '  <tbody>'
                        '    <tr>'
