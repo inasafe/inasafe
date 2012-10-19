@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="id_ID">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -100,7 +101,7 @@
     <message>
         <location filename="clipper.py" line="396"/>
         <source>&lt;p&gt;Error while writing the clip file:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Kesalahan ketika menulis berkas clipping:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan kesalahan: %s</translation>
     </message>
 </context>
 <context>
@@ -419,7 +420,7 @@
     <message>
         <location filename="dock.py" line="984"/>
         <source>An error occurred when write clip file</source>
-        <translation type="unfinished"></translation>
+        <translation>Terjadi pengecualian ketika menulis berkas kliping</translation>
     </message>
     <message>
         <location filename="dock.py" line="2009"/>
@@ -510,7 +511,7 @@
     <message>
         <location filename="function_options_dialog_base.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialog</translation>
     </message>
 </context>
 <context>
