@@ -989,23 +989,23 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     myReport += '<tr><td>%s%s%s.</td></tr>' % (
         myHazardTitle,
         myJoinWords,
-        myHazardSource
-        )
+        myHazardSource)
+
     myReport += '<tr><th>%s</th></tr>' % myExposureDetails
     myReport += '<tr><td>%s%s%s.</td></tr>' % (
         myExposureTitle,
         myJoinWords,
-        myExposureSource
-        )
+        myExposureSource)
 
     myReport += '<tr><th>%s</th></tr>' % myExposureDetails
 
-    myInaSAFEPhrase = tr('This report was created using InaSAFE '
-                              'version %s. Visit http://inasafe.org to get your'
-                              ' free copy of this software!')
-    myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
-                               ' BNPB, AusAid & the World Bank')
-    myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
+    if theInaSAFEFlag:
+        myInaSAFEPhrase = tr('This report was created using InaSAFE '
+                             'version %s. Visit http://inasafe.org to get '
+                             'your free copy of this software!')
+        myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
+                              ' BNPB, AusAid & the World Bank')
+        myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
 
     myReport += '</table>'
 
