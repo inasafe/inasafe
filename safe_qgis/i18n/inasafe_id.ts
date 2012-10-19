@@ -150,7 +150,7 @@
     <message>
         <location filename="dock.py" line="1890"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
-        <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan memotonh lapisan dampak untuk mencocokkan perpotongan dari lapisan paparan dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1903"/>
@@ -160,7 +160,7 @@
     <message>
         <location filename="dock.py" line="1904"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
-        <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan memotong lapisan dampak untuk mencocokkan perpotongan lapisan dampak dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="2211"/>
@@ -210,7 +210,7 @@
     <message>
         <location filename="dock.py" line="356"/>
         <source>You can now proceed to run your model by clicking the &lt;em&gt;Run&lt;/em&gt; button.</source>
-        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
+        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik tombol&lt;em&gt; Hitung&lt;/em&gt;.</translation>
     </message>
     <message>
         <location filename="dock.py" line="358"/>
@@ -503,7 +503,7 @@
     <message>
         <location filename="dock_base.ui" line="173"/>
         <source>Question: In the event of</source>
-        <translation>Pertanyaan: Pada saat terjadi</translation>
+        <translation>Pertanyaan: Apabila terjadi</translation>
     </message>
 </context>
 <context>
