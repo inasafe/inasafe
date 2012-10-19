@@ -13,7 +13,7 @@ SOURCES = __init__.py \
 FORMS = dock_base.ui \
         keywords_dialog_base.ui \
         options_dialog_base.ui \
-        configurable_impact_functions_dialog_base.ui \
+        function_options_dialog_base.ui \
         impact_functions_doc_base.ui
 
 TRANSLATIONS = i18n/inasafe_id.ts \
