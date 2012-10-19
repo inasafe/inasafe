@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -110,12 +111,12 @@
     <message>
         <location filename="utilities.py" line="958"/>
         <source>hazard_title</source>
-        <translation>judul_bahaya</translation>
+        <translation type="obsolete">judul_bahaya</translation>
     </message>
     <message>
         <location filename="utilities.py" line="959"/>
         <source>hazard_source</source>
-        <translation>sumber_bahaya</translation>
+        <translation type="obsolete">sumber_bahaya</translation>
     </message>
     <message>
         <location filename="utilities.py" line="960"/>
@@ -130,7 +131,7 @@
     <message>
         <location filename="utilities.py" line="984"/>
         <source> an unknown source</source>
-        <translation>sumber tidak diketahui</translation>
+        <translation type="obsolete">sumber tidak diketahui</translation>
     </message>
     <message>
         <location filename="utilities.py" line="979"/>
@@ -140,12 +141,120 @@
     <message>
         <location filename="utilities.py" line="1003"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software!</source>
-        <translation>Laporan ini dibuat menggunakan InaSAFE versi %s. Kunjungi http://inasafe.org untuk mendapatkan perangkat lunak ini secara gratis!</translation>
+        <translation type="obsolete">Laporan ini dibuat menggunakan InaSAFE versi %s. Kunjungi http://inasafe.org untuk mendapatkan perangkat lunak ini secara gratis!</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1006"/>
+        <location filename="utilities.py" line="1007"/>
         <source>InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank</source>
         <translation>InaSAFE telah dikembangkan bersama-sama oleh BNPB, AusAid &amp; World Bank</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="140"/>
+        <source>theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: /ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s</source>
+        <translation>Luasan Geografis bencana atau luasan geografis paparan tidak bisa kosong. Ditemukan /n Luasan Geografis bencana : %s /n luasan geografis paparan: %s</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="156"/>
+        <source>Bounding boxes of hazard data, exposure data and viewport did not overlap, so no computation was done. Please make sure you pan to where the data is and that hazard and exposure data overlaps.</source>
+        <translation>Kotak pembatas untuk data bencana, data paparan, dan tampilan sekarang tidak saling berpotongan, sehingga tidak ada perhitungan yang dilakukan. Silahkan pastikan Anda menggeser ke arah data dan data paparan serta bencana berpotongan.</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="302"/>
+        <source>Keyword retrieval failed for %s (%s) 
+ %s</source>
+        <translation>Gagal mengambil katak kunci untuk %s (%s).
+ %s</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="253"/>
+        <source>No value was found for keyword %s in layer %s</source>
+        <translation>Tidak ada nilai yang ditemukan untuk kata kunci %s pada lapisan %s</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="285"/>
+        <source>Cannot get keywords from a non-existent file.%s does not exist.</source>
+        <translation>Tidak dapat mendapatkan kata kunci dari berkas yang tidak ada. %s tidak ada.</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="294"/>
+        <source>No keywords file found for %s</source>
+        <translation>Tidak ada berkas kata kunci ditemukan untuk %s</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="310"/>
+        <source>No value was found in file %s for keyword %s</source>
+        <translation>Tidak ada nilai ditemukan pada berkas %s untuk kata kunci %s</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="363"/>
+        <source>Argument &quot;%s&quot; was not a valid layer instance</source>
+        <translation>Argumen :%s: bukanlah objek lapisan yang valid</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="370"/>
+        <source>Styleinfo retrieval failed for %s
+ %s</source>
+        <translation>Informasi gaya gagal diperoleh untuk %s
+ %s</translation>
+    </message>
+    <message>
+        <location filename="safe_interface.py" line="375"/>
+        <source>No styleInfo was found for layer %s</source>
+        <translation>Tidak ada informasi gaya ditemukan pada lapisan %s</translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="984"/>
+        <source>an unknown source</source>
+        <translation>sumber tidak diketahui</translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="1000"/>
+        <source>Software notes</source>
+        <translation>Catatan perangkat lunak</translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="1003"/>
+        <source>This report was created using InaSAFE version %1. Visit http://inasafe.org to get your free copy of this software!</source>
+        <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %1. Kunjungi http://inasafe.org untuk mendapatkan kopi gratis dari perangkat lunak ini!</translation>
+    </message>
+    <message>
+        <location filename="help.py" line="68"/>
+        <source>InaSAFE</source>
+        <translation>InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="help.py" line="68"/>
+        <source>Documentation could not be found at:
+%s</source>
+        <translation>Dokumentasi tidak dapat ditemukan di : %s</translation>
+    </message>
+</context>
+<context>
+    <name>DOCK</name>
+    <message>
+        <location filename="test_dock.py" line="415"/>
+        <source>Entire area</source>
+        <translation>Area keseluruhan</translation>
+    </message>
+    <message>
+        <location filename="test_dock.py" line="416"/>
+        <source>A flood in Jakarta</source>
+        <translation>Banjir di Jakarta</translation>
+    </message>
+    <message>
+        <location filename="test_dock.py" line="417"/>
+        <source>Essential buildings</source>
+        <translation>Gedung-gedung penting</translation>
+    </message>
+    <message>
+        <location filename="test_dock.py" line="418"/>
+        <source>kabupaten jakarta singlepart</source>
+        <translation>kabupaten Jakarta singlepart</translation>
+    </message>
+    <message>
+        <location filename="test_dock.py" line="419"/>
+        <source>OSM Building Polygons</source>
+        <translation>Poligon gedung OSM</translation>
     </message>
 </context>
 <context>
@@ -472,62 +581,75 @@
     <message>
         <location filename="dock_base.ui" line="201"/>
         <source>How many</source>
-        <translation>Berapa banyak</translation>
+        <translation type="obsolete">Berapa banyak</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="218"/>
         <source>&amp;Might</source>
-        <translation>Yang &amp;mungkin</translation>
+        <translation type="obsolete">Yang &amp;mungkin</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="55"/>
         <source>about:blank</source>
-        <translation>Perihal:kosong</translation>
+        <translation type="obsolete">Perihal:kosong</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="298"/>
         <source>Help</source>
-        <translation>Bantuan</translation>
+        <translation type="obsolete">Bantuan</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="338"/>
         <source>Run</source>
-        <translation>Hitung</translation>
+        <translation type="obsolete">Hitung</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="18"/>
         <source>InaSAFE</source>
-        <translation>InaSAFE</translation>
+        <translation type="obsolete">InaSAFE</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="318"/>
         <source>Print...</source>
-        <translation>Cetak...</translation>
+        <translation type="obsolete">Cetak...</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="101"/>
         <source>Supported by:</source>
-        <translation>Didukung oleh:</translation>
+        <translation type="obsolete">Didukung oleh:</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="286"/>
         <source>Aggregate results by</source>
-        <translation>Hasil agregrasi berdasarkan</translation>
+        <translation type="obsolete">Hasil agregrasi berdasarkan</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="265"/>
         <source>Configure Impact Function Parameter</source>
-        <translation>Pengaturan parameter fungsi dampak</translation>
+        <translation type="obsolete">Pengaturan parameter fungsi dampak</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="268"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="obsolete">...</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="173"/>
         <source>Question: In the event of</source>
-        <translation>Pertanyaan: Apabila terjadi</translation>
+        <translation type="obsolete">Pertanyaan: Apabila terjadi</translation>
+    </message>
+</context>
+<context>
+    <name>FunctionOptionsDialog</name>
+    <message>
+        <location filename="function_options_dialog.py" line="52"/>
+        <source>Impact function configuration</source>
+        <translation>Konfigurasi fungsi dampak</translation>
+    </message>
+    <message>
+        <location filename="function_options_dialog.py" line="108"/>
+        <source>Parameters for impact function &quot;%1&quot; that can be modified are:</source>
+        <translation>Parameter untuk fungsi dampak &quot;%1&quot; yang bisa diatur adalah:</translation>
     </message>
 </context>
 <context>
@@ -535,7 +657,20 @@
     <message>
         <location filename="function_options_dialog_base.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="obsolete">Dialog</translation>
+    </message>
+</context>
+<context>
+    <name>HtmlRenderer</name>
+    <message>
+        <location filename="html_renderer.py" line="220"/>
+        <source>Summary Table</source>
+        <translation>Tabel ringkasan</translation>
+    </message>
+    <message>
+        <location filename="html_renderer.py" line="226"/>
+        <source>Detailed Table</source>
+        <translation>Tabel rincian</translation>
     </message>
 </context>
 <context>
@@ -593,47 +728,47 @@
     <message>
         <location filename="impact_functions_doc_base.ui" line="14"/>
         <source>InaSAFE Impact Functions</source>
-        <translation>Fungsi Dampak InaSAFE</translation>
+        <translation type="obsolete">Fungsi Dampak InaSAFE</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="60"/>
         <source>Title</source>
-        <translation>Judul</translation>
+        <translation type="obsolete">Judul</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="79"/>
         <source>ID</source>
-        <translation>ID</translation>
+        <translation type="obsolete">ID</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="98"/>
         <source>Subcategory</source>
-        <translation>Sub-kategori</translation>
+        <translation type="obsolete">Sub-kategori</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="117"/>
         <source>Category</source>
-        <translation>Kategori</translation>
+        <translation type="obsolete">Kategori</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="136"/>
         <source>Layer Type</source>
-        <translation>Jenis Lapisan</translation>
+        <translation type="obsolete">Jenis Lapisan</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="175"/>
         <source>Unit</source>
-        <translation>Satuan</translation>
+        <translation type="obsolete">Satuan</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="194"/>
         <source>Data Type</source>
-        <translation>Jenis Data</translation>
+        <translation type="obsolete">Jenis Data</translation>
     </message>
     <message>
         <location filename="impact_functions_doc_base.ui" line="214"/>
         <source>about:blank</source>
-        <translation>Perihal:kosong</translation>
+        <translation type="obsolete">Perihal:kosong</translation>
     </message>
 </context>
 <context>
@@ -778,122 +913,176 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog_base.ui" line="20"/>
         <source>InaSAFE - Keyword Editor</source>
-        <translation>InaSAFE - Editor kata kunci</translation>
+        <translation type="obsolete">InaSAFE - Editor kata kunci</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="103"/>
         <source>Category</source>
-        <translation>Kategori</translation>
+        <translation type="obsolete">Kategori</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="112"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
-        <translation>Bahaya merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
+        <translation type="obsolete">Bahaya merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="115"/>
         <source>Hazard</source>
-        <translation>Bahaya</translation>
+        <translation type="obsolete">Bahaya</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="122"/>
         <source>Where people and property are situated.</source>
-        <translation>Dimana lokasi manusia dan harta benda.</translation>
+        <translation type="obsolete">Dimana lokasi manusia dan harta benda.</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="125"/>
         <source>Exposure</source>
-        <translation>Terpapar</translation>
+        <translation type="obsolete">Terpapar</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="80"/>
         <source>Subcategory</source>
-        <translation>Sub-kategori</translation>
+        <translation type="obsolete">Sub-kategori</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="73"/>
         <source>A subcategory represents the type of hazard.</source>
-        <translation>Sub-kategori menunjukan jenis bahaya.</translation>
+        <translation type="obsolete">Sub-kategori menunjukan jenis bahaya.</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="197"/>
         <source>Advanced editor</source>
-        <translation>Editor lanjutan</translation>
+        <translation type="obsolete">Editor lanjutan</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="230"/>
         <source>Keyword</source>
-        <translation>Kata kunci</translation>
+        <translation type="obsolete">Kata kunci</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="301"/>
         <source>Value</source>
-        <translation>Nilai</translation>
+        <translation type="obsolete">Nilai</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="314"/>
         <source>Add to list</source>
-        <translation>Tambahkan ke dalam daftar</translation>
+        <translation type="obsolete">Tambahkan ke dalam daftar</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="324"/>
         <source>Current keywords</source>
-        <translation>Kata kunci saat ini</translation>
+        <translation type="obsolete">Kata kunci saat ini</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="360"/>
         <source>Remove selected</source>
-        <translation>hilangkan yang dipilih</translation>
+        <translation type="obsolete">hilangkan yang dipilih</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="205"/>
         <source>Predefined</source>
-        <translation>Yang telah ditentukan</translation>
+        <translation type="obsolete">Yang telah ditentukan</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="288"/>
         <source>Key</source>
-        <translation>kunci</translation>
+        <translation type="obsolete">kunci</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="64"/>
         <source>Quick edit</source>
-        <translation>Edit cepat</translation>
+        <translation type="obsolete">Edit cepat</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="147"/>
         <source>Title</source>
-        <translation>Judul</translation>
+        <translation type="obsolete">Judul</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="187"/>
         <source>Show advanced editor</source>
-        <translation>Tampilkan editor lanjutan</translation>
+        <translation type="obsolete">Tampilkan editor lanjutan</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="212"/>
         <source>User defined</source>
-        <translation>Yang ditentukan oleh pengguna</translation>
+        <translation type="obsolete">Yang ditentukan oleh pengguna</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="135"/>
         <source>Postprocessing</source>
-        <translation>Pasca pemrosesan</translation>
+        <translation type="obsolete">Pasca pemrosesan</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="96"/>
         <source>Aggregation attribute</source>
-        <translation>Atribut agregasi</translation>
+        <translation type="obsolete">Atribut agregasi</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="154"/>
         <source>Female ratio attribute</source>
-        <translation>Atribut perbandingan wanita</translation>
+        <translation type="obsolete">Atribut perbandingan wanita</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="161"/>
         <source>Female ratio default</source>
-        <translation>Perbandingan wanita default</translation>
+        <translation type="obsolete">Perbandingan wanita default</translation>
+    </message>
+</context>
+<context>
+    <name>Map</name>
+    <message>
+        <location filename="map.py" line="76"/>
+        <source>InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank</source>
+        <translation>InaSAFE telah dikembangkan bersama-sama oleh BNPB, AusAid &amp; World Bank</translation>
+    </message>
+    <message>
+        <location filename="map.py" line="262"/>
+        <source>InaSAFE - Indonesia Scenario Assessment for Emergencies</source>
+        <translation>InaSAFE - Indonesia Scenario Assessment for Emergencies</translation>
+    </message>
+    <message>
+        <location filename="map.py" line="689"/>
+        <source>Assessment carried out on host &quot;%s&quot;by user &quot;%s&quot; using InaSAFE release %s (QGIS plugin version).
+Date and time of assessment: %s %s
+Elapsed time for assessment calculation: %s
+Special note: This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
+        <translation>Pekerjaan dikerjakan pada hst &quot;%s&quot; oleh pengguna &quot;%s&quot; dengan menggunakan InaSAFE keluaran %s (versi penggaya QGIS).
+Tanggal dan waktu pekerjaan: %s %s
+Waktu yang dihabiskan untuk melakukan perhitungan pada pekerjaan: %s
+Catatan khusus : pekerjaan ini hanyalah petunjuk - kita sangat merekomendasikan Anda untuk mengecek kebenaran yang ditunjukan di sin sebelum memasok sumber daya /atau personel.</translation>
+    </message>
+</context>
+<context>
+    <name>MapLegend</name>
+    <message>
+        <location filename="map_legend.py" line="79"/>
+        <source>Unable to make a legend when map generator has no layer set.</source>
+        <translation>Tidak bisa membuat legenda ketika pembuat peta tidak memiliki kumpulan lapisan.</translation>
+    </message>
+    <message>
+        <location filename="map_legend.py" line="85"/>
+        <source>This layer does not appear to be an impact layer. Try selecting an impact layer in the QGIS layers list or creating a new impact scenario before using the print tool.
+Message: %s</source>
+        <translation>Lapisan ini nampaknya bukan lapisan dampak. Cobalah untuk memilih lapisan dampak dari daftar lapisan di QGIS atau buatlah skenario dampak sebelum menggunakan alat pencetak.
+Pesan: %s</translation>
+    </message>
+    <message>
+        <location filename="map_legend.py" line="110"/>
+        <source>A legend can only be generated for vector layers that use the &quot;new symbology&quot; implementation in QGIS.</source>
+        <translation>Legenda hanya dapat dibuat untuk lapisan vektor yang menggunakan implementasi &quot;simbologi baru&quot; di QGIS.</translation>
+    </message>
+    <message>
+        <location filename="map_legend.py" line="138"/>
+        <source>Unrecognised renderer type found for the impact layer. Please use one of these: single symbol, categorised symbol or graduated symbol and then try again.</source>
+        <translation>Ditemukan jenis perender yang tidak dikenali pada lapisan dampak. Silahkan gunakan salah satu dari: simbol tunggal, simbol terkategorisasi atau simbol graduasi dan coba lagi.</translation>
+    </message>
+    <message>
+        <location filename="map_legend.py" line="298"/>
+        <source>Legend</source>
+        <translation>Legenda</translation>
     </message>
 </context>
 <context>
@@ -919,102 +1108,102 @@ ke %s: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="14"/>
         <source>InaSAFE - Options</source>
-        <translation>InaSAFE - Opsi-opsi</translation>
+        <translation type="obsolete">InaSAFE - Opsi-opsi</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="226"/>
         <source>Only show visible layers in InaSAFE dock</source>
-        <translation>Hanya tampilkan lapisan yang terlihat di InaSAFE</translation>
+        <translation type="obsolete">Hanya tampilkan lapisan yang terlihat di InaSAFE</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="236"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
-        <translation>Mengatur nama lapisan QGIS dari &apos;judul&apos; kata-kata kunci</translation>
+        <translation type="obsolete">Mengatur nama lapisan QGIS dari &apos;judul&apos; kata-kata kunci</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="256"/>
         <source>Keyword cache for remote datasources</source>
-        <translation>Chace Kata Kunci untuk sumber data remote</translation>
+        <translation type="obsolete">Chace Kata Kunci untuk sumber data remote</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="275"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="obsolete">...</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="62"/>
         <source>Not yet implemented</source>
-        <translation>Belum diiplementasi</translation>
+        <translation type="obsolete">Belum diiplementasi</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="71"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
-        <translation>Gelembung paparan dan lapisan bahaya ke atas saat dipilih</translation>
+        <translation type="obsolete">Gelembung paparan dan lapisan bahaya ke atas saat dipilih</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="81"/>
         <source>Location for results</source>
-        <translation>Lokasi untuk hasil-hasil</translation>
+        <translation type="obsolete">Lokasi untuk hasil-hasil</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="112"/>
         <source>Report template</source>
-        <translation>Template laporan</translation>
+        <translation type="obsolete">Template laporan</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="143"/>
         <source>Logo for maps (must be x x y) </source>
-        <translation>Logo untuk peta-peta (harus dalam x x y) </translation>
+        <translation type="obsolete">Logo untuk peta-peta (harus dalam x x y) </translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="174"/>
         <source>Organisation name (for maps, reports etc.)</source>
-        <translation>Nama organisasi (untuk peta, laporan-laporan dll.)</translation>
+        <translation type="obsolete">Nama organisasi (untuk peta, laporan-laporan dll.)</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="207"/>
         <source>DPI (Maps and reports)</source>
-        <translation>DPI (Peta-peta dan laporan-laporan)</translation>
+        <translation type="obsolete">DPI (Peta-peta dan laporan-laporan)</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="284"/>
         <source>Run analysis in a separate thread (experimental)</source>
-        <translation>Jalankan analisis dalam thread terpisah (percobaan)</translation>
+        <translation type="obsolete">Jalankan analisis dalam thread terpisah (percobaan)</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="246"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
-        <translation>Zoom ke lapisan dampak pada penyelesaian skenario estimasi</translation>
+        <translation type="obsolete">Zoom ke lapisan dampak pada penyelesaian skenario estimasi</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="294"/>
         <source>Hide exposure layer on scenario estimate completion</source>
-        <translation>Sembunyikan lapisan paparan pada penyelesaian skenario estimasi</translation>
+        <translation type="obsolete">Sembunyikan lapisan paparan pada penyelesaian skenario estimasi</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="304"/>
         <source>Clip datasets to visible extent before analysis</source>
-        <translation>Potong dataset sampai cakupan yang terlihat sebelum melakukan analisis</translation>
+        <translation type="obsolete">Potong dataset sampai cakupan yang terlihat sebelum melakukan analisis</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="301"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
-        <translation>Nyalakan untuk memotong lapisan ancaman dan paparan ke tampilan yang terlihat pada kancas peta</translation>
+        <translation type="obsolete">Nyalakan untuk memotong lapisan ancaman dan paparan ke tampilan yang terlihat pada kancas peta</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="314"/>
         <source>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</source>
-        <translation>Hiduplan untuk melihat berkas intermediate yang dibuat oleh tahapan pasca pemrosesan pada kanvas peta</translation>
+        <translation type="obsolete">Hiduplan untuk melihat berkas intermediate yang dibuat oleh tahapan pasca pemrosesan pada kanvas peta</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="317"/>
         <source>Show intermediate layers generated by postprocessing</source>
-        <translation>Tampilkan lapisan intermediate yang dibuat oleh pasca pemrosesan</translation>
+        <translation type="obsolete">Tampilkan lapisan intermediate yang dibuat oleh pasca pemrosesan</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="326"/>
         <source>Female ratio default value</source>
-        <translation>Nilai default untuk perbandingan wanita</translation>
+        <translation type="obsolete">Nilai default untuk perbandingan wanita</translation>
     </message>
 </context>
 <context>
@@ -1073,6 +1262,19 @@ ke %s: %s</translation>
         <location filename="plugin.py" line="222"/>
         <source>Open InaSAFE impact functions doc</source>
         <translation>Buka dokumentasi fungsi dampak InaSAFE</translation>
+    </message>
+</context>
+<context>
+    <name>myDialog</name>
+    <message>
+        <location filename="test_keywords_dialog.py" line="212"/>
+        <source>Use default</source>
+        <translation>Pergunakan default</translation>
+    </message>
+    <message>
+        <location filename="test_keywords_dialog.py" line="241"/>
+        <source>Don&apos;t use</source>
+        <translation>Jangan digunakan</translation>
     </message>
 </context>
 </TS>
