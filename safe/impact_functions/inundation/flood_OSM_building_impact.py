@@ -89,10 +89,12 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
             # Count affected buildings by usage type if available
 
-            if 'amenity' in attribute_names:
-                usage = attributes[i]['amenity']
+            if 'type' in attribute_names:
+                usage = attributes[i]['type']
             else:
                 usage = None
+            if 'amenity' in attribute_names and (usage is None or usage == 0):
+                    usage = attributes[i]['amenity']
             if 'building_t' in attribute_names and (usage is None
                                                     or usage == 0):
                 usage = attributes[i]['building_t']
