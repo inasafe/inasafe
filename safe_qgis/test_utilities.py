@@ -345,7 +345,7 @@ class UtilitiesTest(unittest.TestCase):
                       'exposure_title': 'Sample Exposure Title',
                       'exposure_source': 'Sample Exposure Source'}
         myHtml = impactLayerAttribution(myKeywords)
-        self.assertEqual(len(myHtml), 286)
+        self.assertEqual(len(myHtml), 320)
 
     def test_localisedAttribution(self):
         """Test we can localise attribution."""
