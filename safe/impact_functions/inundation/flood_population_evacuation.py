@@ -162,11 +162,15 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
-
         style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
         style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
         style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
 
+        # Override associated quantities in colour style
+        for i in range(len(classes)):
+            style_classes[i]['quantity'] = classes[i]
+
+        # Title
         style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return
