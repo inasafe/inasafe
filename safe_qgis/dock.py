@@ -52,8 +52,7 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  htmlFooter,
                                  setRasterStyle,
                                  qgisVersion,
-                                 getDefaults,
-                                 impactLayerAttribution)
+                                 getDefaults)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -2179,8 +2178,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+            myKeywords, theFilename=myTableFilename)
 
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)
