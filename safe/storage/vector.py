@@ -46,7 +46,7 @@ from utilities import get_ringdata
 from utilities import rings_equal
 
 LOGGER = logging.getLogger('InaSAFE')
-_pseudo_inf = float(999999999999999999999999)
+_pseudo_inf = float(99999999)
 
 
 class Vector(Layer):

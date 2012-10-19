@@ -960,10 +960,10 @@ class Test_Engine(unittest.TestCase):
         impact_vector = calculate_impact(layers=[H, E],
                                          impact_fcn=IF)
 
-        assert impact_vector.get_keywords()['hazard title'] == H_tit
-        assert impact_vector.get_keywords()['exposure title'] == E_tit
-        assert impact_vector.get_keywords()['hazard source'] == H_src
-        assert impact_vector.get_keywords()['exposure source'] == E_src
+        assert impact_vector.get_keywords()['hazard_title'] == H_tit
+        assert impact_vector.get_keywords()['exposure_title'] == E_tit
+        assert impact_vector.get_keywords()['hazard_source'] == H_src
+        assert impact_vector.get_keywords()['exposure_source'] == E_src
 
     def test_earthquake_damage_schools(self):
         """Lembang building damage from ground shaking works

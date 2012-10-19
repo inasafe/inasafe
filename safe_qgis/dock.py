@@ -17,7 +17,6 @@ __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'beta'  # beta, final etc will be shown in dock title
 
 import os
 import numpy
@@ -846,6 +845,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             raise e
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            raise e
         except:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -970,6 +973,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred when write clip file')
             myMessage = getExceptionWithStacktrace(e,
                                                    html=True,
                                                    context=myMessage)
@@ -1627,6 +1639,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
+        myReport += self.impactLayerAttribution(myQgisImpactLayer)
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -1884,6 +1897,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                             myCellSize)
         except CallGDALError, e:
             raise e
+        except IOError, e:
+            raise e
 
         myTitle = self.tr('Preparing exposure data...')
         myMessage = self.tr('We are resampling and clipping the exposure'
@@ -1985,6 +2000,51 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #f.close()
         self.wvResults.setHtml(myHtml)
 
+    def impactLayerAttribution(self, theLayer):
+        """Make a little table for attribution of data sources used in impact.
+        """
+        myKeywords = self.keywordIO.readKeywords(theLayer)
+        myReport = ''
+        myJoinWords = ' - sourced from '
+        myHazardDetails = 'Hazard details'
+        myHazardTitleKeyword = 'hazard_title'
+        myHazardSourceKeyword = 'hazard_source'
+        myExposureDetails = 'Exposure details'
+        myExposureTitleKeyword = 'exposure_title'
+        myExposureSourceKeyword = 'exposure_source'
+        if myHazardTitleKeyword in myKeywords:
+            myHazardTitle = myKeywords[myHazardTitleKeyword]
+        else:
+            myHazardTitle = str(theLayer.name())
+        if myHazardSourceKeyword in myKeywords:
+            myHazardSource = myKeywords[myHazardSourceKeyword]
+        else:
+            myHazardSource = self.tr(' an unknown source')
+        if myExposureTitleKeyword in myKeywords:
+            myExposureTitle = myKeywords[myExposureTitleKeyword]
+        else:
+            myExposureTitle = str(theLayer.name())
+        if myExposureSourceKeyword in myKeywords:
+            myExposureSource = myKeywords[myExposureSourceKeyword]
+        else:
+            myExposureSource = self.tr(' an unknown source')
+        myReport += ('<table class="table table-striped condensed'
+                     ' bordered-table">')
+        myReport += '<tr><th>%s</th></tr>' % myHazardDetails
+        myReport += '<tr><td>%s%s%s.</td></tr>' % (
+            myHazardTitle,
+            myJoinWords,
+            myHazardSource
+            )
+        myReport += '<tr><th>%s</th></tr>' % myExposureDetails
+        myReport += '<tr><td>%s%s%s.</td></tr>' % (
+            myExposureTitle,
+            myJoinWords,
+            myExposureSource
+            )
+        myReport += '</table>'
+        return myReport
+
     def layerChanged(self, theLayer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,
@@ -2010,9 +2070,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
-                    myReport += ('<table class="table table-striped condensed'
-                                    ' bordered-table">')
+
+                    myReport += self.impactLayerAttribution(theLayer)
+
                     self.pbnPrint.setEnabled(True)
+
+                    # TODO: Shouldn't this line be in the start of the else
+                    #     block below? (TS)
+                    myReport += ('<table class="table table-striped condensed'
+                                 ' bordered-table">')
 
                 else:
                     self.pbnPrint.setEnabled(False)

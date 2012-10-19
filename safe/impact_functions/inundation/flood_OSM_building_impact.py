@@ -52,7 +52,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         attribute_names = I.get_attribute_names()
         attributes = I.get_data()
         N = len(I)
-        LOGGER.debug('Trolololo')
         # Calculate building impact
         count = 0
         buildings = {}
@@ -88,37 +87,26 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
+
             if 'type' in attribute_names:
                 usage = attributes[i]['type']
             else:
                 usage = None
             if 'amenity' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['amenity']
-            else:
-                usage = None
-            if ('building_t' in attribute_names and
-                    (usage is None or usage == 0)):
+            if 'building_t' in attribute_names and (usage is None
+                                                    or usage == 0):
                 usage = attributes[i]['building_t']
-            else:
-                usage = None
             if 'office' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['office']
-            else:
-                usage = None
             if 'tourism' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['tourism']
-            else:
-                usage = None
             if 'leisure' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['leisure']
-            else:
-                usage = None
             if 'building' in attribute_names and (usage is None or usage == 0):
                 usage = attributes[i]['building']
                 if usage == 'yes':
                     usage = 'building'
-            else:
-                usage = None
             #LOGGER.debug('usage ')
             if usage is not None and usage != 0:
                 key = usage
@@ -153,7 +141,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 affected_buildings['other'] += affected_buildings[usage]
                 del buildings[usage]
                 del affected_buildings[usage]
-
         # Generate csv file of results
 ##        fid = open('C:\dki_table_%s.csv' % H.get_name(), 'wb')
 ##        fid.write('%s, %s, %s\n' % (tr('Building type'),

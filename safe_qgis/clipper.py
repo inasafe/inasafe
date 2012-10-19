@@ -102,6 +102,8 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
                 theExtraKeywords=theExtraKeywords)
         except CallGDALError, e:
             raise e
+        except IOError, e:
+            raise e
 
 
 def _clipVectorLayer(theLayer, theExtent,
@@ -378,12 +380,23 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     LOGGER.debug(myCommand)
     try:
         myProcess = Popen(myCommand, shell=True, stderr=PIPE)
-        _, myErrorMessage = myProcess.communicate()
+        # Note: This sometimes fails on osx when in fact the
+        # process ran fine, so I am wrapping it in a try / except block (TS)
+        myErrorMessage = None
+        try:
+            _, myErrorMessage = myProcess.communicate()
+        except IOError:
+            pass
         del myProcess
         if myErrorMessage != '' and myErrorMessage is not None:
             raise CallGDALError(myErrorMessage)
         # myResult = call(myCommand, shell=True)
         # del myResult
+    except IOError, e:
+        myMessage = tr('<p>Error while writing the clip file:'
+                       '</p><pre>%s</pre><p>Error message: %s'
+                       % (myFilename, str(e)))
+        raise IOError(myMessage)
     except CalledProcessError, e:
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
