@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-19 16:00+0700\n"
+"POT-Creation-Date: 2012-10-19 17:43+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,9 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: id_ID\n"
-"X-Source-Language: en\n"
 
 #: storage/test_io.py:1648 storage/test_io.py:1719 storage/test_io.py:1721
 #: storage/test_io.py:1712 storage/test_io.py:1713 storage/test_io.py:1739
@@ -191,6 +188,7 @@ msgstr "Anggapan"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:233
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:194
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:257
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:258
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:194
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:258
 msgid "Estimated buildings affected"
@@ -216,6 +214,7 @@ msgstr "Bangunan yang diperkirakan terdampak"
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/common/dynamic_translations.py:98
 #: safe/common/dynamic_translations.py:98
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
@@ -286,6 +285,8 @@ msgstr "Bangunan-bangunan"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
 #: safe/postprocessors/gender_postprocessor.py:95
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
@@ -638,6 +639,7 @@ msgstr "OK"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:248
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:92
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:249
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:249
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:92
 msgid "Flooded"
 msgstr "Kebanjiran"
@@ -665,6 +667,7 @@ msgstr "Berdasarkan Perka 2 BNPB - 2012"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/core.py:591
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
 #: safe/impact_functions/core.py:591
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
@@ -825,6 +828,7 @@ msgstr "Anggapan"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:210
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:234
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:235
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:235
 msgid "Buildings are said to be flooded when "
 msgstr "Bangunan dikatakan banjir ketika "
 
@@ -848,6 +852,7 @@ msgstr "Bangunan dikatakan banjir ketika "
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:189
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:212
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:236
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:237
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:237
 #, python-format
 msgid "flood levels exceed %.1f m"
@@ -874,6 +879,7 @@ msgstr "tingkat banjir melebihi %.1f m"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:214
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:238
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:239
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:239
 msgid "in areas marked as flood prone"
 msgstr "berada di area yang ditandai sebagai rawan banjir"
 
@@ -898,6 +904,7 @@ msgstr "berada di area yang ditandai sebagai rawan banjir"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:222
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:246
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:90
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:247
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:247
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:90
 msgid "Not Flooded"
@@ -939,6 +946,7 @@ msgstr "Buka"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:124
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:122
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:168
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:166
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:122
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:166
@@ -963,6 +971,7 @@ msgstr "Penduduk yang perlu dievakuasi"
 #: safe/impact_functions/inundation/flood_population_evacuation.py:110
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:183
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
 msgid "Rice [kg]"
@@ -986,6 +995,7 @@ msgstr "Beras [kg]"
 #: safe/impact_functions/inundation/flood_population_evacuation.py:111
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:130
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:184
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:130
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
 msgid "Drinking Water [l]"
@@ -1009,6 +1019,7 @@ msgstr "Air Minum [l]"
 #: safe/impact_functions/inundation/flood_population_evacuation.py:112
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:183
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:183
 msgid "Clean Water [l]"
@@ -1032,6 +1043,7 @@ msgstr "Air Bersih [l]"
 #: safe/impact_functions/inundation/flood_population_evacuation.py:113
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:132
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:186
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:184
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:132
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:184
 msgid "Family Kits"
@@ -1055,6 +1067,7 @@ msgstr "Kit Keluarga"
 #: safe/impact_functions/inundation/flood_population_evacuation.py:114
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:187
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
 msgid "Toilets"
@@ -1260,6 +1273,7 @@ msgstr "Penduduk perlu evakuasi jika banjir lebih dari %(eps)i m"
 #: safe/impact_functions/inundation/flood_population_evacuation.py:108
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
 msgid "Needs per week"
@@ -1284,6 +1298,7 @@ msgstr "Bantuan per minggu"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:196
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:219
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:243
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:244
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:244
 msgid "Buildings inundated"
 msgstr "Bangunan terendam"
@@ -1521,7 +1536,8 @@ msgstr "Gempa dampak terhadap populasi"
 #: storage/dynamic_translations.py:51 common/dynamic_translations.py:51
 #: safe/common/dynamic_translations.py:51
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:51
-#: safe/common/dynamic_translations.py:58 safe/common/dynamic_translations.py:58
+#: safe/common/dynamic_translations.py:58
+#: safe/common/dynamic_translations.py:58
 msgid "DKI buildings"
 msgstr "Bangunan DKI"
 
@@ -1532,7 +1548,8 @@ msgstr "Bangunan DKI"
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:53
 #: safe/common/dynamic_translations.py:60
 #: safe/common/dynamic_translations.py:61
-#: safe/common/dynamic_translations.py:60 safe/common/dynamic_translations.py:61
+#: safe/common/dynamic_translations.py:60
+#: safe/common/dynamic_translations.py:61
 msgid "Jakarta 2007 flood"
 msgstr "Banjir di Jakarta seperti tahun 2007"
 
@@ -1553,7 +1570,8 @@ msgstr ""
 #: storage/dynamic_translations.py:62 common/dynamic_translations.py:62
 #: common/dynamic_translations.py:65 safe/common/dynamic_translations.py:65
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:65
-#: safe/common/dynamic_translations.py:68 safe/common/dynamic_translations.py:68
+#: safe/common/dynamic_translations.py:68
+#: safe/common/dynamic_translations.py:68
 msgid "Sea wall collapse at Pluit"
 msgstr "Dam Pluit runtuh"
 
@@ -1563,7 +1581,8 @@ msgstr "Dam Pluit runtuh"
 #: storage/dynamic_translations.py:63 common/dynamic_translations.py:63
 #: common/dynamic_translations.py:66 safe/common/dynamic_translations.py:66
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:66
-#: safe/common/dynamic_translations.py:70 safe/common/dynamic_translations.py:70
+#: safe/common/dynamic_translations.py:70
+#: safe/common/dynamic_translations.py:70
 msgid "Jakarta flood prone areas"
 msgstr "Daerah Rawan Banjir"
 
@@ -1573,7 +1592,8 @@ msgstr "Daerah Rawan Banjir"
 #: storage/dynamic_translations.py:64 common/dynamic_translations.py:64
 #: common/dynamic_translations.py:71 safe/common/dynamic_translations.py:71
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:71
-#: safe/common/dynamic_translations.py:74 safe/common/dynamic_translations.py:74
+#: safe/common/dynamic_translations.py:74
+#: safe/common/dynamic_translations.py:74
 msgid "Population Jakarta"
 msgstr "Penduduk Jakarta"
 
@@ -1586,7 +1606,8 @@ msgstr "Penduduk Jakarta"
 #: safe/common/dynamic_translations.py:75
 #: safe/common/dynamic_translations.py:78
 #: safe/common/dynamic_translations.py:80
-#: safe/common/dynamic_translations.py:81 safe/common/dynamic_translations.py:81
+#: safe/common/dynamic_translations.py:81
+#: safe/common/dynamic_translations.py:81
 msgid "Flood Depth (design) Jakarta"
 msgstr "Kedalaman banjir Jakarta (desain)"
 
@@ -1599,7 +1620,8 @@ msgstr "Kedalaman banjir Jakarta (desain)"
 #: safe/common/dynamic_translations.py:76
 #: safe/common/dynamic_translations.py:79
 #: safe/common/dynamic_translations.py:81
-#: safe/common/dynamic_translations.py:82 safe/common/dynamic_translations.py:82
+#: safe/common/dynamic_translations.py:82
+#: safe/common/dynamic_translations.py:82
 msgid "Flood Depth (current) Jakarta"
 msgstr "Kedalaman banjir Jakarta (saat ini)"
 
@@ -1619,7 +1641,8 @@ msgstr "Gempa Yogyakarta 2006"
 #: safe/common/dynamic_translations.py:80
 #: safe/common/dynamic_translations.py:81
 #: safe/common/dynamic_translations.py:83
-#: safe/common/dynamic_translations.py:84 safe/common/dynamic_translations.py:84
+#: safe/common/dynamic_translations.py:84
+#: safe/common/dynamic_translations.py:84
 msgid "Indonesian Earthquake Hazard Map"
 msgstr "Peta Rawan Gempa Indonesia"
 
@@ -1659,21 +1682,24 @@ msgstr "Shakemap Padang 2009"
 #: safe/common/dynamic_translations.py:103
 #: safe/common/dynamic_translations.py:92
 #: safe/common/dynamic_translations.py:94
-#: safe/common/dynamic_translations.py:95 safe/common/dynamic_translations.py:95
+#: safe/common/dynamic_translations.py:95
+#: safe/common/dynamic_translations.py:95
 msgid "OSM building footprints"
 msgstr "Bangunan OSM"
 
 #: storage/titles.py:47 storage/titles.py:56 storage/titles.py:57
 #: storage/titles.py:60 storage/titles.py:65 storage/titles.py:66
 #: storage/titles.py:68 storage/titles.py:70 storage/titles.py:71
-#: storage/titles.py:73 storage/titles.py:78 storage/dynamic_translations.py:87
-#: common/dynamic_translations.py:87 common/dynamic_translations.py:104
-#: common/dynamic_translations.py:105 safe/common/dynamic_translations.py:105
+#: storage/titles.py:73 storage/titles.py:78
+#: storage/dynamic_translations.py:87 common/dynamic_translations.py:87
+#: common/dynamic_translations.py:104 common/dynamic_translations.py:105
+#: safe/common/dynamic_translations.py:105
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:105
 #: safe/common/dynamic_translations.py:106
 #: safe/common/dynamic_translations.py:95
 #: safe/common/dynamic_translations.py:97
 #: safe/common/dynamic_translations.py:98
+#: safe/common/dynamic_translations.py:101
 #: safe/common/dynamic_translations.py:101
 msgid "AIBEP schools"
 msgstr "Sekolah AIBEP"
@@ -1681,14 +1707,16 @@ msgstr "Sekolah AIBEP"
 #: storage/titles.py:48 storage/titles.py:57 storage/titles.py:58
 #: storage/titles.py:61 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:69 storage/titles.py:71 storage/titles.py:72
-#: storage/titles.py:74 storage/titles.py:79 storage/dynamic_translations.py:88
-#: common/dynamic_translations.py:88 common/dynamic_translations.py:105
-#: common/dynamic_translations.py:106 safe/common/dynamic_translations.py:106
+#: storage/titles.py:74 storage/titles.py:79
+#: storage/dynamic_translations.py:88 common/dynamic_translations.py:88
+#: common/dynamic_translations.py:105 common/dynamic_translations.py:106
+#: safe/common/dynamic_translations.py:106
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:106
 #: safe/common/dynamic_translations.py:107
 #: safe/common/dynamic_translations.py:97
 #: safe/common/dynamic_translations.py:99
 #: safe/common/dynamic_translations.py:100
+#: safe/common/dynamic_translations.py:103
 #: safe/common/dynamic_translations.py:103
 msgid "Population density (5kmx5km)"
 msgstr "Kepadatan penduduk (5kmx5km)"
@@ -1698,7 +1726,8 @@ msgstr "Kepadatan penduduk (5kmx5km)"
 #: storage/dynamic_translations.py:58 common/dynamic_translations.py:58
 #: common/dynamic_translations.py:60 safe/common/dynamic_translations.py:60
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:60
-#: safe/common/dynamic_translations.py:65 safe/common/dynamic_translations.py:65
+#: safe/common/dynamic_translations.py:65
+#: safe/common/dynamic_translations.py:65
 msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
 msgstr "Banjir 2007 tanpa pompa di Pluit dan Ancol"
 
@@ -1713,6 +1742,7 @@ msgstr "Banjir 2007 tanpa pompa di Pluit dan Ancol"
 #: safe/common/dynamic_translations.py:98
 #: safe/common/dynamic_translations.py:100
 #: safe/common/dynamic_translations.py:101
+#: safe/common/dynamic_translations.py:104
 #: safe/common/dynamic_translations.py:104
 msgid "Office buildings Jakarta"
 msgstr "Kantor Jakarta"
@@ -1729,6 +1759,7 @@ msgstr "Kantor Jakarta"
 #: safe/common/dynamic_translations.py:102
 #: safe/common/dynamic_translations.py:103
 #: safe/common/dynamic_translations.py:106
+#: safe/common/dynamic_translations.py:106
 msgid "Hospitals and clinics Jakarta"
 msgstr "Puskesmas dan rumah sakit Jakarta"
 
@@ -1744,20 +1775,23 @@ msgstr "Puskesmas dan rumah sakit Jakarta"
 #: safe/common/dynamic_translations.py:103
 #: safe/common/dynamic_translations.py:104
 #: safe/common/dynamic_translations.py:107
+#: safe/common/dynamic_translations.py:107
 msgid "Schools Jakarta"
 msgstr "Sekolah Jakarta"
 
 #: storage/titles.py:64 storage/titles.py:65 storage/titles.py:66
 #: storage/titles.py:69 storage/titles.py:74 storage/titles.py:75
 #: storage/titles.py:77 storage/titles.py:79 storage/titles.py:80
-#: storage/titles.py:82 storage/titles.py:87 storage/dynamic_translations.py:97
-#: common/dynamic_translations.py:97 common/dynamic_translations.py:114
-#: common/dynamic_translations.py:115 safe/common/dynamic_translations.py:115
+#: storage/titles.py:82 storage/titles.py:87
+#: storage/dynamic_translations.py:97 common/dynamic_translations.py:97
+#: common/dynamic_translations.py:114 common/dynamic_translations.py:115
+#: safe/common/dynamic_translations.py:115
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:115
 #: safe/common/dynamic_translations.py:116
 #: safe/common/dynamic_translations.py:103
 #: safe/common/dynamic_translations.py:105
 #: safe/common/dynamic_translations.py:106
+#: safe/common/dynamic_translations.py:109
 #: safe/common/dynamic_translations.py:109
 msgid "Industrial buildings Jakarta"
 msgstr "Bangunan industri Jakarta"
@@ -1765,14 +1799,16 @@ msgstr "Bangunan industri Jakarta"
 #: storage/titles.py:65 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:70 storage/titles.py:75 storage/titles.py:76
 #: storage/titles.py:78 storage/titles.py:80 storage/titles.py:81
-#: storage/titles.py:83 storage/titles.py:88 storage/dynamic_translations.py:98
-#: common/dynamic_translations.py:98 common/dynamic_translations.py:115
-#: common/dynamic_translations.py:116 safe/common/dynamic_translations.py:116
+#: storage/titles.py:83 storage/titles.py:88
+#: storage/dynamic_translations.py:98 common/dynamic_translations.py:98
+#: common/dynamic_translations.py:115 common/dynamic_translations.py:116
+#: safe/common/dynamic_translations.py:116
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:116
 #: safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:104
 #: safe/common/dynamic_translations.py:106
 #: safe/common/dynamic_translations.py:107
+#: safe/common/dynamic_translations.py:110
 #: safe/common/dynamic_translations.py:110
 msgid "Industrial areas Jakarta"
 msgstr "Daerah industri Jakarta"
@@ -1780,14 +1816,16 @@ msgstr "Daerah industri Jakarta"
 #: storage/titles.py:66 storage/titles.py:67 storage/titles.py:68
 #: storage/titles.py:71 storage/titles.py:76 storage/titles.py:77
 #: storage/titles.py:79 storage/titles.py:81 storage/titles.py:82
-#: storage/titles.py:84 storage/titles.py:89 storage/dynamic_translations.py:99
-#: common/dynamic_translations.py:99 common/dynamic_translations.py:116
-#: common/dynamic_translations.py:117 safe/common/dynamic_translations.py:117
+#: storage/titles.py:84 storage/titles.py:89
+#: storage/dynamic_translations.py:99 common/dynamic_translations.py:99
+#: common/dynamic_translations.py:116 common/dynamic_translations.py:117
+#: safe/common/dynamic_translations.py:117
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:118
 #: safe/common/dynamic_translations.py:105
 #: safe/common/dynamic_translations.py:107
 #: safe/common/dynamic_translations.py:108
+#: safe/common/dynamic_translations.py:111
 #: safe/common/dynamic_translations.py:111
 msgid "Commercial areas Jakarta"
 msgstr "Daerah komersial Jakarta"
@@ -1805,6 +1843,7 @@ msgstr "Daerah komersial Jakarta"
 #: safe/common/dynamic_translations.py:108
 #: safe/common/dynamic_translations.py:109
 #: safe/common/dynamic_translations.py:112
+#: safe/common/dynamic_translations.py:112
 msgid "Hospitals Jakarta"
 msgstr "Rumah sakit Jakarta"
 
@@ -1820,6 +1859,7 @@ msgstr "Rumah sakit Jakarta"
 #: safe/common/dynamic_translations.py:104
 #: safe/common/dynamic_translations.py:105
 #: safe/common/dynamic_translations.py:108
+#: safe/common/dynamic_translations.py:108
 msgid "Schools"
 msgstr "Sekolah"
 
@@ -1834,6 +1874,7 @@ msgstr "Sekolah"
 #: safe/common/dynamic_translations.py:94
 #: safe/common/dynamic_translations.py:96
 #: safe/common/dynamic_translations.py:97
+#: safe/common/dynamic_translations.py:100
 #: safe/common/dynamic_translations.py:100
 msgid "OSM buildings"
 msgstr "Bangunan OSM"
@@ -1851,6 +1892,7 @@ msgstr "Bangunan OSM"
 #: safe/common/dynamic_translations.py:114
 #: safe/common/dynamic_translations.py:115
 #: safe/common/dynamic_translations.py:118
+#: safe/common/dynamic_translations.py:118
 msgid "office"
 msgstr "kantor"
 
@@ -1866,6 +1908,7 @@ msgstr "kantor"
 #: safe/common/dynamic_translations.py:113
 #: safe/common/dynamic_translations.py:115
 #: safe/common/dynamic_translations.py:116
+#: safe/common/dynamic_translations.py:119
 #: safe/common/dynamic_translations.py:119
 msgid "clinic"
 msgstr "puskesmas"
@@ -1883,6 +1926,7 @@ msgstr "puskesmas"
 #: safe/common/dynamic_translations.py:116
 #: safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:120
+#: safe/common/dynamic_translations.py:120
 msgid "terrace"
 msgstr "komplek perumahan"
 
@@ -1898,6 +1942,7 @@ msgstr "komplek perumahan"
 #: safe/common/dynamic_translations.py:115
 #: safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:118
+#: safe/common/dynamic_translations.py:121
 #: safe/common/dynamic_translations.py:121
 msgid "police"
 msgstr "polisi"
@@ -1915,6 +1960,7 @@ msgstr "polisi"
 #: safe/common/dynamic_translations.py:118
 #: safe/common/dynamic_translations.py:119
 #: safe/common/dynamic_translations.py:122
+#: safe/common/dynamic_translations.py:122
 msgid "residential"
 msgstr "pemukiman"
 
@@ -1930,6 +1976,7 @@ msgstr "pemukiman"
 #: safe/common/dynamic_translations.py:117
 #: safe/common/dynamic_translations.py:119
 #: safe/common/dynamic_translations.py:120
+#: safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:123
 msgid "kindergarten"
 msgstr "taman kanak-kanak"
@@ -1947,6 +1994,7 @@ msgstr "taman kanak-kanak"
 #: safe/common/dynamic_translations.py:120
 #: safe/common/dynamic_translations.py:121
 #: safe/common/dynamic_translations.py:124
+#: safe/common/dynamic_translations.py:124
 msgid "bank"
 msgstr "bank"
 
@@ -1962,6 +2010,7 @@ msgstr "bank"
 #: safe/common/dynamic_translations.py:119
 #: safe/common/dynamic_translations.py:121
 #: safe/common/dynamic_translations.py:122
+#: safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:125
 msgid "place of worship"
 msgstr "tempat ibadah"
@@ -1979,6 +2028,7 @@ msgstr "tempat ibadah"
 #: safe/common/dynamic_translations.py:122
 #: safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:126
+#: safe/common/dynamic_translations.py:126
 msgid "school"
 msgstr "sekolah"
 
@@ -1994,6 +2044,7 @@ msgstr "sekolah"
 #: safe/common/dynamic_translations.py:121
 #: safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:124
+#: safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:127
 msgid "university"
 msgstr "universitas"
@@ -2011,6 +2062,7 @@ msgstr "universitas"
 #: safe/common/dynamic_translations.py:124
 #: safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:128
+#: safe/common/dynamic_translations.py:128
 msgid "apartments"
 msgstr "apartemen"
 
@@ -2026,6 +2078,7 @@ msgstr "apartemen"
 #: safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:126
+#: safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:129
 msgid "college"
 msgstr "perguruan tinggi"
@@ -2043,6 +2096,7 @@ msgstr "perguruan tinggi"
 #: safe/common/dynamic_translations.py:126
 #: safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:130
+#: safe/common/dynamic_translations.py:130
 msgid "commercial"
 msgstr "komersial"
 
@@ -2058,6 +2112,7 @@ msgstr "komersial"
 #: safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:128
+#: safe/common/dynamic_translations.py:131
 #: safe/common/dynamic_translations.py:131
 msgid "hospital"
 msgstr "rumah sakit"
@@ -2075,6 +2130,7 @@ msgstr "rumah sakit"
 #: safe/common/dynamic_translations.py:128
 #: safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:132
+#: safe/common/dynamic_translations.py:132
 msgid "industrial"
 msgstr "industri"
 
@@ -2090,6 +2146,7 @@ msgstr "industri"
 #: safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:130
+#: safe/common/dynamic_translations.py:133
 #: safe/common/dynamic_translations.py:133
 msgid "civic"
 msgstr "kantor pemerintah"
@@ -2107,6 +2164,7 @@ msgstr "kantor pemerintah"
 #: safe/common/dynamic_translations.py:130
 #: safe/common/dynamic_translations.py:131
 #: safe/common/dynamic_translations.py:134
+#: safe/common/dynamic_translations.py:134
 msgid "church"
 msgstr "Gereja"
 
@@ -2122,6 +2180,7 @@ msgstr "Gereja"
 #: safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:131
 #: safe/common/dynamic_translations.py:132
+#: safe/common/dynamic_translations.py:135
 #: safe/common/dynamic_translations.py:135
 msgid "hotel"
 msgstr "hotel"
@@ -2139,6 +2198,7 @@ msgstr "hotel"
 #: safe/common/dynamic_translations.py:132
 #: safe/common/dynamic_translations.py:133
 #: safe/common/dynamic_translations.py:136
+#: safe/common/dynamic_translations.py:136
 msgid "public building"
 msgstr "bangunan publik"
 
@@ -2155,6 +2215,7 @@ msgstr "bangunan publik"
 #: safe/common/dynamic_translations.py:133
 #: safe/common/dynamic_translations.py:134
 #: safe/common/dynamic_translations.py:137
+#: safe/common/dynamic_translations.py:137
 msgid "other"
 msgstr "lainnya"
 
@@ -2170,6 +2231,7 @@ msgstr "lainnya"
 #: safe/common/dynamic_translations.py:132
 #: safe/common/dynamic_translations.py:134
 #: safe/common/dynamic_translations.py:135
+#: safe/common/dynamic_translations.py:138
 #: safe/common/dynamic_translations.py:138
 msgid "fire station"
 msgstr "pos kebakaran"
@@ -2213,8 +2275,8 @@ msgid "Estimated fatalities"
 msgstr "Perkiraan korban jiwa"
 
 #: storage/titles.py:64 storage/titles.py:66 storage/titles.py:67
-#: storage/titles.py:69 storage/titles.py:74 storage/dynamic_translations.py:83
-#: common/dynamic_translations.py:83
+#: storage/titles.py:69 storage/titles.py:74
+#: storage/dynamic_translations.py:83 common/dynamic_translations.py:83
 msgid "Lembang fault scenario"
 msgstr "Skenario sesar Lembang"
 
@@ -2276,6 +2338,7 @@ msgstr "Jumlah pengungsi"
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:188
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:212
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:136
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:213
 #: safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:134
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:188
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:213
@@ -2333,6 +2396,7 @@ msgstr "Ditutup sementara"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:189
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:213
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:214
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:214
 msgid "Are the critical facilities still open?"
 msgstr "Apakah fasilitas yang penting masih terbuka?"
 
@@ -2347,6 +2411,7 @@ msgstr "Apakah fasilitas yang penting masih terbuka?"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:175
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:181
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:205
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:206
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:206
 msgid "Breakdown by building type"
 msgstr "Perincian menurut jenis bangunan"
@@ -2398,19 +2463,21 @@ msgstr "Apakah fasilitas yang tersedia cukup untuk membantu %i ibu hamil?"
 msgid "Mid"
 msgstr "Sedang"
 
-#: storage/titles.py:51 storage/titles.py:56 storage/dynamic_translations.py:65
-#: common/dynamic_translations.py:65 common/dynamic_translations.py:72
-#: safe/common/dynamic_translations.py:72
+#: storage/titles.py:51 storage/titles.py:56
+#: storage/dynamic_translations.py:65 common/dynamic_translations.py:65
+#: common/dynamic_translations.py:72 safe/common/dynamic_translations.py:72
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:72
-#: safe/common/dynamic_translations.py:75 safe/common/dynamic_translations.py:75
+#: safe/common/dynamic_translations.py:75
+#: safe/common/dynamic_translations.py:75
 msgid "People"
 msgstr "Orang"
 
-#: storage/titles.py:52 storage/titles.py:57 storage/dynamic_translations.py:66
-#: common/dynamic_translations.py:66 common/dynamic_translations.py:73
-#: safe/common/dynamic_translations.py:73
+#: storage/titles.py:52 storage/titles.py:57
+#: storage/dynamic_translations.py:66 common/dynamic_translations.py:66
+#: common/dynamic_translations.py:73 safe/common/dynamic_translations.py:73
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:73
-#: safe/common/dynamic_translations.py:76 safe/common/dynamic_translations.py:76
+#: safe/common/dynamic_translations.py:76
+#: safe/common/dynamic_translations.py:76
 msgid "people"
 msgstr "orang"
 
@@ -2561,8 +2628,8 @@ msgstr ""
 #: safe/impact_functions/core.py:356
 #, python-format
 msgid ""
-"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might "
-"<i>%(impact)s</i>"
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
+"%(impact)s</i>"
 msgstr ""
 "Apabila terjadi <i>%(hazard)s</i> berapa banyak <i>%(exposure)s</i> yang "
 "mungkin <i>%(impact)s</i>"
@@ -2643,19 +2710,22 @@ msgstr "Tinggi [%i orang/sel]"
 
 #: common/dynamic_translations.py:54 safe/common/dynamic_translations.py:54
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:54
-#: safe/common/dynamic_translations.py:62 safe/common/dynamic_translations.py:62
+#: safe/common/dynamic_translations.py:62
+#: safe/common/dynamic_translations.py:62
 msgid "A flood in Jakarta like in 2007"
 msgstr "Banjir di Jakarta seperti tahun 2007"
 
 #: common/dynamic_translations.py:63 safe/common/dynamic_translations.py:63
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:63
-#: safe/common/dynamic_translations.py:66 safe/common/dynamic_translations.py:66
+#: safe/common/dynamic_translations.py:66
+#: safe/common/dynamic_translations.py:66
 msgid "A flood in Jakarta like in 2007 but with structural improvements"
 msgstr "Banjir di Jakarta seperti 2007 tapi ada perbaikan struktural"
 
 #: common/dynamic_translations.py:68 safe/common/dynamic_translations.py:68
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:68
-#: safe/common/dynamic_translations.py:71 safe/common/dynamic_translations.py:71
+#: safe/common/dynamic_translations.py:71
+#: safe/common/dynamic_translations.py:71
 msgid "A flood in Jakarta in RW areas identified as flood prone"
 msgstr "Banjir di Jakarta di daerah identifikas sebagai rawan banjir"
 
@@ -2672,7 +2742,8 @@ msgstr "Banjir di Jakarta di daerah identifikas sebagai rawan banjir"
 #: safe/common/dynamic_translations.py:91
 #: safe/common/dynamic_translations.py:83
 #: safe/common/dynamic_translations.py:92
-#: safe/common/dynamic_translations.py:83 safe/common/dynamic_translations.py:92
+#: safe/common/dynamic_translations.py:83
+#: safe/common/dynamic_translations.py:92
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr "Gempabumi di Yogyakarta seperti 2006"
 
@@ -2680,7 +2751,8 @@ msgstr "Gempabumi di Yogyakarta seperti 2006"
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:81
 #: safe/common/dynamic_translations.py:82
 #: safe/common/dynamic_translations.py:84
-#: safe/common/dynamic_translations.py:85 safe/common/dynamic_translations.py:85
+#: safe/common/dynamic_translations.py:85
+#: safe/common/dynamic_translations.py:85
 msgid "A tsunami in Maumere (Mw 8.1)"
 msgstr "Tsunami di Maumere (Mw 8.1)"
 
@@ -2689,7 +2761,8 @@ msgstr "Tsunami di Maumere (Mw 8.1)"
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:83
 #: safe/common/dynamic_translations.py:84
 #: safe/common/dynamic_translations.py:86
-#: safe/common/dynamic_translations.py:87 safe/common/dynamic_translations.py:87
+#: safe/common/dynamic_translations.py:87
+#: safe/common/dynamic_translations.py:87
 msgid "An earthquake at the Sumatran fault (Mw 7.8)"
 msgstr "Gempabumi di sesar Sumatra (Mw 7.8)"
 
@@ -2698,7 +2771,8 @@ msgstr "Gempabumi di sesar Sumatra (Mw 7.8)"
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:89
 #: safe/common/dynamic_translations.py:90
 #: safe/common/dynamic_translations.py:86
-#: safe/common/dynamic_translations.py:88 safe/common/dynamic_translations.py:89
+#: safe/common/dynamic_translations.py:88
+#: safe/common/dynamic_translations.py:89
 msgid "An earthquake at the Mentawai fault (Mw 9.0)"
 msgstr "Gempabumi di sesar Mentawai (Mw 9.0)"
 
@@ -2708,7 +2782,8 @@ msgstr "Gempabumi di sesar Mentawai (Mw 9.0)"
 #: safe/common/dynamic_translations.py:96
 #: safe/common/dynamic_translations.py:88
 #: safe/common/dynamic_translations.py:90
-#: safe/common/dynamic_translations.py:91 safe/common/dynamic_translations.py:91
+#: safe/common/dynamic_translations.py:91
+#: safe/common/dynamic_translations.py:91
 msgid "An earthquake in Padang like in 2009"
 msgstr "Gempabumi di Padang seperti 2009"
 
@@ -2718,7 +2793,8 @@ msgstr "Gempabumi di Padang seperti 2009"
 #: safe/common/dynamic_translations.py:101
 #: safe/common/dynamic_translations.py:90
 #: safe/common/dynamic_translations.py:92
-#: safe/common/dynamic_translations.py:93 safe/common/dynamic_translations.py:93
+#: safe/common/dynamic_translations.py:93
+#: safe/common/dynamic_translations.py:93
 msgid "An earthquake at the Lembang fault"
 msgstr "Gempabumi di sesar Lembang"
 
@@ -2726,7 +2802,8 @@ msgstr "Gempabumi di sesar Lembang"
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:82
 #: safe/common/dynamic_translations.py:83
 #: safe/common/dynamic_translations.py:85
-#: safe/common/dynamic_translations.py:86 safe/common/dynamic_translations.py:86
+#: safe/common/dynamic_translations.py:86
+#: safe/common/dynamic_translations.py:86
 msgid "A tsunami in Padang (Mw 8.8)"
 msgstr "Tsunami di Padang (Mw 8.8)"
 
@@ -2851,6 +2928,7 @@ msgstr "Nol"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:182
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:225
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:223
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:182
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:223
 msgid "Population Count"
@@ -2939,6 +3017,8 @@ msgstr "Funsgi Dampak Yang Tersedia"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:233
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:147
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:191
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:234
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:189
 #: safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:140
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:194
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:163
@@ -2983,7 +3063,8 @@ msgid "People in %(lo).1f m to %(hi).1f m of water: %(val)i"
 msgstr "Orang-orang di %(lo).1f m ke %(hi).1f m air: %(val)i"
 
 #: safe/common/dynamic_translations.py:74
-#: safe/common/dynamic_translations.py:77 safe/common/dynamic_translations.py:77
+#: safe/common/dynamic_translations.py:77
+#: safe/common/dynamic_translations.py:77
 msgid "People in Jakarta"
 msgstr "Warga di Jakarta"
 
@@ -2998,6 +3079,7 @@ msgstr "Warga di Jakarta"
 #: safe/impact_functions/volcanic/volcano_building_impact.py:171
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:214
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:212
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_building_impact.py:171
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:212
@@ -3015,6 +3097,7 @@ msgstr "0"
 #: safe/impact_functions/volcanic/volcano_building_impact.py:173
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:216
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:214
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
 #: safe/impact_functions/volcanic/volcano_building_impact.py:173
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:214
@@ -3057,6 +3140,7 @@ msgstr "terkena dampak"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:136
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:177
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:177
 msgid "Map shows population affected in each of volcano hazard polygons."
 msgstr ""
 "Peta menunjukkan populasi yang terkena dampak di setiap wilayah rawan bahaya "
@@ -3074,6 +3158,7 @@ msgstr "Jumlah populasi %i di jendela kerja"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:151
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:194
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
 msgid "People need evacuation if they are within the volcanic hazard zones."
 msgstr ""
 "Orang-orang perlu evakuasi kalau daerah identifikas sebagai rawan bahaya "
@@ -3085,6 +3170,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:154
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:197
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:195
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:195
 msgid "People affected by volcanic hazard zone"
 msgstr "Penduduk yang terkena dampak daerah rawan bahaya letusan gunung berapi"
 
@@ -3094,11 +3180,13 @@ msgstr "Penduduk yang terkena dampak daerah rawan bahaya letusan gunung berapi"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:188
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:231
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:229
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:229
 msgid "Population affected by volcanic hazard zone"
 msgstr "Penduduk terkena dampak daerah rawan bahaya letusan gunung berapi"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:191
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:215
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:216
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:216
 msgid "Which structures have warning capacity (eg. sirens, speakers, etc.)?"
 msgstr ""
@@ -3108,11 +3196,13 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:193
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:217
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:218
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:218
 msgid "Which buildings will be evacuation centres?"
 msgstr "Bangunan mana saja yang memiliki pusat evakuasi?"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:195
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:219
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:220
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:220
 msgid "Where will we locate the operations centre?"
 msgstr "Dimana kita akan menempatkanpusat operasi?"
@@ -3120,11 +3210,13 @@ msgstr "Dimana kita akan menempatkanpusat operasi?"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:197
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:221
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:222
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:222
 msgid "Where will we locate warehouse and/or distribution centres?"
 msgstr "Dimana kita akan menempatkan gudang dan atau pusat distribusi?"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:200
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:224
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:225
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:225
 #, python-format
 msgid "Where will the students from the %d closed schools go to study?"
@@ -3132,6 +3224,7 @@ msgstr "Dimanakah siswa dari %d sekolah yang ditutup akan belajar?"
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:204
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:228
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:229
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:229
 #, python-format
 msgid ""
@@ -3221,6 +3314,7 @@ msgstr "Jumlah populasi %i pada area terlihat"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:149
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:190
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:190
 #, python-format
 msgid "Total population %i in the viewable area"
 msgstr "Jumlah populasi %i pada area terlihat "
@@ -3243,12 +3337,14 @@ msgstr "Terkena banjir"
 #: safe/common/dynamic_translations.py:109
 #: safe/common/dynamic_translations.py:110
 #: safe/common/dynamic_translations.py:113
+#: safe/common/dynamic_translations.py:113
 msgid "An eruption"
 msgstr "Letusan gunung api"
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
 msgid "Cumulative"
@@ -3375,7 +3471,8 @@ msgstr ""
 "\n"
 "\n"
 
-#: safe/common/dynamic_translations.py:54 safe/common/dynamic_translations.py:55
+#: safe/common/dynamic_translations.py:54
+#: safe/common/dynamic_translations.py:55
 msgid ""
 "These listed here so they get translated apriori to loading data.\n"
 "    "
@@ -3387,7 +3484,8 @@ msgstr ""
 msgid "Hello world"
 msgstr "Hallo dunia"
 
-#: safe/common/dynamic_translations.py:63 safe/common/dynamic_translations.py:63
+#: safe/common/dynamic_translations.py:63
+#: safe/common/dynamic_translations.py:63
 msgid "Jakarta flood like 2007 with pump failure at Pluit Ancol and Sunter"
 msgstr ""
 "Banjir Jakarta seperti tahun 2007 dengan kegagalan pompa di Pluit Ancol dan "
@@ -3397,6 +3495,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:110
 #: safe/common/dynamic_translations.py:111
 #: safe/common/dynamic_translations.py:114
+#: safe/common/dynamic_translations.py:114
 msgid "A volcano eruption"
 msgstr "Letusan gunung berapi"
 
@@ -3404,15 +3503,18 @@ msgstr "Letusan gunung berapi"
 #: safe/common/dynamic_translations.py:111
 #: safe/common/dynamic_translations.py:112
 #: safe/common/dynamic_translations.py:115
+#: safe/common/dynamic_translations.py:115
 msgid "A volcano alert"
 msgstr "Peringatan letusan gunung berapi"
 
-#: safe/common/dynamic_translations.py:78 safe/common/dynamic_translations.py:78
+#: safe/common/dynamic_translations.py:78
+#: safe/common/dynamic_translations.py:78
 msgid "Indonesian people"
 msgstr "Orang Indonesia"
 
 #: safe/common/dynamic_translations.py:79
-#: safe/common/dynamic_translations.py:80 safe/common/dynamic_translations.py:80
+#: safe/common/dynamic_translations.py:80
+#: safe/common/dynamic_translations.py:80
 msgid "People in Indonesia"
 msgstr "Orang di Indonesia"
 
@@ -3512,6 +3614,7 @@ msgstr "Dodo"
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:165
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:163
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:163
 msgid "Volcanos considered"
 msgstr "Nama gunung api yang dipilih"
 
@@ -3535,22 +3638,27 @@ msgstr "Paket kebersihan mingguan"
 msgid "Additional weekly rice kg for pregnant and lactating women"
 msgstr "Tambahan kilogram beras mingguan untuk ibu hamil dan menyusui"
 
-#: safe/common/dynamic_translations.py:79 safe/common/dynamic_translations.py:79
+#: safe/common/dynamic_translations.py:79
+#: safe/common/dynamic_translations.py:79
 msgid "Indonesian People"
 msgstr "Orang Indonesia"
 
+#: safe/common/dynamic_translations.py:96
 #: safe/common/dynamic_translations.py:96
 msgid "Structures"
 msgstr "Bangunan"
 
 #: safe/common/dynamic_translations.py:97
+#: safe/common/dynamic_translations.py:97
 msgid "Structures in Jakarta"
 msgstr "Bangunan di Jakarta"
 
 #: safe/common/dynamic_translations.py:99
+#: safe/common/dynamic_translations.py:99
 msgid "Buildings in Jakarta"
 msgstr "Gedung di Jakarta"
 
-#: safe/engine/core.py:84 safe/engine/core.py:89
+#: safe/engine/core.py:84 safe/engine/core.py:89 safe/engine/core.py:81
+#: safe/engine/core.py:81
 msgid "Not specified"
 msgstr "Tidak ditentukan"
