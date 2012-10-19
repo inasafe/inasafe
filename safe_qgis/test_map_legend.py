@@ -141,6 +141,7 @@ class MapLegendTest(unittest.TestCase):
         LOGGER.debug(myPath)
         myExpectedHashes = ['850ed7ad9e8f992e96c5449701ba5434',  # ub 12.04-64
                             '3d4d9f196fb2fe1e18d54a8d6ab4a349',
+                            '4fcde4753886a9aa935a26a81f293954',  # wVistaSP2-32
                             'e8ef2222f90fc2f95dc86f416de2579e',  # ub 11.04-64
                             '']
         assertHashesForFile(myExpectedHashes, myPath)
@@ -168,6 +169,7 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
+        # FIXME (Sunni) need to move to image test with tolerance
         myExpectedHashes = ['',  # win
                             '67c0f45792318298664dd02cc0ac94c3',  # ub12.04xiner
                             '53e0ba1144e071ad41756595d29bf444',  # ub12.04
@@ -176,6 +178,7 @@ class MapLegendTest(unittest.TestCase):
                             # ub11.04-64 laptop
                             '944cee3eb9d916816b60ef41e8069683',  # binary read
                             'de3ceb6547ffc6c557d031c0b7ee9e75',  # wVistaSP2-32
+                            '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
                             '91177a81bee4400be4e85789e3be1e91',  # ub12.04-64
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.04-64

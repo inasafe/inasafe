@@ -103,6 +103,7 @@ class MapTest(unittest.TestCase):
         assert os.path.exists(myImagePath), myMessage
 
         myAcceptableImages = ['renderComposition.png',
+                              'renderComposition-variantWindosVistaSP2-32.png',
                               'renderComposition-variantJenkins.png',
                               'renderComposition-variantUB11.10-64.png']
         # Beta version and version changes  can introduce a few extra chars
