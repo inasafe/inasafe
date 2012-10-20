@@ -77,7 +77,9 @@ then
   for LOCALE in $LOCALES
   do
     echo "safe_qgis/i18n/inasafe_"$LOCALE".ts"
-    FILES=`find . -regex ".*\(ui\|py\)$" | grep -v base`
+    # Note we don't use pylupdate with qt .pro file approach as it is flakey about
+    # what is made available.
+    FILES=`find . -regex ".*\(ui\|py\)$"`
     pylupdate4 -noobsolete $FILES -ts i18n/inasafe_id.ts
   done
   cd ..
