@@ -681,7 +681,8 @@ class Map():
         myTokens = myDateTime.split('_')
         myDate = myTokens[0]
         myTime = myTokens[1]
-        #myElapsedTime = self.keywordIO.readKeywords(self.layer, 'elapsed_time')
+        #myElapsedTime = self.keywordIO.readKeywords(self.layer,
+        #                                            'elapsed_time')
         #myElapsedTime = humaniseSeconds(myElapsedTime)
         myLongVersion = get_version()
         myTokens = myLongVersion.split('.')

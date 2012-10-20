@@ -89,13 +89,14 @@ class UtilitiesTest(unittest.TestCase):
             raise Exception(myMessage)
         # Now validate the transparency values were set to 255 because
         # they are floats and we cant specify pixel ranges to floats
-        myValue1 = myLayer.rasterTransparency().alphaValue(1.1)
-        myValue2 = myLayer.rasterTransparency().alphaValue(1.4)
+        # Note we don't test on the exact interval because 464c6171dd55
+        myValue1 = myLayer.rasterTransparency().alphaValue(1.2)
+        myValue2 = myLayer.rasterTransparency().alphaValue(1.5)
         myMessage = ('Transparency should be ignored when style class'
                      ' quantities are floats')
         assert myValue1 == myValue2 == 255, myMessage
 
-        # Now run the same test again
+        # Now run the same test again for int intervals
         myStyleInfo['style_classes'] = [
                         dict(colour='#38A800', quantity=2, transparency=100),
                         dict(colour='#38A800', quantity=4, transparency=0),
@@ -384,7 +385,8 @@ class UtilitiesTest(unittest.TestCase):
                       'exposure_title': 'Sample Exposure Title',
                       'exposure_source': 'Sample Exposure Source'}
         myHtml = impactLayerAttribution(myKeywords)
-        self.assertEqual(len(myHtml), 320)
+        print myHtml
+        self.assertEqual(len(myHtml), 288)
 
     @expectedFailure
     def test_localisedAttribution(self):

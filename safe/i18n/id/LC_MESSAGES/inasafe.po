@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-20 10:56+0700\n"
+"POT-Creation-Date: 2012-10-20 13:23+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -287,6 +287,8 @@ msgstr "Bangunan-bangunan"
 #: safe/postprocessors/gender_postprocessor.py:95
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:170
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:180
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
@@ -294,8 +296,8 @@ msgstr "Bangunan-bangunan"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:82
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:170
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:180
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:193
 #: safe/postprocessors/gender_postprocessor.py:95
 msgid "Total"
 msgstr "Jumlah"
@@ -668,9 +670,10 @@ msgstr "Berdasarkan Perka 2 BNPB - 2012"
 #: safe/impact_functions/core.py:591
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:170
 #: safe/impact_functions/core.py:591
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:170
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
 msgid "Category"
 msgstr "Kategori"
 
@@ -778,6 +781,7 @@ msgstr "Status"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:28
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:27
 #: safe/impact_functions/inundation/flood_population_evacuation.py:28
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:27
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:27
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:26
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:27
@@ -948,9 +952,10 @@ msgstr "Buka"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:122
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:168
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:166
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:167
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:122
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:167
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
 msgid "People needing evacuation"
 msgstr "Penduduk yang perlu dievakuasi"
 
@@ -974,7 +979,7 @@ msgstr "Penduduk yang perlu dievakuasi"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:183
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:129
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:183
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:196
 msgid "Rice [kg]"
 msgstr "Beras [kg]"
 
@@ -998,7 +1003,7 @@ msgstr "Beras [kg]"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:184
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:130
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:184
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:197
 msgid "Drinking Water [l]"
 msgstr "Air Minum [l]"
 
@@ -1021,8 +1026,9 @@ msgstr "Air Minum [l]"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:183
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:186
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:131
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:199
 msgid "Clean Water [l]"
 msgstr "Air Bersih [l]"
 
@@ -1045,8 +1051,9 @@ msgstr "Air Bersih [l]"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:132
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:186
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:184
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:132
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:187
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:132
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:200
 msgid "Family Kits"
 msgstr "Kit Keluarga"
 
@@ -1069,8 +1076,9 @@ msgstr "Kit Keluarga"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:187
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:188
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:133
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:201
 msgid "Toilets"
 msgstr "Jamban"
 
@@ -1275,8 +1283,9 @@ msgstr "Penduduk perlu evakuasi jika banjir lebih dari %(eps)i m"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:180
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:193
 msgid "Needs per week"
 msgstr "Bantuan per minggu"
 
@@ -2929,8 +2938,9 @@ msgstr "Nol"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:182
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:225
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:223
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:182
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:226
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:184
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:239
 msgid "Population Count"
 msgstr "Jumlah penduduk"
 
@@ -2943,7 +2953,7 @@ msgstr "Jumlah penduduk"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:180
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:179
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:188
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:188
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:190
 msgid "Population affected by flood prone areas"
 msgstr "Penduduk terkena dampak daerah rawan banjir"
 
@@ -3019,6 +3029,7 @@ msgstr "Funsgi Dampak Yang Tersedia"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:191
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:234
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:189
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
 #: safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:140
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:194
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:163
@@ -3028,7 +3039,7 @@ msgstr "Funsgi Dampak Yang Tersedia"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:234
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:147
 #: safe/impact_functions/volcanic/volcano_building_impact.py:148
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:205
 msgid "Notes"
 msgstr "Catatan"
 
@@ -3080,9 +3091,10 @@ msgstr "Warga di Jakarta"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:214
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:212
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:215
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_building_impact.py:171
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:215
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:228
 msgid "0"
 msgstr "0"
 
@@ -3098,9 +3110,10 @@ msgstr "0"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:216
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:214
-#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
-#: safe/impact_functions/volcanic/volcano_building_impact.py:173
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:217
+#: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:174
+#: safe/impact_functions/volcanic/volcano_building_impact.py:173
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:230
 #, python-format
 msgid "%i - %i"
 msgstr "%i - %i"
@@ -3140,6 +3153,7 @@ msgstr "terkena dampak"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:177
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:178
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:191
 msgid "Map shows population affected in each of volcano hazard polygons."
 msgstr ""
 "Peta menunjukkan populasi yang terkena dampak di setiap wilayah rawan bahaya "
@@ -3158,6 +3172,7 @@ msgstr "Jumlah populasi %i di jendela kerja"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:194
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:195
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:208
 msgid "People need evacuation if they are within the volcanic hazard zones."
 msgstr ""
 "Orang-orang perlu evakuasi kalau daerah identifikas sebagai rawan bahaya "
@@ -3170,6 +3185,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:197
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:195
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:198
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:211
 msgid "People affected by volcanic hazard zone"
 msgstr "Penduduk yang terkena dampak daerah rawan bahaya letusan gunung berapi"
 
@@ -3180,6 +3196,7 @@ msgstr "Penduduk yang terkena dampak daerah rawan bahaya letusan gunung berapi"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:231
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:229
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:232
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:245
 msgid "Population affected by volcanic hazard zone"
 msgstr "Penduduk terkena dampak daerah rawan bahaya letusan gunung berapi"
 
@@ -3314,6 +3331,7 @@ msgstr "Jumlah populasi %i pada area terlihat"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:190
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:193
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:206
 #, python-format
 msgid "Total population %i in the viewable area"
 msgstr "Jumlah populasi %i pada area terlihat "
@@ -3344,8 +3362,9 @@ msgstr "Letusan gunung api"
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
-#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:170
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
 msgid "Cumulative"
 msgstr "Kumulatif"
 
@@ -3614,6 +3633,7 @@ msgstr "Dodo"
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:165
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:163
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:164
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:179
 msgid "Volcanos considered"
 msgstr "Nama gunung api yang dipilih"
 
@@ -3662,6 +3682,7 @@ msgstr "Gedung di Jakarta"
 msgid "Not specified"
 msgstr "Tidak ditentukan"
 
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:154
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:154
 msgid "Number flooded"
 msgstr "Jumlah kebanjiran"
