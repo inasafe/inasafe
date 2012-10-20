@@ -214,7 +214,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 label = tr('%i - %i') % (lo, hi)
 
             entry = dict(label=label, colour=colour, min=lo, max=hi,
-                         transparency=0, size=1)
+                         transparency=50, size=1)
             style_classes.append(entry)
 
         # Override style info with new classes and name
