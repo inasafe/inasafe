@@ -10,10 +10,6 @@ import logging
 
 LOGGER = logging.getLogger('InaSAFE')
 
-parameters = {'low_threshold': 6,
-              'mediom_threshold': 7,
-              'high_threshold': 8}
-
 
 class EarthquakeBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
@@ -28,6 +24,12 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
     target_field = 'Shake_cls'
     title = tr('Be affected')
+    parameters = {'low_threshold': 6,
+                  'medium_threshold': 7,
+                  'high_threshold': 8}
+
+
+
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
