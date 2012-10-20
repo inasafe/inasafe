@@ -829,7 +829,7 @@ class DockTest(unittest.TestCase):
         #1 - 3 m:    7
         #> 3 m:  0
         # Post rewrite of impact function
-        #Building type	Temporarily closed	Total
+        #Building type	 closed	Total
         #All	        7	                17
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -983,8 +983,11 @@ class DockTest(unittest.TestCase):
                      'classes as expected.')
         myTransparencyList = (myQgisImpactLayer.rasterTransparency().
                 transparentSingleValuePixelList())
+        # Commenting out because we changed impact function to use floating
+        # point quantities. Revisit in QGIS 2.0 where range based transparency
+        # will have been implemented
         #print "Transparency list:" + str(myTransparencyList)
-        assert (len(myTransparencyList) > 0)
+        #assert (len(myTransparencyList) > 0)
 
     def test_Issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
