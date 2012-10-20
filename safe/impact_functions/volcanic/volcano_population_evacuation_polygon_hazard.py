@@ -24,7 +24,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     layertype=='raster'
     """
 
-    title = tr('Be affected')
+    title = tr('Need evacuation')
     target_field = 'population'
 
     parameters = dict(distances=[3000, 5000, 10000])
@@ -159,13 +159,14 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         toilets = evacuated / 20
 
         # Generate impact report for the pdf map
+        blank_cell = ''
         table_body = [question,
                       TableRow([tr('Volcanos considered'),
-                                '%s' % volcano_names],
+                                '%s' % volcano_names, blank_cell],
                                header=True),
                       TableRow([tr('People needing evacuation'),
-                                '%i' % evacuated],
-                               header=True),
+                                '%i' % evacuated, blank_cell],
+                                header=True),
                       TableRow([tr('Category'), tr('Total'), tr('Cumulative')],
                                header=True)]
         cum = 0
@@ -176,13 +177,15 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         table_body.extend([TableRow(tr('Map shows population affected in '
                                        'each of volcano hazard polygons.')),
-                           TableRow([tr('Needs per week'), tr('Total')],
+                           TableRow([tr('Needs per week'), tr('Total'),
+                                     blank_cell],
                                     header=True),
-                           [tr('Rice [kg]'), int(rice)],
-                           [tr('Drinking Water [l]'), int(drinking_water)],
-                           [tr('Clean Water [l]'), int(water)],
-                           [tr('Family Kits'), int(family_kits)],
-                           [tr('Toilets'), int(toilets)]])
+                           [tr('Rice [kg]'), int(rice), blank_cell],
+                           [tr('Drinking Water [l]'), int(drinking_water),
+                           blank_cell],
+                           [tr('Clean Water [l]'), int(water), blank_cell],
+                           [tr('Family Kits'), int(family_kits), blank_cell],
+                           [tr('Toilets'), int(toilets), blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
@@ -214,7 +217,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 label = tr('%i - %i') % (lo, hi)
 
             entry = dict(label=label, colour=colour, min=lo, max=hi,
-                         transparency=0, size=1)
+                         transparency=50, size=1)
             style_classes.append(entry)
 
         # Override style info with new classes and name

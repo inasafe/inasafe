@@ -979,13 +979,13 @@ class DockTest(unittest.TestCase):
         assert myQgisImpactLayer.colorShadingAlgorithm() == \
                 QgsRasterLayer.ColorRampShader, myMessage
 
-        myMessage = ('Raster layer was not assigned transparency'
-                     'classes as expected.')
-        myTransparencyList = (myQgisImpactLayer.rasterTransparency().
-                transparentSingleValuePixelList())
         # Commenting out because we changed impact function to use floating
         # point quantities. Revisit in QGIS 2.0 where range based transparency
         # will have been implemented
+        #myMessage = ('Raster layer was not assigned transparency'
+        #             'classes as expected.')
+        #myTransparencyList = (myQgisImpactLayer.rasterTransparency().
+        #        transparentSingleValuePixelList())
         #print "Transparency list:" + str(myTransparencyList)
         #assert (len(myTransparencyList) > 0)
 

@@ -261,6 +261,13 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
         if 'transparency' in myClass:
             myTransparencyPercent = int(myClass['transparency'])
         if myTransparencyPercent > 0:
+            # Always assign the transparency to the class' specified quantity
+            myPixel = \
+                    QgsRasterTransparency.TransparentSingleValuePixel()
+            myPixel.pixelValue = myMax
+            myPixel.percentTransparent = myTransparencyPercent
+            myTransparencyList.append(myPixel)
+
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
             if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
