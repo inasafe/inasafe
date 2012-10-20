@@ -24,7 +24,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                     layertype=='raster'
     """
 
-    title = tr('Be affected')
+    title = tr('Need evacuation')
     target_field = 'population'
 
     parameters = dict(distances=[3000, 5000, 10000])
