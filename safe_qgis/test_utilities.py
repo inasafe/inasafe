@@ -73,8 +73,8 @@ class UtilitiesTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        myLayer, myType = loadLayer('issue126.tif')
-        del myType
+        myLayer, _ = loadLayer('issue126.tif')
+
         # Note the float quantity values below
         myStyleInfo = {}
         myStyleInfo['style_classes'] = [
@@ -129,6 +129,44 @@ class UtilitiesTest(unittest.TestCase):
             setRasterStyle(myLayer, myStyleInfo)
         except Exception, e:
             raise Exception(myMessage + ': ' + str(e))
+
+    def test_transparency_of_minimum_value(self):
+        """Test that transparency of minimum value works when set to 100%
+        """
+        # This dataset has all cells with value 1.3
+        myLayer, _ = loadLayer('issue126.tif')
+
+        # Note the float quantity values below
+        myStyleInfo = {}
+        myStyleInfo['style_classes'] = [
+            {'colour': '#FFFFFF', 'transparency': 100, 'quantity': 0.0},
+            {'colour': '#38A800', 'quantity': 0.038362596547925065,
+             'transparency': 0, 'label': u'Rendah [0 orang/sel]'},
+            {'colour': '#79C900', 'transparency': 0,
+             'quantity': 0.07672519309585013},
+            {'colour': '#CEED00', 'transparency': 0,
+             'quantity': 0.1150877896437752},
+            {'colour': '#FFCC00', 'quantity': 0.15345038619170026,
+             'transparency': 0, 'label': u'Sedang [0 orang/sel]'},
+            {'colour': '#FF6600', 'transparency': 0,
+             'quantity': 0.19181298273962533},
+            {'colour': '#FF0000', 'transparency': 0,
+             'quantity': 0.23017557928755039},
+            {'colour': '#7A0000', 'quantity': 0.26853817583547546,
+             'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]
+
+        myMessage = 'Could not create raster style'
+        try:
+            setRasterStyle(myLayer, myStyleInfo)
+        except:
+            raise Exception(myMessage)
+
+        myMessage = ('Should get a single transparency class for first style '
+                     'class')
+        myTransparencyList = (myLayer.rasterTransparency().
+                transparentSingleValuePixelList())
+
+        self.assertEqual(len(myTransparencyList), 1)
 
     def test_issue121(self):
         """Test that point symbol size can be set from style (issue 121).
