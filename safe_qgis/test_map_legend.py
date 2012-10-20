@@ -59,7 +59,8 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getLegend.png']
+        myControlImages = ['getLegend.png',
+                           'getLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -106,7 +107,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getRasterLegend.png',
-                           'getRasterLengend-variantJenkins.png']
+                           'getRasterLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
