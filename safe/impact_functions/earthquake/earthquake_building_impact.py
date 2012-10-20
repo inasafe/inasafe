@@ -24,6 +24,12 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
     target_field = 'Shake_cls'
     title = tr('Be affected')
+    parameters = {'low_threshold': 6,
+                  'medium_threshold': 7,
+                  'high_threshold': 8}
+
+
+
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
@@ -32,9 +38,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         LOGGER.debug('Running earthquake building impact')
 
         # Thresholds for mmi breakdown
-        t0 = 6
-        t1 = 7
-        t2 = 8
+        t0 = self.parameters['low_threshold']
+        t1 = self.parameters['medium_threshold']
+        t2 = self.parameters['high_threshold']
 
         class_1 = tr('Low')
         class_2 = tr('Medium')
