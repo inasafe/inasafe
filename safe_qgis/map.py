@@ -701,7 +701,7 @@ class Map():
                          myDate,
                          myTime,
                          myElapsedTime))
-        myFontSize = 8
+        myFontSize = 6
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = True
         myFont = QtGui.QFont('verdana',
