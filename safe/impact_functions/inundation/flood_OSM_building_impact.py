@@ -151,7 +151,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Generate simple impact report
         table_body = [question,
                       TableRow([tr('Building type'),
-                                tr('Temporarily closed'),
+                                tr('Number flooded'),
                                 tr('Total')],
                                header=True),
                       TableRow([tr('All'), count, N])]
