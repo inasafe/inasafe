@@ -997,9 +997,8 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
         myJoinWords,
         myExposureSource)
 
-    myReport += '<tr><th>%s</th></tr>' % tr('Software notes')
-
     if theInaSAFEFlag:
+        myReport += '<tr><th>%s</th></tr>' % tr('Software notes')
         myInaSAFEPhrase = tr('This report was created using InaSAFE '
                               'version %1. Visit http://inasafe.org to get '
                               'your free copy of this software!').arg(
