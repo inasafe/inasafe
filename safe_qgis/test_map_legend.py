@@ -82,7 +82,8 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getVectorLegend.png']
+        myControlImages = ['getVectorLegend.png',
+                           'getVectorLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                     myPath,
@@ -104,7 +105,8 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getRasterLegend.png']
+        myControlImages = ['getRasterLegend.png',
+                           'getRasterLengend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -132,7 +134,8 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['addSymbolToLegend.png']
+        myControlImages = ['addSymbolToLegend.png',
+                           'addSymbolToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -164,7 +167,8 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getClassToLegend.png']
+        myControlImages = ['getClassToLegend.png',
+                           'getClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
