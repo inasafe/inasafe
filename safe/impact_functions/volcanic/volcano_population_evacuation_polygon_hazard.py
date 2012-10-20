@@ -138,17 +138,32 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             cat = new_attributes[poly_id][category_title]
             categories[cat] += pop
 
-            # Update total
-            evacuated += pop
-
         # Count totals
         total = int(numpy.sum(E.get_data(nan=0)))
 
-##        # Don't show digits less than a 1000
-##        if total > 1000:
-##            total = total // 1000 * 1000
-##        if evacuated > 1000:
-##            evacuated = evacuated // 1000 * 1000
+        # Don't show digits less than a 1000
+        if total > 1000:
+            total = total // 1000 * 1000
+
+        # Count number and cumulative for each zone
+        cum = 0
+        pops = {}
+        cums = {}
+        for name in category_names:
+            pop = int(categories[name])
+
+            if pop > 1000:
+                pop = pop // 1000 * 1000
+
+            cum += pop
+            if cum > 1000:
+                cum = cum // 1000 * 1000
+
+            pops[name] = pop
+            cums[name] = cum
+
+        # Use final accumulation as total number needing evac
+        evacuated = cum
 
         # Calculate estimated needs based on BNPB Perka
         # 7/2008 minimum bantuan
@@ -169,11 +184,9 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                 header=True),
                       TableRow([tr('Category'), tr('Total'), tr('Cumulative')],
                                header=True)]
-        cum = 0
+
         for name in category_names:
-            pop = categories[name]
-            cum += pop
-            table_body.append(TableRow([name, int(pop), int(cum)]))
+            table_body.append(TableRow([name, pops[name], cums[name]]))
 
         table_body.extend([TableRow(tr('Map shows population affected in '
                                        'each of volcano hazard polygons.')),
@@ -193,7 +206,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                            tr('Total population %i in the viewable area')
                            % total,
                            tr('People need evacuation if they are within the '
-                             'volcanic hazard zones.')])
+                              'volcanic hazard zones.')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People affected by volcanic hazard zone')
 
