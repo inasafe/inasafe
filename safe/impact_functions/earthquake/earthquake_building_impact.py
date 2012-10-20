@@ -10,6 +10,10 @@ import logging
 
 LOGGER = logging.getLogger('InaSAFE')
 
+parameters = {'low_threshold': 6,
+              'mediom_threshold': 7,
+              'high_threshold': 8}
+
 
 class EarthquakeBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
@@ -32,9 +36,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         LOGGER.debug('Running earthquake building impact')
 
         # Thresholds for mmi breakdown
-        t0 = 6
-        t1 = 7
-        t2 = 8
+        t0 = self.parameters['low_threshold']
+        t1 = self.parameters['medium_threshold']
+        t2 = self.parameters['high_threshold']
 
         class_1 = tr('Low')
         class_2 = tr('Medium')
