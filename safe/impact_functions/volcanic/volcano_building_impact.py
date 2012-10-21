@@ -97,8 +97,6 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E)
 
-        P.write_to_file('/tmp/volcano_building_impact.shp')
-
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = H.get_data()
