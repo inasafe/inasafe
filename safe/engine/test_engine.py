@@ -563,10 +563,13 @@ class Test_Engine(unittest.TestCase):
         keywords = I.get_keywords()
 
         # Check for expected results:
-        for value in ['Merapi', 192055, 56514, 68568, 66971]:
+        #for value in ['Merapi', 192055, 56514, 68568, 66971]:
+        for value in ['Merapi', 190000, 56000, 66000, 68000]:
             x = str(value)
-            msg = 'Did not find expected value %s in summary' % x
-            assert str(x) in keywords['impact_summary'], msg
+            summary = keywords['impact_summary']
+            msg = ('Did not find expected value %s in summary %s'
+                   % (x, summary))
+            assert str(x) in summary, msg
 
         # FIXME (Ole): Should also have test for concentric circle
         #              evacuation zones
