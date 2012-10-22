@@ -60,6 +60,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getLegend.png',
+                           'getLegend-variantWindosVistaSP2-32.png',
                            'getLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -84,6 +85,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getVectorLegend.png',
+                           'getVectorLegend-variantWindosVistaSP2-32.png',
                            'getVectorLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -107,6 +109,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getRasterLegend.png',
+                           'getRasterLegend-variantWindosVistaSP2-32.png',
                            'getRasterLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -136,6 +139,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['addSymbolToLegend.png',
+                           'addSymbolToLegend-variantWindosVistaSP2-32.png',
                            'addSymbolToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -169,6 +173,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getClassToLegend.png',
+                           'getClassToLegend-variantWindosVistaSP2-32.png',
                            'getClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
