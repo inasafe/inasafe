@@ -879,7 +879,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocLayer = self.getPostprocLayer()
         try:
             myOrigKeywords = self.keywordIO.readKeywords(self.postprocLayer)
-        except (AttributeError, InvalidParameterException):
+        except AttributeError:
             myOrigKeywords = {}
 
         #check and generate keywords for the aggregation layer
