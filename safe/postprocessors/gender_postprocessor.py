@@ -93,6 +93,12 @@ class GenderPostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Total')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         try:
             myResult = self.population_total
             myResult = int(round(myResult))
@@ -114,6 +120,12 @@ class GenderPostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Female population')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.female_ratio
         try:
             myResult = int(round(myResult))
@@ -137,9 +149,14 @@ class GenderPostprocessor(AbstractPostprocessor):
         """
         myName = tr('Weekly hygiene packs')
         myMeta = {'description': 'Females hygiene packs for weekly use'}
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT, myMeta)
+            return
+
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-
         myResult = self.population_total * self.female_ratio * 0.7937 * (7 / 7)
         try:
             myResult = int(round(myResult))
@@ -167,6 +184,12 @@ class GenderPostprocessor(AbstractPostprocessor):
                          ' women')
         myMeta = {'description': 'Additional rice kg per week for pregnant and'
                                  ' lactating women'}
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT, myMeta)
+            return
+
         #weekly Kg rice =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         myLactKg = self.population_total * self.female_ratio * 2 * 0.033782
