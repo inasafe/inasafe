@@ -27,7 +27,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
     title = tr('Need evacuation')
     target_field = 'population'
 
-    parameters = dict(distances=[3000, 5000, 10000])
+    parameters = dict(distances=[3, 5, 10])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -72,16 +72,21 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
             centers = H.get_geometry()
             attributes = H.get_data()
-            H = make_circular_polygon(centers, radii, attributes=attributes)
+            rad_m = [x * 1000 for x in radii]  # Convert to meters
+            H = make_circular_polygon(centers,
+                                      rad_m,
+                                      attributes=attributes)
             #H.write_to_file('Evac_zones_%s.shp' % str(radii))  # To check
 
             category_title = 'Radius'
+            category_header = tr('Distance [km]')
             category_names = radii
 
             name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
         else:
             # Use hazard map
             category_title = 'KRB'
+            category_header = tr('Category')
 
             # FIXME (Ole): Change to English and use translation system
             category_names = ['Kawasan Rawan Bencana III',
@@ -150,7 +155,13 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         pops = {}
         cums = {}
         for name in category_names:
-            pop = int(categories[name])
+            if category_title == 'Radius':
+                key = name * 1000  # Convert to meters
+            else:
+                key = name
+
+            pop = int(categories[key])
+
 
             if pop > 1000:
                 pop = pop // 1000 * 1000
@@ -182,7 +193,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                       TableRow([tr('People needing evacuation'),
                                 '%i' % evacuated, blank_cell],
                                 header=True),
-                      TableRow([tr('Category'), tr('Total'), tr('Cumulative')],
+                      TableRow([category_header,
+                                tr('Total'), tr('Cumulative')],
                                header=True)]
 
         for name in category_names:
