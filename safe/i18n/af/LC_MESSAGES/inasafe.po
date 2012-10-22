@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-20 14:19+0700\n"
+"POT-Creation-Date: 2012-10-22 14:20+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
-#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:131
 msgid "Buildings"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:155
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:127
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:82
-#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:131
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:193
 #: safe/postprocessors/gender_postprocessor.py:95
@@ -176,7 +176,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:105
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:157
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
-#: safe/impact_functions/volcanic/volcano_building_impact.py:135
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 msgid "All"
 msgstr ""
 
@@ -473,6 +473,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:257
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:258
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:200
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:197
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:258
 msgid "Estimated buildings affected"
 msgstr ""
@@ -514,9 +515,10 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:104
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:117
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:39
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:45
 #: extras/retired_impact_functions/tsunami_building_impact.py:103
 #: extras/retired_impact_functions/tsunami_building_impact.py:130
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:45
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:42
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:104
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:117
 #: safe/impact_functions/styles.py:23 safe/impact_functions/styles.py:68
@@ -557,9 +559,10 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:103
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:119
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:40
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:46
 #: extras/retired_impact_functions/tsunami_building_impact.py:104
 #: extras/retired_impact_functions/tsunami_building_impact.py:131
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:46
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:43
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:103
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:119
 #: safe/impact_functions/styles.py:27
@@ -597,9 +600,10 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:102
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:121
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:41
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:47
 #: extras/retired_impact_functions/tsunami_building_impact.py:105
 #: extras/retired_impact_functions/tsunami_building_impact.py:132
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:47
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:44
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:102
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:121
 #: safe/impact_functions/styles.py:31 safe/impact_functions/styles.py:78
@@ -3264,15 +3268,16 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:189
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:192
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:205
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:169
 #: safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:140
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:194
-#: safe/impact_functions/earthquake/earthquake_building_impact.py:169
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:166
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:132
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
 #: safe/impact_functions/generic/categorised_hazard_population.py:119
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:234
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:147
-#: safe/impact_functions/volcanic/volcano_building_impact.py:148
+#: safe/impact_functions/volcanic/volcano_building_impact.py:146
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:205
 msgid "Notes"
 msgstr ""
@@ -3328,7 +3333,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:215
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:228
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:171
-#: safe/impact_functions/volcanic/volcano_building_impact.py:171
+#: safe/impact_functions/volcanic/volcano_building_impact.py:169
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:228
 msgid "0"
 msgstr ""
@@ -3349,7 +3354,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:174
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:230
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:174
-#: safe/impact_functions/volcanic/volcano_building_impact.py:173
+#: safe/impact_functions/volcanic/volcano_building_impact.py:171
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:230
 #, python-format
 msgid "%i - %i"
@@ -3593,36 +3598,36 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:169
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:170
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
-#: safe/impact_functions/volcanic/volcano_building_impact.py:133
+#: safe/impact_functions/volcanic/volcano_building_impact.py:131
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:185
 msgid "Cumulative"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:143
-#: safe/impact_functions/volcanic/volcano_building_impact.py:143
+#: safe/impact_functions/volcanic/volcano_building_impact.py:141
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:149
-#: safe/impact_functions/volcanic/volcano_building_impact.py:149
+#: safe/impact_functions/volcanic/volcano_building_impact.py:147
 #, python-format
 msgid "Total number of buildings %i in the viewable area"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:151
-#: safe/impact_functions/volcanic/volcano_building_impact.py:151
+#: safe/impact_functions/volcanic/volcano_building_impact.py:149
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:154
 #: safe/impact_functions/volcanic/volcano_building_impact.py:188
-#: safe/impact_functions/volcanic/volcano_building_impact.py:154
-#: safe/impact_functions/volcanic/volcano_building_impact.py:188
+#: safe/impact_functions/volcanic/volcano_building_impact.py:152
+#: safe/impact_functions/volcanic/volcano_building_impact.py:186
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:182
-#: safe/impact_functions/volcanic/volcano_building_impact.py:182
+#: safe/impact_functions/volcanic/volcano_building_impact.py:180
 msgid "Building Count"
 msgstr ""
 
@@ -3725,6 +3730,8 @@ msgstr ""
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:156
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:145
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:162
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:142
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:159
 msgid "Hazard Level"
 msgstr ""
 
@@ -3732,21 +3739,26 @@ msgstr ""
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:157
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:146
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:163
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:143
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:160
 msgid "Buildings Affected"
 msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:141
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:147
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:144
 msgid "Buildings value ($M)"
 msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:142
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:148
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:145
 msgid "Contents value ($M)"
 msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:164
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:170
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:167
 #, python-format
 msgid ""
 "High hazard is defined as shake levels greater than %i on the MMI scale."
@@ -3754,6 +3766,7 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:166
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:172
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:169
 #, python-format
 msgid ""
 "Medium hazard is defined as shake levels between %i and %i on the MMI scale."
@@ -3761,6 +3774,7 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:169
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:175
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:172
 #, python-format
 msgid ""
 "Low hazard is defined as shake levels between %i and %i on the MMI scale."
@@ -3768,11 +3782,13 @@ msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:173
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:179
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:176
 msgid "Values are in units of 1 million Australian Dollars"
 msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:178
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:184
+#: safe/impact_functions/earthquake/earthquake_building_impact.py:181
 msgid "Buildings affected"
 msgstr ""
 

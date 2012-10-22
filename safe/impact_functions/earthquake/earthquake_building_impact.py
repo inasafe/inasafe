@@ -28,9 +28,6 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                   'medium_threshold': 7,
                   'high_threshold': 8}
 
-
-
-
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
         """
