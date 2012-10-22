@@ -13,7 +13,7 @@ __copyright__ += 'Disaster Reduction'
 import logging
 
 from safe.common.exceptions import PostprocessorError
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import get_defaults
 
 from third_party.odict import OrderedDict
 
@@ -37,7 +37,7 @@ class AbstractPostprocessor():
     optional parameters
     """
 
-    NO_DATA_TEXT = tr('No data')
+    NO_DATA_TEXT = get_defaults('NO_DATA')
 
     def __init__(self):
         """
