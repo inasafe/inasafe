@@ -28,7 +28,7 @@ class FloodEvacuationFunction(FunctionProvider):
     title = tr('Need evacuation')
     defaults = get_defaults()
     parameters = {
-        'thresholds': [0.3, 0.5, 1.0],
+        'thresholds': [1.0],
         'postprocessors':
             {'Gender': {'on': True},
              'Age': {'on': True,
@@ -168,7 +168,13 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Override associated quantities in colour style
         for i in range(len(classes)):
+            if i == 0:
+                transparency = 100
+            else:
+                transparency = 0
+
             style_classes[i]['quantity'] = classes[i]
+            style_classes[i]['transparency'] = transparency
 
         # Title
         style_info['legend_title'] = tr('Population Density')

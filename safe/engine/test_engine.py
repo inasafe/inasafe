@@ -610,8 +610,8 @@ class Test_Engine(unittest.TestCase):
                                          E_clip.get_geotransform(),
                                          polygons)
 
-        print res_clip
-        print len(res_clip)
+        #print res_clip
+        #print len(res_clip)
 
         res_full = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
@@ -620,22 +620,22 @@ class Test_Engine(unittest.TestCase):
         assert len(res_clip) == len(res_full)
 
         for i in range(len(res_clip)):
-            print
+            #print
             x = res_clip[i][0]
             y = res_full[i][0]
 
-            print x
-            print y
+            #print x
+            #print y
             msg = ('Got len(x) == %i, len(y) == %i. Should be the same'
                    % (len(x), len(y)))
             assert len(x) == len(y), msg
 
             # Check that they are inside the respective polygon
             P = polygons[i]
-            idx = inside_polygon(x,
+            idx = inside_polygon(x,  # pylint: disable=W0612
                                  P.outer_ring,
                                  holes=P.inner_rings)
-            print idx
+            #print idx
 
             msg = ('Expected point locations to be the same in clipped '
                    'and full grids, Got %s and %s' % (x, y))

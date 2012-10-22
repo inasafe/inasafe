@@ -46,6 +46,8 @@ class MapLegend():
         # how high each row of the legend should be
         self.legendIncrement = 30
         self.keywordIO = KeywordIO()
+        self.legendFontSize = 16
+        self.legendWidth = 500
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -161,7 +163,7 @@ class MapLegend():
             myShader = self.layer.rasterShader().rasterShaderFunction()
             myRampItems = myShader.colorRampItemList()
             myLastValue = 0  # Making an assumption here...
-            print 'Source: %s' % self.layer.source()
+            LOGGER.debug('Source: %s' % self.layer.source())
             for myItem in myRampItems:
                 myValue = myItem.value
                 myLabel = myItem.label
@@ -255,11 +257,10 @@ class MapLegend():
                                          mySquareSize, mySquareSize))
         myPainter.setPen(QtGui.QColor(0, 0, 0))  # outline colour
         myLabelX = myLeftIndent + mySquareSize + 10
-        myFontSize = 8
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = False
         myFont = QtGui.QFont('verdana',
-                             myFontSize,
+                             self.legendFontSize,
                              myFontWeight,
                              myItalicsFlag)
         myPainter.setFont(myFont)
@@ -284,10 +285,11 @@ class MapLegend():
         """
         LOGGER.debug('InaSAFE Map Legend extendLegend called')
         if self.legendImage is None:
-            self.legendImage = QtGui.QPixmap(300, 80)
+
+            self.legendImage = QtGui.QPixmap(self.legendWidth, 80)
             self.legendImage.fill(QtGui.QColor(255, 255, 255))
             myPainter = QtGui.QPainter(self.legendImage)
-            myFontSize = 12
+            myFontSize = 16
             myFontWeight = QtGui.QFont.Bold
             myItalicsFlag = False
             myFont = QtGui.QFont('verdana',
@@ -298,7 +300,8 @@ class MapLegend():
             myPainter.drawText(10, 25, self.tr('Legend'))
         else:
             # extend the existing legend down for the next class
-            myPixmap = QtGui.QPixmap(300, self.legendImage.height() +
+            myPixmap = QtGui.QPixmap(self.legendWidth,
+                                     self.legendImage.height() +
                                           self.legendIncrement)
             myPixmap.fill(QtGui.QColor(255, 255, 255))
             myPainter = QtGui.QPainter(myPixmap)
