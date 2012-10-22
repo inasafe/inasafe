@@ -344,13 +344,15 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_getDefaults(self):
         myExpectedDefaults = {
-            'FEM_RATIO': 0.50,
             'FEM_RATIO_KEY': 'female ratio default',
-            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
-            'AGGR_ATTR_KEY': 'aggregation attribute',
             'YOUTH_RATIO': 0.263,
-            'ELDER_RATIO': 0.079,
-            'ADULT_RATIO': 0.659}
+            'ELDER_RATIO': 0.078,
+            'NO_DATA': 'No data',
+            'FEM_RATIO': 0.5,
+            'AGGR_ATTR_KEY': 'aggregation attribute',
+            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
+            'ADULT_RATIO': 0.659
+        }
         myDefaults = getDefaults()
         myMessage = 'Defaults: got %s, expected %s' % (
             myDefaults, myExpectedDefaults)
