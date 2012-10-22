@@ -882,6 +882,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except AttributeError:
             myOrigKeywords = {}
         except InvalidParameterException:
+            #no kw file has ben found for postprocLayer. create an empty one
             myOrigKeywords = {}
             self.keywordIO.writeKeywords(self.postprocLayer, myOrigKeywords)
 
