@@ -879,7 +879,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocLayer = self.getPostprocLayer()
         try:
             myOrigKeywords = self.keywordIO.readKeywords(self.postprocLayer)
-        except AttributeError:
+        except (AttributeError, InvalidParameterException):
             myOrigKeywords = {}
 
         #check and generate keywords for the aggregation layer
@@ -1164,8 +1164,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         for proc, resList in self.postprocOutput.iteritems():
             #sorting
             try:
+                #[1]['Total']['value']
+                #r
+                LOGGER.debug(resList)
+                LOGGER.debug(proc)
                 resList = sorted(resList, key=lambda d: (
-                    -d[1]['Total']['value']))
+                    -1 if d[1]['Total']['value'] == self.defaults['NO_DATA']
+                    else d[1]['Total']['value']), reverse=True)
             except KeyError:
                 LOGGER.debug('Skipping sorting as the postprocessor did not '
                              'have a "Total" field')

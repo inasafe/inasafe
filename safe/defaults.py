@@ -20,6 +20,7 @@ __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from safe.common.utilities import ugettext as tr
 
 DEFAULTS = dict()
 
@@ -45,3 +46,4 @@ DEFAULTS['ELDER_RATIO'] = 0.078
 DEFAULTS['FEM_RATIO_ATTR_KEY'] = 'female ratio attribute'
 DEFAULTS['FEM_RATIO_KEY'] = 'female ratio default'
 DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'
+DEFAULTS['NO_DATA'] = tr('No data')
