@@ -34,7 +34,6 @@ do
     PYFILES=$(egrep -r "ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
     echo 'Scanning $PYFILE for new strings'
     #echo
-    echo $PYFILES
     echo $PODIR
     echo $POPATH
     # double brackets deal gracefully if path has spaces
