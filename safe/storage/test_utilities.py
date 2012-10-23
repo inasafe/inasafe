@@ -3,7 +3,6 @@
 from safe.common.utilities import temp_dir, unique_filename
 
 __author__ = 'Tim Sutton <tim@linfiniti.com>'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '21/08/2012'
 __license__ = "GPL"
