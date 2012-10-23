@@ -23,10 +23,10 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
         * x: 1D array of x-coordinates on which to interpolate
         * z: 1D array of values for each x
         * points: 1D array of coordinates where interpolated values are sought
-        * mode: Determines the interpolation order. Options are
-                'constant' - piecewise constant nearest neighbour interpolation
-                'linear' - bilinear interpolation using the two
-                           nearest neighbours (default)
+        * mode: Determines the interpolation order. Options are:
+            * 'constant' - piecewise constant nearest neighbour interpolation
+            * 'linear' - bilinear interpolation using the two nearest \
+              neighbours (default)
         * bounds_error: Boolean flag. If True (default) an exception will
                         be raised when interpolated values are requested
                         outside the domain of the input data. If False, nan
