@@ -2,6 +2,16 @@
 ==========
 Whats new?
 ==========
+Changelog for version 1.0
+---------------------------
+
+* Added post processor infrastructure including gender and age specific indicators
+* Added data source attribution
+* Various GUI updates
+* Added use of transparency in generated maps
+* Added an earthquake impact function
+* Documentation updates
+
 Changelog for version 0.5.1
 ---------------------------
 
