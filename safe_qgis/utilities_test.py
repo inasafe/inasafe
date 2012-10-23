@@ -312,15 +312,17 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
     if (myControlImage.width() != myTestImage.width()
         or myControlImage.height() != myTestImage.height()):
         myMessage = ('Control and test images are different sizes.\n'
-                     'Control image   : %s\n'
-                     'Test image      : %s\n'
-                     'Difference image: %s\n'
+                     'Control image   : %s (%i x %i)\n'
+                     'Test image      : %s (%i x %i)\n'
                      'If this test has failed look at the above images '
                      'to try to determine what may have change or '
                      'adjust the tolerance if needed.' %
-                     (theTolerance,
-                      theControlImagePath,
-                      theTestImagePath))
+                     (theControlImagePath,
+                      myControlImage.width(),
+                      myControlImage.height(),
+                      theTestImagePath,
+                      myTestImage.width(),
+                      myTestImage.height()))
         return False, myMessage
 
     myImageWidth = myControlImage.width()
