@@ -33,7 +33,7 @@ def name():
 
 def author():
     """Author name."""
-    return 'Australia Indonesia Facility for Disaster Reduction'
+    return 'BNPB, AusAID and the World Bank'
 
 
 def email():
