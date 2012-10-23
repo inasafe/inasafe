@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -26,7 +25,7 @@ from PyQt4.QtCore import pyqtSignature
 
 from third_party.odict import OrderedDict
 
-from safe_qgis.safe_interface import InaSAFEError
+from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
@@ -66,7 +65,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-            'InaSAFE %s Keywords Editor' % __version__))
+            'InaSAFE %1 Keywords Editor').arg(get_version()))
         self.keywordIO = KeywordIO()
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
