@@ -1001,6 +1001,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                    context=myMessage)
             self.displayHtml(myMessage)
             return
+        except NoFeaturesInExtentException e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred because there are no '
+                                'features visible in the current view. Try '
+                                'zooming out or panning until some features '
+                                'become visible.')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+
         try:
             self.runner = self.calculator.getRunner()
         except InsufficientParametersException, e:
