@@ -138,13 +138,13 @@ class Point:
         return AZ
 
     def generate_circle(self, radius, resolution=1):
-        """Make circle about this point
+        """Make a circle about this point.
 
         Args:
-            radius: The desired cirle radius [m]
-            resolution (optional): Radial distance (degrees) between
-                points on circle. Default is 1 making the circle consist
-                of 360 points
+            * radius: The desired cirle radius [m]
+            * resolution (optional): Radial distance (degrees) between
+              points on circle. Default is 1 making the circle consist
+              of 360 points
         Returns:
             list of lon, lat coordinates defining the circle
 

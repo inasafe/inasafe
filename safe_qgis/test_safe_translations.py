@@ -73,6 +73,19 @@ class SafeTranslationsTest(unittest.TestCase):
         msg = 'expected %s but got %s' % (expected_title, real_title)
         assert expected_title == real_title, msg
 
+    def testImpactSummaryWords(self):
+        """Test specific words from impact summary info shown in doc see #348.
+        """
+        os.environ['LANG'] = 'id'
+        myPhraseList = []
+        myMessage = 'Specific words checked for translation:\n'
+        for myPhrase in myPhraseList:
+            if myPhrase == safeTr(myPhrase):
+                myMessage += 'FAIL: %s' % myPhrase
+            else:
+                myMessage += 'PASS: %s' % myPhrase
+        self.assertNotIn('FAIL', myMessage, myMessage)
+
     def testAllDynamicTranslatons(self):
         """Test all the phrases defined in dynamic_translations translate."""
         myParentPath = os.path.join(__file__, os.path.pardir, os.path.pardir)
