@@ -140,5 +140,6 @@ def dynamic_translations():
     tr('fire station')
 
     # impact function parameters
-    tr('thresholds')
-    tr('postprocessors')
+    # FIXME (Sunni) It's better to be updated dynamically
+    tr('Thresholds')
+    tr('Postprocessors')

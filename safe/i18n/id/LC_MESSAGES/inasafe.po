@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-23 16:46+0700\n"
+"POT-Creation-Date: 2012-10-23 16:52+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1443,10 +1443,16 @@ msgstr "Bangunan-bangunan penting"
 msgid "Essential Buildings"
 msgstr "Bangunan-bangunan penting"
 
-#: safe/common/dynamic_translations.py:143
 msgid "thresholds"
 msgstr "ambang batas"
 
-#: safe/common/dynamic_translations.py:144
 msgid "postprocessors"
 msgstr "pasca pemrosesan"
+
+#: safe/common/dynamic_translations.py:144
+msgid "Thresholds"
+msgstr "Ambang batas"
+
+#: safe/common/dynamic_translations.py:145
+msgid "Postprocessors"
+msgstr "Pasca pemrosesan"
