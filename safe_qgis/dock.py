@@ -1166,15 +1166,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHTML = ''
         for proc, resList in self.postprocOutput.iteritems():
-            #sorting
+            #sorting using the first indicator of a postprocessor
+            myFirstKey = resList[0][1].keyAt(0)
             try:
-                #[1]['Total']['value']
-                #r
-                LOGGER.debug(resList)
-                LOGGER.debug(proc)
+            # [1]['Total']['value']
+            # resList is for example:
+            # [
+            #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
+            #        (u'Total', {'value': 977536, 'metadata': {}}),
+            #        (u'Female population', {'value': 508319, 'metadata': {}}),
+            #        (u'Weekly hygiene packs', {'value': 403453, 'metadata': {
+            #         'description': 'Females hygiene packs for weekly use'}})
+            #    ]))
+            #]
                 resList = sorted(resList, key=lambda d: (
-                    -1 if d[1]['Total']['value'] == self.defaults['NO_DATA']
-                    else d[1]['Total']['value']), reverse=True)
+                    # return -1 if the postprocessor returns NO_DATA to put at
+                    # the end of the list
+                    # d[1] is the orderedDict
+                    # d[1][myFirstKey] is the 1st indicator in the orderedDict
+                    -1 if d[1][myFirstKey]['value'] == self.defaults['NO_DATA']
+                    else d[1][myFirstKey]['value']), reverse=True)
             except KeyError:
                 LOGGER.debug('Skipping sorting as the postprocessor did not '
                              'have a "Total" field')
