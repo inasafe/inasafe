@@ -73,7 +73,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "is_safe_interface"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 

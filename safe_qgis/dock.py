@@ -881,6 +881,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myOrigKeywords = self.keywordIO.readKeywords(self.postprocLayer)
         except AttributeError:
             myOrigKeywords = {}
+        except InvalidParameterException:
+            #no kw file has ben found for postprocLayer. create an empty one
+            myOrigKeywords = {}
+            self.keywordIO.writeKeywords(self.postprocLayer, myOrigKeywords)
 
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
@@ -1162,10 +1166,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHTML = ''
         for proc, resList in self.postprocOutput.iteritems():
-            #sorting
+            #sorting using the first indicator of a postprocessor
+            myFirstKey = resList[0][1].keyAt(0)
             try:
-                resList = sorted(resList, key=lambda d: (
-                    -d[1]['Total']['value']))
+            # [1]['Total']['value']
+            # resList is for example:
+            # [
+            #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
+            #        (u'Total', {'value': 977536, 'metadata': {}}),
+            #        (u'Female population', {'value': 508319, 'metadata': {}}),
+            #        (u'Weekly hygiene packs', {'value': 403453, 'metadata': {
+            #         'description': 'Females hygiene packs for weekly use'}})
+            #    ]))
+            #]
+                myEndOfList = -1
+                resList = sorted(
+                    resList,
+                    key=lambda d: (
+                    # return -1 if the postprocessor returns NO_DATA to put at
+                    # the end of the list
+                    # d[1] is the orderedDict
+                    # d[1][myFirstKey] is the 1st indicator in the orderedDict
+                        myEndOfList if d[1][myFirstKey]['value'] ==
+                                       self.defaults['NO_DATA']
+                        else d[1][myFirstKey]['value']),
+                    reverse=True)
             except KeyError:
                 LOGGER.debug('Skipping sorting as the postprocessor did not '
                              'have a "Total" field')

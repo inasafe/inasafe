@@ -19,7 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 from PyQt4 import (QtGui, QtCore)
-from safe_interface import tr
 
 
 class Help(QtGui.QDialog):
@@ -65,8 +64,8 @@ class Help(QtGui.QDialog):
                 myPath = myContextPath
 
         if not os.path.isfile(myPath):
-            QtGui.QMessageBox.warning(self.parent, tr('InaSAFE'),
-            (tr('Documentation could not be found at:\n'
+            QtGui.QMessageBox.warning(self.parent, self.tr('InaSAFE'),
+            (self.tr('Documentation could not be found at:\n'
                       '%s' % myPath)))
         else:
             myUrl = QtCore.QUrl('file:///' + myPath)

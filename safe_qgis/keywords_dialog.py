@@ -20,6 +20,7 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
@@ -36,6 +37,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
@@ -139,6 +142,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
 
     def togglePostprocessingWidgets(self):
+        LOGGER.debug('togglePostprocessingWidgets')
         isPostprocessingOn = self.radPostprocessing.isChecked()
         self.cboSubcategory.setVisible(not isPostprocessingOn)
         self.lblSubcategory.setVisible(not isPostprocessingOn)
@@ -264,7 +268,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.pbnAdvanced.setText(self.tr('Show advanced editor'))
         self.grpAdvanced.setVisible(theFlag)
-        self.adjustSize()
+        self.resizeDialog()
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -743,6 +747,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             else:
                 self.setSubcategoryList(self.standardHazardList,
                                         self.tr('Not Set'))
+
+        self.resizeDialog()
+
+    def resizeDialog(self):
+        QtCore.QCoreApplication.processEvents()
+        LOGGER.debug('adjust ing dialog size')
         self.adjustSize()
 
     # prevents actions being handled twice
