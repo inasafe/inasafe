@@ -162,7 +162,6 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
             pop = int(categories[key])
 
-
             if pop > 1000:
                 pop = pop // 1000 * 1000
 
