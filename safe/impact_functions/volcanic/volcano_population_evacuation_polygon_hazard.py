@@ -2,6 +2,7 @@ import numpy
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
+from safe.impact_functions.core import format_int
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
@@ -177,11 +178,12 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         # Calculate estimated needs based on BNPB Perka
         # 7/2008 minimum bantuan
-        rice = evacuated * 2.8
-        drinking_water = evacuated * 17.5
-        water = evacuated * 67
-        family_kits = evacuated / 5
-        toilets = evacuated / 20
+        # FIXME (Ole): Refactor into one function to be shared
+        rice = int(evacuated * 2.8)
+        drinking_water = int(evacuated * 17.5)
+        water = int(evacuated * 67)
+        family_kits = int(evacuated / 5)
+        toilets = int(evacuated / 20)
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -190,32 +192,38 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                 '%s' % volcano_names, blank_cell],
                                header=True),
                       TableRow([tr('People needing evacuation'),
-                                '%i' % evacuated, blank_cell],
+                                '%s' % format_int(evacuated),
+                                blank_cell],
                                 header=True),
                       TableRow([category_header,
                                 tr('Total'), tr('Cumulative')],
                                header=True)]
 
         for name in category_names:
-            table_body.append(TableRow([name, pops[name], cums[name]]))
+            table_body.append(TableRow([name,
+                                        format_int(pops[name]),
+                                        format_int(cums[name])]))
 
         table_body.extend([TableRow(tr('Map shows population affected in '
                                        'each of volcano hazard polygons.')),
                            TableRow([tr('Needs per week'), tr('Total'),
                                      blank_cell],
                                     header=True),
-                           [tr('Rice [kg]'), int(rice), blank_cell],
-                           [tr('Drinking Water [l]'), int(drinking_water),
-                           blank_cell],
-                           [tr('Clean Water [l]'), int(water), blank_cell],
-                           [tr('Family Kits'), int(family_kits), blank_cell],
-                           [tr('Toilets'), int(toilets), blank_cell]])
+                           [tr('Rice [kg]'), format_int(rice), blank_cell],
+                           [tr('Drinking Water [l]'),
+                            format_int(drinking_water), blank_cell],
+                           [tr('Clean Water [l]'), format_int(water),
+                            blank_cell],
+                           [tr('Family Kits'), format_int(family_kits),
+                            blank_cell],
+                           [tr('Toilets'), format_int(toilets),
+                            blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population %i in the viewable area')
-                           % total,
+                           tr('Total population %s in the viewable area')
+                           % format_int(total),
                            tr('People need evacuation if they are within the '
                               'volcanic hazard zones.')])
         impact_summary = Table(table_body).toNewlineFreeString()
