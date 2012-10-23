@@ -47,7 +47,7 @@ class MapLegend():
         self.legendIncrement = 30
         self.keywordIO = KeywordIO()
         self.legendFontSize = 16
-        self.legendWidth = 500
+        self.legendWidth = 900
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
