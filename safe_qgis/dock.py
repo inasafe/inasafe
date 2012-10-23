@@ -1179,13 +1179,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #         'description': 'Females hygiene packs for weekly use'}})
             #    ]))
             #]
-                resList = sorted(resList, key=lambda d: (
+                myEndOfList = -1
+                resList = sorted(
+                    resList,
+                    key=lambda d: (
                     # return -1 if the postprocessor returns NO_DATA to put at
                     # the end of the list
                     # d[1] is the orderedDict
                     # d[1][myFirstKey] is the 1st indicator in the orderedDict
-                    -1 if d[1][myFirstKey]['value'] == self.defaults['NO_DATA']
-                    else d[1][myFirstKey]['value']), reverse=True)
+                        myEndOfList if d[1][myFirstKey]['value'] ==
+                                       self.defaults['NO_DATA']
+                        else d[1][myFirstKey]['value']),
+                    reverse=True)
             except KeyError:
                 LOGGER.debug('Skipping sorting as the postprocessor did not '
                              'have a "Total" field')
