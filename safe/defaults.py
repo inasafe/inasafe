@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '05/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
