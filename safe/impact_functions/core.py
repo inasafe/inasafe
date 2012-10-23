@@ -794,5 +794,3 @@ def format_int(x):
         s = s.replace(',', '.')
 
     return s
-
-
