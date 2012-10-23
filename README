@@ -17,11 +17,11 @@ for impact modelling.
 Quick Installation Guide
 ========================
 
-To install the |project_name|, use the plugin manager in QGIS::
+To install the InaSAFE plugin, use the plugin manager in `QGIS <http://qgis.org>`_::
 
   Plugins -> Fetch Python Plugins
 
-Then search for '|project_name|', select it and click the install button.
+Then search for 'InaSAFE', select it and click the install button.
 The plugin will now be added to your plugins menu.
 
 
@@ -29,7 +29,7 @@ System Requirements
 -------------------
 
  - A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X
- - The Open Source Geographic Information System QGIS (http://www.qgis.org).
+ - The QGIS Open Source Geographic Information System (http://www.qgis.org).
    InaSAFE requires QGIS version 1.7 or newer.
 
 Limitations
@@ -40,9 +40,9 @@ earnest in January 2012 and there is still much to be done.  However,
 we work on the philosophy that stakeholders should have access to the
 development and source code from the very beginning and invite
 comments, suggestions and contributions.  See
-https://github.com/AIFDR/inasafe/issues/milestones and
-https://github.com/AIFDR/inasafe/issues?page=1&state=open for known
-bugs and outstanding tasks.
+`our milestones list <https://github.com/AIFDR/inasafe/issues/milestones>`_ and
+`our open issues list <https://github.com/AIFDR/inasafe/issues?page=1&state=open>`_ 
+for known bugs and outstanding tasks.
 
 
 License
@@ -52,7 +52,7 @@ InaSAFE is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License version 3 (GPLv3) as
 published by the Free Software Foundation.
 
-The full GNU General Public License is available in LICENSE.TXT or
+The full GNU General Public License is available in LICENSE.txt or
 http://www.gnu.org/licenses/gpl.html
 
 
