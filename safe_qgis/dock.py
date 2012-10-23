@@ -71,7 +71,9 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientOverlapException,
                                   InvalidParameterException,
                                   InsufficientParametersException,
-                                  HashNotFoundException, CallGDALError)
+                                  HashNotFoundException,
+                                  CallGDALError,
+                                  NoFeaturesInExtentException)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
@@ -1001,7 +1003,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                    context=myMessage)
             self.displayHtml(myMessage)
             return
-        except NoFeaturesInExtentException e:
+        except NoFeaturesInExtentException, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An error occurred because there are no '
