@@ -409,7 +409,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    return QCoreApplication.translate('Utilities', theText)
+    return QCoreApplication.translate('@default', theText)
 
 
 def getExceptionWithStacktrace(e, html=False, context=None):

@@ -58,7 +58,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "ClipperTest"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 
