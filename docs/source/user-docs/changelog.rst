@@ -2,6 +2,14 @@
 ==========
 Whats new?
 ==========
+
+
+Changelog for version 1.0.1
+---------------------------
+
+* Fix https://github.com/AIFDR/inasafe/issues/374
+* Fix https://github.com/AIFDR/inasafe/issues/375
+
 Changelog for version 1.0.0
 ---------------------------
 
