@@ -31,9 +31,10 @@ do
     echo "Newest python file is newer than po file so updating strings"
     # Keep the current field separator
     oIFS=$IFS
-    PYFILES=$(egrep -r "import ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
+    PYFILES=$(egrep -r "ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
     echo 'Scanning $PYFILE for new strings'
     #echo
+    echo $PYFILES
     echo $PODIR
     echo $POPATH
     # double brackets deal gracefully if path has spaces

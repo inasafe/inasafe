@@ -109,7 +109,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Generate impact report for the pdf map
         table_body = [question,
-                      TableRow([tr('People needing evacuation'),
+                      TableRow([tr('People in %.1f m of water') % thresholds[-1],
                                 '%i' % evacuated],
                                header=True),
                       TableRow(tr('Map shows population density needing '
