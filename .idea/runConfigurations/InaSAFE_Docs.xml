@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="InaSAFE Docs" type="docs" factoryName="Sphinx task">
+  <configuration default="false" name="InaSAFE Docs" type="docs" factoryName="Sphinx task" editBeforeRun="true">
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs />
@@ -9,7 +9,7 @@
     <module name="inasafe-dev" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="docutils_input_file" value="docs/source" />
-    <option name="docutils_output_file" value="docs/_build" />
+    <option name="docutils_output_file" value="docs/build" />
     <option name="docutils_params" value="" />
     <option name="docutils_task" value="html" />
     <option name="docutils_open_in_browser" value="false" />
