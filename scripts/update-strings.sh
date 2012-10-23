@@ -40,12 +40,14 @@ do
     if [[ ! -f $POPATH ]]
     then
       mkdir -p $PODIR
-      xgettext -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR} --no-location
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
     else
       # Update translation file. Options:
       # -a all strings
       # -j update mode
       # -k specify alias marking strings for translation
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR} --no-location
       xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
     fi
 
