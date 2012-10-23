@@ -28,6 +28,7 @@ from safe.common.utilities import VerificationError, unique_filename
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
+from safe.impact_functions.core import format_int
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
@@ -240,8 +241,9 @@ class Test_Engine(unittest.TestCase):
         assert all_numbers == 40871, msg
 
         x = int(round(float(all_numbers) / 1000)) * 1000
-        msg = 'Did not find expected fatality value %i in summary' % x
-        assert str(x) in keywords['impact_summary'], msg
+        msg = ('Did not find expected fatality value %i in summary %s'
+               % (x, keywords['impact_summary']))
+        assert format_int(x) in keywords['impact_summary'], msg
 
     def test_ITB_earthquake_fatality_estimation_org(self):
         """Fatalities from ground shaking can be computed correctly
@@ -565,11 +567,14 @@ class Test_Engine(unittest.TestCase):
         # Check for expected results:
         #for value in ['Merapi', 192055, 56514, 68568, 66971]:
         for value in ['Merapi', 190000, 56000, 66000, 68000]:
-            x = str(value)
+            if isinstance(value, int):
+                x = format_int(value)
+            else:
+                x = value
             summary = keywords['impact_summary']
             msg = ('Did not find expected value %s in summary %s'
                    % (x, summary))
-            assert str(x) in summary, msg
+            assert x in summary, msg
 
         # FIXME (Ole): Should also have test for concentric circle
         #              evacuation zones
