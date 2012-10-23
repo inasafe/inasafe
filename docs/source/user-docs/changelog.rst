@@ -2,7 +2,7 @@
 ==========
 Whats new?
 ==========
-Changelog for version 1.0
+Changelog for version 1.0.0
 ---------------------------
 
 * Added post processor infrastructure including gender and age specific indicators
@@ -11,6 +11,14 @@ Changelog for version 1.0
 * Added use of transparency in generated maps
 * Added an earthquake impact function
 * Documentation updates
+* Many bugfixes and architectural improvements
+* Better internationalisation support
+
+Changelog for version 0.5.2
+---------------------------
+
+* This is a bugfix update to address some minor translation issues in the
+  InaSAFE package.
 
 Changelog for version 0.5.1
 ---------------------------
