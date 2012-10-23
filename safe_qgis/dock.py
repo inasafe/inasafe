@@ -73,7 +73,8 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException,
                                   CallGDALError,
-                                  NoFeaturesInExtentException)
+                                  NoFeaturesInExtentException,
+                                  InvalidProjectionException)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
@@ -1010,6 +1011,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'features visible in the current view. Try '
                                 'zooming out or panning until some features '
                                 'become visible.')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+        except InvalidProjectionException, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred because you are using a '
+                                'layer containing density data (e.g. '
+                                'population density) which will not scale '
+                                'accurately if we re-project it from its '
+                                'native coordinate reference system to'
+                                'WGS84/GeoGraphic.')
             myMessage = getExceptionWithStacktrace(e,
                                                    html=True,
                                                    context=myMessage)
