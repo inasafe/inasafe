@@ -25,12 +25,12 @@ status=final
 # changelog=
 
 # tags are comma separated with spaces allowed
-tags=risk disaster flood
+tags=contingency planning, impact assessments, disaster scenarios, natural hazards
 
 homepage=http://www.inasafe.org/
 tracker=https://github.com/AIFDR/inasafe/issues
 repository=https://github.com/AIFDR/inasafe
-icon=safe_qgis/resources/img/icon.png
+icon=icon.png
 # experimental flag
 experimental=True
 
@@ -38,5 +38,5 @@ experimental=True
 deprecated=False
 
 # Author contact information
-author=Australia Indonesia Facility for Disaster Reduction
+author=BNPB, AusAID and the World Bank
 email=ole.moller.nielsen@gmail.com

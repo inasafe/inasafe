@@ -33,7 +33,7 @@ def name():
 
 def author():
     """Author name."""
-    return 'Australia Indonesia Facility for Disaster Reduction'
+    return 'BNPB, AusAID and the World Bank'
 
 
 def email():
@@ -49,7 +49,7 @@ def description():
 
 def version():
     """Version of the plugin."""
-    return 'Version 1.0.0'
+    return 'Version 1.0.1'
 
 
 def qgisMinimumVersion():

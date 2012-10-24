@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -409,7 +408,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    return QCoreApplication.translate('Utilities', theText)
+    return QCoreApplication.translate('@default', theText)
 
 
 def getExceptionWithStacktrace(e, html=False, context=None):

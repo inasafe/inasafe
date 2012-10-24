@@ -31,7 +31,7 @@ do
     echo "Newest python file is newer than po file so updating strings"
     # Keep the current field separator
     oIFS=$IFS
-    PYFILES=$(egrep -r "import ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
+    PYFILES=$(egrep -r "ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
     echo 'Scanning $PYFILE for new strings'
     #echo
     echo $PODIR
@@ -40,12 +40,14 @@ do
     if [[ ! -f $POPATH ]]
     then
       mkdir -p $PODIR
-      xgettext -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR} --no-location
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
     else
       # Update translation file. Options:
       # -a all strings
       # -j update mode
       # -k specify alias marking strings for translation
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR} --no-location
       xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
     fi
 

@@ -109,6 +109,12 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Total')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total
         try:
             myResult = int(round(myResult))
@@ -130,6 +136,12 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Youth count')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.youth_ratio
         try:
             myResult = int(round(myResult))
@@ -151,6 +163,12 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Adult count')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.adult_ratio
         try:
             myResult = int(round(myResult))
@@ -172,6 +190,12 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Elderly count')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.elder_ratio
         try:
             myResult = int(round(myResult))

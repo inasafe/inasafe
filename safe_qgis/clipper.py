@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -58,7 +57,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "ClipperTest"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 

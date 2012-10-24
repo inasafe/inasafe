@@ -822,6 +822,25 @@ class OrderedDict(dict):
         """
         return self._sequence.index(key)
 
+    def keyAt(self, index):
+        """
+        Return the key of the specified position in the OrderedDict.
+
+        >>> d = OrderedDict(((1, 3), (3, 2), (2, 1)))
+        >>> d.keyAt(1)
+        3
+        >>> d.keyAt(3)
+        Traceback (most recent call last):
+        IndexError: keyAt(): index 3 not valid
+        """
+        if not self._sequence:
+            raise KeyError('keyAt(): dictionary is empty')
+        try:
+            key = self._sequence[index]
+        except IndexError:
+            raise IndexError('keyAt(): index %s not valid' % index)
+        return key
+
     def insert(self, index, key, value):
         """
         Takes ``index``, ``key``, and ``value`` as arguments.

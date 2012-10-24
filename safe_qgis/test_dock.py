@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -35,7 +34,8 @@ from qgis.core import (QgsRasterLayer,
                        QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
-
+# TODO: get this via api
+from safe.impact_functions.core import format_int
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 
 from safe_qgis.utilities_test import (getQgisTestApp,
@@ -890,7 +890,7 @@ class DockTest(unittest.TestCase):
         myMessage = 'Result not as expected: %s' % myResult
 
         # Check numbers are OK (within expected errors from resampling)
-        assert '10484' in myResult, myMessage
+        assert format_int(10484) in myResult, myMessage
         assert '977' in myResult, myMessage  # These are expected impact number
 
     def test_runFloodPopulationPolygonHazardImpactFunction(self):

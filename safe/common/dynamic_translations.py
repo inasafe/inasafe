@@ -97,6 +97,8 @@ def dynamic_translations():
     tr('Structures in Jakarta')
     tr('Buildings')
     tr('Buildings in Jakarta')
+    tr('Essential buildings')
+    tr('Essential Buildings')
     tr('OSM buildings')
     tr('AIBEP schools')
     # Perkiraan penduduk
@@ -136,3 +138,8 @@ def dynamic_translations():
     tr('public building')
     tr('other')
     tr('fire station')
+
+    # impact function parameters
+    # FIXME (Sunni) It's better to be updated dynamically
+    tr('Thresholds')
+    tr('Postprocessors')

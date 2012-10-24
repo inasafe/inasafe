@@ -15,7 +15,6 @@
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
 __license__ = "GPL"
@@ -1254,27 +1253,28 @@ def intersection(line0, line1):
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
 def clip_grid_by_polygons(A, geotransform, polygons):
-    """Clip raster grid by polygon
+    """Clip raster grid by polygon.
 
-    Input
-        A: MxN array of grid points
-        geotransform: 6-tuple used to locate A geographically
-                      (top left x, w-e pixel resolution, rotation,
-                       top left y, rotation, n-s pixel resolution)
-        polygons: list of polygon geometry objects or list of polygon arrays
+    Args:
+        * A: MxN array of grid points
+        * geotransform: 6-tuple used to locate A geographically
+            (top left x, w-e pixel resolution, rotation,
+            top left y, rotation, n-s pixel resolution)
+        * polygons: list of polygon geometry objects or list of polygon arrays
 
-    Output
+    Returns:
         points_covered: List of (points, values) - one per input polygon.
 
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
 
-    Note: Grid points are considered to be pixel-registered which means
-          that each point represents the center of its grid cell.
-          The required half cell shifts are taken care of by the
-          function geotransform2axes
+    .. note:: Grid points are considered to be pixel-registered which means
+        that each point represents the center of its grid cell.
+        The required half cell shifts are taken care of by the
+        function :func:`geotransform2axes`.
 
-          If multiple polygons overlap, the one first encountered will be used
+        If multiple polygons overlap, the one first encountered will be used.
+
     """
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
@@ -1317,23 +1317,24 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
     """Clip multiple lines by multiple polygons
 
     Args:
-        lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
-               where pi and qi are point coordinates (x, y).
-        polygons: list of polygons, each an array of vertices
-        closed: optional parameter to determine whether lines that fall on
-                an polygon boundary should be considered to be inside
-                (closed=True), outside (closed=False) or
-                undetermined (closed=None). The latter case will speed the
-                algorithm up but lines on boundaries may or may not be
-                deemed to fall inside the polygon and so will be
-                indeterministic
+        * lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+            where pi and qi are point coordinates (x, y).
+        * polygons: list of polygons, each an array of vertices
+        * closed: optional parameter to determine whether lines that fall on
+            an polygon boundary should be considered to be inside
+            (closed=True), outside (closed=False) or
+            undetermined (closed=None). The latter case will speed the
+            algorithm up but lines on boundaries may or may not be
+            deemed to fall inside the polygon and so will be
+            indeterministic.
 
     Returns:
-        lines_covered: List of polylines inside a polygon
-                       - one per input polygon.
+        lines_covered: List of polylines inside a polygon -o ne per input
+        polygon.
 
 
-    If multiple polygons overlap, the one first encountered will be used
+    .. note:: If multiple polygons overlap, the one first encountered will be
+        used.
     """
 
     if check_input:

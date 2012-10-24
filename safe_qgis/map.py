@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -37,8 +36,7 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
 from safe_qgis.utilities import (setupPrinter,
                                  pointsToMM,
-                                 mmToPoints,
-                                 humaniseSeconds)
+                                 mmToPoints)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611

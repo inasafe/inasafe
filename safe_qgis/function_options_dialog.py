@@ -100,6 +100,11 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.FieldRole,
                                         myLineEdit)
+
+        #FIXME (MB) temporary fix through hiding for issue 365
+        if theParameterKey == 'postprocessors':
+            myLineEdit.hide()
+            myLabel.hide()
         self.formItemCounters += 1
 
     def setDialogInfo(self, theFunctionID):

@@ -14,18 +14,18 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
 from third_party.odict import OrderedDict
 
-from safe_qgis.safe_interface import InaSAFEError
+from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
@@ -36,6 +36,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
@@ -63,7 +65,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-            'InaSAFE %s Keywords Editor' % __version__))
+            'InaSAFE %1 Keywords Editor').arg(get_version()))
         self.keywordIO = KeywordIO()
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
@@ -139,6 +141,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
 
     def togglePostprocessingWidgets(self):
+        LOGGER.debug('togglePostprocessingWidgets')
         isPostprocessingOn = self.radPostprocessing.isChecked()
         self.cboSubcategory.setVisible(not isPostprocessingOn)
         self.lblSubcategory.setVisible(not isPostprocessingOn)
@@ -264,7 +267,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.pbnAdvanced.setText(self.tr('Show advanced editor'))
         self.grpAdvanced.setVisible(theFlag)
-        self.adjustSize()
+        self.resizeDialog()
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -743,6 +746,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             else:
                 self.setSubcategoryList(self.standardHazardList,
                                         self.tr('Not Set'))
+
+        self.resizeDialog()
+
+    def resizeDialog(self):
+        QtCore.QCoreApplication.processEvents()
+        LOGGER.debug('adjust ing dialog size')
         self.adjustSize()
 
     # prevents actions being handled twice
