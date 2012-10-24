@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.earthquake.earthquake_building_impact import LOGGER
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -90,11 +91,18 @@ class Plugin:
                                              QVariant('')).toString()
         else:
             myLocaleName = QLocale.system().name()
+            # NOTES: we split the locale name because we need the first two
+            # character i.e. 'id', 'af, etc
+            myLocaleName = str(myLocaleName).split('_')[0]
+
         # Also set the system locale to the user overridden local
         # so that the inasafe library functions gettext will work
         # .. see:: :py:func:`common.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
+        LOGGER.debug(('%s %s %s %s') % (thePreferredLocale , myOverrideFlag,
+                                        QLocale.system().name(),
+                                        os.environ['LANG']))
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'safe_qgis', 'i18n',
                         'inasafe_' + str(myLocaleName) + '.qm')
@@ -105,6 +113,8 @@ class Plugin:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadException(myMessage)
             QCoreApplication.installTranslator(self.translator)
+        LOGGER.debug(('%s %s') % (myTranslationPath,
+                                  os.path.exists(myTranslationPath)))
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.

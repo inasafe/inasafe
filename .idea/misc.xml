@@ -7,6 +7,6 @@
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="QGIS 1.8 Python" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python with QGIS-Master libs" project-jdk-type="Python SDK" />
 </project>
 
