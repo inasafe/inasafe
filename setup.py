@@ -60,7 +60,7 @@ def read(fname):
 
 
 setup(name='python-safe',
-      version=safe.get_version(),
+      version=safe.__full_version__,
       description='Spatial Analysis Functional Engine',
       license='GPL',
       keywords='gis vector feature raster data',
