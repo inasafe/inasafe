@@ -871,6 +871,20 @@ def pointsToMM(thePoints, theDpi):
     myMM = (float(thePoints) / theDpi) * myInchAsMM
     return myMM
 
+def dpiToMeters(theDpi):
+    """Convert dots per inch (dpi) to dots perMeters.
+
+    Args:
+        theDpi: int - dots per inch in the print / display medium
+    Returns:
+        int - dpm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myInchesPerM = 1000.0 / myInchAsMM
+    myDotsPerM = myInchesPerM * theDpi
+    return myDotsPerM
 
 def setupPrinter(theFilename,
                  theResolution=300,
