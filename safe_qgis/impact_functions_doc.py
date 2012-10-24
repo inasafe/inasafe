@@ -52,7 +52,8 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         # Set up the user interface from Designer.
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-                            'InaSAFE %1 Impact Functions Browser').arg(get_version()))
+                            'InaSAFE %1 Impact Functions Browser').arg(
+			    get_version()))
         self.no_filter = self.tr('No Filter')
         if dict_filter is None:
             dict_filter = {'id': [],
