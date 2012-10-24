@@ -59,7 +59,6 @@ class PluginTest(unittest.TestCase):
         """Library translations are working."""
         # Import this late so that i18n setup is already in place
         from safe.common.utilities import ugettext as tr
-        myUntranslatedString = 'Temporarily Closed'
 
         # Test indonesian too
         myParent = QWidget()
@@ -67,10 +66,10 @@ class PluginTest(unittest.TestCase):
         myIface = QgisInterface(myCanvas)
         myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
-        myExpectedString = 'Ditutup sementara'
-        myTranslation = tr(myUntranslatedString)
+        myExpectedString = 'Letusan gunung berapi'
+        myTranslation = tr('A volcano eruption')
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
-                            myUntranslatedString,
+                            'A volcano eruption',
                             myTranslation,
                             myExpectedString)
         assert myTranslation == myExpectedString, myMessage
