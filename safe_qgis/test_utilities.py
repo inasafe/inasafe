@@ -411,7 +411,7 @@ class UtilitiesTest(unittest.TestCase):
         myMessage = ('Conversion from dpi to dpm failed\n'
                      ' Got: %s Expected: %s\n' %
                      (myDpm, myExpectedDpm))
-        assert myDpm == myExpectedDpm, myMessage
+        self.assertAlmostEqual(myDpm, myExpectedDpm, msg=myMessage)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
