@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '12/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -126,4 +125,10 @@ class StyleError(Exception):
 class MethodUnavailableError(Exception):
     """Raised if the requested import cannot be performed dur to qgis being
     to old"""
+    pass
+
+
+class CallGDALError(Exception):
+    """Raised if failed to call gdal command. Indicate by error message that is
+    not empty"""
     pass

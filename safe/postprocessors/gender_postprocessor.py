@@ -93,8 +93,17 @@ class GenderPostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Total')
-        myResult = self.population_total
-        myResult = int(round(myResult))
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
+        try:
+            myResult = self.population_total
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_females(self):
@@ -111,8 +120,17 @@ class GenderPostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Female population')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.female_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_weekly_hygene_packs(self):
@@ -131,10 +149,19 @@ class GenderPostprocessor(AbstractPostprocessor):
         """
         myName = tr('Weekly hygiene packs')
         myMeta = {'description': 'Females hygiene packs for weekly use'}
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT, myMeta)
+            return
+
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         myResult = self.population_total * self.female_ratio * 0.7937 * (7 / 7)
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult, myMeta)
 
     def _calculate_weekly_increased_calories(self):
@@ -157,10 +184,19 @@ class GenderPostprocessor(AbstractPostprocessor):
                          ' women')
         myMeta = {'description': 'Additional rice kg per week for pregnant and'
                                  ' lactating women'}
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT, myMeta)
+            return
+
         #weekly Kg rice =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         myLactKg = self.population_total * self.female_ratio * 2 * 0.033782
         myPregKg = self.population_total * self.female_ratio * 2 * 0.01281
         myResult = myLactKg + myPregKg
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult, myMeta)

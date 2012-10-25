@@ -9,9 +9,9 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -21,7 +21,7 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (call, CalledProcessError)
+from subprocess import (CalledProcessError, call)
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
@@ -32,20 +32,20 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsVectorFileWriter,
                        QgsGeometry)
 
-from safe.common.utilities import temp_dir
 from safe_qgis.safe_interface import (verify,
                                       readKeywordsFromFile)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
-                           InvalidProjectionException)
+                           CallGDALError,
+                           InvalidProjectionException,)
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
 
 def tr(theText):
-    """We define a tr() alias here since the Clipper implementation below
+    """We define a tr() alias here since the ClipperTest implementation below
     is not a class and does not inherit from QObject.
 
     .. note:: see http://tinyurl.com/pyqt-differences
@@ -57,7 +57,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "Clipper"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 
@@ -71,22 +71,21 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
 
         * theLayer - a valid QGIS vector or raster layer
         * theExtent - an array representing the exposure layer
-              extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-              that the coordinates are in EPSG:4326 although currently
-              no checks are made to enforce this.
+           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
+           that the coordinates are in EPSG:4326 although currently
+           no checks are made to enforce this.
         * theCellSize - cell size which the layer should be resampled to.
-              This argument will be ignored for vector layers and if not
-              provided for a raster layer, the native raster cell size will be
-              used.
+            This argument will be ignored for vector layers and if not provided
+            for a raster layer, the native raster cell size will be used.
         * theExtraKeywords - Optional keywords dictionary to be added to
                           output layer
         * explodeMultipart - a bool describing if to convert multipart
         features into singleparts
 
     Returns:
-        Path to the output clipped layer (placed in the inasafe temp dir).
-            The output layer will be reprojected to EPSG:4326
-            if needed.
+        Path to the output clipped layer (placed in the
+        system temp dir). The output layer will be reprojected to EPSG:4326
+        if needed.
 
     Raises:
         None
@@ -97,8 +96,13 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
             theExtraKeywords=theExtraKeywords,
             explodeMultipart=explodeMultipart)
     else:
-        return _clipRasterLayer(theLayer, theExtent, theCellSize,
-            theExtraKeywords=theExtraKeywords)
+        try:
+            return _clipRasterLayer(theLayer, theExtent, theCellSize,
+                theExtraKeywords=theExtraKeywords)
+        except CallGDALError, e:
+            raise e
+        except IOError, e:
+            raise e
 
 
 def _clipVectorLayer(theLayer, theExtent,
@@ -270,9 +274,8 @@ def explodeMultiPartGeometry(theGeom):
 
 def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                      theExtraKeywords=None):
-    """Clip a Hazard or Exposure raster layer to the extents provided.
-
-    The layer must be a raster layer or an exception will be thrown.
+    """Clip a Hazard or Exposure raster layer to the extents provided. The
+    layer must be a raster layer or an exception will be thrown.
 
     .. note:: The extent *must* be in EPSG:4326.
 
@@ -290,12 +293,12 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
             theCellSize=None), the native raster cell size will be used.
 
     Returns:
-        str: Path to the output clipped layer (placed in the
+        Path to the output clipped layer (placed in the
         system temp dir).
 
     Raises:
-        Exception if input layer is a density layer in projected coordinates -
-        see issue #123
+       Exception if input layer is a density layer in projected coordinates -
+       see issue #123
 
     """
     if not theLayer or not theExtent:
@@ -436,34 +439,3 @@ def extentToKml(theExtent):
     myFile.write(myKml)
     myFile.close()
     return myFilename
-
-def extentToGeoArray(theExtent, theSourceCrs):
-    """Convert the supplied extent to geographic and return as as array.
-
-    Args:
-        theExtent: QgsRectangle to be transformed to geocrs.
-        theSourceCrs: QgsCoordinateReferenceSystem representing the original
-            extent's CRS.
-
-    Returns:
-        list: Transformed extents in EPSG:4326 in the form
-              [xmin, ymin, xmix, ymax]
-
-    Raises:
-        None
-    """
-
-    myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromEpsg(4326)
-    myXForm = QgsCoordinateTransform(
-        theSourceCrs,
-        myGeoCrs)
-
-    # Get the clip area in the layer's crs
-    myTransformedExtent = myXForm.transformBoundingBox(theExtent)
-
-    myGeoExtent = [myTransformedExtent.xMinimum(),
-                   myTransformedExtent.yMinimum(),
-                   myTransformedExtent.xMaximum(),
-                   myTransformedExtent.yMaximum()]
-    return myGeoExtent

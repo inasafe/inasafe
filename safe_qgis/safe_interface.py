@@ -15,7 +15,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '04/04/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -73,7 +72,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "is_safe_interface"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 

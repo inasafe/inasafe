@@ -75,6 +75,9 @@ def dynamic_translations():
     tr('People')
     tr('people')
     tr('People in Jakarta')
+    tr('Indonesian people')
+    tr('Indonesian People')
+    tr('People in Indonesia')
     tr('Flood Depth (design) Jakarta')
     tr('Flood Depth (current) Jakarta')
     tr('An earthquake in Yogyakarta like in 2006')
@@ -90,7 +93,12 @@ def dynamic_translations():
     tr('An earthquake at the Lembang fault')
     # Bangunan OSM
     tr('OSM building footprints')
-    # Bangunan OSM
+    tr('Structures')
+    tr('Structures in Jakarta')
+    tr('Buildings')
+    tr('Buildings in Jakarta')
+    tr('Essential buildings')
+    tr('Essential Buildings')
     tr('OSM buildings')
     tr('AIBEP schools')
     # Perkiraan penduduk
@@ -130,3 +138,8 @@ def dynamic_translations():
     tr('public building')
     tr('other')
     tr('fire station')
+
+    # impact function parameters
+    # FIXME (Sunni) It's better to be updated dynamically
+    tr('Thresholds')
+    tr('Postprocessors')

@@ -2,6 +2,32 @@
 ==========
 Whats new?
 ==========
+
+
+Changelog for version 1.0.1
+---------------------------
+
+* Fix https://github.com/AIFDR/inasafe/issues/374
+* Fix https://github.com/AIFDR/inasafe/issues/375
+
+Changelog for version 1.0.0
+---------------------------
+
+* Added post processor infrastructure including gender and age specific indicators
+* Added data source attribution
+* Various GUI updates
+* Added use of transparency in generated maps
+* Added an earthquake impact function
+* Documentation updates
+* Many bugfixes and architectural improvements
+* Better internationalisation support
+
+Changelog for version 0.5.2
+---------------------------
+
+* This is a bugfix update to address some minor translation issues in the
+  InaSAFE package.
+
 Changelog for version 0.5.1
 ---------------------------
 

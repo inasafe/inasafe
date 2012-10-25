@@ -20,8 +20,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory=='population' and \
-                    layertype=='raster' and \
-                    datatype=='density'
+                    layertype=='raster'
     """
 
     title = tr('Need evacuation')
@@ -170,11 +169,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
             if i == 0:
                 label = tr('0')
+                transparency = 100
             else:
                 label = tr('%i - %i') % (lo, hi)
+                transparency = 0
 
             entry = dict(label=label, colour=colour, min=lo, max=hi,
-                         transparency=0, size=1)
+                         transparency=transparency, size=1)
             style_classes.append(entry)
 
         # Override style info with new classes and name

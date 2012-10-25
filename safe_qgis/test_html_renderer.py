@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -25,6 +24,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       checkImages)
 from safe_qgis.html_renderer import HtmlRenderer
+from safe_qgis.keyword_io import KeywordIO
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
@@ -47,7 +47,8 @@ class HtmlRendererTest(unittest.TestCase):
         Raises:
             None
         """
-        myHtml = ('<table>'
+        myHtml = ('<table class="table table-striped condensed'
+                  ' bordered-table">'
                   '<thead>'
                   '<tr>'
                   '<th>Wilayah</th>'
@@ -56,7 +57,8 @@ class HtmlRendererTest(unittest.TestCase):
                   '<th>Wilayah</th>'
                   '<th>Jumlah Penduduk</th>'
                   '<th>Jumlah Penduduk yang Mungkin</th>'
-                  '</tr>')
+                  '</tr>'
+                  '</thead>')
         i = 0
         while i < theLineCount:
             i += 1
@@ -110,7 +112,9 @@ class HtmlRendererTest(unittest.TestCase):
         myPath = unique_filename(prefix='impactTable',
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
-        myPath = myHtmlRenderer.printImpactTable(myLayer,
+        myKeywordIO = KeywordIO()
+        myKeywords = myKeywordIO.readKeywords(myLayer)
+        myPath = myHtmlRenderer.printImpactTable(myKeywords,
                                                  theFilename=myPath)
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
@@ -124,9 +128,9 @@ class HtmlRendererTest(unittest.TestCase):
                      % (myExpectedSize, mySize))
         assert mySize >= myExpectedSize, myMessage
 
-    def test_renderHtmlToPixmap(self):
+    def test_renderHtmlToImage(self):
         """Test that we can render html to a pixmap."""
-        LOGGER.debug('InaSAFE HtmlRenderer testing renderHtmlToPixmap')
+        LOGGER.debug('InaSAFE HtmlRenderer testing renderHtmlToImage')
         myHtml = self.sampleHtml(20)
         LOGGER.debug(myHtml)
         myPageDpi = 300
@@ -136,20 +140,22 @@ class HtmlRendererTest(unittest.TestCase):
                                  dir=temp_dir('test'))
         LOGGER.debug(myPath)
         myWidth = 250
-        myPixmap = myRenderer.renderHtmlToPixmap(myHtml, myWidth)
+        myPixmap = myRenderer.renderHtmlToImage(myHtml, myWidth)
         assert not myPixmap.isNull()
         LOGGER.debug(myPixmap.__class__)
         myPixmap.save(myPath)
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
 
-        myControlImages = ['renderHtmlToPixmap.png',
-                           'renderHtmlToPixmap-variantUB11.10-64.png']
+        myControlImages = ['renderHtmlToImage.png',
+                           'renderHtmlToImage-variantWindosVistaSP2-32.png',
+                           'renderHtmlToImage-variantUB11.04-64.png',
+                           'renderHtmlToImage-variantUB11.10-64.png']
         myTolerance = 1000  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                                   myPath,
                                                   myTolerance)
-        assert myFlag == True, myMessage
+        assert myFlag, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(HtmlRendererTest, 'test')

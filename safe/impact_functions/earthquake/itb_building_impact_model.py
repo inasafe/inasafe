@@ -200,13 +200,13 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                             'structural information is available.')
         # Create style
         style_classes = [dict(label=tr('No damage'), min=0, max=10,
-                              colour='#00ff00', transparency=1),
+                              colour='#00ff00', transparency=0),
                          dict(label=tr('Low damage'), min=10, max=33,
-                              colour='#ffff00', transparency=1),
+                              colour='#ffff00', transparency=0),
                          dict(label=tr('Medium damage'), min=33, max=66,
-                              colour='#ffaa00', transparency=1),
+                              colour='#ffaa00', transparency=0),
                          dict(label=tr('High damage'), min=66, max=100,
-                              colour='#ff0000', transparency=1)]
+                              colour='#ff0000', transparency=0)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 

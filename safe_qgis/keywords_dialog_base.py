@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Tue Oct 16 18:07:20 2012
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Tue Oct 23 16:51:29 2012
+#      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_KeywordsDialogBase(object):
     def setupUi(self, KeywordsDialogBase):
         KeywordsDialogBase.setObjectName(_fromUtf8("KeywordsDialogBase"))
-        KeywordsDialogBase.resize(520, 667)
+        KeywordsDialogBase.resize(515, 667)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -29,7 +29,7 @@ class Ui_KeywordsDialogBase(object):
         self.verticalLayout = QtGui.QVBoxLayout(KeywordsDialogBase)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.lblLayerName = QtGui.QLabel(KeywordsDialogBase)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lblLayerName.sizePolicy().hasHeightForWidth())
@@ -38,7 +38,6 @@ class Ui_KeywordsDialogBase(object):
         font.setBold(True)
         font.setWeight(75)
         self.lblLayerName.setFont(font)
-        self.lblLayerName.setStyleSheet(_fromUtf8(""))
         self.lblLayerName.setText(_fromUtf8(""))
         self.lblLayerName.setWordWrap(True)
         self.lblLayerName.setObjectName(_fromUtf8("lblLayerName"))
@@ -49,7 +48,6 @@ class Ui_KeywordsDialogBase(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.grpSimple.sizePolicy().hasHeightForWidth())
         self.grpSimple.setSizePolicy(sizePolicy)
-        self.grpSimple.setStyleSheet(_fromUtf8(""))
         self.grpSimple.setObjectName(_fromUtf8("grpSimple"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpSimple)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
@@ -110,6 +108,11 @@ class Ui_KeywordsDialogBase(object):
         self.pbnAdvanced.setObjectName(_fromUtf8("pbnAdvanced"))
         self.verticalLayout.addWidget(self.pbnAdvanced)
         self.grpAdvanced = QtGui.QGroupBox(KeywordsDialogBase)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.grpAdvanced.sizePolicy().hasHeightForWidth())
+        self.grpAdvanced.setSizePolicy(sizePolicy)
         self.grpAdvanced.setObjectName(_fromUtf8("grpAdvanced"))
         self.gridLayout = QtGui.QGridLayout(self.grpAdvanced)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -192,6 +195,11 @@ class Ui_KeywordsDialogBase(object):
         self.gridLayout.addWidget(self.pbnRemove, 6, 0, 1, 1)
         self.verticalLayout.addWidget(self.grpAdvanced)
         self.buttonBox = QtGui.QDialogButtonBox(KeywordsDialogBase)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.buttonBox.sizePolicy().hasHeightForWidth())
+        self.buttonBox.setSizePolicy(sizePolicy)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setCenterButtons(False)

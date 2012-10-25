@@ -109,8 +109,17 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Total')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_youth(self):
@@ -127,8 +136,17 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Youth count')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.youth_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_adult(self):
@@ -145,8 +163,17 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Adult count')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.adult_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
     def _calculate_elder(self):
@@ -163,6 +190,15 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Elderly count')
+
+        #FIXME (MB) Shameless hack to deal with issue #368
+        if self.population_total > 8000000000 or self.population_total < 0:
+            self._append_result(myName, self.NO_DATA_TEXT)
+            return
+
         myResult = self.population_total * self.elder_ratio
-        myResult = int(round(myResult))
+        try:
+            myResult = int(round(myResult))
+        except ValueError:
+            myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)

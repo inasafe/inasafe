@@ -2,6 +2,7 @@ import numpy
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
+from safe.impact_functions.core import format_int
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
@@ -21,14 +22,13 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory=='population' and \
-                    layertype=='raster' and \
-                    datatype=='density'
+                    layertype=='raster'
     """
 
-    title = tr('Be affected')
+    title = tr('Need evacuation')
     target_field = 'population'
 
-    parameters = dict(distances=[3000, 5000, 10000])
+    parameters = {'R [km]': [3, 5, 10]}
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -69,20 +69,25 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         if H.is_point_data:
             # Use concentric circles
-            radii = self.parameters['distances']
+            radii = self.parameters['R [km]']
 
             centers = H.get_geometry()
             attributes = H.get_data()
-            H = make_circular_polygon(centers, radii, attributes=attributes)
+            rad_m = [x * 1000 for x in radii]  # Convert to meters
+            H = make_circular_polygon(centers,
+                                      rad_m,
+                                      attributes=attributes)
             #H.write_to_file('Evac_zones_%s.shp' % str(radii))  # To check
 
             category_title = 'Radius'
+            category_header = tr('Distance [km]')
             category_names = radii
 
             name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
         else:
             # Use hazard map
             category_title = 'KRB'
+            category_header = tr('Category')
 
             # FIXME (Ole): Change to English and use translation system
             category_names = ['Kawasan Rawan Bencana III',
@@ -139,59 +144,88 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             cat = new_attributes[poly_id][category_title]
             categories[cat] += pop
 
-            # Update total
-            evacuated += pop
-
         # Count totals
         total = int(numpy.sum(E.get_data(nan=0)))
 
-##        # Don't show digits less than a 1000
-##        if total > 1000:
-##            total = total // 1000 * 1000
-##        if evacuated > 1000:
-##            evacuated = evacuated // 1000 * 1000
+        # Don't show digits less than a 1000
+        if total > 1000:
+            total = total // 1000 * 1000
+
+        # Count number and cumulative for each zone
+        cum = 0
+        pops = {}
+        cums = {}
+        for name in category_names:
+            if category_title == 'Radius':
+                key = name * 1000  # Convert to meters
+            else:
+                key = name
+
+            pop = int(categories[key])
+
+            if pop > 1000:
+                pop = pop // 1000 * 1000
+
+            cum += pop
+            if cum > 1000:
+                cum = cum // 1000 * 1000
+
+            pops[name] = pop
+            cums[name] = cum
+
+        # Use final accumulation as total number needing evac
+        evacuated = cum
 
         # Calculate estimated needs based on BNPB Perka
         # 7/2008 minimum bantuan
-        rice = evacuated * 2.8
-        drinking_water = evacuated * 17.5
-        water = evacuated * 67
-        family_kits = evacuated / 5
-        toilets = evacuated / 20
+        # FIXME (Ole): Refactor into one function to be shared
+        rice = int(evacuated * 2.8)
+        drinking_water = int(evacuated * 17.5)
+        water = int(evacuated * 67)
+        family_kits = int(evacuated / 5)
+        toilets = int(evacuated / 20)
 
         # Generate impact report for the pdf map
+        blank_cell = ''
         table_body = [question,
                       TableRow([tr('Volcanos considered'),
-                                '%s' % volcano_names],
+                                '%s' % volcano_names, blank_cell],
                                header=True),
                       TableRow([tr('People needing evacuation'),
-                                '%i' % evacuated],
-                               header=True),
-                      TableRow([tr('Category'), tr('Total'), tr('Cumulative')],
+                                '%s' % format_int(evacuated),
+                                blank_cell],
+                                header=True),
+                      TableRow([category_header,
+                                tr('Total'), tr('Cumulative')],
                                header=True)]
-        cum = 0
+
         for name in category_names:
-            pop = categories[name]
-            cum += pop
-            table_body.append(TableRow([name, int(pop), int(cum)]))
+            table_body.append(TableRow([name,
+                                        format_int(pops[name]),
+                                        format_int(cums[name])]))
 
         table_body.extend([TableRow(tr('Map shows population affected in '
                                        'each of volcano hazard polygons.')),
-                           TableRow([tr('Needs per week'), tr('Total')],
+                           TableRow([tr('Needs per week'), tr('Total'),
+                                     blank_cell],
                                     header=True),
-                           [tr('Rice [kg]'), int(rice)],
-                           [tr('Drinking Water [l]'), int(drinking_water)],
-                           [tr('Clean Water [l]'), int(water)],
-                           [tr('Family Kits'), int(family_kits)],
-                           [tr('Toilets'), int(toilets)]])
+                           [tr('Rice [kg]'), format_int(rice), blank_cell],
+                           [tr('Drinking Water [l]'),
+                            format_int(drinking_water), blank_cell],
+                           [tr('Clean Water [l]'), format_int(water),
+                            blank_cell],
+                           [tr('Family Kits'), format_int(family_kits),
+                            blank_cell],
+                           [tr('Toilets'), format_int(toilets),
+                            blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population %i in the viewable area')
-                           % total,
+                           tr('Total population %s in the viewable area')
+                           % format_int(total),
                            tr('People need evacuation if they are within the '
-                             'volcanic hazard zones.')])
+                              'volcanic hazard zones.')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People affected by volcanic hazard zone')
 
@@ -215,7 +249,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 label = tr('%i - %i') % (lo, hi)
 
             entry = dict(label=label, colour=colour, min=lo, max=hi,
-                         transparency=0, size=1)
+                         transparency=50, size=1)
             style_classes.append(entry)
 
         # Override style info with new classes and name

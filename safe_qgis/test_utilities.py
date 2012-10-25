@@ -2,6 +2,7 @@ import unittest
 import sys
 import os
 
+from unittest import expectedFailure
 from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules
@@ -18,7 +19,9 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                               pointsToMM,
                               humaniseSeconds,
                               isLayerPolygonal,
-                              getLayerAttributeNames)
+                              getLayerAttributeNames,
+                              impactLayerAttribution,
+                              dpiToMeters)
 from safe_qgis.utilities_test import (unitTestDataPath,
                                      loadLayer,
                                      getQgisTestApp)
@@ -37,7 +40,7 @@ class UtilitiesTest(unittest.TestCase):
     """
 
     def setUp(self):
-        pass
+        os.environ['LANG'] = 'en'
 
     def tearDown(self):
         pass
@@ -71,8 +74,8 @@ class UtilitiesTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        myLayer, myType = loadLayer('issue126.tif')
-        del myType
+        myLayer, _ = loadLayer('issue126.tif')
+
         # Note the float quantity values below
         myStyleInfo = {}
         myStyleInfo['style_classes'] = [
@@ -87,13 +90,14 @@ class UtilitiesTest(unittest.TestCase):
             raise Exception(myMessage)
         # Now validate the transparency values were set to 255 because
         # they are floats and we cant specify pixel ranges to floats
-        myValue1 = myLayer.rasterTransparency().alphaValue(1.1)
-        myValue2 = myLayer.rasterTransparency().alphaValue(1.4)
+        # Note we don't test on the exact interval because 464c6171dd55
+        myValue1 = myLayer.rasterTransparency().alphaValue(1.2)
+        myValue2 = myLayer.rasterTransparency().alphaValue(1.5)
         myMessage = ('Transparency should be ignored when style class'
                      ' quantities are floats')
         assert myValue1 == myValue2 == 255, myMessage
 
-        # Now run the same test again
+        # Now run the same test again for int intervals
         myStyleInfo['style_classes'] = [
                         dict(colour='#38A800', quantity=2, transparency=100),
                         dict(colour='#38A800', quantity=4, transparency=0),
@@ -127,6 +131,44 @@ class UtilitiesTest(unittest.TestCase):
             setRasterStyle(myLayer, myStyleInfo)
         except Exception, e:
             raise Exception(myMessage + ': ' + str(e))
+
+    def test_transparency_of_minimum_value(self):
+        """Test that transparency of minimum value works when set to 100%
+        """
+        # This dataset has all cells with value 1.3
+        myLayer, _ = loadLayer('issue126.tif')
+
+        # Note the float quantity values below
+        myStyleInfo = {}
+        myStyleInfo['style_classes'] = [
+            {'colour': '#FFFFFF', 'transparency': 100, 'quantity': 0.0},
+            {'colour': '#38A800', 'quantity': 0.038362596547925065,
+             'transparency': 0, 'label': u'Rendah [0 orang/sel]'},
+            {'colour': '#79C900', 'transparency': 0,
+             'quantity': 0.07672519309585013},
+            {'colour': '#CEED00', 'transparency': 0,
+             'quantity': 0.1150877896437752},
+            {'colour': '#FFCC00', 'quantity': 0.15345038619170026,
+             'transparency': 0, 'label': u'Sedang [0 orang/sel]'},
+            {'colour': '#FF6600', 'transparency': 0,
+             'quantity': 0.19181298273962533},
+            {'colour': '#FF0000', 'transparency': 0,
+             'quantity': 0.23017557928755039},
+            {'colour': '#7A0000', 'quantity': 0.26853817583547546,
+             'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]
+
+        myMessage = 'Could not create raster style'
+        try:
+            setRasterStyle(myLayer, myStyleInfo)
+        except:
+            raise Exception(myMessage)
+
+        myMessage = ('Should get a single transparency class for first style '
+                     'class')
+        myTransparencyList = (myLayer.rasterTransparency().
+                transparentSingleValuePixelList())
+
+        self.assertEqual(len(myTransparencyList), 1)
 
     def test_issue121(self):
         """Test that point symbol size can be set from style (issue 121).
@@ -303,13 +345,15 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_getDefaults(self):
         myExpectedDefaults = {
-            'FEM_RATIO': 0.50,
             'FEM_RATIO_KEY': 'female ratio default',
-            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
-            'AGGR_ATTR_KEY': 'aggregation attribute',
             'YOUTH_RATIO': 0.263,
-            'ELDER_RATIO': 0.079,
-            'ADULT_RATIO': 0.659}
+            'ELDER_RATIO': 0.078,
+            'NO_DATA': 'No data',
+            'FEM_RATIO': 0.5,
+            'AGGR_ATTR_KEY': 'aggregation attribute',
+            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
+            'ADULT_RATIO': 0.659
+        }
         myDefaults = getDefaults()
         myMessage = 'Defaults: got %s, expected %s' % (
             myDefaults, myExpectedDefaults)
@@ -336,6 +380,38 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(humaniseSeconds(9000), '2 hours and 30 minutes')
         self.assertEqual(humaniseSeconds(432232),
                          '5 days, 0 hours and 3 minutes')
+
+    def test_impactLayerAttribution(self):
+        """Test we get an attribution html snippet nicely for impact layers."""
+        myKeywords = {'hazard_title': 'Sample Hazard Title',
+                      'hazard_source': 'Sample Hazard Source',
+                      'exposure_title': 'Sample Exposure Title',
+                      'exposure_source': 'Sample Exposure Source'}
+        myHtml = impactLayerAttribution(myKeywords)
+        print myHtml
+        self.assertEqual(len(myHtml), 288)
+
+    @expectedFailure
+    def test_localisedAttribution(self):
+        """Test we can localise attribution."""
+        os.environ['LANG'] = 'id'
+        myKeywords = {'hazard_title': 'Jakarta 2007 flood',
+                      'hazard_source': 'Sample Hazard Source',
+                      'exposure_title': 'People in Jakarta',
+                      'exposure_source': 'Sample Exposure Source'}
+        myHtml = impactLayerAttribution(myKeywords, True)
+        print myHtml
+        assert myHtml == '11'
+
+    def testDpiToMeters(self):
+        """Test conversion from dpi to dpm."""
+        myDpi = 300
+        myDpm = dpiToMeters(myDpi)
+        myExpectedDpm = 11811.023622
+        myMessage = ('Conversion from dpi to dpm failed\n'
+                     ' Got: %s Expected: %s\n' %
+                     (myDpm, myExpectedDpm))
+        self.assertAlmostEqual(myDpm, myExpectedDpm, msg=myMessage)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

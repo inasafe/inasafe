@@ -1,6 +1,7 @@
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
+from safe.impact_functions.core import format_int
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
                                    get_defaults)
@@ -189,57 +190,62 @@ class ITBFatalityFunction(FunctionProvider):
         table_body = [question]
 
         # Add total fatality estimate
-        s = str(int(fatalities)).rjust(10)
+        #s = str(int(fatalities)).rjust(10)
+        s = format_int(fatalities)
         table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
         if self.parameters['calculate_displaced_people']:
             # Add total estimate of people displaced
-            s = str(int(displaced)).rjust(10)
+            #s = str(int(displaced)).rjust(10)
+            s = format_int(displaced)
             table_body.append(TableRow([tr('Number of people displaced'), s],
                                        header=True))
         else:
             displaced = 0
 
         # Add estimate of total population in area
-        s = str(int(total)).rjust(10)
+        #s = str(int(total)).rjust(10)
+        s = format_int(int(total))
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        rice = displaced * 2.8
-        drinking_water = displaced * 17.5
-        water = displaced * 67
-        family_kits = displaced / 5
-        toilets = displaced / 20
+        # FIXME: Refactor and share
+        rice = int(displaced * 2.8)
+        drinking_water = int(displaced * 17.5)
+        water = int(displaced * 67)
+        family_kits = int(displaced / 5)
+        toilets = int(displaced / 20)
 
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('Fatalities'),
-                                '%i' % fatalities],
+                                '%s' % format_int(fatalities)],
                                header=True),
                       TableRow([tr('People displaced'),
-                                '%i' % displaced],
+                                '%s' % format_int(displaced)],
                                header=True),
                       TableRow(tr('Map shows density estimate of '
                                   'displaced population')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
-                      [tr('Rice [kg]'), int(rice)],
-                      [tr('Drinking Water [l]'), int(drinking_water)],
-                      [tr('Clean Water [l]'), int(water)],
-                      [tr('Family Kits'), int(family_kits)],
-                      [tr('Toilets'), int(toilets)]]
+                      [tr('Rice [kg]'), format_int(rice)],
+                      [tr('Drinking Water [l]'), format_int(drinking_water)],
+                      [tr('Clean Water [l]'), format_int(water)],
+                      [tr('Family Kits'), format_int(family_kits)],
+                      [tr('Toilets'), format_int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
-                                 'units available for %i people?') %
-                                 fatalities)
+                                 'units available for %s people?') %
+                                 format_int(fatalities))
         if displaced > 0:
             table_body.append(tr('Are there enough shelters and relief items '
-                                 'available for %i people?') % displaced)
+                                 'available for %s people?')
+                              % format_int(displaced))
             table_body.append(TableRow(tr('If yes, where are they located and '
                                           'how will we distribute them?')))
             table_body.append(TableRow(tr('If no, where can we obtain '

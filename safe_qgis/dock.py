@@ -17,7 +17,6 @@ __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'beta'  # beta, final etc will be shown in dock title
 
 import os
 import numpy
@@ -53,7 +52,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  htmlFooter,
                                  setRasterStyle,
                                  qgisVersion,
-                                 getDefaults)
+                                 getDefaults,
+                                 impactLayerAttribution)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -71,7 +71,10 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientOverlapException,
                                   InvalidParameterException,
                                   InsufficientParametersException,
-                                  HashNotFoundException)
+                                  HashNotFoundException,
+                                  CallGDALError,
+                                  NoFeaturesInExtentException,
+                                  InvalidProjectionException)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
@@ -837,11 +840,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
 
-        Raises: Propa
-        gates any error from :func:optimalClip()
+        Raises: Propagates any error from :func:optimalClip()
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
+        except CallGDALError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            raise e
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            raise e
         except:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -874,6 +884,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myOrigKeywords = self.keywordIO.readKeywords(self.postprocLayer)
         except AttributeError:
             myOrigKeywords = {}
+        except InvalidParameterException:
+            #no kw file has ben found for postprocLayer. create an empty one
+            myOrigKeywords = {}
+            self.keywordIO.writeKeywords(self.postprocLayer, myOrigKeywords)
 
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
@@ -886,9 +900,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # this is needed because we always want a vectoril layer to store
             # information
             self.doZonalAggregation = False
-            crs = self.getExposureLayer().crs().authid().toLower()
+            myGeoCrs = QgsCoordinateReferenceSystem()
+            myGeoCrs.createFromEpsg(4326)
+            crs = myGeoCrs.authid().toLower()
             myUUID = str(uuid.uuid4())
-            uri = 'Polygon' + '?crs=' + crs + '&index=yes&uuid=' + myUUID
+            uri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
             myName = 'tmpPostprocessingLayer'
             myLayer = QgsVectorLayer(uri, myName, 'memory')
             LOGGER.debug('created' + myLayer.name())
@@ -960,6 +976,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Start the analysis
         try:
             self.setupCalculator()
+        except CallGDALError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+        except IOError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred when write clip file')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
         except InsufficientOverlapException, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -970,6 +1004,33 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                    context=myMessage)
             self.displayHtml(myMessage)
             return
+        except NoFeaturesInExtentException, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred because there are no '
+                                'features visible in the current view. Try '
+                                'zooming out or panning until some features '
+                                'become visible.')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+        except InvalidProjectionException, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An error occurred because you are using a '
+                                'layer containing density data (e.g. '
+                                'population density) which will not scale '
+                                'accurately if we re-project it from its '
+                                'native coordinate reference system to'
+                                'WGS84/GeoGraphic.')
+            myMessage = getExceptionWithStacktrace(e,
+                                                   html=True,
+                                                   context=myMessage)
+            self.displayHtml(myMessage)
+            return
+
         try:
             self.runner = self.calculator.getRunner()
         except InsufficientParametersException, e:
@@ -1042,12 +1103,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         try:
-            myTitle = self.tr('Aggregating results...')
-            myMessage = self.tr('This may take a little while - we are '
-                                ' aggregating the hazards by %1').arg(
-                self.cboAggregation.currentText())
-            myProgress = 88
-            self.showBusy(myTitle, myMessage, myProgress)
             self._aggregateResults()
             if self.aggregationErrorSkipPostprocessing is None:
                 self._startPostprocessors()
@@ -1141,6 +1196,34 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHTML = ''
         for proc, resList in self.postprocOutput.iteritems():
+            #sorting using the first indicator of a postprocessor
+            myFirstKey = resList[0][1].keyAt(0)
+            try:
+            # [1]['Total']['value']
+            # resList is for example:
+            # [
+            #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
+            #        (u'Total', {'value': 977536, 'metadata': {}}),
+            #        (u'Female population', {'value': 508319, 'metadata': {}}),
+            #        (u'Weekly hygiene packs', {'value': 403453, 'metadata': {
+            #         'description': 'Females hygiene packs for weekly use'}})
+            #    ]))
+            #]
+                myEndOfList = -1
+                resList = sorted(
+                    resList,
+                    key=lambda d: (
+                    # return -1 if the postprocessor returns NO_DATA to put at
+                    # the end of the list
+                    # d[1] is the orderedDict
+                    # d[1][myFirstKey] is the 1st indicator in the orderedDict
+                        myEndOfList if d[1][myFirstKey]['value'] ==
+                                       self.defaults['NO_DATA']
+                        else d[1][myFirstKey]['value']),
+                    reverse=True)
+            except KeyError:
+                LOGGER.debug('Skipping sorting as the postprocessor did not '
+                             'have a "Total" field')
             myHTML += ('<table class="table table-striped condensed">'
                        '  <tbody>'
                        '    <tr>'
@@ -1192,6 +1275,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         impactLayer = self.runner.impactLayer()
         impactLayerBB = impactLayer.get_bounding_box()
         #[West, South, East, North]
+
+        myTitle = self.tr('Aggregating results...')
+        myMessage = self.tr('This may take a little while - we are '
+                            ' aggregating the hazards by %1').arg(
+            self.cboAggregation.currentText())
+        myProgress = 88
+        self.showBusy(myTitle, myMessage, myProgress)
+
         if not self.doZonalAggregation:
             self.postprocLayer.startEditing()
             myProvider = self.postprocLayer.dataProvider()
@@ -1265,6 +1356,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProvider.select([myAttrIndex], QgsRectangle(), False)
             myFeat = QgsFeature()
             myHighestVal = 0
+
             while myProvider.nextFeature(myFeat):
                 myAttrMap = myFeat.attributeMap()
                 myVal, ok = myAttrMap[myAttrIndex].toInt()
@@ -1274,7 +1366,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myClasses = []
             myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
             myStep = int(myHighestVal / len(myColors))
-            LOGGER.debug(str(myHighestVal)+' - '+str(myStep))
+            LOGGER.debug('Max val %s, my step %s' % (myHighestVal, myStep))
             myCounter = 0
             for myColor in myColors:
                 myMin = myCounter
@@ -1286,16 +1378,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                      'max': myMax,
                      'colour': myColor,
                      'transparency': 30,
-                     'label': '%s - %s' % (myMin, myMax)}
-                )
+                     'label': '%s - %s' % (myMin, myMax)})
                 myCounter += 1
 
             myStyle = {'target_field': myAttr,
                        'style_classes': myClasses}
 
             setVectorStyle(self.postprocLayer, myStyle)
-            QgsMapLayerRegistry.instance().addMapLayer(
-                self.postprocLayer)
 
     def _aggregateResultsVector(self, myQgisImpactLayer):
         """
@@ -1448,15 +1537,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 zoneName = attrMap[myNameFieldIndex].toString()
 
-            aggrSum, _ = attrMap[mySumFieldIndex].toDouble()
-            try:
-                aggrSum = int(round(float(aggrSum)))
-            except ValueError:
-                myMessage = ('Could not convert')
-                LOGGER.debug(myMessage)
-                self.aggregationErrorSkipPostprocessing = myMessage
-                return
+            aggrSum, ok = attrMap[mySumFieldIndex].toDouble()
+            LOGGER.debug('Reading: %s %s' % (aggrSum, ok))
             myGeneralParams = {'population_total': aggrSum}
+
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
                 try:
@@ -1615,6 +1699,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
+        myReport += impactLayerAttribution(myKeywords)
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -1639,8 +1724,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('Impact layer %1 was neither a raster or a '
                    'vector layer').arg(myQgisImpactLayer.source())
             raise ReadLayerError(myMessage)
-        # Add layer to QGIS
-        QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+
+        # Add layers to QGIS
+        myLayersToAdd = []
+        if self.showPostProcLayers and self.doZonalAggregation:
+            myLayersToAdd.append(self.postprocLayer)
+        myLayersToAdd.append(myQgisImpactLayer)
+        QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
         # then zoom to it
         if self.zoomToImpactFlag:
             self.iface.zoomToActiveLayer()
@@ -1867,8 +1957,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'layer and the current view extents.')
         myProgress = 22
         self.showBusy(myTitle, myMessage, myProgress)
-        myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
-                                        myCellSize)
+        try:
+            myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
+                                            myCellSize)
+        except CallGDALError, e:
+            raise e
+        except IOError, e:
+            raise e
 
         myTitle = self.tr('Preparing exposure data...')
         myMessage = self.tr('We are resampling and clipping the exposure'
@@ -1995,9 +2090,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
                             # append properties of the result layer
-                    myReport += ('<table class="table table-striped condensed'
-                                    ' bordered-table">')
+
+                    myReport += impactLayerAttribution(myKeywords)
+
                     self.pbnPrint.setEnabled(True)
+
+                    # TODO: Shouldn't this line be in the start of the else
+                    #     block below? (TS)
+                    myReport += ('<table class="table table-striped condensed'
+                                 ' bordered-table">')
 
                 else:
                     self.pbnPrint.setEnabled(False)
@@ -2143,8 +2244,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+            myKeywords, theFilename=myTableFilename)
 
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)

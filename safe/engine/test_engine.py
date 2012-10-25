@@ -28,6 +28,7 @@ from safe.common.utilities import VerificationError, unique_filename
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
+from safe.impact_functions.core import format_int
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
@@ -36,6 +37,7 @@ from safe.impact_functions import get_plugins, get_plugin
 from impact_functions_for_testing import empirical_fatality_model
 from impact_functions_for_testing import allen_fatality_model
 from impact_functions_for_testing import unspecific_building_impact_model
+from impact_functions_for_testing import earthquake_impact_on_women
 from impact_functions_for_testing import NEXIS_building_impact_model
 from impact_functions_for_testing import HKV_flood_study
 from impact_functions_for_testing import BNPB_earthquake_guidelines
@@ -239,8 +241,9 @@ class Test_Engine(unittest.TestCase):
         assert all_numbers == 40871, msg
 
         x = int(round(float(all_numbers) / 1000)) * 1000
-        msg = 'Did not find expected fatality value %i in summary' % x
-        assert str(x) in keywords['impact_summary'], msg
+        msg = ('Did not find expected fatality value %i in summary %s'
+               % (x, keywords['impact_summary']))
+        assert format_int(x) in keywords['impact_summary'], msg
 
     def test_ITB_earthquake_fatality_estimation_org(self):
         """Fatalities from ground shaking can be computed correctly
@@ -562,13 +565,21 @@ class Test_Engine(unittest.TestCase):
         keywords = I.get_keywords()
 
         # Check for expected results:
-        for value in ['Merapi', 192055, 56514, 68568, 66971]:
-            x = str(value)
-            msg = 'Did not find expected value %s in summary' % x
-            assert str(x) in keywords['impact_summary'], msg
+        #for value in ['Merapi', 192055, 56514, 68568, 66971]:
+        for value in ['Merapi', 190000, 56000, 66000, 68000]:
+            if isinstance(value, int):
+                x = format_int(value)
+            else:
+                x = value
+            summary = keywords['impact_summary']
+            msg = ('Did not find expected value %s in summary %s'
+                   % (x, summary))
+            assert x in summary, msg
 
         # FIXME (Ole): Should also have test for concentric circle
         #              evacuation zones
+
+    test_volcano_population_evacuation_impact.slow = True
 
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
@@ -609,8 +620,8 @@ class Test_Engine(unittest.TestCase):
                                          E_clip.get_geotransform(),
                                          polygons)
 
-        print res_clip
-        print len(res_clip)
+        #print res_clip
+        #print len(res_clip)
 
         res_full = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
@@ -619,22 +630,22 @@ class Test_Engine(unittest.TestCase):
         assert len(res_clip) == len(res_full)
 
         for i in range(len(res_clip)):
-            print
+            #print
             x = res_clip[i][0]
             y = res_full[i][0]
 
-            print x
-            print y
+            #print x
+            #print y
             msg = ('Got len(x) == %i, len(y) == %i. Should be the same'
                    % (len(x), len(y)))
             assert len(x) == len(y), msg
 
             # Check that they are inside the respective polygon
             P = polygons[i]
-            idx = inside_polygon(x,
+            idx = inside_polygon(x,  # pylint: disable=W0612
                                  P.outer_ring,
                                  holes=P.inner_rings)
-            print idx
+            #print idx
 
             msg = ('Expected point locations to be the same in clipped '
                    'and full grids, Got %s and %s' % (x, y))
@@ -886,7 +897,7 @@ class Test_Engine(unittest.TestCase):
         assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
         assert attributes['polygon_id'] == 4
 
-    test_polygon_hazard_with_holes_and_raster_exposure.slow = False
+    test_polygon_hazard_with_holes_and_raster_exposure.slow = True
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works
@@ -928,6 +939,44 @@ class Test_Engine(unittest.TestCase):
             # FIXME (Ole): check more numbers
 
     test_flood_building_impact_function.slow = True
+
+    def test_data_sources_are_carried_forward(self):
+        """Data sources are carried forward to impact layer
+        """
+
+        haz_filename = 'Flood_Current_Depth_Jakarta_geographic.asc'
+
+        # File names for hazard level and exposure
+        hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
+        exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
+                             % TESTDATA)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        H_tit = H.get_keywords()['title']
+        E_tit = E.get_keywords()['title']
+
+        H_src = H.get_keywords()['source']
+        E_src = E.get_keywords()['source']
+
+        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        impact_vector = calculate_impact(layers=[H, E],
+                                         impact_fcn=IF)
+
+        assert impact_vector.get_keywords()['hazard_title'] == H_tit
+        assert impact_vector.get_keywords()['exposure_title'] == E_tit
+        assert impact_vector.get_keywords()['hazard_source'] == H_src
+        assert impact_vector.get_keywords()['exposure_source'] == E_src
+
+    test_data_sources_are_carried_forward.slow = True
 
     def test_earthquake_damage_schools(self):
         """Lembang building damage from ground shaking works

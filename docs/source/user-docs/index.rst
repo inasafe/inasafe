@@ -16,6 +16,7 @@ This section of the documention describes how to use the |project_name| system.
    inasafe_projects
    data_types
    using-qgis
+   getting_involved
    faq
    known_issues
    changelog

@@ -30,7 +30,8 @@ IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
-CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__), 'test_images')
+CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__),
+    'test_data/test_images')
 
 
 def assertHashesForFile(theHashes, theFilename):
@@ -283,7 +284,6 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
     Returns:
         (bool, str, str) where:
         * bool is success or failure indicator
-        * str is the file path of the resulting difference image
         * str is a message providing analysis comparison notes
 
     Raises:
@@ -296,7 +296,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
         myTestImage = QtGui.QImage(theTestImagePath)
     except OSError:
         myMessage = 'Test image:\n%s\ncould not be loaded' % theTestImagePath
-        return False, None, myMessage
+        return False, myMessage
 
     try:
         if not os.path.exists(theControlImagePath):
@@ -307,22 +307,23 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                      'Test image is:\n%s\n' % (
                          theControlImagePath,
                          theTestImagePath))
-        return False, None, myMessage
+        return False, myMessage
 
     if (myControlImage.width() != myTestImage.width()
         or myControlImage.height() != myTestImage.height()):
         myMessage = ('Control and test images are different sizes.\n'
-                     'Control image   : %s\n'
-                     'Test image      : %s\n'
-                     'Difference image: %s\n'
+                     'Control image   : %s (%i x %i)\n'
+                     'Test image      : %s (%i x %i)\n'
                      'If this test has failed look at the above images '
                      'to try to determine what may have change or '
                      'adjust the tolerance if needed.' %
-                     (theTolerance,
-                      theControlImagePath,
-                      theTestImagePath
-                      ))
-        return False, None, myMessage
+                     (theControlImagePath,
+                      myControlImage.width(),
+                      myControlImage.height(),
+                      theTestImagePath,
+                      myTestImage.width(),
+                      myTestImage.height()))
+        return False, myMessage
 
     myImageWidth = myControlImage.width()
     myImageHeight = myControlImage.height()
@@ -366,8 +367,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                   theTolerance,
                   theControlImagePath,
                   theTestImagePath,
-                  myDifferenceFilePath
-                    ))
+                  myDifferenceFilePath))
     return mySuccessFlag, myMessage
 
 
