@@ -325,7 +325,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # in its keywords.
     myKeywords = readKeywordsFromFile(myKeywordsPath)
     if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
-        if theLayer.srs().epsg() != 4326:
+        if str(theLayer.srs().authid()) != 'EPSG:4326':
 
             # This layer is not WGS84 geographic
             myMessage = ('Layer %s represents density but has spatial '
