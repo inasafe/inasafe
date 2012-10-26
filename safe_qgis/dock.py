@@ -31,8 +31,7 @@ from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
-                       QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform)
+                       QgsCoordinateReferenceSystem)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -40,7 +39,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getBufferedExtent,
                                       internationalisedNames)
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.clipper import clipLayer
+from safe_qgis.clipper import clipLayer, extentToGeoArray
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientOverlapException,
                                   InvalidParameterException,
@@ -963,11 +962,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myViewportGeoExtent = self.viewportGeoArray()
 
         # Get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+        myHazardGeoExtent = extentToGeoArray(myHazardLayer.extent(),
                                                   myHazardLayer.crs())
 
         # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
+        myExposureGeoExtent = extentToGeoArray(myExposureLayer.extent(),
                                                     myExposureLayer.crs())
 
         # Now work out the optimal extent between the two layers and
@@ -1112,27 +1111,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myCrs = QgsCoordinateReferenceSystem()
             myCrs.createFromEpsg(4326)
 
-        return self.extentToGeoArray(myRect, myCrs)
-
-    def extentToGeoArray(self, theExtent, theSourceCrs):
-        """Convert the supplied extent to geographic and return as as array"""
-
-        # FIXME (Ole): As there is no reference to self, this function
-        #              should be a general helper outside the class
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromEpsg(4326)
-        myXForm = QgsCoordinateTransform(
-                            theSourceCrs,
-                            myGeoCrs)
-
-        # Get the clip area in the layer's crs
-        myTransformedExtent = myXForm.transformBoundingBox(theExtent)
-
-        myGeoExtent = [myTransformedExtent.xMinimum(),
-                       myTransformedExtent.yMinimum(),
-                       myTransformedExtent.xMaximum(),
-                       myTransformedExtent.yMaximum()]
-        return myGeoExtent
+        return extentToGeoArray(myRect, myCrs)
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
