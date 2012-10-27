@@ -22,10 +22,12 @@ import os
 import shutil
 import unittest
 import logging
+import difflib
 import PyQt4
 from qgis.core import QgsFeature
+from safe.api import unique_filename, temp_dir
 from safe_qgis.utilities_test import getQgisTestApp
-from utils import shakemapExtractDir, shakemapZipDir
+from utils import shakemapExtractDir, shakemapZipDir, dataDir
 from shake_event import ShakeEvent
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -197,18 +199,40 @@ searchBoxes: None
         myProvider.select(myAttributes)
         myExpectedFeatureCount = 7
         self.assertEquals(myProvider.featureCount(), myExpectedFeatureCount)
-        myString = ''
+        myStrings = []
         while myProvider.nextFeature(myFeature):
             # fetch map of attributes
             myAttributes = myFeature.attributeMap()
             for (myKey, myValue) in myAttributes.iteritems():
-                myString += ("%d: %s\n" % (myKey, myValue.toString()))
-            myString += '------------------\n'
-        LOGGER.debug('Mem table:\n %s' % myString)
-        myExpectedLength = 916
-        myLength = len(myString)
-        myMessage = 'Expected: %s Got %s' % (myExpectedLength, myLength)
-        self.assertEquals(myExpectedLength, myLength, myMessage)
+                myStrings.append("%d: %s\n" % (myKey, myValue.toString()))
+            myStrings.append('------------------\n')
+        LOGGER.debug('Mem table:\n %s' % myStrings)
+        myFilePath = unique_filename(prefix='testLocalCities',
+                                     suffix='.txt',
+                                     dir=temp_dir('test'))
+        myFile = file(myFilePath, 'wt')
+        myFile.writelines(myStrings)
+        myFile.close()
+
+        myFixturePath = os.path.join(dataDir(), 'tests', 'testLocalCities.txt')
+        myFile = file(myFixturePath, 'rt')
+        myExpectedString = myFile.readlines()
+        myFile.close()
+
+        myDiff = difflib.unified_diff(myStrings, myExpectedString)
+        myDiffList = list(myDiff)
+        myDiffString = ''
+        for _, myLine in enumerate(myDiffList):
+            myDiffString += myLine
+
+        myMessage = ('Diff is not zero length:\n'
+                     'Control file: %s\n'
+                     'Test file: %s\n'
+                     'Diff:\n%s'
+                     % (myFixturePath,
+                        myFilePath,
+                        myDiffString))
+        self.assertEqual(myDiffString, '', myMessage)
 
     def testCitiesToShape(self):
         """Test that we can retrieve the cities local to the event"""
@@ -398,20 +422,21 @@ searchBoxes: None
                           'place-name': 'Tondano',
                           'distance-unit': PyQt4.QtCore.QString(u'km'),
                           'depth-unit': PyQt4.QtCore.QString(u'km'),
-                          'latitude-value': PyQt4.QtCore.QString(
-                              u'0\xb012\'36.00"S'),
+                          'latitude-value': u'0\xb012\'36.00"S',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
-                          'longitude-value': PyQt4.QtCore.QString(
-                              u'124\xb027\'0.00"E'), 'bearing-compass': 'SSW',
+                          'longitude-value': u'124\xb027\'0.00"E',
+                          'bearing-compass': 'SSW',
                           'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
-                          'depth': 11.0, 'mmi': 5.0, 'time': '2:15:35',
+                          'depth': '11.0', 'mmi': '5.0', 'time': '2:15:35',
                           'date': '26-7-2012',
                           'located-label': PyQt4.QtCore.QString(u'Located'),
-                          'bearing-degrees': -163.05592346191406,
+                          'bearing-degrees': '-163.055923462',
                           'bearing-text': PyQt4.QtCore.QString(u'bearing')}
+
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
              (myResult, myExpectedDict))
-        assert myResult == myExpectedDict, myMessage
+        self.maxDiff = None
+        self.assertDictEqual(myExpectedDict, myResult, myMessage)
 
     def testEventInfoString(self):
         """Test we can get a location info string nicely."""
