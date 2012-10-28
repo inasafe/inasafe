@@ -260,10 +260,11 @@ searchBoxes: None
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
-
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
                             '/20120726022003/impacts.html')
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml, myExpectedResult)
+
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml,
+            myExpectedResult)
         assert myFatalitiesHtml == myExpectedResult, myMessage
 
         myExpectedFatalities = {2: 0.47386375223673427,
@@ -470,7 +471,6 @@ searchBoxes: None
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
-
 
         # non numeric data as input should return None
         myExpectedResult = None

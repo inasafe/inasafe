@@ -695,6 +695,9 @@ class ShakeEvent(QObject):
         # So that we can set the label horizontal alignment
         myFieldDefinition = ogr.FieldDefn('ALIGN', ogr.OFTString)
         myLayer.CreateField(myFieldDefinition)
+        # So that we can set the label vertical alignment
+        myFieldDefinition = ogr.FieldDefn('VALIGN', ogr.OFTString)
+        myLayer.CreateField(myFieldDefinition)
 
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
@@ -852,6 +855,7 @@ class ShakeEvent(QObject):
         myYIndex = myProvider.fieldNameIndex('Y')
         myRomanIndex = myProvider.fieldNameIndex('ROMAN')
         myAlignIndex = myProvider.fieldNameIndex('ALIGN')
+        myVAlignIndex = myProvider.fieldNameIndex('VALIGN')
         myFeature = QgsFeature()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
@@ -898,6 +902,8 @@ class ShakeEvent(QObject):
             myLayer.changeAttributeValue(myId, myRomanIndex, QVariant(myRoman))
             myLayer.changeAttributeValue(
                 myId, myAlignIndex, QVariant('Center'))
+            myLayer.changeAttributeValue(
+                myId, myVAlignIndex, QVariant('HALF'))
 
         myLayer.commitChanges()
 
@@ -1870,7 +1876,8 @@ class ShakeEvent(QObject):
             myMessage = 'fatalities-table composer item could not be found'
             LOGGER.exception(myMessage)
             raise MapComposerError(myMessage)
-        myFatalitiesHtml = myComposition.getComposerHtmlByItem(myFatalitiesItem)
+        myFatalitiesHtml = myComposition.getComposerHtmlByItem(
+            myFatalitiesItem)
         if myFatalitiesHtml is None:
             myMessage = 'Fatalities QgsComposerHtml could not be found'
             LOGGER.exception(myMessage)
@@ -1928,7 +1935,8 @@ class ShakeEvent(QObject):
             self.eventId,
             '%s-thumb.png' % self.eventId)
         mySize = QSize(200, 200)
-        myThumbnailImage = myImage.scaled(mySize, Qt.KeepAspectRatioByExpanding)
+        myThumbnailImage = myImage.scaled(mySize,
+            Qt.KeepAspectRatioByExpanding)
         myThumbnailImage.save(myThumbnailImagePath)
         LOGGER.info('Generated Thumbnail: %s' % myThumbnailImagePath)
 
@@ -1951,11 +1959,12 @@ class ShakeEvent(QObject):
         except:
             return None
 
-        myDirectionList = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S",
-                           "SSW","SW","WSW","W","WNW","NW","NNW"]
+        myDirectionList = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
+                           'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
+                           'NW', 'NNW']
 
         myDirectionsCount = len(myDirectionList)
-        myDirectionsInterval = 360./myDirectionsCount
+        myDirectionsInterval = 360. / myDirectionsCount
         myIndex = int(round(theBearing / myDirectionsInterval))
         myIndex %= myDirectionsCount
         return myDirectionList[myIndex]
@@ -2063,7 +2072,6 @@ class ShakeEvent(QObject):
         Raises:
             None
         """
-
 
     def __str__(self):
         """The unicode representation for an event object's state.

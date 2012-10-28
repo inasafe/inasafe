@@ -23,7 +23,7 @@ from zipfile import ZipFile
 import logging
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
-from rt_exceptions import ( EventUndefinedError,
+from rt_exceptions import (EventUndefinedError,
                             EventIdError,
                             NetworkError,
                             EventValidationError,

@@ -12,7 +12,7 @@ from qgis.core import (QgsApplication,
                       QgsRasterLayer,
                       QgsRectangle,
                       QgsCoordinateReferenceSystem,
-                      QgsMapRenderer)
+                      )
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 

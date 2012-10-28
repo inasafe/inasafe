@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="1.9.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <transparencyLevelInt>255</transparencyLevelInt>
   <renderer-v2 symbollevels="0" type="RuleRenderer">
     <rules>
@@ -131,9 +131,9 @@
           <prop k="customdash" v="5;2"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0"/>
-          <prop k="penstyle" v="solid"/>
+          <prop k="penstyle" v="dot"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="0.26"/>
+          <prop k="width" v="0.005"/>
         </layer>
       </symbol>
     </symbols>
@@ -142,9 +142,9 @@
     <property key="labeling" value="pal"/>
     <property key="labeling/addDirectionSymbol" value="false"/>
     <property key="labeling/angleOffset" value="0"/>
-    <property key="labeling/bufferColorB" value="0"/>
-    <property key="labeling/bufferColorG" value="0"/>
-    <property key="labeling/bufferColorR" value="0"/>
+    <property key="labeling/bufferColorB" value="255"/>
+    <property key="labeling/bufferColorG" value="255"/>
+    <property key="labeling/bufferColorR" value="255"/>
     <property key="labeling/bufferJoinStyle" value="64"/>
     <property key="labeling/bufferNoFill" value="false"/>
     <property key="labeling/bufferSize" value="0"/>
@@ -153,9 +153,9 @@
     <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
-    <property key="labeling/dataDefinedProperty10" value=""/>
-    <property key="labeling/dataDefinedProperty11" value=""/>
-    <property key="labeling/dataDefinedProperty12" value=""/>
+    <property key="labeling/dataDefinedProperty10" value="3"/>
+    <property key="labeling/dataDefinedProperty11" value="6"/>
+    <property key="labeling/dataDefinedProperty12" value="7"/>
     <property key="labeling/dataDefinedProperty13" value=""/>
     <property key="labeling/dataDefinedProperty14" value=""/>
     <property key="labeling/dataDefinedProperty15" value=""/>
@@ -170,7 +170,7 @@
     <property key="labeling/dataDefinedProperty6" value=""/>
     <property key="labeling/dataDefinedProperty7" value=""/>
     <property key="labeling/dataDefinedProperty8" value=""/>
-    <property key="labeling/dataDefinedProperty9" value=""/>
+    <property key="labeling/dataDefinedProperty9" value="2"/>
     <property key="labeling/decimals" value="0"/>
     <property key="labeling/displayAll" value="false"/>
     <property key="labeling/dist" value="0"/>
@@ -178,7 +178,7 @@
     <property key="labeling/enabled" value="true"/>
     <property key="labeling/fieldName" value="ROMAN"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Times New Roman"/>
+    <property key="labeling/fontFamily" value="Ubuntu"/>
     <property key="labeling/fontItalic" value="false"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
     <property key="labeling/fontSize" value="16"/>
@@ -193,6 +193,8 @@
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="true"/>
     <property key="labeling/minFeatureSize" value="20"/>
+    <property key="labeling/multilineAlign" value="0"/>
+    <property key="labeling/multilineHeight" value="1"/>
     <property key="labeling/namedStyle" value="Bold"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/placement" value="2"/>
@@ -207,6 +209,7 @@
     <property key="labeling/textColorG" value="255"/>
     <property key="labeling/textColorR" value="255"/>
     <property key="labeling/textTransp" value="0"/>
+    <property key="labeling/upsidedownLabels" value="0"/>
     <property key="labeling/wrapChar" value=""/>
     <property key="labeling/xOffset" value="0"/>
     <property key="labeling/xQuadOffset" value="0"/>
@@ -243,11 +246,14 @@
     <edittype type="0" name="MMI"/>
     <edittype type="0" name="RGB"/>
     <edittype type="0" name="ROMAN"/>
+    <edittype type="0" name="VALIGN"/>
     <edittype type="0" name="X"/>
     <edittype type="0" name="Y"/>
   </edittypes>
   <editform>.</editform>
   <editforminit></editforminit>
   <annotationform>.</annotationform>
+  <excludeAttributesWMS/>
+  <excludeAttributesWFS/>
   <attributeactions/>
 </qgis>

@@ -6,24 +6,31 @@
       <symbol outputUnit="MM" alpha="1" type="marker" name="0">
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
-          <prop k="color" v="85,170,255,255"/>
-          <prop k="color_border" v="0,0,255,255"/>
-          <prop k="name" v="rectangle"/>
+          <prop k="color" v="255,85,0,255"/>
+          <prop k="color_border" v="0,0,0,255"/>
+          <prop k="name" v="diamond"/>
           <prop k="offset" v="0,0"/>
-          <prop k="size" v="4"/>
+          <prop k="scale_method" v="area"/>
+          <prop k="size" v="3"/>
         </layer>
       </symbol>
     </symbols>
     <rotation field=""/>
-    <sizescale field=""/>
+    <sizescale field="" scalemethod="area"/>
   </renderer-v2>
   <customproperties>
     <property key="labeling" value="pal"/>
     <property key="labeling/addDirectionSymbol" value="false"/>
+    <property key="labeling/angleOffset" value="0"/>
     <property key="labeling/bufferColorB" value="255"/>
     <property key="labeling/bufferColorG" value="255"/>
     <property key="labeling/bufferColorR" value="255"/>
-    <property key="labeling/bufferSize" value="1"/>
+    <property key="labeling/bufferJoinStyle" value="64"/>
+    <property key="labeling/bufferNoFill" value="false"/>
+    <property key="labeling/bufferSize" value="0.5"/>
+    <property key="labeling/bufferSizeInMapUnits" value="false"/>
+    <property key="labeling/bufferTransp" value="53"/>
+    <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
     <property key="labeling/dataDefinedProperty10" value=""/>
@@ -31,6 +38,11 @@
     <property key="labeling/dataDefinedProperty12" value=""/>
     <property key="labeling/dataDefinedProperty13" value=""/>
     <property key="labeling/dataDefinedProperty14" value=""/>
+    <property key="labeling/dataDefinedProperty15" value=""/>
+    <property key="labeling/dataDefinedProperty16" value=""/>
+    <property key="labeling/dataDefinedProperty17" value=""/>
+    <property key="labeling/dataDefinedProperty18" value=""/>
+    <property key="labeling/dataDefinedProperty19" value=""/>
     <property key="labeling/dataDefinedProperty2" value=""/>
     <property key="labeling/dataDefinedProperty3" value=""/>
     <property key="labeling/dataDefinedProperty4" value=""/>
@@ -40,39 +52,55 @@
     <property key="labeling/dataDefinedProperty8" value=""/>
     <property key="labeling/dataDefinedProperty9" value=""/>
     <property key="labeling/decimals" value="0"/>
-    <property key="labeling/dist" value="0"/>
+    <property key="labeling/displayAll" value="false"/>
+    <property key="labeling/dist" value="1"/>
     <property key="labeling/distInMapUnits" value="false"/>
     <property key="labeling/enabled" value="true"/>
-    <property key="labeling/fieldName" value="name || '_(pop. ' ||  &quot;population&quot;  || ')'"/>
-    <property key="labeling/fontFamily" value="Times New Roman"/>
+    <property key="labeling/fieldName" value="name"/>
+    <property key="labeling/fontCapitals" value="0"/>
+    <property key="labeling/fontFamily" value="Ubuntu"/>
     <property key="labeling/fontItalic" value="false"/>
+    <property key="labeling/fontLetterSpacing" value="0"/>
     <property key="labeling/fontSize" value="10"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
     <property key="labeling/fontWeight" value="75"/>
+    <property key="labeling/fontWordSpacing" value="0"/>
     <property key="labeling/formatNumbers" value="false"/>
-    <property key="labeling/isExpression" value="true"/>
+    <property key="labeling/isExpression" value="false"/>
+    <property key="labeling/labelOffsetInMapUnits" value="true"/>
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="false"/>
     <property key="labeling/minFeatureSize" value="0"/>
+    <property key="labeling/multilineAlign" value="1"/>
+    <property key="labeling/multilineHeight" value="1"/>
+    <property key="labeling/namedStyle" value="Bold"/>
     <property key="labeling/obstacle" value="true"/>
-    <property key="labeling/placement" value="1"/>
+    <property key="labeling/placement" value="0"/>
     <property key="labeling/placementFlags" value="0"/>
     <property key="labeling/plussign" value="true"/>
-    <property key="labeling/priority" value="5"/>
-    <property key="labeling/scaleMax" value="0"/>
-    <property key="labeling/scaleMin" value="0"/>
-    <property key="labeling/textColorB" value="255"/>
+    <property key="labeling/preserveRotation" value="true"/>
+    <property key="labeling/previewBkgrdColor" value="#ffffff"/>
+    <property key="labeling/priority" value="10"/>
+    <property key="labeling/scaleMax" value="10000000"/>
+    <property key="labeling/scaleMin" value="1"/>
+    <property key="labeling/textColorB" value="0"/>
     <property key="labeling/textColorG" value="0"/>
-    <property key="labeling/textColorR" value="85"/>
-    <property key="labeling/wrapChar" value="_"/>
+    <property key="labeling/textColorR" value="0"/>
+    <property key="labeling/textTransp" value="0"/>
+    <property key="labeling/upsidedownLabels" value="0"/>
+    <property key="labeling/wrapChar" value="  "/>
+    <property key="labeling/xOffset" value="0"/>
+    <property key="labeling/xQuadOffset" value="0"/>
+    <property key="labeling/yOffset" value="0"/>
+    <property key="labeling/yQuadOffset" value="0"/>
   </customproperties>
-  <displayfield>geonameid</displayfield>
+  <displayfield>name</displayfield>
   <label>0</label>
   <labelattributes>
     <label fieldname="" text="Label"/>
-    <family fieldname="" name="Sans"/>
+    <family fieldname="" name="Ubuntu"/>
     <size fieldname="" units="pt" value="12"/>
     <bold fieldname="" on="0"/>
     <italic fieldname="" on="0"/>
@@ -91,19 +119,23 @@
     <selectedonly on=""/>
   </labelattributes>
   <edittypes>
-    <edittype type="0" name="PK_UID"/>
-    <edittype type="0" name="asciiname"/>
-    <edittype type="0" name="elevation"/>
-    <edittype type="0" name="geonameid"/>
-    <edittype type="0" name="latitude"/>
-    <edittype type="0" name="longitude"/>
+    <edittype type="0" name="colour"/>
+    <edittype type="0" name="dir_from"/>
+    <edittype type="0" name="dir_to"/>
+    <edittype type="0" name="directio_1"/>
+    <edittype type="0" name="direction_"/>
+    <edittype type="0" name="dist_to"/>
+    <edittype type="0" name="distance_t"/>
+    <edittype type="0" name="id"/>
+    <edittype type="0" name="mmi"/>
     <edittype type="0" name="name"/>
     <edittype type="0" name="population"/>
-    <edittype type="0" name="scale_factor"/>
-    <edittype type="0" name="scale_int"/>
+    <edittype type="0" name="roman"/>
   </edittypes>
-  <editform></editform>
+  <editform>.</editform>
   <editforminit></editforminit>
-  <annotationform></annotationform>
+  <annotationform>.</annotationform>
+  <excludeAttributesWMS/>
+  <excludeAttributesWFS/>
   <attributeactions/>
 </qgis>

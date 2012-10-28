@@ -55,14 +55,14 @@ class FtpClientTest(unittest.TestCase):
         myClient = FtpClient()
         myFile = '20120726022003.inp.zip'
         myMessage = ('Expected that %s exists on the server' % myFile)
-        self.assertTrue(myClient.hasFile(myFile),myMessage)
+        self.assertTrue(myClient.hasFile(myFile), myMessage)
 
     def testHasFiles(self):
         """Test that the ftp client can check if a list of file exists"""
         myClient = FtpClient()
         myFiles = ['20120726022003.inp.zip', '20120726022003.out.zip']
         myMessage = ('Expected that %s exist on the server' % myFiles)
-        self.assertTrue(myClient.hasFiles(myFiles),myMessage)
+        self.assertTrue(myClient.hasFiles(myFiles), myMessage)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(FtpClientTest, 'test')

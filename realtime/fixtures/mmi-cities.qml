@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="1.9.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <transparencyLevelInt>255</transparencyLevelInt>
   <renderer-v2 symbollevels="0" type="singleSymbol">
     <symbols>
@@ -73,6 +73,8 @@
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="false"/>
     <property key="labeling/minFeatureSize" value="0"/>
+    <property key="labeling/multilineAlign" value="1"/>
+    <property key="labeling/multilineHeight" value="1"/>
     <property key="labeling/namedStyle" value="Bold"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/placement" value="0"/>
@@ -87,7 +89,8 @@
     <property key="labeling/textColorG" value="0"/>
     <property key="labeling/textColorR" value="0"/>
     <property key="labeling/textTransp" value="0"/>
-    <property key="labeling/wrapChar" value=" "/>
+    <property key="labeling/upsidedownLabels" value="0"/>
+    <property key="labeling/wrapChar" value="  "/>
     <property key="labeling/xOffset" value="0"/>
     <property key="labeling/xQuadOffset" value="0"/>
     <property key="labeling/yOffset" value="0"/>
@@ -123,6 +126,7 @@
     <edittype type="0" name="direction_"/>
     <edittype type="0" name="dist_to"/>
     <edittype type="0" name="distance_t"/>
+    <edittype type="0" name="id"/>
     <edittype type="0" name="mmi"/>
     <edittype type="0" name="name"/>
     <edittype type="0" name="population"/>
@@ -131,5 +135,7 @@
   <editform>.</editform>
   <editforminit></editforminit>
   <annotationform>.</annotationform>
+  <excludeAttributesWMS/>
+  <excludeAttributesWFS/>
   <attributeactions/>
 </qgis>

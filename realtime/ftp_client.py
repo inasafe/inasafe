@@ -93,7 +93,6 @@ class FtpClient:
         """
         return 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
 
-
     def getFile(self, theUrlPath, theFilePath):
         """Get a file from the ftp server.
 
@@ -162,4 +161,3 @@ class FtpClient:
                 return False
             LOGGER.debug('%s found on server' % myUrl)
         return True
-
