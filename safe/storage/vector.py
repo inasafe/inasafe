@@ -37,7 +37,7 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
-from utilities import array2wkt, array2line
+from utilities import array2line
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string

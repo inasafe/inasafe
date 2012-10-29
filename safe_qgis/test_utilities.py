@@ -352,8 +352,7 @@ class UtilitiesTest(unittest.TestCase):
             'FEM_RATIO': 0.5,
             'AGGR_ATTR_KEY': 'aggregation attribute',
             'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
-            'ADULT_RATIO': 0.659
-        }
+            'ADULT_RATIO': 0.659}
         myDefaults = getDefaults()
         myMessage = 'Defaults: got %s, expected %s' % (
             myDefaults, myExpectedDefaults)
