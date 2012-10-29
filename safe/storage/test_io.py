@@ -2324,7 +2324,7 @@ class Test_IO(unittest.TestCase):
         translatable strings.
         .. see:: :doc:`/developer-docs/i18n`
         """
-        # If you want to modify this code, please get aqcuainted with
+        # If you want to modify this code, please get acquainted with
         # Python's locale module. In particular:
         # http://docs.python.org/library/locale.html#locale.getdefaultlocale
 
@@ -2348,26 +2348,54 @@ class Test_IO(unittest.TestCase):
         msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
         assert indoout1 == indoexpected1, msg
 
-    def test_multipart_polygon_raises_exception(self):
-        """Multipart polygons raise exception
+    def test_multipart_polygon_can_be_read(self):
+        """Multipart polygons are be converted to singlepart
         """
 
-        hazard_filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
+        filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
+        L0 = read_layer(filename)
+        assert len(L0) == 2685
+        assert L0.is_polygon_data
 
-        try:
-            read_layer(hazard_filename)
-        except ReadLayerError, e:
-            msg = 'Wrong error message: %s' % e
-            assert 'convert multipart' not in str(e), msg
-        # I (Sunni) added function for forcing multipolygon to be
-        # single polygon. So it will not raise any exception
-        #======================================================================
-        # else:
-        #    msg = 'Multipart polygon should not have raised exception'
-        #    raise Exception(msg)
-        #======================================================================
+        geometry = L0.get_geometry(as_geometry_objects=True)
+        attributes = L0.get_data()
+        projection = L0.get_projection()
+        keywords = L0.get_keywords()
 
-    test_multipart_polygon_raises_exception.slow = True
+        # Store temporarily e.g. for inspection with QGIS
+        tmp_filename = unique_filename(suffix='.shp')
+        Vector(geometry=geometry, data=attributes,
+               projection=projection,
+               keywords=keywords).write_to_file(tmp_filename)
+
+        # Read again
+        L1 = read_layer(tmp_filename)
+
+        assert len(L1) == len(L0)
+        assert L1.is_polygon_data
+
+        for i in range(len(L0)):
+            # Check geometry
+            g0 = L0.get_geometry(as_geometry_objects=True)[i]
+            g1 = L1.get_geometry(as_geometry_objects=True)[i]
+            assert numpy.allclose(g0.outer_ring, g1.outer_ring)
+            assert len(g0.inner_rings) == len(g1.inner_rings)
+
+            for j in range(len(g0.inner_rings)):
+                assert numpy.allclose(g0.inner_rings[j], g1.inner_rings[j])
+
+            # Check attributes
+            v0 = L0.get_data()[i]
+            v1 = L1.get_data()[i]
+            assert v0 == v1
+
+        # Check projection
+        assert L0.projection == L1.projection
+
+        # Compare all
+        assert L0 == L1
+
+    test_multipart_polygon_can_be_read.slow = True
 
     def test_projection_comparisons(self):
         """Projection information can be correctly compared

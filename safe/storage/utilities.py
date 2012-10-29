@@ -9,6 +9,8 @@ import math
 from ast import literal_eval
 from osgeo import ogr
 
+from geometry import Polygon
+
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.exceptions import BoundingBoxError, InaSAFEError
@@ -1053,3 +1055,30 @@ def get_ringdata(ring):
 
     # Return ring as an Nx2 numpy array
     return A
+
+
+def get_polygondata(G):
+    """Extract polygon data from OGR geometry
+
+    :param G: OGR polygon geometry
+    :return: List of InaSAFE polygon instances
+    """
+
+    # Get outer ring, then inner rings
+    # http://osgeo-org.1560.n6.nabble.com/
+    # gdal-dev-Polygon-topology-td3745761.html
+    number_of_rings = G.GetGeometryCount()
+
+    # Get outer ring
+    outer_ring = get_ringdata(G.GetGeometryRef(0))
+
+    # Get inner rings if any
+    inner_rings = []
+    if number_of_rings > 1:
+        for i in range(1, number_of_rings):
+            inner_ring = get_ringdata(G.GetGeometryRef(i))
+            inner_rings.append(inner_ring)
+
+    # Return Polygon instance
+    return Polygon(outer_ring=outer_ring,
+                   inner_rings=inner_rings)
