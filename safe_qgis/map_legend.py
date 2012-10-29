@@ -299,7 +299,11 @@ class MapLegend():
                                             QtGui.QImage.Format_RGB32)
             self.legendImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             self.legendImage.setDotsPerMeterY(dpiToMeters(self.dpi))
-            self.legendImage.fill(QtGui.QColor(255, 255, 255))
+
+            # Only works in Qt4.8
+            #self.legendImage.fill(QtGui.QColor(255, 255, 255))
+            # Works in older Qt4 versions
+            self.legendImage.fill(QtCore.Qt.white)
             myPainter = QtGui.QPainter(self.legendImage)
             myFontWeight = QtGui.QFont.Bold
             myItalicsFlag = False
@@ -317,7 +321,10 @@ class MapLegend():
                                      QtGui.QImage.Format_RGB32)
             myImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             myImage.setDotsPerMeterY(dpiToMeters(self.dpi))
-            myImage.fill(QtGui.QColor(255, 255, 255))
+            # Only works in Qt4.8
+            #myImage.fill(QtGui.qRgb(255, 255, 255))
+            # Works in older Qt4 versions
+            myImage.fill(QtCore.Qt.white)
             myPainter = QtGui.QPainter(myImage)
 
             myRect = QtCore.QRectF(0, 0,
