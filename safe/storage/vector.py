@@ -37,7 +37,7 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
-from utilities import array2wkt, array2ring
+from utilities import array2wkt, array2line
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
@@ -645,24 +645,21 @@ class Vector(Layer):
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
             elif self.is_line_data:
-                # FIXME (Ole): Change this to use array2ring instead!
-                #geom = ogr.Geometry(ogr.wkbLineString)
-                #linear_ring = array2ring(geometry[i])
-                #geom.AddGeometry(linear_ring)
-
-                wkt = array2wkt(geometry[i], geom_type='LINESTRING')
-                geom = ogr.CreateGeometryFromWkt(wkt)
+                geom = array2line(geometry[i],
+                                  geometry_type=ogr.wkbLineString)
             elif self.is_polygon_data:
                 # Create polygon geometry
                 geom = ogr.Geometry(ogr.wkbPolygon)
 
                 # Add outer ring
-                linear_ring = array2ring(geometry[i].outer_ring)
+                linear_ring = array2line(geometry[i].outer_ring,
+                                         geometry_type=ogr.wkbLinearRing)
                 geom.AddGeometry(linear_ring)
 
                 # Add inner rings if any
                 for A in geometry[i].inner_rings:
-                    geom.AddGeometry(array2ring(A))
+                    geom.AddGeometry(array2line(A,
+                                     geometry_type=ogr.wkbLinearRing))
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise WriteLayerError(msg)

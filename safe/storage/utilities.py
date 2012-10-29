@@ -717,15 +717,17 @@ def is_sequence(x):
         return True
 
 
-def array2ring(A):
+def array2line(A, geometry_type=ogr.wkbLinearRing):
     """Convert coordinates to linear_ring
 
     Args:
         * A: Nx2 Array of coordinates representing either a polygon or a line.
              A can be either a numpy array or a list of coordinates.
+        * geometry_type: A valid OGR geometry type. Default: ogr.wkbLinearRing
+             Other options include ogr.wkbLineString
 
     Returns:
-        * ring: OGR linear_ring
+        * ring: OGR line geometry
 
     Note:
     Based on http://www.packtpub.com/article/working-geospatial-data-python
@@ -747,11 +749,11 @@ def array2ring(A):
 
     N = A.shape[0]  # Number of vertices
 
-    linearRing = ogr.Geometry(ogr.wkbLinearRing)
+    line = ogr.Geometry(geometry_type)
     for i in range(N):
-        linearRing.AddPoint(A[i, 0], A[i, 1])
+        line.AddPoint(A[i, 0], A[i, 1])
 
-    return linearRing
+    return line
 
 
 def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
@@ -764,7 +766,7 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
         * True if x == y or x' == y (up to the specified tolerance)
 
         where x' is x reversed in the first dimension. This corresponds to
-        linear rings being seen as equal irrespective of whether ther are
+        linear rings being seen as equal irrespective of whether they are
         organised in clock wise or counter clock wise order
     """
 
@@ -785,6 +787,7 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
 
 
 # FIXME (Ole): We can retire this messy function now
+#              Positive: Delete it :-)
 def array2wkt(A, geom_type='POLYGON'):
     """Convert coordinates to wkt format
 
