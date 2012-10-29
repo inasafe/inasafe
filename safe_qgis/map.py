@@ -36,7 +36,8 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
 from safe_qgis.utilities import (setupPrinter,
                                  pointsToMM,
-                                 mmToPoints)
+                                 mmToPoints,
+                                 dpiToMeters)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -172,9 +173,9 @@ class Map():
         myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
         myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
                                QtGui.QImage.Format_ARGB32)
-        myImage.setDotsPerMeterX(self.pageDpi / 25.4 * 1000)
-        myImage.setDotsPerMeterY(self.pageDpi / 25.4 * 1000)
-        myImage.fill(0)
+        myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
+        myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
+        myImage.fill(QtGui.qRgb(255, 255, 255))
         myImagePainter = QtGui.QPainter(myImage)
         mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
                                      self.pageHeight)
@@ -605,12 +606,14 @@ class Map():
             None
         """
         LOGGER.debug('InaSAFE Map drawLegend called')
-        myLegend = MapLegend(self.layer)
+        myLegend = MapLegend(self.layer, self.pageDpi)
         self.legend = myLegend.getLegend()
         myPicture1 = QgsComposerPicture(self.composition)
-        myLegendFile = os.path.join(temp_dir(), 'legend.png')
-        self.legend.save(myLegendFile, 'PNG')
-        myPicture1.setPictureFile(myLegendFile)
+        myLegendFilePath = unique_filename(prefix='legend',
+                                       suffix='.png',
+                                       dir='work')
+        self.legend.save(myLegendFilePath, 'PNG')
+        myPicture1.setPictureFile(myLegendFilePath)
         myLegendHeight = pointsToMM(self.legend.height(), self.pageDpi)
         myLegendWidth = pointsToMM(self.legend.width(), self.pageDpi)
         myPicture1.setItemPosition(self.pageMargin,
@@ -619,10 +622,10 @@ class Map():
                                    myLegendHeight)
         myPicture1.setFrame(False)
         self.composition.addItem(myPicture1)
-        os.remove(myLegendFile)
+        os.remove(myLegendFilePath)
 
-    def drawPixmap(self, thePixmap, theWidthMM, theLeftOffset, theTopOffset):
-        """Helper to draw a pixmap directly onto the QGraphicsScene.
+    def drawImage(self, theImage, theWidthMM, theLeftOffset, theTopOffset):
+        """Helper to draw an image directly onto the QGraphicsScene.
         This is an alternative to using QgsComposerPicture which in
         some cases leaves artifacts under windows.
 
@@ -631,20 +634,20 @@ class Map():
 
         Args:
 
-            * thePixmap
-            * theWidthMM - desired width in mm of output on page
-            * theLeftOffset
-            * theTopOffset
+            * theImage: QImage that will be rendered to the layout.
+            * theWidthMM: int - desired width in mm of output on page.
+            * theLeftOffset: int - offset from left of page.
+            * theTopOffset: int - offset from top of page.
 
         Returns:
             QGraphicsSceneItem is returned
         Raises:
             None
         """
-        LOGGER.debug('InaSAFE Map drawPixmap called')
+        LOGGER.debug('InaSAFE Map drawImage called')
         myDesiredWidthMM = theWidthMM  # mm
         myDesiredWidthPX = mmToPoints(myDesiredWidthMM, self.pageDpi)
-        myActualWidthPX = thePixmap.width()
+        myActualWidthPX = theImage.width()
         myScaleFactor = myDesiredWidthPX / myActualWidthPX
 
         LOGGER.debug('%s %s %s' % (
@@ -652,7 +655,7 @@ class Map():
         myTransform = QtGui.QTransform()
         myTransform.scale(myScaleFactor, myScaleFactor)
         myTransform.rotate(0.5)
-        myItem = self.composition.addPixmap(thePixmap)
+        myItem = self.composition.addPixmap(QtGui.QPixmap.fromImage(theImage))
         myItem.setTransform(myTransform)
         myItem.setOffset(theLeftOffset / myScaleFactor,
                          theTopOffset / myScaleFactor)

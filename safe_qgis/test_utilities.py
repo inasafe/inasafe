@@ -20,7 +20,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                               humaniseSeconds,
                               isLayerPolygonal,
                               getLayerAttributeNames,
-                              impactLayerAttribution)
+                              impactLayerAttribution,
+                              dpiToMeters)
 from safe_qgis.utilities_test import (unitTestDataPath,
                                      loadLayer,
                                      getQgisTestApp)
@@ -401,6 +402,16 @@ class UtilitiesTest(unittest.TestCase):
         myHtml = impactLayerAttribution(myKeywords, True)
         print myHtml
         assert myHtml == '11'
+
+    def testDpiToMeters(self):
+        """Test conversion from dpi to dpm."""
+        myDpi = 300
+        myDpm = dpiToMeters(myDpi)
+        myExpectedDpm = 11811.023622
+        myMessage = ('Conversion from dpi to dpm failed\n'
+                     ' Got: %s Expected: %s\n' %
+                     (myDpm, myExpectedDpm))
+        self.assertAlmostEqual(myDpm, myExpectedDpm, msg=myMessage)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

@@ -248,6 +248,8 @@ class Test_IO(unittest.TestCase):
         # Check
         assert R == L, msg
 
+    test_donut_polygons.slow = True
+
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
         """
@@ -2364,6 +2366,8 @@ class Test_IO(unittest.TestCase):
         #    msg = 'Multipart polygon should not have raised exception'
         #    raise Exception(msg)
         #======================================================================
+
+    test_multipart_polygon_raises_exception.slow = True
 
     def test_projection_comparisons(self):
         """Projection information can be correctly compared

@@ -672,9 +672,10 @@ def setupLogger():
     # 'INSAFE_SENTRY=1' present (value can be anything) will this be enabled.
     if 'INASAFE_SENTRY' in os.environ:
         try:
+            #pylint: disable=F0401
             from raven.handlers.logging import SentryHandler
             from raven import Client
-
+            #pylint: enable=F0401
             myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
                               'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
                               '4')
@@ -870,6 +871,22 @@ def pointsToMM(thePoints, theDpi):
     myInchAsMM = 25.4
     myMM = (float(thePoints) / theDpi) * myInchAsMM
     return myMM
+
+
+def dpiToMeters(theDpi):
+    """Convert dots per inch (dpi) to dots perMeters.
+
+    Args:
+        theDpi: int - dots per inch in the print / display medium
+    Returns:
+        int - dpm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myInchesPerM = 1000.0 / myInchAsMM
+    myDotsPerM = myInchesPerM * theDpi
+    return myDotsPerM
 
 
 def setupPrinter(theFilename,

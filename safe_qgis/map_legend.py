@@ -22,7 +22,7 @@ from PyQt4 import QtCore, QtGui
 from qgis.core import QgsMapLayer
 from safe_qgis.exceptions import (LegendLayerException,
                                   KeywordNotFoundException)
-from safe_qgis.utilities import qgisVersion
+from safe_qgis.utilities import qgisVersion, dpiToMeters
 from safe_qgis.keyword_io import KeywordIO
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -30,11 +30,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class MapLegend():
     """A class for creating a map legend."""
-    def __init__(self, theLayer):
+    def __init__(self, theLayer, theDpi=300):
         """Constructor for the Map Legend class.
 
         Args:
-            theIface - reference to the QGIS iface object
+            * theLayer: QgsMapLayer object that the legend should be generated
+                for.
+            * theDpi: Optional DPI for generated legend image. Defaults to
+                300 if not specified.
         Returns:
             None
         Raises:
@@ -44,10 +47,11 @@ class MapLegend():
         self.legendImage = None
         self.layer = theLayer
         # how high each row of the legend should be
-        self.legendIncrement = 30
+        self.legendIncrement = 42
         self.keywordIO = KeywordIO()
-        self.legendFontSize = 16
+        self.legendFontSize = 8
         self.legendWidth = 900
+        self.dpi = theDpi
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -249,7 +253,7 @@ class MapLegend():
         myBrush = QtGui.QBrush(theColour)
         myPainter.setBrush(myBrush)
         myPainter.setPen(theColour)
-        myWhitespace = 0  # white space above and below each class itcon
+        myWhitespace = 2  # white space above and below each class icon
         mySquareSize = self.legendIncrement - (myWhitespace * 2)
         myLeftIndent = 10
         myPainter.drawRect(QtCore.QRectF(myLeftIndent,
@@ -263,6 +267,11 @@ class MapLegend():
                              self.legendFontSize,
                              myFontWeight,
                              myItalicsFlag)
+        myFontMetrics = QtGui.QFontMetricsF(myFont, self.legendImage)
+        myFontHeight = myFontMetrics.height()
+        myCenterVerticalPadding = (self.legendIncrement - myFontHeight) / 2
+        myExtraVerticalSpace = 8  # hack to get label centered on graphic
+        myOffset += myCenterVerticalPadding + myExtraVerticalSpace
         myPainter.setFont(myFont)
         myLabel = ''
         if theLabel:
@@ -286,28 +295,33 @@ class MapLegend():
         LOGGER.debug('InaSAFE Map Legend extendLegend called')
         if self.legendImage is None:
 
-            self.legendImage = QtGui.QPixmap(self.legendWidth, 80)
+            self.legendImage = QtGui.QImage(self.legendWidth, 80,
+                                            QtGui.QImage.Format_RGB32)
+            self.legendImage.setDotsPerMeterX(dpiToMeters(self.dpi))
+            self.legendImage.setDotsPerMeterY(dpiToMeters(self.dpi))
             self.legendImage.fill(QtGui.QColor(255, 255, 255))
             myPainter = QtGui.QPainter(self.legendImage)
-            myFontSize = 16
             myFontWeight = QtGui.QFont.Bold
             myItalicsFlag = False
             myFont = QtGui.QFont('verdana',
-                                 myFontSize,
+                                 self.legendFontSize,
                                  myFontWeight,
                                  myItalicsFlag)
             myPainter.setFont(myFont)
             myPainter.drawText(10, 25, self.tr('Legend'))
         else:
             # extend the existing legend down for the next class
-            myPixmap = QtGui.QPixmap(self.legendWidth,
+            myImage = QtGui.QImage(self.legendWidth,
                                      self.legendImage.height() +
-                                          self.legendIncrement)
-            myPixmap.fill(QtGui.QColor(255, 255, 255))
-            myPainter = QtGui.QPainter(myPixmap)
+                                          self.legendIncrement,
+                                     QtGui.QImage.Format_RGB32)
+            myImage.setDotsPerMeterX(dpiToMeters(self.dpi))
+            myImage.setDotsPerMeterY(dpiToMeters(self.dpi))
+            myImage.fill(QtGui.QColor(255, 255, 255))
+            myPainter = QtGui.QPainter(myImage)
 
             myRect = QtCore.QRectF(0, 0,
                                    self.legendImage.width(),
                                    self.legendImage.height())
-            myPainter.drawPixmap(myRect, self.legendImage, myRect)
-            self.legendImage = myPixmap
+            myPainter.drawImage(myRect, self.legendImage, myRect)
+            self.legendImage = myImage

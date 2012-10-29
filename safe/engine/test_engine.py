@@ -579,6 +579,8 @@ class Test_Engine(unittest.TestCase):
         # FIXME (Ole): Should also have test for concentric circle
         #              evacuation zones
 
+    test_volcano_population_evacuation_impact.slow = True
+
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
     #
@@ -895,7 +897,7 @@ class Test_Engine(unittest.TestCase):
         assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
         assert attributes['polygon_id'] == 4
 
-    test_polygon_hazard_with_holes_and_raster_exposure.slow = False
+    test_polygon_hazard_with_holes_and_raster_exposure.slow = True
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works
