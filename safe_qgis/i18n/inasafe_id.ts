@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -68,62 +69,62 @@
         <translation>Tidak ada detil yang tersedia</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="927"/>
+        <location filename="utilities.py" line="944"/>
         <source>%i seconds</source>
         <translation>%i detik</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="929"/>
+        <location filename="utilities.py" line="946"/>
         <source>a minute</source>
         <translation>satu menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="931"/>
+        <location filename="utilities.py" line="948"/>
         <source>minutes</source>
         <translation>menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="933"/>
+        <location filename="utilities.py" line="950"/>
         <source>over an hour</source>
         <translation>lebih dari satu jam</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="935"/>
+        <location filename="utilities.py" line="952"/>
         <source>%i hours and %i minutes</source>
         <translation>%i jam dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="938"/>
+        <location filename="utilities.py" line="955"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation>%i hari, %i jam dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="961"/>
+        <location filename="utilities.py" line="978"/>
         <source>sourced from</source>
         <translation>sumber dari</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="962"/>
+        <location filename="utilities.py" line="979"/>
         <source>Hazard details</source>
         <translation>Detil bahaya</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="965"/>
+        <location filename="utilities.py" line="982"/>
         <source>Exposure details</source>
         <translation>Detil paparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="973"/>
+        <location filename="utilities.py" line="990"/>
         <source>Hazard layer</source>
         <translation>Lapisan bahaya</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="984"/>
+        <location filename="utilities.py" line="1001"/>
         <source>Exposure layer</source>
         <translation>Lapisan paparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1011"/>
+        <location filename="utilities.py" line="1028"/>
         <source>InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank</source>
         <translation>InaSAFE telah dikembangkan bersama-sama oleh BNPB, AusAid &amp; World Bank</translation>
     </message>
@@ -182,19 +183,24 @@
         <translation>Tidak ada informasi gaya ditemukan pada lapisan %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="989"/>
+        <location filename="utilities.py" line="1006"/>
         <source>an unknown source</source>
         <translation>sumber tidak diketahui</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1006"/>
+        <location filename="utilities.py" line="1023"/>
         <source>Software notes</source>
         <translation>Catatan perangkat lunak</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1007"/>
+        <location filename="utilities.py" line="1024"/>
         <source>This report was created using InaSAFE version %1. Visit http://inasafe.org to get your free copy of this software!</source>
         <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %1. Kunjungi http://inasafe.org untuk mendapatkan kopi gratis dari perangkat lunak ini!</translation>
+    </message>
+    <message>
+        <location filename="test_plugin.py" line="70"/>
+        <source>A volcano eruption</source>
+        <translation>Sebuah letusan gunung berapi</translation>
     </message>
 </context>
 <context>
@@ -655,12 +661,12 @@
 <context>
     <name>HtmlRenderer</name>
     <message>
-        <location filename="html_renderer.py" line="219"/>
+        <location filename="html_renderer.py" line="226"/>
         <source>Summary Table</source>
         <translation>Tabel ringkasan</translation>
     </message>
     <message>
-        <location filename="html_renderer.py" line="225"/>
+        <location filename="html_renderer.py" line="232"/>
         <source>Detailed Table</source>
         <translation>Tabel rincian</translation>
     </message>
@@ -1026,17 +1032,17 @@ ke %s: %s</translation>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.py" line="74"/>
+        <location filename="map.py" line="75"/>
         <source>InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank</source>
         <translation>InaSAFE telah dikembangkan bersama-sama oleh BNPB, AusAid &amp; World Bank</translation>
     </message>
     <message>
-        <location filename="map.py" line="260"/>
+        <location filename="map.py" line="265"/>
         <source>InaSAFE - Indonesia Scenario Assessment for Emergencies</source>
         <translation>InaSAFE - Indonesia Scenario Assessment for Emergencies</translation>
     </message>
     <message>
-        <location filename="map.py" line="688"/>
+        <location filename="map.py" line="695"/>
         <source>Date and time of assessment: %1 %2
 Special note: This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.
 Assessment carried out using InaSAFE release %3 (QGIS plugin version).</source>
@@ -1048,29 +1054,29 @@ Analisis dihasilkan dengan menggunakan InaSAFE versi %3 (versi penggaya QGIS)</t
 <context>
     <name>MapLegend</name>
     <message>
-        <location filename="map_legend.py" line="81"/>
+        <location filename="map_legend.py" line="85"/>
         <source>Unable to make a legend when map generator has no layer set.</source>
         <translation>Tidak bisa membuat legenda ketika pembuat peta tidak memiliki kumpulan lapisan.</translation>
     </message>
     <message>
-        <location filename="map_legend.py" line="87"/>
+        <location filename="map_legend.py" line="91"/>
         <source>This layer does not appear to be an impact layer. Try selecting an impact layer in the QGIS layers list or creating a new impact scenario before using the print tool.
 Message: %s</source>
         <translation>Lapisan ini nampaknya bukan lapisan dampak. Cobalah untuk memilih lapisan dampak dari daftar lapisan di QGIS atau buatlah skenario dampak sebelum menggunakan alat pencetak.
 Pesan: %s</translation>
     </message>
     <message>
-        <location filename="map_legend.py" line="112"/>
+        <location filename="map_legend.py" line="116"/>
         <source>A legend can only be generated for vector layers that use the &quot;new symbology&quot; implementation in QGIS.</source>
         <translation>Legenda hanya dapat dibuat untuk lapisan vektor yang menggunakan implementasi &quot;simbologi baru&quot; di QGIS.</translation>
     </message>
     <message>
-        <location filename="map_legend.py" line="140"/>
+        <location filename="map_legend.py" line="144"/>
         <source>Unrecognised renderer type found for the impact layer. Please use one of these: single symbol, categorised symbol or graduated symbol and then try again.</source>
         <translation>Ditemukan jenis perender yang tidak dikenali pada lapisan dampak. Silahkan gunakan salah satu dari: simbol tunggal, simbol terkategorisasi atau simbol graduasi dan coba lagi.</translation>
     </message>
     <message>
-        <location filename="map_legend.py" line="300"/>
+        <location filename="map_legend.py" line="315"/>
         <source>Legend</source>
         <translation>Legenda</translation>
     </message>
