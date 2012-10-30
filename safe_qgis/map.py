@@ -179,7 +179,7 @@ class Map():
         # Only works in Qt4.8
         #myImage.fill(QtGui.qRgb(255, 255, 255))
         # Works in older Qt4 versions
-        myImage.fill(QtCore.Qt.white)
+        myImage.fill(55 + 255 * 256 + 255 * 256 * 256)
         myImagePainter = QtGui.QPainter(myImage)
         mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
                                      self.pageHeight)
