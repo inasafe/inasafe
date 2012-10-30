@@ -448,17 +448,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no
         """
-        #FIXME (MB) remove hazardlayer and exposure layer type check when
-        # vector aggregation is supported
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
 
         #more than 1 because No aggregation is always there
         if (self.cboAggregation.count() > 1 and
             selectedHazardLayer is not None and
-            selectedExposureLayer is not None and
-            selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
-            selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
+            selectedExposureLayer is not None):
             self.cboAggregation.setEnabled(True)
         else:
             self.cboAggregation.setCurrentIndex(0)
@@ -1431,6 +1427,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'Called on %1').arg(myQgisImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
+            LOGGER.debug(myQgisImpactLayer.type(()))
             return
         else:
             #loop over all features in impact layer
