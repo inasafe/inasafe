@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="id_ID">
+<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
         <location filename="clipper.py" line="305"/>
         <source>Layer or Extent passed to clip is None.</source>
-        <translation>Tidak ada Lapisan atau cakupan wilayah untuk dipotong.</translation>
+        <translation>Tidak ada lapisan atau cakupan wilayah untuk dipotong.</translation>
     </message>
     <message>
         <location filename="clipper.py" line="141"/>
@@ -106,7 +105,7 @@
     <message>
         <location filename="utilities.py" line="979"/>
         <source>Hazard details</source>
-        <translation>Detil bahaya</translation>
+        <translation>Detil ancaman</translation>
     </message>
     <message>
         <location filename="utilities.py" line="982"/>
@@ -116,7 +115,7 @@
     <message>
         <location filename="utilities.py" line="990"/>
         <source>Hazard layer</source>
-        <translation>Lapisan bahaya</translation>
+        <translation>Lapisan ancaman</translation>
     </message>
     <message>
         <location filename="utilities.py" line="1001"/>
@@ -136,7 +135,7 @@
     <message>
         <location filename="safe_interface.py" line="155"/>
         <source>Bounding boxes of hazard data, exposure data and viewport did not overlap, so no computation was done. Please make sure you pan to where the data is and that hazard and exposure data overlaps.</source>
-        <translation>Kotak pembatas untuk data bencana, data paparan, dan tampilan sekarang tidak saling berpotongan, sehingga tidak ada perhitungan yang dilakukan. Silahkan pastikan Anda menggeser ke arah data dan data paparan serta bencana berpotongan.</translation>
+        <translation>Kotak pembatas untuk data ancaman, data paparan, dan tampilan sekarang tidak saling berpotongan, sehingga tidak ada perhitungan yang dilakukan. Silahkan pastikan Anda menggeser ke arah data ancaman dan data paparan serta bencana berpotongan.</translation>
     </message>
     <message>
         <location filename="safe_interface.py" line="301"/>
@@ -195,7 +194,7 @@
     <message>
         <location filename="utilities.py" line="1024"/>
         <source>This report was created using InaSAFE version %1. Visit http://inasafe.org to get your free copy of this software!</source>
-        <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %1. Kunjungi http://inasafe.org untuk mendapatkan kopi gratis dari perangkat lunak ini!</translation>
+        <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %1. Kunjungi http://inasafe.org untuk mendapatkan perangkat lunak ini secara gratis!</translation>
     </message>
     <message>
         <location filename="test_plugin.py" line="70"/>
@@ -252,7 +251,7 @@
     <message>
         <location filename="dock.py" line="1055"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
-        <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak bahaya dan menulis hasilnya ke layer baru.</translation>
+        <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak ancaman dan menulis hasilnya ke layer baru.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1681"/>
@@ -272,12 +271,12 @@
     <message>
         <location filename="dock.py" line="1954"/>
         <source>Preparing hazard data...</source>
-        <translation>Sedang mempersiapkan data bahaya...</translation>
+        <translation>Sedang mempersiapkan data ancaman...</translation>
     </message>
     <message>
         <location filename="dock.py" line="1955"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
-        <translation>Kita resampling dan memotonh lapisan dampak untuk mencocokkan perpotongan dari lapisan paparan dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan memotong lapisan ancaman untuk mencocokkan perpotongan dari lapisan paparan dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1968"/>
@@ -287,7 +286,7 @@
     <message>
         <location filename="dock.py" line="1969"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
-        <translation>Kita resampling dan memotong lapisan dampak untuk mencocokkan perpotongan lapisan dampak dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan memotong lapisan dampak untuk mencocokkan perpotongan lapisan ancaman dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="2231"/>
@@ -302,7 +301,7 @@
     <message>
         <location filename="dock.py" line="2125"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
-        <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai lapisan dampak atau lapisan bahaya dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
+        <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai lapisan dampak atau lapisan ancaman dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
     <message>
         <location filename="dock.py" line="318"/>
@@ -432,7 +431,7 @@
     <message>
         <location filename="dock.py" line="2219"/>
         <source>Please select a valid impact layer before trying to print.</source>
-        <translation>Silahkan pilih lapisan dampat yang vali sebelum mencoba untuk mencetaknya.</translation>
+        <translation>Silahkan pilih lapisan dampat yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
         <location filename="dock.py" line="2225"/>
@@ -547,7 +546,7 @@
     <message>
         <location filename="dock.py" line="991"/>
         <source>An error occurred when write clip file</source>
-        <translation>Terjadi pengecualian ketika menulis berkas kliping</translation>
+        <translation>Terjadi pengecualian ketika menulis berkas pemotongan</translation>
     </message>
     <message>
         <location filename="dock.py" line="1010"/>
@@ -620,7 +619,7 @@
     <message>
         <location filename="dock_base.py" line="166"/>
         <source>Question: In the event of</source>
-        <translation>Pertanyaan: Pada saat terjadi</translation>
+        <translation>Pertanyaan: Apabila terjadi</translation>
     </message>
 </context>
 <context>
@@ -694,7 +693,7 @@
     <message>
         <location filename="impact_calculator_thread.py" line="153"/>
         <source>Ensure that hazard, exposure and function are all set before trying to run the analysis.</source>
-        <translation>Pastikan bahwa bahaya, paparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
+        <translation>Pastikan bahwa ancaman, paparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
     </message>
     <message>
         <location filename="impact_calculator_thread.py" line="164"/>
@@ -846,7 +845,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog.py" line="513"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
-        <translation>Tanda titik dua (:) tidak diijinkan, ganti dengan &quot;.&quot;</translation>
+        <translation>Tanda titik dua (:) tidak diijinkan, diganti dengan &quot;.&quot;</translation>
     </message>
     <message>
         <location filename="keywords_dialog.py" line="79"/>
@@ -921,12 +920,12 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog_base.py" line="240"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
-        <translation>Bahaya merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
+        <translation>Ancaman merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="241"/>
         <source>Hazard</source>
-        <translation>Bahaya</translation>
+        <translation>Ancaman</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="242"/>
@@ -936,7 +935,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog_base.py" line="243"/>
         <source>Exposure</source>
-        <translation>Terpapar</translation>
+        <translation>Paparan</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="237"/>
@@ -946,7 +945,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog_base.py" line="236"/>
         <source>A subcategory represents the type of hazard.</source>
-        <translation>Sub-kategori menunjukan jenis bahaya.</translation>
+        <translation>Sub-kategori menunjukan jenis ancaman.</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="249"/>
@@ -976,7 +975,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog_base.py" line="259"/>
         <source>Remove selected</source>
-        <translation>hilangkan yang dipilih</translation>
+        <translation>Hilangkan yang dipilih</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="250"/>
@@ -1091,7 +1090,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog.py" line="180"/>
         <source>Set keyword cache file</source>
-        <translation>Mengatur file cache kata kunci</translation>
+        <translation>Mengatur berkas cache kata kunci</translation>
     </message>
     <message>
         <location filename="options_dialog.py" line="180"/>
@@ -1119,7 +1118,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.py" line="210"/>
         <source>Keyword cache for remote datasources</source>
-        <translation>Chace Kata Kunci untuk sumber data remote</translation>
+        <translation>Cache Kata Kunci untuk sumber data jarak jauh</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="211"/>
@@ -1134,7 +1133,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.py" line="197"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
-        <translation>Gelembung paparan dan lapisan bahaya ke atas saat dipilih</translation>
+        <translation>Gelembung paparan dan lapisan ancaman ke atas saat dipilih</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="198"/>
@@ -1184,12 +1183,12 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.py" line="214"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
-        <translation>Nyalakan untuk memotong lapisan ancaman dan paparan ke tampilan yang terlihat pada kancas peta</translation>
+        <translation>Nyalakan untuk memotong lapisan ancaman dan paparan ke tampilan yang terlihat pada kanvas peta</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="216"/>
         <source>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</source>
-        <translation>Hiduplan untuk melihat berkas intermediate yang dibuat oleh tahapan pasca pemrosesan pada kanvas peta</translation>
+        <translation>Hidupkan untuk melihat berkas intermediate yang dibuat oleh tahapan pasca pemrosesan pada kanvas peta</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="217"/>
@@ -1232,12 +1231,12 @@ Pesan: %s</translation>
     <message>
         <location filename="plugin.py" line="191"/>
         <source>Reset Dock</source>
-        <translation>Reset panel</translation>
+        <translation>Reset Panel</translation>
     </message>
     <message>
         <location filename="plugin.py" line="196"/>
         <source>Reset the InaSAFE Dock</source>
-        <translation>Reset panel InaSAFE</translation>
+        <translation>Reset Panel InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="208"/>
