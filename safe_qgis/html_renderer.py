@@ -98,7 +98,7 @@ class HtmlRenderer():
         # Only works in Qt4.8
         #myImage.fill(QtGui.qRgb(255, 255, 255))
         # Works in older Qt4 versions
-        myImage.fill(QtCore.Qt.white)
+        myImage.fill(255 + 255 * 256 + 255 * 256 * 256)
         myPainter = QtGui.QPainter(myImage)
         myFrame.render(myPainter)
         myPainter.end()
