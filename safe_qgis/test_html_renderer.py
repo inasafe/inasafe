@@ -135,7 +135,7 @@ class HtmlRendererTest(unittest.TestCase):
         LOGGER.debug(myHtml)
         myPageDpi = 300
         myRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='testHtmlToPixmap',
+        myPath = unique_filename(prefix='testHtmlToImage',
                                  suffix='.png',
                                  dir=temp_dir('test'))
         LOGGER.debug(myPath)
