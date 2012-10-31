@@ -110,7 +110,7 @@
     <message>
         <location filename="utilities.py" line="982"/>
         <source>Exposure details</source>
-        <translation>Detil paparan</translation>
+        <translation>Detil keterpaparan</translation>
     </message>
     <message>
         <location filename="utilities.py" line="990"/>
@@ -120,7 +120,7 @@
     <message>
         <location filename="utilities.py" line="1001"/>
         <source>Exposure layer</source>
-        <translation>Lapisan paparan</translation>
+        <translation>Lapisan keterpaparan</translation>
     </message>
     <message>
         <location filename="utilities.py" line="1028"/>
@@ -130,12 +130,12 @@
     <message>
         <location filename="safe_interface.py" line="139"/>
         <source>theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: /ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s</source>
-        <translation>Luasan Geografis bencana atau luasan geografis paparan tidak bisa kosong. Ditemukan /n Luasan Geografis bencana : %s /n luasan geografis paparan: %s</translation>
+        <translation>Luasan Geografis bencana atau luasan geografis keterpaparan tidak bisa kosong. Ditemukan /n Luasan Geografis bencana : %s /n luasan geografis keterpaparan: %s</translation>
     </message>
     <message>
         <location filename="safe_interface.py" line="155"/>
         <source>Bounding boxes of hazard data, exposure data and viewport did not overlap, so no computation was done. Please make sure you pan to where the data is and that hazard and exposure data overlaps.</source>
-        <translation>Kotak pembatas untuk data ancaman, data paparan, dan tampilan sekarang tidak saling berpotongan, sehingga tidak ada perhitungan yang dilakukan. Silahkan pastikan Anda menggeser ke arah data ancaman dan data paparan serta bencana berpotongan.</translation>
+        <translation>Kotak pembatas untuk data ancaman, data keterpaparan, dan tampilan sekarang tidak saling berpotongan, sehingga tidak ada perhitungan yang dilakukan. Silahkan pastikan Anda menggeser ke arah data ancaman dan data keterpaparan serta bencana berpotongan.</translation>
     </message>
     <message>
         <location filename="safe_interface.py" line="301"/>
@@ -276,17 +276,17 @@
     <message>
         <location filename="dock.py" line="1955"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
-        <translation>Kita resampling dan memotong lapisan ancaman untuk mencocokkan perpotongan dari lapisan paparan dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan memotong lapisan ancaman untuk mencocokkan perpotongan dari lapisan keterpaparan dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1968"/>
         <source>Preparing exposure data...</source>
-        <translation>Sedang mempersiapkan data terpapar...</translation>
+        <translation>Sedang mempersiapkan data keterpaparan...</translation>
     </message>
     <message>
         <location filename="dock.py" line="1969"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
-        <translation>Kita resampling dan memotong lapisan dampak untuk mencocokkan perpotongan lapisan ancaman dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan memotong lapisan keterpaparan untuk mencocokkan perpotongan lapisan ancaman dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="2231"/>
@@ -306,7 +306,7 @@
     <message>
         <location filename="dock.py" line="318"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
-        <translation>Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik tombol&lt;em&gt; jalankan&lt;/em&gt; di bawah ini.</translation>
+        <translation>Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; keterpaparan (seperti tempat tinggal). Ketika anda siap, klik tombol&lt;em&gt; jalankan&lt;/em&gt; di bawah ini.</translation>
     </message>
     <message>
         <location filename="dock.py" line="324"/>
@@ -331,7 +331,7 @@
     <message>
         <location filename="dock.py" line="352"/>
         <source>Exposure keywords:</source>
-        <translation>Kata kunci terpapar:</translation>
+        <translation>Kata kunci keterpaparan:</translation>
     </message>
     <message>
         <location filename="dock.py" line="360"/>
@@ -421,7 +421,7 @@
     <message>
         <location filename="dock.py" line="1881"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewable area Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewable area clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Tidak ada perpotongan yang cukup antara lapisan input dan / atau lapisan dan area terlihat. Silahkan pilih dua lapisan yang berpotongan dan perbesar atau geser lapisan tersebut atau non aktifkan pemotongan area terlihat pada jendela opsi. Detail yang lebih lengkap sebagai berikut:&lt;/p&gt;&lt;p&gt;Gagal mendapatkan luasan optimal diberikan:&lt;/p&gt;&lt;p&gt;Ancaman: %1&lt;/p&gt;&lt;p&gt;Paparan: %2&lt;/p&lt;p&gt;Area terlihat: %3&lt;/p&gt;&lt;p&gt;Area Ancaman: %4&lt;/p&lt;p&gt;Area paparan: %5&lt;/p&gt;&lt;p&gt;Pemotongan area terlihat dalan status aktif: %6&lt;/p&gt;&lt;p&gt;Rincian: %7&lt;/P</translation>
+        <translation>&lt;p&gt;Tidak ada perpotongan yang cukup antara lapisan input dan / atau lapisan dan area terlihat. Silahkan pilih dua lapisan yang berpotongan dan perbesar atau geser lapisan tersebut atau non aktifkan pemotongan area terlihat pada jendela opsi. Detail yang lebih lengkap sebagai berikut:&lt;/p&gt;&lt;p&gt;Gagal mendapatkan luasan optimal diberikan:&lt;/p&gt;&lt;p&gt;Ancaman: %1&lt;/p&gt;&lt;p&gt;Keterpaparan: %2&lt;/p&lt;p&gt;Area terlihat: %3&lt;/p&gt;&lt;p&gt;Area Ancaman: %4&lt;/p&lt;p&gt;Area keterpaparan: %5&lt;/p&gt;&lt;p&gt;Pemotongan area terlihat dalan status aktif: %6&lt;/p&gt;&lt;p&gt;Rincian: %7&lt;/P</translation>
     </message>
     <message>
         <location filename="dock.py" line="2219"/>
@@ -680,7 +680,7 @@
     <message>
         <location filename="impact_calculator.py" line="154"/>
         <source>Error: Exposure layer not set.</source>
-        <translation>Kesalahan: Lapisan terpapar belum ditentukan.</translation>
+        <translation>Kesalahan: Lapisan keterpaparan belum ditentukan.</translation>
     </message>
     <message>
         <location filename="impact_calculator.py" line="158"/>
@@ -693,7 +693,7 @@
     <message>
         <location filename="impact_calculator_thread.py" line="153"/>
         <source>Ensure that hazard, exposure and function are all set before trying to run the analysis.</source>
-        <translation>Pastikan bahwa ancaman, paparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
+        <translation>Pastikan bahwa ancaman, keterpaparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
     </message>
     <message>
         <location filename="impact_calculator_thread.py" line="164"/>
@@ -935,7 +935,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog_base.py" line="243"/>
         <source>Exposure</source>
-        <translation>Paparan</translation>
+        <translation>Keterpaparan</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.py" line="237"/>
@@ -1133,7 +1133,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.py" line="197"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
-        <translation>Gelembung paparan dan lapisan ancaman ke atas saat dipilih</translation>
+        <translation>Gelembung keterpaparan dan lapisan ancaman ke atas saat dipilih</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="198"/>
@@ -1173,7 +1173,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.py" line="213"/>
         <source>Hide exposure layer on scenario estimate completion</source>
-        <translation>Sembunyikan lapisan paparan pada penyelesaian skenario estimasi</translation>
+        <translation>Sembunyikan lapisan keterpaparan pada penyelesaian skenario estimasi</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="215"/>
@@ -1183,7 +1183,7 @@ Pesan: %s</translation>
     <message>
         <location filename="options_dialog_base.py" line="214"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
-        <translation>Nyalakan untuk memotong lapisan ancaman dan paparan ke tampilan yang terlihat pada kanvas peta</translation>
+        <translation>Nyalakan untuk memotong lapisan ancaman dan keterpaparan ke tampilan yang terlihat pada kanvas peta</translation>
     </message>
     <message>
         <location filename="options_dialog_base.py" line="216"/>
