@@ -943,6 +943,32 @@ class DockTest(unittest.TestCase):
         assert '453' in myResult, myMessage
         assert '436' in myResult, myMessage
 
+    def test_runCategorisedHazardPopulationImpactFunction(self):
+        """Flood function runs in GUI with Flood in Jakarta hazard data
+            Uses DKI buildings exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='Flood in Jakarta',
+            theExposure='Penduduk Jakarta',
+            theFunction='Be impacted',
+            theFunctionId='Categorised Hazard Population Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of building might be affected
+        assert '30938000' in myResult, myMessage
+        assert '68280000' in myResult, myMessage
+        assert '157551000' in myResult, myMessage
+
     # disabled this test until further coding
     def Xtest_printMap(self):
         """Test print map, especially on Windows."""
