@@ -2250,11 +2250,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             myMapPdfPath = myMap.printToPdf(myMapFilename)
+        # FIXME (Sunni) : just temporal solution. Needs to create a robust one
+        # for print map to pdf, especially for Windows.
+        except OSError, e:
+            errorContext = ('There is permission issue. Please re-run QGIS as '
+                            'administrator. Save your work if needed.')
+            myReport = getExceptionWithStacktrace(e, html=True,
+                                                  context=errorContext)
+            if myReport is not None:
+                self.displayHtml(myReport)
+            return
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
+            return
 
         myStatus = self.tr('Your PDF was created....opening using '
                            'the default PDF viewer on your system. '
