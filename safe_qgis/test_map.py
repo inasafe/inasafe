@@ -106,7 +106,8 @@ class MapTest(unittest.TestCase):
                               'renderComposition-variantUB12.04.png',
                               'renderComposition-variantWindosVistaSP2-32.png',
                               'renderComposition-variantJenkins.png',
-                              'renderComposition-variantUB11.10-64.png']
+                              'renderComposition-variantUB11.10-64.png',
+                              'renderComposition-variantUB11.04-64.png']
         # Beta version and version changes  can introduce a few extra chars
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
