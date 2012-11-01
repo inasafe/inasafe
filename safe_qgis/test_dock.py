@@ -943,6 +943,34 @@ class DockTest(unittest.TestCase):
         assert '453' in myResult, myMessage
         assert '436' in myResult, myMessage
 
+    # disabled this test until further coding
+    def Xtest_printMap(self):
+        """Test print map, especially on Windows."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='Flood in Jakarta',
+            theExposure='Essential buildings',
+            theFunction='Be affected',
+            theFunctionId='Categorised Hazard Building Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        printButton = DOCK.pbnPrint
+
+        try:
+            QTest.mouseClick(printButton, QtCore.Qt.LeftButton)
+        except OSError:
+            LOGGER.debug('OSError')
+            # pass
+        except Exception, e:
+            raise Exception('Exception is not expected, %s' % e)
+
     def test_ResultStyling(self):
         """Test that ouputs from a model are correctly styled (colours and
         opacity. """
