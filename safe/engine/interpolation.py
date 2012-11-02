@@ -40,7 +40,7 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
        * attribute_name:
              If hazard layer is of type raster, this is the name for new
              attribute in the result containing the hazard level.
-             If None (default) the name of hazard is used.
+             If None (default) the name of hazard layer is used.
              If hazard layer is of type vector, this attribute is ignored.
         * mode:
              Interpolation mode for raster to point interpolation only
@@ -113,13 +113,11 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
     # Vector-Vector
     elif hazard.is_vector and exposure.is_vector:
         return interpolate_polygon_vector(hazard, exposure,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
+                                          layer_name=layer_name)
     # Vector-Raster
     elif hazard.is_vector and exposure.is_raster:
         return interpolate_polygon_raster(hazard, exposure,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
+                                          layer_name=layer_name)
     # Unknown
     else:
         msg = ('Unknown combination of types for hazard and exposure data. '
@@ -228,7 +226,7 @@ def interpolate_raster_vector(source, target,
 
 
 def interpolate_polygon_vector(source, target,
-                               layer_name=None, attribute_name=None):
+                               layer_name=None):
     """Interpolate from polygon vector layer to vector data
 
     Args:
@@ -236,8 +234,6 @@ def interpolate_polygon_vector(source, target,
         * target: Vector data set (points or polygons)  - TBA also lines
         * layer_name: Optional name of returned interpolated layer.
               If None the name of target is used for the returned layer.
-        * attribute_name: Name for new attribute.
-              If None (default) the name of source is used
 
     Output
         I: Vector data set; points located as target with values interpolated
@@ -255,18 +251,15 @@ def interpolate_polygon_vector(source, target,
 
     if target.is_point_data:
         R = interpolate_polygon_points(source, target,
-                                       layer_name=layer_name,
-                                       attribute_name=attribute_name)
+                                       layer_name=layer_name)
     elif target.is_line_data:
         R = interpolate_polygon_lines(source, target,
-                                      layer_name=layer_name,
-                                      attribute_name=attribute_name)
+                                      layer_name=layer_name)
     elif target.is_polygon_data:
         # Use polygon centroids
         X = convert_polygons_to_centroids(target)
         P = interpolate_polygon_points(source, X,
-                                       layer_name=layer_name,
-                                       attribute_name=attribute_name)
+                                       layer_name=layer_name)
 
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
@@ -452,11 +445,6 @@ def interpolate_polygon_points(source, target,
     verify(layer_name is None or
            isinstance(layer_name, basestring), msg)
 
-    msg = ('Attribute must be either a string or None. I got %s'
-           % (str(type(target)))[1:-1])
-    verify(attribute_name is None or
-           isinstance(attribute_name, basestring), msg)
-
     attribute_names = source.get_attribute_names()
 
     attribute_name = None  # Step towards issue #251
@@ -526,8 +514,7 @@ def interpolate_polygon_points(source, target,
 
 
 def interpolate_polygon_lines(source, target,
-                              layer_name=None,
-                              attribute_name=None):
+                              layer_name=None):
     """Interpolate from polygon vector layer to line vector data
 
     Args:
@@ -535,8 +522,6 @@ def interpolate_polygon_lines(source, target,
         * target: Vector data set (lines)
         * layer_name: Optional name of returned interpolated layer.
               If None the name of target is used for the returned layer.
-        * attribute_name: Name for new attribute.
-              If None (default) the name of source is used
 
     Returns:
         Vector data set of lines inside polygons
@@ -545,10 +530,6 @@ def interpolate_polygon_lines(source, target,
 
            Lines not in any polygon are ignored.
     """
-
-    # Remove?
-    if attribute_name is None:
-        attribute_name = source.get_name()
 
     # Extract line features
     lines = target.get_geometry()
