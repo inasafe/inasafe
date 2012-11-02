@@ -173,6 +173,8 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
     if hazard.is_raster and attribute_name is None:
         layer_name = hazard.get_name()
 
+    # FIXME (Ole): Maybe put shapefile laundering of attribute_name in here
+
     return layer_name, attribute_name
 
 
@@ -462,7 +464,6 @@ def interpolate_polygon_points(source, target,
 
     attribute_names = source.get_attribute_names()
 
-    attribute_name = None  # Step towards issue #251
     #----------------
     # Start algorithm
     #----------------
@@ -483,15 +484,9 @@ def interpolate_polygon_points(source, target,
 
     # Augment point features with empty attributes from polygon
     for a in attributes:
-        if attribute_name is None:
-            # Use all attributes
-            for key in attribute_names:
-                a[key] = None
-        else:
-            # Use only requested attribute
-            # FIXME (Ole): Test for this is not finished
-            # BUT don't do it....Issue #251
-            a[attribute_name] = None
+        # Creat all attributes that exist in source
+        for key in attribute_names:
+            a[key] = None
 
         # Always create default attribute flagging if point was
         # inside any of the polygons
@@ -500,12 +495,8 @@ def interpolate_polygon_points(source, target,
 
     # Traverse polygons and assign attributes to points that fall inside
     for i, polygon in enumerate(geom):
-        if attribute_name is None:
-            # Use all attributes
-            poly_attr = data[i]
-        else:
-            # Use only requested attribute
-            poly_attr = {attribute_name: data[i][attribute_name]}
+        # Carry all attributes across from source
+        poly_attr = data[i]
 
         # Assign default attribute to indicate points inside
         poly_attr[DEFAULT_ATTRIBUTE] = True
