@@ -294,7 +294,7 @@
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2278"/>
+        <location filename="dock.py" line="2289"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
@@ -439,7 +439,7 @@
         <translation>Mempersiapkan peta dan laporan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2259"/>
+        <location filename="dock.py" line="2270"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:%1%2%1 and %1%3</source>
         <translation>Berkas PDF Anda telah dibuat...membuka dengan menggunakan pembaca berkas PDF default pada sistem Anda. Berkas PDF yang dihasilkan disimpan sebagai %1%2%1 dan %1%3</translation>
     </message>
@@ -625,12 +625,12 @@
 <context>
     <name>FunctionOptionsDialog</name>
     <message>
-        <location filename="function_options_dialog.py" line="52"/>
+        <location filename="function_options_dialog.py" line="54"/>
         <source>Impact function configuration</source>
         <translation>Konfigurasi fungsi dampak</translation>
     </message>
     <message>
-        <location filename="function_options_dialog.py" line="113"/>
+        <location filename="function_options_dialog.py" line="111"/>
         <source>Parameters for impact function &quot;%1&quot; that can be modified are:</source>
         <translation>Parameter untuk fungsi dampak &quot;%1&quot; yang bisa diatur adalah:</translation>
     </message>
