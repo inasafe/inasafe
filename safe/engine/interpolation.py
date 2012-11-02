@@ -313,6 +313,11 @@ def interpolate_polygon_raster(source, target,
     verify(source.is_vector)
     verify(source.is_polygon_data)
 
+    if attribute_name is None:
+        attribute_name = target.get_name()
+        # FIXME (Ole): Launder for shape files (sucks)
+        attribute_name = str(attribute_name[:10])
+
     # Run underlying clipping algorithm
     polygon_geometry = source.get_geometry(as_geometry_objects=True)
 
@@ -402,7 +407,7 @@ def interpolate_raster_vector_points(source, target,
     N = len(target)
     if attribute_name is None:
         attribute_name = source.get_name()
-        # FIXME (Ole): Launder for shape files
+        # FIXME (Ole): Launder for shape files (sucks)
         attribute_name = str(attribute_name[:10])
 
     try:
