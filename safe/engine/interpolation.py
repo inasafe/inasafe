@@ -172,7 +172,18 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
     if hazard.is_raster and attribute_name is None:
         layer_name = hazard.get_name()
 
-    # FIXME (Ole): Maybe put shapefile laundering of attribute_name in here
+    if (exposure.is_raster and hazard.is_vector and hazard.is_polygon_data
+        and attribute_name is None):
+        attribute_name = exposure.get_name()
+
+    if (hazard.is_raster and exposure.is_vector and exposure.is_point_data
+        and attribute_name is None):
+        attribute_name = hazard.get_name()
+
+    # Launder for shape files
+    # FIXME (Ole): Remove when (if) we get rid of the shp format
+    if attribute_name is not None:
+        attribute_name = str(attribute_name[:10])
 
     return layer_name, attribute_name
 
@@ -314,21 +325,11 @@ def interpolate_polygon_raster(source, target,
     verify(source.is_vector)
     verify(source.is_polygon_data)
 
-    if attribute_name is None:
-        attribute_name = target.get_name()
-        # FIXME (Ole): Launder for shape files (sucks)
-        attribute_name = str(attribute_name[:10])
-
     # Run underlying clipping algorithm
     polygon_geometry = source.get_geometry(as_geometry_objects=True)
 
-    # FIXME (Ole): Perhaps refactor so that polygon_geometry can
-    # be passed in directly. See issue #324, comment
-    #https://github.com/AIFDR/inasafe/issues/324#issuecomment-9440584
-    # FIXME (Ole): Not sure if needed, but explicitly make sure
-    # exposure raster is *never* scaled here
     polygon_attributes = source.get_data()
-    res = clip_grid_by_polygons(target.get_data(),
+    res = clip_grid_by_polygons(target.get_data(scaling=False),
                                 target.get_geotransform(),
                                 polygon_geometry)
 
@@ -398,13 +399,6 @@ def interpolate_raster_vector_points(source, target,
     attributes = target.get_data()
 
     # Create new attribute and interpolate
-    # Remove?
-    N = len(target)
-    if attribute_name is None:
-        attribute_name = source.get_name()
-        # FIXME (Ole): Launder for shape files (sucks)
-        attribute_name = str(attribute_name[:10])
-
     try:
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode=mode)
@@ -417,6 +411,7 @@ def interpolate_raster_vector_points(source, target,
         raise InaSAFEError(msg)
 
     # Add interpolated attribute to existing attributes and return
+    N = len(target)
     for i in range(N):
         attributes[i][attribute_name] = values[i]
 
