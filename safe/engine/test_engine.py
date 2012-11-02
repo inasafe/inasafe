@@ -1578,8 +1578,6 @@ class Test_Engine(unittest.TestCase):
         attributes = exposure_vector.get_data()
 
         # Test interpolation function
-        #I = hazard_raster.interpolate(exposure_vector,
-        #                              attribute_name='MMI')
         I = assign_hazard_values_to_exposure_data(hazard_raster,
                                                   exposure_vector,
                                                   attribute_name='MMI')
@@ -1656,8 +1654,6 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
 
         # Test interpolation function
-        #I = hazard_raster.interpolate(exposure_vector,
-        #                              attribute_name='depth')
         I = assign_hazard_values_to_exposure_data(hazard_raster,
                                                   exposure_vector,
                                                   attribute_name='depth')
@@ -1701,7 +1697,6 @@ class Test_Engine(unittest.TestCase):
         attributes = E.get_data()
 
         # Test the interpolation function
-        #I = H.interpolate(E, attribute_name='depth')
         I = assign_hazard_values_to_exposure_data(H, E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
@@ -1829,8 +1824,6 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  attribute_name=None)  # Take all attributes across
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   # Take all attributes across
@@ -1895,8 +1888,6 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  attribute_name=None)  # Take all attributes across
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   # Take all attributes across
@@ -2024,9 +2015,6 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  # Spelling is as in test data
-        #                  attribute_name='Category')
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   attribute_name='Category')
@@ -2086,7 +2074,6 @@ class Test_Engine(unittest.TestCase):
 
         # Check projection mismatch is caught
         try:
-            #H.interpolate(E)
             assign_hazard_values_to_exposure_data(H, E)
         except VerificationError, e:
             msg = ('Projection mismatch should have been caught: %s'
