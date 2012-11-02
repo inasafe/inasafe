@@ -1825,9 +1825,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_attributes = I.get_data()
         msg = 'Expected "depth", got %s' % I.get_name()
@@ -1889,9 +1887,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_attributes = I.get_data()
 
@@ -2016,8 +2012,8 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name='Category')
+                                                  layer_name='depth')
+                                                  #attribute_name='Category')
 
         #I.write_to_file('MM_res.shp')
 
@@ -2212,9 +2208,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2325,9 +2319,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print 'This took', time.time() - t0
 
         I_geometry = I.get_geometry()
@@ -2468,9 +2460,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print 'That took %f seconds' % (time.time() - t0)
 
         # TODO:
@@ -2587,8 +2577,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print ('Using 2704 individual polygons took %f seconds'
         #       % (time.time() - t0))
         #I.write_to_file('flood_prone_roads_jakarta_individual.shp')
@@ -2664,8 +2653,7 @@ class Test_Engine(unittest.TestCase):
         print
         print 'start'
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         print 'Using merged polygon took %f seconds' % (time.time() - t0)
         I.write_to_file('flood_prone_roads_jakarta_merged.shp')
 
@@ -2709,8 +2697,8 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name='Category')
+                                                  layer_name='depth')#,
+                                                  #attribute_name='Category')
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
