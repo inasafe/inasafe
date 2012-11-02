@@ -41,9 +41,7 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
              If hazard layer is of type raster, this is the name for new
              attribute in the result containing the hazard level.
              If None (default) the name of hazard is used.
-             If hazard layer is of type vector, it is the name of the
-             attribute to transfer from the hazard layer into the result.
-             If None (default) all attributes are transferred.
+             If hazard layer is of type vector, this attribute is ignored.
         * mode:
              Interpolation mode for raster to point interpolation only
 
@@ -426,8 +424,7 @@ def interpolate_raster_vector_points(source, target,
 
 
 def interpolate_polygon_points(source, target,
-                               layer_name=None,
-                               attribute_name=None):
+                               layer_name=None):
     """Interpolate from polygon vector layer to point vector data
 
     Args:
@@ -435,12 +432,14 @@ def interpolate_polygon_points(source, target,
         * target: Vector data set (points)
         * layer_name: Optional name of returned interpolated layer.
               If None the name of target is used for the returned layer.
-        * attribute_name: Name for new attribute.
-              If None (default) the name of source is used
 
     Output
         I: Vector data set; points located as target with values interpolated
         from source
+
+    Note
+        All attribute names from polygons are transferred to the points
+        that are inside them.
     """
 
     msg = ('Vector layer to interpolate to must be point geometry. '
@@ -459,11 +458,8 @@ def interpolate_polygon_points(source, target,
            isinstance(attribute_name, basestring), msg)
 
     attribute_names = source.get_attribute_names()
-    if attribute_name is not None:
-        msg = ('Requested attribute "%s" did not exist in %s'
-               % (attribute_name, attribute_names))
-        verify(attribute_name in attribute_names, msg)
 
+    attribute_name = None  # Step towards issue #251
     #----------------
     # Start algorithm
     #----------------
