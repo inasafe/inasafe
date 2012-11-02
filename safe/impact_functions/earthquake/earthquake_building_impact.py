@@ -12,7 +12,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class EarthquakeBuildingImpactFunction(FunctionProvider):
-    """Inundation impact on building data
+    """Earthquake impact on building data
 
     :param requires category=='hazard' and \
                     subcategory=='earthquake'
@@ -159,9 +159,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                           TableRow([tr('Hazard Level'),
                                     tr('Buildings Affected')],
                                     header=True),
-                          TableRow([class_1, lo]),
-                          TableRow([class_2, me]),
-                          TableRow([class_3, hi])]
+                          TableRow([class_1, str(lo)]),
+                          TableRow([class_2, str(me)]),
+                          TableRow([class_3, str(hi)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('High hazard is defined as shake levels greater '

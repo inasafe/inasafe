@@ -945,7 +945,7 @@ class DockTest(unittest.TestCase):
 
     def test_runCategorisedHazardPopulationImpactFunction(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
-            Uses DKI buildings exposure data."""
+            Uses Penduduk Jakarta as exposure data."""
 
         myResult, myMessage = setupScenario(
             theHazard='Flood in Jakarta',
@@ -964,10 +964,37 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        # This is the expected number of building might be affected
+        # This is the expected number of population might be affected
         assert '30938000' in myResult, myMessage
         assert '68280000' in myResult, myMessage
         assert '157551000' in myResult, myMessage
+
+    def test_runEarthquakeBuildingImpactFunction(self):
+        """Flood function runs in GUI with An earthquake in Yogyakarta like in
+            2006 hazard data uses OSM Building Polygons exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='An earthquake in Yogyakarta like in 2006',
+            theExposure='OSM Building Polygons',
+            theFunction='Be affected',
+            theFunctionId='Earthquake Building Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([101, -12 , 119, -4])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of building might be affected
+        assert '786' in myResult, myMessage
+        assert '15528' in myResult, myMessage
+        assert '177' in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
