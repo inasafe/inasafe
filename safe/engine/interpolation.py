@@ -14,7 +14,6 @@ from safe.common.geodesy import Point
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
-#from safe.common.polygon import line_dictionary_to_geometry
 
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometrytype2string
@@ -385,12 +384,6 @@ def interpolate_raster_vector_points(source, target,
     verify(target.is_vector)
     verify(target.is_point_data)
 
-    # FIXME (Ole): Why can we not remove this ???
-    # It should now be taken care of in the general input_check above
-    # OK - remove when we leave using the form H.interpolate in impact funcs
-    if layer_name is None:
-        layer_name = target.get_name()
-
     # Get raster data and corresponding x and y axes
     A = source.get_data(nan=True)
     longitudes, latitudes = source.get_geometry()
@@ -484,14 +477,9 @@ def interpolate_polygon_points(source, target,
 
     # Augment point features with empty attributes from polygon
     for a in attributes:
-        # Creat all attributes that exist in source
+        # Create all attributes that exist in source
         for key in attribute_names:
             a[key] = None
-
-        # Always create default attribute flagging if point was
-        # inside any of the polygons
-        # FIXME (Ole): Remove as already appended.....
-        a[DEFAULT_ATTRIBUTE] = None
 
     # Traverse polygons and assign attributes to points that fall inside
     for i, polygon in enumerate(geom):
