@@ -38,10 +38,19 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
              If None (default) the name of the exposure layer is used for
              the returned layer.
        * attribute_name:
-             If hazard layer is of type raster, this is the name for new
+             If hazard layer is of type raster, this will be the name for new
              attribute in the result containing the hazard level.
              If None (default) the name of hazard layer is used.
-             If hazard layer is of type vector, this attribute is ignored.
+
+             If hazard layer is polygon and exposure layer raster, this will be
+             the name of the new attribute containing the raster value at each
+             point.
+
+             If hazard and exposure layers are both of type vector,
+             this attribute is ignored.
+
+             If hazard and exposure layers are both of type raster,
+             this attribute is ignored.
         * mode:
              Interpolation mode for raster to point interpolation only
 
@@ -117,7 +126,8 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
     # Vector-Raster
     elif hazard.is_vector and exposure.is_raster:
         return interpolate_polygon_raster(hazard, exposure,
-                                          layer_name=layer_name)
+                                          layer_name=layer_name,
+                                          attribute_name=attribute_name)
     # Unknown
     else:
         msg = ('Unknown combination of types for hazard and exposure data. '
