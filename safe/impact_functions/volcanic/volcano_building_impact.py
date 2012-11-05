@@ -146,7 +146,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         table_body.extend([TableRow(_('Notes'), header=True),
                            _('Total number of buildings %i in the viewable '
                              'area') % total,
-                           _('Only buildings available in Open Street Map'
+                           _('Only buildings available in OpenStreetMap '
                              'are considered.')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('Buildings affected by volcanic hazard zone')
