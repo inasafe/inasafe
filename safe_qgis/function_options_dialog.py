@@ -65,7 +65,6 @@ class FunctionOptionsDialog(QtGui.QDialog,
            not applicable
         """
         self.theFunction = theFunction
-        self.formItemCounters = 0
         self.keys = params.keys()
         for key in self.keys:
             self._addFormItem(key, params[key])
@@ -93,17 +92,13 @@ class FunctionOptionsDialog(QtGui.QDialog,
         myKey = myKey.capitalize()
         myLabel.setText(safeTr(myKey))
         myLabel.setToolTip(str(type(theParameterValue)))
-        self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
-                                        QtGui.QFormLayout.LabelRole, myLabel)
+
         myLineEdit = QtGui.QLineEdit(self.formLayoutWidget)
         myLineEdit.setText(str(theParameterValue))
         myLineEdit.setObjectName(_fromUtf8(theParameterKey + 'LineEdit'))
         myLineEdit.setCursorPosition(0)
-        self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
-                                        QtGui.QFormLayout.FieldRole,
-                                        myLineEdit)
 
-        self.formItemCounters += 1
+        self.editableImpactFunctionsFormLayout.addRow(myLabel, myLineEdit)
 
     def setDialogInfo(self, theFunctionID):
         myText = ''
