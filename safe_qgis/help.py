@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -19,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 from PyQt4 import (QtGui, QtCore)
-from safe_interface import tr
 
 
 class Help(QtGui.QDialog):
@@ -65,8 +63,8 @@ class Help(QtGui.QDialog):
                 myPath = myContextPath
 
         if not os.path.isfile(myPath):
-            QtGui.QMessageBox.warning(self.parent, tr('InaSAFE'),
-            (tr('Documentation could not be found at:\n'
+            QtGui.QMessageBox.warning(self.parent, self.tr('InaSAFE'),
+            (self.tr('Documentation could not be found at:\n'
                       '%s' % myPath)))
         else:
             myUrl = QtCore.QUrl('file:///' + myPath)

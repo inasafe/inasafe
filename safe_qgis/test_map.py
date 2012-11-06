@@ -28,7 +28,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       setJakartaGeoExtent,
                                       checkImages)
-from safe_qgis.utilities import setupPrinter
+from safe_qgis.utilities import setupPrinter, dpiToMeters
 from safe_qgis.map import Map
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -103,9 +103,15 @@ class MapTest(unittest.TestCase):
         assert os.path.exists(myImagePath), myMessage
 
         myAcceptableImages = ['renderComposition.png',
+                              'renderComposition-variantUB12.04.png',
+                              'renderComposition-variantWindosVistaSP2-32.png',
                               'renderComposition-variantJenkins.png',
-                              'renderComposition-variantUB11.10-64.png']
-        myTolerance = 1000
+                              'renderComposition-variantUB11.10-64.png',
+                              'renderComposition-variantUB11.04-64.png']
+        # Beta version and version changes  can introduce a few extra chars
+        # into the metadata section so we set a reasonable tolerance to cope
+        # with this.
+        myTolerance = 8000
         myFlag, myMessage = checkImages(myAcceptableImages,
                                            myImagePath,
                                            myTolerance)
@@ -165,13 +171,16 @@ class MapTest(unittest.TestCase):
         setupPrinter(myPath)
         myMap.setupComposition()
 
-        myPixmap = QtGui.QPixmap(10, 10)
-        #myPixmap.fill(QtGui.QColor(250, 250, 250))
+        myImage = QtGui.QImage(10, 10, QtGui.QImage.Format_RGB32)
+        myImage.setDotsPerMeterX(dpiToMeters(300))
+        myImage.setDotsPerMeterY(dpiToMeters(300))
+        #myImage.fill(QtGui.QColor(250, 250, 250))
         # Look at the output, you will see antialiasing issues around some
         # of the boxes drawn...
-        myPixmap.fill(QtGui.QColor(200, 200, 200))
+        # myImage.fill(QtGui.QColor(200, 200, 200))
+        myImage.fill(200 + 200 * 256 + 200 * 256 * 256)
         myFilename = os.path.join(temp_dir(), 'greyBox')
-        myPixmap.save(myFilename, 'PNG')
+        myImage.save(myFilename, 'PNG')
         for i in range(10, 190, 10):
             myPicture = QgsComposerPicture(myMap.composition)
             myPicture.setPictureFile(myFilename)
@@ -182,22 +191,23 @@ class MapTest(unittest.TestCase):
                                       10)  # height
             myMap.composition.addItem(myPicture)
             # Same drawing drawn directly as a pixmap
-            myPixmapItem = myMap.composition.addPixmap(myPixmap)
+            myPixmapItem = myMap.composition.addPixmap(
+                QtGui.QPixmap.fromImage(myImage))
             myPixmapItem.setOffset(i, i + 20)
-            # Same drawing using our drawPixmap Helper
+            # Same drawing using our drawImage Helper
             myWidthMM = 1
-            myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
+            myMap.drawImage(myImage, myWidthMM, i, i + 40)
 
         myImagePath, _, _ = myMap.renderComposition()
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
 
         myControlImages = ['windowsArtifacts.png']
-        myTolerance = 0  # to allow for version number changes in disclaimer
+        myTolerance = 0
         myFlag, myMessage = checkImages(myControlImages,
                                         myImagePath,
                                         myTolerance)
-        myMessage += ('\nWe want these images to match, if they dont '
+        myMessage += ('\nWe want these images to match, if they do not '
                      'there may be rendering artifacts in windows.\n')
         assert myFlag, myMessage
 

@@ -15,14 +15,14 @@ are provided in |project_name|. After you have installed the |project_name|
 plugin, the dock panel will automatically load in QGIS, appearing on the left
 hand side of the screen.
 
-.. figure:: ../static/inasafe-dock-panel.png
+.. figure:: ../static/inasafe-dock-panel.jpeg
    :align:   center
 
 You can drag and drop the dock panel to reposition it in the user interface.
 For example, dragging the panel towards the right margin of the QGIS application
 will dock it to the right side of the screen.
 
-.. figure:: ../static/docked-right.png
+.. figure:: ../static/docked-right.jpeg
    :align:   center
 
 There are 3 main areas to the panel:

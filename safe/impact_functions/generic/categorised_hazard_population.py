@@ -14,7 +14,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     :author AIFDR
     :rating 2
     :param requires category=='hazard' and \
-                    subcategory=='normalised' and \
+                    unit=='normalised' and \
                     layertype=='raster'
 
     :param requires category=='exposure' and \

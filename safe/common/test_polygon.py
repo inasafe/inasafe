@@ -1002,6 +1002,8 @@ class Test_Polygon(unittest.TestCase):
                     is_inside_polygon(point, inner_rings[0]) or
                     is_inside_polygon(point, inner_rings[1]))
 
+    test_clip_points_by_polygons_with_holes.slow = True
+
     def test_intersection1(self):
         """Intersection of two simple lines works
         """

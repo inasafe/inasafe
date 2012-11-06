@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'ismailsunni@yahoo.co.id'
-__version__ = '0.5.1'
 __date__ = '12/10/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -72,6 +71,19 @@ class SafeTranslationsTest(unittest.TestCase):
         expected_title = 'Terkena dampak'
         msg = 'expected %s but got %s' % (expected_title, real_title)
         assert expected_title == real_title, msg
+
+    def testImpactSummaryWords(self):
+        """Test specific words from impact summary info shown in doc see #348.
+        """
+        os.environ['LANG'] = 'id'
+        myPhraseList = []
+        myMessage = 'Specific words checked for translation:\n'
+        for myPhrase in myPhraseList:
+            if myPhrase == safeTr(myPhrase):
+                myMessage += 'FAIL: %s' % myPhrase
+            else:
+                myMessage += 'PASS: %s' % myPhrase
+        self.assertNotIn('FAIL', myMessage, myMessage)
 
     def testAllDynamicTranslatons(self):
         """Test all the phrases defined in dynamic_translations translate."""

@@ -9,6 +9,8 @@ import math
 from ast import literal_eval
 from osgeo import ogr
 
+from geometry import Polygon
+
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.exceptions import BoundingBoxError, InaSAFEError
@@ -715,15 +717,17 @@ def is_sequence(x):
         return True
 
 
-def array2ring(A):
+def array2line(A, geometry_type=ogr.wkbLinearRing):
     """Convert coordinates to linear_ring
 
     Args:
         * A: Nx2 Array of coordinates representing either a polygon or a line.
              A can be either a numpy array or a list of coordinates.
+        * geometry_type: A valid OGR geometry type. Default: ogr.wkbLinearRing
+             Other options include ogr.wkbLineString
 
     Returns:
-        * ring: OGR linear_ring
+        * ring: OGR line geometry
 
     Note:
     Based on http://www.packtpub.com/article/working-geospatial-data-python
@@ -745,11 +749,11 @@ def array2ring(A):
 
     N = A.shape[0]  # Number of vertices
 
-    linearRing = ogr.Geometry(ogr.wkbLinearRing)
+    line = ogr.Geometry(geometry_type)
     for i in range(N):
-        linearRing.AddPoint(A[i, 0], A[i, 1])
+        line.AddPoint(A[i, 0], A[i, 1])
 
-    return linearRing
+    return line
 
 
 def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
@@ -762,7 +766,7 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
         * True if x == y or x' == y (up to the specified tolerance)
 
         where x' is x reversed in the first dimension. This corresponds to
-        linear rings being seen as equal irrespective of whether ther are
+        linear rings being seen as equal irrespective of whether they are
         organised in clock wise or counter clock wise order
     """
 
@@ -783,6 +787,7 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
 
 
 # FIXME (Ole): We can retire this messy function now
+#              Positive: Delete it :-)
 def array2wkt(A, geom_type='POLYGON'):
     """Convert coordinates to wkt format
 
@@ -1053,3 +1058,30 @@ def get_ringdata(ring):
 
     # Return ring as an Nx2 numpy array
     return A
+
+
+def get_polygondata(G):
+    """Extract polygon data from OGR geometry
+
+    :param G: OGR polygon geometry
+    :return: List of InaSAFE polygon instances
+    """
+
+    # Get outer ring, then inner rings
+    # http://osgeo-org.1560.n6.nabble.com/
+    # gdal-dev-Polygon-topology-td3745761.html
+    number_of_rings = G.GetGeometryCount()
+
+    # Get outer ring
+    outer_ring = get_ringdata(G.GetGeometryRef(0))
+
+    # Get inner rings if any
+    inner_rings = []
+    if number_of_rings > 1:
+        for i in range(1, number_of_rings):
+            inner_ring = get_ringdata(G.GetGeometryRef(i))
+            inner_rings.append(inner_ring)
+
+    # Return Polygon instance
+    return Polygon(outer_ring=outer_ring,
+                   inner_rings=inner_rings)

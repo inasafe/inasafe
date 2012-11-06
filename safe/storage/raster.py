@@ -261,7 +261,7 @@ class Raster(Layer):
 
         # Write data
         fid.GetRasterBand(1).WriteArray(A)
-        fid.GetRasterBand(1).SetNoDataValue(self.nodata_value)
+        fid.GetRasterBand(1).SetNoDataValue(self.get_nodata_value())
         fid = None  # Close
 
         # Write keywords if any

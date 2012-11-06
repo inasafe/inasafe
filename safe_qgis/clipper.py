@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -22,7 +21,7 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (call, CalledProcessError)
+from subprocess import (CalledProcessError, call)
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
@@ -39,7 +38,8 @@ from safe_qgis.safe_interface import (verify,
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
-                           InvalidProjectionException)
+                           CallGDALError,
+                           InvalidProjectionException,)
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -57,7 +57,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "ClipperTest"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 
@@ -96,8 +96,13 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
             theExtraKeywords=theExtraKeywords,
             explodeMultipart=explodeMultipart)
     else:
-        return _clipRasterLayer(theLayer, theExtent, theCellSize,
-            theExtraKeywords=theExtraKeywords)
+        try:
+            return _clipRasterLayer(theLayer, theExtent, theCellSize,
+                theExtraKeywords=theExtraKeywords)
+        except CallGDALError, e:
+            raise e
+        except IOError, e:
+            raise e
 
 
 def _clipVectorLayer(theLayer, theExtent,

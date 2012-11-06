@@ -2,6 +2,7 @@
 LOCALES=$*
 
 # get newest .py file
+TR='tr'  # Gettext alias marking translatable strings
 NEWESTPY=0
 PYTHONFILES=$(find . -name '*.py')
 for PYTHONFILE in $PYTHONFILES
@@ -30,7 +31,7 @@ do
     echo "Newest python file is newer than po file so updating strings"
     # Keep the current field separator
     oIFS=$IFS
-    PYFILES=$(egrep -r "import ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
+    PYFILES=$(egrep -r "ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
     echo 'Scanning $PYFILE for new strings'
     #echo
     echo $PODIR
@@ -39,13 +40,15 @@ do
     if [[ ! -f $POPATH ]]
     then
       mkdir -p $PODIR
-      xgettext -d ${LOCALE} -o ${POPATH} ${PYFILES}
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR} --no-location
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
     else
-      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES}
-      # force this to translate
+      # Update translation file. Options:
       # -a all strings
       # -j update mode
-      xgettext -a -j -d ${LOCALE} -o ${POPATH} safe/common/dynamic_translations.py
+      # -k specify alias marking strings for translation
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR} --no-location
+      xgettext -j -d ${LOCALE} -o ${POPATH} ${PYFILES} -k${TR}
     fi
 
     # Spit out files that need to be edited
@@ -72,13 +75,16 @@ done
 if [ $UPDATE == true ]
 then
   cd safe_qgis
-  pylupdate4 -noobsolete inasafe.pro
-  cd ..
   echo "Please provide translations by editing the translation files below:"
   for LOCALE in $LOCALES
   do
     echo "safe_qgis/i18n/inasafe_"$LOCALE".ts"
+    # Note we don't use pylupdate with qt .pro file approach as it is flakey about
+    # what is made available.
+    FILES=`find . -regex ".*\(ui\|py\)$"`
+    pylupdate4 -noobsolete $FILES -ts i18n/inasafe_id.ts
   done
+  cd ..
 else
   echo "No need to edit any translation files (.ts) because no python files has been updated since the last update translation. "
 fi

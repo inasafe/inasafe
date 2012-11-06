@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -24,10 +23,10 @@ from PyQt4 import QtCore, QtGui, QtWebKit
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  mmToPoints,
-                                 setupPrinter)
+                                 dpiToMeters,
+                                 setupPrinter,
+                                 impactLayerAttribution)
 from safe_interface import unique_filename, temp_dir
-from safe_qgis.exceptions import KeywordNotFoundException
-from keyword_io import KeywordIO
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -37,7 +36,7 @@ class HtmlRenderer():
         """Constructor for the Map class.
 
         Args:
-            None
+            thePageDpi: int - desired resolution for image rendered outputs.
         Returns:
             None
         Raises:
@@ -62,7 +61,7 @@ class HtmlRenderer():
         """
         return QtCore.QCoreApplication.translate('HtmlRenderer', theString)
 
-    def renderHtmlToPixmap(self, theHtml, theWidthMM):
+    def renderHtmlToImage(self, theHtml, theWidthMM):
         """Render some HTML to a pixmap.
 
         Args:
@@ -72,33 +71,39 @@ class HtmlRenderer():
             * theWidthMM- width of the table in mm - will be converted to
               points based on the resolution of our page.
         Returns:
-            QPixmap
+            QImage
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
         """
-        LOGGER.debug('InaSAFE Map renderHtmlToPixmap called')
+        LOGGER.debug('InaSAFE Map renderHtmlToImage called')
+
+        myWidthPx = mmToPoints(theWidthMM, self.pageDpi)
+        self.loadAndWait(theHtmlSnippet=theHtml)
+        myFrame = self.webView.page().mainFrame()
+
         # Using 150dpi as the baseline, work out a standard text size
         # multiplier so that page renders equally well at different print
         # resolutions.
-        myBaselineDpi = 150
-        myFactor = float(self.pageDpi) / myBaselineDpi
-        myWidthPx = mmToPoints(theWidthMM, self.pageDpi)
-
-        self.loadAndWait(theHtmlSnippet=theHtml)
-        myFrame = self.webView.page().mainFrame()
-        myFrame.setTextSizeMultiplier(myFactor)
+        #myBaselineDpi = 150
+        #myFactor = float(self.pageDpi) / myBaselineDpi
+        #myFrame.setTextSizeMultiplier(myFactor)
 
         mySize = myFrame.contentsSize()
         mySize.setWidth(myWidthPx)
         self.webView.page().setViewportSize(mySize)
 
-        myPixmap = QtGui.QPixmap(mySize)
-        myPixmap.fill(QtGui.QColor(255, 255, 255))
-        myPainter = QtGui.QPainter(myPixmap)
+        myImage = QtGui.QImage(mySize, QtGui.QImage.Format_RGB32)
+        myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
+        myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
+        # Only works in Qt4.8
+        #myImage.fill(QtGui.qRgb(255, 255, 255))
+        # Works in older Qt4 versions
+        myImage.fill(255 + 255 * 256 + 255 * 256 * 256)
+        myPainter = QtGui.QPainter(myImage)
         myFrame.render(myPainter)
         myPainter.end()
-        myPixmap.save('/tmp/test.png')
-        return myPixmap
+        myImage.save('/tmp/test.png')
+        return myImage
 
     def printToPdf(self, theHtml, theFilename=None):
         """Render an html snippet into the printer, paginating as needed.
@@ -178,37 +183,42 @@ class HtmlRenderer():
                                   QtCore.SIGNAL("loadFinished(bool)"),
                                   self.htmlLoadedSlot)
 
-    def printImpactTable(self, theLayer, theFilename=None):
+    def printImpactTable(self, theKeywords, theFilename=None):
         """High level table generator to print layer keywords.
 
         It gets the summary and impact table from a QgsMapLayer's keywords and
         renders to pdf, returning the resulting PDF file path.
 
         Args:
-            * theLayer: QgsMapLayer instance (required)
+            theKeywords: dic containing impact layer keywords (required)
+
+        Returns:
+            str: Path to generated pdf file.
+
+        Raises:
+            None
 
         """
         myFilePath = theFilename
+
         if theFilename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 
-        myKeywordIO = KeywordIO()
         try:
-            mySummaryTable = myKeywordIO.readKeywords(
-                theLayer, 'impact_summary')
-        except KeywordNotFoundException:
+            mySummaryTable = theKeywords['impact_summary']
+        except KeyError:
             mySummaryTable = None
 
+        myAttributionTable = impactLayerAttribution(theKeywords)
+
         try:
-            myFullTable = myKeywordIO.readKeywords(
-                theLayer, 'impact_table')
-        except KeywordNotFoundException:
+            myFullTable = theKeywords['impact_table']
+        except KeyError:
             myFullTable = None
 
         try:
-            myAggregationTable = myKeywordIO.readKeywords(
-                theLayer, 'postprocessing_report')
-        except KeywordNotFoundException:
+            myAggregationTable = theKeywords['postprocessing_report']
+        except KeyError:
             myAggregationTable = None
 
         myHtml = ''
@@ -217,6 +227,8 @@ class HtmlRenderer():
             myHtml += mySummaryTable
             if myAggregationTable is not None:
                 myHtml += myAggregationTable
+            if myAttributionTable is not None:
+                myHtml += myAttributionTable
             myHtml += '<h2>%s</h2>' % self.tr('Detailed Table')
             myHtml += myFullTable
         else:
@@ -224,6 +236,8 @@ class HtmlRenderer():
                 myHtml = myAggregationTable
             if myFullTable is not None:
                 myHtml += myFullTable
+            if myAttributionTable is not None:
+                myHtml += myAttributionTable
 
         # myNewFilePath should be the same as myFilePath
         myNewFilePath = self.printToPdf(myHtml, myFilePath)
