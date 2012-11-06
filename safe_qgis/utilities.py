@@ -451,7 +451,7 @@ def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
                                                         '<' + os.sep)
             myWrappedMessage = myWrappedMessage.replace('<wbr>' + os.sep + '>',
                                                         os.sep + '>')
-            
+
             myErrorMessage = ('<b>' + theException.__class__.__name__ +
                               '</b> : ' + myWrappedMessage)
 
