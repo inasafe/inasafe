@@ -133,6 +133,12 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 lineEditText = lineEdit.text()
                 convText = str(lineEditText)
                 myFunction.parameters[key] = ast.literal_eval(convText)
+            except SyntaxError:
+                text = ("Unexpected error: SyntaxError. " +
+                        "Please make sure you input the data correctly.")
+                label = self.impFuncConfErrLabel
+                label.setText(text)
+                noError = True
             except ValueError:
                 text = ("Unexpected error: ValueError" +
                 ". Please consult Python language reference for correct " +
@@ -140,5 +146,5 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 label = self.impFuncConfErrLabel
                 label.setText(text)
                 noError = True
-        if (not noError):
+        if not noError:
             self.close()
