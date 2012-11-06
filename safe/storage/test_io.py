@@ -1025,6 +1025,89 @@ class Test_IO(unittest.TestCase):
         # Check override of ==
         assert R1 == R2
 
+    def test_rasters_created_with_projected_srs(self):
+        """Rasters can be created from arrays in projected coordinates
+        """
+
+        # Create test data
+        x_ul = 220534  # x value of upper left corner
+        y_ul = 827790   # y_value of upper left corner
+        numx = 8    # Number of xs
+        numy = 5    # Number of ys
+        dx = 200
+        dy = -200
+
+        # Define array where ys are rows and xs columns
+        A1 = numpy.zeros((numy, numx))
+
+        # Establish coordinates for lower left corner
+        y_ll = y_ul - numy * dy
+        x_ll = x_ul
+
+        # Define pixel centers along each direction
+        x = numpy.linspace(x_ll + 0.5, x_ll + numx - 0.5, numx)
+        y = numpy.linspace(y_ll + 0.5, y_ll + numy - 0.5, numy)
+
+        # Define raster with latitudes going bottom-up (south to north).
+        # Longitudes go left-right (west to east)
+        for i in range(numy):
+            for j in range(numx):
+                A1[numy - 1 - i, j] = linear_function(x[j], y[i])
+
+        # Throw in a nodata element
+        A1[2, 6] = numpy.nan
+
+        # Upper left corner
+        assert A1[0, 0] == linear_function(x[0], y[4])
+
+        # Lower left corner
+        assert A1[4, 0] == linear_function(x[0], y[0])
+
+        # Upper right corner
+        assert A1[0, 7] == linear_function(x[7], y[4])
+
+        # Lower right corner
+        assert A1[4, 7] == linear_function(x[7], y[0])
+
+        # Generate raster object and write
+        projection = """PROJCS["DGN95 / Indonesia TM-3 zone 48.2",
+                        GEOGCS["DGN95",
+                            DATUM["Datum_Geodesi_Nasional_1995",
+                                SPHEROID["WGS 84",6378137,298.257223563,
+                                    AUTHORITY["EPSG","7030"]],
+                                TOWGS84[0,0,0,0,0,0,0],
+                                AUTHORITY["EPSG","6755"]],
+                            PRIMEM["Greenwich",0,
+                                AUTHORITY["EPSG","8901"]],
+                            UNIT["degree",0.01745329251994328,
+                                AUTHORITY["EPSG","9122"]],
+                            AUTHORITY["EPSG","4755"]],
+                        UNIT["metre",1,
+                            AUTHORITY["EPSG","9001"]],
+                        PROJECTION["Transverse_Mercator"],
+                        PARAMETER["latitude_of_origin",0],
+                        PARAMETER["central_meridian",106.5],
+                        PARAMETER["scale_factor",0.9999],
+                        PARAMETER["false_easting",200000],
+                        PARAMETER["false_northing",1500000],
+                        AUTHORITY["EPSG","23834"],
+                        AXIS["X",EAST],
+                        AXIS["Y",NORTH]]"""
+
+        geotransform = (x_ul, dx, 0, y_ul, 0, dy)
+        R1 = Raster(A1, projection, geotransform,
+                    keywords={'testkwd': 'testval', 'size': 'small'})
+
+        # Check string representation of raster class
+        assert str(R1).startswith('Raster data')
+        assert str(R1.rows) in str(R1)
+        assert str(R1.columns) in str(R1)
+
+        assert nanallclose(R1.get_data(), A1, rtol=1.0e-12)
+        assert nanallclose(R1.get_geotransform(), geotransform,
+                           rtol=1.0e-12)
+        assert 'DGN95' in R1.get_projection()
+
     def test_reading_and_writing_of_real_rasters(self):
         """Rasters can be read and written correctly in different formats
         """
