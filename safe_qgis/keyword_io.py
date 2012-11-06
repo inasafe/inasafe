@@ -341,10 +341,11 @@ class KeywordIO(QObject):
                          'dict text);')
                 LOGGER.debug(mySQL)
                 myCursor.execute(mySQL)
-                myData = myCursor.fetchone()
+                #myData = myCursor.fetchone()
+                myCursor.fetchone()
             else:
                 LOGGER.debug('Keywords table already exists')
-                pass
+
             return myCursor
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])
