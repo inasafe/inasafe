@@ -2264,13 +2264,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if myReport is not None:
                 self.displayHtml(myReport)
 
+        # Make sure the file paths can wrap nicely:
+        myWrappedMapPath = myMapPdfFilePath.replace(os.sep, '<wbr>' + os.sep)
+        myWrappedHtmlPath = myHtmlPdfPath.replace(os.sep, '<wbr>' + os.sep)
         myStatus = self.tr('Your PDF was created....opening using '
                            'the default PDF viewer on your system. '
                            'The generated pdfs were saved as:%1'
                            '%2%1 and %1%3').arg(
                            '<br>').arg(QtCore.QString(
-                           myMapPdfFilePath)).arg(QtCore.QString(
-                           myHtmlPdfPath))
+                            myWrappedMapPath)).arg(QtCore.QString(
+                            myWrappedHtmlPath))
 
         self.showBusy(self.tr('Map Creator'),
                       myStatus,
