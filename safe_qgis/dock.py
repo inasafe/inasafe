@@ -2060,7 +2060,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Apply header and footer to html snippet and display in wvResults.
 
         Args:
-            theMessage: Any html snippet. Do not include head and body elements.
+            theMessage: An html snippet. Do not include head and body elements.
 
         Returns:
             None
@@ -2235,7 +2235,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMap.setImpactLayer(self.iface.activeLayer())
         LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
         myDefaultFileName = myMap.getMapTitle() + '.pdf'
-        myDefaultFileName = myDefaultFileName.replace(' ','_')
+        myDefaultFileName = myDefaultFileName.replace(' ', '_')
         myMapPdfFilePath = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
                             os.path.join(temp_dir(),
