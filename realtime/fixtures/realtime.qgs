@@ -4,9 +4,9 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>121.200610</xmin>
+            <xmin>120.276982</xmin>
             <ymin>-1.060663</ymin>
-            <xmax>126.074810</xmax>
+            <xmax>126.998438</xmax>
             <ymax>2.580980</ymax>
         </extent>
         <projections>1</projections>
@@ -55,19 +55,27 @@
             </filegroup>
         </legendlayer>
     </legend>
-    <Composer title="Realtime" visible="0">
+    <Composer title="Realtime" visible="1">
         <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
+            <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" halign="1" margin="1">
+                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="24.6" x="10.811" y="49.2085" rotation="0" height="6.9" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="2.68246" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
             <ComposerScaleBar segmentMillimeters="26.2192" numMapUnitsPerScaleBarUnit="1000" numSegments="2" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
                 <BrushColor red="0" blue="0" green="0"/>
-                <ComposerItem width="96.6768" x="110.42" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.06711" id="scalebar" positionLock="false">
+                <ComposerItem width="96.6577" x="110.42" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.68246" id="scalebar" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerScaleBar>
-            <ComposerLabel valign="32" labelText="[location-info]" halign="1" margin="1">
+            <ComposerLabel valign="32" labelText="M[mmi] [date] [time]" halign="1" margin="1">
                 <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="194.684" x="8.08255" y="40.7115" rotation="0" height="10.1895" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.6745" id="location-info" positionLock="false">
+                <ComposerItem width="86.2337" x="8.08255" y="40.7115" rotation="0" height="6.63302" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.68246" id="location-info" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -75,7 +83,7 @@
             <ComposerLabel valign="32" labelText="Perkiraan jumlah penduduk terpapar pada setiap tingkat getaran berbeda&#xa;" halign="4" margin="1">
                 <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="194.348" x="6.50655" y="58.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.6745" id="mmi-table-header" positionLock="false">
+                <ComposerItem width="194.348" x="6.50655" y="58.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.68246" id="mmi-table-header" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -101,7 +109,7 @@
                 <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
                     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="4.13423" id="overview-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.68246" id="overview-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -140,7 +148,7 @@
                 <Grid gridStyle="1" crossLength="1" penColorRed="172" penColorBlue="172" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="172">
                     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="4.13423" id="main-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="2.68246" id="main-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -174,7 +182,7 @@
                         <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
                     </LayerItem>
                 </Model>
-                <ComposerItem width="8" x="150.781" y="217.371" rotation="0" height="29" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="1.36242" id="legend" positionLock="false">
+                <ComposerItem width="29" x="150.781" y="217.371" rotation="0" height="36.4" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="1.36242" id="legend" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -187,17 +195,17 @@
                     </ComposerItem>
                 </ComposerFrame>
             </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="1.36242" id="fatalities-table" positionLock="false">
+            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
+                <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
+                    <ComposerItem width="79.4918" x="118.403" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.68246" id="affected-cities" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
                 </ComposerFrame>
             </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
-                <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-                    <ComposerItem width="79.4918" x="118.403" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="4.13423" id="affected-cities" positionLock="false">
+            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="1.36242" id="fatalities-table" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -227,7 +235,7 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="0.764706" alphaBand="-1" blueBand="3" greenBand="2" type="multibandcolor" invertColor="0" redBand="1">
+            <rasterrenderer opacity="0.764706" alphaBand="-1" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
                 <rasterTransparency/>
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
@@ -423,6 +431,8 @@
             <editform>.</editform>
             <editforminit></editforminit>
             <annotationform>.</annotationform>
+            <excludeAttributesWMS/>
+            <excludeAttributesWFS/>
             <attributeactions/>
         </maplayer>
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
@@ -446,7 +456,7 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="1" alphaBand="-1" blueBand="3" greenBand="2" type="multibandcolor" invertColor="0" redBand="1">
+            <rasterrenderer opacity="1" alphaBand="-1" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
                 <rasterTransparency/>
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
@@ -472,7 +482,7 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="1" alphaBand="0" blueBand="3" greenBand="2" type="multibandcolor" invertColor="0" redBand="1">
+            <rasterrenderer opacity="1" alphaBand="0" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
                 <rasterTransparency>
                     <threeValuePixelList>
                         <pixelListEntry red="115" blue="255" green="223" percentTransparent="100"/>
@@ -635,6 +645,8 @@
             <editform>.</editform>
             <editforminit></editforminit>
             <annotationform>.</annotationform>
+            <excludeAttributesWMS/>
+            <excludeAttributesWFS/>
             <attributeactions/>
         </maplayer>
         <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
@@ -658,7 +670,7 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="0.435294" alphaBand="0" type="singlebandgray" invertColor="0" grayBand="1">
+            <rasterrenderer gradient="BlackToWhite" opacity="0.435294" alphaBand="0" type="singlebandgray" grayBand="1">
                 <rasterTransparency>
                     <singleValuePixelList>
                         <pixelListEntry min="0" max="0" percentTransparent="100"/>

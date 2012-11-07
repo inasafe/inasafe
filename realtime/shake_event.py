@@ -1845,7 +1845,7 @@ class ShakeEvent(QObject):
         LOGGER.debug(myLocationInfo)
         mySubstitutionMap = {'location-info': myLocationInfo,
                              'version': self.version()}
-        #mySubstitutionMap.update(self.eventDict())
+        mySubstitutionMap.update(self.eventDict())
         LOGGER.debug(mySubstitutionMap)
         myResult = myComposition.loadFromTemplate(myDocument,
                                                   mySubstitutionMap)

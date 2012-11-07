@@ -72,6 +72,30 @@ template, and which you can modify.
     interpretive information and so on.
 * **credits** - A block of text for displaying credits on the map output.
 
+{
+'place-name': 'Tondano',
+'depth-name': PyQt4.QtCore.QString(u'Depth'),
+'location-info': u'M 5.0 26-7-2012 2:15:35 Latitude: 0\xb012\'36.00"S Longitude: 124\xb027\'0.00"E Depth: 11.0km Located 2.50km SSW of Tondano',
+'depth-unit': PyQt4.QtCore.QString(u'km'),
+'bearing-compass': 'SSW',
+'distance-unit': PyQt4.QtCore.QString(u'km'),
+'mmi': '5.0',
+'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
+'date': '26-7-2012',
+'located-label': PyQt4.QtCore.QString(u'Located'),
+'bearing-degrees': '-163.055923462',
+'distance': '2.50',
+'direction-relation': PyQt4.QtCore.QString(u'of'),
+'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
+'latitude-value': u'0\xb012\'36.00"S',
+'longitude-value': u'124\xb027\'0.00"E',
+'depth': '11.0',
+'version': PyQt4.QtCore.QString(u'Version: 1.0.1'),
+'time': '2:15:35',
+'bearing-text': PyQt4.QtCore.QString(u'bearing')}
+
+
+
 The template is provided as :file:`realtime/fixtures/realtime-template.qgs`
 and can be modified by opening the template using the QGIS map composer,
 making your changes and then overwriting the template. You should take care
