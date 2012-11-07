@@ -12,6 +12,7 @@ from Scientific.IO.NetCDF import NetCDFFile
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
+
 def convert_netcdf2tif(filename, n):
     """Convert netcdf to tif aggregating firsts n bands
     """
