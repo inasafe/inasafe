@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 09:36+0700\n"
+"POT-Creation-Date: 2012-11-07 15:19+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,7 +156,7 @@ msgstr ""
 msgid "Flooded"
 msgstr ""
 
-#: safe/storage/test_io.py:2336 safe/storage/test_io.py:2346
+#: safe/storage/test_io.py:2419 safe/storage/test_io.py:2429
 msgid "Hello!"
 msgstr ""
 
@@ -907,7 +907,7 @@ msgid ""
 "%(impact)s</i>"
 msgstr ""
 
-#: safe/engine/interpolation.py:411
+#: safe/engine/interpolation.py:406
 #, python-format
 msgid ""
 "Could not interpolate from raster layer %(raster)s to vector layer "
@@ -1244,7 +1244,6 @@ msgstr ""
 msgid "Total number of buildings %i in the viewable area"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:149
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
@@ -1552,4 +1551,8 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:225
 #, python-format
 msgid "Total population %s in the viewable area"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:149
+msgid "Only buildings available in OpenStreetMap are considered."
 msgstr ""
