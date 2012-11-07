@@ -63,6 +63,8 @@ logging.info('-------------------------------------------')
 
 # Always regenerate the products
 myForceFlag = True
+myShakeEvent.populationRasterPath = ('/home/timlinux/Downloads/IDN_mosaic/'
+                                     'popmap15_all.tif')
 myShakeEvent.renderMap(myForceFlag)
 
 logging.info('-------------------------------------------')

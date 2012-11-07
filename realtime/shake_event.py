@@ -1686,31 +1686,14 @@ class ShakeEvent(QObject):
         myGeoCrs.createFromEpsg(4326)
 
         # Get the Hazard extents as an array in EPSG:4326
+        # Note that we will always clip to this extent regardless of
+        # whether the exposure layer completely covers it. This differs
+        # from safe_qgis which takes care to ensure that the two layers
+        # have coincidental coverage before clipping. The
+        # clipper function will take care to null padd any missing data.
         myHazardGeoExtent = extentToGeoArray(myHazardLayer.extent(),
                                                   myHazardLayer.crs())
 
-        # Fake the viewport extent to be the same as hazard extent
-        # since we are doing this headless without any vieport but I wanted
-        # to re-use code from safe_qgis
-        myViewportGeoExtent = myHazardGeoExtent
-
-        # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = extentToGeoArray(myExposureLayer.extent(),
-                                                    myExposureLayer.crs())
-
-        # Now work out the optimal extent between the two layers and
-        # the current view extent. The optimal extent is the intersection
-        # between the two layers and the viewport.
-        try:
-            # Extent is returned as an array [xmin,ymin,xmax,ymax]
-            # We will convert it to a QgsRectangle afterwards.
-            myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                           myExposureGeoExtent,
-                                           myViewportGeoExtent)
-        except InsufficientOverlapException:
-            LOGGER.exception('There was insufficient overlap between the input'
-                         ' layers')
-            raise
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
         # this based on the geographic extents
@@ -1735,13 +1718,16 @@ class ShakeEvent(QObject):
         if not numpy.allclose(myCellSize, myExposureGeoCellSize):
             extraExposureKeywords['resolution'] = myExposureGeoCellSize
 
+        # The extents should already be correct but the cell size may need
+        # resampling, so we pass the hazard layer to the clipper
         myClippedHazardPath = clipLayer(
                                 theLayer=myHazardLayer,
-                                theExtent=myGeoExtent,
+                                theExtent=myHazardGeoExtent,
                                 theCellSize=myCellSize)
+
         myClippedExposurePath = clipLayer(
                                     theLayer=myExposureLayer,
-                                    theExtent=myGeoExtent,
+                                    theExtent=myHazardGeoExtent,
                                     theCellSize=myCellSize,
                                     theExtraKeywords=extraExposureKeywords)
 
@@ -1752,7 +1738,7 @@ class ShakeEvent(QObject):
 
         The following priority will be used to determine the path:
             1) the class attribute self.populationRasterPath
-                will be checked and if not None it will be used.
+                will be checked and if not None it will be used.p7zip-full
             2) the environment variable 'SAFE_POPULATION_PATH' will be
                checked if set it will be used.
             4) A hard coded path of
@@ -1768,6 +1754,12 @@ class ShakeEvent(QObject):
             str - path to a population raster file.
         Raises:
             FileNotFoundError
+
+        TODO: Consider automatically fetching from
+        http://web.clas.ufl.edu/users/atatem/pub/IDN.7z
+
+        Also see http://web.clas.ufl.edu/users/atatem/pub/
+        https://github.com/AIFDR/inasafe/issues/381
         """
         # When used via the scripts make_shakemap.sh
         myFixturePath = os.path.join(dataDir(),
