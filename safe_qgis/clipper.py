@@ -21,9 +21,9 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (CalledProcessError, call)
+import time
 
-from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtCore import QCoreApplication, QProcess
 from qgis.core import (QgsCoordinateTransform,
                        QgsCoordinateReferenceSystem,
                        QgsRectangle,
@@ -39,7 +39,7 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
                            CallGDALError,
-                           InvalidProjectionException,)
+                           InvalidProjectionException)
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -370,29 +370,23 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                               'Versions/1.9/Programs/')
     myCommand = myExecutablePrefix + myCommand
 
-    # For debugging only
-    # myCommand = myExecutablePrefix + myCommand
-    # myFile = file('C:/temp/command.txt', 'wt')
-    # myFile.write(myCommand)
-    # myFile.close()
-    # Now run GDAL warp scottie...
     LOGGER.debug(myCommand)
-    try:
-        myResult = call(myCommand, shell=True)
-        del myResult
-    except CalledProcessError, e:
+    myResult = QProcess().execute(myCommand)
+
+    # For QProcess exit codes see
+    # http://qt-project.org/doc/qt-4.8/qprocess.html#execute
+    if myResult == -2:  # cannot be started
+        myMessageDetail = tr('Process could not be started.')
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
-                     % (myCommand, str(e)))
-        # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
-        if sys.platform == 'darwin':  # Mac OS X
-            if 'Errno 4' in str(e):
-                # continue as the error seems to be non critical
-                pass
-            else:
-                raise Exception(myMessage)
-        else:
-            raise Exception(myMessage)
+                     % (myCommand, myMessageDetail))
+        raise CallGDALError(myMessage)
+    elif myResult == -1:  # process crashed
+        myMessageDetail = tr('Process could not be started.')
+        myMessage = tr('<p>Error while executing the following shell command:'
+                       '</p><pre>%s</pre><p>Error message: %s'
+                       % (myCommand, myMessageDetail))
+        raise CallGDALError(myMessage)
 
     # .. todo:: Check the result of the shell call is ok
     myKeywordIO = KeywordIO()
