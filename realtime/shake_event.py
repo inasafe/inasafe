@@ -55,7 +55,8 @@ from qgis.core import (QgsPoint,
                        QgsProject,
                        QgsComposition,
                        QgsMapLayerRegistry,
-                       QgsMapRenderer)
+                       QgsMapRenderer,
+                       QgsPalLabeling)
 #TODO refactor this into a utilitiy class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
 from safe.common.version import get_version
@@ -63,10 +64,8 @@ from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
-from safe_qgis.safe_interface import getOptimalExtent
 from safe_qgis.utilities import getWGS84resolution
 from safe_qgis.clipper import extentToGeoArray, clipLayer
-from safe_qgis.exceptions import InsufficientOverlapException
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
@@ -1830,6 +1829,11 @@ class ShakeEvent(QObject):
 
         # Set up the map renderer that will be assigend to the composition
         myMapRenderer = QgsMapRenderer()
+        # Set the labelling engine for the canvas
+        myLabellingEngine = QgsPalLabeling()
+        myMapRenderer.setLabelingEngine(myLabellingEngine)
+
+        # Enable on the fly CRS transformations
         myMapRenderer.setProjectionsEnabled(False)
         # Now set up the composition
         myComposition = QgsComposition(myMapRenderer)
