@@ -21,7 +21,6 @@ import os
 import sys
 import tempfile
 import logging
-import time
 
 from PyQt4.QtCore import QCoreApplication, QProcess
 from qgis.core import (QgsCoordinateTransform,
