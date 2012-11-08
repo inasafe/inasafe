@@ -47,6 +47,7 @@ from qgis.core import (QgsPoint,
                        QgsGeometry,
                        QgsVectorLayer,
                        QgsRasterLayer,
+                       QgsRasterDataProvider,
                        QgsRectangle,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
@@ -54,7 +55,8 @@ from qgis.core import (QgsPoint,
                        QgsProject,
                        QgsComposition,
                        QgsMapLayerRegistry,
-                       QgsMapRenderer)
+                       QgsMapRenderer,
+                       QgsPalLabeling)
 #TODO refactor this into a utilitiy class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
 from safe.common.version import get_version
@@ -62,10 +64,8 @@ from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
-from safe_qgis.safe_interface import getOptimalExtent
 from safe_qgis.utilities import getWGS84resolution
 from safe_qgis.clipper import extentToGeoArray, clipLayer
-from safe_qgis.exceptions import InsufficientOverlapException
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
@@ -75,6 +75,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
+from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -85,20 +86,25 @@ class ShakeEvent(QObject):
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, theEventId, thePopulationRasterPath=None):
+    def __init__(self, theEventId=None,
+                 thePopulationRasterPath=None,
+                 theForceFlag=False):
         """Constructor for the shake event class.
 
         Args:
-            theEventId - (Mandatory) Id of the event. Will be used to
-                determine the path to an grid.xml file that
-                will be used to intialise the state of the ShakeEvent instance.
+            theEventId - (Optional) Id of the event. Will be used to
+                fetch the ShakeData for this event (either from cache or from
+                ftp server as required). The grid.xml file in the unpacked
+                event will be used to intialise the state of the ShakeEvent
+                instance.
+                If no event id is supplied, the most recent event recorded
+                on the server will be used.
             thePopulationRasterPath - (Optional)path to the population raster
                 that will be used if you want to calculate the impact. This
                 is optional because there are various ways this can be
                 specified before calling :func:`calculateFatalities`.
-            e.g.
-
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
+            theForceFlag: bool Whether to force retrieval of the dataset from
+                the ftp server.
 
         Returns: Instance
 
@@ -106,9 +112,11 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
+        self.data = ShakeData(theEventId, theForceFlag)
+        self.data.extract()
         self.latitude = None
         self.longitude = None
-        self.eventId = theEventId
+        self.eventId = self.data.eventId
         self.magnitude = None
         self.depth = None
         self.description = None
@@ -686,6 +694,9 @@ class ShakeEvent(QObject):
         # So that we can set the label horizontal alignment
         myFieldDefinition = ogr.FieldDefn('ALIGN', ogr.OFTString)
         myLayer.CreateField(myFieldDefinition)
+        # So that we can set the label vertical alignment
+        myFieldDefinition = ogr.FieldDefn('VALIGN', ogr.OFTString)
+        myLayer.CreateField(myFieldDefinition)
 
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
@@ -742,9 +753,14 @@ class ShakeEvent(QObject):
         Raises:
             None
         """
+        if theMMIValue is None:
+            LOGGER.debug('Romanize passed None')
+            return ''
+
+        LOGGER.debug('Romanising %f' % float(theMMIValue))
         myRomanList = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
                        'IX', 'X', 'XI', 'XII']
-        return myRomanList[int(round(theMMIValue))]
+        return myRomanList[int(round(float(theMMIValue)))]
 
     def mmiColour(self, theMMIValue):
         """Return the colour for an mmi value.
@@ -838,6 +854,7 @@ class ShakeEvent(QObject):
         myYIndex = myProvider.fieldNameIndex('Y')
         myRomanIndex = myProvider.fieldNameIndex('ROMAN')
         myAlignIndex = myProvider.fieldNameIndex('ALIGN')
+        myVAlignIndex = myProvider.fieldNameIndex('VALIGN')
         myFeature = QgsFeature()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
@@ -884,6 +901,8 @@ class ShakeEvent(QObject):
             myLayer.changeAttributeValue(myId, myRomanIndex, QVariant(myRoman))
             myLayer.changeAttributeValue(
                 myId, myAlignIndex, QVariant('Center'))
+            myLayer.changeAttributeValue(
+                myId, myVAlignIndex, QVariant('HALF'))
 
         myLayer.commitChanges()
 
@@ -1185,17 +1204,21 @@ class ShakeEvent(QObject):
             myNewFeature.setGeometry(myFeature.geometry())
 
             # Populate the mmi field by raster lookup
-            myResult, myRasterValues = myRasterLayer.identify(myPoint)
-            if not myResult:
+            # Get a {int, QVariant} back
+            myRasterValues = myRasterLayer.dataProvider().identify(myPoint,
+                                QgsRasterDataProvider.IdentifyFormatValue)
+            myRasterValues = myRasterValues.values()
+            if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster
                 continue
-            myValue = myRasterValues[QString('Band 1')]
-            if 'no data' not in myValue:
-                myMmi = float(myValue)
+            myValue = myRasterValues[0]  # Band 1
+            LOGGER.debug('MyValue: %s' % myValue)
+            if 'no data' not in myValue.toString():
+                myMmi = myValue.toFloat()[0]
             else:
                 myMmi = 0
 
-            LOGGER.debug('Looked up mmi of %s on raster for %ss' %
+            LOGGER.debug('Looked up mmi of %s on raster for %s' %
                          (myMmi, myPoint.toString()))
 
             myAttributeMap = {
@@ -1662,31 +1685,14 @@ class ShakeEvent(QObject):
         myGeoCrs.createFromEpsg(4326)
 
         # Get the Hazard extents as an array in EPSG:4326
+        # Note that we will always clip to this extent regardless of
+        # whether the exposure layer completely covers it. This differs
+        # from safe_qgis which takes care to ensure that the two layers
+        # have coincidental coverage before clipping. The
+        # clipper function will take care to null padd any missing data.
         myHazardGeoExtent = extentToGeoArray(myHazardLayer.extent(),
                                                   myHazardLayer.crs())
 
-        # Fake the viewport extent to be the same as hazard extent
-        # since we are doing this headless without any vieport but I wanted
-        # to re-use code from safe_qgis
-        myViewportGeoExtent = myHazardGeoExtent
-
-        # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = extentToGeoArray(myExposureLayer.extent(),
-                                                    myExposureLayer.crs())
-
-        # Now work out the optimal extent between the two layers and
-        # the current view extent. The optimal extent is the intersection
-        # between the two layers and the viewport.
-        try:
-            # Extent is returned as an array [xmin,ymin,xmax,ymax]
-            # We will convert it to a QgsRectangle afterwards.
-            myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                           myExposureGeoExtent,
-                                           myViewportGeoExtent)
-        except InsufficientOverlapException:
-            LOGGER.exception('There was insufficient overlap between the input'
-                         ' layers')
-            raise
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
         # this based on the geographic extents
@@ -1711,13 +1717,16 @@ class ShakeEvent(QObject):
         if not numpy.allclose(myCellSize, myExposureGeoCellSize):
             extraExposureKeywords['resolution'] = myExposureGeoCellSize
 
+        # The extents should already be correct but the cell size may need
+        # resampling, so we pass the hazard layer to the clipper
         myClippedHazardPath = clipLayer(
                                 theLayer=myHazardLayer,
-                                theExtent=myGeoExtent,
+                                theExtent=myHazardGeoExtent,
                                 theCellSize=myCellSize)
+
         myClippedExposurePath = clipLayer(
                                     theLayer=myExposureLayer,
-                                    theExtent=myGeoExtent,
+                                    theExtent=myHazardGeoExtent,
                                     theCellSize=myCellSize,
                                     theExtraKeywords=extraExposureKeywords)
 
@@ -1728,7 +1737,7 @@ class ShakeEvent(QObject):
 
         The following priority will be used to determine the path:
             1) the class attribute self.populationRasterPath
-                will be checked and if not None it will be used.
+                will be checked and if not None it will be used.p7zip-full
             2) the environment variable 'SAFE_POPULATION_PATH' will be
                checked if set it will be used.
             4) A hard coded path of
@@ -1744,6 +1753,12 @@ class ShakeEvent(QObject):
             str - path to a population raster file.
         Raises:
             FileNotFoundError
+
+        TODO: Consider automatically fetching from
+        http://web.clas.ufl.edu/users/atatem/pub/IDN.7z
+
+        Also see http://web.clas.ufl.edu/users/atatem/pub/
+        https://github.com/AIFDR/inasafe/issues/381
         """
         # When used via the scripts make_shakemap.sh
         myFixturePath = os.path.join(dataDir(),
@@ -1814,6 +1829,11 @@ class ShakeEvent(QObject):
 
         # Set up the map renderer that will be assigend to the composition
         myMapRenderer = QgsMapRenderer()
+        # Set the labelling engine for the canvas
+        myLabellingEngine = QgsPalLabeling()
+        myMapRenderer.setLabelingEngine(myLabellingEngine)
+
+        # Enable on the fly CRS transformations
         myMapRenderer.setProjectionsEnabled(False)
         # Now set up the composition
         myComposition = QgsComposition(myMapRenderer)
@@ -1821,10 +1841,12 @@ class ShakeEvent(QObject):
         # You can use this to replace any string like this [key]
         # in the template with a new value. e.g. to replace
         # [date] pass a map like this {'date': '1 Jan 2012'}
-        myLocationInfo = self.eventInfo().replace(unichr(176),'')
+        myLocationInfo = self.eventInfo()
         LOGGER.debug(myLocationInfo)
         mySubstitutionMap = {'location-info': myLocationInfo,
                              'version': self.version()}
+        mySubstitutionMap.update(self.eventDict())
+        LOGGER.debug(mySubstitutionMap)
         myResult = myComposition.loadFromTemplate(myDocument,
                                                   mySubstitutionMap)
         if not myResult:
@@ -1850,7 +1872,8 @@ class ShakeEvent(QObject):
             myMessage = 'fatalities-table composer item could not be found'
             LOGGER.exception(myMessage)
             raise MapComposerError(myMessage)
-        myFatalitiesHtml = myComposition.getComposerHtmlByItem(myFatalitiesItem)
+        myFatalitiesHtml = myComposition.getComposerHtmlByItem(
+            myFatalitiesItem)
         if myFatalitiesHtml is None:
             myMessage = 'Fatalities QgsComposerHtml could not be found'
             LOGGER.exception(myMessage)
@@ -1879,10 +1902,15 @@ class ShakeEvent(QObject):
                     [myContoursLayer, myCitiesLayer])
 
         # Now add out layers to the renderer so they appear in the print out
-        myLayerStringList = QStringList()
-        myLayerStringList.append(myContoursLayer.id())
-        myLayerStringList.append(myCitiesLayer.id())
-        myMapRenderer.setLayerSet(myLayerStringList)
+        myLayers = reversed(CANVAS.layers())
+        myLayerList = []
+        for myLayer in myLayers:
+            myLayerList.append(myLayer.id())
+
+        myLayerList.append(myContoursLayer.id())
+        myLayerList.append(myCitiesLayer.id())
+        myMapRenderer.setLayerSet(myLayerList)
+        LOGGER.info(str(myLayerList))
 
         # Save a pdf.
         myPdfPath = os.path.join(shakemapExtractDir(),
@@ -1903,7 +1931,8 @@ class ShakeEvent(QObject):
             self.eventId,
             '%s-thumb.png' % self.eventId)
         mySize = QSize(200, 200)
-        myThumbnailImage = myImage.scaled(mySize, Qt.KeepAspectRatioByExpanding)
+        myThumbnailImage = myImage.scaled(mySize,
+            Qt.KeepAspectRatioByExpanding)
         myThumbnailImage.save(myThumbnailImagePath)
         LOGGER.info('Generated Thumbnail: %s' % myThumbnailImagePath)
 
@@ -1926,29 +1955,63 @@ class ShakeEvent(QObject):
         except:
             return None
 
-        myDirectionList = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S",
-                           "SSW","SW","WSW","W","WNW","NW","NNW"]
+        myDirectionList = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
+                           'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
+                           'NW', 'NNW']
 
         myDirectionsCount = len(myDirectionList)
-        myDirectionsInterval = 360./myDirectionsCount
+        myDirectionsInterval = 360. / myDirectionsCount
         myIndex = int(round(theBearing / myDirectionsInterval))
         myIndex %= myDirectionsCount
         return myDirectionList[myIndex]
 
     def eventInfo(self):
-        """Get a short paragraph describing the event."""
+        """Get a short paragraph describing the event.
 
-        #Format the lat lon from ddegrees to dms
+        Args:
+            None
+
+        Returns:
+            str: A string describing the event e.g.
+                'M 5.0 26-7-2012 2:15:35 Latitude: 0°12'36.00"S
+                 Longitude: 124°27'0.00"E Depth: 11.0km
+                 Located 2.50km SSW of Tondano'
+        Raises:
+            None
+        """
+        myDict = self.eventDict()
+        myString = ('M %(mmi)s %(date)s %(time)s '
+                    '%(latitude-name)s: %(latitude-value)s '
+                    '%(longitude-name)s: %(longitude-value)s '
+                    '%(depth-name)s: %(depth)s%(depth-unit)s '
+                    '%(located-label)s %(distance)s%(distance-unit)s '
+                    '%(bearing-compass)s '
+                    '%(direction-relation)s %(place-name)s'
+                   ) % myDict
+        return myString
+
+    def eventDict(self):
+        """Get a dict of key value pairs that describe the event.
+
+        Args:
+
+        Returns:
+            dict: key-value pairs describing the event.
+
+        Raises:
+            propagates any exceptions
+
+        """
+
+        #Format the lat lon from decimal degrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
-        myCoordinates = str(myPoint.toDegreesMinutesSeconds(2).toAscii())
-        myCoordinates = myCoordinates.replace('xb027','u00B0')
-        #myString = QString()
-        #myString.toUtf8()
-        #myCoordinates.
-        myTokens = str(myCoordinates).split(',')
-        myLongitude = myTokens[0].encode('string_escape')
-        myLatitude = myTokens[1].encode('string_escape')
-
+        myCoordinates = myPoint.toDegreesMinutesSeconds(2)
+        myTokens = myCoordinates.split(',')
+        myLongitude = myTokens[0]
+        myLatitude = myTokens[1]
+        myKmText = self.tr('km')
+        myDirectionalityText = self.tr('of')
+        myBearingText = self.tr('bearing')
         LOGGER.debug(myLongitude)
         LOGGER.debug(myLatitude)
         if self.mostAffectedCity is None:
@@ -1958,31 +2021,30 @@ class ShakeEvent(QObject):
         myName = self.mostAffectedCity['name']
         myBearing = self.bearingToCardinal(myDirection)
 
-        myString = (('M %(mmi)s %(date)s %(time)s '
-                    '%(latitude-name)s: %(latitude-value)s %(longitude-name)s:'
-                     '%(longitude-value)s %(depth-name)s: %(depth)s %('
-                     'located-label)s %(distance)2f, %(bearing-degrees)s '
-                     '%(bearing-compass)s %(place-name)s')
-                    % {'mmi': self.magnitude,
-                       'date': '%s-%s-%s' % (self.day,
-                                             self.month,
-                                             self.year),
-                       'time': '%s:%s:%s' % (self.hour,
-                                             self.minute,
-                                             self.second),
-                       'latitude-name': self.tr('Latitude'),
-                       'latitude-value': '', # myLatitude, #causes error
-                       'longitude-name': self.tr('Longitude'),
-                       'longitude-value': '', # myLongitude, #error
-                       'depth-name': self.tr('Depth'),
-                       'depth': '%s %s' % (self.depth, self.tr('Km')),
-                       'located-label': self.tr('Located'),
-                       'distance': myDistance,
-                       'bearing-degrees': myDirection,
-                       'bearing-compass': myBearing,
-                       'place-name': myName
-                     } )
-        return myString
+        myDict = {'mmi': '%s' % self.magnitude,
+         'date': '%s-%s-%s' % (self.day,
+                               self.month,
+                               self.year),
+         'time': '%s:%s:%s' % (self.hour,
+                               self.minute,
+                               self.second),
+         'latitude-name': self.tr('Latitude'),
+         'latitude-value': '%s' % myLatitude,
+         'longitude-name': self.tr('Longitude'),
+         'longitude-value': '%s' % myLongitude,
+         'depth-name': self.tr('Depth'),
+         'depth': '%s' % self.depth,
+         'depth-unit': myKmText,
+         'located-label': self.tr('Located'),
+         'distance': '%.2f' % myDistance,
+         'distance-unit': myKmText,
+         'direction-relation': myDirectionalityText,
+         'bearing-degrees': '%s' % myDirection,
+         'bearing-compass': '%s' % myBearing,
+         'bearing-text': myBearingText,
+         'place-name': myName
+        }
+        return myDict
 
     def version(self):
         """Return a string showing the version of Inasafe.
@@ -2006,7 +2068,6 @@ class ShakeEvent(QObject):
         Raises:
             None
         """
-
 
     def __str__(self):
         """The unicode representation for an event object's state.

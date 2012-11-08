@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -22,7 +21,7 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (call, CalledProcessError)
+from subprocess import (CalledProcessError, call)
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
@@ -39,13 +38,14 @@ from safe_qgis.safe_interface import (verify,
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
-                           InvalidProjectionException)
+                           CallGDALError,
+                           InvalidProjectionException,)
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
 
 def tr(theText):
-    """We define a tr() alias here since the Clipper implementation below
+    """We define a tr() alias here since the ClipperTest implementation below
     is not a class and does not inherit from QObject.
 
     .. note:: see http://tinyurl.com/pyqt-differences
@@ -57,11 +57,12 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "Clipper"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 
-def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
+def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
+              explodeMultipart=True):
     """Clip a Hazard or Exposure layer to the extents provided.
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
@@ -70,20 +71,21 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
 
         * theLayer - a valid QGIS vector or raster layer
         * theExtent - an array representing the exposure layer
-              extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-              that the coordinates are in EPSG:4326 although currently
-              no checks are made to enforce this.
+           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
+           that the coordinates are in EPSG:4326 although currently
+           no checks are made to enforce this.
         * theCellSize - cell size which the layer should be resampled to.
-              This argument will be ignored for vector layers and if not
-              provided for a raster layer, the native raster cell size will be
-              used.
+            This argument will be ignored for vector layers and if not provided
+            for a raster layer, the native raster cell size will be used.
         * theExtraKeywords - Optional keywords dictionary to be added to
                           output layer
+        * explodeMultipart - a bool describing if to convert multipart
+        features into singleparts
 
     Returns:
-        Path to the output clipped layer (placed in the inasafe temp dir).
-            The output layer will be reprojected to EPSG:4326
-            if needed.
+        Path to the output clipped layer (placed in the
+        system temp dir). The output layer will be reprojected to EPSG:4326
+        if needed.
 
     Raises:
         None
@@ -91,14 +93,20 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
     """
     if theLayer.type() == QgsMapLayer.VectorLayer:
         return _clipVectorLayer(theLayer, theExtent,
-                                theExtraKeywords=theExtraKeywords)
+            theExtraKeywords=theExtraKeywords,
+            explodeMultipart=explodeMultipart)
     else:
-        return _clipRasterLayer(theLayer, theExtent, theCellSize,
-                                theExtraKeywords=theExtraKeywords)
+        try:
+            return _clipRasterLayer(theLayer, theExtent, theCellSize,
+                theExtraKeywords=theExtraKeywords)
+        except CallGDALError, e:
+            raise e
+        except IOError, e:
+            raise e
 
 
 def _clipVectorLayer(theLayer, theExtent,
-                     theExtraKeywords=None):
+                     theExtraKeywords=None, explodeMultipart=True):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     vector layer or an exception will be thrown.
@@ -114,6 +122,8 @@ def _clipVectorLayer(theLayer, theExtent,
            no checks are made to enforce this.
         * theExtraKeywords - any additional keywords over and above the
           original keywords that should be associated with the cliplayer.
+        * explodeMultipart - a bool describing if to convert multipart
+        features into singleparts
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -129,9 +139,11 @@ def _clipVectorLayer(theLayer, theExtent,
 
     if theLayer.type() != QgsMapLayer.VectorLayer:
         myMessage = tr('Expected a vector layer but received a %s.' %
-                str(theLayer.type()))
+                       str(theLayer.type()))
         raise InvalidParameterException(myMessage)
 
+    #myHandle, myFilename = tempfile.mkstemp('.sqlite', 'clip_',
+    #    temp_dir())
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
                                             temp_dir())
 
@@ -148,17 +160,17 @@ def _clipVectorLayer(theLayer, theExtent,
     myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
     myRect = QgsRectangle(theExtent[0], theExtent[1],
-                          theExtent[2], theExtent[3])
+        theExtent[2], theExtent[3])
     myProjectedExtent = myXForm.transformBoundingBox(myRect)
 
     # Get vector layer
     myProvider = theLayer.dataProvider()
     if myProvider is None:
         myMessage = tr('Could not obtain data provider from '
-               'layer "%s"' % theLayer.source())
+                       'layer "%s"' % theLayer.source())
         raise Exception(myMessage)
 
-    # get the layer field list, select by our extent then write to disk
+    # Get the layer field list, select by our extent then write to disk
     # .. todo:: FIXME - for different geometry types we should implement
     #    different clipping behaviour e.g. reject polygons that
     #    intersect the edge of the bbox. Tim
@@ -166,22 +178,23 @@ def _clipVectorLayer(theLayer, theExtent,
     myFetchGeometryFlag = True
     myUseIntersectFlag = True
     myProvider.select(myAttributes,
-                      myProjectedExtent,
-                      myFetchGeometryFlag,
-                      myUseIntersectFlag)
+        myProjectedExtent,
+        myFetchGeometryFlag,
+        myUseIntersectFlag)
 
     myFieldList = myProvider.fields()
 
     myWriter = QgsVectorFileWriter(myFilename,
-                                   'UTF-8',
-                                   myFieldList,
-                                   theLayer.wkbType(),
-                                   myGeoCrs,
-                                   'ESRI Shapefile')
+        'UTF-8',
+        myFieldList,
+        theLayer.wkbType(),
+        myGeoCrs,
+        #'SQLite')  # FIXME (Ole): This works but is far too slow
+        'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
         myMessage = tr('Error when creating shapefile: <br>Filename:'
-               '%s<br>Error: %s' %
-            (myFilename, myWriter.hasError()))
+                       '%s<br>Error: %s' %
+                       (myFilename, myWriter.hasError()))
         raise Exception(myMessage)
 
     # Reverse the coordinate xform now so that we can convert
@@ -193,8 +206,12 @@ def _clipVectorLayer(theLayer, theExtent,
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
         # Loop through the parts adding them to the output file
-        # we ALWAYS write out single part features
-        myGeometryList = explodeMultiPartGeometry(myGeometry)
+        # we write out single part features unless explodeMultipart is False
+        if explodeMultipart:
+            myGeometryList = explodeMultiPartGeometry(myGeometry)
+        else:
+            myGeometryList = [myGeometry]
+
         for myPart in myGeometryList:
             myPart.transform(myXForm)
             myFeature.setGeometry(myPart)
@@ -210,7 +227,7 @@ def _clipVectorLayer(theLayer, theExtent,
 
     myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(theLayer, myFilename,
-                  theExtraKeywords=theExtraKeywords)
+        theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
 
@@ -257,9 +274,8 @@ def explodeMultiPartGeometry(theGeom):
 
 def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                      theExtraKeywords=None):
-    """Clip a Hazard or Exposure raster layer to the extents provided.
-
-    The layer must be a raster layer or an exception will be thrown.
+    """Clip a Hazard or Exposure raster layer to the extents provided. The
+    layer must be a raster layer or an exception will be thrown.
 
     .. note:: The extent *must* be in EPSG:4326.
 
@@ -277,12 +293,12 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
             theCellSize=None), the native raster cell size will be used.
 
     Returns:
-        str: Path to the output clipped layer (placed in the
+        Path to the output clipped layer (placed in the
         system temp dir).
 
     Raises:
-        Exception if input layer is a density layer in projected coordinates -
-        see issue #123
+       Exception if input layer is a density layer in projected coordinates -
+       see issue #123
 
     """
     if not theLayer or not theExtent:
@@ -309,7 +325,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # in its keywords.
     myKeywords = readKeywordsFromFile(myKeywordsPath)
     if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
-        if theLayer.srs().epsg() != 4326:
+        if str(theLayer.srs().authid()) != 'EPSG:4326':
 
             # This layer is not WGS84 geographic
             myMessage = ('Layer %s represents density but has spatial '
@@ -423,6 +439,7 @@ def extentToKml(theExtent):
     myFile.write(myKml)
     myFile.close()
     return myFilename
+
 
 def extentToGeoArray(theExtent, theSourceCrs):
     """Convert the supplied extent to geographic and return as as array.

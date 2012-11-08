@@ -4,10 +4,10 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>95.319910</xmin>
-            <ymin>-2.210000</ymin>
-            <xmax>101.840090</xmax>
-            <ymax>1.990000</ymax>
+            <xmin>120.276982</xmin>
+            <ymin>-1.060663</ymin>
+            <xmax>126.998438</xmax>
+            <ymax>2.580980</ymax>
         </extent>
         <projections>1</projections>
         <destinationsrs>
@@ -24,27 +24,32 @@
         </destinationsrs>
     </mapcanvas>
     <legend updateDrawingOrder="false">
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="mmi-contours-nearest" showFeatureCount="0">
-            <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="mmi_contours_nearest20120921120217824" visible="1"/>
-            </filegroup>
-        </legendlayer>
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Cities" showFeatureCount="0">
-            <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="mmi_cities20120921120217778" visible="1"/>
-            </filegroup>
-        </legendlayer>
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="gadm2" showFeatureCount="0">
+        <legendlayer drawingOrder="4" open="false" checked="Qt::Checked" name="gadm2" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="gadm220120907131545352" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="population" showFeatureCount="0">
+        <legendlayer drawingOrder="5" open="false" checked="Qt::Checked" name="places" showFeatureCount="0">
+            <filegroup open="false" hidden="false">
+                <legendlayerfile isInOverview="0" layerid="places20121003111306499" visible="1"/>
+            </filegroup>
+        </legendlayer>
+        <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="People" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="population20120911162940535" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="6" open="false" checked="Qt::Unchecked" name="Blue-marble-topo-jan" showFeatureCount="0">
+        <legendlayer drawingOrder="7" open="false" checked="Qt::Checked" name="indonesia-terrain" showFeatureCount="0">
+            <filegroup open="false" hidden="false">
+                <legendlayerfile isInOverview="0" layerid="indonesia_terrain20121003111101754" visible="1"/>
+            </filegroup>
+        </legendlayer>
+        <legendlayer drawingOrder="8" open="false" checked="Qt::Checked" name="indonesia-bathymetry" showFeatureCount="0">
+            <filegroup open="false" hidden="false">
+                <legendlayerfile isInOverview="0" layerid="indonesia_bathymetry20121003111205159" visible="1"/>
+            </filegroup>
+        </legendlayer>
+        <legendlayer drawingOrder="9" open="false" checked="Qt::Unchecked" name="Blue-marble-topo-jan" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="blue_marble_topo_jan20120718154124441" visible="0"/>
             </filegroup>
@@ -52,218 +57,33 @@
     </legend>
     <Composer title="Realtime" visible="1">
         <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
-            <ComposerScaleBar segmentMillimeters="17.0672" numMapUnitsPerScaleBarUnit="1000" numSegments="3" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
-                <BrushColor red="0" blue="0" green="0"/>
-                <ComposerItem width="86.2686" x="115.624" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.65436" id="scalebar" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerScaleBar>
-            <ComposerLabel valign="32" labelText="[location-info]" halign="1" margin="1">
-                <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
+            <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" halign="1" margin="1">
+                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="194.684" x="8.08255" y="40.7115" rotation="0" height="10.1895" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.6745" id="location-info" positionLock="false">
+                <ComposerItem width="24.6" x="10.811" y="49.2085" rotation="0" height="6.9" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="2.68246" id="" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerLegend symbolWidth="4" title="Population" boxSpace="2" titleFont="Verdana,12,-1,5,75,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="1" iconLabelSpace="2" wrapChar=" " itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
-                <Model autoUpdate="1">
-                    <LayerItem layerId="population20120911162940535" text="">
-                        <RasterClassificationItem layerId="population20120911162940535" color="#fafafa" text="0-10"/>
-                        <RasterClassificationItem layerId="population20120911162940535" color="#bcbcbc" text="10-100"/>
-                        <RasterClassificationItem layerId="population20120911162940535" color="#7f7f7f" text="100-1000"/>
-                        <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
-                    </LayerItem>
-                    <LayerItem layerId="mmi_cities20120921120217778" text="mmi-cities">
-                        <VectorClassificationItemNg text="">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="marker" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleMarker" locked="0">
-                                        <prop k="angle" v="0"/>
-                                        <prop k="color" v="255,85,0,255"/>
-                                        <prop k="color_border" v="0,0,0,255"/>
-                                        <prop k="name" v="diamond"/>
-                                        <prop k="offset" v="0,0"/>
-                                        <prop k="scale_method" v="area"/>
-                                        <prop k="size" v="3"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                    </LayerItem>
-                    <LayerItem layerId="mmi_contours_nearest20120921120217824" text="mmi-contours-nearest">
-                        <VectorClassificationItemNg text="Whole Intervals">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="0">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="220,0,3,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="0.26"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="II">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="round"/>
-                                        <prop k="color" v="32,159,255,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="round"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="III">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="0,207,255,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="IV">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="85,255,255,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="V">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="170,255,255,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="VI">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="255,240,0,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="VII">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="255,168,0,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="VIII">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="255,112,0,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="IX">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="1">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="255,0,0,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="1"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                        <VectorClassificationItemNg text="Half Intervals">
-                            <symbols>
-                                <symbol outputUnit="MM" alpha="0.176471" type="line" name="classificationSymbol">
-                                    <layer pass="0" class="SimpleLine" locked="0">
-                                        <prop k="capstyle" v="square"/>
-                                        <prop k="color" v="72,160,0,255"/>
-                                        <prop k="customdash" v="5;2"/>
-                                        <prop k="joinstyle" v="bevel"/>
-                                        <prop k="offset" v="0"/>
-                                        <prop k="penstyle" v="solid"/>
-                                        <prop k="use_custom_dash" v="0"/>
-                                        <prop k="width" v="0.26"/>
-                                    </layer>
-                                </symbol>
-                            </symbols>
-                        </VectorClassificationItemNg>
-                    </LayerItem>
-                </Model>
-                <ComposerItem width="48" x="144.781" y="218.371" rotation="0" height="116.9" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.65436" id="legend" positionLock="false">
+            <ComposerScaleBar segmentMillimeters="26.2192" numMapUnitsPerScaleBarUnit="1000" numSegments="2" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
+                <BrushColor red="0" blue="0" green="0"/>
+                <ComposerItem width="96.6577" x="110.42" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.68246" id="scalebar" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
-            </ComposerLegend>
+            </ComposerScaleBar>
+            <ComposerLabel valign="32" labelText="M[mmi] [date] [time]" halign="1" margin="1">
+                <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="86.2337" x="8.08255" y="40.7115" rotation="0" height="6.63302" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.68246" id="location-info" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
             <ComposerLabel valign="32" labelText="Perkiraan jumlah penduduk terpapar pada setiap tingkat getaran berbeda&#xa;" halign="4" margin="1">
                 <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="194.348" x="6.50655" y="58.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="2.6745" id="mmi-table-header" positionLock="false">
+                <ComposerItem width="194.348" x="6.50655" y="58.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.68246" id="mmi-table-header" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -289,7 +109,7 @@
                 <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
                     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.6745" id="overview-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.68246" id="overview-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -297,15 +117,15 @@
             <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduk dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
                 <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.65436" id="disclaimer" positionLock="false">
+                <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="2.65436" id="disclaimer" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="1" margin="1">
+            <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="4" margin="1">
                 <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="143.22" x="34.0388" y="284.513" rotation="0" height="6.42241" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.65436" id="credits" positionLock="false">
+                <ComposerItem width="192.174" x="7.46623" y="283.513" rotation="0" height="13.8378" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="3.08054" id="credits" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -323,12 +143,12 @@
                         </layer>
                     </symbol>
                 </overviewFrame>
-                <Extent ymin="-3.28201" xmin="95.944" ymax="1.98999" xmax="101.216"/>
+                <Extent ymin="-1.87921" xmin="122.271" ymax="1.54879" xmax="125.699"/>
                 <LayerSet/>
                 <Grid gridStyle="1" crossLength="1" penColorRed="172" penColorBlue="172" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="172">
                     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="2.6745" id="main-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="2.68246" id="main-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -336,26 +156,40 @@
             <ComposerLabel valign="32" labelText="Perkiraan Dampak Gempa" halign="1" margin="1">
                 <LabelFont description="Ubuntu,28,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="128.587" x="39.4618" y="14" rotation="0" height="14.2277" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="2.65436" id="main-title" positionLock="false">
+                <ComposerItem width="128.587" x="39.4618" y="14" rotation="0" height="14.2277" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="2.65436" id="main-title" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
             <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="right-logo" positionLock="false">
+                <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="2.06711" id="right-logo" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerPicture>
             <ComposerPicture pictureWidth="30" file="./bnpb_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="logo-left" positionLock="false">
+                <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="2" lastValidViewScaleFactor="2.65436" id="logo-left" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerPicture>
+            <ComposerLegend symbolWidth="4" title="Population" boxSpace="2" titleFont="Verdana,12,-1,5,75,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="5" iconLabelSpace="2" wrapChar=" " itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
+                <Model autoUpdate="0">
+                    <LayerItem layerId="population20120911162940535" text="">
+                        <RasterClassificationItem layerId="population20120911162940535" color="#fafafa" text="0-10"/>
+                        <RasterClassificationItem layerId="population20120911162940535" color="#bcbcbc" text="10-100"/>
+                        <RasterClassificationItem layerId="population20120911162940535" color="#7f7f7f" text="100-1000"/>
+                        <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
+                    </LayerItem>
+                </Model>
+                <ComposerItem width="29" x="150.781" y="217.371" rotation="0" height="36.4" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="1.36242" id="legend" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLegend>
             <ComposerHtml resizeMode="0" url="">
                 <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-                    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.67785" id="" positionLock="false">
+                    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="2.06711" id="" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -363,7 +197,7 @@
             </ComposerHtml>
             <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
                 <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-                    <ComposerItem width="79.4918" x="117.919" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.65436" id="affected-cities" positionLock="false">
+                    <ComposerItem width="79.4918" x="118.403" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.68246" id="affected-cities" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -371,7 +205,7 @@
             </ComposerHtml>
             <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
                 <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="1.44966" id="fatalities-table" positionLock="false">
+                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="1.36242" id="fatalities-table" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -379,8 +213,8 @@
             </ComposerHtml>
         </Composition>
     </Composer>
-    <projectlayers layercount="5">
-        <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+    <projectlayers layercount="6">
+        <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>blue_marble_topo_jan20120718154124441</id>
             <datasource>../../../../../gisdata/world/blue-marble-mbtiles/blue-marble-topo-jan.mbtiles</datasource>
             <title></title>
@@ -401,12 +235,12 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="0.517647" alphaBand="0" blueBand="3" greenBand="2" type="multibandcolor" invertColor="0" redBand="1">
+            <rasterrenderer opacity="0.764706" alphaBand="-1" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
                 <rasterTransparency/>
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
         </maplayer>
-        <maplayer minimumScale="0" maximumScale="7.5e+07" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="1">
+        <maplayer minimumScale="0" maximumScale="1e+07" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="1">
             <id>gadm220120907131545352</id>
             <datasource>../../../../../gisdata/world/gadm/gadm2.shp</datasource>
             <title></title>
@@ -429,10 +263,10 @@
             <vectorjoins/>
             <renderer-v2 symbollevels="0" type="singleSymbol">
                 <symbols>
-                    <symbol outputUnit="MM" alpha="0.192157" type="fill" name="0">
+                    <symbol outputUnit="MM" alpha="0.615686" type="fill" name="0">
                         <layer pass="0" class="SimpleFill" locked="0">
-                            <prop k="color" v="190,102,25,49"/>
-                            <prop k="color_border" v="0,0,0,49"/>
+                            <prop k="color" v="0,0,255,255"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="style" v="no"/>
                             <prop k="style_border" v="solid"/>
@@ -447,14 +281,14 @@
                 <property key="labeling" value="pal"/>
                 <property key="labeling/addDirectionSymbol" value="false"/>
                 <property key="labeling/angleOffset" value="0"/>
-                <property key="labeling/bufferColorB" value="255"/>
-                <property key="labeling/bufferColorG" value="255"/>
-                <property key="labeling/bufferColorR" value="255"/>
+                <property key="labeling/bufferColorB" value="236"/>
+                <property key="labeling/bufferColorG" value="236"/>
+                <property key="labeling/bufferColorR" value="236"/>
                 <property key="labeling/bufferJoinStyle" value="64"/>
                 <property key="labeling/bufferNoFill" value="false"/>
-                <property key="labeling/bufferSize" value="0"/>
+                <property key="labeling/bufferSize" value="1"/>
                 <property key="labeling/bufferSizeInMapUnits" value="false"/>
-                <property key="labeling/bufferTransp" value="0"/>
+                <property key="labeling/bufferTransp" value="49"/>
                 <property key="labeling/centroidWhole" value="false"/>
                 <property key="labeling/dataDefinedProperty0" value=""/>
                 <property key="labeling/dataDefinedProperty1" value=""/>
@@ -483,10 +317,10 @@
                 <property key="labeling/enabled" value="true"/>
                 <property key="labeling/fieldName" value="NAME_2"/>
                 <property key="labeling/fontCapitals" value="0"/>
-                <property key="labeling/fontFamily" value="Ubuntu"/>
-                <property key="labeling/fontItalic" value="false"/>
+                <property key="labeling/fontFamily" value="Times New Roman"/>
+                <property key="labeling/fontItalic" value="true"/>
                 <property key="labeling/fontLetterSpacing" value="0"/>
-                <property key="labeling/fontSize" value="7"/>
+                <property key="labeling/fontSize" value="14"/>
                 <property key="labeling/fontSizeInMapUnits" value="false"/>
                 <property key="labeling/fontStrikeout" value="false"/>
                 <property key="labeling/fontUnderline" value="false"/>
@@ -498,14 +332,14 @@
                 <property key="labeling/labelPerPart" value="false"/>
                 <property key="labeling/mergeLines" value="false"/>
                 <property key="labeling/minFeatureSize" value="0"/>
-                <property key="labeling/namedStyle" value="Regular"/>
+                <property key="labeling/namedStyle" value="Italic"/>
                 <property key="labeling/obstacle" value="true"/>
                 <property key="labeling/placement" value="0"/>
                 <property key="labeling/placementFlags" value="0"/>
                 <property key="labeling/plussign" value="true"/>
                 <property key="labeling/preserveRotation" value="true"/>
                 <property key="labeling/previewBkgrdColor" value="#ffffff"/>
-                <property key="labeling/priority" value="5"/>
+                <property key="labeling/priority" value="9"/>
                 <property key="labeling/scaleMax" value="20000000"/>
                 <property key="labeling/scaleMin" value="1"/>
                 <property key="labeling/textColorB" value="0"/>
@@ -596,15 +430,73 @@
             </edittypes>
             <editform>.</editform>
             <editforminit></editforminit>
-            <annotationform>../../../../../.qgis/project_templates</annotationform>
+            <annotationform>.</annotationform>
+            <excludeAttributesWMS/>
+            <excludeAttributesWFS/>
             <attributeactions/>
         </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
-            <id>mmi_cities20120921120217778</id>
-            <datasource>/tmp/inasafe/realtime/shakemaps-extracted/20120921035135/mmi-cities.shp</datasource>
+        <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+            <id>indonesia_bathymetry20121003111205159</id>
+            <datasource>./context/indonesia-bathymetry.tif</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>Cities</layername>
+            <layername>indonesia-bathymetry</layername>
+            <srs>
+                <spatialrefsys>
+                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+                    <srsid>3452</srsid>
+                    <srid>4326</srid>
+                    <authid>EPSG:4326</authid>
+                    <description>WGS 84</description>
+                    <projectionacronym>longlat</projectionacronym>
+                    <ellipsoidacronym>WGS84</ellipsoidacronym>
+                    <geographicflag>true</geographicflag>
+                </spatialrefsys>
+            </srs>
+            <transparencyLevelInt>255</transparencyLevelInt>
+            <customproperties/>
+            <provider>gdal</provider>
+            <rasterrenderer opacity="1" alphaBand="-1" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
+                <rasterTransparency/>
+            </rasterrenderer>
+            <rasterresampler maxOversampling="2"/>
+        </maplayer>
+        <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+            <id>indonesia_terrain20121003111101754</id>
+            <datasource>./context/indonesia-terrain.tif</datasource>
+            <title></title>
+            <abstract></abstract>
+            <layername>indonesia-terrain</layername>
+            <srs>
+                <spatialrefsys>
+                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+                    <srsid>3452</srsid>
+                    <srid>4326</srid>
+                    <authid>EPSG:4326</authid>
+                    <description>WGS 84</description>
+                    <projectionacronym>longlat</projectionacronym>
+                    <ellipsoidacronym>WGS84</ellipsoidacronym>
+                    <geographicflag>true</geographicflag>
+                </spatialrefsys>
+            </srs>
+            <transparencyLevelInt>255</transparencyLevelInt>
+            <customproperties/>
+            <provider>gdal</provider>
+            <rasterrenderer opacity="1" alphaBand="0" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
+                <rasterTransparency>
+                    <threeValuePixelList>
+                        <pixelListEntry red="115" blue="255" green="223" percentTransparent="100"/>
+                    </threeValuePixelList>
+                </rasterTransparency>
+            </rasterrenderer>
+            <rasterresampler maxOversampling="2"/>
+        </maplayer>
+        <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
+            <id>places20121003111306499</id>
+            <datasource>./context/places.shp</datasource>
+            <title></title>
+            <abstract></abstract>
+            <layername>places</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -625,12 +517,12 @@
                     <symbol outputUnit="MM" alpha="1" type="marker" name="0">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
-                            <prop k="color" v="255,85,0,255"/>
-                            <prop k="color_border" v="0,0,0,255"/>
+                            <prop k="color" v="150,150,150,255"/>
+                            <prop k="color_border" v="150,150,150,255"/>
                             <prop k="name" v="diamond"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="scale_method" v="area"/>
-                            <prop k="size" v="3"/>
+                            <prop k="size" v="2"/>
                         </layer>
                     </symbol>
                 </symbols>
@@ -646,9 +538,9 @@
                 <property key="labeling/bufferColorR" value="255"/>
                 <property key="labeling/bufferJoinStyle" value="64"/>
                 <property key="labeling/bufferNoFill" value="false"/>
-                <property key="labeling/bufferSize" value="0.5"/>
+                <property key="labeling/bufferSize" value="0"/>
                 <property key="labeling/bufferSizeInMapUnits" value="false"/>
-                <property key="labeling/bufferTransp" value="53"/>
+                <property key="labeling/bufferTransp" value="0"/>
                 <property key="labeling/centroidWhole" value="false"/>
                 <property key="labeling/dataDefinedProperty0" value=""/>
                 <property key="labeling/dataDefinedProperty1" value=""/>
@@ -672,19 +564,19 @@
                 <property key="labeling/dataDefinedProperty9" value=""/>
                 <property key="labeling/decimals" value="0"/>
                 <property key="labeling/displayAll" value="false"/>
-                <property key="labeling/dist" value="1"/>
+                <property key="labeling/dist" value="0.5"/>
                 <property key="labeling/distInMapUnits" value="false"/>
                 <property key="labeling/enabled" value="true"/>
                 <property key="labeling/fieldName" value="name"/>
                 <property key="labeling/fontCapitals" value="0"/>
-                <property key="labeling/fontFamily" value="Ubuntu"/>
-                <property key="labeling/fontItalic" value="false"/>
+                <property key="labeling/fontFamily" value="Verdana"/>
+                <property key="labeling/fontItalic" value="true"/>
                 <property key="labeling/fontLetterSpacing" value="0"/>
-                <property key="labeling/fontSize" value="10"/>
+                <property key="labeling/fontSize" value="7"/>
                 <property key="labeling/fontSizeInMapUnits" value="false"/>
                 <property key="labeling/fontStrikeout" value="false"/>
                 <property key="labeling/fontUnderline" value="false"/>
-                <property key="labeling/fontWeight" value="75"/>
+                <property key="labeling/fontWeight" value="50"/>
                 <property key="labeling/fontWordSpacing" value="0"/>
                 <property key="labeling/formatNumbers" value="false"/>
                 <property key="labeling/isExpression" value="false"/>
@@ -692,21 +584,21 @@
                 <property key="labeling/labelPerPart" value="false"/>
                 <property key="labeling/mergeLines" value="false"/>
                 <property key="labeling/minFeatureSize" value="0"/>
-                <property key="labeling/namedStyle" value="Bold"/>
+                <property key="labeling/namedStyle" value="Italic"/>
                 <property key="labeling/obstacle" value="true"/>
                 <property key="labeling/placement" value="0"/>
                 <property key="labeling/placementFlags" value="0"/>
                 <property key="labeling/plussign" value="true"/>
                 <property key="labeling/preserveRotation" value="true"/>
                 <property key="labeling/previewBkgrdColor" value="#ffffff"/>
-                <property key="labeling/priority" value="10"/>
-                <property key="labeling/scaleMax" value="10000000"/>
-                <property key="labeling/scaleMin" value="1"/>
-                <property key="labeling/textColorB" value="0"/>
-                <property key="labeling/textColorG" value="0"/>
-                <property key="labeling/textColorR" value="0"/>
+                <property key="labeling/priority" value="5"/>
+                <property key="labeling/scaleMax" value="0"/>
+                <property key="labeling/scaleMin" value="0"/>
+                <property key="labeling/textColorB" value="116"/>
+                <property key="labeling/textColorG" value="116"/>
+                <property key="labeling/textColorR" value="116"/>
                 <property key="labeling/textTransp" value="0"/>
-                <property key="labeling/wrapChar" value=" "/>
+                <property key="labeling/wrapChar" value=""/>
                 <property key="labeling/xOffset" value="0"/>
                 <property key="labeling/xQuadOffset" value="0"/>
                 <property key="labeling/yOffset" value="0"/>
@@ -742,293 +634,27 @@
                 <edittype type="0" name="direction_"/>
                 <edittype type="0" name="dist_to"/>
                 <edittype type="0" name="distance_t"/>
+                <edittype type="0" name="lat"/>
+                <edittype type="0" name="lon"/>
                 <edittype type="0" name="mmi"/>
                 <edittype type="0" name="name"/>
+                <edittype type="0" name="pop"/>
                 <edittype type="0" name="population"/>
                 <edittype type="0" name="roman"/>
             </edittypes>
             <editform>.</editform>
             <editforminit></editforminit>
             <annotationform>.</annotationform>
+            <excludeAttributesWMS/>
+            <excludeAttributesWFS/>
             <attributeactions/>
         </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Line" type="vector" hasScaleBasedVisibilityFlag="0">
-            <id>mmi_contours_nearest20120921120217824</id>
-            <datasource>/tmp/inasafe/realtime/shakemaps-extracted/20120921035135/mmi-contours-nearest.shp</datasource>
-            <title></title>
-            <abstract></abstract>
-            <layername>mmi-contours-nearest</layername>
-            <srs>
-                <spatialrefsys>
-                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-                    <srsid>3452</srsid>
-                    <srid>4326</srid>
-                    <authid>EPSG:4326</authid>
-                    <description>WGS 84</description>
-                    <projectionacronym>longlat</projectionacronym>
-                    <ellipsoidacronym>WGS84</ellipsoidacronym>
-                    <geographicflag>true</geographicflag>
-                </spatialrefsys>
-            </srs>
-            <transparencyLevelInt>255</transparencyLevelInt>
-            <provider encoding="UTF-8">ogr</provider>
-            <vectorjoins/>
-            <renderer-v2 symbollevels="0" type="RuleRenderer">
-                <rules>
-                    <rule description="Integer MMI valued contouirs will be shown but not labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) = 0" symbol="0" label="Whole Intervals">
-                        <rule filter="&quot;MMI&quot; = '2'" symbol="1" label="II"/>
-                        <rule filter="&quot;MMI&quot; = '3'" symbol="2" label="III"/>
-                        <rule filter="&quot;MMI&quot; = '4'" symbol="3" label="IV"/>
-                        <rule filter="&quot;MMI&quot; = '5'" symbol="4" label="V"/>
-                        <rule filter="&quot;MMI&quot; = '6'" symbol="5" label="VI"/>
-                        <rule filter="&quot;MMI&quot; = '7'" symbol="6" label="VII"/>
-                        <rule filter="&quot;MMI&quot; = '8'" symbol="7" label="VIII"/>
-                        <rule filter="&quot;MMI&quot; = '9'" symbol="8" label="IX"/>
-                    </rule>
-                    <rule description="Integer MMI valued contouirs will be hidden but labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) != 0" symbol="9" label="Half Intervals"/>
-                </rules>
-                <symbols>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="0">
-                        <layer pass="0" class="SimpleLine" locked="0">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="220,0,3,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="0.26"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="1">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="round"/>
-                            <prop k="color" v="32,159,255,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="round"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="2">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="0,207,255,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="3">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="85,255,255,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="4">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="170,255,255,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="5">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="255,240,0,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="6">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="255,168,0,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="7">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="255,112,0,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="8">
-                        <layer pass="0" class="SimpleLine" locked="1">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="255,0,0,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="1"/>
-                        </layer>
-                    </symbol>
-                    <symbol outputUnit="MM" alpha="0.176471" type="line" name="9">
-                        <layer pass="0" class="SimpleLine" locked="0">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="72,160,0,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="0.26"/>
-                        </layer>
-                    </symbol>
-                </symbols>
-            </renderer-v2>
-            <customproperties>
-                <property key="labeling" value="pal"/>
-                <property key="labeling/addDirectionSymbol" value="false"/>
-                <property key="labeling/angleOffset" value="0"/>
-                <property key="labeling/bufferColorB" value="0"/>
-                <property key="labeling/bufferColorG" value="0"/>
-                <property key="labeling/bufferColorR" value="0"/>
-                <property key="labeling/bufferJoinStyle" value="64"/>
-                <property key="labeling/bufferNoFill" value="false"/>
-                <property key="labeling/bufferSize" value="0"/>
-                <property key="labeling/bufferSizeInMapUnits" value="false"/>
-                <property key="labeling/bufferTransp" value="0"/>
-                <property key="labeling/centroidWhole" value="false"/>
-                <property key="labeling/dataDefinedProperty0" value=""/>
-                <property key="labeling/dataDefinedProperty1" value=""/>
-                <property key="labeling/dataDefinedProperty10" value=""/>
-                <property key="labeling/dataDefinedProperty11" value=""/>
-                <property key="labeling/dataDefinedProperty12" value=""/>
-                <property key="labeling/dataDefinedProperty13" value=""/>
-                <property key="labeling/dataDefinedProperty14" value=""/>
-                <property key="labeling/dataDefinedProperty15" value=""/>
-                <property key="labeling/dataDefinedProperty16" value=""/>
-                <property key="labeling/dataDefinedProperty17" value=""/>
-                <property key="labeling/dataDefinedProperty18" value=""/>
-                <property key="labeling/dataDefinedProperty19" value=""/>
-                <property key="labeling/dataDefinedProperty2" value=""/>
-                <property key="labeling/dataDefinedProperty3" value=""/>
-                <property key="labeling/dataDefinedProperty4" value="4"/>
-                <property key="labeling/dataDefinedProperty5" value=""/>
-                <property key="labeling/dataDefinedProperty6" value=""/>
-                <property key="labeling/dataDefinedProperty7" value=""/>
-                <property key="labeling/dataDefinedProperty8" value=""/>
-                <property key="labeling/dataDefinedProperty9" value=""/>
-                <property key="labeling/decimals" value="0"/>
-                <property key="labeling/displayAll" value="false"/>
-                <property key="labeling/dist" value="0"/>
-                <property key="labeling/distInMapUnits" value="false"/>
-                <property key="labeling/enabled" value="true"/>
-                <property key="labeling/fieldName" value="ROMAN"/>
-                <property key="labeling/fontCapitals" value="0"/>
-                <property key="labeling/fontFamily" value="Times New Roman"/>
-                <property key="labeling/fontItalic" value="false"/>
-                <property key="labeling/fontLetterSpacing" value="0"/>
-                <property key="labeling/fontSize" value="16"/>
-                <property key="labeling/fontSizeInMapUnits" value="false"/>
-                <property key="labeling/fontStrikeout" value="false"/>
-                <property key="labeling/fontUnderline" value="false"/>
-                <property key="labeling/fontWeight" value="75"/>
-                <property key="labeling/fontWordSpacing" value="0"/>
-                <property key="labeling/formatNumbers" value="false"/>
-                <property key="labeling/isExpression" value="false"/>
-                <property key="labeling/labelOffsetInMapUnits" value="true"/>
-                <property key="labeling/labelPerPart" value="false"/>
-                <property key="labeling/mergeLines" value="true"/>
-                <property key="labeling/minFeatureSize" value="20"/>
-                <property key="labeling/namedStyle" value="Bold"/>
-                <property key="labeling/obstacle" value="true"/>
-                <property key="labeling/placement" value="2"/>
-                <property key="labeling/placementFlags" value="9"/>
-                <property key="labeling/plussign" value="true"/>
-                <property key="labeling/preserveRotation" value="true"/>
-                <property key="labeling/previewBkgrdColor" value="#ffffff"/>
-                <property key="labeling/priority" value="10"/>
-                <property key="labeling/scaleMax" value="0"/>
-                <property key="labeling/scaleMin" value="0"/>
-                <property key="labeling/textColorB" value="255"/>
-                <property key="labeling/textColorG" value="255"/>
-                <property key="labeling/textColorR" value="255"/>
-                <property key="labeling/textTransp" value="0"/>
-                <property key="labeling/wrapChar" value=""/>
-                <property key="labeling/xOffset" value="0"/>
-                <property key="labeling/xQuadOffset" value="0"/>
-                <property key="labeling/yOffset" value="0"/>
-                <property key="labeling/yQuadOffset" value="0"/>
-            </customproperties>
-            <displayfield>ID</displayfield>
-            <label>0</label>
-            <labelattributes>
-                <label fieldname="" text="Label"/>
-                <family fieldname="" name="Verdana"/>
-                <size fieldname="" units="pt" value="12"/>
-                <bold fieldname="" on="0"/>
-                <italic fieldname="" on="0"/>
-                <underline fieldname="" on="0"/>
-                <strikeout fieldname="" on="0"/>
-                <color fieldname="" red="0" blue="0" green="0"/>
-                <x fieldname=""/>
-                <y fieldname=""/>
-                <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
-                <angle fieldname="" value="0" auto="0"/>
-                <alignment fieldname="" value="center"/>
-                <buffercolor fieldname="" red="255" blue="255" green="255"/>
-                <buffersize fieldname="" units="pt" value="1"/>
-                <bufferenabled fieldname="" on=""/>
-                <multilineenabled fieldname="" on=""/>
-                <selectedonly on=""/>
-            </labelattributes>
-            <edittypes>
-                <edittype type="0" name="ALIGN"/>
-                <edittype type="0" name="ALIGNMENT"/>
-                <edittype type="0" name="ELEV"/>
-                <edittype type="0" name="ID"/>
-                <edittype type="0" name="MMI"/>
-                <edittype type="0" name="RGB"/>
-                <edittype type="0" name="ROMAN"/>
-                <edittype type="0" name="X"/>
-                <edittype type="0" name="Y"/>
-            </edittypes>
-            <editform>.</editform>
-            <editforminit></editforminit>
-            <annotationform>.</annotationform>
-            <attributeactions/>
-        </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+        <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>population20120911162940535</id>
             <datasource>./exposure/population.tif</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>population</layername>
+            <layername>People</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -1044,7 +670,7 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="0.435294" alphaBand="-1" type="singlebandgray" invertColor="0" grayBand="1">
+            <rasterrenderer gradient="BlackToWhite" opacity="0.435294" alphaBand="0" type="singlebandgray" grayBand="1">
                 <rasterTransparency>
                     <singleValuePixelList>
                         <pixelListEntry min="0" max="0" percentTransparent="100"/>

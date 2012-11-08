@@ -47,7 +47,7 @@ Translation of strings *not* in the gui such as impact functions
    (Note that you must have the sequence "import ugettext" in the statement. It will not work as part of a multiple import such as import x, y, ugettext as _)
 * All strings should be wrapped using the _ helper e.g::
 
-    _('Are there enough shelters available for %i people?') % displaced
+    tr('Are there enough shelters available for %i people?') % displaced
 
 * The library will use at run-time the :samp:`LANG` environment variable which
   should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale
@@ -70,7 +70,7 @@ The translation system works by scanning the Python code for strings marked as d
 
     common/dynamic_translations.py
 
-  and add the name to the dictionary "names". E.g. :samp:`'college' = _('college')`
+  and add the name to the dictionary "names". E.g. :samp:`'college' = tr('college')`
 * Update the translation strings as described in the section below
 * Make impact functions refer to the dynamic translations e.g. as in this example::
 

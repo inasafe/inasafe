@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'ismailsunni@yahoo.co.id'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '10/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -21,9 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import (QtGui, QtCore, QtWebKit,)
 from impact_functions_doc_base import Ui_ImpactFunctionsDocBase
+# TODO: use safe_qgis.safe_interface here rather
 from safe.impact_functions import core
-from safe_qgis.help import Help
+# TODO: and here
 from safe.impact_functions.core import get_unique_values
+from safe_qgis.help import Help
+from safe_qgis.safe_interface import get_version
 from utilities import htmlFooter, htmlHeader
 
 
@@ -50,8 +52,9 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         # Set up the user interface from Designer.
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-                            'InaSAFE %s Impact Functions Doc' % __version__))
-        self.no_filter = 'No Filter'
+                            'InaSAFE %1 Impact Functions Browser').arg(
+                             get_version()))
+        self.no_filter = self.tr('No Filter')
         if dict_filter is None:
             dict_filter = {'id': [],
                            'title': [],
@@ -169,9 +172,9 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self, 'impact_functions')
-        self.helpDialog.show()
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(self, 'impact_functions')
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""

@@ -32,9 +32,15 @@ from safe.impact_functions import get_admissible_plugins
 
 from safe.engine.core import calculate_impact
 
-from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
-from safe.common.utilities import VerificationError, temp_dir, unique_filename
+from safe.common.exceptions import (InaSAFEError,
+                                    BoundingBoxError,
+                                    ReadLayerError,
+                                    InaSAFEError)
+from safe.common.utilities import (VerificationError,
+                                   temp_dir,
+                                   unique_filename,
+                                   ugettext as safe_tr)
+from safe.common.version import get_version
 from safe.common.tables import Table, TableCell, TableRow
 # pylint: enable=W0611

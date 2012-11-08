@@ -26,47 +26,47 @@ is good enough. For example at the time of writing I downloaded
 Once the file is downloaded, run it and respond to the installer prompts as
 illustrated below:
 
-.. figure:: ../_static/msysgit-step1.jpg
+.. figure:: ../static/msysgit-step1.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step2.jpg
+.. figure:: ../static/msysgit-step2.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step3.jpg
+.. figure:: ../static/msysgit-step3.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step4.jpg
+.. figure:: ../static/msysgit-step4.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step5.jpg
+.. figure:: ../static/msysgit-step5.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step6.jpg
+.. figure:: ../static/msysgit-step6.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step7.jpg
+.. figure:: ../static/msysgit-step7.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step8.jpg
+.. figure:: ../static/msysgit-step8.jpg
    :align:   center
 
    
 
-.. figure:: ../_static/msysgit-step9.jpg
+.. figure:: ../static/msysgit-step9.jpg
    :align:   center
 
 
@@ -81,7 +81,7 @@ Clone the code repository
 
 First open a GIT bash prompt as illustrated below:
 
-.. figure:: ../_static/msysgit-step10.jpg
+.. figure:: ../static/msysgit-step10.jpg
    :align:   center
 
 
@@ -115,7 +115,7 @@ Checkout the test data
 
 To check out the test data from git, first open a GIT bash prompt as illustrated below:
 
-.. figure:: ../_static/msysgit-step10.jpg
+.. figure:: ../static/msysgit-step10.jpg
    :align:   center
 
 

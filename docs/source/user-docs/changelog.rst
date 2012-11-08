@@ -3,6 +3,65 @@
 Whats new?
 ==========
 
+
+Changelog for version 1.0.1
+---------------------------
+
+* Fix https://github.com/AIFDR/inasafe/issues/374
+* Fix https://github.com/AIFDR/inasafe/issues/375
+
+Changelog for version 1.0.0
+---------------------------
+
+* Added post processor infrastructure including gender and age specific indicators
+* Added data source attribution
+* Various GUI updates
+* Added use of transparency in generated maps
+* Added an earthquake impact function
+* Documentation updates
+* Many bugfixes and architectural improvements
+* Better internationalisation support
+
+Changelog for version 0.5.2
+---------------------------
+
+* This is a bugfix update to address some minor translation issues in the
+  InaSAFE package.
+
+Changelog for version 0.5.1
+---------------------------
+
+* This is a bugfix update to reduce the size of the InaSAFE package.
+
+Changelog for version 0.5.0
+---------------------------
+
+* Better documentation. See http://inasafe.org/contents.html
+* Time stamp and other metadata added to generated map PDF.
+* Initial support for parameterisation of impact functions.
+* Updated logging infrastructure including support for logging to the
+  QGIS log panel.
+* Fixed missing InaSAFE icon in QGIS plugin manager.
+* Fixes for help system under windows.
+* Multi-page support for generated report PDF (which is now created as a
+  separate document).
+* Ability to combine polygon hazard  (such as flood prone areas) with
+  population density.
+* Option to use entire intersection of hazard and exposure instead of clipping
+  to the somewhat arbitrary viewport (the training revealed that this was a bit
+  confusing)
+* Aggregation of raster impact layers by arbitrary polygon layers (such as
+  kelurahan boundaries)
+* Limited support for runtime configuration of impact functions (e.g. by
+  changing thresholds). This is an interim measure while the team is working on
+  a GUI to manipulate impact functions more generally.
+* More DRR actions added to impact function reports (such as how will warnings
+  be disseminated, how will we reach stranded people etc.)
+* Volcanic (zonal hazard) impact assessments on building and population
+* New function table view that lists all the available impact functions and allows
+  them to be filtered by different criteria.
+* Lots of small improvements to error reporting, GUI, translations and code quality.
+
 Changelog for version 0.4.1
 ...........................
 

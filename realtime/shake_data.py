@@ -23,7 +23,7 @@ from zipfile import ZipFile
 import logging
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
-from rt_exceptions import ( EventUndefinedError,
+from rt_exceptions import (EventUndefinedError,
                             EventIdError,
                             NetworkError,
                             EventValidationError,
@@ -31,9 +31,7 @@ from rt_exceptions import ( EventUndefinedError,
                             ExtractionError
                           )
 from ftp_client import FtpClient
-from utils import (shakemapZipDir,
-                   shakemapExtractDir)
-from shake_event import ShakeEvent
+from utils import shakemapZipDir, shakemapExtractDir
 
 
 class ShakeData:
@@ -124,6 +122,75 @@ class ShakeData:
             raise EventIdError('Latest Event Id could not be obtained')
         self.eventId = myEventId
 
+    def isOnServer(self):
+        """Check the event associated with this instance exists on the server.
+
+        Args: None
+
+        Returns: True if valid, False if not
+
+        Raises: NetworkError
+        """
+        myInpFileName, myOutFileName = self.fileNames()
+        myList = [myInpFileName, myOutFileName]
+        myFtpClient = FtpClient()
+        return myFtpClient.hasFiles(myList)
+
+    def fileNames(self):
+        """Return file names for the inp and out files based on the event id.
+
+        e.g. 20120726022003.inp.zip, 20120726022003.out.zip
+
+        Args: None
+
+        Returns:
+            two tuple: str, str Consisting of inp and out local cache paths.
+
+        Raises:
+            None
+        """
+        myInpFileName = self.eventId + '.inp.zip'
+        myOutFileName = self.eventId + '.out.zip'
+        return myInpFileName, myOutFileName
+
+    def cachePaths(self):
+        """Return the paths to the inp and out files as expected locally.
+
+        Args: None
+
+        Returns:
+            two tuple: str, str Consisting of inp and out local cache paths.
+
+        Raises:
+            None
+        """
+
+        myInpFileName, myOutFileName = self.fileNames()
+        myInpFilePath = os.path.join(shakemapZipDir(),
+                                     myInpFileName)
+        myOutFilePath = os.path.join(shakemapZipDir(),
+                                     myOutFileName)
+        return myInpFilePath, myOutFilePath
+
+    def isCached(self):
+        """Check the event associated with this instance exists in cache.
+
+        Args: None
+
+        Returns: True if locally cached, False if not
+
+        Raises: None
+        """
+        myInpFilePath, myOutFilePath = self.cachePaths()
+        if (os.path.exists(myInpFilePath) and
+            os.path.exists(myOutFilePath)):
+            # TODO: we should actually try to unpack them for deeper validation
+            return True
+        else:
+            LOGGER.debug('%s is not cached' % myInpFilePath)
+            LOGGER.debug('%s is not cached' % myOutFilePath)
+            return False
+
     def validateEvent(self):
         """Check that the event associated with this instance exists either
         in the local event cache, or on the remote ftp site.
@@ -135,23 +202,10 @@ class ShakeData:
         Raises: NetworkError
         """
         # First check local cache
-        myInpFileName = self.eventId + '.inp.zip'
-        myOutFileName = self.eventId + '.out.zip'
-        myInpFilePath = os.path.join(shakemapZipDir(),
-                                     myInpFileName)
-        myOutFilePath = os.path.join(shakemapZipDir(),
-                                     myOutFileName)
-        if (os.path.exists(myInpFilePath) and
-            os.path.exists(myOutFilePath)):
-            # TODO: we should actually try to unpack them for deeper validation
+        if self.isCached():
             return True
         else:
-            LOGGER.debug('%s is not cached' % myInpFileName)
-            LOGGER.debug('%s is not cached' % myOutFileName)
-        myFtpClient = FtpClient()
-        myList = myFtpClient.getListing()
-        if (myInpFileName in myList and myOutFileName in myList):
-            return True
+            return self.isOnServer()
 
     def _fetchFile(self, theEventFile):
         """Private helper to fetch a file from the ftp site.
@@ -370,23 +424,3 @@ class ShakeData:
         myExtractedDir = self.extractDir()
         if os.path.isdir(myExtractedDir):
             shutil.rmtree(myExtractedDir)
-
-    def shakeEvent(self, theForceFlag=True):
-        """Parse the grid.xml and return it as a ShakeEvent object.
-
-        In the simplest use case you can simply do::
-
-           myShakeData = ShakeData('20120726022003')
-           myShakeEvent = myShakeData.shakeEvent()
-
-        Args: theForceFlag - (Optional). Whether to force the regeneration
-            of post processed ShakeEvent. Defaults to False.
-
-        Returns: A ShakeEvent object.
-
-        Raises: propogates any exceptions from ShakeEvent
-        """
-        if self._shakeEvent is None or theForceFlag is True:
-            self.extract(theForceFlag)
-            self._shakeEvent = ShakeEvent(self.eventId)
-        return self._shakeEvent

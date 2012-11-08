@@ -72,6 +72,7 @@ Please observe the following coding standards when working on the codebase:
 
 **Example standard header**::
 
+    # -*- coding: utf-8 -*-
     """**One line description.**
 
     .. tip::

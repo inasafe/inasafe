@@ -1,16 +1,24 @@
 <Composer title="Realtime" visible="1">
  <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
-  <ComposerScaleBar segmentMillimeters="17.0672" numMapUnitsPerScaleBarUnit="1000" numSegments="2" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
+  <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" halign="1" margin="1">
+   <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem width="24.6" x="10.811" y="49.2085" rotation="0" height="6.9" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="2.68246" id="" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerScaleBar segmentMillimeters="26.2192" numMapUnitsPerScaleBarUnit="1000" numSegments="2" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
    <BrushColor red="0" blue="0" green="0"/>
-   <ComposerItem width="69.2016" x="124.158" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="3.08054" id="scalebar" positionLock="false">
+   <ComposerItem width="96.6577" x="110.42" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.68246" id="scalebar" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerScaleBar>
-  <ComposerLabel valign="32" labelText="[location-info]" halign="1" margin="1">
+  <ComposerLabel valign="32" labelText="M[mmi] [date] [time]" halign="1" margin="1">
    <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="194.684" x="8.08255" y="40.7115" rotation="0" height="10.1895" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.6745" id="location-info" positionLock="false">
+   <ComposerItem width="86.2337" x="8.08255" y="40.7115" rotation="0" height="6.63302" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.68246" id="location-info" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -18,7 +26,7 @@
   <ComposerLabel valign="32" labelText="Perkiraan jumlah penduduk terpapar pada setiap tingkat getaran berbeda&#xa;" halign="4" margin="1">
    <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="194.348" x="6.50655" y="58.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.6745" id="mmi-table-header" positionLock="false">
+   <ComposerItem width="194.348" x="6.50655" y="58.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.68246" id="mmi-table-header" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -44,7 +52,7 @@
    <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="3.08054" id="overview-map" positionLock="false">
+   <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.68246" id="overview-map" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -78,12 +86,12 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-3.28201" xmin="95.944" ymax="1.98999" xmax="101.216"/>
+   <Extent ymin="-1.87921" xmin="122.271" ymax="1.54879" xmax="125.699"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="1" penColorRed="172" penColorBlue="172" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="172">
     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="3.08054" id="main-map" positionLock="false">
+   <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="2.68246" id="main-map" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -97,7 +105,7 @@
    </ComposerItem>
   </ComposerLabel>
   <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
-   <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="3.08054" id="right-logo" positionLock="false">
+   <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="2.06711" id="right-logo" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -109,201 +117,22 @@
    </ComposerItem>
   </ComposerPicture>
   <ComposerLegend symbolWidth="4" title="Population" boxSpace="2" titleFont="Verdana,12,-1,5,75,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="5" iconLabelSpace="2" wrapChar=" " itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
-   <Model autoUpdate="1">
+   <Model autoUpdate="0">
     <LayerItem layerId="population20120911162940535" text="">
      <RasterClassificationItem layerId="population20120911162940535" color="#fafafa" text="0-10"/>
      <RasterClassificationItem layerId="population20120911162940535" color="#bcbcbc" text="10-100"/>
      <RasterClassificationItem layerId="population20120911162940535" color="#7f7f7f" text="100-1000"/>
      <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
     </LayerItem>
-    <LayerItem layerId="mmi_cities20120921120217778" text="mmi-cities">
-     <VectorClassificationItemNg text="">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="marker" name="classificationSymbol">
-        <layer pass="0" class="SimpleMarker" locked="0">
-         <prop k="angle" v="0"/>
-         <prop k="color" v="255,85,0,255"/>
-         <prop k="color_border" v="0,0,0,255"/>
-         <prop k="name" v="diamond"/>
-         <prop k="offset" v="0,0"/>
-         <prop k="scale_method" v="area"/>
-         <prop k="size" v="3"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-    </LayerItem>
-    <LayerItem layerId="mmi_contours_nearest20120921120217824" text="mmi-contours-nearest">
-     <VectorClassificationItemNg text="Whole Intervals">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="0">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="220,0,3,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="0.26"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="II">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="round"/>
-         <prop k="color" v="32,159,255,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="round"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="III">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="0,207,255,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="IV">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="85,255,255,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="V">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="170,255,255,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="VI">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="255,240,0,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="VII">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="255,168,0,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="VIII">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="255,112,0,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="IX">
-      <symbols>
-       <symbol outputUnit="MM" alpha="1" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="1">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="255,0,0,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="1"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-     <VectorClassificationItemNg text="Half Intervals">
-      <symbols>
-       <symbol outputUnit="MM" alpha="0.176471" type="line" name="classificationSymbol">
-        <layer pass="0" class="SimpleLine" locked="0">
-         <prop k="capstyle" v="square"/>
-         <prop k="color" v="72,160,0,255"/>
-         <prop k="customdash" v="5;2"/>
-         <prop k="joinstyle" v="bevel"/>
-         <prop k="offset" v="0"/>
-         <prop k="penstyle" v="solid"/>
-         <prop k="use_custom_dash" v="0"/>
-         <prop k="width" v="0.26"/>
-        </layer>
-       </symbol>
-      </symbols>
-     </VectorClassificationItemNg>
-    </LayerItem>
    </Model>
-   <ComposerItem width="48" x="150.781" y="217.371" rotation="0" height="128.9" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.08054" id="legend" positionLock="false">
+   <ComposerItem width="29" x="150.781" y="217.371" rotation="0" height="36.4" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="1.36242" id="legend" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLegend>
-  <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-   <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.08054" id="fatalities-table" positionLock="false">
+  <ComposerHtml resizeMode="0" url="">
+   <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
+    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="2.06711" id="" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
@@ -311,15 +140,15 @@
   </ComposerHtml>
   <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
    <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-    <ComposerItem width="79.4918" x="117.919" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="3.08054" id="affected-cities" positionLock="false">
+    <ComposerItem width="79.4918" x="118.403" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.68246" id="affected-cities" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
    </ComposerFrame>
   </ComposerHtml>
-  <ComposerHtml resizeMode="0" url="">
-   <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="3.08054" id="" positionLock="false">
+  <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+   <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="1.36242" id="fatalities-table" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>

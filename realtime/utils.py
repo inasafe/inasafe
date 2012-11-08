@@ -112,36 +112,37 @@ def setupLogger():
     myConsoleHandler = logging.StreamHandler()
     myConsoleHandler.setLevel(logging.ERROR)
     # Email handler for errors
-    myEmailServer = 'localhost'
-    myEmailServerPort = 25
-    mySenderAddress = 'realtime@inasafe.org'
-    myRecipientAddresses = ['tim@linfiniti.com']
-    mySubject = 'Error'
-    myEmailHandler = logging.handlers.SMTPHandler(
-        (myEmailServer, myEmailServerPort),
-        mySenderAddress,
-        myRecipientAddresses,
-        mySubject)
-    myEmailHandler.setLevel(logging.ERROR)
+    #myEmailServer = 'localhost'
+    #myEmailServerPort = 25
+    #mySenderAddress = 'realtime@inasafe.org'
+    #myRecipientAddresses = ['tim@linfiniti.com']
+    #mySubject = 'Error'
+    #myEmailHandler = logging.handlers.SMTPHandler(
+    #    (myEmailServer, myEmailServerPort),
+    #    mySenderAddress,
+    #    myRecipientAddresses,
+    #    mySubject)
+    #myEmailHandler.setLevel(logging.ERROR)
 
     # create formatter and add it to the handlers
     myFormatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
-    myEmailHandler.setFormatter(myFormatter)
+    #myEmailHandler.setFormatter(myFormatter)
     # add the handlers to the logger
     myLogger.addHandler(myFileHandler)
     myLogger.addHandler(myConsoleHandler)
-    myLogger.addHandler(myEmailHandler)
+    #myLogger.addHandler(myEmailHandler)
 
     # Sentry handler - this is optional hence the localised import
     try:
         from raven.handlers.logging import SentryHandler
         from raven import Client
 
-        myClient = Client('http://faaf2c12f0b74e13a9f2104c9e0225c1:69e4e4ad8c'
-                          '2f4997ba63a64acdc6e2e7@localhost:9000/2')
+        myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
+                          'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
+                          '4')
         mySentryHandler = SentryHandler(myClient)
         mySentryHandler.setFormatter(myFormatter)
         mySentryHandler.setLevel(logging.ERROR)

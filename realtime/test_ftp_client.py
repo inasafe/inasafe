@@ -28,8 +28,8 @@ class FtpClientTest(unittest.TestCase):
     _expectedMatches = ('20110413170148.inp.zip',
                              '20110413170148.out.zip')
 
-    def test_getDirectoryListingUsingUrlLib2(self):
-        """Check if we can get a nice directory listing using urllib2"""
+    def testGetDirectoryListing(self):
+        """Check if we can get a nice directory listing"""
         myClient = FtpClient()
         myListing = myClient.getListing()
         #Make it a single string
@@ -39,18 +39,7 @@ class FtpClientTest(unittest.TestCase):
         for myExpectedFile in self._expectedMatches:
             assert re.search(myExpectedFile, myListing), myMessage
 
-    def test_getDirectoryListingUsingFtpLib(self):
-        """Check if we can get a nice directory listing using ftplib"""
-        myClient = FtpClient(theBackend='ftplib')
-        myListing = myClient.getListing()
-        #Make it a single string
-        myListing = '\n'.join(myListing)
-        myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, self._expectedMatches))
-        for myExpectedFile in self._expectedMatches:
-            assert re.search(myExpectedFile, myListing), myMessage
-
-    def test_getFile(self):
+    def testGetFile(self):
         """Test that the ftp client can fetch a file ok"""
         myClient = FtpClient()
         myListing = myClient.getListing()
@@ -61,6 +50,19 @@ class FtpClientTest(unittest.TestCase):
         for myExpectedFile in self._expectedMatches:
             assert re.search(myExpectedFile, myListing), myMessage
 
+    def testHasFile(self):
+        """Test that the ftp client can check if a file exists"""
+        myClient = FtpClient()
+        myFile = '20120726022003.inp.zip'
+        myMessage = ('Expected that %s exists on the server' % myFile)
+        self.assertTrue(myClient.hasFile(myFile), myMessage)
+
+    def testHasFiles(self):
+        """Test that the ftp client can check if a list of file exists"""
+        myClient = FtpClient()
+        myFiles = ['20120726022003.inp.zip', '20120726022003.out.zip']
+        myMessage = ('Expected that %s exist on the server' % myFiles)
+        self.assertTrue(myClient.hasFiles(myFiles), myMessage)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(FtpClientTest, 'test')

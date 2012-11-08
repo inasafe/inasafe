@@ -21,10 +21,10 @@ import sys
 import logging
 from zipfile import BadZipfile
 
-from shake_data import ShakeData
 from ftp_client import FtpClient
 from safe_qgis.utilities_test import getQgisTestApp
 from realtime.utils import setupLogger
+from realtime.shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setupLogger()
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -48,14 +48,12 @@ else:
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 # Used cached data where available
 myForceFlag = False
-# Get the latest dataset
-myShakeData = ShakeData(myEventId)
 # Extract the event
 try:
-    myShakeEvent = myShakeData.shakeEvent(theForceFlag=myForceFlag)
+    myShakeEvent = ShakeEvent(theEventId=myEventId, theForceFlag=myForceFlag)
 except BadZipfile:
     # retry with force flag true
-    myShakeEvent = myShakeData.shakeEvent(theForceFlag=True)
+    myShakeEvent = ShakeEvent(theEventId=myEventId, theForceFlag=True)
 except:
     LOGGER.exception('An error occurred setting up the latest shake event.')
     exit()
@@ -65,6 +63,8 @@ logging.info('-------------------------------------------')
 
 # Always regenerate the products
 myForceFlag = True
+myShakeEvent.populationRasterPath = ('/home/timlinux/Downloads/IDN_mosaic/'
+                                     'popmap10_all.tif')
 myShakeEvent.renderMap(myForceFlag)
 
 logging.info('-------------------------------------------')

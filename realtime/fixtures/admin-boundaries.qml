@@ -3,27 +3,11 @@
   <transparencyLevelInt>255</transparencyLevelInt>
   <renderer-v2 symbollevels="0" type="singleSymbol">
     <symbols>
-      <symbol outputUnit="MM" alpha="0.192157" type="fill" name="0">
+      <symbol outputUnit="MM" alpha="0.615686" type="fill" name="0">
         <layer pass="0" class="SimpleFill" locked="0">
-          <prop k="color" v="190,102,25,49"/>
-          <prop k="color_border" v="0,0,0,49"/>
+          <prop k="color" v="0,0,255,255"/>
+          <prop k="color_border" v="0,0,0,255"/>
           <prop k="offset" v="0,0"/>
-          <prop k="style" v="no"/>
-          <prop k="style_border" v="solid"/>
-          <prop k="width_border" v="0.26"/>
-        </layer>
-        <layer pass="0" class="SimpleFill" locked="0">
-          <prop k="color" v="113,147,171,49"/>
-          <prop k="color_border" v="113,147,171,49"/>
-          <prop k="offset" v="0,0"/>
-          <prop k="style" v="no"/>
-          <prop k="style_border" v="solid"/>
-          <prop k="width_border" v="0.5"/>
-        </layer>
-        <layer pass="0" class="SimpleFill" locked="0">
-          <prop k="color" v="0,0,255,49"/>
-          <prop k="color_border" v="0,0,0,49"/>
-          <prop k="offset" v="1,1"/>
           <prop k="style" v="no"/>
           <prop k="style_border" v="solid"/>
           <prop k="width_border" v="0.26"/>
@@ -37,14 +21,14 @@
     <property key="labeling" value="pal"/>
     <property key="labeling/addDirectionSymbol" value="false"/>
     <property key="labeling/angleOffset" value="0"/>
-    <property key="labeling/bufferColorB" value="255"/>
-    <property key="labeling/bufferColorG" value="255"/>
-    <property key="labeling/bufferColorR" value="255"/>
+    <property key="labeling/bufferColorB" value="236"/>
+    <property key="labeling/bufferColorG" value="236"/>
+    <property key="labeling/bufferColorR" value="236"/>
     <property key="labeling/bufferJoinStyle" value="64"/>
     <property key="labeling/bufferNoFill" value="false"/>
-    <property key="labeling/bufferSize" value="0"/>
+    <property key="labeling/bufferSize" value="1"/>
     <property key="labeling/bufferSizeInMapUnits" value="false"/>
-    <property key="labeling/bufferTransp" value="0"/>
+    <property key="labeling/bufferTransp" value="49"/>
     <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
@@ -73,10 +57,10 @@
     <property key="labeling/enabled" value="true"/>
     <property key="labeling/fieldName" value="NAME_2"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Ubuntu"/>
-    <property key="labeling/fontItalic" value="false"/>
+    <property key="labeling/fontFamily" value="Times New Roman"/>
+    <property key="labeling/fontItalic" value="true"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
-    <property key="labeling/fontSize" value="8"/>
+    <property key="labeling/fontSize" value="14"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
@@ -88,19 +72,19 @@
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="false"/>
     <property key="labeling/minFeatureSize" value="0"/>
-    <property key="labeling/namedStyle" value="Regular"/>
+    <property key="labeling/namedStyle" value="Italic"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/placement" value="0"/>
     <property key="labeling/placementFlags" value="0"/>
     <property key="labeling/plussign" value="true"/>
     <property key="labeling/preserveRotation" value="true"/>
     <property key="labeling/previewBkgrdColor" value="#ffffff"/>
-    <property key="labeling/priority" value="5"/>
-    <property key="labeling/scaleMax" value="0"/>
-    <property key="labeling/scaleMin" value="0"/>
-    <property key="labeling/textColorB" value="0"/>
+    <property key="labeling/priority" value="9"/>
+    <property key="labeling/scaleMax" value="20000000"/>
+    <property key="labeling/scaleMin" value="1"/>
+    <property key="labeling/textColorB" value="230"/>
     <property key="labeling/textColorG" value="0"/>
-    <property key="labeling/textColorR" value="0"/>
+    <property key="labeling/textColorR" value="84"/>
     <property key="labeling/textTransp" value="0"/>
     <property key="labeling/wrapChar" value=""/>
     <property key="labeling/xOffset" value="0"/>

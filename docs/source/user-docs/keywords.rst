@@ -111,7 +111,7 @@ Units
 The units keyword is only valid in the context of 'hazard' layers, and is
 used to indicate the metric or imperial units represented by each data entity
 (a grid cell or a vector feature) in the hazard layer. Example keywords file
-entry:
+entry::
 
   category: hazard
   subcategory: flood
@@ -221,7 +221,7 @@ The graphical user interface for keyword editing is divided into two parts:
 
 An example of the keywords editor in minimal mode is shown below.
 
-.. figure:: ../_static/keyword-editor-simple.jpeg
+.. figure:: ../static/keyword-editor-simple.jpeg
    :align:   center
 
 2) **Advanced mode**: In this mode several extra options are provided in
@@ -246,7 +246,7 @@ An example of the keywords editor in minimal mode is shown below.
 
 An example of the keywords editor in advanced mode is shown below.
 
-.. figure:: ../_static/keyword-editor-advanced.jpeg
+.. figure:: ../static/keyword-editor-advanced.jpeg
    :align:   center
 
 Invoking the keywords editor
@@ -258,7 +258,7 @@ QGIS layers list, and then using the plugin menu to start the editor
 Alternatively, you may use the keywords editor icon on the
 plugins toolbar as illustrated below.
 
-.. figure:: ../_static/keyword-editor-icon.png
+.. figure:: ../static/keyword-editor-icon.png
    :align:   center
 
 Saving your edits
@@ -288,20 +288,20 @@ options dialog can be launched by clicking on the InaSAFE plugin toolbar's
 options icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE
 --> InaSAFE Options`.
 
-.. figure:: ../_static/inasafe-options-icon.png
+.. figure:: ../static/inasafe-options-icon.png
    :align:   center
 
 When the options dialog is opened, the keywords database path can be specified
 using the :guilabel:`keyword cache for remote datasources` option as shown
-below. 
+below.
 
-.. figure:: ../_static/options-keyword-db-path.png
+.. figure:: ../static/options-keyword-db-path.png
    :align:   center
 
 .. note:: (1) Support for remote and non-file based layers was added in
    InaSAFE version 0.3.
    (2) The database can be opened using a sqlite editor such as sqliteman,
-   but the data in the keywords table is not intended to be human readable 
+   but the data in the keywords table is not intended to be human readable
    or edited. The table columns consist of an MD5 hash based on the URI for
    the datasource (typically the database connection details) and a blob
    which contains the keywords as a pickled python dictionary.
@@ -335,12 +335,12 @@ point or network share to access the data if you wish to successfull hit the
 cache with the layer's URI. For example you could have all users mount your
 data to the same place. Under Unix like operating systems this could look
 something like this::
-   
+
    /mnt/gisdata/jk.sqlite
 
 Under Windows you could always the same drive letter and path the to share
 e.g.::
-   
+
    Z:\gisdata\jk.sqlite
 
 
