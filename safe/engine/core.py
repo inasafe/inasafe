@@ -60,7 +60,9 @@ def calculate_impact(layers, impact_fcn):
 
     # Elapsed time
     elapsed_time = end_time - start_time
-    elapsed_time_sec = elapsed_time.total_seconds()
+    # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
+    # elapsed_time_sec = elapsed_time.total_seconds()
+    elapsed_time_sec = elapsed_time.seconds + (elapsed_time.days * 24 * 3600)
 
     # Eet current time stamp
     # Need to change : to _ because : is forbidden in keywords
