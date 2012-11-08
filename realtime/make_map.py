@@ -17,13 +17,14 @@ __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 import sys
 import logging
 from zipfile import BadZipfile
 
 from ftp_client import FtpClient
 from safe_qgis.utilities_test import getQgisTestApp
-from realtime.utils import setupLogger
+from realtime.utils import setupLogger, dataDir
 from realtime.shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setupLogger()
@@ -63,8 +64,10 @@ logging.info('-------------------------------------------')
 
 # Always regenerate the products
 myForceFlag = True
-myShakeEvent.populationRasterPath = ('/home/timlinux/Downloads/IDN_mosaic/'
-                                     'popmap10_all.tif')
+myShakeEvent.populationRasterPath = (os.path.join(dataDir(),
+                                     'exposure',
+                                     'IDN_mosaic',
+                                     'popmap10_all.tif'))
 myShakeEvent.renderMap(myForceFlag)
 
 logging.info('-------------------------------------------')

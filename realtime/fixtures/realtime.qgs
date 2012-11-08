@@ -5,9 +5,9 @@
         <units>degrees</units>
         <extent>
             <xmin>120.276982</xmin>
-            <ymin>-1.060663</ymin>
+            <ymin>-2.050250</ymin>
             <xmax>126.998438</xmax>
-            <ymax>2.580980</ymax>
+            <ymax>3.570567</ymax>
         </extent>
         <projections>1</projections>
         <destinationsrs>
@@ -34,7 +34,7 @@
                 <legendlayerfile isInOverview="0" layerid="places20121003111306499" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="People" showFeatureCount="0">
+        <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="population" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="population20120911162940535" visible="1"/>
             </filegroup>
@@ -49,11 +49,6 @@
                 <legendlayerfile isInOverview="0" layerid="indonesia_bathymetry20121003111205159" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="9" open="false" checked="Qt::Unchecked" name="Blue-marble-topo-jan" showFeatureCount="0">
-            <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="blue_marble_topo_jan20120718154124441" visible="0"/>
-            </filegroup>
-        </legendlayer>
     </legend>
     <Composer title="Realtime" visible="1">
         <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
@@ -65,7 +60,7 @@
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerScaleBar segmentMillimeters="26.2192" numMapUnitsPerScaleBarUnit="1000" numSegments="2" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
+            <ComposerScaleBar segmentMillimeters="2.91715e+06" numMapUnitsPerScaleBarUnit="1000" numSegments="2" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
                 <BrushColor red="0" blue="0" green="0"/>
                 <ComposerItem width="96.6577" x="110.42" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.68246" id="scalebar" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
@@ -175,7 +170,7 @@
             </ComposerPicture>
             <ComposerLegend symbolWidth="4" title="Population" boxSpace="2" titleFont="Verdana,12,-1,5,75,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="5" iconLabelSpace="2" wrapChar=" " itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
                 <Model autoUpdate="0">
-                    <LayerItem layerId="population20120911162940535" text="">
+                    <LayerItem layerId="population20120911162940535" text="" showFeatureCount="0">
                         <RasterClassificationItem layerId="population20120911162940535" color="#fafafa" text="0-10"/>
                         <RasterClassificationItem layerId="population20120911162940535" color="#bcbcbc" text="10-100"/>
                         <RasterClassificationItem layerId="population20120911162940535" color="#7f7f7f" text="100-1000"/>
@@ -195,6 +190,14 @@
                     </ComposerItem>
                 </ComposerFrame>
             </ComposerHtml>
+            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.27488" id="fatalities-table" positionLock="false">
+                        <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                        <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                    </ComposerItem>
+                </ComposerFrame>
+            </ComposerHtml>
             <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
                 <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
                     <ComposerItem width="79.4918" x="118.403" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.68246" id="affected-cities" positionLock="false">
@@ -203,46 +206,12 @@
                     </ComposerItem>
                 </ComposerFrame>
             </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="1.36242" id="fatalities-table" positionLock="false">
-                        <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                        <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                    </ComposerItem>
-                </ComposerFrame>
-            </ComposerHtml>
         </Composition>
     </Composer>
-    <projectlayers layercount="6">
-        <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-            <id>blue_marble_topo_jan20120718154124441</id>
-            <datasource>../../../../../gisdata/world/blue-marble-mbtiles/blue-marble-topo-jan.mbtiles</datasource>
-            <title></title>
-            <abstract></abstract>
-            <layername>Blue-marble-topo-jan</layername>
-            <srs>
-                <spatialrefsys>
-                    <proj4>+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs</proj4>
-                    <srsid>3857</srsid>
-                    <srid>3857</srid>
-                    <authid>EPSG:3857</authid>
-                    <description>WGS 84 / Pseudo Mercator</description>
-                    <projectionacronym>merc</projectionacronym>
-                    <ellipsoidacronym>WGS84</ellipsoidacronym>
-                    <geographicflag>false</geographicflag>
-                </spatialrefsys>
-            </srs>
-            <transparencyLevelInt>255</transparencyLevelInt>
-            <customproperties/>
-            <provider>gdal</provider>
-            <rasterrenderer opacity="0.764706" alphaBand="-1" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
-                <rasterTransparency/>
-            </rasterrenderer>
-            <rasterresampler maxOversampling="2"/>
-        </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+07" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="1">
+    <projectlayers layercount="5">
+        <maplayer minimumScale="-4.65661e-10" maximumScale="1e+07" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="1">
             <id>gadm220120907131545352</id>
-            <datasource>../../../../../gisdata/world/gadm/gadm2.shp</datasource>
+            <datasource>./context/boundaries.shp</datasource>
             <title></title>
             <abstract></abstract>
             <layername>gadm2</layername>
@@ -317,7 +286,7 @@
                 <property key="labeling/enabled" value="true"/>
                 <property key="labeling/fieldName" value="NAME_2"/>
                 <property key="labeling/fontCapitals" value="0"/>
-                <property key="labeling/fontFamily" value="Times New Roman"/>
+                <property key="labeling/fontFamily" value="Cantarell"/>
                 <property key="labeling/fontItalic" value="true"/>
                 <property key="labeling/fontLetterSpacing" value="0"/>
                 <property key="labeling/fontSize" value="14"/>
@@ -332,7 +301,9 @@
                 <property key="labeling/labelPerPart" value="false"/>
                 <property key="labeling/mergeLines" value="false"/>
                 <property key="labeling/minFeatureSize" value="0"/>
-                <property key="labeling/namedStyle" value="Italic"/>
+                <property key="labeling/multilineAlign" value="0"/>
+                <property key="labeling/multilineHeight" value="1"/>
+                <property key="labeling/namedStyle" value="Oblique"/>
                 <property key="labeling/obstacle" value="true"/>
                 <property key="labeling/placement" value="0"/>
                 <property key="labeling/placementFlags" value="0"/>
@@ -346,12 +317,14 @@
                 <property key="labeling/textColorG" value="0"/>
                 <property key="labeling/textColorR" value="0"/>
                 <property key="labeling/textTransp" value="0"/>
+                <property key="labeling/upsidedownLabels" value="0"/>
                 <property key="labeling/wrapChar" value=""/>
                 <property key="labeling/xOffset" value="0"/>
                 <property key="labeling/xQuadOffset" value="0"/>
                 <property key="labeling/yOffset" value="0"/>
                 <property key="labeling/yQuadOffset" value="0"/>
             </customproperties>
+            <editorlayout>generatedlayout</editorlayout>
             <displayfield>OBJECTID</displayfield>
             <label>0</label>
             <labelattributes>
@@ -604,6 +577,7 @@
                 <property key="labeling/yOffset" value="0"/>
                 <property key="labeling/yQuadOffset" value="0"/>
             </customproperties>
+            <editorlayout>generatedlayout</editorlayout>
             <displayfield>name</displayfield>
             <label>0</label>
             <labelattributes>
@@ -654,7 +628,7 @@
             <datasource>./exposure/population.tif</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>People</layername>
+            <layername>population</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
