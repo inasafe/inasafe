@@ -415,6 +415,7 @@ class DockTest(unittest.TestCase):
         """Aggregation combo changes properly according loaded layers"""
         myLayerList = [DOCK.tr('Entire area'),
                        DOCK.tr('A flood in Jakarta'),
+                       DOCK.tr('donut'),
                        DOCK.tr('Essential buildings'),
                        DOCK.tr('kabupaten jakarta singlepart'),
                        DOCK.tr('OSM Building Polygons')]
