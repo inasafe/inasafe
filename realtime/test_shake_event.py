@@ -333,46 +333,26 @@ searchBoxes: None
         myShakeEvent = ShakeEvent(myShakeId)
         myTable = myShakeEvent.sortedImpactedCities()
         myExpectedResult = [
-            {'dir_from': 16.94407844543457,
-             'dir_to': -163.05592346191406,
-             'roman': 'II',
-             'dist_to': 2.504295825958252,
-             'mmi': 1.909999966621399,
-             'name': 'Tondano',
-             'id': 57,
-             'population': 33317},
-            {'dir_from': 13.119078636169434,
-             'dir_to': -166.88092041015625,
-             'roman': 'II',
-             'dist_to': 3.036229133605957,
-             'mmi': 1.809999942779541,
-             'name': 'Manado',
-             'id': 207,
-             'population': 451893},
-            {'dir_from': 14.711240768432617,
-             'dir_to': -165.28875732421875,
-             'roman': 'II',
-             'dist_to': 2.2785418033599854,
-             'mmi': 1.75,
-             'name': 'Provinsi Sulawesi Utara',
-             'id': 87,
+            {'dir_from': 14.711240768432617, 'dir_to': -165.28875732421875,
+             'roman': 'II', 'dist_to': 2.2785418033599854, 'mmi': 1.75,
+             'name': 'Provinsi Sulawesi Utara', 'id': 87,
              'population': 2146600},
-            {'dir_from': 14.14267635345459,
-             'dir_to': -165.85733032226562,
-             'roman': 'II',
-             'dist_to': 2.5372657775878906,
-             'mmi': 1.690000057220459,
-             'name': 'Tomohon',
-             'id': 58,
-             'population': 27624},
-            {'dir_from': -114.04046630859375,
-             'dir_to': 65.95953369140625,
-             'roman': 'II',
-             'dist_to': 3.3138768672943115,
-             'mmi': 1.5299999713897705,
-             'name': 'Luwuk',
-             'id': 215,
-             'population': 47778}]
+            {'dir_from': 13.119078636169434, 'dir_to': -166.88092041015625,
+             'roman': 'II', 'dist_to': 3.036229133605957,
+             'mmi': 1.809999942779541, 'name': 'Manado', 'id': 207,
+             'population': 451893},
+            {'dir_from': -114.04046630859375, 'dir_to': 65.95953369140625,
+             'roman': 'II', 'dist_to': 3.3138768672943115,
+             'mmi': 1.5299999713897705, 'name': 'Luwuk', 'id': 215,
+             'population': 47778},
+            {'dir_from': 16.94407844543457, 'dir_to': -163.05592346191406,
+             'roman': 'II', 'dist_to': 2.504295825958252,
+             'mmi': 1.909999966621399, 'name': 'Tondano', 'id': 57,
+             'population': 33317},
+            {'dir_from': 14.14267635345459, 'dir_to': -165.85733032226562,
+             'roman': 'II', 'dist_to': 2.5372657775878906,
+             'mmi': 1.690000057220459, 'name': 'Tomohon', 'id': 58,
+             'population': 27624}]
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
         assert myTable == myExpectedResult, myMessage
 
@@ -417,22 +397,28 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myResult = myShakeEvent.eventDict()
-        myExpectedDict = {'distance': '2.50',
+        myExpectedDict = {'distance': '2.28',
                           'direction-relation': PyQt4.QtCore.QString(u'of'),
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
-                          'place-name': 'Tondano',
+                          'place-name': 'Provinsi Sulawesi Utara',
                           'distance-unit': PyQt4.QtCore.QString(u'km'),
                           'depth-unit': PyQt4.QtCore.QString(u'km'),
                           'latitude-value': u'0\xb012\'36.00"S',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
                           'longitude-value': u'124\xb027\'0.00"E',
                           'bearing-compass': 'SSW',
+                          'bearing-degrees': '-165.29\xb0',
                           'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
-                          'depth': '11.0', 'mmi': '5.0', 'time': '2:15:35',
+                          'mmi': '5.0',
+                          'bearing-text': PyQt4.QtCore.QString(u'bearing'),
+                          'elapsed-time': u'15 weeks 0 days',
+                          'time': '2:15:35',
                           'date': '26-7-2012',
                           'located-label': PyQt4.QtCore.QString(u'Located'),
-                          'bearing-degrees': '-163.055923462',
-                          'bearing-text': PyQt4.QtCore.QString(u'bearing')}
+                          'elapsed-time-name': PyQt4.QtCore.QString(
+                              u'Elapsed time since event'),
+                          'depth-value': '11.0',
+                          'formatted-date-time': '26-Jul-12 02:15:35 '}
 
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
              (myResult, myExpectedDict))
@@ -444,10 +430,11 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myDegreeSymbol = unichr(176)
-        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S '
-                            'Longitude: 124%s27\'0.00"E '
-                            'Depth: 11.0km Located 2.50km SSW of Tondano'
-                            % (myDegreeSymbol, myDegreeSymbol))
+        myExpectedResult = (
+            'M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S Longitude: '
+            '124%s27\'0.00"E Depth: 11.0km Located 2.28km SSW of Provinsi '
+            'Sulawesi Utara'
+            % (myDegreeSymbol, myDegreeSymbol))
         myResult = myShakeEvent.eventInfo()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
