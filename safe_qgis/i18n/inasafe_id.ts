@@ -4,37 +4,37 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="clipper.py" line="305"/>
+        <location filename="clipper.py" line="304"/>
         <source>Layer or Extent passed to clip is None.</source>
         <translation>Tidak ada lapisan atau cakupan wilayah untuk dipotong.</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="141"/>
+        <location filename="clipper.py" line="140"/>
         <source>Expected a vector layer but received a %s.</source>
         <translation>Yang diharapkan berupa lapisan vektor akan tetapi yang diterima %s.</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="169"/>
+        <location filename="clipper.py" line="168"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
         <translation>Tidak dapat mendapatkan penyedia data pada lapisan &quot;%s&quot;</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="195"/>
+        <location filename="clipper.py" line="194"/>
         <source>Error when creating shapefile: &lt;br&gt;Filename:%s&lt;br&gt;Error: %s</source>
         <translation>Gagal ketika membuat shapefile: &lt;br&gt;Nama arsip:%s&lt;br&gt;Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="309"/>
+        <location filename="clipper.py" line="308"/>
         <source>Expected a raster layer but received a %s.</source>
         <translation>Yang diharapkan berupa lapisan raster akan tetapi yang diterima %s.</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="317"/>
+        <location filename="clipper.py" line="316"/>
         <source>Input file to be clipped &quot;%s&quot; does not have the expected keywords file %s</source>
         <translation>Arsip input yang akan di potong &quot;%s&quot; tidak memiliki arsip kata kunci seperti yang diharapkan %s</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="384"/>
+        <location filename="clipper.py" line="385"/>
         <source>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
@@ -44,7 +44,7 @@
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="223"/>
+        <location filename="clipper.py" line="222"/>
         <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.</source>
         <translation>Tidak ada fitur termasuk dalam luasan klip. Cobalah panning / zoom ke area yang berisi data dan kemudian mencoba untuk menjalankan analisis Anda lagi.</translation>
     </message>
@@ -201,6 +201,11 @@
         <location filename="test_plugin.py" line="70"/>
         <source>A volcano eruption</source>
         <translation>Sebuah letusan gunung berapi</translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="384"/>
+        <source>Process could not be started.</source>
+        <translation>Proses tidak dapat dimulai.</translation>
     </message>
 </context>
 <context>
@@ -1215,7 +1220,7 @@ Pesan: %s</translation>
         <translation>Tampilkan/hilangkan widget InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="302"/>
+        <location filename="plugin.py" line="301"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -1232,12 +1237,12 @@ Pesan: %s</translation>
     <message>
         <location filename="plugin.py" line="209"/>
         <source>InaSAFE Options</source>
-        <translation>Opsi-opsi InaSAFE</translation>
+        <translation>InaSAFE Opsi-opsi</translation>
     </message>
     <message>
         <location filename="plugin.py" line="214"/>
         <source>Open InaSAFE options dialog</source>
-        <translation>Buka dialog opsi InaSAFE</translation>
+        <translation>Buka dialog InaSAFE Opsi-opsi</translation>
     </message>
     <message>
         <location filename="plugin.py" line="173"/>
