@@ -58,9 +58,8 @@ def dynamic_translations():
     tr('DKI buildings')
     # Banjir seperti 2007
     tr('Jakarta 2007 flood')
-    tr('Jakarta 2007 flood')
     tr('A flood in Jakarta like in 2007')
-    tr('Jakarta flood like 2007 with pump failure at Pluit Ancol and Sunter')
+    tr('Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter')
     # Banjir 2007 tanpa pompa di Pluit, Ancol dan Sunter
     tr('Jakarta flood like 2007 with pump failure at Pluit and Ancol')
     tr('A flood in Jakarta like in 2007 but with structural improvements')
@@ -81,8 +80,10 @@ def dynamic_translations():
     tr('Flood Depth (design) Jakarta')
     tr('Flood Depth (current) Jakarta')
     tr('An earthquake in Yogyakarta like in 2006')
+    tr('Yogyakarta 2006 earthquake')
     tr('Indonesian Earthquake Hazard Map')
     tr('A tsunami in Maumere (Mw 8.1)')
+    tr('Maumere tsunami inundation')
     tr('A tsunami in Padang (Mw 8.8)')
     tr('An earthquake at the Sumatran fault (Mw 7.8)')
     # Skenario Gempabumi Sesar Sumatra Mw 7.8

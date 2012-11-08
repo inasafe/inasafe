@@ -37,11 +37,11 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
-from utilities import array2wkt, array2ring
+from utilities import array2line
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from utilities import get_ringdata
+from utilities import get_ringdata, get_polygondata
 from utilities import rings_equal
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -450,68 +450,26 @@ class Vector(Layer):
                     ring = get_ringdata(G)
                     geometry.append(ring)
                 elif self.is_polygon_data:
-                    # Get outer ring, then inner rings
-                    # http://osgeo-org.1560.n6.nabble.com/
-                    # gdal-dev-Polygon-topology-td3745761.html
-                    number_of_rings = G.GetGeometryCount()
-
-                    # Get outer ring
-                    outer_ring = get_ringdata(G.GetGeometryRef(0))
-
-                    # Get inner rings if any
-                    inner_rings = []
-                    if number_of_rings > 1:
-                        for i in range(1, number_of_rings):
-                            inner_ring = get_ringdata(G.GetGeometryRef(i))
-                            inner_rings.append(inner_ring)
-
-                    # Append Polygon instance to geometry list
-                    geometry.append(Polygon(outer_ring=outer_ring,
-                                            inner_rings=inner_rings))
-
+                    polygon = get_polygondata(G)
+                    geometry.append(polygon)
                 elif self.is_multi_polygon_data:
                     try:
                         G = ogr.ForceToPolygon(G)
-                        # FIXME: reuse the code for polygon above
-                        ring = G.GetGeometryRef(0)
-                        M = ring.GetPointCount()
-                        coordinates = []
-                        for j in range(M):
-                            coordinates.append((ring.GetX(j), ring.GetY(j)))
-
-                        # Record entire polygon ring as an Mx2 numpy array
-                        geometry.append(numpy.array(coordinates,
-                                                    dtype='d',
-                                                    copy=False))
-#                    msg = ('Got geometry type Multipolygon (%s) for filename '
-#                            '%s which is not yet supported. Only point, line '
-#                           'and polygon geometries are supported. However, '
-#                           'you can use QGIS functionality to convert '
-#                           'multipart vector data to singlepart (Vector -> '
-#                           'Geometry Tools -> Multipart to Singleparts and '
-#                           'use the resulting dataset.'
-#                           % (ogr.wkbMultiPolygon, filename))
                     except:
-                        msg = ('Got geometry type multipolygon (%s) when read '
-                               '%s and failed to ForceToPolygon')
+                        msg = ('Got geometry type Multipolygon (%s) for '
+                               'filename %s and could not convert it to '
+                               'singlepart. However, you can use QGIS '
+                               'functionality to convert multipart vector '
+                               'data to singlepart (Vector -> Geometry Tools '
+                               '-> Multipart to Singleparts and use the '
+                               'resulting dataset.'
+                               % (ogr.wkbMultiPolygon, filename))
                         raise ReadLayerError(msg)
-
-                #    # FIXME: Unpact multiple polygons to simple polygons
-                #    # For hints on how to unpack see
-#http://osgeo-org.1803224.n2.nabble.com/
-#gdal-dev-Shapefile-Multipolygon-with-interior-rings-td5391090.html
-#http://osdir.com/ml/gdal-development-gis-osgeo/2010-12/msg00107.html
-
-                #    ring = G.GetGeometryRef(0)
-                #    M = ring.GetPointCount()
-                #    coordinates = []
-                #    for j in range(M):
-                #        coordinates.append((ring.GetX(j), ring.GetY(j)))
-
-                #    # Record entire polygon ring as an Mx2 numpy array
-                #    geometry.append(numpy.array(coordinates,
-                #                                dtype='d',
-                #                                copy=False))
+                    else:
+                        # Read polygon data as single part
+                        self.geometry_type = ogr.wkbPolygon
+                        polygon = get_polygondata(G)
+                        geometry.append(polygon)
                 else:
                     msg = ('Only point, line and polygon geometries are '
                            'supported. '
@@ -687,24 +645,21 @@ class Vector(Layer):
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
             elif self.is_line_data:
-                # FIXME (Ole): Change this to use array2ring instead!
-                #geom = ogr.Geometry(ogr.wkbLineString)
-                #linear_ring = array2ring(geometry[i])
-                #geom.AddGeometry(linear_ring)
-
-                wkt = array2wkt(geometry[i], geom_type='LINESTRING')
-                geom = ogr.CreateGeometryFromWkt(wkt)
+                geom = array2line(geometry[i],
+                                  geometry_type=ogr.wkbLineString)
             elif self.is_polygon_data:
                 # Create polygon geometry
                 geom = ogr.Geometry(ogr.wkbPolygon)
 
                 # Add outer ring
-                linear_ring = array2ring(geometry[i].outer_ring)
+                linear_ring = array2line(geometry[i].outer_ring,
+                                         geometry_type=ogr.wkbLinearRing)
                 geom.AddGeometry(linear_ring)
 
                 # Add inner rings if any
                 for A in geometry[i].inner_rings:
-                    geom.AddGeometry(array2ring(A))
+                    geom.AddGeometry(array2line(A,
+                                     geometry_type=ogr.wkbLinearRing))
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise WriteLayerError(msg)

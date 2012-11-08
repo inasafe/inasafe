@@ -95,7 +95,10 @@ class HtmlRenderer():
         myImage = QtGui.QImage(mySize, QtGui.QImage.Format_RGB32)
         myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
         myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
-        myImage.fill(QtGui.QColor(255, 255, 255))
+        # Only works in Qt4.8
+        #myImage.fill(QtGui.qRgb(255, 255, 255))
+        # Works in older Qt4 versions
+        myImage.fill(255 + 255 * 256 + 255 * 256 * 256)
         myPainter = QtGui.QPainter(myImage)
         myFrame.render(myPainter)
         myPainter.end()

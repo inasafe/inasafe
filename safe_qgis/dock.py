@@ -528,7 +528,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             None
 
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
 
         """
         if self.showOnlyVisibleLayersFlag:
@@ -981,8 +981,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myMessage = self.tr('An error occurred when call GDAL command')
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
         except IOError, e:
@@ -990,8 +990,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myMessage = self.tr('An error occurred when write clip file')
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
         except InsufficientOverlapException, e:
@@ -1000,8 +1000,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('An exception occurred when setting up the '
                                 'impact calculator.')
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
         except NoFeaturesInExtentException, e:
@@ -1012,8 +1012,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'zooming out or panning until some features '
                                 'become visible.')
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
         except InvalidProjectionException, e:
@@ -1026,8 +1026,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'native coordinate reference system to'
                                 'WGS84/GeoGraphic.')
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
 
@@ -1038,8 +1038,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myContext = self.tr('An exception occurred when setting up the '
                                 ' model runner.')
-            myMessage = getExceptionWithStacktrace(e, html=True,
-                                                   context=myContext)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True,
+                                                   theContext=myContext)
             self.displayHtml(myMessage)
             return
 
@@ -1073,8 +1073,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myContext = self.tr('An exception occurred when starting'
                                 ' the model.')
-            myMessage = getExceptionWithStacktrace(e, html=True,
-                                                   context=myContext)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True,
+                                                   theContext=myContext)
             self.displayHtml(myMessage)
 
     def postprocess(self):
@@ -1095,8 +1095,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myContext = self.tr('An exception occurred when calculating '
                                     'the results')
                 myMessage = getExceptionWithStacktrace(myException,
-                    html=True,
-                    context=myContext)
+                    theHtml=True,
+                    theContext=myContext)
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             self.displayHtml(myMessage)
@@ -1112,8 +1112,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myContext = self.tr(
                 'An exception occurred when postprocessing the results')
-            myMessage = getExceptionWithStacktrace(e, html=True,
-                context=myContext)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True,
+                theContext=myContext)
             self.displayHtml(myMessage)
             return
         self.completed()
@@ -1656,7 +1656,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (Ole): This branch is not covered by the tests
 
             # Display message and traceback
-            myMessage = getExceptionWithStacktrace(e, html=True)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True)
             self.displayHtml(myMessage)
         else:
             # On success, display generated report
@@ -1839,7 +1839,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             exposure layers.
 
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
 
         # Get the hazard and exposure layers selected in the combos
@@ -2057,12 +2057,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return self.footer
 
     def displayHtml(self, theMessage):
-        """Given an html snippet, wrap it in a page header and footer
-        and display it in the wvResults widget."""
+        """Apply header and footer to html snippet and display in wvResults.
+
+        Args:
+            theMessage: An html snippet. Do not include head and body elements.
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
         myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
-        #f = file('/tmp/h.thml', 'wa')  # for debugging
-        #f.write(myHtml)
-        #f.close()
         self.wvResults.setHtml(myHtml)
 
     def layerChanged(self, theLayer):
@@ -2131,10 +2137,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         ' width="16" height="16"> icon'
                         ' in the toolbar, or choosing Plugins -> InaSAFE'
                         ' -> Keyword Editor from the menus.')
-                myReport += getExceptionWithStacktrace(e, html=True,
-                                                       context=myContext)
+                myReport += getExceptionWithStacktrace(e, theHtml=True,
+                                                       theContext=myContext)
             except Exception, e:
-                myReport += getExceptionWithStacktrace(e, html=True)
+                myReport += getExceptionWithStacktrace(e, theHtml=True)
             if myReport is not None:
                 self.displayHtml(myReport)
 
@@ -2147,7 +2153,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         myStateDict = {'hazard': self.cboHazard.currentText(),
                        'exposure': self.cboExposure.currentText(),
@@ -2165,7 +2171,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         if self.state is None:
             return
@@ -2195,7 +2201,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the RIAB library will be propagated.
         """
         # Restore previous state of combo
         for myCount in range(0, self.cboFunction.count()):
@@ -2212,7 +2218,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         myMap = Map(self.iface)
         if self.iface.activeLayer() is None:
@@ -2228,41 +2234,46 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myMap.setImpactLayer(self.iface.activeLayer())
         LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
-        myMapFilename = QtGui.QFileDialog.getSaveFileName(self,
+        myDefaultFileName = myMap.getMapTitle() + '.pdf'
+        myDefaultFileName = myDefaultFileName.replace(' ', '_')
+        myMapPdfFilePath = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
                             os.path.join(temp_dir(),
-                                         myMap.getMapTitle() + '.pdf'),
+                                         myDefaultFileName),
                             self.tr('Pdf File (*.pdf)'))
-        myMapFilename = str(myMapFilename)
+        myMapPdfFilePath = str(myMapPdfFilePath)
 
-        if myMapFilename is None:
+        if myMapPdfFilePath is None or myMapPdfFilePath == '':
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Printing cancelled!'),
                           theProgress=100)
             self.hideBusy()
             return
 
-        myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
+        myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
         myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
             myKeywords, theFilename=myTableFilename)
 
         try:
-            myMapPdfPath = myMap.printToPdf(myMapFilename)
+            myMap.printToPdf(myMapPdfFilePath)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
-            myReport = getExceptionWithStacktrace(e, html=True)
+            myReport = getExceptionWithStacktrace(e, theHtml=True)
             if myReport is not None:
                 self.displayHtml(myReport)
 
+        # Make sure the file paths can wrap nicely:
+        myWrappedMapPath = myMapPdfFilePath.replace(os.sep, '<wbr>' + os.sep)
+        myWrappedHtmlPath = myHtmlPdfPath.replace(os.sep, '<wbr>' + os.sep)
         myStatus = self.tr('Your PDF was created....opening using '
                            'the default PDF viewer on your system. '
                            'The generated pdfs were saved as:%1'
                            '%2%1 and %1%3').arg(
                            '<br>').arg(QtCore.QString(
-                           myMapPdfPath)).arg(QtCore.QString(
-                           myHtmlPdfPath))
+                            myWrappedMapPath)).arg(QtCore.QString(
+                            myWrappedHtmlPath))
 
         self.showBusy(self.tr('Map Creator'),
                       myStatus,
@@ -2272,7 +2283,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.QUrl('file:///' + myHtmlPdfPath,
             QtCore.QUrl.TolerantMode))
         QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl('file:///' + myMapPdfPath,
+            QtCore.QUrl('file:///' + myMapPdfFilePath,
             QtCore.QUrl.TolerantMode))
 
         self.showBusy(self.tr('Map Creator'),

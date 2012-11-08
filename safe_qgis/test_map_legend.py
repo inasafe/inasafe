@@ -60,6 +60,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
         myControlImages = ['getLegend.png',
                            'getLegend-variantWindosVistaSP2-32.png',
+                           'getClassToLegend-variantUB12.04-64.png',
+                           'getClassToLegend-variantUB11.04-64.png',
                            'getLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -85,6 +87,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
         myControlImages = ['getVectorLegend.png',
                            'getVectorLegend-variantWindosVistaSP2-32.png',
+                           'getVectorLegend-variantUB12.04-64.png',
+                           'getVectorLegend-variantUB11.04-64.png',
                            'getVectorLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -109,6 +113,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
         myControlImages = ['getRasterLegend.png',
                            'getRasterLegend-variantWindosVistaSP2-32.png',
+                           'getRasterLegend-variantUB12.04-64.png',
+                           'getRasterLegend-variantUB11.04-64.png',
                            'getRasterLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -139,6 +145,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
         myControlImages = ['addSymbolToLegend.png',
                            'addSymbolToLegend-variantWindosVistaSP2-32.png',
+                           'addSymbolToLegend-variantUB12.04-64.png',
+                           'addSymbolToLegend-variantUB11.04-64.png',
                            'addSymbolToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -173,6 +181,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
         myControlImages = ['getClassToLegend.png',
                            'getClassToLegend-variantWindosVistaSP2-32.png',
+                           'getClassToLegend-variantUB12.04-64.png',
+                           'getClassToLegend-variantUB11.04-64.png',
                            'getClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
