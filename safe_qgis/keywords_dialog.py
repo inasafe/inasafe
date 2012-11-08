@@ -74,7 +74,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.standardExposureList = OrderedDict([('population',
                                       self.tr('population')),
                                      ('structure', self.tr('structure')),
-                                     ('roads', self.tr('roads')),
+                                     ('road', self.tr('road')),
                                      ('Not Set', self.tr('Not Set'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
                                     self.tr('earthquake [MMI]')),
