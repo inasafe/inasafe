@@ -24,6 +24,10 @@ from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
 import numpy
+from datetime import datetime
+#sudo apt-get install python-tz
+import pytz
+import locale
 
 import ogr
 import gdal
@@ -1421,10 +1425,10 @@ class ShakeEvent(QObject):
         #LOGGER.exception(myCities)
         mySortedCities = sorted(myCities,
                                 key=lambda d: (
-                                    -d['mmi'],
+                                    d['roman'],  # we want to use intervals
                                     -d['population'],
                                     d['name'],
-                                    d['roman'],
+                                    d['mmi'],  # not decimals
                                     d['dist_to'],
                                     d['dir_to'],
                                     d['dir_from'],
@@ -1983,7 +1987,7 @@ class ShakeEvent(QObject):
         myString = ('M %(mmi)s %(date)s %(time)s '
                     '%(latitude-name)s: %(latitude-value)s '
                     '%(longitude-name)s: %(longitude-value)s '
-                    '%(depth-name)s: %(depth)s%(depth-unit)s '
+                    '%(depth-name)s: %(depth-value)s%(depth-unit)s '
                     '%(located-label)s %(distance)s%(distance-unit)s '
                     '%(bearing-compass)s '
                     '%(direction-relation)s %(place-name)s'
@@ -2020,7 +2024,9 @@ class ShakeEvent(QObject):
         myDistance = self.mostAffectedCity['dist_to']
         myName = self.mostAffectedCity['name']
         myBearing = self.bearingToCardinal(myDirection)
-
+        myElapsedTimeText = self.tr('Elapsed time since event')
+        myElapsedTime =  self.elapsedTime()[1]
+        myDegreeSymbol = '\xb0'
         myDict = {'mmi': '%s' % self.magnitude,
          'date': '%s-%s-%s' % (self.day,
                                self.month,
@@ -2028,23 +2034,100 @@ class ShakeEvent(QObject):
          'time': '%s:%s:%s' % (self.hour,
                                self.minute,
                                self.second),
+         'formatted-date-time': self.elapsedTime()[0],
          'latitude-name': self.tr('Latitude'),
          'latitude-value': '%s' % myLatitude,
          'longitude-name': self.tr('Longitude'),
          'longitude-value': '%s' % myLongitude,
          'depth-name': self.tr('Depth'),
-         'depth': '%s' % self.depth,
+         'depth-value': '%s' % self.depth,
          'depth-unit': myKmText,
          'located-label': self.tr('Located'),
          'distance': '%.2f' % myDistance,
          'distance-unit': myKmText,
          'direction-relation': myDirectionalityText,
-         'bearing-degrees': '%s' % myDirection,
+         'bearing-degrees': '%.2f%s' % (myDirection, myDegreeSymbol),
          'bearing-compass': '%s' % myBearing,
          'bearing-text': myBearingText,
-         'place-name': myName
+         'place-name': myName,
+         'elapsed-time-name': myElapsedTimeText,
+         'elapsed-time': myElapsedTime
         }
         return myDict
+
+    def elapsedTime(self):
+        """Calculate how much time has elapsed since the event.
+
+        Args:
+            None
+
+        Returns:
+            str - local formatted date
+
+        Raises:
+            None
+
+        .. note:: Code based on Ole's original impact_map work.
+        """
+        # Work out interval since earthquake (assume both are GMT)
+        year = self.year
+        month = self.month
+        day = self.day
+        hour = self.hour
+        minute = self.minute
+        second = self.second
+
+        eq_date = datetime(year, month, day, hour, minute, second)
+        time_delta = datetime.utcnow() - eq_date
+
+        # Hack - remove when ticket:10 has been resolved
+        tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
+        now = datetime.utcnow()
+        now_jakarta = now.replace(tzinfo=pytz.utc).astimezone(tz)
+        eq_jakarta = eq_date.replace(tzinfo=tz).astimezone(tz)
+        time_delta = now_jakarta - eq_jakarta
+
+        # Work out string to report time elapsed after quake
+        if time_delta.days == 0:
+            # This is within the first day after the quake
+            hours = int(time_delta.seconds / 3600)
+            minutes = int((time_delta.seconds % 3600) / 60)
+
+            if hours == 0:
+                lapse_string = '%i %s' % (minutes, self.tr('minute(s)'))
+            else:
+                lapse_string = '%i %s %i %s' % (hours,
+                                                self.tr('hour(s)'),
+                                                minutes,
+                                                self.tr('minute(s)'))
+        else:
+            # This at least one day after the quake
+
+            weeks = int(time_delta.days / 7)
+            days = int(time_delta.days % 7)
+
+            if weeks == 0:
+                lapse_string = '%i %s' % (days, self.tr('days'))
+            else:
+                lapse_string = '%i %s %i %s' % (weeks,
+                                                self.tr('weeks'),
+                                                days,
+                                                self.tr('days'))
+
+        # Convert date to GMT+7
+        # FIXME (Ole) Hack - Remove this as the shakemap data always
+        # reports the time in GMT+7 but the timezone as GMT.
+        # This is the topic of ticket:10
+        #tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
+        #eq_date_jakarta = eq_date.replace(tzinfo=pytz.utc).astimezone(tz)
+        eq_date_jakarta = eq_date
+
+        # The character %b will use the local word for month
+        # However, setting the locale explicitly to test, does not work.
+        #locale.setlocale(locale.LC_TIME, 'id_ID')
+
+        date_str = eq_date_jakarta.strftime('%d-%b-%y %H:%M:%S %Z')
+        return date_str, lapse_string
 
     def version(self):
         """Return a string showing the version of Inasafe.
