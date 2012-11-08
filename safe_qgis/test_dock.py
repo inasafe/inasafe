@@ -292,6 +292,7 @@ def loadStandardLayers():
                   join(EXPDATA, 'DKI_buildings.shp'),
                   join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
+                  join(TESTDATA, 'donut.shp'),
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
@@ -970,8 +971,8 @@ class DockTest(unittest.TestCase):
         assert '157551000' in myResult, myMessage
 
     def test_runEarthquakeBuildingImpactFunction(self):
-        """Flood function runs in GUI with An earthquake in Yogyakarta like in
-            2006 hazard data uses OSM Building Polygons exposure data."""
+        """Earthquake function runs in GUI with An earthquake in Yogyakarta
+        like in 2006 hazard data uses OSM Building Polygons exposure data."""
 
         myResult, myMessage = setupScenario(
             theHazard='An earthquake in Yogyakarta like in 2006',
@@ -995,6 +996,31 @@ class DockTest(unittest.TestCase):
         assert '786' in myResult, myMessage
         assert '15528' in myResult, myMessage
         assert '177' in myResult, myMessage
+
+    def test_runVolcanoBuildingImpact(self):
+        """Volcano function runs in GUI with An donut (merapi explostion)
+         hazard data uses OSM Building Polygons exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='donut',
+            theExposure='OSM Building Polygons',
+            theFunction='Be affected',
+            theFunctionId='Volcano Building Impact')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of building might be affected
+        assert '288' in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
