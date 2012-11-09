@@ -53,17 +53,17 @@
     <Composer title="Realtime" visible="1">
         <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
             <ComposerLabel valign="32" labelText="[elapsed-time-name] [elapsed-time]" halign="2" margin="1">
-                <LabelFont description="Cantarell,10,-1,5,50,0,0,0,0,0"/>
+                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="90.9957" x="108.096" y="40.1389" rotation="0" height="6.7178" frame="false" outlineWidth="0.3" zValue="18" lastValidViewScaleFactor="3.27488" id="elapsed-time" positionLock="false">
+                <ComposerItem width="90.9957" x="108.096" y="42.1389" rotation="0" height="6.7178" frame="false" outlineWidth="0.3" zValue="18" lastValidViewScaleFactor="3.27488" id="elapsed-time" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
             <ComposerLabel valign="32" labelText="[located-label] [distance] [distance-unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-name]" halign="1" margin="1">
-                <LabelFont description="Cantarell,10,-1,5,50,0,0,0,0,0"/>
+                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="189.404" x="10.2981" y="53.1852" rotation="0" height="6.96961" frame="false" outlineWidth="0.3" zValue="17" lastValidViewScaleFactor="6.54976" id="location-description" positionLock="false">
+                <ComposerItem width="189.176" x="9.60932" y="53.1852" rotation="0" height="7.275" frame="false" outlineWidth="0.3" zValue="17" lastValidViewScaleFactor="3.27488" id="location-description" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -79,15 +79,15 @@
             <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" halign="1" margin="1">
                 <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="184.616" x="9.89494" y="47.5978" rotation="0" height="7.28209" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="6.54976" id="position-depth" positionLock="false">
+                <ComposerItem width="184.616" x="9.60932" y="47.5978" rotation="0" height="7.28209" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="3.27488" id="position-depth" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerLabel valign="32" labelText="M[mmi] [formatted-date-time]" halign="1" margin="1">
-                <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
+            <ComposerLabel valign="32" labelText="M [mmi]  [formatted-date-time]" halign="1" margin="1">
+                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="86.2337" x="9.60932" y="40.7115" rotation="0" height="6.63302" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="3.27488" id="intensity-date" positionLock="false">
+                <ComposerItem width="86.2337" x="9.60932" y="41.7115" rotation="0" height="6.63302" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="3.27488" id="intensity-date" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -201,7 +201,7 @@
             </ComposerLegend>
             <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
                 <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.27488" id="fatalities-table" positionLock="false">
+                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.27488" id="impacts-table" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>

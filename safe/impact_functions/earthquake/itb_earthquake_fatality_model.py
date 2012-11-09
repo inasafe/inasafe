@@ -301,6 +301,8 @@ class ITBFatalityFunction(FunctionProvider):
                              'total_population': total,
                              'total_fatalities': fatalities,
                              'fatalites_per_mmi': number_of_fatalities,
+                             'exposed_per_mmi': number_of_exposed,
+                             'displaced_per_mmi': number_of_displaced,
                              'impact_table': impact_table,
                              'map_title': map_title},
                    name=tr('Estimated displaced population'),

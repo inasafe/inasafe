@@ -106,7 +106,7 @@ class ShakeEvent(QObject):
             thePopulationRasterPath - (Optional)path to the population raster
                 that will be used if you want to calculate the impact. This
                 is optional because there are various ways this can be
-                specified before calling :func:`calculateFatalities`.
+                specified before calling :func:`calculateImpacts`.
             theForceFlag: bool Whether to force retrieval of the dataset from
                 the ftp server.
 
@@ -142,7 +142,12 @@ class ShakeEvent(QObject):
         self.impactFile = None
         # Path to impact keywords file - this is GOLD here!
         self.impactKeywordsFile = None
+        # number of people killed per mmi band
         self.fatalityCounts = None
+        # number of people displaced per mmi band
+        self.displacedCounts = None
+        # number of people affected per mmi band
+        self.affectedCounts = None
         # After selecting affected cities near the event, the bbox of
         # shake map + cities
         self.extentWithCities = None
@@ -1119,7 +1124,7 @@ class ShakeEvent(QObject):
         myUri = QgsDataSourceURI()
         myUri.setDatabase(myDBPath)
         myTable = 'geonames'
-        myGeometryColumn = 'Geometry'
+        myGeometryColumn = 'geom'
         mySchema = ''
         myUri.setDataSource(mySchema, myTable, myGeometryColumn)
         myLayer = QgsVectorLayer(myUri.uri(), 'Towns', 'spatialite')
@@ -1169,7 +1174,8 @@ class ShakeEvent(QObject):
                     '%s times.' % (myMinimumCityCount, myAttemptsLimit))
         # Setup field indexes of our input and out datasets
         myCities = []
-        myLayerIdIndex = myLayerProvider.fieldNameIndex('PK_UID')
+        myLayerIdIndex = myLayerProvider.fieldNameIndex('id')
+        myLayerCodeIndex = myLayerProvider.fieldNameIndex('fcode')
         myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
         myLayerPopulationIndex = myLayerProvider.fieldNameIndex('population')
         myIdIndex = 0
@@ -1198,12 +1204,23 @@ class ShakeEvent(QObject):
             # to and from the epicenter
             myAttributes = myFeature.attributeMap()
             myId = str(myAttributes[myLayerIdIndex].toString())
+
+            # Make sure the fcode contains PPL (populated place)
+            myCode = str(myAttributes[myLayerCodeIndex].toString())
+            if 'PPL' not in myCode:
+                continue
+
+            # Make sure the place is populated
+            myPopulation = myAttributes[myLayerPopulationIndex].toInt()[0]
+            if myPopulation < 1:
+                continue
+
             myPoint = myFeature.geometry().asPoint()
             myDistance = myPoint.sqrDist(myEpicenter)
             myDirectionTo = myPoint.azimuth(myEpicenter)
             myDirectionFrom = myEpicenter.azimuth(myPoint)
             myPlaceName = str(myAttributes[myLayerPlaceNameIndex].toString())
-            myPopulation = myAttributes[myLayerPopulationIndex]
+
             myNewFeature = QgsFeature()
             myNewFeature.setGeometry(myFeature.geometry())
 
@@ -1415,6 +1432,7 @@ class ShakeEvent(QObject):
             myDistanceTo = myAttributes[myDistanceToIndex].toFloat()[0]
             myCity = {'id': myId,
                       'name': myPlaceName,
+                      'mmi-int': round(myMmi),
                       'mmi': myMmi,
                       'population': myPopulation,
                       'roman': myRoman,
@@ -1425,10 +1443,11 @@ class ShakeEvent(QObject):
         #LOGGER.exception(myCities)
         mySortedCities = sorted(myCities,
                                 key=lambda d: (
-                                    d['roman'],  # we want to use intervals
+                                    -d['mmi-int'],  # we want to use whole no.s
                                     -d['population'],
                                     d['name'],
                                     d['mmi'],  # not decimals
+                                    d['roman'],
                                     d['dist_to'],
                                     d['dir_to'],
                                     d['dir_from'],
@@ -1536,12 +1555,12 @@ class ShakeEvent(QObject):
 
         return myTable, myPath
 
-    def fatalitiesTable(self, theMmiLevels):
-        """Create the html listing fatalities per mmi interval.
+    def impactTable(self, theMmiLevels):
+        """Create the html listing affected people per mmi interval.
         Args:
-            dict: A dictionary with keys mmi leves and values mortalities as
-                per the example below. This is typically going to be passed
-                from the :func:`calculateFatalities` function defined below.
+            dict: A dictionary with keys mmi levels and values affected count
+                as per the example below. This is typically going to be passed
+                from the :func:`calculateImpacts` function defined below.
         Returns:
             str: full absolute path to the saved html content.
 
@@ -1557,16 +1576,16 @@ class ShakeEvent(QObject):
         """
         myHeader = [TableCell(self.tr('Intensity'),
                             header=True)]
-        myCountRow = [TableCell(self.tr('Fatalities (x 1000)'),
+        myCountRow = [TableCell(self.tr('People (x 1000)'),
                             header=True)]
-        myImpactRow = [TableCell(self.tr('Percieved Shaking'),
+        myImpactRow = [TableCell(self.tr('Perceived Shaking'),
                             header=True)]
         for myMmi in range(2, 10):
             myHeader.append(TableCell(self.romanize(myMmi),
                                       cell_class='mmi-%s' % myMmi,
                                       header=True))
             if myMmi in theMmiLevels:
-                myCountRow.append('%.2f' % theMmiLevels[myMmi])
+                myCountRow.append('%i' % round(theMmiLevels[myMmi] / 1000))
             else:
                 myCountRow.append(0.00)
 
@@ -1580,11 +1599,11 @@ class ShakeEvent(QObject):
                             theTable=myTable)
         return myPath
 
-    def calculateFatalities(self,
+    def calculateImpacts(self,
                             thePopulationRasterPath=None,
                             theForceFlag=False,
                             theAlgorithm='nearest'):
-        """Use the earthquake fatalities  function to calculate fatalities.
+        """Use the SAFE ITB earthquake function to calculate impacts.
 
         Args:
             thePopulationRasterPath: str optional. see
@@ -1598,12 +1617,12 @@ class ShakeEvent(QObject):
                 behaviour.
         Returns:
             str: the path to the computed impact file.
-                The class members self.impactFile and self.fatalityCounts
-                will be populated.
-                self.fatalityCounts is a dict containing fatality counts for
-                the shake events. Keys for the dict will be MMI classes (I-X)
-                and values will be fatalities for that class.
-            str: Path to the html report showing a table of mortalities per
+                The class members self.impactFile, self.fatalityCounts,
+                self.displacedCounts and self.affectedCounts will be populated.
+                self.*Counts are dicts containing fatality / displaced /
+                affected counts for the shake events. Keys for the dict will be
+                MMI classes (I-X) and values will be count type for that class.
+            str: Path to the html report showing a table of affected people per
                 mmi interval.
         Raises:
             None
@@ -1634,7 +1653,9 @@ class ShakeEvent(QObject):
 
         myResult = safe_calculate_impact(myLayers, myFunction)
         try:
-            myMmiLevels = myResult.keywords['fatalites_per_mmi']
+            myFatalities = myResult.keywords['fatalites_per_mmi']
+            myAffected = myResult.keywords['exposed_per_mmi']
+            myDisplaced = myResult.keywords['displaced_per_mmi']
         except:
             LOGGER.exception('fatalities_per_mmi key not found in:\n%s' %
                             myResult.keywords)
@@ -1656,9 +1677,14 @@ class ShakeEvent(QObject):
 
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
-        self.fatalityCounts = myMmiLevels
+        self.fatalityCounts = myFatalities
+        self.displacedCounts = myDisplaced
+        self.affectedCounts = myAffected
+        LOGGER.info('***** Fatalities: %s ********' % self.fatalityCounts)
+        LOGGER.info('***** Displaced: %s ********' % self.displacedCounts)
+        LOGGER.info('***** Affected: %s ********' % self.affectedCounts)
 
-        myImpactTablePath = self.fatalitiesTable(myMmiLevels)
+        myImpactTablePath = self.impactTable(myAffected)
         return self.impactFile, myImpactTablePath
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
@@ -1796,6 +1822,7 @@ class ShakeEvent(QObject):
         """
         myMmiShapeFile = self.mmiDataToShapefile(theForceFlag=theForceFlag)
         logging.info('Created: %s', myMmiShapeFile)
+        myCitiesHtmlPath = None
         #for myAlgorithm in ['average', 'invdist', 'nearest']:
         for myAlgorithm in ['nearest']:
             myContoursShapeFile = self.mmiDataToContours(
@@ -1814,8 +1841,8 @@ class ShakeEvent(QObject):
         except:
             logging.exception('No nearby cities found!')
 
-        _, myFatalitiesHtmlPath = self.calculateFatalities()
-        logging.info('Created: %s', myFatalitiesHtmlPath)
+        _, myImpactsHtmlPath = self.calculateImpacts()
+        logging.info('Created: %s', myImpactsHtmlPath)
 
         # Load our project
         myProjectPath = os.path.join(dataDir(), 'realtime.qgs')
@@ -1869,20 +1896,20 @@ class ShakeEvent(QObject):
                              myTemplatePath)
             raise MapComposerError
 
-        # Set the fatalities report up
-        myFatalitiesItem = myComposition.getComposerItemById(
-            'fatalities-table')
-        if myFatalitiesItem is None:
-            myMessage = 'fatalities-table composer item could not be found'
+        # Set the impacts report up
+        myImpactsItem = myComposition.getComposerItemById(
+            'impacts-table')
+        if myImpactsItem is None:
+            myMessage = 'impacts-table composer item could not be found'
             LOGGER.exception(myMessage)
             raise MapComposerError(myMessage)
-        myFatalitiesHtml = myComposition.getComposerHtmlByItem(
-            myFatalitiesItem)
-        if myFatalitiesHtml is None:
-            myMessage = 'Fatalities QgsComposerHtml could not be found'
+        myImpactsHtml = myComposition.getComposerHtmlByItem(
+            myImpactsItem)
+        if myImpactsHtml is None:
+            myMessage = 'Impacts QgsComposerHtml could not be found'
             LOGGER.exception(myMessage)
             raise MapComposerError(myMessage)
-        myFatalitiesHtml.setUrl(QUrl(myFatalitiesHtmlPath))
+        myImpactsHtml.setUrl(QUrl(myImpactsHtmlPath))
 
         # Set the affected cities report up
         myCitiesItem = myComposition.getComposerItemById('affected-cities')
@@ -1895,7 +1922,11 @@ class ShakeEvent(QObject):
             myMessage = 'Cities QgsComposerHtml could not be found'
             LOGGER.exception(myMessage)
             raise MapComposerError(myMessage)
-        myCitiesHtml.setUrl(QUrl(myCitiesHtmlPath))
+
+        if myCitiesHtmlPath is not None:
+            myCitiesHtml.setUrl(QUrl(myCitiesHtmlPath))
+        else:
+            raise CityMemoryLayerCreationError('No nearby cities found.')
 
         # Load the contours and cities shapefile into the map
         myContoursLayer = QgsVectorLayer(myContoursShapeFile,
@@ -2193,7 +2224,9 @@ class ShakeEvent(QObject):
                      'populationRasterPath: %(populationRasterPath)s\n'
                      'impactFile: %(impactFile)s\n'
                      'impactKeywordsFile: %(impactKeywordsFile)s\n'
-                     'fatalityCounts: %(fatalityCounts)s\n'
+                     'fatalityCounts: %(fatalityCounts)s\n',
+                     'displacedCounts: %(displacedCounts)s\n',
+                     'affectedCounts: %(affectedCounts)s\n',
                      'extentWithCities: %(extentWithCities)s\n'
                      'zoomFactor: %(zoomFactor)s\n'
                      'searchBoxes: %(searchBoxes)s\n'
@@ -2222,6 +2255,8 @@ class ShakeEvent(QObject):
                         'impactFile': self.impactFile,
                         'impactKeywordsFile': self.impactKeywordsFile,
                         'fatalityCounts': self.fatalityCounts,
+                        'displacedCounts': self.displacedCountsCounts,
+                        'affectedCounts': self.affectedCounts,
                         'extentWithCities': myExtentWithCities,
                         'zoomFactor': self.zoomFactor,
                         'searchBoxes': self.searchBoxes

@@ -253,7 +253,7 @@ searchBoxes: None
         LOGGER.debug(QGISAPP.showSettings())
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myResult, myFatalitiesHtml = myShakeEvent.calculateFatalities()
+        myResult, myFatalitiesHtml = myShakeEvent.calculateImpacts()
 
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
                            '/20120726022003/impact-nearest.tif')
@@ -385,7 +385,7 @@ searchBoxes: None
          7: 0.0,
          8: 0.0,
          9: 0.0}
-        myResult = myShakeEvent.fatalitiesTable(myDict)
+        myResult = myShakeEvent.impactTable(myDict)
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted/'
                            '20120726022003/impacts.html')
         myMessage = ('Got:\n%s\nExpected:\n%s' %

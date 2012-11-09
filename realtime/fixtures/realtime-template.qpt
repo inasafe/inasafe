@@ -149,7 +149,7 @@
   </ComposerLegend>
   <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
    <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.27488" id="fatalities-table" positionLock="false">
+    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.27488" id="impacts-table" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
