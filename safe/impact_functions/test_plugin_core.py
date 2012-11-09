@@ -239,7 +239,7 @@ class Test_plugin_core(unittest.TestCase):
         myMsg += str(dict_doc)
         for key, value in dict_doc.iteritems():
             print key + ':\t' + str(value)
-        assert dict_doc['title'] == 'Be temporarily closed', myMsg
+        assert dict_doc['title'] == 'Be flooded', myMsg
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

@@ -62,7 +62,8 @@ on your machine in order to work effectively with the code base:
 On an ubuntu system you can install these requirements using apt::
 
    sudo apt-get install git rsync pep8 python-nose python-coverage \
-   python-gdal python-numpy python-sphinx pyqt4-dev-tools pyflakes \
+   python-gdal python-numpy python-sphinx pyqt4-dev-tools pyflakes
+
    sudo pip install cloud-sptheme python-nosexcover
 
 In some cases these dependencies may already be on your system via installation

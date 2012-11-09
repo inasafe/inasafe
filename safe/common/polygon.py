@@ -15,7 +15,6 @@
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
 __license__ = "GPL"
@@ -29,7 +28,7 @@ from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
 from safe.common.numerics import grid2points, geotransform2axes
-from safe.common.exceptions import PolygonInputError
+from safe.common.exceptions import PolygonInputError, InaSAFEError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -81,6 +80,8 @@ def separate_points_by_polygon(points, polygon,
     http://www.alienryderflex.com/polygon/
     """
 
+    # FIXME (Ole): Make sure bounding box here follows same format as
+    #              those returned by layers. Methinks they don't at the moment
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean or None'
@@ -131,6 +132,10 @@ def separate_points_by_polygon(points, polygon,
         msg = 'Points array must have two columns'
         if points.shape[1] != 2:
             raise PolygonInputError(msg)
+
+    # If there are no points return two 0-vectors
+    if points.shape[0] == 0:
+        return numpy.arange(0), numpy.arange(0)
 
     # Get polygon extents to rule out segments that
     # are outside its bounding box. This is a very important
@@ -460,6 +465,54 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8,
         return result
 
 
+def in_and_outside_polygon(points, polygon,
+                           closed=True,
+                           holes=None,
+                           check_input=True):
+    """Separate a list of points into two sets inside and outside a polygon
+
+    Input
+        points: (tuple, list or array) of coordinates
+        polygon: list or Nx2 array of polygon vertices
+        closed: Set to True if points on boundary are considered
+                to be 'inside' polygon
+        holes: list of polygons representing holes. Points inside either of
+               these are considered outside polygon
+
+    Output
+        inside: Indices of points inside the polygon
+        outside: Indices of points outside the polygon
+
+    See separate_points_by_polygon for more documentation
+    """
+
+    # Get separation by outer_ring
+    inside, outside = separate_points_by_polygon(points, polygon,
+                                                 closed=closed,
+                                                 check_input=check_input)
+
+    # Take care of holes
+    if holes is not None:
+        msg = ('Argument holes must be a list of polygons, '
+               'I got %s' % holes)
+        if not isinstance(holes, list):
+            raise InaSAFEError(msg)
+
+        for hole in holes:
+            in_hole, out_hole = separate_points_by_polygon(points[inside],
+                                                           hole,
+                                                           closed=not closed,
+                                                           check_input=True)
+
+            in_hole = inside[in_hole]  # Inside hole
+            inside = inside[out_hole]  # Inside outer_ring but outside hole
+
+            # Add holde indices to outside
+            outside = numpy.concatenate((outside, in_hole))
+
+    return inside, outside
+
+
 def is_inside_polygon(point, polygon, closed=True):
     """Determine if one point is inside a polygon
 
@@ -474,7 +527,8 @@ def is_inside_polygon(point, polygon, closed=True):
         return False
 
 
-def inside_polygon(points, polygon, closed=True):
+def inside_polygon(points, polygon, closed=True, holes=None,
+                   check_input=True):
     """Determine points inside a polygon
 
        Functions inside_polygon and outside_polygon have been defined in
@@ -485,16 +539,21 @@ def inside_polygon(points, polygon, closed=True):
 
        points and polygon can be a geospatial instance,
        a list or a numeric array
+
+       holes: list of polygons representing holes. Points inside either of
+       these are not considered inside_polygon
     """
 
-    indices, _ = separate_points_by_polygon(points, polygon,
-                                            closed=closed,
-                                            check_input=True)
+    indices, _ = in_and_outside_polygon(points, polygon,
+                                        closed=closed,
+                                        holes=holes,
+                                        check_input=check_input)
 
     # Return indices of points inside polygon
     return indices
 
 
+# FIXME (Ole): This also needs to fixed as per issue #324
 def is_outside_polygon(point, polygon, closed=True):
     """Determine if one point is outside a polygon
 
@@ -509,7 +568,8 @@ def is_outside_polygon(point, polygon, closed=True):
         return False
 
 
-def outside_polygon(points, polygon, closed=True):
+def outside_polygon(points, polygon, closed=True,
+                    holes=None, check_input=True):
     """Determine points outside a polygon
 
        Functions inside_polygon and outside_polygon have been defined in
@@ -517,36 +577,18 @@ def outside_polygon(points, polygon, closed=True):
        the first part of the indices array and outside indices in the last
 
        See separate_points_by_polygon for documentation
+
+       holes: list of polygons representing holes. Points inside either of
+              these are considered outside polygon
     """
 
-    _, indices = separate_points_by_polygon(points, polygon,
-                                            closed=closed,
-                                            check_input=True)
+    _, indices = in_and_outside_polygon(points, polygon,
+                                        closed=closed,
+                                        holes=holes,
+                                        check_input=check_input)
 
     # Return indices of points outside polygon
     return indices
-
-
-def in_and_outside_polygon(points, polygon, closed=True):
-    """Separate a list of points into two sets inside and outside a polygon
-
-    Input
-        points: (tuple, list or array) of coordinates
-        polygon: list or Nx2 array of polygon vertices
-        closed: Set to True if points on boundary are considered
-                to be 'inside' polygon
-
-    Output
-        inside: Array of points inside the polygon
-        outside: Array of points outside the polygon
-
-    See separate_points_by_polygon for more documentation
-    """
-
-    inside, outside = separate_points_by_polygon(points, polygon,
-                                                 closed=closed,
-                                                 check_input=True)
-    return inside, outside
 
 
 def clip_lines_by_polygon(lines, polygon,
@@ -1021,8 +1063,29 @@ def line_dictionary_to_geometry(D):
 
 
 #--------------------------------------------------
-# Helper function to generate points inside polygon
+# Helper functions to generate points inside polygon
 #--------------------------------------------------
+def generate_random_points_in_bbox(polygon, N, seed=None):
+    """Generate random points in polygon bounding box
+    """
+
+    # Find outer extent of polygon
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
+
+    seed_function(seed)
+
+    points = []
+    for _ in range(N):
+        x = uniform(minpx, maxpx)
+        y = uniform(minpy, maxpy)
+        points.append([x, y])
+
+    return numpy.array(points)
+
+
 def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
     """Populate given polygon with uniformly distributed points.
 
@@ -1041,28 +1104,20 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
        will return five randomly selected points inside the unit square
     """
 
-    # Find outer extent of polygon
-    max_x = min_x = polygon[0][0]
-    max_y = min_y = polygon[0][1]
-    for point in polygon[1:]:
-        x = point[0]
-        if x > max_x:
-            max_x = x
-        if x < min_x:
-            min_x = x
+    polygon = ensure_numeric(polygon)
 
-        y = point[1]
-        if y > max_y:
-            max_y = y
-        if y < min_y:
-            min_y = y
+    # Find outer extent of polygon
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
 
     # Generate random points until enough are in polygon
     seed_function(seed)
     points = []
     while len(points) < number_of_points:
-        x = uniform(min_x, max_x)
-        y = uniform(min_y, max_y)
+        x = uniform(minpx, maxpx)
+        y = uniform(minpy, maxpy)
 
         append = False
         if is_inside_polygon([x, y], polygon):
@@ -1198,27 +1253,28 @@ def intersection(line0, line1):
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
 def clip_grid_by_polygons(A, geotransform, polygons):
-    """Clip raster grid by polygon
+    """Clip raster grid by polygon.
 
-    Input
-        A: MxN array of grid points
-        geotransform: 6-tuple used to locate A geographically
-                      (top left x, w-e pixel resolution, rotation,
-                       top left y, rotation, n-s pixel resolution)
-        polygons: list of polygons, each an array of vertices
+    Args:
+        * A: MxN array of grid points
+        * geotransform: 6-tuple used to locate A geographically
+            (top left x, w-e pixel resolution, rotation,
+            top left y, rotation, n-s pixel resolution)
+        * polygons: list of polygon geometry objects or list of polygon arrays
 
-    Output
+    Returns:
         points_covered: List of (points, values) - one per input polygon.
 
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
 
-    Note: Grid points are considered to be pixel-registered which means
-          that each point represents the center of its grid cell.
-          The required half cell shifts are taken care of by the
-          function geotransform2axes
+    .. note:: Grid points are considered to be pixel-registered which means
+        that each point represents the center of its grid cell.
+        The required half cell shifts are taken care of by the
+        function :func:`geotransform2axes`.
 
-          If multiple polygons overlap, the one first encountered will be used
+        If multiple polygons overlap, the one first encountered will be used.
+
     """
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
@@ -1234,10 +1290,18 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     for polygon in polygons:
         #print 'Remaining points', len(remaining_points)
 
-        inside, outside = separate_points_by_polygon(remaining_points,
-                                                     polygon,
-                                                     closed=True,
-                                                     check_input=False)
+        if hasattr(polygon, 'outer_ring'):
+            outer_ring = polygon.outer_ring
+            inner_rings = polygon.inner_rings
+        else:
+            # Assume it is an array
+            outer_ring = polygon
+
+        inside, outside = in_and_outside_polygon(remaining_points,
+                                                 outer_ring,
+                                                 holes=inner_rings,
+                                                 closed=True,
+                                                 check_input=False)
         # Add features inside this polygon
         points_covered.append((remaining_points[inside],
                                remaining_values[inside]))
@@ -1253,23 +1317,24 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
     """Clip multiple lines by multiple polygons
 
     Args:
-        lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
-               where pi and qi are point coordinates (x, y).
-        polygons: list of polygons, each an array of vertices
-        closed: optional parameter to determine whether lines that fall on
-                an polygon boundary should be considered to be inside
-                (closed=True), outside (closed=False) or
-                undetermined (closed=None). The latter case will speed the
-                algorithm up but lines on boundaries may or may not be
-                deemed to fall inside the polygon and so will be
-                indeterministic
+        * lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+            where pi and qi are point coordinates (x, y).
+        * polygons: list of polygons, each an array of vertices
+        * closed: optional parameter to determine whether lines that fall on
+            an polygon boundary should be considered to be inside
+            (closed=True), outside (closed=False) or
+            undetermined (closed=None). The latter case will speed the
+            algorithm up but lines on boundaries may or may not be
+            deemed to fall inside the polygon and so will be
+            indeterministic.
 
     Returns:
-        lines_covered: List of polylines inside a polygon
-                       - one per input polygon.
+        lines_covered: List of polylines inside a polygon -o ne per input
+        polygon.
 
 
-    If multiple polygons overlap, the one first encountered will be used
+    .. note:: If multiple polygons overlap, the one first encountered will be
+        used.
     """
 
     if check_input:

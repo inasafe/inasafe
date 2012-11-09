@@ -6,9 +6,9 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 
-from safe.common.utilities import verify
+from safe.common.utilities import (verify,
+                                   ugettext as safe_tr)
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
-from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -19,7 +19,8 @@ from projection import Projection
 from utilities import DRIVER_MAP
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import geotransform2bbox, geotransform2resolution
+from utilities import (geotransform2bbox, geotransform2resolution,
+                       check_geotransform)
 
 
 class Raster(Layer):
@@ -27,7 +28,7 @@ class Raster(Layer):
     """
 
     def __init__(self, data=None, projection=None, geotransform=None,
-                 name='', keywords=None, style_info=None):
+                 name=None, keywords=None, style_info=None):
         """Initialise object with either data or filename
 
         Args:
@@ -43,8 +44,7 @@ class Raster(Layer):
                              top left y, rotation, n-s pixel resolution).
                             See e.g. http://www.gdal.org/gdal_tutorial.html
                             Only used if data is provide as a numeric array,
-            * name: Optional name for layer.
-                    Only used if data is provide as a numeric array,
+            * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                         layer. When the layer is stored, these keywords will
                         be written into an associated file with extension
@@ -83,6 +83,12 @@ class Raster(Layer):
             # with extra keyword arguments supplying metadata
 
             self.data = numpy.array(data, dtype='d', copy=False)
+
+            proj4 = self.get_projection(proj4=True)
+            if 'longlat' in proj4 and 'WGS84' in proj4:
+                # This is only implemented for geographic coordinates
+                # Omit check for projected coordinate systems
+                check_geotransform(geotransform)
             self.geotransform = geotransform
 
             self.rows = data.shape[0]
@@ -182,15 +188,15 @@ class Raster(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            if title in internationalised_titles:
-                title = internationalised_titles[title]
+            title = safe_tr(title)
 
             rastername = title
         else:
             # Use basename without leading directories as name
             rastername = os.path.split(basename)[-1]
 
-        self.name = rastername
+        if self.name is None:
+            self.name = rastername
         self.filename = filename
 
         self.projection = Projection(self.fid.GetProjection())
@@ -231,7 +237,7 @@ class Raster(Layer):
 
         msg = ('Invalid file type for file %s. Only extension '
                'tif allowed.' % filename)
-        verify(extension in ['.tif', '.asc'], msg)
+        verify(extension in ['.tif'], msg)
         file_format = DRIVER_MAP[extension]
 
         # Get raster data
@@ -259,7 +265,7 @@ class Raster(Layer):
 
         # Write data
         fid.GetRasterBand(1).WriteArray(A)
-        fid.GetRasterBand(1).SetNoDataValue(self.nodata_value)
+        fid.GetRasterBand(1).SetNoDataValue(self.get_nodata_value())
         fid = None  # Close
 
         # Write keywords if any

@@ -94,7 +94,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+test: clean docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
@@ -111,7 +111,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py,function_options_dialog_base.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
@@ -148,11 +148,11 @@ gui_test_suite: compile testdata
 # commit rights. See issue https://github.com/AIFDR/inasafe/issues/232
 testdata:
 	@echo
-	@echo "-----------------------------------------------------------"
+	@echo "------------------------------------------------------------"
 	@echo "Updating inasafe_data - public test and demo data repository"
-	@echo "You should update the hash to check out a specific data version"
-	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh e550ec0edae9e6cb6bc3653e76a357dd0af559af 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@echo "Update the hash to check out a specific data version        "
+	@echo "------------------------------------------------------------"
+	@scripts/update-test-data.sh 0a33f7d27c28a8fb7ad7951ed7163341ef1ea7ad 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -245,13 +245,20 @@ pyflakes:
 	@echo "---------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis | wc -l
 
+indent:
+	@echo
+	@echo "---------------"
+	@echo "Check indentation is at 4 spaces (and apply fix)"
+	@echo "---------------"
+	@# sudo apt-get install python2.7-examples for reindent script
+	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point
 #
 ##########################################################
 
-jenkins-test: testdata
+jenkins-test: testdata clean
 	@echo
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
@@ -284,7 +291,7 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis > pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis > pylint.log || :
 
 jenkins-pep8:
 	@echo

@@ -2,6 +2,8 @@ import unittest
 import numpy
 
 from safe.storage.vector import Vector
+from safe.storage.raster import Raster
+from safe.storage.geometry import Polygon
 from safe.common.polygon import (separate_points_by_polygon,
                                  is_inside_polygon,
                                  is_outside_polygon,
@@ -14,7 +16,9 @@ from safe.common.polygon import (separate_points_by_polygon,
                                  intersection,
                                  join_line_segments,
                                  clip_line_by_polygon,
+                                 clip_grid_by_polygons,
                                  populate_polygon,
+                                 generate_random_points_in_bbox,
                                  PolygonInputError,
                                  line_dictionary_to_geometry)
 from safe.common.testing import test_polygon, test_lines
@@ -262,6 +266,32 @@ class Test_Polygon(unittest.TestCase):
         assert len(inside) + len(outside) == len(points)
         assert numpy.allclose(inside, [0, 1, 2])
         assert numpy.allclose(outside, [3, 4])
+
+    def test_separate_points_by_polygon_empty_points(self):
+        """Separate points by polygon ok when no points in bbox
+        """
+
+        # This is from a real example that failed
+        polygon = numpy.array([[109.82203092, -7.22977256],
+                               [109.82224507, -7.22986774],
+                               [109.82255440, -7.22974876],
+                               [109.82272096, -7.22960600],
+                               [109.82283994, -7.22929667],
+                               [109.82283994, -7.22884457],
+                               [109.82272096, -7.22860662],
+                               [109.82248302, -7.22841627],
+                               [109.82241163, -7.22822591],
+                               [109.82224507, -7.22822591],
+                               [109.82210230, -7.22841627],
+                               [109.82191195, -7.22860662],
+                               [109.82179297, -7.22872560],
+                               [109.82169779, -7.22882077],
+                               [109.82172159, -7.22917769],
+                               [109.82176918, -7.22932046],
+                               [109.82188815, -7.22953461],
+                               [109.82203092, -7.22977256]])
+        points = numpy.zeros((0, 2))
+        separate_points_by_polygon(points, polygon)
 
     def test_outside_polygon(self):
         """Points are classified as either outside polygon or not
@@ -543,6 +573,80 @@ class Test_Polygon(unittest.TestCase):
         else:
             msg = 'Should have raised PolygonInputError'
             raise Exception(msg)
+
+    def test_clip_grid_by_polygon(self):
+        """Regular grids can be clipped by polygons (with holes)
+        """
+        # Define an outer ring
+        outer_ring = numpy.array([[106.79, -6.233],
+                                  [106.80, -6.24],
+                                  [106.78, -6.23],
+                                  [106.77, -6.21],
+                                  [106.79, -6.233]])
+
+        # Define inner rings
+        inner_rings = [numpy.array([[106.77827, -6.2252],
+                                    [106.77775, -6.22378],
+                                    [106.78, -6.22311],
+                                    [106.78017, -6.22530],
+                                    [106.77827, -6.2252]]),
+                       numpy.array([[106.78652, -6.23215],
+                                    [106.78642, -6.23075],
+                                    [106.78746, -6.23143],
+                                    [106.78831, -6.23307],
+                                    [106.78652, -6.23215]])]
+
+        # Make a grid
+        N = 10
+        A = numpy.arange(N * N).reshape((N, N))
+        # Longitudes
+        minx = min(outer_ring[:, 0])
+        maxx = max(outer_ring[:, 0])
+        dx = (maxx - minx) / N
+
+        # Latitudes
+        miny = min(outer_ring[:, 1])
+        maxy = max(outer_ring[:, 1])
+        dy = -(maxy - miny) / N
+
+        #top left x, w-e pixel res, rot, top left y, rot, n-s pixel res
+        #(lon_ul, dlon, 0, lat_ul, 0, dlat)
+        geotransform = (minx, dx, 0, maxy, 0, dy)
+
+        # Create suitable instance on the fly
+        # See
+        # http://docs.python.org/library/functions.html#type
+        # http://jjinux.blogspot.com/2005/03/
+        #      python-create-new-class-on-fly.html
+        polygon_arg = [type('', (),
+                            dict(outer_ring=outer_ring,
+                                 inner_rings=inner_rings))()]
+
+        # Call clipping function
+        res = clip_grid_by_polygons(A, geotransform,
+                                    polygon_arg)
+
+        points = res[0][0]
+        values = res[0][1]
+        values = [{'val': float(x)} for x in values]
+
+        # Check correctness (from QGIS inspection)
+        assert numpy.allclose(points[0], [106.7745, -6.2175])
+        assert numpy.allclose(points[3], [106.7805, -6.2235])
+        assert numpy.allclose(points[9], [106.7865, -6.2325])
+        assert values[0]['val'] == 21
+        assert values[3]['val'] == 43
+        assert values[9]['val'] == 75
+
+        # Optionally store output for inspection with QGIS (this one is nice)
+        if False:
+            R = Raster(A, geotransform=geotransform)
+            R.write_to_file('test_raster.tif')
+            P = Vector(geometry=[Polygon(outer_ring=outer_ring,
+                                         inner_rings=inner_rings)])
+            P.write_to_file('test_polygon.shp')
+            Vector(geometry=points,
+                   data=values).write_to_file('test_points.shp')
 
     def test_populate_polygon(self):
         """Polygon can be populated by random points
@@ -846,6 +950,59 @@ class Test_Polygon(unittest.TestCase):
         inside, outside = in_and_outside_polygon(points, polygon)
         assert numpy.alltrue(inside == [1, 3])
         assert numpy.alltrue(outside == [0, 2, 4, 5])
+
+    def test_clip_points_by_polygons_with_holes(self):
+        """Points can be separated by polygons with holes
+        """
+
+        # Define an outer ring
+        outer_ring = numpy.array([[106.79, -6.233],
+                                  [106.80, -6.24],
+                                  [106.78, -6.23],
+                                  [106.77, -6.21],
+                                  [106.79, -6.233]])
+
+        # Define inner rings
+        inner_rings = [numpy.array([[106.77827, -6.2252],
+                                    [106.77775, -6.22378],
+                                    [106.78, -6.22311],
+                                    [106.78017, -6.22530],
+                                    [106.77827, -6.2252]]),
+                       numpy.array([[106.78652, -6.23215],
+                                    [106.78642, -6.23075],
+                                    [106.78746, -6.23143],
+                                    [106.78831, -6.23307],
+                                    [106.78652, -6.23215]])]
+
+        # Make some test points
+        points = generate_random_points_in_bbox(outer_ring, 1000, seed=13)
+
+        # Clip to outer ring, excluding holes
+        inside, outside = in_and_outside_polygon(points, outer_ring,
+                                                 holes=inner_rings)
+
+        # Check wrapper functions
+        assert numpy.all(inside == inside_polygon(points, outer_ring,
+                                                  holes=inner_rings))
+        assert numpy.all(outside == outside_polygon(points, outer_ring,
+                                                    holes=inner_rings))
+
+        # Verify that each point is where it should
+        for point in points[inside, :]:
+            # Must be inside outer ring
+            assert is_inside_polygon(point, outer_ring)
+
+            # But not in any of the inner rings
+            assert not is_inside_polygon(point, inner_rings[0])
+            assert not is_inside_polygon(point, inner_rings[1])
+
+        for point in points[outside, :]:
+            # Must be either outside outer ring or inside a hole
+            assert (is_outside_polygon(point, outer_ring) or
+                    is_inside_polygon(point, inner_rings[0]) or
+                    is_inside_polygon(point, inner_rings[1]))
+
+    test_clip_points_by_polygons_with_holes.slow = True
 
     def test_intersection1(self):
         """Intersection of two simple lines works

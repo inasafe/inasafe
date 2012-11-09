@@ -10,7 +10,7 @@ import numpy
 import logging
 import keyword as python_keywords
 from safe.common.polygon import inside_polygon
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string, remove_double_spaces
 
@@ -65,10 +65,13 @@ def get_function_title(func):
         otherwise what is returned by the function pretty_function_name.
     """
 
+    myTitle = None
     if hasattr(func, 'title'):
-        return func.title
+        myTitle = func.title
     else:
-        return pretty_function_name(func)
+        myTitle = pretty_function_name(func)
+
+    return tr(myTitle)
 
 
 def get_plugins(name=None):
@@ -115,6 +118,7 @@ def get_plugin(name):
     return impact_function
 
 
+# FIXME (Ole): Deprecate this function
 def pretty_function_name(func):
     """Return a human readable name for the function
     if the function has a func.plugin_name use this
@@ -349,7 +353,7 @@ def get_question(hazard_title, exposure_title, func):
     """
 
     function_title = get_function_title(func)
-    return (_('In the event of <i>%(hazard)s</i> how many '
+    return (tr('In the event of <i>%(hazard)s</i> how many '
               '<i>%(exposure)s</i> might <i>%(impact)s</i>')
             % {'hazard': hazard_title.lower(),
                'exposure': exposure_title.lower(),
@@ -584,9 +588,9 @@ def get_plugins_as_table(dict_filter=None):
     # use this list for avoiding wrong order in dict
     atts = ['category', 'subcategory', 'layertype',
                            'datatype', 'unit']
-    header = TableRow([_('Title'), _('ID'), _('Category'),
-                       _('Sub Category'), _('Layer type'), _('Data type'),
-                       _('Unit')],
+    header = TableRow([tr('Title'), tr('ID'), tr('Category'),
+                       tr('Sub Category'), tr('Layer type'), tr('Data type'),
+                       tr('Unit')],
                       header=True)
     table_body.append(header)
 
@@ -653,7 +657,7 @@ def get_plugins_as_table(dict_filter=None):
                        str(cw) + '%', str(cw) + '%', str(cw) + '%',
                        str(cw) + '%']
     table = Table(table_body, col_width=table_col_width)
-    table.caption = _('Available Impact Functions')
+    table.caption = tr('Available Impact Functions')
 
     return table
 
@@ -833,3 +837,36 @@ def get_documentation(func):
     if hasattr(func, limitation):
         retval[limitation] = remove_double_spaces(func.limitation)
     return retval
+
+
+def format_int(x):
+    """Format integer with separator between thousands
+
+    From http://stackoverflow.com/questions/5513615/
+                add-thousands-separators-to-a-number
+
+    # FIXME (Ole)
+    Currently not using locale coz broken
+
+    Instead use this:
+    http://docs.python.org/library/string.html#formatspec
+
+    """
+
+    # This is broken
+    #import locale
+    #locale.setlocale(locale.LC_ALL, '')  # Broken, why?
+    #s = locale.format('%d', x, 1)
+
+    import os
+    lang = os.getenv('LANG')
+
+    s = '{0:,}'.format(x)
+    #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+
+    # Quick solution for the moment
+    if lang == 'id':
+        # Replace commas with dots
+        s = s.replace(',', '.')
+
+    return s

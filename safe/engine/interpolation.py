@@ -8,17 +8,17 @@ import numpy
 
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.numerics import ensure_numeric
 from safe.common.geodesy import Point
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
-#from safe.common.polygon import line_dictionary_to_geometry
 
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometrytype2string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
+from safe.storage.geometry import Polygon
 
 
 def assign_hazard_values_to_exposure_data(hazard, exposure,
@@ -37,13 +37,19 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
              If None (default) the name of the exposure layer is used for
              the returned layer.
        * attribute_name:
-             If hazard layer is of type raster, this is the name for new
+             If hazard layer is of type raster, this will be the name for new
              attribute in the result containing the hazard level.
-             If None (default) the name of hazard is used
+             If None (default) the name of hazard layer is used.
 
-             If hazard layer is of type vector, it is the name of the
-             attribute to transfer from the hazard layer into the result.
-             If None (default) all attributes are transferred.
+             If hazard layer is polygon and exposure layer raster, this will be
+             the name of the new attribute containing the raster value at each
+             point.
+
+             If hazard and exposure layers are both of type vector,
+             this attribute is ignored.
+
+             If hazard and exposure layers are both of type raster,
+             this attribute is ignored.
         * mode:
              Interpolation mode for raster to point interpolation only
 
@@ -91,6 +97,16 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
         Raster-Raster:   Raster data
     """
 
+    # Make sure attribute name can be stored in a shapefile
+    if attribute_name is not None and len(attribute_name) > 10:
+        msg = ('Specified attribute name "%s"\
+         has length = %i. '
+               'To fit into a shapefile it must be at most 10 characters '
+               'long. How about naming it "%s"?' % (attribute_name,
+                                                    len(attribute_name),
+                                                    attribute_name[:10]))
+        raise InaSAFEError(msg)
+
     layer_name, attribute_name = check_inputs(hazard, exposure,
                                               layer_name, attribute_name)
     # Raster-Vector
@@ -105,8 +121,7 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
     # Vector-Vector
     elif hazard.is_vector and exposure.is_vector:
         return interpolate_polygon_vector(hazard, exposure,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
+                                          layer_name=layer_name)
     # Vector-Raster
     elif hazard.is_vector and exposure.is_raster:
         return interpolate_polygon_raster(hazard, exposure,
@@ -156,6 +171,19 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
 
     if hazard.is_raster and attribute_name is None:
         layer_name = hazard.get_name()
+
+    if (exposure.is_raster and hazard.is_vector and hazard.is_polygon_data
+        and attribute_name is None):
+        attribute_name = exposure.get_name()
+
+    if (hazard.is_raster and exposure.is_vector and exposure.is_point_data
+        and attribute_name is None):
+        attribute_name = hazard.get_name()
+
+    # Launder for shape files
+    # FIXME (Ole): Remove when (if) we get rid of the shp format
+    if attribute_name is not None:
+        attribute_name = str(attribute_name[:10])
 
     return layer_name, attribute_name
 
@@ -220,7 +248,7 @@ def interpolate_raster_vector(source, target,
 
 
 def interpolate_polygon_vector(source, target,
-                               layer_name=None, attribute_name=None):
+                               layer_name=None):
     """Interpolate from polygon vector layer to vector data
 
     Args:
@@ -228,8 +256,6 @@ def interpolate_polygon_vector(source, target,
         * target: Vector data set (points or polygons)  - TBA also lines
         * layer_name: Optional name of returned interpolated layer.
               If None the name of target is used for the returned layer.
-        * attribute_name: Name for new attribute.
-              If None (default) the name of source is used
 
     Output
         I: Vector data set; points located as target with values interpolated
@@ -247,25 +273,22 @@ def interpolate_polygon_vector(source, target,
 
     if target.is_point_data:
         R = interpolate_polygon_points(source, target,
-                                       layer_name=layer_name,
-                                       attribute_name=attribute_name)
+                                       layer_name=layer_name)
     elif target.is_line_data:
         R = interpolate_polygon_lines(source, target,
-                                      layer_name=layer_name,
-                                      attribute_name=attribute_name)
+                                      layer_name=layer_name)
     elif target.is_polygon_data:
         # Use polygon centroids
         X = convert_polygons_to_centroids(target)
         P = interpolate_polygon_points(source, X,
-                                       layer_name=layer_name,
-                                       attribute_name=attribute_name)
+                                       layer_name=layer_name)
 
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
         # that of the original polygon
         R = Vector(data=P.get_data(),
                    projection=P.get_projection(),
-                   geometry=X.get_geometry(),
+                   geometry=target.get_geometry(as_geometry_objects=True),
                    name=P.get_name())
     else:
         msg = ('Unknown datatype for polygon2vector interpolation: '
@@ -303,9 +326,10 @@ def interpolate_polygon_raster(source, target,
     verify(source.is_polygon_data)
 
     # Run underlying clipping algorithm
-    polygon_geometry = source.get_geometry()
+    polygon_geometry = source.get_geometry(as_geometry_objects=True)
+
     polygon_attributes = source.get_data()
-    res = clip_grid_by_polygons(target.get_data(),
+    res = clip_grid_by_polygons(target.get_data(scaling=False),
                                 target.get_geotransform(),
                                 polygon_geometry)
 
@@ -361,12 +385,6 @@ def interpolate_raster_vector_points(source, target,
     verify(target.is_vector)
     verify(target.is_point_data)
 
-    # FIXME (Ole): Why can we not remove this ???
-    # It should now be taken care of in the general input_check above
-    # OK - remove when we leave using the form H.interpolate in impact funcs
-    if layer_name is None:
-        layer_name = target.get_name()
-
     # Get raster data and corresponding x and y axes
     A = source.get_data(nan=True)
     longitudes, latitudes = source.get_geometry()
@@ -381,16 +399,11 @@ def interpolate_raster_vector_points(source, target,
     attributes = target.get_data()
 
     # Create new attribute and interpolate
-    # Remove?
-    N = len(target)
-    if attribute_name is None:
-        attribute_name = source.get_name()
-
     try:
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode=mode)
     except (BoundsError, InaSAFEError), e:
-        msg = (_('Could not interpolate from raster layer %(raster)s to '
+        msg = (tr('Could not interpolate from raster layer %(raster)s to '
                  'vector layer %(vector)s. Error message: %(error)s')
                % {'raster': source.get_name(),
                   'vector': target.get_name(),
@@ -398,6 +411,7 @@ def interpolate_raster_vector_points(source, target,
         raise InaSAFEError(msg)
 
     # Add interpolated attribute to existing attributes and return
+    N = len(target)
     for i in range(N):
         attributes[i][attribute_name] = values[i]
 
@@ -408,8 +422,7 @@ def interpolate_raster_vector_points(source, target,
 
 
 def interpolate_polygon_points(source, target,
-                               layer_name=None,
-                               attribute_name=None):
+                               layer_name=None):
     """Interpolate from polygon vector layer to point vector data
 
     Args:
@@ -417,12 +430,14 @@ def interpolate_polygon_points(source, target,
         * target: Vector data set (points)
         * layer_name: Optional name of returned interpolated layer.
               If None the name of target is used for the returned layer.
-        * attribute_name: Name for new attribute.
-              If None (default) the name of source is used
 
     Output
         I: Vector data set; points located as target with values interpolated
         from source
+
+    Note
+        All attribute names from polygons are transferred to the points
+        that are inside them.
     """
 
     msg = ('Vector layer to interpolate to must be point geometry. '
@@ -435,16 +450,7 @@ def interpolate_polygon_points(source, target,
     verify(layer_name is None or
            isinstance(layer_name, basestring), msg)
 
-    msg = ('Attribute must be either a string or None. I got %s'
-           % (str(type(target)))[1:-1])
-    verify(attribute_name is None or
-           isinstance(attribute_name, basestring), msg)
-
     attribute_names = source.get_attribute_names()
-    if attribute_name is not None:
-        msg = ('Requested attribute "%s" did not exist in %s'
-               % (attribute_name, attribute_names))
-        verify(attribute_name in attribute_names, msg)
 
     #----------------
     # Start algorithm
@@ -456,43 +462,37 @@ def interpolate_polygon_points(source, target,
     original_geometry = target.get_geometry()  # Geometry for returned data
 
     # Extract polygon features
-    geom = source.get_geometry()
+    geom = source.get_geometry(as_geometry_objects=True)
     data = source.get_data()
     verify(len(geom) == len(data))
 
+    # Include polygon_id as attribute
+    attribute_names.append('polygon_id')
+    attribute_names.append(DEFAULT_ATTRIBUTE)
+
     # Augment point features with empty attributes from polygon
     for a in attributes:
-        if attribute_name is None:
-            # Use all attributes
-            for key in attribute_names:
-                a[key] = None
-        else:
-            # Use only requested attribute
-            # FIXME (Ole): Test for this is not finished
-            a[attribute_name] = None
-
-        # Always create default attribute flagging if point was
-        # inside any of the polygons
-        a[DEFAULT_ATTRIBUTE] = None
+        # Create all attributes that exist in source
+        for key in attribute_names:
+            a[key] = None
 
     # Traverse polygons and assign attributes to points that fall inside
     for i, polygon in enumerate(geom):
-        if attribute_name is None:
-            # Use all attributes
-            poly_attr = data[i]
-        else:
-            # Use only requested attribute
-            poly_attr = {attribute_name: data[i][attribute_name]}
+        # Carry all attributes across from source
+        poly_attr = data[i]
 
         # Assign default attribute to indicate points inside
         poly_attr[DEFAULT_ATTRIBUTE] = True
 
         # Clip data points by polygons and add polygon attributes
-        indices = inside_polygon(points, polygon)
+        indices = inside_polygon(points, polygon.outer_ring,
+                                 holes=polygon.inner_rings)
+
         for k in indices:
             for key in poly_attr:
                 # Assign attributes from polygon to points
                 attributes[k][key] = poly_attr[key]
+            attributes[k]['polygon_id'] = i  # Store id for associated polygon
 
     # Create new Vector instance and return
     V = Vector(data=attributes,
@@ -503,8 +503,7 @@ def interpolate_polygon_points(source, target,
 
 
 def interpolate_polygon_lines(source, target,
-                              layer_name=None,
-                              attribute_name=None):
+                              layer_name=None):
     """Interpolate from polygon vector layer to line vector data
 
     Args:
@@ -512,8 +511,6 @@ def interpolate_polygon_lines(source, target,
         * target: Vector data set (lines)
         * layer_name: Optional name of returned interpolated layer.
               If None the name of target is used for the returned layer.
-        * attribute_name: Name for new attribute.
-              If None (default) the name of source is used
 
     Returns:
         Vector data set of lines inside polygons
@@ -522,10 +519,6 @@ def interpolate_polygon_lines(source, target,
 
            Lines not in any polygon are ignored.
     """
-
-    # Remove?
-    if attribute_name is None:
-        attribute_name = source.get_name()
 
     # Extract line features
     lines = target.get_geometry()
@@ -594,21 +587,50 @@ def interpolate_raster_raster(source, target):
 
 
 # FIXME (Ole): Not sure this is the place for this function
-def make_circular_polygon(center, radius):
-    """Create circula polygon in geographic coordinates
+def make_circular_polygon(centers, radii, attributes=None):
+    """Create circular polygon in geographic coordinates
 
     Args:
-        center: list of longitude, latitude
-        radius: desired approximate radius in meters
+        centers: list of (longitude, latitude)
+        radii: desired approximate radii in meters (must be
+               monotonically ascending).
+        Can be either one number or list of numbers
+        attributes (optional): Attributes for each center
     Returns
         Vector polygon layer representing circle in WGS84
     """
 
-    # FIXME (Ole): Input checks here
-    p = Point(longitude=center[0], latitude=center[1])
-    C = p.generate_circle(radius)
-    Z = Vector(geometry=[C],  # List with one element containing the polygon
-               data=[{'Radius': radius}],
+    if not isinstance(radii, list):
+        radii = [radii]
+
+    # FIXME (Ole): Check that radii are monotonically increasing
+
+    circles = []
+    new_attributes = []
+    for i, center in enumerate(centers):
+        p = Point(longitude=center[0], latitude=center[1])
+        inner_rings = None
+        for radius in radii:
+            # Generate circle polygon
+            C = p.generate_circle(radius)
+            circles.append(Polygon(outer_ring=C, inner_rings=inner_rings))
+
+            # Store current circle and inner ring for next poly
+            inner_rings = [C]
+
+            # Carry attributes for center forward
+            attr = {}
+            if attributes is not None:
+                for key in attributes[i]:
+                    attr[key] = attributes[i][key]
+
+            # Add radius to this ring
+            attr['Radius'] = radius
+
+            new_attributes.append(attr)
+
+    Z = Vector(geometry=circles,  # List with circular polygons
+               data=new_attributes,  # Associated attributes
                geometry_type='polygon')
 
     return Z

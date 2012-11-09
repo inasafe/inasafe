@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -22,9 +21,8 @@ import os
 import sys
 import tempfile
 import logging
-from subprocess import (call, CalledProcessError)
 
-from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtCore import QCoreApplication, QProcess
 from qgis.core import (QgsCoordinateTransform,
                        QgsCoordinateReferenceSystem,
                        QgsRectangle,
@@ -39,6 +37,7 @@ from safe_qgis.safe_interface import (verify,
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
+                           CallGDALError,
                            InvalidProjectionException)
 
 LOGGER = logging.getLogger(name='InaSAFE')
@@ -57,7 +56,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "ClipperTest"
+    myContext = "@default"
     return QCoreApplication.translate(myContext, theText)
 
 
@@ -96,8 +95,13 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
             theExtraKeywords=theExtraKeywords,
             explodeMultipart=explodeMultipart)
     else:
-        return _clipRasterLayer(theLayer, theExtent, theCellSize,
-            theExtraKeywords=theExtraKeywords)
+        try:
+            return _clipRasterLayer(theLayer, theExtent, theCellSize,
+                theExtraKeywords=theExtraKeywords)
+        except CallGDALError, e:
+            raise e
+        except IOError, e:
+            raise e
 
 
 def _clipVectorLayer(theLayer, theExtent,
@@ -137,8 +141,10 @@ def _clipVectorLayer(theLayer, theExtent,
                        str(theLayer.type()))
         raise InvalidParameterException(myMessage)
 
+    #myHandle, myFilename = tempfile.mkstemp('.sqlite', 'clip_',
+    #    temp_dir())
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
-        temp_dir())
+                                            temp_dir())
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
@@ -163,7 +169,7 @@ def _clipVectorLayer(theLayer, theExtent,
                        'layer "%s"' % theLayer.source())
         raise Exception(myMessage)
 
-    # get the layer field list, select by our extent then write to disk
+    # Get the layer field list, select by our extent then write to disk
     # .. todo:: FIXME - for different geometry types we should implement
     #    different clipping behaviour e.g. reject polygons that
     #    intersect the edge of the bbox. Tim
@@ -182,6 +188,7 @@ def _clipVectorLayer(theLayer, theExtent,
         myFieldList,
         theLayer.wkbType(),
         myGeoCrs,
+        #'SQLite')  # FIXME (Ole): This works but is far too slow
         'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
         myMessage = tr('Error when creating shapefile: <br>Filename:'
@@ -362,29 +369,23 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                               'Versions/1.9/Programs/')
     myCommand = myExecutablePrefix + myCommand
 
-    # For debugging only
-    # myCommand = myExecutablePrefix + myCommand
-    # myFile = file('C:/temp/command.txt', 'wt')
-    # myFile.write(myCommand)
-    # myFile.close()
-    # Now run GDAL warp scottie...
     LOGGER.debug(myCommand)
-    try:
-        myResult = call(myCommand, shell=True)
-        del myResult
-    except CalledProcessError, e:
+    myResult = QProcess().execute(myCommand)
+
+    # For QProcess exit codes see
+    # http://qt-project.org/doc/qt-4.8/qprocess.html#execute
+    if myResult == -2:  # cannot be started
+        myMessageDetail = tr('Process could not be started.')
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
-                     % (myCommand, str(e)))
-        # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
-        if sys.platform == 'darwin':  # Mac OS X
-            if 'Errno 4' in str(e):
-                # continue as the error seems to be non critical
-                pass
-            else:
-                raise Exception(myMessage)
-        else:
-            raise Exception(myMessage)
+                     % (myCommand, myMessageDetail))
+        raise CallGDALError(myMessage)
+    elif myResult == -1:  # process crashed
+        myMessageDetail = tr('Process could not be started.')
+        myMessage = tr('<p>Error while executing the following shell command:'
+                       '</p><pre>%s</pre><p>Error message: %s'
+                       % (myCommand, myMessageDetail))
+        raise CallGDALError(myMessage)
 
     # .. todo:: Check the result of the shell call is ok
     myKeywordIO = KeywordIO()

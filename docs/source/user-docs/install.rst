@@ -42,7 +42,7 @@ To do this open the plugin manager (:menuselection:`Plugins --> Manage plugins..
 and type :samp:`insafe` into the filter box. You should see the InaSAFE plugin
 appear in the list. Now tick the checkbox next to it to enable the plugin.
 
-.. figure:: ../_static/plugin-manager.png
+.. figure:: ../static/plugin-manager.png
    :align: center
 
 

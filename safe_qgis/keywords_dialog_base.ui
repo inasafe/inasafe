@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
-    <height>601</height>
+    <width>515</width>
+    <height>667</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>InaSAFE - Keyword Editor</string>
@@ -17,13 +23,44 @@
    <iconset resource="resources.qrc">
     <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="lblLayerName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="grpSimple">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>Quick edit</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="4" column="1">
+       <widget class="QComboBox" name="cboFemaleRatioAttribute"/>
+      </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="cboSubcategory">
         <property name="toolTip">
@@ -31,20 +68,26 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblTitle">
-        <property name="text">
-         <string>Title</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="lblSubcategory">
         <property name="text">
          <string>Subcategory</string>
         </property>
         <property name="buddy">
          <cstring>cboSubcategory</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="cboAggregationAttribute"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lblAggregationAttribute">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Aggregation attribute</string>
         </property>
        </widget>
       </item>
@@ -54,9 +97,6 @@
          <string>Category</string>
         </property>
        </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="leTitle"/>
       </item>
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -92,23 +132,50 @@
         </item>
        </layout>
       </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="cboAggregationAttribute"/>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="leTitle"/>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lblAggregationAttribute">
-        <property name="enabled">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblTitle">
+        <property name="text">
+         <string>Title</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lblFemaleRatioAttribute">
+        <property name="text">
+         <string>Female ratio attribute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="lblFemaleRatioDefault">
+        <property name="text">
+         <string>Female ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QDoubleSpinBox" name="dsbFemaleRatioDefault">
+        <property name="accelerated">
          <bool>true</bool>
         </property>
-        <property name="text">
-         <string>Attribute</string>
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.000000000000000</double>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item>
     <widget class="QPushButton" name="pbnAdvanced">
      <property name="text">
       <string>Show advanced editor</string>
@@ -118,28 +185,14 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblLayerName">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
+   <item>
     <widget class="QGroupBox" name="grpAdvanced">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>Advanced editor</string>
      </property>
@@ -311,6 +364,25 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>
@@ -331,18 +403,66 @@
  </resources>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>KeywordsDialogBase</receiver>
-   <slot>accept()</slot>
+   <sender>radPredefined</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frameUserDefined</receiver>
+   <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>570</y>
+     <x>153</x>
+     <y>343</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>127</x>
+     <y>450</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radUserDefined</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>framePredefined</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>500</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>82</x>
+     <y>397</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radPredefined</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>framePredefined</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>102</x>
+     <y>397</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radUserDefined</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frameUserDefined</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>500</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>450</y>
     </hint>
    </hints>
   </connection>
@@ -353,8 +473,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>570</y>
+     <x>343</x>
+     <y>657</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -363,66 +483,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>radPredefined</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>frameUserDefined</receiver>
-   <slot>setHidden(bool)</slot>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>KeywordsDialogBase</receiver>
+   <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>243</y>
+     <x>275</x>
+     <y>657</y>
     </hint>
     <hint type="destinationlabel">
-     <x>101</x>
-     <y>343</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radUserDefined</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>framePredefined</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>331</x>
-     <y>243</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>56</x>
-     <y>262</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radPredefined</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>framePredefined</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>95</x>
-     <y>243</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>76</x>
-     <y>262</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radUserDefined</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>frameUserDefined</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>362</x>
-     <y>243</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>140</x>
-     <y>343</y>
+     <x>157</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>

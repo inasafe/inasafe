@@ -3,10 +3,14 @@
 .. tip:: Provides functionality for manipulation of vector data. The data can
    be in-memory or file based.
 
+Resources for understanding vector data formats and the OGR library:
+Treatise on vector data model: http://www.esri.com/news/arcuser/0401/topo.html
+OGR C++ reference: http://www.gdal.org/ogr
+
+
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
 __license__ = "GPL"
@@ -14,30 +18,34 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import sys
 import numpy
 import logging
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.utilities import verify
-from safe.common.dynamic_translations import names as internationalised_titles
+from safe.common.utilities import (verify,
+                                   ugettext as safe_tr)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from projection import Projection
+from geometry import Polygon
 from utilities import DRIVER_MAP, TYPE_MAP
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
-from utilities import array2wkt
+from utilities import array2line
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
+from utilities import get_ringdata, get_polygondata
+from utilities import rings_equal
 
 LOGGER = logging.getLogger('InaSAFE')
-_pseudo_inf = float(999999999999999999999999)
+_pseudo_inf = float(99999999)
 
 
 class Vector(Layer):
@@ -45,8 +53,8 @@ class Vector(Layer):
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None, name='', keywords=None, style_info=None,
-                 sublayer=None):
+                 geometry_type=None, name=None, keywords=None,
+                 style_info=None, sublayer=None):
         """Initialise object with either geometry or filename
 
         Args:
@@ -64,8 +72,7 @@ class Vector(Layer):
                 Valid options are 'point', 'line', 'polygon' or
                 the ogr types: 1, 2, 3.
                 If None, a geometry_type will be inferred from the data.
-            * name: Optional name for layer.
-                Only used if geometry is provided as a numeric array.
+            * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                 layer. When the layer is stored, these keywords will
                 be written into an associated file with extension
@@ -103,6 +110,10 @@ class Vector(Layer):
 
             Each polygon or line feature take the form of an Nx2 array
             representing vertices where line segments are joined.
+
+            If polygons have holes, their geometry must be passed in as a
+            list of polygon geometry objects
+            (as defined in module geometry.py)
         """
 
         # Invoke common layer constructor
@@ -132,9 +143,18 @@ class Vector(Layer):
 
             msg = 'Geometry must be a sequence'
             verify(is_sequence(geometry), msg)
-            self.geometry = geometry
 
-            self.geometry_type = get_geometry_type(geometry, geometry_type)
+            if len(geometry) > 0 and isinstance(geometry[0], Polygon):
+                self.geometry_type = ogr.wkbPolygon
+                self.geometry = geometry
+            else:
+                self.geometry_type = get_geometry_type(geometry, geometry_type)
+
+                # Convert to objects if input is a list of simple arrays
+                if self.is_polygon_data:
+                    self.geometry = [Polygon(outer_ring=x) for x in geometry]
+                else:
+                    self.geometry = geometry
 
             if data is None:
                 # Generate default attribute as OGR will do that anyway
@@ -153,7 +173,38 @@ class Vector(Layer):
                        'must be the same')
                 verify(len(geometry) == len(data), msg)
 
-            # FIXME: Need to establish extent here
+            # Establish extent
+            if len(geometry) == 0:
+                # Degenerate layer
+                self.extent = [0, 0, 0, 0]
+                return
+
+            # Compute bounding box for each geometry type
+            minx = miny = sys.maxint
+            maxx = maxy = -minx
+            if self.is_point_data:
+                A = numpy.array(self.get_geometry())
+                minx = min(A[:, 0])
+                maxx = max(A[:, 0])
+                miny = min(A[:, 1])
+                maxy = max(A[:, 1])
+            elif self.is_line_data:
+                for g in self.get_geometry():
+                    A = numpy.array(g)
+                    minx = min(minx, min(A[:, 0]))
+                    maxx = max(maxx, max(A[:, 0]))
+                    miny = min(miny, min(A[:, 1]))
+                    maxy = max(maxy, max(A[:, 1]))
+            elif self.is_polygon_data:
+                # Do outer ring only
+                for g in self.get_geometry(as_geometry_objects=False):
+                    A = numpy.array(g)
+                    minx = min(minx, min(A[:, 0]))
+                    maxx = max(maxx, max(A[:, 0]))
+                    miny = min(miny, min(A[:, 1]))
+                    maxy = max(maxy, max(A[:, 1]))
+
+            self.extent = [minx, maxx, miny, maxy]
 
     def __str__(self):
         """Render as name, number of features, geometry type
@@ -212,8 +263,13 @@ class Vector(Layer):
             return False
 
         # Check geometry
-        geom0 = self.get_geometry()
-        geom1 = other.get_geometry()
+        if self.is_polygon_data:
+            geom0 = self.get_geometry(as_geometry_objects=True)
+            geom1 = other.get_geometry(as_geometry_objects=True)
+        else:
+            geom0 = self.get_geometry()
+            geom1 = other.get_geometry()
+
         if len(geom0) != len(geom1):
             return False
 
@@ -221,12 +277,31 @@ class Vector(Layer):
             if not numpy.allclose(geom0, geom1,
                                   rtol=rtol, atol=atol):
                 return False
-        else:
-            # Line or Polygon data
+        elif self.is_line_data:
+            # Check vertices of each line
             for i in range(len(geom0)):
-                if not numpy.allclose(geom0[i], geom1[i],
-                                      rtol=rtol, atol=atol):
+
+                if not rings_equal(geom0[i], geom1[i], rtol=rtol, atol=atol):
                     return False
+
+        elif self.is_polygon_data:
+            # Check vertices of outer and inner rings
+            for i in range(len(geom0)):
+
+                x = geom0[i].outer_ring
+                y = geom1[i].outer_ring
+                if not rings_equal(x, y, rtol=rtol, atol=atol):
+                    return False
+
+                for j, ring0 in enumerate(geom0[i].inner_rings):
+                    ring1 = geom1[i].inner_rings[j]
+                    if not rings_equal(ring0, ring1, rtol=rtol, atol=atol):
+                        return False
+
+        else:
+            msg = ('== not implemented for geometry type: %s'
+                   % self.geometry_type)
+            raise InaSAFEError(msg)
 
         # Check keys for attribute values
         x = self.get_data()
@@ -295,6 +370,11 @@ class Vector(Layer):
         * danieljlewis.org/files/2010/09/basicpythonmap.pdf
         * http://invisibleroads.com/tutorials/gdal-shapefile-points-save.html
         * http://www.packtpub.com/article/geospatial-data-python-geometry
+
+        Limitation of the Shapefile are documented in
+        http://resources.esri.com/help/9.3/ArcGISDesktop/com/Gp_ToolRef/
+        geoprocessing_tool_reference/
+        geoprocessing_considerations_for_shapefile_output.htm
         """
 
         basename = os.path.splitext(filename)[0]
@@ -309,15 +389,15 @@ class Vector(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            if title in internationalised_titles:
-                title = internationalised_titles[title]
+            title = safe_tr(title)
 
             vectorname = title
         else:
             # Use basename without leading directories as name
             vectorname = os.path.split(basename)[-1]
 
-        self.name = vectorname
+        if self.name is None:
+            self.name = vectorname
         self.filename = filename
         self.geometry_type = None  # In case there are no features
 
@@ -352,9 +432,6 @@ class Vector(Layer):
 
         layer.ResetReading()
 
-        # Get number of features
-        # N = layer.GetFeatureCount()
-
         # Extract coordinates and attributes for all features
         geometry = []
         data = []
@@ -370,54 +447,29 @@ class Vector(Layer):
                 if self.is_point_data:
                     geometry.append((G.GetX(), G.GetY()))
                 elif self.is_line_data:
-                    M = G.GetPointCount()
-                    coordinates = []
-                    for j in range(M):
-                        coordinates.append((G.GetX(j), G.GetY(j)))
-
-                    # Record entire line as an Mx2 numpy array
-                    geometry.append(numpy.array(coordinates,
-                                                dtype='d',
-                                                copy=False))
+                    ring = get_ringdata(G)
+                    geometry.append(ring)
                 elif self.is_polygon_data:
-                    ring = G.GetGeometryRef(0)
-                    M = ring.GetPointCount()
-                    coordinates = []
-                    for j in range(M):
-                        coordinates.append((ring.GetX(j), ring.GetY(j)))
-
-                    # Record entire polygon ring as an Mx2 numpy array
-                    geometry.append(numpy.array(coordinates,
-                                                dtype='d',
-                                                copy=False))
+                    polygon = get_polygondata(G)
+                    geometry.append(polygon)
                 elif self.is_multi_polygon_data:
-                    msg = ('Got geometry type Multipolygon (%s) for filename '
-                           '%s which is not yet supported. Only point, line '
-                           'and polygon geometries are supported. However, '
-                           'you can use QGIS functionality to convert '
-                           'multipart vector data to singlepart (Vector -> '
-                           'Geometry Tools -> Multipart to Singleparts and '
-                           'use the resulting dataset.'
-                           % (ogr.wkbMultiPolygon, filename))
-                    raise ReadLayerError(msg)
-
-                #    # FIXME: Unpact multiple polygons to simple polygons
-                #    # For hints on how to unpack see
-#http://osgeo-org.1803224.n2.nabble.com/
-#gdal-dev-Shapefile-Multipolygon-with-interior-rings-td5391090.html
-#http://osdir.com/ml/gdal-development-gis-osgeo/2010-12/msg00107.html
-
-                #    ring = G.GetGeometryRef(0)
-                #    M = ring.GetPointCount()
-                #    coordinates = []
-                #    for j in range(M):
-                #        coordinates.append((ring.GetX(j), ring.GetY(j)))
-
-                #    # Record entire polygon ring as an Mx2 numpy array
-                #    geometry.append(numpy.array(coordinates,
-                #                                dtype='d',
-                #                                copy=False))
-
+                    try:
+                        G = ogr.ForceToPolygon(G)
+                    except:
+                        msg = ('Got geometry type Multipolygon (%s) for '
+                               'filename %s and could not convert it to '
+                               'singlepart. However, you can use QGIS '
+                               'functionality to convert multipart vector '
+                               'data to singlepart (Vector -> Geometry Tools '
+                               '-> Multipart to Singleparts and use the '
+                               'resulting dataset.'
+                               % (ogr.wkbMultiPolygon, filename))
+                        raise ReadLayerError(msg)
+                    else:
+                        # Read polygon data as single part
+                        self.geometry_type = ogr.wkbPolygon
+                        polygon = get_polygondata(G)
+                        geometry.append(polygon)
                 else:
                     msg = ('Only point, line and polygon geometries are '
                            'supported. '
@@ -451,7 +503,6 @@ class Vector(Layer):
                 #print 'Field', name, feature_type, j, fields[name]
 
             data.append(fields)
-
         # Store geometry coordinates as a compact numeric array
         self.geometry = geometry
         self.data = data
@@ -497,7 +548,10 @@ class Vector(Layer):
             layername = sublayer
 
         # Get vector data
-        geometry = self.get_geometry()
+        if self.is_polygon_data:
+            geometry = self.get_geometry(as_geometry_objects=True)
+        else:
+            geometry = self.get_geometry()
         data = self.get_data()
 
         N = len(geometry)
@@ -590,12 +644,22 @@ class Vector(Layer):
                 x = float(geometry[i][0])
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
-            elif self.is_polygon_data:
-                wkt = array2wkt(geometry[i], geom_type='POLYGON')
-                geom = ogr.CreateGeometryFromWkt(wkt)
             elif self.is_line_data:
-                wkt = array2wkt(geometry[i], geom_type='LINESTRING')
-                geom = ogr.CreateGeometryFromWkt(wkt)
+                geom = array2line(geometry[i],
+                                  geometry_type=ogr.wkbLineString)
+            elif self.is_polygon_data:
+                # Create polygon geometry
+                geom = ogr.Geometry(ogr.wkbPolygon)
+
+                # Add outer ring
+                linear_ring = array2line(geometry[i].outer_ring,
+                                         geometry_type=ogr.wkbLinearRing)
+                geom.AddGeometry(linear_ring)
+
+                # Add inner rings if any
+                for A in geometry[i].inner_rings:
+                    geom.AddGeometry(array2line(A,
+                                     geometry_type=ogr.wkbLinearRing))
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise WriteLayerError(msg)
@@ -653,8 +717,13 @@ class Vector(Layer):
         This copy will be equal to self in the sense defined by __eq__
         """
 
+        if self.is_polygon_data:
+            geometry = self.get_geometry(copy=True, as_geometry_objects=True)
+        else:
+            geometry = self.get_geometry(copy=True)
+
         return Vector(data=self.get_data(copy=True),
-                      geometry=self.get_geometry(copy=True),
+                      geometry=geometry,
                       projection=self.get_projection(),
                       keywords=self.get_keywords())
 
@@ -726,7 +795,7 @@ class Vector(Layer):
         """
         return geometrytype2string(self.geometry_type)
 
-    def get_geometry(self, copy=False):
+    def get_geometry(self, copy=False, as_geometry_objects=False):
         """Return geometry for vector layer.
 
         Depending on the feature type, geometry is
@@ -737,12 +806,26 @@ class Vector(Layer):
         line              list of arrays of coordinates
         polygon           list of arrays of coordinates
 
+        Optional boolean argument as_geometry_objects will change the return
+        value to a list of geometry objects rather than a list of arrays.
+        This currently only applies to polygon geometries
         """
 
         if copy:
-            return copy_module.deepcopy(self.geometry)
+            geometry = copy_module.deepcopy(self.geometry)
         else:
-            return self.geometry
+            geometry = self.geometry
+
+        if self.is_polygon_data:
+            if not as_geometry_objects:
+                geometry = [p.outer_ring for p in geometry]
+        else:
+            if as_geometry_objects:
+                msg = ('Argument as_geometry_objects can currently '
+                       'be True only for polygon data')
+                raise InaSAFEError(msg)
+
+        return geometry
 
     def get_bounding_box(self):
         """Get bounding box coordinates for vector layer.

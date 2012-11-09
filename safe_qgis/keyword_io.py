@@ -7,7 +7,6 @@
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
 __license__ = "GPL"
@@ -129,6 +128,25 @@ class KeywordIO(QObject):
         except:
             raise
 
+    def appendKeywords(self, theLayer, theKeywords):
+        """Write keywords for a datasource.
+
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+            * theKeywords - a dict containing all the keywords to be added
+              for the layer.
+        Returns:
+            None.
+        Raises:
+            None
+        """
+        try:
+            myKeywords = self.readKeywords(theLayer)
+        except HashNotFoundException:
+            myKeywords = {}
+        myKeywords.update(theKeywords)
+        self.writeKeywords(theLayer, myKeywords)
+
     def copyKeywords(self, theSourceLayer,
                      theDestinationFile, theExtraKeywords=None):
         """Helper to copy the keywords file from a source dataset
@@ -181,6 +199,45 @@ class KeywordIO(QObject):
                    (theSourceLayer.source(), myNewDestination, str(e)))
             raise Exception(myMessage)
         return
+
+    def clearKeywords(self, theLayer):
+        """convenience method to clear a files keywords
+
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+        Returns:
+            None.
+        Raises:
+            None
+        """
+
+        self.writeKeywords(theLayer, dict())
+
+    def deleteKeyword(self, theLayer, theKeyword):
+        """Read keywords for a datasource and return them as a dictionary.
+        This is a wrapper method that will 'do the right thing' to fetch
+        keywords for the given datasource. In particular, if the datasource
+        is remote (e.g. a database connection) it will fetch the keywords from
+        the keywords store.
+
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+            * theKeyword - the specified keyword will be deleted
+              from the keywords dict.
+        Returns:
+            True if the keyword was sucessfully delete. False otherwise
+        Raises:
+            Propogates exception from the underlying reader delegate.
+        """
+
+        try:
+            myKeywords = self.readKeywords(theLayer)
+            myKeywords.pop(theKeyword)
+            self.writeKeywords(theLayer, myKeywords)
+            return True
+        except (HashNotFoundException, KeyError):
+            return False
+
 # methods below here should be considered private
 
     def defaultKeywordDbPath(self):
@@ -236,7 +293,7 @@ class KeywordIO(QObject):
         try:
             self.connection = sqlite.connect(self.keywordDbPath)
         except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             raise
 
     def closeConnection(self):
@@ -272,25 +329,26 @@ class KeywordIO(QObject):
             myCursor = self.connection.cursor()
             myCursor.execute('SELECT SQLITE_VERSION()')
             myData = myCursor.fetchone()
-            #print "SQLite version: %s" % myData
+            LOGGER.debug("SQLite version: %s" % myData)
             # Check if we have some tables, if not create them
             mySQL = 'select sql from sqlite_master where type = \'table\';'
             myCursor.execute(mySQL)
             myData = myCursor.fetchone()
-            #print "Tables: %s" % myData
+            LOGGER.debug("Tables: %s" % myData)
             if myData is None:
-                #print 'No tables found'
+                LOGGER.debug('No tables found')
                 mySQL = ('create table keyword (hash varchar(32) primary key,'
                          'dict text);')
-                print mySQL
+                LOGGER.debug(mySQL)
                 myCursor.execute(mySQL)
-                myData = myCursor.fetchone()
+                #myData = myCursor.fetchone()
+                myCursor.fetchone()
             else:
-                #print 'Keywords table already exists'
-                pass
+                LOGGER.debug('Keywords table already exists')
+
             return myCursor
         except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             raise
 
     def areKeywordsFileBased(self, theLayer):
@@ -376,10 +434,10 @@ class KeywordIO(QObject):
             myCursor.execute(mySQL)
             self.connection.commit()
         except sqlite.Error, e:
-            print "SQLITE Error %s:" % e.args[0]
+            LOGGER.debug("SQLITE Error %s:" % e.args[0])
             self.connection.rollback()
         except Exception, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             self.connection.rollback()
             raise
         finally:
@@ -432,10 +490,10 @@ class KeywordIO(QObject):
                              (sqlite.Binary(myPickle), myHash))
                 self.connection.commit()
         except sqlite.Error, e:
-            print "SQLITE Error %s:" % e.args[0]
+            LOGGER.debug("SQLITE Error %s:" % e.args[0])
             self.connection.rollback()
         except Exception, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             self.connection.rollback()
             raise
         finally:
@@ -487,9 +545,9 @@ class KeywordIO(QObject):
                 raise KeywordNotFoundException('No hash found for %s' % myHash)
 
         except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
         except Exception, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             raise
         finally:
             self.closeConnection()

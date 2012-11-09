@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -24,6 +23,8 @@ from PyQt4.QtCore import pyqtSignature
 from safe_qgis.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.help import Help
 from safe_qgis.keyword_io import KeywordIO
+from safe_qgis.safe_interface import get_version
+from safe_qgis.safe_interface import DEFAULTS
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -58,7 +59,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.setWindowTitle(self.tr('InaSAFE %s Options' % __version__))
+        self.setWindowTitle(self.tr('InaSAFE %s Options' % get_version()))
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -107,8 +108,13 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxClipToViewport.setChecked(myFlag)
 
         myFlag = mySettings.value(
-                            'inasafe/showPostProcessingLayers', False).toBool()
+                            'inasafe/showPostProcLayers', False).toBool()
         self.cbxShowPostprocessingLayers.setChecked(myFlag)
+
+        myRatio = mySettings.value(
+            'inasafe/defaultFemaleRatio',
+            DEFAULTS['FEM_RATIO']).toDouble()
+        self.dsbFemaleRatioDefault.setValue(myRatio[0])
 
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
@@ -136,8 +142,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxHideExposure.isChecked())
         mySettings.setValue('inasafe/clipToViewport',
                             self.cbxClipToViewport.isChecked())
-        mySettings.setValue('inasafe/showPostProcessingLayers',
-            self.cbxShowPostprocessingLayers.isChecked())
+        mySettings.setValue('inasafe/showPostProcLayers',
+                            self.cbxShowPostprocessingLayers.isChecked())
+        mySettings.setValue('inasafe/defaultFemaleRatio',
+                            self.dsbFemaleRatioDefault.value())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
 
@@ -145,7 +153,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """Load the help text for the options safe_qgis"""
         if not self.helpDialog:
             self.helpDialog = Help(self.iface.mainWindow(), 'options')
-        self.helpDialog.showMe()
 
     def accept(self):
         """Method invoked when ok button is clicked
