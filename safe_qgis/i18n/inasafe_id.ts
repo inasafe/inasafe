@@ -211,29 +211,34 @@
 <context>
     <name>DOCK</name>
     <message>
-        <location filename="test_dock.py" line="415"/>
+        <location filename="test_dock.py" line="416"/>
         <source>Entire area</source>
         <translation>Area keseluruhan</translation>
     </message>
     <message>
-        <location filename="test_dock.py" line="416"/>
+        <location filename="test_dock.py" line="417"/>
         <source>A flood in Jakarta</source>
         <translation>Banjir di Jakarta</translation>
     </message>
     <message>
-        <location filename="test_dock.py" line="417"/>
+        <location filename="test_dock.py" line="419"/>
         <source>Essential buildings</source>
         <translation>Gedung-gedung penting</translation>
     </message>
     <message>
-        <location filename="test_dock.py" line="418"/>
+        <location filename="test_dock.py" line="420"/>
         <source>kabupaten jakarta singlepart</source>
         <translation>kabupaten Jakarta singlepart</translation>
     </message>
     <message>
-        <location filename="test_dock.py" line="419"/>
+        <location filename="test_dock.py" line="421"/>
         <source>OSM Building Polygons</source>
         <translation>Poligon gedung OSM</translation>
+    </message>
+    <message>
+        <location filename="test_dock.py" line="418"/>
+        <source>donut</source>
+        <translation>donut</translation>
     </message>
 </context>
 <context>

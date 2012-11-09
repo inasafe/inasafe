@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-08 10:43+0700\n"
+"POT-Creation-Date: 2012-11-09 08:39+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1555,4 +1555,16 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_building_impact.py:149
 msgid "Only buildings available in OpenStreetMap are considered."
+msgstr ""
+
+#: safe/common/dynamic_translations.py:147
+msgid "Medium thresholds"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:148
+msgid "High thresholds"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:149
+msgid "Low thresholds"
 msgstr ""
