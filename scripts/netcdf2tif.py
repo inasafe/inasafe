@@ -6,7 +6,9 @@ This requires scientific python
 import os
 import sys
 import numpy
+import argparse
 from Scientific.IO.NetCDF import NetCDFFile
+
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
@@ -79,29 +81,29 @@ def convert_netcdf2tif(filename, n):
 
     # Write result to tif file
     R = Raster(data=A,
-               projection="""PROJCS["DGN95 / Indonesia TM-3 zone 48.2",
-                             GEOGCS["DGN95",
-                                 DATUM["Datum_Geodesi_Nasional_1995",
-                                     SPHEROID["WGS 84",6378137,298.257223563,
-                                         AUTHORITY["EPSG","7030"]],
-                                     TOWGS84[0,0,0,0,0,0,0],
-                                     AUTHORITY["EPSG","6755"]],
-                                 PRIMEM["Greenwich",0,
-                                     AUTHORITY["EPSG","8901"]],
-                                 UNIT["degree",0.01745329251994328,
-                                     AUTHORITY["EPSG","9122"]],
-                                 AUTHORITY["EPSG","4755"]],
-                             UNIT["metre",1,
-                                 AUTHORITY["EPSG","9001"]],
-                             PROJECTION["Transverse_Mercator"],
-                             PARAMETER["latitude_of_origin",0],
-                             PARAMETER["central_meridian",106.5],
-                             PARAMETER["scale_factor",0.9999],
-                             PARAMETER["false_easting",200000],
-                             PARAMETER["false_northing",1500000],
-                             AUTHORITY["EPSG","23834"],
-                             AXIS["X",EAST],
-                             AXIS["Y",NORTH]]""",
+               #projection="""PROJCS["DGN95 / Indonesia TM-3 zone 48.2",
+               #              GEOGCS["DGN95",
+               #                  DATUM["Datum_Geodesi_Nasional_1995",
+               #                      SPHEROID["WGS 84",6378137,298.257223563,
+               #                          AUTHORITY["EPSG","7030"]],
+               #                      TOWGS84[0,0,0,0,0,0,0],
+               #                      AUTHORITY["EPSG","6755"]],
+               #                  PRIMEM["Greenwich",0,
+               #                      AUTHORITY["EPSG","8901"]],
+               #                  UNIT["degree",0.01745329251994328,
+               #                      AUTHORITY["EPSG","9122"]],
+               #                  AUTHORITY["EPSG","4755"]],
+               #              UNIT["metre",1,
+               #                  AUTHORITY["EPSG","9001"]],
+               #              PROJECTION["Transverse_Mercator"],
+               #              PARAMETER["latitude_of_origin",0],
+               #              PARAMETER["central_meridian",106.5],
+               #              PARAMETER["scale_factor",0.9999],
+               #              PARAMETER["false_easting",200000],
+               #              PARAMETER["false_northing",1500000],
+               #              AUTHORITY["EPSG","23834"],
+               #              AXIS["X",EAST],
+               #              AXIS["Y",NORTH]]""",
                geotransform=geotransform,
                keywords={'category': 'hazard',
                          'subcategory': 'flood',
@@ -118,10 +120,28 @@ def usage():
 
 if __name__ == '__main__':
 
-    if len(sys.argv) != 3:
-        print usage()
-    else:
-        filename = sys.argv[1]
-        N = sys.argv[2]
+    doc = 'Convert FEWS flood forecast data to hazard layers for InaSAFE'
+    parser = argparse.ArgumentParser(description=doc)
+    parser.add_argument('filename', type=str,
+                        help='NetCDF filename from FEWS')
+    parser.add_argument('--hours', metavar='h', type=int, default=6,
+                        help='Number of hours to use from forecast')
+    parser.add_argument('--regions', metavar='regions', type=str,
+                        help=('Administrative areas to be flagged as '
+                              'flooded or not'))
 
-        convert_netcdf2tif(filename, N)
+    args = parser.parse_args()
+    print args
+    print
+
+    #print args.filename
+    #print args.hours
+
+    convert_netcdf2tif(args.filename, args.hours)
+    #if len(sys.argv) != 3:
+    #    print usage()
+    #else:
+    #    filename = sys.argv[1]
+    #    N = sys.argv[2]
+    #
+    #    convert_netcdf2tif(filename, N)

@@ -84,7 +84,11 @@ class Raster(Layer):
 
             self.data = numpy.array(data, dtype='d', copy=False)
 
-            check_geotransform(geotransform)
+            proj4 = self.get_projection(proj4=True)
+            if 'longlat' in proj4 and 'WGS84' in proj4:
+                # This is only implemented for geographic coordinates
+                # Omit check for projected coordinate systems
+                check_geotransform(geotransform)
             self.geotransform = geotransform
 
             self.rows = data.shape[0]
