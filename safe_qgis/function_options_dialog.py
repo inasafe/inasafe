@@ -19,6 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ast
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import QRect, QObject, QVariant
+from PyQt4.QtGui import QTabWidget, QLineEdit, QLabel, QCheckBox, QFormLayout, QWidget
 from function_options_dialog_base import (
             Ui_FunctionOptionsDialogBase)
 
@@ -53,7 +55,10 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE impact function configuration'))
 
-    def buildForm(self, theFunction, params):
+        self.inputs = {}
+
+
+    def buildForm(self, theFunction, theParams):
         """we build a form from impact functions parameter
 
         .. note:: see http://tinyurl.com/pyqt-differences
@@ -64,18 +69,54 @@ class FunctionOptionsDialog(QtGui.QDialog,
         Returns:
            not applicable
         """
-        self.theFunction = theFunction
-        self.keys = params.keys()
-        for key in self.keys:
-            self._addFormItem(key, params[key])
 
-    def _addFormItem(self, theParameterKey, theParameterValue):
+        self.theFunction = theFunction
+
+        if 'postprocessors' in theParams:
+            self._addPostProcessorFormItem(theParams['postprocessors'])
+
+        myParams = filter(lambda x: x[0] != 'postprocessors', theParams.items())
+        for (myKey, myValue) in myParams:
+            self._addFormItem(myKey, myValue)
+
+    def _addPostProcessorFormItem(self, theParams):
+        myTabWidget = QtGui.QTabWidget(self)
+        myTabWidget.setGeometry(QRect(10, 80, 561, 231))
+
+        # create other options tab
+        myOptionTab = QWidget()
+        self.editableImpactFunctionsFormLayout.setParent(myOptionTab)
+        myTabWidget.addTab(myOptionTab, self.tr('options'))
+
+        # create postprocessors tab
+        myPostProcessorsTab = QWidget()
+        myFormLayout = QFormLayout(myPostProcessorsTab)
+        myTabWidget.addTab(myPostProcessorsTab, self.tr('postprocessors'))
+
+
+        for myLabel, myOptions in theParams.items():
+            myCheckBox = QCheckBox()
+            myCheckBox.setText(myLabel)
+
+            myWidget = None
+
+            if myOptions.get('on') is True:
+                myCheckBox.setChecked(True)
+
+            if 'params' in myOptions:
+                myWidget = QLineEdit()
+                myWidget.setText(str(myOptions['params']))
+            
+            myFormLayout.addRow(myCheckBox, myWidget)
+
+
+    def _addFormItem(self, theName, theValue):
         """Add a new form element dynamically from a key value pair.
 
         Args:
-            * theParameterKey: str Mandatory string referencing the key in the
+            * theName: str Mandatory string referencing the key in the
                 function configurable parameters dictionary.
-            * theParameterValue: object Mandatory representing the value
+            * theValue: object Mandatory representing the value
                 referenced by the key.
 
         Returns:
@@ -85,28 +126,37 @@ class FunctionOptionsDialog(QtGui.QDialog,
             None
 
         """
-        myLabel = QtGui.QLabel(self.formLayoutWidget)
-        myLabel.setObjectName(_fromUtf8(theParameterKey + "Label"))
-        myKey = theParameterKey
-        myKey = myKey.replace('_', ' ')
-        myKey = myKey.capitalize()
-        myLabel.setText(safeTr(myKey))
-        myLabel.setToolTip(str(type(theParameterValue)))
+        myLabel = QLabel(self.formLayoutWidget)
+        myLabel.setObjectName(_fromUtf8(theName + "Label"))
+        myLabelText = theName.replace('_', ' ').capitalize()
+        myLabel.setText(safeTr(myLabelText))
+        myLabel.setToolTip(str(type(theValue)))
 
-        myLineEdit = QtGui.QLineEdit(self.formLayoutWidget)
-        myLineEdit.setText(str(theParameterValue))
-        myLineEdit.setObjectName(_fromUtf8(theParameterKey + 'LineEdit'))
+        myLineEdit = QLineEdit(self.formLayoutWidget)
+        myObjectName = _fromUtf8(theName + 'LineEdit')
+        myLineEdit.setObjectName(myObjectName)
         myLineEdit.setCursorPosition(0)
+
+        if isinstance(theValue, list):
+            myValue = ', '.join(map(str, theValue))
+            myLineEdit.setText(myValue)
+            self.inputs[theName] = lambda: map( float, str(myLineEdit.text()).split(',') )
+        else:
+            myValue = str(theValue)
+            myLineEdit.setText(myValue)
+            self.inputs[theName] = lambda: type(theValue)(myLineEdit.text())
 
         self.editableImpactFunctionsFormLayout.addRow(myLabel, myLineEdit)
 
     def setDialogInfo(self, theFunctionID):
+
         myText = ''
         impactFunctionName = theFunctionID
         myText += self.tr('Parameters for impact function "%1" that can be '
                           'modified are:').arg(impactFunctionName)
         myLabel = self.impFuncConfLabel
         myLabel.setText(myText)
+
 
     def accept(self):
         """Override the default accept function
@@ -119,27 +169,45 @@ class FunctionOptionsDialog(QtGui.QDialog,
         Returns:
            not applicable
         """
-        noError = False
+        hasError = False
         myFunction = self.theFunction
-        for key in self.keys:
+
+        for myName, myValueFunc in self.inputs.items():
             try:
-                lineEdit = self.findChild(QtGui.QLineEdit,
-                                          _fromUtf8(key + "LineEdit"))
-                lineEditText = lineEdit.text()
-                convText = str(lineEditText)
-                myFunction.parameters[key] = ast.literal_eval(convText)
-            except SyntaxError:
-                text = ("Unexpected error: SyntaxError. " +
-                        "Please make sure you input the data correctly.")
-                label = self.impFuncConfErrLabel
-                label.setText(text)
-                noError = True
-            except ValueError:
-                text = self.tr("Unexpected error: ValueError" +
-                ". Please consult Python language reference for correct " +
-                "format of data type.")
-                label = self.impFuncConfErrLabel
-                label.setText(text)
-                noError = True
-        if not noError:
+                myFunction.parameters[myName] = myValueFunc()
+            except Exception as myEx:
+                myText = self.tr("Unexpected error: " + str(myEx))
+                self.impFuncConfErrLabel.setText(myText)
+                hasError = True
+
+        if not hasError:
             self.close()
+
+if __name__ == '__main__':
+
+    class FunctionMock:
+        parameters = {}
+
+    theFunctionID = 'Flood Evacuation Function'
+    theFunction = FunctionMock()
+    theParams =  {
+        'thresholds': [1.0],
+        'postprocessors': {
+            'Gender': {'on': True},
+            'Age': {
+                'on': True,
+                'params': {'youth_ratio': 0.263, 'elder_ratio': 0.078, 'adult_ratio': 0.659}
+            }
+        }
+    }
+
+
+    import sys
+    app = QtGui.QApplication(sys.argv)
+
+    a = FunctionOptionsDialog()
+    a.setDialogInfo(theFunctionID)
+    a.buildForm(theFunction, theParams)
+    a.show()
+
+    sys.exit(app.exec_())
