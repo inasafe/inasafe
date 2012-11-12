@@ -12,7 +12,9 @@ from Scientific.IO.NetCDF import NetCDFFile
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
-# FIXME: Move this function to e.g. safe.storage.utilities and unit test
+# FIXME (Ole): Move this function to e.g. safe.storage.utilities and write
+# unit test using test data
+# inasafe_data/test/201211071300_Jakarta_200m_Sobek_Forecast_CCAM.nc
 def convert_netcdf2tif(filename, n):
     """Convert netcdf to tif aggregating firsts n bands
     """
@@ -118,5 +120,8 @@ if __name__ == '__main__':
     # it contains at least one pixel exceeding a specific threshold
     # (e.g. 0.3m).
     # See https://github.com/AIFDR/inasafe/issues/182#issuecomment-10136401
-
+    #
+    # For this function use
+    # def clip_grid_by_polygons(A, geotransform, polygons):
+    # which is available in safe/common/polygons.py
 
