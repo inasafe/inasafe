@@ -814,11 +814,11 @@ def get_documentation(func):
     retval['title'] = get_function_title(func)
 
     if hasattr(func, synopsis):
-        retval[synopsis] = remove_double_spaces(func.synopsis)
+        retval[synopsis] = func.synopsis
     if hasattr(func, actions):
-        retval[actions] = remove_double_spaces(func.actions)
+        retval[actions] = func.actions
     if hasattr(func, citations):
-        retval[citations] = remove_double_spaces(func.citations)
+        retval[citations] = func.citations
     if hasattr(func, detailed_description):
         retval[detailed_description] = func.detailed_description
     if hasattr(func, permissible_hazard_input):

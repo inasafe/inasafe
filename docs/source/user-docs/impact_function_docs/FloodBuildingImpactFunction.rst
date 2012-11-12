@@ -35,7 +35,8 @@ To assess the impacts of inundation on building footprints originating from Open
 
 Citations
 ---------
-Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. Vol 66(2). 2012
+* Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. Vol 66(2). 2012
+
 
 Permissible Exposure Input
 --------------------------
