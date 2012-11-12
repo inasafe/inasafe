@@ -3,7 +3,7 @@
 """
 
 __author__ = 'Ismail Sunni <ismailsunni@yahoo.co.id>'
-__version__ = '0.5.0'
+__version__ = '1.0.0'
 __revision__ = '$Format:%H$'
 __date__ = '17/09/2012'
 __license__ = "GPL"
@@ -23,7 +23,7 @@ def pretty_key(myKey):
     """Return a pretty key for documentation. Just remove underscore and
     capitalize
     :param myKey:string
-    :return:
+    :return: a pretty one
     """
     MyPrettyKey = myKey.replace('_', ' ').title()
     return MyPrettyKey
@@ -31,8 +31,8 @@ def pretty_key(myKey):
 
 def gen_rst_doc(impfunc_doc):
     """Generate .rst file
-    :arg
-        dict_doc : dictionary that contains documentation
+    :param
+        impfunc_doc : dictionary that contains documentation
     :return
         None
     """
@@ -59,10 +59,6 @@ def gen_rst_doc(impfunc_doc):
 
 def gen_impact_func_index(list_unique_identifier=[]):
     """Generate impact function index
-    :arg
-        None
-    :return:
-        None
     """
     content_rst = ''
     title_page = 'Impact Functions Documentation'
@@ -90,23 +86,12 @@ if __name__ == "__main__":
     impfunc_doc = {}
     # Get all impact functions
     plugins_dict = get_plugins()
-    for k, v in plugins_dict.iteritems():
-        print k, v
     for k in plugins_dict.keys():
         impfunc_doc[k] = get_documentation(k)
-    for k, v in impfunc_doc.iteritems():
-        print '======================================================='
-        print k
-        if v is not None:
-            for a, b in v.iteritems():
-                print a, b
-        else:
-            print 'None'
     list_unique_identifier = [x['unique_identifier']
                                 for x in impfunc_doc.itervalues()]
     gen_impact_func_index(list_unique_identifier)
 
     create_dirs(insafe_dir_path + os.sep + doc_dir + os.sep +
                     impact_func_doc_dir)
-    print insafe_dir_path + os.sep + doc_dir + os.sep + impact_func_doc_dir
     gen_rst_doc(impfunc_doc)
