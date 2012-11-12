@@ -216,6 +216,13 @@ run_data_audit:
 	@echo "-----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/data_IP_audit.py
 
+gen_impact_function_doc:
+	@echo
+	@echo "-----------------------------------"
+	@echo "Generate impact functions' documentation"
+	@echo "-----------------------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_impfunc_doc.py
+
 pylint-count:
 	@echo
 	@echo "---------------------------"

@@ -790,7 +790,7 @@ def get_documentation(func):
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
     if func not in plugins_dict.keys():
-        return retval
+        return None
     else:
         func = plugins_dict[func]
 
@@ -802,9 +802,9 @@ def get_documentation(func):
     actions = 'actions'
     # citations must be a list
     citations = 'citations'
-    detailed_desc = 'detailed_desc'
-    permissible_haz_input = 'permissible_haz_input'
-    permissible_exp_input = 'permissible_exp_input'
+    detailed_description = 'detailed_description'
+    permissible_hazard_input = 'permissible_hazard_input'
+    permissible_exposure_input = 'permissible_exposure_input'
     limitation = 'limitation'
 
     if hasattr(func, '__doc__') and func.__doc__:
@@ -817,7 +817,7 @@ def get_documentation(func):
                 retval['author'] = remove_double_spaces(
                                         doc_line[len(author_tag) + 1:])
             elif doc_line.startswith(rating_tag):
-                retval['rating'] = int(doc_line[len(rating_tag) + 1:])
+                retval['rating'] = doc_line[len(rating_tag) + 1:]
     retval['title'] = get_function_title(func)
 
     if hasattr(func, synopsis):
@@ -826,14 +826,15 @@ def get_documentation(func):
         retval[actions] = remove_double_spaces(func.actions)
     if hasattr(func, citations):
         retval[citations] = remove_double_spaces(func.citations)
-    if hasattr(func, detailed_desc):
-        retval[detailed_desc] = remove_double_spaces(func.detailed_desc)
-    if hasattr(func, permissible_haz_input):
-        retval[permissible_haz_input] = remove_double_spaces(
-                                                func.permissible_haz_input)
-    if hasattr(func, permissible_exp_input):
-        retval[permissible_exp_input] = remove_double_spaces(
-                                                func.permissible_exp_input)
+    if hasattr(func, detailed_description):
+        retval[detailed_description] = remove_double_spaces(
+                                            func.detailed_description)
+    if hasattr(func, permissible_hazard_input):
+        retval[permissible_hazard_input] = remove_double_spaces(
+                                            func.permissible_hazard_input)
+    if hasattr(func, permissible_exposure_input):
+        retval[permissible_exposure_input] = remove_double_spaces(
+                                            func.permissible_exposure_input)
     if hasattr(func, limitation):
         retval[limitation] = remove_double_spaces(func.limitation)
     return retval
