@@ -118,7 +118,7 @@ def get_plugin(name):
     return impact_function
 
 
-# FIXME (Ole): Deprecate this function
+# FIXME (Ole): Deprecate this function (see issue #392)
 def pretty_function_name(func):
     """Return a human readable name for the function
     if the function has a func.plugin_name use this
