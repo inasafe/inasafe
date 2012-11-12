@@ -56,13 +56,13 @@ class UtilitiesTest(unittest.TestCase):
         except Exception, e:
             # Display message and traceback
 
-            myMessage = getExceptionWithStacktrace(e, html=False)
+            myMessage = getExceptionWithStacktrace(e, theHtml=False)
             #print myMessage
             assert str(e) in myMessage
             assert 'line' in myMessage
             assert 'File' in myMessage
 
-            myMessage = getExceptionWithStacktrace(e, html=True)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True)
             assert str(e) in myMessage
             assert '<pre id="traceback"' in myMessage
             assert 'line' in myMessage
@@ -215,7 +215,7 @@ class UtilitiesTest(unittest.TestCase):
         try:
             bbox_intersection('aoeu', 'oaeu', [])
         except BoundingBoxError, e:
-            myMessage = getExceptionWithStacktrace(e, html=False)
+            myMessage = getExceptionWithStacktrace(e, theHtml=False)
             assert 'BoundingBoxError : Western' in myMessage, myMessage
 
     def test_issue230(self):

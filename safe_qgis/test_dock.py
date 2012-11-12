@@ -292,6 +292,7 @@ def loadStandardLayers():
                   join(EXPDATA, 'DKI_buildings.shp'),
                   join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
+                  join(TESTDATA, 'donut.shp'),
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
@@ -414,6 +415,7 @@ class DockTest(unittest.TestCase):
         """Aggregation combo changes properly according loaded layers"""
         myLayerList = [DOCK.tr('Entire area'),
                        DOCK.tr('A flood in Jakarta'),
+                       DOCK.tr('donut'),
                        DOCK.tr('Essential buildings'),
                        DOCK.tr('kabupaten jakarta singlepart'),
                        DOCK.tr('OSM Building Polygons')]
@@ -942,6 +944,112 @@ class DockTest(unittest.TestCase):
         assert '535' in myResult, myMessage
         assert '453' in myResult, myMessage
         assert '436' in myResult, myMessage
+
+    def test_runCategorisedHazardPopulationImpactFunction(self):
+        """Flood function runs in GUI with Flood in Jakarta hazard data
+            Uses Penduduk Jakarta as exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='Flood in Jakarta',
+            theExposure='Penduduk Jakarta',
+            theFunction='Be impacted',
+            theFunctionId='Categorised Hazard Population Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of population might be affected
+        assert '30938000' in myResult, myMessage
+        assert '68280000' in myResult, myMessage
+        assert '157551000' in myResult, myMessage
+
+    def test_runEarthquakeBuildingImpactFunction(self):
+        """Earthquake function runs in GUI with An earthquake in Yogyakarta
+        like in 2006 hazard data uses OSM Building Polygons exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='An earthquake in Yogyakarta like in 2006',
+            theExposure='OSM Building Polygons',
+            theFunction='Be affected',
+            theFunctionId='Earthquake Building Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([101, -12 , 119, -4])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of building might be affected
+        assert '786' in myResult, myMessage
+        assert '15528' in myResult, myMessage
+        assert '177' in myResult, myMessage
+
+    def test_runVolcanoBuildingImpact(self):
+        """Volcano function runs in GUI with An donut (merapi explostion)
+         hazard data uses OSM Building Polygons exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='donut',
+            theExposure='OSM Building Polygons',
+            theFunction='Be affected',
+            theFunctionId='Volcano Building Impact')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of building might be affected
+        assert '288' in myResult, myMessage
+
+    # disabled this test until further coding
+    def Xtest_printMap(self):
+        """Test print map, especially on Windows."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='Flood in Jakarta',
+            theExposure='Essential buildings',
+            theFunction='Be affected',
+            theFunctionId='Categorised Hazard Building Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        printButton = DOCK.pbnPrint
+
+        try:
+            QTest.mouseClick(printButton, QtCore.Qt.LeftButton)
+        except OSError:
+            LOGGER.debug('OSError')
+            # pass
+        except Exception, e:
+            raise Exception('Exception is not expected, %s' % e)
 
     def test_ResultStyling(self):
         """Test that ouputs from a model are correctly styled (colours and

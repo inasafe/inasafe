@@ -113,6 +113,9 @@ def unique_filename(**kwargs):
     if 'dir' not in kwargs:
         path = temp_dir('impacts')
         kwargs['dir'] = path
+    else:
+        path = temp_dir(kwargs['dir'])
+        kwargs['dir'] = path
     if not os.path.exists(kwargs['dir']):
         # Ensure that the dir mask won't conflict with the mode
         # Umask sets the new mask and returns the old

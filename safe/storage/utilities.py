@@ -344,6 +344,10 @@ def check_geotransform(geotransform):
         (top left x, w-e pixel resolution, rotation,
         top left y, rotation, n-s pixel resolution).
         See e.g. http://www.gdal.org/gdal_tutorial.html
+
+    Note
+       This assumes that the spatial reference uses geographic coordinaties,
+       so will not work for projected coordinate systems.
     """
 
     msg = ('Supplied geotransform must be a tuple with '

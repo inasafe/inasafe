@@ -22,6 +22,8 @@ from PyQt4 import QtGui, QtCore
 from function_options_dialog_base import (
             Ui_FunctionOptionsDialogBase)
 
+from safe_interface import safeTr
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -89,7 +91,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         myKey = theParameterKey
         myKey = myKey.replace('_', ' ')
         myKey = myKey.capitalize()
-        myLabel.setText(myKey)
+        myLabel.setText(safeTr(myKey))
         myLabel.setToolTip(str(type(theParameterValue)))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.LabelRole, myLabel)
@@ -131,6 +133,12 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 lineEditText = lineEdit.text()
                 convText = str(lineEditText)
                 myFunction.parameters[key] = ast.literal_eval(convText)
+            except SyntaxError:
+                text = ("Unexpected error: SyntaxError. " +
+                        "Please make sure you input the data correctly.")
+                label = self.impFuncConfErrLabel
+                label.setText(text)
+                noError = True
             except ValueError:
                 text = ("Unexpected error: ValueError" +
                 ". Please consult Python language reference for correct " +
@@ -138,5 +146,5 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 label = self.impFuncConfErrLabel
                 label.setText(text)
                 noError = True
-        if (not noError):
+        if not noError:
             self.close()

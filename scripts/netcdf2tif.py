@@ -6,7 +6,9 @@ This requires scientific python
 import os
 import sys
 import numpy
+import argparse
 from Scientific.IO.NetCDF import NetCDFFile
+
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
@@ -118,10 +120,28 @@ def usage():
 
 if __name__ == '__main__':
 
-    if len(sys.argv) != 3:
-        print usage()
-    else:
-        filename = sys.argv[1]
-        N = sys.argv[2]
+    doc = 'Convert FEWS flood forecast data to hazard layers for InaSAFE'
+    parser = argparse.ArgumentParser(description=doc)
+    parser.add_argument('filename', type=str,
+                        help='NetCDF filename from FEWS')
+    parser.add_argument('--hours', metavar='h', type=int, default=6,
+                        help='Number of hours to use from forecast')
+    parser.add_argument('--regions', metavar='regions', type=str,
+                        help=('Administrative areas to be flagged as '
+                              'flooded or not'))
 
-        convert_netcdf2tif(filename, N)
+    args = parser.parse_args()
+    print args
+    print
+
+    #print args.filename
+    #print args.hours
+
+    convert_netcdf2tif(args.filename, args.hours)
+    #if len(sys.argv) != 3:
+    #    print usage()
+    #else:
+    #    filename = sys.argv[1]
+    #    N = sys.argv[2]
+    #
+    #    convert_netcdf2tif(filename, N)

@@ -1192,8 +1192,8 @@ class Test_Engine(unittest.TestCase):
 
         # Do interpolation using underlying library
         # This was to debug this test failing under Windows
-        I = interpolate_raster_vector_points(H, E)
         key = 'Tsunami Ma'
+        I = interpolate_raster_vector_points(H, E, attribute_name=key)
 
         for feature in I.get_data():
             msg = ('%s not found in field list:\n%s'
@@ -1578,8 +1578,6 @@ class Test_Engine(unittest.TestCase):
         attributes = exposure_vector.get_data()
 
         # Test interpolation function
-        #I = hazard_raster.interpolate(exposure_vector,
-        #                              attribute_name='MMI')
         I = assign_hazard_values_to_exposure_data(hazard_raster,
                                                   exposure_vector,
                                                   attribute_name='MMI')
@@ -1656,8 +1654,6 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
 
         # Test interpolation function
-        #I = hazard_raster.interpolate(exposure_vector,
-        #                              attribute_name='depth')
         I = assign_hazard_values_to_exposure_data(hazard_raster,
                                                   exposure_vector,
                                                   attribute_name='depth')
@@ -1701,7 +1697,6 @@ class Test_Engine(unittest.TestCase):
         attributes = E.get_data()
 
         # Test the interpolation function
-        #I = H.interpolate(E, attribute_name='depth')
         I = assign_hazard_values_to_exposure_data(H, E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
@@ -1829,12 +1824,8 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  attribute_name=None)  # Take all attributes across
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_attributes = I.get_data()
         msg = 'Expected "depth", got %s' % I.get_name()
@@ -1895,12 +1886,8 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  attribute_name=None)  # Take all attributes across
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_attributes = I.get_data()
 
@@ -1995,80 +1982,6 @@ class Test_Engine(unittest.TestCase):
 
     test_interpolation_from_polygons_multiple.slow = True
 
-    def Xtest_point_interpolation_from_polygons_one_attribute(self):
-        """Point interpolation from multiple polygons works with attribute
-
-        This is a test for interpolation (issue #48)
-        """
-
-        # FIXME: test passes, but it is not tested that
-        #        nothing *but* the requested attribute
-        #        has been carried over. Do we need this?
-
-        # Name file names for hazard and exposure
-        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
-        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)
-
-        # Read input data
-        H = read_layer(hazard_filename)
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-
-        # Cut down to make test quick
-        H = Vector(data=H_attributes[658:850],
-                   geometry=H_geometry[658:850],
-                   projection=H.get_projection())
-        #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
-
-        E = read_layer(exposure_filename)
-        E_attributes = E.get_data()
-
-        # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  # Spelling is as in test data
-        #                  attribute_name='Category')
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name='Category')
-
-        #I.write_to_file('MM_res.shp')
-
-        I_attributes = I.get_data()
-        assert I.get_name() == 'depth'
-        N = len(I_attributes)
-        assert N == len(E_attributes)
-
-        # Assert that expected attribute names exist
-        I_names = I.get_attribute_names()
-        E_names = E.get_attribute_names()
-
-        name = 'Category'
-        msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
-        assert name in I_names, msg
-
-        print I_names
-
-        for name in E_names:
-            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        # Verify interpolated values with test result
-        counts = {}
-        for i in range(N):
-            category = I_attributes[i]['Category']
-            if category not in counts:
-                counts[category] = 0
-
-            counts[category] += 1
-
-        msg = ('Expected 100 points tagged with category "High", '
-               'but got only %i' % counts['High'])
-        assert counts['High'] == 100, msg
-
-        msg = ('Expected 739 points tagged with category "Very High", '
-               'but got only %i' % counts['Very High'])
-        assert counts['Very High'] == 739, msg
-
     def test_interpolation_from_polygons_error_handling(self):
         """Interpolation using polygons handles input errors as expected
 
@@ -2086,7 +1999,6 @@ class Test_Engine(unittest.TestCase):
 
         # Check projection mismatch is caught
         try:
-            #H.interpolate(E)
             assign_hazard_values_to_exposure_data(H, E)
         except VerificationError, e:
             msg = ('Projection mismatch should have been caught: %s'
@@ -2225,9 +2137,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2338,9 +2248,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print 'This took', time.time() - t0
 
         I_geometry = I.get_geometry()
@@ -2481,9 +2389,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print 'That took %f seconds' % (time.time() - t0)
 
         # TODO:
@@ -2600,8 +2506,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print ('Using 2704 individual polygons took %f seconds'
         #       % (time.time() - t0))
         #I.write_to_file('flood_prone_roads_jakarta_individual.shp')
@@ -2677,8 +2582,7 @@ class Test_Engine(unittest.TestCase):
         print
         print 'start'
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         print 'Using merged polygon took %f seconds' % (time.time() - t0)
         I.write_to_file('flood_prone_roads_jakarta_merged.shp')
 
@@ -2691,81 +2595,6 @@ class Test_Engine(unittest.TestCase):
         #assert I_attributes[198]['parent_line_id'] == 333
 
     Xtest_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
-
-    def Xtest_line_interpolation_from_polygons_one_attribute(self):
-        """Line interpolation using one polygon works with attribute
-
-        This is a test for road interpolation (issue #55)
-        """
-
-        # FIXME: test passes, but functionality is not really there.
-        # Do we need it?
-
-        # RETIRE!!!!!!
-
-        # Name file names for hazard level and exposure
-        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
-        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
-
-        # Read input data
-        H = read_layer(hazard_filename)
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-
-        # Cut down to polygon #799 to make test quick
-        H = Vector(data=H_attributes[799:800],
-                   geometry=H_geometry[799:800],
-                   projection=H.get_projection())
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-        E = read_layer(exposure_filename)
-
-        # Test interpolation function
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name='Category')
-
-        I_geometry = I.get_geometry()
-        I_attributes = I.get_data()
-
-        N = len(I_attributes)
-
-        # Possibly generate files for visual inspection with e.g. QGis
-        if False:
-            L = Vector(geometry=H_geometry, geometry_type='polygon',
-                       data=H_attributes)
-            L.write_to_file('test_polygon.shp')
-
-            L = Vector(geometry=I_geometry, geometry_type='line',
-                       data=I_attributes)
-            L.write_to_file('interpolated_lines.shp')
-
-        # Assert that expected attribute names exist
-        I_names = I.get_attribute_names()
-        E_names = E.get_attribute_names()
-
-        name = 'Category'
-        msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
-        assert name in I_names, msg
-
-        for name in E_names:
-            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        # Verify interpolated values with test result
-        counts = {}
-        for i in range(N):
-
-            # Check specific attribute
-            category = I_attributes[i]['Category']
-            if category not in counts:
-                counts[category] = 0
-
-            counts[category] += 1
-
-        msg = ('Expected 14 segments tagged with category "Very High", '
-               'but got only %i' % counts['Very High'])
-        assert counts['Very High'] == 14, msg
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -3119,12 +2948,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    #suite = unittest.makeSuite(Test_Engine,
-    #                           ('test_polygon_to_roads_interpolation'
-    #                            '_flood_example'))
-    #suite = unittest.makeSuite(Test_Engine,
-    #                           ('test_polygon_to_roads_interpolation'
-    #                            '_jakarta_flood_merged'))
     suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
