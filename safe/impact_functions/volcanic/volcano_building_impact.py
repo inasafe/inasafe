@@ -130,13 +130,13 @@ class VolcanoBuildingImpact(FunctionProvider):
         table_body = [question,
                       TableRow([_('Buildings'), _('Total'), _('Cumulative')],
                                header=True),
-                      TableRow([_('All'), total_affected])]
+                      TableRow([_('All'), str(total_affected), ''])]
 
         cum = 0
         for name in category_names:
             count = categories[name]
             cum += count
-            table_body.append(TableRow([name, int(count), int(cum)]))
+            table_body.append(TableRow([name, str(count), str(cum)]))
 
         table_body.append(TableRow(_('Map shows buildings affected in '
                                      'each of volcano hazard polygons.')))

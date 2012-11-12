@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 09:36+0700\n"
+"POT-Creation-Date: 2012-11-08 10:43+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -651,7 +651,7 @@ msgstr ""
 "Apabila terjadi <i>%(hazard)s</i> berapa banyak <i>%(exposure)s</i> yang "
 "mungkin <i>%(impact)s</i>"
 
-#: safe/engine/interpolation.py:411
+#: safe/engine/interpolation.py:406
 #, python-format
 msgid ""
 "Could not interpolate from raster layer %(raster)s to vector layer "
@@ -973,7 +973,6 @@ msgstr ""
 msgid "Total number of buildings %i in the viewable area"
 msgstr "Total bangunan %i di area terlihat"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:149
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr "Hanya bangunan yang tersedia di Open Street Map yang diperhitungkan."
 
@@ -1109,7 +1108,7 @@ msgstr "Bangunan di Jakarta"
 msgid "Buildings in Jakarta"
 msgstr "Gedung di Jakarta"
 
-#: safe/engine/core.py:81
+#: safe/engine/core.py:83
 msgid "Not specified"
 msgstr "Tidak ditentukan"
 
@@ -1226,7 +1225,7 @@ msgstr "Jumlah Penduduk: %s"
 msgid "Total population %s in the viewable area"
 msgstr "Jumlah populasi %s pada area terlihat "
 
-#: safe/storage/test_io.py:2336 safe/storage/test_io.py:2346
+#: safe/storage/test_io.py:2419 safe/storage/test_io.py:2429
 msgid "Hello!"
 msgstr "Hi!"
 
@@ -1237,3 +1236,7 @@ msgstr "Gempabumi Yogyakarta 2006"
 #: safe/common/dynamic_translations.py:86
 msgid "Maumere tsunami inundation"
 msgstr "Genangan tsunami Maumere"
+
+#: safe/impact_functions/volcanic/volcano_building_impact.py:149
+msgid "Only buildings available in OpenStreetMap are considered."
+msgstr "Hanya bangunan yang tersedia di OpenStreetMap yang diperhitungkan."

@@ -2243,7 +2243,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             self.tr('Pdf File (*.pdf)'))
         myMapPdfFilePath = str(myMapPdfFilePath)
 
-        if myMapPdfFilePath is None:
+        if myMapPdfFilePath is None or myMapPdfFilePath == '':
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Printing cancelled!'),
                           theProgress=100)
