@@ -1,7 +1,7 @@
 import math
 import numpy
 
-from safe.impact_functions.earthquake import ITBFatalityFunction
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model import ITBFatalityFunction
 from safe.common.utilities import get_defaults
 
 
