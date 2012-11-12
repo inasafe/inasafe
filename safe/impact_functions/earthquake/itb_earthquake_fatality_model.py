@@ -86,7 +86,9 @@ class ITBFatalityFunction(FunctionProvider):
     parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
                       # Rates of people displaced for each MMI level
                       displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                                         7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0},
+                                            7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0},
+                      mmi_range=range(2, 10),
+                      step=0.5,
                       # Threshold below which layer should be transparent
                       tolerance=0.01,
                       calculate_displaced_people=True,
@@ -96,6 +98,12 @@ class ITBFatalityFunction(FunctionProvider):
                                   {'youth_ratio': defaults['YOUTH_RATIO'],
                                    'adult_ratio': defaults['ADULT_RATIO'],
                                    'elder_ratio': defaults['ELDER_RATIO']}}})
+
+
+    def fatality_rate(self, mmi, x=parameters['x'], y=parameters['y']):
+        import pdb
+        pdb.set_trace()
+        return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
@@ -131,7 +139,9 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-        mmi_range = range(2, 10)
+        #import pdb
+        #pdb.set_trace()
+        mmi_range = self.parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
@@ -142,13 +152,18 @@ class ITBFatalityFunction(FunctionProvider):
         for mmi in mmi_range:
 
             # Identify cells where MMI is in class i
-            mask = (H > mmi - 0.5) * (H <= mmi + 0.5)
+            mask = (H > mmi - self.parameters['step']) * (
+                        H <= mmi + self.parameters['step'])
 
             # Count population affected by this shake level
             I = numpy.where(mask, P, 0)
 
             # Calculate expected number of fatalities per level
-            fatality_rate = numpy.power(10.0, x * mmi - y)
+            #fatality_rate = numpy.power(10.0, x * mmi - y)
+
+            fatality_rate = self.fatality_rate(mmi)
+            #import pdb
+            #pdb.set_trace()
             F = fatality_rate * I
 
             # Calculate expected number of displaced people per level
