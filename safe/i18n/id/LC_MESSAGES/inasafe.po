@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-09 08:39+0700\n"
+"POT-Creation-Date: 2012-11-08 10:43+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,10 +20,9 @@ msgstr ""
 "X-Language: id_ID\n"
 "X-Source-Language: en\n"
 
-#: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:130
-#: safe/impact_functions/earthquake/itb_building_impact_model.py:183
-#: safe/impact_functions/earthquake/padang_building_impact_model.py:126
-#: safe/impact_functions/generic/categorised_hazard_building_impact.py:105
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:157
+#: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
+#: safe/impact_functions/volcanic/volcano_building_impact.py:133
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:157
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
 #: safe/impact_functions/volcanic/volcano_building_impact.py:133
@@ -184,7 +183,6 @@ msgstr "berada di area yang ditandai sebagai rawan banjir"
 msgid "Not Flooded"
 msgstr "Tidak terkena banjir"
 
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:122
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:194
 msgid "People needing evacuation"
@@ -252,8 +250,6 @@ msgstr "Minimum bantuan per minggu dari perka 7 BNPB/2008"
 msgid "People in need of evacuation"
 msgstr "Penduduk yang perlu dievakuasi"
 
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:122
-#: safe/impact_functions/generic/categorised_hazard_population.py:141
 #: safe/impact_functions/inundation/flood_population_evacuation.py:183
 msgid "Population Density"
 msgstr "Kepadatan Penduduk"
@@ -630,7 +626,6 @@ msgstr "Apakah unit identifikasi korban yang tersedia cukup untuk %i orang?"
 msgid "%.2f people/cell"
 msgstr "%.2f orang/sel"
 
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:93
 #: safe/impact_functions/inundation/flood_population_evacuation.py:118
 msgid "Map shows population density needing evacuation"
 msgstr "Peta menunjukkan kepadatan penduduk yang memerlukan evakuasi"
@@ -663,7 +658,7 @@ msgstr ""
 "Tidak bisa interpolasi dari %(raster)s lapisan raster ke %(vector)s lapisan "
 "vektor. Pesan error: %(error)s"
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:137
+#: safe/impact_functions/inundation/flood_population_evacuation.py:168
 #: safe/impact_functions/inundation/flood_population_evacuation.py:168
 #, python-format
 msgid "Low [%i people/cell]"
@@ -675,7 +670,6 @@ msgstr "Rendah [%i orang/sel]"
 msgid "Medium [%i people/cell]"
 msgstr "Sedang [%i orang/sel]"
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:139
 #: safe/impact_functions/inundation/flood_population_evacuation.py:170
 #, python-format
 msgid "High [%i people/cell]"
@@ -693,7 +687,8 @@ msgstr "Banjir di Jakarta seperti 2007 tapi ada perbaikan struktural"
 msgid "A flood in Jakarta in RW areas identified as flood prone"
 msgstr "Banjir di Jakarta di daerah identifikas sebagai rawan banjir"
 
-#: safe/common/dynamic_translations.py:82 safe/common/dynamic_translations.py:93
+#: safe/common/dynamic_translations.py:82
+#: safe/common/dynamic_translations.py:93
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr "Gempabumi di Yogyakarta seperti 2006"
 

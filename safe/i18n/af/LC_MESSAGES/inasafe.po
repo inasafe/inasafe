@@ -413,15 +413,16 @@ msgstr ""
 msgid "Minimum needs are defined in BNPB regulation 7/2008"
 msgstr ""
 
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:121
+#: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:260
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:265
+#: safe/impact_functions/inundation/flood_population_evacuation.py:158
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:260
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:265
 #: safe/impact_functions/inundation/flood_population_evacuation.py:158
 msgid "People in need of evacuation"
 msgstr ""
 
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:122
-#: safe/impact_functions/generic/categorised_hazard_population.py:141
+#: safe/impact_functions/inundation/flood_population_evacuation.py:183
 #: safe/impact_functions/inundation/flood_population_evacuation.py:183
 msgid "Population Density"
 msgstr ""
@@ -921,7 +922,7 @@ msgstr ""
 msgid "%.2f people/cell)"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:137
+#: safe/impact_functions/inundation/flood_population_evacuation.py:168
 #: safe/impact_functions/inundation/flood_population_evacuation.py:168
 #, python-format
 msgid "Low [%i people/cell]"
@@ -933,7 +934,6 @@ msgstr ""
 msgid "Medium [%i people/cell]"
 msgstr ""
 
-#: safe/impact_functions/generic/categorised_hazard_population.py:139
 #: safe/impact_functions/inundation/flood_population_evacuation.py:170
 #, python-format
 msgid "High [%i people/cell]"
