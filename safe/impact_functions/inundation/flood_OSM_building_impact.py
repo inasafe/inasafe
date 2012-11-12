@@ -31,8 +31,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
         'originating from OpenStreetMap (OSM).')
     actions = tr('Provide details about where critical response areas are')
     # citations must be a list
-    citations = tr('Hutchings, Field & Parks. Assessment of Flood impacts on '
-        'buildings. Impact. Vol 66(2). 2012')
+    citations = [tr('Hutchings, Field & Parks. Assessment of Flood impacts on '
+        'buildings. Impact. Vol 66(2). 2012')]
     detailed_description = tr('This is an area for free form text where a'
         'detailed description of the methodology used is given.')
     permissible_hazard_input = tr('A raster layer where each cell represents '

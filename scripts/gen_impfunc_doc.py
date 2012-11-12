@@ -12,8 +12,7 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 from safe.api import get_documentation, get_plugins
-from gen_rst_script import (create_dirs, create_rst_file, python_file_siever,
-                            create_index, insafe_dir_path)
+from gen_rst_script import (create_dirs, create_rst_file, insafe_dir_path)
 
 doc_dir = "docs" + os.sep + "source" + os.sep + "user-docs"
 impact_func_doc_dir = 'impact_function_docs'
@@ -48,7 +47,8 @@ def gen_rst_doc(impfunc_doc):
                 content_rst += myPrettykey + '\n'
                 content_rst += '-' * len(myPrettykey) + '\n'
                 if type(myValue) is list and len(myValue) > 0:
-                    content_rst += '\n'.join(myValue)
+                    for myVal in myValue:
+                        content_rst += '* ' + myVal + '\n'
                 elif myValue is None or len(myValue) == 0:
                     content_rst += 'No documentation found'
                 else:

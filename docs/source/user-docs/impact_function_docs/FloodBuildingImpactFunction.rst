@@ -5,22 +5,6 @@ Rating
 ------
 0
 
-Unique Identifier
------------------
-Flood Building Impact Function
-
-Actions
--------
-Provide details about where critical response areas are
-
-Detailed Description
---------------------
-This is an area for free form text where adetailed description of the methodology used is given.
-
-Detailed Desc
--------------
-No documentation found
-
 Limitation
 ----------
 Lorem ipsum limitation
@@ -29,6 +13,10 @@ Title
 -----
 Be flooded
 
+Unique Identifier
+-----------------
+Flood Building Impact Function
+
 Permissible Hazard Input
 ------------------------
 A raster layer where each cell represents flood depth, or a vector polygon layer where each polygon represents an inundated area. Optionally the user may nominate an attribute in the polygon layer that represents inundation depth.
@@ -36,6 +24,10 @@ A raster layer where each cell represents flood depth, or a vector polygon layer
 Author
 ------
 Ole Nielsen, Kristy van Putten
+
+Actions
+-------
+Provide details about where critical response areas are
 
 Synopsis
 --------
@@ -48,4 +40,8 @@ Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. Vol 
 Permissible Exposure Input
 --------------------------
 vector polygon layer extracted from OSM where each polygon represents the footprint of a building.
+
+Detailed Description
+--------------------
+This is an area for free form text where adetailed description of the methodology used is given.
 

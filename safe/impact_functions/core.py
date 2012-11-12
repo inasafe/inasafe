@@ -778,19 +778,12 @@ def get_documentation(func):
                 citation : list of citation in string (function properties)
                 limitation : string (function properties)
     """
-    retval = {'unique_identifier': func,
-              'title': '',
-              'synopsis': '',
-              'author': '',
-              'rating': '0',
-              'detailed_desc': '',
-              'citations': [],
-              'limitation': ''}
+    retval = {'unique_identifier': func}
 
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
     if func not in plugins_dict.keys():
-        return None
+        return retval
     else:
         func = plugins_dict[func]
 
@@ -827,16 +820,13 @@ def get_documentation(func):
     if hasattr(func, citations):
         retval[citations] = remove_double_spaces(func.citations)
     if hasattr(func, detailed_description):
-        retval[detailed_description] = remove_double_spaces(
-                                            func.detailed_description)
+        retval[detailed_description] = func.detailed_description
     if hasattr(func, permissible_hazard_input):
-        retval[permissible_hazard_input] = remove_double_spaces(
-                                            func.permissible_hazard_input)
+        retval[permissible_hazard_input] = func.permissible_hazard_input
     if hasattr(func, permissible_exposure_input):
-        retval[permissible_exposure_input] = remove_double_spaces(
-                                            func.permissible_exposure_input)
+        retval[permissible_exposure_input] = func.permissible_exposure_input
     if hasattr(func, limitation):
-        retval[limitation] = remove_double_spaces(func.limitation)
+        retval[limitation] = func.limitation
     return retval
 
 
