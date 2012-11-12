@@ -65,7 +65,7 @@ def temp_dir(sub_dir='work'):
     """
     user = getpass.getuser().replace(' ', '_')
     current_date = date.today()
-    date_string = current_date.strftime("%d-%m-%Y")
+    date_string = current_date.isoformat()
     # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
     handle, filename = mkstemp()
     os.close(handle)

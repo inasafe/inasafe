@@ -12,6 +12,7 @@ from Scientific.IO.NetCDF import NetCDFFile
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
+
 # FIXME (Ole): Move this function to e.g. safe.storage.utilities and write
 # unit test using test data
 # inasafe_data/test/201211071300_Jakarta_200m_Sobek_Forecast_CCAM.nc
@@ -135,4 +136,3 @@ if __name__ == '__main__':
     # For this function use
     # def clip_grid_by_polygons(A, geotransform, polygons):
     # which is available in safe/common/polygons.py
-
