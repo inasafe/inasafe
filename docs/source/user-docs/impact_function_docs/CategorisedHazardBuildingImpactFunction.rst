@@ -1,19 +1,18 @@
 Categorised Hazard Building Impact Function
 ===========================================
 
-Unique Identifier
------------------
-Categorised Hazard Building Impact Function
+Overview
+--------
 
-Rating
-------
-The Rating
+**Unique Identifier**: Categorised Hazard Building Impact Function
 
-Title
------
-Be affected
+**Rating**: The Rating
 
-Author
-------
-The Author
+**Title**: Be affected
 
+**Author**: The Author
+
+Details
+-------
+
+No documentation found

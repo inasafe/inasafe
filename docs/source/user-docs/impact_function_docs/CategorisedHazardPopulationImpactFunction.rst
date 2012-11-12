@@ -1,19 +1,18 @@
 Categorised Hazard Population Impact Function
 =============================================
 
-Unique Identifier
------------------
-Categorised Hazard Population Impact Function
+Overview
+--------
 
-Rating
-------
-2
+**Unique Identifier**: Categorised Hazard Population Impact Function
 
-Title
------
-Be impacted
+**Rating**: 2
 
-Author
-------
-AIFDR
+**Title**: Be impacted
 
+**Author**: AIFDR
+
+Details
+-------
+
+No documentation found

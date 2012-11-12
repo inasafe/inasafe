@@ -41,12 +41,16 @@ def gen_rst_doc(impfunc_doc):
         content_rst = k
         content_rst += '\n' + '=' * len(k) + '\n\n'
         # provide documentation
+        content_rst += 'Overview'
+        content_rst += '\n' + '-' * len('Overview') + '\n\n'
         if type(v) is dict :
             for mykey, myValue in v.iteritems():
+                if mykey == 'detailed_description':
+                    continue
                 myPrettykey = pretty_key(mykey)
-                content_rst += myPrettykey + '\n'
-                content_rst += '-' * len(myPrettykey) + '\n'
+                content_rst += '**' + myPrettykey + '**' + ': '
                 if type(myValue) is list and len(myValue) > 0:
+                    content_rst += '\n\n'
                     for myVal in myValue:
                         content_rst += '* ' + myVal + '\n'
                 elif myValue is None or len(myValue) == 0:
@@ -54,6 +58,15 @@ def gen_rst_doc(impfunc_doc):
                 else:
                     content_rst += myValue
                 content_rst += '\n\n'
+            content_rst += 'Details'
+            content_rst += '\n' + '-' * len('Details') + '\n\n'
+            if v.has_key('detailed_description'):
+                content_rst += v['detailed_description']
+            else:
+                content_rst += 'No documentation found'
+        else:
+            content_rst += 'No documentation found'
+
         create_rst_file(impact_func_doc_path, k.replace(' ', ''), content_rst)
 
 

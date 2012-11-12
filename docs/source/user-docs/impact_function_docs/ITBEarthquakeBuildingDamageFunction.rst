@@ -1,11 +1,14 @@
 I T B Earthquake Building Damage Function
 =========================================
 
-Unique Identifier
------------------
-I T B Earthquake Building Damage Function
+Overview
+--------
 
-Title
------
-Be damaged depending on building type
+**Unique Identifier**: I T B Earthquake Building Damage Function
 
+**Title**: Be damaged depending on building type
+
+Details
+-------
+
+No documentation found

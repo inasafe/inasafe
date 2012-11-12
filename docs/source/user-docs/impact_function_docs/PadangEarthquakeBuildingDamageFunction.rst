@@ -1,11 +1,14 @@
 Padang Earthquake Building Damage Function
 ==========================================
 
-Unique Identifier
------------------
-Padang Earthquake Building Damage Function
+Overview
+--------
 
-Title
------
-Be damaged depending on building type
+**Unique Identifier**: Padang Earthquake Building Damage Function
 
+**Title**: Be damaged depending on building type
+
+Details
+-------
+
+No documentation found

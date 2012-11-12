@@ -1,19 +1,18 @@
 Volcano Building Impact
 =======================
 
-Unique Identifier
------------------
-Volcano Building Impact
+Overview
+--------
 
-Rating
-------
-4
+**Unique Identifier**: Volcano Building Impact
 
-Title
------
-Be affected
+**Rating**: 4
 
-Author
-------
-AIFDR
+**Title**: Be affected
 
+**Author**: AIFDR
+
+Details
+-------
+
+No documentation found

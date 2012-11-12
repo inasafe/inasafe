@@ -1,19 +1,18 @@
 I T B Fatality Function
 =======================
 
-Unique Identifier
------------------
-I T B Fatality Function
+Overview
+--------
 
-Rating
-------
-3
+**Unique Identifier**: I T B Fatality Function
 
-Title
------
-Die or be displaced
+**Rating**: 3
 
-Author
-------
-Hadi Ghasemi
+**Title**: Die or be displaced
 
+**Author**: Hadi Ghasemi
+
+Details
+-------
+
+No documentation found
