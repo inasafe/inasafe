@@ -21,7 +21,8 @@ import ast
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
-    QGroupBox, QLineEdit, QLabel, QCheckBox, QFormLayout, QWidget)
+    QGroupBox, QLineEdit, QDialog,
+    QLabel, QCheckBox, QFormLayout, QWidget)
 from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
 
 from safe_interface import safeTr
@@ -56,6 +57,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.setWindowTitle(self.tr('InaSAFE impact function configuration'))
         self.tabWidget.tabBar().setVisible(False)
 
+        self._result = None
         self.values = {}
 
     def bind(self, theObject, theProperty, theType):
@@ -71,19 +73,16 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
         return lambda: theType(theObject.property(theProperty).toPyObject())
 
-    def buildForm(self, theFunction, theParams):
+    def buildForm(self, theParams):
         """we build a form from impact functions parameter
 
         .. note:: see http://tinyurl.com/pyqt-differences
 
         Args:
-           * theFunction - theFunction to be modified
            * params - parameters to be edited
         Returns:
            not applicable
         """
-
-        self.theFunction = theFunction
 
         for myKey, myValue in theParams.items():
             if myKey == 'postprocessors':
@@ -148,7 +147,6 @@ class FunctionOptionsDialog(QtGui.QDialog,
             myValues[myLabel] = myInputValues
 
         self.values['postprocessors'] = myValues
-        print self.values['postprocessors']
 
     def buildWidget(self, theFormLayout, theName, theValue):
         """Create a new form element dynamically based from theValue type.
@@ -245,9 +243,11 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
 
         try:
-            myResult = self.parseInput(self.values)
-            self.theFunction.parameters = myResult
-            self.close()
-        except Exception as myEx:
+            self._result = self.parseInput(self.values)
+            self.done(QDialog.Accepted)
+        except (SyntaxError, ValueError) as myEx:
             myText = self.tr("Unexpected error: %s " % myEx)
             self.lblErrorMessage.setText(myText)
+
+    def result(self):
+        return self._result

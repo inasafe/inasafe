@@ -512,8 +512,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            no exceptions explicitly raised."""
         myDialog = FunctionOptionsDialog(self)
         myDialog.setDialogInfo(self.getFunctionID())
-        myDialog.buildForm(self.activeFunction, self.functionParams)
-        myDialog.showNormal()
+        myDialog.buildForm(self.functionParams)
+
+        if myDialog.exec_():
+            self.activeFunction.parameters = myDialog.result()
+            self.functionParams = self.activeFunction.parameters
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
