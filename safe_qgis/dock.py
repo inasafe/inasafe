@@ -1449,14 +1449,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 LOGGER.debug('Doing point in polygon aggregation')
 
                 myPoints = mySafeImpactLayer.get_geometry()
-                myValues = mySafeImpactLayer.get_data(index=myTargetFieldIndex)
+                myValues = mySafeImpactLayer.get_data(attribute=myTargetField)
 
                 pointsCovered = []
 
                 myRemainingPoints = myPoints
                 myRemainingValues = myValues
             
-                for i, myPolygon in enumerate(myPolygons):
+                for myPolygonIndex, myPolygon in enumerate(myPolygons):
+                    myTotal = 0
                     print 'Remaining points', len(myRemainingPoints)
             
                     if hasattr(myPolygon, 'outer_ring'):
@@ -1465,6 +1466,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     else:
                         # Assume it is an array
                         outer_ring = myPolygon
+                        inner_rings = None
             
                     inside, outside = points_in_and_outside_polygon(
                         myRemainingPoints,
@@ -1472,24 +1474,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         holes=inner_rings,
                         closed=True,
                         check_input=False)
-                    # Add features inside this polygon
-                    pointsCovered.append((myRemainingPoints[inside],
-                                           myRemainingValues[inside]))
-                    myTotal = sum(myRemainingValues[inside])
 
                     #summ attributes
-                    attrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
-                    myFID = i
+                    for i in inside:
+                       myTotal += myRemainingValues[i]
+
+                    # Add features inside this polygon
+                    myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+                    myFID = myPolygonIndex
                     myPostprocessorProvider.changeAttributeValues(
-                        {myFID: attrs})
+                        {myFID: myAttrs})
 
-                    # Select remaining points to clip
+                    # make outside points the input to the next iteration
                     myRemainingPoints = myRemainingPoints[outside]
-                    myRemainingValues = myRemainingValues[outside]
+                    myRemainingValues = [myRemainingValues[i] for i in outside]
+#                    LOGGER.debug('Before: ' + str(len(myRemainingValues)))
+#                    LOGGER.debug('After: ' + str(len(myRemainingValues)))
+#                    LOGGER.debug('Inside: ' + str(len(inside)))
+#                    LOGGER.debug('Outside: ' + str(len(outside)))
 
-
-                
-                
             else:
                 myMessage = self.tr('Aggregation on vector impact layers other'
                                     'than points or polygons not implemented '
@@ -1506,9 +1509,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 if ok:
                     myTotal += myVal
 
-            attrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+            myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
             myFID = 0
-            myPostprocessorProvider.changeAttributeValues({myFID: attrs})
+            myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
 
         #commit changes to postprocessing layer
         self.postprocLayer.commitChanges()
