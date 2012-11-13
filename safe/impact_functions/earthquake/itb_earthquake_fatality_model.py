@@ -101,8 +101,6 @@ class ITBFatalityFunction(FunctionProvider):
 
 
     def fatality_rate(self, mmi, x=parameters['x'], y=parameters['y']):
-        import pdb
-        pdb.set_trace()
         return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
