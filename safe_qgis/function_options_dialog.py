@@ -19,10 +19,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ast
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QRect, QObject, QVariant
-from PyQt4.QtGui import QTabWidget, QLineEdit, QLabel, QCheckBox, QFormLayout, QWidget
-from function_options_dialog_base import (
-            Ui_FunctionOptionsDialogBase)
+from PyQt4.QtCore import QRect, QObject, QVariant, Qt
+from PyQt4.QtGui import (
+    QTabWidget, QLineEdit, QLabel, QCheckBox, QFormLayout, QWidget)
+from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
 
 from safe_interface import safeTr
 
@@ -35,7 +35,7 @@ except AttributeError:
 # FIXME (Tim and Ole): Change to ConfigurationDialog throughout
 #                      Maybe also change filename and Base name accordingly.
 class FunctionOptionsDialog(QtGui.QDialog,
-                Ui_FunctionOptionsDialogBase):
+                            Ui_FunctionOptionsDialogBase):
     """ConfigurableImpactFunctions Dialog for InaSAFE."""
 
     def __init__(self, theParent=None):
@@ -54,9 +54,12 @@ class FunctionOptionsDialog(QtGui.QDialog,
         QtGui.QDialog.__init__(self, theParent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE impact function configuration'))
+        self.tabWidget.tabBar().setVisible(False)
 
-        self.inputs = {}
+        self.values = {}
 
+    def bind(self, object, propertyName, type):
+        return lambda: type(object.property(propertyName).toPyObject())
 
     def buildForm(self, theFunction, theParams):
         """we build a form from impact functions parameter
@@ -72,81 +75,91 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         self.theFunction = theFunction
 
-        if 'postprocessors' in theParams:
-            self._addPostProcessorFormItem(theParams['postprocessors'])
-
-        myParams = filter(lambda x: x[0] != 'postprocessors', theParams.items())
-        for (myKey, myValue) in myParams:
-            self._addFormItem(myKey, myValue)
+        for myKey, myValue in theParams.items():
+            if myKey == 'postprocessors':
+                self._addPostProcessorFormItem(myValue)
+            else:
+                self.values[myKey] = self.buildWidget(
+                    self.configLayout,
+                    myKey,
+                    myValue)
 
     def _addPostProcessorFormItem(self, theParams):
-        myTabWidget = QtGui.QTabWidget(self)
-        myTabWidget.setGeometry(QRect(10, 80, 561, 231))
-
-        # create other options tab
-        myOptionTab = QWidget()
-        self.editableImpactFunctionsFormLayout.setParent(myOptionTab)
-        myTabWidget.addTab(myOptionTab, self.tr('options'))
-
         # create postprocessors tab
-        myPostProcessorsTab = QWidget()
-        myFormLayout = QFormLayout(myPostProcessorsTab)
-        myTabWidget.addTab(myPostProcessorsTab, self.tr('postprocessors'))
+        myTab = QWidget()
+        myFormLayout = QFormLayout(myTab)
+        myFormLayout.setLabelAlignment(Qt.AlignLeft)
+        self.tabWidget.addTab(myTab, self.tr('postprocessors'))
+        self.tabWidget.tabBar().setVisible(True)
 
-
+        # create element for the tab
+        myWidgets = {}
         for myLabel, myOptions in theParams.items():
+            myInputValues = {}
+
             myCheckBox = QCheckBox()
             myCheckBox.setText(myLabel)
 
-            myWidget = None
-
             if myOptions.get('on') is True:
                 myCheckBox.setChecked(True)
+                myInputValues['on'] = self.bind(myCheckBox, 'checked', bool)
 
             if 'params' in myOptions:
-                myWidget = QLineEdit()
-                myWidget.setText(str(myOptions['params']))
-            
-            myFormLayout.addRow(myCheckBox, myWidget)
+                myInputValues = self.buildWidget(myFormLayout, myCheckBox, myOptions['params'])
+            else:
+                myFormLayout.addRow(myCheckBox, None)
 
+            myWidgets[myLabel] = myInputValues
 
-    def _addFormItem(self, theName, theValue):
-        """Add a new form element dynamically from a key value pair.
+        self.values['postprocessors'] = myWidgets
+
+    def buildWidget(self, theFormLayout, theName, theValue):
+        """Create a new form element dynamically based from theValue type.
+        The element will be inserted to theFormLayout.
 
         Args:
+            * theFormLayout: QFormLayout Mandatory a layout instance
             * theName: str Mandatory string referencing the key in the
                 function configurable parameters dictionary.
             * theValue: object Mandatory representing the value
                 referenced by the key.
 
         Returns:
-            None
+            a function that return the value of widget
 
         Raises:
             None
 
         """
-        myLabel = QLabel(self.formLayoutWidget)
-        myLabel.setObjectName(_fromUtf8(theName + "Label"))
-        myLabelText = theName.replace('_', ' ').capitalize()
-        myLabel.setText(safeTr(myLabelText))
-        myLabel.setToolTip(str(type(theValue)))
 
-        myLineEdit = QLineEdit(self.formLayoutWidget)
-        myObjectName = _fromUtf8(theName + 'LineEdit')
-        myLineEdit.setObjectName(myObjectName)
-        myLineEdit.setCursorPosition(0)
-
-        if isinstance(theValue, list):
-            myValue = ', '.join(map(str, theValue))
-            myLineEdit.setText(myValue)
-            self.inputs[theName] = lambda: map( float, str(myLineEdit.text()).split(',') )
+        # create label
+        if isinstance(theName, str):
+            myLabel = QLabel()
+            myLabel.setObjectName(_fromUtf8(theName + "Label"))
+            myLabelText = theName.replace('_', ' ').capitalize()
+            myLabel.setText(safeTr(myLabelText))
+            myLabel.setToolTip(str(type(theValue)))
         else:
-            myValue = str(theValue)
-            myLineEdit.setText(myValue)
-            self.inputs[theName] = lambda: type(theValue)(myLineEdit.text())
+            myLabel = theName
 
-        self.editableImpactFunctionsFormLayout.addRow(myLabel, myLineEdit)
+        # create widget based on the type of theValue variable
+        if isinstance(theValue, list):
+            myWidget = QLineEdit()
+            myValue = ', '.join(map(str, theValue))
+            myFunc = lambda x: map(float, str(x).split(','))
+        elif isinstance(theValue, dict):
+            myWidget = QLineEdit()
+            myValue = str(theValue)
+            myFunc = lambda x: ast.literal_eval(str(x))
+        else:
+            myWidget = QLineEdit()
+            myValue = str(theValue)
+            myFunc = type(theValue)
+
+        myWidget.setText(myValue)
+        theFormLayout.addRow(myLabel, myWidget)
+
+        return self.bind(myWidget, 'text', myFunc)
 
     def setDialogInfo(self, theFunctionID):
 
@@ -154,9 +167,21 @@ class FunctionOptionsDialog(QtGui.QDialog,
         impactFunctionName = theFunctionID
         myText += self.tr('Parameters for impact function "%1" that can be '
                           'modified are:').arg(impactFunctionName)
-        myLabel = self.impFuncConfLabel
+        myLabel = self.lblFunctionDescription
         myLabel.setText(myText)
 
+    def parseInput(self, theInput):
+        myResult = {}
+        for myName, myValue in theInput.items():
+            if hasattr(myValue, '__call__'):
+                myResult[myName] = myValue()
+            elif isinstance(myValue, dict):
+                myResult[myName] = self.parseInput(myValue)
+            else:
+                myResult[myName] = myValue
+           # print "(%s, %s) Result : %s" % (myName, myValue, myResult)
+
+        return myResult
 
     def accept(self):
         """Override the default accept function
@@ -169,19 +194,15 @@ class FunctionOptionsDialog(QtGui.QDialog,
         Returns:
            not applicable
         """
-        hasError = False
-        myFunction = self.theFunction
 
-        for myName, myValueFunc in self.inputs.items():
-            try:
-                myFunction.parameters[myName] = myValueFunc()
-            except Exception as myEx:
-                myText = self.tr("Unexpected error: " + str(myEx))
-                self.impFuncConfErrLabel.setText(myText)
-                hasError = True
-
-        if not hasError:
+        try:
+            myResult = self.parseInput(self.values)
+            self.theFunction.parameters = myResult
             self.close()
+        except Exception as myEx:
+            myText = self.tr("Unexpected error: %s " % myEx)
+            self.lblErrorMessage.setText(myText)
+
 
 if __name__ == '__main__':
 
@@ -190,17 +211,19 @@ if __name__ == '__main__':
 
     theFunctionID = 'Flood Evacuation Function'
     theFunction = FunctionMock()
-    theParams =  {
+    theParams = {
         'thresholds': [1.0],
         'postprocessors': {
             'Gender': {'on': True},
             'Age': {
                 'on': True,
-                'params': {'youth_ratio': 0.263, 'elder_ratio': 0.078, 'adult_ratio': 0.659}
+                'params': {
+                    'youth_ratio': 0.263,
+                    'elder_ratio': 0.078,
+                    'adult_ratio': 0.659}
             }
         }
     }
-
 
     import sys
     app = QtGui.QApplication(sys.argv)
@@ -210,4 +233,7 @@ if __name__ == '__main__':
     a.buildForm(theFunction, theParams)
     a.show()
 
-    sys.exit(app.exec_())
+    app.exec_()
+
+    print "theParams : %s" % theParams
+    print "result: %s" % theFunction.parameters
