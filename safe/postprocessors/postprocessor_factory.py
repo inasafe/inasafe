@@ -19,11 +19,12 @@ import logging
 # pylint: disable=W0611
 from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
+from aggregation_postprocessor import AggregationPostprocessor
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
-AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age']
+AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age', 'Aggregation']
 
 
 def get_post_processors(requested_postprocessors):
