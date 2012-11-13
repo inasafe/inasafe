@@ -87,19 +87,34 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Count affected population per polygon, per category and total
         evacuated = 0
         for attr in P.get_data():
-            # Get population at this location
-            pop = float(attr['population'])
 
-            # Update population count for associated polygon
-            poly_id = attr['polygon_id']
-            new_attributes[poly_id][self.target_field] += pop
+            affected = False
+            if 'FLOODPRONE' in attr:
+                res = attr['FLOODPRONE']
+                if res is not None:
+                    affected = res.lower() == 'yes'
+            else:
+                # If there isn't a flood prone attribute,
+                # assume that building is wet if inside polygon
+                # as flag by generic attribute AFFECTED
+                res = attr['Affected']
+                if res is not None:
+                    affected = res
 
-            # Update population count for each category
-            cat = new_attributes[poly_id][category_title]
-            categories[cat] += pop
+            if affected:
+                # Get population at this location
+                pop = float(attr['population'])
 
-            # Update total
-            evacuated += pop
+                # Update population count for associated polygon
+                poly_id = attr['polygon_id']
+                new_attributes[poly_id][self.target_field] += pop
+
+                # Update population count for each category
+                cat = new_attributes[poly_id][category_title]
+                categories[cat] += pop
+
+                # Update total
+                evacuated += pop
 
         # Count totals
         total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
