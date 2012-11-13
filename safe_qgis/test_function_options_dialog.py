@@ -62,7 +62,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         assert len(myFunctionList) == 1
         assert myFunctionList[0].keys()[0] == myFunctionId
 
-        myFunction = myFunctionList[0]
         myDialog = FunctionOptionsDialog(None)
         myParameters = {
             'thresholds': [1.0],
@@ -78,7 +77,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
             }
         }
 
-        myDialog.buildForm(myFunction, myParameters)
+        myDialog.buildForm(myParameters)
 
         assert myDialog.tabWidget.count() == 2
 
@@ -110,11 +109,17 @@ class FunctionOptionsDialogTest(unittest.TestCase):
             raise Exception("Fail: must be raise an exception")
 
     def test_parseInput(self):
-        myFunc = lambda: 77
         myInput = {
-            'foo': myFunc,
-            'bar': {
-                'baz': myFunc
+            'thresholds': lambda: [1.0],
+            'postprocessors': {
+                'Gender': {'on': lambda: True},
+                'Age': {
+                    'on': lambda: True,
+                    'params': {
+                        'youth_ratio': lambda: 0.263,
+                        'elder_ratio': lambda: 0.078,
+                        'adult_ratio': lambda: 0.659}
+                }
             }
         }
 
@@ -122,9 +127,16 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         myResult = myDialog.parseInput(myInput)
 
         assert myResult == {
-            'foo': 77,
-            'bar': {
-                'baz': 77
+            'thresholds': [1.0],
+            'postprocessors': {
+                'Gender': {'on': True},
+                'Age': {
+                    'on': True,
+                    'params': {
+                        'youth_ratio': 0.263,
+                        'elder_ratio': 0.078,
+                        'adult_ratio': 0.659}
+                }
             }
         }
 
