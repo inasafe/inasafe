@@ -28,7 +28,8 @@ from functools import partial
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 
-from qgis.core import (QgsMapLayer,
+from qgis.core import (QGis,
+                       QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsGeometry,
@@ -64,7 +65,9 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       safeTr,
                                       get_version,
                                       temp_dir,
-                                      ReadLayerError)
+                                      safe_read_layer,
+                                      ReadLayerError,
+                                      points_in_and_outside_polygon)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -1422,13 +1425,80 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFeat = QgsFeature()
         myTotal = 0
 
+        #add the total field to the postprocLayer
+        myPostprocessorProvider = self.postprocLayer.dataProvider()
+        self.postprocLayer.startEditing()
+        myAggrField = self.getAggregationFieldNameSum()
+        myPostprocessorProvider.addAttributes([QgsField(myAggrField,
+            QtCore.QVariant.Int)])
+        self.postprocLayer.commitChanges()
+        myAggrFieldIndex = self.postprocLayer.fieldNameIndex(myAggrField)
+        self.postprocLayer.startEditing()
+
         if self.doZonalAggregation:
-            myMessage = self.tr('Vector aggregation not implemented yet. '
-                                'Called on %1').arg(myQgisImpactLayer.name())
-            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-            self.aggregationErrorSkipPostprocessing = myMessage
-            LOGGER.debug(myQgisImpactLayer.type(()))
-            return
+            #get safe layers
+            mySafePostprocLayer = safe_read_layer(
+                str(self.postprocLayer.source()))
+            mySafeImpactLayer = self.runner.impactLayer()
+            myPolygons = mySafePostprocLayer.get_geometry()
+
+            #FIXME (MB) do we need further geometry types
+            if mySafeImpactLayer.is_polygon_data:
+                LOGGER.debug('Doing polygon in polygon aggregation')
+            elif mySafeImpactLayer.is_point_data    :
+                LOGGER.debug('Doing point in polygon aggregation')
+
+                myPoints = mySafeImpactLayer.get_geometry()
+                myValues = mySafeImpactLayer.get_data(index=myTargetFieldIndex)
+
+                pointsCovered = []
+
+                myRemainingPoints = myPoints
+                myRemainingValues = myValues
+            
+                for i, myPolygon in enumerate(myPolygons):
+                    print 'Remaining points', len(myRemainingPoints)
+            
+                    if hasattr(myPolygon, 'outer_ring'):
+                        outer_ring = myPolygon.outer_ring
+                        inner_rings = myPolygon.inner_rings
+                    else:
+                        # Assume it is an array
+                        outer_ring = myPolygon
+            
+                    inside, outside = points_in_and_outside_polygon(
+                        myRemainingPoints,
+                        outer_ring,
+                        holes=inner_rings,
+                        closed=True,
+                        check_input=False)
+                    # Add features inside this polygon
+                    pointsCovered.append((myRemainingPoints[inside],
+                                           myRemainingValues[inside]))
+                    myTotal = sum(myRemainingValues[inside])
+
+                    #summ attributes
+                    attrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+                    myFID = i
+                    myPostprocessorProvider.changeAttributeValues(
+                        {myFID: attrs})
+
+                    # Select remaining points to clip
+                    myRemainingPoints = myRemainingPoints[outside]
+                    myRemainingValues = myRemainingValues[outside]
+
+
+                
+                
+            else:
+                myMessage = self.tr('Aggregation on vector impact layers other'
+                                    'than points or polygons not implemented '
+                                    'yet not implemented yet. '
+                                    'Called on %1').arg(
+                    myQgisImpactLayer.name())
+                LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+                self.aggregationErrorSkipPostprocessing = myMessage
+                return
         else:
             #loop over all features in impact layer
             while myImpactProvider.nextFeature(myFeat):
@@ -1436,22 +1506,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 if ok:
                     myTotal += myVal
 
-            #add the total to the postprocLayer
-            myPostprocessorProvider = self.postprocLayer.dataProvider()
-            self.postprocLayer.startEditing()
-            myAggrField = self.getAggregationFieldNameSum()
-            myPostprocessorProvider.addAttributes([QgsField(myAggrField,
-                QtCore.QVariant.Int)])
-            self.postprocLayer.commitChanges()
-            myAggrFieldIndex = self.postprocLayer.fieldNameIndex(
-                myAggrField)
             attrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
             myFID = 0
-            self.postprocLayer.startEditing()
             myPostprocessorProvider.changeAttributeValues({myFID: attrs})
-            self.postprocLayer.commitChanges()
 
-        return
+        #commit changes to postprocessing layer
+        self.postprocLayer.commitChanges()
 
     def _aggregateResultsRaster(self, myQgisImpactLayer):
         """

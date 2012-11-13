@@ -44,7 +44,8 @@ from safe.api import (get_admissible_plugins,
                       calculate_impact as safe_calculate_impact,
                       BoundingBoxError,
                       ReadLayerError,
-                      get_plugins, get_version)
+                      get_plugins, get_version,
+                      in_and_outside_polygon as points_in_and_outside_polygon)
 
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611

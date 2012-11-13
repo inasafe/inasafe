@@ -42,4 +42,5 @@ from safe.common.utilities import (VerificationError,
                                    unique_filename,
                                    ugettext as safe_tr)
 from safe.common.version import get_version
+from safe.common.polygon import in_and_outside_polygon
 # pylint: enable=W0611
