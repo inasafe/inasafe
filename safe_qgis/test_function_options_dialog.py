@@ -61,21 +61,74 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         myFunctionList = get_plugins(myFunctionId)
         assert len(myFunctionList) == 1
         assert myFunctionList[0].keys()[0] == myFunctionId
+
         myFunction = myFunctionList[0]
         myDialog = FunctionOptionsDialog(None)
-        myParameters = {'foo': 'bar'}
+        myParameters = {
+            'thresholds': [1.0],
+            'postprocessors': {
+                'Gender': {'on': True},
+                'Age': {
+                    'on': True,
+                    'params': {
+                        'youth_ratio': 0.263,
+                        'elder_ratio': 0.078,
+                        'adult_ratio': 0.659}
+                }
+            }
+        }
+
+
         myDialog.buildForm(myFunction, myParameters)
 
-        #myKids = myDialog.findChildren(QLineEdit)
-        #for myKid in myKids:
-        #    print myKid.objectName()
-        myWidget = myDialog.findChild(QLineEdit, 'fooLineEdit')
-        assert myWidget is not None
-        assert myWidget.text() == 'bar'
+        assert myDialog.tabWidget.count() == 2
 
-        # For localised testing only, disable when test works!
-        # This will spawn the dialog so you can actually see its contents
-        #myDialog.exec_()
+        myChildren = myDialog.tabWidget.findChildren(QLineEdit)
+        assert len(myChildren) == 4
+
+    def test_buildWidget(self):
+        myDialog = FunctionOptionsDialog(None)
+        myValue = myDialog.buildWidget(myDialog.configLayout, 'foo', [2.3])
+        myWidget = myDialog.findChild(QLineEdit)
+
+        # initial value must be same with default
+        assert myValue() == [2.3]
+
+        # change to 5.9
+        myWidget.setText('5.9')
+        assert myValue() == [5.9]
+
+        myWidget.setText('5.9, 70')
+        assert myValue() == [5.9, 70]
+
+        myWidget.setText('bar')
+        try:
+            myValue()
+        except ValueError:
+            ## expected to raises this exception
+            pass
+        else:
+            raise Exception("Fail: must be raise an exception")
+
+    def test_parseInput(self):
+        myFunc = lambda: 77
+        myInput = {
+            'foo' : myFunc,
+            'bar' : {
+                'baz' : myFunc
+            }
+        }
+
+        myDialog = FunctionOptionsDialog(None)
+        myResult = myDialog.parseInput(myInput)
+
+        assert myResult == {
+            'foo' : 77,
+            'bar' : {
+                'baz' : 77
+            }
+        }
+
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
