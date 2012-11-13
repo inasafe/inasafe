@@ -10,7 +10,10 @@ import argparse
 from Scientific.IO.NetCDF import NetCDFFile
 
 from safe.storage.raster import Raster
+from safe.storage.vector import Vector
 from safe.storage.utilities import raster_geometry2geotransform
+from safe.storage.core import read_layer
+from safe.engine.interpolation import tag_polygons_by_grid
 
 
 # FIXME (Ole): Move this function to e.g. safe.storage.utilities and write
@@ -102,8 +105,12 @@ def convert_netcdf2tif(filename, n):
                          'unit': 'm',
                          'title': ('%d hour flood forecast '
                                    'in Jakarta at %s' % (n, date))})
-    R.write_to_file('%s_%d_hours.tif' % (basename, n))
+
+    tif_filename = '%s_%d_hours.tif' % (basename, n)
+    R.write_to_file(tif_filename)
+
     print 'Success: %d hour forecast written to %s' % (n, R.filename)
+    return tif_filename
 
 
 def usage():
@@ -126,13 +133,33 @@ if __name__ == '__main__':
     print args
     print
 
-    convert_netcdf2tif(args.filename, args.hours)
+    tif_filename = convert_netcdf2tif(args.filename, args.hours)
 
-    # FIXME (Ole): Call function to tag each polygon with Y if
-    # it contains at least one pixel exceeding a specific threshold
-    # (e.g. 0.3m).
-    # See https://github.com/AIFDR/inasafe/issues/182#issuecomment-10136401
-    #
-    # For this function use
-    # def clip_grid_by_polygons(A, geotransform, polygons):
-    # which is available in safe/common/polygons.py
+    # Tag each polygon with Y if it contains at least one pixel
+    # exceeding a specific threshold (e.g. 0.3m).
+    if args.regions is not None:
+        print 'Tagging %s as "Affected" or not' % args.regions
+        polygons = read_layer(args.regions)
+        grid = read_layer(tif_filename)
+        res = tag_polygons_by_grid(polygons, grid,
+                                   threshold=0.3, tag='Affected')
+
+        # Keep only those that are affected
+        geom = res.get_geometry()
+        data = res.get_data()
+        new_geom = []
+        new_data = []
+
+        for i, d in enumerate(data):
+            if d['Affected']:
+                g = geom[i]
+                new_geom.append(g)
+                new_data.append(d)
+
+        v = Vector(geometry=new_geom, data=new_data,
+                   projection=res.projection,
+                   keywords={'category': 'hazard', 'subcategory': 'flood'})
+
+        polyforecast_filename = os.path.splitext(tif_filename)[0] + '.shp'
+        v.write_to_file(polyforecast_filename)
+        print 'Wrote tagged polygons to %s' % polyforecast_filename
