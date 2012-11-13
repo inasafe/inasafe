@@ -52,14 +52,15 @@ def create_index(title, max_depth, subtitles):
     return return_text
 
 
-def create_package_index(package_name, max_depth, modules, inner_packages=None):
+def create_package_index(package_name, max_depth, modules,
+                         inner_packages=None):
     """Function for creating text for index for a package.
         package_name : name of the package
         max_depth : maxdepth
         modules : list of module in the package.
     """
     if inner_packages is None:
-        inner_packages=[]
+        inner_packages = []
     return_text = 'Package::' + package_name
     dash = '=' * len(return_text)
     return_text += '\n' + dash + '\n\n'
