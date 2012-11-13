@@ -687,6 +687,8 @@ def get_unique_values():
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
     for key, func in plugins_dict.iteritems():
+        if not is_function_enabled(func):
+            continue
         dict_retval['title'].add(get_function_title(func))
         dict_retval['id'].add(key)
         for requirement in requirements_collect(func):
