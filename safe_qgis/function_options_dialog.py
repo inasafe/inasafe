@@ -129,14 +129,13 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 myGroupBox.setLayout(myLayout)
 
                 myInputValues['params'] = {}
-                for myKey, myValue in  myOptions['params'].items():
+                for myKey, myValue in myOptions['params'].items():
                     myInputValues['params'][myKey] = self.buildWidget(
                         myLayout, myKey, myValue)
 
-
                 myFormLayout.addRow(myGroupBox, None)
 
-            elif myOptions.has_key('on'):
+            elif 'on' in myOptions:
                 myCheckBox = QCheckBox()
                 myCheckBox.setText(myLabel)
                 myCheckBox.setChecked(myOptions['on'])
@@ -219,7 +218,8 @@ class FunctionOptionsDialog(QtGui.QDialog,
             a dictionary that can be consumed for impact functions.
 
         Raises:
-            * ValueError - occurs when some input cannot be converted to suitable type.
+            * ValueError - occurs when some input cannot be converted
+                           to suitable type.
         """
 
         myResult = {}

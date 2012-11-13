@@ -78,7 +78,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
             }
         }
 
-
         myDialog.buildForm(myFunction, myParameters)
 
         assert myDialog.tabWidget.count() == 2
@@ -113,9 +112,9 @@ class FunctionOptionsDialogTest(unittest.TestCase):
     def test_parseInput(self):
         myFunc = lambda: 77
         myInput = {
-            'foo' : myFunc,
-            'bar' : {
-                'baz' : myFunc
+            'foo': myFunc,
+            'bar': {
+                'baz': myFunc
             }
         }
 
@@ -123,12 +122,11 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         myResult = myDialog.parseInput(myInput)
 
         assert myResult == {
-            'foo' : 77,
-            'bar' : {
-                'baz' : 77
+            'foo': 77,
+            'bar': {
+                'baz': 77
             }
         }
-
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
