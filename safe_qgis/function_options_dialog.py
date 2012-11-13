@@ -19,9 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ast
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QRect, QObject, QVariant, Qt
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
-    QTabWidget, QLineEdit, QLabel, QCheckBox, QFormLayout, QWidget)
+    QGroupBox, QLineEdit, QLabel, QCheckBox, QFormLayout, QWidget)
 from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
 
 from safe_interface import safeTr
@@ -89,29 +89,49 @@ class FunctionOptionsDialog(QtGui.QDialog,
         myTab = QWidget()
         myFormLayout = QFormLayout(myTab)
         myFormLayout.setLabelAlignment(Qt.AlignLeft)
-        self.tabWidget.addTab(myTab, self.tr('postprocessors'))
+        self.tabWidget.addTab(myTab, self.tr('Postprocessors'))
         self.tabWidget.tabBar().setVisible(True)
 
         # create element for the tab
-        myWidgets = {}
+        myValues = {}
         for myLabel, myOptions in theParams.items():
             myInputValues = {}
 
-            myCheckBox = QCheckBox()
-            myCheckBox.setText(myLabel)
-
-            if myOptions.get('on') is True:
-                myCheckBox.setChecked(True)
-                myInputValues['on'] = self.bind(myCheckBox, 'checked', bool)
-
+            # NOTE (gigih) : 'params' is assumed as dictionary
             if 'params' in myOptions:
-                myInputValues = self.buildWidget(myFormLayout, myCheckBox, myOptions['params'])
-            else:
+                myGroupBox = QGroupBox()
+                myGroupBox.setCheckable(True)
+                myGroupBox.setTitle(myLabel)
+
+                # NOTE (gigih): is 'on' always exist??
+                myGroupBox.setChecked(myOptions.get('on'))
+                myInputValues['on'] = self.bind(myGroupBox, 'checked', bool)
+
+                myLayout = QFormLayout(myGroupBox)
+                myGroupBox.setLayout(myLayout)
+
+                myInputValues['params'] = {}
+                for myKey, myValue in  myOptions['params'].items():
+                    myInputValues['params'][myKey] = self.buildWidget(
+                        myLayout, myKey, myValue)
+
+
+                myFormLayout.addRow(myGroupBox, None)
+
+            elif myOptions.hasattr('on'):
+                myCheckBox = QCheckBox()
+                myCheckBox.setText(myLabel)
+                myCheckBox.setChecked(myOptions['on'])
+
+                myInputValues['on'] = self.bind(myCheckBox, 'checked', bool)
                 myFormLayout.addRow(myCheckBox, None)
+            else:
+                raise NotImplementedError('This case is not handled for now')
 
-            myWidgets[myLabel] = myInputValues
+            myValues[myLabel] = myInputValues
 
-        self.values['postprocessors'] = myWidgets
+        self.values['postprocessors'] = myValues
+        print self.values['postprocessors']
 
     def buildWidget(self, theFormLayout, theName, theValue):
         """Create a new form element dynamically based from theValue type.
@@ -146,7 +166,9 @@ class FunctionOptionsDialog(QtGui.QDialog,
         if isinstance(theValue, list):
             myWidget = QLineEdit()
             myValue = ', '.join(map(str, theValue))
-            myFunc = lambda x: map(float, str(x).split(','))
+            # NOTE: we assume that all element in list have same type
+            myType = type(theValue[0])
+            myFunc = lambda x: map(myType, str(x).split(','))
         elif isinstance(theValue, dict):
             myWidget = QLineEdit()
             myValue = str(theValue)
@@ -171,6 +193,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         myLabel.setText(myText)
 
     def parseInput(self, theInput):
+#        print "theInput : %s" % theInput
         myResult = {}
         for myName, myValue in theInput.items():
             if hasattr(myValue, '__call__'):
