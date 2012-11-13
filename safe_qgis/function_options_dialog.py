@@ -58,8 +58,18 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         self.values = {}
 
-    def bind(self, object, propertyName, type):
-        return lambda: type(object.property(propertyName).toPyObject())
+    def bind(self, theObject, theProperty, theType):
+        """Create a function that return the QWidget property
+        of object and convert the value to type.
+
+        Args:
+           * theObject - QWidget instance
+           * theProperty - the name of property inside QWidget instance
+           * theType - a function to convert the property value
+        Returns:
+           a function that return the property value of theObject
+        """
+        return lambda: theType(theObject.property(theProperty).toPyObject())
 
     def buildForm(self, theFunction, theParams):
         """we build a form from impact functions parameter
@@ -85,6 +95,14 @@ class FunctionOptionsDialog(QtGui.QDialog,
                     myValue)
 
     def _addPostProcessorFormItem(self, theParams):
+        """Build Post Processor Tab
+
+        Args:
+           * theParams - dictionary containing element of form
+        Returns:
+           not applicable
+        """
+
         # create postprocessors tab
         myTab = QWidget()
         myFormLayout = QFormLayout(myTab)
@@ -193,7 +211,17 @@ class FunctionOptionsDialog(QtGui.QDialog,
         myLabel.setText(myText)
 
     def parseInput(self, theInput):
-#        print "theInput : %s" % theInput
+        """Parse the input value of widget.
+        Args:
+            * theInput: dictionary that holds all value of element
+
+        Returns:
+            a dictionary that can be consumed for impact functions.
+
+        Raises:
+            * ValueError - occurs when some input cannot be converted to suitable type.
+        """
+
         myResult = {}
         for myName, myValue in theInput.items():
             if hasattr(myValue, '__call__'):
@@ -202,7 +230,6 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 myResult[myName] = self.parseInput(myValue)
             else:
                 myResult[myName] = myValue
-           # print "(%s, %s) Result : %s" % (myName, myValue, myResult)
 
         return myResult
 
@@ -212,8 +239,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         .. note:: see http://tinyurl.com/pyqt-differences
 
         Args:
-           theFunction - theFunction to be modified
-           params - parameters to be edited
+
         Returns:
            not applicable
         """
