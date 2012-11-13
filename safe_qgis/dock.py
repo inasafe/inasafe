@@ -1230,13 +1230,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '       <td colspan="100%">'
                        '         <strong>'
                        + self.tr('Detailed %1 report').arg(
-                                 self.tr(proc)) +
+                                 self.tr(proc).toLower()) +
                        '         </strong>'
                        '       </td>'
                        '    </tr>'
                        '    <tr>'
                        '      <th width="25%">'
-                       + self.aggrAttrTitle +
+                       + str(self.aggrAttrTitle).capitalize() +
                        '      </th>')
             # add th according to the ammount of calculation done by each
             # postprocessor
