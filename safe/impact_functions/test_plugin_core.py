@@ -9,6 +9,7 @@ from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
+from core import get_documentation
 from utilities import pretty_string
 # from safe.impact_functions.core import get_dict_doc_func
 
@@ -230,14 +231,15 @@ class Test_plugin_core(unittest.TestCase):
         S = T.toNewlineFreeString()
         LOGGER.debug(S)
 
-    #==========================================================================
-    # def test_get_dict_doc_func(self):
-    #    """Test get doc string in dictionary format."""
-    #    func = 'Catergorised Hazard Population Impact Function'
-    #    dict_doc = get_dict_doc_func(func)
-    #    print dict_doc
-    #    assert dict_doc['author'] == 'AIFDR', 'XX' + dict_doc['author'] + 'XX'
-    #==========================================================================
+    def test_get_documentation(self):
+        """Test get_documentation for a function"""
+        dict_doc = get_documentation('Basic Function')
+        myMsg = ('title should be Basic Function but found %s \n'
+                % (dict_doc['title']))
+        myMsg += str(dict_doc)
+        for key, value in dict_doc.iteritems():
+            print key + ':\t' + str(value)
+        assert dict_doc['title'] == 'Basic Function', myMsg
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

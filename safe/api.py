@@ -26,9 +26,10 @@ from safe.storage.utilities import buffered_bounding_box, verify
 from safe.storage.utilities import write_keywords, read_keywords
 from safe.storage.core import read_layer
 
-from safe.impact_functions import get_plugins
-from safe.impact_functions import get_function_title
-from safe.impact_functions import get_admissible_plugins
+from safe.impact_functions import (get_plugins,
+                                    get_function_title,
+                                    get_admissible_plugins,
+                                    get_documentation)
 
 from safe.engine.core import calculate_impact
 

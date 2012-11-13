@@ -37,6 +37,8 @@ else
   git merge origin/gh-pages
   echo "Generating .rst files for API doc..."
   python $SCRIPTDIR/gen_rst_script.py
+  echo "Generating .rst files for impact function doc..."
+  python $SCRIPTDIR/gen_impfunc_doc.py
   cd $INASAFEDIR
   echo "Pulling lates sources of inaSAFE ..."
   git fetch

@@ -13,8 +13,20 @@ from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
 
+# FIXME (Ole): Move this function to e.g. safe.storage.utilities and write
+# unit test using test data
+# inasafe_data/test/201211071300_Jakarta_200m_Sobek_Forecast_CCAM.nc
 def convert_netcdf2tif(filename, n):
-    """Convert netcdf to tif aggregating firsts n bands
+    """Convert netcdf to tif aggregating first n bands
+
+    Args
+        * filename: NetCDF multiband raster with extension .nc
+        * n: Positive integer determining how many bands to use
+
+    Returns
+        * Raster file in tif format. Each pixel will be the maximum
+          of that pixel in the first n bands in the input file.
+
     """
 
     if not isinstance(filename, basestring):
@@ -80,36 +92,16 @@ def convert_netcdf2tif(filename, n):
     print 'Geotransform', geotransform
 
     # Write result to tif file
+    # NOTE: This assumes a default projection (WGS 84, geographic)
+    date = os.path.split(basename)[-1].split('_')[0]
+    print 'date', date
     R = Raster(data=A,
-               projection="""PROJCS["DGN95 / Indonesia TM-3 zone 48.2",
-                             GEOGCS["DGN95",
-                                 DATUM["Datum_Geodesi_Nasional_1995",
-                                     SPHEROID["WGS 84",6378137,298.257223563,
-                                         AUTHORITY["EPSG","7030"]],
-                                     TOWGS84[0,0,0,0,0,0,0],
-                                     AUTHORITY["EPSG","6755"]],
-                                 PRIMEM["Greenwich",0,
-                                     AUTHORITY["EPSG","8901"]],
-                                 UNIT["degree",0.01745329251994328,
-                                     AUTHORITY["EPSG","9122"]],
-                                 AUTHORITY["EPSG","4755"]],
-                             UNIT["metre",1,
-                                 AUTHORITY["EPSG","9001"]],
-                             PROJECTION["Transverse_Mercator"],
-                             PARAMETER["latitude_of_origin",0],
-                             PARAMETER["central_meridian",106.5],
-                             PARAMETER["scale_factor",0.9999],
-                             PARAMETER["false_easting",200000],
-                             PARAMETER["false_northing",1500000],
-                             AUTHORITY["EPSG","23834"],
-                             AXIS["X",EAST],
-                             AXIS["Y",NORTH]]""",
                geotransform=geotransform,
                keywords={'category': 'hazard',
                          'subcategory': 'flood',
                          'unit': 'm',
-                         'title': ('Hypothetical %d hour flood forecast '
-                                   'in Jakarta' % n)})
+                         'title': ('%d hour flood forecast '
+                                   'in Jakarta at %s' % (n, date))})
     R.write_to_file('%s_%d_hours.tif' % (basename, n))
     print 'Success: %d hour forecast written to %s' % (n, R.filename)
 
@@ -134,14 +126,13 @@ if __name__ == '__main__':
     print args
     print
 
-    #print args.filename
-    #print args.hours
-
     convert_netcdf2tif(args.filename, args.hours)
-    #if len(sys.argv) != 3:
-    #    print usage()
-    #else:
-    #    filename = sys.argv[1]
-    #    N = sys.argv[2]
+
+    # FIXME (Ole): Call function to tag each polygon with Y if
+    # it contains at least one pixel exceeding a specific threshold
+    # (e.g. 0.3m).
+    # See https://github.com/AIFDR/inasafe/issues/182#issuecomment-10136401
     #
-    #    convert_netcdf2tif(filename, N)
+    # For this function use
+    # def clip_grid_by_polygons(A, geotransform, polygons):
+    # which is available in safe/common/polygons.py

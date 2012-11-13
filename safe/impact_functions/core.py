@@ -118,7 +118,7 @@ def get_plugin(name):
     return impact_function
 
 
-# FIXME (Ole): Deprecate this function
+# FIXME (Ole): Deprecate this function (see issue #392)
 def pretty_function_name(func):
     """Return a human readable name for the function
     if the function has a func.plugin_name use this
@@ -723,7 +723,7 @@ def get_dict_doc_func(func):
               'param_req': [],
               'detail': '',
               'citation': [],
-              'limitaion': ''}
+              'limitation': ''}
 
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
@@ -760,6 +760,73 @@ def get_dict_doc_func(func):
 
         retval['synopsis'] = remove_double_spaces(doc_str.split('\n')[0])
 
+    return retval
+
+
+def get_documentation(func):
+    """Collect documentaion of a impact function and return it as a dictionary
+
+        Args:
+            * func : name of function
+        Returns:
+            * Dictionary contains:
+                author : string (identified by :author)
+                synopsis : string (first line)
+                rating : integer (identified by :rating)
+                param_req : list of param (identified by :param requires)
+                detail : detail description (function properties)
+                citation : list of citation in string (function properties)
+                limitation : string (function properties)
+    """
+    retval = {'unique_identifier': func}
+
+    plugins_dict = dict([(pretty_function_name(p), p)
+                         for p in FunctionProvider.plugins])
+    if func not in plugins_dict.keys():
+        return retval
+    else:
+        func = plugins_dict[func]
+
+    author_tag = ':author'
+    rating_tag = ':rating'
+
+    # attributes
+    synopsis = 'synopsis'
+    actions = 'actions'
+    # citations must be a list
+    citations = 'citations'
+    detailed_description = 'detailed_description'
+    permissible_hazard_input = 'permissible_hazard_input'
+    permissible_exposure_input = 'permissible_exposure_input'
+    limitation = 'limitation'
+
+    if hasattr(func, '__doc__') and func.__doc__:
+        doc_str = func.__doc__
+        for line in doc_str.split('\n'):
+            doc_line = remove_double_spaces(line)
+            doc_line = doc_line.strip()
+
+            if doc_line.startswith(author_tag):
+                retval['author'] = remove_double_spaces(
+                                        doc_line[len(author_tag) + 1:])
+            elif doc_line.startswith(rating_tag):
+                retval['rating'] = doc_line[len(rating_tag) + 1:]
+    retval['title'] = get_function_title(func)
+
+    if hasattr(func, synopsis):
+        retval[synopsis] = func.synopsis
+    if hasattr(func, actions):
+        retval[actions] = func.actions
+    if hasattr(func, citations):
+        retval[citations] = func.citations
+    if hasattr(func, detailed_description):
+        retval[detailed_description] = func.detailed_description
+    if hasattr(func, permissible_hazard_input):
+        retval[permissible_hazard_input] = func.permissible_hazard_input
+    if hasattr(func, permissible_exposure_input):
+        retval[permissible_exposure_input] = func.permissible_exposure_input
+    if hasattr(func, limitation):
+        retval[limitation] = func.limitation
     return retval
 
 
