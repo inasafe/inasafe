@@ -118,7 +118,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
                 myFormLayout.addRow(myGroupBox, None)
 
-            elif myOptions.hasattr('on'):
+            elif myOptions.has_key('on'):
                 myCheckBox = QCheckBox()
                 myCheckBox.setText(myLabel)
                 myCheckBox.setChecked(myOptions['on'])
