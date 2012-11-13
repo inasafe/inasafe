@@ -254,8 +254,8 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = '%s/pager_test_mmi.asc' % TESTDATA
-        exposure_filename = '%s/pager_test_pop.asc' % TESTDATA
+        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
+        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
 
         # Calculate impact using API
         H = read_layer(hazard_filename)

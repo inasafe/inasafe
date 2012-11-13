@@ -1,12 +1,21 @@
 import math
 import numpy
 
-from safe.impact_functions.earthquake.itb_earthquake_fatality_model import ITBFatalityFunction
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
+ ITBFatalityFunction)
 from safe.common.utilities import get_defaults
 
 
-
 class PAGFatalityFunction(ITBFatalityFunction):
+    """
+    Population Vulnerability Model Pager
+    Loss ratio(MMI) = standard normal distrib( 1 / BETA * ln(MMI/THETA)).
+    Reference:
+    Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).
+    Estimating casualties for large worldwide earthquakes using an empirical
+    approach. U.S. Geological Survey Open-File Report 2009-1136.
+    """
+
     defaults = get_defaults()
     parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
                       # Rates of people displaced for each MMI level
@@ -27,11 +36,9 @@ class PAGFatalityFunction(ITBFatalityFunction):
                                    'adult_ratio': defaults['ADULT_RATIO'],
                                    'elder_ratio': defaults['ELDER_RATIO']}}})
 
-
-    def fatality_rate(self, mmi, THETA=11.067,
-                        BETA=0.106, N=math.sqrt(2*math.pi)):
+    def fatality_rate(self, mmi, THETA=11.067, BETA=0.106,
+                        N=math.sqrt(2 * math.pi)):
         """Pager method to compute fatality rate"""
-
 
         x = math.log(mmi / THETA) / BETA
         return math.exp(-x * x / 2.0) / N

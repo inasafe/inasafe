@@ -99,8 +99,13 @@ class ITBFatalityFunction(FunctionProvider):
                                    'adult_ratio': defaults['ADULT_RATIO'],
                                    'elder_ratio': defaults['ELDER_RATIO']}}})
 
-
     def fatality_rate(self, mmi, x=parameters['x'], y=parameters['y']):
+        """
+        ITB method to compute fatality rate
+        :param x: model coefficient.
+        :param y: model coefficient.
+        """
+
         return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
@@ -112,10 +117,6 @@ class ITBFatalityFunction(FunctionProvider):
               P: Raster layer of population density
 
         """
-
-        # Establish model coefficients
-        x = self.parameters['x']
-        y = self.parameters['y']
 
         # Define percentages of people being displaced at each mmi level
         displacement_rate = self.parameters['displacement_rate']
@@ -137,8 +138,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-        #import pdb
-        #pdb.set_trace()
+
         mmi_range = self.parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
@@ -157,11 +157,8 @@ class ITBFatalityFunction(FunctionProvider):
             I = numpy.where(mask, P, 0)
 
             # Calculate expected number of fatalities per level
-            #fatality_rate = numpy.power(10.0, x * mmi - y)
-
             fatality_rate = self.fatality_rate(mmi)
-            #import pdb
-            #pdb.set_trace()
+
             F = fatality_rate * I
 
             # Calculate expected number of displaced people per level
