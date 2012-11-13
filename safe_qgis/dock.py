@@ -1451,8 +1451,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myPoints = mySafeImpactLayer.get_geometry()
                 myValues = mySafeImpactLayer.get_data(attribute=myTargetField)
 
-                pointsCovered = []
-
                 myRemainingPoints = myPoints
                 myRemainingValues = myValues
             
