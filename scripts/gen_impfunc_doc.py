@@ -72,9 +72,11 @@ def gen_rst_doc(impfunc_doc):
                         content_rst)
 
 
-def gen_impact_func_index(list_unique_identifier=[]):
+def gen_impact_func_index(list_unique_identifier=None):
     """Generate impact function index
     """
+    if list_unique_identifier is None:
+        list_unique_identifier = []
     content_rst = ''
     title_page = 'Impact Functions Documentation'
     content_rst += '=' * len(title_page) + '\n'

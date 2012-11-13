@@ -201,7 +201,7 @@ def requirement_check(params, require_str, verbose=False):
         # Check that symbol is not a Python keyword
         if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
-                   'Must not use Python keywords as params: %s' % (key))
+                   'Must not use Python keywords as params: %s' % key)
             #print msg
             #logger.error(msg)
             return False
