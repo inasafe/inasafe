@@ -10,7 +10,7 @@ from safe.engine.core import calculate_impact
 from safe.engine.interpolation import interpolate_polygon_raster
 from safe.engine.interpolation import interpolate_raster_vector_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.impact_functions.earthquake.pager_earthquake_fatality_model import PAGFatalityFunction
+
 
 from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
@@ -45,6 +45,8 @@ from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
 from impact_functions_for_testing import itb_fatality_model_org
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
+PAGFatalityFunction)
 # pylint: enable=W0611
 
 
