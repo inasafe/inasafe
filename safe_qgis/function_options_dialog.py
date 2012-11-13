@@ -225,38 +225,3 @@ class FunctionOptionsDialog(QtGui.QDialog,
         except Exception as myEx:
             myText = self.tr("Unexpected error: %s " % myEx)
             self.lblErrorMessage.setText(myText)
-
-
-if __name__ == '__main__':
-
-    class FunctionMock:
-        parameters = {}
-
-    theFunctionID = 'Flood Evacuation Function'
-    theFunction = FunctionMock()
-    theParams = {
-        'thresholds': [1.0],
-        'postprocessors': {
-            'Gender': {'on': True},
-            'Age': {
-                'on': True,
-                'params': {
-                    'youth_ratio': 0.263,
-                    'elder_ratio': 0.078,
-                    'adult_ratio': 0.659}
-            }
-        }
-    }
-
-    import sys
-    app = QtGui.QApplication(sys.argv)
-
-    a = FunctionOptionsDialog()
-    a.setDialogInfo(theFunctionID)
-    a.buildForm(theFunction, theParams)
-    a.show()
-
-    app.exec_()
-
-    print "theParams : %s" % theParams
-    print "result: %s" % theFunction.parameters
