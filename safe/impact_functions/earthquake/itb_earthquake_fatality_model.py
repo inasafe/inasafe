@@ -99,14 +99,15 @@ class ITBFatalityFunction(FunctionProvider):
                                    'adult_ratio': defaults['ADULT_RATIO'],
                                    'elder_ratio': defaults['ELDER_RATIO']}}})
 
-    def fatality_rate(self, mmi, x=parameters['x'], y=parameters['y']):
+    def fatality_rate(self, mmi):
         """
         ITB method to compute fatality rate
         :param x: model coefficient.
         :param y: model coefficient.
         """
-
-        return numpy.power(10.0, x * mmi - y)
+        x = self.parameters['x']
+        y = self.parameters['y']
+        return numpy.power(10.0,  x * mmi - y)
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
