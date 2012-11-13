@@ -94,10 +94,10 @@ class AggregationPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        if self.target_field is None:
-            myName = tr('Total')
-        else:
-            myName = tr(self.target_field).capitalize()
+
+        myName = tr('Total')
+        if self.target_field is not None:
+            myName = '%s %s' % (myName, tr(self.target_field).lower())
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
