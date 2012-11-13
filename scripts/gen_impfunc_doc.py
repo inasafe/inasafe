@@ -11,7 +11,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import shutil
+from shutil import rmtree
 from safe.api import get_documentation, get_plugins, is_function_enabled
 from gen_rst_script import (create_dirs, create_rst_file, insafe_dir_path)
 
@@ -99,8 +99,10 @@ def gen_impact_func_index(list_unique_identifier=[]):
 
 if __name__ == "__main__":
     # remove old files, in case you disabled or remove impact function
-    shutil.rmtree(insafe_dir_path + os.sep + doc_dir + os.sep +
-                  impact_func_doc_dir)
+    impact_func_doc_dir_path = (insafe_dir_path + os.sep + doc_dir + os.sep +
+            impact_func_doc_dir)
+    if os.path.exists(impact_func_doc_dir_path):
+        rmtree(impact_func_doc_dir_path)
 
     impfunc_doc = {}
     # Get all impact functions
@@ -113,6 +115,5 @@ if __name__ == "__main__":
                                 for x in impfunc_doc.itervalues()]
     gen_impact_func_index(list_unique_identifier)
 
-    create_dirs(insafe_dir_path + os.sep + doc_dir + os.sep +
-                    impact_func_doc_dir)
+    create_dirs(impact_func_doc_dir_path)
     gen_rst_doc(impfunc_doc)

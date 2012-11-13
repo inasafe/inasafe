@@ -10,6 +10,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+from shutil import rmtree
 import string
 
 # Constant
@@ -88,10 +89,12 @@ def create_text_module(module_name):
     return return_text
 
 
-def python_file_siever(files, excluded_files=['__init__.py']):
+def python_file_siever(files, excluded_files=None):
     """Return list of python file from files, except it is an excluded file.
     """
 
+    if excluded_files == None:
+        excluded_files = ['__init__.py']
     python_files = []
     for fl in files:
         if fl.endswith('.py') and not fl in excluded_files:
@@ -209,4 +212,8 @@ def main():
 
 
 if __name__ == "__main__":
+    # Remove old .rst files, incase you deleted python files
+    # print insafe_dir_path
+    if os.path.exists(insafe_dir_path + os.sep + _docs_dir):
+        rmtree(insafe_dir_path + os.sep + _docs_dir)
     main()
