@@ -3,6 +3,8 @@ import numpy
 
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
  ITBFatalityFunction)
+from safe.common.utilities import ugettext as tr
+
 from safe.common.utilities import get_defaults
 
 
@@ -16,8 +18,9 @@ class PAGFatalityFunction(ITBFatalityFunction):
     approach. U.S. Geological Survey Open-File Report 2009-1136.
     """
 
+    title = tr('Die or be displaced according Pager model')
     defaults = get_defaults()
-    parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
+    parameters = dict(THETA=11.067, BETA=0.106,  # Model coefficients
                       # Rates of people displaced for each MMI level
                       displacement_rate={1: 0, 1.5: 0, 2: 0, 2.5: 0, 3: 0,
                                          3.5: 0, 4: 0, 4.5: 0, 5: 0, 5.5: 0,
