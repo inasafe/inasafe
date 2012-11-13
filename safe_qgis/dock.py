@@ -1127,6 +1127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.postprocOutput = {}
         self.aggregationErrorSkipPostprocessing = None
+        self.targetField = None
         try:
             if (self.postprocLayer is not None and
                 self.lastUsedFunction != self.getFunctionID()):
@@ -1396,7 +1397,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
         try:
-            myTargetField = self.keywordIO.readKeywords(myQgisImpactLayer,
+            self.targetField = self.keywordIO.readKeywords(myQgisImpactLayer,
                 'target_field')
         except KeywordNotFoundException:
             myMessage = self.tr('No "target_field" keyword found in the impact'
@@ -1407,13 +1408,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.aggregationErrorSkipPostprocessing = myMessage
             return
         myImpactProvider = myQgisImpactLayer.dataProvider()
-        myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
+        myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = self.tr('No attribute "%1" was found in the attribute '
                                 'table for layer "%2". The impact function '
                                 'must define this attribute for '
-                                'postprocessing to work.').arg(myTargetField,
+                                'postprocessing to work.').arg(self.targetField,
                                 myQgisImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
@@ -1442,14 +1443,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             mySafeImpactLayer = self.runner.impactLayer()
             myPolygons = mySafePostprocLayer.get_geometry()
 
-            #FIXME (MB) do we need further geometry types
+            #FIXME (MB) do we need further geometry types?
             if mySafeImpactLayer.is_polygon_data:
                 LOGGER.debug('Doing polygon in polygon aggregation')
-            elif mySafeImpactLayer.is_point_data    :
+            elif mySafeImpactLayer.is_point_data:
                 LOGGER.debug('Doing point in polygon aggregation')
 
                 myPoints = mySafeImpactLayer.get_geometry()
-                myValues = mySafeImpactLayer.get_data(attribute=myTargetField)
+                myValues = mySafeImpactLayer.get_data(
+                    attribute=self.targetField)
 
                 myRemainingPoints = myPoints
                 myRemainingValues = myValues
@@ -1490,6 +1492,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 #                    LOGGER.debug('After: ' + str(len(myRemainingValues)))
 #                    LOGGER.debug('Inside: ' + str(len(inside)))
 #                    LOGGER.debug('Outside: ' + str(len(outside)))
+
+            elif mySafeImpactLayer.is_line_data:
+                LOGGER.debug('Doing line in polygon aggregation')
 
             else:
                 myMessage = self.tr('Aggregation on vector impact layers other'
@@ -1597,7 +1602,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             aggrSum, ok = attrMap[mySumFieldIndex].toDouble()
             LOGGER.debug('Reading: %s %s' % (aggrSum, ok))
-            myGeneralParams = {'population_total': aggrSum}
+            myGeneralParams = {'impact_total': aggrSum,
+                               'target_field': self.targetField}
 
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
