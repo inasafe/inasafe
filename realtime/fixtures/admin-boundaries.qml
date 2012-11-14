@@ -26,7 +26,7 @@
     <property key="labeling/bufferColorR" value="236"/>
     <property key="labeling/bufferJoinStyle" value="64"/>
     <property key="labeling/bufferNoFill" value="false"/>
-    <property key="labeling/bufferSize" value="1"/>
+    <property key="labeling/bufferSize" value="0.25"/>
     <property key="labeling/bufferSizeInMapUnits" value="false"/>
     <property key="labeling/bufferTransp" value="49"/>
     <property key="labeling/centroidWhole" value="false"/>
@@ -57,14 +57,14 @@
     <property key="labeling/enabled" value="true"/>
     <property key="labeling/fieldName" value="NAME_2"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Cantarell"/>
+    <property key="labeling/fontFamily" value="Ubuntu"/>
     <property key="labeling/fontItalic" value="true"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
-    <property key="labeling/fontSize" value="10"/>
+    <property key="labeling/fontSize" value="6"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
-    <property key="labeling/fontWeight" value="50"/>
+    <property key="labeling/fontWeight" value="75"/>
     <property key="labeling/fontWordSpacing" value="0"/>
     <property key="labeling/formatNumbers" value="false"/>
     <property key="labeling/isExpression" value="false"/>
@@ -74,7 +74,7 @@
     <property key="labeling/minFeatureSize" value="0"/>
     <property key="labeling/multilineAlign" value="0"/>
     <property key="labeling/multilineHeight" value="1"/>
-    <property key="labeling/namedStyle" value="Oblique"/>
+    <property key="labeling/namedStyle" value="Bold Italic"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/placement" value="0"/>
     <property key="labeling/placementFlags" value="0"/>
@@ -84,12 +84,12 @@
     <property key="labeling/priority" value="9"/>
     <property key="labeling/scaleMax" value="20000000"/>
     <property key="labeling/scaleMin" value="1"/>
-    <property key="labeling/textColorB" value="0"/>
+    <property key="labeling/textColorB" value="255"/>
     <property key="labeling/textColorG" value="0"/>
     <property key="labeling/textColorR" value="0"/>
     <property key="labeling/textTransp" value="0"/>
     <property key="labeling/upsidedownLabels" value="0"/>
-    <property key="labeling/wrapChar" value=""/>
+    <property key="labeling/wrapChar" value=" "/>
     <property key="labeling/xOffset" value="0"/>
     <property key="labeling/xQuadOffset" value="0"/>
     <property key="labeling/yOffset" value="0"/>

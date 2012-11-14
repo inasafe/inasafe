@@ -57,6 +57,7 @@ def processEvent(theEventId=None):
                           'popmap10_all.tif')
     if os.path.exists(myPath):
         myShakeEvent.populationRasterPath = myPath
+        # Otherwise it will default to the one in fixtures
 
     myShakeEvent.renderMap(myForceFlag)
 
