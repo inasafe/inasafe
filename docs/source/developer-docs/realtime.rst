@@ -249,3 +249,15 @@ Additional configuration options
 Running a shake event
 ---------------------
 
+Unit tests
+-----------
+
+
+Batch validation
+----------------
+
+http://quake.linfiniti.com/
+
+Hosting the shakemaps
+---------------------
+
