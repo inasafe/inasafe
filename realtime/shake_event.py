@@ -1849,12 +1849,19 @@ class ShakeEvent(QObject):
         logging.info('Created: %s', myImpactsHtmlPath)
 
         # Load our project
-        myProjectPath = os.path.join(dataDir(), 'realtime.qgs')
+        if 'INSAFE_REALTIME_PROJECT' in os.environ:
+            myProjectPath = os.environ['INSAFE_REALTIME_PROJECT']
+        else:
+            myProjectPath = os.path.join(dataDir(), 'realtime.qgs')
         QgsProject.instance().setFileName(myProjectPath)
         QgsProject.instance().read()
 
-        myTemplatePath = os.path.join(dataDir(),
+        if 'INSAFE_REALTIME_TEMPLATE' in os.environ:
+            myTemplatePath = os.environ['INSAFE_REALTIME_TEMPLATE']
+        else:
+            myTemplatePath = os.path.join(dataDir(),
                                      'realtime-template.qpt')
+
         myTemplateFile = file(myTemplatePath, 'rt')
         myTemplateContent = myTemplateFile.read()
         myTemplateFile.close()
@@ -2041,7 +2048,27 @@ class ShakeEvent(QObject):
             propagates any exceptions
 
         """
-
+        myMapName = self.tr('Estimated Earthquake Impact')
+        myExposureTableName = self.tr('Estimated number of people exposed to '
+            'each MMI level')
+        myCityTableName = self.tr('Places Affected')
+        myLegendName = 'Population density'
+        myLimitations = self.tr(
+            'This impact estimation is automatically generated and only takes'
+            ' into account the population and cities affected by different '
+            'levels of ground shaking. The estimate is based on ground '
+            'shaking data from BMKG, population density data from asiapop'
+            '.org, place information from geonames.org and software developed'
+            ' by BNPB. Limitations in the estimates of ground shaking, '
+            'population  data and place names datasets may result in '
+            'significant misrepresentation of the on-the-ground situation in '
+            'the figures shown here. Consequently decisions should not be '
+            'made solely on the information presented here and should always '
+            'be verified by ground truthing and other reliable information '
+            'sources.')
+        myCredits = self.tr(
+            'Supported by the Australia-Indonesia Facility for Disaster '
+            'Reduction and Geoscience Australia.')
         #Format the lat lon from decimal degrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
         myCoordinates = myPoint.toDegreesMinutesSeconds(2)
@@ -2057,36 +2084,43 @@ class ShakeEvent(QObject):
             self.sortedImpactedCities()
         myDirection = self.mostAffectedCity['dir_to']
         myDistance = self.mostAffectedCity['dist_to']
-        myName = self.mostAffectedCity['name']
+        myKeyCityName = self.mostAffectedCity['name']
         myBearing = self.bearingToCardinal(myDirection)
         myElapsedTimeText = self.tr('Elapsed time since event')
         myElapsedTime =  self.elapsedTime()[1]
         myDegreeSymbol = '\xb0'
-        myDict = {'mmi': '%s' % self.magnitude,
-         'date': '%s-%s-%s' % (self.day,
+        myDict = {
+            'map-name': myMapName,
+            'exposure-table-name': myExposureTableName,
+            'city-table-name': myCityTableName,
+            'legend-name': myLegendName,
+            'limitations': myLimitations,
+            'credits': myCredits,
+            'mmi': '%s' % self.magnitude,
+            'date': '%s-%s-%s' % (self.day,
                                self.month,
                                self.year),
-         'time': '%s:%s:%s' % (self.hour,
+            'time': '%s:%s:%s' % (self.hour,
                                self.minute,
                                self.second),
-         'formatted-date-time': self.elapsedTime()[0],
-         'latitude-name': self.tr('Latitude'),
-         'latitude-value': '%s' % myLatitude,
-         'longitude-name': self.tr('Longitude'),
-         'longitude-value': '%s' % myLongitude,
-         'depth-name': self.tr('Depth'),
-         'depth-value': '%s' % self.depth,
-         'depth-unit': myKmText,
-         'located-label': self.tr('Located'),
-         'distance': '%.2f' % myDistance,
-         'distance-unit': myKmText,
-         'direction-relation': myDirectionalityText,
-         'bearing-degrees': '%.2f%s' % (myDirection, myDegreeSymbol),
-         'bearing-compass': '%s' % myBearing,
-         'bearing-text': myBearingText,
-         'place-name': myName,
-         'elapsed-time-name': myElapsedTimeText,
-         'elapsed-time': myElapsedTime
+            'formatted-date-time': self.elapsedTime()[0],
+            'latitude-name': self.tr('Latitude'),
+            'latitude-value': '%s' % myLatitude,
+            'longitude-name': self.tr('Longitude'),
+            'longitude-value': '%s' % myLongitude,
+            'depth-name': self.tr('Depth'),
+            'depth-value': '%s' % self.depth,
+            'depth-unit': myKmText,
+            'located-label': self.tr('Located'),
+            'distance': '%.2f' % myDistance,
+            'distance-unit': myKmText,
+            'direction-relation': myDirectionalityText,
+            'bearing-degrees': '%.2f%s' % (myDirection, myDegreeSymbol),
+            'bearing-compass': '%s' % myBearing,
+            'bearing-text': myBearingText,
+            'place-name': myKeyCityName,
+            'elapsed-time-name': myElapsedTimeText,
+            'elapsed-time': myElapsedTime
         }
         return myDict
 
