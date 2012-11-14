@@ -143,9 +143,9 @@ def setupLogger():
         from raven.handlers.logging import SentryHandler
         from raven import Client
 
-        myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
-                          'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
-                          '4')
+        myClient = Client(
+            'http://fda607badbe440be9a2fa6b22e759c72'
+            ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
         mySentryHandler = SentryHandler(myClient)
         mySentryHandler.setFormatter(myFormatter)
         mySentryHandler.setLevel(logging.ERROR)
