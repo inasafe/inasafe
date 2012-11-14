@@ -24,3 +24,4 @@ from safe.impact_functions.core import get_admissible_plugins
 from safe.impact_functions.core import compatible_layers
 from safe.impact_functions.core import get_function_title
 from safe.impact_functions.core import get_documentation
+from safe.impact_functions.core import is_function_enabled
