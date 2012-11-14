@@ -1480,6 +1480,9 @@ class Test_IO(unittest.TestCase):
         # Generate vector layer
         V = R.to_vector_layer()
         geometry = V.get_geometry()
+        msg = ('Vector geometry should have been a list. I got %s'
+                % str(type(geometry))[1:-1])
+        assert isinstance(geometry, list), msg
         attributes = V.get_data()
 
         # Store it for visual inspection e.g. with QGIS
