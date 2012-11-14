@@ -43,7 +43,7 @@ def processEvent(theEventId=None):
                                   theForceFlag=True)
     except:
         LOGGER.exception('An error occurred setting up the shake event.')
-        exit()
+        return
 
     logging.info('Event Id: %s', myShakeEvent)
     logging.info('-------------------------------------------')
@@ -82,7 +82,7 @@ elif len(sys.argv) == 2:
             if 'out' not in myEvent:
                 continue
             myEvent = myEvent.replace('ftp://118.97.83.243/', '')
-            myEvent = myEvent.replace('out.zip', '')
+            myEvent = myEvent.replace('.out.zip', '')
             print 'Processing %s' % myEvent
             try:
                 processEvent(myEvent)

@@ -79,7 +79,7 @@ def temp_dir(sub_dir='work'):
         os.close(handle)
         new_directory = os.path.dirname(filename)
         os.remove(filename)
-        
+
     path = os.path.join(new_directory, 'inasafe', date_string, user, sub_dir)
 
     if not os.path.exists(path):
