@@ -43,6 +43,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
         'where each polygon represents the footprint of a building.')
     limitation = tr('Lorem ipsum limitation')
 
+    parameters = {'postprocessors': {'OSMBuildingType': {'on': True}}}
+
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
         """

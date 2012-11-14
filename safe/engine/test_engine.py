@@ -10,6 +10,7 @@ from safe.engine.core import calculate_impact
 from safe.engine.interpolation import interpolate_polygon_raster
 from safe.engine.interpolation import interpolate_raster_vector_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.engine.interpolation import tag_polygons_by_grid
 
 from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
@@ -848,6 +849,35 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(attributes[23]['number'], -50)
         assert numpy.allclose(attributes[23]['grid_value'], 50.0377)
         assert attributes[23]['polygon_id'] == 3
+
+    def test_tagging_polygons_by_raster_values(self):
+        """Polygons can be tagged by raster values
+
+        This is testing a simple application of clip_grid_by_polygons
+        """
+
+        # Name input files
+        polygon = join(TESTDATA, 'test_polygon_on_test_grid.shp')
+        grid = join(TESTDATA, 'test_grid.asc')
+
+        # Get layers using API
+        G = read_layer(grid)
+        P = read_layer(polygon)
+
+        # Run tagging routine
+        R = tag_polygons_by_grid(P, G, threshold=50.85, tag='tag')
+        assert len(R) == len(P)
+
+        data = R.get_data()
+        for d in data:
+            assert 'tag' in d
+
+        # Check against inspection with QGIS. Only polygon 1 and 2
+        # contain grid points with values greater than 50.85
+        assert data[0]['tag'] is False
+        assert data[1]['tag'] is True
+        assert data[2]['tag'] is True
+        assert data[3]['tag'] is False
 
     def test_polygon_hazard_with_holes_and_raster_exposure(self):
         """Rasters can be clipped by polygons (with holes)

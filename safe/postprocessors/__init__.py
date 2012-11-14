@@ -2,7 +2,7 @@
 """**Postprocessors package.**
 
 .. tip::
-   import like this from safe.postprocessors import get_post_processors
+   import like this from safe.postprocessors import get_postprocessors
 
 """
 
@@ -13,4 +13,5 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from postprocessor_factory import get_post_processors
+from postprocessor_factory import get_postprocessors
+from postprocessor_factory import get_postprocessor_human_name

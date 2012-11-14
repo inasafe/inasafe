@@ -29,6 +29,7 @@ from safe.storage.core import read_layer
 from safe.impact_functions import (get_plugins,
                                     get_function_title,
                                     get_admissible_plugins,
+                                    is_function_enabled,
                                     get_documentation)
 
 from safe.engine.core import calculate_impact

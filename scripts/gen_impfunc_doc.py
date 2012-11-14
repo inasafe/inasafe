@@ -11,7 +11,8 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-from safe.api import get_documentation, get_plugins
+from shutil import rmtree
+from safe.api import get_documentation, get_plugins, is_function_enabled
 from gen_rst_script import (create_dirs, create_rst_file, insafe_dir_path)
 
 doc_dir = "docs" + os.sep + "source" + os.sep + "user-docs"
@@ -37,14 +38,14 @@ def gen_rst_doc(impfunc_doc):
     """
     impact_func_doc_path = insafe_dir_path + os.sep + doc_dir + os.sep +\
                            impact_func_doc_dir
-    for k, v in impfunc_doc.iteritems():
-        content_rst = k
-        content_rst += '\n' + '=' * len(k) + '\n\n'
+    for myFuncName, myDoc in impfunc_doc.iteritems():
+        content_rst = myFuncName
+        content_rst += '\n' + '=' * len(myFuncName) + '\n\n'
         # provide documentation
         content_rst += 'Overview'
         content_rst += '\n' + '-' * len('Overview') + '\n\n'
-        if type(v) is dict :
-            for mykey, myValue in v.iteritems():
+        if type(myDoc) is dict :
+            for mykey, myValue in myDoc.iteritems():
                 if mykey == 'detailed_description':
                     continue
                 myPrettykey = pretty_key(mykey)
@@ -60,19 +61,22 @@ def gen_rst_doc(impfunc_doc):
                 content_rst += '\n\n'
             content_rst += 'Details'
             content_rst += '\n' + '-' * len('Details') + '\n\n'
-            if 'detailed_description' in v.iterkeys():
-                content_rst += v['detailed_description']
+            if 'detailed_description' in myDoc.iterkeys():
+                content_rst += myDoc['detailed_description']
             else:
                 content_rst += 'No documentation found'
         else:
             content_rst += 'No documentation found'
 
-        create_rst_file(impact_func_doc_path, k.replace(' ', ''), content_rst)
+        create_rst_file(impact_func_doc_path, myFuncName.replace(' ', ''),
+                        content_rst)
 
 
-def gen_impact_func_index(list_unique_identifier=[]):
+def gen_impact_func_index(list_unique_identifier=None):
     """Generate impact function index
     """
+    if list_unique_identifier is None:
+        list_unique_identifier = []
     content_rst = ''
     title_page = 'Impact Functions Documentation'
     content_rst += '=' * len(title_page) + '\n'
@@ -96,15 +100,22 @@ def gen_impact_func_index(list_unique_identifier=[]):
 
 
 if __name__ == "__main__":
+    # remove old files, in case you disabled or remove impact function
+    impact_func_doc_dir_path = (insafe_dir_path + os.sep + doc_dir + os.sep +
+            impact_func_doc_dir)
+    if os.path.exists(impact_func_doc_dir_path):
+        rmtree(impact_func_doc_dir_path)
+
     impfunc_doc = {}
     # Get all impact functions
     plugins_dict = get_plugins()
-    for k in plugins_dict.keys():
-        impfunc_doc[k] = get_documentation(k)
+    for myKey, myFunc in plugins_dict.iteritems():
+        if not is_function_enabled(myFunc):
+            continue
+        impfunc_doc[myKey] = get_documentation(myKey)
     list_unique_identifier = [x['unique_identifier']
                                 for x in impfunc_doc.itervalues()]
     gen_impact_func_index(list_unique_identifier)
 
-    create_dirs(insafe_dir_path + os.sep + doc_dir + os.sep +
-                    impact_func_doc_dir)
+    create_dirs(impact_func_doc_dir_path)
     gen_rst_doc(impfunc_doc)

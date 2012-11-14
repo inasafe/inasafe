@@ -2,8 +2,8 @@
 """**Postprocessors package.**
 
 .. tip::
-   import like this from safe.postprocessors import get_post_processors and
-   then call get_post_processors(requested_postprocessors)
+   import like this from safe.postprocessors import get_postprocessors and
+   then call get_postprocessors(requested_postprocessors)
 
 """
 
@@ -19,14 +19,20 @@ import logging
 # pylint: disable=W0611
 from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
+from aggregation_postprocessor import AggregationPostprocessor
+from osm_building_type_postprocessor import OSMBuildingTypePostprocessor
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
-AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age']
+AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
+                            'Age': 'Age',
+                            'Aggregation': 'Aggregation',
+                            'OSMBuildingType': 'Open Street Map building type'
+                            }
 
 
-def get_post_processors(requested_postprocessors):
+def get_postprocessors(requested_postprocessors):
     """
     Creates a dictionary of applicable postprocessor instances
 
@@ -61,7 +67,7 @@ def get_post_processors(requested_postprocessors):
         constr_id = name + 'Postprocessor'
         try:
             if values['on']:
-                if name in AVAILABLE_POSTPTOCESSORS:
+                if name in AVAILABLE_POSTPTOCESSORS.keys():
                     #http://stackoverflow.com/a/554462
                     constr = globals()[constr_id]
                     instance = constr()
@@ -76,3 +82,16 @@ def get_post_processors(requested_postprocessors):
             LOGGER.debug(constr_id + ' has no "on" key, skipping it')
 
     return postprocessor_instances
+
+
+def get_postprocessor_human_name(postprocesor):
+    """
+    Returns the human readable name of  post processor
+
+    Args:
+        * postprocessor: Machine name of the postprocessor
+
+    Returns:
+        str with the human readable name
+    """
+    return AVAILABLE_POSTPTOCESSORS[postprocesor]

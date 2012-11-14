@@ -201,7 +201,7 @@ def requirement_check(params, require_str, verbose=False):
         # Check that symbol is not a Python keyword
         if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
-                   'Must not use Python keywords as params: %s' % (key))
+                   'Must not use Python keywords as params: %s' % key)
             #print msg
             #logger.error(msg)
             return False
@@ -610,6 +610,10 @@ def get_plugins_as_table(dict_filter=None):
 
             dict_req = parse_single_requirement(str(requirement))
 
+            # If the impact function is disabled, do not show it
+            if dict_req.get('disabled', False):
+                continue
+
             for myKey in dict_found.iterkeys():
                 myFilter = dict_filter.get(myKey, [])
                 if myKey == 'title':
@@ -683,6 +687,8 @@ def get_unique_values():
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
     for key, func in plugins_dict.iteritems():
+        if not is_function_enabled(func):
+            continue
         dict_retval['title'].add(get_function_title(func))
         dict_retval['id'].add(key)
         for requirement in requirements_collect(func):
@@ -699,68 +705,6 @@ def get_unique_values():
     for key in dict_retval.iterkeys():
         dict_retval[key] = list(dict_retval[key])
     return dict_retval
-
-
-def get_dict_doc_func(func):
-    """Collect all doc string of func and return a beatiuful format of them
-    in a dictionary format.
-
-        Args:
-            * func : name of function
-        Returns:
-            * Dictionary contains:
-                synopsis : string (first line)
-                author : string (identified by :author)
-                rating : integer (identified by :rating)
-                param_req : list of param (identified by :param requires)
-                detail : detail description (identified by :detail)
-                citation : list of citation in string (identified by :citation)
-                limitation : string (identified by :limitation)
-    """
-    retval = {'synopsis': '',
-              'author': '',
-              'rating': '',
-              'param_req': [],
-              'detail': '',
-              'citation': [],
-              'limitation': ''}
-
-    plugins_dict = dict([(pretty_function_name(p), p)
-                         for p in FunctionProvider.plugins])
-    if func not in plugins_dict.keys():
-        return retval
-    else:
-        func = plugins_dict[func]
-
-    author_tag = ':author'
-    rating_tag = ':rating'
-    param_req_tag = ':param requires'
-    detail_tag = ':detail'
-    citation_tag = ':citation'
-    limitation_tag = ':limitation'
-
-    if hasattr(func, '__doc__') and func.__doc__:
-        doc_str = func.__doc__
-        for line in doc_str.split('\n'):
-            doc_line = remove_double_spaces(line)
-            doc_line = doc_line.strip()
-
-            if doc_line.startswith(author_tag):
-                retval['author'] = doc_line[len(author_tag) + 1:]
-            elif doc_line.startswith(rating_tag):
-                retval['rating'] = int(doc_line[len(rating_tag) + 1:])
-            elif doc_line.startswith(detail_tag):
-                retval['detail'] = doc_line[len(detail_tag) + 1:]
-            elif doc_line.startswith(limitation_tag):
-                retval['limitation'] = doc_line[len(limitation_tag) + 1:]
-            elif doc_line.startswith(param_req_tag):
-                retval['param_req'].append(doc_line[len(param_req_tag) + 1:])
-            elif doc_line.startswith(citation_tag):
-                retval['citation'].append(doc_line[len(citation_tag) + 1:])
-
-        retval['synopsis'] = remove_double_spaces(doc_str.split('\n')[0])
-
-    return retval
 
 
 def get_documentation(func):
@@ -783,7 +727,7 @@ def get_documentation(func):
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
     if func not in plugins_dict.keys():
-        return retval
+        return None
     else:
         func = plugins_dict[func]
 
@@ -828,6 +772,20 @@ def get_documentation(func):
     if hasattr(func, limitation):
         retval[limitation] = func.limitation
     return retval
+
+
+def is_function_enabled(func):
+    """Check whether a function is enabled or not
+    :param func:
+    :return: False is disabled param is True
+    """
+    for requirement in requirements_collect(func):
+        dict_req = parse_single_requirement(str(requirement))
+
+        # If the impact function is disabled, do not show it
+        if dict_req.get('disabled', False):
+            return False
+    return True
 
 
 def format_int(x):
