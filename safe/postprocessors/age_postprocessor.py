@@ -76,11 +76,15 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.process(self)
         if self.impact_total is None:
-            self._raise_error('setup needs to be called before process')
-        self._calculate_total()
-        self._calculate_youth()
-        self._calculate_adult()
-        self._calculate_elder()
+            self._log_message('%s not all params have been correctly '
+                              'initialized, setup needs to be called before '
+                              'process. Skipping this postprocessor'
+                              % self.__class__.__name__)
+        else:
+            self._calculate_total()
+            self._calculate_youth()
+            self._calculate_adult()
+            self._calculate_elder()
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being

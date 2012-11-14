@@ -28,8 +28,7 @@ from functools import partial
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 
-from qgis.core import (QGis,
-                       QgsMapLayer,
+from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsGeometry,
@@ -1128,6 +1127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocOutput = {}
         self.aggregationErrorSkipPostprocessing = None
         self.targetField = None
+        self.impactLayerAttributes = []
         try:
             if (self.postprocLayer is not None and
                 self.lastUsedFunction != self.getFunctionID()):
@@ -1197,8 +1197,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHTML = ''
         for proc, resList in self.postprocOutput.iteritems():
             #sorting using the first indicator of a postprocessor
-            myFirstKey = resList[0][1].keyAt(0)
-            try:
             # [1]['Total']['value']
             # resList is for example:
             # [
@@ -1209,21 +1207,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #         'description': 'Females hygiene packs for weekly use'}})
             #    ]))
             #]
-                myEndOfList = -1
-                resList = sorted(
-                    resList,
-                    key=lambda d: (
-                    # return -1 if the postprocessor returns NO_DATA to put at
-                    # the end of the list
-                    # d[1] is the orderedDict
-                    # d[1][myFirstKey] is the 1st indicator in the orderedDict
-                        myEndOfList if d[1][myFirstKey]['value'] ==
-                                       self.defaults['NO_DATA']
-                        else d[1][myFirstKey]['value']),
-                    reverse=True)
+            try:
+                myFirstKey = resList[0][1].keyAt(0)
             except KeyError:
-                LOGGER.debug('Skipping sorting as the postprocessor did not '
-                             'have a "Total" field')
+                LOGGER.debug('Skipping showing %s Postprocessor as it has no '
+                             'results' % proc)
+                continue
+
+            myEndOfList = -1
+            resList = sorted(
+                resList,
+                key=lambda d: (
+                # return -1 if the postprocessor returns NO_DATA to put at
+                # the end of the list
+                # d[1] is the orderedDict
+                # d[1][myFirstKey] is the 1st indicator in the orderedDict
+                    myEndOfList if d[1][myFirstKey]['value'] ==
+                                   self.defaults['NO_DATA']
+                    else d[1][myFirstKey]['value']),
+                reverse=True)
+
             myHTML += ('<table class="table table-striped condensed">'
                        '  <tbody>'
                        '    <tr>'
@@ -1414,8 +1417,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('No attribute "%1" was found in the attribute '
                                 'table for layer "%2". The impact function '
                                 'must define this attribute for '
-                                'postprocessing to work.').arg(self.targetField,
-                                myQgisImpactLayer.name())
+                                'postprocessing to work.').arg(
+                                    self.targetField, myQgisImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
             return
@@ -1450,16 +1453,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 LOGGER.debug('Doing point in polygon aggregation')
 
                 myPoints = mySafeImpactLayer.get_geometry()
-                myValues = mySafeImpactLayer.get_data(
-                    attribute=self.targetField)
+                myValues = mySafeImpactLayer.get_data()
 
                 myRemainingPoints = myPoints
                 myRemainingValues = myValues
-            
+
                 for myPolygonIndex, myPolygon in enumerate(myPolygons):
                     myTotal = 0
                     print 'Remaining points', len(myRemainingPoints)
-            
+
                     if hasattr(myPolygon, 'outer_ring'):
                         outer_ring = myPolygon.outer_ring
                         inner_rings = myPolygon.inner_rings
@@ -1467,7 +1469,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         # Assume it is an array
                         outer_ring = myPolygon
                         inner_rings = None
-            
+
                     inside, outside = points_in_and_outside_polygon(
                         myRemainingPoints,
                         outer_ring,
@@ -1476,8 +1478,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         check_input=False)
 
                     #summ attributes
+                    self.impactLayerAttributes.append([])
                     for i in inside:
-                       myTotal += myRemainingValues[i]
+                        myTotal += myRemainingValues[i][self.targetField]
+                        self.impactLayerAttributes[myPolygonIndex].append(
+                            myRemainingValues[i])
 
                     # Add features inside this polygon
                     myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
@@ -1590,6 +1595,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # feature
         provider.select(allAttrs, QgsRectangle(), False)
         feat = QgsFeature()
+        myPolygonIndex = 0
         while provider.nextFeature(feat):
             #get all attributes of a feature
             attrMap = feat.attributeMap()
@@ -1602,8 +1608,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             aggrSum, ok = attrMap[mySumFieldIndex].toDouble()
             LOGGER.debug('Reading: %s %s' % (aggrSum, ok))
+            LOGGER.debug('Polygon index %s\nAttr len %s' % (myPolygonIndex,
+                                            len(self.impactLayerAttributes)))
             myGeneralParams = {'impact_total': aggrSum,
-                               'target_field': self.targetField}
+                               'target_field': self.targetField,
+                                }
+            try:
+                myGeneralParams['impact_attrs'] = (
+                    self.impactLayerAttributes[myPolygonIndex])
+            except IndexError:
+                #rasters and attributeless vectors have no attributes
+                myGeneralParams['impact_attrs'] = None
 
             for n, p in myPostprocessors.iteritems():
                 myParams = myGeneralParams
@@ -1633,6 +1648,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 except KeyError:
                     self.postprocOutput[n] = []
                     self.postprocOutput[n].append((zoneName, myResults))
+
+            myPolygonIndex += 1
 
     def _checkPostprocAttributes(self):
         """checks if the postprocessing layer has all attribute

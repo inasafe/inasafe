@@ -14,8 +14,7 @@ __copyright__ += 'Disaster Reduction'
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
-from safe.common.utilities import (get_defaults,
-                                   ugettext as tr)
+from safe.common.utilities import ugettext as tr
 
 
 class AggregationPostprocessor(AbstractPostprocessor):
@@ -47,10 +46,13 @@ class AggregationPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.setup(self, None)
         if self.impact_total is not None:
-            self._raise_error('clear needs to be called before setup')
-
-        self.impact_total = params['impact_total']
-        self.target_field = params['target_field']
+            self._log_message('%s not all params have been correctly '
+                              'initialized, setup needs to be called before '
+                              'process. Skipping this postprocessor'
+                              % self.__class__.__name__)
+        else:
+            self.impact_total = params['impact_total']
+            self.target_field = params['target_field']
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being

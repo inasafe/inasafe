@@ -59,11 +59,15 @@ class GenderPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.process(self)
         if self.impact_total is None or self.female_ratio is None:
-            self._raise_error('setup needs to be called before process')
-        self._calculate_total()
-        self._calculate_females()
-        self._calculate_weekly_hygene_packs()
-        self._calculate_weekly_increased_calories()
+            self._log_message('%s not all params have been correctly '
+                              'initialized, setup needs to be called before '
+                              'process. Skipping this postprocessor'
+                              % self.__class__.__name__)
+        else:
+            self._calculate_total()
+            self._calculate_females()
+            self._calculate_weekly_hygene_packs()
+            self._calculate_weekly_increased_calories()
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
