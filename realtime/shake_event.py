@@ -2202,7 +2202,38 @@ class ShakeEvent(QObject):
         else:
             mmiData = 'Not populated'
 
-        myString = (('latitude: %(latitude)s\n'
+        myDict = {
+                'latitude': self.latitude,
+                'longitude': self.longitude,
+                'eventId': self.eventId,
+                'magnitude': self.magnitude,
+                'depth': self.depth,
+                'description': self.description,
+                'location': self.location,
+                'day': self.day,
+                'month': self.month,
+                'year': self.year,
+                'time': self.time,
+                'timeZone': self.timeZone,
+                'xMinimum': self.xMinimum,
+                'xMaximum': self.xMaximum,
+                'yMinimum': self.yMinimum,
+                'yMaximum': self.yMaximum,
+                'rows': self.rows,
+                'columns': self.columns,
+                'mmiData': mmiData,
+                'populationRasterPath': self.populationRasterPath,
+                'impactFile': self.impactFile,
+                'impactKeywordsFile': self.impactKeywordsFile,
+                'fatalityCounts': self.fatalityCounts,
+                'displacedCounts': self.displacedCounts,
+                'affectedCounts': self.affectedCounts,
+                'extentWithCities': myExtentWithCities,
+                'zoomFactor': self.zoomFactor,
+                'searchBoxes': self.searchBoxes
+            }
+        print str(myDict)
+        myString = ('latitude: %(latitude)s\n'
                      'longitude: %(longitude)s\n'
                      'eventId: %(eventId)s\n'
                      'magnitude: %(magnitude)s\n'
@@ -2224,41 +2255,11 @@ class ShakeEvent(QObject):
                      'populationRasterPath: %(populationRasterPath)s\n'
                      'impactFile: %(impactFile)s\n'
                      'impactKeywordsFile: %(impactKeywordsFile)s\n'
-                     'fatalityCounts: %(fatalityCounts)s\n',
-                     'displacedCounts: %(displacedCounts)s\n',
-                     'affectedCounts: %(affectedCounts)s\n',
+                     'fatalityCounts: %(fatalityCounts)s\n'
+                     'displacedCounts: %(displacedCounts)s\n'
+                     'affectedCounts: %(affectedCounts)s\n'
                      'extentWithCities: %(extentWithCities)s\n'
                      'zoomFactor: %(zoomFactor)s\n'
                      'searchBoxes: %(searchBoxes)s\n'
-                     ) %
-                    {
-                        'latitude': self.latitude,
-                        'longitude': self.longitude,
-                        'eventId': self.eventId,
-                        'magnitude': self.magnitude,
-                        'depth': self.depth,
-                        'description': self.description,
-                        'location': self.location,
-                        'day': self.day,
-                        'month': self.month,
-                        'year': self.year,
-                        'time': self.time,
-                        'timeZone': self.timeZone,
-                        'xMinimum': self.xMinimum,
-                        'xMaximum': self.xMaximum,
-                        'yMinimum': self.yMinimum,
-                        'yMaximum': self.yMaximum,
-                        'rows': self.rows,
-                        'columns': self.columns,
-                        'mmiData': mmiData,
-                        'populationRasterPath': self.populationRasterPath,
-                        'impactFile': self.impactFile,
-                        'impactKeywordsFile': self.impactKeywordsFile,
-                        'fatalityCounts': self.fatalityCounts,
-                        'displacedCounts': self.displacedCountsCounts,
-                        'affectedCounts': self.affectedCounts,
-                        'extentWithCities': myExtentWithCities,
-                        'zoomFactor': self.zoomFactor,
-                        'searchBoxes': self.searchBoxes
-                    })
+                      % myDict)
         return myString
