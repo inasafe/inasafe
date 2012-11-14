@@ -1,17 +1,17 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="1.9.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <transparencyLevelInt>255</transparencyLevelInt>
   <renderer-v2 symbollevels="0" type="singleSymbol">
     <symbols>
       <symbol outputUnit="MM" alpha="1" type="marker" name="0">
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
-          <prop k="color" v="150,150,150,255"/>
-          <prop k="color_border" v="150,150,150,255"/>
+          <prop k="color" v="0,0,0,255"/>
+          <prop k="color_border" v="255,255,255,255"/>
           <prop k="name" v="diamond"/>
           <prop k="offset" v="0,0"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="0.5"/>
         </layer>
       </symbol>
     </symbols>
@@ -82,12 +82,12 @@
     <property key="labeling/plussign" value="true"/>
     <property key="labeling/preserveRotation" value="true"/>
     <property key="labeling/previewBkgrdColor" value="#ffffff"/>
-    <property key="labeling/priority" value="5"/>
+    <property key="labeling/priority" value="2"/>
     <property key="labeling/scaleMax" value="0"/>
     <property key="labeling/scaleMin" value="0"/>
-    <property key="labeling/textColorB" value="116"/>
-    <property key="labeling/textColorG" value="116"/>
-    <property key="labeling/textColorR" value="116"/>
+    <property key="labeling/textColorB" value="0"/>
+    <property key="labeling/textColorG" value="0"/>
+    <property key="labeling/textColorR" value="0"/>
     <property key="labeling/textTransp" value="0"/>
     <property key="labeling/upsidedownLabels" value="0"/>
     <property key="labeling/wrapChar" value=""/>

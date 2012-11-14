@@ -29,9 +29,9 @@
                 <legendlayerfile isInOverview="0" layerid="gadm220120907131545352" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="5" open="false" checked="Qt::Checked" name="places" showFeatureCount="0">
+        <legendlayer drawingOrder="5" open="false" checked="Qt::Unchecked" name="places" showFeatureCount="0">
             <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="places20121003111306499" visible="1"/>
+                <legendlayerfile isInOverview="0" layerid="places20121003111306499" visible="0"/>
             </filegroup>
         </legendlayer>
         <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="population" showFeatureCount="0">
@@ -121,7 +121,7 @@
                 <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
                     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="3.27488" id="overview-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="8" lastValidViewScaleFactor="2.82938" id="overview-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -160,7 +160,7 @@
                 <Grid gridStyle="1" crossLength="1" penColorRed="172" penColorBlue="172" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="172">
                     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="3.27488" id="main-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="2.82938" id="main-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -194,7 +194,7 @@
                         <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
                     </LayerItem>
                 </Model>
-                <ComposerItem width="8" x="141.781" y="217.371" rotation="0" height="29" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.27488" id="legend" positionLock="false">
+                <ComposerItem width="29" x="141.781" y="217.371" rotation="0" height="36.4" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.27488" id="legend" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -217,7 +217,7 @@
             </ComposerHtml>
             <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
                 <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-                    <ComposerItem width="77.94" x="118.403" y="117.699" rotation="0" height="92.3849" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="3.27488" id="affected-cities" positionLock="false">
+                    <ComposerItem width="77.94" x="118.403" y="117.699" rotation="0" height="92.3849" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.82938" id="affected-cities" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -481,7 +481,7 @@
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
         </maplayer>
-        <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
+        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>places20121003111306499</id>
             <datasource>./context/places.shp</datasource>
             <title></title>
@@ -507,12 +507,12 @@
                     <symbol outputUnit="MM" alpha="1" type="marker" name="0">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
-                            <prop k="color" v="150,150,150,255"/>
-                            <prop k="color_border" v="150,150,150,255"/>
+                            <prop k="color" v="0,0,0,255"/>
+                            <prop k="color_border" v="255,255,255,255"/>
                             <prop k="name" v="diamond"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="scale_method" v="area"/>
-                            <prop k="size" v="2"/>
+                            <prop k="size" v="0.5"/>
                         </layer>
                     </symbol>
                 </symbols>
@@ -583,12 +583,12 @@
                 <property key="labeling/plussign" value="true"/>
                 <property key="labeling/preserveRotation" value="true"/>
                 <property key="labeling/previewBkgrdColor" value="#ffffff"/>
-                <property key="labeling/priority" value="5"/>
+                <property key="labeling/priority" value="2"/>
                 <property key="labeling/scaleMax" value="0"/>
                 <property key="labeling/scaleMin" value="0"/>
-                <property key="labeling/textColorB" value="116"/>
-                <property key="labeling/textColorG" value="116"/>
-                <property key="labeling/textColorR" value="116"/>
+                <property key="labeling/textColorB" value="0"/>
+                <property key="labeling/textColorG" value="0"/>
+                <property key="labeling/textColorR" value="0"/>
                 <property key="labeling/textTransp" value="0"/>
                 <property key="labeling/upsidedownLabels" value="0"/>
                 <property key="labeling/wrapChar" value=""/>

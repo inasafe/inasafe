@@ -1936,7 +1936,7 @@ class ShakeEvent(QObject):
         myContoursLayer = QgsVectorLayer(myContoursShapeFile,
                                          'mmi-contours', "ogr")
         myCitiesLayer = QgsVectorLayer(myCitiesShapeFile,
-                                       'mmi-contours', "ogr")
+                                       'mmi-cities', "ogr")
         QgsMapLayerRegistry.instance().addMapLayers(
                     [myContoursLayer, myCitiesLayer])
 
