@@ -30,6 +30,39 @@ from realtime.shake_event import ShakeEvent
 setupLogger()
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
+def processEvent(theEventId=None):
+    # Used cached data where available
+    myForceFlag = False
+    # Extract the event
+    try:
+        myShakeEvent = ShakeEvent(theEventId=myEventId,
+                                  theForceFlag=myForceFlag)
+    except BadZipfile:
+        # retry with force flag true
+        myShakeEvent = ShakeEvent(theEventId=myEventId,
+                                  theForceFlag=True)
+    except:
+        LOGGER.exception('An error occurred setting up the shake event.')
+        exit()
+
+    logging.info('Event Id: %s', myShakeEvent)
+    logging.info('-------------------------------------------')
+
+    # Always regenerate the products
+    myForceFlag = True
+
+    myPath = os.path.join(dataDir(),
+                          'exposure',
+                          'IDN_mosaic',
+                          'popmap10_all.tif')
+    if os.path.exists(myPath):
+        myShakeEvent.populationRasterPath = myPath
+
+    myShakeEvent.renderMap(myForceFlag)
+
+    logging.info('-------------------------------------------')
+
+
 if len(sys.argv) > 2:
     sys.exit('Usage:\n%s [optional shakeid]\nor\n%s --list' % (
         sys.argv[0], sys.argv[0]))
@@ -42,36 +75,24 @@ elif len(sys.argv) == 2:
         for myEvent in myListing:
             print myEvent
         sys.exit(0)
+    if myEventId in '--run-all':
+        myFtpClient = FtpClient()
+        myListing = myFtpClient.getListing()
+        for myEvent in myListing:
+            if 'out' not in myEvent:
+                continue
+            myEvent = myEvent.replace('ftp://118.97.83.243/', '')
+            myEvent = myEvent.replace('out.zip', '')
+            print 'Processing %s' % myEvent
+            try:
+                processEvent(myEvent)
+            except:
+                LOGGER.exception('Failed to process %s' % myEvent)
+        sys.exit(0)
 else:
     myEventId = None
     print('Processing latest shakemap')
+    processEvent()
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
-# Used cached data where available
-myForceFlag = False
-# Extract the event
-try:
-    myShakeEvent = ShakeEvent(theEventId=myEventId, theForceFlag=myForceFlag)
-except BadZipfile:
-    # retry with force flag true
-    myShakeEvent = ShakeEvent(theEventId=myEventId, theForceFlag=True)
-except:
-    LOGGER.exception('An error occurred setting up the latest shake event.')
-    exit()
 
-logging.info('Latest Event Id: %s', myShakeEvent)
-logging.info('-------------------------------------------')
 
-# Always regenerate the products
-myForceFlag = True
-
-myPath = os.path.join(dataDir(),
-                      'exposure',
-                      'IDN_mosaic',
-                      'popmap10_all.tif')
-if os.path.exists(myPath):
-    myShakeEvent.populationRasterPath = myPath
-
-myShakeEvent.renderMap(myForceFlag)
-
-logging.info('-------------------------------------------')
