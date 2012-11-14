@@ -896,7 +896,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.doZonalAggregation = True
         if self.postprocLayer is None:
             # generate on the fly a memory layer to be used in postprocessing
-            # this is needed because we always want a vectoril layer to store
+            # this is needed because we always want a vectorial layer to store
             # information
             self.doZonalAggregation = False
             myGeoCrs = QgsCoordinateReferenceSystem()
@@ -971,6 +971,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if (myFemRatioAttr != self.tr('Don\'t use') and
             myFemRatioAttr != self.tr('Use default')):
             self.postprocAttributes[myDefaultFemRatioKey] = myFemRatioAttr
+
+        if self.doZonalAggregation:
+            #go and see if hazard and input layers need to be preprocessed
+            self.preprocessInputLayers()
 
         # Start the analysis
         try:
@@ -1075,6 +1079,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = getExceptionWithStacktrace(e, theHtml=True,
                                                    theContext=myContext)
             self.displayHtml(myMessage)
+
+    def preprocessInputLayers(self):
+        #TODO (MB) start preprocessing of hazard and exposure layer
+        pass
 
     def postprocess(self):
         """
