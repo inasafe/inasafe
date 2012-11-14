@@ -25,8 +25,11 @@ import logging.handlers
 
 def baseDataDir():
     """Create (if needed) and return the path to the base realtime data dir"""
-    # TODO: support env var setting here too
-    myBaseDataDir = '/tmp/inasafe/realtime'
+    if 'INASAFE_WORK_DIR' in os.environ:
+        myBaseDataDir = os.environ['INASAFE_WORK_DIR']
+    else:
+        # TODO: support env var setting here too
+        myBaseDataDir = '/tmp/inasafe/realtime'
     mkDir(myBaseDataDir)
     return myBaseDataDir
 
