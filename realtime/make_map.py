@@ -64,10 +64,14 @@ logging.info('-------------------------------------------')
 
 # Always regenerate the products
 myForceFlag = True
-myShakeEvent.populationRasterPath = (os.path.join(dataDir(),
-                                     'exposure',
-                                     'IDN_mosaic',
-                                     'popmap10_all.tif'))
+
+myPath = os.path.join(dataDir(),
+                      'exposure',
+                      'IDN_mosaic',
+                      'popmap10_all.tif')
+if os.path.exists(myPath):
+    myShakeEvent.populationRasterPath = myPath
+
 myShakeEvent.renderMap(myForceFlag)
 
 logging.info('-------------------------------------------')
