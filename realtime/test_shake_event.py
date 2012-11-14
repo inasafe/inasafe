@@ -398,27 +398,54 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myResult = myShakeEvent.eventDict()
-        myExpectedDict = {'distance': '3.04',
-                          'direction-relation': PyQt4.QtCore.QString(u'of'),
+        myExpectedDict = {'place-name': 'Manado',
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
-                          'place-name': 'Manado',
-                          'distance-unit': PyQt4.QtCore.QString(u'km'),
-                          'depth-unit': PyQt4.QtCore.QString(u'km'),
-                          'latitude-value': u'0\xb012\'36.00"S',
+                          'elapsed-time': u'16 weeks 0 days',
+                          'legend-name': 'Population density',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
-                          'longitude-value': u'124\xb027\'0.00"E',
-                          'bearing-compass': 'SSW',
-                          'bearing-degrees': '-166.88\xb0',
-                          'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
-                          'mmi': '5.0',
-                          'bearing-text': PyQt4.QtCore.QString(u'bearing'),
-                          'elapsed-time': u'15 weeks 4 days', 'time': '2:15:35',
-                          'date': '26-7-2012',
                           'located-label': PyQt4.QtCore.QString(u'Located'),
+                          'distance-unit': PyQt4.QtCore.QString(u'km'),
+                          'bearing-compass': 'SSW',
                           'elapsed-time-name': PyQt4.QtCore.QString(
                               u'Elapsed time since event'),
-                          'depth-value': '11.0',
-                          'formatted-date-time': '26-Jul-12 02:15:35 '}
+                          'exposure-table-name': PyQt4.QtCore.QString(
+                              u'Estimated number of people exposed to each '
+                              u'MMI level'),
+                          'longitude-value': u'124\xb027\'0.00"E',
+                          'city-table-name': PyQt4.QtCore.QString(
+                              u'Places Affected'),
+                          'bearing-text': PyQt4.QtCore.QString(u'bearing'),
+                          'limitations': PyQt4.QtCore.QString(
+                              u'This impact estimation is automatically '
+                              u'generated and only takes into account the '
+                              u'population and cities affected by different '
+                              u'levels of ground shaking. The estimate is '
+                              u'based on ground shaking data from BMKG, '
+                              u'population density data from asiapop.org, '
+                              u'place information from geonames.org and '
+                              u'software developed by BNPB. Limitations in '
+                              u'the estimates of ground shaking, '
+                              u'population  data and place names datasets may'
+                              u' result in significant misrepresentation of '
+                              u'the on-the-ground situation in the figures '
+                              u'shown here. Consequently decisions should not'
+                              u' be made solely on the information presented '
+                              u'here and should always be verified by ground '
+                              u'truthing and other reliable information '
+                              u'sources.'),
+                          'depth-unit': PyQt4.QtCore.QString(u'km'),
+                          'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
+                          'mmi': '5.0', 'map-name': PyQt4.QtCore.QString(
+            u'Estimated Earthquake Impact'), 'date': '26-7-2012',
+                          'bearing-degrees': '-166.88\xb0',
+                          'formatted-date-time': '26-Jul-12 02:15:35 ',
+                          'distance': '3.04',
+                          'direction-relation': PyQt4.QtCore.QString(u'of'),
+                          'credits': PyQt4.QtCore.QString(
+                              u'Supported by the Australia-Indonesia Facility '
+                           'for Disaster Reduction and Geoscience Australia.'),
+                          'latitude-value': u'0\xb012\'36.00"S',
+                          'time': '2:15:35', 'depth-value': '11.0'}
 
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
              (myResult, myExpectedDict))
