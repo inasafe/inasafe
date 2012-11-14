@@ -6,12 +6,12 @@
       <symbol outputUnit="MM" alpha="1" type="marker" name="0">
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
-          <prop k="color" v="255,85,0,255"/>
-          <prop k="color_border" v="0,0,0,255"/>
+          <prop k="color" v="150,150,150,255"/>
+          <prop k="color_border" v="150,150,150,255"/>
           <prop k="name" v="diamond"/>
           <prop k="offset" v="0,0"/>
           <prop k="scale_method" v="area"/>
-          <prop k="size" v="3"/>
+          <prop k="size" v="2"/>
         </layer>
       </symbol>
     </symbols>
@@ -27,9 +27,9 @@
     <property key="labeling/bufferColorR" value="255"/>
     <property key="labeling/bufferJoinStyle" value="64"/>
     <property key="labeling/bufferNoFill" value="false"/>
-    <property key="labeling/bufferSize" value="0.5"/>
+    <property key="labeling/bufferSize" value="0"/>
     <property key="labeling/bufferSizeInMapUnits" value="false"/>
-    <property key="labeling/bufferTransp" value="53"/>
+    <property key="labeling/bufferTransp" value="0"/>
     <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
@@ -53,19 +53,19 @@
     <property key="labeling/dataDefinedProperty9" value=""/>
     <property key="labeling/decimals" value="0"/>
     <property key="labeling/displayAll" value="false"/>
-    <property key="labeling/dist" value="1"/>
+    <property key="labeling/dist" value="0.5"/>
     <property key="labeling/distInMapUnits" value="false"/>
     <property key="labeling/enabled" value="true"/>
     <property key="labeling/fieldName" value="name"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Ubuntu"/>
-    <property key="labeling/fontItalic" value="false"/>
+    <property key="labeling/fontFamily" value="Cantarell"/>
+    <property key="labeling/fontItalic" value="true"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
-    <property key="labeling/fontSize" value="10"/>
+    <property key="labeling/fontSize" value="4"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
-    <property key="labeling/fontWeight" value="75"/>
+    <property key="labeling/fontWeight" value="50"/>
     <property key="labeling/fontWordSpacing" value="0"/>
     <property key="labeling/formatNumbers" value="false"/>
     <property key="labeling/isExpression" value="false"/>
@@ -73,29 +73,30 @@
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="false"/>
     <property key="labeling/minFeatureSize" value="0"/>
-    <property key="labeling/multilineAlign" value="1"/>
+    <property key="labeling/multilineAlign" value="0"/>
     <property key="labeling/multilineHeight" value="1"/>
-    <property key="labeling/namedStyle" value="Bold"/>
+    <property key="labeling/namedStyle" value="Oblique"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/placement" value="0"/>
     <property key="labeling/placementFlags" value="0"/>
     <property key="labeling/plussign" value="true"/>
     <property key="labeling/preserveRotation" value="true"/>
     <property key="labeling/previewBkgrdColor" value="#ffffff"/>
-    <property key="labeling/priority" value="10"/>
-    <property key="labeling/scaleMax" value="10000000"/>
-    <property key="labeling/scaleMin" value="1"/>
-    <property key="labeling/textColorB" value="0"/>
-    <property key="labeling/textColorG" value="0"/>
-    <property key="labeling/textColorR" value="0"/>
+    <property key="labeling/priority" value="5"/>
+    <property key="labeling/scaleMax" value="0"/>
+    <property key="labeling/scaleMin" value="0"/>
+    <property key="labeling/textColorB" value="116"/>
+    <property key="labeling/textColorG" value="116"/>
+    <property key="labeling/textColorR" value="116"/>
     <property key="labeling/textTransp" value="0"/>
     <property key="labeling/upsidedownLabels" value="0"/>
-    <property key="labeling/wrapChar" value="  "/>
+    <property key="labeling/wrapChar" value=""/>
     <property key="labeling/xOffset" value="0"/>
     <property key="labeling/xQuadOffset" value="0"/>
     <property key="labeling/yOffset" value="0"/>
     <property key="labeling/yQuadOffset" value="0"/>
   </customproperties>
+  <editorlayout>generatedlayout</editorlayout>
   <displayfield>name</displayfield>
   <label>0</label>
   <labelattributes>
@@ -126,9 +127,11 @@
     <edittype type="0" name="direction_"/>
     <edittype type="0" name="dist_to"/>
     <edittype type="0" name="distance_t"/>
-    <edittype type="0" name="id"/>
+    <edittype type="0" name="lat"/>
+    <edittype type="0" name="lon"/>
     <edittype type="0" name="mmi"/>
     <edittype type="0" name="name"/>
+    <edittype type="0" name="pop"/>
     <edittype type="0" name="population"/>
     <edittype type="0" name="roman"/>
   </edittypes>

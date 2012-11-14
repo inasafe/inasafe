@@ -37,7 +37,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="1" type="line" name="2">
@@ -49,7 +49,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="1" type="line" name="3">
@@ -61,7 +61,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="1" type="line" name="4">
@@ -73,7 +73,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="1" type="line" name="5">
@@ -85,7 +85,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="1" type="line" name="6">
@@ -97,7 +97,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="1" type="line" name="7">
@@ -109,7 +109,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="1" type="line" name="8">
@@ -121,7 +121,7 @@
           <prop k="offset" v="0"/>
           <prop k="penstyle" v="solid"/>
           <prop k="use_custom_dash" v="0"/>
-          <prop k="width" v="1"/>
+          <prop k="width" v="0.4"/>
         </layer>
       </symbol>
       <symbol outputUnit="MM" alpha="0.176471" type="line" name="9">
@@ -181,7 +181,7 @@
     <property key="labeling/fontFamily" value="Ubuntu"/>
     <property key="labeling/fontItalic" value="false"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
-    <property key="labeling/fontSize" value="16"/>
+    <property key="labeling/fontSize" value="12"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
@@ -216,6 +216,7 @@
     <property key="labeling/yOffset" value="0"/>
     <property key="labeling/yQuadOffset" value="0"/>
   </customproperties>
+  <editorlayout>generatedlayout</editorlayout>
   <displayfield>ID</displayfield>
   <label>0</label>
   <labelattributes>

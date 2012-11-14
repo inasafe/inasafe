@@ -1820,6 +1820,10 @@ class ShakeEvent(QObject):
         Raises:
             Propogates any exceptions.
         """
+        # Make sure the map layers have all been removed before we
+        # start otherwise in batch mode we will get overdraws.
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+
         myMmiShapeFile = self.mmiDataToShapefile(theForceFlag=theForceFlag)
         logging.info('Created: %s', myMmiShapeFile)
         myCitiesHtmlPath = None

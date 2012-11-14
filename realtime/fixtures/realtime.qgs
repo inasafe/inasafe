@@ -50,7 +50,7 @@
             </filegroup>
         </legendlayer>
     </legend>
-    <Composer title="Realtime" visible="1">
+    <Composer title="Realtime" visible="0">
         <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
             <ComposerLabel valign="32" labelText="[elapsed-time-name] [elapsed-time]" halign="2" margin="1">
                 <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
@@ -194,22 +194,22 @@
                         <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
                     </LayerItem>
                 </Model>
-                <ComposerItem width="29" x="141.781" y="217.371" rotation="0" height="36.4" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.27488" id="legend" positionLock="false">
+                <ComposerItem width="8" x="141.781" y="217.371" rotation="0" height="29" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.27488" id="legend" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLegend>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.27488" id="impacts-table" positionLock="false">
+            <ComposerHtml resizeMode="0" url="">
+                <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
+                    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="3.27488" id="" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
                 </ComposerFrame>
             </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="">
-                <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-                    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="3.27488" id="" positionLock="false">
+            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.27488" id="impacts-table" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -306,7 +306,7 @@
                 <property key="labeling/fontFamily" value="Cantarell"/>
                 <property key="labeling/fontItalic" value="true"/>
                 <property key="labeling/fontLetterSpacing" value="0"/>
-                <property key="labeling/fontSize" value="14"/>
+                <property key="labeling/fontSize" value="10"/>
                 <property key="labeling/fontSizeInMapUnits" value="false"/>
                 <property key="labeling/fontStrikeout" value="false"/>
                 <property key="labeling/fontUnderline" value="false"/>
@@ -559,10 +559,10 @@
                 <property key="labeling/enabled" value="true"/>
                 <property key="labeling/fieldName" value="name"/>
                 <property key="labeling/fontCapitals" value="0"/>
-                <property key="labeling/fontFamily" value="Verdana"/>
+                <property key="labeling/fontFamily" value="Cantarell"/>
                 <property key="labeling/fontItalic" value="true"/>
                 <property key="labeling/fontLetterSpacing" value="0"/>
-                <property key="labeling/fontSize" value="7"/>
+                <property key="labeling/fontSize" value="4"/>
                 <property key="labeling/fontSizeInMapUnits" value="false"/>
                 <property key="labeling/fontStrikeout" value="false"/>
                 <property key="labeling/fontUnderline" value="false"/>
@@ -574,7 +574,9 @@
                 <property key="labeling/labelPerPart" value="false"/>
                 <property key="labeling/mergeLines" value="false"/>
                 <property key="labeling/minFeatureSize" value="0"/>
-                <property key="labeling/namedStyle" value="Italic"/>
+                <property key="labeling/multilineAlign" value="0"/>
+                <property key="labeling/multilineHeight" value="1"/>
+                <property key="labeling/namedStyle" value="Oblique"/>
                 <property key="labeling/obstacle" value="true"/>
                 <property key="labeling/placement" value="0"/>
                 <property key="labeling/placementFlags" value="0"/>
@@ -588,6 +590,7 @@
                 <property key="labeling/textColorG" value="116"/>
                 <property key="labeling/textColorR" value="116"/>
                 <property key="labeling/textTransp" value="0"/>
+                <property key="labeling/upsidedownLabels" value="0"/>
                 <property key="labeling/wrapChar" value=""/>
                 <property key="labeling/xOffset" value="0"/>
                 <property key="labeling/xQuadOffset" value="0"/>
