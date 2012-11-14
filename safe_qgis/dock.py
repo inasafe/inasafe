@@ -84,7 +84,8 @@ from safe_qgis.function_options_dialog import (
    FunctionOptionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe.postprocessors import get_post_processors
+from safe.postprocessors import (get_postprocessors,
+                                 get_postprocessor_human_name)
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -1233,7 +1234,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '       <td colspan="100%">'
                        '         <strong>'
                        + self.tr('Detailed %1 report').arg(
-                                 self.tr(proc).toLower()) +
+                                 self.tr(get_postprocessor_human_name(proc))
+                                    .toLower()) +
                        '         </strong>'
                        '       </td>'
                        '    </tr>'
@@ -1439,12 +1441,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myAggrFieldIndex = self.postprocLayer.fieldNameIndex(myAggrField)
         self.postprocLayer.startEditing()
 
+        mySafeImpactLayer = self.runner.impactLayer()
+        myImpactGeoms = mySafeImpactLayer.get_geometry()
+        myImpactValues = mySafeImpactLayer.get_data()
+
         if self.doZonalAggregation:
             #get safe layers
             mySafePostprocLayer = safe_read_layer(
                 str(self.postprocLayer.source()))
-            mySafeImpactLayer = self.runner.impactLayer()
-            myPolygons = mySafePostprocLayer.get_geometry()
+            myPostprocPolygons = mySafePostprocLayer.get_geometry()
 
             #FIXME (MB) do we need further geometry types?
             if mySafeImpactLayer.is_polygon_data:
@@ -1452,15 +1457,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             elif mySafeImpactLayer.is_point_data:
                 LOGGER.debug('Doing point in polygon aggregation')
 
-                myPoints = mySafeImpactLayer.get_geometry()
-                myValues = mySafeImpactLayer.get_data()
+                myRemainingPoints = myImpactGeoms
+                myRemainingValues = myImpactValues
 
-                myRemainingPoints = myPoints
-                myRemainingValues = myValues
-
-                for myPolygonIndex, myPolygon in enumerate(myPolygons):
+                for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
                     myTotal = 0
-                    print 'Remaining points', len(myRemainingPoints)
 
                     if hasattr(myPolygon, 'outer_ring'):
                         outer_ring = myPolygon.outer_ring
@@ -1469,13 +1470,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         # Assume it is an array
                         outer_ring = myPolygon
                         inner_rings = None
-
                     inside, outside = points_in_and_outside_polygon(
                         myRemainingPoints,
                         outer_ring,
                         holes=inner_rings,
                         closed=True,
-                        check_input=False)
+                        check_input=True)
 
                     #summ attributes
                     self.impactLayerAttributes.append([])
@@ -1491,8 +1491,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         {myFID: myAttrs})
 
                     # make outside points the input to the next iteration
-                    myRemainingPoints = myRemainingPoints[outside]
-                    myRemainingValues = [myRemainingValues[i] for i in outside]
+                    # this could maybe be done quicklier using directly numpy
+                    # arrays like this:
+                    # myRemainingPoints = myRemainingPoints[outside]
+                    # myRemainingValues =
+                    # [myRemainingValues[i] for i in outside]
+                    myTmpPoints = []
+                    myTmpValues = []
+                    for i in outside:
+                        myTmpPoints.append(myRemainingPoints[i])
+                        myTmpValues.append(myRemainingValues[i])
+                    myRemainingPoints = myTmpPoints
+                    myRemainingValues = myTmpValues
+
 #                    LOGGER.debug('Before: ' + str(len(myRemainingValues)))
 #                    LOGGER.debug('After: ' + str(len(myRemainingValues)))
 #                    LOGGER.debug('Inside: ' + str(len(inside)))
@@ -1512,11 +1523,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 return
         else:
             #loop over all features in impact layer
-            while myImpactProvider.nextFeature(myFeat):
-                myVal, ok = myFeat.attributeMap()[myTargetFieldIndex].toInt()
-                if ok:
-                    myTotal += myVal
-
+            self.impactLayerAttributes.append([])
+            for myImpactValueList in myImpactValues:
+                myTotal += myImpactValueList[self.targetField]
+                self.impactLayerAttributes[0].append(myImpactValueList)
             myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
             myFID = 0
             myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
@@ -1555,7 +1565,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #instantiate postprocessors if they are requested by the function
         try:
             myRequestedPostprocessors = self.functionParams['postprocessors']
-            myPostprocessors = get_post_processors(myRequestedPostprocessors)
+            myPostprocessors = get_postprocessors(myRequestedPostprocessors)
         except (TypeError, KeyError):
             # TypeError is for when functionParams is none
             # KeyError is for when ['postprocessors'] is unavailable
