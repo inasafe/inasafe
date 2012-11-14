@@ -17,7 +17,7 @@ from safe.postprocessors.abstract_postprocessor import (
 from safe.common.utilities import ugettext as tr
 
 
-class BuildingTypePostprocessor(AbstractPostprocessor):
+class OSMBuildingTypePostprocessor(AbstractPostprocessor):
     """
     Postprocessor that calculates age related statistics.
     see the _calculate_* methods to see indicator specific documentation
@@ -207,11 +207,6 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         myName = tr('Schools')
         if self.target_field is not None:
             myName = '%s %s' % (myName, tr(self.target_field).lower())
-
-        #FIXME (MB) Shameless hack to deal with issue #368
-        if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT)
-            return
 
         myResult = 0
         for building in self.impact_attrs:
