@@ -39,7 +39,7 @@ def processEvent(theEventId=None):
                                   theForceFlag=myForceFlag)
     except BadZipfile:
         # retry with force flag true
-        myShakeEvent = ShakeEvent(theEventId=myEventId,
+        myShakeEvent = ShakeEvent(theEventId=theEventId,
                                   theForceFlag=True)
     except:
         LOGGER.exception('An error occurred setting up the shake event.')
@@ -91,6 +91,7 @@ elif len(sys.argv) == 2:
         sys.exit(0)
     else:
         processEvent(myEventId)
+
 else:
     myEventId = None
     print('Processing latest shakemap')
