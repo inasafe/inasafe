@@ -35,7 +35,7 @@ def processEvent(theEventId=None):
     myForceFlag = False
     # Extract the event
     try:
-        myShakeEvent = ShakeEvent(theEventId=myEventId,
+        myShakeEvent = ShakeEvent(theEventId=theEventId,
                                   theForceFlag=myForceFlag)
     except BadZipfile:
         # retry with force flag true
@@ -75,7 +75,7 @@ elif len(sys.argv) == 2:
         for myEvent in myListing:
             print myEvent
         sys.exit(0)
-    if myEventId in '--run-all':
+    elif myEventId in '--run-all':
         myFtpClient = FtpClient()
         myListing = myFtpClient.getListing()
         for myEvent in myListing:
@@ -89,6 +89,8 @@ elif len(sys.argv) == 2:
             except:
                 LOGGER.exception('Failed to process %s' % myEvent)
         sys.exit(0)
+    else:
+        processEvent(myEventId)
 else:
     myEventId = None
     print('Processing latest shakemap')
