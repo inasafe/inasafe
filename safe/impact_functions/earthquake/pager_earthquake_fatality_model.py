@@ -16,6 +16,18 @@ class PAGFatalityFunction(ITBFatalityFunction):
     Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).
     Estimating casualties for large worldwide earthquakes using an empirical
     approach. U.S. Geological Survey Open-File Report 2009-1136.
+
+    :author Helen Crowley
+    :rating 3
+
+    :param requires category=='hazard' and \
+                    subcategory=='earthquake' and \
+                    layertype=='raster' and \
+                    unit=='MMI'
+
+    :param requires category=='exposure' and \
+                    subcategory=='population' and \
+                    layertype=='raster'
     """
 
     title = tr('Die or be displaced according Pager model')
