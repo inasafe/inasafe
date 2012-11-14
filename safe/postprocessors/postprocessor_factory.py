@@ -20,11 +20,12 @@ import logging
 from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
 from aggregation_postprocessor import AggregationPostprocessor
+from building_type_postprocessor import BuildingTypePostprocessor
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
-AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age', 'Aggregation']
+AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age', 'Aggregation', 'BuildingType']
 
 
 def get_post_processors(requested_postprocessors):
