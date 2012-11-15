@@ -45,7 +45,8 @@ from safe.api import (get_admissible_plugins,
                       BoundingBoxError,
                       ReadLayerError,
                       get_plugins, get_version,
-                      in_and_outside_polygon as points_in_and_outside_polygon)
+                      in_and_outside_polygon as points_in_and_outside_polygon,
+                      calculate_polygon_centroid)
 
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611

@@ -66,7 +66,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       temp_dir,
                                       safe_read_layer,
                                       ReadLayerError,
-                                      points_in_and_outside_polygon)
+                                      points_in_and_outside_polygon,
+                                      calculate_polygon_centroid)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -1459,14 +1460,34 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 str(self.postprocLayer.source()))
             myPostprocPolygons = mySafePostprocLayer.get_geometry()
 
-            #FIXME (MB) do we need further geometry types?
-            if mySafeImpactLayer.is_polygon_data:
-                LOGGER.debug('Doing polygon in polygon aggregation')
-            elif mySafeImpactLayer.is_point_data:
+            if (mySafeImpactLayer.is_point_data or
+                mySafeImpactLayer.is_polygon_data):
                 LOGGER.debug('Doing point in polygon aggregation')
 
-                myRemainingPoints = myImpactGeoms
                 myRemainingValues = myImpactValues
+
+                if mySafeImpactLayer.is_polygon_data:
+                    # Using centroids to do polygon in polygon aggregation
+                    # this is always ok because preprocessInputLayers() took
+                    # care of splitting polygons that spawn across multiple
+                    # postprocessing polygons. After preprocessInputLayers()
+                    # each impact polygon will never be contained by more than
+                    # one aggregation polygon
+                    
+                    # Calculate points for each polygon
+                    myCentroids = []
+                    for myPolygon in myImpactGeoms:
+                        if hasattr(myPolygon, 'outer_ring'):
+                            outer_ring = myPolygon.outer_ring
+                        else:
+                            # Assume it is an array
+                            outer_ring = myPolygon
+                        c = calculate_polygon_centroid(outer_ring)
+                        myCentroids.append(c)
+                    myRemainingPoints = myCentroids
+
+                else:
+                    myRemainingPoints = myImpactGeoms
 
                 for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
                     myTotal = 0
