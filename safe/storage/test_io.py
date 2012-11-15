@@ -677,7 +677,7 @@ class Test_IO(unittest.TestCase):
         V_ref = V.get_topN('FLOOR_AREA', 5)
 
         geometry = V_ref.get_geometry()
-        data = V_ref.get_data()
+        #data = V_ref.get_data()
         projection = V_ref.get_projection()
 
         # Create new attributes with a range of types
@@ -698,7 +698,6 @@ class Test_IO(unittest.TestCase):
                         D[key] = values[j]
                 else:
                     D[key] = values[j]
-
             data.append(D)
 
         # Create new object from test data
@@ -710,9 +709,13 @@ class Test_IO(unittest.TestCase):
 
         V_tmp = read_layer(tmp_filename)
 
-        #print V_new.get_data()
-        #print V_tmp.get_data()
+        #print V_new.get_data()[1]
+        #print V_tmp.get_data()[1]
 
+        assert V_tmp.projection == V_new.projection
+        assert numpy.allclose(V_tmp.geometry, V_new.geometry)
+        assert V_tmp.data == V_new.data
+        assert V_tmp.get_data() == V_new.get_data()
         assert V_tmp == V_new
         assert not V_tmp != V_new
 
