@@ -400,7 +400,7 @@ searchBoxes: None
         myResult = myShakeEvent.eventDict()
         myExpectedDict = {'place-name': 'Manado',
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
-                          'elapsed-time': u'16 weeks 0 days',
+                          'elapsed-time': u'16 weeks 1 days',
                           'legend-name': 'Population density',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
                           'located-label': PyQt4.QtCore.QString(u'Located'),
