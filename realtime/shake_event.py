@@ -1950,7 +1950,10 @@ class ShakeEvent(QObject):
         if myCitiesHtmlPath is not None:
             myCitiesHtml.setUrl(QUrl(myCitiesHtmlPath))
         else:
-            raise CityMemoryLayerCreationError('No nearby cities found.')
+            # We used to raise an error here but it is actually feasible that
+            # no nearby cities with a valid mmi value are found - e.g.
+            # if the event is way out in the ocean.
+            LOGGER.info('No nearby cities found.')
 
         # Load the contours and cities shapefile into the map
         myContoursLayer = QgsVectorLayer(myContoursShapeFile,
