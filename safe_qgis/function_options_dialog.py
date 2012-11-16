@@ -26,6 +26,8 @@ from PyQt4.QtGui import (
 from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
 
 from safe_interface import safeTr
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessor_human_name)
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -86,14 +88,14 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         for myKey, myValue in theParams.items():
             if myKey == 'postprocessors':
-                self._addPostProcessorFormItem(myValue)
+                self.buildPostProcessorForm(myValue)
             else:
                 self.values[myKey] = self.buildWidget(
                     self.configLayout,
                     myKey,
                     myValue)
 
-    def _addPostProcessorFormItem(self, theParams):
+    def buildPostProcessorForm(self, theParams):
         """Build Post Processor Tab
 
         Args:
@@ -118,7 +120,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
             if 'params' in myOptions:
                 myGroupBox = QGroupBox()
                 myGroupBox.setCheckable(True)
-                myGroupBox.setTitle(myLabel)
+                myGroupBox.setTitle(get_postprocessor_human_name(myLabel))
 
                 # NOTE (gigih): is 'on' always exist??
                 myGroupBox.setChecked(myOptions.get('on'))
@@ -127,16 +129,18 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 myLayout = QFormLayout(myGroupBox)
                 myGroupBox.setLayout(myLayout)
 
+                # create widget element from 'params'
                 myInputValues['params'] = {}
                 for myKey, myValue in myOptions['params'].items():
+                    myHumanName = get_postprocessor_human_name(myKey)
                     myInputValues['params'][myKey] = self.buildWidget(
-                        myLayout, myKey, myValue)
+                        myLayout, myHumanName, myValue)
 
                 myFormLayout.addRow(myGroupBox, None)
 
             elif 'on' in myOptions:
                 myCheckBox = QCheckBox()
-                myCheckBox.setText(myLabel)
+                myCheckBox.setText(get_postprocessor_human_name(myLabel))
                 myCheckBox.setChecked(myOptions['on'])
 
                 myInputValues['on'] = self.bind(myCheckBox, 'checked', bool)
