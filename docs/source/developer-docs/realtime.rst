@@ -5,18 +5,21 @@ InaSAFE Realtime
 InaSAFE Realtime is a component of the InaSAFE project designed for deployment
 on a server and creation of Impact Maps a short interval after an event occurs.
 
-The original prototype of the realtime system was implemented by Ole Nielsen
-(AusAID). The subsequent port of the realtime system to InaSAFE was implemented
-by Tim Sutton (Linfiniti Consulting CC., funded by The World Bank and the
-AIFDR).
-
 Currently the realtime system supports Earthquake fatality impact assessments,
-though in future we invisage additional support for other disaster types being
-facilited.
+though in future we envisage additional support for other disaster types being
+facilitated.
 
 .. note:: This work was funded by the Australia-Indonesia Facility for Disaster
           Reduction, Geoscience Australia and the GFDRR. We thank you for your
           support.
+
+Historical Note
+---------------
+
+The original prototype of the realtime system was implemented by Ole Nielsen
+(AusAID). The subsequent port of the realtime system to InaSAFE was implemented
+by Tim Sutton (Linfiniti Consulting CC., funded by The World Bank and the
+AIFDR).
 
 
 Supported Platforms
@@ -252,10 +255,20 @@ If you wish to use your own custom project, you need to specify the
 :samp:`INSAFE_REALTIME_PROJECT` environment variable, populating it with
 the path to your preferred project file.
 
-Additional configuration options
+Configuration of population data
 --------------------------------
 
-
+Population data is used as the 'exposure' dataset for shake reports.
+The following priority will be used to determine the path of the population
+raster dataset.
+# the class attribute **self.populationRasterPath**
+    will be checked and if not None it will be used.
+# the environment variable :samp:`INASAFE_POPULATION_PATH` will be
+   checked if set it will be used.
+# A hard coded path of
+   :file:`/fixtures/exposure/population.tif` will be checked.
+# A hard coded path of
+   :file:`/usr/local/share/inasafe/exposure/population.tif` will be used.
 
 
 Running a shake event
@@ -288,8 +301,13 @@ Unit tests
 A complete set of unit tests is provided with the realtime package for InaSAFE.
 You can execute these tests like this::
 
+    nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime
 
+There are also a number of Jenkins tasks provided in the Makefile for InaSAFE
+to automate testing on our continuous integration server. You can view the
+current state of these tests by visiting this URL:
 
+http://jenkins.linfiniti.com/job/InaSAFE-Realtime/
 
 .. _realtime-batch:
 
@@ -389,6 +407,19 @@ Next ensure that apache has read access to your hosting directory::
 You can customise the look and feel of the hosted site by editing the files in
 :file:`/home/web/quake/public/resource` (assumes basic knowledge of HTML).
 
+Lastly, you should regularly run a script to move generated pdf and png
+outputs into the public directory. An example of such a script is provided as
+:file:`realtime/fixtures/web/make-public.sh`. To run this script regularly, you
+could add it to a cron job e.g.::
+
+    crontab -e
+
+And then add a line like this to the cron file::
+
+    * * * * * /home/timlinux/dev/python/inasafe-realtime/realtime/fixtures/web/make-public.sh
+
+.. note:: The resources used in the above examples are all available in the
+    source code under :file:`realtime/fixtures/web`.
 
 
 

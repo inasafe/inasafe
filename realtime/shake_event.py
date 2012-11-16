@@ -1767,7 +1767,7 @@ class ShakeEvent(QObject):
 
         The following priority will be used to determine the path:
             1) the class attribute self.populationRasterPath
-                will be checked and if not None it will be used.p7zip-full
+                will be checked and if not None it will be used.
             2) the environment variable 'INASAFE_POPULATION_PATH' will be
                checked if set it will be used.
             4) A hard coded path of
