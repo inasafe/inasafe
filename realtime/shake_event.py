@@ -2097,7 +2097,7 @@ class ShakeEvent(QObject):
             # Check why we have this line - perhaps setting class state?
             self.sortedImpactedCities()
             myDirection = 0
-            myDistance = self.tr('n/a')
+            myDistance = 0
             myKeyCityName = self.tr('n/a')
             myBearing = self.tr('n/a')
         else:
