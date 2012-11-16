@@ -442,8 +442,9 @@ searchBoxes: None
                           'distance': '3.04',
                           'direction-relation': PyQt4.QtCore.QString(u'of'),
                           'credits': PyQt4.QtCore.QString(
-                              u'Supported by the Australia-Indonesia Facility '
-                           'for Disaster Reduction and Geoscience Australia.'),
+                              u'Supported by the Australia-Indonesia Facility'
+                              u' for Disaster Reduction, '
+                              u'Geoscience Australia and the GFDRR.'),
                           'latitude-value': u'0\xb012\'36.00"S',
                           'time': '2:15:35', 'depth-value': '11.0'}
 
