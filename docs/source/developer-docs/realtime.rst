@@ -341,7 +341,7 @@ provide a pleasing, user friendly directory listing of shakemap reports.
     your system.
 
 First create a file (as root / sudo) with this content in your
-:file:`/etc/apache2/sites-available/quake-apache.conf.`::
+:file:`/etc/apache2/sites-available/quake-apache.conf.` for example::
 
     <VirtualHost *:80>
       ServerAdmin tim@linfiniti.com
@@ -375,11 +375,11 @@ be hosted::
 
     mkdir -p /home/web/quake/public
 
-Unpack the :file:`realtime/fixtures/resource.tar.gz` directory into the
+Unpack the :file:`realtime/fixtures/web/resource` directory into the
 above mentioned public directory. For example::
 
     cd /home/web/quake/public
-    tar xfz ~/dev/python/inasafe/realtime/fixtures/resource.tar.gz
+    cp -r ~/dev/python/inasafe/realtime/fixtures/web/resource .
 
 Next ensure that apache has read access to your hosting directory::
 
