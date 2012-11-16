@@ -1961,6 +1961,7 @@ class ShakeEvent(QObject):
                                          'mmi-contours', "ogr")
         QgsMapLayerRegistry.instance().addMapLayers([myContoursLayer])
 
+        myCitiesLayer = None
         if myCitiesShapeFile is not None:
             myCitiesLayer = QgsVectorLayer(myCitiesShapeFile,
                                        'mmi-cities', "ogr")
@@ -1974,7 +1975,9 @@ class ShakeEvent(QObject):
             myLayerList.append(myLayer.id())
 
         myLayerList.append(myContoursLayer.id())
-        myLayerList.append(myCitiesLayer.id())
+        if myCitiesLayer is not None and myCitiesLayer.isValid():
+            myLayerList.append(myCitiesLayer.id())
+
         myMapRenderer.setLayerSet(myLayerList)
         LOGGER.info(str(myLayerList))
 
