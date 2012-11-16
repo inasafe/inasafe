@@ -2,8 +2,8 @@
 """**Postprocessors package.**
 
 .. tip::
-   import like this from safe.postprocessors import get_postprocessors and
-   then call get_postprocessors(requested_postprocessors)
+   import like this from safe.postprocessors import get_post_processors and
+   then call get_post_processors(requested_postprocessors)
 
 """
 
