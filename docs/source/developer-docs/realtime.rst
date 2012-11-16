@@ -14,6 +14,17 @@ Currently the realtime system supports Earthquake fatality impact assessments,
 though in future we invisage additional support for other disaster types being
 facilited.
 
+.. note:: This work was funded by the Australia-Indonesia Facility for Disaster
+          Reduction, Geoscience Australia and the GFDRR. We thank you for your
+          support.
+
+
+Supported Platforms
+-------------------
+
+Currently only Ubuntu 12.04 is supported. The software may work or can easily
+be made to work on other platforms but it is untested.
+
 Architecture
 ------------
 
@@ -246,18 +257,145 @@ Additional configuration options
 
 
 
+
 Running a shake event
 ---------------------
+
+To run a single event locally on a system with an X-Server you can
+use the provided script :file:`scripts/make-shakemap.sh`. The script can be
+used with the following options:
+
+* **--list**: :samp:`scripts/make-shakemap.sh --list` - retrieve a list of
+    all known shake events on the server. Events are listed as their full
+    ftp url e.g. :file:`ftp://118.97.83.243/20121106084105.out.zip` and
+    both *inp* and *out* files are listed.
+* **[event id]**: :samp:`scripts/make-shakemap.sh 20121106084105` - retrieve
+    and process a single shake event. A pdf, png and thumbnail will be produced.
+* **--all**: :samp:`scripts/make-shakemap.sh --all` - process all identified
+    events on the server in batch mode. **Note:** this is experimental and
+    not production ready - we recommend to use the approach described in
+    :ref:`realtime-batch`.
+* **no parameters**: :samp:`scripts/make-shakemap.sh` - fetch and process
+    the latest existing shake dataset. This is typically what you would want
+    to use as the target of a cron job.
+
+.. note:: The :file:`make_shakemap.sh` script is just a thin wrapper around
+    the python :mod:`realtime.make_map` python module.
 
 Unit tests
 -----------
 
+A complete set of unit tests is provided with the realtime package for InaSAFE.
+You can execute these tests like this::
 
-Batch validation
-----------------
+
+
+
+.. _realtime-batch:
+
+Batch validation & running
+---------------------------
+
+
+The :file:`scripts/make-all-shakemaps.sh` provided in the InaSAFE source tree
+will automate the production of one shakemap report per event found on the
+shake ftp server. It contains a number of environment variable settings which
+can be used to control batch execution. First a complete script listing::
+
+    #!/bin/bash
+
+    export QGIS_DEBUG=0
+    export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log
+    export QGIS_DEBUG_FILE=/tmp/inasafe/realtime/logs/qgis-debug.log
+    export QGIS_PREFIX_PATH=/usr/local/qgis-master/
+    export PYTHONPATH=/usr/local/qgis-master/share/qgis/python/:`pwd`
+    export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
+    export INASAFE_WORK_DIR=/home/web/quake
+    export SAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-Realtime/exposure/population.tif
+    for FILE in `xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py --list | grep -v inp | grep -v Proces`
+    do
+        FILE=`echo $FILE | sed 's/ftp:\/\/118.97.83.243\///g'`
+        FILE=`echo $FILE | sed 's/.out.zip//g'`
+        echo "Running: $FILE"
+        xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py $FILE
+    done
+    exit
+
+An example of the output produced from such a batch run is provided at:
 
 http://quake.linfiniti.com/
+
+
 
 Hosting the shakemaps
 ---------------------
 
+In this section we describe how to easily host the shakemaps on a public web
+site.
+
+An apache configuration file and a set of resources are provided to make it easy
+to host the shakemap outputs. The resources provided can easily be modified to
+provide a pleasing, user friendly directory listing of shakemap reports.
+
+.. note:: You should adapt the paths used below to match the configuration of
+    your system.
+
+First create a file (as root / sudo) with this content in your
+:file:`/etc/apache2/sites-available/quake-apache.conf.`::
+
+    <VirtualHost *:80>
+      ServerAdmin tim@linfiniti.com
+      ServerName quake.linfiniti.com
+
+      DocumentRoot /home/web/quake/public/
+      <Directory /home/web/quake/public/>
+        Options Indexes FollowSymLinks
+        IndexOptions +FancyIndexing
+        IndexOptions +FoldersFirst
+        IndexOptions +XHTML
+        IndexOptions +HTMLTable
+        IndexOptions +SuppressRules
+        HeaderName resource/header.html
+        ReadmeName resource/footer.html
+        IndexStyleSheet "resource/bootstrap.css"
+        IndexIgnore .htaccess /resource
+        AllowOverride None
+        Order allow,deny
+        allow from all
+      </Directory>
+
+      ErrorLog /var/log/apache2/quake.linfiniti.error.log
+      CustomLog /var/log/apache2/quake.linfiniti.access.log combined
+      ServerSignature Off
+
+    </VirtualHost>
+
+Now make the :file:`/home/web/quake/public` directory in which the outputs will
+be hosted::
+
+    mkdir -p /home/web/quake/public
+
+Unpack the :file:`realtime/fixtures/resource.tar.gz` directory into the
+above mentioned public directory. For example::
+
+    cd /home/web/quake/public
+    tar xfz ~/dev/python/inasafe/realtime/fixtures/resource.tar.gz
+
+Next ensure that apache has read access to your hosting directory::
+
+    chmod +X /home/web/quake/public
+    chmod +X /home/web/quake/public/resource
+
+You can customise the look and feel of the hosted site by editing the files in
+:file:`/home/web/quake/public/resource` (assumes basic knowledge of HTML).
+
+
+
+
+
+
+
+
+
+
+http://paradox460.newsvine.com/_news/2008/04/05/1413490-how2-stylish-apache-directory-listings
