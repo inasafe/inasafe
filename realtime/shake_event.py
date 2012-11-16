@@ -1840,6 +1840,7 @@ class ShakeEvent(QObject):
         myMmiShapeFile = self.mmiDataToShapefile(theForceFlag=theForceFlag)
         logging.info('Created: %s', myMmiShapeFile)
         myCitiesHtmlPath = None
+        myCitiesShapeFile = None
         #for myAlgorithm in ['average', 'invdist', 'nearest']:
         for myAlgorithm in ['nearest']:
             myContoursShapeFile = self.mmiDataToContours(
@@ -1960,10 +1961,11 @@ class ShakeEvent(QObject):
                                          'mmi-contours', "ogr")
         QgsMapLayerRegistry.instance().addMapLayers([myContoursLayer])
 
-        myCitiesLayer = QgsVectorLayer(myCitiesShapeFile,
+        if myCitiesShapeFile is not None:
+            myCitiesLayer = QgsVectorLayer(myCitiesShapeFile,
                                        'mmi-cities', "ogr")
-        if myCitiesLayer.isValid():
-            QgsMapLayerRegistry.instance().addMapLayers([myCitiesLayer])
+            if myCitiesLayer.isValid():
+                QgsMapLayerRegistry.instance().addMapLayers([myCitiesLayer])
 
         # Now add out layers to the renderer so they appear in the print out
         myLayers = reversed(CANVAS.layers())
