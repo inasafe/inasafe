@@ -30,6 +30,7 @@ from realtime.shake_event import ShakeEvent
 setupLogger()
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
+
 def processEvent(theEventId=None):
     # Used cached data where available
     myForceFlag = False
@@ -97,6 +98,3 @@ else:
     myEventId = None
     print('Processing latest shakemap')
     processEvent()
-
-
-

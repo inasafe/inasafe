@@ -769,7 +769,12 @@ class ShakeEvent(QObject):
         LOGGER.debug('Romanising %f' % float(theMMIValue))
         myRomanList = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
                        'IX', 'X', 'XI', 'XII']
-        return myRomanList[int(round(float(theMMIValue)))]
+        try:
+            myRoman = myRomanList[int(round(float(theMMIValue)))]
+        except ValueError:
+            LOGGER.exception('Error converting MMI value to roman')
+            return None
+        return myRoman
 
     def mmiColour(self, theMMIValue):
         """Return the colour for an mmi value.
@@ -1167,7 +1172,7 @@ class ShakeEvent(QObject):
 
         self.searchBoxes = mySearchBoxes
         # TODO: Perhaps it might be neater to combine the bbox of cities and
-        #       mmi to get a tigher AOI then do a small zoom out.
+        #       mmi to get a tighter AOI then do a small zoom out.
         self.extentWithCities = myRectangle
         if not myFoundFlag:
             LOGGER.debug('Could not find %s cities after expanding rect '
@@ -1242,6 +1247,10 @@ class ShakeEvent(QObject):
             LOGGER.debug('Looked up mmi of %s on raster for %s' %
                          (myMmi, myPoint.toString()))
 
+            myRoman = self.romanize(myMmi)
+            if myRoman is None:
+                continue
+
             myAttributeMap = {
                 myIdIndex: myId,
                 myPlaceNameIndex: myPlaceName,
@@ -1250,7 +1259,7 @@ class ShakeEvent(QObject):
                 myDistanceIndex: QVariant(myDistance),
                 myDirectionToIndex: QVariant(myDirectionTo),
                 myDirectionFromIndex: QVariant(myDirectionFrom),
-                myRomanIndex: QVariant(self.romanize(myMmi)),
+                myRomanIndex: QVariant(myRoman),
                 myColourIndex: QVariant(self.mmiColour(myMmi))
             }
             #LOGGER.debug('Attribute Map: %s' % str(myAttributeMap))
@@ -1443,8 +1452,9 @@ class ShakeEvent(QObject):
         #LOGGER.exception(myCities)
         mySortedCities = sorted(myCities,
                                 key=lambda d: (
-                                    -d['mmi-int'],  # we want to use whole no.s
-                                    -d['population'],
+                                    # we want to use whole no's for sort
+                                    -d['mmi-int'],  # pylint: disable=E225
+                                    -d['population'],  # pylint: disable=E225
                                     d['name'],
                                     d['mmi'],  # not decimals
                                     d['roman'],
@@ -2087,7 +2097,7 @@ class ShakeEvent(QObject):
         myKeyCityName = self.mostAffectedCity['name']
         myBearing = self.bearingToCardinal(myDirection)
         myElapsedTimeText = self.tr('Elapsed time since event')
-        myElapsedTime =  self.elapsedTime()[1]
+        myElapsedTime = self.elapsedTime()[1]
         myDegreeSymbol = '\xb0'
         myDict = {
             'map-name': myMapName,
