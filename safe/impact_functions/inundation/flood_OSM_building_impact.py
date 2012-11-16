@@ -114,10 +114,14 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     else:
                         x = res
                 else:
-                    # If there aren't any flood related attribute,
-                    # Just say that being in a polygon means it
-                    # is affected
-                    x = True
+                    # there is no flood related attribute
+                    msg = ('No flood related attribute found in %s. '
+                           'I was looking fore either "Flooded", "FLOODPRONE" '
+                           'or "Affected". The latter should have been '
+                           'automatically set by call to '
+                           'assign_hazard_values_to_exposure_data(). '
+                           'Sorry I can\'t help more.')
+                    raise Exception(msg)
             else:
                 msg = (tr('Unknown hazard type %s. '
                          'Must be either "depth" or "grid"')
