@@ -1958,10 +1958,12 @@ class ShakeEvent(QObject):
         # Load the contours and cities shapefile into the map
         myContoursLayer = QgsVectorLayer(myContoursShapeFile,
                                          'mmi-contours', "ogr")
+        QgsMapLayerRegistry.instance().addMapLayers([myContoursLayer])
+
         myCitiesLayer = QgsVectorLayer(myCitiesShapeFile,
                                        'mmi-cities', "ogr")
-        QgsMapLayerRegistry.instance().addMapLayers(
-                    [myContoursLayer, myCitiesLayer])
+        if myCitiesLayer.isValid():
+            QgsMapLayerRegistry.instance().addMapLayers([myCitiesLayer])
 
         # Now add out layers to the renderer so they appear in the print out
         myLayers = reversed(CANVAS.layers())
