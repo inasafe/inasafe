@@ -152,7 +152,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh 4ce221fb55ac7624c89915097a90699dcbf26889 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 0a33f7d27c28a8fb7ad7951ed7163341ef1ea7ad 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -215,6 +215,13 @@ run_data_audit:
 	@echo "Audit of IP status for bundled data"
 	@echo "-----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/data_IP_audit.py
+
+gen_impact_function_doc:
+	@echo
+	@echo "-----------------------------------"
+	@echo "Generate impact functions' documentation"
+	@echo "-----------------------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_impfunc_doc.py
 
 pylint-count:
 	@echo
