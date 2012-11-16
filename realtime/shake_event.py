@@ -1399,6 +1399,9 @@ class ShakeEvent(QObject):
         .. note:: self.mostAffectedCity will also be populated with
             the dictionary of details for the most affected city.
 
+        .. note:: It is possible that there is no affected city! e.g. if
+            all nearby cities fall outside of the shake raster.
+
         """
         myLayer = self.localCitiesMemoryLayer()
         myLayerProvider = myLayer.dataProvider()
@@ -2091,11 +2094,18 @@ class ShakeEvent(QObject):
         LOGGER.debug(myLongitude)
         LOGGER.debug(myLatitude)
         if self.mostAffectedCity is None:
+            # Check why we have this line - perhaps setting class state?
             self.sortedImpactedCities()
-        myDirection = self.mostAffectedCity['dir_to']
-        myDistance = self.mostAffectedCity['dist_to']
-        myKeyCityName = self.mostAffectedCity['name']
-        myBearing = self.bearingToCardinal(myDirection)
+            myDirection = 0
+            myDistance = self.tr('n/a')
+            myKeyCityName = self.tr('n/a')
+            myBearing = self.tr('n/a')
+        else:
+            myDirection = self.mostAffectedCity['dir_to']
+            myDistance = self.mostAffectedCity['dist_to']
+            myKeyCityName = self.mostAffectedCity['name']
+            myBearing = self.bearingToCardinal(myDirection)
+
         myElapsedTimeText = self.tr('Elapsed time since event')
         myElapsedTime = self.elapsedTime()[1]
         myDegreeSymbol = '\xb0'
