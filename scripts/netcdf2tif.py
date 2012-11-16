@@ -103,7 +103,7 @@ def convert_netcdf2tif(filename, n):
                keywords={'category': 'hazard',
                          'subcategory': 'flood',
                          'unit': 'm',
-                         'title': ('%d hour flood forecast '
+                         'title': ('%d hour flood forecast grid '
                                    'in Jakarta at %s' % (n, date))})
 
     tif_filename = '%s_%d_hours.tif' % (basename, n)
@@ -138,28 +138,41 @@ if __name__ == '__main__':
     # Tag each polygon with Y if it contains at least one pixel
     # exceeding a specific threshold (e.g. 0.3m).
     if args.regions is not None:
-        print 'Tagging %s as "Affected" or not' % args.regions
+        print 'Tagging %s as "Flooded" or not' % args.regions
         polygons = read_layer(args.regions)
         grid = read_layer(tif_filename)
         res = tag_polygons_by_grid(polygons, grid,
-                                   threshold=0.3, tag='Affected')
+                                   threshold=0.3,
+                                   tag='Flooded')
 
-        # Keep only those that are affected
-        geom = res.get_geometry()
-        data = res.get_data()
-        new_geom = []
-        new_data = []
+        # Keep only those that are affected (speeds things up a lot,
+        # but will reduce overall bounding box for buildings under
+        # consideration)
+        #geom = res.get_geometry()
+        #data = res.get_data()
+        #new_geom = []
+        #new_data = []
+        #
+        #for i, d in enumerate(data):
+        #    if d['Flooded']:
+        #        g = geom[i]
+        #        new_geom.append(g)
+        #        new_data.append(d)
 
-        for i, d in enumerate(data):
-            if d['Affected']:
-                g = geom[i]
-                new_geom.append(g)
-                new_data.append(d)
+        # Keep all polygons
+        new_geom = res.get_geometry()
+        new_data = res.get_data()
 
+        date = os.path.split(args.filename)[-1].split('_')[0]
         v = Vector(geometry=new_geom, data=new_data,
                    projection=res.projection,
-                   keywords={'category': 'hazard', 'subcategory': 'flood'})
+                   keywords={'category': 'hazard',
+                             'subcategory': 'flood',
+                             'title': ('%d hour flood forecast regions '
+                                       'in Jakarta at %s' % (args.hours,
+                                                             date))})
 
-        polyforecast_filename = os.path.splitext(tif_filename)[0] + '.shp'
+        polyforecast_filename = (os.path.splitext(tif_filename)[0] +
+                                 '_regions.shp')
         v.write_to_file(polyforecast_filename)
         print 'Wrote tagged polygons to %s' % polyforecast_filename

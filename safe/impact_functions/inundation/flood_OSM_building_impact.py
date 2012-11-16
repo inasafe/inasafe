@@ -37,8 +37,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
         'detailed description of the methodology used is given.')
     permissible_hazard_input = tr('A raster layer where each cell represents '
         'flood depth, or a vector polygon layer where each polygon represents '
-        'an inundated area. Optionally the user may nominate an attribute in '
-        'the polygon layer that represents inundation depth.')
+        'an inundated area. The following attributes are recognised '
+        '(in order): Flooded (True or False), FLOODPRONE (Yes or No) and '
+        'Affected (True or False).')
     permissible_exposure_input = tr('vector polygon layer extracted from OSM '
         'where each polygon represents the footprint of a building.')
     limitation = tr('Lorem ipsum limitation')
@@ -61,9 +62,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Determine attribute name for hazard levels
         if H.is_raster:
+            mode = 'grid'
             hazard_attribute = 'depth'
         else:
-            hazard_attribute = 'FLOODPRONE'
+            mode = 'regions'
+            hazard_attribute = None
 
         # Interpolate hazard level to building locations
         I = assign_hazard_values_to_exposure_data(H, E,
@@ -78,33 +81,49 @@ class FloodBuildingImpactFunction(FunctionProvider):
         buildings = {}
         affected_buildings = {}
         for i in range(N):
-            if hazard_attribute == 'depth':
+            if mode == 'grid':
                 # Get the interpolated depth
                 x = float(attributes[i]['depth'])
                 x = x >= threshold
-            elif hazard_attribute == 'FLOODPRONE':
+            elif mode == 'regions':
                 # Use interpolated polygon attribute
                 atts = attributes[i]
 
-                if 'FLOODPRONE' in atts:
+                # FIXME (Ole): Need to agree whether to use one or the
+                # other as this can be very confusing!
+                # For now look for 'Flooded first'
+                if 'Flooded' in atts:
+                    # E.g. from flood forecast
+                    # Assume that building is wet if inside polygon
+                    # as flagged by attribute Flooded
+                    res = atts['Flooded']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res
+                elif 'FLOODPRONE' in atts:
                     res = atts['FLOODPRONE']
                     if res is None:
                         x = False
                     else:
                         x = res.lower() == 'yes'
-                else:
-                    # If there isn't a flood prone attribute,
-                    # assume that building is wet if inside polygon
-                    # as flag by generic attribute AFFECTED
+                elif 'Affected' in atts:
+                    # Check the default attribute assigned for points
+                    # covered by a polygon
                     res = atts['Affected']
                     if res is None:
                         x = False
                     else:
                         x = res
+                else:
+                    # If there aren't any flood related attribute,
+                    # Just say that being in a polygon means it
+                    # is affected
+                    x = True
             else:
                 msg = (tr('Unknown hazard type %s. '
-                         'Must be either "depth" or "floodprone"')
-                       % hazard_attribute)
+                         'Must be either "depth" or "grid"')
+                       % mode)
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
@@ -254,10 +273,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         table_body.append(TableRow(tr('Notes'), header=True))
         assumption = tr('Buildings are said to be flooded when ')
-        if hazard_attribute == 'depth':
+        if mode == 'grid':
             assumption += tr('flood levels exceed %.1f m') % threshold
         else:
-            assumption += tr('in areas marked as flood prone')
+            assumption += tr('in regions marked as affected')
         table_body.append(assumption)
 
         impact_summary = Table(table_body).toNewlineFreeString()

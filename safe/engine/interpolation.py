@@ -673,8 +673,10 @@ def tag_polygons_by_grid(polygons, grid, threshold=0, tag='affected'):
             if val > threshold:
                 affected = True
 
+        # Existing attributes for this polygon
+        attr = polygon_attributes[i].copy()
+
         # Create tagged polygon feature
-        attr = polygon_attributes[i].copy()  # Attributes for this polygon
         if affected:
             attr[tag] = True
         else:
