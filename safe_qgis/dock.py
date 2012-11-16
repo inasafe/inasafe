@@ -1128,6 +1128,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(myPostprocPolygons):
             myPolygonsCount = len(myRemainingPolygons)
+
+            # myPostprocPolygon bounding box values
+            A = numpy.array(myPostprocPolygon)
+            minx = miny = sys.maxint
+            maxx = maxy = -minx
+            myPostprocPolygonMinx = min(minx, min(A[:, 0]))
+            myPostprocPolygonMaxx = max(maxx, max(A[:, 0]))
+            myPostprocPolygonMiny = min(miny, min(A[:, 1]))
+            myPostprocPolygonMaxy = max(maxy, max(A[:, 1]))
+
             # create an array full of False to store if a BB vertex is inside
             # or outside the myPostprocPolygon
             myAreVerticesInside = numpy.zeros(myPolygonsCount * 4,
@@ -1141,23 +1151,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 maxx = maxy = -minx
                 # Do outer ring only as the BB is outside anyway
                 A = numpy.array(myPoly)
-                minx = min(minx, min(A[:, 0]))
-                maxx = max(maxx, max(A[:, 0]))
-                miny = min(miny, min(A[:, 1]))
-                maxy = max(maxy, max(A[:, 1]))
+                minx = min(minx, numpy.min(A[:, 0]))
+                maxx = max(maxx, numpy.max(A[:, 0]))
+                miny = min(miny, numpy.min(A[:, 1]))
+                maxy = max(maxy, numpy.max(A[:, 1]))
                 myBBVertices.extend([(minx,miny),
                                     (minx,maxy),
                                     (maxx,maxy),
                                     (maxx,miny)])
-            LOGGER.debug('%s vertices: %s' % (len(myBBVertices), myBBVertices))
+
+#            numpy.all
             # see if BB vertices are in myPostprocPolygon
+            myBBVertices = numpy.array(myBBVertices)
             inside,_ = points_in_and_outside_polygon(myBBVertices,
                                                     myPostprocPolygon)
             # make True if the vertice was in myPostprocPolygon
             myAreVerticesInside[inside] = True
-
-            LOGGER.debug('%s myAreVerticesInside: %s' % (len(myAreVerticesInside),
-                myAreVerticesInside))
 
             insidePolygons = []
             outsidePolygons = []
@@ -1170,22 +1179,37 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 if myPolygonLocation == 0:
                     # all vertices are outside
-                    # leave this polygon alone
-                    outsidePolygons.append(i)
-                    print 'polygon %i is outside' % i
+                    # check if the polygon BB is completely outside of the
+                    # myPostprocPolygon BB.
+                    myPolyMinx = numpy.min(myBBVertices[k:k + 4, 0])
+                    myPolyMaxx = numpy.max(myBBVertices[k:k + 4, 0])
+                    myPolyMiny = numpy.min(myBBVertices[k:k + 4, 1])
+                    myPolyMaxy = numpy.max(myBBVertices[k:k + 4, 1])
+
+                    # check if myPoly is all E,W,N,S of myPostprocPolygon
+                    if (myPolyMinx > myPostprocPolygonMaxx or
+                        myPolyMaxx < myPostprocPolygonMinx or
+                        myPolyMiny > myPostprocPolygonMaxy or
+                        myPolyMaxy < myPostprocPolygonMiny):
+                        #polygon is surely outside
+                        outsidePolygons.append(i)
+                    else:
+                        # polygon might be outside or intersecting. consider
+                        # it intersecting so it goes into further analysis
+                        intersectingPolygons.append(i)
+
                 elif myPolygonLocation == 4:
-                    # all vertices are inside
+                    # all vertices are inside -> polygon is inside
                     #remove this polygon from further analysis
                     insidePolygons.append(i)
-                    print 'polygon %i is inside' % i
                 else:
-                    # some vertices are outside some inside
+                    # some vertices are outside some inside -> polygon is
+                    # intersecting
                     # Do the clipping
                     # Save to output layer
                     #output_geometry.append(polygon[k])
                     #output_values.append(values[k])
                     intersectingPolygons.append(i)
-                    print 'polygon %i is intersecting' % i
 
                     # Add clip result to output layer
                     #for k in clipped_result:
