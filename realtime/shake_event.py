@@ -1768,7 +1768,7 @@ class ShakeEvent(QObject):
         The following priority will be used to determine the path:
             1) the class attribute self.populationRasterPath
                 will be checked and if not None it will be used.p7zip-full
-            2) the environment variable 'SAFE_POPULATION_PATH' will be
+            2) the environment variable 'INASAFE_POPULATION_PATH' will be
                checked if set it will be used.
             4) A hard coded path of
                :file:`/fixtures/exposure/population.tif` will be appended
@@ -1798,8 +1798,8 @@ class ShakeEvent(QObject):
         myLocalPath = '/usr/local/share/inasafe/exposure/population.tif'
         if self.populationRasterPath is not None:
             return self.populationRasterPath
-        elif 'SAFE_POPULATION_PATH' in os.environ:
-            return os.environ['SAFE_POPULATION_PATH']
+        elif 'INASAFE_POPULATION_PATH' in os.environ:
+            return os.environ['INASAFE_POPULATION_PATH']
         elif os.path.exists(myFixturePath):
             return myFixturePath
         elif os.path.exists(myLocalPath):
