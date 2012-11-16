@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import numpy
+import sys
 import logging
 import uuid
 
@@ -844,6 +845,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
+            if self.doZonalAggregation:
+                myHazardFilename, myExposureFilename =\
+                self.prepareInputLayerForAggregation(
+                    myHazardFilename, myExposureFilename)
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -973,10 +978,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myFemRatioAttr != self.tr('Use default')):
             self.postprocAttributes[myDefaultFemRatioKey] = myFemRatioAttr
 
-        if self.doZonalAggregation:
-            #go and see if hazard and input layers need to be preprocessed
-            self.preprocessInputLayers()
-
         # Start the analysis
         try:
             self.setupCalculator()
@@ -1081,9 +1082,131 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                    theContext=myContext)
             self.displayHtml(myMessage)
 
-    def preprocessInputLayers(self):
-        #TODO (MB) start preprocessing of hazard and exposure layer
-        pass
+    def prepareInputLayerForAggregation(self, theClippedHazardFilename,
+                              theClippedExposureFilename):
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
+
+        #get safe version of postproc layers
+        self.mySafePostprocLayer = safe_read_layer(
+            str(self.postprocLayer.source()))
+
+        if isLayerPolygonal(myHazardLayer):
+            theClippedHazardFilename = self.preparePolygonLayerForAggr(
+                theClippedHazardFilename)
+
+        if isLayerPolygonal(myExposureLayer):
+            mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
+                'subcategory')
+            if mySubcategory != 'structure':
+                theClippedExposureFilename = self.preparePolygonLayerForAggr(
+                    theClippedExposureFilename)
+
+        return theClippedHazardFilename, theClippedExposureFilename
+
+    def preparePolygonLayerForAggr(self, theLayerFilename):
+        """ A helper function to align the polygons to the postprocLayer
+        polygons. If one input polygon is in two or more postprocLayer polygons
+        then it is divided so that each part is within only one of the
+        postprocLayer polygons. this allows to aggregate in postrocessing using
+        centroid in polygon.
+
+        The function assumes EPSG:4326 but no checks are enforced
+
+        Args:
+            theLayerFilename str of the file to be processed
+        Returns:
+            str of the processed file
+
+        Raises:
+            Any exceptions raised by the InaSAFE library will be propagated.
+        """
+
+        myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
+        myPolygonsLayer = safe_read_layer(theLayerFilename)
+        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
+
+        for myPostprocPolygonIndex, myPostprocPolygon in enumerate(myPostprocPolygons):
+            myPolygonsCount = len(myRemainingPolygons)
+            # create an array full of False to store if a BB vertex is inside
+            # or outside the myPostprocPolygon
+            myAreVerticesInside = numpy.zeros(myPolygonsCount * 4,
+                dtype=numpy.bool)
+
+            # Create Nx2 vector of vertices of bounding boxes
+            myBBVertices = []
+            # Compute bounding box for each geometry type
+            for myPoly in myRemainingPolygons:
+                minx = miny = sys.maxint
+                maxx = maxy = -minx
+                # Do outer ring only as the BB is outside anyway
+                A = numpy.array(myPoly)
+                minx = min(minx, min(A[:, 0]))
+                maxx = max(maxx, max(A[:, 0]))
+                miny = min(miny, min(A[:, 1]))
+                maxy = max(maxy, max(A[:, 1]))
+                myBBVertices.extend([(minx,miny),
+                                    (minx,maxy),
+                                    (maxx,maxy),
+                                    (maxx,miny)])
+            LOGGER.debug('%s vertices: %s' % (len(myBBVertices), myBBVertices))
+            # see if BB vertices are in myPostprocPolygon
+            inside,_ = points_in_and_outside_polygon(myBBVertices,
+                                                    myPostprocPolygon)
+            # make True if the vertice was in myPostprocPolygon
+            myAreVerticesInside[inside] = True
+
+            LOGGER.debug('%s myAreVerticesInside: %s' % (len(myAreVerticesInside),
+                myAreVerticesInside))
+
+            insidePolygons = []
+            outsidePolygons = []
+            intersectingPolygons = []
+            for i in range(myPolygonsCount):
+                k = i * 4
+                # summ the isInside bool for each of the boundingbox vertices
+                # of each poygon. for example True + True + False + True is 3
+                myPolygonLocation = numpy.sum(myAreVerticesInside[k:k + 4])
+
+                if myPolygonLocation == 0:
+                    # all vertices are outside
+                    # leave this polygon alone
+                    outsidePolygons.append(i)
+                    print 'polygon %i is outside' % i
+                elif myPolygonLocation == 4:
+                    # all vertices are inside
+                    #remove this polygon from further analysis
+                    insidePolygons.append(i)
+                    print 'polygon %i is inside' % i
+                else:
+                    # some vertices are outside some inside
+                    # Do the clipping
+                    # Save to output layer
+                    #output_geometry.append(polygon[k])
+                    #output_values.append(values[k])
+                    intersectingPolygons.append(i)
+                    print 'polygon %i is intersecting' % i
+
+                    # Add clip result to output layer
+                    #for k in clipped_result:
+                    #    output_geometry.append(clipped_polygon[k])
+                    #    output_values.append(clipped_values[k])
+
+
+                    #v = Vector(geometry=output_geometry,
+                    #           data=output_values,
+                    #           projection=input_layer.projection,
+                    #           keywords=input_layer.keywords)
+                    #v.write_to_file('oaeu')
+            LOGGER.debug('')
+            LOGGER.debug('Polygon %s' % myPostprocPolygonIndex)
+            LOGGER.debug('Inside %s' % insidePolygons)
+            LOGGER.debug('Outside %s' % outsidePolygons)
+            LOGGER.debug('Intersec %s' % intersectingPolygons)
+
+
+
+        return theLayerFilename
 
     def postprocess(self):
         """
@@ -1437,7 +1560,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # start data retreival: fetch no geometry and
         # 1 attr for each feature
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
-        myFeat = QgsFeature()
         myTotal = 0
 
         #add the total field to the postprocLayer
@@ -1455,10 +1577,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myImpactValues = mySafeImpactLayer.get_data()
 
         if self.doZonalAggregation:
-            #get safe layers
-            mySafePostprocLayer = safe_read_layer(
-                str(self.postprocLayer.source()))
-            myPostprocPolygons = mySafePostprocLayer.get_geometry()
+            myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
 
             if (mySafeImpactLayer.is_point_data or
                 mySafeImpactLayer.is_polygon_data):
@@ -1468,12 +1587,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 if mySafeImpactLayer.is_polygon_data:
                     # Using centroids to do polygon in polygon aggregation
-                    # this is always ok because preprocessInputLayers() took
-                    # care of splitting polygons that spawn across multiple
-                    # postprocessing polygons. After preprocessInputLayers()
+                    # this is always ok because
+                    # prepareInputLayerForAggregation() took care of splitting
+                    # polygons that spawn across multiple postprocessing
+                    # polygons. After prepareInputLayerForAggregation()
                     # each impact polygon will never be contained by more than
                     # one aggregation polygon
-                    
+
                     # Calculate points for each polygon
                     myCentroids = []
                     for myPolygon in myImpactGeoms:
