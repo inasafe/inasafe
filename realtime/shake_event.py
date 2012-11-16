@@ -2068,7 +2068,7 @@ class ShakeEvent(QObject):
             'sources.')
         myCredits = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
-            'Reduction and Geoscience Australia.')
+            'Reduction, Geoscience Australia and the GFDRR.')
         #Format the lat lon from decimal degrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
         myCoordinates = myPoint.toDegreesMinutesSeconds(2)
