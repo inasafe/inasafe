@@ -184,7 +184,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         # create widget based on the type of theValue variable
         if isinstance(theValue, list):
             myWidget = QLineEdit()
-            myValue = '. '.join([str(x) for x in theValue])
+            myValue = ', '.join([str(x) for x in theValue])
             # NOTE: we assume that all element in list have same type
             myType = type(theValue[0])
             myFunc = lambda x: [myType(y) for y in str(x).split(',')]
