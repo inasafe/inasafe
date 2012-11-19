@@ -21,6 +21,7 @@ Developer Documentation Contents:
    i18n
    version_control
    maintaining_documentation
+   postprocessors
    bug_reporting
    preparing_a_release
    jenkins_ci

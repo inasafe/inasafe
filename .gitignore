@@ -28,6 +28,4 @@ setup.cfg
 run_qgis.sh
 .achievements
 .idea/runConfigurations/NoseTests_Realtime.xml
-docs/source/_build
-docs/source/_static
-docs/source/i18n/pot/.doctrees
+docs/source/output

@@ -1,5 +1,0 @@
-TODO
-----
-* try and clean up rendering of relbar menu - maybe w/ optional icons
-* way to specify "redirects" from old pages - would probably have to be javascript based.
-* better docs for the extensions

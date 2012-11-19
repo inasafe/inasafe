@@ -1,0 +1,1029 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# b5a6bab7b4e94960942cecaad2448d08
+#: ../../source/tutorial-docs/tutorial.rst:7
+msgid "InaSAFE Tutorial"
+msgstr ""
+
+# 18f3576b53434df884862e11943f17b4
+#: ../../source/tutorial-docs/tutorial.rst:10
+msgid "Overview"
+msgstr ""
+
+# fec6fa30f3ed4daf89449ad684bddc73
+#: ../../source/tutorial-docs/tutorial.rst:13
+msgid "Description"
+msgstr ""
+
+# 27dac4fc097549aba96db2aed2d486e1
+#: ../../source/tutorial-docs/tutorial.rst:15
+msgid ""
+"InaSAFE is a plugin for QGIS software. It aims to produce realistic natural "
+"hazard impact scenarios for better planning, preparedness and response "
+"activities, using hazard and exposure geographic data. A user’s manual "
+"developed by Ole Moeller Nielsen and Tim Sutton complements this short "
+"training material. During this training, you will explore the different "
+"components of InaSAFE plugin and their usage for an easy-to-use risk and "
+"impact scenarios assessments. A data sample will be provided with the "
+"present material to give you the ability to learn how to manipulate data in "
+"InaSAFE, what the requirements of the data are and what kind of results you "
+"can expect out of the data."
+msgstr ""
+
+# 12938b5cfd504c239960d7e5d361a58b
+#: ../../source/tutorial-docs/tutorial.rst:27
+msgid "Prerequisites"
+msgstr ""
+
+# 1c8cb3f108b342dabd1a72daa6438a9b
+#: ../../source/tutorial-docs/tutorial.rst:29
+msgid ""
+"This training is designed for those with a basic or intermediate knowledge "
+"of GIS, who wants to integrate scientific-based risk impact scenario in "
+"their decision-making. Since the tool is a QGIS plugin, some knowledge of "
+"the QGIS environment will help, but not required."
+msgstr ""
+
+# a3fbc17f117c4670bd42ba376b4e96e3
+#: ../../source/tutorial-docs/tutorial.rst:35
+msgid "Goals"
+msgstr ""
+
+# c2b812fc5cce4a67b2977ede52281df0
+#: ../../source/tutorial-docs/tutorial.rst:37
+msgid "After the training, you will be able to:"
+msgstr ""
+
+# 48e6b12bc7444c96944b4b01bb4467d1
+#: ../../source/tutorial-docs/tutorial.rst:39
+msgid "install a plugin in QGIS and understand its usage for spatial analysis"
+msgstr ""
+
+# 61d46a127ed04a39a46ed61ecf56ea8b
+#: ../../source/tutorial-docs/tutorial.rst:40
+msgid ""
+"understand what are hazard and exposure data and how they can be used to "
+"estimate impacts"
+msgstr ""
+
+# cab40996763842cf9cc4e520fe8a3c32
+#: ../../source/tutorial-docs/tutorial.rst:42
+msgid "learn how to prepare the data to be able to use it in InaSAFE"
+msgstr ""
+
+# 10a4310f1b5e4a10942e8ec5ef28c490
+#: ../../source/tutorial-docs/tutorial.rst:43
+msgid "perform a risk scenario using flood and earthquake data"
+msgstr ""
+
+# 967d8925b3c24281ba9488b34744ff07
+#: ../../source/tutorial-docs/tutorial.rst:44
+msgid "analyze estimated impact of the example scenarios"
+msgstr ""
+
+# 29d6f916960a4057b6572f79c67fcbd3
+#: ../../source/tutorial-docs/tutorial.rst:45
+msgid "learn how to print and save the result of the simulation"
+msgstr ""
+
+# 8d13bf834b514df0ab42923df75e4f97
+#: ../../source/tutorial-docs/tutorial.rst:48
+msgid "Software Requirements"
+msgstr ""
+
+# d838dec031064f48a7d5c56c71711ced
+#: ../../source/tutorial-docs/tutorial.rst:50
+msgid ""
+"To complete the exercise, you need a standard computer with at least 4GB of "
+"RAM running Windows, Linux or Mac OS X. You also need to install the "
+"following on your computer:"
+msgstr ""
+
+# bd5dd66389a64c419bd6356b4ec5fdc9
+#: ../../source/tutorial-docs/tutorial.rst:54
+msgid "QGIS"
+msgstr ""
+
+# 6436db3795674d3b81090e1ad30dd128
+#: ../../source/tutorial-docs/tutorial.rst:55
+msgid "InaSAFE plugin."
+msgstr ""
+
+# b17ad4843e794d37be6a822c1b82ef84
+#: ../../source/tutorial-docs/tutorial.rst:58
+msgid "Reference"
+msgstr ""
+
+# 358090a088c647f39d3f8d64add13ae4
+#: ../../source/tutorial-docs/tutorial.rst:60
+msgid ""
+"“InaSAFE Documentation, Release 0.4.0-alpha”, Ole Moeller Nielsen & Tim "
+"Sutton, June 2012.  For more information, please visit `www.inasafe.org "
+"<http://inasafe.org>`_."
+msgstr ""
+
+# 2c6cd8db9ec54fd09c247464abc3a51d
+#: ../../source/tutorial-docs/tutorial.rst:64
+msgid "Installation"
+msgstr ""
+
+# f74922a4baf34cc8a535deb22b4c8211
+#: ../../source/tutorial-docs/tutorial.rst:67
+msgid "Install QGIS"
+msgstr ""
+
+# bb3f8a49599c4606abf96dc0a996e916
+#: ../../source/tutorial-docs/tutorial.rst:69
+msgid "You need QGIS version 1.7 or newer."
+msgstr ""
+
+# 1579145571dc4a01b4a84006f892c628
+#: ../../source/tutorial-docs/tutorial.rst:71
+msgid "You can download the software from http://download.qgis.org."
+msgstr ""
+
+# 88f6092bd8ea4797bb4d18ce2e45e21b
+#: ../../source/tutorial-docs/tutorial.rst:74
+msgid "Install InaSAFE Plugin"
+msgstr ""
+
+# 9df067a4aeb843cc97a413f7f42d355c
+#: ../../source/tutorial-docs/tutorial.rst:77
+msgid "Option 1: From QGIS Repository:"
+msgstr ""
+
+# 9b3c0301e59e49a081d18f273fe195a6
+#: ../../source/tutorial-docs/tutorial.rst:79
+msgid "To install the InaSAFE, use the plugin manager in QGIS:"
+msgstr ""
+
+# a95590e9d5a4441296f1bf5218da01d4
+#: ../../source/tutorial-docs/tutorial.rst:81
+msgid ""
+":menuselection:`Plugins --> Fetch Python Plugins` Then search for ‘InaSAFE‘, "
+"select it and click the install button. The plugin will now be added to your "
+"plugins menu."
+msgstr ""
+
+# 4773e15f08e447f8bffbf3c6fefba4f3
+#: ../../source/tutorial-docs/tutorial.rst:86
+msgid "Option 2: Manual Installation:"
+msgstr ""
+
+# b7cdcb30b8e84c619a4030b8dd7d66a4
+#: ../../source/tutorial-docs/tutorial.rst:88
+msgid ""
+"To install the InaSAFE plugin, go to https://github.com/AIFDR/inasafe/"
+"downloads."
+msgstr ""
+
+# a6fde4046d1b4658824e4f6810042457
+#: ../../source/tutorial-docs/tutorial.rst:91
+msgid ""
+"The application package comes as a zip file. Please select the most updated "
+"version."
+msgstr ""
+
+# 8d4e6cf6b74c4dbcb429d0839115cee2
+#: ../../source/tutorial-docs/tutorial.rst:94
+msgid ""
+"Extract the zip file into the QGIS directory :file:`C:\\Users\\<your "
+"username>\\.qgis\\python\\plugins`."
+msgstr ""
+
+# df7398b3ec014becbd11e7f05a685bc1
+#: ../../source/tutorial-docs/tutorial.rst:97
+msgid ""
+"After extracting the plugin, it should be available as :file:`C:\\Users"
+"\\<yourusername>\\.qgis\\python\\plugins\\inasafe`"
+msgstr ""
+
+# 8df5b15e05d740eea43371a50d455e99
+#: ../../source/tutorial-docs/tutorial.rst:100
+msgid ""
+"Mac and Linux users need to follow the same procedure but instead the plugin "
+"directory will be under your :file:`$HOME` directory."
+msgstr ""
+
+# bfce84973fde480c88f121f9b38e05f4
+#: ../../source/tutorial-docs/tutorial.rst:104
+msgid "Enable InaSAFE Plugin in QGIS"
+msgstr ""
+
+# f0a926a8cfed47d8bf6b5bbb1ba928bc
+#: ../../source/tutorial-docs/tutorial.rst:106
+msgid ""
+"Once the plugin is extracted in QGIS plugin directory, start QGIS and enable "
+"it from the plugin manager.  To do this, open **Manage Plugins** from the "
+"**Plugins** menu on the menu toolbar."
+msgstr ""
+
+# 991c5ac38d334889b2cd6504b0aa20e1
+#: ../../source/tutorial-docs/tutorial.rst:113
+msgid ""
+"A pop-up window that lists all available plugins in your current QGIS "
+"project will appear. Type **InaSAFE** in the filter box. You should see the "
+"InaSAFE plugin appear in the list. Now **tick the checkbox** next to it to "
+"enable the plugin."
+msgstr ""
+
+# 4ea1e55871284e84a065cedfe1c8ab53
+#: ../../source/tutorial-docs/tutorial.rst:121
+msgid "The plugin now will be added to your **Plugins** menu."
+msgstr ""
+
+# cf963776dc564640a86ff3c8248d399f
+#: ../../source/tutorial-docs/tutorial.rst:123
+msgid ""
+"Now you will need to add the INASAFE panel on your QGIS interface. For that, "
+"select **Toggle Inasafe Dock** in the INASAFE plugin scroll list."
+msgstr ""
+
+# 3a04dc478f334ecfaad6c8d08c4324ea
+#: ../../source/tutorial-docs/tutorial.rst:129
+msgid ""
+"The InaSAFE dock panel will then appear on the left of your QGIS window."
+msgstr ""
+
+# 701e51a4c56d4be6aa7122a125125fe4
+#: ../../source/tutorial-docs/tutorial.rst:134
+msgid ""
+"It is the main way to interact with the tools that are provided in InaSAFE."
+msgstr ""
+
+# 2cf0844f00bf4dcbb446d022acc6bc46
+#: ../../source/tutorial-docs/tutorial.rst:136
+msgid "Also, an InaSAFE icon will appear on the QGIS toolbar."
+msgstr ""
+
+# b95a7d64840545f1871af0d70abf8b48
+#: ../../source/tutorial-docs/tutorial.rst:142
+msgid "Using InaSAFE"
+msgstr ""
+
+# 716c9a8dfb6b4534aaa4a0de3a66c4bc
+#: ../../source/tutorial-docs/tutorial.rst:145
+msgid "InaSAFE Options"
+msgstr ""
+
+# 76837e1ef87646a9ae36a6558bf9f72f
+#: ../../source/tutorial-docs/tutorial.rst:147
+msgid ""
+"The InaSAFE plugin provides an options dialog which allows you to define "
+"various options relating to how InaSAFE will behave. The options dialog can "
+"be launched by clicking on the InaSAFE plugin toolbar’s options icon (as "
+"shown below) or from QGIS :menuselection:`Plugins --> InaSAFE --> InaSAFE "
+"Options`."
+msgstr ""
+
+# 4b54617d927a4e4d9953c5511d5c328b
+#: ../../source/tutorial-docs/tutorial.rst:155
+msgid "Then the dialog will appear, looking something like this:"
+msgstr ""
+
+# ed8ee043066a4743b9ddfd98fc80786f
+#: ../../source/tutorial-docs/tutorial.rst:160
+msgid ""
+"You can click on the Help button at any time and it will open the help "
+"documentation browser to this page."
+msgstr ""
+
+# e16ef44f9e8a4058a812478308434226
+#: ../../source/tutorial-docs/tutorial.rst:163
+msgid "The following options are available on the Options Dialog:"
+msgstr ""
+
+# 3d34a773c7b74418ac561f5eec59b1f9
+#: ../../source/tutorial-docs/tutorial.rst:165
+msgid ""
+"**Only show visible layers in the InaSAFE dock:** This option will determine "
+"whether (when unchecked) all hazard, exposure and impact layers should be "
+"listed in the InaSAFE dock’s combo boxes; or (when checked) only visible "
+"layers."
+msgstr ""
+
+# 14fb25cec432491ea93eb8b621daa438
+#: ../../source/tutorial-docs/tutorial.rst:169
+msgid ""
+"**Set QGIS layer name from ‘title’ in keywords:** This option will (when "
+"enabled) cause QGIS to name layers in the Layers tree, using the title "
+"keyword in the layer’s keywords file. If the layer has no ‘title’ in its "
+"keywords, or it has no keywords at all, the normal QGIS behavior for naming "
+"layers will apply."
+msgstr ""
+
+# 5b18b80b8d94460aa95991bd9343104b
+#: ../../source/tutorial-docs/tutorial.rst:174
+msgid ""
+"**Zoom to impact layer on scenario estimate completion:** This option will "
+"cause the map view to zoom in/out in order to completely contain the InaSAFE "
+"impact scenario map output when an analysis is completed."
+msgstr ""
+
+# df4a7eaf89b24381b6ac05309a443d52
+#: ../../source/tutorial-docs/tutorial.rst:177
+msgid ""
+"**Hide exposure layer on scenario estimate completion:** This option will "
+"cause QGIS to turn off the exposure layer used when InaSAFE completes the "
+"current analysis. You can re-enable the layer visibility again by checking "
+"its checkbox in the legend."
+msgstr ""
+
+# 6678b2e07c024944bb53637525a0e325
+#: ../../source/tutorial-docs/tutorial.rst:181
+msgid ""
+"**Keyword cache for remote datasources:** This option is used to determine "
+"where keywords are stored for datasets where it is not possible to write "
+"them into a .keywords file. See Keywords System for more information on the "
+"keywords system."
+msgstr ""
+
+# 11f070b768be41cb8a4e8df004935792
+#: ../../source/tutorial-docs/tutorial.rst:185
+msgid ""
+"**Run analysis in separate thread (experimental):** This option cause the "
+"analysis to be run in its own thread."
+msgstr ""
+
+# efd12e14c6b0473199f7a72e41df6685
+#: ../../source/tutorial-docs/tutorial.rst:188
+msgid "**WARNING!**"
+msgstr ""
+
+# 6525e84b912d432a9cfe691ab2cc87ba
+#: ../../source/tutorial-docs/tutorial.rst:190
+msgid ""
+"It is not recommended to use the threaded implementation at this time. For "
+"this reason it is disabled by default."
+msgstr ""
+
+# 35bdb0972a8e49d0832abb82789959a2
+#: ../../source/tutorial-docs/tutorial.rst:192
+msgid ""
+"Pressing Cancel at any time will close the options dialog and any changes "
+"made will not be applied."
+msgstr ""
+
+# 4f84c1ef60474995b63a07961f7efd6f
+#: ../../source/tutorial-docs/tutorial.rst:194
+msgid ""
+"Pressing Ok at any time will close the options dialog and any changes made "
+"will be applied immediately."
+msgstr ""
+
+# 9d84dbbc560343e1893cdcbdc64edc63
+#: ../../source/tutorial-docs/tutorial.rst:196
+msgid ""
+"The exact button order shown on this dialog may differ depending on your "
+"operating system or desktop environment."
+msgstr ""
+
+# e04dd7f6f58442789e1494e302098fd5
+#: ../../source/tutorial-docs/tutorial.rst:200
+msgid "Adjust Projection"
+msgstr ""
+
+# 1b7c37c15dd04eaa99b8f9d8ca5eac33
+#: ../../source/tutorial-docs/tutorial.rst:202
+msgid ""
+"Before continuing we need to turn one more QGIS functionality on, to enable "
+"all data layers display in one projection (no matter what their projection)."
+msgstr ""
+
+# 718816cd164c4739b6da556a2ba0657c
+#: ../../source/tutorial-docs/tutorial.rst:205
+msgid "For that, go to QGIS **Settings/Project Properties.**"
+msgstr ""
+
+# d332b9d78e9a4a36b0f766dd066bc5a4
+#: ../../source/tutorial-docs/tutorial.rst:210
+msgid ""
+"Click on **Coordinate Reference System (CRS)** tab in the new dialog box. "
+"Tick the **Enable ‘on the fly’ CRS transformation** box. And then **OK.**"
+msgstr ""
+
+# a2cac58c1665438a826f6f52b76517d7
+#: ../../source/tutorial-docs/tutorial.rst:216
+msgid ""
+"Now, any data layer that we will integrate into our project will be adjusted "
+"on the same coordinate."
+msgstr ""
+
+# d798782ce2574f62b3936cc973972880
+#: ../../source/tutorial-docs/tutorial.rst:220
+msgid "Exploring InaSAFE Plugin"
+msgstr ""
+
+# 3e98303fa2a64bee9918c607bbe01ef7
+#: ../../source/tutorial-docs/tutorial.rst:222
+msgid ""
+"You can drag and drop the dock panel to reposition it in the user interface. "
+"For example, dragging the panel towards the right margin of the QGIS "
+"application will dock it to the right side of the screen."
+msgstr ""
+
+# 8886318b67824109a8a136bd6dba6f9b
+#: ../../source/tutorial-docs/tutorial.rst:226
+msgid ""
+"Depending on your preference you could show the **Layer** and **InaSAFE** "
+"panel at the same time."
+msgstr ""
+
+# 00286fd53b3b45c0940c39e3cecfa780
+#: ../../source/tutorial-docs/tutorial.rst:232
+msgid "Or have the **Layer** and **InaSAFE** panels in a tab systems."
+msgstr ""
+
+# 66e6dd867f814a6584dd1097e96ed4d0
+#: ../../source/tutorial-docs/tutorial.rst:237
+msgid "Or for more convenience, having them on top of each other."
+msgstr ""
+
+# ecf8d62243d34f698295a817d22eb40b
+#: ../../source/tutorial-docs/tutorial.rst:242
+msgid ""
+"The INASAFE panel contains 3 sections: **Questions, Results** and **Buttons."
+"** We will explore those sections one by one."
+msgstr ""
+
+# 603a910478a54341ab1a936ccaca37a6
+#: ../../source/tutorial-docs/tutorial.rst:246
+msgid "The Questions Section"
+msgstr ""
+
+# 0e5a0d09d9de4c599f3e6bf6dba803f9
+#: ../../source/tutorial-docs/tutorial.rst:248
+msgid ""
+"The intention of InaSAFE is to make it really simple and easy to perform "
+"your impact analysis. The Questions area provides a simple way for you to "
+"formulate what it is you want to find out? All questions are formulated in "
+"the form:"
+msgstr ""
+
+# 8d1ac91e8c87476d93788f670f94f239
+#: ../../source/tutorial-docs/tutorial.rst:252
+msgid ""
+"*In the event of* **[hazard]** *how many* **[exposure]** *might* **[impact]."
+"**"
+msgstr ""
+
+# f20a6a16ce704319a9e15bb89a5d2a79
+#: ../../source/tutorial-docs/tutorial.rst:254
+msgid ""
+"For example: “In the event of a **flood** how many **buildings** might be "
+"**closed**?”"
+msgstr ""
+
+# 1e2006eb66f6469598c6fc664ee7c92b
+#: ../../source/tutorial-docs/tutorial.rst:257
+msgid "Let’s practice this exercise."
+msgstr ""
+
+# cb0a032531134565b930eb880596f075
+#: ../../source/tutorial-docs/tutorial.rst:259
+msgid ""
+"In order to answer such question, InaSAFE developers have built a number of "
+"impact functions that cover risk scenarios such as flood, tsunami, volcanic "
+"ash fall, earthquake and so on. In our case, we will use the flood impact "
+"function."
+msgstr ""
+
+# 25f7d39d98dc46bc8a584dcbd4bb8f32
+#: ../../source/tutorial-docs/tutorial.rst:263
+msgid ""
+"To answer our question “In the event of a flood, how many buildings might be "
+"closed”, we need to complete all the areas in the Questions section: hazard, "
+"exposure, impact."
+msgstr ""
+
+# 9691d6802ddb422aa4767717cdcfd022
+#: ../../source/tutorial-docs/tutorial.rst:268
+msgid "Hazard"
+msgstr ""
+
+# a7a0896084174b5b80928b98d9a2ad84
+#: ../../source/tutorial-docs/tutorial.rst:270
+msgid "Hazard is the physical event that creates the risk."
+msgstr ""
+
+# 7decff4afe634f5aa2a531903826e7ba
+#: ../../source/tutorial-docs/tutorial.rst:272
+msgid ""
+"A hazard (in **the event of**) may be represented as a raster layer or as an "
+"area (polygon). For example:"
+msgstr ""
+
+# c50d8eb69f9e45f9bba888bdaf720322
+#: ../../source/tutorial-docs/tutorial.rst:275
+msgid ""
+"**Raster:** where each pixel in the raster represents the current flood "
+"depth following an inundation event."
+msgstr ""
+
+# ab202dc0466a49e2b5a780a5698d6f46
+#: ../../source/tutorial-docs/tutorial.rst:277
+msgid ""
+"**Polygon:** where it has been identified that flood has existed in that "
+"area (this will not have depth related information)"
+msgstr ""
+
+# af3bb66612b6478da58715fd1aca1ac7
+#: ../../source/tutorial-docs/tutorial.rst:280
+msgid ""
+"For our exercise, we will use an example from Jakarta, Indonesia. Those data "
+"are already installed on your computer at :file:`C:\\Users\\<your username>"
+"\\desktop\\inasafe_data`. If they are not, you can load the data on your "
+"desktop using the thumb drive distributed with this material."
+msgstr ""
+
+# a562b406b2ed44b49d3e0fac3846c340
+#: ../../source/tutorial-docs/tutorial.rst:285
+msgid ""
+"The inasafe_data package contains various geographic data that we will use "
+"along the workshop."
+msgstr ""
+
+# d636b655bc3244e8b2e9400eb96dd142
+#: ../../source/tutorial-docs/tutorial.rst:288
+msgid ""
+"Now, we will add the hazard layer in the INASAFE dock. For that, we need to "
+"add the hazard layer from QGIS first. The flood layer is in a raster format, "
+"so we will go to the QGIS menu, click on **Layer,** and select **Add Raster "
+"Layer.**"
+msgstr ""
+
+# 8fa507b94e82464580f4fd091bfb44f9
+#: ../../source/tutorial-docs/tutorial.rst:295
+msgid ""
+"Once you click on that, a pop-up window will appear where you will have to "
+"fetch your flood data.  Please select the "
+"**“Flood_Design_Depth_Jakarta_geographic.asc”** file from the hazard folder. "
+"This is a raster data (in ASCII format) that represents flooding depth in "
+"the Jakarta province. The display name is **Jakarta 2007 flood with dredging."
+"**"
+msgstr ""
+
+# 70df48090b324b6ba397daf9c9fe81a4
+#: ../../source/tutorial-docs/tutorial.rst:301
+msgid ""
+"You will notice that the layer filled automatically the “hazard” area in the "
+"InaSAFE dock panel. There are two important things to note when **uploading "
+"data** in InaSAFE."
+msgstr ""
+
+# 3d4595cfc0c8461098af34f01c73f5fa
+#: ../../source/tutorial-docs/tutorial.rst:305
+msgid ""
+"Data should follow a keyword metadata system that allows InaSAFE to "
+"determine if the layer is a hazard or if it is an exposure."
+msgstr ""
+
+# 95787a76825d4e6f929d62fd6258deb7
+#: ../../source/tutorial-docs/tutorial.rst:307
+msgid "The area of analysis should overlap."
+msgstr ""
+
+# 44b7c92ebe054018b0c776a78b7921aa
+#: ../../source/tutorial-docs/tutorial.rst:310
+msgid "Adding keyword metadata"
+msgstr ""
+
+# 8a6ff7275dd24494933c49bf8c8edde1
+#: ../../source/tutorial-docs/tutorial.rst:312
+msgid ""
+"You may be wondering how the InaSAFE plugin determines whether a layer "
+"should be listed in the “In the event of” “How many” combo boxes? The plugin "
+"relies on simple keyword metadata to be associated with each layer (*The "
+"keyword system is described in detail in the user’s manual under Keywords "
+"System*). Each layer that has a keyword allocating it’s category to hazard "
+"will be listed in the “In the event of” combo. Similarly, a category of "
+"exposure in the keywords for a layer will result in it being listed under "
+"the “How many” combo. InaSAFE uses the combination of category, subcategory, "
+"units and datatype keywords to determine which impact functions will be "
+"listed in the “Might” combo."
+msgstr ""
+
+# 2559920d1d814b04a2dff0e5c0d3b693
+#: ../../source/tutorial-docs/tutorial.rst:322
+msgid ""
+"In our exercise, the keywords were already created, so the data could fill "
+"automatically the “In the event of” “How many combo” boxes. If the keywords "
+"were not created in advance, then we will create them by following one of "
+"the two steps:"
+msgstr ""
+
+# 620ac66dc63546f2af720befa7f7b49c
+#: ../../source/tutorial-docs/tutorial.rst:327
+msgid ""
+"Go to the Inasafe tools on the toolbar, click on the **Keyword Editor** icon."
+msgstr ""
+
+# e33068b38bb54a8290be3aa550812698
+#: ../../source/tutorial-docs/tutorial.rst:332
+msgid ""
+"Or, open the **Plugin** menu on QGIS toolbar, click on **InaSAFE,** then "
+"click on the **Keyword Editor** in the scroll list."
+msgstr ""
+
+# 418e3ded86ee4a7c992589db3509c2c0
+#: ../../source/tutorial-docs/tutorial.rst:338
+msgid ""
+"Once you click on the Keyword Editor, a dialog box containing the flood data "
+"will be prompted. Since the flood data is a hazard layer, pinpoint the "
+"**Hazard** Category. In the Subcategory, we will choose flood [m] because "
+"our data represents depth of flood in Jakarta in meter unit."
+msgstr ""
+
+# 4a781232c5244aebb79dbd3c47296961
+#: ../../source/tutorial-docs/tutorial.rst:346
+msgid "Then click **OK.**"
+msgstr ""
+
+# ae0e8dd470b44ed9960d9e679738c603
+#: ../../source/tutorial-docs/tutorial.rst:348
+msgid ""
+"Now the data follow the keyword rule, and can be used in the InaSAFE "
+"function."
+msgstr ""
+
+# c6a338c388784f0aa41e36813e8c247c
+#: ../../source/tutorial-docs/tutorial.rst:351
+msgid "Exposure"
+msgstr ""
+
+# 3d98c8977a624555b2ca1875d2dad1ac
+#: ../../source/tutorial-docs/tutorial.rst:353
+msgid "Exposure is the sum of assets and population that are at risks."
+msgstr ""
+
+# 73e3fc07cd674f38844e0f9df7cf4863
+#: ../../source/tutorial-docs/tutorial.rst:355
+msgid ""
+"An exposure (How **many**) layer could be represented, for example, as "
+"vector polygon data representing building outlines, or a raster outline "
+"where each pixel represents the number of people resident in that cell."
+msgstr ""
+
+# eab3a4f3af36497e83f0f1050765da48
+#: ../../source/tutorial-docs/tutorial.rst:359
+msgid ""
+"Now, we will add the exposure layer in our InaSAFE project. For that, we "
+"need to add the exposure layer to QGIS first. For our exercise, we will use "
+"the OpenStreetMap (OSM) data that represents buildings in Jakarta Province."
+msgstr ""
+
+# 46604a27129a4aeb8304b117585ec2f9
+#: ../../source/tutorial-docs/tutorial.rst:363
+msgid ""
+"The OSM building layer is in a vector format, so we will go to the QGIS menu "
+"toolbar, click on **Layer,** and select **Add Vector Layer.**"
+msgstr ""
+
+# 4a8ad8457dd04fc0a626fdc4c893adba
+#: ../../source/tutorial-docs/tutorial.rst:369
+msgid ""
+"Once you click on that, a pop-up window will appear where you will have to "
+"fetch your OSM buildings data."
+msgstr ""
+
+# e362fa6d3c09474387672311a22780da
+#: ../../source/tutorial-docs/tutorial.rst:375
+msgid ""
+"Please select the “OSM_building_footprints_20120629_Jakarta_All.shp” file "
+"from the exposure folder."
+msgstr ""
+
+# 14a11f3e6d7a458f9b19ffa61f38482e
+#: ../../source/tutorial-docs/tutorial.rst:378
+msgid "Click **Open.**"
+msgstr ""
+
+# 6341498a8c384c86b1846f0923fb98b3
+#: ../../source/tutorial-docs/tutorial.rst:380
+msgid ""
+"This is a vector data (in ESRI SHP format) that represents buildings data "
+"gathered by the Jakarta province community using the OSM participatory "
+"tools. The display name is “OSM **buildings** ”."
+msgstr ""
+
+# cbaf3d80d8394d389701f11af9a2e59f
+#: ../../source/tutorial-docs/tutorial.rst:384
+msgid ""
+"Please note that the exposure data should follow the same **keyword system** "
+"that we explained earlier for the hazard data."
+msgstr ""
+
+# 5ff9721804ae49f1bea97d09b426d57b
+#: ../../source/tutorial-docs/tutorial.rst:387
+msgid ""
+"In our case, the keyword was already created. If the keyword was not created "
+"in advance, then we will create it by using the **Keyword Editor** in "
+"InaSAFE from the toolbar or from the **Plugins** menu."
+msgstr ""
+
+# f6b78f516c5542e7a95ed0aa11cdfcf4
+#: ../../source/tutorial-docs/tutorial.rst:391
+msgid ""
+"Go to the **Plugin menu** on QGIS toolbar. Click on **InaSAFE.** Then, click "
+"on the **Keyword Editor** in the dialog box. Pinpoint the **Exposure** "
+"category. Choose **building [OSM]** in the **Subcategory** scroll box. Click "
+"**OK.**"
+msgstr ""
+
+# 249c7984fb5b40aa831ca5297642c0a5
+#: ../../source/tutorial-docs/tutorial.rst:398
+msgid ""
+"Now our OSM building exposure data can be used in INASAFE and was "
+"automatically entered in the **How many box** of the INASAFE dock panel."
+msgstr ""
+
+# 1dc35c5695484d03a2a0b3fc8e1a4d5d
+#: ../../source/tutorial-docs/tutorial.rst:404
+msgid ""
+"Also note that the 2 datasets are sitting on top of one another even though "
+"they are different projections."
+msgstr ""
+
+# 5f0b7437f97e49fa811e59b551334c74
+#: ../../source/tutorial-docs/tutorial.rst:408
+msgid "Impact Analysis"
+msgstr ""
+
+# 1964e482546342dc9cb703a61c6c34f1
+#: ../../source/tutorial-docs/tutorial.rst:410
+msgid ""
+"The impact function (**Might**) will spatially combine the hazard and "
+"exposure input layers in order to postulate what the impacts of the hazard "
+"will be on the exposure infrastructure or people. By selecting a combination "
+"from the “In the event of” and “How many” combo boxes, an appropriate set of "
+"impact functions will be listed in the “Might” combo box."
+msgstr ""
+
+# 21f267b2148c41af897eb24c660075be
+#: ../../source/tutorial-docs/tutorial.rst:416
+msgid ""
+"Impact scenarios are predefined depending on what the decision-maker is "
+"looking for. For our flood analysis in Jakarta, we only have on predefined "
+"impact function which asks: **In case of flood event, how many buildings "
+"might be temporarily closed?** As we see on the previous step, this is "
+"filled automatically by default in the InaSAFE panel dock as soon as the "
+"hazard [flood] and exposure [buildings] layers are entered correctly."
+msgstr ""
+
+# 0957424165404f6c9110455ee3d919f8
+#: ../../source/tutorial-docs/tutorial.rst:424
+msgid "The Results section"
+msgstr ""
+
+# cf6efda190074ff3b71680c3b1a919b0
+#: ../../source/tutorial-docs/tutorial.rst:426
+msgid ""
+"Now that we have our two input layers and that we know what impacts we would "
+"like to assess, click on the **Run** button at the bottom to start the "
+"impact analysis. At the end of the process, figures will be shown in the "
+"**Results** section, a new layer will be added in the QGIS layer panel "
+"representing the result of the impact function, and the map will "
+"differentiate affected and non-affected building."
+msgstr ""
+
+# 9d4d4b97f7944d3cab6afec2af02762d
+#: ../../source/tutorial-docs/tutorial.rst:439
+msgid ""
+"The result shows **total number of buildings** and the **number of buildings "
+"that might be temporarily closed** in the event of a flood. Also, there is "
+"an **Action Checklist** where the question: *Are the critical facilities "
+"still open?* And a **Note** description explaining that buildings are said "
+"flooded when the flood level exceeds 1m."
+msgstr ""
+
+# 6449335b420e40bfaaf9dae0090ce5a8
+#: ../../source/tutorial-docs/tutorial.rst:446
+msgid "Enhancing the Map Output"
+msgstr ""
+
+# af6641a73f354c6289618f3cb5fe14e6
+#: ../../source/tutorial-docs/tutorial.rst:448
+msgid ""
+"The final output map can be enhanced using cartographic functions in QGIS. "
+"Styles can be changed, background layer or other relevant layers can be "
+"added, layout can be changed using the **Print Composer** in QGIS."
+msgstr ""
+
+# d3e97bfb15024b25b56216ba7fe44fb7
+#: ../../source/tutorial-docs/tutorial.rst:452
+msgid ""
+"If you would like to add openlayer background to your map, all you need to "
+"do is add a new plugin called **OpenLayer Plugin** in QGIS and follow the "
+"same steps as we did to acquire the InaSAFE plugin."
+msgstr ""
+
+# 2273146dd28d4ca6acf4eec279490d17
+#: ../../source/tutorial-docs/tutorial.rst:456
+msgid ""
+"You can download the plugin from the website http://build.sourcepole.ch/qgis/"
+"plugins.xml, and put it in the QGIS plugin directory :file:`C:\\Users\\<your "
+"username>\\.qgis\\python\\plugins`."
+msgstr ""
+
+# 0038be763fd24e40ab9fd10505a0fdbe
+#: ../../source/tutorial-docs/tutorial.rst:460
+msgid ""
+"To enable the OpenLayer plugin, go to the QGIS **Plugin Manager** and select "
+"**OpenLayers Plugin.**"
+msgstr ""
+
+# d667ca209c90442aabbf4c9f137bee5e
+#: ../../source/tutorial-docs/tutorial.rst:463
+msgid ""
+"Once installed you should be able to use background imagery and tiles from "
+"google, yahoo, bing and openstreetmap."
+msgstr ""
+
+# 69355a5e603d49fbbc9a7393235030c5
+#: ../../source/tutorial-docs/tutorial.rst:469
+msgid ""
+"For our exercise, let’s add the Google Satellite view to our map as a "
+"background. Make sure that the background is not on top of the other active "
+"layers."
+msgstr ""
+
+# 51c832d6433141d58073538df527bdf9
+#: ../../source/tutorial-docs/tutorial.rst:474
+msgid "Print Results"
+msgstr ""
+
+# 423be8f8eba840d4bab9145ac24dc317
+#: ../../source/tutorial-docs/tutorial.rst:476
+msgid ""
+"The data shown on the screen can be saved into a **PDF file** by clicking on "
+"**Print** at the bottom of the InaSAFE panel. The PDF file contains then the "
+"**legend** for the result of the impact assessment, the **map** created and "
+"a **table** summarizing the results from the impact function."
+msgstr ""
+
+# 7485c5c2458249e19f03e1b7b757e8b8
+#: ../../source/tutorial-docs/tutorial.rst:481
+msgid ""
+"However, any change that you want to make into the final map document should "
+"be done **before** clicking on the **Print** button of the INASAFE dock "
+"panel. The print should be only use once the data is exactly as you want it "
+"to be displayed."
+msgstr ""
+
+# 2277176938d947398ddba924f3562d4d
+#: ../../source/tutorial-docs/tutorial.rst:490
+msgid "Save results and QGIS project"
+msgstr ""
+
+# 7e826b7babdc4637840be4042223e21b
+#: ../../source/tutorial-docs/tutorial.rst:492
+msgid ""
+"The output layer result of the assessment can be saved by right clicking on "
+"the layer."
+msgstr ""
+
+# 671f9633f041414bbf6ea1e2107f8a61
+#: ../../source/tutorial-docs/tutorial.rst:498
+msgid ""
+"Then **Save As** a shapefile or a raster. However the keywords and "
+"statistics do not get saved."
+msgstr ""
+
+# 93d507e79cd446ba852d33e2e60a1d68
+#: ../../source/tutorial-docs/tutorial.rst:504
+msgid ""
+"You can also save the project under QGIS so that you can access your current "
+"window view anytime needed. For that, go to the **File** menu on QGIS "
+"toolbar. Click on **Save Project As.**"
+msgstr ""
+
+# 693cf4b4752b4083a2764d14152c4784
+#: ../../source/tutorial-docs/tutorial.rst:511
+msgid ""
+"Give a name to the project and put it in the directory you want to store "
+"your work. Then click on **Save.**"
+msgstr ""
+
+# bcb315772c844bf396b0f0f343b12214
+#: ../../source/tutorial-docs/tutorial.rst:517
+msgid ""
+"Now that the project is saved under QGIS, you can go back to your work "
+"anytime you need. However, the statistical data will be lost whenever the "
+"project is closed. To get the data back, you will need to redo the impact "
+"analysis process we described above from **Run.**"
+msgstr ""
+
+# 7925df9ae85f4b2f9a2c28cdc3e9b332
+#: ../../source/tutorial-docs/tutorial.rst:522
+msgid ""
+"The impact assessment can also be replicated for flood zone areas; the only "
+"change is to add the layer as a vector and using keyword flood (wet/dry)."
+msgstr ""
+
+# 806fb688503f4d4ba80d228b367d2ef8
+#: ../../source/tutorial-docs/tutorial.rst:525
+msgid "Go to QGIS **Layer/Add Vector Layer.**"
+msgstr ""
+
+# 84cc1ee0dd3f46299ad38e29fc540d48
+#: ../../source/tutorial-docs/tutorial.rst:530
+msgid "Add the **Jakarta_RW_2007flood.shp**"
+msgstr ""
+
+# 72712e2989454e6d9c548ccad04dcdb9
+#: ../../source/tutorial-docs/tutorial.rst:535
+msgid ""
+"The impact functions can also be modified to pull out certain attributes "
+"from the input layers, in this case it can tease out the breakup of building "
+"types."
+msgstr ""
+
+# 1f50fad79b2d4c9d88f017169cb13272
+#: ../../source/tutorial-docs/tutorial.rst:541
+msgid ""
+"The flood zone areas were derived from sub-village administration boundaries "
+"and defined as areas that were flooded in the last large flood in Jakarta in "
+"2007."
+msgstr ""
+
+# c8f3d203b5c8400ba8911844cbb8d6af
+#: ../../source/tutorial-docs/tutorial.rst:546
+msgid "International Language"
+msgstr ""
+
+# a1421397921c4650b3c4a3c0d62a569e
+#: ../../source/tutorial-docs/tutorial.rst:548
+msgid "Both QGIS and InaSAFE come with multi-lingual support."
+msgstr ""
+
+# 49074d139615468f851c760558078f1f
+#: ../../source/tutorial-docs/tutorial.rst:550
+msgid "Go to QGIS Settings/options."
+msgstr ""
+
+# 9bf08c9ca47441d993b51896a093c64d
+#: ../../source/tutorial-docs/tutorial.rst:555
+msgid ""
+"Go to the Locale tab, and click to **Override system locale.** You must "
+"close the QGIS project and reopen for the language to take hold."
+msgstr ""
+
+# 46f1eedc778143dd97451c3f81be71fe
+#: ../../source/tutorial-docs/tutorial.rst:561
+msgid ""
+"At this point InaSAFE has only been translated into Indonesian, however "
+"there is a framework that can support all languages outlined in QGIS."
+msgstr ""
+
+# b8a01ff84dbc4eb896799e003d924e88
+#: ../../source/tutorial-docs/tutorial.rst:566
+msgid "Thank You"
+msgstr ""
+
+# d74945d15af24215b211b5ae715e5716
+#: ../../source/tutorial-docs/tutorial.rst:568
+msgid "THANK YOU FOR YOUR PARTICIPATION! :)"
+msgstr ""
+
+# 47ab61c80ffb4f0ebe57ce4205f1553d
+#: ../../source/tutorial-docs/tutorial.rst:570
+msgid ""
+"Let us know how you enjoyed the training and what you think about the tool."
+msgstr ""
+
+# 73e0daa48fcd4e90a000c1c1edafbeac
+#: ../../source/tutorial-docs/tutorial.rst:572
+msgid "THE INASAFE TEAM"
+msgstr ""
+
+# 79cc2b7f96604054aa31b2491f4c8584
+#: ../../source/tutorial-docs/tutorial.rst:574
+msgid "Indonesian Disaster Management Agency (BNPB)"
+msgstr ""
+
+# 0eb9b45f7b2945e1b18eda3a701c8dca
+#: ../../source/tutorial-docs/tutorial.rst:575
+msgid "AusAID - Australia-Indonesia Facility for Disaster Reduction"
+msgstr ""
+
+# 9f51e14fc09a424085f94227fd7bd8f5
+#: ../../source/tutorial-docs/tutorial.rst:576
+msgid "World Bank - Global Facility for Disaster Reduction and Recovery"
+msgstr ""

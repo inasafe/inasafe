@@ -1,0 +1,29 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 8b8fbc13b7df42b9825f1fece4350ca4
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/error_raising_functions.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.error_raising_functions"
+msgstr ""
+
+# 39cb1664f9404a5db6c2838ebbc5dc46
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/error_raising_functions.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

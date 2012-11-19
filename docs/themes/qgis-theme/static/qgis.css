@@ -1,0 +1,63 @@
+/* adding qgis specific css here, overriding bootstrap or adding new classes */
+
+
+/* color for disclaimer (used when files need to be revised)*/
+.disclaimer {
+  display:block;
+  margin-top:5px;
+  color:red;
+  border:2px solid red;
+  padding:5px 50px 5px 50px;
+
+}
+body {
+  padding-top: 85px;
+  padding-bottom: 40px;
+  font-size: 14px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+#locales li{
+  float: left;
+  list-style-type: none;
+  padding: 0 1px 1px 1px;
+}
+#locales {
+  margin-left:2px;
+}
+.search input[type=text] {
+  width:90%;
+}
+
+.sidebar-nav {
+  padding: 9px 5px;
+}
+
+.navbar .brand {
+  background-image: url("/static/icon.png");
+  background-repeat: no-repeat;
+  padding-left: 60px;
+  height:42px;
+}
+
+.navbar .nav {
+  margin-top: 23px;
+  background-color: #fdfdfd;
+}
+
+.navbar-inverse .navbar-inner {
+}
+
+.navbar-inverse .nav > li > a:focus,
+.navbar-inverse .nav > li > a:hover {
+  color: #000000;
+  background-color: transparent;
+}
+
+.navbar-inverse .brand:hover,
+.navbar-inverse .nav > li > a:hover {
+  color: #000000;
+}

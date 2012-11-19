@@ -5,7 +5,9 @@ Package::safe
    :maxdepth: 2
 
    safe/api
+   safe/defaults
    safe/storage
+   safe/postprocessors
    safe/engine
    safe/impact_functions
    safe/i18n
