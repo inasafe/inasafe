@@ -28,6 +28,28 @@ Supported Platforms
 Currently only Ubuntu 12.04 is supported. The software may work or can easily
 be made to work on other platforms but it is untested.
 
+Generated Products
+------------------
+
+For every shake event, the tool produces a number of GIS products:
+
+* A raster layer interpolated from the original MMI point matrix and symbolized
+    according to the MMI scale colours.
+* A vector (shapefile) layer generated from the original MMI point matrix and
+    symbolized according to the MMI scale colours.
+* A vector (shapefile) layer depicting MMI isolines and symbolized according to
+    the MMI scale colours.
+* A cities layer (shapefile) which lists the affected cities along with key
+    data such as distance from and direction to epicenter, number of people resident in the city, mmi exposure etc.
+
+In addition to the above mentioned GIS products, the following 3 files are
+created for each event:
+
+* A PNG file containing a single page report as illustrated above.
+* A large PNG image which contains exactly the same content as the pdf but in
+    an image format.
+* A thumbnail PNG image which contains a reduced size image of the report.
+
 Architecture
 ------------
 
