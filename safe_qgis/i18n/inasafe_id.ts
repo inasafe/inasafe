@@ -9,19 +9,19 @@
         <translation>Tidak terasa</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="809"/>
+        <location filename="shake_event.py" line="810"/>
         <source>Weak</source>
         <translation>Lemah</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="838"/>
         <source>Light</source>
-        <translation>Agak lemah</translation>
+        <translation>Agak Lemah</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="839"/>
         <source>Moderate</source>
-        <translation>Menengah</translation>
+        <translation>Sedang</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="813"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="shake_event.py" line="814"/>
         <source>Very strong</source>
-        <translation>Sangat kuat	</translation>
+        <translation>Sangat Kuat</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="815"/>
@@ -101,27 +101,27 @@
     <message>
         <location filename="shake_event.py" line="2074"/>
         <source>Estimated Earthquake Impact</source>
-        <translation>Perkiraan Dampak Gempabumi</translation>
+        <translation>Perkiraan Dampak Gempa</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2075"/>
         <source>Estimated number of people exposed to each MMI level</source>
-        <translation>Perkiraan banyak orang yang terpapar untuk setiap tingkat MMI</translation>
+        <translation>Perkiraan jumlah penduduk terpapar pada setiap tingkat getaran berbeda</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2077"/>
         <source>Places Affected</source>
-        <translation>Tempat-tempat terdampak</translation>
+        <translation>Kota Terdampak</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2079"/>
         <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population density data from asiapop.org, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population  data and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
-        <translation>Perkiraan dampak ini dihasilkan secara otomatis dan hanya memperhitungkan penduduk dan kota yang terdampak oleh tingkatan getaran tanah yang berbeda. Perkiraan di sini berdasarkan data getaran tanah dari BMKG, data kepadatan penduduk dari asiapop.org, informasi tempat dari geonames.org, dan perangkat lunak yang dikemabangkan BNPB. Keterbatasan dalam memperkirakan getaran tanah, data penduduk, dan data nama tempat mungkin menghasilkan kesalahan representasi yang signifikan terhadap situasi tanah yang tergambar di sini. Oleh karena itu keputusan seharusnya tidak diambil semata-mata  berdasarkan informasi yang diperlihatkan di sini dan seharusnya selalu diperiksa melalui pengecekan langsung dan sumber informasi yang dapat dipercaya lainnya.</translation>
+        <translation>Perkiraan dampat ini dihasilkan secara otomatis dan hanya memperhitungkan penduduk dan kota yang terdampak oleh tingkatan getaran tanah yang berbeda. Perkiraan ini berdasarkan data getaran tanah dari BMKG, data kepadatan penduduk dari asiapop.org, informasi tempat dari geonames.org dan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasn dalam memperkirakan getaran tanah, data penduduk, dan data nama tempat mungkin menghasilkan kesalahan representasi dari situasi tanah yang ditunjukan di sini. Oleh karena itu keputusan tidak seharusnya diambil semata-mata berdasarkan informasi yang ada di sini dan seharusnya selalau diperiksa kebenaran di lapangan dan sumber data yang terpercaya lainnya. </translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2092"/>
         <source>Supported by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the GFDRR.</source>
-        <translation>Didukung oleh Australia Indonesia Facility for Disaster Reduction, Geoscience Australia dan GFDRR.</translation>
+        <translation>Didukung oleh Australia Indonesia Facility for Disaster Reduction, Geoscience Australia, dan GFDRR</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2101"/>
@@ -141,12 +141,12 @@
     <message>
         <location filename="shake_event.py" line="2112"/>
         <source>n/a</source>
-        <translation>Tidak ada informasi</translation>
+        <translation>tidak ada informasi</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2119"/>
         <source>Elapsed time since event</source>
-        <translation>Waktu sejak kejadian</translation>
+        <translation>Waktu berlalu sejak kejadian</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2137"/>
