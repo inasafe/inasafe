@@ -11,6 +11,8 @@ import numpy
 
 
 # This is for testing of configurable impact functions dialog
+
+
 class ITBFatalityFunctionConfigurable(FunctionProvider):
     """Indonesian Earthquake Fatality Model
 
