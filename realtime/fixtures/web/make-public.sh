@@ -18,8 +18,8 @@ done
 
 for FILE in `find shakemaps-extracted -name *.png`
 do 
-  BASE=`basename $FILE .pdf`
-  DEST=public/$BASE.pdf
+  BASE=`basename $FILE .png`
+  DEST=public/$BASE.png
   if [ ! -f $DEST ]
   then 
     cp -a $FILE $DEST

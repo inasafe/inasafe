@@ -807,7 +807,7 @@ class ShakeEvent(QObject):
         myShakingDict = {
             1: self.tr('Not felt'),
             2: self.tr('Weak'),
-            3: self.tr('Light'),
+            3: self.tr('Weak'),
             4: self.tr('Light'),
             5: self.tr('Moderate'),
             6: self.tr('Strong'),
