@@ -78,7 +78,7 @@ class Plugin:
         Returns:
            None.
         Raises:
-           no exceptions explicitly raised.
+           TranslationLoadException
         """
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
