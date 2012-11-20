@@ -106,7 +106,7 @@ rst_epilog = """
 #html_theme = 'linfiniti-sphinx-theme'
 #html_theme = 'basic'
 #html_theme = 'sphinxdoc'
-html_theme = 'qgis-theme'
+html_theme = 'inasafe-theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -149,7 +149,8 @@ html_static_path = ['static']
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
 html_sidebars = {
-        'contents': ['globaltoc.html', 'searchbox.html']
+        'index' : ['indexsidebar.html', 'searchbox.html']
+        ,'contents': ['globaltoc.html', 'searchbox.html']
         ,'tutorial-docs/**': ['localtoc.html', 'searchbox.html']
         ,'user-docs/**': ['localtoc.html', 'searchbox.html']
         ,'developer-docs/**': ['localtoc.html', 'searchbox.html']
@@ -223,7 +224,7 @@ latex_documents = [
 #latex_use_modindex = True
 
 # -- Options for PDF output ----------------------------------------------------
- 
+
 # Grouping the document tree into PDF files. List of tuples
 # (source start file, target name, title, author).
 pdf_documents = [
