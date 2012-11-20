@@ -104,19 +104,19 @@
 	  {# These are the prev | next | index links to the right #}
           {% for rellink in rellinks %}
           <li class="right" {% if loop.first %}style="margin-right: 10px"{% endif %}>
-            <a href="{{ pathto(rellink[0]) }}" title="{{ rellink[1]|striptags }}"
-               {{ accesskey(rellink[2]) }}>{{ rellink[3] }}</a>
+            <a href="{{ pathto(rellink[0]) }}" title="{{ rellink[1]|striptags }}"  style="z-index:{{ loop.revcounter }};" {{ accesskey(rellink[2]) }}>{{ rellink[3] }}</a>
                {% if loop.first %}{% endif %}
           </li>
           {% endfor %}
-          <li>
-            <a href="{{ pathto(master_doc) }}" style="z-index:{{ loop.revcounter }};"> {{ shorttitle|e }} </a>
-          </li>
 
-          {# breadcrumbs on the left comes now #} 
+          {# Static breadcrumb first entry now #}
+          <li class="first">
+            <a href="{{ pathto(master_doc) }}"> {{ shorttitle|e }} </a>
+          </li>
+          {# auto breadcrumbs on the left comes now #} 
           {% for parent in parents %}
-          <li {% if loop.last %} class="first"{% endif %}>
-            <a href="{{ parent.link|e }}" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ parent.title }}</a>
+          <li>
+            <a href="{{ parent.link|e }}" style="z-index:{{ loop.revcounter }};" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ parent.title }}</a>
           </li>
           {% endfor %}
           <li><a href="#">{{ title }}</a></li>
