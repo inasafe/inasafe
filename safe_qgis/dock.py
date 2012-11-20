@@ -39,7 +39,8 @@ from qgis.core import (QgsMapLayer,
                        QgsFeature,
                        QgsRectangle,
                        QgsPoint,
-                       QgsField)
+                       QgsField
+                       )
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.dock_base import Ui_DockBase
@@ -846,9 +847,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
             if self.doZonalAggregation:
-                myHazardFilename, myExposureFilename =\
-                self.prepareInputLayerForAggregation(
-                    myHazardFilename, myExposureFilename)
+                myHazardFilename, myExposureFilename = \
+                    self.prepareInputLayerForAggregation(
+                        myHazardFilename, myExposureFilename)
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -1093,18 +1094,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if isLayerPolygonal(myHazardLayer):
             theClippedHazardFilename = self.preparePolygonLayerForAggr(
-                theClippedHazardFilename)
+                theClippedHazardFilename, myHazardLayer)
 
         if isLayerPolygonal(myExposureLayer):
             mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
                 'subcategory')
             if mySubcategory != 'structure':
                 theClippedExposureFilename = self.preparePolygonLayerForAggr(
-                    theClippedExposureFilename)
+                    theClippedExposureFilename, myExposureLayer)
 
         return theClippedHazardFilename, theClippedExposureFilename
 
-    def preparePolygonLayerForAggr(self, theLayerFilename):
+    def preparePolygonLayerForAggr(self, theLayerFilename, theQgisLayer):
         """ A helper function to align the polygons to the postprocLayer
         polygons. If one input polygon is in two or more postprocLayer polygons
         then it is divided so that each part is within only one of the
@@ -1125,8 +1126,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
+        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
+        myRemainingIndexes = numpy.array(range(len(myRemainingPolygons)))
+        myIntersectingPolygons = []
+        myInsidePolygons = []
 
-        for myPostprocPolygonIndex, myPostprocPolygon in enumerate(myPostprocPolygons):
+        for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
+                                                           myPostprocPolygons):
             myPolygonsCount = len(myRemainingPolygons)
 
             # myPostprocPolygon bounding box values
@@ -1155,24 +1161,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 maxx = max(maxx, numpy.max(A[:, 0]))
                 miny = min(miny, numpy.min(A[:, 1]))
                 maxy = max(maxy, numpy.max(A[:, 1]))
-                myBBVertices.extend([(minx,miny),
-                                    (minx,maxy),
-                                    (maxx,maxy),
-                                    (maxx,miny)])
+                myBBVertices.extend([(minx, miny),
+                                    (minx, maxy),
+                                    (maxx, maxy),
+                                    (maxx, miny)])
 
-#            numpy.all
             # see if BB vertices are in myPostprocPolygon
             myBBVertices = numpy.array(myBBVertices)
-            inside,_ = points_in_and_outside_polygon(myBBVertices,
+            inside, _ = points_in_and_outside_polygon(myBBVertices,
                                                     myPostprocPolygon)
             # make True if the vertice was in myPostprocPolygon
             myAreVerticesInside[inside] = True
 
-            insidePolygons = []
-            outsidePolygons = []
-            intersectingPolygons = []
+            # myLocalOutsidePolygons has the 0:count indexes
+            # myOutsidePolygons has the mapped to original indexes
+            # and is overwritten at every iteration because we care only of
+            # the outside polygons remaining avter the last iteration
+            myLocalOutsidePolygons = []
+            myOutsidePolygons = []
             for i in range(myPolygonsCount):
                 k = i * 4
+                myMappedIndex = myRemainingIndexes[i]
                 # summ the isInside bool for each of the boundingbox vertices
                 # of each poygon. for example True + True + False + True is 3
                 myPolygonLocation = numpy.sum(myAreVerticesInside[k:k + 4])
@@ -1192,16 +1201,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myPolyMiny > myPostprocPolygonMaxy or
                         myPolyMaxy < myPostprocPolygonMiny):
                         #polygon is surely outside
-                        outsidePolygons.append(i)
+                        myLocalOutsidePolygons.append(i)
+                        myOutsidePolygons.append(myMappedIndex)
                     else:
                         # polygon might be outside or intersecting. consider
                         # it intersecting so it goes into further analysis
-                        intersectingPolygons.append(i)
+                        myIntersectingPolygons.append(myMappedIndex)
 
                 elif myPolygonLocation == 4:
                     # all vertices are inside -> polygon is inside
-                    #remove this polygon from further analysis
-                    insidePolygons.append(i)
+                    #ignore this polygon from further analysis
+                    myInsidePolygons.append(myMappedIndex)
                 else:
                     # some vertices are outside some inside -> polygon is
                     # intersecting
@@ -1209,13 +1219,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     # Save to output layer
                     #output_geometry.append(polygon[k])
                     #output_values.append(values[k])
-                    intersectingPolygons.append(i)
+                    myIntersectingPolygons.append(myMappedIndex)
 
                     # Add clip result to output layer
                     #for k in clipped_result:
                     #    output_geometry.append(clipped_polygon[k])
                     #    output_values.append(clipped_values[k])
-
 
                     #v = Vector(geometry=output_geometry,
                     #           data=output_values,
@@ -1224,11 +1233,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     #v.write_to_file('oaeu')
             LOGGER.debug('')
             LOGGER.debug('Polygon %s' % myPostprocPolygonIndex)
-            LOGGER.debug('Inside %s' % insidePolygons)
-            LOGGER.debug('Outside %s' % outsidePolygons)
-            LOGGER.debug('Intersec %s' % intersectingPolygons)
+            LOGGER.debug('Inside %s' % myInsidePolygons)
+            LOGGER.debug('Outside %s' % myOutsidePolygons)
+            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
+            if len(myLocalOutsidePolygons) > 0:
+                #some polygons are still completely outside of the postprocPoly
+                #so go on and reiterate using only these
+                outsidePolygonsIndex = numpy.array(myLocalOutsidePolygons)
+                myRemainingPolygons = myRemainingPolygons[outsidePolygonsIndex]
+                myRemainingAttributes = myRemainingAttributes[
+                                        outsidePolygonsIndex]
+                myRemainingIndexes = myRemainingIndexes[outsidePolygonsIndex]
+            else:
+                print 'no more polygons to be checked'
+                break
 
+        # here the full polygon set is reppresented by:
+        # myInsidePolygons + myIntersectingPolygons + myLocalOutsidePolygons
 
+        LOGGER.debug('TOT: %s %s %s' % (myInsidePolygons,
+                                        myIntersectingPolygons,
+                                        myOutsidePolygons))
 
         return theLayerFilename
 
