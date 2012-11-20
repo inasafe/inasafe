@@ -11,7 +11,7 @@
 
 }
 body {
-  padding-top: 105px;
+  padding-top: 110px;
   padding-bottom: 40px;
   font-size: 14px;
 }
@@ -53,6 +53,62 @@ h3 {
     background-image: url('img/bg-navbar.png') !important;
     background-repeat: repeat-x;
 }
+
+/** Themeing of sphinx markup now **/
+
+.section h1 {
+    border-bottom: solid 1px #002070;
+}
+
+.guilabel {
+    font-weight: bold;
+    border: 1px solid #ddd;
+    background: #eee;
+    color: #08C;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.menuselection {
+    font-weight: bold;
+    border: 1px dashed #ddd;
+    background: #eee;
+    color: #E44A00;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.kbd {
+    font-weight: bold;
+    border: 1px solid #ddd;
+    background: #eee;
+    color: #E22;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+/* Suppress anchor markers */
+.headerlink {display: none;}
+
+.admonition-title {
+    font-size: larger;
+    display: block;
+    border-bottom: 1px #ddd solid;
+    margin-left: 44px !important;
+}
+/* theming of warning boxes class=".admonition .warning" */
+.warning{
+    background-image: url("img/warning.png");
+}
+/* theming of warning boxes class=".admonition .note" */
+.note {
+    background-image: url("img/note.png");
+}
+.admonition {
+    background-position: 22px 10px;
+    background-repeat: no-repeat;
+}
+
 
 /** Adapted from http://www.hongkiat.com/blog/breadcrumb-menu-css3/ **/
 
