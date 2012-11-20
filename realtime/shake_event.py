@@ -42,7 +42,8 @@ from PyQt4.QtCore import (QCoreApplication,
                           QStringList,
                           QUrl,
                           QSize,
-                          Qt
+                          Qt,
+                          QTranslator
                           )
 from PyQt4.QtXml import QDomDocument
 from qgis.core import (QgsPoint,
@@ -63,6 +64,7 @@ from qgis.core import (QgsPoint,
                        QgsPalLabeling)
 #TODO refactor this into a utilitiy class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
+from safe_qgis.exceptions import TranslationLoadException
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
@@ -91,23 +93,27 @@ class ShakeEvent(QObject):
     earthquake, including epicenter, magnitude etc."""
 
     def __init__(self, theEventId=None,
+                 theLocale='en',
                  thePopulationRasterPath=None,
                  theForceFlag=False):
         """Constructor for the shake event class.
 
         Args:
-            theEventId - (Optional) Id of the event. Will be used to
+            * theEventId - (Optional) Id of the event. Will be used to
                 fetch the ShakeData for this event (either from cache or from
                 ftp server as required). The grid.xml file in the unpacked
                 event will be used to intialise the state of the ShakeEvent
                 instance.
                 If no event id is supplied, the most recent event recorded
                 on the server will be used.
-            thePopulationRasterPath - (Optional)path to the population raster
+            * theLocale - (Optional) string for iso locale to use for outputs.
+                Defaults to en. Can also use 'id' or possibly more as
+                translations are added.
+            * thePopulationRasterPath - (Optional)path to the population raster
                 that will be used if you want to calculate the impact. This
                 is optional because there are various ways this can be
                 specified before calling :func:`calculateImpacts`.
-            theForceFlag: bool Whether to force retrieval of the dataset from
+            * theForceFlag: bool Whether to force retrieval of the dataset from
                 the ftp server.
 
         Returns: Instance
@@ -166,6 +172,10 @@ class ShakeEvent(QObject):
         #'id': 57,
         #'population': 33317}
         self.mostAffectedCity = None
+        # for localization
+        self.translator = None
+        self.locale = theLocale
+
         self.parseGridXml()
 
     def gridFilePath(self):
@@ -2331,3 +2341,36 @@ class ShakeEvent(QObject):
                      'searchBoxes: %(searchBoxes)s\n'
                       % myDict)
         return myString
+
+    def setupI18n(self, thePreferredLocale=None):
+        """Setup internationalisation for the plugin.
+
+        See if QGIS wants to override the system locale
+        and then see if we can get a valid translation file
+        for whatever locale is effectively being used.
+
+        Args:
+           thePreferredLocale - optional parameter which if set
+           will override any other way of determining locale..
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        myLocaleName = self.locale
+        # Also set the system locale to the user overridden local
+        # so that the inasafe library functions gettext will work
+        # .. see:: :py:func:`common.utilities`
+        os.environ['LANG'] = str(myLocaleName)
+
+        myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        myTranslationPath = os.path.join(myRoot, 'safe_qgis', 'i18n',
+                                         'inasafe_' + str(myLocaleName) + '.qm')
+        if os.path.exists(myTranslationPath):
+            self.translator = QTranslator()
+            myResult = self.translator.load(myTranslationPath)
+            if not myResult:
+                myMessage = 'Failed to load translation for %s' % myLocaleName
+                LOGGER.exception(myMessage)
+                raise TranslationLoadException(myMessage)
+            QCoreApplication.installTranslator(self.translator)
