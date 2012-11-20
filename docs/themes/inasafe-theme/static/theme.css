@@ -1,0 +1,103 @@
+/* adding qgis specific css here, overriding bootstrap or adding new classes */
+
+
+/* color for disclaimer (used when files need to be revised)*/
+.disclaimer {
+  display:block;
+  margin-top:5px;
+  color:red;
+  border:2px solid red;
+  padding:5px 50px 5px 50px;
+
+}
+body {
+  padding-top: 105px;
+  padding-bottom: 40px;
+  font-size: 14px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+#locales li{
+  float: left;
+  list-style-type: none;
+  padding: 0 1px 1px 1px;
+}
+#locales {
+  margin-left:2px;
+}
+.search input[type=text] {
+  width:90%;
+}
+
+.sidebar-nav {
+  padding: 9px 5px;
+}
+
+.navbar .brand {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-left: 60px;
+  height:42px;
+}
+
+.navbar .nav {
+  margin-top: 20px;
+  background-color: #fdfdfd;
+}
+
+
+.navbar-inner {
+    background-image: url('img/bg-navbar.png') !important;
+    background-repeat: repeat-x;
+}
+
+/** Adapted from http://www.hongkiat.com/blog/breadcrumb-menu-css3/ **/
+
+#breadcrumbs {height: 29px;}
+
+.breadcrumb li.first { padding-left: 8px; }
+.breadcrumb li a, .crumbs li a:link, .crumbs li a:visited {
+  color: #666;
+  display: block;
+  float: left;
+  font-size: 12px;
+  margin-left: -13px;
+  padding: 7px 17px 11px 25px;
+  position: relative;
+  text-decoration: none;
+}
+
+.breadcrumb li a {
+  background-image: url('img/bg-crumbs.png');
+  background-repeat: no-repeat;
+  background-position: 100% 0;
+  position: relative;
+}
+
+.breadcrumb li .right a {
+    background-image: none;
+}
+
+.breadcrumb li a:hover {
+  color: #333;
+  background-position: 100% -48px;
+  cursor: pointer;
+}
+
+.breadcrumb li a:active {
+  color: #333;
+  background-position: 100% -96px;
+}
+
+.breadcrumb li.first a span {
+  height: 29px;
+  width: 3px;
+  border-left: 1px solid #d9d9d9;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
