@@ -21,10 +21,13 @@ import ast
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import (
-    QGroupBox, QLineEdit, QLabel, QCheckBox, QFormLayout, QWidget)
+    QGroupBox, QLineEdit, QDialog,
+    QLabel, QCheckBox, QFormLayout, QWidget)
 from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
 
 from safe_interface import safeTr
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessor_human_name)
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -56,6 +59,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.setWindowTitle(self.tr('InaSAFE impact function configuration'))
         self.tabWidget.tabBar().setVisible(False)
 
+        self._result = None
         self.values = {}
 
     def bind(self, theObject, theProperty, theType):
@@ -71,30 +75,27 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
         return lambda: theType(theObject.property(theProperty).toPyObject())
 
-    def buildForm(self, theFunction, theParams):
+    def buildForm(self, theParams):
         """we build a form from impact functions parameter
 
         .. note:: see http://tinyurl.com/pyqt-differences
 
         Args:
-           * theFunction - theFunction to be modified
            * params - parameters to be edited
         Returns:
            not applicable
         """
 
-        self.theFunction = theFunction
-
         for myKey, myValue in theParams.items():
             if myKey == 'postprocessors':
-                self._addPostProcessorFormItem(myValue)
+                self.buildPostProcessorForm(myValue)
             else:
                 self.values[myKey] = self.buildWidget(
                     self.configLayout,
                     myKey,
                     myValue)
 
-    def _addPostProcessorFormItem(self, theParams):
+    def buildPostProcessorForm(self, theParams):
         """Build Post Processor Tab
 
         Args:
@@ -119,7 +120,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
             if 'params' in myOptions:
                 myGroupBox = QGroupBox()
                 myGroupBox.setCheckable(True)
-                myGroupBox.setTitle(myLabel)
+                myGroupBox.setTitle(get_postprocessor_human_name(myLabel))
 
                 # NOTE (gigih): is 'on' always exist??
                 myGroupBox.setChecked(myOptions.get('on'))
@@ -128,17 +129,18 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 myLayout = QFormLayout(myGroupBox)
                 myGroupBox.setLayout(myLayout)
 
+                # create widget element from 'params'
                 myInputValues['params'] = {}
-                for myKey, myValue in  myOptions['params'].items():
+                for myKey, myValue in myOptions['params'].items():
+                    myHumanName = get_postprocessor_human_name(myKey)
                     myInputValues['params'][myKey] = self.buildWidget(
-                        myLayout, myKey, myValue)
-
+                        myLayout, myHumanName, myValue)
 
                 myFormLayout.addRow(myGroupBox, None)
 
-            elif myOptions.has_key('on'):
+            elif 'on' in myOptions:
                 myCheckBox = QCheckBox()
-                myCheckBox.setText(myLabel)
+                myCheckBox.setText(get_postprocessor_human_name(myLabel))
                 myCheckBox.setChecked(myOptions['on'])
 
                 myInputValues['on'] = self.bind(myCheckBox, 'checked', bool)
@@ -149,7 +151,6 @@ class FunctionOptionsDialog(QtGui.QDialog,
             myValues[myLabel] = myInputValues
 
         self.values['postprocessors'] = myValues
-        print self.values['postprocessors']
 
     def buildWidget(self, theFormLayout, theName, theValue):
         """Create a new form element dynamically based from theValue type.
@@ -183,10 +184,10 @@ class FunctionOptionsDialog(QtGui.QDialog,
         # create widget based on the type of theValue variable
         if isinstance(theValue, list):
             myWidget = QLineEdit()
-            myValue = ', '.join(map(str, theValue))
+            myValue = ', '.join([str(x) for x in theValue])
             # NOTE: we assume that all element in list have same type
             myType = type(theValue[0])
-            myFunc = lambda x: map(myType, str(x).split(','))
+            myFunc = lambda x: [myType(y) for y in str(x).split(',')]
         elif isinstance(theValue, dict):
             myWidget = QLineEdit()
             myValue = str(theValue)
@@ -219,7 +220,8 @@ class FunctionOptionsDialog(QtGui.QDialog,
             a dictionary that can be consumed for impact functions.
 
         Raises:
-            * ValueError - occurs when some input cannot be converted to suitable type.
+            * ValueError - occurs when some input cannot be converted
+                           to suitable type.
         """
 
         myResult = {}
@@ -245,9 +247,11 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
 
         try:
-            myResult = self.parseInput(self.values)
-            self.theFunction.parameters = myResult
-            self.close()
-        except Exception as myEx:
+            self._result = self.parseInput(self.values)
+            self.done(QDialog.Accepted)
+        except (SyntaxError, ValueError) as myEx:
             myText = self.tr("Unexpected error: %s " % myEx)
             self.lblErrorMessage.setText(myText)
+
+    def result(self):
+        return self._result
