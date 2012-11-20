@@ -494,6 +494,14 @@ searchBoxes: None
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
 
+    def testI18n(self):
+        """See if internationalisation is working."""
+        myShakeId = '20120726022003'
+        myShakeEvent = ShakeEvent(myShakeId, theLocale='id')
+        myShaking = myShakeEvent.mmiShaking(5)
+        myExpectedShaking = 'Sedang'
+        self.assertEqual(myExpectedShaking, myShaking)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

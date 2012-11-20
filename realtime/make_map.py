@@ -31,12 +31,13 @@ setupLogger()
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
 
-def processEvent(theEventId=None):
+def processEvent(theEventId=None, theLocale='en'):
     # Used cached data where available
     myForceFlag = False
     # Extract the event
     try:
         myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                  theLocale=theLocale,
                                   theForceFlag=myForceFlag)
     except BadZipfile:
         # retry with force flag true
@@ -70,6 +71,12 @@ if len(sys.argv) > 2:
         sys.argv[0], sys.argv[0]))
 elif len(sys.argv) == 2:
     print('Processing shakemap %s' % sys.argv[1])
+    
+    if 'INASAFE_LOCALE' in os.environ:
+        myLocale = os.environ['INASAFE_LOCALE']
+    else:
+        myLocale = 'en'
+
     myEventId = sys.argv[1]
     if myEventId in '--list':
         myFtpClient = FtpClient()
@@ -92,7 +99,7 @@ elif len(sys.argv) == 2:
                 LOGGER.exception('Failed to process %s' % myEvent)
         sys.exit(0)
     else:
-        processEvent(myEventId)
+        processEvent(myEventId, myLocale)
 
 else:
     myEventId = None

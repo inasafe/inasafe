@@ -175,7 +175,7 @@ class ShakeEvent(QObject):
         # for localization
         self.translator = None
         self.locale = theLocale
-
+        self.setupI18n()
         self.parseGridXml()
 
     def gridFilePath(self):
@@ -2342,20 +2342,15 @@ class ShakeEvent(QObject):
                       % myDict)
         return myString
 
-    def setupI18n(self, thePreferredLocale=None):
-        """Setup internationalisation for the plugin.
-
-        See if QGIS wants to override the system locale
-        and then see if we can get a valid translation file
-        for whatever locale is effectively being used.
+    def setupI18n(self):
+        """Setup internationalisation for the reports.
 
         Args:
-           thePreferredLocale - optional parameter which if set
-           will override any other way of determining locale..
+           None
         Returns:
            None.
         Raises:
-           no exceptions explicitly raised.
+           TranslationLoadException
         """
         myLocaleName = self.locale
         # Also set the system locale to the user overridden local
