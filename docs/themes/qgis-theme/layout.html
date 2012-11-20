@@ -115,7 +115,7 @@
           {# auto breadcrumbs on the left comes now #} 
           {% for parent in parents %}
           <li>
-            <a href="{{ parent.link|e }}" style="z-index:{{loop.revcounter}};" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ loop.revcounter }}{{ parent.title }}</a>
+            <a href="{{ parent.link|e }}" style="z-index:{{loop.revcounter}};" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ loop.length }}{{ parent.title }}</a>
           </li>
           {% endfor %}
           <li><a href="#">{{ title }}</a></li>
