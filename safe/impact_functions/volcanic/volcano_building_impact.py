@@ -10,6 +10,7 @@ from safe.engine.interpolation import make_circular_polygon
 from safe.common.exceptions import InaSAFEError
 from third_party.odict import OrderedDict
 
+
 class VolcanoBuildingImpact(FunctionProvider):
     """Risk plugin for flood evacuation
 

@@ -85,7 +85,7 @@ class ITBFatalityFunction(FunctionProvider):
     title = tr('Die or be displaced')
     defaults = get_defaults()
     parameters = OrderedDict([
-        ('x',0.62275231), ('y',8.03314466),  # Model coefficients
+        ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
         # Rates of people displaced for each MMI level
         ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
                                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
