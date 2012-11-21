@@ -76,11 +76,11 @@ def processEvent(theEventId=None, theLocale='en'):
     LOGGER.info('-------------------------------------------')
 
     myShakeEvent.renderMap(myForceFlag)
-    if 'en' not in myLocale:
+    #if 'en' not in myLocale:
     # Always make an english version too ...
-        myShakeEvent.locale = 'en'
-        myShakeEvent.setupI18n()
-        myShakeEvent.renderMap(myEventId)
+    #    myShakeEvent.locale = 'en'
+    #    myShakeEvent.setupI18n()
+    #    myShakeEvent.renderMap(myEventId)
 
 
 LOGGER.info('-------------------------------------------')

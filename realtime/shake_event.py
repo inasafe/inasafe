@@ -2383,6 +2383,7 @@ class ShakeEvent(QObject):
         if os.path.exists(myTranslationPath):
             self.translator = QTranslator()
             myResult = self.translator.load(myTranslationPath)
+            LOGGER.debug('Switched locale to %s' % myTranslationPath)
             if not myResult:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 LOGGER.exception(myMessage)
