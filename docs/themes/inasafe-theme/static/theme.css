@@ -109,6 +109,9 @@ h3 {
     background-repeat: no-repeat;
 }
 
+.pre {
+    font-variant: full-width;
+}
 
 /** Adapted from http://www.hongkiat.com/blog/breadcrumb-menu-css3/ **/
 
