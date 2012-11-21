@@ -2389,3 +2389,6 @@ class ShakeEvent(QObject):
                 LOGGER.exception(myMessage)
                 raise TranslationLoadException(myMessage)
             QCoreApplication.installTranslator(self.translator)
+        else:
+            myMessage = 'No translation exists for %s' % myLocaleName
+            LOGGER.exception(myMessage)
