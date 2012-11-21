@@ -39,7 +39,8 @@ from qgis.core import (QgsMapLayer,
                        QgsFeature,
                        QgsRectangle,
                        QgsPoint,
-                       QgsField
+                       QgsField,
+                       QgsVectorFileWriter
                        )
 from qgis.analysis import QgsZonalStatistics
 
@@ -1095,9 +1096,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.mySafePostprocLayer = safe_read_layer(
             str(self.postprocLayer.source()))
 
+        myTitle = self.tr('Preclipping input data...')
+        myMessage = self.tr('We are clipping the input layers to avoid '
+                            'intersections with the aggregation layer')
+        myProgress = 44
+        self.showBusy(myTitle, myMessage, myProgress)
+        import cProfile
         if isLayerPolygonal(myHazardLayer):
-            theClippedHazardFilename = self.preparePolygonLayerForAggr(
-                theClippedHazardFilename, myHazardLayer)
+            # http://stackoverflow.com/questions/1031657/profiling-self-and-arguments-in-python
+            cProfile.runctx('self.preparePolygonLayerForAggr(theClippedHazardFilename, myHazardLayer)', globals(), locals())
+            raise
+            theClippedHazardFilename = self.preparePolygonLayerForAggr(theClippedHazardFilename, myHazardLayer)
 
         if isLayerPolygonal(myExposureLayer):
             mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
@@ -1125,7 +1134,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
         """
-
+        import time
+        startTime = time.clock()
         myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
@@ -1134,9 +1144,38 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myIntersectingPolygons = []
         myInsidePolygons = []
 
+
+
+
+
+        #FIXME (MB) do raw geos without qgis
+        postprocProvider = self.postprocLayer.dataProvider()
+        #select all postproc polygons
+        postprocProvider.select([])
+        polygonsProvider = theQgisLayer.dataProvider()
+        allPolygonAttrs = polygonsProvider.attributeIndexes()
+        polygonsProvider.select(allPolygonAttrs)
+        myQgisPostprocPoly = QgsFeature()
+        myQgisPoly = QgsFeature()
+        myClippedFeat = QgsFeature()
+        fields = polygonsProvider.fields()
+        writer = QgsVectorFileWriter('/tmp/myOut.shp', 'UTF-8', fields,
+            polygonsProvider.geometryType(), polygonsProvider.crs())
+        if writer.hasError():
+            raise InvalidParameterException (writer.errorMessage())
+
+
+
+
+
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
                                                            myPostprocPolygons):
+#            LOGGER.debug('')
+#            LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
             myPolygonsCount = len(myRemainingPolygons)
+            postprocProvider.featureAtId(myPostprocPolygonIndex,
+                                         myQgisPostprocPoly, True, [])
+            myQgisPostprocPolyGeom = QgsGeometry(myQgisPostprocPoly.geometry())
 
             # myPostprocPolygon bounding box values
             A = numpy.array(myPostprocPolygon)
@@ -1185,6 +1224,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             for i in range(myPolygonsCount):
                 k = i * 4
                 myMappedIndex = myRemainingIndexes[i]
+                doClip = False
                 # summ the isInside bool for each of the boundingbox vertices
                 # of each poygon. for example True + True + False + True is 3
                 myPolygonLocation = numpy.sum(myAreVerticesInside[k:k + 4])
@@ -1210,7 +1250,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         # polygon might be outside or intersecting. consider
                         # it intersecting so it goes into further analysis
                         myIntersectingPolygons.append(myMappedIndex)
-
+                        doClip = True
                 elif myPolygonLocation == 4:
                     # all vertices are inside -> polygon is inside
                     #ignore this polygon from further analysis
@@ -1223,6 +1263,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     #output_geometry.append(polygon[k])
                     #output_values.append(values[k])
                     myIntersectingPolygons.append(myMappedIndex)
+                    doClip = True
 
                     # Add clip result to output layer
                     #for k in clipped_result:
@@ -1234,11 +1275,37 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     #           projection=input_layer.projection,
                     #           keywords=input_layer.keywords)
                     #v.write_to_file('oaeu')
-            LOGGER.debug('')
-            LOGGER.debug('Polygon %s' % myPostprocPolygonIndex)
-            LOGGER.debug('Inside %s' % myInsidePolygons)
-            LOGGER.debug('Outside %s' % myOutsidePolygons)
-            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
+
+                #clip using qgis
+                if doClip:
+#                    LOGGER.debug('clipping polygon %s' % myMappedIndex)
+                    polygonsProvider.featureAtId(myMappedIndex,
+                        myQgisPoly, True, [])
+                    myQgisPolyGeom = QgsGeometry(myQgisPoly.geometry())
+
+                    # clip myQgisPolyGeom with myQgisPostprocPoly
+                    try:
+                        geom = myQgisPostprocPolyGeom
+                        cur_geom = myQgisPolyGeom
+                        new_geom = QgsGeometry(geom.intersection(cur_geom))
+
+                        if new_geom.wkbType() == 0:
+                            int_com = QgsGeometry(geom.combine(cur_geom))
+                            int_sym = QgsGeometry(geom.symDifference(cur_geom))
+                            new_geom = QgsGeometry(int_com.difference(int_sym))
+
+                            myClippedFeat.setGeometry(new_geom)
+                            atMap = cur_geom.attributeMap()
+                            myClippedFeat.setAttributeMap(atMap)
+                            writer.addFeature(myClippedFeat)
+                    except:
+                        FEAT_EXCEPT = False
+                        continue
+
+
+#            LOGGER.debug('Inside %s' % myInsidePolygons)
+#            LOGGER.debug('Outside %s' % myOutsidePolygons)
+#            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
             if len(myLocalOutsidePolygons) > 0:
                 #some polygons are still completely outside of the postprocPoly
                 #so go on and reiterate using only these
@@ -1253,11 +1320,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # here the full polygon set is reppresented by:
         # myInsidePolygons + myIntersectingPolygons + myLocalOutsidePolygons
-
-        LOGGER.debug('TOT: %s %s %s' % (myInsidePolygons,
-                                        myIntersectingPolygons,
-                                        myOutsidePolygons))
-
+        LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
+                myInsidePolygons, myIntersectingPolygons, myOutsidePolygons))
+        LOGGER.debug('Duration: %s' % (time.clock() - startTime))
+        del writer
         return theLayerFilename
 
     def postprocess(self):
@@ -2261,7 +2327,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMessage = self.tr('We are resampling and clipping the exposure'
                             'layer to match the intersection of the hazard'
                             'layer and the current view extents.')
-        myProgress = 44
+        myProgress = 33
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(
             myExposureLayer,
