@@ -83,17 +83,16 @@ def processEvent(theEventId=None, theLocale='en'):
 
 LOGGER.info('-------------------------------------------')
 
+if 'INASAFE_LOCALE' in os.environ:
+    myLocale = os.environ['INASAFE_LOCALE']
+else:
+    myLocale = 'en'
 
 if len(sys.argv) > 2:
     sys.exit('Usage:\n%s [optional shakeid]\nor\n%s --list' % (
         sys.argv[0], sys.argv[0]))
 elif len(sys.argv) == 2:
     print('Processing shakemap %s' % sys.argv[1])
-
-    if 'INASAFE_LOCALE' in os.environ:
-        myLocale = os.environ['INASAFE_LOCALE']
-    else:
-        myLocale = 'en'
 
     myEventId = sys.argv[1]
     if myEventId in '--list':
@@ -126,4 +125,4 @@ elif len(sys.argv) == 2:
 else:
     myEventId = None
     print('Processing latest shakemap')
-    processEvent()
+    processEvent(theLocale=myLocale)
