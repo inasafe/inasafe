@@ -57,6 +57,16 @@ and the message provided to the LOGGER.exception call to all be logged e.g.::
 The above example was contrived in the QGIS python console. When the exception
 originates inside a module, the traceback will include the complete call tree.
 
+Logging in loops
+------------------
+.. warning::
+
+   Please be considerate when logging into loops as this can slow execution a
+   lot (we had a spatial analysis loop with two logged messages and it took
+   15sec for 1000 itterations, removing logging brought it to 5sec)
+   See also :ref:`profiling`
+
+
 Remote logging
 --------------
 
