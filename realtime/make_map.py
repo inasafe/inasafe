@@ -32,38 +32,56 @@ LOGGER = logging.getLogger('InaSAFE-Realtime')
 
 
 def processEvent(theEventId=None, theLocale='en'):
+    """Launcher that actually runs the event processing."""
+    myPopulationPath = os.path.join(dataDir(),
+                          'exposure',
+                          'IDN_mosaic',
+                          'popmap10_all.tif')
+
     # Used cached data where available
+    # Whether we should always regenerate the products
     myForceFlag = False
+    if 'INASAFE_FORCE' in os.environ:
+        myForceString = os.environ['INASAFE_FORCE']
+        if str(myForceString).capitalize() == 'Y':
+            myForceFlag = True
+
     # Extract the event
     try:
-        myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                  theLocale=theLocale,
-                                  theForceFlag=myForceFlag)
+        if os.path.exists(myPopulationPath):
+            myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=theLocale,
+                                      theForceFlag=myForceFlag,
+                                      thePopulationRasterPath=myPopulationPath)
+        else:
+            myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=theLocale,
+                                      theForceFlag=myForceFlag)
     except BadZipfile:
         # retry with force flag true
-        myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                  theForceFlag=True)
+        if os.path.exists(myPopulationPath):
+            myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=theLocale,
+                                      theForceFlag=True,
+                                      thePopulationRasterPath=myPopulationPath)
+        else:
+            myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=theLocale,
+                                      theForceFlag=True)
     except:
         LOGGER.exception('An error occurred setting up the shake event.')
         return
 
-    logging.info('Event Id: %s', myShakeEvent)
-    logging.info('-------------------------------------------')
-
-    # Always regenerate the products
-    myForceFlag = True
-
-    myPath = os.path.join(dataDir(),
-                          'exposure',
-                          'IDN_mosaic',
-                          'popmap10_all.tif')
-    if os.path.exists(myPath):
-        myShakeEvent.populationRasterPath = myPath
-        # Otherwise it will default to the one in fixtures
+    LOGGER.info('Event Id: %s', myShakeEvent)
+    LOGGER.info('-------------------------------------------')
 
     myShakeEvent.renderMap(myForceFlag)
+    if 'en' not in myLocale:
+    # Always make an english version too ...
+        myShakeEvent.renderMap(myEventId, theLocale='en')
 
-    logging.info('-------------------------------------------')
+
+LOGGER.info('-------------------------------------------')
 
 
 if len(sys.argv) > 2:
@@ -71,7 +89,7 @@ if len(sys.argv) > 2:
         sys.argv[0], sys.argv[0]))
 elif len(sys.argv) == 2:
     print('Processing shakemap %s' % sys.argv[1])
-    
+
     if 'INASAFE_LOCALE' in os.environ:
         myLocale = os.environ['INASAFE_LOCALE']
     else:
@@ -85,6 +103,10 @@ elif len(sys.argv) == 2:
             print myEvent
         sys.exit(0)
     elif myEventId in '--run-all':
+        #
+        # Caution, this branch gets memory leaks, use the
+        # batch file approach rather!
+        #
         myFtpClient = FtpClient()
         myListing = myFtpClient.getListing()
         for myEvent in myListing:
@@ -94,7 +116,7 @@ elif len(sys.argv) == 2:
             myEvent = myEvent.replace('.out.zip', '')
             print 'Processing %s' % myEvent
             try:
-                processEvent(myEvent)
+                processEvent(myEvent, myLocale)
             except:
                 LOGGER.exception('Failed to process %s' % myEvent)
         sys.exit(0)

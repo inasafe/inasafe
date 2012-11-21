@@ -1835,7 +1835,7 @@ class ShakeEvent(QObject):
 
         Args:
             theForceFlag bool - (Optional). Whether to force the regeneration
-                of contour product. Defaults to False.
+                of map product. Defaults to False.
 
         Returns:
             str - path to rendered pdf.
@@ -1843,6 +1843,34 @@ class ShakeEvent(QObject):
         Raises:
             Propogates any exceptions.
         """
+        myPdfPath = os.path.join(shakemapExtractDir(),
+                                 self.eventId,
+                                 '%s-%s.pdf' % (self.eventId, self.locale))
+        myImagePath = os.path.join(shakemapExtractDir(),
+                                   self.eventId,
+                                   '%s-%s.png' % (self.eventId, self.locale))
+        myThumbnailImagePath = os.path.join(shakemapExtractDir(),
+                                            self.eventId,
+                                            '%s-thumb-%s.png' % (
+                                            self.eventId, self.locale))
+
+        if not theForceFlag:
+            # Check if the images already exist and if so
+            # short circuit.
+            myShortCircuitFlag = True
+            if not os.path.exists(myPdfPath):
+                myShortCircuitFlag = False
+            if not os.path.exists(myImagePath):
+                myShortCircuitFlag = False
+            if not os.path.exists(myThumbnailImagePath):
+                myShortCircuitFlag = False
+            if myShortCircuitFlag:
+                LOGGER.info('%s (already exists)' % myPdfPath)
+                LOGGER.info('%s (already exists)' % myImagePath)
+                LOGGER.info('%s (already exists)' % myThumbnailImagePath)
+                return myPdfPath
+
+
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
         QgsMapLayerRegistry.instance().removeAllMapLayers()
@@ -1992,23 +2020,14 @@ class ShakeEvent(QObject):
         LOGGER.info(str(myLayerList))
 
         # Save a pdf.
-        myPdfPath = os.path.join(shakemapExtractDir(),
-                         self.eventId,
-                         '%s.pdf' % self.eventId)
         myComposition.exportAsPDF(myPdfPath)
         LOGGER.info('Generated PDF: %s' % myPdfPath)
         # Save a png
-        myImagePath = os.path.join(shakemapExtractDir(),
-            self.eventId,
-            '%s.png' % self.eventId)
         myPageNumber = 0
         myImage = myComposition.printPageAsRaster(myPageNumber)
         myImage.save(myImagePath)
         LOGGER.info('Generated Image: %s' % myImagePath)
         # Save a thumbnail
-        myThumbnailImagePath = os.path.join(shakemapExtractDir(),
-            self.eventId,
-            '%s-thumb.png' % self.eventId)
         mySize = QSize(200, 200)
         myThumbnailImage = myImage.scaled(mySize,
             Qt.KeepAspectRatioByExpanding)
