@@ -222,6 +222,7 @@ gen_impact_function_doc:
 	@echo "Generate impact functions' documentation"
 	@echo "-----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_impfunc_doc.py
+	@echo $(PYTHONPATH)
 
 pylint-count:
 	@echo
