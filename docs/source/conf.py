@@ -149,7 +149,7 @@ html_static_path = ['static']
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
 html_sidebars = {
-        'index' : ['indexsidebar.html', 'searchbox.html']
+        'index' : ['inasafe-base.html',]
         ,'contents': ['globaltoc.html', 'searchbox.html']
         ,'tutorial-docs/**': ['localtoc.html', 'searchbox.html']
         ,'user-docs/**': ['localtoc.html', 'searchbox.html']
@@ -202,8 +202,11 @@ html_show_copyright = False
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('user_manual/index', 'InaSAFEDocumentation.tex', u'InaSAFE Documentation',
-   u'InaSAFE Project', 'manual'),
+  ('index',
+   'InaSAFEDocumentation.tex',
+   u'InaSAFE Documentation',
+   u'InaSAFE Project',
+   'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -228,7 +231,10 @@ latex_documents = [
 # Grouping the document tree into PDF files. List of tuples
 # (source start file, target name, title, author).
 pdf_documents = [
-    ('user-guide/index', u'InaSAFE-User-Guide', u'InaSAFE User Guide', u'InaSAFE Project'),
+    ('user-docs/index',
+     u'InaSAFE-User-Guide',
+     u'InaSAFE User Guide',
+     u'InaSAFE Project'),
 ]
 
 # A comma-separated list of custom stylesheets. Example:

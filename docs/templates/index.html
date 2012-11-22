@@ -1,4 +1,77 @@
-{% extends "layout.html" %}
-{% set title = 'Home' %}
+{% extends "inasafe-base.html" %}
+{% set title = 'index' %}
 {% block body %}
+        <div id="container" class="container">
+            <div style="text-align: right;" class="hero-unit">
+                <h1>InaSAFE</h1>
+
+                <h2>Indonesian Scenario Assement for Emergencies</h2>
+                <img src="screenshot.png"/>
+
+                <p>This project is Free Software, published under the GPL V3
+                    license.
+                </p>
+            </div>
+            <hr class="span12"/>
+            <div class="row show-grid">
+                <div class="span6">
+                    <a class="btn btn-large btn-primary" href="en/index.html">
+                        <i class="icon-file icon-white"></i>
+                        InaSAFE online manual in English.
+                    </a>
+                </div>
+                <div class="span6">
+                    <a class="btn btn-large btn-primary" href="en/index.html">
+                        <i class="icon-book icon-white"></i>
+                        The InaSAFE PDF manual in English.
+                    </a>
+                </div>
+                <div class="span6">
+                    <a class="span6 btn btn-large btn-primary" href="en/index.html">
+                        <i class="icon-file icon-white"></i>
+                        Manual InaSAFE dalam Bahasa Indonesia.
+                    </a>
+                </div>
+                <div class="span6">
+                    <div class="span6">
+                        <a class="span6 btn btn-large btn-primary"
+                           href="en/index.html">
+                            <i class="icon-book icon-white"></i>
+                            Manual InaSAFE dalam Bahasa Indonesia.
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="span12"/>
+            <div class="row">
+                <div class="centered span6"><span class="label label-success">About this
+            project:</span>This project is a collaborative effort between the
+                    Australian Aid Agency in Indonesia, the BNPB (Indonesia), the
+                    World Bank / GFDRR, the Australian Institute for Disaster Reduction,
+                    Universitas Gadja Mada and other participating organisations.
+                    The goal of this project is to create a tool that can provide
+                    rapid and relevant information in order to understand risk
+                    related
+                    to events such as volcanic eruptions, inundation from flood /
+                    tsunami, earthquakes and so on.
+                </div>
+                <div class="centered span6"><span class="label label-success">About this
+            project:</span>This project is a collaborative effort between the
+                    Australian Aid Agency in Indonesia, the BNPB (Indonesia), the
+                    World Bank / GFDRR, the Australian Institute for Disaster Reduction,
+                    Universitas Gadja Mada and other participating organisations.
+                    The goal of this project is to create a tool that can provide
+                    rapid and relevant information in order to understand risk
+                    related
+                    to events such as volcanic eruptions, inundation from flood /
+                    tsunami, earthquakes and so on.
+                </div>
+            </div>
+            <hr class="span12"/>
+            <p>Contact tim@linfiniti.com for more information.
+                Source code available on <a href="https://github.com/AIFDR/inasafe">GitHub!</a>.
+                <a href="https://github.com/qgis/QGIS-Training-Manual/issues">File a
+                    ticket</a> if you have discovered an issue.
+            </p>
+        </div>
 {% endblock %}
