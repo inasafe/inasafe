@@ -1,50 +1,57 @@
 {% extends "inasafe-base.html" %}
-{% set title = 'index' %}
+{% set title = 'Home' %}
 {% block body %}
-        <div id="container" class="container">
-            <div style="text-align: right;" class="hero-unit">
-                <h1>InaSAFE</h1>
+                <h1><img src="{{ pathto('_static/img/logo.png', 1)}}"/>InaSAFE</h1>
 
                 <h2>Indonesian Scenario Assement for Emergencies</h2>
-                <img src="screenshot.png"/>
 
                 <p>This project is Free Software, published under the GPL V3
                     license.
                 </p>
+            </div> {# closes the hero unit from the template super #}
+
+            <div class="row">
+                <div class="span1"></div>
+                <div class="span4">
+                    <a class="btn btn-small btn-primary" href="../en/contents.html">
+                        <i class="icon-file icon-white"></i>
+                        Online Manual
+                    </a>
+                    InaSAFE online manual in English.
+                </div>
+                <div class="span2"></div>
+                <div class="span4">
+                    <a class="btn btn-small btn-primary" href="../id/contents.html">
+                        <i class="icon-file icon-white"></i>
+                        Online Manual
+                    </a>
+                    Manual InaSAFE dalam Bahasa Indonesia.
+                </div>
+                <div class="span1"></div>
             </div>
-            <hr class="span12"/>
-            <div class="row show-grid">
-                <div class="span6">
-                    <a class="btn btn-large btn-primary" href="en/index.html">
-                        <i class="icon-file icon-white"></i>
-                        InaSAFE online manual in English.
-                    </a>
-                </div>
-                <div class="span6">
-                    <a class="btn btn-large btn-primary" href="en/index.html">
+            <div class="row">
+                <div class="span1"></div>
+                <div class="span4">
+                    <a class="btn btn-small btn-primary" href="InaSAFE-Documentation-en.pdf">
                         <i class="icon-book icon-white"></i>
-                        The InaSAFE PDF manual in English.
+                        Download PDF
                     </a>
+                    The InaSAFE PDF manual in English.
                 </div>
-                <div class="span6">
-                    <a class="span6 btn btn-large btn-primary" href="en/index.html">
-                        <i class="icon-file icon-white"></i>
-                        Manual InaSAFE dalam Bahasa Indonesia.
+                <div class="span2"></div>
+                <div class="span4">
+                    <a class="btn btn-small btn-primary" href="InaSAFE-Documentation-id.pdf">
+                        <i class="icon-book icon-white"></i>
+                        Download PDF
                     </a>
+                    Manual InaSAFE dalam Bahasa Indonesia.
                 </div>
-                <div class="span6">
-                    <div class="span6">
-                        <a class="span6 btn btn-large btn-primary"
-                           href="en/index.html">
-                            <i class="icon-book icon-white"></i>
-                            Manual InaSAFE dalam Bahasa Indonesia.
-                        </a>
-                    </div>
-                </div>
+                <div class="span1"></div>
             </div>
             <hr class="span12"/>
             <div class="row">
-                <div class="centered span6"><span class="label label-success">About this
+                <div class="span1"></div>
+                <div class="centered span4"><span class="label label-success">About this
             project:</span>This project is a collaborative effort between the
                     Australian Aid Agency in Indonesia, the BNPB (Indonesia), the
                     World Bank / GFDRR, the Australian Institute for Disaster Reduction,
@@ -55,7 +62,8 @@
                     to events such as volcanic eruptions, inundation from flood /
                     tsunami, earthquakes and so on.
                 </div>
-                <div class="centered span6"><span class="label label-success">About this
+                <div class="span2"></div>
+                <div class="centered span4"><span class="label label-success">About this
             project:</span>This project is a collaborative effort between the
                     Australian Aid Agency in Indonesia, the BNPB (Indonesia), the
                     World Bank / GFDRR, the Australian Institute for Disaster Reduction,
@@ -66,12 +74,18 @@
                     to events such as volcanic eruptions, inundation from flood /
                     tsunami, earthquakes and so on.
                 </div>
+                <div class="span1"></div>
+            </div>
+            <div class="row">
+                <div class="span1"></div>
+                <div class="centered span10">
+                    Contact ole.moller.nielsen@gmail.com for more information.
+                    Source code available on <a href="https://github.com/AIFDR/inasafe">GitHub!</a>.
+                    <a href="https://github.com/AIFDR/inasafe/issues">File a
+                        ticket</a> if you have discovered an issue.
+                </div>
+                <div class="span1"></div>
             </div>
             <hr class="span12"/>
-            <p>Contact tim@linfiniti.com for more information.
-                Source code available on <a href="https://github.com/AIFDR/inasafe">GitHub!</a>.
-                <a href="https://github.com/qgis/QGIS-Training-Manual/issues">File a
-                    ticket</a> if you have discovered an issue.
-            </p>
-        </div>
+        <div> {# unclosed on purpose as it is closed in super #}
 {% endblock %}
