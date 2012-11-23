@@ -62,7 +62,7 @@ do
   # Compile the latex docs for that locale
   sphinx-build -d ${BUILDDIR}/doctrees -D language=${LOCALE} -b latex source ${BUILDDIR}/latex/${LOCALE}
   # Compile the pdf docs for that locale
-  # we use texi2pdf since latexpdf target is not available via 
+  # we use texi2pdf since latexpdf target is not available via
   # sphinx-build which we need to use since we need to pass language flag
   pushd .
   cd ${BUILDDIR}/latex/${LOCALE}/
