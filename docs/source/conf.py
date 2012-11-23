@@ -202,8 +202,8 @@ html_show_copyright = False
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index',
-   'InaSAFEDocumentation.tex',
+  ('contents',
+   'InaSAFE-Documentation.tex',
    u'InaSAFE Documentation',
    u'InaSAFE Project',
    'manual'),
