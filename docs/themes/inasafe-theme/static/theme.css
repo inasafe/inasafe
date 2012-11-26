@@ -54,6 +54,8 @@ h3 {
     background-repeat: repeat-x;
 }
 
+.centered {text-align: center}​
+
 /** Themeing of sphinx markup now **/
 
 .section h1 {

@@ -67,7 +67,7 @@ TODO: remove this, or make this obsolete ?? #}
 <![endif]-->
 
 {# Fav and touch icons #}
-<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="shortcut icon" href="{{ pathto('_static/img/favicon.ico', 1)}}">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
       href="{{ pathto('_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png', 1)}}">
 <link rel="apple-touch-icon-precomposed" sizes="72x72"
@@ -80,76 +80,92 @@ TODO: remove this, or make this obsolete ?? #}
 {# overriding relbar1: NO relbar above the content we make it manually below #}
 {% block relbar1 %}{% endblock %}
 {% block content %}
-{# bootstrap stuff from fluid.html example #}
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
+    {# bootstrap stuff from fluid.html example #}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                {# this is used to provide a menu toggle button on small screens #}
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>{# This is the main menu list #}
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="http://inasafe.org">InaSAFE Home</a></li>
+                        <li class="active"><a href="{{ pathto(master_doc) }}">Documentation</a>
+                        </li>
+                        <li><a href="https://github.com/AIFDR/inasafe/issues">Report
+                            an issue</a></li>
+                    </ul>
+                </div>{# end of nav-collapse #}
+            </div>
+        </div>
+        {# Manually implementing breadcrumbs because sphinx strips markup away when
+        doing it in macro #}
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                {# These are the prev | next | index links to the right #}
+                {% for rellink in rellinks %}
+                <li class="right"
+                {% if loop.first %}style="margin-right: 10px"{% endif %}>
+                <a href="{{ pathto(rellink[0]) }}"
+                   title="{{ rellink[1]|striptags }}"
+                   style="z-index:{{ loop.counter }};"
+                {{ accesskey(rellink[2]) }}>{{ rellink[3] }}</a>
+                </li>
+                {% endfor %}
+
+                {# Static breadcrumb first entry now #}
+                <li class="first">
+                    <a style="z-index:100;" href="{{ pathto(master_doc) }}"> {{
+                        shorttitle|e }} </a>
+                </li>
+                {# auto breadcrumbs on the left comes now #}
+                {% for parent in parents %}
+                <li>
+                    <a href="{{ parent.link|e }}"
+                       style="z-index: 1;" {# broken 4 z : {{ loop.revcounter }} #}
+                    {% if loop.last %}{{ accesskey("U") }}{% endif %}>
+                    {{ parent.title }}</a>
+                </li>
+                {% endfor %}
+                <li><a href="#">{{ title }}</a></li>
+            </ul>{# Breadcrumbs end #}
+        </div>{# Related div end #}
+    </div> {# Navbar ends #}
+
+    {# Default layout is a simple 12 spanned block with no sidebars #}
+    {# See layout.html template for sidebar implementation #}
+    {% block user_content %}
         <div class="container-fluid">
-            {# this is used to provide a menu toggle button on small screens #}
-            <a class="btn btn-navbar" data-toggle="collapse"
-               data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="#"></a>{# This is the main menu list #}
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <li><a href="http://inasafe.org">InaSAFE Home</a></li>
-                    <li class="active"><a href="{{ pathto(master_doc) }}">Documentation</a>
-                    </li>
-                    <li><a href="https://github.com/AIFDR/inasafe/issues">Report
-                        an issue</a></li>
-                </ul>
-            </div>{# end of nav-collapse #}
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="hero-unit">
+                        {% block hero %} {% endblock %}
+                    </div>
+                </div> {# span 12 ends #}
+            </div>
+            {% block body %} {% endblock %}
+        </div>{# fluid-container ends #}
+    {% endblock %}{# user-content block end #}
+    {# Now our standard footer #}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="row">
+                <div class="span1"></div>
+                <div class="span10 alert alert-info centered">
+                    Contact ole.moller.nielsen@gmail.com for more information.
+                    Source code available on
+                    <a href="https://github.com/AIFDR/inasafe"><b>GitHub!</b></a>.
+                    Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+                    file a ticket</b></a> if you have discovered an issue.
+                </div>
+                <div class="span1"></div>
+            </div>
         </div>
     </div>
-    {# Manually implementing breadcrumbs because sphinx strips markup away when
-    doing it in macro #}
-    <div class="related">
-        <ul class="breadcrumb" id="breadcrumbs">
-            {# These are the prev | next | index links to the right #}
-            {% for rellink in rellinks %}
-            <li class="right"
-            {% if loop.first %}style="margin-right: 10px"{% endif %}>
-            <a href="{{ pathto(rellink[0]) }}"
-               title="{{ rellink[1]|striptags }}"
-               style="z-index:{{ loop.counter }};"
-            {{ accesskey(rellink[2]) }}>{{ rellink[3] }}</a>
-            </li>
-            {% endfor %}
-
-            {# Static breadcrumb first entry now #}
-            <li class="first">
-                <a style="z-index:100;" href="{{ pathto(master_doc) }}"> {{
-                    shorttitle|e }} </a>
-            </li>
-            {# auto breadcrumbs on the left comes now #}
-            {% for parent in parents %}
-            <li>
-                <a href="{{ parent.link|e }}"
-                   style="z-index: 1;" {# broken 4 z : {{ loop.revcounter }} #}
-                {% if loop.last %}{{ accesskey("U") }}{% endif %}>
-                {{ parent.title }}</a>
-            </li>
-            {% endfor %}
-            <li><a href="#">{{ title }}</a></li>
-        </ul>{# Breadcrumbs end #}
-    </div>{# Related div end #}
-</div> {# Navbar ends #}
-
-{# Default layout is a simple 12 spanned block with no sidebars #}
-{# See layout.html template for sidebar implementation #}
-{% block user_content %}
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="hero-unit">
-                {% block body %} {% endblock %}
-            </div>
-        </div> {# span 10 ends #}
-        <hr>
-    </div>
-</div>{# fluid-container ends #}
-{% endblock %}{# user-content block end #}
 {% endblock %}{# content block end #}
 

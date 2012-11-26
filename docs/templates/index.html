@@ -1,91 +1,129 @@
 {% extends "inasafe-base.html" %}
 {% set title = 'Home' %}
+
+{% block hero %}
+    <h1><img src="{{ pathto('_static/img/logo.png', 1)}}"/>InaSAFE</h1>
+
+    <h2>Indonesian Scenario Assement for Emergencies</h2>
+
+    <p>This project is Free Software, published under the GPL V3
+        license.
+    </p>
+{% endblock %}
 {% block body %}
-                <h1><img src="{{ pathto('_static/img/logo.png', 1)}}"/>InaSAFE</h1>
-
-                <h2>Indonesian Scenario Assement for Emergencies</h2>
-
-                <p>This project is Free Software, published under the GPL V3
-                    license.
+        <div class="row-fluid">
+            <div class="span4">
+                <h3>Learn to use it!</h3>
+                <p>
+                <a class="btn btn-small btn-primary"
+                   href="../en/contents.html">
+                    <i class="icon-file icon-white"></i>
+                    Online Manual
+                </a>
+                InaSAFE online manual in English.
                 </p>
-            </div> {# closes the hero unit from the template super #}
-
-            <div class="row">
-                <div class="span1"></div>
-                <div class="span4">
-                    <a class="btn btn-small btn-primary" href="../en/contents.html">
-                        <i class="icon-file icon-white"></i>
-                        Online Manual
-                    </a>
-                    InaSAFE online manual in English.
-                </div>
-                <div class="span2"></div>
-                <div class="span4">
-                    <a class="btn btn-small btn-primary" href="../id/contents.html">
-                        <i class="icon-file icon-white"></i>
-                        Online Manual
-                    </a>
-                    Manual InaSAFE dalam Bahasa Indonesia.
-                </div>
-                <div class="span1"></div>
+                <p>
+                <a class="btn btn-small btn-primary"
+                   href="../id/contents.html">
+                    <i class="icon-file icon-white"></i>
+                    Online Manual
+                </a>
+                Manual InaSAFE dalam Bahasa Indonesia.
+                </p>
+                <p>
+                <a class="btn btn-small btn-primary"
+                   href="InaSAFE-Documentation-en.pdf">
+                    <i class="icon-book icon-white"></i>
+                    Download PDF
+                </a>
+                The InaSAFE PDF manual in English.
+                </p>
+                <p>
+                <a class="btn btn-small btn-primary"
+                   href="InaSAFE-Documentation-id.pdf">
+                    <i class="icon-book icon-white"></i>
+                    Download PDF
+                </a>
+                Manual InaSAFE dalam Bahasa Indonesia.
+                </p>
             </div>
-            <div class="row">
-                <div class="span1"></div>
-                <div class="span4">
-                    <a class="btn btn-small btn-primary" href="InaSAFE-Documentation-en.pdf">
-                        <i class="icon-book icon-white"></i>
-                        Download PDF
-                    </a>
-                    The InaSAFE PDF manual in English.
-                </div>
-                <div class="span2"></div>
-                <div class="span4">
-                    <a class="btn btn-small btn-primary" href="InaSAFE-Documentation-id.pdf">
-                        <i class="icon-book icon-white"></i>
-                        Download PDF
-                    </a>
-                    Manual InaSAFE dalam Bahasa Indonesia.
-                </div>
-                <div class="span1"></div>
+            <div class="span4">
+                <h3>Install it!</h3>
+                <p>You can install InaSAFE in 5 easy steps! Open a recent
+                    version of <a hred="http://qgis.org">QGIS</a>
+                    (1.7 or better) and do:</p>
+                <ol>
+                    <li><span class='kbd'>Plugins -> Fetch Python Plugins
+                        </span>.
+                    </li>
+                    <li>Type <span class='kbd'>InaSAFE</span> in the
+                        <span class='guilabel'>Filter</span> box.
+                    </li>
+                    <li>Tick the box next to the InaSAFE plugin.</li>
+                    <li>Click the <span class='guilabel'>Install/upgrade plugin
+                        </span> button.
+                    </li>
+                    <li>Close the plugin manager and InaSAFE should be
+                        installed and ready to use.
+                    </li>
+                </ol>
+                <p>If you don't already have QGIS installed, you can download
+                if for free at <a href="http://download.qgis.org">
+                        download.qgis.org</a></p>
             </div>
-            <hr class="span12"/>
-            <div class="row">
-                <div class="span1"></div>
-                <div class="centered span4"><span class="label label-success">About this
-            project:</span>This project is a collaborative effort between the
-                    Australian Aid Agency in Indonesia, the BNPB (Indonesia), the
-                    World Bank / GFDRR, the Australian Institute for Disaster Reduction,
-                    Universitas Gadja Mada and other participating organisations.
-                    The goal of this project is to create a tool that can provide
-                    rapid and relevant information in order to understand risk
-                    related
-                    to events such as volcanic eruptions, inundation from flood /
-                    tsunami, earthquakes and so on.
-                </div>
-                <div class="span2"></div>
-                <div class="centered span4"><span class="label label-success">About this
-            project:</span>This project is a collaborative effort between the
-                    Australian Aid Agency in Indonesia, the BNPB (Indonesia), the
-                    World Bank / GFDRR, the Australian Institute for Disaster Reduction,
-                    Universitas Gadja Mada and other participating organisations.
-                    The goal of this project is to create a tool that can provide
-                    rapid and relevant information in order to understand risk
-                    related
-                    to events such as volcanic eruptions, inundation from flood /
-                    tsunami, earthquakes and so on.
-                </div>
-                <div class="span1"></div>
+            <div class="span4">
+                <h3>Community</h3>
+                <p>Join our mailing list by sending an email to
+                    <a href="mailto:inasafe-users+subscribe@googlegroups.com">
+                        inasafe-users+subscribe@googlegroups.com</a>
+                    Source code available on
+                    <a href="https://github.com/AIFDR/inasafe"><b>GitHub!</b></a>.
+                    Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+                        file a ticket</b></a> if you have discovered an issue.
+                </p>
             </div>
-            <div class="row">
-                <div class="span1"></div>
-                <div class="centered span10">
-                    Contact ole.moller.nielsen@gmail.com for more information.
-                    Source code available on <a href="https://github.com/AIFDR/inasafe">GitHub!</a>.
-                    <a href="https://github.com/AIFDR/inasafe/issues">File a
-                        ticket</a> if you have discovered an issue.
-                </div>
-                <div class="span1"></div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6"><span class="label label-success">About
+                this project:</span> This project is a collaborative effort
+                between the Australia Aid Agency in Indonesia, the BNPB
+                (Indonesia), the World Bank / GFDRR, the Australia-Indonesia
+                Institure for Disaster Reduction, Universitas Gadja Mada and
+                other participating organisations.
+                The goal of this project is to create a tool that can provide
+                rapid and relevant information in order to understand risk
+                related to events such as volcanic eruptions, inundation from
+                flood / tsunami, earthquakes and so on.
             </div>
-            <hr class="span12"/>
-        <div> {# unclosed on purpose as it is closed in super #}
+            <div class="span6"><span class="label label-success">About
+                this project:</span> This project is a collaborative effort
+                between the Australian Aid Agency in Indonesia, the BNPB
+                (Indonesia), the World Bank / GFDRR, the Australia-Indonesia
+                Institute for Disaster Reduction, Universitas Gadja Mada and
+                other participating organisations.
+                The goal of this project is to create a tool that can provide
+                rapid and relevant information in order to understand risk
+                related to events such as volcanic eruptions, inundation from
+                flood / tsunami, earthquakes and so on.
+            </div>
+        </div>
+        <br />
+        <ul class="thumbnails">
+            <li class="span1"></li>
+            <li class="span3">
+                <a href="#" class="thumbnail">
+                    <img src="{{ pathto('_static/img/bnpb_logo.png', 1)}}" alt=""/>
+                </a>
+            </li>
+            <li class="span1"></li>
+            <li class="span2">{# skinny one for worldbank #}
+            </li>
+            <li class="span1"></li>
+            <li class="span3">
+                <a href="#" class="thumbnail">
+                    <img src="{{ pathto('_static/img/aifdr_logo.png', 1)}}" alt=""/>
+                </a>
+            </li>
+            <li class="span1"></li>
+        </ul>
 {% endblock %}
