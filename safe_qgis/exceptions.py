@@ -117,9 +117,9 @@ class StyleError(Exception):
 #    pass
 #
 #
-#class memoryLayerCreationError(Exception):
-#    """Raised if an error occurs creating the cities file"""
-#    pass
+class MemoryLayerCreationError(Exception):
+    """Raised if an error occurs creating the cities file"""
+    pass
 
 
 class MethodUnavailableError(Exception):

@@ -56,7 +56,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  setRasterStyle,
                                  qgisVersion,
                                  getDefaults,
-                                 impactLayerAttribution)
+                                 impactLayerAttribution,
+                                 copyInMemory)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -70,7 +71,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       safe_read_layer,
                                       ReadLayerError,
                                       points_in_and_outside_polygon,
-                                      calculate_polygon_centroid)
+                                      calculate_polygon_centroid,
+                                      unique_filename)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -1147,22 +1149,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myInsidePolygons = []
 
         # FIXME (MB) maybe do raw geos without qgis
+        #select all postproc polygons with no attributes
         postprocProvider = self.postprocLayer.dataProvider()
-        #select all postproc polygons
         postprocProvider.select([])
-        polygonsProvider = theQgisLayer.dataProvider()
+
+        # copy polygons to a memory layer
+        theQgisMemoryLayer = copyInMemory(theQgisLayer)
+
+        polygonsProvider = theQgisMemoryLayer.dataProvider()
         allPolygonAttrs = polygonsProvider.attributeIndexes()
         polygonsProvider.select(allPolygonAttrs)
-        myQgisPolyFeatures = []
         myQgisPostprocPoly = QgsFeature()
         myQgisPoly = QgsFeature()
         myInsideFeat = QgsFeature()
         fields = polygonsProvider.fields()
-        writer = QgsVectorFileWriter('/tmp/myOut.shp', 'UTF-8', fields,
-            polygonsProvider.geometryType(), polygonsProvider.crs())
-        if writer.hasError():
-            raise InvalidParameterException (writer.errorMessage())
-        
+        myTempdir = temp_dir(sub_dir='preprocess')
+        myOutFilename = unique_filename(suffix='.shp',
+                                        dir=myTempdir)
+
+        self.keywordIO.copyKeywords(theQgisLayer, myOutFilename)
+        mySHPWriter = QgsVectorFileWriter(  myOutFilename,
+                                            'UTF-8',
+                                            fields,
+                                            polygonsProvider.geometryType(),
+                                            polygonsProvider.crs())
+        if mySHPWriter.hasError():
+            raise InvalidParameterException (mySHPWriter.errorMessage())
         # end FIXME
 
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
@@ -1284,12 +1296,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         # write the inside part to the new file
                         myInsideFeat.setGeometry(myInsideGeom)
                         myInsideFeat.setAttributeMap(myAtMap)
-                        writer.addFeature(myInsideFeat)
+                        mySHPWriter.addFeature(myInsideFeat)
 
                         # modifiy the original geometry to the part outside of
                         # the postproc polygon
-#                        polygonsProvider.changeGeometryValues({
-#                            myMappedIndex: myOutsideGeom})
+                        polygonsProvider.changeGeometryValues({
+                            myMappedIndex: myOutsideGeom})
 
 #                        if myOutsideGeom.type() is not empty:
                         print myOutsideGeom
@@ -1323,18 +1335,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # multiple times in the array
         LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
                 myInsidePolygons, myIntersectingPolygons, myOutsidePolygons))
-
+        QgsMapLayerRegistry.instance().addMapLayer(theQgisMemoryLayer)
         #add in- and outside polygons
         myNonIntersectingPoly = myInsidePolygons
         myNonIntersectingPoly.extend(myOutsidePolygons)
 
         for i in myNonIntersectingPoly:
             polygonsProvider.featureAtId(i, myQgisPoly, True, allPolygonAttrs)
-            writer.addFeature(myQgisPoly)
+            mySHPWriter.addFeature(myQgisPoly)
 
-        del writer
+        del mySHPWriter
         LOGGER.debug('Duration: %s' % (time.clock() - startTime))
-        return theLayerFilename
+        return myOutFilename
 
     def postprocess(self):
         """
