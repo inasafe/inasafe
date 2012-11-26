@@ -2,7 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/sass_stdlib.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_SAFE_QGIS.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_SAFE_QGIS.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/index.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/index.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/common.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/common.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/engine/impact_functions_for_testing.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/engine/impact_functions_for_testing.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/earthquake.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/earthquake.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/inundation.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/inundation.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/volcanic.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/volcanic.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/postprocessors.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/postprocessors.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/storage.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/storage.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis_tests.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis_tests.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/tutorial-docs/index.rst" afterPath="$PROJECT_DIR$/docs/source/tutorial-docs/index.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/tutorial-docs/tutorial.rst" afterPath="$PROJECT_DIR$/docs/source/tutorial-docs/tutorial.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/user-docs/index.rst" afterPath="$PROJECT_DIR$/docs/source/user-docs/index.rst" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,64 +50,64 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="dock.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+      <file leaf-file-name="layout.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="111" column="45" selection-start="4201" selection-end="4201" vertical-scroll-proportion="0.0">
+            <state line="15" column="0" selection-start="695" selection-end="977" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="version.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe/common/version.py">
+      <file leaf-file-name="inasafe-base.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="25" selection-start="946" selection-end="978" vertical-scroll-proportion="0.0">
+            <state line="69" column="48" selection-start="2501" selection-end="2505" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="html_renderer.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/html_renderer.py">
+      <file leaf-file-name="indexsidebar.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/templates/indexsidebar.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="276" column="16" selection-start="9878" selection-end="9878" vertical-scroll-proportion="0.0">
+            <state line="1" column="20" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_map.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/test_map.py">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="74" selection-start="4505" selection-end="4505" vertical-scroll-proportion="0.0">
+            <state line="0" column="0" selection-start="0" selection-end="33" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_map_legend.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/test_map_legend.py">
+      <file leaf-file-name="conf.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="179" column="79" selection-start="8663" selection-end="8663" vertical-scroll-proportion="0.0">
+            <state line="15" column="79" selection-start="519" selection-end="519" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_html_renderer.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/test_html_renderer.py">
+      <file leaf-file-name="tutorial.rst" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/tutorial-docs/tutorial.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="133" column="79" selection-start="5636" selection-end="5636" vertical-scroll-proportion="0.59375">
+            <state line="485" column="6" selection-start="18250" selection-end="18250" vertical-scroll-proportion="-9.188406">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="map.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/map.py">
+      <file leaf-file-name="platform_windows.rst" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="685" column="0" selection-start="28051" selection-end="28205" vertical-scroll-proportion="0.0">
+            <state line="35" column="0" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.7796014">
               <folding />
             </state>
           </provider>
@@ -109,30 +126,30 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/__init__.py" />
-        <option value="$PROJECT_DIR$/metadata.txt" />
-        <option value="$PROJECT_DIR$/safe_qgis/safe_interface.py" />
-        <option value="$PROJECT_DIR$/safe/common/dynamic_translations.py" />
-        <option value="$PROJECT_DIR$/safe/api.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/map_legend.py" />
-        <option value="$USER_HOME$/.PyCharm20/system/python_stubs/-1247972723/PyQt4/QtGui.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/test_utilities.py" />
-        <option value="$PROJECT_DIR$/safe/engine/test_engine.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/map.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/utilities.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/html_renderer.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/test_map.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_map_legend.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_html_renderer.py" />
+        <option value="$PROJECT_DIR$/docs/themes/qgis-theme/layout.html" />
+        <option value="$PROJECT_DIR$/docs/source/tutorial-docs/index.rst" />
+        <option value="$PROJECT_DIR$/docs/templates/indexsidebar.html" />
+        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" />
+        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" />
+        <option value="$PROJECT_DIR$/docs/source/index.html" />
+        <option value="$PROJECT_DIR$/docs/templates/README.txt" />
+        <option value="$PROJECT_DIR$/docs/source/api-docs/index.rst" />
+        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
+        <option value="$PROJECT_DIR$/docs/templates/index.html" />
+        <option value="$PROJECT_DIR$/docs/scripts/post_translate.sh" />
+        <option value="$PROJECT_DIR$/docs/source/conf.py" />
+        <option value="$PROJECT_DIR$/docs/source/tutorial-docs/tutorial.rst" />
+        <option value="$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="26" />
-    <option name="width" value="1368" />
-    <option name="height" value="743" />
+    <option name="x" value="1919" />
+    <option name="y" value="27" />
+    <option name="width" value="1922" />
+    <option name="height" value="1054" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -160,7 +177,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -175,7 +191,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemId" value="inasafe-master" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -185,25 +201,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemId" value="inasafe-master" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="safe_qgis" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="safe" />
+              <option name="myItemId" value="docs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -213,20 +215,101 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-master" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
               <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-master" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="safe" />
+              <option name="myItemId" value="docs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-master" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tutorial-docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-master" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="developer-docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-master" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -234,7 +317,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../inasafe_data/test/test_shakeimpact.keywords" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../inasafe-dev" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="options.splitter.details.proportions" value="0.31698564" />
     <property name="options.searchVisible" value="true" />
@@ -249,17 +332,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/themes/inasafe-theme/static" />
       <recent name="$PROJECT_DIR$/safe/test/data/other" />
       <recent name="$PROJECT_DIR$/docs/source/api-docs/safe/common" />
       <recent name="$PROJECT_DIR$/docs/source/api-docs/safe_qgis_tests" />
       <recent name="$PROJECT_DIR$/docs/source/api-docs/safe" />
-      <recent name="$PROJECT_DIR$/common" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/templates" />
+      <recent name="$PROJECT_DIR$/docs/themes/inasafe-theme" />
       <recent name="$PROJECT_DIR$/safe/storage" />
       <recent name="$PROJECT_DIR$/docs/source/api-docs" />
       <recent name="$PROJECT_DIR$/docs/source/api-docs/safe/storage" />
-      <recent name="$PROJECT_DIR$/safe/common" />
     </key>
   </component>
   <component name="RunManager" selected="Python's test.Unittests in test_html_renderer">
@@ -423,7 +507,6 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
-      <option name="MULTIPROCESS" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="docs" factoryName="Docutils task">
@@ -530,19 +613,17 @@
       <ConfigurationWrapper RunnerId="PyRemoteDebugRunner" />
       <method />
     </configuration>
-    <list size="12">
+    <list size="10">
       <item index="0" class="java.lang.String" itemvalue="Python Remote Debug.Remote Debug Server" />
       <item index="1" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
       <item index="2" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
       <item index="3" class="java.lang.String" itemvalue="Python's test.NoseTests SAFE_QGIS" />
-      <item index="4" class="java.lang.String" itemvalue="Python's test.NoseTests GUI I18N" />
-      <item index="5" class="java.lang.String" itemvalue="Python's test.NoseTests Dock" />
-      <item index="6" class="java.lang.String" itemvalue="Python's test.NoseTest VectorTest" />
-      <item index="7" class="java.lang.String" itemvalue="Python's test.Unittests in HtmlRendererTest" />
-      <item index="8" class="java.lang.String" itemvalue="Python's test.Unittests in MapTest.test_renderComposition" />
-      <item index="9" class="java.lang.String" itemvalue="Python's test.Unittests in HtmlRendererTest.test_renderHtmlToPixmap" />
-      <item index="10" class="java.lang.String" itemvalue="Python's test.Unittests in MapTest.test_renderTemplate" />
-      <item index="11" class="java.lang.String" itemvalue="Python's test.Unittests in test_html_renderer" />
+      <item index="4" class="java.lang.String" itemvalue="Python's test.NoseTest VectorTest" />
+      <item index="5" class="java.lang.String" itemvalue="Python's test.Unittests in HtmlRendererTest" />
+      <item index="6" class="java.lang.String" itemvalue="Python's test.Unittests in MapTest.test_renderComposition" />
+      <item index="7" class="java.lang.String" itemvalue="Python's test.Unittests in HtmlRendererTest.test_renderHtmlToPixmap" />
+      <item index="8" class="java.lang.String" itemvalue="Python's test.Unittests in MapTest.test_renderTemplate" />
+      <item index="9" class="java.lang.String" itemvalue="Python's test.Unittests in test_html_renderer" />
     </list>
     <recent_temporary>
       <list size="5">
@@ -646,30 +727,30 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="26" width="1368" height="743" extended-state="6" />
+    <frame x="1919" y="27" width="1922" height="1054" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23975721" sideWeight="0.14237855" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23444612" sideWeight="0.5829146" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12540193" sideWeight="0.6316384" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3400335" sideWeight="0.6616085" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43729904" sideWeight="0.4165402" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41708544" sideWeight="0.5781487" order="2" side_tool="false" content_ui="tabs" x="217" y="178" width="1477" height="799" />
-      <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3255814" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41666666" sideWeight="0.5781487" order="2" side_tool="false" content_ui="tabs" x="217" y="178" width="1477" height="799" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32959402" sideWeight="0.6105611" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3685092" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3683616" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32869378" sideWeight="0.49358973" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32941177" sideWeight="0.7128603" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3255814" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -774,104 +855,98 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/safe_qgis/test_utilities.py">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/html_renderer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="248" column="29" selection-start="10503" selection-end="10513" vertical-scroll-proportion="0.30844155" />
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/unittest/case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="326" column="0" selection-start="10783" selection-end="10783" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/engine/interpolation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="418" column="0" selection-start="16173" selection-end="16173" vertical-scroll-proportion="17.96793" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/engine/test_engine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1038" column="0" selection-start="41849" selection-end="41849" vertical-scroll-proportion="0.33236152">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/common/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="0" selection-start="1884" selection-end="1884" vertical-scroll-proportion="0.33236152">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/genericpath.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="499" selection-end="499" vertical-scroll-proportion="0.33116883" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/map_legend.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="0" selection-start="2504" selection-end="2504" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="735" column="0" selection-start="27415" selection-end="27415" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="0" selection-start="1291" selection-end="1291" vertical-scroll-proportion="0.033391915">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="685" column="0" selection-start="28051" selection-end="28205" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/common/version.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="25" selection-start="946" selection-end="978" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="276" column="16" selection-start="9878" selection-end="9878" vertical-scroll-proportion="0.7549824" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="45" selection-start="4201" selection-end="4201" vertical-scroll-proportion="0.0">
+        <state line="111" column="45" selection-start="4201" selection-end="4201" vertical-scroll-proportion="0.022274327">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/html_renderer.py">
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="276" column="16" selection-start="9878" selection-end="9878" vertical-scroll-proportion="0.0">
+        <state line="112" column="28" selection-start="1934" selection-end="1934" vertical-scroll-proportion="0.023370234" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/templates/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="4" selection-start="4" selection-end="4" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/tutorial-docs/index.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="173" selection-end="173" vertical-scroll-proportion="0.22619048" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/index.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/api-docs/index.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="8" selection-start="180" selection-end="180" vertical-scroll-proportion="0.11137163" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="33" vertical-scroll-proportion="-0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/test_map.py">
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/theme.conf">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="74" selection-start="4505" selection-end="4505" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/scripts/post_translate.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="66" column="9" selection-start="1865" selection-end="1865" vertical-scroll-proportion="0.7116061" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="0" selection-start="695" selection-end="977" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/test_map_legend.py">
+    <entry file="file://$PROJECT_DIR$/docs/templates/indexsidebar.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="179" column="79" selection-start="8663" selection-end="8663" vertical-scroll-proportion="0.0">
+        <state line="1" column="20" selection-start="21" selection-end="21" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/test_html_renderer.py">
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="133" column="79" selection-start="5636" selection-end="5636" vertical-scroll-proportion="0.59375">
+        <state line="69" column="48" selection-start="2501" selection-end="2505" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="79" selection-start="519" selection-end="519" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/tutorial-docs/tutorial.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="485" column="6" selection-start="18250" selection-end="18250" vertical-scroll-proportion="-9.188406">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="0" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.7796014">
           <folding />
         </state>
       </provider>
