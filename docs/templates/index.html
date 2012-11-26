@@ -11,7 +11,7 @@
     </p>
 {% endblock %}
 {% block body %}
-        <div class="row">
+        <div class="row" id="blocks-row">
             <div class="span4 admonition">
                 <h3>Learn to use it!</h3>
                 <p>
@@ -129,4 +129,5 @@
             </li>
             <li class="span1"></li>
         </ul>
+        <script type="text/javascript">$('#blocks-row').equalHeights();</script>
 {% endblock %}
