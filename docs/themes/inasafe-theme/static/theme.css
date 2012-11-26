@@ -128,8 +128,18 @@ h3 {
     margin: 0 15px 0 0;
 }
 
+.item > img {
+    margin: 0 auto;
+}
+
 .hero-unit {
     background-color: #CEE4ED;
+    padding: 5px;
+    text-align: center;
+}
+
+.hero-unit h1 {
+    text-align: left;
 }
 
 .pre {
