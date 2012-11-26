@@ -12,7 +12,7 @@
 {% endblock %}
 {% block body %}
         <div class="row">
-            <div class="span4">
+            <div class="span4 admonition">
                 <h3>Learn to use it!</h3>
                 <p>
                 <a class="btn btn-small btn-primary"
@@ -47,11 +47,16 @@
                 Manual InaSAFE dalam Bahasa Indonesia.
                 </p>
             </div>
-            <div class="span4">
+            <div class="span4 admonition">
                 <h3>Install it!</h3>
-                <p>You can install InaSAFE in 5 easy steps! Open a recent
-                    version of <a hred="http://qgis.org">QGIS</a>
-                    (1.7 or better) and do:</p>
+                <p><img alt="" src="{{ pathto('_static/img/qgis_logo.png', 1)}}"/>
+                    If you don't already have QGIS installed, you can download
+                    it for free at <a href="http://download.qgis.org">
+                        download.qgis.org</a></p>
+                <p>Once you have QGIS installed, you can install InaSAFE in 5
+                    easy steps! Open a recent version of
+                    <a href="http://qgis.org">QGIS</a> (1.7 or better) and do:
+                </p>
                 <ol>
                     <li><span class='kbd'>Plugins -> Fetch Python Plugins
                         </span>.
@@ -67,11 +72,9 @@
                         installed and ready to use.
                     </li>
                 </ol>
-                <p>If you don't already have QGIS installed, you can download
-                if for free at <a href="http://download.qgis.org">
-                        download.qgis.org</a></p>
+
             </div>
-            <div class="span4">
+            <div class="span4 admonition">
                 <h3>Community</h3>
                 <p>Join our mailing list by sending an email to
                     <a href="mailto:inasafe-users+subscribe@googlegroups.com">
