@@ -1,9 +1,5 @@
-=================================================================
-InaSAFE Tutorial
-=================================================================
-
-Overview
---------
+Tutorial Overview
+=================
 
 Description
 ...........
@@ -57,29 +53,30 @@ Reference
 June 2012.  For more information, please visit `www.inasafe.org <http://inasafe.org>`_.
 
 Installation
-------------
+============
 
 Install QGIS
-............
+------------
 
 You need QGIS version 1.7 or newer.
 
 You can download the software from http://download.qgis.org.
 
 Install InaSAFE Plugin
-......................
+----------------------
 
 Option 1: From QGIS Repository:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...............................
 
 To install the InaSAFE, use the plugin manager in QGIS:
 
 :menuselection:`Plugins --> Fetch Python Plugins`
+
 Then search for ‘InaSAFE‘, select it and click the install button. The plugin
 will now be added to your plugins menu.
 
 Option 2: Manual Installation:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..............................
 
 To install the InaSAFE plugin, go to
 https://github.com/AIFDR/inasafe/downloads.
@@ -91,19 +88,19 @@ Extract the zip file into the QGIS directory :file:`C:\Users\<your
 username>\.qgis\python\plugins`.
 
 After extracting the plugin, it should be available as
-:file:`C:\Users\<yourusername>\.qgis\python\plugins\inasafe`
+:file:`C:\Users\<yourusername>\.qgis\python\plugins\inasafe`.
 
 Mac and Linux users need to follow the same procedure but instead the plugin
 directory will be under your :file:`$HOME` directory.
 
 Enable InaSAFE Plugin in QGIS
-.............................
+..............................
 
 Once the plugin is extracted in QGIS plugin directory, start QGIS and enable it
 from the plugin manager.  To do this, open **Manage Plugins** from the
 **Plugins** menu on the menu toolbar.
 
-.. image:/static/tutorial/001.png
+.. image:: /static/tutorial/001.png
    :align: center
 
 A pop-up window that lists all available plugins in your current QGIS project
@@ -111,7 +108,7 @@ will appear. Type **InaSAFE** in the filter box. You should see the InaSAFE
 plugin appear in the list. Now **tick the checkbox** next to it to enable the
 plugin.
 
-.. image:/static/tutorial/002.png
+.. image:: /static/tutorial/002.png
    :align: center
 
 The plugin now will be added to your **Plugins** menu.
@@ -119,26 +116,26 @@ The plugin now will be added to your **Plugins** menu.
 Now you will need to add the INASAFE panel on your QGIS interface. For that,
 select **Toggle Inasafe Dock** in the INASAFE plugin scroll list.
 
-.. image:/static/tutorial/003.png
+.. image:: /static/tutorial/003.png
    :align: center
 
 The InaSAFE dock panel will then appear on the left of your QGIS window.
 
-.. image:/static/tutorial/004.png
+.. image:: /static/tutorial/004.png
    :align: center
 
 It is the main way to interact with the tools that are provided in InaSAFE.
 
 Also, an InaSAFE icon will appear on the QGIS toolbar.
 
-.. image:/static/tutorial/005.png
+.. image:: /static/tutorial/005.png
    :align: center
 
 Using InaSAFE
--------------
+=============
 
 InaSAFE Options
-...............
+---------------
 
 The InaSAFE plugin provides an options dialog which allows you to define
 various options relating to how InaSAFE will behave. The options dialog can be
@@ -193,7 +190,7 @@ The following options are available on the Options Dialog:
   operating system or desktop environment.
 
 Adjust Projection
-.................
+-----------------
 
 Before continuing we need to turn one more QGIS functionality on, to enable all
 data layers display in one projection (no matter what their projection).
@@ -213,7 +210,7 @@ Now, any data layer that we will integrate into our project will be adjusted on
 the same coordinate.
 
 Exploring InaSAFE Plugin
-........................
+------------------------
 
 You can drag and drop the dock panel to reposition it in the user interface.
 For example, dragging the panel towards the right margin of the QGIS
@@ -239,7 +236,7 @@ The INASAFE panel contains 3 sections: **Questions, Results** and **Buttons.**
 We will explore those sections one by one.
 
 The Questions Section
-.....................
+---------------------
 
 The intention of InaSAFE is to make it really simple and easy to perform your
 impact analysis. The Questions area provides a simple way for you to formulate
@@ -261,7 +258,7 @@ closed”, we need to complete all the areas in the Questions section: hazard,
 exposure, impact.
 
 Hazard
-......
+------
 
 Hazard is the physical event that creates the risk.
 
@@ -303,7 +300,7 @@ data** in InaSAFE.
 * The area of analysis should overlap.
 
 Adding keyword metadata
-.......................
+-----------------------
 
 You may be wondering how the InaSAFE plugin determines whether a layer should
 be listed in the “In the event of” “How many” combo boxes? The plugin relies on
@@ -344,7 +341,7 @@ Then click **OK.**
 Now the data follow the keyword rule, and can be used in the InaSAFE function.
 
 Exposure
-........
+--------
 
 Exposure is the sum of assets and population that are at risks.
 
@@ -401,7 +398,7 @@ Also note that the 2 datasets are sitting on top of one another even though
 they are different projections.
 
 Impact Analysis
-...............
+---------------
 
 The impact function (**Might**) will spatially combine the hazard and exposure
 input layers in order to postulate what the impacts of the hazard will be on
@@ -417,7 +414,7 @@ automatically by default in the InaSAFE panel dock as soon as the hazard
 [flood] and exposure [buildings] layers are entered correctly.
 
 The Results section
-...................
+-------------------
 
 Now that we have our two input layers and that we know what impacts we would
 like to assess, click on the **Run** button at the bottom to start the impact
@@ -439,7 +436,7 @@ open?* And a **Note** description explaining that buildings are said flooded
 when the flood level exceeds 1m.
 
 Enhancing the Map Output
-........................
+------------------------
 
 The final output map can be enhanced using cartographic functions in QGIS.
 Styles can be changed, background layer or other relevant layers can be added,
@@ -467,7 +464,7 @@ background. Make sure that the background is not on top of the other active
 layers.
 
 Print Results
-.............
+-------------
 
 The data shown on the screen can be saved into a **PDF file** by clicking on
 **Print** at the bottom of the InaSAFE panel. The PDF file contains then the
@@ -483,7 +480,7 @@ displayed.
    :align: center
 
 Save results and QGIS project
-.............................
+-----------------------------
 
 The output layer result of the assessment can be saved by right clicking on the
 layer.
@@ -559,7 +556,7 @@ is a framework that can support all languages outlined in QGIS.
 
 
 Thank You
----------
+=========
 
 THANK YOU FOR YOUR PARTICIPATION! :)
 
