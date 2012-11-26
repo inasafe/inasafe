@@ -1101,11 +1101,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'intersections with the aggregation layer')
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
-        import cProfile
+#        import cProfile
         if isLayerPolygonal(myHazardLayer):
             # http://stackoverflow.com/questions/1031657/profiling-self-and-arguments-in-python
-            cProfile.runctx('self.preparePolygonLayerForAggr(theClippedHazardFilename, myHazardLayer)', globals(), locals())
-            raise
+#            cProfile.runctx('self.preparePolygonLayerForAggr(theClippedHazardFilename, myHazardLayer)', globals(), locals())
+#            raise
             theClippedHazardFilename = self.preparePolygonLayerForAggr(theClippedHazardFilename, myHazardLayer)
 
         if isLayerPolygonal(myExposureLayer):
@@ -1139,34 +1139,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
-        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
+#        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
         myRemainingIndexes = numpy.array(range(len(myRemainingPolygons)))
+        # FIXME (MB) the intersecting array is used only for debugging and
+        # could be safely removed
         myIntersectingPolygons = []
         myInsidePolygons = []
 
-
-
-
-
-        #FIXME (MB) do raw geos without qgis
+        # FIXME (MB) maybe do raw geos without qgis
         postprocProvider = self.postprocLayer.dataProvider()
         #select all postproc polygons
         postprocProvider.select([])
         polygonsProvider = theQgisLayer.dataProvider()
         allPolygonAttrs = polygonsProvider.attributeIndexes()
         polygonsProvider.select(allPolygonAttrs)
+        myQgisPolyFeatures = []
         myQgisPostprocPoly = QgsFeature()
         myQgisPoly = QgsFeature()
-        myClippedFeat = QgsFeature()
+        myInsideFeat = QgsFeature()
         fields = polygonsProvider.fields()
         writer = QgsVectorFileWriter('/tmp/myOut.shp', 'UTF-8', fields,
             polygonsProvider.geometryType(), polygonsProvider.crs())
         if writer.hasError():
             raise InvalidParameterException (writer.errorMessage())
-
-
-
-
+        
+        # end FIXME
 
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
                                                            myPostprocPolygons):
@@ -1175,7 +1172,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myPolygonsCount = len(myRemainingPolygons)
             postprocProvider.featureAtId(myPostprocPolygonIndex,
                                          myQgisPostprocPoly, True, [])
-            myQgisPostprocPolyGeom = QgsGeometry(myQgisPostprocPoly.geometry())
+            myQgisPostprocGeom = QgsGeometry(myQgisPostprocPoly.geometry())
 
             # myPostprocPolygon bounding box values
             A = numpy.array(myPostprocPolygon)
@@ -1215,11 +1212,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # make True if the vertice was in myPostprocPolygon
             myAreVerticesInside[inside] = True
 
-            # myLocalOutsidePolygons has the 0:count indexes
+            # myNextIterPolygons has the 0:count indexes
             # myOutsidePolygons has the mapped to original indexes
             # and is overwritten at every iteration because we care only of
-            # the outside polygons remaining avter the last iteration
-            myLocalOutsidePolygons = []
+            # the outside polygons remaining after the last iteration
+            myNextIterPolygons = []
             myOutsidePolygons = []
             for i in range(myPolygonsCount):
                 k = i * 4
@@ -1229,7 +1226,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # of each poygon. for example True + True + False + True is 3
                 myPolygonLocation = numpy.sum(myAreVerticesInside[k:k + 4])
 
-                if myPolygonLocation == 0:
+                if myPolygonLocation == 4:
+                    # all vertices are inside -> polygon is inside
+                    #ignore this polygon from further analysis
+                    myInsidePolygons.append(myMappedIndex)
+
+                elif myPolygonLocation == 0:
                     # all vertices are outside
                     # check if the polygon BB is completely outside of the
                     # myPostprocPolygon BB.
@@ -1244,86 +1246,94 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myPolyMiny > myPostprocPolygonMaxy or
                         myPolyMaxy < myPostprocPolygonMiny):
                         #polygon is surely outside
-                        myLocalOutsidePolygons.append(i)
                         myOutsidePolygons.append(myMappedIndex)
+                        # we need this polygon in the next iteration
+                        myNextIterPolygons.append(i)
                     else:
                         # polygon might be outside or intersecting. consider
                         # it intersecting so it goes into further analysis
-                        myIntersectingPolygons.append(myMappedIndex)
                         doClip = True
-                elif myPolygonLocation == 4:
-                    # all vertices are inside -> polygon is inside
-                    #ignore this polygon from further analysis
-                    myInsidePolygons.append(myMappedIndex)
                 else:
                     # some vertices are outside some inside -> polygon is
                     # intersecting
-                    # Do the clipping
-                    # Save to output layer
-                    #output_geometry.append(polygon[k])
-                    #output_values.append(values[k])
-                    myIntersectingPolygons.append(myMappedIndex)
                     doClip = True
-
-                    # Add clip result to output layer
-                    #for k in clipped_result:
-                    #    output_geometry.append(clipped_polygon[k])
-                    #    output_values.append(clipped_values[k])
-
-                    #v = Vector(geometry=output_geometry,
-                    #           data=output_values,
-                    #           projection=input_layer.projection,
-                    #           keywords=input_layer.keywords)
-                    #v.write_to_file('oaeu')
 
                 #clip using qgis
                 if doClip:
 #                    LOGGER.debug('clipping polygon %s' % myMappedIndex)
+                    myIntersectingPolygons.append(myMappedIndex)
                     polygonsProvider.featureAtId(myMappedIndex,
-                        myQgisPoly, True, [])
+                                                 myQgisPoly,
+                                                 True,
+                                                 allPolygonAttrs)
                     myQgisPolyGeom = QgsGeometry(myQgisPoly.geometry())
+                    myAtMap = myQgisPoly.attributeMap()
 
-                    # clip myQgisPolyGeom with myQgisPostprocPoly
+                    # make intersection of the myQgisPoly and the postprocPoly
+                    # write the inside part to a shp file and the outside part
+                    # back to the original QGIS layer
                     try:
-                        geom = myQgisPostprocPolyGeom
-                        cur_geom = myQgisPolyGeom
-                        new_geom = QgsGeometry(geom.intersection(cur_geom))
+                        #Part of the polygon that is inside the postprocpoly
+                        myInsideGeom = QgsGeometry(
+                            myQgisPostprocGeom.intersection(myQgisPolyGeom))
+                        #Part of the polygon that is outside the postprocpoly
+                        myOutsideGeom = QgsGeometry(
+                            myQgisPolyGeom.difference(myInsideGeom))
+                        print myOutsideGeom
 
-                        if new_geom.wkbType() == 0:
-                            int_com = QgsGeometry(geom.combine(cur_geom))
-                            int_sym = QgsGeometry(geom.symDifference(cur_geom))
-                            new_geom = QgsGeometry(int_com.difference(int_sym))
+                        # write the inside part to the new file
+                        myInsideFeat.setGeometry(myInsideGeom)
+                        myInsideFeat.setAttributeMap(myAtMap)
+                        writer.addFeature(myInsideFeat)
 
-                            myClippedFeat.setGeometry(new_geom)
-                            atMap = cur_geom.attributeMap()
-                            myClippedFeat.setAttributeMap(atMap)
-                            writer.addFeature(myClippedFeat)
+                        # modifiy the original geometry to the part outside of
+                        # the postproc polygon
+#                        polygonsProvider.changeGeometryValues({
+#                            myMappedIndex: myOutsideGeom})
+
+#                        if myOutsideGeom.type() is not empty:
+                        print myOutsideGeom
+                        # we need this polygon in the next iteration
+                        myOutsidePolygons.append(myMappedIndex)
+                        myNextIterPolygons.append(i)
+
                     except:
-                        FEAT_EXCEPT = False
                         continue
-
 
 #            LOGGER.debug('Inside %s' % myInsidePolygons)
 #            LOGGER.debug('Outside %s' % myOutsidePolygons)
 #            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
-            if len(myLocalOutsidePolygons) > 0:
+            if len(myNextIterPolygons) > 0:
                 #some polygons are still completely outside of the postprocPoly
                 #so go on and reiterate using only these
-                outsidePolygonsIndex = numpy.array(myLocalOutsidePolygons)
-                myRemainingPolygons = myRemainingPolygons[outsidePolygonsIndex]
-                myRemainingAttributes = myRemainingAttributes[
-                                        outsidePolygonsIndex]
-                myRemainingIndexes = myRemainingIndexes[outsidePolygonsIndex]
+                nextIterPolygonsIndex = numpy.array(myNextIterPolygons)
+
+                myRemainingPolygons = myRemainingPolygons[
+                                        nextIterPolygonsIndex]
+#                myRemainingAttributes = myRemainingAttributes[
+#                                        nextIterPolygonsIndex]
+                myRemainingIndexes = myRemainingIndexes[nextIterPolygonsIndex]
             else:
                 print 'no more polygons to be checked'
                 break
 
         # here the full polygon set is reppresented by:
-        # myInsidePolygons + myIntersectingPolygons + myLocalOutsidePolygons
+        # myInsidePolygons + myIntersectingPolygons + myNextIterPolygons
+        # the a polygon intersecting multiple postproc polygons appears
+        # multiple times in the array
         LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
                 myInsidePolygons, myIntersectingPolygons, myOutsidePolygons))
-        LOGGER.debug('Duration: %s' % (time.clock() - startTime))
+
+        #add in- and outside polygons
+        myNonIntersectingPoly = myInsidePolygons
+        myNonIntersectingPoly.extend(myOutsidePolygons)
+
+        for i in myNonIntersectingPoly:
+            polygonsProvider.featureAtId(i, myQgisPoly, True, allPolygonAttrs)
+            writer.addFeature(myQgisPoly)
+
         del writer
+        LOGGER.debug('Duration: %s' % (time.clock() - startTime))
         return theLayerFilename
 
     def postprocess(self):
