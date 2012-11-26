@@ -125,3 +125,19 @@ For vector to raster conversion, use gdal_rasterize utility, for example::
    gdal_rasterize -a <attribute_name> -l <source>.shp <destination>.tif
 
 
+Why does the plugin not show up in my QGIS Plugin Manager?
+----------------------------------------------------------
+
+One common issue is that if you upgraded from QGIS 1.7.x to 1.8 you may not
+get the new plugin repo added to your repo list. To fix this you can do:
+
+* open QGIS
+* Go Plugins -> Fetch Python Plugins
+* click 'Repositories' tab
+* click add
+* :guilabel:`Name`: Official QGIS Repository
+* :guilabel:`Url`: http://plugins.qgis.org/plugins/plugins.xml
+* Save it and the plugin repo list should update. If it doesn't,
+  close and open QGIS to force an update.
+* In the python plugin manager main tab now you should find InaSAFE available
+
