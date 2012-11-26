@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/templates/index.html" afterPath="$PROJECT_DIR$/docs/templates/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,11 +35,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="layout.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="layout.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="26" selection-start="1069" selection-end="1070" vertical-scroll-proportion="0.52969694">
-              <folding />
+            <state line="4" column="3" selection-start="108" selection-end="108" vertical-scroll-proportion="-0.78350514">
+              <folding>
+                <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -49,7 +49,7 @@
       <file leaf-file-name="inasafe-base.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="144" column="34" selection-start="6224" selection-end="6224" vertical-scroll-proportion="-7.071429">
+            <state line="156" column="3" selection-start="6620" selection-end="6620" vertical-scroll-proportion="-4.3917527">
               <folding>
                 <element signature="n#style#0;n#a#0;n#ul#0;n#div#1;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#a#0;n#li#1;n#ul#0;n#div#1;n#div#0;n#!!top" expanded="true" />
@@ -68,10 +68,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="63" column="32" selection-start="2450" selection-end="2450" vertical-scroll-proportion="-12.071428">
+            <state line="86" column="3" selection-start="3514" selection-end="3514" vertical-scroll-proportion="0.93386245">
               <folding />
             </state>
           </provider>
@@ -148,9 +148,9 @@
         <option value="$PROJECT_DIR$/docs/source/tutorial-docs/tutorial.rst" />
         <option value="$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" />
-        <option value="$PROJECT_DIR$/docs/templates/index.html" />
-        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" />
+        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
+        <option value="$PROJECT_DIR$/docs/templates/index.html" />
       </list>
     </option>
   </component>
@@ -1009,13 +1009,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/templates/indexsidebar.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="20" selection-start="21" selection-end="21" vertical-scroll-proportion="-0.6785714">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="56" column="9" selection-start="845" selection-end="845" vertical-scroll-proportion="0.0">
@@ -1023,16 +1016,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="32" selection-start="2450" selection-end="2450" vertical-scroll-proportion="-12.071428">
-          <folding />
+        <state line="4" column="3" selection-start="108" selection-end="108" vertical-scroll-proportion="-0.78350514">
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="144" column="34" selection-start="6224" selection-end="6224" vertical-scroll-proportion="-7.071429">
+        <state line="156" column="3" selection-start="6620" selection-end="6620" vertical-scroll-proportion="-4.3917527">
           <folding>
             <element signature="n#style#0;n#a#0;n#ul#0;n#div#1;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#a#0;n#li#1;n#ul#0;n#div#1;n#div#0;n#!!top" expanded="true" />
@@ -1041,9 +1036,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
+    <entry file="file://$PROJECT_DIR$/docs/templates/indexsidebar.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="26" selection-start="1069" selection-end="1070" vertical-scroll-proportion="0.52969694">
+        <state line="1" column="20" selection-start="21" selection-end="21" vertical-scroll-proportion="-0.6785714">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="3" selection-start="3514" selection-end="3514" vertical-scroll-proportion="0.93386245">
           <folding />
         </state>
       </provider>

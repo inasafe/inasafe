@@ -83,7 +83,7 @@ TODO: remove this, or make this obsolete ?? #}
     {# bootstrap stuff from fluid.html example #}
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
-            <div class="container-fluid">
+            <div class="container">
                 {# this is used to provide a menu toggle button on small screens #}
                 <a class="btn btn-navbar" data-toggle="collapse"
                    data-target=".nav-collapse">
@@ -140,8 +140,8 @@ TODO: remove this, or make this obsolete ?? #}
     {# Default layout is a simple 12 spanned block with no sidebars #}
     {# See layout.html template for sidebar implementation #}
     {% block user_content %}
-        <div class="container-fluid">
-            <div class="row-fluid">
+        <div class="container">
+            <div class="row">
                 <div class="span12">
                     <div class="hero-unit">
                         {% block hero %} {% endblock %}
@@ -152,8 +152,8 @@ TODO: remove this, or make this obsolete ?? #}
         </div>{# fluid-container ends #}
     {% endblock %}{# user-content block end #}
     {# Now our standard footer #}
-    <div class="container-fluid">
-        <div class="row-fluid">
+    <div class="container">
+        <div class="row">
             <div class="row">
                 <div class="span1"></div>
                 <div class="span10 alert alert-info centered">
