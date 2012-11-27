@@ -40,7 +40,8 @@ from qgis.core import (QgsMapLayer,
                        QgsRectangle,
                        QgsPoint,
                        QgsField,
-                       QgsVectorFileWriter
+                       QgsVectorFileWriter,
+                       QGis
                        )
 from qgis.analysis import QgsZonalStatistics
 
@@ -1105,10 +1106,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy(myTitle, myMessage, myProgress)
 #        import cProfile
         if isLayerPolygonal(myHazardLayer):
-            # http://stackoverflow.com/questions/1031657/profiling-self-and-arguments-in-python
-#            cProfile.runctx('self.preparePolygonLayerForAggr(theClippedHazardFilename, myHazardLayer)', globals(), locals())
+            # http://stackoverflow.com/questions/1031657/
+            # profiling-self-and-arguments-in-python
+#            cProfile.runctx('self.preparePolygonLayerForAggr(
+#               theClippedHazardFilename, myHazardLayer)', globals(), locals())
 #            raise
-            theClippedHazardFilename = self.preparePolygonLayerForAggr(theClippedHazardFilename, myHazardLayer)
+            theClippedHazardFilename = self.preparePolygonLayerForAggr(
+                theClippedHazardFilename, myHazardLayer)
 
         if isLayerPolygonal(myExposureLayer):
             mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
@@ -1154,13 +1158,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         postprocProvider.select([])
 
         # copy polygons to a memory layer
-        theQgisMemoryLayer = copyInMemory(theQgisLayer)
+        myQgisMemoryLayer = copyInMemory(theQgisLayer)
+        QgsMapLayerRegistry.instance().addMapLayer(myQgisMemoryLayer)
 
-        polygonsProvider = theQgisMemoryLayer.dataProvider()
+        polygonsProvider = myQgisMemoryLayer.dataProvider()
         allPolygonAttrs = polygonsProvider.attributeIndexes()
         polygonsProvider.select(allPolygonAttrs)
         myQgisPostprocPoly = QgsFeature()
-        myQgisPoly = QgsFeature()
+        myQgisFeat = QgsFeature()
         myInsideFeat = QgsFeature()
         fields = polygonsProvider.fields()
         myTempdir = temp_dir(sub_dir='preprocess')
@@ -1168,19 +1173,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                         dir=myTempdir)
 
         self.keywordIO.copyKeywords(theQgisLayer, myOutFilename)
-        mySHPWriter = QgsVectorFileWriter(  myOutFilename,
+        mySHPWriter = QgsVectorFileWriter(myOutFilename,
                                             'UTF-8',
                                             fields,
                                             polygonsProvider.geometryType(),
                                             polygonsProvider.crs())
         if mySHPWriter.hasError():
-            raise InvalidParameterException (mySHPWriter.errorMessage())
+            raise InvalidParameterException(mySHPWriter.errorMessage())
         # end FIXME
 
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
                                                            myPostprocPolygons):
-#            LOGGER.debug('')
-#            LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
+            LOGGER.debug('')
+            LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
             myPolygonsCount = len(myRemainingPolygons)
             postprocProvider.featureAtId(myPostprocPolygonIndex,
                                          myQgisPostprocPoly, True, [])
@@ -1230,10 +1235,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # the outside polygons remaining after the last iteration
             myNextIterPolygons = []
             myOutsidePolygons = []
+
+#            tmpWriter = QgsVectorFileWriter('/tmp/loop%s.shp'% myPostprocPolygonIndex,
+#                                              'UTF-8',
+#                                              fields,
+#                                              polygonsProvider.geometryType(),
+#                                              polygonsProvider.crs())
+
             for i in range(myPolygonsCount):
                 k = i * 4
                 myMappedIndex = myRemainingIndexes[i]
-                doClip = False
+                # memory layers counting starts at 1 instead of 0 as in our
+                # indexes
+                myFeatId = myMappedIndex + 1
+                doIntersection = False
                 # summ the isInside bool for each of the boundingbox vertices
                 # of each poygon. for example True + True + False + True is 3
                 myPolygonLocation = numpy.sum(myAreVerticesInside[k:k + 4])
@@ -1242,6 +1257,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     # all vertices are inside -> polygon is inside
                     #ignore this polygon from further analysis
                     myInsidePolygons.append(myMappedIndex)
+                    polygonsProvider.featureAtId(myFeatId,
+                                                 myQgisFeat,
+                                                 True,
+                                                 allPolygonAttrs)
+                    mySHPWriter.addFeature(myQgisFeat)
+#                    tmpWriter.addFeature(myQgisFeat)
 
                 elif myPolygonLocation == 0:
                     # all vertices are outside
@@ -1264,57 +1285,111 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     else:
                         # polygon might be outside or intersecting. consider
                         # it intersecting so it goes into further analysis
-                        doClip = True
+                        doIntersection = True
                 else:
                     # some vertices are outside some inside -> polygon is
                     # intersecting
-                    doClip = True
+                    doIntersection = True
 
-                #clip using qgis
-                if doClip:
-#                    LOGGER.debug('clipping polygon %s' % myMappedIndex)
+                #intersect using qgis
+                if doIntersection:
+                    LOGGER.debug('Intersecting polygon %s' % myMappedIndex)
                     myIntersectingPolygons.append(myMappedIndex)
-                    polygonsProvider.featureAtId(myMappedIndex,
-                                                 myQgisPoly,
+
+                    ok = polygonsProvider.featureAtId(myFeatId,
+                                                 myQgisFeat,
                                                  True,
                                                  allPolygonAttrs)
-                    myQgisPolyGeom = QgsGeometry(myQgisPoly.geometry())
-                    myAtMap = myQgisPoly.attributeMap()
+                    if not ok:
+                        raise
 
-                    # make intersection of the myQgisPoly and the postprocPoly
+                    myQgisPolyGeom = QgsGeometry(myQgisFeat.geometry())
+                    myAtMap = myQgisFeat.attributeMap()
+#                    for (k, attr) in myAtMap.iteritems():
+#                        LOGGER.debug( "%d: %s" % (k, attr.toString()))
+
+
+                    # make intersection of the myQgisFeat and the postprocPoly
                     # write the inside part to a shp file and the outside part
                     # back to the original QGIS layer
                     try:
-                        #Part of the polygon that is inside the postprocpoly
-                        myInsideGeom = QgsGeometry(
-                            myQgisPostprocGeom.intersection(myQgisPolyGeom))
+                        myIntersecGeom = QgsGeometry(myQgisPostprocGeom.intersection(myQgisPolyGeom))
+
+                        #from ftools
+                        myUnknownGeomType = 0
+                        if myIntersecGeom.wkbType() == myUnknownGeomType:
+                            LOGGER.debug('trying different intersection method')
+                            int_com = myQgisPostprocGeom.combine(myQgisPolyGeom)
+                            int_sym = myQgisPostprocGeom.symDifference(myQgisPolyGeom)
+                            myIntersecGeom = QgsGeometry(int_com.difference(int_sym))
+                        LOGGER.debug('wkbType type of intersection: %s' % myIntersecGeom.wkbType())
+                        polygonTypesList = [QGis.WKBPolygon,
+                                            QGis.WKBMultiPolygon]
+                        if myIntersecGeom.wkbType() in polygonTypesList:
+                            myInsideFeat.setGeometry(myIntersecGeom)
+                            myInsideFeat.setAttributeMap(myAtMap)
+                            mySHPWriter.addFeature(myInsideFeat)
+                        else:
+                            LOGGER.debug('Intersection not a polygon so not'
+                                         'the two poligons either touch '
+                                         'only or do not intersect. Not '
+                                         'adding this to the inside list')
+
                         #Part of the polygon that is outside the postprocpoly
-                        myOutsideGeom = QgsGeometry(
-                            myQgisPolyGeom.difference(myInsideGeom))
-                        print myOutsideGeom
+                        myOutsideGeom = QgsGeometry(myQgisPolyGeom.difference(
+                            myIntersecGeom))
 
-                        # write the inside part to the new file
-                        myInsideFeat.setGeometry(myInsideGeom)
-                        myInsideFeat.setAttributeMap(myAtMap)
-                        mySHPWriter.addFeature(myInsideFeat)
-
-                        # modifiy the original geometry to the part outside of
-                        # the postproc polygon
-                        polygonsProvider.changeGeometryValues({
-                            myMappedIndex: myOutsideGeom})
-
-#                        if myOutsideGeom.type() is not empty:
-                        print myOutsideGeom
+                        # modifiy the original geometry to the part outside
+                        # of the postproc polygon
+                        polygonsProvider.changeGeometryValues(
+                            {myFeatId: myOutsideGeom})
                         # we need this polygon in the next iteration
                         myOutsidePolygons.append(myMappedIndex)
                         myNextIterPolygons.append(i)
 
                     except:
-                        continue
+                        LOGGER.debug('ERROR with %s', myMappedIndex)
+                        raise
 
-#            LOGGER.debug('Inside %s' % myInsidePolygons)
-#            LOGGER.debug('Outside %s' % myOutsidePolygons)
-#            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
+
+
+
+
+
+
+
+
+
+#                        #Part of the polygon that is inside the postprocpoly
+#                        myInsideGeom = QgsGeometry(
+#                            myQgisPostprocGeom.intersection(myQgisPolyGeom))
+#                        #Part of the polygon that is outside the postprocpoly
+#                        myOutsideGeom = QgsGeometry(
+#                            myQgisPolyGeom.difference(myInsideGeom))
+#
+#                        LOGGER.debug(myInsideGeom.type())
+#                        if myInsideGeom.type() == QGis.Polygon:
+#                            # write the inside part to the new file
+#                            myInsideFeat.setGeometry(myInsideGeom)
+#                            myInsideFeat.setAttributeMap(myAtMap)
+#                            mySHPWriter.addFeature(myInsideFeat)
+#
+#                        if myOutsideGeom.type() == QGis.Polygon:
+#                            # modifiy the original geometry to the part outside
+#                            # of the postproc polygon
+##                            polygonsProvider.changeGeometryValues({
+##                                myMappedIndex: myOutsideGeom})
+#                            # we need this polygon in the next iteration
+#                            myOutsidePolygons.append(myMappedIndex)
+#                            myNextIterPolygons.append(i)
+#                        LOGGER.debug(myOutsideGeom)
+
+
+
+
+            LOGGER.debug('Inside %s' % myInsidePolygons)
+            LOGGER.debug('Outside %s' % myOutsidePolygons)
+            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
             if len(myNextIterPolygons) > 0:
                 #some polygons are still completely outside of the postprocPoly
                 #so go on and reiterate using only these
@@ -1328,6 +1403,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 print 'no more polygons to be checked'
                 break
+#            del tmpWriter
 
         # here the full polygon set is reppresented by:
         # myInsidePolygons + myIntersectingPolygons + myNextIterPolygons
@@ -1335,17 +1411,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # multiple times in the array
         LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
                 myInsidePolygons, myIntersectingPolygons, myOutsidePolygons))
-        QgsMapLayerRegistry.instance().addMapLayer(theQgisMemoryLayer)
-        #add in- and outside polygons
-        myNonIntersectingPoly = myInsidePolygons
-        myNonIntersectingPoly.extend(myOutsidePolygons)
 
-        for i in myNonIntersectingPoly:
-            polygonsProvider.featureAtId(i, myQgisPoly, True, allPolygonAttrs)
-            mySHPWriter.addFeature(myQgisPoly)
+        #add in- and outside polygons
+
+        for i in myOutsidePolygons:
+            polygonsProvider.featureAtId(i, myQgisFeat, True, allPolygonAttrs)
+            mySHPWriter.addFeature(myQgisFeat)
 
         del mySHPWriter
         LOGGER.debug('Duration: %s' % (time.clock() - startTime))
+        LOGGER.debug(myOutFilename)
+        QgsMapLayerRegistry.instance().addMapLayer(myQgisMemoryLayer)
         return myOutFilename
 
     def postprocess(self):
