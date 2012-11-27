@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/bg-navbar.png" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/bg-navbar.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/bnpb_logo.png" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/bnpb_logo.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/sby.jpg" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/sby.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/templates/index.html" afterPath="$PROJECT_DIR$/docs/templates/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,7 +50,7 @@
       <file leaf-file-name="inasafe-base.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="151" column="46" selection-start="6439" selection-end="6439" vertical-scroll-proportion="-13.857142">
+            <state line="161" column="73" selection-start="6912" selection-end="6912" vertical-scroll-proportion="-24.285715">
               <folding />
             </state>
           </provider>
@@ -63,19 +65,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="163" column="43" selection-start="7838" selection-end="7848" vertical-scroll-proportion="-24.035715">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jQuery.equalHeights.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="32" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.3372244">
+            <state line="153" column="17" selection-start="7546" selection-end="7546" vertical-scroll-proportion="0.59515154">
               <folding />
             </state>
           </provider>
@@ -134,9 +127,9 @@
         <option value="$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" />
+        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
         <option value="$PROJECT_DIR$/docs/templates/index.html" />
-        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" />
       </list>
     </option>
   </component>
@@ -1096,13 +1089,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="151" column="46" selection-start="6439" selection-end="6439" vertical-scroll-proportion="-13.857142">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="142" column="1" selection-start="2569" selection-end="2569" vertical-scroll-proportion="1.1711606">
@@ -1110,16 +1096,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="43" selection-start="7838" selection-end="7848" vertical-scroll-proportion="-24.035715">
+        <state line="25" column="32" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.3372244">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js">
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="32" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.3372244">
+        <state line="161" column="73" selection-start="6912" selection-end="6912" vertical-scroll-proportion="-24.285715">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="153" column="17" selection-start="7546" selection-end="7546" vertical-scroll-proportion="0.59515154">
           <folding />
         </state>
       </provider>

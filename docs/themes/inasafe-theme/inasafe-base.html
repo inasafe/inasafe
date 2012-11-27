@@ -148,24 +148,20 @@ TODO: remove this, or make this obsolete ?? #}
     {# See layout.html template for sidebar implementation #}
     {% block user_content %}
         <div class="container">
-            <div class="row">
-                <div class="span12 hero-unit">
-                        {% block hero %} {% endblock %}
-                </div> {# span 12 ends #}
-            </div>
+            <div class="hero-unit">
+                    {% block hero %} {% endblock %}
+            </div> {# span 12 ends #}
             {% block body %} {% endblock %}
         </div>{# fluid-container ends #}
     {% endblock %}{# user-content block end #}
     {# Now our standard footer #}
     <div class="container">
-        <div class="row">
-            <div class="span12 alert alert-info centered">
-                Contact ole.moller.nielsen@gmail.com for more information.
-                Source code available on
-                <a href="https://github.com/AIFDR/inasafe"><b>GitHub!</b></a>.
-                Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
-                file a ticket</b></a> if you have discovered an issue.
-            </div>
+        <div class="alert alert-info centered">
+            Contact ole.moller.nielsen@gmail.com for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.
         </div>
     </div>
 {% endblock %}{# content block end #}

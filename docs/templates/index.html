@@ -35,10 +35,8 @@
     <script type="text/javascript">$('.carousel').carousel();</script>
 {% endblock %}
 {% block body %}
-        <div class="row">
-            <div class="span12 alert alert-info centered">
-                Switch to Bahasa Indonesia!
-            </div>
+        <div class="alert alert-info centered">
+            Switch to Bahasa Indonesia!
         </div>
         <div class="row" id="blocks-row">
             <div class="span4">
@@ -59,9 +57,7 @@
                         Institure for Disaster Reduction, Universitas Gadja Mada and
                         other participating organisations.
                     </p>
-                    <p class="centered">
-                        <img alt="" src="{{ pathto('_static/img/sby.jpg', 1)}}"/>
-                    </p>
+
                     <p>
                         Indonesian Scenario Assessment for Emergencies (InaSAFE) is
                         a Free and Open Source Software (FOSS) project, published
@@ -105,8 +101,12 @@
             <div class="span4">
                 <div class="admonition">
                     <h3>Help using InaSAFE</h3>
-
-                    InaSAFE documentation can be found here:
+                    <p>
+                    <img alt=""
+                         src="{{ pathto('_static/img/documentation57.png', 1)}}"/>
+                    We are actively building up documentation for InaSAFE that
+                    includes tutorials, general help and developer documentation:
+                    </p>
                     <ul>
                         <li>
                             <a href="../en/contents.html">
@@ -134,32 +134,61 @@
                         would like help running your own courses or to see if there
                         is a local course that you can attend (mainly Indonesia focused).
                     </p>
-                    <p>The video below provides a short introduction to InaSAFE.
-                    <iframe width="350" height="263"
-                            src="http://www.youtube.com/embed/YGyd3YC1hy4"
-                            frameborder="0" allowfullscreen></iframe>
-                    </p>
                 </div>
             </div>
         </div>
 
         <ul class="thumbnails">
-            <li class="span1"></li>
-            <li class="span3">
+            <li class="span4">
+                <div class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/sby.jpg', 1)}}"/>
+                    <div class="caption">
+                        <h3>AMCDRR</h3>
+                        <p>Dr. Trevor Dhu demonstrating InaSAFE to
+                            Indonesian President Susilo Bambang Yudhoyono
+                            at the 5th Asian Ministerial Conference on
+                            Disaster Risk Reduction held in Yogyakarta,
+                            Indonesia, October 2012.</p>
+                    </div>
+                </div>
+            </li>
+            <li class="span4">
                 <a href="#" class="thumbnail">
-                    <img src="{{ pathto('_static/img/bnpb_logo.png', 1)}}" alt=""/>
+                    <img alt="" src="{{ pathto('_static/img/blank.jpg', 1)}}"/>
                 </a>
+                <p></p>
             </li>
-            <li class="span1"></li>
-            <li class="span2">{# skinny one for worldbank #}
+            <li class="span4">
+                <div class="thumbnail">
+                    <iframe width="350" height="263"
+                            src="http://www.youtube.com/embed/YGyd3YC1hy4"
+                            frameborder="0" allowfullscreen></iframe>
+                    <div class="caption">
+                        <h3>Introduction</h3>
+                        <p>The video above provides a short introduction
+                            to InaSAFE.</p>
+                    </div>
+                </div>
             </li>
-            <li class="span1"></li>
-            <li class="span3">
-                <a href="#" class="thumbnail">
-                    <img src="{{ pathto('_static/img/aifdr_logo.png', 1)}}" alt=""/>
+            <li class="span4">
+                <a href="http://bnpb.go.id" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/bnpb_logo.png', 1)}}"/>
                 </a>
+                <p></p>
             </li>
-            <li class="span1"></li>
+            <li class="span4">
+                <a href="http://www.ausaid.gov.au" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/ausaid.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
+            <li class="span4">
+                <a href="http://www.worldbank.org/" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/wb_logo.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
         </ul>
+
         <script type="text/javascript">$('#blocks-row').equalHeights();</script>
 {% endblock %}
