@@ -149,10 +149,8 @@ TODO: remove this, or make this obsolete ?? #}
     {% block user_content %}
         <div class="container">
             <div class="row">
-                <div class="span12">
-                    <div class="hero-unit">
+                <div class="span12 hero-unit">
                         {% block hero %} {% endblock %}
-                    </div>
                 </div> {# span 12 ends #}
             </div>
             {% block body %} {% endblock %}
@@ -161,16 +159,12 @@ TODO: remove this, or make this obsolete ?? #}
     {# Now our standard footer #}
     <div class="container">
         <div class="row">
-            <div class="row">
-                <div class="span1"></div>
-                <div class="span10 alert alert-info centered">
-                    Contact ole.moller.nielsen@gmail.com for more information.
-                    Source code available on
-                    <a href="https://github.com/AIFDR/inasafe"><b>GitHub!</b></a>.
-                    Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
-                    file a ticket</b></a> if you have discovered an issue.
-                </div>
-                <div class="span1"></div>
+            <div class="span12 alert alert-info centered">
+                Contact ole.moller.nielsen@gmail.com for more information.
+                Source code available on
+                <a href="https://github.com/AIFDR/inasafe"><b>GitHub!</b></a>.
+                Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+                file a ticket</b></a> if you have discovered an issue.
             </div>
         </div>
     </div>

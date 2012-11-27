@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/carousel/screenshot.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/carousel/team.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/carousel/translators.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/qgis_logo.png" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/img/qgis_logo.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/templates/index.html" afterPath="$PROJECT_DIR$/docs/templates/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,7 +39,7 @@
       <file leaf-file-name="layout.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="3" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+            <state line="4" column="3" selection-start="108" selection-end="108" vertical-scroll-proportion="-0.6785714">
               <folding />
             </state>
           </provider>
@@ -51,7 +48,7 @@
       <file leaf-file-name="inasafe-base.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="51" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0">
+            <state line="151" column="46" selection-start="6439" selection-end="6439" vertical-scroll-proportion="-13.857142">
               <folding />
             </state>
           </provider>
@@ -66,19 +63,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="41" selection-start="3155" selection-end="3155" vertical-scroll-proportion="0.41454545">
+            <state line="163" column="43" selection-start="7838" selection-end="7848" vertical-scroll-proportion="-24.035715">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="theme.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css">
+      <file leaf-file-name="jQuery.equalHeights.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="142" column="1" selection-start="2569" selection-end="2569" vertical-scroll-proportion="0.0">
+            <state line="25" column="32" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.3372244">
               <folding />
             </state>
           </provider>
@@ -124,7 +121,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/safe_qgis/test_map_legend.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_html_renderer.py" />
         <option value="$PROJECT_DIR$/docs/themes/qgis-theme/layout.html" />
         <option value="$PROJECT_DIR$/docs/source/tutorial-docs/index.rst" />
@@ -137,9 +133,10 @@
         <option value="$PROJECT_DIR$/docs/source/tutorial-docs/tutorial.rst" />
         <option value="$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" />
-        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" />
+        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
         <option value="$PROJECT_DIR$/docs/templates/index.html" />
+        <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" />
       </list>
     </option>
   </component>
@@ -317,6 +314,70 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="carousel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-master" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-theme" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bootstrap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-master" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-theme" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bootstrap" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -844,7 +905,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23975721" sideWeight="0.14237855" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12700965" sideWeight="0.6316384" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15648445" sideWeight="0.6316384" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3400335" sideWeight="0.6616085" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43729904" sideWeight="0.4165402" order="11" side_tool="true" content_ui="tabs" />
@@ -965,13 +1026,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="45" selection-start="4201" selection-end="4201" vertical-scroll-proportion="0.022274327">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/templates/README.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="4" selection-start="4" selection-end="4" vertical-scroll-proportion="0.0" />
@@ -1037,28 +1091,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="3" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+        <state line="4" column="3" selection-start="108" selection-end="108" vertical-scroll-proportion="-0.6785714">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="51" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0">
+        <state line="151" column="46" selection-start="6439" selection-end="6439" vertical-scroll-proportion="-13.857142">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="1" selection-start="2569" selection-end="2569" vertical-scroll-proportion="0.0">
+        <state line="142" column="1" selection-start="2569" selection-end="2569" vertical-scroll-proportion="1.1711606">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="41" selection-start="3155" selection-end="3155" vertical-scroll-proportion="0.41454545">
+        <state line="163" column="43" selection-start="7838" selection-end="7848" vertical-scroll-proportion="-24.035715">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="32" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.3372244">
           <folding />
         </state>
       </provider>
