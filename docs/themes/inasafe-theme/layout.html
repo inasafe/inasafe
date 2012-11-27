@@ -2,7 +2,7 @@
 {% block user_content %}
 <div class="container">
     <div class="row">
-        <div class="span2">
+        <div class="span3">
             <div class="well sidebar-nav">
                 <ul id="locales">
                     <li id="flag_en"><a href="#" onclick="gotoLang('en');"><img
@@ -20,10 +20,10 @@
                 {%- endfor %}
                 {%- endif %}
             </div>{# well ends #}
-        </div>{# span 2 ends #}
-        <div class="span10">
+        </div>{# span 3 ends #}
+        <div class="span9">
                 {% block body %} {% endblock %}
-        </div> {# span 10 ends #}
+        </div> {# span 9 ends #}
         <hr>
     </div>
 </div>{# fluid-container ends #}
