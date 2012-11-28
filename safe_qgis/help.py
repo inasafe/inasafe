@@ -17,27 +17,19 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import logging
 from PyQt4 import (QtGui, QtCore)
 
+LOGGER = logging.getLogger('InaSAFE')
 
-class Help():
+
+class Help(QtGui.QDialog):
     """Help dialog class for the Risk In A Box plugin.
 
     .. todo:: Add navigation buttons. See url for example of how to do so.
        http://www.rkblog.rk.edu.pl/w/p/webkit-pyqt-rendering-web-pages/
 
     """
-    def tr(self, theString):
-        """We implement this ourself since we do not inherit QObject.
-
-        Args:
-           theString - string for translation.
-        Returns:
-           Translated version of theString.
-        Raises:
-           no exceptions explicitly raised.
-        """
-        return QtCore.QCoreApplication.translate('Help', theString)
 
     def __init__(self, theParent=None, theContext=None):
         """Constructor for the dialog.
@@ -56,6 +48,7 @@ class Help():
         """
         self.parent = theParent
         self.context = theContext
+        QtGui.QDialog.__init__(self, self.parent)
         self.showContextHelp()
 
     def showContextHelp(self):
@@ -70,13 +63,14 @@ class Help():
                                             'docs', 'build',
                                             'html', 'user-docs',
                                             self.context + '.html'))
+            LOGGER.debug(os.path.isfile(myContextPath))
             if os.path.isfile(myContextPath):
                 myPath = myContextPath
 
         if not os.path.isfile(myPath):
-            QtGui.QMessageBox.warning(None, self.tr('InaSAFE'),
+            QtGui.QMessageBox.warning(self.parent, self.tr('InaSAFE'),
             (self.tr('Documentation could not be found at:\n'
-                      '%s' % myPath)))
+                      '%1').arg(myPath)))
         else:
             myUrl = QtCore.QUrl('file:///' + myPath)
             QtGui.QDesktopServices.openUrl(myUrl)
