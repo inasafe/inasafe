@@ -293,6 +293,7 @@ def loadStandardLayers():
                   join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
                   join(TESTDATA, 'donut.shp'),
+                  join(TESTDATA, 'Merapi_alert.shp'),
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
@@ -1050,6 +1051,36 @@ class DockTest(unittest.TestCase):
         # Kawasan Rawan Bencana III	45.000	45.000
         # Kawasan Rawan Bencana II	84.000	129.000
         # Kawasan Rawan Bencana I	28.000	157.000
+        assert '45' in myResult, myMessage
+        assert '84' in myResult, myMessage
+        assert '28' in myResult, myMessage
+
+    def test_runVolcanoCirclePopulation(self):
+        """Volcano function runs in GUI with a circular evacutation zone
+
+        Uses population density grid as exposure."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='Merapi Alert',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Volcano Polygon Hazard Population')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of people affected
+
+        # FIXME: Update once we know what to expect
         assert '45' in myResult, myMessage
         assert '84' in myResult, myMessage
         assert '28' in myResult, myMessage
