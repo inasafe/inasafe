@@ -38,7 +38,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
 from safe_qgis.keywords_dialog import KeywordsDialog
-from safe_qgis.exceptions import KeywordNotFoundException
+from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.utilities import getDefaults
 
 
@@ -86,7 +86,7 @@ def makePolygonLayer():
     myPath = os.path.join(TESTDATA, myFile)
     try:
         myTitle = readKeywordsFromFile(myPath, 'title')
-    except KeywordNotFoundException:
+    except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
@@ -99,7 +99,7 @@ def makePointLayer():
     myPath = os.path.join(TESTDATA, myFile)
     try:
         myTitle = readKeywordsFromFile(myPath, 'title')
-    except KeywordNotFoundException:
+    except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)

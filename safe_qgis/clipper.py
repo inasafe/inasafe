@@ -23,7 +23,8 @@ import tempfile
 import logging
 
 from PyQt4.QtCore import QCoreApplication, QProcess
-from qgis.core import (QgsCoordinateTransform,
+from qgis.core import (QGis,
+                       QgsCoordinateTransform,
                        QgsCoordinateReferenceSystem,
                        QgsRectangle,
                        QgsMapLayer,
@@ -35,10 +36,11 @@ from safe_qgis.safe_interface import (verify,
                                       readKeywordsFromFile)
 
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.exceptions import (InvalidParameterException,
-                           NoFeaturesInExtentException,
+from safe_qgis.exceptions import (InvalidParameterError,
+                           NoFeaturesInExtentError,
                            CallGDALError,
-                           InvalidProjectionException)
+                           InvalidProjectionError,
+                           InvalidClipGeometryError)
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -60,8 +62,12 @@ def tr(theText):
     return QCoreApplication.translate(myContext, theText)
 
 
-def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
-              explodeMultipart=True):
+def clipLayer(theLayer,
+              theExtent,
+              theCellSize=None,
+              theExtraKeywords=None,
+              theExplodeFlag=True,
+              theHardClipFlag=False):
     """Clip a Hazard or Exposure layer to the extents provided.
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
@@ -69,31 +75,40 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
     Args:
 
         * theLayer - a valid QGIS vector or raster layer
-        * theExtent - an array representing the exposure layer
+        * theExtent either: an array representing the exposure layer
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
+                    or: A QgsGeometry of type polygon. **Polygon clipping is
+           currently only supported for vector datasets.**
         * theCellSize - cell size which the layer should be resampled to.
             This argument will be ignored for vector layers and if not provided
             for a raster layer, the native raster cell size will be used.
         * theExtraKeywords - Optional keywords dictionary to be added to
-                          output layer
-        * explodeMultipart - a bool describing if to convert multipart
-        features into singleparts
+                          output layer.
+        * theExplodeFlag - a bool specifying whether multipart features
+            should be 'exploded' into singleparts. **This parameter is ignored
+            for raster layer clipping.**
+        * theHardClipFlag - a bool specifying whether line and polygon features
+            that extend beyond the extents should be clipped such that they
+            are reduced in size to the part of the geometry that intersects
+            the extent only. Default is False. **This parameter is ignored
+            for raster layer clipping.**
 
     Returns:
-        Path to the output clipped layer (placed in the
-        system temp dir). The output layer will be reprojected to EPSG:4326
-        if needed.
+        Path to the output clipped layer (placed in the system temp dir).
+        The output layer will be reprojected to EPSG:4326 if needed.
 
     Raises:
         None
 
     """
     if theLayer.type() == QgsMapLayer.VectorLayer:
-        return _clipVectorLayer(theLayer, theExtent,
-            theExtraKeywords=theExtraKeywords,
-            explodeMultipart=explodeMultipart)
+        return _clipVectorLayer(theLayer,
+                                theExtent,
+                                theExtraKeywords=theExtraKeywords,
+                                theExplodeFlag=theExplodeFlag,
+                                theHardClipFlag=theHardClipFlag)
     else:
         try:
             return _clipRasterLayer(theLayer, theExtent, theCellSize,
@@ -104,8 +119,11 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
             raise e
 
 
-def _clipVectorLayer(theLayer, theExtent,
-                     theExtraKeywords=None, explodeMultipart=True):
+def _clipVectorLayer(theLayer,
+                     theExtent,
+                     theExtraKeywords=None,
+                     theExplodeFlag=True,
+                     theHardClipFlag=False):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     vector layer or an exception will be thrown.
@@ -115,18 +133,23 @@ def _clipVectorLayer(theLayer, theExtent,
     Args:
 
         * theLayer - a valid QGIS vector layer in EPSG:4326
-        * theExtent -  an array representing the exposure layer
+        * theExtent either: an array representing the exposure layer
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
+                    or: A QgsGeometry of type polygon. **Polygon clipping is
+           currently only supported for vector datasets.**
         * theExtraKeywords - any additional keywords over and above the
           original keywords that should be associated with the cliplayer.
-        * explodeMultipart - a bool describing if to convert multipart
-        features into singleparts
+        * theExplodeFlag - a bool specifying whether multipart features
+            should be 'exploded' into singleparts.
+        * theHardClipFlag - a bool specifying whether line and polygon features
+            that extend beyond the extents should be clipped such that they
+            are reduced in size to the part of the geometry that intersects
+            the extent only. Default is False.
 
     Returns:
-        Path to the output clipped layer (placed in the
-        system temp dir).
+        Path to the output clipped layer (placed in the system temp dir).
 
     Raises:
        None
@@ -134,12 +157,12 @@ def _clipVectorLayer(theLayer, theExtent,
     """
     if not theLayer or not theExtent:
         myMessage = tr('Layer or Extent passed to clip is None.')
-        raise InvalidParameterException(myMessage)
+        raise InvalidParameterError(myMessage)
 
     if theLayer.type() != QgsMapLayer.VectorLayer:
         myMessage = tr('Expected a vector layer but received a %s.' %
                        str(theLayer.type()))
-        raise InvalidParameterException(myMessage)
+        raise InvalidParameterError(myMessage)
 
     #myHandle, myFilename = tempfile.mkstemp('.sqlite', 'clip_',
     #    temp_dir())
@@ -158,8 +181,20 @@ def _clipVectorLayer(theLayer, theExtent,
     myGeoCrs = QgsCoordinateReferenceSystem()
     myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
-    myRect = QgsRectangle(theExtent[0], theExtent[1],
-        theExtent[2], theExtent[3])
+    myAllowedClipTypes = [QGis.WKBPolygon, QGis.WKBPolygon25D]
+    if type(theExtent) is list:
+        myRect = QgsRectangle(theExtent[0], theExtent[1],
+            theExtent[2], theExtent[3])
+        myClipPolygon = myRect.asPolygon()
+    elif (type(theExtent) is QgsGeometry and
+          theExtent.wkbType in myAllowedClipTypes):
+        myRect = theExtent.boundingBox().toRectF()
+        myClipPolygon = theExtent
+    else:
+        raise InvalidClipGeometryError(
+            tr('Clip geometry must be an extent or a single part'
+            'polygon based geometry.'))
+
     myProjectedExtent = myXForm.transformBoundingBox(myRect)
 
     # Get vector layer
@@ -205,14 +240,18 @@ def _clipVectorLayer(theLayer, theExtent,
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
         # Loop through the parts adding them to the output file
-        # we write out single part features unless explodeMultipart is False
-        if explodeMultipart:
+        # we write out single part features unless theExplodeFlag is False
+        if theExplodeFlag:
             myGeometryList = explodeMultiPartGeometry(myGeometry)
         else:
             myGeometryList = [myGeometry]
 
         for myPart in myGeometryList:
             myPart.transform(myXForm)
+            if theHardClipFlag:
+                # Remove any dangling bits so only intersecting area is
+                # kept.
+                myPart = myPart.clipToPolygon(myClipPolygon, myPart)
             myFeature.setGeometry(myPart)
             myWriter.addFeature(myFeature)
         myCount += 1
@@ -222,7 +261,7 @@ def _clipVectorLayer(theLayer, theExtent,
         myMessage = tr('No features fall within the clip extents. '
                        'Try panning / zooming to an area containing data '
                        'and then try to run your analysis again.')
-        raise NoFeaturesInExtentException(myMessage)
+        raise NoFeaturesInExtentError(myMessage)
 
     myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(theLayer, myFilename,
@@ -230,6 +269,32 @@ def _clipVectorLayer(theLayer, theExtent,
 
     return myFilename  # Filename of created file
 
+def clipGeometry(theClipPolygon, theGeometry):
+    """Clip a geometry (linestring or polygon) using a clip polygon.
+
+    To do this we combine the clip polygon with the input geometry which
+    will add nodes to the input geometry where it intersects the clip polygon.
+    Next we get the symmetrical difference between the input geometry and the
+    combined geometry.
+
+    Args:
+        * theClipPolygon - QgsGeometry a Polygon or Polygon25D geometry to clip
+            with. Multipart polygons are not supported so the client needs to
+            take care of that.
+        * theGeometry - QgsGeometry - linestring or polygon that should be
+            clipped.
+
+    Returns:
+        QgsGeometry - clipped to the region of the clip polygon.
+
+    Raises:
+        None
+    """
+    # Add nodes to input geometry where it intersects with clip
+    myCombinedGeometry = theGeometry.combine(theClipPolygon)
+    # Gives you the areas inside the clip
+    mySymmetricalGeometry = theGeometry.symDifference(myCombinedGeometry)
+    return mySymmetricalGeometry
 
 def explodeMultiPartGeometry(theGeom):
     """Convert a multipart geometry to a list of single parts. This method was
@@ -283,10 +348,12 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     Args:
 
         * theLayer - a valid QGIS raster layer in EPSG:4326
-        * theExtent -  an array representing the exposure layer
+        * theExtent either: an array representing the exposure layer
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
+                    or: A QgsGeometry of type polygon. **Polygon clipping is
+           currently only supported for vector datasets.**
         * theCellSize - cell size (in GeoCRS) which the layer should
             be resampled to. If not provided for a raster layer (i.e.
             theCellSize=None), the native raster cell size will be used.
@@ -302,12 +369,12 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     """
     if not theLayer or not theExtent:
         myMessage = tr('Layer or Extent passed to clip is None.')
-        raise InvalidParameterException(myMessage)
+        raise InvalidParameterError(myMessage)
 
     if theLayer.type() != QgsMapLayer.RasterLayer:
         myMessage = tr('Expected a raster layer but received a %s.' %
                str(theLayer.type()))
-        raise InvalidParameterException(myMessage)
+        raise InvalidParameterError(myMessage)
 
     myWorkingLayer = str(theLayer.source())
 
@@ -333,7 +400,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                          'and try again. For more information, see issue '
                          'https://github.com/AIFDR/inasafe/issues/123'
                          % (myWorkingLayer, theLayer.srs().toProj4()))
-            raise InvalidProjectionException(myMessage)
+            raise InvalidProjectionError(myMessage)
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.

@@ -33,7 +33,7 @@ from qgis.core import (QgsVectorLayer,
 
 from safe_qgis.safe_interface import readSafeLayer
 from safe_qgis.safe_interface import getOptimalExtent
-from safe_qgis.exceptions import InvalidProjectionException, CallGDALError
+from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.clipper import clipLayer, extentToKml, explodeMultiPartGeometry
 
 from safe_qgis.utilities_test import (getQgisTestApp,
@@ -436,10 +436,10 @@ class ClipperTest(unittest.TestCase):
                           myBoundingBox,
                           myResolution,
                           theExtraKeywords=myExtraKeywords)
-            except InvalidProjectionException:
+            except InvalidProjectionError:
                 pass
             else:
-                myMessage = 'Should have raised InvalidProjectionException'
+                myMessage = 'Should have raised InvalidProjectionError'
                 raise Exception(myMessage)
 
     def test_extentToKml(self):
