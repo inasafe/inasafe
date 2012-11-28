@@ -1341,7 +1341,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             LOGGER.debug(myMessage)
 
         del myUnneededAttributes, myProvider, myFields
-        self.keywordIO.appendKeywords(self.postprocLayer, {'title': myLayerName})
+        self.keywordIO.appendKeywords(
+            self.postprocLayer, {'title': myLayerName})
 
         #call the correct aggregator
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
@@ -1441,7 +1442,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             #loop over all features in impact layer
             while myImpactProvider.nextFeature(myFeature):
-                myVal, ok = myFeature.attributeMap()[myTargetFieldIndex].toInt()
+                myVal, ok = myFeature.attributeMap()[
+                              myTargetFieldIndex].toInt()
                 if ok:
                     myTotal += myVal
 

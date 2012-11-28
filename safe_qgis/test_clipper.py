@@ -511,18 +511,18 @@ class ClipperTest(unittest.TestCase):
     def test_clipGeometry(self):
         """Test that we can clip a geometry using another geometry."""
         myGeometry = QgsGeometry.fromPolyline([
-            QgsPoint(10,10),
-            QgsPoint(20,20),
-            QgsPoint(30,30),
-            QgsPoint(40,40),
+            QgsPoint(10, 10),
+            QgsPoint(20, 20),
+            QgsPoint(30, 30),
+            QgsPoint(40, 40),
             ]
         )
         myClipPolygon = QgsGeometry.fromPolygon([[
-             QgsPoint(20,20),
-             QgsPoint(20,30),
-             QgsPoint(30,30),
-             QgsPoint(30,20),
-             QgsPoint(20,20),
+             QgsPoint(20, 20),
+             QgsPoint(20, 30),
+             QgsPoint(30, 30),
+             QgsPoint(30, 20),
+             QgsPoint(20, 20),
              ]]
         )
         myResult = clipGeometry(myClipPolygon, myGeometry)
@@ -588,7 +588,7 @@ class ClipperTest(unittest.TestCase):
         assert myVectorLayer.isValid()
         setCanvasCrs(GEOCRS, True)
         setJakartaGeoExtent()
-        myClipRect = [106.8218,-6.1842, 106.8232,-6.1830]
+        myClipRect = [106.8218, -6.1842, 106.8232, -6.1830]
 
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myClipRect, theHardClipFlag=True)

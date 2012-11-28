@@ -271,6 +271,7 @@ def _clipVectorLayer(theLayer,
 
     return myFilename  # Filename of created file
 
+
 def clipGeometry(theClipPolygon, theGeometry):
     """Clip a geometry (linestring or polygon) using a clip polygon.
 

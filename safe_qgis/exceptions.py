@@ -22,9 +22,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # FIXME (Ole): Shouldn't at least some these move to safe.common.exceptions
 #              so that they can be reused
 
+
 class InvalidClipGeometryError(Exception):
     """Custom exception for when clip geometry is invalid."""
     pass
+
 
 class QgisPathError(Exception):
     """Custom exception for when qgispath.txt could not be read."""
