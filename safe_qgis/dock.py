@@ -38,7 +38,8 @@ from qgis.core import (QgsMapLayer,
                        QgsFeature,
                        QgsRectangle,
                        QgsPoint,
-                       QgsField)
+                       QgsField,
+                       QGis)
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.dock_base import Ui_DockBase
@@ -1947,12 +1948,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             # Hazard layer is vector
 
-            # FIXME (Ole): Check that it is a polygon layer
-
-            # FIXME (Ole): This should say something like this (issue #285)
-            #if myHazardLayer.geometry() == QgsMapLayer.Point:
-            #    myGeoExtent = myExposureGeoExtent
-            pass
+            # In case hazad data is a point dataset, we will not clip the
+            # exposure data to it. The reason being that points may be used
+            # as centers for evacuation cirles: See issue #285
+            if myHazardLayer.geometryType() == QGis.Point:
+                myGeoExtent = myExposureGeoExtent
 
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
