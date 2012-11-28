@@ -20,13 +20,24 @@ import os
 from PyQt4 import (QtGui, QtCore)
 
 
-class Help(QtGui.QDialog):
+class Help():
     """Help dialog class for the Risk In A Box plugin.
 
     .. todo:: Add navigation buttons. See url for example of how to do so.
        http://www.rkblog.rk.edu.pl/w/p/webkit-pyqt-rendering-web-pages/
 
     """
+    def tr(self, theString):
+        """We implement this ourself since we do not inherit QObject.
+
+        Args:
+           theString - string for translation.
+        Returns:
+           Translated version of theString.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        return QtCore.QCoreApplication.translate('Help', theString)
 
     def __init__(self, theParent=None, theContext=None):
         """Constructor for the dialog.
@@ -45,9 +56,9 @@ class Help(QtGui.QDialog):
         """
         self.parent = theParent
         self.context = theContext
-        self.showContexthelp()
+        self.showContextHelp()
 
-    def showContexthelp(self):
+    def showContextHelp(self):
         """Load the help text into the wvResults widget."""
         ROOT = os.path.dirname(__file__)
         myPath = os.path.abspath(os.path.join(ROOT, '..', 'docs', 'build',
@@ -63,7 +74,7 @@ class Help(QtGui.QDialog):
                 myPath = myContextPath
 
         if not os.path.isfile(myPath):
-            QtGui.QMessageBox.warning(self.parent, self.tr('InaSAFE'),
+            QtGui.QMessageBox.warning(None, self.tr('InaSAFE'),
             (self.tr('Documentation could not be found at:\n'
                       '%s' % myPath)))
         else:

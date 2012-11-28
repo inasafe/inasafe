@@ -671,12 +671,12 @@
 <context>
     <name>Help</name>
     <message>
-        <location filename="help.py" line="66"/>
+        <location filename="help.py" line="77"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="help.py" line="66"/>
+        <location filename="help.py" line="77"/>
         <source>Documentation could not be found at:
 %s</source>
         <translation>Dokumentasi tidak dapat ditemukan di : %s</translation>
