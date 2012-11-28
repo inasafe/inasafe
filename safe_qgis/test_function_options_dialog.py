@@ -72,10 +72,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'params': {
                         'youth_ratio': 0.263,
                         'elder_ratio': 0.078,
-                        'adult_ratio': 0.659}
-                }
-            }
-        }
+                        'adult_ratio': 0.659}}}}
 
         myDialog.buildForm(myParameters)
 
@@ -118,10 +115,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'params': {
                         'youth_ratio': lambda: 0.263,
                         'elder_ratio': lambda: 0.078,
-                        'adult_ratio': lambda: 0.659}
-                }
-            }
-        }
+                        'adult_ratio': lambda: 0.659}}}}
 
         myDialog = FunctionOptionsDialog(None)
         myResult = myDialog.parseInput(myInput)
