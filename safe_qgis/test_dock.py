@@ -1060,6 +1060,8 @@ class DockTest(unittest.TestCase):
 
         Uses population density grid as exposure."""
 
+        # NOTE: We assume radii in impact function to be 3, 5 and 10 km
+
         myResult, myMessage = setupScenario(
             theHazard='Merapi Alert',
             theExposure='People',
@@ -1079,11 +1081,13 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people affected
-
-        # FIXME: Update once we know what to expect
-        assert '45' in myResult, myMessage
-        assert '84' in myResult, myMessage
-        assert '28' in myResult, myMessage
+        # Jarak [km]	Jumlah	Kumulatif
+        # 3	     15.000	15.000
+        # 5	     17.000	32.000
+        # 10	124.000	156.000
+        assert '15' in myResult, myMessage
+        assert '17' in myResult, myMessage
+        assert '124' in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
