@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" afterPath="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/templates/index.html" afterPath="$PROJECT_DIR$/docs/templates/index.html" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,10 +34,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="conf.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="conf.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="151" column="25" selection-start="5118" selection-end="5126" vertical-scroll-proportion="0.022274327">
+            <state line="151" column="25" selection-start="5118" selection-end="5126" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="151" column="41" selection-start="7340" selection-end="7340" vertical-scroll-proportion="0.5786925">
               <folding />
             </state>
           </provider>
@@ -88,14 +97,14 @@
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html" />
-        <option value="$PROJECT_DIR$/docs/templates/index.html" />
         <option value="$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html" />
+        <option value="$PROJECT_DIR$/docs/templates/index.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1930" />
-    <option name="y" value="36" />
+    <option name="x" value="1920" />
+    <option name="y" value="27" />
     <option name="width" value="1922" />
     <option name="height" value="1054" />
   </component>
@@ -439,12 +448,12 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
-    <property name="restartRequiresConfirmation" value="false" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../inasafe-realtime/realtime/fixtures/web/resource/header.html" />
-    <property name="options.searchVisible" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="options.splitter.details.proportions" value="0.31698564" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -618,6 +627,21 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <method />
+    </configuration>
     <configuration default="true" type="docs" factoryName="Docutils task">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -634,21 +658,6 @@
       <option name="docutils_open_in_browser" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <method />
-    </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -663,19 +672,6 @@
       <option name="docutils_params" value="" />
       <option name="docutils_task" value="" />
       <option name="docutils_open_in_browser" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
-      <module name="" />
-      <option name="PORT" value="0" />
-      <option name="HOST" value="null" />
-      <PyPathMappingSettings>
-        <option name="pathMappings">
-          <list />
-        </option>
-      </PyPathMappingSettings>
-      <option name="REDIRECT_OUTPUT" value="true" />
-      <option name="SUSPEND_AFTER_CONNECT" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
@@ -695,6 +691,19 @@
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <option name="PUREUNITTEST" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
+      <module name="" />
+      <option name="PORT" value="0" />
+      <option name="HOST" value="null" />
+      <PyPathMappingSettings>
+        <option name="pathMappings">
+          <list />
+        </option>
+      </PyPathMappingSettings>
+      <option name="REDIRECT_OUTPUT" value="true" />
+      <option name="SUSPEND_AFTER_CONNECT" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -851,14 +860,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1930" y="36" width="1922" height="1054" extended-state="6" />
+    <frame x="1920" y="27" width="1922" height="1054" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23975721" sideWeight="0.14237855" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15648445" sideWeight="0.6316384" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15755627" sideWeight="0.6316384" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3400335" sideWeight="0.6616085" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43729904" sideWeight="0.4165402" order="11" side_tool="true" content_ui="tabs" />
@@ -1011,13 +1020,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/theme.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -1030,51 +1032,46 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/theme.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="1" selection-start="2569" selection-end="2569" vertical-scroll-proportion="1.1711606">
-          <folding />
-        </state>
+        <state line="142" column="1" selection-start="2569" selection-end="2569" vertical-scroll-proportion="1.1711606" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/static/jQuery.equalHeights.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="32" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.3372244">
-          <folding />
-        </state>
+        <state line="25" column="32" selection-start="1379" selection-end="1379" vertical-scroll-proportion="0.3372244" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="23" selection-start="1023" selection-end="1023" vertical-scroll-proportion="0.50666666">
-          <folding>
-            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
+        <state line="22" column="23" selection-start="1023" selection-end="1023" vertical-scroll-proportion="0.50666666" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/themes/inasafe-theme/inasafe-base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="138" column="42" selection-start="5959" selection-end="5959" vertical-scroll-proportion="3.178182">
-          <folding />
-        </state>
+        <state line="138" column="42" selection-start="5959" selection-end="5959" vertical-scroll-proportion="3.178182" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/templates/indexsidebar.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="20" selection-start="21" selection-end="21" vertical-scroll-proportion="0.023030303">
-          <folding />
-        </state>
+        <state line="1" column="20" selection-start="21" selection-end="21" vertical-scroll-proportion="0.023030303" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/platform_windows.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="153" column="17" selection-start="7546" selection-end="7546" vertical-scroll-proportion="0.59515154">
+        <state line="35" column="0" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="151" column="25" selection-start="5118" selection-end="5126" vertical-scroll-proportion="0.022274327">
+        <state line="151" column="25" selection-start="5118" selection-end="5126" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="151" column="41" selection-start="7340" selection-end="7340" vertical-scroll-proportion="0.5786925">
           <folding />
         </state>
       </provider>
