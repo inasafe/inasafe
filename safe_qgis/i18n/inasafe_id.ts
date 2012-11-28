@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -671,15 +672,15 @@
 <context>
     <name>Help</name>
     <message>
-        <location filename="help.py" line="77"/>
+        <location filename="help.py" line="71"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="help.py" line="77"/>
+        <location filename="help.py" line="71"/>
         <source>Documentation could not be found at:
-%s</source>
-        <translation>Dokumentasi tidak dapat ditemukan di : %s</translation>
+%1</source>
+        <translation>Dokuemen tidak dapat ditemukan di: %1</translation>
     </message>
 </context>
 <context>
