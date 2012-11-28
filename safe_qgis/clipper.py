@@ -185,7 +185,7 @@ def _clipVectorLayer(theLayer,
     if type(theExtent) is list:
         myRect = QgsRectangle(theExtent[0], theExtent[1],
             theExtent[2], theExtent[3])
-        myClipPolygon = myRect.asPolygon()
+        myClipPolygon = QgsGeometry.fromRect(myRect)
     elif (type(theExtent) is QgsGeometry and
           theExtent.wkbType in myAllowedClipTypes):
         myRect = theExtent.boundingBox().toRectF()
@@ -251,7 +251,9 @@ def _clipVectorLayer(theLayer,
             if theHardClipFlag:
                 # Remove any dangling bits so only intersecting area is
                 # kept.
-                myPart = myPart.clipToPolygon(myClipPolygon, myPart)
+                myPart = clipGeometry(myClipPolygon, myPart)
+            if myPart is None:
+                continue
             myFeature.setGeometry(myPart)
             myWriter.addFeature(myFeature)
         myCount += 1
@@ -291,10 +293,27 @@ def clipGeometry(theClipPolygon, theGeometry):
         None
     """
     # Add nodes to input geometry where it intersects with clip
-    myCombinedGeometry = theGeometry.combine(theClipPolygon)
-    # Gives you the areas inside the clip
-    mySymmetricalGeometry = theGeometry.symDifference(myCombinedGeometry)
-    return mySymmetricalGeometry
+    myLineTypes = [QGis.WKBLineString, QGis.WKBLineString25D]
+    myPointTypes = [QGis.WKBPoint, QGis.WKBPoint25D]
+    myPolygonTypes = [QGis.WKBPolygon, QGis.WKBPolygon25D]
+    myType = theGeometry.wkbType()
+    if myType in myLineTypes:
+        myCombinedGeometry = theGeometry.combine(theClipPolygon)
+        # Gives you the areas inside the clip
+        mySymmetricalGeometry = theGeometry.symDifference(myCombinedGeometry)
+        return mySymmetricalGeometry
+    elif myType in myPolygonTypes:
+        myIntersectionGeometry = QgsGeometry(
+            theGeometry.intersection(theClipPolygon))
+        return myIntersectionGeometry
+    elif myType in myPointTypes:
+        if theClipPolygon.contains(theGeometry):
+            return theGeometry
+        else:
+            return None
+    else:
+        return None
+
 
 def explodeMultiPartGeometry(theGeom):
     """Convert a multipart geometry to a list of single parts. This method was
