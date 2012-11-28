@@ -29,12 +29,17 @@ import numpy
 
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer,
-                       QgsGeometry)
+                       QgsGeometry,
+                       QgsPoint)
 
 from safe_qgis.safe_interface import readSafeLayer
 from safe_qgis.safe_interface import getOptimalExtent
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
-from safe_qgis.clipper import clipLayer, extentToKml, explodeMultiPartGeometry
+from safe_qgis.clipper import (clipLayer,
+                               extentToKml,
+                               explodeMultiPartGeometry,
+                               clipGeometry)
+from safe_qgis.utilities import qgisVersion
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                             setCanvasCrs,
@@ -501,6 +506,35 @@ class ClipperTest(unittest.TestCase):
         myCollection = explodeMultiPartGeometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart point geometry'
         assert len(myCollection) == 2, myMessage
+
+    def test_clipGeometry(self):
+        """Test that we can clip a geometry using another geometry."""
+        myGeometry = QgsGeometry.fromPolyline([
+            QgsPoint(10,10),
+            QgsPoint(20,20),
+            QgsPoint(30,30),
+            QgsPoint(40,40),
+            ]
+        )
+        myClipPolygon = QgsGeometry.fromPolygon([[
+             QgsPoint(20,20),
+             QgsPoint(20,30),
+             QgsPoint(30,30),
+             QgsPoint(30,20),
+             QgsPoint(20,20),
+             ]]
+        )
+        myResult = clipGeometry(myClipPolygon, myGeometry)
+
+        if qgisVersion() > 10800:
+            myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
+        else:
+            myExpectedWkt = ('LINESTRING(20.000000 20.000000, '
+                '30.000000 30.000000)')
+        # There should only be one feature that intersects this clip
+        # poly so this assertion should work.
+        self.assertEqual(myExpectedWkt,
+                         str(myResult.exportToWkt()))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ClipperTest, 'test')
