@@ -129,10 +129,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'params': {
                         'youth_ratio': 0.263,
                         'elder_ratio': 0.078,
-                        'adult_ratio': 0.659}
-                }
-            }
-        }
+                        'adult_ratio': 0.659}}}}
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')

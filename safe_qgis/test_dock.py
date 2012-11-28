@@ -999,7 +999,7 @@ class DockTest(unittest.TestCase):
         assert '177' in myResult, myMessage
 
     def test_runVolcanoBuildingImpact(self):
-        """Volcano function runs in GUI with An donut (merapi explostion)
+        """Volcano function runs in GUI with An donut (merapi hazard map)
          hazard data uses OSM Building Polygons exposure data."""
 
         myResult, myMessage = setupScenario(
@@ -1022,6 +1022,37 @@ class DockTest(unittest.TestCase):
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
         assert '288' in myResult, myMessage
+
+    def test_runVolcanoPopulationImpact(self):
+        """Volcano function runs in GUI with a donut (merapi hazard map)
+         hazard data uses population density grid."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='donut',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Volcano Polygon Hazard Population')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of people affected
+        # Kategori	Jumlah	Kumulatif
+        # Kawasan Rawan Bencana III	45.000	45.000
+        # Kawasan Rawan Bencana II	84.000	129.000
+        # Kawasan Rawan Bencana I	28.000	157.000
+        assert '45' in myResult, myMessage
+        assert '84' in myResult, myMessage
+        assert '28' in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
