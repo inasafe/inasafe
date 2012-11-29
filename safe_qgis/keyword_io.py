@@ -22,8 +22,8 @@ from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayer
 
-from safe_qgis.exceptions import (HashNotFoundException,
-                                  KeywordNotFoundException)
+from safe_qgis.exceptions import (HashNotFoundError,
+                                  KeywordNotFoundError)
 from safe_qgis.safe_interface import (verify,
                                       readKeywordsFromFile,
                                       writeKeywordsToFile)
@@ -98,7 +98,7 @@ class KeywordIO(QObject):
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
-        except (HashNotFoundException, Exception):
+        except (HashNotFoundError, Exception):
             raise
 
     def writeKeywords(self, theLayer, theKeywords):
@@ -142,7 +142,7 @@ class KeywordIO(QObject):
         """
         try:
             myKeywords = self.readKeywords(theLayer)
-        except HashNotFoundException:
+        except HashNotFoundError:
             myKeywords = {}
         myKeywords.update(theKeywords)
         self.writeKeywords(theLayer, myKeywords)
@@ -235,7 +235,7 @@ class KeywordIO(QObject):
             myKeywords.pop(theKeyword)
             self.writeKeywords(theLayer, myKeywords)
             return True
-        except (HashNotFoundException, KeyError):
+        except (HashNotFoundError, KeyError):
             return False
 
 # methods below here should be considered private
@@ -466,7 +466,7 @@ class KeywordIO(QObject):
            complete keywords dictionary is returned.
 
         Raises:
-           KeywordNotFoundException if the keyword is not recognised.
+           KeywordNotFoundError if the keyword is not recognised.
         """
         myHash = self.getHashForDatasource(theUri)
         try:
@@ -522,7 +522,7 @@ class KeywordIO(QObject):
            complete keywords dictionary is returned.
 
         Raises:
-           KeywordNotFoundException if the keyword is not found.
+           KeywordNotFoundError if the keyword is not found.
         """
         myHash = self.getHashForDatasource(theUri)
         self.openConnection()
@@ -534,7 +534,7 @@ class KeywordIO(QObject):
             myData = myCursor.fetchone()
             #unpickle it to get our dict back
             if myData is None:
-                raise HashNotFoundException('No hash found for %s' % myHash)
+                raise HashNotFoundError('No hash found for %s' % myHash)
             myData = myData[0]  # first field
             myDict = pickle.loads(str(myData))
             if theKeyword is None:
@@ -542,7 +542,7 @@ class KeywordIO(QObject):
             if theKeyword in myDict:
                 return myDict[theKeyword]
             else:
-                raise KeywordNotFoundException('No hash found for %s' % myHash)
+                raise KeywordNotFoundError('No hash found for %s' % myHash)
 
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])
