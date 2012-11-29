@@ -28,6 +28,7 @@ from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
 from safe_interface import safeTr
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
+from third_party.odict import OrderedDict
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -60,7 +61,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.tabWidget.tabBar().setVisible(False)
 
         self._result = None
-        self.values = {}
+        self.values = OrderedDict()
 
     def bind(self, theObject, theProperty, theType):
         """Create a function that return the QWidget property
@@ -112,9 +113,9 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.tabWidget.tabBar().setVisible(True)
 
         # create element for the tab
-        myValues = {}
+        myValues = OrderedDict()
         for myLabel, myOptions in theParams.items():
-            myInputValues = {}
+            myInputValues = OrderedDict()
 
             # NOTE (gigih) : 'params' is assumed as dictionary
             if 'params' in myOptions:
@@ -130,7 +131,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 myGroupBox.setLayout(myLayout)
 
                 # create widget element from 'params'
-                myInputValues['params'] = {}
+                myInputValues['params'] = OrderedDict()
                 for myKey, myValue in myOptions['params'].items():
                     myHumanName = get_postprocessor_human_name(myKey)
                     myInputValues['params'][myKey] = self.buildWidget(
@@ -224,7 +225,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
                            to suitable type.
         """
 
-        myResult = {}
+        myResult = OrderedDict()
         for myName, myValue in theInput.items():
             if hasattr(myValue, '__call__'):
                 myResult[myName] = myValue()

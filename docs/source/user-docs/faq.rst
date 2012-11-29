@@ -10,14 +10,6 @@ issue tracker is open to everyone, though you will first need to register a
 (free) account on GitHub to use it. You can find the GitHub self-registration
 page `here <https://github.com/signup/free>`_.
 
-Why can't I find the plugin in the QGIS repositories?
------------------------------------------------------
-
-We do plan to publish the plugin at
-`plugins.qgis.org <http://plugins.qgis.org/>`_ so that it can be effortlessly
-installed from within QGIS, we are just no ready to do that yet. In the mean
-time please use the manual installation procedure to install InaSAFE in QGIS.
-
 Do I need to pay to use |project_name|?
 ---------------------------------------
 
