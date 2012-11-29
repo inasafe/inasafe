@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Tue Oct 23 16:51:29 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Thu Nov 29 14:42:45 2012
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -32,12 +32,12 @@ class Ui_OptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, -111, 465, 638))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 468, 764))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem, 13, 0, 1, 1)
+        self.gridLayout_2.addItem(spacerItem, 14, 0, 1, 1)
         self.grpNotImplemented = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         self.grpNotImplemented.setObjectName(_fromUtf8("grpNotImplemented"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpNotImplemented)
@@ -117,7 +117,7 @@ class Ui_OptionsDialogBase(object):
         self.spinBox.setObjectName(_fromUtf8("spinBox"))
         self.horizontalLayout_5.addWidget(self.spinBox)
         self.gridLayout_3.addLayout(self.horizontalLayout_5, 9, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.grpNotImplemented, 11, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.grpNotImplemented, 12, 0, 1, 1)
         self.cbxVisibleLayersOnly = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxVisibleLayersOnly.setObjectName(_fromUtf8("cbxVisibleLayersOnly"))
         self.gridLayout_2.addWidget(self.cbxVisibleLayersOnly, 0, 0, 1, 1)
@@ -132,7 +132,7 @@ class Ui_OptionsDialogBase(object):
         self.lblKeywordCache = QtGui.QLabel(self.scrollAreaWidgetContents)
         self.lblKeywordCache.setEnabled(True)
         self.lblKeywordCache.setObjectName(_fromUtf8("lblKeywordCache"))
-        self.gridLayout_2.addWidget(self.lblKeywordCache, 8, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.lblKeywordCache, 9, 0, 1, 1)
         self.horizontalLayout_6 = QtGui.QHBoxLayout()
         self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
         self.leKeywordCachePath = QtGui.QLineEdit(self.scrollAreaWidgetContents)
@@ -143,10 +143,10 @@ class Ui_OptionsDialogBase(object):
         self.toolKeywordCachePath.setEnabled(True)
         self.toolKeywordCachePath.setObjectName(_fromUtf8("toolKeywordCachePath"))
         self.horizontalLayout_6.addWidget(self.toolKeywordCachePath)
-        self.gridLayout_2.addLayout(self.horizontalLayout_6, 10, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_6, 11, 0, 1, 1)
         self.cbxUseThread = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxUseThread.setObjectName(_fromUtf8("cbxUseThread"))
-        self.gridLayout_2.addWidget(self.cbxUseThread, 12, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbxUseThread, 13, 0, 1, 1)
         self.cbxHideExposure = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxHideExposure.setEnabled(True)
         self.cbxHideExposure.setObjectName(_fromUtf8("cbxHideExposure"))
@@ -157,7 +157,7 @@ class Ui_OptionsDialogBase(object):
         self.gridLayout_2.addWidget(self.cbxClipToViewport, 4, 0, 1, 1)
         self.cbxShowPostprocessingLayers = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxShowPostprocessingLayers.setObjectName(_fromUtf8("cbxShowPostprocessingLayers"))
-        self.gridLayout_2.addWidget(self.cbxShowPostprocessingLayers, 5, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbxShowPostprocessingLayers, 6, 0, 1, 1)
         self.horizontalLayout_7 = QtGui.QHBoxLayout()
         self.horizontalLayout_7.setObjectName(_fromUtf8("horizontalLayout_7"))
         self.label_6 = QtGui.QLabel(self.scrollAreaWidgetContents)
@@ -169,7 +169,10 @@ class Ui_OptionsDialogBase(object):
         self.dsbFemaleRatioDefault.setSingleStep(0.01)
         self.dsbFemaleRatioDefault.setObjectName(_fromUtf8("dsbFemaleRatioDefault"))
         self.horizontalLayout_7.addWidget(self.dsbFemaleRatioDefault)
-        self.gridLayout_2.addLayout(self.horizontalLayout_7, 7, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_7, 8, 0, 1, 1)
+        self.cbxClipHard = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxClipHard.setObjectName(_fromUtf8("cbxClipHard"))
+        self.gridLayout_2.addWidget(self.cbxClipHard, 5, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
 
@@ -216,5 +219,6 @@ class Ui_OptionsDialogBase(object):
         self.cbxShowPostprocessingLayers.setToolTip(QtGui.QApplication.translate("OptionsDialogBase", "Turn on to see the intermediate files generated by the postprocessing steps in the map canvas", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxShowPostprocessingLayers.setText(QtGui.QApplication.translate("OptionsDialogBase", "Show intermediate layers generated by postprocessing", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setText(QtGui.QApplication.translate("OptionsDialogBase", "Female ratio default value", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxClipHard.setText(QtGui.QApplication.translate("OptionsDialogBase", "When clipping, also clip features (e.g. will clip polygon smaller)", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc

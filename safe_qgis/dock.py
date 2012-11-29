@@ -206,6 +206,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'inasafe/clipToViewport', True).toBool()
         self.clipToViewport = myFlag
 
+        # whether to 'hard clip' layers (e.g. cut buildings in half if they
+        # lie partially in the AOI
+        myFlag = mySettings.value(
+            'inasafe/clipHard', False).toBool()
+        self.clipHard = myFlag
+
         # whether to show or not postprocessing generated layers
         myFlag = mySettings.value(
                             'inasafe/showPostProcLayers', False).toBool()
@@ -1309,11 +1315,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 .arg(self.postprocLayer.name()))
 
         # in case aggregation layer is larger than the impact layer let's
-        # trimm it down to  avoid extra calculations
+        # trim it down to  avoid extra calculations
         clippedAggregationLayerPath = clipLayer(
-            self.postprocLayer,
-            myImpactBBox,
-            theExplodeFlag=False)
+            theLayer=self.postprocLayer,
+            theExtent=myImpactBBox,
+            theExplodeFlag=False,
+            theHardClipFlag=self.clipHard)
 
         self.postprocLayer = QgsVectorLayer(
             clippedAggregationLayerPath, myLayerName, 'ogr')
@@ -1966,8 +1973,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 22
         self.showBusy(myTitle, myMessage, myProgress)
         try:
-            myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
-                                            myCellSize)
+            myClippedHazardPath = clipLayer(theLayer=myHazardLayer,
+                                            theExtent=myBufferedGeoExtent,
+                                            theCellSize=myCellSize,
+                                            theHardClipFlag=self.clipHard)
         except CallGDALError, e:
             raise e
         except IOError, e:
@@ -1980,9 +1989,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(
-            myExposureLayer,
-            myGeoExtent, myCellSize,
-            theExtraKeywords=extraExposureKeywords)
+            theLayer=myExposureLayer,
+            theExtent=myGeoExtent,
+            theCellSize=myCellSize,
+            theExtraKeywords=extraExposureKeywords,
+            theHardClipFlag=self.clipHard)
 
         return myClippedHazardPath, myClippedExposurePath
 
