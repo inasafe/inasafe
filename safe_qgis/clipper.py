@@ -300,12 +300,11 @@ def clipGeometry(theClipPolygon, theGeometry):
     myType = theGeometry.wkbType()
     if myType in myLineTypes:
         myCombinedGeometry = theGeometry.combine(theClipPolygon)
-        # Gives you the areas inside the clip
+        # Gives you the lines inside the clip
         mySymmetricalGeometry = theGeometry.symDifference(myCombinedGeometry)
         return mySymmetricalGeometry
     elif myType in myPolygonTypes:
-        myIntersectionGeometry = QgsGeometry(
-            theGeometry.intersection(theClipPolygon))
+        myIntersectionGeometry = theGeometry.intersection(theClipPolygon)
         return myIntersectionGeometry
     elif myType in myPointTypes:
         if theClipPolygon.contains(theGeometry):
