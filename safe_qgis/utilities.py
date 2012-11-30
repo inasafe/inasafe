@@ -45,6 +45,11 @@ from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
 from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
+sys.path.append(os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '..', 'third_party')))
+from raven.handlers.logging import SentryHandler
+from raven import Client
+
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
@@ -684,14 +689,15 @@ def setupLogger():
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
     # logging messages will be sent to http://sentry.linfiniti.com
-    # We will log exceptions only there. Only if you have the env var
-    # 'INSAFE_SENTRY=1' present (value can be anything) will this be enabled.
-    if 'INASAFE_SENTRY' in os.environ:
+    # We will log exceptions only there. You need to either:
+    #  * Set env var 'INSAFE_SENTRY=1' present (value can be anything)
+    #  * Enable the 'help improve InaSAFE by submitting errors to a remove
+    #    server' option in InaSAFE options dialog
+    # before this will be enabled.
+    mySettings = QtCore.QSettings()
+    myFlag = mySettings.value('inasafe/useSentry', False).toBool()
+    if 'INASAFE_SENTRY' in os.environ or myFlag:
         try:
-            #pylint: disable=F0401
-            from raven.handlers.logging import SentryHandler
-            from raven import Client
-            #pylint: enable=F0401
             myClient = Client(
                 'http://c64a83978732474ea751d432ab943a6b'
                 ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
@@ -700,9 +706,10 @@ def setupLogger():
             mySentryHandler.setLevel(logging.ERROR)
             if addLoggingHanderOnce(myLogger, mySentryHandler):
                 myLogger.debug('Sentry logging enabled')
-        except ImportError:
-            myLogger.debug('Sentry logging disabled')
-
+        except:
+            myLogger.exception('Sentry logging could not be started')
+    else:
+        myLogger.debug('Sentry logging disabled')
     #Set formatters
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)

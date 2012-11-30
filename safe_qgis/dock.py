@@ -989,7 +989,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = self.tr('An error occurred when calling a GDAL command')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
                                                    theHtml=True,
                                                    theContext=myMessage)
@@ -998,7 +999,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IOError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('An error occurred when write clip file')
+            myMessage = self.tr('An error occurred when writing clip file')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
                                                    theHtml=True,
                                                    theContext=myMessage)
@@ -1009,6 +1011,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myMessage = self.tr('An exception occurred when setting up the '
                                 'impact calculator.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
                                                    theHtml=True,
                                                    theContext=myMessage)
@@ -1021,6 +1024,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'features visible in the current view. Try '
                                 'zooming out or panning until some features '
                                 'become visible.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
                                                    theHtml=True,
                                                    theContext=myMessage)
@@ -1035,6 +1039,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'accurately if we re-project it from its '
                                 'native coordinate reference system to'
                                 'WGS84/GeoGraphic.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
                                                    theHtml=True,
                                                    theContext=myMessage)
@@ -1048,6 +1053,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myContext = self.tr('An exception occurred when setting up the '
                                 ' model runner.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e, theHtml=True,
                                                    theContext=myContext)
             self.displayHtml(myMessage)
@@ -1083,6 +1089,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myContext = self.tr('An exception occurred when starting'
                                 ' the model.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e, theHtml=True,
                                                    theContext=myContext)
             self.displayHtml(myMessage)
@@ -1122,6 +1129,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             myContext = self.tr(
                 'An exception occurred when postprocessing the results')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e, theHtml=True,
                 theContext=myContext)
             self.displayHtml(myMessage)
@@ -1523,14 +1531,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.getAggregationFieldNameSum())
 
         if 'Gender' in myPostprocessors:
-            #look if we need to look for a variable female ratio in a layer
-            myFemaleRatioIsVariable = False
+            #look if we need to look for a vaInaSAFEle female ratio in a layer
+            myFemaleRatioIsVaInaSAFEle = False
             try:
                 myFemRatioField = self.postprocAttributes[self.defaults[
                                                      'FEM_RATIO_ATTR_KEY']]
                 myFemRatioFieldIndex = self.postprocLayer.fieldNameIndex(
                     myFemRatioField)
-                myFemaleRatioIsVariable = True
+                myFemaleRatioIsVaInaSAFEle = True
 
             except KeyError:
                 myFemaleRatio = self.keywordIO.readKeywords(self.postprocLayer,
@@ -1567,7 +1575,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     pass
 
                 if myKey == 'Gender':
-                    if myFemaleRatioIsVariable:
+                    if myFemaleRatioIsVaInaSAFEle:
                         myFemaleRatio, mySuccessFlag = myAttributeMap[
                                         myFemRatioFieldIndex].toDouble()
                         if not mySuccessFlag:
@@ -1782,7 +1790,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propagated.
+            Any exceptions raised by the InaSAFE library will be propagated.
 
         ..note:: Uses bootstrap css for progress bar.
         """
@@ -2218,7 +2226,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propagated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         # Restore previous state of combo
         for myCount in range(0, self.cboFunction.count()):
