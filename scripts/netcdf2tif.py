@@ -7,6 +7,11 @@ import os
 import sys
 import numpy
 import argparse
+
+# This module requires the package: python-scientific
+# To query netcdf files with ncdump also install netcdf-bin
+# The package libnetcdf-dev is also required but is automatically
+# installed as a dependency on python-scientific
 from Scientific.IO.NetCDF import NetCDFFile
 
 from safe.storage.raster import Raster
