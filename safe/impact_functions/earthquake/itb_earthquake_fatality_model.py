@@ -89,8 +89,8 @@ class ITBFatalityFunction(FunctionProvider):
         # Rates of people displaced for each MMI level
         ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
                                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
-        ('mmi_range', range(2, 10),
-		('step', 0.5),   
+        ('mmi_range', range(2, 10)),
+        ('step', 0.5),
         # Threshold below which layer should be transparent
         ('tolerance', 0.01),
         ('calculate_displaced_people', True),
@@ -111,7 +111,7 @@ class ITBFatalityFunction(FunctionProvider):
         """
         x = self.parameters['x']
         y = self.parameters['y']
-        return numpy.power(10.0,  x * mmi - y)
+        return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model

@@ -218,10 +218,9 @@ class Test_Engine(unittest.TestCase):
         #calculated_result = I.get_data()
         #print calculated_result.shape
         keywords = I.get_keywords()
-#        print "keywords", keywords
+        # print "keywords", keywords
         population = float(keywords['total_population'])
         fatalities = float(keywords['total_fatalities'])
-
 
         # Check aggregated values
         expected_population = int(round(85424650. / 1000)) * 1000
@@ -292,7 +291,6 @@ class Test_Engine(unittest.TestCase):
                % (expected_fatalities, fatalities))
         assert numpy.allclose(fatalities, expected_fatalities,
                               rtol=1.0e-5), msg
-
 
     def test_ITB_earthquake_fatality_estimation_org(self):
         """Fatalities from ground shaking can be computed correctly
