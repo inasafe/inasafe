@@ -8,7 +8,7 @@ export PYTHONPATH=/usr/local/qgis-master/share/qgis/python/:`pwd`
 export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
 export INASAFE_WORK_DIR=/home/web/quake
 export INASAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-Realtime/exposure/population.tif
-export INASAFE_LOCALE=id
+export INASAFE_LOCALE=en
 
 for FILE in `xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py --list | grep -v inp | grep -v Proces`
 do
