@@ -989,7 +989,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('An error occurred when calling a GDAL command')
+            myMessage = self.tr(
+                'An error occurred when calling a GDAL command')
             LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
                                                    theHtml=True,
