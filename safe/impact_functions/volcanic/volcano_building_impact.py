@@ -38,8 +38,7 @@ class VolcanoBuildingImpact(FunctionProvider):
               H: Raster layer of volcano depth
               P: Raster layer of population data on the same grid as H
 
-        Counts number of people exposed to flood levels exceeding
-        specified threshold.
+        Counts number of people exposed to each volcano hazard zones.
 
         Return
           Map of population exposed to volcanic hazard zones
