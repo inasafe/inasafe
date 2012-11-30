@@ -399,14 +399,14 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myResult = myShakeEvent.eventDict()
-        myExpectedDict = {'place-name': 'Manado',
+        myExpectedDict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
-                          'elapsed-time': u'16 weeks 1 days',
+                          'elapsed-time': u'18 weeks 1 days',
                           'legend-name': 'Population density',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
                           'located-label': PyQt4.QtCore.QString(u'Located'),
                           'distance-unit': PyQt4.QtCore.QString(u'km'),
-                          'bearing-compass': 'SSW',
+                          'bearing-compass': u'n/a',
                           'elapsed-time-name': PyQt4.QtCore.QString(
                               u'Elapsed time since event'),
                           'exposure-table-name': PyQt4.QtCore.QString(
@@ -437,10 +437,10 @@ searchBoxes: None
                           'depth-unit': PyQt4.QtCore.QString(u'km'),
                           'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
                           'mmi': '5.0', 'map-name': PyQt4.QtCore.QString(
-            u'Estimated Earthquake Impact'), 'date': '26-7-2012',
-                          'bearing-degrees': '-166.88\xb0',
+                          u'Estimated Earthquake Impact'), 'date': '26-7-2012',
+                          'bearing-degrees': '0.00\xb0',
                           'formatted-date-time': '26-Jul-12 02:15:35 ',
-                          'distance': '3.04',
+                          'distance': '0.00',
                           'direction-relation': PyQt4.QtCore.QString(u'of'),
                           'credits': PyQt4.QtCore.QString(
                               u'Supported by the Australia-Indonesia Facility'
@@ -461,7 +461,7 @@ searchBoxes: None
         myDegreeSymbol = unichr(176)
         myExpectedResult = (
             'M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S Longitude: '
-            '124%s27\'0.00"E Depth: 11.0km Located 3.04km SSW of Manado'
+            '124%s27\'0.00"E Depth: 11.0km Located 0.00km n/a of n/a'
             % (myDegreeSymbol, myDegreeSymbol))
         myResult = myShakeEvent.eventInfo()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
