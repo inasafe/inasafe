@@ -109,6 +109,7 @@ def swap_coords(filename):
 
 if __name__ == '__main__':
     filename = sys.argv[1]
-    assert filename.endswith('.gml')
-
-    swap_coords(filename)
+    if filename.endswith('.gml'):
+        swap_coords(filename)
+    else:
+        print 'Unsupported file extension:', filename
