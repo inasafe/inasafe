@@ -8,6 +8,7 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.engine.interpolation import make_circular_polygon
 from safe.common.exceptions import InaSAFEError
+from third_party.odict import OrderedDict
 
 
 class VolcanoBuildingImpact(FunctionProvider):
@@ -27,8 +28,10 @@ class VolcanoBuildingImpact(FunctionProvider):
     title = _('Be affected')
     target_field = 'buildings'
 
-    parameters = dict(distances=[1000, 2000, 3000, 5000, 10000],
-                      volcano_name='All')
+    parameters = OrderedDict([
+        ('distances', [1000, 2000, 3000, 5000, 10000]),
+        ('volcano_name', 'All')
+    ])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

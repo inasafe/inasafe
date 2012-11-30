@@ -25,9 +25,9 @@ sys.path.append(pardir)
 
 import unittest
 from safe_qgis.impact_calculator import ImpactCalculator
-from safe_qgis.exceptions import (InsufficientParametersException,
-                           KeywordNotFoundException,
-                           StyleInfoNotFoundException)
+from safe_qgis.exceptions import (InsufficientParametersError,
+                           KeywordNotFoundError,
+                           StyleInfoNotFoundError)
 
 from safe_qgis.safe_interface import (readKeywordsFromLayer, getStyleInfo)
 
@@ -124,7 +124,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         except RuntimeError, e:
             myMessage = 'Runtime error encountered: %s' % str(e)
             assert(), myMessage
-        except InsufficientParametersException:
+        except InsufficientParametersError:
             return  # expected outcome
         except:
             myMessage = 'Missing parameters not raised as error.'
@@ -145,7 +145,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         try:
             myKeyword = readKeywordsFromLayer(
                             myImpactLayer, 'boguskeyword')
-        except KeywordNotFoundException:
+        except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
             myMessage = ('Request for bogus keyword raised incorrect '
@@ -199,12 +199,12 @@ class ImpactCalculatorTest(unittest.TestCase):
         # Test we get an exception if style info is not found
         try:
             myStyleInfo = getStyleInfo('boguspath')
-        except StyleInfoNotFoundException:
+        except StyleInfoNotFoundError:
             pass  # This is good
         except Exception, e:
             myMessage = ('StyleInfo request for bogus file raised incorrect' +
                    ' exception type: \n %s') % str(e)
-            raise StyleInfoNotFoundException(myMessage)
+            raise StyleInfoNotFoundError(myMessage)
 
 
 if __name__ == '__main__':

@@ -20,8 +20,8 @@ import logging
 
 from PyQt4 import QtCore, QtGui
 from qgis.core import QgsMapLayer
-from safe_qgis.exceptions import (LegendLayerException,
-                                  KeywordNotFoundException)
+from safe_qgis.exceptions import (LegendLayerError,
+                                  KeywordNotFoundError)
 from safe_qgis.utilities import qgisVersion, dpiToMeters
 from safe_qgis.keyword_io import KeywordIO
 
@@ -84,10 +84,10 @@ class MapLegend():
         if self.layer is None:
             myMessage = self.tr('Unable to make a legend when map generator '
                                 'has no layer set.')
-            raise LegendLayerException(myMessage)
+            raise LegendLayerError(myMessage)
         try:
             self.keywordIO.readKeywords(self.layer, 'impact_summary')
-        except KeywordNotFoundException, e:
+        except KeywordNotFoundError, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
                                 'QGIS layers list or creating a new impact '
@@ -116,7 +116,7 @@ class MapLegend():
             myMessage = self.tr('A legend can only be generated for '
                                 'vector layers that use the "new symbology" '
                                 'implementation in QGIS.')
-            raise LegendLayerException(myMessage)
+            raise LegendLayerError(myMessage)
             # new symbology - subclass of QgsFeatureRendererV2 class
         self.legendImage = None
         myRenderer = self.layer.rendererV2()
@@ -145,7 +145,7 @@ class MapLegend():
                                 'impact layer. Please use one of these: '
                                 'single symbol, categorised symbol or '
                                 'graduated symbol and then try again.')
-            raise LegendLayerException(myMessage)
+            raise LegendLayerError(myMessage)
         return self.legendImage
 
     def getRasterLegend(self):
