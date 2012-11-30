@@ -30,8 +30,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
     parameters = OrderedDict([
         ('distances', [1000, 2000, 3000, 5000, 10000]),
-        ('volcano_name', 'All')
-    ])
+        ('volcano_name', 'All')])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
