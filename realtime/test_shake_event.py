@@ -401,7 +401,7 @@ searchBoxes: None
         myResult = myShakeEvent.eventDict()
         myExpectedDict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
-                          'elapsed-time': u'18 weeks 1 days',
+                          'elapsed-time': u'', # empty as it will change
                           'legend-name': 'Population density',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
                           'located-label': PyQt4.QtCore.QString(u'Located'),
@@ -448,7 +448,7 @@ searchBoxes: None
                               u'Geoscience Australia and the GFDRR.'),
                           'latitude-value': u'0\xb012\'36.00"S',
                           'time': '2:15:35', 'depth-value': '11.0'}
-
+        myResult['elapsed-time'] = ''
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
              (myResult, myExpectedDict))
         self.maxDiff = None
