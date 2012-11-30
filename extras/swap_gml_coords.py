@@ -16,6 +16,7 @@ position_tag = '<gml:posList>'
 lc_tag = '<gml:lowerCorner>'
 uc_tag = '<gml:upperCorner>'
 
+
 def swap_pairs(line, starttag=position_tag):
     """Swap coordinate pairs
 

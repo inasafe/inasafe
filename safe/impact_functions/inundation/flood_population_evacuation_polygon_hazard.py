@@ -35,11 +35,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])
-                ])
-            })
-        ]))
-    ])
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

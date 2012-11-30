@@ -514,17 +514,15 @@ class ClipperTest(unittest.TestCase):
             QgsPoint(10, 10),
             QgsPoint(20, 20),
             QgsPoint(30, 30),
-            QgsPoint(40, 40),
-            ]
-        )
+            QgsPoint(40, 40)])
+
         myClipPolygon = QgsGeometry.fromPolygon([[
              QgsPoint(20, 20),
              QgsPoint(20, 30),
              QgsPoint(30, 30),
              QgsPoint(30, 20),
-             QgsPoint(20, 20),
-             ]]
-        )
+             QgsPoint(20, 20)]])
+
         myResult = clipGeometry(myClipPolygon, myGeometry)
 
         if qgisVersion() > 10800:
