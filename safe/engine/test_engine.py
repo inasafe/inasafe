@@ -12,6 +12,7 @@ from safe.engine.interpolation import interpolate_raster_vector_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.engine.interpolation import tag_polygons_by_grid
 
+
 from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
 from safe.storage.core import write_raster_data
@@ -45,6 +46,8 @@ from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
 from impact_functions_for_testing import itb_fatality_model_org
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
+PAGFatalityFunction)
 # pylint: enable=W0611
 
 
@@ -219,6 +222,7 @@ class Test_Engine(unittest.TestCase):
         population = float(keywords['total_population'])
         fatalities = float(keywords['total_fatalities'])
 
+
         # Check aggregated values
         expected_population = int(round(85424650. / 1000)) * 1000
         msg = ('Expected population was %f, I got %f'
@@ -228,6 +232,7 @@ class Test_Engine(unittest.TestCase):
         expected_fatalities = int(round(40871.3028 / 1000)) * 1000
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
+
         assert numpy.allclose(fatalities, expected_fatalities,
                               rtol=1.0e-5), msg
 
@@ -245,6 +250,49 @@ class Test_Engine(unittest.TestCase):
         msg = ('Did not find expected fatality value %i in summary %s'
                % (x, keywords['impact_summary']))
         assert format_int(x) in keywords['impact_summary'], msg
+
+    def test_pager_earthquake_fatality_estimation(self):
+        """Fatalities from ground shaking can be computed correctly
+            using the Pager fatality model.
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
+        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+        plugin_name = 'P A G Fatality Function'
+        plugin_list = get_plugins(plugin_name)
+
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)
+        keywords = I.get_keywords()
+        population = float(keywords['total_population'])
+        fatalities = float(keywords['total_fatalities'])
+
+        # Check aggregated values
+        expected_population = 85425000.0
+        msg = ('Expected population was %f, I got %f'
+               % (expected_population, population))
+        assert population == expected_population, msg
+
+        expected_fatalities = 409000.0
+        msg = ('Expected fatalities was %f, I got %f'
+               % (expected_fatalities, fatalities))
+        assert numpy.allclose(fatalities, expected_fatalities,
+                              rtol=1.0e-5), msg
+
 
     def test_ITB_earthquake_fatality_estimation_org(self):
         """Fatalities from ground shaking can be computed correctly
