@@ -692,9 +692,9 @@ def setupLogger():
             from raven.handlers.logging import SentryHandler
             from raven import Client
             #pylint: enable=F0401
-            myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
-                              'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
-                              '4')
+            myClient = Client(
+                'http://c64a83978732474ea751d432ab943a6b'
+                ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
             mySentryHandler = SentryHandler(myClient)
             mySentryHandler.setFormatter(myFormatter)
             mySentryHandler.setLevel(logging.ERROR)
