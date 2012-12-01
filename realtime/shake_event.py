@@ -1578,12 +1578,20 @@ class ShakeEvent(QObject):
 
         return myTable, myPath
 
-    def impactTable(self, theMmiLevels):
+    def impactTable(self):
         """Create the html listing affected people per mmi interval.
-        Args:
-            dict: A dictionary with keys mmi levels and values affected count
+
+        Expects that calculate impacts has run and set pop affected etc.
+        already.
+
+        self.: A dictionary with keys mmi levels and values affected count
                 as per the example below. This is typically going to be passed
                 from the :func:`calculateImpacts` function defined below.
+
+
+        Args:
+            None
+
         Returns:
             str: full absolute path to the saved html content.
 
@@ -1599,22 +1607,33 @@ class ShakeEvent(QObject):
         """
         myHeader = [TableCell(self.tr('Intensity'),
                             header=True)]
-        myCountRow = [TableCell(self.tr('People (x 1000)'),
+        myAffectedRow = [TableCell(self.tr('People Affected (x 1000)'),
                             header=True)]
+        myFatalitiesRow = [TableCell(self.tr('Predicted fatalities'),
+                                header=True)]
         myImpactRow = [TableCell(self.tr('Perceived Shaking'),
                             header=True)]
         for myMmi in range(2, 10):
             myHeader.append(TableCell(self.romanize(myMmi),
                                       cell_class='mmi-%s' % myMmi,
                                       header=True))
-            if myMmi in theMmiLevels:
-                myCountRow.append('%i' % round(theMmiLevels[myMmi] / 1000))
+            if myMmi in self.affectedCounts:
+                myAffectedRow.append(
+                    '%i' % round(self.affectedCounts[myMmi] / 1000))
             else:
-                myCountRow.append(0.00)
+                myAffectedRow.append(0.00)
+
+            if myMmi in self.fatalityCounts:
+                myFatalitiesRow.append(
+                    '%0.2f' % round(self.fatalityCounts[myMmi]))
+            else:
+                myFatalitiesRow.append(0.00)
 
             myImpactRow.append(TableCell(self.mmiShaking(myMmi)))
+
         myTableBody = []
-        myTableBody.append(myCountRow)
+        myTableBody.append(myAffectedRow)
+        myTableBody.append(myFatalitiesRow)
         myTableBody.append(myImpactRow)
         myTable = Table(myTableBody, header_row=myHeader,
                         table_class='table table-striped table-condensed')
@@ -1707,7 +1726,7 @@ class ShakeEvent(QObject):
         LOGGER.info('***** Displaced: %s ********' % self.displacedCounts)
         LOGGER.info('***** Affected: %s ********' % self.affectedCounts)
 
-        myImpactTablePath = self.impactTable(myAffected)
+        myImpactTablePath = self.impactTable()
         return self.impactFile, myImpactTablePath
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):

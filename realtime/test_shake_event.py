@@ -379,15 +379,9 @@ searchBoxes: None
         """Test rendering a fatalities table."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myDict = {2: 0.47386375223673427,
-         3: 0.024892573693488258,
-         4: 0.0,
-         5: 0.0,
-         6: 0.0,
-         7: 0.0,
-         8: 0.0,
-         9: 0.0}
-        myResult = myShakeEvent.impactTable(myDict)
+        myShakeEvent.calculateImpacts()
+        myResult = myShakeEvent.impactTable()
+        # TODO compare actual content of impact table...
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted/'
                            '20120726022003/impacts.html')
         myMessage = ('Got:\n%s\nExpected:\n%s' %
