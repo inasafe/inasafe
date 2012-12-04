@@ -248,7 +248,7 @@ class Plugin:
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = Dock(self.iface)
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
 
         if myLegendTab:
