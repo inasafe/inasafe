@@ -65,12 +65,10 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """For testing only"""
         print 'hello'
 
-    def __init__(self, theHazardLayer, theExposureLayer,
-                 theFunction):
+    def __init__(self, theHazardLayer, theExposureLayer, theFunction):
         """Constructor for the impact calculator thread.
 
         Args:
-
           * Hazard layer: InaSAFE read_layer object containing the Hazard data.
           * Exposure layer: InaSAFE read_layer object containing the Exposure
             data.

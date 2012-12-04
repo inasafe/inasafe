@@ -65,7 +65,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       safeTr,
                                       get_version,
                                       temp_dir,
-                                      ReadLayerError)
+                                      ReadLayerError,
+                                      get_post_processors)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundError,
@@ -79,11 +80,8 @@ from safe_qgis.exceptions import (KeywordNotFoundError,
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
-from safe_qgis.function_options_dialog import (
-   FunctionOptionsDialog)
+from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
-
-from safe.postprocessors import get_post_processors
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -108,8 +106,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
 
         Args:
-
-           * iface - a Quantum GIS QGisAppInterface instance.
+           iface: QgsAppInterface - a Quantum GIS QGisAppInterface instance.
 
         Returns:
            not applicable
@@ -153,7 +150,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Aggregation / post processing related items
         self.postProcessingOutput = {}
         self.aggregationPrefix = 'aggr_'
-        self.doZonalAggregation = True
+        self.doZonalAggregation = False
         self.postProcessingLayer = None
         self.postProcessingAttributes = {}
         self.aggregationAttributeTitle = None
@@ -1208,17 +1205,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except Exception, e:  # pylint: disable=W0703
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myContext = self.tr(
-                'An exception occurred when postprocessing the results')
+            myMessage = self.tr(
+                'An exception occurred when post processing the results.')
             LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e, theHtml=True,
-                theContext=myContext)
+                theContext=myMessage)
             self.displayHtml(myMessage)
             return
         self.completed()
 
     def initializePostProcessor(self):
-        """Initializes and clears self.postProcessingOutput.
+        """Initializes and clears self._postProcessingOutput.
 
         .. note:: Needs to run at the end of postProcess.
 
@@ -1239,7 +1236,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #first run, self.lastUsedFunction does not exist yet
             pass
 
-    def postProcessingOutput(self, theSingleTableFlag=False):
+    def _postProcessingOutput(self, theSingleTableFlag=False):
         """Returns the results of the post processing as a table.
 
         Args:
@@ -1811,7 +1808,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
-        myKeywords['postprocessing_report'] = self.postProcessingOutput()
+        myKeywords['postprocessing_report'] = self._postProcessingOutput()
         self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1859,7 +1856,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.restoreState()
 
         #append postprocessing report
-        myReport += self.postProcessingOutput()
+        myReport += self._postProcessingOutput()
 
         # Return text to display in report panel
         return myReport

@@ -45,7 +45,7 @@ from safe.api import (get_admissible_plugins,
                       BoundingBoxError,
                       ReadLayerError,
                       get_plugins, get_version)
-
+from safe.postprocessors import get_post_processors
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611
 

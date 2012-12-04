@@ -83,7 +83,7 @@ both use mandatory and optional parameters
 Output
 ------
 Dock.postprocOutput will hold the result datastructure (shown below) of all the
-postprocessors. The structure is then parsed by Dock.postProcessingOutput() and
+postprocessors. The structure is then parsed by Dock._postProcessingOutput() and
 stored in the impact layer's keywords
 
 Data structure of results
