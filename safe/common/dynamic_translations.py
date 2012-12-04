@@ -144,6 +144,3 @@ def dynamic_translations():
     # FIXME (Sunni) It's better to be updated dynamically
     tr('Thresholds')
     tr('Postprocessors')
-    tr('Medium thresholds')
-    tr('High thresholds')
-    tr('Low thresholds')

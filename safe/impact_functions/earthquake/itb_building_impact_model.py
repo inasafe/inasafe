@@ -78,8 +78,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory=='structure' and \
                     layertype=='vector' and \
-                    datatype in ['osm', 'itb', 'sigab'] and \
-                    disabled=='True'
+                    datatype in ['osm', 'itb', 'sigab']
     """
 
     title = tr('Be damaged depending on building type')

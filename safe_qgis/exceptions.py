@@ -23,90 +23,85 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 #              so that they can be reused
 
 
-class InvalidClipGeometryError(Exception):
-    """Custom exception for when clip geometry is invalid."""
-    pass
-
-
-class QgisPathError(Exception):
+class QgisPathException(Exception):
     """Custom exception for when qgispath.txt could not be read."""
     pass
 
 
-class TestNotImplementedError(Exception):
+class TestNotImplementedException(Exception):
     """Custom exception for when a test exists only as a stub."""
     pass
 
 
-class InsufficientParametersError(Exception):
+class InsufficientParametersException(Exception):
     """Custom exception for when insufficient parameters have been set."""
     pass
 
 
-class NoFunctionsFoundError(Exception):
+class NoFunctionsFoundException(Exception):
     """Custom exception for when a no impact calculation
     functions can be found."""
     pass
 
 
-class KeywordNotFoundError(Exception):
+class KeywordNotFoundException(Exception):
     """Custom exception for when a no keyword can be found."""
     pass
 
 
-class HashNotFoundError(Exception):
+class HashNotFoundException(Exception):
     """Custom exception for when a no keyword hash can be found."""
     pass
 
 
-class StyleInfoNotFoundError(Exception):
+class StyleInfoNotFoundException(Exception):
     """Custom exception for when a no styleInfo can be found."""
     pass
 
 
-class InvalidParameterError(Exception):
+class InvalidParameterException(Exception):
     """Custom exception for when an invalid parameter is
     passed to a function."""
     pass
 
 
-class TranslationLoadError(Exception):
+class TranslationLoadException(Exception):
     """Custom exception handler for whe translation file fails
     to load."""
     pass
 
 
-class InvalidKVPError(Exception):
+class InvalidKVPException(Exception):
     """An exception raised when a key value pair is invalid -
     for example if the key of value is None or an empty string."""
     pass
 
 
-class LegendLayerError(Exception):
+class LegendLayerException(Exception):
     """An exception raised when trying to create a legend from
     a QgsMapLayer that does not have suitable characteristics to
     allow a legend to be created from it."""
     pass
 
 
-class NoFeaturesInExtentError(Exception):
+class NoFeaturesInExtentException(Exception):
     """An exception that gets thrown when no features are within
     the extent being clipped."""
     pass
 
 
-class InvalidProjectionError(Exception):
+class InvalidProjectionException(Exception):
     """An exception raised if a layer needs to be reprojected."""
     pass
 
 
-class InsufficientOverlapError(Exception):
+class InsufficientOverlapException(Exception):
     """An exception raised if an error occurs during extent calculation
     because the bounding boxes do not overlap."""
     pass
 
 
-class InvalidBoundingBoxError(Exception):
+class InvalidBoundingBoxException(Exception):
     """An exception raised if an error occurs during extent calculation
     because one of the extents is invalid."""
     pass

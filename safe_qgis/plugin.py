@@ -30,7 +30,7 @@ from PyQt4.QtCore import (QObject,
                           QSettings,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
-from safe_qgis.exceptions import TranslationLoadError
+from safe_qgis.exceptions import TranslationLoadException
 import utilities
 
 
@@ -111,7 +111,7 @@ class Plugin:
             myResult = self.translator.load(myTranslationPath)
             if not myResult:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
-                raise TranslationLoadError(myMessage)
+                raise TranslationLoadException(myMessage)
             QCoreApplication.installTranslator(self.translator)
         LOGGER.debug(('%s %s') % (myTranslationPath,
                                   os.path.exists(myTranslationPath)))
