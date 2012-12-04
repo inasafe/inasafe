@@ -16,7 +16,7 @@ from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 from safe.common.testing import HAZDATA, TESTDATA
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.exceptions import HashNotFoundException
+from safe_qgis.exceptions import HashNotFoundError
 from safe_qgis.test_keywords_dialog import makePadangLayerClone
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -108,9 +108,9 @@ class KeywordIOTest(unittest.TestCase):
         try:
             myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype')
             #if the above didnt cause an exception then bad
-            myMessage = 'Expected a HashNotFoundException to be raised'
+            myMessage = 'Expected a HashNotFoundError to be raised'
             assert myMessage
-        except HashNotFoundException:
+        except HashNotFoundError:
             #we expect this outcome so good!
             pass
 

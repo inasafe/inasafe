@@ -10,14 +10,6 @@ issue tracker is open to everyone, though you will first need to register a
 (free) account on GitHub to use it. You can find the GitHub self-registration
 page `here <https://github.com/signup/free>`_.
 
-Why can't I find the plugin in the QGIS repositories?
------------------------------------------------------
-
-We do plan to publish the plugin at
-`plugins.qgis.org <http://plugins.qgis.org/>`_ so that it can be effortlessly
-installed from within QGIS, we are just no ready to do that yet. In the mean
-time please use the manual installation procedure to install InaSAFE in QGIS.
-
 Do I need to pay to use |project_name|?
 ---------------------------------------
 
@@ -124,4 +116,20 @@ For vector to raster conversion, use gdal_rasterize utility, for example::
 
    gdal_rasterize -a <attribute_name> -l <source>.shp <destination>.tif
 
+
+Why does the plugin not show up in my QGIS Plugin Manager?
+----------------------------------------------------------
+
+One common issue is that if you upgraded from QGIS 1.7.x to 1.8 you may not
+get the new plugin repo added to your repo list. To fix this you can do:
+
+* open QGIS
+* Go Plugins -> Fetch Python Plugins
+* click 'Repositories' tab
+* click add
+* :guilabel:`Name`: Official QGIS Repository
+* :guilabel:`Url`: http://plugins.qgis.org/plugins/plugins.xml
+* Save it and the plugin repo list should update. If it doesn't,
+  close and open QGIS to force an update.
+* In the python plugin manager main tab now you should find InaSAFE available
 

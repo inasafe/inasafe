@@ -23,7 +23,7 @@ from PyQt4.QtCore import QObject
 
 #Do not import any QGIS or SAFE modules in this module!
 from safe_qgis.impact_calculator_thread import ImpactCalculatorThread
-from safe_qgis.exceptions import InsufficientParametersException
+from safe_qgis.exceptions import InsufficientParametersError
 from safe_qgis.safe_interface import (readSafeLayer,
                                    getSafeImpactFunctions)
 
@@ -141,22 +141,22 @@ class ImpactCalculator(QObject):
         Returns:
            None
         Raises:
-           InsufficientParametersException if not all parameters are
+           InsufficientParametersError if not all parameters are
            set.
         """
         self._filename = None
         self._result = None
         if self._hazardLayer is None or self._hazardLayer == '':
             myMessage = self.tr('Error: Hazard layer not set.')
-            raise InsufficientParametersException(myMessage)
+            raise InsufficientParametersError(myMessage)
 
         if self._exposureLayer is None or self._exposureLayer == '':
             myMessage = self.tr('Error: Exposure layer not set.')
-            raise InsufficientParametersException(myMessage)
+            raise InsufficientParametersError(myMessage)
 
         if self._function is None or self._function == '':
             myMessage = self.tr('Error: Function not set.')
-            raise InsufficientParametersException(myMessage)
+            raise InsufficientParametersError(myMessage)
 
         # Call impact calculation engine
         try:

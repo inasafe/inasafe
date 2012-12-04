@@ -29,12 +29,17 @@ import numpy
 
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer,
-                       QgsGeometry)
+                       QgsGeometry,
+                       QgsPoint)
 
 from safe_qgis.safe_interface import readSafeLayer
 from safe_qgis.safe_interface import getOptimalExtent
-from safe_qgis.exceptions import InvalidProjectionException, CallGDALError
-from safe_qgis.clipper import clipLayer, extentToKml, explodeMultiPartGeometry
+from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
+from safe_qgis.clipper import (clipLayer,
+                               extentToKml,
+                               explodeMultiPartGeometry,
+                               clipGeometry)
+from safe_qgis.utilities import qgisVersion
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                             setCanvasCrs,
@@ -43,13 +48,14 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                             GEOCRS,
                             setJakartaGeoExtent)
 
-from safe.common.testing import HAZDATA, TESTDATA, EXPDATA
+from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
 from safe.common.exceptions import GetDataError
 from safe.api import nanallclose
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
+VECTOR_PATH3 = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
 
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
@@ -436,10 +442,10 @@ class ClipperTest(unittest.TestCase):
                           myBoundingBox,
                           myResolution,
                           theExtraKeywords=myExtraKeywords)
-            except InvalidProjectionException:
+            except InvalidProjectionError:
                 pass
             else:
-                myMessage = 'Should have raised InvalidProjectionException'
+                myMessage = 'Should have raised InvalidProjectionError'
                 raise Exception(myMessage)
 
     def test_extentToKml(self):
@@ -501,6 +507,92 @@ class ClipperTest(unittest.TestCase):
         myCollection = explodeMultiPartGeometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart point geometry'
         assert len(myCollection) == 2, myMessage
+
+    def test_clipGeometry(self):
+        """Test that we can clip a geometry using another geometry."""
+        myGeometry = QgsGeometry.fromPolyline([
+            QgsPoint(10, 10),
+            QgsPoint(20, 20),
+            QgsPoint(30, 30),
+            QgsPoint(40, 40)])
+
+        myClipPolygon = QgsGeometry.fromPolygon([[
+             QgsPoint(20, 20),
+             QgsPoint(20, 30),
+             QgsPoint(30, 30),
+             QgsPoint(30, 20),
+             QgsPoint(20, 20)]])
+
+        myResult = clipGeometry(myClipPolygon, myGeometry)
+
+        if qgisVersion() > 10800:
+            myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
+        else:
+            myExpectedWkt = ('LINESTRING(20.000000 20.000000, '
+                '30.000000 30.000000)')
+        # There should only be one feature that intersects this clip
+        # poly so this assertion should work.
+        self.assertEqual(myExpectedWkt, str(myResult.exportToWkt()))
+
+        # Now poly on poly clip test
+        myClipPolygon = QgsGeometry.fromWkt(
+            'POLYGON((106.8218 -6.1842,106.8232 -6.1842,'
+            '106.82304963 -6.18317148,106.82179736 -6.18314774,'
+            '106.8218 -6.1842))')
+        myGeometry = QgsGeometry.fromWkt(
+            'POLYGON((106.8216869 -6.1852067,106.8213233 -6.1843051,'
+            '106.8212891 -6.1835559,106.8222566 -6.1835184,'
+            '106.8227557 -6.1835076,106.8228588 -6.1851204,'
+            '106.8216869 -6.1852067))')
+        myResult = clipGeometry(myClipPolygon, myGeometry)
+
+        if qgisVersion() > 10800:
+            myExpectedWkt = (
+                'POLYGON((106.82179833 -6.18353616,106.8222566 -6.1835184,'
+                '106.8227557 -6.1835076,106.82279996 -6.1842,'
+                '106.8218 -6.1842,106.82179833 -6.18353616))')
+        else:
+            myExpectedWkt = (
+                'POLYGON((106.821798 -6.183536,106.822257 -6.183518,'
+                '106.822756 -6.183508,106.822800 -6.184200,'
+                '106.821800 -6.184200,106.821798 -6.183536))')
+        # There should only be one feature that intersects this clip
+        # poly so this assertion should work.
+        self.assertEqual(myExpectedWkt, str(myResult.exportToWkt()))
+
+        # Now point on poly test clip
+
+        myGeometry = QgsGeometry.fromWkt('POINT(106.82241 -6.18369)')
+        myResult = clipGeometry(myClipPolygon, myGeometry)
+
+        if qgisVersion() > 10800:
+            myExpectedWkt = 'POINT(106.82241 -6.18369)'
+        else:
+            myExpectedWkt = 'POINT(106.822410 -6.183690)'
+            # There should only be one feature that intersects this clip
+        # poly so this assertion should work.
+        self.assertEqual(myExpectedWkt, str(myResult.exportToWkt()))
+
+    def test_clipVectorHard(self):
+        """Vector layers can be hard clipped.
+
+        Hard clipping will remove any dangling, non intersecting elements.
+        """
+        myVectorLayer = QgsVectorLayer(VECTOR_PATH3,
+                                       'OSM Buildings',
+                                       'ogr')
+        myMessage = 'Failed to load osm buildings'
+        assert myVectorLayer is not None, myMessage
+        assert myVectorLayer.isValid()
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        myClipRect = [106.8218, -6.1842, 106.8232, -6.1830]
+
+        # Clip the vector to the bbox
+        myResult = clipLayer(myVectorLayer, myClipRect, theHardClipFlag=True)
+
+        # Check the output is valid
+        assert(os.path.exists(myResult))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ClipperTest, 'test')

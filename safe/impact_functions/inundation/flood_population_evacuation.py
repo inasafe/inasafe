@@ -9,6 +9,7 @@ from safe.common.utilities import (ugettext as tr,
                                    get_defaults)
 from safe.common.utilities import verify
 from safe.common.tables import Table, TableRow
+from third_party.odict import OrderedDict
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -28,15 +29,16 @@ class FloodEvacuationFunction(FunctionProvider):
 
     title = tr('Need evacuation')
     defaults = get_defaults()
-    parameters = {
-        'thresholds': [1.0],
-        'postprocessors':
-            {'Gender': {'on': True},
-             'Age': {'on': True,
-                     'params': {
-                    'youth_ratio': defaults['YOUTH_RATIO'],
-                    'adult_ratio': defaults['ADULT_RATIO'],
-                    'elder_ratio': defaults['ELDER_RATIO']}}}}
+    parameters = OrderedDict([
+        ('thresholds', [1.0]),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

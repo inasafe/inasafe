@@ -26,7 +26,7 @@ from PyQt4.QtCore import (QObject,
                           pyqtSignal)
 
 from safe_qgis.safe_interface import calculateSafeImpact
-from safe_qgis.exceptions import InsufficientParametersException
+from safe_qgis.exceptions import InsufficientParametersError
 
 
 class ImpactCalculatorThread(threading.Thread, QObject):
@@ -78,7 +78,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         Returns:
            None
         Raises:
-           InsufficientParametersException if not all parameters are
+           InsufficientParametersError if not all parameters are
            set.
 
         Requires three parameters to be set before execution
@@ -143,7 +143,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         Returns:
            None
         Raises:
-           InsufficientParametersException
+           InsufficientParametersError
            set.
         """
         if (self._hazardLayer is None or self._exposureLayer is None
@@ -151,7 +151,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             myMessage = self.tr('Ensure that hazard, exposure and function '
                                 'are all set before trying to run the '
                                 'analysis.')
-            raise InsufficientParametersException(myMessage)
+            raise InsufficientParametersError(myMessage)
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculateSafeImpact(theLayers=myLayers,
