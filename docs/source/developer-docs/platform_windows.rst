@@ -300,6 +300,11 @@ If the installation goes successfully, you should see output like this::
    Processing dependencies for pip
    Finished processing dependencies for pip
 
+.. note:: If your Windows is 64bit, you need to do a little trick to install pip.
+   First you have to install python 32bit and add its path to PATH variable in 
+   environment variable (on Windows 7: `System Properties --> Advanced --> Environment Variables`).
+   After that, run command prompt (as administrator if needed) and run `easy_install pip`
+
 Installing nose
 ...............
 

@@ -12,6 +12,7 @@ This section of the documention describes how to use the |project_name| system.
    keywords
    options
    impact_functions
+   impact_functions_doc
    postprocessors
    inasafe_projects
    data_types

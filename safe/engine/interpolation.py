@@ -634,3 +634,58 @@ def make_circular_polygon(centers, radii, attributes=None):
                geometry_type='polygon')
 
     return Z
+
+
+def tag_polygons_by_grid(polygons, grid, threshold=0, tag='affected'):
+    """Tag polygons by raster values
+
+    Args:
+        * polygons: Polygon layer
+        * grid: Raster layer
+        * threshold: Threshold for grid value to tag polygon
+        * tag: Name of new tag
+
+    Returns:
+        Polygon layer: Same as input polygon but with extra attribute tag
+                       set according to grid values
+
+    """
+
+    verify(polygons.is_polygon_data)
+    verify(grid.is_raster)
+
+    polygon_attributes = polygons.get_data()
+    polygon_geometry = polygons.get_geometry(as_geometry_objects=True)
+
+    # Separate grid points by polygon
+    res = clip_grid_by_polygons(grid.get_data(),
+                                grid.get_geotransform(),
+                                polygon_geometry)
+
+    # Create new polygon layer with tag set according to grid values
+    # and threshold
+    new_attributes = []
+    for i, (_, values) in enumerate(res):
+        # For each polygon check if any grid value in it exceeds the threshold
+        affected = False
+        for val in values:
+            # Check each grid value in this polygon
+            if val > threshold:
+                affected = True
+
+        # Existing attributes for this polygon
+        attr = polygon_attributes[i].copy()
+
+        # Create tagged polygon feature
+        if affected:
+            attr[tag] = True
+        else:
+            attr[tag] = False
+
+        new_attributes.append(attr)
+
+    R = Vector(data=new_attributes,
+               projection=polygons.get_projection(),
+               geometry=polygon_geometry,
+               name='%s_tagged_by_%s' % (polygons.name, grid.name))
+    return R

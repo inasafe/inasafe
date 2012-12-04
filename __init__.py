@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '1.0.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -49,7 +48,7 @@ def description():
 
 def version():
     """Version of the plugin."""
-    return 'Version 1.0.1'
+    return 'Version 1.1.0'
 
 
 def qgisMinimumVersion():

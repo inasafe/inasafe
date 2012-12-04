@@ -150,11 +150,15 @@ class Vector(Layer):
             else:
                 self.geometry_type = get_geometry_type(geometry, geometry_type)
 
-                # Convert to objects if input is a list of simple arrays
                 if self.is_polygon_data:
+                    # Convert to objects if input is a list of simple arrays
                     self.geometry = [Polygon(outer_ring=x) for x in geometry]
                 else:
-                    self.geometry = geometry
+                    # Convert to list if input is an array
+                    if isinstance(geometry, numpy.ndarray):
+                        self.geometry = geometry.tolist()
+                    else:
+                        self.geometry = geometry
 
             if data is None:
                 # Generate default attribute as OGR will do that anyway
