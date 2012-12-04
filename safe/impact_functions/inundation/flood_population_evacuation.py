@@ -106,11 +106,16 @@ class FloodEvacuationFunction(FunctionProvider):
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
 
         # FIXME: Refactor and share
-        rice = int(evacuated * 2.8) # 400g per person per day
-        drinking_water = int(evacuated * 17.5) # 2.5L per person per day
-        water = int(evacuated * 105) #15L per person per day
-        family_kits = int(evacuated / 5) # assume 5 people per family (not in perka)
-        toilets = int(evacuated / 20) # 20 people per toilet
+        # 400g per person per day
+        rice = int(evacuated * 2.8)
+        # 2.5L per person per day
+        drinking_water = int(evacuated * 17.5)
+        # 15L per person per day
+        water = int(evacuated * 105)
+        # assume 5 people per family (not in perka)
+        family_kits = int(evacuated / 5)
+        # 20 people per toilet
+        toilets = int(evacuated / 20)
 
         # Generate impact report for the pdf map
         table_body = [question,
