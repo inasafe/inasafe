@@ -899,7 +899,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return self.aggregationPrefix + 'sum'
 
     def setupCalculator(self):
-        """Initialise the ImpactCalculator based on the current state of the ui.
+        """Initialise ImpactCalculator based on the current state of the ui.
 
         Args:
             None
@@ -955,7 +955,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except AttributeError:
             myOriginalKeywords = {}
         except InvalidParameterError:
-            #no kw file has ben found for postProcessingLayer. create an empty one
+            #No kw file was found for postProcessingLayer -create an empty one.
             myOriginalKeywords = {}
             self.keywordIO.writeKeywords(
                 self.postProcessingLayer, myOriginalKeywords)
@@ -1228,10 +1228,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             if (self.postProcessingLayer is not None and
                 self.lastUsedFunction != self.getFunctionID()):
-                # remove category keyword so we force the keyword editor to
-                # popup. see the beginning of _checkPostProcessingAttributes to see
-                # how the popup decision is made
-                self.keywordIO.deleteKeyword(self.postProcessingLayer, 'category')
+                # Remove category keyword so we force the keyword editor to
+                # popup. See the beginning of _checkPostProcessingAttributes to
+                # see how the popup decision is made
+                self.keywordIO.deleteKeyword(
+                    self.postProcessingLayer, 'category')
         except AttributeError:
             #first run, self.lastUsedFunction does not exist yet
             pass
@@ -1416,7 +1417,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFields = myProvider.fields()
         myUnneededAttributes = []
         for i in myFields:
-            if myFields[i].name() not in self.postProcessingAttributes.values():
+            if (myFields[i].name() not in
+                self.postProcessingAttributes.values()):
                 myUnneededAttributes.append(i)
         LOGGER.debug('Removing this attributes: ' + str(myUnneededAttributes))
         try:
