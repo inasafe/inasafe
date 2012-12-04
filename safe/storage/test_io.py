@@ -677,7 +677,7 @@ class Test_IO(unittest.TestCase):
         V_ref = V.get_topN('FLOOR_AREA', 5)
 
         geometry = V_ref.get_geometry()
-        data = V_ref.get_data()
+        #data = V_ref.get_data()
         projection = V_ref.get_projection()
 
         # Create new attributes with a range of types
@@ -698,7 +698,6 @@ class Test_IO(unittest.TestCase):
                         D[key] = values[j]
                 else:
                     D[key] = values[j]
-
             data.append(D)
 
         # Create new object from test data
@@ -710,9 +709,13 @@ class Test_IO(unittest.TestCase):
 
         V_tmp = read_layer(tmp_filename)
 
-        #print V_new.get_data()
-        #print V_tmp.get_data()
+        #print V_new.get_data()[1]
+        #print V_tmp.get_data()[1]
 
+        assert V_tmp.projection == V_new.projection
+        assert numpy.allclose(V_tmp.geometry, V_new.geometry)
+        assert V_tmp.data == V_new.data
+        assert V_tmp.get_data() == V_new.get_data()
         assert V_tmp == V_new
         assert not V_tmp != V_new
 
@@ -1024,6 +1027,89 @@ class Test_IO(unittest.TestCase):
 
         # Check override of ==
         assert R1 == R2
+
+    def test_rasters_created_with_projected_srs(self):
+        """Rasters can be created from arrays in projected coordinates
+        """
+
+        # Create test data
+        x_ul = 220534  # x value of upper left corner
+        y_ul = 827790   # y_value of upper left corner
+        numx = 8    # Number of xs
+        numy = 5    # Number of ys
+        dx = 200
+        dy = -200
+
+        # Define array where ys are rows and xs columns
+        A1 = numpy.zeros((numy, numx))
+
+        # Establish coordinates for lower left corner
+        y_ll = y_ul - numy * dy
+        x_ll = x_ul
+
+        # Define pixel centers along each direction
+        x = numpy.linspace(x_ll + 0.5, x_ll + numx - 0.5, numx)
+        y = numpy.linspace(y_ll + 0.5, y_ll + numy - 0.5, numy)
+
+        # Define raster with latitudes going bottom-up (south to north).
+        # Longitudes go left-right (west to east)
+        for i in range(numy):
+            for j in range(numx):
+                A1[numy - 1 - i, j] = linear_function(x[j], y[i])
+
+        # Throw in a nodata element
+        A1[2, 6] = numpy.nan
+
+        # Upper left corner
+        assert A1[0, 0] == linear_function(x[0], y[4])
+
+        # Lower left corner
+        assert A1[4, 0] == linear_function(x[0], y[0])
+
+        # Upper right corner
+        assert A1[0, 7] == linear_function(x[7], y[4])
+
+        # Lower right corner
+        assert A1[4, 7] == linear_function(x[7], y[0])
+
+        # Generate raster object and write
+        projection = """PROJCS["DGN95 / Indonesia TM-3 zone 48.2",
+                        GEOGCS["DGN95",
+                            DATUM["Datum_Geodesi_Nasional_1995",
+                                SPHEROID["WGS 84",6378137,298.257223563,
+                                    AUTHORITY["EPSG","7030"]],
+                                TOWGS84[0,0,0,0,0,0,0],
+                                AUTHORITY["EPSG","6755"]],
+                            PRIMEM["Greenwich",0,
+                                AUTHORITY["EPSG","8901"]],
+                            UNIT["degree",0.01745329251994328,
+                                AUTHORITY["EPSG","9122"]],
+                            AUTHORITY["EPSG","4755"]],
+                        UNIT["metre",1,
+                            AUTHORITY["EPSG","9001"]],
+                        PROJECTION["Transverse_Mercator"],
+                        PARAMETER["latitude_of_origin",0],
+                        PARAMETER["central_meridian",106.5],
+                        PARAMETER["scale_factor",0.9999],
+                        PARAMETER["false_easting",200000],
+                        PARAMETER["false_northing",1500000],
+                        AUTHORITY["EPSG","23834"],
+                        AXIS["X",EAST],
+                        AXIS["Y",NORTH]]"""
+
+        geotransform = (x_ul, dx, 0, y_ul, 0, dy)
+        R1 = Raster(A1, projection, geotransform,
+                    keywords={'testkwd': 'testval', 'size': 'small'})
+
+        # Check string representation of raster class
+        assert str(R1).startswith('Raster data')
+        assert str(R1.rows) in str(R1)
+        assert str(R1.columns) in str(R1)
+
+        assert nanallclose(R1.get_data(), A1, rtol=1.0e-12)
+        assert nanallclose(R1.get_geotransform(), geotransform,
+                           rtol=1.0e-12)
+        assert 'DGN95' in R1.get_projection()
 
     def test_reading_and_writing_of_real_rasters(self):
         """Rasters can be read and written correctly in different formats
@@ -1397,6 +1483,9 @@ class Test_IO(unittest.TestCase):
         # Generate vector layer
         V = R.to_vector_layer()
         geometry = V.get_geometry()
+        msg = ('Vector geometry should have been a list. I got %s'
+                % str(type(geometry))[1:-1])
+        assert isinstance(geometry, list), msg
         attributes = V.get_data()
 
         # Store it for visual inspection e.g. with QGIS
@@ -2324,7 +2413,7 @@ class Test_IO(unittest.TestCase):
         translatable strings.
         .. see:: :doc:`/developer-docs/i18n`
         """
-        # If you want to modify this code, please get aqcuainted with
+        # If you want to modify this code, please get acquainted with
         # Python's locale module. In particular:
         # http://docs.python.org/library/locale.html#locale.getdefaultlocale
 
@@ -2333,42 +2422,69 @@ class Test_IO(unittest.TestCase):
         os.environ['LC_ALL'] = 'C.UTF-8'
 
         #must be after above
-        string1 = 'Hello!'
-        out1 = tr(string1)
+        out1 = tr('Hello!')
         expected1 = 'Hello!'
         msg = 'Expected %s, got %s' % (expected1, out1)
-        assert string1 == expected1, msg
+        assert out1 == expected1, msg
 
         # Set the Indonesian locale to test translations.
         os.environ['LANG'] = 'id'
         os.environ['LC_ALL'] = 'id_ID.UTF-8'
 
         #must be after above
-        indoout1 = tr(string1)  # translate as 'Hi'
+        indoout1 = tr('Hello!')  # translate as 'Hi'
         indoexpected1 = 'Hi!'
         msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
         assert indoout1 == indoexpected1, msg
 
-    def test_multipart_polygon_raises_exception(self):
-        """Multipart polygons raise exception
+    def test_multipart_polygon_can_be_read(self):
+        """Multipart polygons are be converted to singlepart
         """
 
-        hazard_filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
+        filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
+        L0 = read_layer(filename)
+        assert len(L0) == 2685
+        assert L0.is_polygon_data
 
-        try:
-            read_layer(hazard_filename)
-        except ReadLayerError, e:
-            msg = 'Wrong error message: %s' % e
-            assert 'convert multipart' not in str(e), msg
-        # I (Sunni) added function for forcing multipolygon to be
-        # single polygon. So it will not raise any exception
-        #======================================================================
-        # else:
-        #    msg = 'Multipart polygon should not have raised exception'
-        #    raise Exception(msg)
-        #======================================================================
+        geometry = L0.get_geometry(as_geometry_objects=True)
+        attributes = L0.get_data()
+        projection = L0.get_projection()
+        keywords = L0.get_keywords()
 
-    test_multipart_polygon_raises_exception.slow = True
+        # Store temporarily e.g. for inspection with QGIS
+        tmp_filename = unique_filename(suffix='.shp')
+        Vector(geometry=geometry, data=attributes,
+               projection=projection,
+               keywords=keywords).write_to_file(tmp_filename)
+
+        # Read again
+        L1 = read_layer(tmp_filename)
+
+        assert len(L1) == len(L0)
+        assert L1.is_polygon_data
+
+        for i in range(len(L0)):
+            # Check geometry
+            g0 = L0.get_geometry(as_geometry_objects=True)[i]
+            g1 = L1.get_geometry(as_geometry_objects=True)[i]
+            assert numpy.allclose(g0.outer_ring, g1.outer_ring)
+            assert len(g0.inner_rings) == len(g1.inner_rings)
+
+            for j in range(len(g0.inner_rings)):
+                assert numpy.allclose(g0.inner_rings[j], g1.inner_rings[j])
+
+            # Check attributes
+            v0 = L0.get_data()[i]
+            v1 = L1.get_data()[i]
+            assert v0 == v1
+
+        # Check projection
+        assert L0.projection == L1.projection
+
+        # Compare all
+        assert L0 == L1
+
+    test_multipart_polygon_can_be_read.slow = True
 
     def test_projection_comparisons(self):
         """Projection information can be correctly compared

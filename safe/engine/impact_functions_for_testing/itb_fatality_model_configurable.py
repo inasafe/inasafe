@@ -6,11 +6,14 @@ from safe.common.utilities import (ugettext as tr,
                                    get_defaults)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
+from third_party.odict import OrderedDict
 
 import numpy
 
 
 # This is for testing of configurable impact functions dialog
+
+
 class ITBFatalityFunctionConfigurable(FunctionProvider):
     """Indonesian Earthquake Fatality Model
 
@@ -83,19 +86,22 @@ class ITBFatalityFunctionConfigurable(FunctionProvider):
 
     title = tr('Die or be displaced')
     defaults = get_defaults()
-    parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
-                      # Rates of people displaced for each MMI level
-                      displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                                         7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0},
-                      # Threshold below which layer should be transparent
-                      tolerance=0.01,
-                      calculate_displaced_people=True,
-                      postprocessors={'Gender': {'on': True},
-                          'Age': {'on': True,
-                              'params':
-                                  {'youth_ratio': defaults['YOUTH_RATIO'],
-                                   'adult_ratio': defaults['ADULT_RATIO'],
-                                   'elder_ratio': defaults['ELDER_RATIO']}}})
+    parameters = OrderedDict([
+        ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
+        # Rates of people displaced for each MMI level
+        ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
+                              7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
+        # Threshold below which layer should be transparent
+        ('tolerance', 0.01),
+        ('calculate_displaced_people', True),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model

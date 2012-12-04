@@ -20,8 +20,8 @@ import logging
 
 from PyQt4 import QtCore, QtGui
 from qgis.core import QgsMapLayer
-from safe_qgis.exceptions import (LegendLayerException,
-                                  KeywordNotFoundException)
+from safe_qgis.exceptions import (LegendLayerError,
+                                  KeywordNotFoundError)
 from safe_qgis.utilities import qgisVersion, dpiToMeters
 from safe_qgis.keyword_io import KeywordIO
 
@@ -84,10 +84,10 @@ class MapLegend():
         if self.layer is None:
             myMessage = self.tr('Unable to make a legend when map generator '
                                 'has no layer set.')
-            raise LegendLayerException(myMessage)
+            raise LegendLayerError(myMessage)
         try:
             self.keywordIO.readKeywords(self.layer, 'impact_summary')
-        except KeywordNotFoundException, e:
+        except KeywordNotFoundError, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
                                 'QGIS layers list or creating a new impact '
@@ -116,7 +116,7 @@ class MapLegend():
             myMessage = self.tr('A legend can only be generated for '
                                 'vector layers that use the "new symbology" '
                                 'implementation in QGIS.')
-            raise LegendLayerException(myMessage)
+            raise LegendLayerError(myMessage)
             # new symbology - subclass of QgsFeatureRendererV2 class
         self.legendImage = None
         myRenderer = self.layer.rendererV2()
@@ -145,7 +145,7 @@ class MapLegend():
                                 'impact layer. Please use one of these: '
                                 'single symbol, categorised symbol or '
                                 'graduated symbol and then try again.')
-            raise LegendLayerException(myMessage)
+            raise LegendLayerError(myMessage)
         return self.legendImage
 
     def getRasterLegend(self):
@@ -299,7 +299,11 @@ class MapLegend():
                                             QtGui.QImage.Format_RGB32)
             self.legendImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             self.legendImage.setDotsPerMeterY(dpiToMeters(self.dpi))
-            self.legendImage.fill(QtGui.QColor(255, 255, 255))
+
+            # Only works in Qt4.8
+            #self.legendImage.fill(QtGui.QColor(255, 255, 255))
+            # Works in older Qt4 versions
+            self.legendImage.fill(255 + 255 * 256 + 255 * 256 * 256)
             myPainter = QtGui.QPainter(self.legendImage)
             myFontWeight = QtGui.QFont.Bold
             myItalicsFlag = False
@@ -317,7 +321,10 @@ class MapLegend():
                                      QtGui.QImage.Format_RGB32)
             myImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             myImage.setDotsPerMeterY(dpiToMeters(self.dpi))
-            myImage.fill(QtGui.QColor(255, 255, 255))
+            # Only works in Qt4.8
+            #myImage.fill(QtGui.qRgb(255, 255, 255))
+            # Works in older Qt4 versions
+            myImage.fill(255 + 255 * 256 + 255 * 256 * 256)
             myPainter = QtGui.QPainter(myImage)
 
             myRect = QtCore.QRectF(0, 0,

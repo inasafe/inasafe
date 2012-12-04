@@ -30,3 +30,5 @@ run_qgis.sh
 .idea/runConfigurations/NoseTests_Realtime.xml
 .idea/workspace.xml
 pydev
+.idea/inasafe-dev.iml
+.idea/misc.xml

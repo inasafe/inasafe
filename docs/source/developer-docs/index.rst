@@ -18,6 +18,7 @@ Developer Documentation Contents:
    platform_windows
    coding_standards
    logging
+   profiling
    i18n
    version_control
    maintaining_documentation

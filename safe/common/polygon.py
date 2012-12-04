@@ -1296,6 +1296,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
         else:
             # Assume it is an array
             outer_ring = polygon
+            inner_rings = None
 
         inside, outside = in_and_outside_polygon(remaining_points,
                                                  outer_ring,

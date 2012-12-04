@@ -1,3 +1,4 @@
+
 """Impact function based on Padang 2009 post earthquake survey
 
 This impact function estimates percentual damage to buildings as a
@@ -124,10 +125,10 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                       TableRow([tr('Buildings'), tr('Total')],
                                header=True),
                       TableRow([tr('All'), N]),
-                      TableRow([tr('No damage'), count_none]),
-                      TableRow([tr('Low damage'), count_low]),
-                      TableRow([tr('Medium damage'), count_medium]),
-                      TableRow([tr('High damage'), count_high])]
+                      TableRow([tr('No damage'), str(count_none)]),
+                      TableRow([tr('Low damage'), str(count_low)]),
+                      TableRow([tr('Medium damage'), str(count_medium)]),
+                      TableRow([tr('High damage'), str(count_high)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Levels of impact are defined by post 2009 '

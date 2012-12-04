@@ -22,6 +22,7 @@ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get install python2.7-examples
 sudo apt-get -qq update
 sudo apt-get install -q -y qgis python-qgis
+
 echo "Installing Ubuntu packages for development"
 sudo apt-get install -y git rsync pep8 python-nose python-coverage python-numpy\
      pyqt4-dev-tools python-pip libqt4-dev pyflakes python-nosexcover
@@ -78,8 +79,9 @@ echo "Downloading InaSAFE"
 checkup ${InaSAFEREPO} ${InaSAFEDIR} master
 
 echo "Create symlink $InaSAFEQGIS from QGis plugin area"
-mkdir ~/.qgis/python 2>/dev/null
-mkdir ~/.qgis/python/plugins 2>/dev/null
+sudo chown $USER ~/.qgis
+mkdir ~/.qgis/python
+mkdir ~/.qgis/python/plugins
 pushd ~/.qgis/python/plugins
 ln -sf $InaSAFEQGIS
 popd
@@ -92,7 +94,7 @@ popd
 
 
 echo
-echo "Congratulations, you have installed InaSAFE - QGIS"
+echo "Congratulations, you have installed InaSAFE"
 echo
 echo "To verify that the installation works, you can run the test suite"
 echo "cd $InaSAFEQGIS"

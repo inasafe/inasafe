@@ -8,6 +8,7 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.engine.interpolation import make_circular_polygon
 from safe.common.exceptions import InaSAFEError
+from third_party.odict import OrderedDict
 
 
 class VolcanoBuildingImpact(FunctionProvider):
@@ -27,8 +28,9 @@ class VolcanoBuildingImpact(FunctionProvider):
     title = _('Be affected')
     target_field = 'buildings'
 
-    parameters = dict(distances=[1000, 2000, 3000, 5000, 10000],
-                      volcano_name='All')
+    parameters = OrderedDict([
+        ('distances', [1000, 2000, 3000, 5000, 10000]),
+        ('volcano_name', 'All')])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -130,13 +132,13 @@ class VolcanoBuildingImpact(FunctionProvider):
         table_body = [question,
                       TableRow([_('Buildings'), _('Total'), _('Cumulative')],
                                header=True),
-                      TableRow([_('All'), total_affected])]
+                      TableRow([_('All'), str(total_affected), ''])]
 
         cum = 0
         for name in category_names:
             count = categories[name]
             cum += count
-            table_body.append(TableRow([name, int(count), int(cum)]))
+            table_body.append(TableRow([name, str(count), str(cum)]))
 
         table_body.append(TableRow(_('Map shows buildings affected in '
                                      'each of volcano hazard polygons.')))
@@ -146,7 +148,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         table_body.extend([TableRow(_('Notes'), header=True),
                            _('Total number of buildings %i in the viewable '
                              'area') % total,
-                           _('Only buildings available in Open Street Map'
+                           _('Only buildings available in OpenStreetMap '
                              'are considered.')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('Buildings affected by volcanic hazard zone')

@@ -10,6 +10,8 @@ from safe.engine.core import calculate_impact
 from safe.engine.interpolation import interpolate_polygon_raster
 from safe.engine.interpolation import interpolate_raster_vector_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.engine.interpolation import tag_polygons_by_grid
+
 
 from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
@@ -44,6 +46,8 @@ from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
 from impact_functions_for_testing import itb_fatality_model_org
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
+PAGFatalityFunction)
 # pylint: enable=W0611
 
 
@@ -214,7 +218,7 @@ class Test_Engine(unittest.TestCase):
         #calculated_result = I.get_data()
         #print calculated_result.shape
         keywords = I.get_keywords()
-#        print "keywords", keywords
+        # print "keywords", keywords
         population = float(keywords['total_population'])
         fatalities = float(keywords['total_fatalities'])
 
@@ -227,6 +231,7 @@ class Test_Engine(unittest.TestCase):
         expected_fatalities = int(round(40871.3028 / 1000)) * 1000
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
+
         assert numpy.allclose(fatalities, expected_fatalities,
                               rtol=1.0e-5), msg
 
@@ -244,6 +249,48 @@ class Test_Engine(unittest.TestCase):
         msg = ('Did not find expected fatality value %i in summary %s'
                % (x, keywords['impact_summary']))
         assert format_int(x) in keywords['impact_summary'], msg
+
+    def test_pager_earthquake_fatality_estimation(self):
+        """Fatalities from ground shaking can be computed correctly
+            using the Pager fatality model.
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
+        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+        plugin_name = 'P A G Fatality Function'
+        plugin_list = get_plugins(plugin_name)
+
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)
+        keywords = I.get_keywords()
+        population = float(keywords['total_population'])
+        fatalities = float(keywords['total_fatalities'])
+
+        # Check aggregated values
+        expected_population = 85425000.0
+        msg = ('Expected population was %f, I got %f'
+               % (expected_population, population))
+        assert population == expected_population, msg
+
+        expected_fatalities = 409000.0
+        msg = ('Expected fatalities was %f, I got %f'
+               % (expected_fatalities, fatalities))
+        assert numpy.allclose(fatalities, expected_fatalities,
+                              rtol=1.0e-5), msg
 
     def test_ITB_earthquake_fatality_estimation_org(self):
         """Fatalities from ground shaking can be computed correctly
@@ -849,6 +896,35 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(attributes[23]['grid_value'], 50.0377)
         assert attributes[23]['polygon_id'] == 3
 
+    def test_tagging_polygons_by_raster_values(self):
+        """Polygons can be tagged by raster values
+
+        This is testing a simple application of clip_grid_by_polygons
+        """
+
+        # Name input files
+        polygon = join(TESTDATA, 'test_polygon_on_test_grid.shp')
+        grid = join(TESTDATA, 'test_grid.asc')
+
+        # Get layers using API
+        G = read_layer(grid)
+        P = read_layer(polygon)
+
+        # Run tagging routine
+        R = tag_polygons_by_grid(P, G, threshold=50.85, tag='tag')
+        assert len(R) == len(P)
+
+        data = R.get_data()
+        for d in data:
+            assert 'tag' in d
+
+        # Check against inspection with QGIS. Only polygon 1 and 2
+        # contain grid points with values greater than 50.85
+        assert data[0]['tag'] is False
+        assert data[1]['tag'] is True
+        assert data[2]['tag'] is True
+        assert data[3]['tag'] is False
+
     def test_polygon_hazard_with_holes_and_raster_exposure(self):
         """Rasters can be clipped by polygons (with holes)
 
@@ -1192,8 +1268,8 @@ class Test_Engine(unittest.TestCase):
 
         # Do interpolation using underlying library
         # This was to debug this test failing under Windows
-        I = interpolate_raster_vector_points(H, E)
         key = 'Tsunami Ma'
+        I = interpolate_raster_vector_points(H, E, attribute_name=key)
 
         for feature in I.get_data():
             msg = ('%s not found in field list:\n%s'
@@ -1578,8 +1654,6 @@ class Test_Engine(unittest.TestCase):
         attributes = exposure_vector.get_data()
 
         # Test interpolation function
-        #I = hazard_raster.interpolate(exposure_vector,
-        #                              attribute_name='MMI')
         I = assign_hazard_values_to_exposure_data(hazard_raster,
                                                   exposure_vector,
                                                   attribute_name='MMI')
@@ -1656,8 +1730,6 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
 
         # Test interpolation function
-        #I = hazard_raster.interpolate(exposure_vector,
-        #                              attribute_name='depth')
         I = assign_hazard_values_to_exposure_data(hazard_raster,
                                                   exposure_vector,
                                                   attribute_name='depth')
@@ -1701,7 +1773,6 @@ class Test_Engine(unittest.TestCase):
         attributes = E.get_data()
 
         # Test the interpolation function
-        #I = H.interpolate(E, attribute_name='depth')
         I = assign_hazard_values_to_exposure_data(H, E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
@@ -1829,12 +1900,8 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  attribute_name=None)  # Take all attributes across
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_attributes = I.get_data()
         msg = 'Expected "depth", got %s' % I.get_name()
@@ -1895,12 +1962,8 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  attribute_name=None)  # Take all attributes across
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_attributes = I.get_data()
 
@@ -1995,80 +2058,6 @@ class Test_Engine(unittest.TestCase):
 
     test_interpolation_from_polygons_multiple.slow = True
 
-    def Xtest_point_interpolation_from_polygons_one_attribute(self):
-        """Point interpolation from multiple polygons works with attribute
-
-        This is a test for interpolation (issue #48)
-        """
-
-        # FIXME: test passes, but it is not tested that
-        #        nothing *but* the requested attribute
-        #        has been carried over. Do we need this?
-
-        # Name file names for hazard and exposure
-        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
-        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)
-
-        # Read input data
-        H = read_layer(hazard_filename)
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-
-        # Cut down to make test quick
-        H = Vector(data=H_attributes[658:850],
-                   geometry=H_geometry[658:850],
-                   projection=H.get_projection())
-        #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
-
-        E = read_layer(exposure_filename)
-        E_attributes = E.get_data()
-
-        # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  # Spelling is as in test data
-        #                  attribute_name='Category')
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name='Category')
-
-        #I.write_to_file('MM_res.shp')
-
-        I_attributes = I.get_data()
-        assert I.get_name() == 'depth'
-        N = len(I_attributes)
-        assert N == len(E_attributes)
-
-        # Assert that expected attribute names exist
-        I_names = I.get_attribute_names()
-        E_names = E.get_attribute_names()
-
-        name = 'Category'
-        msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
-        assert name in I_names, msg
-
-        print I_names
-
-        for name in E_names:
-            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        # Verify interpolated values with test result
-        counts = {}
-        for i in range(N):
-            category = I_attributes[i]['Category']
-            if category not in counts:
-                counts[category] = 0
-
-            counts[category] += 1
-
-        msg = ('Expected 100 points tagged with category "High", '
-               'but got only %i' % counts['High'])
-        assert counts['High'] == 100, msg
-
-        msg = ('Expected 739 points tagged with category "Very High", '
-               'but got only %i' % counts['Very High'])
-        assert counts['Very High'] == 739, msg
-
     def test_interpolation_from_polygons_error_handling(self):
         """Interpolation using polygons handles input errors as expected
 
@@ -2086,7 +2075,6 @@ class Test_Engine(unittest.TestCase):
 
         # Check projection mismatch is caught
         try:
-            #H.interpolate(E)
             assign_hazard_values_to_exposure_data(H, E)
         except VerificationError, e:
             msg = ('Projection mismatch should have been caught: %s'
@@ -2225,9 +2213,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2338,9 +2324,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print 'This took', time.time() - t0
 
         I_geometry = I.get_geometry()
@@ -2481,9 +2465,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print 'That took %f seconds' % (time.time() - t0)
 
         # TODO:
@@ -2600,8 +2582,7 @@ class Test_Engine(unittest.TestCase):
         #import time
         #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         #print ('Using 2704 individual polygons took %f seconds'
         #       % (time.time() - t0))
         #I.write_to_file('flood_prone_roads_jakarta_individual.shp')
@@ -2677,8 +2658,7 @@ class Test_Engine(unittest.TestCase):
         print
         print 'start'
         I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name=None)
+                                                  layer_name='depth')
         print 'Using merged polygon took %f seconds' % (time.time() - t0)
         I.write_to_file('flood_prone_roads_jakarta_merged.shp')
 
@@ -2691,81 +2671,6 @@ class Test_Engine(unittest.TestCase):
         #assert I_attributes[198]['parent_line_id'] == 333
 
     Xtest_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
-
-    def Xtest_line_interpolation_from_polygons_one_attribute(self):
-        """Line interpolation using one polygon works with attribute
-
-        This is a test for road interpolation (issue #55)
-        """
-
-        # FIXME: test passes, but functionality is not really there.
-        # Do we need it?
-
-        # RETIRE!!!!!!
-
-        # Name file names for hazard level and exposure
-        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
-        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
-
-        # Read input data
-        H = read_layer(hazard_filename)
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-
-        # Cut down to polygon #799 to make test quick
-        H = Vector(data=H_attributes[799:800],
-                   geometry=H_geometry[799:800],
-                   projection=H.get_projection())
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-        E = read_layer(exposure_filename)
-
-        # Test interpolation function
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  attribute_name='Category')
-
-        I_geometry = I.get_geometry()
-        I_attributes = I.get_data()
-
-        N = len(I_attributes)
-
-        # Possibly generate files for visual inspection with e.g. QGis
-        if False:
-            L = Vector(geometry=H_geometry, geometry_type='polygon',
-                       data=H_attributes)
-            L.write_to_file('test_polygon.shp')
-
-            L = Vector(geometry=I_geometry, geometry_type='line',
-                       data=I_attributes)
-            L.write_to_file('interpolated_lines.shp')
-
-        # Assert that expected attribute names exist
-        I_names = I.get_attribute_names()
-        E_names = E.get_attribute_names()
-
-        name = 'Category'
-        msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
-        assert name in I_names, msg
-
-        for name in E_names:
-            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        # Verify interpolated values with test result
-        counts = {}
-        for i in range(N):
-
-            # Check specific attribute
-            category = I_attributes[i]['Category']
-            if category not in counts:
-                counts[category] = 0
-
-            counts[category] += 1
-
-        msg = ('Expected 14 segments tagged with category "Very High", '
-               'but got only %i' % counts['Very High'])
-        assert counts['Very High'] == 14, msg
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -3119,12 +3024,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    #suite = unittest.makeSuite(Test_Engine,
-    #                           ('test_polygon_to_roads_interpolation'
-    #                            '_flood_example'))
-    #suite = unittest.makeSuite(Test_Engine,
-    #                           ('test_polygon_to_roads_interpolation'
-    #                            '_jakarta_flood_merged'))
     suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

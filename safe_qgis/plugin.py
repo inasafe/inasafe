@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.earthquake.earthquake_building_impact import LOGGER
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -29,7 +30,7 @@ from PyQt4.QtCore import (QObject,
                           QSettings,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
-from safe_qgis.exceptions import TranslationLoadException
+from safe_qgis.exceptions import TranslationLoadError
 import utilities
 
 
@@ -90,11 +91,18 @@ class Plugin:
                                              QVariant('')).toString()
         else:
             myLocaleName = QLocale.system().name()
+            # NOTES: we split the locale name because we need the first two
+            # character i.e. 'id', 'af, etc
+            myLocaleName = str(myLocaleName).split('_')[0]
+
         # Also set the system locale to the user overridden local
         # so that the inasafe library functions gettext will work
         # .. see:: :py:func:`common.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
+        LOGGER.debug(('%s %s %s %s') % (thePreferredLocale , myOverrideFlag,
+                                        QLocale.system().name(),
+                                        os.environ['LANG']))
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'safe_qgis', 'i18n',
                         'inasafe_' + str(myLocaleName) + '.qm')
@@ -103,8 +111,10 @@ class Plugin:
             myResult = self.translator.load(myTranslationPath)
             if not myResult:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
-                raise TranslationLoadException(myMessage)
+                raise TranslationLoadError(myMessage)
             QCoreApplication.installTranslator(self.translator)
+        LOGGER.debug(('%s %s') % (myTranslationPath,
+                                  os.path.exists(myTranslationPath)))
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -162,11 +172,12 @@ class Plugin:
         #--------------------------------------
         self.actionKeywordsDialog = QAction(
                             QIcon(':/plugins/inasafe/keywords.png'),
-                            self.tr('Keyword Editor'), self.iface.mainWindow())
+                            self.tr('InaSAFE Keyword Editor'),
+                            self.iface.mainWindow())
         self.actionKeywordsDialog.setStatusTip(self.tr(
-                                    'Open the keywords editor'))
+                                    'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setWhatsThis(self.tr(
-                                    'Open the keywords editor'))
+                                    'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setEnabled(False)
 
         QObject.connect(self.actionKeywordsDialog, SIGNAL('triggered()'),
@@ -214,12 +225,12 @@ class Plugin:
         #--------------------------------------
         self.actionImpactFunctionsDoc = QAction(
                         QIcon(':/plugins/inasafe/functions-table.png'),
-                        self.tr('InaSAFE Impact Functions Doc'),
+                        self.tr('InaSAFE Impact Functions Browser'),
                         self.iface.mainWindow())
         self.actionImpactFunctionsDoc.setStatusTip(self.tr(
-                                    'Open InaSAFE impact functions doc'))
+                                    'Open InaSAFE Impact Functions Browser'))
         self.actionImpactFunctionsDoc.setWhatsThis(self.tr(
-                                    'Open InaSAFE impact functions doc'))
+                                    'Open InaSAFE Impact Functions Browser'))
         QObject.connect(self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
                         self.showImpactFunctionsDoc)
 
@@ -230,7 +241,6 @@ class Plugin:
         # Short cut for Open Impact Functions Doc
         self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
         self.iface.registerMainWindowAction(self.keyAction, "F7")
-        self.iface.addPluginToMenu("&Test plugins", self.keyAction)
         QObject.connect(self.keyAction, SIGNAL("triggered()"),
                         self.keyActionF7)
 
@@ -238,7 +248,7 @@ class Plugin:
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = Dock(self.iface)
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
 
         if myLegendTab:

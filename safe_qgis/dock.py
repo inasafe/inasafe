@@ -38,7 +38,8 @@ from qgis.core import (QgsMapLayer,
                        QgsFeature,
                        QgsRectangle,
                        QgsPoint,
-                       QgsField)
+                       QgsField,
+                       QGis)
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.dock_base import Ui_DockBase
@@ -64,25 +65,23 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       safeTr,
                                       get_version,
                                       temp_dir,
-                                      ReadLayerError)
+                                      ReadLayerError,
+                                      get_post_processors)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
-from safe_qgis.exceptions import (KeywordNotFoundException,
-                                  InsufficientOverlapException,
-                                  InvalidParameterException,
-                                  InsufficientParametersException,
-                                  HashNotFoundException,
+from safe_qgis.exceptions import (KeywordNotFoundError,
+                                  InsufficientOverlapError,
+                                  InvalidParameterError,
+                                  InsufficientParametersError,
+                                  HashNotFoundError,
                                   CallGDALError,
-                                  NoFeaturesInExtentException,
-                                  InvalidProjectionException)
+                                  NoFeaturesInExtentError,
+                                  InvalidProjectionError)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
-from safe_qgis.function_options_dialog import (
-   FunctionOptionsDialog)
+from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
-
-from safe.postprocessors import get_post_processors
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -107,8 +106,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
 
         Args:
-
-           * iface - a Quantum GIS QGisAppInterface instance.
+           iface: QgsAppInterface - a Quantum GIS QGisAppInterface instance.
 
         Returns:
            not applicable
@@ -148,7 +146,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
-        self._aggregationPrefix = 'aggr_'
+
+        # Aggregation / post processing related items
+        self.postProcessingOutput = {}
+        self.aggregationPrefix = 'aggr_'
+        self.doZonalAggregation = False
+        self.postProcessingLayer = None
+        self.postProcessingAttributes = {}
+        self.aggregationAttributeTitle = None
+        self.runtimeKeywordsDialog = None
+
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
         self.activeFunction = None
@@ -204,6 +211,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFlag = mySettings.value(
                             'inasafe/clipToViewport', True).toBool()
         self.clipToViewport = myFlag
+
+        # whether to 'hard clip' layers (e.g. cut buildings in half if they
+        # lie partially in the AOI
+        myFlag = mySettings.value(
+            'inasafe/clipHard', False).toBool()
+        self.clipHard = myFlag
 
         # whether to show or not postprocessing generated layers
         myFlag = mySettings.value(
@@ -366,8 +379,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return (True, myMessage)
 
     def on_cboHazard_currentIndexChanged(self, theIndex):
-        """Automatic slot executed when the Hazard combo is changed
-        so that we can see if the ok button should be enabled.
+        """Automatic slot executed when the Hazard combo is changed.
+
+        This is here so that we can see if the ok button should be enabled.
 
         .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
@@ -384,12 +398,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Add any other logic you might like here...
         del theIndex
         self.getFunctions()
-        self._toggleCboAggregation()
+        self.toggleAggregationCombo()
         self.setOkButtonStatus()
 
     def on_cboExposure_currentIndexChanged(self, theIndex):
-        """Automatic slot executed when the Exposure combo is changed
-        so that we can see if the ok button should be enabled.
+        """Automatic slot executed when the Exposure combo is changed.
+
+        This is here so that we can see if the ok button should be enabled.
 
         .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
@@ -403,16 +418,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            No exceptions explicitly raised.
 
         """
-        # Add any other logic you mught like here...
+        # Add any other logic you might like here...
         del theIndex
         self.getFunctions()
-        self._toggleCboAggregation()
+        self.toggleAggregationCombo()
         self.setOkButtonStatus()
 
     @pyqtSlot(QtCore.QString)
     def on_cboFunction_currentIndexChanged(self, theIndex):
-        """Automatic slot executed when the Function combo is changed
-        so that we can see if the ok button should be enabled.
+        """Automatic slot executed when the Function combo is changed.
+
+        This is here so that we can see if the ok button should be enabled.
 
         Args:
            None.
@@ -422,7 +438,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises:
            no exceptions explicitly raised."""
-        # Add any other logic you mught like here...
+        # Add any other logic you might like here...
         if not theIndex.isNull or not theIndex == '':
             myFunctionID = self.getFunctionID()
 
@@ -431,15 +447,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.functionParams = None
             if hasattr(self.activeFunction, 'parameters'):
                 self.functionParams = self.activeFunction.parameters
-            self.setToolFunctionOptionsButton()
+            self.setFunctionOptionsStatus()
         else:
             del theIndex
-        self._toggleCboAggregation()
+        self.toggleAggregationCombo()
         self.setOkButtonStatus()
 
-    def _toggleCboAggregation(self):
-        """Helper function to toggle the aggregation combo depending on the
-        current dock status
+    def toggleAggregationCombo(self):
+        """Helper function to toggle the aggregation combo enabled status.
+
+        Whether the combo is toggled on or off will depend on the current dock
+        status.
 
         Args:
            None.
@@ -465,8 +483,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.cboAggregation.setEnabled(False)
 
     def setOkButtonStatus(self):
-        """Helper function to set the ok button status if the
-        form is valid and disable it if it is not.
+        """Helper function to set the ok button status based on form validity.
 
         Args:
            None.
@@ -480,10 +497,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMessage is not '':
             self.displayHtml(myMessage)
 
-    def setToolFunctionOptionsButton(self):
-        """Helper function to set the tool function button
-        status if there is function parameters to configure
-        then enable it, otherwise disable it.
+    def setFunctionOptionsStatus(self):
+        """Helper function to toggle the tool function button based on context.
+
+        If there are function parameters to configure then enable it, otherwise
+        disable it.
 
         Args:
            None.
@@ -499,8 +517,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     @pyqtSlot()
     def on_toolFunctionOptions_clicked(self):
-        """Automatic slot executed when the tool button for configuring
-        impact functions is clicked (when available) to open the dialog
+        """Automatic slot executed when toolFunctionOptions is clicked.
 
         Args:
            None.
@@ -512,14 +529,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            no exceptions explicitly raised."""
         myDialog = FunctionOptionsDialog(self)
         myDialog.setDialogInfo(self.getFunctionID())
-        myDialog.buildForm(self.activeFunction, self.functionParams)
-        myDialog.showNormal()
+        myDialog.buildForm(self.functionParams)
+
+        if myDialog.exec_():
+            self.activeFunction.parameters = myDialog.result()
+            self.functionParams = self.activeFunction.parameters
 
     def canvasLayersetChanged(self):
-        """A helper slot to update the dock combos if the canvas layerset
-        has been changed (e.g. one or more layer visibilities changed).
-        If self.showOnlyVisibleLayersFlag is set to False this method will
-        simply return, doing nothing.
+        """A helper slot to update dock combos if canvas layerset changes.
+
+        Activated when the layerset has been changed (e.g. one or more layer
+        visibilities changed). If self.showOnlyVisibleLayersFlag is set to
+        False this method will simply return, doing nothing.
 
         Args:
             None
@@ -528,7 +549,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             None
 
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
 
         """
         if self.showOnlyVisibleLayersFlag:
@@ -536,22 +557,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     @pyqtSlot()
     def layersWillBeRemoved(self):
-        """Slot for the new (QGIS 1.8 and beyond api) to notify us when
-        a group of layers is are removed. This is optimal since if many layers
-        are removed this slot gets called only once. This slot simply
-        delegates to getLayers and is only implemented here to make the
-        connections between the different signals and slots clearer and
-        better documented."""
+        """QGIS 1.8+ slot to notify us when a group of layers are removed.
+        This is optimal since if many layers are removed this slot gets called
+        only once. This slot simply delegates to getLayers and is only
+        implemented here to make the connections between the different signals
+        and slots clearer and better documented.
+
+        .. note:: Requires QGIS 1.8 and better api.
+
+        """
         self.getLayers()
 
     @pyqtSlot()
     def layersAdded(self, theLayers=None):
-        """Slot for the new (QGIS 1.8 and beyond api) to notify us when
+        """QGIS 1.8+ slot to notify us when a group of layers are added.
+
+        Slot for the new (QGIS 1.8 and beyond api) to notify us when
         a group of layers is are added. This is optimal since if many layers
         are added this slot gets called only once. This slot simply
         delegates to getLayers and is only implemented here to make the
         connections between the different signals and slots clearer and
-        better documented."""
+        better documented.
+
+        .. note:: Requires QGIS 1.8 and better api.
+
+        """
         del theLayers
         self.getLayers()
 
@@ -567,12 +597,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     @pyqtSlot()
     def layerWasAdded(self):
-        """Slot for the old (pre QGIS 1.8 api) to notify us when
+        """QGIS <= 1.7.x slot to notify us when a layer was added.
+
+        Slot for the old (pre QGIS 1.8 api) to notify us when
         a layer is added. This is suboptimal since if many layers are
         added this slot gets called multiple times. This slot simply
         delegates to getLayers and is only implemented here to make the
         connections between the different signals and slots clearer and
-        better documented."""
+        better documented.
+
+        ..note :: see :func:`layersAdded` - this slot will be deprecated
+            eventually.
+
+        """
         self.getLayers()
 
     def getLayers(self):
@@ -640,8 +677,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myLayer.setLayerName(myTitle)
 
             #check if layer is a vector polygon layer
-            layer = myRegistry.mapLayer(mySource)
-            if isLayerPolygonal(layer):
+            if isLayerPolygonal(myLayer):
                 self.addComboItemInOrder(self.cboAggregation, myTitle,
                     mySource)
                 self.aggregationLayers.append(myLayer)
@@ -665,7 +701,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #handle the cboAggregation combo
         self.cboAggregation.insertItem(0, self.tr('Entire area'))
         self.cboAggregation.setCurrentIndex(0)
-        self._toggleCboAggregation()
+        self.toggleAggregationCombo()
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
@@ -675,12 +711,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
         self.blockSignals(False)
-        self.getPostprocLayer()
+        self.getPostProcessingLayer()
         return
 
     def getFunctions(self):
-        """Helper function to obtain a list of impact functions from
-        the impact calculator.
+        """Obtain a list of impact functions from the impact calculator.
 
         Args:
            None.
@@ -744,16 +779,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Helper function to read and validate layer.
 
         Args
-            myEngineImpactLayer: Layer object as provided by the inasafe engine
+            myEngineImpactLayer: Layer object as provided by InaSAFE engine.
 
         Returns
-            validated qgis layer or None
+            validated QGIS layer or None
 
         Raises
             Exception if layer is not valid
         """
 
-        myMessage = self.tr('Input argument must be a InaSAFE spatial object. '
+        myMessage = self.tr('Input layer must be a InaSAFE spatial object. '
                'I got %1').arg(str(type(myEngineImpactLayer)))
         if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
             raise Exception(myMessage)
@@ -764,24 +799,36 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFilename = myEngineImpactLayer.get_filename()
         myName = myEngineImpactLayer.get_name()
 
-        myQgisLayer = None
+        myQGISLayer = None
         # Read layer
         if myEngineImpactLayer.is_vector:
-            myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+            myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
         elif myEngineImpactLayer.is_raster:
-            myQgisLayer = QgsRasterLayer(myFilename, myName)
+            myQGISLayer = QgsRasterLayer(myFilename, myName)
 
         # Verify that new qgis layer is valid
-        if myQgisLayer.isValid():
-            return myQgisLayer
+        if myQGISLayer.isValid():
+            return myQGISLayer
         else:
             myMessage = self.tr('Loaded impact layer "%1" is not'
                                 ' valid').arg(myFilename)
             raise Exception(myMessage)
 
     def getHazardLayer(self):
-        """Obtain qgsmaplayer id from the userrole of the QtCombo for exposure
-        and return it as a QgsMapLayer"""
+        """Get the QgsMapLayer currently selected in the hazard combo.
+
+        Obtain QgsMapLayer id from the userrole of the QtCombo for hazard
+        and return it as a QgsMapLayer.
+
+        Args:
+            None
+
+        Returns:
+            QgsMapLayer - currently selected map layer in the hazard combo.
+
+        Raises:
+            None
+        """
         myIndex = self.cboHazard.currentIndex()
         if myIndex < 0:
             return None
@@ -791,8 +838,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return myLayer
 
     def getExposureLayer(self):
-        """Obtain the name of the path to the exposure file from the
-        userrole of the QtCombo for exposure."""
+        """Get the QgsMapLayer currently selected in the exposure combo.
+
+        Obtain QgsMapLayer id from the userrole of the QtCombo for exposure
+        and return it as a QgsMapLayer.
+
+        Args:
+            None
+
+        Returns:
+            QgsMapLayer - currently selected map layer in the exposure combo.
+
+        Raises:
+            None
+        """
 
         myIndex = self.cboExposure.currentIndex()
         if myIndex < 0:
@@ -802,16 +861,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
-    def getPostprocLayer(self):
-        """Obtain the name of the path to the aggregation file from the
-        userrole of the QtCombo for aggregation.
+    def getPostProcessingLayer(self):
 
-        Args: None
+        """Get the QgsMapLayer currently selected in the post processing combo.
+
+        Obtain QgsMapLayer id from the userrole of the QtCombo for post
+        processing combo return it as a QgsMapLayer.
+
+        Args:
+            None
 
         Returns:
-            - None if no aggregation is selected or cboAggregation is
-        disabled
-            - else a polygon layer
+            * None if no aggregation is selected or cboAggregation is
+                disabled, otherwise:
+            * QgsMapLayer - a polygon layer.
+
+        Raises:
+            None
         """
 
         myNoSelectionValue = 0
@@ -824,23 +890,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return myLayer
 
     def getAggregationFieldNameCount(self):
-        return self._aggregationPrefix + 'count'
+        return self.aggregationPrefix + 'count'
 
     def getAggregationFieldNameMean(self):
-        return self._aggregationPrefix + 'mean'
+        return self.aggregationPrefix + 'mean'
 
     def getAggregationFieldNameSum(self):
-        return self._aggregationPrefix + 'sum'
+        return self.aggregationPrefix + 'sum'
 
     def setupCalculator(self):
-        """Initialise the ImpactCalculator based on the current
-        state of the ui.
+        """Initialise ImpactCalculator based on the current state of the ui.
 
-        Args: None
+        Args:
+            None
 
-        Returns: None
+        Returns:
+            None
 
-        Raises: Propagates any error from :func:optimalClip()
+        Raises:
+            Propagates any error from :func:optimalClip()
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
@@ -866,12 +934,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.calculator.setFunction(myFunctionID)
 
     def accept(self):
-        """Execute analysis when ok button is clicked."""
-        #.. todo:: FIXME (Tim) We may have to implement some polling logic
-        # because the button click accept() function and the updating
-        # of the web view after model completion are asynchronous (when
-        # threading mode is enabled especially)
+        """Execute analysis when ok button is clicked.
 
+        .. todo:: FIXME (Tim) We may have to implement some polling logic
+            because the button click accept() function and the updating
+            of the web view after model completion are asynchronous (when
+            threading mode is enabled especially)
+        """
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
@@ -879,34 +948,36 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
-        self.postprocLayer = self.getPostprocLayer()
+        self.postProcessingLayer = self.getPostProcessingLayer()
         try:
-            myOrigKeywords = self.keywordIO.readKeywords(self.postprocLayer)
+            myOriginalKeywords = self.keywordIO.readKeywords(
+                self.postProcessingLayer)
         except AttributeError:
-            myOrigKeywords = {}
-        except InvalidParameterException:
-            #no kw file has ben found for postprocLayer. create an empty one
-            myOrigKeywords = {}
-            self.keywordIO.writeKeywords(self.postprocLayer, myOrigKeywords)
+            myOriginalKeywords = {}
+        except InvalidParameterError:
+            #No kw file was found for postProcessingLayer -create an empty one.
+            myOriginalKeywords = {}
+            self.keywordIO.writeKeywords(
+                self.postProcessingLayer, myOriginalKeywords)
 
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
-        LOGGER.debug('my pre dialog keywords' + str(myOrigKeywords))
-        self.initPostproc()
+        LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
+        self.initializePostProcessor()
 
         self.doZonalAggregation = True
-        if self.postprocLayer is None:
+        if self.postProcessingLayer is None:
             # generate on the fly a memory layer to be used in postprocessing
-            # this is needed because we always want a vectoril layer to store
+            # this is needed because we always want a vector layer to store
             # information
             self.doZonalAggregation = False
             myGeoCrs = QgsCoordinateReferenceSystem()
             myGeoCrs.createFromEpsg(4326)
             crs = myGeoCrs.authid().toLower()
             myUUID = str(uuid.uuid4())
-            uri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
+            myUri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
             myName = 'tmpPostprocessingLayer'
-            myLayer = QgsVectorLayer(uri, myName, 'memory')
+            myLayer = QgsVectorLayer(myUri, myName, 'memory')
             LOGGER.debug('created' + myLayer.name())
 
             if not myLayer.isValid():
@@ -921,35 +992,47 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 QtCore.QVariant.String)])
             myLayer.commitChanges()
 
-            self.postprocLayer = myLayer
-            self.keywordIO.appendKeywords(self.postprocLayer, {self.defaults[
-                                                'AGGR_ATTR_KEY']: myAttrName})
+            self.postProcessingLayer = myLayer
+            self.keywordIO.appendKeywords(
+                self.postProcessingLayer, {self.defaults[
+                'AGGR_ATTR_KEY']: myAttrName})
 
         LOGGER.debug('Do zonal aggregation: ' + str(self.doZonalAggregation))
 
-        self.runtimeKWDialog = KeywordsDialog(
+        self.runtimeKeywordsDialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
             self,
-            self.postprocLayer)
+            self.postProcessingLayer)
 
-        QtCore.QObject.connect(self.runtimeKWDialog,
+        QtCore.QObject.connect(self.runtimeKeywordsDialog,
             QtCore.SIGNAL('accepted()'),
             self.run)
 
-        QtCore.QObject.connect(self.runtimeKWDialog,
+        QtCore.QObject.connect(self.runtimeKeywordsDialog,
             QtCore.SIGNAL('rejected()'),
-            partial(self.acceptCancelled, myOrigKeywords))
+            partial(self.acceptCancelled, myOriginalKeywords))
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown myContinue will be false
         # and the run method is called by the accepted signal
-        myContinue = self._checkPostprocAttributes()
+        myContinue = self._checkPostProcessingAttributes()
         if myContinue:
             self.run()
 
     def acceptCancelled(self, theOldKeywords):
+        """Deal with user cancelling post processing option dialog.
+
+        Args:
+            theOldKeywords: dict - keywords dictionary to reinstate.
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
         LOGGER.debug('Setting old dictionary: ' + str(theOldKeywords))
-        self.keywordIO.writeKeywords(self.postprocLayer, theOldKeywords)
+        self.keywordIO.writeKeywords(self.postProcessingLayer, theOldKeywords)
         self.hideBusy()
         self.setOkButtonStatus()
 
@@ -960,18 +1043,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Attributes that will not be deleted from the postprocessing layer
         # attribute table
-        self.postprocAttributes = {}
+        self.postProcessingAttributes = {}
 
-        self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']] = (
-            self.keywordIO.readKeywords(self.postprocLayer,
-                                        self.defaults['AGGR_ATTR_KEY']))
+        self.postProcessingAttributes[self.defaults['AGGR_ATTR_KEY']] = (
+            self.keywordIO.readKeywords(self.postProcessingLayer,
+            self.defaults['AGGR_ATTR_KEY']))
 
-        myDefaultFemRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
-        myFemRatioAttr = self.keywordIO.readKeywords(self.postprocLayer,
-                                                     myDefaultFemRatioKey)
+        myFemaleRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
+        myFemRatioAttr = self.keywordIO.readKeywords(self.postProcessingLayer,
+                                                     myFemaleRatioKey)
         if (myFemRatioAttr != self.tr('Don\'t use') and
             myFemRatioAttr != self.tr('Use default')):
-            self.postprocAttributes[myDefaultFemRatioKey] = myFemRatioAttr
+            self.postProcessingAttributes[myFemaleRatioKey] = myFemRatioAttr
 
         # Start the analysis
         try:
@@ -979,44 +1062,49 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('An error occurred when call GDAL command')
+            myMessage = self.tr(
+                'An error occurred when calling a GDAL command')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
         except IOError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('An error occurred when write clip file')
+            myMessage = self.tr('An error occurred when writing clip file')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
-        except InsufficientOverlapException, e:
+        except InsufficientOverlapError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An exception occurred when setting up the '
                                 'impact calculator.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
-        except NoFeaturesInExtentException, e:
+        except NoFeaturesInExtentError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An error occurred because there are no '
                                 'features visible in the current view. Try '
                                 'zooming out or panning until some features '
                                 'become visible.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
-        except InvalidProjectionException, e:
+        except InvalidProjectionError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An error occurred because you are using a '
@@ -1025,27 +1113,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'accurately if we re-project it from its '
                                 'native coordinate reference system to'
                                 'WGS84/GeoGraphic.')
+            LOGGER.exception(myMessage)
             myMessage = getExceptionWithStacktrace(e,
-                                                   html=True,
-                                                   context=myMessage)
+                                                   theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
 
         try:
             self.runner = self.calculator.getRunner()
-        except InsufficientParametersException, e:
+        except InsufficientParametersError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myContext = self.tr('An exception occurred when setting up the '
+            myMessage = self.tr('An exception occurred when setting up the '
                                 ' model runner.')
-            myMessage = getExceptionWithStacktrace(e, html=True,
-                                                   context=myContext)
+            LOGGER.exception(myMessage)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
             return
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.postprocess)
+                               self.postProcess)
         QtGui.qApp.setOverrideCursor(
                 QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
@@ -1071,18 +1161,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (Ole): This branch is not covered by the tests
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myContext = self.tr('An exception occurred when starting'
+            myMessage = self.tr('An exception occurred when starting'
                                 ' the model.')
-            myMessage = getExceptionWithStacktrace(e, html=True,
-                                                   context=myContext)
+            LOGGER.exception(myMessage)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True,
+                                                   theContext=myMessage)
             self.displayHtml(myMessage)
 
-    def postprocess(self):
-        """
-        Called on self.runner SIGNAL('done()') starts all postprocessing steps
-        Args: None
+    def postProcess(self):
+        """Run all post processing steps.
 
-        Returns: None
+        Called on self.runner SIGNAL('done()') starts all postprocessing steps
+
+        Args:
+            None
+
+        Returns:
+            None
         """
 
         if self.runner.impactLayer() is None:
@@ -1095,8 +1190,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myContext = self.tr('An exception occurred when calculating '
                                     'the results')
                 myMessage = getExceptionWithStacktrace(myException,
-                    html=True,
-                    context=myContext)
+                    theHtml=True,
+                    theContext=myContext)
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             self.displayHtml(myMessage)
@@ -1105,50 +1200,54 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self._aggregateResults()
             if self.aggregationErrorSkipPostprocessing is None:
-                self._startPostprocessors()
+                self._startPostProcessors()
             QtGui.qApp.restoreOverrideCursor()
         except Exception, e:  # pylint: disable=W0703
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myContext = self.tr(
-                'An exception occurred when postprocessing the results')
-            myMessage = getExceptionWithStacktrace(e, html=True,
-                context=myContext)
+            myMessage = self.tr(
+                'An exception occurred when post processing the results.')
+            LOGGER.exception(myMessage)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True,
+                theContext=myMessage)
             self.displayHtml(myMessage)
             return
         self.completed()
 
-    def initPostproc(self):
-        """
-        initializes and clears self.postprocOutput. needs to run at the
-         end of postprocess
+    def initializePostProcessor(self):
+        """Initializes and clears self._postProcessingOutput.
 
+        .. note:: Needs to run at the end of postProcess.
+
+        Args: None
         Returns: None
         """
 
-        self.postprocOutput = {}
+        self.postProcessingOutput = {}
         self.aggregationErrorSkipPostprocessing = None
         try:
-            if (self.postprocLayer is not None and
+            if (self.postProcessingLayer is not None and
                 self.lastUsedFunction != self.getFunctionID()):
-                # remove category keyword so we force the keyword editor to
-                # popup. see the beginning of _checkPostprocAttributes to see
-                # how the popup decision is made
-                self.keywordIO.deleteKeyword(self.postprocLayer, 'category')
+                # Remove category keyword so we force the keyword editor to
+                # popup. See the beginning of _checkPostProcessingAttributes to
+                # see how the popup decision is made
+                self.keywordIO.deleteKeyword(
+                    self.postProcessingLayer, 'category')
         except AttributeError:
             #first run, self.lastUsedFunction does not exist yet
             pass
 
-    def getPostprocOutput(self, asOneBigTable=False):
+    def _postProcessingOutput(self, theSingleTableFlag=False):
+        """Returns the results of the post processing as a table.
+
+        Args:
+            theSingleTableFlag - bool indicating if result should be rendered
+                as a single table. Default False.
+
+        Returns: str - a string containing the html in the requested format.
         """
-        gets the of the postprocOutput
 
-        Args: None
-
-        Returns: a string containing the html in the requested format
-        """
-
-        LOGGER.debug(self.postprocOutput)
+        LOGGER.debug(self.postProcessingOutput)
         if self.aggregationErrorSkipPostprocessing is not None:
             myHTML = ('<table class="table table-striped condensed">'
             '    <tr>'
@@ -1168,34 +1267,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             '</table>')
             return myHTML
 
-        if asOneBigTable:
-            return self._parsePostProcOutputAsOneBigTables()
+        if theSingleTableFlag:
+            #FIXME, return a parsed HTML
+            return str(self.postProcessingOutput)
         else:
-            return self._parsePostProcOutputAsMultipleTables()
+            return self.postProcessingTables()
 
-    def _parsePostProcOutputAsOneBigTables(self):
-        """
-        parses the postprocessing output as one table with all postprocessors
+    def postProcessingTables(self):
+        """Parses the postprocessing output as one table per postprocessor.
 
-        Args: None
+        Args:
+            None
 
-        Returns: a string containing the html
-        """
-
-        #FIXME, return a parsed HTML
-        return str(self.postprocOutput)
-
-    def _parsePostProcOutputAsMultipleTables(self):
-        """
-        parses the postprocessing output as one table per postprocessor
-
-        Args: None
-
-        Returns: a string containing the html
+        Returns:
+            str - a string containing the html
         """
 
         myHTML = ''
-        for proc, resList in self.postprocOutput.iteritems():
+        for proc, resList in self.postProcessingOutput.iteritems():
             #sorting using the first indicator of a postprocessor
             myFirstKey = resList[0][1].keyAt(0)
             try:
@@ -1236,7 +1325,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '    </tr>'
                        '    <tr>'
                        '      <th width="25%">'
-                       + self.aggrAttrTitle +
+                       + self.aggregationAttributeTitle +
                        '      </th>')
             # add th according to the ammount of calculation done by each
             # postprocessor
@@ -1261,20 +1350,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return myHTML
 
     def _aggregateResults(self):
-        """
+        """Do any requested aggregation post processing.
+
         Performs Aggregation postprocessing step by
-         - creating a copy of the dataset clipped by the impactlayer bounding
+         * creating a copy of the dataset clipped by the impactlayer bounding
           box
-         - stripping all attributes beside the aggregation attribute
-         - delegating to the appropriate aggregator for raster and vectors
+         * stripping all attributes beside the aggregation attribute
+         * delegating to the appropriate aggregator for raster and vectors
 
         Args: None
 
         Returns: None
+
+        Raises:
+            ReadLayerError
         """
-        impactLayer = self.runner.impactLayer()
-        impactLayerBB = impactLayer.get_bounding_box()
+        myImpactLayer = self.runner.impactLayer()
         #[West, South, East, North]
+        myImpactBBox = myImpactLayer.get_bounding_box()
 
         myTitle = self.tr('Aggregating results...')
         myMessage = self.tr('This may take a little while - we are '
@@ -1284,81 +1377,85 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy(myTitle, myMessage, myProgress)
 
         if not self.doZonalAggregation:
-            self.postprocLayer.startEditing()
-            myProvider = self.postprocLayer.dataProvider()
+            self.postProcessingLayer.startEditing()
+            myProvider = self.postProcessingLayer.dataProvider()
             # add a feature the size of the impact layer bounding box
-            myFeat = QgsFeature()
-            myFeat.setGeometry(QgsGeometry.fromRect(QgsRectangle(
-                QgsPoint(impactLayerBB[0], impactLayerBB[1]),
-                QgsPoint(impactLayerBB[2], impactLayerBB[3]))))
-            myFeat.setAttributeMap({0: QtCore.QVariant(
+            myFeature = QgsFeature()
+            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
+                QgsPoint(myImpactBBox[0], myImpactBBox[1]),
+                QgsPoint(myImpactBBox[2], myImpactBBox[3]))))
+            myFeature.setAttributeMap({0: QtCore.QVariant(
                 self.tr('Entire area'))})
-            myProvider.addFeatures([myFeat])
-            self.postprocLayer.commitChanges()
+            myProvider.addFeatures([myFeature])
+            self.postProcessingLayer.commitChanges()
 
-        myQgisImpactLayer = self.readImpactLayer(impactLayer)
-        if not myQgisImpactLayer.isValid():
-            myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
+        myQGISImpactLayer = self.readImpactLayer(myImpactLayer)
+        if not myQGISImpactLayer.isValid():
+            myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             raise ReadLayerError(myMessage)
-        lName = str(self.tr('%1 aggregated to %2')
-                .arg(myQgisImpactLayer.name())
-                .arg(self.postprocLayer.name()))
+        myLayerName = str(self.tr('%1 aggregated to %2')
+                .arg(myQGISImpactLayer.name())
+                .arg(self.postProcessingLayer.name()))
 
         # in case aggregation layer is larger than the impact layer let's
-        # trimm it down to  avoid extra calculations
+        # trim it down to  avoid extra calculations
         clippedAggregationLayerPath = clipLayer(
-            self.postprocLayer,
-            impactLayerBB, explodeMultipart=False)
+            theLayer=self.postProcessingLayer,
+            theExtent=myImpactBBox,
+            theExplodeFlag=False,
+            theHardClipFlag=self.clipHard)
 
-        self.postprocLayer = QgsVectorLayer(
-            clippedAggregationLayerPath, lName, 'ogr')
-        if not self.postprocLayer.isValid():
+        self.postProcessingLayer = QgsVectorLayer(
+            clippedAggregationLayerPath, myLayerName, 'ogr')
+        if not self.postProcessingLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(
-                self.postprocLayer.lastError())
+                self.postProcessingLayer.lastError())
             raise ReadLayerError(myMessage)
 
             #delete unwanted fields
-        myProvider = self.postprocLayer.dataProvider()
+        myProvider = self.postProcessingLayer.dataProvider()
         myFields = myProvider.fields()
-        toDel = []
+        myUnneededAttributes = []
         for i in myFields:
-            if myFields[i].name() not in self.postprocAttributes.values():
-                toDel.append(i)
-        LOGGER.debug('Removing this attributes: ' + str(toDel))
+            if (myFields[i].name() not in
+                self.postProcessingAttributes.values()):
+                myUnneededAttributes.append(i)
+        LOGGER.debug('Removing this attributes: ' + str(myUnneededAttributes))
         try:
-            self.postprocLayer.startEditing()
-            myProvider.deleteAttributes(toDel)
-            self.postprocLayer.commitChanges()
+            self.postProcessingLayer.startEditing()
+            myProvider.deleteAttributes(myUnneededAttributes)
+            self.postProcessingLayer.commitChanges()
         # FIXME (Ole): Disable pylint check for the moment
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
-            myMessage = self.tr('Could not remove the unneded fields')
+            myMessage = self.tr('Could not remove the unneeded fields')
             LOGGER.debug(myMessage)
 
-        del toDel, myProvider, myFields
-        self.keywordIO.appendKeywords(self.postprocLayer, {'title': lName})
+        del myUnneededAttributes, myProvider, myFields
+        self.keywordIO.appendKeywords(
+            self.postProcessingLayer, {'title': myLayerName})
 
         #call the correct aggregator
-        if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
-            self._aggregateResultsVector(myQgisImpactLayer)
-        elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
-            self._aggregateResultsRaster(myQgisImpactLayer)
+        if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
+            self._aggregateResultsVector(myQGISImpactLayer)
+        elif myQGISImpactLayer.type() == QgsMapLayer.RasterLayer:
+            self._aggregateResultsRaster(myQGISImpactLayer)
         else:
             myMessage = self.tr('%1 is %2 but it should be either vector or '
-                                'raster').arg(myQgisImpactLayer.name()).arg(
-                                myQgisImpactLayer.type())
+                                'raster').arg(myQGISImpactLayer.name()).arg(
+                                myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
         if self.showPostProcLayers and self.doZonalAggregation:
-            myProvider = self.postprocLayer.dataProvider()
+            myProvider = self.postProcessingLayer.dataProvider()
             myAttr = self.getAggregationFieldNameSum()
             myAttrIndex = myProvider.fieldNameIndex(myAttr)
             myProvider.select([myAttrIndex], QgsRectangle(), False)
-            myFeat = QgsFeature()
+            myFeature = QgsFeature()
             myHighestVal = 0
 
-            while myProvider.nextFeature(myFeat):
-                myAttrMap = myFeat.attributeMap()
+            while myProvider.nextFeature(myFeature):
+                myAttrMap = myFeature.attributeMap()
                 myVal, ok = myAttrMap[myAttrIndex].toInt()
                 if ok and myVal > myHighestVal:
                     myHighestVal = myVal
@@ -1384,22 +1481,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myStyle = {'target_field': myAttr,
                        'style_classes': myClasses}
 
-            setVectorStyle(self.postprocLayer, myStyle)
+            setVectorStyle(self.postProcessingLayer, myStyle)
 
     def _aggregateResultsVector(self, myQgisImpactLayer):
-        """
-        Performs Aggregation postprocessing step on vectorial impact layers
-        Args:
-            * myQgisImpactLayer a valid QgsRasterLayer
+        """Performs Aggregation postprocessing step on vector impact layers.
 
-        Returns: None
+        Args:
+            myQGISImpactLayer a valid QgsRasterLayer
+
+        Returns:
+            None
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
         try:
             myTargetField = self.keywordIO.readKeywords(myQgisImpactLayer,
                 'target_field')
-        except KeywordNotFoundException:
+        except KeywordNotFoundError:
             myMessage = self.tr('No "target_field" keyword found in the impact'
                                 ' layer %1 keywords. The impact function'
                                 ' should define this.').arg(
@@ -1423,7 +1521,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # start data retreival: fetch no geometry and
         # 1 attr for each feature
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
-        myFeat = QgsFeature()
+        myFeature = QgsFeature()
         myTotal = 0
 
         if self.doZonalAggregation:
@@ -1434,48 +1532,51 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
         else:
             #loop over all features in impact layer
-            while myImpactProvider.nextFeature(myFeat):
-                myVal, ok = myFeat.attributeMap()[myTargetFieldIndex].toInt()
+            while myImpactProvider.nextFeature(myFeature):
+                myVal, ok = myFeature.attributeMap()[
+                              myTargetFieldIndex].toInt()
                 if ok:
                     myTotal += myVal
 
-            #add the total to the postprocLayer
-            myPostprocessorProvider = self.postprocLayer.dataProvider()
-            self.postprocLayer.startEditing()
+            #add the total to the postProcessingLayer
+            myPostprocessorProvider = self.postProcessingLayer.dataProvider()
+            self.postProcessingLayer.startEditing()
             myAggrField = self.getAggregationFieldNameSum()
             myPostprocessorProvider.addAttributes([QgsField(myAggrField,
                 QtCore.QVariant.Int)])
-            self.postprocLayer.commitChanges()
-            myAggrFieldIndex = self.postprocLayer.fieldNameIndex(
+            self.postProcessingLayer.commitChanges()
+            myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(
                 myAggrField)
-            attrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
-            myFID = 0
-            self.postprocLayer.startEditing()
-            myPostprocessorProvider.changeAttributeValues({myFID: attrs})
-            self.postprocLayer.commitChanges()
+            myAttributes = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+            myFeatureId = 0
+            self.postProcessingLayer.startEditing()
+            myPostprocessorProvider.changeAttributeValues(
+                {myFeatureId: myAttributes})
+            self.postProcessingLayer.commitChanges()
 
         return
 
-    def _aggregateResultsRaster(self, myQgisImpactLayer):
-        """
-        Performs Aggregation postprocessing step on raster impact layers by
-        calling QgsZonalStatistics
+    def _aggregateResultsRaster(self, theQGISImpactLayer):
+        """Perform aggregation postprocessing step on raster impact layers.
+
+         Uses QgsZonalStatistics.
+
         Args:
-            * myQgisImpactLayer a valid QgsVectorLayer
+            QgsMapLayer: theQGISImpactLayer a valid QgsVectorLayer
 
         Returns: None
         """
-        zonStat = QgsZonalStatistics(
-            self.postprocLayer,
-            myQgisImpactLayer.dataProvider().dataSourceUri(),
-            self._aggregationPrefix)
-        progressDialog = QtGui.QProgressDialog(
+        myZonalStatistics = QgsZonalStatistics(
+            self.postProcessingLayer,
+            theQGISImpactLayer.dataProvider().dataSourceUri(),
+            self.aggregationPrefix)
+        myProgressDialog = QtGui.QProgressDialog(
             self.tr('Calculating zonal statistics'),
             self.tr('Abort...'),
             0,
             0)
-        zonStat.calculateStatistics(progressDialog)
-        if progressDialog.wasCanceled():
+        myZonalStatistics.calculateStatistics(myProgressDialog)
+        if myProgressDialog.wasCanceled():
             QtGui.QMessageBox.error(self, self.tr('ZonalStats: Error'),
                 self.tr(
                     'You aborted aggregation, '
@@ -1483,107 +1584,123 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         return
 
-    def _startPostprocessors(self):
-        #instantiate postprocessors if they are requested by the function
+    def _startPostProcessors(self):
+        """Run any post processors requested by the impact function.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
         try:
-            myRequestedPostprocessors = self.functionParams['postprocessors']
-            myPostprocessors = get_post_processors(myRequestedPostprocessors)
+            myRequestedPostProcessors = self.functionParams['postprocessors']
+            myPostProcessors = get_post_processors(myRequestedPostProcessors)
         except (TypeError, KeyError):
             # TypeError is for when functionParams is none
             # KeyError is for when ['postprocessors'] is unavailable
-            myPostprocessors = {}
-        LOGGER.debug('Running this postprocessors: ' + str(myPostprocessors))
+            myPostProcessors = {}
+        LOGGER.debug('Running this postprocessors: ' + str(myPostProcessors))
 
-        myFeatureNameAttribute = self.postprocAttributes[self.defaults[
+        myFeatureNameAttribute = self.postProcessingAttributes[self.defaults[
                                                          'AGGR_ATTR_KEY']]
         if myFeatureNameAttribute is None:
-            self.aggrAttrTitle = self.tr('Aggregation unit')
+            self.aggregationAttributeTitle = self.tr('Aggregation unit')
         else:
-            self.aggrAttrTitle = myFeatureNameAttribute
+            self.aggregationAttributeTitle = myFeatureNameAttribute
 
-        myNameFieldIndex = self.postprocLayer.fieldNameIndex(
+        myNameFieldIndex = self.postProcessingLayer.fieldNameIndex(
             myFeatureNameAttribute)
-        mySumFieldIndex = self.postprocLayer.fieldNameIndex(
+        mySumFieldIndex = self.postProcessingLayer.fieldNameIndex(
             self.getAggregationFieldNameSum())
 
-        if 'Gender' in myPostprocessors:
-            #look if we need to look for a variable female ratio in a layer
-            myFemRatioIsVariable = False
+        if 'Gender' in myPostProcessors:
+            #look if we need to look for a vaInaSAFEle female ratio in a layer
+            myFemaleRatioIsVaInaSAFEle = False
             try:
-                myFemRatioField = self.postprocAttributes[self.defaults[
+                myFemRatioField = self.postProcessingAttributes[self.defaults[
                                                      'FEM_RATIO_ATTR_KEY']]
-                myFemRatioFieldIndex = self.postprocLayer.fieldNameIndex(
+                myFemRatioFieldIndex = self.postProcessingLayer.fieldNameIndex(
                     myFemRatioField)
-                myFemRatioIsVariable = True
+                myFemaleRatioIsVaInaSAFEle = True
 
             except KeyError:
-                myFemRatio = self.keywordIO.readKeywords(self.postprocLayer,
+                myFemaleRatio = self.keywordIO.readKeywords(
+                    self.postProcessingLayer,
                     self.defaults['FEM_RATIO_KEY'])
 
         #iterate zone features
-        provider = self.postprocLayer.dataProvider()
-        allAttrs = provider.attributeIndexes()
+        myProvider = self.postProcessingLayer.dataProvider()
+        myAttributes = myProvider.attributeIndexes()
         # start data retreival: fetch no geometry and all attributes for each
         # feature
-        provider.select(allAttrs, QgsRectangle(), False)
-        feat = QgsFeature()
-        while provider.nextFeature(feat):
+        myProvider.select(myAttributes, QgsRectangle(), False)
+        myFeatures = QgsFeature()
+        while myProvider.nextFeature(myFeatures):
             #get all attributes of a feature
-            attrMap = feat.attributeMap()
+            myAttributeMap = myFeatures.attributeMap()
 
             #if a feature has no field called
             if myNameFieldIndex == -1:
-                zoneName = str(feat.id())
+                myZoneName = str(myFeatures.id())
             else:
-                zoneName = attrMap[myNameFieldIndex].toString()
+                myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
-            aggrSum, ok = attrMap[mySumFieldIndex].toDouble()
-            LOGGER.debug('Reading: %s %s' % (aggrSum, ok))
-            myGeneralParams = {'population_total': aggrSum}
+            mySum, myResult = myAttributeMap[mySumFieldIndex].toDouble()
+            LOGGER.debug('Reading: %s %s' % (mySum, myResult))
+            myGeneralParams = {'population_total': mySum}
 
-            for n, p in myPostprocessors.iteritems():
-                myParams = myGeneralParams
+            for myKey, myValue in myPostProcessors.iteritems():
+                myParameters = myGeneralParams
                 try:
                     #look if params are available for this postprocessor
-                    myParams.update(
-                        self.functionParams['postprocessors'][n]['params'])
+                    myParameters.update(
+                        self.functionParams['postprocessors'][myKey]['params'])
                 except KeyError:
                     pass
 
-                if n == 'Gender':
-                    if myFemRatioIsVariable:
-                        myFemRatio, success = attrMap[
+                if myKey == 'Gender':
+                    if myFemaleRatioIsVaInaSAFEle:
+                        myFemaleRatio, mySuccessFlag = myAttributeMap[
                                         myFemRatioFieldIndex].toDouble()
-                        if not success:
-                            myFemRatio = self.defaults['FEM_RATIO']
-                        LOGGER.debug(success)
-                    myParams['female_ratio'] = myFemRatio
+                        if not mySuccessFlag:
+                            myFemaleRatio = self.defaults['FEM_RATIO']
+                        LOGGER.debug(mySuccessFlag)
+                    myParameters['female_ratio'] = myFemaleRatio
 
-                p.setup(myParams)
-                p.process()
-                myResults = p.results()
-                p.clear()
+                myValue.setup(myParameters)
+                myValue.process()
+                myResults = myValue.results()
+                myValue.clear()
                 LOGGER.debug(myResults)
                 try:
-                    self.postprocOutput[n].append((zoneName, myResults))
+                    self.postProcessingOutput[myKey].append(
+                        (myZoneName, myResults))
                 except KeyError:
-                    self.postprocOutput[n] = []
-                    self.postprocOutput[n].append((zoneName, myResults))
+                    self.postProcessingOutput[myKey] = []
+                    self.postProcessingOutput[myKey].append(
+                        (myZoneName, myResults))
 
-    def _checkPostprocAttributes(self):
-        """checks if the postprocessing layer has all attribute
-        keyword. If not it calls _promptPostprocAttributes to prompt for
-        inputs
+    def _checkPostProcessingAttributes(self):
+        """Checks if the postprocessing layer has all attribute keyword.
 
-        Args: None
+        If not it calls _promptPostprocAttributes to prompt for inputs
 
-        Returns: None
+        Args:
+            None
 
-        Raises: Propogates any error
+        Returns:
+            None
+
+        Raises:
+            Propagates any error
         """
 
         try:
-            myKeywords = self.keywordIO.readKeywords(self.postprocLayer)
+            myKeywords = self.keywordIO.readKeywords(self.postProcessingLayer)
         #discussed with tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             myKeywords = {}
@@ -1602,11 +1719,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #set the default values by writing to the myKeywords
             myKeywords['category'] = 'postprocessing'
 
-            myAttrs, _ = getLayerAttributeNames(
-                self.postprocLayer,
+            myAttributes, _ = getLayerAttributeNames(
+                self.postProcessingLayer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String])
             if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
-                myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttrs[0]
+                myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttributes[0]
 
             if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
                 myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
@@ -1616,10 +1733,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myKeywords[self.defaults['FEM_RATIO_KEY']] = self.defaults[
                                                              'FEM_RATIO']
 
-#            delete = self.keywordIO.deleteKeyword(self.postprocLayer,
+#            delete = self.keywordIO.deleteKeyword(self.postProcessingLayer,
 #               'subcategory')
 #            LOGGER.debug('Deleted: ' + str(delete))
-            self.keywordIO.appendKeywords(self.postprocLayer, myKeywords)
+            self.keywordIO.appendKeywords(self.postProcessingLayer, myKeywords)
             if self.doZonalAggregation:
                 #prompt user for a choice
                 myTitle = self.tr(
@@ -1630,13 +1747,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.showBusy(myTitle, myMessage, myProgress)
 
                 self.disableBusyCursor()
-                self.runtimeKWDialog.setLayer(self.postprocLayer)
+                self.runtimeKeywordsDialog.setLayer(self.postProcessingLayer)
                 #disable gui elements that should not be applicable for this
-                self.runtimeKWDialog.radExposure.setEnabled(False)
-                self.runtimeKWDialog.radHazard.setEnabled(False)
-                self.runtimeKWDialog.pbnAdvanced.setEnabled(False)
-                self.runtimeKWDialog.setModal(True)
-                self.runtimeKWDialog.show()
+                self.runtimeKeywordsDialog.radExposure.setEnabled(False)
+                self.runtimeKeywordsDialog.radHazard.setEnabled(False)
+                self.runtimeKeywordsDialog.pbnAdvanced.setEnabled(False)
+                self.runtimeKeywordsDialog.setModal(True)
+                self.runtimeKeywordsDialog.show()
 
                 return False
             else:
@@ -1656,7 +1773,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (Ole): This branch is not covered by the tests
 
             # Display message and traceback
-            myMessage = getExceptionWithStacktrace(e, html=True)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True)
             self.displayHtml(myMessage)
         else:
             # On success, display generated report
@@ -1684,20 +1801,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 99
         self.showBusy(myTitle, myMessage, myProgress)
 
-        myMessage = self.runner.result()
+        #myMessage = self.runner.result()
 
         myEngineImpactLayer = self.runner.impactLayer()
 
         # Load impact layer into QGIS
-        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+        myQGISImpactLayer = self.readImpactLayer(myEngineImpactLayer)
 
-        myKeywords = self.keywordIO.readKeywords(myQgisImpactLayer)
+        myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
-        myKeywords['postprocessing_report'] = self.getPostprocOutput()
-        self.keywordIO.writeKeywords(myQgisImpactLayer, myKeywords)
+        myKeywords['postprocessing_report'] = self._postProcessingOutput()
+        self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
-        myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
+        myReport = self.keywordIO.readKeywords(myQGISImpactLayer,
                                                'impact_summary')
         myReport += impactLayerAttribution(myKeywords)
 
@@ -1710,26 +1827,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # Set default style if possible
                 pass
             else:
-                setVectorStyle(myQgisImpactLayer, myStyle)
+                setVectorStyle(myQGISImpactLayer, myStyle)
         elif myEngineImpactLayer.is_raster:
             if not myStyle:
-                myQgisImpactLayer.setDrawingStyle(
+                myQGISImpactLayer.setDrawingStyle(
                                 QgsRasterLayer.SingleBandPseudoColor)
-                myQgisImpactLayer.setColorShadingAlgorithm(
+                myQGISImpactLayer.setColorShadingAlgorithm(
                                 QgsRasterLayer.PseudoColorShader)
             else:
-                setRasterStyle(myQgisImpactLayer, myStyle)
+                setRasterStyle(myQGISImpactLayer, myStyle)
 
         else:
             myMessage = self.tr('Impact layer %1 was neither a raster or a '
-                   'vector layer').arg(myQgisImpactLayer.source())
+                   'vector layer').arg(myQGISImpactLayer.source())
             raise ReadLayerError(myMessage)
 
         # Add layers to QGIS
         myLayersToAdd = []
         if self.showPostProcLayers and self.doZonalAggregation:
-            myLayersToAdd.append(self.postprocLayer)
-        myLayersToAdd.append(myQgisImpactLayer)
+            myLayersToAdd.append(self.postProcessingLayer)
+        myLayersToAdd.append(myQGISImpactLayer)
         QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
         # then zoom to it
         if self.zoomToImpactFlag:
@@ -1741,7 +1858,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.restoreState()
 
         #append postprocessing report
-        myReport += self.getPostprocOutput()
+        myReport += self._postProcessingOutput()
 
         # Return text to display in report panel
         return myReport
@@ -1765,8 +1882,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns:
             None
+
         Raises:
-            Any exceptions raised by the RIAB library will be propagated.
+            Any exceptions raised by the InaSAFE library will be propagated.
 
         ..note:: Uses bootstrap css for progress bar.
         """
@@ -1806,7 +1924,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.postprocess)
+                               self.postProcess)
             self.runner = None
 
         self.grpQuestion.setEnabled(True)
@@ -1839,7 +1957,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             exposure layers.
 
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
 
         # Get the hazard and exposure layers selected in the combos
@@ -1876,7 +1994,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myGeoExtent = getOptimalExtent(myHazardGeoExtent,
                     myExposureGeoExtent)
 
-        except InsufficientOverlapException, e:
+        except InsufficientOverlapError, e:
             # FIXME (MB): This branch is not covered by the tests
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
@@ -1899,7 +2017,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         QtCore.QString(str(myExposureGeoExtent))).arg(
                         QtCore.QString(str(self.clipToViewport))).arg(
                         str(e))
-            raise InsufficientOverlapException(myMessage)
+            raise InsufficientOverlapError(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
@@ -1941,12 +2059,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             # Hazard layer is vector
 
-            # FIXME (Ole): Check that it is a polygon layer
-
-            # FIXME (Ole): This should say something like this (issue #285)
-            #if myHazardLayer.geometry() == QgsMapLayer.Point:
-            #    myGeoExtent = myExposureGeoExtent
-            pass
+            # In case hazad data is a point dataset, we will not clip the
+            # exposure data to it. The reason being that points may be used
+            # as centers for evacuation cirles: See issue #285
+            if myHazardLayer.geometryType() == QGis.Point:
+                myGeoExtent = myExposureGeoExtent
 
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
@@ -1958,8 +2075,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 22
         self.showBusy(myTitle, myMessage, myProgress)
         try:
-            myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
-                                            myCellSize)
+            myClippedHazardPath = clipLayer(theLayer=myHazardLayer,
+                                            theExtent=myBufferedGeoExtent,
+                                            theCellSize=myCellSize,
+                                            theHardClipFlag=self.clipHard)
         except CallGDALError, e:
             raise e
         except IOError, e:
@@ -1972,9 +2091,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(
-            myExposureLayer,
-            myGeoExtent, myCellSize,
-            theExtraKeywords=extraExposureKeywords)
+            theLayer=myExposureLayer,
+            theExtent=myGeoExtent,
+            theCellSize=myCellSize,
+            theExtraKeywords=extraExposureKeywords,
+            theHardClipFlag=self.clipHard)
 
         return myClippedHazardPath, myClippedExposurePath
 
@@ -2011,8 +2132,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # get the current viewport extent
         myCanvas = self.iface.mapCanvas()
         myRect = myCanvas.extent()
-
-        myCrs = None
 
         if myCanvas.hasCrsTransformEnabled():
             myCrs = myCanvas.mapRenderer().destinationCrs()
@@ -2057,12 +2176,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return self.footer
 
     def displayHtml(self, theMessage):
-        """Given an html snippet, wrap it in a page header and footer
-        and display it in the wvResults widget."""
+        """Apply header and footer to html snippet and display in wvResults.
+
+        Args:
+            theMessage: An html snippet. Do not include head and body elements.
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
         myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
-        #f = file('/tmp/h.thml', 'wa')  # for debugging
-        #f.write(myHtml)
-        #f.close()
         self.wvResults.setHtml(myHtml)
 
     def layerChanged(self, theLayer):
@@ -2120,8 +2245,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                        '<td>' + str(myValue) + '</td>'
                                      '</tr>')
                     myReport += '</table>'
-            except (KeywordNotFoundException, HashNotFoundException,
-                    InvalidParameterException), e:
+            except (KeywordNotFoundError, HashNotFoundError,
+                    InvalidParameterError), e:
                 myContext = self.tr('No keywords have been defined'
                         ' for this layer yet. If you wish to use it as'
                         ' an impact or hazard layer in a scenario, please'
@@ -2131,10 +2256,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         ' width="16" height="16"> icon'
                         ' in the toolbar, or choosing Plugins -> InaSAFE'
                         ' -> Keyword Editor from the menus.')
-                myReport += getExceptionWithStacktrace(e, html=True,
-                                                       context=myContext)
+                myReport += getExceptionWithStacktrace(e, theHtml=True,
+                                                       theContext=myContext)
             except Exception, e:
-                myReport += getExceptionWithStacktrace(e, html=True)
+                myReport += getExceptionWithStacktrace(e, theHtml=True)
             if myReport is not None:
                 self.displayHtml(myReport)
 
@@ -2147,7 +2272,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         myStateDict = {'hazard': self.cboHazard.currentText(),
                        'exposure': self.cboExposure.currentText(),
@@ -2165,7 +2290,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         if self.state is None:
             return
@@ -2195,7 +2320,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         # Restore previous state of combo
         for myCount in range(0, self.cboFunction.count()):
@@ -2212,7 +2337,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         myMap = Map(self.iface)
         if self.iface.activeLayer() is None:
@@ -2228,41 +2353,46 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myMap.setImpactLayer(self.iface.activeLayer())
         LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
-        myMapFilename = QtGui.QFileDialog.getSaveFileName(self,
+        myDefaultFileName = myMap.getMapTitle() + '.pdf'
+        myDefaultFileName = myDefaultFileName.replace(' ', '_')
+        myMapPdfFilePath = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
                             os.path.join(temp_dir(),
-                                         myMap.getMapTitle() + '.pdf'),
+                                         myDefaultFileName),
                             self.tr('Pdf File (*.pdf)'))
-        myMapFilename = str(myMapFilename)
+        myMapPdfFilePath = str(myMapPdfFilePath)
 
-        if myMapFilename is None:
+        if myMapPdfFilePath is None or myMapPdfFilePath == '':
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Printing cancelled!'),
                           theProgress=100)
             self.hideBusy()
             return
 
-        myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
+        myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
         myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
             myKeywords, theFilename=myTableFilename)
 
         try:
-            myMapPdfPath = myMap.printToPdf(myMapFilename)
+            myMap.printToPdf(myMapPdfFilePath)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
-            myReport = getExceptionWithStacktrace(e, html=True)
+            myReport = getExceptionWithStacktrace(e, theHtml=True)
             if myReport is not None:
                 self.displayHtml(myReport)
 
+        # Make sure the file paths can wrap nicely:
+        myWrappedMapPath = myMapPdfFilePath.replace(os.sep, '<wbr>' + os.sep)
+        myWrappedHtmlPath = myHtmlPdfPath.replace(os.sep, '<wbr>' + os.sep)
         myStatus = self.tr('Your PDF was created....opening using '
                            'the default PDF viewer on your system. '
                            'The generated pdfs were saved as:%1'
                            '%2%1 and %1%3').arg(
                            '<br>').arg(QtCore.QString(
-                           myMapPdfPath)).arg(QtCore.QString(
-                           myHtmlPdfPath))
+                            myWrappedMapPath)).arg(QtCore.QString(
+                            myWrappedHtmlPath))
 
         self.showBusy(self.tr('Map Creator'),
                       myStatus,
@@ -2272,7 +2402,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.QUrl('file:///' + myHtmlPdfPath,
             QtCore.QUrl.TolerantMode))
         QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl('file:///' + myMapPdfPath,
+            QtCore.QUrl('file:///' + myMapPdfFilePath,
             QtCore.QUrl.TolerantMode))
 
         self.showBusy(self.tr('Map Creator'),

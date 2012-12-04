@@ -135,7 +135,7 @@ class HtmlRendererTest(unittest.TestCase):
         LOGGER.debug(myHtml)
         myPageDpi = 300
         myRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='testHtmlToPixmap',
+        myPath = unique_filename(prefix='testHtmlToImage',
                                  suffix='.png',
                                  dir=temp_dir('test'))
         LOGGER.debug(myPath)
@@ -149,6 +149,7 @@ class HtmlRendererTest(unittest.TestCase):
 
         myControlImages = ['renderHtmlToImage.png',
                            'renderHtmlToImage-variantWindosVistaSP2-32.png',
+                           'renderHtmlToImage-variantWindowsXPSP3-32.png',
                            'renderHtmlToImage-variantUB11.04-64.png',
                            'renderHtmlToImage-variantUB11.10-64.png']
         myTolerance = 1000  # to allow for version number changes in disclaimer

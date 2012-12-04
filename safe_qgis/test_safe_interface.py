@@ -23,8 +23,8 @@ from safe_qgis.safe_interface import (getOptimalExtent,
                                       availableFunctions,
                                       readKeywordsFromFile,
                                       readSafeLayer)
-from safe_qgis.exceptions import (KeywordNotFoundException,
-                                  InsufficientOverlapException)
+from safe_qgis.exceptions import (KeywordNotFoundError,
+                                  InsufficientOverlapError)
 from safe.common.exceptions import BoundingBoxError
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
@@ -125,7 +125,7 @@ class SafeInterfaceTest(unittest.TestCase):
         view_port = [105.3, -4.3, 110.29, -2.5]
         try:
             getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        except InsufficientOverlapException, e:
+        except InsufficientOverlapError, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'did not overlap' in str(e), myMessage
         else:
@@ -139,7 +139,7 @@ class SafeInterfaceTest(unittest.TestCase):
         except BoundingBoxError:
             #good this was expected
             pass
-        except InsufficientOverlapException, e:
+        except InsufficientOverlapError, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Invalid' in str(e), myMessage
         else:
@@ -199,7 +199,7 @@ class SafeInterfaceTest(unittest.TestCase):
         try:
             myKeyword = readKeywordsFromFile(
                             self.rasterShakePath, 'boguskeyword')
-        except KeywordNotFoundException:
+        except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
             myMessage = ('Request for bogus keyword raised incorrect '

@@ -66,10 +66,9 @@ def temp_dir(sub_dir='work'):
     Raises:
        Any errors from the underlying system calls.
     """
-
     user = getpass.getuser().replace(' ', '_')
     current_date = date.today()
-    date_string = current_date.strftime("%d-%m-%Y")
+    date_string = current_date.isoformat()
     if 'INASAFE_WORK_DIR' in os.environ:
         new_directory = os.environ['INASAFE_WORK_DIR']
     else:
@@ -121,6 +120,9 @@ def unique_filename(**kwargs):
 
     if 'dir' not in kwargs:
         path = temp_dir('impacts')
+        kwargs['dir'] = path
+    else:
+        path = temp_dir(kwargs['dir'])
         kwargs['dir'] = path
     if not os.path.exists(kwargs['dir']):
         # Ensure that the dir mask won't conflict with the mode

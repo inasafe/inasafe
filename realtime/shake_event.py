@@ -1052,6 +1052,8 @@ class ShakeEvent(QObject):
         myLayerOptions = QStringList()
         mySelectedOnlyFlag = False
         mySkipAttributesFlag = False
+        # May differ from myOutputFile
+        myActualNewFileName = QString()
         myResult = QgsVectorFileWriter.writeAsVectorFormat(
             theMemoryLayer,
             myOutputFile,
@@ -1062,7 +1064,9 @@ class ShakeEvent(QObject):
             myErrorMessage,
             myOptions,
             myLayerOptions,
-            mySkipAttributesFlag)
+            mySkipAttributesFlag,
+            myActualNewFileName
+            )
 
         if myResult == QgsVectorFileWriter.NoError:
             LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)

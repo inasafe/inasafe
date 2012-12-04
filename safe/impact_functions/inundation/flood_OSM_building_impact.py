@@ -13,6 +13,9 @@ LOGGER = logging.getLogger('InaSAFE')
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
+    :author Ole Nielsen, Kristy van Putten
+    # this rating below is only for testing a function, not the real one
+    :rating 0
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami']
 
@@ -21,8 +24,25 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     layertype=='vector'
     """
 
+    # Function documentation
     target_field = 'INUNDATED'
     title = tr('Be flooded')
+    synopsis = tr('To assess the impacts of inundation on building footprints '
+        'originating from OpenStreetMap (OSM).')
+    actions = tr('Provide details about where critical response areas are')
+    # citations must be a list
+    citations = [tr('Hutchings, Field & Parks. Assessment of Flood impacts on '
+        'buildings. Impact. Vol 66(2). 2012')]
+    detailed_description = tr('This is an area for free form text where a'
+        'detailed description of the methodology used is given.')
+    permissible_hazard_input = tr('A raster layer where each cell represents '
+        'flood depth, or a vector polygon layer where each polygon represents '
+        'an inundated area. The following attributes are recognised '
+        '(in order): Flooded (True or False), FLOODPRONE (Yes or No) and '
+        'Affected (True or False).')
+    permissible_exposure_input = tr('vector polygon layer extracted from OSM '
+        'where each polygon represents the footprint of a building.')
+    limitation = tr('Lorem ipsum limitation')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
@@ -40,9 +60,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Determine attribute name for hazard levels
         if H.is_raster:
+            mode = 'grid'
             hazard_attribute = 'depth'
         else:
-            hazard_attribute = 'FLOODPRONE'
+            mode = 'regions'
+            hazard_attribute = None
 
         # Interpolate hazard level to building locations
         I = assign_hazard_values_to_exposure_data(H, E,
@@ -57,33 +79,53 @@ class FloodBuildingImpactFunction(FunctionProvider):
         buildings = {}
         affected_buildings = {}
         for i in range(N):
-            if hazard_attribute == 'depth':
+            if mode == 'grid':
                 # Get the interpolated depth
                 x = float(attributes[i]['depth'])
                 x = x >= threshold
-            elif hazard_attribute == 'FLOODPRONE':
+            elif mode == 'regions':
                 # Use interpolated polygon attribute
                 atts = attributes[i]
 
-                if 'FLOODPRONE' in atts:
+                # FIXME (Ole): Need to agree whether to use one or the
+                # other as this can be very confusing!
+                # For now look for 'Flooded first'
+                if 'Flooded' in atts:
+                    # E.g. from flood forecast
+                    # Assume that building is wet if inside polygon
+                    # as flagged by attribute Flooded
+                    res = atts['Flooded']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res
+                elif 'FLOODPRONE' in atts:
                     res = atts['FLOODPRONE']
                     if res is None:
                         x = False
                     else:
                         x = res.lower() == 'yes'
-                else:
-                    # If there isn't a flood prone attribute,
-                    # assume that building is wet if inside polygon
-                    # as flag by generic attribute AFFECTED
+                elif 'Affected' in atts:
+                    # Check the default attribute assigned for points
+                    # covered by a polygon
                     res = atts['Affected']
                     if res is None:
                         x = False
                     else:
                         x = res
+                else:
+                    # there is no flood related attribute
+                    msg = ('No flood related attribute found in %s. '
+                           'I was looking fore either "Flooded", "FLOODPRONE" '
+                           'or "Affected". The latter should have been '
+                           'automatically set by call to '
+                           'assign_hazard_values_to_exposure_data(). '
+                           'Sorry I can\'t help more.')
+                    raise Exception(msg)
             else:
                 msg = (tr('Unknown hazard type %s. '
-                         'Must be either "depth" or "floodprone"')
-                       % hazard_attribute)
+                         'Must be either "depth" or "grid"')
+                       % mode)
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
@@ -233,10 +275,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         table_body.append(TableRow(tr('Notes'), header=True))
         assumption = tr('Buildings are said to be flooded when ')
-        if hazard_attribute == 'depth':
+        if mode == 'grid':
             assumption += tr('flood levels exceed %.1f m') % threshold
         else:
-            assumption += tr('in areas marked as flood prone')
+            assumption += tr('in regions marked as affected')
         table_body.append(assumption)
 
         impact_summary = Table(table_body).toNewlineFreeString()

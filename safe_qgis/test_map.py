@@ -106,7 +106,8 @@ class MapTest(unittest.TestCase):
                               'renderComposition-variantUB12.04.png',
                               'renderComposition-variantWindosVistaSP2-32.png',
                               'renderComposition-variantJenkins.png',
-                              'renderComposition-variantUB11.10-64.png']
+                              'renderComposition-variantUB11.10-64.png',
+                              'renderComposition-variantUB11.04-64.png']
         # Beta version and version changes  can introduce a few extra chars
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
@@ -176,7 +177,8 @@ class MapTest(unittest.TestCase):
         #myImage.fill(QtGui.QColor(250, 250, 250))
         # Look at the output, you will see antialiasing issues around some
         # of the boxes drawn...
-        myImage.fill(QtGui.QColor(200, 200, 200))
+        # myImage.fill(QtGui.QColor(200, 200, 200))
+        myImage.fill(200 + 200 * 256 + 200 * 256 * 256)
         myFilename = os.path.join(temp_dir(), 'greyBox')
         myImage.save(myFilename, 'PNG')
         for i in range(10, 190, 10):

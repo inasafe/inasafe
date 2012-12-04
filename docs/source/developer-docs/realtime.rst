@@ -75,7 +75,7 @@ InaSAFE Realtime is implemented by four main python modules:
 InaSAFE has strong dependencies on QGIS (http://qgis.org) which is
 used for much of the data processing and reporting functionality.
 
-.. note:: Currently version e15f4a8383f425284622ce31a28098849f11a6fe is
+.. note:: Currently version c064933677d48d90776bdea0426fdea1e3490d01 is
     the 'known good' SHA1.
 
 Two of these dependencies is a template QGIS project and a map
@@ -88,6 +88,24 @@ item IDs listed in the section that follows are used.
 
 Installation
 ------------
+
+The supported platform is currently Ubuntu 12.04 LTS. The instructions provided below are for that OS. First we are going to hand build QGIS. This may not be needed in future once 2.0 packages are available, but for now it is recommended.::
+
+    sudo apt-get install python-software-properties
+    sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+    sudo apt-get update
+    sudo apt-get build-dep qgis
+
+    cd ~
+    mkdir -p dev/cpp
+    mkdir -p dev/python
+    sudo mkdir /home/web
+    sudo chown <youruser>.<youruser> /home/web
+    cd ~/dev/cpp
+    sudo apt-get install git cmake-curses-gui
+    git clone git@github.com:qgis/Quantum-GIS.git
+
+
 
 To run the realtime component of InaSAFE, you need to have QGIS 2.0 and
 the QGIS 2.0 python bindings installed. In addition the :samp:`pytz` module
