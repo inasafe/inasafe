@@ -18,10 +18,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import sys
 import shutil
 import logging
 import logging.handlers
-
+sys.path.append(os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', 'third_party')))
+from raven.handlers.logging import SentryHandler
+from raven import Client
 
 def baseDataDir():
     """Create (if needed) and return the path to the base realtime data dir"""
@@ -140,9 +144,6 @@ def setupLogger():
 
     # Sentry handler - this is optional hence the localised import
     try:
-        from raven.handlers.logging import SentryHandler
-        from raven import Client
-
         myClient = Client(
             'http://fda607badbe440be9a2fa6b22e759c72'
             ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')

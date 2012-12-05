@@ -27,7 +27,6 @@ import numpy
 from datetime import datetime
 #sudo apt-get install python-tz
 import pytz
-import locale
 
 import ogr
 import gdal
@@ -64,7 +63,7 @@ from qgis.core import (QgsPoint,
                        QgsPalLabeling)
 #TODO refactor this into a utilitiy class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
-from safe_qgis.exceptions import TranslationLoadException
+from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
@@ -1470,8 +1469,8 @@ class ShakeEvent(QObject):
         mySortedCities = sorted(myCities,
                                 key=lambda d: (
                                     # we want to use whole no's for sort
-                                    -d['mmi-int'],  # pylint: disable=E225
-                                    -d['population'],  # pylint: disable=E225
+                                    - d['mmi-int'],
+                                    - d['population'],
                                     d['name'],
                                     d['mmi'],  # not decimals
                                     d['roman'],
@@ -1893,7 +1892,6 @@ class ShakeEvent(QObject):
                 LOGGER.info('%s (already exists)' % myThumbnailImagePath)
                 return myPdfPath
 
-
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
         QgsMapLayerRegistry.instance().removeAllMapLayers()
@@ -2070,12 +2068,6 @@ class ShakeEvent(QObject):
         .. note:: This method is heavily based on http://hoegners.de/Maxi/geo/
            which is licensed under the GPL V3.
         """
-
-        try:
-            myBearing = float(theBearing)
-        except:
-            return None
-
         myDirectionList = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
                            'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
                            'NW', 'NNW']
@@ -2402,7 +2394,7 @@ class ShakeEvent(QObject):
 
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'safe_qgis', 'i18n',
-                                         'inasafe_' + str(myLocaleName) + '.qm')
+                                     'inasafe_' + str(myLocaleName) + '.qm')
         if os.path.exists(myTranslationPath):
             self.translator = QTranslator()
             myResult = self.translator.load(myTranslationPath)
@@ -2410,7 +2402,7 @@ class ShakeEvent(QObject):
             if not myResult:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 LOGGER.exception(myMessage)
-                raise TranslationLoadException(myMessage)
+                raise TranslationLoadError(myMessage)
             QCoreApplication.installTranslator(self.translator)
         else:
             myMessage = 'No translation exists for %s' % myLocaleName

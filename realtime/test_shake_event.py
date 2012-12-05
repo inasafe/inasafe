@@ -395,7 +395,7 @@ searchBoxes: None
         myResult = myShakeEvent.eventDict()
         myExpectedDict = {'place-name': PyQt4.QtCore.QString(u'n/a'),
                           'depth-name': PyQt4.QtCore.QString(u'Depth'),
-                          'elapsed-time': u'', # empty as it will change
+                          'elapsed-time': u'',  # empty as it will change
                           'legend-name': 'Population density',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
                           'located-label': PyQt4.QtCore.QString(u'Located'),

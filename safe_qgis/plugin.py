@@ -50,9 +50,9 @@ class Plugin:
         manipulate the running QGIS instance that spawned it.
 
         Args:
-           iface - a Quantum GIS QGisAppInterface instance. This instance
-           is automatically passed to the plugin by QGIS when it loads the
-           plugin.
+            iface - a Quantum GIS QGisAppInterface instance. This instance
+                is automatically passed to the plugin by QGIS when it loads the
+                plugin.
         Returns:
            None.
         Raises:
