@@ -1777,6 +1777,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.displayHtml(myMessage)
         else:
             # On success, display generated report
+
             self.displayHtml(myReport)
         self.saveState()
         # Hide hour glass
