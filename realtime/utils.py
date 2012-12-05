@@ -27,6 +27,7 @@ sys.path.append(os.path.abspath(
 from raven.handlers.logging import SentryHandler
 from raven import Client
 
+
 def baseDataDir():
     """Create (if needed) and return the path to the base realtime data dir"""
     if 'INASAFE_WORK_DIR' in os.environ:
