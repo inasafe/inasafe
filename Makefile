@@ -284,7 +284,7 @@ jenkins-test: testdata clean
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis || :
 
 jenkins-pyflakes:
 	@echo
@@ -312,7 +312,7 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis realtime > pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis > pylint.log || :
 
 jenkins-pep8:
 	@echo
