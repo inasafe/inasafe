@@ -35,7 +35,7 @@ compile:
 	make -C safe_qgis
 
 docs: compile
-	@ech
+	@echo
 	@echo "-------------------------------"
 	@echo "Compile documentation into html"
 	@echo "-------------------------------"
