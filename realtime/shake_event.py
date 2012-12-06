@@ -2071,10 +2071,10 @@ class ShakeEvent(QObject):
         myDirectionList = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
                            'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
                            'NW', 'NNW']
-
+        myBearing = float(theBearing)
         myDirectionsCount = len(myDirectionList)
         myDirectionsInterval = 360. / myDirectionsCount
-        myIndex = int(round(theBearing / myDirectionsInterval))
+        myIndex = int(round(myBearing / myDirectionsInterval))
         myIndex %= myDirectionsCount
         return myDirectionList[myIndex]
 
