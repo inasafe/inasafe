@@ -145,16 +145,16 @@ gui_test_suite: compile testdata
 
 # Run realtime test suite only
 realtime_test_suite:
-	@echo
-	@echo "-------------------"
-	@echo "Realtime Test Suite"
-	@echo "-------------------"
+        @echo
+        @echo "-------------------"
+        @echo "Realtime Test Suite"
+        @echo "-------------------"
 
-	@# Preceding dash means that make will continue in case of errors
-	#Noisy version - uncomment if you want to see all qgis stdout
-	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
-	#Quiet version
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+        @# Preceding dash means that make will continue in case of errors
+        #Noisy version - uncomment if you want to see all qgis stdout
+        #@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+        #Quiet version
+        @-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
 # FIXME (Ole): Need to attempt cloning this r/w for those with
@@ -320,3 +320,16 @@ jenkins-pep8:
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
 	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py . > pep8.log || :
+
+jenkins-realtime-test:
+        @echo
+        @echo "---------------------------------------------------------------"
+        @echo "Regresssion Test Suite for Jenkins (Realtime module only)"
+        @echo "if you are going to run more than "
+        @echo "one InaSAFE Jenkins job, you should run each on a different"
+        @echo "display by changing the :100 option below to a different number"
+        @echo "Update: Above is taken care of by xvfb jenkins pluging now"
+        @echo "---------------------------------------------------------------"
+        # xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
+        @-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
+        nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime || :
