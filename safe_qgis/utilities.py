@@ -272,6 +272,7 @@ def _addMinMaxToStyle(theStyle):
         myNewStyles.append(myClass)
     return myNewStyles
 
+
 def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
     """Set QGIS raster style based on InaSAFE style dictionary for QGIS < 2.0.
 
