@@ -88,6 +88,7 @@ from safe_qgis.keywords_dialog import KeywordsDialog
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
+#from pydev import pydevd
 
 
 class Dock(QtGui.QDockWidget, Ui_DockBase):
@@ -173,6 +174,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                self.accept)
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
+        #pydevd.settrace('localhost',
+        #            port=53100,
+        #            stdoutToServer=True,
+        #            stderrToServer=True)
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after

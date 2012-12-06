@@ -21,7 +21,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                               isLayerPolygonal,
                               getLayerAttributeNames,
                               impactLayerAttribution,
-                              dpiToMeters)
+                              dpiToMeters,
+                              _addMinMaxToStyle)
 from safe_qgis.utilities_test import (unitTestDataPath,
                                      loadLayer,
                                      getQgisTestApp)
@@ -411,6 +412,39 @@ class UtilitiesTest(unittest.TestCase):
                      ' Got: %s Expected: %s\n' %
                      (myDpm, myExpectedDpm))
         self.assertAlmostEqual(myDpm, myExpectedDpm, msg=myMessage)
+
+    def testAddMinMaxToStyle(self):
+        """Test our add min max to style function."""
+        myClasses = [dict(colour='#38A800', quantity=2, transparency=0),
+                     dict(colour='#38A800', quantity=5, transparency=50),
+                     dict(colour='#79C900', quantity=10, transparency=50),
+                     dict(colour='#CEED00', quantity=20, transparency=50),
+                     dict(colour='#FFCC00', quantity=50, transparency=34),
+                     dict(colour='#FF6600', quantity=100, transparency=77),
+                     dict(colour='#FF0000', quantity=200, transparency=24),
+                     dict(colour='#7A0000', quantity=300, transparency=22)]
+        myExpectedClasses = [
+            {'max': 2.0, 'colour': '#38A800', 'min': 0.0, 'transparency': 0,
+             'quantity': 2},
+            {'max': 5.0, 'colour': '#38A800', 'min': 2.0000000000000004,
+             'transparency': 50, 'quantity': 5},
+            {'max': 10.0, 'colour': '#79C900', 'min': 5.0000000000000009,
+             'transparency': 50, 'quantity': 10},
+            {'max': 20.0, 'colour': '#CEED00', 'min': 10.000000000000002,
+             'transparency': 50, 'quantity': 20},
+            {'max': 50.0, 'colour': '#FFCC00', 'min': 20.000000000000004,
+             'transparency': 34, 'quantity': 50},
+            {'max': 100.0, 'colour': '#FF6600', 'min': 50.000000000000007,
+             'transparency': 77, 'quantity': 100},
+            {'max': 200.0, 'colour': '#FF0000', 'min': 100.00000000000001,
+             'transparency': 24, 'quantity': 200},
+            {'max': 300.0, 'colour': '#7A0000', 'min': 200.00000000000003,
+             'transparency': 22, 'quantity': 300}]
+
+        myActualClasses = _addMinMaxToStyle(myClasses)
+        print myActualClasses
+        self.maxDiff = None
+        self.assertListEqual(myExpectedClasses, myActualClasses)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
