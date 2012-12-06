@@ -99,6 +99,9 @@ test: clean docs test_suite pep8 pylint dependency_test unwanted_strings run_dat
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
 
+# Run the test suite followed by style checking includes realtime and requires QGIS 2.0
+qgis2test: clean docs qgis2_test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+
 quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 test_suite_quick:
@@ -142,6 +145,14 @@ gui_test_suite: compile testdata
 	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 	#Quiet version
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+
+# This one includes safe, safe_qgis and realtime and runs against QGIS v2
+qgis2_test_suite: compile testdata
+	@echo
+	@echo "---------------------"
+	@echo "Regression Test Suite"
+	@echo "---------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Run realtime test suite only
 realtime_test_suite:
@@ -283,9 +294,18 @@ indent:
 jenkins-test: testdata clean
 	@echo
 	@echo "----------------------------------"
-	@echo "Regresssion Test Suite for Jenkins"
+	@echo "Regression Test Suite for Jenkins"
+	@echo " against QGIS 1.x"
 	@echo "----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis || :
+
+jenkins-qgis2-test: testdata clean
+	@echo
+	@echo "----------------------------------"
+	@echo "Regression Test Suite for Jenkins"
+	@echo " against QGIS 2.x"
+	@echo "----------------------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis,realtime safe safe_qgis realtime || :
 
 jenkins-pyflakes:
 	@echo
