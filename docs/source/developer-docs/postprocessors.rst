@@ -3,8 +3,8 @@
 Postprocessors
 ==============
 
-This document explains the purpose of postprocessors and lists the 
-different available postprocessor and the requirements each has to be 
+This document explains the purpose of postprocessors and lists the
+different available postprocessor and the requirements each has to be
 used effectively.
 
 .. note:: This document is still a work in progress.
@@ -83,7 +83,7 @@ both use mandatory and optional parameters
 Output
 ------
 Dock.postprocOutput will hold the result datastructure (shown below) of all the
-postprocessors. The structure is then parsed by Dock.getPostprocOutput() and
+postprocessors. The structure is then parsed by Dock._postProcessingOutput() and
 stored in the impact layer's keywords
 
 Data structure of results

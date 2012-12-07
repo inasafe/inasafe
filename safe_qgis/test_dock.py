@@ -494,8 +494,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (myAttribute))
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
@@ -520,8 +520,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (myAttribute))
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
@@ -546,8 +546,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
                      (myAttribute))
         assert myAttribute is None, myMessage
@@ -572,8 +572,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
                      (myAttribute))
         assert myAttribute is None, myMessage
@@ -1493,7 +1493,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
+        DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
         myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
@@ -1564,7 +1564,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-#        DOCK.runtimeKWDialog.accept()
+#        DOCK.runtimeKeywordsDialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:
@@ -1594,7 +1594,7 @@ Click for Diagnostic Information:
 
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        #        DOCK.runtimeKWDialog.accept()
+        #        DOCK.runtimeKeywordsDialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:

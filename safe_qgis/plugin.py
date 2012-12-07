@@ -50,9 +50,9 @@ class Plugin:
         manipulate the running QGIS instance that spawned it.
 
         Args:
-           iface - a Quantum GIS QGisAppInterface instance. This instance
-           is automatically passed to the plugin by QGIS when it loads the
-           plugin.
+            iface - a Quantum GIS QGisAppInterface instance. This instance
+                is automatically passed to the plugin by QGIS when it loads the
+                plugin.
         Returns:
            None.
         Raises:
@@ -79,7 +79,7 @@ class Plugin:
         Returns:
            None.
         Raises:
-           no exceptions explicitly raised.
+           TranslationLoadException
         """
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
@@ -248,7 +248,7 @@ class Plugin:
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = Dock(self.iface)
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
 
         if myLegendTab:

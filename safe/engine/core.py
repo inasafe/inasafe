@@ -201,8 +201,8 @@ def check_data_integrity(layer_objects):
             if geotransform is None:
                 geotransform = layer.get_geotransform()
             else:
-                msg = ('Geotransforms in input raster layers are different: '
-                       '%s %s' % (geotransform, layer.get_geotransform()))
+                msg = ('Geotransforms in input raster layers are different:\n'
+                       '%s\n%s' % (geotransform, layer.get_geotransform()))
                 verify(numpy.allclose(geotransform,
                                       layer.get_geotransform(),
                                       rtol=tolerance), msg)

@@ -22,6 +22,7 @@ import sys
 import traceback
 import logging
 import math
+import numpy
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
@@ -199,14 +200,77 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         list: RangeList
         list: TransparencyList
     """
+    myNewStyles = _addMinMaxToStyle(theStyle['style_classes'])
     # test if QGIS 1.8.0 or older
     # see issue #259
     if qgisVersion() <= 10800:
         LOGGER.debug('Rendering raster using <= 1.8 styling')
-        return _setLegacyRasterStyle(theQgsRasterLayer, theStyle)
+        return _setLegacyRasterStyle(theQgsRasterLayer, myNewStyles)
     else:
         LOGGER.debug('Rendering raster using 2+ styling')
-        return _setNewRasterStyle(theQgsRasterLayer, theStyle)
+        return _setNewRasterStyle(theQgsRasterLayer, myNewStyles)
+
+
+def _addMinMaxToStyle(theStyle):
+    """Add a min and max to each style class in a style dictionary.
+
+    When InaSAFE provides style classes they are specific values, not ranges.
+    However QGIS wants to work in ranges, so this helper will address that by
+    updating the dictionary to include a min max value for each class.
+
+    It is assumed that we will start for 0 as the min for the first class
+    and the quantity of each class shall constitute the max. For all other
+    classes , min shall constitute the smalles increment to a float that can
+    meaningfully be made by python (as determined by numpy.nextafter()).
+
+    Args:
+        style: list - A list of dictionaries of the form as in the example
+            below.
+
+    Returns:
+        dict: A new dictionary list with min max attributes added to each
+            entry.
+
+    Example input:
+
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
+                         dict(colour='#38A800', quantity=5, transparency=50),
+                         dict(colour='#79C900', quantity=10, transparency=50),
+                         dict(colour='#CEED00', quantity=20, transparency=50),
+                         dict(colour='#FFCC00', quantity=50, transparency=34),
+                         dict(colour='#FF6600', quantity=100, transparency=77),
+                         dict(colour='#FF0000', quantity=200, transparency=24),
+                         dict(colour='#7A0000', quantity=300, transparency=22)]
+
+    Example output:
+
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=0,
+                              min=0, max=2),
+                         dict(colour='#38A800', quantity=5, transparency=50,
+                              min=2.0000000000002, max=5),
+                         ),
+                         dict(colour='#79C900', quantity=10, transparency=50,
+                              min=5.0000000000002, max=10),),
+                         dict(colour='#CEED00', quantity=20, transparency=50,
+                              min=5.0000000000002, max=20),),
+                         dict(colour='#FFCC00', quantity=50, transparency=34,
+                              min=20.0000000000002, max=50),),
+                         dict(colour='#FF6600', quantity=100, transparency=77,
+                              min=50.0000000000002, max=100),),
+                         dict(colour='#FF0000', quantity=200, transparency=24,
+                              min=100.0000000000002, max=200),),
+                         dict(colour='#7A0000', quantity=300, transparency=22,
+                              min=200.0000000000002, max=300),)]
+    """
+    myNewStyles = []
+    myLastMax = 0.0
+    for myClass in theStyle:
+        myQuantity = float(myClass['quantity'])
+        myClass['min'] = myLastMax
+        myClass['max'] = myQuantity
+        myLastMax = numpy.nextafter(myQuantity, sys.float_info.max)
+        myNewStyles.append(myClass)
+    return myNewStyles
 
 
 def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
@@ -217,7 +281,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
 
     Args:
         * theQgsRasterLayer: QgsRasterLayer.
-        * style: dict - Dictionary of the form as in the example below.
+        * style: List - of the form as in the example below.
 
     Returns:
         * list: RangeList
@@ -241,12 +305,11 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
 
     """
     theQgsRasterLayer.setDrawingStyle(QgsRasterLayer.PalettedColor)
-    myClasses = theStyle['style_classes']
-    LOGGER.debug(myClasses)
+    LOGGER.debug(theStyle)
     myRangeList = []
     myTransparencyList = []
     myLastValue = 0
-    for myClass in myClasses:
+    for myClass in theStyle:
         LOGGER.debug('Evaluating class:\n%s\n' % myClass)
         myMax = myClass['quantity']
         myColour = QtGui.QColor(myClass['colour'])
@@ -295,7 +358,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
         QgsRasterLayer.ColorRampShader)
     myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
     # Discrete will shade any cell between maxima of this break
-    # and mamima of previous break to the colour of this break
+    # and minima of previous break to the colour of this break
     myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
     myFunction.setColorRampItemList(myRangeList)
 
@@ -307,7 +370,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
     return myRangeList, myTransparencyList
 
 
-def _setNewRasterStyle(theQgsRasterLayer, theStyle):
+def _setNewRasterStyle(theQgsRasterLayer, theClasses):
     """Set QGIS raster style based on InaSAFE style dictionary for QGIS >= 2.0.
 
     This function will set both the colour map and the transparency
@@ -315,7 +378,7 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
 
     Args:
         * theQgsRasterLayer: QgsRasterLayer
-        * style: Dictionary of the form as in the example below.
+        * theClasses: List of the form as in the example below.
 
     Returns:
         * list: RangeList
@@ -344,16 +407,25 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
     # pylint: enable=W0621
     # pylint: enable=W0404
 
-    myClasses = theStyle['style_classes']
     myRampItemList = []
     myTransparencyList = []
-    myLastValue = 0
-    for myClass in myClasses:
-        LOGGER.debug('Evaluating class:\n%s\n' % myClass)
-        myMax = myClass['quantity']
+    LOGGER.debug(theClasses)
+    for myClass in theClasses:
 
+        LOGGER.debug('Evaluating class:\n%s\n' % myClass)
+
+        if 'quantity' not in myClass:
+            LOGGER.exception('Class has no quantity attribute')
+            continue
+
+        myMax = myClass['max']
         if math.isnan(myMax):
-            LOGGER.debug('Skipping class.')
+            LOGGER.debug('Skipping class - max is nan.')
+            continue
+
+        myMin = myClass['min']
+        if math.isnan(myMin):
+            LOGGER.debug('Skipping class - min is nan.')
             continue
 
         myColour = QtGui.QColor(myClass['colour'])
@@ -362,6 +434,7 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
             myLabel = QtCore.QString(myClass['label'])
         myRampItem = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
         myRampItemList.append(myRampItem)
+
         # Create opacity entries for this range
         myTransparencyPercent = 0
         if 'transparency' in myClass:
@@ -370,11 +443,12 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
             myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
-            myPixel.min = myLastValue
+            myPixel.min = myMin
+            # We want it just a leeetle bit smaller than max
+            # so that ranges are discrete
             myPixel.max = myMax
             myPixel.percentTransparent = myTransparencyPercent
             myTransparencyList.append(myPixel)
-            myLastValue = myMax
 
     myBand = 1  # gdal counts bands from base 1
     LOGGER.debug('Setting colour ramp list')
@@ -391,12 +465,19 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
         myRasterShader)
     LOGGER.debug('Assigning renderer to raster layer')
     theQgsRasterLayer.setRenderer(myRenderer)
+
     LOGGER.debug('Setting raster transparency list')
-    #if len(myTransparencyList) > 0:
-    #    myRasterTransparency = QgsRasterTransparency()
-    #    myRasterTransparency.setTransparentSingleValuePixelList(
-    #        myTransparencyList)
-    #    myRenderer.setRasterTransparency(myRasterTransparency)
+
+    myRenderer = theQgsRasterLayer.renderer()
+    myTransparency = QgsRasterTransparency()
+    myTransparency.setTransparentSingleValuePixelList(myTransparencyList)
+    myRenderer.setRasterTransparency(myTransparency)
+    # For interest you can also view the list like this:
+    #pix = t.transparentSingleValuePixelList()
+    #for px in pix:
+    #    print 'Min: %s Max %s Percent %s' % (
+    #       px.min, px.max, px.percentTransparent)
+
     LOGGER.debug('Saving style as default')
     theQgsRasterLayer.saveDefaultStyle()
     LOGGER.debug('Setting raster style done!')
@@ -670,7 +751,7 @@ def setupLogger():
     myConsoleHandler = logging.StreamHandler()
     myConsoleHandler.setLevel(logging.ERROR)
 
-    myQgisHandler = QgsLogHandler()
+    myQGISHandler = QgsLogHandler()
 
     # TODO: User opt in before we enable email based logging.
     # Email handler for errors
@@ -714,21 +795,24 @@ def setupLogger():
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
     #myEmailHandler.setFormatter(myFormatter)
-    myQgisHandler.setFormatter(myFormatter)
+    myQGISHandler.setFormatter(myFormatter)
 
     # add the handlers to the logger
     addLoggingHanderOnce(myLogger, myFileHandler)
     addLoggingHanderOnce(myLogger, myConsoleHandler)
     #addLoggingHanderOnce(myLogger, myEmailHandler)
-    addLoggingHanderOnce(myLogger, myQgisHandler)
+    addLoggingHanderOnce(myLogger, myQGISHandler)
 
 
 def isLayerPolygonal(theLayer):
-    """tell if a qgis theLayer is vectorial and d its geometries polygons
+    """Tell if a QGIS layer is vector and its geometries are polygons.
+
    Args:
        the theLayer
+
     Returns:
         bool - true if the theLayer contains polygons
+
     Raises:
        None
     """

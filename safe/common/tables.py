@@ -306,20 +306,26 @@ class Table(object):
         # style for thin borders by default
         if style is None:
             self.style = TABLE_STYLE_THINBORDER
+
+        self.table_class = table_class
         if table_class is None:
             self.table_class = DEFAULT_TABLE_CLASS
+
         self.caption = caption
         self.caption_at_bottom = caption_at_bottom
         self.width = width
         self.cellspacing = cellspacing
         self.cellpadding = cellpadding
         self.header_row = header_row
+
         self.rows = rows
         if not rows:
             self.rows = []
+
         self.attribs = attribs
         if not attribs:
             self.attribs = {}
+
         self.col_width = col_width
         self.col_align = col_align
         self.col_char = col_char

@@ -29,4 +29,5 @@ Developer Documentation Contents:
    irc
    faq
    todo
+   realtime
 
