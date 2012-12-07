@@ -17,13 +17,15 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import SIGNAL
+from PyQt4.QtCore import (QRect, SIGNAL)
 from PyQt4.QtGui import (QDialog, QProgressDialog)
 from import_dialog_base import Ui_ImportDialogBase
 
 from bs4 import BeautifulSoup
 import requests
 import time
+
+from third_party.lightmaps import LightMaps
 
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
@@ -42,6 +44,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.parent = theParent
         self.setupUi(self)
 
+        self.setWindowTitle(self.tr('Import Hot-Export'))
+
         ## base url
         self.url = 'http://hot-export.geofabrik.de'
 
@@ -51,11 +55,15 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.maxLongitude.setText('106.8629')
         self.maxLatitude.setText('-6.3656')
 
+        self.map = LightMaps(self)
+        self.map.setGeometry(QRect(10, 10, 300, 240))
+        self.map.setCenter(-6.4338, 106.7685 )
+
+
     def accept(self):
 
         self.doImport()
         self.done(QDialog.Accepted)
-
 
     def progressDlgCanceled(self):
         pass
