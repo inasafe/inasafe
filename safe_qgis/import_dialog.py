@@ -1,6 +1,6 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Impact Functions Dialog.**
+**Import Dialog.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -17,10 +17,8 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
-
-
-from PyQt4.QtGui import (QDialog)
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import (QDialog, QProgressDialog)
 from import_dialog_base import Ui_ImportDialogBase
 
 from bs4 import BeautifulSoup
@@ -33,7 +31,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     def __init__(self, theParent=None):
         '''Constructor for the dialog.
 
-
         Args:
            * theParent - Optional widget to use as parent
         Returns:
@@ -45,6 +42,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.parent = theParent
         self.setupUi(self)
 
+        ## base url
+        self.url = 'http://hot-export.geofabrik.de'
+
         ## example location: depok
         self.minLongitude.setText('106.7685')
         self.minLatitude.setText('-6.4338')
@@ -52,34 +52,26 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.maxLatitude.setText('-6.3656')
 
     def accept(self):
-        print "hore"
+
+        self.doImport()
         self.done(QDialog.Accepted)
 
 
-    def getToken(self, theContent):
-        ## we need to get authenticity_token value
-        ## FIXME(gigih): need fail-proof method to get authenticity_token
-        myToken = theContent.split('authenticity_token" type="hidden" value="')[1]
-        myToken = myToken.split('"')[0]
+    def progressDlgCanceled(self):
+        pass
 
-        return myToken
+    def doImport(self):
+        # creating progress dialog for download
+        self.progressDialog=QProgressDialog(self)
+        self.progressDialog.setAutoClose(False)
+        self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
+        self.connect(self.progressDialog,SIGNAL("canceled()"), self.progressDlgCanceled)
 
+        self.progressDialog.show()
+        self.progressDialog.setMaximum(100)
+        self.progressDialog.setValue(0)
 
-    def createNewJob(self):
-
-        myUrl = 'http://hot-export.geofabrik.de'
-
-        ## Job
-        myJobResponse = requests.get(myUrl + '/newjob')
-        myJobToken = self.getToken(myJobResponse.content)
-
-        print "job token : " + myJobToken
-
-
-        ## wizard area
         myPayload = {
-            'authenticity_token': myJobToken,
-
             'job[region_id]': '1', # 1 is indonesia
             'job[name]': 'depok test',
             'job[description]': 'just some test',
@@ -89,19 +81,87 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             'job[lonmax]': str(self.maxLongitude.text()),
             'job[latmax]': str(self.maxLatitude .text()),
         }
-        myWizardResponse = requests.post(myUrl + '/wizard_area', myPayload)
-        myWizardToken = self.getToken(myWizardResponse.content)
 
-        print "wizard token : " + myWizardToken
+        self.progressDialog.setLabelText(
+            self.tr("Create A New Job on Hot-Exports..."))
+        myNewJobToken = self.createNewJob(myPayload)
+        self.progressDialog.setValue(10)
 
+        self.progressDialog.setLabelText(
+            self.tr("Upload Default Preset File..."))
+        myJobId = self.uploadTag(myPayload, myNewJobToken)
+        self.progressDialog.setValue(20)
+
+        self.progressDialog.setLabelText(
+            self.tr("Waiting For Result Available on Server..."))
+        myShapeUrl = self.getDownloadUrl(myJobId)
+        self.progressDialog.setValue(30)
+
+        self.progressDialog.setLabelText(
+            self.tr("Waiting For Result Available on Server..."))
+        myOutputPath = '/tmp/' + myJobId + '.shp.zip'
+        self.progressDialog.setValue(50)
+
+        self.progressDialog.setLabelText(
+            self.tr("Download Shape File..."))
+        myZipPath = self.downloadShapeFile(myShapeUrl, myOutputPath)
+        self.progressDialog.setValue(90)
+
+        self.progressDialog.setLabelText(
+            self.tr("Extract Shape File..."))
+        self.extractZip(myZipPath)
+        self.progressDialog.setValue(100)
+
+
+    def getAuthToken(self, theContent):
+        '''Get authenticity_token value
+
+        Args:
+           * theContent - string containing html page from hot-exports
+        Returns:
+           authenticity_token value
+        Raises:
+           no exceptions explicitly raised
+        '''
+
+        ## FIXME(gigih): need fail-proof method to get authenticity_token
+        myToken = theContent.split('authenticity_token" type="hidden" value="')[1]
+        myToken = myToken.split('"')[0]
+
+        return myToken
+
+    def createNewJob(self, thePayload):
+        """ Fill form to create new hot-exports job.
+        Args:
+           * thePayload - dictionary
+        Returns:
+           authenticity_token value
+        Raises:
+           no exceptions explicitly raised
+        """
+
+        myJobResponse = requests.get(self.url + '/newjob')
+        myJobToken = self.getAuthToken(myJobResponse.content)
+
+        print "job token : " + myJobToken
+        thePayload['authenticity_token'] = myJobToken
+
+        myWizardResponse = requests.post(self.url + '/wizard_area', thePayload)
+        myWizardToken = self.getAuthToken(myWizardResponse.content)
+
+        return myWizardToken
+
+    def uploadTag(self, thePayload, theToken):
         ## tag upload
-        myPayload['authenticity_token'] = myWizardToken
-        myTagResponse = requests.post(myUrl + '/tagupload', myPayload)
+        ## FIXME(gigih): upload buildings preset to hot-export
+        thePayload['authenticity_token'] = theToken
+        myTagResponse = requests.post(self.url + '/tagupload', thePayload)
         myId = myTagResponse.url.split('/')[-1]
 
-        ## wait until download page is ready
-        print "wait until download page is ready...."
-        myResultUrl = myUrl + '/jobs/' + myId
+        return myId
+
+    def getDownloadUrl(self, theJobId):
+        myResultUrl = self.url + '/jobs/' + theJobId
         myIsReady = False
 
         while myIsReady is False:
@@ -114,26 +174,14 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
                 print "\tstill not ready. wait 5 seconds..."
                 time.sleep(5)
 
-        print "download shape file...."
+        return self.url + myLinks[0].get('href')
 
-        ## only need first link
-        myShapeUrl = myUrl + myLinks[0].get('href')
-        myShapeResponse = requests.get(myShapeUrl)
+    def downloadShapeFile(self, theUrl, theOutput):
+        myShapeResponse = requests.get(theUrl)
 
-        ## FIXME(gigih): don't put in temporary folder
-        myShapePath = '/tmp/' + myId + '.shp.zip'
-        myShapeFile = open(myShapePath, 'wb')
+        myShapeFile = open(theOutput, 'wb')
         myShapeFile.write(myShapeResponse.content)
         myShapeFile.close()
-
-        print "extract file...."
-        self.extractZip(myShapePath)
-
-        ## FIXME(gigih): add shape file layer to qgis
-
-        print "file already extracted in /tmp...."
-
-
 
     def extractZip(self, thePath):
         import zipfile, os
@@ -156,6 +204,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     a = ImportDialog()
-#    a.show()
-#    app.exec_()
-    a.createNewJob()
+    a.show()
+    app.exec_()
+    #a.doImport()
