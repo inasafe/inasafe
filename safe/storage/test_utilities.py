@@ -120,6 +120,5 @@ class CommonUtilitiesTest(unittest.TestCase):
         self.assertEquals(keywords, expected_keywords, msg)
         LOGGER.debug(keywords)
 
-    def test
 if __name__ == '__main__':
     unittest.main()
