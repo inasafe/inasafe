@@ -18,9 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import sys
 import shutil
-import logging
 from safe_qgis.utilities import setupLogger as setupLoggerSQ
 
 
@@ -110,4 +108,3 @@ def setupLogger():
     mySentryUrl = ('http://fda607badbe440be9a2fa6b22e759c72'
             ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
     setupLoggerSQ(theSentryUrl=mySentryUrl, theLogFile=myLogFile)
-

@@ -123,7 +123,7 @@ class FtpClient:
             myFile = file(theFilePath, 'wb')
             myFile.write(myUrlHandle.read())
             myFile.close()
-        except urllib2.URLError, e:
+        except urllib2.URLError:
             LOGGER.exception('Bad Url or Timeout')
             raise
 

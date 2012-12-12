@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import logging
-import urllib2
+from urllib2 import URLError
 from zipfile import BadZipfile
 
 from ftp_client import FtpClient
@@ -58,7 +58,7 @@ def processEvent(theEventId=None, theLocale='en'):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
                                       theLocale=theLocale,
                                       theForceFlag=myForceFlag)
-    except BadZipfile, urllib2.URLError:
+    except BadZipfile, URLError:
         # retry with force flag true
         if os.path.exists(myPopulationPath):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
