@@ -695,10 +695,15 @@ def addLoggingHanderOnce(theLogger, theHandler):
     return True
 
 
-def setupLogger():
+def setupLogger(theLogFile=None, theSentryUrl=None):
     """Run once when the module is loaded and enable logging
 
-    Args: None
+    Args:
+        * theLogFile: str - optional full path to a file to write logs to.
+        * theSentryUrl: str - optional url to sentry api for remote logging.
+            Defaults to http://c64a83978732474ea751d432ab943a6b
+                :d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5
+            which is the sentry project for InaSAFE desktop.
 
     Returns: None
 
@@ -745,11 +750,14 @@ def setupLogger():
     # user's temporary working directory.
     myTempDir = temp_dir('logs')
     myFilename = os.path.join(myTempDir, 'inasafe.log')
-    myFileHandler = logging.FileHandler(myFilename)
+    if theLogFile is None:
+        myFileHandler = logging.FileHandler(myFilename)
+    else:
+        myFileHandler = logging.FileHandler(theLogFile)
     myFileHandler.setLevel(myDefaultHanderLevel)
     # create console handler with a higher log level
     myConsoleHandler = logging.StreamHandler()
-    myConsoleHandler.setLevel(logging.ERROR)
+    myConsoleHandler.setLevel(logging.INFO)
 
     myQGISHandler = QgsLogHandler()
 
@@ -779,9 +787,12 @@ def setupLogger():
     myFlag = mySettings.value('inasafe/useSentry', False).toBool()
     if 'INASAFE_SENTRY' in os.environ or myFlag:
         try:
-            myClient = Client(
-                'http://c64a83978732474ea751d432ab943a6b'
-                ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
+            if theSentryUrl is None:
+                myClient = Client(
+                    'http://c64a83978732474ea751d432ab943a6b'
+                    ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
+            else:
+                myClient = Client(theSentryUrl)
             mySentryHandler = SentryHandler(myClient)
             mySentryHandler.setFormatter(myFormatter)
             mySentryHandler.setLevel(logging.ERROR)

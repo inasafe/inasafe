@@ -83,7 +83,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
 from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
@@ -1863,7 +1863,7 @@ class ShakeEvent(QObject):
             str - path to rendered pdf.
 
         Raises:
-            Propogates any exceptions.
+            Propagates any exceptions.
         """
         myPdfPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
@@ -2344,7 +2344,7 @@ class ShakeEvent(QObject):
                 'zoomFactor': self.zoomFactor,
                 'searchBoxes': self.searchBoxes
             }
-        print str(myDict)
+
         myString = ('latitude: %(latitude)s\n'
                      'longitude: %(longitude)s\n'
                      'eventId: %(eventId)s\n'
@@ -2405,5 +2405,6 @@ class ShakeEvent(QObject):
                 raise TranslationLoadError(myMessage)
             QCoreApplication.installTranslator(self.translator)
         else:
-            myMessage = 'No translation exists for %s' % myLocaleName
-            LOGGER.exception(myMessage)
+            if myLocaleName != 'en':
+                myMessage = 'No translation exists for %s' % myLocaleName
+                LOGGER.exception(myMessage)

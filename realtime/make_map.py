@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import logging
+import urllib2
 from zipfile import BadZipfile
 
 from ftp_client import FtpClient
@@ -28,7 +29,7 @@ from realtime.utils import setupLogger, dataDir
 from realtime.shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setupLogger()
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def processEvent(theEventId=None, theLocale='en'):
@@ -57,7 +58,7 @@ def processEvent(theEventId=None, theLocale='en'):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
                                       theLocale=theLocale,
                                       theForceFlag=myForceFlag)
-    except BadZipfile:
+    except BadZipfile, urllib2.URLError:
         # retry with force flag true
         if os.path.exists(myPopulationPath):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
@@ -105,7 +106,7 @@ elif len(sys.argv) == 2:
         sys.exit(0)
     elif myEventId in '--run-all':
         #
-        # Caution, this branch gets memory leaks, use the
+        # Caution, this code path gets memory leaks, use the
         # batch file approach rather!
         #
         myFtpClient = FtpClient()

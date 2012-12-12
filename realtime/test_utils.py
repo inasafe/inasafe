@@ -33,7 +33,7 @@ from utils import (baseDataDir,
 purgeWorkingData()
 # The logger is intiailsed in utils.py by init
 import logging
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Test(unittest.TestCase):

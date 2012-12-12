@@ -21,7 +21,7 @@ import shutil
 from zipfile import ZipFile
 # The logger is intiailsed in utils.py by init
 import logging
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 
 from rt_exceptions import (EventUndefinedError,
                             EventIdError,

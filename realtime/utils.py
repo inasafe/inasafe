@@ -21,11 +21,7 @@ import os
 import sys
 import shutil
 import logging
-import logging.handlers
-sys.path.append(os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', 'third_party')))
-from raven.handlers.logging import SentryHandler
-from raven import Client
+from safe_qgis.utilities import setupLogger as setupLoggerSQ
 
 
 def baseDataDir():
@@ -110,53 +106,8 @@ def setupLogger():
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
     """
-    myLogger = logging.getLogger('InaSAFE-Realtime')
-    myLogger.setLevel(logging.DEBUG)
-    # create file handler which logs even debug messages
     myLogFile = os.path.join(logDir(), 'realtime.log')
-    myFileHandler = logging.FileHandler(myLogFile)
-    myFileHandler.setLevel(logging.DEBUG)
-    # create console handler with a higher log level
-    myConsoleHandler = logging.StreamHandler()
-    myConsoleHandler.setLevel(logging.ERROR)
-    # Email handler for errors
-    #myEmailServer = 'localhost'
-    #myEmailServerPort = 25
-    #mySenderAddress = 'realtime@inasafe.org'
-    #myRecipientAddresses = ['tim@linfiniti.com']
-    #mySubject = 'Error'
-    #myEmailHandler = logging.handlers.SMTPHandler(
-    #    (myEmailServer, myEmailServerPort),
-    #    mySenderAddress,
-    #    myRecipientAddresses,
-    #    mySubject)
-    #myEmailHandler.setLevel(logging.ERROR)
-
-    # create formatter and add it to the handlers
-    myFormatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    myFileHandler.setFormatter(myFormatter)
-    myConsoleHandler.setFormatter(myFormatter)
-    #myEmailHandler.setFormatter(myFormatter)
-    # add the handlers to the logger
-    myLogger.addHandler(myFileHandler)
-    myLogger.addHandler(myConsoleHandler)
-    #myLogger.addHandler(myEmailHandler)
-
-    # Sentry handler - this is optional hence the localised import
-    try:
-        myClient = Client(
-            'http://fda607badbe440be9a2fa6b22e759c72'
+    mySentryUrl = ('http://fda607badbe440be9a2fa6b22e759c72'
             ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
-        mySentryHandler = SentryHandler(myClient)
-        mySentryHandler.setFormatter(myFormatter)
-        mySentryHandler.setLevel(logging.ERROR)
-        myLogger.addHandler(mySentryHandler)
-        mySentryMessage = 'Sentry logging enabled'
-    except:
-        mySentryMessage = 'Sentry logging could not be enabled'
+    setupLoggerSQ(theSentryUrl=mySentryUrl, theLogFile=myLogFile)
 
-    myLogger.info('Realtime Module Loaded')
-    myLogger.info('----------------------')
-    myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))
-    myLogger.info(mySentryMessage)
