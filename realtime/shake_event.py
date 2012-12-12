@@ -150,7 +150,7 @@ class ShakeEvent(QObject):
         # number of people killed per mmi band
         self.fatalityCounts = None
         # Total number of predicted fatalities
-        self.fatalityTotal = None
+        self.fatalityTotal = 0
         # number of people displaced per mmi band
         self.displacedCounts = None
         # number of people affected per mmi band
@@ -2068,7 +2068,12 @@ class ShakeEvent(QObject):
         myDirectionList = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
                            'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
                            'NW', 'NNW']
-        myBearing = float(theBearing)
+        try:
+            myBearing = float(theBearing)
+        except:
+            LOGGER.exception('Error casting bearing to a float')
+            return None
+
         myDirectionsCount = len(myDirectionList)
         myDirectionsInterval = 360. / myDirectionsCount
         myIndex = int(round(myBearing / myDirectionsInterval))
