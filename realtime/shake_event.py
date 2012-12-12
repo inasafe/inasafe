@@ -149,6 +149,8 @@ class ShakeEvent(QObject):
         self.impactKeywordsFile = None
         # number of people killed per mmi band
         self.fatalityCounts = None
+        # Total number of predicted fatalities
+        self.fatalityTotal = None
         # number of people displaced per mmi band
         self.displacedCounts = None
         # number of people affected per mmi band
@@ -1612,8 +1614,6 @@ class ShakeEvent(QObject):
                             header=True)]
         myAffectedRow = [TableCell(self.tr('People Affected (x 1000)'),
                             header=True)]
-        myFatalitiesRow = [TableCell(self.tr('Predicted fatalities'),
-                                header=True)]
         myImpactRow = [TableCell(self.tr('Perceived Shaking'),
                             header=True)]
         for myMmi in range(2, 10):
@@ -1626,17 +1626,10 @@ class ShakeEvent(QObject):
             else:
                 myAffectedRow.append(0.00)
 
-            if myMmi in self.fatalityCounts:
-                myFatalitiesRow.append(
-                    '%0.2f' % round(self.fatalityCounts[myMmi]))
-            else:
-                myFatalitiesRow.append(0.00)
-
             myImpactRow.append(TableCell(self.mmiShaking(myMmi)))
 
         myTableBody = []
         myTableBody.append(myAffectedRow)
-        myTableBody.append(myFatalitiesRow)
         myTableBody.append(myImpactRow)
         myTable = Table(myTableBody, header_row=myHeader,
                         table_class='table table-striped table-condensed')
@@ -1723,6 +1716,10 @@ class ShakeEvent(QObject):
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
         self.fatalityCounts = myFatalities
+        myFatalityTotal = 0
+        for myFatality in myFatalities:
+            myFatalityTotal += myFatality
+        self.fatalityTotal = myFatalityTotal
         self.displacedCounts = myDisplaced
         self.affectedCounts = myAffected
         LOGGER.info('***** Fatalities: %s ********' % self.fatalityCounts)
@@ -2118,6 +2115,8 @@ class ShakeEvent(QObject):
         myMapName = self.tr('Estimated Earthquake Impact')
         myExposureTableName = self.tr('Estimated number of people exposed to '
             'each MMI level')
+        myFatalitiesName = self.tr('Estimated fatalities')
+        myFatalitiesCount = self.fatalityTotal
         myCityTableName = self.tr('Places Affected')
         myLegendName = 'Population density'
         myLimitations = self.tr(
@@ -2170,6 +2169,8 @@ class ShakeEvent(QObject):
             'legend-name': myLegendName,
             'limitations': myLimitations,
             'credits': myCredits,
+            'fatalities-name': myFatalitiesName,
+            'fatalities-count': '%s' % myFatalitiesCount,
             'mmi': '%s' % self.magnitude,
             'date': '%s-%s-%s' % (self.day,
                                self.month,
