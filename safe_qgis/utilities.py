@@ -786,20 +786,17 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     mySettings = QtCore.QSettings()
     myFlag = mySettings.value('inasafe/useSentry', False).toBool()
     if 'INASAFE_SENTRY' in os.environ or myFlag:
-        try:
-            if theSentryUrl is None:
-                myClient = Client(
-                    'http://c64a83978732474ea751d432ab943a6b'
-                    ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
-            else:
-                myClient = Client(theSentryUrl)
-            mySentryHandler = SentryHandler(myClient)
-            mySentryHandler.setFormatter(myFormatter)
-            mySentryHandler.setLevel(logging.ERROR)
-            if addLoggingHanderOnce(myLogger, mySentryHandler):
-                myLogger.debug('Sentry logging enabled')
-        except:
-            myLogger.exception('Sentry logging could not be started')
+        if theSentryUrl is None:
+            myClient = Client(
+                'http://c64a83978732474ea751d432ab943a6b'
+                ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
+        else:
+            myClient = Client(theSentryUrl)
+        mySentryHandler = SentryHandler(myClient)
+        mySentryHandler.setFormatter(myFormatter)
+        mySentryHandler.setLevel(logging.ERROR)
+        if addLoggingHanderOnce(myLogger, mySentryHandler):
+            myLogger.debug('Sentry logging enabled')
     else:
         myLogger.debug('Sentry logging disabled')
     #Set formatters

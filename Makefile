@@ -333,14 +333,14 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis > pylint.log || :
+	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/third_party; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis > pylint.log || :
 
 jenkins-pep8:
 	@echo
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203 --exclude third_party,docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py . > pep8.log || :
 
 jenkins-realtime-test:
 
