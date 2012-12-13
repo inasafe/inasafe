@@ -781,7 +781,7 @@ class ShakeEvent(QObject):
         myRomanList = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
                        'IX', 'X', 'XI', 'XII']
         try:
-            myRoman = myRomanList[int(round(float(theMMIValue)))]
+            myRoman = myRomanList[int(float(theMMIValue))]
         except ValueError:
             LOGGER.exception('Error converting MMI value to roman')
             return None
@@ -1089,11 +1089,15 @@ class ShakeEvent(QObject):
 
         The following fields will be created for each city feature:
 
-            QgsField("name", QVariant.String),
-            QgsField("population",  QVariant.Int),
-            QgsField("mmi", QVariant.Double),
-            QgsField("distance_to", QVariant.Double),
-            QgsField("direction_from", QVariant.Double)
+            QgsField('id', QVariant.Int),
+            QgsField('name', QVariant.String),
+            QgsField('population', QVariant.Int),
+            QgsField('mmi', QVariant.Double),
+            QgsField('dist_to', QVariant.Double),
+            QgsField('dir_to', QVariant.Double),
+            QgsField('dir_from', QVariant.Double),
+            QgsField('roman', QVariant.String),
+            QgsField('colour', QVariant.String),
 
         The 'name' and 'population' fields will be obtained from our geonames
         dataset.
@@ -1459,7 +1463,7 @@ class ShakeEvent(QObject):
             myDistanceTo = myAttributes[myDistanceToIndex].toFloat()[0]
             myCity = {'id': myId,
                       'name': myPlaceName,
-                      'mmi-int': round(myMmi),
+                      'mmi-int': int(myMmi),
                       'mmi': myMmi,
                       'population': myPopulation,
                       'roman': myRoman,
