@@ -744,8 +744,6 @@ class ShakeEvent(QObject):
         finally:
             del myTifDataset
             myOgrDataset.Release()
-        # Now update the additional columns - X,Y, ROMAN and RGB
-        self.setContourProperties(myOutputFile)
 
         # Copy over the standard .prj file since ContourGenerate does not
         # create a projection definition
@@ -761,6 +759,13 @@ class ShakeEvent(QObject):
                                  'mmi-contours-%s.qml' % theAlgorithm)
         mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
+
+        # Now update the additional columns - X,Y, ROMAN and RGB
+        try:
+            self.setContourProperties(myOutputFile)
+        except InvalidLayerError:
+            raise
+
         return myOutputFile
 
     def romanize(self, theMMIValue):
@@ -864,8 +869,8 @@ class ShakeEvent(QObject):
 
         Raises: InvalidLayerError if anything is amiss with the layer.
         """
-        LOGGER.debug('setContourProperties requested.')
-        myLayer = QgsVectorLayer(theFile , 'mmi-contours', "ogr")
+        LOGGER.debug('setContourProperties requested for %s.' % theFile)
+        myLayer = QgsVectorLayer(theFile, 'mmi-contours', "ogr")
         if not myLayer.isValid():
             raise InvalidLayerError(theFile)
 
@@ -1903,9 +1908,12 @@ class ShakeEvent(QObject):
         myCitiesShapeFile = None
         #for myAlgorithm in ['average', 'invdist', 'nearest']:
         for myAlgorithm in ['nearest']:
-            myContoursShapeFile = self.mmiDataToContours(
+            try:
+                myContoursShapeFile = self.mmiDataToContours(
                                            theForceFlag=theForceFlag,
                                            theAlgorithm=myAlgorithm)
+            except:
+                raise
             logging.info('Created: %s', myContoursShapeFile)
         try:
             myCitiesShapeFile = self.citiesToShapefile(
