@@ -30,7 +30,7 @@ from core import check_bbox_string
 from utilities_test import same_API
 from geometry import Polygon
 from safe.common.numerics import nanallclose
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
+from safe.common.testing import TESTDATA, HAZDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as tr, unique_filename
@@ -2508,7 +2508,7 @@ class Test_IO(unittest.TestCase):
 
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
-        exposure_filename = ('%s/indonesia_highway.shp' % EXPDATA)
+        exposure_filename = ('%s/indonesia_highway_sample.shp' % TESTDATA)
 
         # Read
         H = read_layer(hazard_filename)

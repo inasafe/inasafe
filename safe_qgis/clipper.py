@@ -410,7 +410,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # in its keywords.
     myKeywords = readKeywordsFromFile(myKeywordsPath)
     if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
-        if theLayer.srs().epsg() != 4326:
+        if str(theLayer.srs().authid()) != 'EPSG:4326':
 
             # This layer is not WGS84 geographic
             myMessage = ('Layer %s represents density but has spatial '
@@ -518,3 +518,35 @@ def extentToKml(theExtent):
     myFile.write(myKml)
     myFile.close()
     return myFilename
+
+
+def extentToGeoArray(theExtent, theSourceCrs):
+    """Convert the supplied extent to geographic and return as as array.
+
+    Args:
+        theExtent: QgsRectangle to be transformed to geocrs.
+        theSourceCrs: QgsCoordinateReferenceSystem representing the original
+            extent's CRS.
+
+    Returns:
+        list: Transformed extents in EPSG:4326 in the form
+              [xmin, ymin, xmix, ymax]
+
+    Raises:
+        None
+    """
+
+    myGeoCrs = QgsCoordinateReferenceSystem()
+    myGeoCrs.createFromEpsg(4326)
+    myXForm = QgsCoordinateTransform(
+        theSourceCrs,
+        myGeoCrs)
+
+    # Get the clip area in the layer's crs
+    myTransformedExtent = myXForm.transformBoundingBox(theExtent)
+
+    myGeoExtent = [myTransformedExtent.xMinimum(),
+                   myTransformedExtent.yMinimum(),
+                   myTransformedExtent.xMaximum(),
+                   myTransformedExtent.yMaximum()]
+    return myGeoExtent

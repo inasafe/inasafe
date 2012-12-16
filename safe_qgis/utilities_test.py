@@ -7,12 +7,12 @@ import hashlib
 import logging
 
 from PyQt4 import QtGui, QtCore
-
 from qgis.core import (QgsApplication,
                       QgsVectorLayer,
                       QgsRasterLayer,
                       QgsRectangle,
-                      QgsCoordinateReferenceSystem)
+                      QgsCoordinateReferenceSystem,
+                      )
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 

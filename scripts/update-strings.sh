@@ -73,19 +73,24 @@ do
 done
 
 if [ $UPDATE == true ]
+# retrieve all python files in safe_qgis and realtime
 then
-  cd safe_qgis
+  python_safe_qgis=`find safe_qgis/ -regex ".*\(ui\|py\)$"`
+  python_realtime=`find realtime/ -regex ".*\(ui\|py\)$"`
+  # concat list of files
+  python_all="$python_safe_qgis $python_realtime"
+
+  # update .ts
   echo "Please provide translations by editing the translation files below:"
   for LOCALE in $LOCALES
   do
     echo "safe_qgis/i18n/inasafe_"$LOCALE".ts"
-    # Note we don't use pylupdate with qt .pro file approach as it is flakey about
-    # what is made available.
-    FILES=`find . -regex ".*\(ui\|py\)$"`
-    pylupdate4 -noobsolete $FILES -ts i18n/inasafe_id.ts
+    # Note we don't use pylupdate with qt .pro file approach as it is flakey
+    # about what is made available.
+    pylupdate4 -noobsolete $python_all -ts safe_qgis/i18n/inasafe_id.ts
   done
-  cd ..
 else
-  echo "No need to edit any translation files (.ts) because no python files has been updated since the last update translation. "
+  echo "No need to edit any translation files (.ts) because no python files "
+  echo "has been updated since the last update translation. "
 fi
 

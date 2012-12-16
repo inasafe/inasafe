@@ -12,7 +12,7 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
-from safe.common.exceptions import PostprocessorError
+from safe.common.exceptions import PostProcessorError
 from safe.common.utilities import get_defaults
 
 from third_party.odict import OrderedDict
@@ -114,11 +114,11 @@ class AbstractPostprocessor():
         Returns:
             None
         Raises:
-            PostprocessorError
+            PostProcessorError
         """
         if message is None:
             message = 'Postprocessor error'
-        raise PostprocessorError(message)
+        raise PostProcessorError(message)
 
     def _log_message(self, message):
         """internal method to be used by the postprocessors to log a message
