@@ -53,7 +53,7 @@ def convert_netcdf2tif(filename, n):
         msg = 'Argument N should be an integer. I got %s' % n
         raise RuntimeError(msg)
 
-    print filename, n
+    print filename, n, 'hours'
 
     # Read NetCDF file
     fid = NetCDFFile(filename)
@@ -90,12 +90,22 @@ def convert_netcdf2tif(filename, n):
     M = inundation_depth.shape[1]  # Steps in the y direction
     N = inundation_depth.shape[2]  # Steps in the x direction
 
+    if n > T:
+        msg = ('You requested %i hours prediction, but the '
+               'forecast only contains %i hours' % (n, T))
+        raise RuntimeError(msg)
+
     # Compute the max of the first n timesteps
     A = numpy.zeros((M, N), dtype='float')
     for i in range(n):
         B = inundation_depth[i, :, :]
         A = numpy.maximum(A, B)
 
+        # Calculate overall maximal value
+        total_max = numpy.max(A[:])
+        print i, numpy.max(B[:]), total_max
+
+    print 'Overall max depth over %i hours: %.2f m' % (n, total_max)
     geotransform = raster_geometry2geotransform(x, y)
     print 'Geotransform', geotransform
 
