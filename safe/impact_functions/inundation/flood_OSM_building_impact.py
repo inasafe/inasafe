@@ -2,6 +2,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
+from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -89,7 +90,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
                 # FIXME (Ole): Need to agree whether to use one or the
                 # other as this can be very confusing!
-                # For now look for 'Flooded first'
+                # For now look for 'affected' first
                 if 'affected' in atts:
                     # E.g. from flood forecast
                     # Assume that building is wet if inside polygon
@@ -98,17 +99,17 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     if res is None:
                         x = False
                     else:
-                        x = res
+                        x = bool(res)
                 elif 'FLOODPRONE' in atts:
                     res = atts['FLOODPRONE']
                     if res is None:
                         x = False
                     else:
                         x = res.lower() == 'yes'
-                elif 'Affected' in atts:
+                elif DEFAULT_ATTRIBUTE in atts:
                     # Check the default attribute assigned for points
                     # covered by a polygon
-                    res = atts['Affected']
+                    res = atts[DEFAULT_ATTRIBUTE]
                     if res is None:
                         x = False
                     else:
@@ -116,8 +117,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 else:
                     # there is no flood related attribute
                     msg = ('No flood related attribute found in %s. '
-                           'I was looking fore either "Flooded", "FLOODPRONE" '
-                           'or "Affected". The latter should have been '
+                           'I was looking for either "affected", "FLOODPRONE" '
+                           'or "inapolygon". The latter should have been '
                            'automatically set by call to '
                            'assign_hazard_values_to_exposure_data(). '
                            'Sorry I can\'t help more.')
