@@ -90,11 +90,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 # FIXME (Ole): Need to agree whether to use one or the
                 # other as this can be very confusing!
                 # For now look for 'Flooded first'
-                if 'Flooded' in atts:
+                if 'affected' in atts:
                     # E.g. from flood forecast
                     # Assume that building is wet if inside polygon
                     # as flagged by attribute Flooded
-                    res = atts['Flooded']
+                    res = atts['affected']
                     if res is None:
                         x = False
                     else:

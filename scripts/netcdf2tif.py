@@ -143,12 +143,12 @@ if __name__ == '__main__':
     # Tag each polygon with Y if it contains at least one pixel
     # exceeding a specific threshold (e.g. 0.3m).
     if args.regions is not None:
-        print 'Tagging %s as "Flooded" or not' % args.regions
+        print 'Tagging %s as "affected" or not' % args.regions
         polygons = read_layer(args.regions)
         grid = read_layer(tif_filename)
         res = tag_polygons_by_grid(polygons, grid,
                                    threshold=0.3,
-                                   tag='Flooded')
+                                   tag='affected')
 
         # Keep only those that are affected (speeds things up a lot,
         # but will reduce overall bounding box for buildings under
