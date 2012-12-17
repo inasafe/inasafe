@@ -175,7 +175,8 @@ class FloodEvacuationFunction(FunctionProvider):
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
         style_classes[1]['label'] = tr('Low [%.2f people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%.2f people/cell]') % classes[4]
+        style_classes[4]['label'] = tr('Medium [%.2f people/cell]')\
+            % classes[4]
         style_classes[7]['label'] = tr('High [%.2f people/cell]') % classes[7]
 
         # Override associated quantities in colour style

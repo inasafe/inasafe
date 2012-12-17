@@ -100,10 +100,10 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 res = attr['FLOODPRONE']
                 if res is not None:
                     affected = res.lower() == 'yes'
-            elif 'Affected' in atts:
+            elif 'Affected' in attr:
                 # Check the default attribute assigned for points
                 # covered by a polygon
-                res = atts['Affected']
+                res = attr['Affected']
                 if res is None:
                     x = False
                 else:
