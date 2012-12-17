@@ -58,7 +58,7 @@ def processEvent(theEventId=None, theLocale='en'):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
                                       theLocale=theLocale,
                                       theForceFlag=myForceFlag)
-    except BadZipfile, URLError:
+    except (BadZipfile, URLError):
         # retry with force flag true
         if os.path.exists(myPopulationPath):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
