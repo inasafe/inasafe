@@ -20,7 +20,7 @@ import urllib2
 import os
 from BeautifulSoup import BeautifulSoup
 netcdf_url = 'http://bfews.pusair-pu.go.id/Sobek-Floodmaps/'
-download_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood' \
+_download_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood' \
                      '/forecasting_data/'
 
 
@@ -56,7 +56,20 @@ def _read_contents(url):
 
     return list_name
 
-def download_file_url(url, download_directory='', name=None):
+
+def list_all_netcdf_files(url=netcdf_url):
+    """Public function to get list of files in the server
+    """
+    print 'Listing all netcdf file from %s' % url
+    list_all_files = _read_contents(url)
+    retval = []
+    for my_file in list_all_files[200:]:
+        if my_file.endswith('.nc'):
+            retval.append(str(my_file))
+    return retval
+
+
+def download_file_url(url, download_directory=_download_directory, name=None):
     """Download file for one file
         * Args:
             - url : URL where the file is published
@@ -67,13 +80,13 @@ def download_file_url(url, download_directory='', name=None):
     """
 
     # checking file in url directory
-    names = _read_contents(url)
+    names = list_all_netcdf_files(url)
     if name is None:
         name = names[-1]
         print 'Getting file for latest file, which is %s' % name
     elif name not in names:
-        print 'Can not download %s. File is not exist in %s' %\
-              (name, url)
+        print ('Can not download %s. File is not exist in %s'
+              % (name, url))
         return False
     else:
         print 'Getting file for selected file, which is %s' % name
@@ -96,8 +109,8 @@ def download_file_url(url, download_directory='', name=None):
 
     # make sure the file has been downloaded
     if os.path.isfile(local_file_path):
-        print 'file has been downloaded to %s' %\
-              os.path.join(download_directory, name)
+        print ('File has been downloaded to %s'
+                % os.path.join(download_directory, name))
         retval = local_file_path
     else:
         print 'wow, file is not downloaded'
@@ -107,8 +120,5 @@ def download_file_url(url, download_directory='', name=None):
     return str(retval)
 
 if __name__ == '__main__':
-#    urls = _read_contents(netcdf_url)
-#    print len(urls)
-    download_file_url(netcdf_url, download_directory=download_directory)
+    download_file_url(netcdf_url, download_directory=_download_directory)
     print 'fin'
-
