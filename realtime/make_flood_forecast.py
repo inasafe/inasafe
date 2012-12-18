@@ -26,9 +26,11 @@ from download_netcdf import (download_file_url,
                              netcdf_url,
                              list_all_netcdf_files)
 
-flood_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood'\
-                  '/flood/'
+flood_forecast_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood'
+flood_directory = os.path.join(flood_forecast_directory, 'flood')
+forecast_directory = os.path.join(flood_forecast_directory, 'forecasting_data')
 polygons_path = '../inasafe_data/boundaries/rw_jakarta.shp'
+
 
 def check_environment():
     if not os.path.isfile(polygons_path):
@@ -45,9 +47,10 @@ def processFloodEvent(netcdf_file=None, hours=12):
 
     if netcdf_file is None:
         # retrieve data from the web
-        netcdf_file = download_file_url(netcdf_url)
+        netcdf_file = download_file_url(netcdf_url, forecast_directory)
     else:
-        netcdf_file = download_file_url(netcdf_url, name=netcdf_file)
+        netcdf_file = download_file_url(netcdf_url, name=netcdf_file,
+            download_directory=forecast_directory)
     print 'Do flood forecasting for %s ...' % netcdf_file
 
     # check if a forecasting file has been created or not
@@ -88,6 +91,7 @@ def processFloodEvent(netcdf_file=None, hours=12):
 
     v.write_to_file(polyforecast_filepath)
     print 'Wrote tagged polygons to %s' % polyforecast_filepath
+
 
 def usage():
     """Print how to use the main function.

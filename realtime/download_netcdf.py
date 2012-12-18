@@ -51,8 +51,11 @@ def _read_contents(url):
     # get href
     list_name = []
     for inner_cell in list_inner_cells:
-        if inner_cell.has_key('href'):
+        # if inner_cell.has_key('href'):
+        try:
             list_name.append(inner_cell['href'])
+        except KeyError:
+            pass
 
     return list_name
 
