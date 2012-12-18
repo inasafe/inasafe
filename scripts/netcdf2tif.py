@@ -23,7 +23,7 @@ from safe.engine.interpolation import tag_polygons_by_grid
 
 # FIXME (Ole): Move this function to e.g. safe.storage.utilities and write
 # unit test using test data
-# inasafe_data/test/201211071300_Jakarta_200m_Sobek_Forecast_CCAM.nc
+# inasafe_data/test/201211120500_Jakarta_200m_Sobek_Forecast_CCAM.nc
 def convert_netcdf2tif(filename, n):
     """Convert netcdf to tif aggregating first n bands
 
@@ -103,7 +103,7 @@ def convert_netcdf2tif(filename, n):
 
         # Calculate overall maximal value
         total_max = numpy.max(A[:])
-        print i, numpy.max(B[:]), total_max
+        #print i, numpy.max(B[:]), total_max
 
     print 'Overall max depth over %i hours: %.2f m' % (n, total_max)
     geotransform = raster_geometry2geotransform(x, y)

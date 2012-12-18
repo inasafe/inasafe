@@ -100,6 +100,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                         x = False
                     else:
                         x = bool(res)
+
+                    #if x:
+                    #    print 'Got affected', x
                 elif 'FLOODPRONE' in atts:
                     res = atts['FLOODPRONE']
                     if res is None:
