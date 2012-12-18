@@ -31,7 +31,6 @@ flood_directory = '/home/sunnii/Documents/inasafe/inasafe_real_flood'\
 polygons_path = '../inasafe_data/boundaries/rw_jakarta.shp'
 
 def check_environment():
-    os.mkdir('/home/sunnii/Documents/inasafe/inasafe-dev/pret')
     if not os.path.isfile(polygons_path):
         return False, 'Polygon file %s is not valid.' % polygons_path
     if not os.path.isdir(flood_directory):

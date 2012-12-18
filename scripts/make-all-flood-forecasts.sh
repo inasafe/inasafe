@@ -11,4 +11,5 @@ export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
 export INASAFE_WORK_DIR=~/Documents/inasafe/inasafe_real_flood
 export INASAFE_RW_JKT_PATH=/home/flood/data_input/rw_jakarta.shp
 export INASAFE_LOCALE=id
+cd /home/sunnii/Documents/inasafe/inasafe-dev/
 xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_flood_forecast.py --run-all
