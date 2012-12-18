@@ -47,7 +47,8 @@ def convert_netcdf2tif(filename, n, verbose=False):
         msg = 'Argument N should be an integer. I got %s' % n
         raise RuntimeError(msg)
 
-    print filename, n, 'hours'
+    if verbose:
+        print filename, n, 'hours'
 
     # Read NetCDF file
     fid = NetCDFFile(filename)
@@ -110,6 +111,9 @@ def convert_netcdf2tif(filename, n, verbose=False):
         print 'Overall max depth over %i hours: %.2f m' % (n, total_max)
         print 'Geotransform', geotransform
         print 'date', date
+
+    # Flip array upside down as it comes with rows ordered from south to north
+    A = numpy.flipud(A)
 
     R = Raster(data=A,
                geotransform=geotransform,
