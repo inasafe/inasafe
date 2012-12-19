@@ -13,7 +13,7 @@ from raster import Raster
 from utilities import raster_geometry2geotransform
 
 
-def convert_netcdf2tif(filename, n, verbose=True):
+def convert_netcdf2tif(filename, n, verbose=True, output_file=None):
     """Convert netcdf to tif aggregating first n bands
 
     Args
@@ -105,8 +105,10 @@ def convert_netcdf2tif(filename, n, verbose=True):
                   'unit': 'm',
                   'title': ('%d hour flood forecast grid '
                             'in Jakarta at %s' % (n, date))})
-
-    tif_filename = unique_filename(suffix='.tif')
+    if output_file is None or not output_file.endswith('.tif'):
+        tif_filename = unique_filename(suffix='.tif')
+    else:
+        tif_filename = output_file
     R.write_to_file(tif_filename)
 
     if verbose:

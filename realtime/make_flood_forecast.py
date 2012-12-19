@@ -36,8 +36,8 @@ def check_environment():
     if not os.path.isfile(polygons_path):
         return False, 'Polygon file %s is not valid.' % polygons_path
     if not os.path.isdir(flood_forecast_directory):
-        return False, 'flood_forecast_directory %s is not valid.' %\
-                      flood_forecast_directory
+        return False, ('flood_forecast_directory %s is not valid.' %
+                      flood_forecast_directory)
     if not os.path.isdir(flood_directory):
         return False, 'flood_directory %s is not valid.' % flood_directory
     if not os.path.isdir(forecast_directory):
@@ -60,7 +60,7 @@ def processFloodEvent(netcdf_file=None, hours=12):
     print 'Do flood forecasting for %s ...' % netcdf_file
 
     # check if a forecasting file has been created or not
-    is_exist, polyforecast_filepath = get_result_file_name(netcdf_file)
+    is_exist, polyforecast_filepath = get_result_file_name(netcdf_file, hours)
 
     if is_exist:
         print 'Current flood forecasting has been already created.'
@@ -68,7 +68,9 @@ def processFloodEvent(netcdf_file=None, hours=12):
         return
 
     # convert to tif
-    tif_file = convert_netcdf2tif(netcdf_file, hours, verbose=False)
+    tif_file = polyforecast_filepath.replace('_regions.shp', '.tif')
+    tif_file = convert_netcdf2tif(netcdf_file, hours, verbose=False,
+        output_file=tif_file)
     tif_file = read_layer(tif_file)
     my_polygons = read_layer(polygons_path)
     my_result = tag_polygons_by_grid(my_polygons, tif_file, threshold=0.3,
@@ -78,13 +80,6 @@ def processFloodEvent(netcdf_file=None, hours=12):
     new_data = my_result.get_data()
 
     date = os.path.split(netcdf_file)[-1].split('_')[0]
-    # Create style
-    style_classes = [dict(label=('Not Flooded'), min=0, max=0,
-        colour='#1EFC7C', transparency=0, size=1),
-                     dict(label=('Flooded'), min=1, max=1,
-                         colour='#F31A1C', transparency=0, size=1)]
-    style_info = dict(target_field='affected',
-        style_classes=style_classes)
 
     v = Vector(geometry=new_geom, data=new_data,
         projection=my_result.projection,
@@ -92,8 +87,7 @@ def processFloodEvent(netcdf_file=None, hours=12):
                   'subcategory': 'flood',
                   'title': ('%d hour flood forecast regions '
                             'in Jakarta at %s' % (hours,
-                                                  date))},
-        style_info=style_info)
+                                                  date))})
 
     v.write_to_file(polyforecast_filepath)
     print 'Wrote tagged polygons to %s' % polyforecast_filepath
@@ -107,13 +101,13 @@ def usage():
         sys.argv[0], sys.argv[0], sys.argv[0]))
 
 
-def get_result_file_name(netcdf_file):
+def get_result_file_name(netcdf_file, hours):
     """Function to get result file name from a netcdf_file.
     It will return a boolean value and the result file path.
     If the file path is exist, it will return true, otherwise false
     """
     polyforecast_filename = os.path.split(netcdf_file)[1].replace('.nc',
-        '_regions.shp')
+        '_%d_hours_regions.shp' % hours)
     date_file = polyforecast_filename.split('_')[0]
     if not os.path.isdir(os.path.join(flood_directory, date_file)):
         os.mkdir(os.path.join(flood_directory, date_file))
