@@ -100,7 +100,7 @@ class Test_flood_forecasting_functionality(unittest.TestCase):
         res = tag_polygons_by_grid(polygons, grid,
                                    threshold=threshold,
                                    tag=label)
-
+        os.remove(tif_filename)
         geom = res.get_geometry()
         data = res.get_data()
 
