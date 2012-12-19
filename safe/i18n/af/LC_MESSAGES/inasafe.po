@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-19 13:47+0700\n"
+"POT-Creation-Date: 2012-12-19 14:11+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:183
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:246
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:125
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:198
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:201
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:159
 #: safe/impact_functions/inundation/flood_population_evacuation.py:128
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
@@ -46,7 +46,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:184
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:127
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:105
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:200
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:203
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:86
 #: safe/impact_functions/volcanic/volcano_building_impact.py:134
 msgid "All"
@@ -118,7 +118,7 @@ msgid "Buildings that will need to closed when floodingmore than %.1f m"
 msgstr ""
 
 #: safe/impact_functions/earthquake/earthquake_building_impact.py:198
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:301
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:304
 msgid "Estimated buildings affected"
 msgstr ""
 
@@ -152,7 +152,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:292
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:295
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:94
 msgid "Flooded"
 msgstr ""
@@ -241,7 +241,7 @@ msgstr ""
 msgid "Be inundated"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:196
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:199
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:82
 msgid "Building type"
 msgstr ""
@@ -321,11 +321,11 @@ msgstr ""
 msgid "Assumptions"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:278
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:281
 msgid "Buildings are said to be flooded when "
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:280
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:283
 #, python-format
 msgid "flood levels exceed %.1f m"
 msgstr ""
@@ -333,7 +333,7 @@ msgstr ""
 msgid "in areas marked as flood prone"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:290
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:293
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:92
 msgid "Not Flooded"
 msgstr ""
@@ -452,7 +452,7 @@ msgstr ""
 msgid "Total (*)"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:287
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:290
 msgid "Buildings inundated"
 msgstr ""
 
@@ -755,7 +755,7 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:242
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_org.py:188
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:255
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:256
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:259
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:168
 #: safe/impact_functions/inundation/flood_population_evacuation.py:137
 msgid "Action Checklist:"
@@ -791,11 +791,11 @@ msgstr ""
 msgid "Temporarily closed"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:257
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:260
 msgid "Are the critical facilities still open?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:249
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:252
 msgid "Breakdown by building type"
 msgstr ""
 
@@ -1052,7 +1052,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:133
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
 #: safe/impact_functions/generic/categorised_hazard_population.py:119
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:277
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:280
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:179
 #: safe/impact_functions/inundation/flood_population_evacuation.py:148
 #: safe/impact_functions/volcanic/volcano_building_impact.py:147
@@ -1132,28 +1132,28 @@ msgstr ""
 msgid "Population affected by volcanic hazard zone"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:259
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:262
 msgid "Which structures have warning capacity (eg. sirens, speakers, etc.)?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:261
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:264
 msgid "Which buildings will be evacuation centres?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:263
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:266
 msgid "Where will we locate the operations centre?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:265
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:268
 msgid "Where will we locate warehouse and/or distribution centres?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:268
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:271
 #, python-format
 msgid "Where will the students from the %d closed schools go to study?"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:272
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:275
 #, python-format
 msgid ""
 "Where will the patients from the %d closed hospitals go for treatment and "
@@ -1432,7 +1432,7 @@ msgstr ""
 msgid "Not specified"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:197
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:200
 msgid "Number flooded"
 msgstr ""
 
@@ -1605,12 +1605,12 @@ msgstr ""
 msgid "Lorem ipsum limitation"
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:127
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:130
 #, python-format
 msgid "Unknown hazard type %s. Must be either \"depth\" or \"grid\""
 msgstr ""
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:282
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:285
 msgid "in regions marked as affected"
 msgstr ""
 
