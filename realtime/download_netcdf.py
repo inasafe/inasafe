@@ -85,13 +85,6 @@ def download_file_url(url, download_directory=_download_directory, name=None):
             - Instance of file containing name
     """
 
-    local_file_path = os.path.join(download_directory, name)
-
-    # check local file, if exist, don't download
-    if os.path.isfile(local_file_path):
-        print 'But, file is exist, so use your local file.'
-        return str(local_file_path)
-
     # checking file in url directory
     names = list_all_netcdf_files(url)
     if name is None:
@@ -103,6 +96,13 @@ def download_file_url(url, download_directory=_download_directory, name=None):
         return False
     else:
         print 'Getting file for selected file, which is %s' % name
+
+    local_file_path = os.path.join(download_directory, name)
+
+    # check local file, if exist, don't download
+    if os.path.isfile(local_file_path):
+        print 'But, file is exist, so use your local file.'
+        return str(local_file_path)
 
     # directory management
     cwd = os.getcwd()
