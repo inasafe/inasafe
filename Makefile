@@ -333,7 +333,7 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/third_party; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis > pylint.log || :
+	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/third_party; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins -i y safe safe_qgis realtime> pylint.log || :
 
 jenkins-pep8:
 	@echo
