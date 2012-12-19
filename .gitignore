@@ -32,3 +32,6 @@ run_qgis.sh
 pydev
 .idea/inasafe-dev.iml
 .idea/misc.xml
+.idea/inasafe-realtime.iml
+.idea/misc.xml
+.idea/runConfigurations/make_map.xml
