@@ -118,7 +118,7 @@ elif len(sys.argv) == 2:
             print 'Processing %s' % myEvent
             try:
                 processEvent(myEvent, myLocale)
-            except:  #pylint: disable W0702
+            except:  # pylint: disable=W0702
                 LOGGER.exception('Failed to process %s' % myEvent)
         sys.exit(0)
     else:
