@@ -123,7 +123,7 @@ def convert_netcdf2tif(filename, n, verbose=False):
                          'title': ('%d hour flood forecast grid '
                                    'in Jakarta at %s' % (n, date))})
 
-    tif_filename = '%s_%d_hours.tif' % (basename, n)
+    tif_filename = '%s_%d_hours_max_%i.tif' % (basename, n, total_max)
     R.write_to_file(tif_filename)
 
     if verbose:
