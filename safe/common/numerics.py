@@ -230,13 +230,19 @@ def grid2points(A, x, y):
 
     Args:
         * A: Array of pixel values
-        * x: Longitudes corresponding to columns in A (left->right)
-        * y: Latitudes corresponding to rows in A (top->bottom)
+        * x: Longitudes corresponding to columns in A (west->east)
+        * y: Latitudes corresponding to rows in A (south->north)
 
     Returns:
         * P: Nx2 array of point coordinates
         * V: N array of point values
     """
+
+    msg = ('Longitudes must be increasing (west to east). I got %s' % str(x))
+    verify(x[0] < x[1], msg)
+
+    msg = ('Latitudes must be increasing (south to north). I got %s' % str(y))
+    verify(y[0] < y[1], msg)
 
     # Create Nx2 array of x, y points corresponding to each
     # element in A.
@@ -246,9 +252,6 @@ def grid2points(A, x, y):
     # one column vector of length MxN where M, N = A.shape
     #values = A.reshape((-1, 1))
     values = A.reshape(-1)
-
-    # Concatenate coordinates with their values from the grid
-    #P = numpy.concatenate((points, values), axis=1)
 
     # Return Nx3 array with rows: x, y, value
     return points, values

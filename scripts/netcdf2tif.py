@@ -58,7 +58,7 @@ if __name__ == '__main__':
         #new_data = []
         #
         #for i, d in enumerate(data):
-        #    if d['Flooded']:
+        #    if d['affected']:
         #        g = geom[i]
         #        new_geom.append(g)
         #        new_data.append(d)
