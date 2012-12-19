@@ -26,7 +26,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=doc)
     parser.add_argument('filename', type=str,
                         help='NetCDF filename from FEWS')
-    parser.add_argument('--hours', metavar='h', type=int, default=6,
+    parser.add_argument('--hours', metavar='h', type=int, default=24,
                         help='Number of hours to use from forecast')
     parser.add_argument('--regions', metavar='regions', type=str,
                         help=('Administrative areas to be flagged as '
