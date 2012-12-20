@@ -1916,7 +1916,7 @@ class ShakeEvent(QObject):
             logging.info('Created: %s', mySearchBoxFile)
             _, myCitiesHtmlPath = self.impactedCitiesTable()
             logging.info('Created: %s', myCitiesHtmlPath)
-        except:
+        except:  # pylint: disable=W0702
             logging.exception('No nearby cities found!')
 
         _, myImpactsHtmlPath = self.calculateImpacts()
@@ -2074,7 +2074,7 @@ class ShakeEvent(QObject):
                            'NW', 'NNW']
         try:
             myBearing = float(theBearing)
-        except:
+        except ValueError:
             LOGGER.exception('Error casting bearing to a float')
             return None
 
