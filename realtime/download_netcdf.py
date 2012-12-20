@@ -34,10 +34,10 @@ def _read_contents(url):
             after concat it with netcdf_url
     """
 
-    proxy_handler = urllib2.ProxyHandler({'http': '218.54.201.168:80'})
-    opener = urllib2.build_opener(proxy_handler)
-    # fid = urllib2.urlopen(url)
-    fid = opener.open(url)
+#    proxy_handler = urllib2.ProxyHandler({'http': '218.54.201.168:80'})
+#    opener = urllib2.build_opener(proxy_handler)
+    fid = urllib2.urlopen(url)
+#    fid = opener.open(url)
     html = fid.read()
     soup = BeautifulSoup(html)
     soup_table = soup.findAll('table')[0]
