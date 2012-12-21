@@ -16,6 +16,7 @@ from safe.storage.utilities import raster_geometry2geotransform
 # FIXME (Ole): Write test using
 # inasafe_data/test/201211120500_Jakarta_200m_Sobek_Forecast_CCAM.nc
 def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
+
     """Convert netcdf to tif aggregating first n bands
 
     Args
@@ -130,6 +131,7 @@ def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
         if not os.path.isdir(shapefile_dir):
             os.mkdir(shapefile_dir)
         tif_filename = os.path.join(shapefile_dir, subdir_name + '.tif')
+
     R.write_to_file(tif_filename)
 
     if verbose:
