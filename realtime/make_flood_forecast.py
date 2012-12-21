@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
 import sys
-from safe.storage.converter import convert_netcdf2tif
+#from safe.storage.converter import convert_netcdf2tif as a
+from safe.common.utilities import zip_shp
+from safe.storage.netcdf_utilities import convert_netcdf2tif
 from safe.storage.vector import Vector
 from safe.engine.interpolation import tag_polygons_by_grid
 from safe.storage.core import read_layer
@@ -46,7 +48,7 @@ def check_environment():
     return True, 'Environment is ready....'
 
 
-def processFloodEvent(netcdf_file=None, hours=12):
+def processFloodEvent(netcdf_file=None, hours=24):
     """A function to process netcdf_file to a forecast file.
     """
     print 'Start flood forecasting'
@@ -59,38 +61,56 @@ def processFloodEvent(netcdf_file=None, hours=12):
             download_directory=forecast_directory)
     print 'Do flood forecasting for %s ...' % netcdf_file
 
-    # check if a forecasting file has been created or not
-    is_exist, polyforecast_filepath = get_result_file_name(netcdf_file, hours)
-
-    if is_exist:
-        print 'Current flood forecasting has been already created.'
-        print 'You can look it at %s' % polyforecast_filepath
-        return
+#    # check if a forecasting file has been created or not
+#    is_exist, polyforecast_filepath = get_result_file_name(netcdf_file, hours)
+#
+#    if is_exist:
+#        print 'Current flood forecasting has been already created.'
+#        print 'You can look it at %s' % polyforecast_filepath
+#        return
 
     # convert to tif
-    tif_file = polyforecast_filepath.replace('_regions.shp', '.tif')
-    tif_file = convert_netcdf2tif(netcdf_file, hours, verbose=False,
-        output_file=tif_file)
-    tif_file = read_layer(tif_file)
-    my_polygons = read_layer(polygons_path)
-    my_result = tag_polygons_by_grid(my_polygons, tif_file, threshold=0.3,
-        tag='affected')
+#    tif_file = polyforecast_filepath.replace('_regions.shp', '.tif')
+    tif_filename = convert_netcdf2tif(netcdf_file, hours,
+            verbose=False, output_dir=flood_directory)
+    print 'tif_file', tif_filename
+    tif_file = read_layer(tif_filename)
 
-    new_geom = my_result.get_geometry()
-    new_data = my_result.get_data()
+    # check if there is another file with the same name
+    # if so, do not do the forecasting
+    polyforecast_filepath = tif_filename.replace('.tif', '.shp')
+    if os.path.isfile(polyforecast_filepath):
+        print ('File %s is exist, so we do not do the forecasting'
+               % polyforecast_filepath)
+    else:
+        my_polygons = read_layer(polygons_path)
+        my_result = tag_polygons_by_grid(my_polygons, tif_file, threshold=0.3,
+            tag='affected')
 
-    date = os.path.split(netcdf_file)[-1].split('_')[0]
+        new_geom = my_result.get_geometry()
+        new_data = my_result.get_data()
 
-    v = Vector(geometry=new_geom, data=new_data,
-        projection=my_result.projection,
-        keywords={'category': 'hazard',
-                  'subcategory': 'flood',
-                  'title': ('%d hour flood forecast regions '
-                            'in Jakarta at %s' % (hours,
-                                                  date))})
+        date = os.path.split(netcdf_file)[-1].split('_')[0]
 
-    v.write_to_file(polyforecast_filepath)
-    print 'Wrote tagged polygons to %s' % polyforecast_filepath
+        v = Vector(geometry=new_geom, data=new_data,
+            projection=my_result.projection,
+            keywords={'category': 'hazard',
+                      'subcategory': 'flood',
+                      'title': ('%d hour flood forecast regions '
+                                'in Jakarta at %s' % (hours,
+                                                      date))})
+
+        print 'polyforecast_filepath', polyforecast_filepath
+        v.write_to_file(polyforecast_filepath)
+        print 'Wrote tagged polygons to %s' % polyforecast_filepath
+
+    # zip all file
+    zip_filename = polyforecast_filepath.replace('.shp', '.zip')
+    if os.path.isfile(zip_filename):
+        print 'Has been zipped to %s' % zip_filename
+    else:
+        zip_shp(polyforecast_filepath, ['.keywords'])
+        print 'Zipped to %s' % zip_filename
 
 
 def usage():
