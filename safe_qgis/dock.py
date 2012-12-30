@@ -1233,8 +1233,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
         """
-        import time
-        startTime = time.clock()
+#        import time
+#        startTime = time.clock()
         myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
@@ -1391,7 +1391,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         LOGGER.debug('Couldn\'t fetch feature: %s' % myFeatId)
                         LOGGER.debug( [str(error) for error in
                                        polygonsProvider.errors()])
-#                        raise
 
                     myQgisPolyGeom = QgsGeometry(myQgisFeat.geometry())
                     myAtMap = myQgisFeat.attributeMap()
@@ -1482,7 +1481,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             mySHPWriter.addFeature(myQgisFeat)
 
         del mySHPWriter
-        LOGGER.debug('Duration: %s' % (time.clock() - startTime))
+#        LOGGER.debug('Duration: %s' % (time.clock() - startTime))
         if self.showPostProcLayers:
             self.iface.addVectorLayer(myOutFilename, theQgisLayer.title(),
                                       'ogr')
