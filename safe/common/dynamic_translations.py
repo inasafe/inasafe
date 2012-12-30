@@ -96,6 +96,7 @@ def dynamic_translations():
     tr('OSM building footprints')
     tr('Structures')
     tr('Structures in Jakarta')
+    tr('Building')
     tr('Buildings')
     tr('Buildings in Jakarta')
     tr('Essential buildings')

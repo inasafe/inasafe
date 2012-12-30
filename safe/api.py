@@ -49,4 +49,5 @@ from safe.common.utilities import (VerificationError,
                                    ugettext as safe_tr)
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
+from safe.common.tables import Table, TableCell, TableRow
 # pylint: enable=W0611

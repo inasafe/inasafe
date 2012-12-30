@@ -31,7 +31,7 @@ from qgis.core import (QgsComposition,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundException
+from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
 from safe_qgis.utilities import (setupPrinter,
@@ -770,7 +770,7 @@ class Map():
         try:
             myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
             return myTitle
-        except KeywordNotFoundException:
+        except KeywordNotFoundError:
             return None
         except Exception:
             return None

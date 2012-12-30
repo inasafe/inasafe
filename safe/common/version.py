@@ -1,6 +1,7 @@
 import datetime
 import os
 import subprocess
+from exceptions import WindowsError
 
 
 def get_version(version=None):
@@ -41,9 +42,12 @@ def get_version(version=None):
     sub = ''
     # This crashes on windows
     if version[3] == 'alpha' and version[4] == 0:
-        git_changeset = get_git_changeset()
-        if git_changeset:
-            sub = '.dev%s' % git_changeset
+        try:
+            git_changeset = get_git_changeset()
+            if git_changeset:
+                sub = '.dev%s' % git_changeset
+        except WindowsError:
+            sub = '.dev-master'
 
     elif version[3] != 'final':
         mapping = {'alpha': 'a', 'beta': 'b', 'rc': 'c'}

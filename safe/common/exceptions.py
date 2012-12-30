@@ -61,7 +61,11 @@ class GetDataError(InaSAFEError):
     pass
 
 
-class PostprocessorError(Exception):
-    """Raised if the requested import cannot be performed dur to qgis being
-    to old"""
+class PostProcessorError(Exception):
+    """Raised when requested import cannot be performed if QGIS is too old."""
+    pass
+
+
+class WindowsError(Exception):
+    """For windows specific errors."""
     pass

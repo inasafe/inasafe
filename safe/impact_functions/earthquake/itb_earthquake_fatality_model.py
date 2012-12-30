@@ -7,6 +7,7 @@ from safe.common.utilities import (ugettext as tr,
                                    get_defaults)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
+from third_party.odict import OrderedDict
 
 import numpy
 
@@ -83,19 +84,34 @@ class ITBFatalityFunction(FunctionProvider):
 
     title = tr('Die or be displaced')
     defaults = get_defaults()
-    parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
-                      # Rates of people displaced for each MMI level
-                      displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                                         7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0},
-                      # Threshold below which layer should be transparent
-                      tolerance=0.01,
-                      calculate_displaced_people=True,
-                      postprocessors={'Gender': {'on': True},
-                          'Age': {'on': True,
-                              'params':
-                                  {'youth_ratio': defaults['YOUTH_RATIO'],
-                                   'adult_ratio': defaults['ADULT_RATIO'],
-                                   'elder_ratio': defaults['ELDER_RATIO']}}})
+    parameters = OrderedDict([
+        ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
+        # Rates of people displaced for each MMI level
+        ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
+                               7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
+        ('mmi_range', range(2, 10)),
+        ('step', 0.5),
+        # Threshold below which layer should be transparent
+        ('tolerance', 0.01),
+        ('calculate_displaced_people', True),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                      ('youth_ratio', defaults['YOUTH_RATIO']),
+                      ('adult_ratio', defaults['ADULT_RATIO']),
+                      ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
+
+    def fatality_rate(self, mmi):
+        """
+        ITB method to compute fatality rate
+        :param x: model coefficient.
+        :param y: model coefficient.
+        """
+        x = self.parameters['x']
+        y = self.parameters['y']
+        return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
@@ -106,10 +122,6 @@ class ITBFatalityFunction(FunctionProvider):
               P: Raster layer of population density
 
         """
-
-        # Establish model coefficients
-        x = self.parameters['x']
-        y = self.parameters['y']
 
         # Define percentages of people being displaced at each mmi level
         displacement_rate = self.parameters['displacement_rate']
@@ -131,7 +143,8 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-        mmi_range = range(2, 10)
+
+        mmi_range = self.parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
@@ -142,13 +155,15 @@ class ITBFatalityFunction(FunctionProvider):
         for mmi in mmi_range:
 
             # Identify cells where MMI is in class i
-            mask = (H > mmi - 0.5) * (H <= mmi + 0.5)
+            mask = (H > mmi - self.parameters['step']) * (
+                        H <= mmi + self.parameters['step'])
 
             # Count population affected by this shake level
             I = numpy.where(mask, P, 0)
 
             # Calculate expected number of fatalities per level
-            fatality_rate = numpy.power(10.0, x * mmi - y)
+            fatality_rate = self.fatality_rate(mmi)
+
             F = fatality_rate * I
 
             # Calculate expected number of displaced people per level
@@ -300,6 +315,9 @@ class ITBFatalityFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'total_population': total,
                              'total_fatalities': fatalities,
+                             'fatalites_per_mmi': number_of_fatalities,
+                             'exposed_per_mmi': number_of_exposed,
+                             'displaced_per_mmi': number_of_displaced,
                              'impact_table': impact_table,
                              'map_title': map_title},
                    name=tr('Estimated displaced population'),

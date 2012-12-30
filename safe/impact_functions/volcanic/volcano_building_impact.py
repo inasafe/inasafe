@@ -3,15 +3,16 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.engine.interpolation import make_circular_polygon
 from safe.common.exceptions import InaSAFEError
+from third_party.odict import OrderedDict
 
 
 class VolcanoBuildingImpact(FunctionProvider):
-    """Risk plugin for flood evacuation
+    """Risk plugin for volvano evacuation
 
     :author AIFDR
     :rating 4
@@ -24,11 +25,12 @@ class VolcanoBuildingImpact(FunctionProvider):
                     layertype=='vector'
     """
 
-    title = _('Be affected')
+    title = tr('Be affected')
     target_field = 'buildings'
 
-    parameters = dict(distances=[1000, 2000, 3000, 5000, 10000],
-                      volcano_name='All')
+    parameters = OrderedDict([
+        ('distances', [1000, 2000, 3000, 5000, 10000]),
+        ('volcano_name', 'All')])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -38,8 +40,7 @@ class VolcanoBuildingImpact(FunctionProvider):
               H: Raster layer of volcano depth
               P: Raster layer of population data on the same grid as H
 
-        Counts number of people exposed to flood levels exceeding
-        specified threshold.
+        Counts number of people exposed to each volcano hazard zones.
 
         Return
           Map of population exposed to volcanic hazard zones
@@ -128,9 +129,9 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Generate simple impact report
         table_body = [question,
-                      TableRow([_('Buildings'), _('Total'), _('Cumulative')],
+                    TableRow([tr('Buildings'), tr('Total'), tr('Cumulative')],
                                header=True),
-                      TableRow([_('All'), str(total_affected), ''])]
+                    TableRow([tr('All'), str(total_affected), ''])]
 
         cum = 0
         for name in category_names:
@@ -138,18 +139,18 @@ class VolcanoBuildingImpact(FunctionProvider):
             cum += count
             table_body.append(TableRow([name, str(count), str(cum)]))
 
-        table_body.append(TableRow(_('Map shows buildings affected in '
+        table_body.append(TableRow(tr('Map shows buildings affected in '
                                      'each of volcano hazard polygons.')))
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(_('Notes'), header=True),
-                           _('Total number of buildings %i in the viewable '
+        table_body.extend([TableRow(tr('Notes'), header=True),
+                           tr('Total number of buildings %i in the viewable '
                              'area') % total,
-                           _('Only buildings available in OpenStreetMap '
+                           tr('Only buildings available in OpenStreetMap '
                              'are considered.')])
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = _('Buildings affected by volcanic hazard zone')
+        map_title = tr('Buildings affected by volcanic hazard zone')
 
         # Define classes for legend for flooded building counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -166,9 +167,9 @@ class VolcanoBuildingImpact(FunctionProvider):
             hi = cls[i + 1]
 
             if i == 0:
-                label = _('0')
+                label = tr('0')
             else:
-                label = _('%i - %i') % (lo, hi)
+                label = tr('%i - %i') % (lo, hi)
 
             entry = dict(label=label, colour=colour, min=lo, max=hi,
                          transparency=0, size=1)
@@ -177,13 +178,13 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Override style info with new classes and name
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
-                          legend_title=_('Building Count'))
+                          legend_title=tr('Building Count'))
 
         # Create vector layer and return
         V = Vector(data=new_attributes,
                    projection=H.get_projection(),
                    geometry=H.get_geometry(as_geometry_objects=True),
-                   name=_('Buildings affected by volcanic hazard zone'),
+                   name=tr('Buildings affected by volcanic hazard zone'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title,

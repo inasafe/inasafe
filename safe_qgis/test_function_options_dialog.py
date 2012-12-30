@@ -27,6 +27,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe.impact_functions import get_plugins
+from third_party.odict import OrderedDict
 
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.utilities_test import getQgisTestApp
@@ -72,10 +73,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'params': {
                         'youth_ratio': 0.263,
                         'elder_ratio': 0.078,
-                        'adult_ratio': 0.659}
-                }
-            }
-        }
+                        'adult_ratio': 0.659}}}}
 
         myDialog.buildForm(myParameters)
 
@@ -118,29 +116,23 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                     'params': {
                         'youth_ratio': lambda: 0.263,
                         'elder_ratio': lambda: 0.078,
-                        'adult_ratio': lambda: 0.659}
-                }
-            }
-        }
+                        'adult_ratio': lambda: 0.659}}}}
 
         myDialog = FunctionOptionsDialog(None)
         myResult = myDialog.parseInput(myInput)
+        print myResult
+        assert myResult == OrderedDict([
+            ('thresholds', [1.0]),
+            ('postprocessors', OrderedDict([
+                ('Gender', OrderedDict([('on', True)])),
+                ('Age', OrderedDict([
+                    ('on', True),
+                    ('params', OrderedDict([
+                        ('youth_ratio', 0.263),
+                        ('elder_ratio', 0.078),
+                        ('adult_ratio', 0.659)]))]))]))])
 
-        assert myResult == {
-            'thresholds': [1.0],
-            'postprocessors': {
-                'Gender': {'on': True},
-                'Age': {
-                    'on': True,
-                    'params': {
-                        'youth_ratio': 0.263,
-                        'elder_ratio': 0.078,
-                        'adult_ratio': 0.659}
-                }
-            }
-        }
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

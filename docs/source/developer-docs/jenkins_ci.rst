@@ -108,7 +108,7 @@ Enable the following plugins:
 * Jenkins Cobertura Plugin
 * Jenkins Gravatar plugin
 * Jenkins SSH Slaves plugin
-
+* xvfb
 
 
 Lock down access
@@ -151,6 +151,7 @@ Here is a log of the options we set for the Jenkins job:
 * Check :guilabel:`Enable project-based security` then add an entry for
   **Anonymous** with :kbd:`Job: Read` and :kbd:`Job Discover` permissions
   only. This will allow anonymous read-only access to the project.
+* :guilabel:`Xvfb` set to ticked.
 * :guilabel:`GitHub project` set to :kbd:`https://github.com/AIFDR/inasafe/`
 * :guilabel:`Source Code Management` check :guilabel:`Git` and set to
   :kbd:`git@github.com:AIFDR/inasafe.git`
@@ -291,8 +292,7 @@ Also you should set the Jenkins git user and email::
    jenkins@maps:~$ git config --global user.email "jenkins@linfiniti.com"
    jenkins@maps:~$ git config --global user.name "Jenkins Build Server @Linfiniti2"
 
-.. note:: The source tree will be in
-   :file:`~/jobs/InaSAFE/workspace/`.
+.. note:: The source tree will be in :file:`~/jobs/InaSAFE/workspace/`.
 
 Project setup
 ^^^^^^^^^^^^^
@@ -326,7 +326,6 @@ Further Reading
 
 Here are some useful resources we found while getting things set up.
 
-* http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html
 * http://www.alexconrad.org/2011/10/jenkins-and-python.html
 * http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html
 * http://blog.jvc26.org/2011/06/13/jenkins-ci-and-django-howto

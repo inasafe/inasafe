@@ -293,6 +293,7 @@ def loadStandardLayers():
                   join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
                   join(TESTDATA, 'donut.shp'),
+                  join(TESTDATA, 'Merapi_alert.shp'),
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
@@ -493,8 +494,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (myAttribute))
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
@@ -519,8 +520,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (myAttribute))
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
@@ -545,8 +546,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
                      (myAttribute))
         assert myAttribute is None, myMessage
@@ -571,8 +572,8 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
-        myAttribute = DOCK.postprocAttributes[myAttrKey]
+        DOCK.runtimeKeywordsDialog.accept()
+        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
                      (myAttribute))
         assert myAttribute is None, myMessage
@@ -999,7 +1000,7 @@ class DockTest(unittest.TestCase):
         assert '177' in myResult, myMessage
 
     def test_runVolcanoBuildingImpact(self):
-        """Volcano function runs in GUI with An donut (merapi explostion)
+        """Volcano function runs in GUI with An donut (merapi hazard map)
          hazard data uses OSM Building Polygons exposure data."""
 
         myResult, myMessage = setupScenario(
@@ -1022,6 +1023,71 @@ class DockTest(unittest.TestCase):
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
         assert '288' in myResult, myMessage
+
+    def test_runVolcanoPopulationImpact(self):
+        """Volcano function runs in GUI with a donut (merapi hazard map)
+         hazard data uses population density grid."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='donut',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Volcano Polygon Hazard Population')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of people affected
+        # Kategori	Jumlah	Kumulatif
+        # Kawasan Rawan Bencana III	45.000	45.000
+        # Kawasan Rawan Bencana II	84.000	129.000
+        # Kawasan Rawan Bencana I	28.000	157.000
+        assert '45' in myResult, myMessage
+        assert '84' in myResult, myMessage
+        assert '28' in myResult, myMessage
+
+    def test_runVolcanoCirclePopulation(self):
+        """Volcano function runs in GUI with a circular evacutation zone
+
+        Uses population density grid as exposure."""
+
+        # NOTE: We assume radii in impact function to be 3, 5 and 10 km
+
+        myResult, myMessage = setupScenario(
+            theHazard='Merapi Alert',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Volcano Polygon Hazard Population')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of people affected
+        # Jarak [km]	Jumlah	Kumulatif
+        # 3	     15.000	15.000
+        # 5	     17.000	32.000
+        # 10	124.000	156.000
+        assert '15' in myResult, myMessage
+        assert '17' in myResult, myMessage
+        assert '124' in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
@@ -1427,7 +1493,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKWDialog.accept()
+        DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
         myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
@@ -1498,7 +1564,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-#        DOCK.runtimeKWDialog.accept()
+#        DOCK.runtimeKeywordsDialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:
@@ -1528,7 +1594,7 @@ Click for Diagnostic Information:
 
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        #        DOCK.runtimeKWDialog.accept()
+        #        DOCK.runtimeKeywordsDialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:

@@ -17,7 +17,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import logging
 from PyQt4 import (QtGui, QtCore)
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Help(QtGui.QDialog):
@@ -45,9 +48,10 @@ class Help(QtGui.QDialog):
         """
         self.parent = theParent
         self.context = theContext
-        self.showContexthelp()
+        QtGui.QDialog.__init__(self, self.parent)
+        self.showContextHelp()
 
-    def showContexthelp(self):
+    def showContextHelp(self):
         """Load the help text into the wvResults widget."""
         ROOT = os.path.dirname(__file__)
         myPath = os.path.abspath(os.path.join(ROOT, '..', 'docs', 'build',
@@ -59,13 +63,14 @@ class Help(QtGui.QDialog):
                                             'docs', 'build',
                                             'html', 'user-docs',
                                             self.context + '.html'))
+            LOGGER.debug(os.path.isfile(myContextPath))
             if os.path.isfile(myContextPath):
                 myPath = myContextPath
 
         if not os.path.isfile(myPath):
             QtGui.QMessageBox.warning(self.parent, self.tr('InaSAFE'),
             (self.tr('Documentation could not be found at:\n'
-                      '%s' % myPath)))
+                      '%1').arg(myPath)))
         else:
             myUrl = QtCore.QUrl('file:///' + myPath)
             QtGui.QDesktopServices.openUrl(myUrl)

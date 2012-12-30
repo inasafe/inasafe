@@ -1,6 +1,7 @@
 """Utilities for InaSAFE
 """
 import os
+import zipfile
 import gettext
 from datetime import date
 import getpass
@@ -53,6 +54,9 @@ def temp_dir(sub_dir='work'):
        print tmpfile
        /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C
 
+    If you specify INASAFE_WORK_DIR as an environment var, it will be
+    used in preference to the system temp directory.
+
     Args:
         sub_dir str - optional argument which will cause an additional
                 subirectory to be created e.g. /tmp/inasafe/foo/
@@ -66,11 +70,16 @@ def temp_dir(sub_dir='work'):
     user = getpass.getuser().replace(' ', '_')
     current_date = date.today()
     date_string = current_date.isoformat()
-    # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
-    handle, filename = mkstemp()
-    os.close(handle)
-    new_directory = os.path.dirname(filename)
-    os.remove(filename)
+    if 'INASAFE_WORK_DIR' in os.environ:
+        new_directory = os.environ['INASAFE_WORK_DIR']
+    else:
+        # Following 4 lines are a workaround for tempfile.tempdir()
+        # unreliabilty
+        handle, filename = mkstemp()
+        os.close(handle)
+        new_directory = os.path.dirname(filename)
+        os.remove(filename)
+
     path = os.path.join(new_directory, 'inasafe', date_string, user, sub_dir)
 
     if not os.path.exists(path):
@@ -151,3 +160,65 @@ except ImportError:
             return DEFAULTS[default]
         else:
             return None
+
+
+def zip_directory(dir_path):
+    '''Zip all files in the dir_path
+    Create dir_path.zip inside the dir_path
+    Back to current directory in the end of process
+    '''
+
+    # go to the directory
+    my_cwd = os.getcwd()
+    os.chdir(dir_path)
+
+    # list all file in the directory
+    files = [f for f in os.listdir('.') if os.path.isfile(f)]
+
+    # create zip_filename
+    zip_filename = os.path.basename(dir_path)
+    if zip_filename == '':
+        zip_filename = os.path.basename(dir_path[:-1])
+    zip_filename += '.zip'
+
+    # create zip_object
+    zip_object = zipfile.ZipFile(zip_filename, 'w')
+
+    # zip each file
+    for f in files:
+        zip_object.write(f)
+    zip_object.close()
+
+    # back to current directory
+    os.chdir(my_cwd)
+
+
+def zip_shp(shp_path, extra_ext=None):
+    """Zip shape file and its gang (.shx, .dbf, .prj)
+    and extra_file is a list of another ext related to shapefile, if exist
+    The zip file will be put in the same directory
+    """
+
+    # go to the directory
+    my_cwd = os.getcwd()
+    shp_dir, shp_name = os.path.split(shp_path)
+    os.chdir(shp_dir)
+
+    shp_basename, _ = os.path.splitext(shp_name)
+    exts = ['.shp', '.shx', '.dbf', '.prj']
+    if extra_ext is not None:
+        exts.extend(extra_ext)
+
+    # zip files
+    zip_filename = shp_basename + '.zip'
+    zip_object = zipfile.ZipFile(zip_filename, 'w')
+    for ext in exts:
+        zip_object.write(shp_basename + ext)
+    zip_object.close()
+
+    os.chdir(my_cwd)
+
+if __name__ == '__main__':
+    a = '/home/sunnii/Downloads/abs/'
+    zip_directory(a)
+    print 'fin'
