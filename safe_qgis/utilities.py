@@ -856,10 +856,11 @@ def copyInMemory(vLayer, copyName=''):
     while vProvider.nextFeature(ft):
         memProvider.addFeatures([ft])
 
-    # Next two lines a workaround for a QGIS bug (lte 1.8)
-    # preventing mem layer attributes being saved to shp.
-    memLayer.startEditing()
-    memLayer.commitChanges()
+    if qgisVersion() <= 10800:
+        # Next two lines a workaround for a QGIS bug (lte 1.8)
+        # preventing mem layer attributes being saved to shp.
+        memLayer.startEditing()
+        memLayer.commitChanges()
 
     return memLayer
 
