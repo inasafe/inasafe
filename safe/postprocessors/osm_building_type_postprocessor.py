@@ -148,14 +148,14 @@ class OSMBuildingTypePostprocessor(AbstractPostprocessor):
             return
 
         myResult = 0
-        for building in self.impact_attrs:
-            if (building[self.target_field] and
-                building['amenity'] == 'place_of_worship'):
-                myResult += building[self.target_field]
-
         try:
+            for building in self.impact_attrs:
+                if (building[self.target_field] and
+                    building['amenity'] == 'place_of_worship'):
+                    myResult += building[self.target_field]
+
             myResult = int(round(myResult))
-        except ValueError:
+        except (ValueError, KeyError):
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
@@ -181,14 +181,14 @@ class OSMBuildingTypePostprocessor(AbstractPostprocessor):
             return
 
         myResult = 0
-        for building in self.impact_attrs:
-            if (building[self.target_field] and
-                building['amenity'] == 'hospital'):
-                myResult += building[self.target_field]
-
         try:
+            for building in self.impact_attrs:
+                if (building[self.target_field] and
+                    building['amenity'] == 'hospital'):
+                    myResult += building[self.target_field]
+
             myResult = int(round(myResult))
-        except ValueError:
+        except (ValueError, KeyError):
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
@@ -209,13 +209,13 @@ class OSMBuildingTypePostprocessor(AbstractPostprocessor):
             myName = '%s %s' % (myName, tr(self.target_field).lower())
 
         myResult = 0
-        for building in self.impact_attrs:
-            if (building[self.target_field] and
-                building['amenity'] == 'school'):
-                myResult += building[self.target_field]
-
         try:
+            for building in self.impact_attrs:
+                if (building[self.target_field] and
+                    building['amenity'] == 'school'):
+                    myResult += building[self.target_field]
+
             myResult = int(round(myResult))
-        except ValueError:
+        except (ValueError, KeyError):
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
