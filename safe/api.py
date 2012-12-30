@@ -50,4 +50,6 @@ from safe.common.utilities import (VerificationError,
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
+from safe.postprocessors import (get_postprocessors,
+                                 get_postprocessor_human_name)
 # pylint: enable=W0611

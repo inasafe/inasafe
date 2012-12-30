@@ -73,7 +73,9 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       ReadLayerError,
                                       points_in_and_outside_polygon,
                                       calculate_polygon_centroid,
-                                      unique_filename)
+                                      unique_filename,
+                                      get_postprocessors,
+                                      get_postprocessor_human_name)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundError,
@@ -90,8 +92,7 @@ from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe.postprocessors import (get_postprocessors,
-                                 get_postprocessor_human_name)
+
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -1271,7 +1272,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                             polygonsProvider.geometryType(),
                                             polygonsProvider.crs())
         if mySHPWriter.hasError():
-            raise InvalidParameterException(mySHPWriter.errorMessage())
+            raise InvalidParameterError(mySHPWriter.errorMessage())
         # end FIXME
 
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
@@ -1968,7 +1969,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         return
 
-    def _aggregateResultsRaster(self, myQgisImpactLayer):
+    def _aggregateResultsRaster(self, theQGISImpactLayer):
         """
         Performs Aggregation postprocessing step on raster impact layers by
         calling QgsZonalStatistics
@@ -2009,7 +2010,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         try:
             myRequestedPostProcessors = self.functionParams['postprocessors']
-            myPostProcessors = get_post_processors(myRequestedPostProcessors)
+            myPostProcessors = get_postprocessors(myRequestedPostProcessors)
         except (TypeError, KeyError):
             # TypeError is for when functionParams is none
             # KeyError is for when ['postprocessors'] is unavailable
@@ -2030,13 +2031,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if 'Gender' in myPostProcessors:
             #look if we need to look for a vaInaSAFEle female ratio in a layer
-            myFemaleRatioIsVaInaSAFEle = False
+            myFemaleRatioIsVariable = False
             try:
                 myFemRatioField = self.postProcessingAttributes[self.defaults[
                                                      'FEM_RATIO_ATTR_KEY']]
                 myFemRatioFieldIndex = self.postProcessingLayer.fieldNameIndex(
                     myFemRatioField)
-                myFemaleRatioIsVaInaSAFEle = True
+                myFemaleRatioIsVariable = True
 
             except KeyError:
                 myFemaleRatio = self.keywordIO.readKeywords(
@@ -2049,19 +2050,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # start data retreival: fetch no geometry and all attributes for each
         # feature
         myProvider.select(myAttributes, QgsRectangle(), False)
-        myFeatures = QgsFeature()
-		myPolygonIndex = 0
-        while myProvider.nextFeature(myFeatures):
+        myFeature = QgsFeature()
+        myPolygonIndex = 0
+        while myProvider.nextFeature(myFeature):
             #get all attributes of a feature
-            myAttributeMap = myFeatures.attributeMap()
+            myAttributeMap = myFeature.attributeMap()
 
             #if a feature has no field called
             if myNameFieldIndex == -1:
-                myZoneName = str(myFeatures.id())
+                myZoneName = str(myFeature.id())
             else:
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
-            mySum, myResult = attrMap[mySumFieldIndex].toDouble()
+            mySum, myResult = myAttributeMap[mySumFieldIndex].toDouble()
             LOGGER.debug('Reading: %s %s' % (mySum, myResult))
             LOGGER.debug('Polygon index %s\nAttr len %s' % (myPolygonIndex,
                                             len(self.impactLayerAttributes)))
@@ -2085,7 +2086,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     pass
 
                 if myKey == 'Gender':
-                    if myFemaleRatioIsVaInaSAFEle:
+                    if myFemaleRatioIsVariable:
                         myFemaleRatio, mySuccessFlag = myAttributeMap[
                                         myFemRatioFieldIndex].toDouble()
                         if not mySuccessFlag:
