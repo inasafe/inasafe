@@ -1388,7 +1388,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                  True,
                                                  allPolygonAttrs)
                     if not ok:
-                        raise
+                        LOGGER.debug('Couldn\'t fetch feature: %s' % myFeatId)
+                        LOGGER.debug( [str(error) for error in
+                                       polygonsProvider.errors()])
+#                        raise
 
                     myQgisPolyGeom = QgsGeometry(myQgisFeat.geometry())
                     myAtMap = myQgisFeat.attributeMap()
@@ -1399,8 +1402,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     # write the inside part to a shp file and the outside part
                     # back to the original QGIS layer
                     try:
-                        myIntersecGeom = QgsGeometry(
-                            myQgisPostprocGeom.intersection(myQgisPolyGeom))
+                        myIntersec = myQgisPostprocGeom.intersection(
+                            myQgisPolyGeom)
+#                        if myIntersec is not None:
+                        myIntersecGeom = QgsGeometry(myIntersec)
 
                         #from ftools
                         myUnknownGeomType = 0
@@ -1425,23 +1430,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 #                                         'the two polygons either touch '
 #                                         'only or do not intersect. Not '
 #                                         'adding this to the inside list')
-
                         #Part of the polygon that is outside the postprocpoly
-                        myOutsideGeom = QgsGeometry(myQgisPolyGeom.difference(
-                            myIntersecGeom))
+                        myOutside = myQgisPolyGeom.difference(myIntersecGeom)
+#                        if myOutside is not None:
+                        myOutsideGeom = QgsGeometry(myOutside)
 
                         if myOutsideGeom.wkbType() in polygonTypesList:
-                            # modifiy the original geometry to the part outside
-                            # of the postproc polygon
+                            # modifiy the original geometry to the part
+                            # outside of the postproc polygon
                             polygonsProvider.changeGeometryValues(
                                 {myFeatId: myOutsideGeom})
                             # we need this polygon in the next iteration
                             myOutsidePolygons.append(myMappedIndex)
                             myNextIterPolygons.append(i)
 
-                    except:
-                        LOGGER.debug('ERROR with %s', myMappedIndex)
-                        raise
+                    except TypeError:
+                        LOGGER.debug('ERROR with FID %s', myMappedIndex)
 
             LOGGER.debug('Inside %s' % myInsidePolygons)
             LOGGER.debug('Outside %s' % myOutsidePolygons)
@@ -1479,12 +1483,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         del mySHPWriter
         LOGGER.debug('Duration: %s' % (time.clock() - startTime))
-        LOGGER.debug(myOutFilename)
-        #TODO (MB) Fix read layer
-        mySplittedLayer = QgsVectorLayer(myOutFilename)
         if self.showPostProcLayers:
-            QgsMapLayerRegistry.instance().addMapLayer(mySplittedLayer)
-        raise
+            self.iface.addVectorLayer(myOutFilename, theQgisLayer.title(),
+                                      'ogr')
         return myOutFilename
 
     def postProcess(self):
@@ -1952,6 +1953,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myQgisImpactLayer.name())
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.aggregationErrorSkipPostprocessing = myMessage
+                self.postProcessingLayer.commitChanges()
                 return
         else:
             #loop over all features in impact layer
@@ -1963,6 +1965,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myFID = 0
             myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
 
+        self.postProcessingLayer.commitChanges()
         return
 
     def _aggregateResultsRaster(self, theQGISImpactLayer):
