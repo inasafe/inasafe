@@ -963,6 +963,7 @@ def copyInMemory(vLayer, copyName=''):
 
     return memLayer
 
+
 def mmToPoints(theMM, theDpi):
     """Convert measurement in points to one in mm.
 

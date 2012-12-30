@@ -93,7 +93,6 @@ from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 
-
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -1191,7 +1190,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         #get safe version of postproc layers
         self.mySafePostprocLayer = safe_read_layer(
-            str(self.postprocLayer.source()))
+            str(self.postProcessingLayer.source()))
 
         myTitle = self.tr('Preclipping input data...')
         myMessage = self.tr('We are clipping the input layers to avoid '
@@ -1248,7 +1247,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # FIXME (MB) maybe do raw geos without qgis
         #select all postproc polygons with no attributes
-        postprocProvider = self.postprocLayer.dataProvider()
+        postprocProvider = self.postProcessingLayer.dataProvider()
         postprocProvider.select([])
 
         # copy polygons to a memory layer
@@ -1329,12 +1328,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myNextIterPolygons = []
             myOutsidePolygons = []
 
-#            tmpWriter = QgsVectorFileWriter('/tmp/loop%s.shp'% myPostprocPolygonIndex,
-#                                              'UTF-8',
-#                                              fields,
-#                                              polygonsProvider.geometryType(),
-#                                              polygonsProvider.crs())
-
             for i in range(myPolygonsCount):
                 k = i * 4
                 myMappedIndex = myRemainingIndexes[i]
@@ -1402,21 +1395,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 #                    for (k, attr) in myAtMap.iteritems():
 #                        LOGGER.debug( "%d: %s" % (k, attr.toString()))
 
-
                     # make intersection of the myQgisFeat and the postprocPoly
                     # write the inside part to a shp file and the outside part
                     # back to the original QGIS layer
                     try:
-                        myIntersecGeom = QgsGeometry(myQgisPostprocGeom.intersection(myQgisPolyGeom))
+                        myIntersecGeom = QgsGeometry(
+                            myQgisPostprocGeom.intersection(myQgisPolyGeom))
 
                         #from ftools
                         myUnknownGeomType = 0
                         if myIntersecGeom.wkbType() == myUnknownGeomType:
-#                            LOGGER.debug('trying different intersection method')
-                            int_com = myQgisPostprocGeom.combine(myQgisPolyGeom)
-                            int_sym = myQgisPostprocGeom.symDifference(myQgisPolyGeom)
-                            myIntersecGeom = QgsGeometry(int_com.difference(int_sym))
-#                        LOGGER.debug('wkbType type of intersection: %s' % myIntersecGeom.wkbType())
+                            int_com = myQgisPostprocGeom.combine(
+                                myQgisPolyGeom)
+                            int_sym = myQgisPostprocGeom.symDifference(
+                                myQgisPolyGeom)
+                            myIntersecGeom = QgsGeometry(
+                                int_com.difference(int_sym))
+#                        LOGGER.debug('wkbType type of intersection: %s' %
+# myIntersecGeom.wkbType())
                         polygonTypesList = [QGis.WKBPolygon,
                                             QGis.WKBMultiPolygon]
                         if myIntersecGeom.wkbType() in polygonTypesList:
@@ -1460,7 +1456,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 #                myRemainingAttributes = myRemainingAttributes[
 #                                        nextIterPolygonsIndex]
                 myRemainingIndexes = myRemainingIndexes[nextIterPolygonsIndex]
-                LOGGER.debug('Remaining: %s'% len(myRemainingPolygons))
+                LOGGER.debug('Remaining: %s' % len(myRemainingPolygons))
             else:
                 print 'no more polygons to be checked'
                 break
@@ -1477,7 +1473,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         for i in myOutsidePolygons:
             myFeatId = i + 1
-            polygonsProvider.featureAtId(myFeatId, myQgisFeat, True, allPolygonAttrs)
+            polygonsProvider.featureAtId(myFeatId, myQgisFeat, True,
+                                         allPolygonAttrs)
             mySHPWriter.addFeature(myQgisFeat)
 
         del mySHPWriter
@@ -1488,7 +1485,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.showPostProcLayers:
             QgsMapLayerRegistry.instance().addMapLayer(mySplittedLayer)
         raise
-#        return myOutFilename
+        return myOutFilename
 
     def postProcess(self):
         """Run all post processing steps.
@@ -1846,7 +1843,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # start data retreival: fetch no geometry and
         # 1 attr for each feature
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
-        myFeature = QgsFeature()
         myTotal = 0
 
         #add the total field to the postProcessingLayer
