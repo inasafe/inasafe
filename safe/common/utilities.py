@@ -162,38 +162,7 @@ except ImportError:
             return None
 
 
-def zip_directory(dir_path):
-    '''Zip all files in the dir_path
-    Create dir_path.zip inside the dir_path
-    Back to current directory in the end of process
-    '''
-
-    # go to the directory
-    my_cwd = os.getcwd()
-    os.chdir(dir_path)
-
-    # list all file in the directory
-    files = [f for f in os.listdir('.') if os.path.isfile(f)]
-
-    # create zip_filename
-    zip_filename = os.path.basename(dir_path)
-    if zip_filename == '':
-        zip_filename = os.path.basename(dir_path[:-1])
-    zip_filename += '.zip'
-
-    # create zip_object
-    zip_object = zipfile.ZipFile(zip_filename, 'w')
-
-    # zip each file
-    for f in files:
-        zip_object.write(f)
-    zip_object.close()
-
-    # back to current directory
-    os.chdir(my_cwd)
-
-
-def zip_shp(shp_path, extra_ext=None):
+def zip_shp(shp_path, extra_ext=None, remove_file=False):
     """Zip shape file and its gang (.shx, .dbf, .prj)
     and extra_file is a list of another ext related to shapefile, if exist
     The zip file will be put in the same directory
@@ -213,12 +182,13 @@ def zip_shp(shp_path, extra_ext=None):
     zip_filename = shp_basename + '.zip'
     zip_object = zipfile.ZipFile(zip_filename, 'w')
     for ext in exts:
-        zip_object.write(shp_basename + ext)
+        if os.path.isfile(shp_basename + ext):
+            zip_object.write(shp_basename + ext)
     zip_object.close()
 
-    os.chdir(my_cwd)
+    if remove_file:
+        for ext in exts:
+            if os.path.isfile(shp_basename + ext):
+                os.remove(shp_basename + ext)
 
-if __name__ == '__main__':
-    a = '/home/sunnii/Downloads/abs/'
-    zip_directory(a)
-    print 'fin'
+    os.chdir(my_cwd)

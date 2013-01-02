@@ -78,10 +78,11 @@ def processFloodEvent(netcdf_file=None, hours=24):
 
     # check if there is another file with the same name
     # if so, do not do the forecasting
-    polyforecast_filepath = tif_filename.replace('.tif', '.shp')
-    if os.path.isfile(polyforecast_filepath):
+    polyforecast_filepath = tif_filename.replace('.tif', '_regions.shp')
+    zip_filename = polyforecast_filepath.replace('.shp', '.zip')
+    if os.path.isfile(zip_filename):
         print ('File %s is exist, so we do not do the forecasting'
-               % polyforecast_filepath)
+               % zip_filename)
     else:
         my_polygons = read_layer(polygons_path)
         my_result = tag_polygons_by_grid(my_polygons, tif_file, threshold=0.3,
@@ -105,11 +106,11 @@ def processFloodEvent(netcdf_file=None, hours=24):
         print 'Wrote tagged polygons to %s' % polyforecast_filepath
 
     # zip all file
-    zip_filename = polyforecast_filepath.replace('.shp', '.zip')
     if os.path.isfile(zip_filename):
         print 'Has been zipped to %s' % zip_filename
     else:
-        zip_shp(polyforecast_filepath, ['.keywords'])
+        zip_shp(polyforecast_filepath, extra_ext=['.keywords'],
+            remove_file=True)
         print 'Zipped to %s' % zip_filename
 
 
