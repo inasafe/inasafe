@@ -109,7 +109,7 @@ def processFloodEvent(netcdf_file=None, hours=24):
     if os.path.isfile(zip_filename):
         print 'Has been zipped to %s' % zip_filename
     else:
-        zip_shp(polyforecast_filepath, ['.keywords'])
+        zip_shp(polyforecast_filepath, extra_ext=['.keywords'], remove_file=True)
         print 'Zipped to %s' % zip_filename
 
 
