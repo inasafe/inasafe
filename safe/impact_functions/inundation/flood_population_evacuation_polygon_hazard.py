@@ -143,11 +143,11 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             evacuated = evacuated // 1000 * 1000
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        rice = evacuated * 2.8
-        drinking_water = evacuated * 17.5
-        water = evacuated * 67
-        family_kits = evacuated / 5
-        toilets = evacuated / 20
+        rice = evacuated * 2.8  # 400g per person per day
+        drinking_water = evacuated * 17.5  # 2.5L per person per day
+        water = evacuated * 105  # 15L per person per day
+        family_kits = evacuated / 5  # assume 5 people per family
+        toilets = evacuated / 20  # 20 people to 1 toilet
 
         # Generate impact report for the pdf map
         table_body = [question,
