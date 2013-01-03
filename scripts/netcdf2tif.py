@@ -4,14 +4,12 @@ This requires scientific python
 """
 
 import os
-import sys
-import numpy
 import argparse
 
 
 from safe.storage.vector import Vector
 
-from safe.storage.netcdf_utilities import convert_netcdf2tif
+from realtime.netcdf_utilities import convert_netcdf2tif
 from safe.storage.core import read_layer
 from safe.engine.interpolation import tag_polygons_by_grid
 
