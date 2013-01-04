@@ -20,9 +20,11 @@ Class Building Type                              Median (MMI)  Beta (MMI)
 9     Timber frame residential                        10.5     0.15
 """
 
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.numerics import lognormal_cdf
@@ -125,10 +127,11 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                       TableRow([tr('Buildings'), tr('Total')],
                                header=True),
                       TableRow([tr('All'), N]),
-                      TableRow([tr('No damage'), str(count_none)]),
-                      TableRow([tr('Low damage'), str(count_low)]),
-                      TableRow([tr('Medium damage'), str(count_medium)]),
-                      TableRow([tr('High damage'), str(count_high)])]
+                      TableRow([tr('No damage'), format_int(count_none)]),
+                      TableRow([tr('Low damage'), format_int(count_low)]),
+                      TableRow([tr('Medium damage'),
+                                format_int(count_medium)]),
+                      TableRow([tr('High damage'), format_int(count_high)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Levels of impact are defined by post 2009 '

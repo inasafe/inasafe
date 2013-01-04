@@ -685,7 +685,7 @@ class DockTest(unittest.TestCase):
         myMessage = ('Unexpected result returned for Earthquake guidelines'
                'function. Expected:\n "All" count of 2993, '
                'received: \n %s' % myResult)
-        assert '2993' in myResult, myMessage
+        assert format_int(2993) in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_small(self):
         """Padang 2009 fatalities estimated correctly (small extent)"""
@@ -736,12 +736,12 @@ class DockTest(unittest.TestCase):
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: fatality count of '
                      '116 , received: \n %s' % myResult)
-        assert '116' in myResult, myMessage
+        assert format_int(116) in myResult, myMessage
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: total population count of '
                      '847529 , received: \n %s' % myResult)
-        assert '847529' in myResult, myMessage
+        assert format_int(847529) in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_Padang_full(self):
         """Padang 2009 fatalities estimated correctly (large extent)"""
@@ -791,12 +791,12 @@ class DockTest(unittest.TestCase):
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: fatality count of '
                      '500 , received: \n %s' % myResult)
-        assert '500' in myResult, myMessage
+        assert format_int(500) in myResult, myMessage
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: total population count of '
                      '31372262 , received: \n %s' % myResult)
-        assert '31372262' in myResult, myMessage
+        assert format_int(31372262) in myResult, myMessage
 
     def test_runTsunamiBuildingImpactFunction(self):
         """Tsunami function runs in GUI as expected."""
@@ -836,8 +836,8 @@ class DockTest(unittest.TestCase):
         #All	        7	                17
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '17' in myResult, myMessage
-        assert '7' in myResult, myMessage
+        assert format_int(17) in myResult, myMessage
+        assert format_int(7) in myResult, myMessage
 
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
@@ -868,7 +868,7 @@ class DockTest(unittest.TestCase):
         # Marco Hartman form HKV
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected impact number
-        assert '2480' in myResult, myMessage
+        assert format_int(2480) in myResult, myMessage
 
     def test_runFloodPopulationImpactFunction_scaling(self):
         """Flood function runs in GUI with 5x5km population data
@@ -893,8 +893,9 @@ class DockTest(unittest.TestCase):
         myMessage = 'Result not as expected: %s' % myResult
 
         # Check numbers are OK (within expected errors from resampling)
+        # These are expected impact number
         assert format_int(10484) in myResult, myMessage
-        assert '977' in myResult, myMessage  # These are expected impact number
+        assert format_int(977) in myResult, myMessage
 
     def test_runFloodPopulationPolygonHazardImpactFunction(self):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
@@ -918,7 +919,7 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people needing evacuation
-        assert '134953000' in myResult, myMessage
+        assert format_int(134953000) in myResult, myMessage
 
     def test_runCategorizedHazardBuildingImpact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -942,9 +943,9 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
-        assert '535' in myResult, myMessage
-        assert '453' in myResult, myMessage
-        assert '436' in myResult, myMessage
+        assert format_int(535) in myResult, myMessage
+        assert format_int(453) in myResult, myMessage
+        assert format_int(436) in myResult, myMessage
 
     def test_runCategorisedHazardPopulationImpactFunction(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -968,9 +969,9 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of population might be affected
-        assert '30938000' in myResult, myMessage
-        assert '68280000' in myResult, myMessage
-        assert '157551000' in myResult, myMessage
+        assert format_int(30938000) in myResult, myMessage
+        assert format_int(68280000) in myResult, myMessage
+        assert format_int(157551000) in myResult, myMessage
 
     def test_runEarthquakeBuildingImpactFunction(self):
         """Earthquake function runs in GUI with An earthquake in Yogyakarta
@@ -995,9 +996,9 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
-        assert '786' in myResult, myMessage
-        assert '15528' in myResult, myMessage
-        assert '177' in myResult, myMessage
+        assert format_int(786) in myResult, myMessage
+        assert format_int(15528) in myResult, myMessage
+        assert format_int(177) in myResult, myMessage
 
     def test_runVolcanoBuildingImpact(self):
         """Volcano function runs in GUI with An donut (merapi hazard map)
@@ -1022,7 +1023,7 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
-        assert '288' in myResult, myMessage
+        assert format_int(288) in myResult, myMessage
 
     def test_runVolcanoPopulationImpact(self):
         """Volcano function runs in GUI with a donut (merapi hazard map)
@@ -1051,9 +1052,9 @@ class DockTest(unittest.TestCase):
         # Kawasan Rawan Bencana III	45.000	45.000
         # Kawasan Rawan Bencana II	84.000	129.000
         # Kawasan Rawan Bencana I	28.000	157.000
-        assert '45' in myResult, myMessage
-        assert '84' in myResult, myMessage
-        assert '28' in myResult, myMessage
+        assert format_int(45) in myResult, myMessage
+        assert format_int(84) in myResult, myMessage
+        assert format_int(28) in myResult, myMessage
 
     def test_runVolcanoCirclePopulation(self):
         """Volcano function runs in GUI with a circular evacutation zone
@@ -1085,9 +1086,9 @@ class DockTest(unittest.TestCase):
         # 3	     15.000	15.000
         # 5	     17.000	32.000
         # 10	124.000	156.000
-        assert '15' in myResult, myMessage
-        assert '17' in myResult, myMessage
-        assert '124' in myResult, myMessage
+        assert format_int(15) in myResult, myMessage
+        assert format_int(17) in myResult, myMessage
+        assert format_int(124) in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
@@ -1185,7 +1186,7 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '2366' in myResult, myMessage
+        assert format_int(2366) in myResult, myMessage
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
@@ -1408,7 +1409,7 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '68' in myResult, myMessage
+        assert format_int(68) in myResult, myMessage
 
     def test_state(self):
         """Check if the save/restore state methods work. See also

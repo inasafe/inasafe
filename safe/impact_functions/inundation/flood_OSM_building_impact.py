@@ -1,6 +1,8 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.utilities import ugettext as tr
@@ -200,7 +202,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 tr('Number flooded'),
                                 tr('Total')],
                                header=True),
-                      TableRow([tr('All'), count, N])]
+                      TableRow([tr('All'), format_int(count), format_int(N)])]
 
 ##        fid.write('%s, %s, %s\n' % (tr('Building type'),
 ##                                    tr('Temporarily closed'),
@@ -233,7 +235,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 # FIXME (Sunni) : I change affected_buildings[usage] to string
                 # because it will be replace with &nbsp in html
                 building_list.append([building_type.capitalize(),
-                                      str(affected_buildings[usage]),
+                                      format_int(affected_buildings[usage]),
                                       buildings[usage]])
                 if building_type == 'school':
                     school_closed = affected_buildings[usage]
@@ -270,12 +272,12 @@ class FloodBuildingImpactFunction(FunctionProvider):
         if school_closed > 0:
             table_body.append(TableRow(tr('Where will the students from the %d'
                                          ' closed schools go to study?') %
-                                         school_closed))
+                                       format_int(school_closed)))
         if hospital_closed > 0:
             table_body.append(TableRow(tr('Where will the patients from the %d'
                                          ' closed hospitals go for treatment '
                                          'and how will we transport them?') %
-                                         hospital_closed))
+                                       format_int(hospital_closed)))
 
         table_body.append(TableRow(tr('Notes'), header=True))
         assumption = tr('Buildings are said to be flooded when ')
