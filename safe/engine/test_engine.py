@@ -498,7 +498,8 @@ class Test_Engine(unittest.TestCase):
 
         # Expected values from HKV
         expected_values = [2485442, 1537920]
-        expected_strings = ['<b>2480</b>', '<b>1533</b>']
+        expected_strings = ['<b>' + format_int(2480) + '</b>',
+                            '<b>' + format_int(1533) + '</b>']
 
         i = 0
         for filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
