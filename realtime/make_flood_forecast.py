@@ -20,7 +20,7 @@ import os
 import sys
 #from safe.storage.converter import convert_netcdf2tif as a
 from safe.common.utilities import zip_shp
-from safe.storage.netcdf_utilities import convert_netcdf2tif
+from realtime.netcdf_utilities import convert_netcdf2tif
 from safe.storage.vector import Vector
 from safe.engine.interpolation import tag_polygons_by_grid
 from safe.storage.core import read_layer

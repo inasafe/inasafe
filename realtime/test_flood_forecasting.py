@@ -4,7 +4,7 @@ import unittest
 import numpy
 import os
 
-from safe.storage.netcdf_utilities import convert_netcdf2tif
+from netcdf_utilities import convert_netcdf2tif
 from safe.storage.core import read_layer
 from safe.storage.vector import Vector
 from safe.engine.interpolation import tag_polygons_by_grid
