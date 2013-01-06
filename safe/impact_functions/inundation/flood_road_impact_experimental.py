@@ -12,11 +12,13 @@ class FloodRoadImpactFunctionExperimental(FunctionProvider):
 
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami'] and \
-                    layertype=='vector'
+                    layertype=='vector and \
+                    disabled=='True'
 
     :param requires category=='exposure' and \
                     subcategory=='road' and \
-                    layertype=='vector'
+                    layertype=='vector and \
+                    disabled=='True'
     """
 
     target_field = 'INUNDATED'

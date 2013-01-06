@@ -1,5 +1,7 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layers
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layers,
+                                        format_int)
 from safe.impact_functions.styles import earthquake_fatality_style
 from safe.storage.raster import Raster
 import numpy
@@ -89,21 +91,25 @@ class EarthquakeFatalityFunction(FunctionProvider):
 
         # Create report
         impact_summary = ('<table border="0" width="320px">'
-                   '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                   % ('Jumlah Penduduk', int(total)))
+                   '   <tr><td>%s&#58;</td><td>%s</td></tr>'
+                   % ('Jumlah Penduduk', format_int(int(total))))
         if gender_ratio is not None:
-            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
-                        % (' - Wanita', int(numpy.nansum(P_female.flat))))
-            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
-                        % (' - Pria', int(numpy.nansum(P_male.flat))))
-        impact_summary += ('   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    % ('Perkiraan Orang Meninggal', int(count)))
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%s</td></tr>'
+                        % (' - Wanita',
+                           format_int(int(numpy.nansum(P_female.flat)))))
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%s</td></tr>'
+                        % (' - Pria',
+                           format_int(int(numpy.nansum(P_male.flat)))))
+        impact_summary += ('   <tr><td>%s&#58;</td><td>%s</td></tr>'
+                    % ('Perkiraan Orang Meninggal', format_int(int(count))))
 
         if gender_ratio is not None:
-            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
-                        % (' - Wanita', int(numpy.nansum(F_female.flat))))
-            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
-                        % (' - Pria', int(numpy.nansum(F_male.flat))))
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%s</td></tr>'
+                        % (' - Wanita',
+                           format_int(int(numpy.nansum(F_female.flat)))))
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%s</td></tr>'
+                        % (' - Pria',
+                           format_int(int(numpy.nansum(F_male.flat)))))
 
         impact_summary += '</table>'
 

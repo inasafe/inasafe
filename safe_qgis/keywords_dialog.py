@@ -34,8 +34,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  getLayerAttributeNames,
                                  getDefaults)
 
-from safe_qgis.exceptions import (InvalidParameterException,
-                                  HashNotFoundException)
+from safe_qgis.exceptions import (InvalidParameterError,
+                                  HashNotFoundError)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -74,7 +74,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.standardExposureList = OrderedDict([('population',
                                       self.tr('population')),
                                      ('structure', self.tr('structure')),
-                                     ('roads', self.tr('roads')),
+                                     ('road', self.tr('road')),
                                      ('Not Set', self.tr('Not Set'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
                                     self.tr('earthquake [MMI]')),
@@ -476,7 +476,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """Add an item to the keywords list given its key/value.
 
         The key and value must both be valid, non empty strings
-        or an InvalidKVPException will be raised.
+        or an InvalidKVPError will be raised.
 
         If an entry with the same key exists, it's value will be
         replaced with theValue.
@@ -680,7 +680,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         try:
             # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        except (InvalidParameterException, HashNotFoundException):
+        except (InvalidParameterError, HashNotFoundError):
             pass
 
         myLayerName = self.layer.name()

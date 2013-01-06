@@ -5,15 +5,15 @@ Package::safe.storage
    :maxdepth: 2
 
    storage/test_vector
-   storage/core
-   storage/test_utilities
-   storage/geometry
-   storage/clipping
-   storage/raster
    storage/utilities
-   storage/layer
-   storage/vector
    storage/test_clipping
    storage/test_io
-   storage/utilities_test
+   storage/test_utilities
+   storage/geometry
    storage/projection
+   storage/vector
+   storage/core
+   storage/clipping
+   storage/utilities_test
+   storage/raster
+   storage/layer

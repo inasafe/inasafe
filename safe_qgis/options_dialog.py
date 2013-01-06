@@ -108,6 +108,14 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxClipToViewport.setChecked(myFlag)
 
         myFlag = mySettings.value(
+            'inasafe/clipHard', False).toBool()
+        self.cbxClipHard.setChecked(myFlag)
+
+        myFlag = mySettings.value(
+            'inasafe/useSentry', False).toBool()
+        self.cbxUseSentry.setChecked(myFlag)
+
+        myFlag = mySettings.value(
                             'inasafe/showPostProcLayers', False).toBool()
         self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
@@ -142,6 +150,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxHideExposure.isChecked())
         mySettings.setValue('inasafe/clipToViewport',
                             self.cbxClipToViewport.isChecked())
+        mySettings.setValue('inasafe/clipHard',
+                            self.cbxClipHard.isChecked())
+        mySettings.setValue('inasafe/useSentry',
+                            self.cbxUseSentry.isChecked())
         mySettings.setValue('inasafe/showPostProcLayers',
                             self.cbxShowPostprocessingLayers.isChecked())
         mySettings.setValue('inasafe/defaultFemaleRatio',

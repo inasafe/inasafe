@@ -22,8 +22,8 @@ from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayer
 
-from safe_qgis.exceptions import (HashNotFoundException,
-                                  KeywordNotFoundException)
+from safe_qgis.exceptions import (HashNotFoundError,
+                                  KeywordNotFoundError)
 from safe_qgis.safe_interface import (verify,
                                       readKeywordsFromFile,
                                       writeKeywordsToFile)
@@ -98,7 +98,7 @@ class KeywordIO(QObject):
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
-        except (HashNotFoundException, Exception):
+        except (HashNotFoundError, Exception):
             raise
 
     def writeKeywords(self, theLayer, theKeywords):
@@ -142,7 +142,7 @@ class KeywordIO(QObject):
         """
         try:
             myKeywords = self.readKeywords(theLayer)
-        except HashNotFoundException:
+        except HashNotFoundError:
             myKeywords = {}
         myKeywords.update(theKeywords)
         self.writeKeywords(theLayer, myKeywords)
@@ -235,7 +235,7 @@ class KeywordIO(QObject):
             myKeywords.pop(theKeyword)
             self.writeKeywords(theLayer, myKeywords)
             return True
-        except (HashNotFoundException, KeyError):
+        except (HashNotFoundError, KeyError):
             return False
 
 # methods below here should be considered private
@@ -293,7 +293,7 @@ class KeywordIO(QObject):
         try:
             self.connection = sqlite.connect(self.keywordDbPath)
         except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             raise
 
     def closeConnection(self):
@@ -329,25 +329,26 @@ class KeywordIO(QObject):
             myCursor = self.connection.cursor()
             myCursor.execute('SELECT SQLITE_VERSION()')
             myData = myCursor.fetchone()
-            #print "SQLite version: %s" % myData
+            LOGGER.debug("SQLite version: %s" % myData)
             # Check if we have some tables, if not create them
             mySQL = 'select sql from sqlite_master where type = \'table\';'
             myCursor.execute(mySQL)
             myData = myCursor.fetchone()
-            #print "Tables: %s" % myData
+            LOGGER.debug("Tables: %s" % myData)
             if myData is None:
-                #print 'No tables found'
+                LOGGER.debug('No tables found')
                 mySQL = ('create table keyword (hash varchar(32) primary key,'
                          'dict text);')
-                print mySQL
+                LOGGER.debug(mySQL)
                 myCursor.execute(mySQL)
-                myData = myCursor.fetchone()
+                #myData = myCursor.fetchone()
+                myCursor.fetchone()
             else:
-                #print 'Keywords table already exists'
-                pass
+                LOGGER.debug('Keywords table already exists')
+
             return myCursor
         except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             raise
 
     def areKeywordsFileBased(self, theLayer):
@@ -433,10 +434,10 @@ class KeywordIO(QObject):
             myCursor.execute(mySQL)
             self.connection.commit()
         except sqlite.Error, e:
-            print "SQLITE Error %s:" % e.args[0]
+            LOGGER.debug("SQLITE Error %s:" % e.args[0])
             self.connection.rollback()
         except Exception, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             self.connection.rollback()
             raise
         finally:
@@ -465,7 +466,7 @@ class KeywordIO(QObject):
            complete keywords dictionary is returned.
 
         Raises:
-           KeywordNotFoundException if the keyword is not recognised.
+           KeywordNotFoundError if the keyword is not recognised.
         """
         myHash = self.getHashForDatasource(theUri)
         try:
@@ -489,10 +490,10 @@ class KeywordIO(QObject):
                              (sqlite.Binary(myPickle), myHash))
                 self.connection.commit()
         except sqlite.Error, e:
-            print "SQLITE Error %s:" % e.args[0]
+            LOGGER.debug("SQLITE Error %s:" % e.args[0])
             self.connection.rollback()
         except Exception, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             self.connection.rollback()
             raise
         finally:
@@ -521,7 +522,7 @@ class KeywordIO(QObject):
            complete keywords dictionary is returned.
 
         Raises:
-           KeywordNotFoundException if the keyword is not found.
+           KeywordNotFoundError if the keyword is not found.
         """
         myHash = self.getHashForDatasource(theUri)
         self.openConnection()
@@ -533,7 +534,7 @@ class KeywordIO(QObject):
             myData = myCursor.fetchone()
             #unpickle it to get our dict back
             if myData is None:
-                raise HashNotFoundException('No hash found for %s' % myHash)
+                raise HashNotFoundError('No hash found for %s' % myHash)
             myData = myData[0]  # first field
             myDict = pickle.loads(str(myData))
             if theKeyword is None:
@@ -541,12 +542,12 @@ class KeywordIO(QObject):
             if theKeyword in myDict:
                 return myDict[theKeyword]
             else:
-                raise KeywordNotFoundException('No hash found for %s' % myHash)
+                raise KeywordNotFoundError('No hash found for %s' % myHash)
 
         except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
         except Exception, e:
-            print "Error %s:" % e.args[0]
+            LOGGER.debug("Error %s:" % e.args[0])
             raise
         finally:
             self.closeConnection()

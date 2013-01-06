@@ -1,14 +1,17 @@
 import numpy
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question, get_function_title
-from safe.impact_functions.core import format_int
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        get_function_title,
+                                        format_int)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
                                    get_defaults)
 from safe.common.utilities import verify
 from safe.common.tables import Table, TableRow
+from third_party.odict import OrderedDict
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -28,15 +31,16 @@ class FloodEvacuationFunction(FunctionProvider):
 
     title = tr('Need evacuation')
     defaults = get_defaults()
-    parameters = {
-        'thresholds': [1.0],
-        'postprocessors':
-            {'Gender': {'on': True},
-             'Age': {'on': True,
-                     'params': {
-                    'youth_ratio': defaults['YOUTH_RATIO'],
-                    'adult_ratio': defaults['ADULT_RATIO'],
-                    'elder_ratio': defaults['ELDER_RATIO']}}}}
+    parameters = OrderedDict([
+        ('thresholds', [1.0]),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -53,7 +57,7 @@ class FloodEvacuationFunction(FunctionProvider):
           Map of population exposed to flood levels exceeding the threshold
           Table with number of people evacuated and supplies required
         """
-
+        print 'AAAAAAAAAAAAAAA'
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation [m]
         population = get_exposure_layer(layers)
@@ -102,11 +106,17 @@ class FloodEvacuationFunction(FunctionProvider):
             total = total // 1000 * 1000
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+
         # FIXME: Refactor and share
+        # 400g per person per day
         rice = int(evacuated * 2.8)
+        # 2.5L per person per day
         drinking_water = int(evacuated * 17.5)
-        water = int(evacuated * 67)
+        # 15L per person per day
+        water = int(evacuated * 105)
+        # assume 5 people per family (not in perka)
         family_kits = int(evacuated / 5)
+        # 20 people per toilet
         toilets = int(evacuated / 20)
 
         # Generate impact report for the pdf map
@@ -163,11 +173,13 @@ class FloodEvacuationFunction(FunctionProvider):
         classes = numpy.linspace(numpy.nanmin(I.flat[:]),
                                  numpy.nanmax(I.flat[:]), 8)
 
+        # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
-        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
-        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
+        style_classes[1]['label'] = tr('Low [%.2f people/cell]') % classes[1]
+        style_classes[4]['label'] = tr('Medium [%.2f people/cell]')\
+            % classes[4]
+        style_classes[7]['label'] = tr('High [%.2f people/cell]') % classes[7]
 
         # Override associated quantities in colour style
         for i in range(len(classes)):

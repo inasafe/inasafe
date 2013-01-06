@@ -7,12 +7,12 @@ import hashlib
 import logging
 
 from PyQt4 import QtGui, QtCore
-
 from qgis.core import (QgsApplication,
                       QgsVectorLayer,
                       QgsRasterLayer,
                       QgsRectangle,
-                      QgsCoordinateReferenceSystem)
+                      QgsCoordinateReferenceSystem,
+                      )
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
@@ -332,7 +332,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
     myDifferenceImage = QtGui.QImage(myImageWidth,
                                      myImageHeight,
                                      QtGui.QImage.Format_ARGB32_Premultiplied)
-    myDifferenceImage.fill(QtGui.qRgb(152, 219, 249))
+    myDifferenceImage.fill(152 + 219 * 256 + 249 * 256 * 256)
 
     myControlPixel = QtGui.QColor().rgb()
     myTestPixel = QtGui.QColor().rgb()

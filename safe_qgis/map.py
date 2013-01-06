@@ -31,7 +31,7 @@ from qgis.core import (QgsComposition,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundException
+from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
 from safe_qgis.utilities import (setupPrinter,
@@ -175,7 +175,11 @@ class Map():
                                QtGui.QImage.Format_ARGB32)
         myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
         myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
-        myImage.fill(QtGui.qRgb(255, 255, 255))
+
+        # Only works in Qt4.8
+        #myImage.fill(QtGui.qRgb(255, 255, 255))
+        # Works in older Qt4 versions
+        myImage.fill(55 + 255 * 256 + 255 * 256 * 256)
         myImagePainter = QtGui.QPainter(myImage)
         mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
                                      self.pageHeight)
@@ -766,7 +770,7 @@ class Map():
         try:
             myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
             return myTitle
-        except KeywordNotFoundException:
+        except KeywordNotFoundError:
             return None
         except Exception:
             return None

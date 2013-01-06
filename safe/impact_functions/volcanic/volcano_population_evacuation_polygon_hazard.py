@@ -1,13 +1,14 @@
 import numpy
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
-from safe.impact_functions.core import format_int
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
-from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.engine.interpolation import make_circular_polygon
+from safe.engine.interpolation import (assign_hazard_values_to_exposure_data,
+                                       make_circular_polygon)
 from safe.common.exceptions import InaSAFEError
 
 

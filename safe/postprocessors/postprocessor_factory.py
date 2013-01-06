@@ -76,3 +76,18 @@ def get_post_processors(requested_postprocessors):
             LOGGER.debug(constr_id + ' has no "on" key, skipping it')
 
     return postprocessor_instances
+
+
+def get_postprocessor_human_name(postprocesor):
+    """
+    Returns the human readable name of  post processor
+
+    Args:
+        * postprocessor: Machine name of the postprocessor
+
+    Returns:
+        str with the human readable name
+    """
+    # TODO (MB) this is a stub, the correct implementation will come when
+    # aggregation branch gets merged
+    return postprocesor

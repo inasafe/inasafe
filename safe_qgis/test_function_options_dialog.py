@@ -27,6 +27,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe.impact_functions import get_plugins
+from third_party.odict import OrderedDict
 
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.utilities_test import getQgisTestApp
@@ -61,23 +62,77 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         myFunctionList = get_plugins(myFunctionId)
         assert len(myFunctionList) == 1
         assert myFunctionList[0].keys()[0] == myFunctionId
-        myFunction = myFunctionList[0]
+
         myDialog = FunctionOptionsDialog(None)
-        myParameters = {'foo': 'bar'}
-        myDialog.buildForm(myFunction, myParameters)
+        myParameters = {
+            'thresholds': [1.0],
+            'postprocessors': {
+                'Gender': {'on': True},
+                'Age': {
+                    'on': True,
+                    'params': {
+                        'youth_ratio': 0.263,
+                        'elder_ratio': 0.078,
+                        'adult_ratio': 0.659}}}}
 
-        #myKids = myDialog.findChildren(QLineEdit)
-        #for myKid in myKids:
-        #    print myKid.objectName()
-        myWidget = myDialog.findChild(QLineEdit, 'fooLineEdit')
-        assert myWidget is not None
-        assert myWidget.text() == 'bar'
+        myDialog.buildForm(myParameters)
 
-        # For localised testing only, disable when test works!
-        # This will spawn the dialog so you can actually see its contents
-        #myDialog.exec_()
+        assert myDialog.tabWidget.count() == 2
 
-if __name__ == "__main__":
+        myChildren = myDialog.tabWidget.findChildren(QLineEdit)
+        assert len(myChildren) == 4
+
+    def test_buildWidget(self):
+        myDialog = FunctionOptionsDialog(None)
+        myValue = myDialog.buildWidget(myDialog.configLayout, 'foo', [2.3])
+        myWidget = myDialog.findChild(QLineEdit)
+
+        # initial value must be same with default
+        assert myValue() == [2.3]
+
+        # change to 5.9
+        myWidget.setText('5.9')
+        assert myValue() == [5.9]
+
+        myWidget.setText('5.9, 70')
+        assert myValue() == [5.9, 70]
+
+        myWidget.setText('bar')
+        try:
+            myValue()
+        except ValueError:
+            ## expected to raises this exception
+            pass
+        else:
+            raise Exception("Fail: must be raise an exception")
+
+    def test_parseInput(self):
+        myInput = {
+            'thresholds': lambda: [1.0],
+            'postprocessors': {
+                'Gender': {'on': lambda: True},
+                'Age': {
+                    'on': lambda: True,
+                    'params': {
+                        'youth_ratio': lambda: 0.263,
+                        'elder_ratio': lambda: 0.078,
+                        'adult_ratio': lambda: 0.659}}}}
+
+        myDialog = FunctionOptionsDialog(None)
+        myResult = myDialog.parseInput(myInput)
+        print myResult
+        assert myResult == OrderedDict([
+            ('thresholds', [1.0]),
+            ('postprocessors', OrderedDict([
+                ('Gender', OrderedDict([('on', True)])),
+                ('Age', OrderedDict([
+                    ('on', True),
+                    ('params', OrderedDict([
+                        ('youth_ratio', 0.263),
+                        ('elder_ratio', 0.078),
+                        ('adult_ratio', 0.659)]))]))]))])
+
+if __name__ == '__main__':
     suite = unittest.makeSuite(FunctionOptionsDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

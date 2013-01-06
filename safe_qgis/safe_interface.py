@@ -45,16 +45,16 @@ from safe.api import (get_admissible_plugins,
                       BoundingBoxError,
                       ReadLayerError,
                       get_plugins, get_version)
-
+from safe.postprocessors import get_post_processors
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication
-from safe_qgis.exceptions import (KeywordNotFoundException,
-                                  StyleInfoNotFoundException,
-                                  InvalidParameterException,
-                                  InsufficientOverlapException)
+from safe_qgis.exceptions import (KeywordNotFoundError,
+                                  StyleInfoNotFoundError,
+                                  InvalidParameterError,
+                                  InsufficientOverlapError)
 
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
 LOGGER = logging.getLogger('InaSAFE')
@@ -156,7 +156,7 @@ def getOptimalExtent(theHazardGeoExtent,
                'and viewport did not overlap, so no computation was '
                'done. Please make sure you pan to where the data is and '
                'that hazard and exposure data overlaps.')
-        raise InsufficientOverlapException(myMessage)
+        raise InsufficientOverlapError(myMessage)
 
     return myOptimalExtent
 
@@ -210,13 +210,13 @@ def availableFunctions(theKeywordList=None):
         plugins will be returned in the list.
 
     Raises:
-       NoFunctionsFoundException if no functions are found.
+       NoFunctionsFoundError if no functions are found.
     """
     try:
         myDict = get_admissible_plugins(theKeywordList)
         #if len(myDict) < 1:
         #    myMessage = 'No InaSAFE impact functions could be found'
-        #    raise NoFunctionsFoundException(myMessage)
+        #    raise NoFunctionsFoundError(myMessage)
         return myDict
     except:
         raise
@@ -237,21 +237,21 @@ def readKeywordsFromLayer(theLayer, keyword):
        A string containing the retrieved value for the keyword.
 
     Raises:
-       KeywordNotFoundException if the keyword is not recognised.
+       KeywordNotFoundError if the keyword is not recognised.
     """
     myValue = None
     if theLayer is None:
-        raise InvalidParameterException()
+        raise InvalidParameterError()
     try:
         myValue = theLayer.get_keywords(keyword)
     except Exception, e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 theLayer.get_filename(), keyword, str(e)))
-        raise KeywordNotFoundException(myMessage)
+        raise KeywordNotFoundError(myMessage)
     if not myValue or myValue == '':
         myMessage = tr('No value was found for keyword %s in layer %s' % (
                     theLayer.get_filename(), keyword))
-        raise KeywordNotFoundException(myMessage)
+        raise KeywordNotFoundError(myMessage)
     return myValue
 
 
@@ -277,21 +277,20 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
        complete keywords dictionary is returned.
 
     Raises:
-       KeywordNotFoundException if the keyword is not recognised.
+       KeywordNotFoundError if the keyword is not recognised.
     """
     # check the source layer path is valid
     if not os.path.isfile(theLayerPath):
         myMessage = tr('Cannot get keywords from a non-existent file.'
                        '%s does not exist.' % theLayerPath)
-        raise InvalidParameterException(myMessage)
+        raise InvalidParameterError(myMessage)
 
     # check there really is a keywords file for this layer
     myKeywordFilePath = os.path.splitext(theLayerPath)[0]
     myKeywordFilePath += '.keywords'
     if not os.path.isfile(myKeywordFilePath):
-        wrappedPath = theLayerPath.replace(os.sep, '<wbr>' + os.sep)
-        myMessage = tr('No keywords file found for %s' % wrappedPath)
-        raise InvalidParameterException(myMessage)
+        myMessage = tr('No keywords file found for %s' % myKeywordFilePath)
+        raise InvalidParameterError(myMessage)
 
     # now get the requested keyword using the inasafe library
     myDictionary = None
@@ -300,7 +299,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     except Exception, e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 myKeywordFilePath, theKeyword, str(e)))
-        raise KeywordNotFoundException(myMessage)
+        raise KeywordNotFoundError(myMessage)
 
     # if no keyword was supplied, just return the dict
     if theKeyword is None:
@@ -308,7 +307,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     if not theKeyword in myDictionary:
         myMessage = tr('No value was found in file %s for keyword %s' % (
                     myKeywordFilePath, theKeyword))
-        raise KeywordNotFoundException(myMessage)
+        raise KeywordNotFoundError(myMessage)
 
     try:
         myValue = myDictionary[theKeyword]
@@ -351,29 +350,29 @@ def getStyleInfo(theLayer):
 
     Raises:
 
-       * StyleInfoNotFoundException if the style is not found.
-       * InvalidParameterException if the paramers are not correct.
+       * StyleInfoNotFoundError if the style is not found.
+       * InvalidParameterError if the paramers are not correct.
     """
 
     if not theLayer:
-        raise InvalidParameterException()
+        raise InvalidParameterError()
 
     if not hasattr(theLayer, 'get_style_info'):
         myMessage = tr('Argument "%s" was not a valid layer instance' %
                theLayer)
-        raise StyleInfoNotFoundException(myMessage)
+        raise StyleInfoNotFoundError(myMessage)
 
     try:
         myValue = theLayer.get_style_info()
     except Exception, e:
         myMessage = tr('Styleinfo retrieval failed for %s\n %s' % (
                     theLayer.get_filename(), str(e)))
-        raise StyleInfoNotFoundException(myMessage)
+        raise StyleInfoNotFoundError(myMessage)
 
     if not myValue or myValue == '':
         myMessage = tr('No styleInfo was found for layer %s' % (
                 theLayer.get_filename()))
-        raise StyleInfoNotFoundException(myMessage)
+        raise StyleInfoNotFoundError(myMessage)
     return myValue
 
 
