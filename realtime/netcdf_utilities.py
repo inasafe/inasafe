@@ -9,7 +9,7 @@ import numpy
 # installed as a dependency on python-scientific
 from Scientific.IO.NetCDF import NetCDFFile
 
-from raster import Raster
+from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
 

@@ -12,8 +12,10 @@ the guidelines.
 
 import numpy
 
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.impact_functions.mappings import osm2bnpb
@@ -122,17 +124,17 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
         impact_summary = ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (10-25%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (25-50%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (50-100%%)&#58;</td><td>%i</td></tr>'
+                    '   <tr><td>%s&#58;</td><td>%s</td></tr>'
+                    '   <tr><td>%s (10-25%%)&#58;</td><td>%s</td></tr>'
+                    '   <tr><td>%s (25-50%%)&#58;</td><td>%s</td></tr>'
+                    '   <tr><td>%s (50-100%%)&#58;</td><td>%s</td></tr>'
                     % (tr('Buildings'), tr('Total'),
-                       tr('All'), N,
-                       tr('Low damage'), count1,
-                       tr('Medium damage'), count2,
-                       tr('High damage'), count3))
-        impact_summary += ('   <tr><td>%s (NaN)&#58;</td><td>%i</td></tr>'
-                    % ('Unknown', count_unknown))
+                       tr('All'), format_int(N),
+                       tr('Low damage'), format_int(count1),
+                       tr('Medium damage'), format_int(count2),
+                       tr('High damage'), format_int(count3)))
+        impact_summary += ('   <tr><td>%s (NaN)&#58;</td><td>%s</td></tr>'
+                    % ('Unknown', format_int(count_unknown)))
         impact_summary += '</table>'
 
         # Create style

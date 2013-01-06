@@ -1,7 +1,10 @@
 import numpy
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question, get_function_title
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        get_function_title,
+                                        format_int)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import ugettext as tr
@@ -94,16 +97,16 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('People impacted '),
-                                '%i' % total_impact],
+                                '%s' % format_int(total_impact)],
                                header=True),
                       TableRow([tr('People in high hazard area '),
-                                '%i' % high],
+                                '%s' % format_int(high)],
                                header=True),
                       TableRow([tr('People in medium hazard area '),
-                                '%i' % medium],
+                                '%s' % format_int(medium)],
                                header=True),
                       TableRow([tr('People in low hazard area'),
-                                '%i' % low],
+                                '%s' % format_int(low)],
                                header=True)]
 
 ##                    TableRow([tr('Needs per week'), tr('Total')],

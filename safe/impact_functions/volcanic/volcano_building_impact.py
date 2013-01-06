@@ -1,12 +1,14 @@
 import numpy
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
-from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.engine.interpolation import make_circular_polygon
+from safe.engine.interpolation import (assign_hazard_values_to_exposure_data,
+                                       make_circular_polygon)
 from safe.common.exceptions import InaSAFEError
 from third_party.odict import OrderedDict
 
@@ -131,13 +133,14 @@ class VolcanoBuildingImpact(FunctionProvider):
         table_body = [question,
                     TableRow([tr('Buildings'), tr('Total'), tr('Cumulative')],
                                header=True),
-                    TableRow([tr('All'), str(total_affected), ''])]
+                    TableRow([tr('All'), format_int(total_affected), ''])]
 
         cum = 0
         for name in category_names:
             count = categories[name]
             cum += count
-            table_body.append(TableRow([name, str(count), str(cum)]))
+            table_body.append(TableRow([name, format_int(count),
+                                        format_int(cum)]))
 
         table_body.append(TableRow(tr('Map shows buildings affected in '
                                      'each of volcano hazard polygons.')))
@@ -145,8 +148,8 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total number of buildings %i in the viewable '
-                             'area') % total,
+                           tr('Total number of buildings %s in the viewable '
+                             'area') % format_int(total),
                            tr('Only buildings available in OpenStreetMap '
                              'are considered.')])
         impact_summary = Table(table_body).toNewlineFreeString()

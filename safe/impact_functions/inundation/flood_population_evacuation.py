@@ -1,8 +1,10 @@
 import numpy
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question, get_function_title
-from safe.impact_functions.core import format_int
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        get_function_title,
+                                        format_int)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
@@ -55,7 +57,7 @@ class FloodEvacuationFunction(FunctionProvider):
           Map of population exposed to flood levels exceeding the threshold
           Table with number of people evacuated and supplies required
         """
-
+        print 'AAAAAAAAAAAAAAA'
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation [m]
         population = get_exposure_layer(layers)
