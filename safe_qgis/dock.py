@@ -79,6 +79,7 @@ from safe_qgis.safe_interface import (availableFunctions,
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundError,
+                                  KeywordDbError,
                                   InsufficientOverlapError,
                                   InvalidParameterError,
                                   InsufficientParametersError,
@@ -1008,9 +1009,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myLayer.commitChanges()
 
             self.postProcessingLayer = myLayer
-            self.keywordIO.appendKeywords(
-                self.postProcessingLayer, {self.defaults[
-                'AGGR_ATTR_KEY']: myAttrName})
+            try:
+                self.keywordIO.appendKeywords(
+                    self.postProcessingLayer, {self.defaults[
+                    'AGGR_ATTR_KEY']: myAttrName})
+            except KeywordDbError, e:
+                myMessage = getExceptionWithStacktrace(e, theHtml=True)
+                self.displayHtml(myMessage)
+                self.hideBusy()
+                return
 
         LOGGER.debug('Do zonal aggregation: ' + str(self.doZonalAggregation))
 
