@@ -259,7 +259,6 @@ class ShakeData:
                              % theEventFile)
         raise myLastError
 
-
     def fetchInput(self):
         """Fetch the input file for the event id associated with this class
            e.g. for event 20110413170148 this file would be fetched::
