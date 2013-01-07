@@ -1,6 +1,8 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
@@ -99,10 +101,10 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         table_body = [question,
                       TableRow([tr('Category'), tr('Affected')],
                                header=True),
-                      TableRow([tr('High'), count2]),
-                      TableRow([tr('Medium'), count1]),
-                      TableRow([tr('Low'), count0]),
-                      TableRow([tr('All'), N])]
+                      TableRow([tr('High'), format_int(count2)]),
+                      TableRow([tr('Medium'), format_int(count1)]),
+                      TableRow([tr('Low'), format_int(count0)]),
+                      TableRow([tr('All'), format_int(N)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Categorised hazard has only 3'

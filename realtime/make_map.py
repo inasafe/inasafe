@@ -24,7 +24,6 @@ from urllib2 import URLError
 from zipfile import BadZipfile
 
 from ftp_client import FtpClient
-from safe_qgis.utilities_test import getQgisTestApp
 from realtime.utils import setupLogger, dataDir
 from realtime.shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
@@ -58,7 +57,7 @@ def processEvent(theEventId=None, theLocale='en'):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
                                       theLocale=theLocale,
                                       theForceFlag=myForceFlag)
-    except BadZipfile, URLError:
+    except (BadZipfile, URLError):
         # retry with force flag true
         if os.path.exists(myPopulationPath):
             myShakeEvent = ShakeEvent(theEventId=theEventId,
@@ -120,7 +119,7 @@ elif len(sys.argv) == 2:
             print 'Processing %s' % myEvent
             try:
                 processEvent(myEvent, myLocale)
-            except:
+            except:  # pylint: disable=W0702
                 LOGGER.exception('Failed to process %s' % myEvent)
         sys.exit(0)
     else:

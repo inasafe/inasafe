@@ -17,7 +17,7 @@ from safe.common.exceptions import BoundingBoxError, InaSAFEError
 
 
 # Default attribute to assign to vector layers
-DEFAULT_ATTRIBUTE = 'Affected'
+DEFAULT_ATTRIBUTE = 'inapolygon'
 
 # Spatial layer file extensions that are recognised in Risiko
 # FIXME: Perhaps add '.gml', '.zip', ...

@@ -1,7 +1,10 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
+from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -89,26 +92,29 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
                 # FIXME (Ole): Need to agree whether to use one or the
                 # other as this can be very confusing!
-                # For now look for 'Flooded first'
-                if 'Flooded' in atts:
+                # For now look for 'affected' first
+                if 'affected' in atts:
                     # E.g. from flood forecast
                     # Assume that building is wet if inside polygon
                     # as flagged by attribute Flooded
-                    res = atts['Flooded']
+                    res = atts['affected']
                     if res is None:
                         x = False
                     else:
-                        x = res
+                        x = bool(res)
+
+                    #if x:
+                    #    print 'Got affected', x
                 elif 'FLOODPRONE' in atts:
                     res = atts['FLOODPRONE']
                     if res is None:
                         x = False
                     else:
                         x = res.lower() == 'yes'
-                elif 'Affected' in atts:
+                elif DEFAULT_ATTRIBUTE in atts:
                     # Check the default attribute assigned for points
                     # covered by a polygon
-                    res = atts['Affected']
+                    res = atts[DEFAULT_ATTRIBUTE]
                     if res is None:
                         x = False
                     else:
@@ -116,8 +122,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 else:
                     # there is no flood related attribute
                     msg = ('No flood related attribute found in %s. '
-                           'I was looking fore either "Flooded", "FLOODPRONE" '
-                           'or "Affected". The latter should have been '
+                           'I was looking for either "affected", "FLOODPRONE" '
+                           'or "inapolygon". The latter should have been '
                            'automatically set by call to '
                            'assign_hazard_values_to_exposure_data(). '
                            'Sorry I can\'t help more.')
@@ -196,7 +202,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 tr('Number flooded'),
                                 tr('Total')],
                                header=True),
-                      TableRow([tr('All'), count, N])]
+                      TableRow([tr('All'), format_int(count), format_int(N)])]
 
 ##        fid.write('%s, %s, %s\n' % (tr('Building type'),
 ##                                    tr('Temporarily closed'),
@@ -229,8 +235,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 # FIXME (Sunni) : I change affected_buildings[usage] to string
                 # because it will be replace with &nbsp in html
                 building_list.append([building_type.capitalize(),
-                                      str(affected_buildings[usage]),
-                                      buildings[usage]])
+                                      format_int(affected_buildings[usage]),
+                                      format_int(buildings[usage])])
                 if building_type == 'school':
                     school_closed = affected_buildings[usage]
                 if building_type == 'hospital':
@@ -264,14 +270,14 @@ class FloodBuildingImpactFunction(FunctionProvider):
         table_body.append(TableRow(tr('Where will we locate warehouse and/or '
                                      'distribution centres?')))
         if school_closed > 0:
-            table_body.append(TableRow(tr('Where will the students from the %d'
+            table_body.append(TableRow(tr('Where will the students from the %s'
                                          ' closed schools go to study?') %
-                                         school_closed))
+                                       format_int(school_closed)))
         if hospital_closed > 0:
-            table_body.append(TableRow(tr('Where will the patients from the %d'
+            table_body.append(TableRow(tr('Where will the patients from the %s'
                                          ' closed hospitals go for treatment '
                                          'and how will we transport them?') %
-                                         hospital_closed))
+                                       format_int(hospital_closed)))
 
         table_body.append(TableRow(tr('Notes'), header=True))
         assumption = tr('Buildings are said to be flooded when ')

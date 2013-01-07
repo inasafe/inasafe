@@ -42,12 +42,16 @@ def get_version(version=None):
     sub = ''
     # This crashes on windows
     if version[3] == 'alpha' and version[4] == 0:
-        try:
-            git_changeset = get_git_changeset()
-            if git_changeset:
-                sub = '.dev%s' % git_changeset
-        except WindowsError:
+        # Currently failed on windows and mac
+        if 'nt' in os.name or 'posix' in os.name:
             sub = '.dev-master'
+        else:
+            try:
+                git_changeset = get_git_changeset()
+                if git_changeset:
+                    sub = '.dev%s' % git_changeset
+            except WindowsError:
+                sub = '.dev-master'
 
     elif version[3] != 'final':
         mapping = {'alpha': 'a', 'beta': 'b', 'rc': 'c'}

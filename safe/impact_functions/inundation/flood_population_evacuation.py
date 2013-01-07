@@ -1,8 +1,10 @@
 import numpy
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question, get_function_title
-from safe.impact_functions.core import format_int
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        get_function_title,
+                                        format_int)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
@@ -55,7 +57,7 @@ class FloodEvacuationFunction(FunctionProvider):
           Map of population exposed to flood levels exceeding the threshold
           Table with number of people evacuated and supplies required
         """
-
+        print 'AAAAAAAAAAAAAAA'
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation [m]
         population = get_exposure_layer(layers)
@@ -171,11 +173,13 @@ class FloodEvacuationFunction(FunctionProvider):
         classes = numpy.linspace(numpy.nanmin(I.flat[:]),
                                  numpy.nanmax(I.flat[:]), 8)
 
+        # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
-        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
-        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
+        style_classes[1]['label'] = tr('Low [%.2f people/cell]') % classes[1]
+        style_classes[4]['label'] = tr('Medium [%.2f people/cell]')\
+            % classes[4]
+        style_classes[7]['label'] = tr('High [%.2f people/cell]') % classes[7]
 
         # Override associated quantities in colour style
         for i in range(len(classes)):
