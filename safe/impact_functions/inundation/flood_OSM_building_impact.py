@@ -238,7 +238,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 # because it will be replace with &nbsp in html
                 building_list.append([building_type.capitalize(),
                                       format_int(affected_buildings[usage]),
-                                      buildings[usage]])
+                                      format_int(buildings[usage])])
                 if building_type == 'school':
                     school_closed = affected_buildings[usage]
                 if building_type == 'hospital':
@@ -272,11 +272,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
         table_body.append(TableRow(tr('Where will we locate warehouse and/or '
                                      'distribution centres?')))
         if school_closed > 0:
-            table_body.append(TableRow(tr('Where will the students from the %d'
+            table_body.append(TableRow(tr('Where will the students from the %s'
                                          ' closed schools go to study?') %
                                        format_int(school_closed)))
         if hospital_closed > 0:
-            table_body.append(TableRow(tr('Where will the patients from the %d'
+            table_body.append(TableRow(tr('Where will the patients from the %s'
                                          ' closed hospitals go for treatment '
                                          'and how will we transport them?') %
                                        format_int(hospital_closed)))
