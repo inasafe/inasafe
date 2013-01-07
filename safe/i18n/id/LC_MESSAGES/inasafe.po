@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-04 15:40+0700\n"
+"POT-Creation-Date: 2013-01-07 11:46+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -283,8 +283,6 @@ msgstr "Bangunan terendam"
 
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:113
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:258
-#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:273
-#: safe/impact_functions/generic/categorised_hazard_population.py:125
 #, python-format
 msgid "Total population: %i"
 msgstr "Jumlah Penduduk: %i"
@@ -877,12 +875,10 @@ msgstr "Dimana kita akan menempatkanpusat operasi?"
 msgid "Where will we locate warehouse and/or distribution centres?"
 msgstr "Dimana kita akan menempatkan gudang dan atau pusat distribusi?"
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:273
 #, python-format
 msgid "Where will the students from the %d closed schools go to study?"
 msgstr "Dimanakah siswa dari %d sekolah yang ditutup akan belajar?"
 
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:277
 #, python-format
 msgid ""
 "Where will the patients from the %d closed hospitals go for treatment and "
@@ -1210,6 +1206,8 @@ msgstr ""
 "Apakah tempat penampungan dan barang-barang yang tersedia cukup untuk %s "
 "orang?"
 
+#: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:273
+#: safe/impact_functions/generic/categorised_hazard_population.py:125
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:183
 #: safe/impact_functions/inundation/flood_population_evacuation.py:151
 #, python-format
@@ -1349,3 +1347,17 @@ msgstr "Tinggi [%.2f orang/sel]"
 #, python-format
 msgid "Total number of buildings %s in the viewable area"
 msgstr "Total bangunan %s di area terlihat"
+
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:273
+#, python-format
+msgid "Where will the students from the %s closed schools go to study?"
+msgstr "Dimanakah siswa dari %s sekolah yang ditutup akan belajar?"
+
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:277
+#, python-format
+msgid ""
+"Where will the patients from the %s closed hospitals go for treatment and "
+"how will we transport them?"
+msgstr ""
+"Dimanakah pasien dari %s rumah sakit yang ditutup akan mendapatkan perawatan "
+"dan bagaimana cara memindahkan mereka?"
