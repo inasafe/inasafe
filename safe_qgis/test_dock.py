@@ -1607,23 +1607,21 @@ Click for Diagnostic Information:
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 
-    @expectedFailure
-    #we need to use a scenario that calls itb_building_impact_model.py
     def test_hasParametersButtonDisabled(self):
         """Function configuration button is disabled
         when layers not compatible."""
         setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        #add additional layers
         #myResult, myMessage = setupScenario(
-        #    theHazard='A flood in Jakarta like in 2007',
-        #    theExposure='Essential Buildings',
-        #    theFunction='Be flooded',
-        #    theFunctionId='Flood Building Impact Function')
+        #    heHazard='An earthquake in Yogyakarta like in 2006',
+        #    theExposure = 'Essential Buildings',
+        #    theFunction = 'Be damaged depending on building type',
+        #    theFunctionId = 'ITB Earthquake Building Damage Function')
         setupScenario(
-                theHazard='A flood in Jakarta like in 2007',
+            theHazard='An earthquake in Yogyakarta like in 2006',
             theExposure='Essential Buildings',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function')
+            theFunction='Be damaged depending on building type',
+            theFunctionId='ITB Earthquake Building Damage Function')
         myToolButton = DOCK.toolFunctionOptions
         myFlag = myToolButton.isEnabled()
         assert not myFlag, ('Expected configuration options '

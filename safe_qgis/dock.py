@@ -1912,7 +1912,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     #summ attributes
                     self.impactLayerAttributes.append([])
                     for i in inside:
-                        myTotal += myRemainingValues[i][self.targetField]
+                        try:
+                            myTotal += myRemainingValues[i][self.targetField]
+                        except:
+                            pass
                         self.impactLayerAttributes[myPolygonIndex].append(
                             myRemainingValues[i])
 
@@ -1958,7 +1961,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #loop over all features in impact layer
             self.impactLayerAttributes.append([])
             for myImpactValueList in myImpactValues:
-                myTotal += myImpactValueList[self.targetField]
+                if myImpactValueList[self.targetField] == 'None':
+                    myImpactValueList[self.targetField] = None
+                try:
+                    myTotal += myImpactValueList[self.targetField]
+                except TypeError:
+                    pass
                 self.impactLayerAttributes[0].append(myImpactValueList)
             myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
             myFID = 0
