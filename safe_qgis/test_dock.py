@@ -294,13 +294,12 @@ def loadStandardLayers():
                   join(TESTDATA, 'roads_Maumere.shp'),
                   join(TESTDATA, 'donut.shp'),
                   join(TESTDATA, 'Merapi_alert.shp'),
-                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp'),
-                  join(BOUNDDATA, 'kabupaten_jakarta.shp')]
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
-    #FIXME (MB) -2 is untill we add the aggregation category because of
+    #FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta* not being either hazard nor exposure layer
-    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 2
+    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
 
     return myHazardLayerCount, myExposureLayerCount
 
@@ -1507,8 +1506,9 @@ class DockTest(unittest.TestCase):
 
         #add additional layers
         myFileList = ['jakarta_crosskabupaten_polygons.shp']
-        #add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        myFileList = ['kabupaten_jakarta.shp']
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=BOUNDDATA)
 
         myRunButton = DOCK.pbnRunStop
 
