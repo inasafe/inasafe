@@ -1240,6 +1240,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
 #        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
         myRemainingIndexes = numpy.array(range(len(myRemainingPolygons)))
+
+        #used for unit tests only
+        self.preprocessedFeatureCount = 0
+
         # FIXME (MB) the intersecting array is used only for debugging and
         # could be safely removed
         myIntersectingPolygons = []
@@ -1348,6 +1352,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                  True,
                                                  allPolygonAttrs)
                     mySHPWriter.addFeature(myQgisFeat)
+                    self.preprocessedFeatureCount += 1
 #                    LOGGER.debug('Polygon %s is fully inside' %myMappedIndex)
 #                    tmpWriter.addFeature(myQgisFeat)
 
@@ -1389,7 +1394,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                  allPolygonAttrs)
                     if not ok:
                         LOGGER.debug('Couldn\'t fetch feature: %s' % myFeatId)
-                        LOGGER.debug( [str(error) for error in
+                        LOGGER.debug([str(error) for error in
                                        polygonsProvider.errors()])
 
                     myQgisPolyGeom = QgsGeometry(myQgisFeat.geometry())
@@ -1423,6 +1428,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             myInsideFeat.setGeometry(myIntersecGeom)
                             myInsideFeat.setAttributeMap(myAtMap)
                             mySHPWriter.addFeature(myInsideFeat)
+                            self.preprocessedFeatureCount += 1
                         else:
                             pass
 #                            LOGGER.debug('Intersection not a polygon so '
@@ -1479,11 +1485,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             polygonsProvider.featureAtId(myFeatId, myQgisFeat, True,
                                          allPolygonAttrs)
             mySHPWriter.addFeature(myQgisFeat)
+            self.preprocessedFeatureCount += 1
 
         del mySHPWriter
-#        LOGGER.debug('Duration: %s' % (time.clock() - startTime))
+#        LOGGER.debug('Created: %s' % self.preprocessedFeatureCount)
         if self.showPostProcLayers:
-            self.iface.addVectorLayer(myOutFilename, theQgisLayer.title(),
+            self.iface.addVectorLayer(myOutFilename,
+                                      theQgisLayer.title(),
                                       'ogr')
         return myOutFilename
 
@@ -1914,7 +1922,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     for i in inside:
                         try:
                             myTotal += myRemainingValues[i][self.targetField]
-                        except:
+                        except TypeError:
                             pass
                         self.impactLayerAttributes[myPolygonIndex].append(
                             myRemainingValues[i])

@@ -36,7 +36,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsRectangle)
 # TODO: get this via api
 from safe.impact_functions.core import format_int
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
@@ -294,12 +294,13 @@ def loadStandardLayers():
                   join(TESTDATA, 'roads_Maumere.shp'),
                   join(TESTDATA, 'donut.shp'),
                   join(TESTDATA, 'Merapi_alert.shp'),
-                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp'),
+                  join(BOUNDDATA, 'kabupaten_jakarta.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
-    #FIXME (MB) -1 is untill we add the aggregation category because of
-    # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
-    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
+    #FIXME (MB) -2 is untill we add the aggregation category because of
+    # kabupaten_jakarta* not being either hazard nor exposure layer
+    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 2
 
     return myHazardLayerCount, myExposureLayerCount
 
@@ -1500,6 +1501,39 @@ class DockTest(unittest.TestCase):
         myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
+
+    def test_preprocessing(self):
+        """preprocessing results are correct."""
+
+        #add additional layers
+        myFileList = ['jakarta_crosskabupaten_polygons.shp']
+        #add additional layers
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+
+        myRunButton = DOCK.pbnRunStop
+
+        myResult, myMessage = setupScenario(
+            theHazard='jakarta_crosskabupaten_polygons',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregation='kabupaten jakarta',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKeywordsDialog.accept()
+
+        myExpectedFeatureCount = 20
+        myMessage = ('The preprocessing should have generated %s features, '
+                     'found %s' % (myExpectedFeatureCount,
+                                   DOCK.preprocessedFeatureCount))
+        self.assertEqual(myExpectedFeatureCount, DOCK.preprocessedFeatureCount,
+                         myMessage)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
