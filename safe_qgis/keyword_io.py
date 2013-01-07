@@ -500,12 +500,9 @@ class KeywordIO(QObject):
         except sqlite.Error:
             LOGGER.exception('Error writing keywords to SQLite db %s' %
                              self.keywordDbPath)
-            try:
-                # See if we can roll back.
-                if self.connection is not None:
-                    self.connection.rollback()
-            except:
-                pass
+            # See if we can roll back.
+            if self.connection is not None:
+                self.connection.rollback()
             raise
         finally:
             self.closeConnection()
