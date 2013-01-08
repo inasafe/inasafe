@@ -2,6 +2,7 @@
 """
 
 import os
+import gc
 import numpy
 import copy as copy_module
 from osgeo import gdal
@@ -311,6 +312,9 @@ class Raster(Layer):
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
 
         else:
+            # Force garbage collection to free up any memory we can (TS)
+            gc.collect()
+
             # Read from raster file
             # FIXME: This can be slow so should be moved to read_from_file
             A = self.band.ReadAsArray()

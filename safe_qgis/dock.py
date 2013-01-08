@@ -988,7 +988,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # information
             self.doZonalAggregation = False
             myGeoCrs = QgsCoordinateReferenceSystem()
-            myGeoCrs.createFromEpsg(4326)
+            myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
             crs = myGeoCrs.authid().toLower()
             myUUID = str(uuid.uuid4())
             myUri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
@@ -2411,7 +2411,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Reproject all extents to EPSG:4326 if needed
         myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromEpsg(4326)
+        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
         # Get the current viewport extent as an array in EPSG:4326
         myViewportGeoExtent = self.viewportGeoArray()
@@ -2596,7 +2596,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # FIXME (Ole): As there is no reference to self, this function
         #              should be a general helper outside the class
         myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromEpsg(4326)
+        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
         myXForm = QgsCoordinateTransform(
                             theSourceCrs,
                             myGeoCrs)
