@@ -16,6 +16,7 @@ __copyright__ += 'Disaster Reduction'
 import os
 import logging
 import sqlite3 as sqlite
+from sqlite3 import OperationalError
 import cPickle as pickle
 
 from PyQt4.QtCore import QObject
@@ -23,7 +24,8 @@ from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayer
 
 from safe_qgis.exceptions import (HashNotFoundError,
-                                  KeywordNotFoundError)
+                                  KeywordNotFoundError,
+                                  KeywordDbError)
 from safe_qgis.safe_interface import (verify,
                                       readKeywordsFromFile,
                                       writeKeywordsToFile)
@@ -98,7 +100,7 @@ class KeywordIO(QObject):
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
-        except (HashNotFoundError, Exception):
+        except (HashNotFoundError, Exception, OperationalError):
             raise
 
     def writeKeywords(self, theLayer, theKeywords):
@@ -142,10 +144,13 @@ class KeywordIO(QObject):
         """
         try:
             myKeywords = self.readKeywords(theLayer)
-        except HashNotFoundError:
+        except (HashNotFoundError, OperationalError):
             myKeywords = {}
         myKeywords.update(theKeywords)
-        self.writeKeywords(theLayer, myKeywords)
+        try:
+            self.writeKeywords(theLayer, myKeywords)
+        except OperationalError, e:
+            raise KeywordDbError(e)
 
     def copyKeywords(self, theSourceLayer,
                      theDestinationFile, theExtraKeywords=None):
@@ -292,8 +297,8 @@ class KeywordIO(QObject):
         self.connection = None
         try:
             self.connection = sqlite.connect(self.keywordDbPath)
-        except sqlite.Error, e:
-            LOGGER.debug("Error %s:" % e.args[0])
+        except (OperationalError, sqlite.Error):
+            LOGGER.exception('Failed to open keywords cache database.')
             raise
 
     def closeConnection(self):
@@ -324,7 +329,10 @@ class KeywordIO(QObject):
             An sqlite.Error will be raised if anything goes wrong
         """
         if self.connection is None:
-            self.openConnection()
+            try:
+                self.openConnection()
+            except OperationalError:
+                raise
         try:
             myCursor = self.connection.cursor()
             myCursor.execute('SELECT SQLITE_VERSION()')
@@ -489,12 +497,12 @@ class KeywordIO(QObject):
                 myCursor.execute('update keyword set dict=? where hash = ?;',
                              (sqlite.Binary(myPickle), myHash))
                 self.connection.commit()
-        except sqlite.Error, e:
-            LOGGER.debug("SQLITE Error %s:" % e.args[0])
-            self.connection.rollback()
-        except Exception, e:
-            LOGGER.debug("Error %s:" % e.args[0])
-            self.connection.rollback()
+        except sqlite.Error:
+            LOGGER.exception('Error writing keywords to SQLite db %s' %
+                             self.keywordDbPath)
+            # See if we can roll back.
+            if self.connection is not None:
+                self.connection.rollback()
             raise
         finally:
             self.closeConnection()
@@ -525,7 +533,10 @@ class KeywordIO(QObject):
            KeywordNotFoundError if the keyword is not found.
         """
         myHash = self.getHashForDatasource(theUri)
-        self.openConnection()
+        try:
+            self.openConnection()
+        except OperationalError:
+            raise
         try:
             myCursor = self.getCursor()
             #now see if we have any data for our hash

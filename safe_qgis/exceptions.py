@@ -49,6 +49,12 @@ class NoFunctionsFoundError(Exception):
     pass
 
 
+class KeywordDbError(Exception):
+    """Custom exception for when an error is encountered with keyword cach db.
+    """
+    pass
+
+
 class KeywordNotFoundError(Exception):
     """Custom exception for when a no keyword can be found."""
     pass

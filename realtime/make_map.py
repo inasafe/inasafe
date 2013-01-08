@@ -76,6 +76,7 @@ def processEvent(theEventId=None, theLocale='en'):
     LOGGER.info('-------------------------------------------')
 
     myShakeEvent.renderMap(myForceFlag)
+
     #if 'en' not in myLocale:
     # Always make an english version too ...
     #    myShakeEvent.locale = 'en'
@@ -127,4 +128,7 @@ elif len(sys.argv) == 2:
 else:
     myEventId = None
     print('Processing latest shakemap')
-    processEvent(theLocale=myLocale)
+    try:
+        processEvent(theLocale=myLocale)
+    except:
+        LOGGER.exception('Process event failed')
