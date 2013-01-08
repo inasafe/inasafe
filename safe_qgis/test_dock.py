@@ -1504,6 +1504,7 @@ class DockTest(unittest.TestCase):
     def test_preprocessing(self):
         """preprocessing results are correct."""
 
+        # See qgis project in test data: vector_preprocessing_test.qgs
         #add additional layers
         myFileList = ['jakarta_crosskabupaten_polygons.shp']
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
