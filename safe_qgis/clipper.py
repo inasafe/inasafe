@@ -410,7 +410,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # in its keywords.
     myKeywords = readKeywordsFromFile(myKeywordsPath)
     if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
-        if str(theLayer.srs().authid()) != 'EPSG:4326':
+        if str(theLayer.crs().authid()) != 'EPSG:4326':
 
             # This layer is not WGS84 geographic
             myMessage = ('Layer %s represents density but has spatial '
@@ -418,7 +418,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                          'WGS84 geographic coordinates, so please reproject '
                          'and try again. For more information, see issue '
                          'https://github.com/AIFDR/inasafe/issues/123'
-                         % (myWorkingLayer, theLayer.srs().toProj4()))
+                         % (myWorkingLayer, theLayer.crs().toProj4()))
             raise InvalidProjectionError(myMessage)
 
     # We need to provide gdalwarp with a dataset for the clip

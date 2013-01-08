@@ -324,7 +324,10 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
             myExposureLayerCount += 1
         # Add layer to the registry (that QGis knows about) a slot
         # in qgis_interface will also ensure it gets added to the canvas
-        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+        if qgisVersion() >= 10800:  # 1.8 or newer
+            QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+        else:
+            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
     DOCK.getLayers()
 
@@ -332,6 +335,7 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     return myHazardLayerCount, myExposureLayerCount
 
 
+#noinspection PyArgumentList
 class DockTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
@@ -446,7 +450,7 @@ class DockTest(unittest.TestCase):
         #vector hazard
         #raster exposure
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta'),
+            theHazard='A flood in Jakarta',
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard',
@@ -497,7 +501,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
-                     (myAttribute))
+                     myAttribute)
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
     def test_checkAggregationAttribute1Attr(self):
@@ -523,7 +527,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
-                     (myAttribute))
+                     myAttribute)
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
     def test_checkAggregationAttributeNoAttr(self):
@@ -549,7 +553,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
-                     (myAttribute))
+                     myAttribute)
         assert myAttribute is None, myMessage
 
     def test_checkAggregationAttributeNoneAttr(self):
@@ -973,6 +977,7 @@ class DockTest(unittest.TestCase):
         assert format_int(68280000) in myResult, myMessage
         assert format_int(157551000) in myResult, myMessage
 
+    #noinspection PyArgumentList
     def test_runEarthquakeBuildingImpactFunction(self):
         """Earthquake function runs in GUI with An earthquake in Yogyakarta
         like in 2006 hazard data uses OSM Building Polygons exposure data."""
