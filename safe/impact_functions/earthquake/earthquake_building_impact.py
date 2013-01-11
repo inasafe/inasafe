@@ -29,7 +29,10 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     title = tr('Be affected')
     parameters = OrderedDict([('low_threshold', 6),
                   ('medium_threshold', 7),
-                  ('high_threshold', 8)])
+                  ('high_threshold', 8),
+                  ('postprocessors', OrderedDict([
+                      ('AggregationCategorical', {'on': True})]))
+    ])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
