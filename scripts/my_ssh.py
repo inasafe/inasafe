@@ -1,6 +1,6 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Ftp Client Test Cases.**
+- **Ftp Client for Retrieving ftp data.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -10,22 +10,31 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'imajimatika@gmail.com'
 __version__ = '0.5.0'
 __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import unittest
-from ssh_client import SSHClient
 
-class SSHClientTest(unittest.TestCase):
-    def test_ssh_connect(self):
-        my_ssh_client = SSHClient()
-        assert(my_ssh_client is not None)
+import os
+import paramiko
 
-if __name__ == '__main__':
-    suite = unittest.makeSuite(SSHClientTest, 'test')
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
+my_host = '118.97.83.243'
+my_username = 'geospasial'
+my_password = 'geospasial'
 
+transport=paramiko.Transport(my_host)
+transport.connect(username=my_username,password=my_password)
+sftp=paramiko.SFTPClient.from_transport(transport)
+
+# download
+filename = 'shakemaps/20130110041009/about_formats.html'
+localname = 'ab.html'
+
+#sftp.chdir('shakemaps/20130110041009/')
+print os.getcwd()
+
+sftp.get(filename, localname)
+print 'saved to ', os.path.join(os.getcwd(), localname)
+
+print 'fin'
