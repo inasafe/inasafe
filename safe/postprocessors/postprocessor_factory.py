@@ -20,7 +20,7 @@ import logging
 from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
 from aggregation_postprocessor import AggregationPostprocessor
-from osm_building_type_postprocessor import OSMBuildingTypePostprocessor
+from building_type_postprocessor import BuildingTypePostprocessor
 from aggregation_categorical_postprocessor import \
     AggregationCategoricalPostprocessor
 # pylint: enable=W0611
@@ -30,7 +30,7 @@ LOGGER = logging.getLogger('InaSAFE')
 AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
                             'Age': 'Age',
                             'Aggregation': 'Aggregation',
-                            'OSMBuildingType': 'Open Street Map building type',
+                            'BuildingType': 'Building type',
                             'AggregationCategorical': 'Aggregation Categorical'
                             }
 
