@@ -895,15 +895,18 @@ class Vector(Layer):
 
     @property
     def is_point_data(self):
-        return self.is_vector and self.geometry_type == ogr.wkbPoint
+        return self.is_vector and (self.geometry_type == ogr.wkbPoint or
+            self.geometry_type == ogr.wkbPoint25D)
 
     @property
     def is_line_data(self):
-        return self.is_vector and self.geometry_type == ogr.wkbLineString
+        return self.is_vector and (self.geometry_type == ogr.wkbLineString or
+            self.geometry_type == ogr.wkbLineString25D)
 
     @property
     def is_polygon_data(self):
-        return self.is_vector and self.geometry_type == ogr.wkbPolygon
+        return self.is_vector and (self.geometry_type == ogr.wkbPolygon or
+            self.geometry_type == ogr.wkbPolygon25D)
 
     @property
     def is_multi_polygon_data(self):
