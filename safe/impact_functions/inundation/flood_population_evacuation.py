@@ -31,6 +31,41 @@ class FloodEvacuationFunction(FunctionProvider):
 
     title = tr('Need evacuation')
     defaults = get_defaults()
+
+    # Function documentation
+    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
+                  'on population.')
+    actions = tr('Provide details about how many people would likely need '
+                 'to be evacuated, where they are located and what resources '
+                 'would be required to support them.')
+    #citations = []
+    detailed_description = tr('The population subject to inundation '
+                              'exceeding a threshold (default 1m) is '
+                              'calculated and returned as a raster layer.'
+                              'In addition the total number and the required '
+                              'needs in terms of the BNPB (Perka 7) '
+                              'are reported. The threshold can be changed and '
+                              'even contain multiple numbers in which case '
+                              'evacuation and needs are calculated using '
+                              'the largest number with population breakdowns '
+                              'provided for the smaller numbers. The '
+                              'population '
+                              'raster is resampled to the resolution of the '
+                              'hazard raster and is rescaled so that the '
+                              'resampled population counts reflect estimates '
+                              'of population count per resampled cell. '
+                              'The resulting impact layer has the same '
+                              'resolution and reflects population count '
+                              'per cell which are affected by inundation.')
+    permissible_hazard_input = tr('A hazard raster layer where each cell '
+        'represents flood depth (in meters).')
+    permissible_exposure_input = tr('An exposure raster layer where each '
+                                    'cell '
+                                    'represent population count.')
+    limitation = tr('The default threshold of 1 meter was selected based on '
+                    'consensus, not hard evidence.')
+
+    # Configurable parameters
     parameters = OrderedDict([
         ('thresholds', [1.0]),
         ('postprocessors', OrderedDict([
@@ -57,7 +92,7 @@ class FloodEvacuationFunction(FunctionProvider):
           Map of population exposed to flood levels exceeding the threshold
           Table with number of people evacuated and supplies required
         """
-        print 'AAAAAAAAAAAAAAA'
+
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation [m]
         population = get_exposure_layer(layers)
