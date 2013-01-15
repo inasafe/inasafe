@@ -19,6 +19,8 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import sys
+import logging
 
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import (QObject,
@@ -29,7 +31,7 @@ from PyQt4.QtCore import (QObject,
                           Qt,
                           QSettings,
                           QVariant)
-from PyQt4.QtGui import QAction, QIcon, QApplication
+from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 from safe_qgis.exceptions import TranslationLoadError
 import utilities
 
@@ -66,6 +68,7 @@ class Plugin:
         #print self.tr('InaSAFE')
         utilities.setupLogger()
 
+    #noinspection PyArgumentList
     def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
 
@@ -83,7 +86,7 @@ class Plugin:
         """
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
-        myLocaleName = None
+
         if thePreferredLocale is not None:
             myLocaleName = thePreferredLocale
         elif myOverrideFlag:
@@ -100,7 +103,7 @@ class Plugin:
         # .. see:: :py:func:`common.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
-        LOGGER.debug(('%s %s %s %s') % (thePreferredLocale , myOverrideFlag,
+        LOGGER.debug('%s %s %s %s' % (thePreferredLocale , myOverrideFlag,
                                         QLocale.system().name(),
                                         os.environ['LANG']))
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -113,7 +116,7 @@ class Plugin:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadError(myMessage)
             QCoreApplication.installTranslator(self.translator)
-        LOGGER.debug(('%s %s') % (myTranslationPath,
+        LOGGER.debug('%s %s' % (myTranslationPath,
                                   os.path.exists(myTranslationPath)))
 
     def tr(self, theString):
@@ -128,6 +131,7 @@ class Plugin:
         """
         return QCoreApplication.translate('Plugin', theString)
 
+    #noinspection PyCallByClass
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
 
