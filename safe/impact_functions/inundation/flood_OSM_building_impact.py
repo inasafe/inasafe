@@ -30,22 +30,41 @@ class FloodBuildingImpactFunction(FunctionProvider):
     # Function documentation
     target_field = 'INUNDATED'
     title = tr('Be flooded')
-    synopsis = tr('To assess the impacts of inundation on building footprints '
-        'originating from OpenStreetMap (OSM).')
-    actions = tr('Provide details about where critical response areas are')
+    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
+                  'on building footprints originating from OpenStreetMap '
+                  '(OSM).')
+    actions = tr('Provide details about where critical infrastructure might '
+                 'be flooded')
     # citations must be a list
-    citations = [tr('Hutchings, Field & Parks. Assessment of Flood impacts on '
-        'buildings. Impact. Vol 66(2). 2012')]
-    detailed_description = tr('This is an area for free form text where a'
-        'detailed description of the methodology used is given.')
-    permissible_hazard_input = tr('A raster layer where each cell represents '
-        'flood depth, or a vector polygon layer where each polygon represents '
-        'an inundated area. The following attributes are recognised '
-        '(in order): Flooded (True or False), FLOODPRONE (Yes or No) and '
-        'Affected (True or False).')
-    permissible_exposure_input = tr('vector polygon layer extracted from OSM '
+    # FIXME (Ole): I don't think this citation is for real?
+    #citations = [tr('Hutchings, Field & Parks. Assessment of Flood impacts '
+    #    'on buildings. Impact. Vol 66(2). 2012')]
+    detailed_description = tr('The inundation status is calculated for each '
+        'building (using the centroid if it is a polygon) based on the hazard '
+        'levels provided. if the hazard is given as a raster a threshold of '
+        '1 meter is used. This is configurable through the InaSAFE interface. '
+        'If the hazard is given as a vector polygon layer buildings are '
+        'considered to be impacted depending on the value of hazard '
+        'attributes (in order) "affected" or "FLOODPRONE": If a building is in'
+        ' a region that has attribute "affected" set to True (or 1) it is '
+        'impacted. If attribute "affected" does not exist but "FLOODPRONE" '
+        'does, then the building is considered impacted if "FLOODPRONE" is '
+        '"yes". If neither "affected" nor "FLOODPRONE" is available, a '
+        'building will be impacted if it belongs to any polygon. The latter '
+        'behaviour is implemented through the attribute "inapolygon" which '
+        'is automatically assigned.')
+    permissible_hazard_input = tr('A hazard raster layer where each cell '
+        'represents flood depth (in meters), or a vector polygon layer '
+        'where each polygon represents an inundated area. In the latter '
+        'case, the following attributes are recognised '
+        '(in order): "affected" (True or False) or "FLOODPRONE" (Yes or No). '
+        '(True may be represented as 1, False as 0')
+    permissible_exposure_input = tr('Vector polygon layer extracted from OSM '
         'where each polygon represents the footprint of a building.')
-    limitation = tr('Lorem ipsum limitation')
+    limitation = tr('This function only flags buildings as impacted or not '
+                    'either based on a fixed threshold in case of raster '
+                    'hazard or the the attributes mentioned under input '
+                    'in case of vector hazard.')
 
     parameters = {'postprocessors': {'BuildingType': {'on': True}}}
 

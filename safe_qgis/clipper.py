@@ -262,7 +262,14 @@ def _clipVectorLayer(theLayer,
     if myCount < 1:
         myMessage = tr('No features fall within the clip extents. '
                        'Try panning / zooming to an area containing data '
-                       'and then try to run your analysis again.')
+                       'and then try to run your analysis again.'
+                       'If hazard and exposure data doesn\'t overlap '
+                       'at all, it is not possible to do an analysis.'
+                       'Another possibility is that the layers do overlap '
+                       'but because they may have different spatial '
+                       'references, they appear to be disjoint. '
+                       'If this is the case, try to turn on reproject '
+                       'on-the-fly in QGIS.')
         raise NoFeaturesInExtentError(myMessage)
 
     myKeywordIO = KeywordIO()
@@ -329,23 +336,22 @@ def explodeMultiPartGeometry(theGeom):
        None
 
     """
-    myMultiGeometry = QgsGeometry()
     myParts = []
-    if theGeom.type() == 0:
+    if theGeom.type() == QGis.Point:
         if theGeom.isMultipart():
             myMultiGeometry = theGeom.asMultiPoint()
             for i in myMultiGeometry:
                 myParts.append(QgsGeometry().fromPoint(i))
         else:
             myParts.append(theGeom)
-    elif theGeom.type() == 1:
+    elif theGeom.type() == QGis.Line:
         if theGeom.isMultipart():
             myMultiGeometry = theGeom.asMultiPolyline()
             for i in myMultiGeometry:
                 myParts.append(QgsGeometry().fromPolyline(i))
         else:
             myParts.append(theGeom)
-    elif theGeom.type() == 2:
+    elif theGeom.type() == QGis.Polygon:
         if theGeom.isMultipart():
             myMultiGeometry = theGeom.asMultiPolygon()
             for i in myMultiGeometry:
