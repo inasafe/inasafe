@@ -1820,7 +1820,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             setVectorStyle(self.postProcessingLayer, myStyle)
 
-    def _aggregateResultsVector(self, myQgisImpactLayer):
+    def _aggregateResultsVector(self, myQGISImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
 
         Args:
@@ -1832,25 +1832,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
         try:
-            self.targetField = self.keywordIO.readKeywords(myQgisImpactLayer,
+            self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
                 'target_field')
         except KeywordNotFoundError:
             myMessage = self.tr('No "target_field" keyword found in the impact'
                                 ' layer %1 keywords. The impact function'
                                 ' should define this.').arg(
-                                myQgisImpactLayer.name())
+                                myQGISImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
             return
-        myImpactProvider = myQgisImpactLayer.dataProvider()
-        myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(self.targetField)
+        myImpactProvider = myQGISImpactLayer.dataProvider()
+        myTargetFieldIndex = myQGISImpactLayer.fieldNameIndex(self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = self.tr('No attribute "%1" was found in the attribute '
                                 'table for layer "%2". The impact function '
                                 'must define this attribute for '
                                 'postprocessing to work.').arg(
-                                    self.targetField, myQgisImpactLayer.name())
+                                    self.targetField, myQGISImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
             return
@@ -1967,7 +1967,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                     'than points or polygons not implemented '
                                     'yet not implemented yet. '
                                     'Called on %1').arg(
-                    myQgisImpactLayer.name())
+                    myQGISImpactLayer.name())
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.aggregationErrorSkipPostprocessing = myMessage
                 self.postProcessingLayer.commitChanges()
