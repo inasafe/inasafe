@@ -32,6 +32,8 @@ import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
+from sftp_shake_data import SftpShakeData
+
 # TODO I think QCoreApplication is needed for tr() check hefore removing
 from PyQt4.QtCore import (QCoreApplication,
                           QObject,
@@ -80,7 +82,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
-from shake_data import ShakeData
+# from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
@@ -121,7 +123,9 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
-        self.data = ShakeData(theEventId, theForceFlag)
+#        self.data = ShakeData(theEventId, theForceFlag)
+        self.data = SftpShakeData(theEvent=theEventId,
+            theForceFlag=theForceFlag)
         self.data.extract()
         self.latitude = None
         self.longitude = None

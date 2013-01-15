@@ -97,3 +97,8 @@ class CityMemoryLayerCreationError(Exception):
 class MapComposerError(Exception):
     """Raised if a problem occurs rendering a map"""
     pass
+
+
+class CopyError(Exception):
+    """Raised if a problem occurs copying a file"""
+    pass

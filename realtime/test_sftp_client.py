@@ -20,6 +20,7 @@ import unittest
 from sftp_client import SFtpClient
 import os
 
+
 class SFtpClientTest(unittest.TestCase):
     def test_get_list_events(self):
         """Test to get all event ids
@@ -27,16 +28,14 @@ class SFtpClientTest(unittest.TestCase):
         my_ssh_client = SFtpClient()
         assert(my_ssh_client is not None)
 
-        print my_ssh_client.get_list_event_ids()
-        assert my_ssh_client.event_ids is not None, 'Num ID == 0'
-
     def test_download_path(self):
         """Test to download all directories and files under a path
         """
-        my_ssh_client = SFtpClient()
+        my_ssh_client = SFtpClient(the_working_dir='shakemaps')
         assert(my_ssh_client is not None)
 
-        remote_path = os.path.join(my_ssh_client.sftp.getcwd(), '20130111144746')
+        remote_path = os.path.join(my_ssh_client.sftp.getcwd(),
+                                '20130113003746/output/grid.xml')
         local_path = '/home/sunnii/Documents/inasafe/'
         print local_path
         my_ssh_client.download_path(remote_path, local_path)
@@ -45,4 +44,3 @@ if __name__ == '__main__':
     suite = unittest.makeSuite(SFtpClientTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
-

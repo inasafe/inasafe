@@ -65,6 +65,13 @@ def shakemapDataDir():
     return myDir
 
 
+def shakemapCacheDir():
+    """Create (if needed) and return the path to the base shakemap zip dir"""
+    myDir = os.path.join(baseDataDir(), 'shakemaps-cache')
+    mkDir(myDir)
+    return myDir
+
+
 def reportDataDir():
     """Create (if needed) and return the path to the base report data dir"""
     myDir = os.path.join(baseDataDir(), 'reports')

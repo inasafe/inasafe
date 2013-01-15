@@ -18,99 +18,44 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import paramiko
 import ntpath
-from datetime import datetime
 from stat import S_ISDIR
 from errno import ENOENT
 import os
+import logging
+from utils import mkDir
+
+# The logger is intialised in utils.py by init
+LOGGER = logging.getLogger('InaSAFE')
 
 my_host = '118.97.83.243'
 my_username = 'geospasial'
 my_password = 'geospasial'
-download_dir = ''
 
-remote_path = 'shakemaps'
+my_remote_path = 'shakemaps'
+
 
 class SFtpClient:
     """A utility class that contains methods to fetch a listings and files
     from an SSH protocol"""
     def __init__(self, the_host=my_host, the_username=my_username,
-                 the_password=my_password,):
+                 the_password=my_password, the_working_dir=my_remote_path):
 
         self.host = the_host
         self.username = the_username
         self.password = the_password
-        self.events = None
+        self.working_dir = the_working_dir
 
         # create transport object
-        self.transport=paramiko.Transport(self.host)
-        self.transport.connect(username=self.username,password=self.password)
+        self.transport = paramiko.Transport(self.host)
+        self.transport.connect(username=self.username, password=self.password)
 
         # create sftp object
         self.sftp = paramiko.SFTPClient.from_transport(self.transport)
 
         # go to remote_path folder, this is the default folder
-        self.sftp.chdir(remote_path)
-
-    def get_list_event_ids(self):
-        """Get all event id indicated by folder in remote_path
-        """
-        dirs = self.sftp.listdir()
-        event_ids = []
-        for my_dir in dirs:
-            if self.is_event_id(my_dir):
-                event_ids.append(my_dir)
-        self.event_ids = event_ids
-        if len(self.event_ids) == 0:
-            raise Exception('List event is empty')
-        return event_ids
-
-    def is_event_id(self, id):
-        """Check if an id is event id.
-        Event id is in form of yyyymmddHHMMSS or '%Y%m%d%H%M%S'
-        i.e. 20130110204706
-        """
-        if len(id) != 14:
-            return False
-        try:
-            datetime.strptime(id, '%Y%m%d%H%M%S')
-        except ValueError:
-            return False
-        return True
-
-    def get_latest_event_id(self):
-        """Return latest event id
-        """
-        if self.event_ids is None:
-            self.get_list_events()
-        self.event_ids.sort()
-        return self.event_ids[-1]
-
-#    def get_files(self, event_id=None):
-#        """Download files related event_id from the host
-#        if event_id = None, return the latest one
-#        """
-#        self.get_list_events()
-#        if event_id is None:
-#            event_id = self.get_latest_event_id()
-#        if event_id not in self.event_ids:
-#            raise Exception('Event Id is not found in the host %s' % self.host)
-#
-#        # create directory for the event in download directory
-#        event_dir = os.path.join(download_dir, event_id)
-#        if not os.path.isdir(event_dir):
-#            os.mkdir(event_dir)
-#
-#        # create input dir
-#        input_dir = os.path.join(event_dir, 'input')
-#        if not os.path.isdir(input_dir):
-#            os.mkdir(input_dir)
-#
-#        # create output dir
-#            output_dir = os.path.join(event_dir, 'output')
-#        if not os.path.isdir(output_dir):
-#            os.mkdir(output_dir)
-#
-#        # download input folder
+        if not self.working_dir is None:
+            self.sftp.chdir(self.working_dir)
+        self.workdir_path = self.sftp.getcwd()
 
     def download_path(self, remote_path, local_path):
         """ Download remote_dir to local_dir.
@@ -123,29 +68,24 @@ class SFtpClient:
             print 'remote path is not exist %s' % remote_path
             return False
         if self.is_dir(remote_path):
-            print 'path %s is a directory' % remote_path
             # get directory name
             dir_name = get_path_tail(remote_path)
-            print 'the dir name %s' % dir_name
             # create directory in local machine
             local_dir_path = os.path.join(local_path, dir_name)
-            print 'local_dir_path %s' % local_dir_path
-            make_dir(local_dir_path)
+            mkDir(local_dir_path)
             # list all directory in remote path
             list_dir = self.sftp.listdir(remote_path)
             # iterate recursive
             for my_dir in list_dir:
-                print my_dir
                 new_remote_path = os.path.join(remote_path, my_dir)
-#                new_local_path = os.path.join(local_path, my_dir)
                 self.download_path(new_remote_path, local_dir_path)
         else:
             # download file to local_path
             file_name = get_path_tail(remote_path)
             local_file_path = os.path.join(local_path, file_name)
-            print 'file %s will be downloaded to %s' % (remote_path, local_file_path)
+            print 'file %s will be downloaded to %s' % (remote_path,
+                                                        local_file_path)
             self.sftp.get(remote_path, local_file_path)
-
 
     def is_dir(self, path):
         """Check if a path is a directory or not in sftp
@@ -161,26 +101,28 @@ class SFtpClient:
         """os.path.exists for paramiko's SCP object
         Reference: http://stackoverflow.com/q/850749/1198772
         """
+        print path
         try:
             self.sftp.stat(path)
         except IOError, e:
+            print e.errno
             if e.errno == ENOENT:
                 return False
             raise
         else:
             return True
 
-def make_dir(dir_path):
-    """Helper function for creating directory in file system
-    """
-    if not os.path.isdir(dir_path):
-        try:
-            os.mkdir(dir_path)
-            print 'YAHA'
-        except OSError, e:
-            print e
-            return False
-        return True
+    def getListing(self, remote_dir=None):
+        """Return list of files and directories name under a remote_dir
+        """
+        if remote_dir is None:
+            remote_dir = self.workdir_path
+        if self.is_path_exist(remote_dir):
+            return self.sftp.listdir(remote_dir)
+        else:
+            LOGGER.debug('Directory %s is not exist, return None' % remote_dir)
+            return None
+
 
 def get_path_tail(path):
     '''Return tail of a path

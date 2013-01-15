@@ -67,7 +67,7 @@ class ShakeData:
                   that this raster is associated with. e.g. 20110413170148.
                   **If no event id is supplied, a query will be made to the
                   ftp server, and the latest event id assigned.**
-                * theData - (Optional) a string representing the ip address
+                * theHost - (Optional) a string representing the ip address
                   or host name of the server from which the data should be
                   retrieved. It assumes that the data is in the root directory.
                   Defaults to 118.97.83.243
