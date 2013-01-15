@@ -1622,8 +1622,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHTML = ''
         for proc, resList in self.postProcessingOutput.iteritems():
             #sorting using the first indicator of a postprocessor
-            myFirstKey = resList[0][1].keyAt(0)
             try:
+                myFirstKey = resList[0][1].keyAt(0)
             # [1]['Total']['value']
             # resList is for example:
             # [
