@@ -336,23 +336,22 @@ def explodeMultiPartGeometry(theGeom):
        None
 
     """
-    myMultiGeometry = QgsGeometry()
     myParts = []
-    if theGeom.type() == 0:
+    if theGeom.type() == QGis.Point:
         if theGeom.isMultipart():
             myMultiGeometry = theGeom.asMultiPoint()
             for i in myMultiGeometry:
                 myParts.append(QgsGeometry().fromPoint(i))
         else:
             myParts.append(theGeom)
-    elif theGeom.type() == 1:
+    elif theGeom.type() == QGis.Line:
         if theGeom.isMultipart():
             myMultiGeometry = theGeom.asMultiPolyline()
             for i in myMultiGeometry:
                 myParts.append(QgsGeometry().fromPolyline(i))
         else:
             myParts.append(theGeom)
-    elif theGeom.type() == 2:
+    elif theGeom.type() == QGis.Polygon:
         if theGeom.isMultipart():
             myMultiGeometry = theGeom.asMultiPolygon()
             for i in myMultiGeometry:

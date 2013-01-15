@@ -1134,7 +1134,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             self.runner = self.calculator.getRunner()
-        except InsufficientParametersError, e:
+        except (InsufficientParametersError, ReadLayerError), e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An exception occurred when setting up the '
