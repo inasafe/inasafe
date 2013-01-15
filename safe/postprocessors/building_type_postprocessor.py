@@ -36,9 +36,9 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.target_field = None
         self.type_field = None
         self.valid_type_fields = ['amenity', 'type']
-        self.types = {'medical': 'Hospitals',
-                      'place_of_worship': 'Places of worship',
-                      'school': 'Schools'}
+        self.types = {'Hospitals': ['medical', 'clinic','hospital'],
+                      'Places of worship': ['place_of_worship'],
+                      'Schools': ['school']}
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being
@@ -62,12 +62,14 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_attrs = params['impact_attrs']
         self.target_field = params['target_field']
 
+        #find which attribute field has to be used
         for key, value in self.impact_attrs[0].iteritems():
             if key in self.valid_type_fields:
                 self.type_field = key
                 break
 
-        self._log_message('Using field: %s' % self.type_field)
+        self._log_message('BuildingType postprocessor, using field: %s' %
+                          self.type_field)
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
@@ -91,8 +93,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                               % self.__class__.__name__)
         else:
             self._calculate_total()
-            for type, name in self.types.iteritems():
-                self._calculate_type(type, name)
+            for title, types in self.types.iteritems():
+                self._calculate_type(title, types)
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
@@ -140,7 +142,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
-    def _calculate_type(self, type, title=None):
+    def _calculate_type(self, title, types):
         """Indicator that shows total population.
 
         this indicator reports the total population
@@ -152,10 +154,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        if title is not None:
-            myName = title
-        else:
-            myName = tr(type.title().replace('_', ' '))
+        myName = tr(title)
         if self.target_field is not None:
             myName = '%s %s' % (myName, tr(self.target_field).lower())
 
@@ -163,7 +162,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         if self.type_field is not None:
             try:
                 for building in self.impact_attrs:
-                    if self.type_field == type:
+                    if building[self.type_field] in types:
                         myResult += building[self.target_field]
 
                 myResult = int(round(myResult))
