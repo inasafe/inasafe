@@ -1772,6 +1772,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.keywordIO.appendKeywords(
             self.postProcessingLayer, {'title': myLayerName})
 
+        #find needed statistics type
+        try:
+            self.statisticsType = self.keywordIO.readKeywords(myQGISImpactLayer,
+                                                           'statistics_type')
+            self.statisticsClasses = self.keywordIO.readKeywords(
+                myQGISImpactLayer, 'statistics_classes')
+
+        except KeywordNotFoundError:
+            #default to summing
+            self.statisticsType = 'sum'
+
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
             self._aggregateResultsVector(myQGISImpactLayer)
@@ -1783,7 +1794,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers and self.doZonalAggregation:
+        if (self.showPostProcLayers and self.doZonalAggregation and
+            self.statisticsType == 'sum'):
             myProvider = self.postProcessingLayer.dataProvider()
             myAttr = self.getAggregationFieldNameSum()
             myAttrIndex = myProvider.fieldNameIndex(myAttr)
@@ -1863,11 +1875,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #add the total field to the postProcessingLayer
         myPostprocessorProvider = self.postProcessingLayer.dataProvider()
         self.postProcessingLayer.startEditing()
-        myAggrField = self.getAggregationFieldNameSum()
-        myPostprocessorProvider.addAttributes([QgsField(myAggrField,
-            QtCore.QVariant.Int)])
-        self.postProcessingLayer.commitChanges()
-        myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(myAggrField)
+
+        if self.statisticsType == 'class_count':
+            myFields = [QgsField('%s_%s' % (f, self.targetField),
+                QtCore.QVariant.String) for f in self.statisticsClasses]
+            myPostprocessorProvider.addAttributes(myFields)
+            self.postProcessingLayer.commitChanges()
+            myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
+            myAggrFieldMap = {}
+            for k,v in myTmpAggrFieldMap.iteritems():
+                myAggrFieldMap[str(k)] = v
+        elif self.statisticsType == 'sum':
+            myAggrField = self.getAggregationFieldNameSum()
+            myPostprocessorProvider.addAttributes([QgsField(myAggrField,
+                QtCore.QVariant.Int)])
+            self.postProcessingLayer.commitChanges()
+            myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(
+                myAggrField)
+
+
         self.postProcessingLayer.startEditing()
 
         mySafeImpactLayer = self.runner.impactLayer()
@@ -1908,8 +1934,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myRemainingPoints = myImpactGeoms
 
                 for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
-                    myTotal = 0
-
                     if hasattr(myPolygon, 'outer_ring'):
                         outer_ring = myPolygon.outer_ring
                         inner_rings = myPolygon.inner_rings
@@ -1917,6 +1941,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         # Assume it is an array
                         outer_ring = myPolygon
                         inner_rings = None
+
                     inside, outside = points_in_and_outside_polygon(
                         myRemainingPoints,
                         outer_ring,
@@ -1924,18 +1949,43 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         closed=True,
                         check_input=True)
 
-                    #summ attributes
                     self.impactLayerAttributes.append([])
-                    for i in inside:
-                        try:
-                            myTotal += myRemainingValues[i][self.targetField]
-                        except TypeError:
-                            pass
-                        self.impactLayerAttributes[myPolygonIndex].append(
-                            myRemainingValues[i])
+                    if self.statisticsType == 'class_count':
+                        myResults = {}
+
+                        for i in inside:
+                            myKey = myRemainingValues[i][self.targetField]
+                            try:
+                                myResults[myKey] += 1
+                            except KeyError:
+                                myResults[myKey] = 1
+
+                            self.impactLayerAttributes[myPolygonIndex].append(
+                                myRemainingValues[i])
+                        myAttrs = {}
+                        LOGGER.debug(myAggrFieldMap)
+                        for k, v in myResults.iteritems():
+                            myKey = '%s_%s' % (k, self.targetField)
+                            #FIXME (MB) remove next line when we get rid of
+                            #shape files as internal format
+                            myKey = myKey[:10]
+#                            LOGGER.debug(myAggrFieldMap)
+                            myAggrFieldIndex = myAggrFieldMap[myKey]
+                            myAttrs[myAggrFieldIndex] =  QtCore.QVariant(v)
+
+                    elif self.statisticsType == 'sum':
+                        #by default summ attributes
+                        for i in inside:
+                            myTotal = 0
+                            try:
+                                myTotal += myRemainingValues[i][self.targetField]
+                            except TypeError:
+                                pass
+                            self.impactLayerAttributes[myPolygonIndex].append(
+                                myRemainingValues[i])
+                        myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
 
                     # Add features inside this polygon
-                    myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
                     myFID = myPolygonIndex
                     myPostprocessorProvider.changeAttributeValues(
                         {myFID: myAttrs})
@@ -2083,11 +2133,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
-            mySum, myResult = myAttributeMap[mySumFieldIndex].toDouble()
-            LOGGER.debug('Reading: %s %s' % (mySum, myResult))
-            LOGGER.debug('Polygon index %s\nAttr len %s' % (myPolygonIndex,
-                                            len(self.impactLayerAttributes)))
-            myGeneralParams = {'impact_total': mySum,
+            if self.statisticsType == 'sum':
+                myImpact, myResult = myAttributeMap[mySumFieldIndex].toDouble()
+            elif self.statisticsType == 'class_count':
+                myImpact = []
+            myGeneralParams = {'impact_total': myImpact,
                                'target_field': self.targetField,
                                 }
             try:
