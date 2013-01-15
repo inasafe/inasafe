@@ -41,7 +41,9 @@ from qgis.core import (QgsMapLayer,
                        QgsPoint,
                        QgsField,
                        QgsVectorFileWriter,
-                       QGis
+                       QGis,
+                       QgsSingleSymbolRendererV2,
+                       QgsFillSymbolV2
                        )
 from qgis.analysis import QgsZonalStatistics
 
@@ -1772,6 +1774,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.keywordIO.appendKeywords(
             self.postProcessingLayer, {'title': myLayerName})
 
+        #find needed statistics type
+        try:
+            self.statisticsType = self.keywordIO.readKeywords(myQGISImpactLayer,
+                                                           'statistics_type')
+            self.statisticsClasses = self.keywordIO.readKeywords(
+                myQGISImpactLayer, 'statistics_classes')
+
+        except KeywordNotFoundError:
+            #default to summing
+            self.statisticsType = 'sum'
+
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
             self._aggregateResultsVector(myQGISImpactLayer)
@@ -1783,42 +1796,54 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers and self.doZonalAggregation:
-            myProvider = self.postProcessingLayer.dataProvider()
-            myAttr = self.getAggregationFieldNameSum()
-            myAttrIndex = myProvider.fieldNameIndex(myAttr)
-            myProvider.select([myAttrIndex], QgsRectangle(), False)
-            myFeature = QgsFeature()
-            myHighestVal = 0
+        if (self.showPostProcLayers and self.doZonalAggregation):
+            if self.statisticsType == 'sum':
+                #style layer if we are summing
+                myProvider = self.postProcessingLayer.dataProvider()
+                myAttr = self.getAggregationFieldNameSum()
+                myAttrIndex = myProvider.fieldNameIndex(myAttr)
+                myProvider.select([myAttrIndex], QgsRectangle(), False)
+                myFeature = QgsFeature()
+                myHighestVal = 0
 
-            while myProvider.nextFeature(myFeature):
-                myAttrMap = myFeature.attributeMap()
-                myVal, ok = myAttrMap[myAttrIndex].toInt()
-                if ok and myVal > myHighestVal:
-                    myHighestVal = myVal
+                while myProvider.nextFeature(myFeature):
+                    myAttrMap = myFeature.attributeMap()
+                    myVal, ok = myAttrMap[myAttrIndex].toInt()
+                    if ok and myVal > myHighestVal:
+                        myHighestVal = myVal
 
-            myClasses = []
-            myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
-            myStep = int(myHighestVal / len(myColors))
-            LOGGER.debug('Max val %s, my step %s' % (myHighestVal, myStep))
-            myCounter = 0
-            for myColor in myColors:
-                myMin = myCounter
-                myCounter += myStep
-                myMax = myCounter
+                myClasses = []
+                myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
+                myStep = int(myHighestVal / len(myColors))
+                LOGGER.debug('Max val %s, my step %s' % (myHighestVal, myStep))
+                myCounter = 0
+                for myColor in myColors:
+                    myMin = myCounter
+                    myCounter += myStep
+                    myMax = myCounter
 
-                myClasses.append(
-                    {'min': myMin,
-                     'max': myMax,
-                     'colour': myColor,
-                     'transparency': 30,
-                     'label': '%s - %s' % (myMin, myMax)})
-                myCounter += 1
+                    myClasses.append(
+                        {'min': myMin,
+                         'max': myMax,
+                         'colour': myColor,
+                         'transparency': 30,
+                         'label': '%s - %s' % (myMin, myMax)})
+                    myCounter += 1
 
-            myStyle = {'target_field': myAttr,
-                       'style_classes': myClasses}
+                myStyle = {'target_field': myAttr,
+                           'style_classes': myClasses}
+                setVectorStyle(self.postProcessingLayer, myStyle)
+            else:
+                #make style of layer pretty much invisible
+                myProps = {'style': 'no',
+                           'color_border': '0,0,0,127',
+                           'width_border': '0.0'
+                           }
+                mySymbol = QgsFillSymbolV2.createSimple(myProps)
+                myRenderer = QgsSingleSymbolRendererV2(mySymbol)
+                self.postProcessingLayer.setRendererV2(myRenderer)
+                self.postProcessingLayer.saveDefaultStyle()
 
-            setVectorStyle(self.postProcessingLayer, myStyle)
 
     def _aggregateResultsVector(self, myQGISImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
