@@ -19,8 +19,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import sys
-import logging
 
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import (QObject,
@@ -31,7 +29,7 @@ from PyQt4.QtCore import (QObject,
                           Qt,
                           QSettings,
                           QVariant)
-from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
+from PyQt4.QtGui import QAction, QIcon, QApplication
 from safe_qgis.exceptions import TranslationLoadError
 import utilities
 
