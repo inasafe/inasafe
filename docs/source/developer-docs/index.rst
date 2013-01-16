@@ -26,6 +26,7 @@ Developer Documentation Contents:
    bug_reporting
    preparing_a_release
    jenkins_ci
+   jenkins_ci_windows_slave
    irc
    faq
    todo

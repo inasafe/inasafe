@@ -75,7 +75,7 @@ InaSAFE Realtime is implemented by four main python modules:
 InaSAFE has strong dependencies on QGIS (http://qgis.org) which is
 used for much of the data processing and reporting functionality.
 
-.. note:: Currently version c064933677d48d90776bdea0426fdea1e3490d01 is
+.. note:: Currently version 779e16603ee3fb8781c85a0e95913a1f6bbd2d6a is
     the 'known good' SHA1.
 
 Two of these dependencies is a template QGIS project and a map
@@ -89,29 +89,157 @@ item IDs listed in the section that follows are used.
 Installation
 ------------
 
-The supported platform is currently Ubuntu 12.04 LTS. The instructions provided below are for that OS. First we are going to hand build QGIS. This may not be needed in future once 2.0 packages are available, but for now it is recommended.::
+The supported platform is currently Ubuntu 12.04 LTS. The instructions provided
+below are for that OS. First we are going to hand build QGIS. This may not be
+needed in future once 2.0 packages are available, but for now it is
+recommended.::
 
-    sudo apt-get install python-software-properties
-    sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-    sudo apt-get update
-    sudo apt-get build-dep qgis
+  sudo apt-get install python-software-properties
+  sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+  sudo apt-get update
+  sudo apt-get build-dep qgis
+  cd ~
+  mkdir -p dev/cpp
+  sudo mkdir /home/web
+  sudo chown <youruser>.<youruser> /home/web
+  cd ~/dev/cpp
+  sudo apt-get install git cmake-curses-gui
+  git clone git://github.com/qgis/Quantum-GIS.git
 
-    cd ~
-    mkdir -p dev/cpp
-    mkdir -p dev/python
-    sudo mkdir /home/web
-    sudo chown <youruser>.<youruser> /home/web
-    cd ~/dev/cpp
-    sudo apt-get install git cmake-curses-gui
-    git clone git@github.com:qgis/Quantum-GIS.git
+At this point you should enter ‘yes’ when prompted::
+
+  cd Quantum-GIS
+  mkdir build
+  cd build
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/qgis-master \
+  -DCMAKE_BUILD_TYPE=Debug
+  make -j4
+  sudo mkdir /usr/local/qgis-master
+  sudo chown <youruser>.<youruser> /usr/local/qgis-master
+  make install
+
+At this point you can test if your hand build QGIS is working by doing::
+
+  export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
+  export QGIS_PREFIX_PATH=/usr/local/qgis-master
+  export PYTHONPATH=/usr/local/qgis-master/share/qgis/python
+  python
+  from qgis.core import *
+  ctrl-d
+
+You should see something like the listing below::
+
+  timlinux@waterfall:~/dev/python/inasafe-realtime$ python
+  Python 2.7.3 (default, Sep 26 2012, 21:51:14)
+  [GCC 4.7.2] on linux2
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> from qgis.core import *
+  >>>
+
+Get InaSAFE ::
+
+  cd ~
+  mkdir -p dev/python
+  cd dev/python
+  git clone git://github.com/AIFDR/inasafe.git inasafe-realtime
+  cd inasafe-realtime
+  git branch --track realtime origin/realtime
+  git checkout realtime
+  sudo apt-get install python-tz
+
+Setup Apache::
+
+  sudo apt-get install apache2-mpm-worker
+  cd /etc/apache2/sites-available
+  sudo cp ~/dev/python/inasafe-realtime/realtime/fixtures/web/quake-apache.conf .
+  sudo apt-get install rpl
+  sudo chown <yourname>.<yourname> quake-apache.conf
+  rpl “quake.linfiniti.com” “quake.<yourhost>” quake-apache.conf
+
+For local testing only you can use quake.localhost for your host then add this to your /etc/hosts::
+
+  127.0.0.1 localhost quake.localhost
+
+Now deploy your site:
+
+  sudo a2dissite default
+  sudo a2enssite quake.apache.conf
+  cd /home
+  chmod a+X web
+  mkdir web/quake
+  chmod a+X web/quake
+  cd /home/web/quake
+
+Just for testing do::
+
+  mkdir public
+  echo 'Hello' > public/foo.txt
+  sudo service apache2 restart
+
+Open your web browser and point it to : http://quake.localhost
+
+You should see a basic directory listing containing file foo.
+
+Now copy over some required datasets::
+
+  cd ~/dev/python/inasafe-realtime/realtime/fixtures/
+  wget http://quake.linfiniti.com/indonesia.sqlite
+
+  mkdir ~/dev/python/inasafe-realtime/realtime/fixtures/exposure
+  cd ~/dev/python/inasafe-realtime/realtime/fixtures/exposure
+  wget http://quake.linfiniti.com/population.tif
+  wget http://quake.linfiniti.com/population.keywords
+
+  cd /home/web/quake/public
+  wget http://quake.linfiniti.com/web.tar.gz
+  tar xfz web.tar.gz
+  rm web.tar.gz
 
 
+Running your first report::
 
-To run the realtime component of InaSAFE, you need to have QGIS 2.0 and
-the QGIS 2.0 python bindings installed. In addition the :samp:`pytz` module
-is needed::
+  cd ~/dev/python/inasafe-realtime
+  scripts/make-latest-shakemap.sh
 
-    sudo apt-get install python-tz
+Running all back reports::
+
+  cd ~/dev/python/inasafe-realtime
+  scripts/make-all-shakemaps.sh
+
+Listing shake files on ftp server::
+
+  cd ~/dev/python/inasafe-realtime
+  scripts/make-list-shakes.sh
+
+
+Cron Jobs::
+
+There are two cron jobs - one to run the latest shake event regularly, and one
+to synchronise all the shake outputs::
+
+  crontab -e
+
+Now add these lines (replacing <yourname>)::
+
+  * * * * * /home/<yourname>/dev/python/inasafe-realtime/realtime/fixtures/web/make-public.sh
+  * * * * * /home/<yourname>/bin/realtime.sh
+
+
+Finally make a small script to run the analysis every minute::
+
+  cd ~
+  mkdir bin
+  cd bin
+  touch realtime.sh
+  chmod +x realtime.sh
+
+Now edit the file and set its content to this::
+
+  #!/bin/bash
+  cd /home/<yourname>/dev/python/inasafe-realtime
+  scripts/make-latest-shakemap.sh
+
+
 
 You also need to have the standard datasets needed for the cartography:
 

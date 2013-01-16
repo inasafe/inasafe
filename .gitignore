@@ -35,3 +35,10 @@ pydev
 .idea/inasafe-realtime.iml
 .idea/misc.xml
 .idea/runConfigurations/make_map.xml
+realtime/fixtures/context/gadm/
+realtime/fixtures/context/boundaries.*
+pylint.log
+safe/test/data/hazard/keywordless_layer.tif.aux.xml
+scripts/nightly-build-repo/apache.conf
+runmake*
+.idea/dictionaries/*
