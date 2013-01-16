@@ -2190,6 +2190,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     self.postProcessingOutput[myKey] = []
                     self.postProcessingOutput[myKey].append(
                         (myZoneName, myResults))
+            #increment the index
+            myPolygonIndex += 1
 
     def _checkPostProcessingAttributes(self):
         """Checks if the postprocessing layer has all attribute keyword.
