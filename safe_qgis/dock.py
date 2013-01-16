@@ -1289,7 +1289,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
                                                            myPostprocPolygons):
-            LOGGER.debug('')
             LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
             myPolygonsCount = len(myRemainingPolygons)
             postprocProvider.featureAtId(myPostprocPolygonIndex,
@@ -1461,9 +1460,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     except TypeError:
                         LOGGER.debug('ERROR with FID %s', myMappedIndex)
 
-            LOGGER.debug('Inside %s' % myInsidePolygons)
-            LOGGER.debug('Outside %s' % myOutsidePolygons)
-            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
+#            LOGGER.debug('Inside %s' % myInsidePolygons)
+#            LOGGER.debug('Outside %s' % myOutsidePolygons)
+#            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
             if len(myNextIterPolygons) > 0:
                 #some polygons are still completely outside of the postprocPoly
                 #so go on and reiterate using only these
@@ -1585,7 +1584,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: str - a string containing the html in the requested format.
         """
 
-        LOGGER.debug(self.postProcessingOutput)
+#        LOGGER.debug(self.postProcessingOutput)
         if self.aggregationErrorSkipPostprocessing is not None:
             myHTML = ('<table class="table table-striped condensed">'
             '    <tr>'
@@ -1776,8 +1775,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         #find needed statistics type
         try:
-            self.statisticsType = self.keywordIO.readKeywords(myQGISImpactLayer,
-                                                           'statistics_type')
+            self.statisticsType = self.keywordIO.readKeywords(
+                myQGISImpactLayer, 'statistics_type')
             self.statisticsClasses = self.keywordIO.readKeywords(
                 myQGISImpactLayer, 'statistics_classes')
 
@@ -1815,7 +1814,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myClasses = []
                 myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
                 myStep = int(myHighestVal / len(myColors))
-                LOGGER.debug('Max val %s, my step %s' % (myHighestVal, myStep))
                 myCounter = 0
                 for myColor in myColors:
                     myMin = myCounter
@@ -1843,7 +1841,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myRenderer = QgsSingleSymbolRendererV2(mySymbol)
                 self.postProcessingLayer.setRendererV2(myRenderer)
                 self.postProcessingLayer.saveDefaultStyle()
-
 
     def _aggregateResultsVector(self, myQGISImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
@@ -1896,7 +1893,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.postProcessingLayer.commitChanges()
             myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
             myAggrFieldMap = {}
-            for k,v in myTmpAggrFieldMap.iteritems():
+            for k, v in myTmpAggrFieldMap.iteritems():
                 myAggrFieldMap[str(k)] = v
         elif self.statisticsType == 'sum':
             myAggrField = self.getAggregationFieldNameSum()
@@ -1905,7 +1902,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.postProcessingLayer.commitChanges()
             myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(
                 myAggrField)
-
 
         self.postProcessingLayer.startEditing()
 
@@ -1962,6 +1958,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         closed=True,
                         check_input=True)
 
+                    #self.impactLayerAttributes is a list of list of dict
+                    #[
+                    #   [{...},{...},{...}],
+                    #   [{...},{...},{...}]
+                    #]
                     self.impactLayerAttributes.append([])
                     if self.statisticsType == 'class_count':
                         myResults = {}
@@ -1976,24 +1977,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             self.impactLayerAttributes[myPolygonIndex].append(
                                 myRemainingValues[i])
                         myAttrs = {}
-                        LOGGER.debug(myAggrFieldMap)
                         for k, v in myResults.iteritems():
                             myKey = '%s_%s' % (k, self.targetField)
                             #FIXME (MB) remove next line when we get rid of
                             #shape files as internal format
                             myKey = myKey[:10]
-#                            LOGGER.debug(myAggrFieldMap)
                             myAggrFieldIndex = myAggrFieldMap[myKey]
-                            myAttrs[myAggrFieldIndex] =  QtCore.QVariant(v)
+                            myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
 
                     elif self.statisticsType == 'sum':
                         #by default summ attributes
                         myTotal = 0
                         for i in inside:
                             try:
-                                myTotal += myRemainingValues[i][self.targetField]
-                            except TypeError as e:
+                                myTotal += myRemainingValues[i][
+                                           self.targetField]
+                            except TypeError:
                                 pass
+
+                            #add all attributes to the impactLayerAttributes
                             self.impactLayerAttributes[myPolygonIndex].append(
                                 myRemainingValues[i])
                         myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
@@ -2182,7 +2184,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myValue.process()
                 myResults = myValue.results()
                 myValue.clear()
-                LOGGER.debug(myResults)
+#                LOGGER.debug(myResults)
                 try:
                     self.postProcessingOutput[myKey].append(
                         (myZoneName, myResults))

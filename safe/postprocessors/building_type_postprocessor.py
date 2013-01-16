@@ -36,7 +36,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.target_field = None
         self.type_field = None
         self.valid_type_fields = ['amenity', 'type']
-        self.types = {'Hospitals': ['medical', 'clinic','hospital'],
+        self.types = {'Hospitals': ['medical', 'clinic', 'hospital'],
                       'Places of worship': ['place_of_worship'],
                       'Schools': ['school']}
 
@@ -68,8 +68,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                 self.type_field = key
                 break
 
-        self._log_message('BuildingType postprocessor, using field: %s' %
-                          self.type_field)
+#        self._log_message('BuildingType postprocessor, using field: %s' %
+#                          self.type_field)
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
@@ -129,11 +129,6 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         myName = tr('Total')
         if self.target_field is not None:
             myName = '%s %s' % (myName, tr(self.target_field).lower())
-
-        #FIXME (MB) Shameless hack to deal with issue #368
-        if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT)
-            return
 
         myResult = self.impact_total
         try:
