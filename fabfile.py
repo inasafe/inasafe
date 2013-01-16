@@ -7,7 +7,10 @@ from datetime import datetime
 from fabric.api import *
 from fabric.contrib.files import contains, exists, append, sed
 env.hosts = ['localhost']
-site_name = 'inasafe-nightly.localhost'
+if 'SITE_NAME' in os.environ:
+    site_name = os.environ['SITE_NAME']
+else:
+    site_name = 'inasafe-nightly.localhost'
 dest_path = '/home/web/inasafe-nightly'
 
 
@@ -74,6 +77,14 @@ def build_nightly():
     dir_name = os.path.dirname(__file__)
     dir_name = os.path.split(dir_name)[-1]
     fastprint('Dir is: %s' % dir_name)
+    # Get git version and write it to a text file in case we need to cross
+    # references it for a user ticket.
+    sha = local('git rev-parse HEAD', capture=True)
+    fastprint('Git revision: %s' % sha)
+    sha_path = 'git_revision.txt'
+    sha_file = file(sha_path, 'wt')
+    sha_file.write(sha)
+    sha_file.close()
 
     freshen_repo()
 
@@ -88,7 +99,7 @@ def build_nightly():
             status = line.replace('status=', '')
 
     local('scripts/release.sh %s' % plugin_version)
-    package_name = '%s.%s.zip' % (dir_name, plugin_version)
+    package_name = '%s.%s.zip' % ('inasafe', plugin_version)
     source = '/tmp/%s' % package_name
     fastprint('Source: %s' % source)
     put(source, dest_path)
@@ -98,3 +109,9 @@ def build_nightly():
     sed(plugins_xml, '\[FILE_NAME\]', package_name)
     sed(plugins_xml, '\[URL\]', 'http://%s/%s' % (site_name, package_name))
     sed(plugins_xml, '\[DATE\]', str(datetime.now()))
+
+    os.remove(sha_path)
+
+    fastprint('Add http://%s/plugins.xml to QGIS plugin manager to use this.'
+        % sha)
+

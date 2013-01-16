@@ -17,7 +17,7 @@ rm -rf docs/build
 make docs
 
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
-DIR=${PWD##*/}
+DIR='inasafe'
 
 # For some reason sphinx copies image resources both into build/_static and build/images
 # _static should hold just theme based resources
