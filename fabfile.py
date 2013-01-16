@@ -114,4 +114,3 @@ def build_nightly():
 
     fastprint('Add http://%s/plugins.xml to QGIS plugin manager to use this.'
         % sha)
-
