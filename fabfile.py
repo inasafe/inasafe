@@ -1,4 +1,6 @@
 # ~/fabfile.py
+# A Fabric file for carrying out various administrative tasks with InaSAFE.
+# Tim Sutton, Jan 2013
 
 import os
 from datetime import datetime
@@ -8,13 +10,16 @@ env.hosts = ['localhost']
 site_name = 'inasafe-nightly.localhost'
 dest_path = '/home/web/inasafe-nightly'
 
+
 def remote_info():
-    env.user  = run('whoami')
+    env.user = run('whoami')
     run('uname -a')
 
+
 def local_info():
-    local.user  = run('whoami')
+    local.user = run('whoami')
     local('uname -a')
+
 
 def initialise_repo():
     """Initialise a local repo for nightly builds"""
@@ -27,7 +32,8 @@ def initialise_repo():
     local('cp %(local_path)s/inasafe-nightly.conf.templ '
         '%(local_path)s/inasafe-nightly.conf' % {'local_path': local_path})
 
-    sed('%s/inasafe-nightly.conf' % local_path, 'inasafe-nightly.linfiniti.com',
+    sed('%s/inasafe-nightly.conf' % local_path,
+        'inasafe-nightly.linfiniti.com',
         site_name)
 
     with cd('/etc/apache2/sites-available/'):
@@ -46,6 +52,7 @@ def initialise_repo():
     sudo('a2ensite inasafe-nightly.conf')
     sudo('service apache2 reload')
 
+
 def freshen_repo():
     """Copy all content files from git repo to web repo.
 
@@ -61,6 +68,7 @@ def freshen_repo():
     else:
         fastprint('Repo does not exist - run initialise_repo first')
 
+
 def build_nightly():
     """Create a nightly package and publish it in our repo."""
     dir_name = os.path.dirname(__file__)
@@ -69,7 +77,7 @@ def build_nightly():
 
     freshen_repo()
 
-    metadata_file = file('metadata.txt','rt')
+    metadata_file = file('metadata.txt', 'rt')
     metadata_text = metadata_file.readlines()
     metadata_file.close()
     for line in metadata_text:
@@ -77,19 +85,16 @@ def build_nightly():
         if 'version=' in line:
             plugin_version = line.replace('version=', '')
         if 'status=' in line:
-            status = line.replace('status=','')
+            status = line.replace('status=', '')
 
     local('scripts/release.sh %s' % plugin_version)
     package_name = '%s.%s.zip' % (dir_name, plugin_version)
     source = '/tmp/%s' % package_name
     fastprint('Source: %s' % source)
-    put(source, dest_path )
+    put(source, dest_path)
 
     plugins_xml = os.path.join(dest_path, 'plugins.xml')
     sed(plugins_xml, '\[VERSION\]', plugin_version)
     sed(plugins_xml, '\[FILE_NAME\]', package_name)
     sed(plugins_xml, '\[URL\]', 'http://%s/%s' % (site_name, package_name))
     sed(plugins_xml, '\[DATE\]', str(datetime.now()))
-
-
-
