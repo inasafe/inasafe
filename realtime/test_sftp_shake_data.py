@@ -78,17 +78,6 @@ class SFtpShakeDataTest(unittest.TestCase):
         """
         assert sftp_data.isOnServer(), 'Event is not in server'
 
-    def test_is_event_id(self):
-        """Test to check if a event is in server
-        """
-        assert sftp_data.is_event_id('20130110041009'), 'should be event id'
-        assert not sftp_data.is_event_id('20130110041090'), \
-                            'should not be event id'
-        assert not sftp_data.is_event_id('2013'), \
-                            'should not be event id'
-        assert not sftp_data.is_event_id('AAA'), \
-                            'should not be event id'
-
     def test_extract(self):
         """Test extracting data to be used in earth quake realtime
         """

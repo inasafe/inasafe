@@ -113,10 +113,7 @@ elif len(sys.argv) == 2:
         # batch file approach rather!
         #
         myFtpClient = FtpClient()
-#        mySftpClient = SFtpClient()
         myListing = myFtpClient.getListing()
-#        myListing = mySftpClient.getListing(my_func=is_event_id)
-#        print myListing
         for myEvent in myListing:
             if 'out' not in myEvent:
                 continue

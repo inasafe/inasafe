@@ -12,12 +12,15 @@ export INASAFE_WORK_DIR=/home/web/quake
 export INASAFE_POPULATION_PATH=`pwd`/realtime/fixtures/exposure/population.tif
 export INASAFE_LOCALE=en
 
-for FILE in `xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py --list #| grep -v inp | grep -v Proces`
+for FILE in `xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py --list | grep -v inp | grep -v Proces`
 do
   # FILE=`echo $FILE | sed 's/ftp:\/\/118.97.83.243\///g'`
   # FILE=`echo $FILE | sed 's/.out.zip//g'`
-  echo "Running: $FILE"
-  xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py $FILE
+  # simple filter incase there another output except the event ids
+  if [ 14 == ${#FILE} ] ; then
+    echo "Running: $FILE"
+    xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py $FILE
+  fi
 done
 exit
 # Memory errors..

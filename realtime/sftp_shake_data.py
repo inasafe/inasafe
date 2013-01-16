@@ -16,7 +16,6 @@ __date__ = '14/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from datetime import datetime
 import os
 import shutil
 from rt_exceptions import (FileNotFoundError,
@@ -26,6 +25,7 @@ from rt_exceptions import (FileNotFoundError,
                            CopyError
                            )
 from sftp_client import SFtpClient
+from utils import is_event_id
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 from utils import shakemapCacheDir, shakemapExtractDir, mkDir, is_event_id
@@ -193,20 +193,15 @@ class SftpShakeData:
         """
         myRemoteXMLPath = os.path.join(self.sftpclient.workdir_path,
                         self.eventId)
-        print myRemoteXMLPath
         return self.sftpclient.is_path_exist(myRemoteXMLPath)
 
     def get_list_event_ids(self):
         """Get all event id indicated by folder in remote_path
         """
-        dirs = self.sftpclient.getListing()
-        event_ids = []
-        for my_dir in dirs:
-            if is_event_id(my_dir):
-                event_ids.append(my_dir)
-        if len(event_ids) == 0:
+        dirs = self.sftpclient.getListing(my_func=is_event_id)
+        if len(dirs) == 0:
             raise Exception('List event is empty')
-        return event_ids
+        return dirs
 
     def getLatestEventId(self):
         """Return latest event id

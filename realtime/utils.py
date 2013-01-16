@@ -117,15 +117,16 @@ def setupLogger():
             ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
     setupLoggerSQ(theSentryUrl=mySentryUrl, theLogFile=myLogFile)
 
+
 def is_event_id(eventid):
-        """Check if an id is event id.
-        Event id is in form of yyyymmddHHMMSS or '%Y%m%d%H%M%S'
-        i.e. 20130110204706
-        """
-        if len(eventid) != 14:
-            return False
-        try:
-            datetime.strptime(eventid, '%Y%m%d%H%M%S')
-        except ValueError:
-            return False
-        return True
+    """Check if an id is event id.
+    Event id is in form of yyyymmddHHMMSS or '%Y%m%d%H%M%S'
+    i.e. 20130110204706
+    """
+    if len(eventid) != 14:
+        return False
+    try:
+        datetime.strptime(eventid, '%Y%m%d%H%M%S')
+    except ValueError:
+        return False
+    return True

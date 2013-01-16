@@ -101,11 +101,9 @@ class SFtpClient:
         """os.path.exists for paramiko's SCP object
         Reference: http://stackoverflow.com/q/850749/1198772
         """
-        print path
         try:
             self.sftp.stat(path)
         except IOError, e:
-            print e.errno
             if e.errno == ENOENT:
                 return False
             raise
@@ -119,7 +117,7 @@ class SFtpClient:
         if remote_dir is None:
             remote_dir = self.workdir_path
         if self.is_path_exist(remote_dir):
-            temp_list =  self.sftp.listdir(remote_dir)
+            temp_list = self.sftp.listdir(remote_dir)
         else:
             LOGGER.debug('Directory %s is not exist, return None' % remote_dir)
             return None
@@ -128,7 +126,6 @@ class SFtpClient:
             if my_func(my_temp):
                 retval.append(my_temp)
         return retval
-
 
 
 def get_path_tail(path):
