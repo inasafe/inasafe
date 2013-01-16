@@ -112,16 +112,23 @@ class SFtpClient:
         else:
             return True
 
-    def getListing(self, remote_dir=None):
+    def getListing(self, remote_dir=None, my_func=None):
         """Return list of files and directories name under a remote_dir
+        and return true when it is input to my_func
         """
         if remote_dir is None:
             remote_dir = self.workdir_path
         if self.is_path_exist(remote_dir):
-            return self.sftp.listdir(remote_dir)
+            temp_list =  self.sftp.listdir(remote_dir)
         else:
             LOGGER.debug('Directory %s is not exist, return None' % remote_dir)
             return None
+        retval = []
+        for my_temp in temp_list:
+            if my_func(my_temp):
+                retval.append(my_temp)
+        return retval
+
 
 
 def get_path_tail(path):

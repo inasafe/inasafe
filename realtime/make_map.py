@@ -24,7 +24,8 @@ from urllib2 import URLError
 from zipfile import BadZipfile
 
 from ftp_client import FtpClient
-from realtime.utils import setupLogger, dataDir
+from sftp_client import SFtpClient
+from realtime.utils import setupLogger, dataDir, is_event_id
 from realtime.shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setupLogger()
@@ -99,8 +100,10 @@ elif len(sys.argv) == 2:
 
     myEventId = sys.argv[1]
     if myEventId in '--list':
-        myFtpClient = FtpClient()
-        myListing = myFtpClient.getListing()
+#        myFtpClient = FtpClient()
+        mySftpClient = SFtpClient()
+#        myListing = myFtpClient.getListing()
+        myListing = mySftpClient.getListing(my_func=is_event_id)
         for myEvent in myListing:
             print myEvent
         sys.exit(0)
@@ -110,7 +113,10 @@ elif len(sys.argv) == 2:
         # batch file approach rather!
         #
         myFtpClient = FtpClient()
+#        mySftpClient = SFtpClient()
         myListing = myFtpClient.getListing()
+#        myListing = mySftpClient.getListing(my_func=is_event_id)
+#        print myListing
         for myEvent in myListing:
             if 'out' not in myEvent:
                 continue

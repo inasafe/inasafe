@@ -28,7 +28,7 @@ from rt_exceptions import (FileNotFoundError,
 from sftp_client import SFtpClient
 import logging
 LOGGER = logging.getLogger('InaSAFE')
-from utils import shakemapCacheDir, shakemapExtractDir, mkDir
+from utils import shakemapCacheDir, shakemapExtractDir, mkDir, is_event_id
 
 
 defaultHost = '118.97.83.243'
@@ -202,24 +202,11 @@ class SftpShakeData:
         dirs = self.sftpclient.getListing()
         event_ids = []
         for my_dir in dirs:
-            if self.is_event_id(my_dir):
+            if is_event_id(my_dir):
                 event_ids.append(my_dir)
         if len(event_ids) == 0:
             raise Exception('List event is empty')
         return event_ids
-
-    def is_event_id(self, eventid):
-        """Check if an id is event id.
-        Event id is in form of yyyymmddHHMMSS or '%Y%m%d%H%M%S'
-        i.e. 20130110204706
-        """
-        if len(eventid) != 14:
-            return False
-        try:
-            datetime.strptime(eventid, '%Y%m%d%H%M%S')
-        except ValueError:
-            return False
-        return True
 
     def getLatestEventId(self):
         """Return latest event id
