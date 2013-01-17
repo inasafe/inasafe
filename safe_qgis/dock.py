@@ -95,6 +95,8 @@ from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
 
+from third_party.odict import OrderedDict
+
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -1862,20 +1864,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myTotal = 0
 
-        #add the total field to the postProcessingLayer
+
         myPostprocessorProvider = self.postProcessingLayer.dataProvider()
         self.postProcessingLayer.startEditing()
 
         if self.statisticsType == 'class_count':
+            #add the class count fields to the postProcessingLayer
             myFields = [QgsField('%s_%s' % (f, self.targetField),
                 QtCore.QVariant.String) for f in self.statisticsClasses]
             myPostprocessorProvider.addAttributes(myFields)
             self.postProcessingLayer.commitChanges()
+
             myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
             myAggrFieldMap = {}
             for k, v in myTmpAggrFieldMap.iteritems():
                 myAggrFieldMap[str(k)] = v
+
         elif self.statisticsType == 'sum':
+            #add the total field to the postProcessingLayer
             myAggrField = self.getAggregationFieldNameSum()
             myPostprocessorProvider.addAttributes([QgsField(myAggrField,
                 QtCore.QVariant.Int)])
@@ -1945,14 +1951,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     #]
                     self.impactLayerAttributes.append([])
                     if self.statisticsType == 'class_count':
-                        myResults = {}
+                        myResults = OrderedDict()
+                        for myClass in self.statisticsClasses:
+                            myResults[myClass] = 0
 
                         for i in inside:
                             myKey = myRemainingValues[i][self.targetField]
                             try:
                                 myResults[myKey] += 1
                             except KeyError:
-                                myResults[myKey] = 1
+                                myError = ('StatisticsClasses %s does not '
+                                           'include the %s class which was '
+                                           'found in the data. This is a '
+                                           'problem in the %s '
+                                           'statistics_classes definition' %
+                                           (self.statisticsClasses,
+                                            myKey,
+                                            self.getFunctionID()))
+                                raise KeyError(myError)
 
                             self.impactLayerAttributes[myPolygonIndex].append(
                                 myRemainingValues[i])
@@ -2020,14 +2036,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             if self.statisticsType == 'class_count':
                 #loop over all features in impact layer
-                myResults = {}
+                myResults = OrderedDict()
+                for myClass in self.statisticsClasses:
+                    myResults[myClass] = 0
+                    
                 self.impactLayerAttributes.append([])
                 for myImpactValueList in myImpactValues:
                     myKey = myImpactValueList[self.targetField]
                     try:
                         myResults[myKey] += 1
                     except KeyError:
-                        myResults[myKey] = 1
+                        myError = ('StatisticsClasses %s does not '
+                                   'include the %s class which was '
+                                   'found in the data. This is a '
+                                   'problem in the %s '
+                                   'statistics_classes definition' %
+                                   (self.statisticsClasses,
+                                    myKey,
+                                    self.getFunctionID()))
+                        raise KeyError(myError)
+
                     self.impactLayerAttributes[0].append(myImpactValueList)
 
                 myAttrs = {}
@@ -2039,7 +2067,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myAggrFieldIndex = myAggrFieldMap[myKey]
                     myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
 
-            else:
+            elif self.statisticsType == 'sum':
                 #loop over all features in impact layer
                 self.impactLayerAttributes.append([])
                 for myImpactValueList in myImpactValues:
@@ -2152,13 +2180,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
-            if self.statisticsType == 'sum':
-                myImpact, _ = myAttributeMap[mySumFieldIndex].toDouble()
-            elif self.statisticsType == 'class_count':
-                myImpact = []
-            myGeneralParams = {'impact_total': myImpact,
-                               'target_field': self.targetField,
-                                }
+            #create dictionary of attributes to pass to postprocessor
+            myGeneralParams = {'target_field': self.targetField}
+
+            if self.statisticsType == 'class_count':
+                myGeneralParams['impact_classes'] = self.statisticsClasses
+            elif self.statisticsType == 'sum':
+                myImpactTotal, _ = myAttributeMap[mySumFieldIndex].toDouble()
+                myGeneralParams['impact_total'] = myImpactTotal
+
             try:
                 myGeneralParams['impact_attrs'] = (
                     self.impactLayerAttributes[myPolygonIndex])

@@ -27,10 +27,10 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
     def __init__(self):
         """
         Constructor for AgePostprocessor postprocessor class,
-        It takes care of defining self.impact_total
+        It takes care of defining self.impact_classes
         """
         AbstractPostprocessor.__init__(self)
-        self.impact_total = None
+        self.impact_classes = None
         self.impact_attrs = None
         self.target_field = None
 
@@ -46,14 +46,15 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.setup(self, None)
-        if (self.impact_total is not None or
+        if (self.impact_classes is not None or
             self.impact_attrs is not None or
             self.target_field is not None):
             self._raise_error('clear needs to be called before setup')
 
-        self.impact_total = params['impact_total']
+        self.impact_classes = params['impact_classes']
         self.impact_attrs = params['impact_attrs']
         self.target_field = params['target_field']
+        self._log_message(self.impact_attrs)
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
@@ -67,7 +68,7 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.process(self)
-        if (self.impact_total is None or
+        if (self.impact_classes is None or
             self.impact_attrs is None or
             self.target_field is None):
             self._log_message('%s not all params have been correctly '
@@ -89,7 +90,7 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.clear(self)
-        self.impact_total = None
+        self.impact_classes = None
         self.impact_attrs = None
         self.target_field = None
 
@@ -106,14 +107,16 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
             None
         """
 
-        myName = tr(self.target_field).lower()
-        myResults = {}
-        for building in self.impact_attrs:
-            myTarget = building[self.target_field]
-            try:
-                myResults[myTarget] += 1
-            except KeyError:
-                myResults[myTarget] = 1
-        self._log_message(myResults)
-        for k, v in myResults.iteritems():
-            self._append_result('%s %s' % (myName, k), v)
+        impact_name = tr(self.target_field).lower()
+
+        results = {}
+        for impact_class in self.impact_classes:
+            results[impact_class] = 0
+
+        for feature in self.impact_attrs:
+            myTarget = feature[self.target_field]
+            results[myTarget] += 1
+
+        for impact_class in self.impact_classes:
+            result = results[impact_class]
+            self._append_result('%s %s' % (impact_name, impact_class), result)

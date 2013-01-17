@@ -7,6 +7,8 @@ from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from third_party.odict import OrderedDict
+
 
 
 #FIXME: need to normalise all raster data Ole/Kristy
@@ -30,6 +32,11 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
     target_field = 'ICLASS'
     title = tr('Be affected')
+    statistics_type = 'class_count'
+    statistics_classes = ['None', 1, 2, 3]
+    parameters = OrderedDict([('postprocessors', OrderedDict([
+                                  ('AggregationCategorical', {'on': True})]))
+    ])
 
     def run(self, layers):
         """Impact plugin for hazard impact
@@ -135,7 +142,9 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title,
-                             'target_field': self.target_field},
+                             'target_field': self.target_field,
+                             'statistics_type': self.statistics_type,
+                             'statistics_classes': self.statistics_classes},
                    name=name,
                    style_info=style_info)
         return V
