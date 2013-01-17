@@ -36,8 +36,8 @@ def remote():
 def _all():
     """Things to do regardless of whether command is local or remote."""
     site_names = {
-        'waterfall': 'inasafe-nightly.localhost',
-        'maps.linfiniti.com': 'inasafe-nightly.linfiniti.com'}
+        'waterfall': 'inasafe-test.localhost',
+        'maps.linfiniti.com': 'inasafe-test.linfiniti.com'}
     with hide('output'):
         env.user = env.run('whoami')
         env.hostname = env.run('hostname')
@@ -46,13 +46,13 @@ def _all():
             exit
         else:
             env.site_name = site_names[env.hostname]
-            env.plugin_repo_path = '/home/web/inasafe-nightly'
+            env.plugin_repo_path = '/home/web/inasafe-test'
             env.home = os.path.join('/home/', env.user)
             env.repo_path = os.path.join(env.home,
                                          'dev',
                                          'python')
             env.git_url = 'git://github.com/AIFDR/inasafe.git'
-            env.repo_alias = 'inasafe-nightly'
+            env.repo_alias = 'inasafe-test'
             show_environment()
 
 ###############################################################################
@@ -60,9 +60,9 @@ def _all():
 ###############################################################################
 
 def update_qgis_plugin_repo():
-    """Initialise a QGIS plugin repo where we host nightly builds."""
+    """Initialise a QGIS plugin repo where we host test builds."""
     code_path = os.path.join(env.repo_path, env.repo_alias)
-    local_path = '%s/scripts/nightly-build-repo' % code_path
+    local_path = '%s/scripts/test-build-repo' % code_path
 
     if not exists(env.plugin_repo_path):
         sudo('mkdir -p %s' % env.plugin_repo_path)
@@ -70,32 +70,36 @@ def update_qgis_plugin_repo():
 
     env.run('cp %s/plugin* %s' % (local_path, env.plugin_repo_path))
     env.run('cp %s/icon* %s' % (code_path, env.plugin_repo_path))
-    env.run('cp %(local_path)s/inasafe-nightly.conf.templ '
-        '%(local_path)s/inasafe-nightly.conf' % {'local_path': local_path})
+    env.run('cp %(local_path)s/inasafe-test.conf.templ '
+        '%(local_path)s/inasafe-test.conf' % {'local_path': local_path})
 
-    sed('%s/inasafe-nightly.conf' % local_path,
-        'inasafe-nightly.linfiniti.com',
+    sed('%s/inasafe-test.conf' % local_path,
+        'inasafe-test.linfiniti.com',
         env.site_name)
 
     with cd('/etc/apache2/sites-available/'):
-        if exists('inasafe-nightly.conf'):
-            sudo('a2dissite inasafe-nightly.conf')
+        if exists('inasafe-test.conf'):
+            sudo('a2dissite inasafe-test.conf')
             fastprint('Removing old apache2 conf', False)
-            sudo('rm inasafe-nightly.conf')
+            sudo('rm inasafe-test.conf')
 
-        sudo('ln -s %s/inasafe-nightly.conf .' % local_path)
+        sudo('ln -s %s/inasafe-test.conf .' % local_path)
 
     # Add a hosts entry for local testing - only really useful for localhost
     hosts = '/etc/hosts'
-    if not contains(hosts, 'inasafe-nightly'):
+    if not contains(hosts, 'inasafe-test'):
         append(hosts, '127.0.0.1 %s' % env.site_name, use_sudo=True)
 
-    sudo('a2ensite inasafe-nightly.conf')
+    sudo('a2ensite inasafe-test.conf')
     sudo('service apache2 reload')
 
 
-def update_git_checkout():
+def update_git_checkout(branch='master'):
     """Make sure there is a read only git checkout.
+
+    Args:
+        branch: str - a string representing the name of the branch to build
+            from. Defaults to 'master'
 
     To run e.g.::
 
@@ -112,19 +116,24 @@ def update_git_checkout():
         fastprint('Repo checkout does exist, updating.')
         with cd(os.path.join(env.repo_path, env.repo_alias)):
             clone = env.run('git reset --hard')
-            clone = env.run('git checkout master')
+            if branch != 'master':
+                clone = env.run('git branch --track %s origin/%s' %
+                                (branch, branch))
+                clone = env.run('git checkout %s' % branch)
+            else:
+                clone = env.run('git checkout master')
             clone = env.run('git pull')
 
 ###############################################################################
 # Next section contains actual tasks
 ###############################################################################
 
-def build_nightly():
-    """Create a nightly package and publish it in our repo.
+def build_test_package(branch='master'):
+    """Create a test package and publish it in our repo.
 
     To run e.g.::
 
-        fab -H 188.40.123.80:8697 remote build_nightly
+        fab -H 188.40.123.80:8697 remote build_test_package
     """
 
     update_git_checkout()

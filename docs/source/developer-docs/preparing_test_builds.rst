@@ -17,12 +17,12 @@ This document has two sections:
 * How to configure QGIS to use the InaSAFE test builds repo.
 * How to set up a test build server (intended only for sysadmins).
 
-Configuring QGIS to use test builds (from Linfintii server).
-------------------------------------
+Configuring QGIS to use test builds (from Linfiniti server).
+------------------------------------------------------------
 
 * :menuselection:`Plugins --> Fetch Python Plugins --> Repository Tab --> Add...`
 * :guilabel:`Name:` :kbd:`InaSAFE Testing`
-* :guilabel:`URL:` :kbd:`http://inasafe-nightly.linfiniti.com/plugins.xml`
+* :guilabel:`URL:` :kbd:`http://inasafe-test.linfiniti.com/plugins.xml`
 * :guilabel:`OK`
 
 You should now see the experimental versions of InaSAFE listed in the
@@ -44,7 +44,7 @@ Install some packages (run this on the server)::
 
 Initialise everything (run this on your desktop)::
 
-    fab -H 188.40.123.80:8697 remote build_nightly
+    fab -H 188.40.123.80:8697 remote build_test
 
 .. note:: You need to be able to authenticate on the server hosting the
     test builds.
