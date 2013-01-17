@@ -257,7 +257,8 @@ class ShakeData:
 
         LOGGER.exception('Could not fetch shake event from server %s'
                              % theEventFile)
-        raise myLastError
+        raise Exception('Could not fetch shake event from server %s'
+                        % theEventFile)
 
     def fetchInput(self):
         """Fetch the input file for the event id associated with this class

@@ -130,5 +130,5 @@ else:
     print('Processing latest shakemap')
     try:
         processEvent(theLocale=myLocale)
-    except:
+    except:  # pylint: disable=W0702
         LOGGER.exception('Process event failed')
