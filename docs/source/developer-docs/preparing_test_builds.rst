@@ -25,6 +25,9 @@ Configuring QGIS to use test builds (from Linfiniti server).
 * :guilabel:`URL:` :kbd:`http://inasafe-test.linfiniti.com/plugins.xml`
 * :guilabel:`OK`
 
+In the :guilabel:`Options` tab, tick the
+:guilabel:`Show all plugins, even those marked as experimental` option.
+
 You should now see the experimental versions of InaSAFE listed in the
 :guilabel:`Plugins` tab.
 
