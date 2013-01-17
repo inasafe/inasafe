@@ -53,7 +53,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
           Map of population exposed to flooding
           Table with number of people evacuated and supplies required
         """
-        print 'BBBBBBBBBBBBBBBBBBB'
         # Identify hazard and exposure layers
         H = get_hazard_layer(layers)  # Flood inundation
         E = get_exposure_layer(layers)

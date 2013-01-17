@@ -270,7 +270,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %i') % total,
+                           tr('Total population: %s') % format_int(total),
                            tr('People are considered to be displaced if '
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),

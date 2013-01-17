@@ -122,7 +122,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         table_body.extend([TableRow(tr('Notes'), header=True),
                            tr('Map shows population density in high or medium '
                              'hazard area'),
-                           tr('Total population: %i') % total])
+                           tr('Total population: %s') % format_int(total)])
 ##                           tr('Minimum needs are defined in BNPB '
 ##                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()

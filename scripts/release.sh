@@ -17,7 +17,7 @@ rm -rf docs/build
 make docs
 
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
-DIR=${PWD##*/}
+DIR='inasafe'
 
 # For some reason sphinx copies image resources both into build/_static and build/images
 # _static should hold just theme based resources
@@ -25,8 +25,8 @@ DIR=${PWD##*/}
 # Normally we wouldn't care but we want to bundle this as documentation so we do care about size
 pushd .
 cd docs/build/html
-for FILE in `ls _images/` 
-do 
+for FILE in `ls _images/`
+do
   echo "Deleting $FILE from _static"
   rm _static/${FILE}
 done
@@ -36,33 +36,35 @@ popd
 
 OUT="/tmp/${DIR}.${1}.zip"
 
-rm -rf /tmp/${DIR}
-mkdir /tmp/${DIR}
-git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C /tmp/${DIR}
-rm -rf /tmp/${DIR}/docs/
-rm -rf /tmp/${DIR}/unit_test_data
-rm -rf /tmp/${DIR}/.idea
-rm -rf /tmp/${DIR}/Makefile
-rm -rf /tmp/${DIR}/.git*
-rm -rf /tmp/${DIR}/scripts
-rm -rf /tmp/${DIR}/pylintrc
-rm -rf /tmp/${DIR}/extras
-rm -rf /tmp/${DIR}/safe/test
-rm -rf /tmp/${DIR}/safe_qgis/resources
-rm -rf /tmp/${DIR}/pylintrc_jenkins
-rm -rf /tmp/${DIR}/.travis.yml
-rm -rf /tmp/${DIR}/setup.py
+WORKDIR=/tmp/${DIR}$$
+mkdir -p ${WORKDIR}/${DIR}
+git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C ${WORKDIR}/${DIR}
+rm -rf ${WORKDIR}/${DIR}/docs/
+rm -rf ${WORKDIR}/${DIR}/unit_test_data
+rm -rf ${WORKDIR}/${DIR}/.idea
+rm -rf ${WORKDIR}/${DIR}/Makefile
+rm -rf ${WORKDIR}/${DIR}/.git*
+rm -rf ${WORKDIR}/${DIR}/scripts
+rm -rf ${WORKDIR}/${DIR}/pylintrc
+rm -rf ${WORKDIR}/${DIR}/extras
+rm -rf ${WORKDIR}/${DIR}/safe/test
+rm -rf ${WORKDIR}/${DIR}/realtime
+rm -rf ${WORKDIR}/${DIR}/files
+rm -rf ${WORKDIR}/${DIR}/fabfile.py
+rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
+rm -rf ${WORKDIR}/${DIR}/pylintrc_jenkins
+rm -rf ${WORKDIR}/${DIR}/.travis.yml
+rm -rf ${WORKDIR}/${DIR}/setup.py
 
-
-find /tmp/${DIR} -name test*.py -delete
-find /tmp/${DIR} -name *_test.py -delete
-find /tmp/${DIR} -name *.po -delete
-find /tmp/${DIR} -name *.ts -delete
-rm -rf /tmp/${DIR}/*.bat
-mkdir -p /tmp/${DIR}/docs/build
-cp -r docs/build/html /tmp/${DIR}/docs/build/html
+find ${WORKDIR}/${DIR} -name test*.py -delete
+find ${WORKDIR}/${DIR} -name *_test.py -delete
+find ${WORKDIR}/${DIR} -name *.po -delete
+find ${WORKDIR}/${DIR} -name *.ts -delete
+rm -rf ${WORKDIR}/${DIR}/*.bat
+mkdir -p ${WORKDIR}/${DIR}/docs/build
+cp -r docs/build/html ${WORKDIR}/${DIR}/docs/build/html
 pushd .
-cd /tmp/
+cd ${WORKDIR}
 # The \* tells zip to ignore recursively
 rm ${OUT}
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
@@ -90,13 +92,14 @@ zip -r ${OUT} ${DIR} --exclude \*.pyc \
               ${DIR}/\*.*.orig \
               ${DIR}/\*.bat \
               ${DIR}/\*.xcf \
-              ${DIR}/~ 
+              ${DIR}/~
               #${DIR}/docs/*.jpg\
               #${DIR}/docs/*.jpeg\
               #${DIR}/docs/*.png\
-              
+
 popd
 
+rm -rf ${WORKDIR}
 
 echo "Your plugin archive has been generated as"
 ls -lah ${OUT}
