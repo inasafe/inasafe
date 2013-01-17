@@ -2018,17 +2018,41 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.postProcessingLayer.commitChanges()
                 return
         else:
-            #loop over all features in impact layer
-            self.impactLayerAttributes.append([])
-            for myImpactValueList in myImpactValues:
-                if myImpactValueList[self.targetField] == 'None':
-                    myImpactValueList[self.targetField] = None
-                try:
-                    myTotal += myImpactValueList[self.targetField]
-                except TypeError:
-                    pass
-                self.impactLayerAttributes[0].append(myImpactValueList)
-            myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+            if self.statisticsType == 'class_count':
+                #loop over all features in impact layer
+                myResults = {}
+                self.impactLayerAttributes.append([])
+                for myImpactValueList in myImpactValues:
+                    myKey = myImpactValueList[self.targetField]
+                    try:
+                        myResults[myKey] += 1
+                    except KeyError:
+                        myResults[myKey] = 1
+                    self.impactLayerAttributes[0].append(myImpactValueList)
+
+                myAttrs = {}
+                for k, v in myResults.iteritems():
+                    myKey = '%s_%s' % (k, self.targetField)
+                    #FIXME (MB) remove next line when we get rid of
+                    #shape files as internal format
+                    myKey = myKey[:10]
+                    myAggrFieldIndex = myAggrFieldMap[myKey]
+                    myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
+
+            else:
+                #loop over all features in impact layer
+                self.impactLayerAttributes.append([])
+                for myImpactValueList in myImpactValues:
+                    if myImpactValueList[self.targetField] == 'None':
+                        myImpactValueList[self.targetField] = None
+                    try:
+                        myTotal += myImpactValueList[self.targetField]
+                    except TypeError:
+                        pass
+                    self.impactLayerAttributes[0].append(myImpactValueList)
+                myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+
+            #apply to all area feature
             myFID = 0
             myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
 
