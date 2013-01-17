@@ -6,7 +6,7 @@
 
         <html>
             <head>
-                <title>Qgis Plugins - Official 1.0 Repository</title>
+                <title>InaSAFE Testing Repository</title>
                 <!--link href="xsl.css" rel="stylesheet" type="text/css" /-->
 
                 <style>
@@ -67,7 +67,7 @@
 
             </head>
             <body>
-                <h2>InaSAFE nightly Build Plugin</h2>
+                <h2>InaSAFE Test Build Plugin</h2>
                 <table>
                     <tr>
 

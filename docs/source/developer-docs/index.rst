@@ -25,7 +25,7 @@ Developer Documentation Contents:
    postprocessors
    bug_reporting
    preparing_a_release
-   preparing_nightly_builds
+   preparing_test_builds
    jenkins_ci
    jenkins_ci_windows_slave
    irc
