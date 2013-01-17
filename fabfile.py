@@ -120,14 +120,24 @@ def update_git_checkout(branch='master'):
     else:
         fastprint('Repo checkout does exist, updating.')
         with cd(os.path.join(env.repo_path, env.repo_alias)):
+            # Get rid of any local changes
             clone = env.run('git reset --hard')
-            if branch != 'master':
-                clone = env.run('git branch --track %s origin/%s' %
-                                (branch, branch))
-                clone = env.run('git checkout %s' % branch)
-            else:
-                clone = env.run('git checkout master')
-            clone = env.run('git pull')
+            # Get back onto master branch
+            clone = env.run('git checkout master')
+            # Remove any local changes in master
+            clone = env.run('git reset --hard')
+            # Delete all local branches
+            clone = env.run('git branch | grep -v \* | xargs git branch -D')
+
+    with cd(os.path.join(env.repo_path, env.repo_alias)):
+        if branch != 'master':
+            clone = env.run('git branch --track %s origin/%s' %
+                            (branch, branch))
+            clone = env.run('git checkout %s' % branch)
+        else:
+            clone = env.run('git checkout master')
+        clone = env.run('git pull')
+
 
 ###############################################################################
 # Next section contains actual tasks
@@ -137,12 +147,18 @@ def update_git_checkout(branch='master'):
 def build_test_package(branch='master'):
     """Create a test package and publish it in our repo.
 
+    Args:
+        branch: str - a string representing the name of the branch to build
+            from. Defaults to 'master'
+
     To run e.g.::
 
         fab -H 188.40.123.80:8697 remote build_test_package
+
+    .. note:: Using the branch option will not work for branches older than 1.1
     """
 
-    update_git_checkout()
+    update_git_checkout(branch)
     update_qgis_plugin_repo()
 
     dir_name = os.path.join(env.repo_path, env.repo_alias)
@@ -152,7 +168,8 @@ def build_test_package(branch='master'):
         sha = env.run('git rev-parse HEAD > git_revision.txt')
         fastprint('Git revision: %s' % sha)
 
-        metadata_file = file('metadata.txt', 'rt')
+        get('metadata.txt', '/tmp/metadata.txt')
+        metadata_file = file('/tmp/metadata.txt', 'rt')
         metadata_text = metadata_file.readlines()
         metadata_file.close()
         for line in metadata_text:
