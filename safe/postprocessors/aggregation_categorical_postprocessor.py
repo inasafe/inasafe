@@ -115,6 +115,5 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
             except KeyError:
                 myResults[myTarget] = 1
         self._log_message(myResults)
-        for k, v  in myResults.iteritems():
+        for k, v in myResults.iteritems():
             self._append_result('%s %s' % (myName, k), v)
-
