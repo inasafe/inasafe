@@ -41,6 +41,7 @@ def _all():
     """Things to do regardless of whether command is local or remote."""
     site_names = {
         'waterfall': 'inasafe-test.localhost',
+        'spur': 'inasafe-test.localhost',
         'maps.linfiniti.com': 'inasafe-test.linfiniti.com'}
     with hide('output'):
         env.user = env.run('whoami')
