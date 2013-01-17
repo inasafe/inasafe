@@ -13,15 +13,18 @@ from fabric.contrib.files import contains, exists, append, sed
 
 # Global fabric settings
 
+
 def captured_local(command):
     """A wrapper around local that always returns output."""
     return local(command, capture=True)
+
 
 def localhost():
     """Set up things so that commands run locally."""
     env.run = captured_local
     env.hosts = ['localhost']
     _all()
+
 
 def remote():
     """Set up things so that commands run remotely.
@@ -32,6 +35,7 @@ def remote():
     """
     env.run = run
     _all()
+
 
 def _all():
     """Things to do regardless of whether command is local or remote."""
@@ -58,6 +62,7 @@ def _all():
 ###############################################################################
 # Next section contains helper methods tasks
 ###############################################################################
+
 
 def update_qgis_plugin_repo():
     """Initialise a QGIS plugin repo where we host test builds."""
@@ -128,6 +133,7 @@ def update_git_checkout(branch='master'):
 # Next section contains actual tasks
 ###############################################################################
 
+
 def build_test_package(branch='master'):
     """Create a test package and publish it in our repo.
 
@@ -165,11 +171,13 @@ def build_test_package(branch='master'):
         plugins_xml = os.path.join(env.plugin_repo_path, 'plugins.xml')
         sed(plugins_xml, '\[VERSION\]', plugin_version)
         sed(plugins_xml, '\[FILE_NAME\]', package_name)
-        sed(plugins_xml, '\[URL\]', 'http://%s/%s' % (env.site_name, package_name))
+        sed(plugins_xml, '\[URL\]', 'http://%s/%s' %
+                                    (env.site_name, package_name))
         sed(plugins_xml, '\[DATE\]', str(datetime.now()))
 
-        fastprint('Add http://%s/plugins.xml to QGIS plugin manager to use this.'
+        fastprint('Add http://%s/plugins.xml to QGIS plugin manager to use.'
             % env.site_name)
+
 
 def show_environment():
     """For diagnostics - show any pertinent info about server."""
