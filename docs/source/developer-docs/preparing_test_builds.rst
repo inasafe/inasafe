@@ -52,4 +52,4 @@ Initialise everything (run this on your desktop)::
 The above would create a test package based on current master by default. You
 can also specify a branch to build the package from like this::
 
-    fab -H 188.40.123.80:8697 remote build_test_package:branch=version-2_0
+    fab -H 188.40.123.80:8697 remote build_test_package:branch=version-1_0
