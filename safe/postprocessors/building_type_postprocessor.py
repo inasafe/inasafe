@@ -69,11 +69,13 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                     self.type_field = key
                     break
         except IndexError:
-            #there are no features in this postprocessing polygon
-            if self.impact_attrs == []:
-                self.noFeatures = True
-            else:
-                self.noFeatures = False
+            pass
+
+        #there are no features in this postprocessing polygon
+        if self.impact_attrs == []:
+            self.noFeatures = True
+        else:
+            self.noFeatures = False
 #        self._log_message('BuildingType postprocessor, using field: %s' %
 #                          self.type_field)
 
