@@ -1,49 +1,51 @@
 ==============
-Nightly builds
+Test builds
 ==============
 
-Nightly builds are created using fabric (http://fabfile.org) and a bash script.
+Test builds are created using fabric (http://fabfile.org) and a bash script.
 
-Nightly builds are intended for early adopters / testers who want to use the
+Test builds are intended for early adopters / testers who want to use the
 bleeding edge version of InaSAFE.
 
-.. warning:: Using nightly builds may result in strange behaviour or bad things
+.. warning:: Using test builds may result in strange behaviour or bad things
   happening when you run your assessment. We try our best to keep the master
   in a good, usable and secure (for you) state, but we can't guarantee this
   will always be the case.
 
 This document has two sections:
 
+* How to configure QGIS to use the InaSAFE test builds repo.
+* How to set up a test build server (intended only for sysadmins).
 
-* How to configure QGIS to use the InaSAFE nightly builds repo.
-* How to set up a nightly build server (intended only for sysadmins).
+Configuring QGIS to use test builds (from Linfintii server).
+------------------------------------
 
-Configuring QGIS to use nightly builds.
----------------------------------------
+* :menuselection:`Plugins --> Fetch Python Plugins --> Repository Tab --> Add...`
+* :guilabel:`Name:` :kbd:`InaSAFE Testing`
+* :guilabel:`URL:` :kbd:`http://inasafe-nightly.linfiniti.com/plugins.xml`
+* :guilabel:`OK`
+
+You should now see the experimental versions of InaSAFE listed in the
+:guilabel:`Plugins` tab.
+
+.. note:: The URL may differ depending on where the test repo is hosted (see
+    below).
 
 
-
-
-Configuring the hosting of the nightly build repo.
+Configuring the hosting of the test build repo.
 --------------------------------------------------
 
 Prepare your server:
 ....................
 
-Install some packages::
+Install some packages (run this on the server)::
 
     sudo apt-get install git fabric apache2
 
-Do a read only checkout::
+Initialise everything (run this on your desktop)::
 
-    cd ~
-    mkdir -p ~/dev/python/
-    cd ~/dev/python
-    git clone git://github.com/AIFDR/inasafe.git inasafe-nightly
+    fab -H 188.40.123.80:8697 remote build_nightly
 
-Initialise your configuration::
+.. note:: You need to be able to authenticate on the server hosting the
+    test builds.
 
-    SITE_NAME=inasafe-nightly.linfiniti.com fab
-
-
-SITE_NAME=inasafe-nightly.linfiniti.com fab build_nightly
