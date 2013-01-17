@@ -63,11 +63,17 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.target_field = params['target_field']
 
         #find which attribute field has to be used
-        for key, value in self.impact_attrs[0].iteritems():
-            if key in self.valid_type_fields:
-                self.type_field = key
-                break
-
+        try:
+            for key in self.impact_attrs[0].iterkeys():
+                if key in self.valid_type_fields:
+                    self.type_field = key
+                    break
+        except IndexError:
+            #there are no features in this postprocessing polygon
+            if self.impact_attrs == []:
+                self.noFeatures = True
+            else:
+                self.noFeatures = False
 #        self._log_message('BuildingType postprocessor, using field: %s' %
 #                          self.type_field)
 
@@ -164,5 +170,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             except (ValueError, KeyError):
                 myResult = self.NO_DATA_TEXT
         else:
-            myResult = self.NO_DATA_TEXT
+            if self.noFeatures:
+                myResult = 0
+            else:
+                myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)

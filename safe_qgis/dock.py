@@ -925,7 +925,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Propagates any error from :func:optimalClip()
         """
         try:
-            myHazardFilename, myExposureFilename = self.optimalClip()
+            myHazardFilename, myExposureFilename, \
+            myAggregationFilename = self.optimalClip()
+            # in case aggregation layer is larger than the impact layer let's
+            # trim it down to  avoid extra calculations
+            self.postProcessingLayer = QgsVectorLayer(
+                myAggregationFilename, 'myLayerName', 'ogr')
+            if not self.postProcessingLayer.isValid():
+                myMessage = self.tr('Error when reading %1').arg(
+                    self.postProcessingLayer.lastError())
+                raise ReadLayerError(myMessage)
+
             if self.doZonalAggregation:
                 myHazardFilename, myExposureFilename = \
                     self.prepareInputLayerForAggregation(
@@ -1704,8 +1714,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             ReadLayerError
         """
         myImpactLayer = self.runner.impactLayer()
-        #[West, South, East, North]
-        myImpactBBox = myImpactLayer.get_bounding_box()
 
         myTitle = self.tr('Aggregating results...')
         myMessage = self.tr('This may take a little while - we are '
@@ -1713,19 +1721,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.cboAggregation.currentText())
         myProgress = 88
         self.showBusy(myTitle, myMessage, myProgress)
-
-        if not self.doZonalAggregation:
-            self.postProcessingLayer.startEditing()
-            myProvider = self.postProcessingLayer.dataProvider()
-            # add a feature the size of the impact layer bounding box
-            myFeature = QgsFeature()
-            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
-                QgsPoint(myImpactBBox[0], myImpactBBox[1]),
-                QgsPoint(myImpactBBox[2], myImpactBBox[3]))))
-            myFeature.setAttributeMap({0: QtCore.QVariant(
-                self.tr('Entire area'))})
-            myProvider.addFeatures([myFeature])
-            self.postProcessingLayer.commitChanges()
 
         myQGISImpactLayer = self.readImpactLayer(myImpactLayer)
         if not myQGISImpactLayer.isValid():
@@ -1735,22 +1730,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 .arg(myQGISImpactLayer.name())
                 .arg(self.postProcessingLayer.name()))
 
-        # in case aggregation layer is larger than the impact layer let's
-        # trim it down to  avoid extra calculations
-        clippedAggregationLayerPath = clipLayer(
-            theLayer=self.postProcessingLayer,
-            theExtent=myImpactBBox,
-            theExplodeFlag=False,
-            theHardClipFlag=self.clipHard)
-
-        self.postProcessingLayer = QgsVectorLayer(
-            clippedAggregationLayerPath, myLayerName, 'ogr')
-        if not self.postProcessingLayer.isValid():
-            myMessage = self.tr('Error when reading %1').arg(
-                self.postProcessingLayer.lastError())
-            raise ReadLayerError(myMessage)
-
-            #delete unwanted fields
+        #delete unwanted fields
         myProvider = self.postProcessingLayer.dataProvider()
         myFields = myProvider.fields()
         myUnneededAttributes = []
@@ -2149,7 +2129,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
             if self.statisticsType == 'sum':
-                myImpact, myResult = myAttributeMap[mySumFieldIndex].toDouble()
+                myImpact, _ = myAttributeMap[mySumFieldIndex].toDouble()
             elif self.statisticsType == 'class_count':
                 myImpact = []
             myGeneralParams = {'impact_total': myImpact,
@@ -2609,7 +2589,35 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theExtraKeywords=extraExposureKeywords,
             theHardClipFlag=self.clipHard)
 
-        return myClippedHazardPath, myClippedExposurePath
+        myTitle = self.tr('Preparing aggregation layer...')
+        myMessage = self.tr('We are clipping the aggregation'
+                            'layer to match the intersection of the hazard'
+                            'and exposure layer extents.')
+        myProgress = 39
+        self.showBusy(myTitle, myMessage, myProgress)
+        #If doing entire area, create a fake feature that covers the whole
+        #myGeoExtent
+        if not self.doZonalAggregation:
+            self.postProcessingLayer.startEditing()
+            myProvider = self.postProcessingLayer.dataProvider()
+            # add a feature the size of the impact layer bounding box
+            myFeature = QgsFeature()
+            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
+                QgsPoint(myGeoExtent[0], myGeoExtent[1]),
+                QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
+            myFeature.setAttributeMap({0: QtCore.QVariant(
+                self.tr('Entire area'))})
+            myProvider.addFeatures([myFeature])
+            self.postProcessingLayer.commitChanges()
+
+        myClippedAggregationPath = clipLayer(
+            theLayer=self.postProcessingLayer,
+            theExtent=myGeoExtent,
+            theExplodeFlag=False,
+            theHardClipFlag=self.clipHard)
+
+        return myClippedHazardPath, myClippedExposurePath, \
+               myClippedAggregationPath
 
         ############################################################
         # logic checked to here..............
