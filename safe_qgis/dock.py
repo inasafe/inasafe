@@ -1864,7 +1864,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myTotal = 0
 
-
         myPostprocessorProvider = self.postProcessingLayer.dataProvider()
         self.postProcessingLayer.startEditing()
 
@@ -2039,7 +2038,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myResults = OrderedDict()
                 for myClass in self.statisticsClasses:
                     myResults[myClass] = 0
-                    
+
                 self.impactLayerAttributes.append([])
                 for myImpactValueList in myImpactValues:
                     myKey = myImpactValueList[self.targetField]

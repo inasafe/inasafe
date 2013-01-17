@@ -10,7 +10,6 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from third_party.odict import OrderedDict
 
 
-
 #FIXME: need to normalise all raster data Ole/Kristy
 class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
