@@ -97,23 +97,35 @@ version at the point of release.
 **Outcome:** If needed, create a release branch which provides a 'known good'
 version that can be returned to at any point in time.
 
-Updating the source version number
-..................................
+Updating the version number
+...........................
 
-In the preample to any source file there should be a standard header as
-described in the :doc:`coding_standards` document. Included in this header
-section is the version number e.g.::
+There are two files containing version numbers:
 
-   __version__ = '0.1.0'
+* :file:`__init__.py`
+* :file:`metadata.txt
 
-This number should be updated in every source file prior to release. Under
-linux this can easily be done using the :command:`rpl` command (which can
-easily be installed (by doing for example :command:`sudo apt-get install rpl`).
+In the init file you would typically update the version entry like this::
 
-Using th example above, to update version numbers for minor release '0.1.1'
-you could issue the following command at the root of the plugin source tree::
+    def version():
+        """Version of the plugin."""
+        return 'Version 1.1.0'
 
-   rpl "__version__ = '0.1.0'" "__version__ = '0.1.1'" *.py
+.. note:: Be very careful about editing medata in __init__.py. The system
+    of storing metadata in QGIS plugins is being deprecated (from QGIS 2.0)
+    because it is extremely fragile and prone to breakage by poor text
+    formatting.
+
+In metadata you would typically update the version and status entries to::
+
+    version=1.1.0
+    # alpha, beta, rc or final
+    status=beta
+
+Immediately after branching, and then change the status designation to final
+just prior to tagging the release.
+
+Both of these files should be updated to reflect the version number and
 
 **Outcome::** Every source file should be updated to indicate the version number.
 
@@ -268,7 +280,7 @@ In particular the following two languages are supported as part of this
 project:
 
 * English
-* Bahasa Indonesian
+* Bahasa Indonesia
 
 There are three components of the project that require translation:
 
