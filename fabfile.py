@@ -121,6 +121,8 @@ def update_git_checkout(branch='master'):
     else:
         fastprint('Repo checkout does exist, updating.')
         with cd(os.path.join(env.repo_path, env.repo_alias)):
+            # Get any updates first
+            clone = env.run('git fetch')
             # Get rid of any local changes
             clone = env.run('git reset --hard')
             # Get back onto master branch
