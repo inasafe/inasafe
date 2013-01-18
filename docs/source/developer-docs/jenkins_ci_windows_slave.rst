@@ -91,5 +91,19 @@ to the plugins directory use the GitHub Windows app's options dialog to find
 them by clicking the 'scan for repositories' button.
 
 
+Python Setup
+............
+
+
+* Download and install Python **32Bit** (even if you are running a 64 bit
+  windows!!!) to match the version of python shipped with QGIS (python 2.7 in
+  the case of QGIS 1.8).
+* Follow the process described in :ref:`windows_shell_launcher-label` so that
+  you can use the QGIS libraries from a python shell. Note that you probably
+  need to change the second last line of that script to :samp:`cd "%HOMEPATH%\
+  .qgis\python\plugins\inasafe"` (removing the '-dev') at the end.
+* Follow the processed described in :ref:`windows-nose-setup` so that you have
+  a working pip, nose etc.
+
 
 
