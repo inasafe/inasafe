@@ -10,41 +10,51 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+
 from safe.postprocessors.abstract_postprocessor import (
-                                                    AbstractPostprocessor)
+    AbstractPostprocessor)
 
 from safe.common.utilities import ugettext as tr
 
 
-class GenderPostprocessor(AbstractPostprocessor):
+class OSMBuildingTypePostprocessor(AbstractPostprocessor):
     """
-    Postprocessor that calculates gender related statistics.
+    Postprocessor that calculates age related statistics.
     see the _calculate_* methods to see indicator specific documentation
 
     see :mod:`safe.defaults` for default values information
     """
 
     def __init__(self):
+        """
+        Constructor for AgePostprocessor postprocessor class,
+        It takes care of defining self.impact_total
+        """
         AbstractPostprocessor.__init__(self)
         self.impact_total = None
-        self.female_ratio = None
+        self.impact_attrs = None
+        self.target_field = None
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being
          initialized
 
         Args:
-            params: Dict of parameters to pass to the post processor
+            params: dict of parameters to pass to the post processor
         Returns:
             None
         Raises:
             None
         """
         AbstractPostprocessor.setup(self, None)
-        if self.impact_total is not None or self.female_ratio is not None:
+        if (self.impact_total is not None or
+           self.impact_attrs is not None or
+           self.target_field is not None):
             self._raise_error('clear needs to be called before setup')
+
         self.impact_total = params['impact_total']
-        self.female_ratio = params['female_ratio']
+        self.impact_attrs = params['impact_attrs']
+        self.target_field = params['target_field']
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
@@ -58,16 +68,18 @@ class GenderPostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.process(self)
-        if self.impact_total is None or self.female_ratio is None:
+        if (self.impact_total is None or
+            self.impact_attrs is None or
+            self.target_field is None):
             self._log_message('%s not all params have been correctly '
                               'initialized, setup needs to be called before '
                               'process. Skipping this postprocessor'
                               % self.__class__.__name__)
         else:
             self._calculate_total()
-            self._calculate_females()
-            self._calculate_weekly_hygene_packs()
-            self._calculate_weekly_increased_calories()
+            self._calculate_medical()
+            self._calculate_place_of_worship()
+            self._calculate_schools()
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
@@ -82,10 +94,11 @@ class GenderPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.clear(self)
         self.impact_total = None
-        self.female_ratio = None
+        self.impact_attrs = None
+        self.target_field = None
 
     def _calculate_total(self):
-        """Total population indicator.
+        """Indicator that shows total population.
 
         this indicator reports the total population
 
@@ -96,25 +109,27 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
+
         myName = tr('Total')
+        if self.target_field is not None:
+            myName = '%s %s' % (myName, tr(self.target_field).lower())
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
             self._append_result(myName, self.NO_DATA_TEXT)
             return
 
+        myResult = self.impact_total
         try:
-            myResult = self.impact_total
             myResult = int(round(myResult))
         except ValueError:
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
-    def _calculate_females(self):
-        """Female population count indicator.
+    def _calculate_place_of_worship(self):
+        """Indicator that shows total population.
 
-        this indicator reports the amount of female population according to the
-        set female_ratio
+        this indicator reports the total population
 
         Args:
             None
@@ -123,26 +138,31 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Female population')
+        myName = tr('Place of worship')
+        if self.target_field is not None:
+            myName = '%s %s' % (myName, tr(self.target_field).lower())
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
             self._append_result(myName, self.NO_DATA_TEXT)
             return
 
-        myResult = self.impact_total * self.female_ratio
+        myResult = 0
         try:
+            for building in self.impact_attrs:
+                if (building[self.target_field] and
+                    building['amenity'] == 'place_of_worship'):
+                    myResult += building[self.target_field]
+
             myResult = int(round(myResult))
-        except ValueError:
+        except (ValueError, KeyError):
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
-    def _calculate_weekly_hygene_packs(self):
-        """Weekly requirements of female hygiene packs indicator.
+    def _calculate_medical(self):
+        """Indicator that shows total population.
 
-        This indicator reports the weekly requirements of female hygiene packs
-        for further detail refer to the "Sample InaSAFE Actions for Vulnerable
-        Populations" [27.07.2012] paper
+        this indicator reports the total population
 
         Args:
             None
@@ -151,31 +171,31 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Weekly hygiene packs')
-        myMeta = {'description': 'Females hygiene packs for weekly use'}
+        myName = tr('Hospitals')
+        if self.target_field is not None:
+            myName = '%s %s' % (myName, tr(self.target_field).lower())
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT, myMeta)
+            self._append_result(myName, self.NO_DATA_TEXT)
             return
 
-        #weekly hygene packs =
-        # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        myResult = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
+        myResult = 0
         try:
+            for building in self.impact_attrs:
+                if (building[self.target_field] and
+                    building['amenity'] == 'hospital'):
+                    myResult += building[self.target_field]
+
             myResult = int(round(myResult))
-        except ValueError:
+        except (ValueError, KeyError):
             myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult, myMeta)
+        self._append_result(myName, myResult)
 
-    def _calculate_weekly_increased_calories(self):
-        """Weekly additional kg of rice for pregnant and lactating women
-        indicator.
+    def _calculate_schools(self):
+        """Indicator that shows total population.
 
-        This indicator reports the weekly additional kg of rice for pregnant
-        and lactating women.
-        for further detail refer to the "Sample InaSAFE Actions for Vulnerable
-        Populations" [27.07.2012] paper
+        this indicator reports the total population
 
         Args:
             None
@@ -184,23 +204,18 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Additional weekly rice kg for pregnant and lactating'
-                         ' women')
-        myMeta = {'description': 'Additional rice kg per week for pregnant and'
-                                 ' lactating women'}
+        myName = tr('Schools')
+        if self.target_field is not None:
+            myName = '%s %s' % (myName, tr(self.target_field).lower())
 
-        #FIXME (MB) Shameless hack to deal with issue #368
-        if self.impact_total > 8000000000 or self.impact_total < 0:
-            self._append_result(myName, self.NO_DATA_TEXT, myMeta)
-            return
-
-        #weekly Kg rice =
-        # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        myLactKg = self.impact_total * self.female_ratio * 2 * 0.033782
-        myPregKg = self.impact_total * self.female_ratio * 2 * 0.01281
-        myResult = myLactKg + myPregKg
+        myResult = 0
         try:
+            for building in self.impact_attrs:
+                if (building[self.target_field] and
+                    building['amenity'] == 'school'):
+                    myResult += building[self.target_field]
+
             myResult = int(round(myResult))
-        except ValueError:
+        except (ValueError, KeyError):
             myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult, myMeta)
+        self._append_result(myName, myResult)

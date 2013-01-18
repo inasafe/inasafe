@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import numpy
+import sys
 import logging
 import uuid
 
@@ -39,7 +40,9 @@ from qgis.core import (QgsMapLayer,
                        QgsRectangle,
                        QgsPoint,
                        QgsField,
-                       QGis)
+                       QgsVectorFileWriter,
+                       QGis
+                       )
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.dock_base import Ui_DockBase
@@ -54,7 +57,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  setRasterStyle,
                                  qgisVersion,
                                  getDefaults,
-                                 impactLayerAttribution)
+                                 impactLayerAttribution,
+                                 copyInMemory)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -65,8 +69,13 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       safeTr,
                                       get_version,
                                       temp_dir,
+                                      safe_read_layer,
                                       ReadLayerError,
-                                      get_post_processors)
+                                      points_in_and_outside_polygon,
+                                      calculate_polygon_centroid,
+                                      unique_filename,
+                                      get_postprocessors,
+                                      get_postprocessor_human_name)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundError,
@@ -83,6 +92,7 @@ from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
+
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -472,17 +482,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no
         """
-        #FIXME (MB) remove hazardlayer and exposure layer type check when
-        # vector aggregation is supported
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
 
         #more than 1 because No aggregation is always there
         if (self.cboAggregation.count() > 1 and
             selectedHazardLayer is not None and
-            selectedExposureLayer is not None and
-            selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
-            selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
+            selectedExposureLayer is not None):
             self.cboAggregation.setEnabled(True)
         else:
             self.cboAggregation.setCurrentIndex(0)
@@ -918,6 +924,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
+            if self.doZonalAggregation:
+                myHazardFilename, myExposureFilename = \
+                    self.prepareInputLayerForAggregation(
+                        myHazardFilename, myExposureFilename)
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -1180,6 +1190,318 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                    theContext=myMessage)
             self.displayHtml(myMessage)
 
+    def prepareInputLayerForAggregation(self, theClippedHazardFilename,
+                              theClippedExposureFilename):
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
+
+        #get safe version of postproc layers
+        self.mySafePostprocLayer = safe_read_layer(
+            str(self.postProcessingLayer.source()))
+
+        myTitle = self.tr('Preclipping input data...')
+        myMessage = self.tr('We are clipping the input layers to avoid '
+                            'intersections with the aggregation layer')
+        myProgress = 44
+        self.showBusy(myTitle, myMessage, myProgress)
+#        import cProfile
+        if isLayerPolygonal(myHazardLayer):
+            # http://stackoverflow.com/questions/1031657/
+            # profiling-self-and-arguments-in-python
+#            cProfile.runctx('self.preparePolygonLayerForAggr(
+#               theClippedHazardFilename, myHazardLayer)', globals(), locals())
+#            raise
+            theClippedHazardFilename = self.preparePolygonLayerForAggr(
+                theClippedHazardFilename, myHazardLayer)
+
+        if isLayerPolygonal(myExposureLayer):
+            mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
+                'subcategory')
+            if mySubcategory != 'structure':
+                theClippedExposureFilename = self.preparePolygonLayerForAggr(
+                    theClippedExposureFilename, myExposureLayer)
+
+        return theClippedHazardFilename, theClippedExposureFilename
+
+    def preparePolygonLayerForAggr(self, theLayerFilename, theQgisLayer):
+        """ A helper function to align the polygons to the postprocLayer
+        polygons. If one input polygon is in two or more postprocLayer polygons
+        then it is divided so that each part is within only one of the
+        postprocLayer polygons. this allows to aggregate in postrocessing using
+        centroid in polygon.
+
+        The function assumes EPSG:4326 but no checks are enforced
+
+        Args:
+            theLayerFilename str of the file to be processed
+        Returns:
+            str of the processed file
+
+        Raises:
+            Any exceptions raised by the InaSAFE library will be propagated.
+        """
+#        import time
+#        startTime = time.clock()
+        myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
+        myPolygonsLayer = safe_read_layer(theLayerFilename)
+        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
+#        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
+        myRemainingIndexes = numpy.array(range(len(myRemainingPolygons)))
+
+        #used for unit tests only
+        self.preprocessedFeatureCount = 0
+
+        # FIXME (MB) the intersecting array is used only for debugging and
+        # could be safely removed
+        myIntersectingPolygons = []
+        myInsidePolygons = []
+
+        # FIXME (MB) maybe do raw geos without qgis
+        #select all postproc polygons with no attributes
+        postprocProvider = self.postProcessingLayer.dataProvider()
+        postprocProvider.select([])
+
+        # copy polygons to a memory layer
+        myQgisMemoryLayer = copyInMemory(theQgisLayer)
+
+        polygonsProvider = myQgisMemoryLayer.dataProvider()
+        allPolygonAttrs = polygonsProvider.attributeIndexes()
+        polygonsProvider.select(allPolygonAttrs)
+        myQgisPostprocPoly = QgsFeature()
+        myQgisFeat = QgsFeature()
+        myInsideFeat = QgsFeature()
+        fields = polygonsProvider.fields()
+        myTempdir = temp_dir(sub_dir='preprocess')
+        myOutFilename = unique_filename(suffix='.shp',
+                                        dir=myTempdir)
+
+        self.keywordIO.copyKeywords(theQgisLayer, myOutFilename)
+        mySHPWriter = QgsVectorFileWriter(myOutFilename,
+                                            'UTF-8',
+                                            fields,
+                                            polygonsProvider.geometryType(),
+                                            polygonsProvider.crs())
+        if mySHPWriter.hasError():
+            raise InvalidParameterError(mySHPWriter.errorMessage())
+        # end FIXME
+
+        for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
+                                                           myPostprocPolygons):
+            LOGGER.debug('')
+            LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
+            myPolygonsCount = len(myRemainingPolygons)
+            postprocProvider.featureAtId(myPostprocPolygonIndex,
+                                         myQgisPostprocPoly, True, [])
+            myQgisPostprocGeom = QgsGeometry(myQgisPostprocPoly.geometry())
+
+            # myPostprocPolygon bounding box values
+            A = numpy.array(myPostprocPolygon)
+            minx = miny = sys.maxint
+            maxx = maxy = -minx
+            myPostprocPolygonMinx = min(minx, min(A[:, 0]))
+            myPostprocPolygonMaxx = max(maxx, max(A[:, 0]))
+            myPostprocPolygonMiny = min(miny, min(A[:, 1]))
+            myPostprocPolygonMaxy = max(maxy, max(A[:, 1]))
+
+            # create an array full of False to store if a BB vertex is inside
+            # or outside the myPostprocPolygon
+            myAreVerticesInside = numpy.zeros(myPolygonsCount * 4,
+                dtype=numpy.bool)
+
+            # Create Nx2 vector of vertices of bounding boxes
+            myBBVertices = []
+            # Compute bounding box for each geometry type
+            for myPoly in myRemainingPolygons:
+                minx = miny = sys.maxint
+                maxx = maxy = -minx
+                # Do outer ring only as the BB is outside anyway
+                A = numpy.array(myPoly)
+                minx = min(minx, numpy.min(A[:, 0]))
+                maxx = max(maxx, numpy.max(A[:, 0]))
+                miny = min(miny, numpy.min(A[:, 1]))
+                maxy = max(maxy, numpy.max(A[:, 1]))
+                myBBVertices.extend([(minx, miny),
+                                    (minx, maxy),
+                                    (maxx, maxy),
+                                    (maxx, miny)])
+
+            # see if BB vertices are in myPostprocPolygon
+            myBBVertices = numpy.array(myBBVertices)
+            inside, _ = points_in_and_outside_polygon(myBBVertices,
+                                                    myPostprocPolygon)
+            # make True if the vertice was in myPostprocPolygon
+            myAreVerticesInside[inside] = True
+
+            # myNextIterPolygons has the 0:count indexes
+            # myOutsidePolygons has the mapped to original indexes
+            # and is overwritten at every iteration because we care only of
+            # the outside polygons remaining after the last iteration
+            myNextIterPolygons = []
+            myOutsidePolygons = []
+
+            for i in range(myPolygonsCount):
+                k = i * 4
+                myMappedIndex = myRemainingIndexes[i]
+                # memory layers counting starts at 1 instead of 0 as in our
+                # indexes
+                myFeatId = myMappedIndex + 1
+                doIntersection = False
+                # summ the isInside bool for each of the boundingbox vertices
+                # of each poygon. for example True + True + False + True is 3
+                myPolygonLocation = numpy.sum(myAreVerticesInside[k:k + 4])
+
+                if myPolygonLocation == 4:
+                    # all vertices are inside -> polygon is inside
+                    #ignore this polygon from further analysis
+                    myInsidePolygons.append(myMappedIndex)
+                    polygonsProvider.featureAtId(myFeatId,
+                                                 myQgisFeat,
+                                                 True,
+                                                 allPolygonAttrs)
+                    mySHPWriter.addFeature(myQgisFeat)
+                    self.preprocessedFeatureCount += 1
+#                    LOGGER.debug('Polygon %s is fully inside' %myMappedIndex)
+#                    tmpWriter.addFeature(myQgisFeat)
+
+                elif myPolygonLocation == 0:
+                    # all vertices are outside
+                    # check if the polygon BB is completely outside of the
+                    # myPostprocPolygon BB.
+                    myPolyMinx = numpy.min(myBBVertices[k:k + 4, 0])
+                    myPolyMaxx = numpy.max(myBBVertices[k:k + 4, 0])
+                    myPolyMiny = numpy.min(myBBVertices[k:k + 4, 1])
+                    myPolyMaxy = numpy.max(myBBVertices[k:k + 4, 1])
+
+                    # check if myPoly is all E,W,N,S of myPostprocPolygon
+                    if (myPolyMinx > myPostprocPolygonMaxx or
+                        myPolyMaxx < myPostprocPolygonMinx or
+                        myPolyMiny > myPostprocPolygonMaxy or
+                        myPolyMaxy < myPostprocPolygonMiny):
+                        #polygon is surely outside
+                        myOutsidePolygons.append(myMappedIndex)
+                        # we need this polygon in the next iteration
+                        myNextIterPolygons.append(i)
+                    else:
+                        # polygon might be outside or intersecting. consider
+                        # it intersecting so it goes into further analysis
+                        doIntersection = True
+                else:
+                    # some vertices are outside some inside -> polygon is
+                    # intersecting
+                    doIntersection = True
+
+                #intersect using qgis
+                if doIntersection:
+#                    LOGGER.debug('Intersecting polygon %s' % myMappedIndex)
+                    myIntersectingPolygons.append(myMappedIndex)
+
+                    ok = polygonsProvider.featureAtId(myFeatId,
+                                                 myQgisFeat,
+                                                 True,
+                                                 allPolygonAttrs)
+                    if not ok:
+                        LOGGER.debug('Couldn\'t fetch feature: %s' % myFeatId)
+                        LOGGER.debug([str(error) for error in
+                                       polygonsProvider.errors()])
+
+                    myQgisPolyGeom = QgsGeometry(myQgisFeat.geometry())
+                    myAtMap = myQgisFeat.attributeMap()
+#                    for (k, attr) in myAtMap.iteritems():
+#                        LOGGER.debug( "%d: %s" % (k, attr.toString()))
+
+                    # make intersection of the myQgisFeat and the postprocPoly
+                    # write the inside part to a shp file and the outside part
+                    # back to the original QGIS layer
+                    try:
+                        myIntersec = myQgisPostprocGeom.intersection(
+                            myQgisPolyGeom)
+#                        if myIntersec is not None:
+                        myIntersecGeom = QgsGeometry(myIntersec)
+
+                        #from ftools
+                        myUnknownGeomType = 0
+                        if myIntersecGeom.wkbType() == myUnknownGeomType:
+                            int_com = myQgisPostprocGeom.combine(
+                                myQgisPolyGeom)
+                            int_sym = myQgisPostprocGeom.symDifference(
+                                myQgisPolyGeom)
+                            myIntersecGeom = QgsGeometry(
+                                int_com.difference(int_sym))
+#                        LOGGER.debug('wkbType type of intersection: %s' %
+# myIntersecGeom.wkbType())
+                        polygonTypesList = [QGis.WKBPolygon,
+                                            QGis.WKBMultiPolygon]
+                        if myIntersecGeom.wkbType() in polygonTypesList:
+                            myInsideFeat.setGeometry(myIntersecGeom)
+                            myInsideFeat.setAttributeMap(myAtMap)
+                            mySHPWriter.addFeature(myInsideFeat)
+                            self.preprocessedFeatureCount += 1
+                        else:
+                            pass
+#                            LOGGER.debug('Intersection not a polygon so '
+#                                         'the two polygons either touch '
+#                                         'only or do not intersect. Not '
+#                                         'adding this to the inside list')
+                        #Part of the polygon that is outside the postprocpoly
+                        myOutside = myQgisPolyGeom.difference(myIntersecGeom)
+#                        if myOutside is not None:
+                        myOutsideGeom = QgsGeometry(myOutside)
+
+                        if myOutsideGeom.wkbType() in polygonTypesList:
+                            # modifiy the original geometry to the part
+                            # outside of the postproc polygon
+                            polygonsProvider.changeGeometryValues(
+                                {myFeatId: myOutsideGeom})
+                            # we need this polygon in the next iteration
+                            myOutsidePolygons.append(myMappedIndex)
+                            myNextIterPolygons.append(i)
+
+                    except TypeError:
+                        LOGGER.debug('ERROR with FID %s', myMappedIndex)
+
+            LOGGER.debug('Inside %s' % myInsidePolygons)
+            LOGGER.debug('Outside %s' % myOutsidePolygons)
+            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
+            if len(myNextIterPolygons) > 0:
+                #some polygons are still completely outside of the postprocPoly
+                #so go on and reiterate using only these
+                nextIterPolygonsIndex = numpy.array(myNextIterPolygons)
+
+                myRemainingPolygons = myRemainingPolygons[
+                                        nextIterPolygonsIndex]
+#                myRemainingAttributes = myRemainingAttributes[
+#                                        nextIterPolygonsIndex]
+                myRemainingIndexes = myRemainingIndexes[nextIterPolygonsIndex]
+                LOGGER.debug('Remaining: %s' % len(myRemainingPolygons))
+            else:
+                print 'no more polygons to be checked'
+                break
+#            del tmpWriter
+
+        # here the full polygon set is represented by:
+        # myInsidePolygons + myIntersectingPolygons + myNextIterPolygons
+        # the a polygon intersecting multiple postproc polygons appears
+        # multiple times in the array
+        LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
+                myInsidePolygons, myIntersectingPolygons, myOutsidePolygons))
+
+        #add in- and outside polygons
+
+        for i in myOutsidePolygons:
+            myFeatId = i + 1
+            polygonsProvider.featureAtId(myFeatId, myQgisFeat, True,
+                                         allPolygonAttrs)
+            mySHPWriter.addFeature(myQgisFeat)
+            self.preprocessedFeatureCount += 1
+
+        del mySHPWriter
+#        LOGGER.debug('Created: %s' % self.preprocessedFeatureCount)
+        if self.showPostProcLayers:
+            self.iface.addVectorLayer(myOutFilename,
+                                      theQgisLayer.title(),
+                                      'ogr')
+        return myOutFilename
+
     def postProcess(self):
         """Run all post processing steps.
 
@@ -1237,6 +1559,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.postProcessingOutput = {}
         self.aggregationErrorSkipPostprocessing = None
+        self.targetField = None
+        self.impactLayerAttributes = []
         try:
             if (self.postProcessingLayer is not None and
                 self.lastUsedFunction != self.getFunctionID()):
@@ -1331,13 +1655,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '       <td colspan="100%">'
                        '         <strong>'
                        + self.tr('Detailed %1 report').arg(
-                                 self.tr(proc)) +
+                                 self.tr(get_postprocessor_human_name(proc))
+                                    .toLower()) +
                        '         </strong>'
                        '       </td>'
                        '    </tr>'
                        '    <tr>'
                        '      <th width="25%">'
-                       + self.aggregationAttributeTitle +
+                       + str(self.aggregationAttributeTitle).capitalize() +
                        '      </th>')
             # add th according to the ammount of calculation done by each
             # postprocessor
@@ -1507,7 +1832,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
         try:
-            myTargetField = self.keywordIO.readKeywords(myQgisImpactLayer,
+            self.targetField = self.keywordIO.readKeywords(myQgisImpactLayer,
                 'target_field')
         except KeywordNotFoundError:
             myMessage = self.tr('No "target_field" keyword found in the impact'
@@ -1518,14 +1843,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.aggregationErrorSkipPostprocessing = myMessage
             return
         myImpactProvider = myQgisImpactLayer.dataProvider()
-        myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(myTargetField)
+        myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = self.tr('No attribute "%1" was found in the attribute '
                                 'table for layer "%2". The impact function '
                                 'must define this attribute for '
-                                'postprocessing to work.').arg(myTargetField,
-                                myQgisImpactLayer.name())
+                                'postprocessing to work.').arg(
+                                    self.targetField, myQgisImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
             return
@@ -1533,46 +1858,142 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # start data retreival: fetch no geometry and
         # 1 attr for each feature
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
-        myFeature = QgsFeature()
         myTotal = 0
 
+        #add the total field to the postProcessingLayer
+        myPostprocessorProvider = self.postProcessingLayer.dataProvider()
+        self.postProcessingLayer.startEditing()
+        myAggrField = self.getAggregationFieldNameSum()
+        myPostprocessorProvider.addAttributes([QgsField(myAggrField,
+            QtCore.QVariant.Int)])
+        self.postProcessingLayer.commitChanges()
+        myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(myAggrField)
+        self.postProcessingLayer.startEditing()
+
+        mySafeImpactLayer = self.runner.impactLayer()
+        myImpactGeoms = mySafeImpactLayer.get_geometry()
+        myImpactValues = mySafeImpactLayer.get_data()
+
         if self.doZonalAggregation:
-            myMessage = self.tr('Vector aggregation not implemented yet. '
-                                'Called on %1').arg(myQgisImpactLayer.name())
-            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-            self.aggregationErrorSkipPostprocessing = myMessage
-            return
+            myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
+
+            if (mySafeImpactLayer.is_point_data or
+                mySafeImpactLayer.is_polygon_data):
+                LOGGER.debug('Doing point in polygon aggregation')
+
+                myRemainingValues = myImpactValues
+
+                if mySafeImpactLayer.is_polygon_data:
+                    # Using centroids to do polygon in polygon aggregation
+                    # this is always ok because
+                    # prepareInputLayerForAggregation() took care of splitting
+                    # polygons that spawn across multiple postprocessing
+                    # polygons. After prepareInputLayerForAggregation()
+                    # each impact polygon will never be contained by more than
+                    # one aggregation polygon
+
+                    # Calculate points for each polygon
+                    myCentroids = []
+                    for myPolygon in myImpactGeoms:
+                        if hasattr(myPolygon, 'outer_ring'):
+                            outer_ring = myPolygon.outer_ring
+                        else:
+                            # Assume it is an array
+                            outer_ring = myPolygon
+                        c = calculate_polygon_centroid(outer_ring)
+                        myCentroids.append(c)
+                    myRemainingPoints = myCentroids
+
+                else:
+                    myRemainingPoints = myImpactGeoms
+
+                for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
+                    myTotal = 0
+
+                    if hasattr(myPolygon, 'outer_ring'):
+                        outer_ring = myPolygon.outer_ring
+                        inner_rings = myPolygon.inner_rings
+                    else:
+                        # Assume it is an array
+                        outer_ring = myPolygon
+                        inner_rings = None
+                    inside, outside = points_in_and_outside_polygon(
+                        myRemainingPoints,
+                        outer_ring,
+                        holes=inner_rings,
+                        closed=True,
+                        check_input=True)
+
+                    #summ attributes
+                    self.impactLayerAttributes.append([])
+                    for i in inside:
+                        try:
+                            myTotal += myRemainingValues[i][self.targetField]
+                        except TypeError:
+                            pass
+                        self.impactLayerAttributes[myPolygonIndex].append(
+                            myRemainingValues[i])
+
+                    # Add features inside this polygon
+                    myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+                    myFID = myPolygonIndex
+                    myPostprocessorProvider.changeAttributeValues(
+                        {myFID: myAttrs})
+
+                    # make outside points the input to the next iteration
+                    # this could maybe be done quicklier using directly numpy
+                    # arrays like this:
+                    # myRemainingPoints = myRemainingPoints[outside]
+                    # myRemainingValues =
+                    # [myRemainingValues[i] for i in outside]
+                    myTmpPoints = []
+                    myTmpValues = []
+                    for i in outside:
+                        myTmpPoints.append(myRemainingPoints[i])
+                        myTmpValues.append(myRemainingValues[i])
+                    myRemainingPoints = myTmpPoints
+                    myRemainingValues = myTmpValues
+
+#                    LOGGER.debug('Before: ' + str(len(myRemainingValues)))
+#                    LOGGER.debug('After: ' + str(len(myRemainingValues)))
+#                    LOGGER.debug('Inside: ' + str(len(inside)))
+#                    LOGGER.debug('Outside: ' + str(len(outside)))
+
+            elif mySafeImpactLayer.is_line_data:
+                LOGGER.debug('Doing line in polygon aggregation')
+
+            else:
+                myMessage = self.tr('Aggregation on vector impact layers other'
+                                    'than points or polygons not implemented '
+                                    'yet not implemented yet. '
+                                    'Called on %1').arg(
+                    myQgisImpactLayer.name())
+                LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+                self.aggregationErrorSkipPostprocessing = myMessage
+                self.postProcessingLayer.commitChanges()
+                return
         else:
             #loop over all features in impact layer
-            while myImpactProvider.nextFeature(myFeature):
-                myVal, ok = myFeature.attributeMap()[
-                              myTargetFieldIndex].toInt()
-                if ok:
-                    myTotal += myVal
+            self.impactLayerAttributes.append([])
+            for myImpactValueList in myImpactValues:
+                if myImpactValueList[self.targetField] == 'None':
+                    myImpactValueList[self.targetField] = None
+                try:
+                    myTotal += myImpactValueList[self.targetField]
+                except TypeError:
+                    pass
+                self.impactLayerAttributes[0].append(myImpactValueList)
+            myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+            myFID = 0
+            myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
 
-            #add the total to the postProcessingLayer
-            myPostprocessorProvider = self.postProcessingLayer.dataProvider()
-            self.postProcessingLayer.startEditing()
-            myAggrField = self.getAggregationFieldNameSum()
-            myPostprocessorProvider.addAttributes([QgsField(myAggrField,
-                QtCore.QVariant.Int)])
-            self.postProcessingLayer.commitChanges()
-            myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(
-                myAggrField)
-            myAttributes = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
-            myFeatureId = 0
-            self.postProcessingLayer.startEditing()
-            myPostprocessorProvider.changeAttributeValues(
-                {myFeatureId: myAttributes})
-            self.postProcessingLayer.commitChanges()
-
+        self.postProcessingLayer.commitChanges()
         return
 
     def _aggregateResultsRaster(self, theQGISImpactLayer):
-        """Perform aggregation postprocessing step on raster impact layers.
-
-         Uses QgsZonalStatistics.
-
+        """
+        Performs Aggregation postprocessing step on raster impact layers by
+        calling QgsZonalStatistics
         Args:
             QgsMapLayer: theQGISImpactLayer a valid QgsVectorLayer
 
@@ -1610,7 +2031,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         try:
             myRequestedPostProcessors = self.functionParams['postprocessors']
-            myPostProcessors = get_post_processors(myRequestedPostProcessors)
+            myPostProcessors = get_postprocessors(myRequestedPostProcessors)
         except (TypeError, KeyError):
             # TypeError is for when functionParams is none
             # KeyError is for when ['postprocessors'] is unavailable
@@ -1631,13 +2052,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if 'Gender' in myPostProcessors:
             #look if we need to look for a vaInaSAFEle female ratio in a layer
-            myFemaleRatioIsVaInaSAFEle = False
+            myFemaleRatioIsVariable = False
             try:
                 myFemRatioField = self.postProcessingAttributes[self.defaults[
                                                      'FEM_RATIO_ATTR_KEY']]
                 myFemRatioFieldIndex = self.postProcessingLayer.fieldNameIndex(
                     myFemRatioField)
-                myFemaleRatioIsVaInaSAFEle = True
+                myFemaleRatioIsVariable = True
 
             except KeyError:
                 myFemaleRatio = self.keywordIO.readKeywords(
@@ -1650,20 +2071,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # start data retreival: fetch no geometry and all attributes for each
         # feature
         myProvider.select(myAttributes, QgsRectangle(), False)
-        myFeatures = QgsFeature()
-        while myProvider.nextFeature(myFeatures):
+        myFeature = QgsFeature()
+        myPolygonIndex = 0
+        while myProvider.nextFeature(myFeature):
             #get all attributes of a feature
-            myAttributeMap = myFeatures.attributeMap()
+            myAttributeMap = myFeature.attributeMap()
 
             #if a feature has no field called
             if myNameFieldIndex == -1:
-                myZoneName = str(myFeatures.id())
+                myZoneName = str(myFeature.id())
             else:
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
             mySum, myResult = myAttributeMap[mySumFieldIndex].toDouble()
             LOGGER.debug('Reading: %s %s' % (mySum, myResult))
-            myGeneralParams = {'population_total': mySum}
+            LOGGER.debug('Polygon index %s\nAttr len %s' % (myPolygonIndex,
+                                            len(self.impactLayerAttributes)))
+            myGeneralParams = {'impact_total': mySum,
+                               'target_field': self.targetField,
+                                }
+            try:
+                myGeneralParams['impact_attrs'] = (
+                    self.impactLayerAttributes[myPolygonIndex])
+            except IndexError:
+                #rasters and attributeless vectors have no attributes
+                myGeneralParams['impact_attrs'] = None
 
             for myKey, myValue in myPostProcessors.iteritems():
                 myParameters = myGeneralParams
@@ -1675,7 +2107,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     pass
 
                 if myKey == 'Gender':
-                    if myFemaleRatioIsVaInaSAFEle:
+                    if myFemaleRatioIsVariable:
                         myFemaleRatio, mySuccessFlag = myAttributeMap[
                                         myFemRatioFieldIndex].toDouble()
                         if not mySuccessFlag:
@@ -2101,7 +2533,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMessage = self.tr('We are resampling and clipping the exposure'
                             'layer to match the intersection of the hazard'
                             'layer and the current view extents.')
-        myProgress = 44
+        myProgress = 33
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(
             theLayer=myExposureLayer,
@@ -2145,6 +2577,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # get the current viewport extent
         myCanvas = self.iface.mapCanvas()
         myRect = myCanvas.extent()
+
+        myCrs = None
 
         if myCanvas.hasCrsTransformEnabled():
             myCrs = myCanvas.mapRenderer().destinationCrs()
