@@ -16,9 +16,9 @@ from safe.storage.core import read_layer
 from safe.storage.vector import Vector
 import logging
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 
 from safe_qgis.safe_interface import get_version
 from safe_qgis.minimum_needs_base import Ui_MinimumNeedsBase
@@ -72,7 +72,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             if population in ['-', None]:
                 displaced = 0
             else:
-                population = population.replace(',','')
+                population = str(population).replace(',','')
                 displaced = int(population)
 
 
@@ -120,9 +120,20 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
     def accept(self):
 
-        filename = 'foo'
-        input_layer = read_layer(filename)
+        myIndex = self.cboPolygonLayers.currentIndex()
+        myLayerId = self.cboPolygonLayers.itemData(myIndex,
+                                                 QtCore.Qt.UserRole).toString()
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 
-        output_layer = self.minimum_needs(input_layer, 'Pengungsi_')
+        myFileName = str(myLayer.source())
 
-        output_layer.write_to_file(filename[:-4] + '_perka7' + '.shp')
+        myInputLayer = read_layer(myFileName)
+
+        myOutputLayer = self.minimum_needs(myInputLayer, 'pengungsi')
+
+        myNewFile = myFileName[:-4] + '_perka7' + '.shp'
+
+        myOutputLayer.write_to_file(myNewFile)
+
+        self.postProcessingLayer = QgsVectorLayer(
+            myNewFile, 'Minimum Needs', 'ogr')
