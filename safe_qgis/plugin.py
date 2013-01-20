@@ -250,7 +250,7 @@ class Plugin:
         # Create action for minimum needs dialog
         #---------------------------------------
         self.actionMinimumNeeds = QAction(
-            QIcon(':/plugins/inasafe/icon.png'),
+            QIcon(':/plugins/inasafe/minimum_needs.png'),
             self.tr('InaSAFE Minimum Needs Tool'), self.iface.mainWindow())
         self.actionMinimumNeeds.setStatusTip(self.tr(
             'Open InaSAFE minimum needs tool'))
