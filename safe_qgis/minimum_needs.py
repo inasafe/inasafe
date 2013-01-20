@@ -135,5 +135,6 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
         myOutputLayer.write_to_file(myNewFile)
 
-        self.postProcessingLayer = QgsVectorLayer(
-            myNewFile, 'Minimum Needs', 'ogr')
+        myNewLayer = QgsVectorLayer(myNewFile, 'Minimum Needs', 'ogr')
+        QgsMapLayerRegistry.instance().addMapLayers([myNewLayer])
+        self.done(QtGui.QDialog.Accepted)

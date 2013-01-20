@@ -39,10 +39,14 @@ def remote():
 
 def _all():
     """Things to do regardless of whether command is local or remote."""
+
+    # Key is hostname as it resolves by running hostname directly on the server
+    # value is desired web site url to publish the repo as.
     site_names = {
         'waterfall': 'inasafe-test.localhost',
         'spur': 'inasafe-test.localhost',
-        'maps.linfiniti.com': 'inasafe-test.linfiniti.com'}
+        'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
+        'linfiniti': 'inasafe-crisis.linfiniti.com'}
     with hide('output'):
         env.user = env.run('whoami')
         env.hostname = env.run('hostname')
@@ -155,6 +159,10 @@ def build_test_package(branch='master'):
     To run e.g.::
 
         fab -H 188.40.123.80:8697 remote build_test_package
+
+        or to package up a specific branch (in this case minimum_needs)
+
+        fab -H 88.198.36.154:8697 remote build_test_package:minimum_needs
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """
