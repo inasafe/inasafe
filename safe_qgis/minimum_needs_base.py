@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'minimum_needs_base.ui'
 #
-# Created: Sun Jan 20 16:24:49 2013
+# Created: Sun Jan 20 23:22:18 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -24,15 +24,21 @@ class Ui_MinimumNeedsBase(object):
         self.label_2.setWordWrap(True)
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
-        self.horizontalLayout = QtGui.QHBoxLayout()
-        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.formLayout = QtGui.QFormLayout()
+        self.formLayout.setObjectName(_fromUtf8("formLayout"))
         self.label = QtGui.QLabel(MinimumNeedsBase)
         self.label.setObjectName(_fromUtf8("label"))
-        self.horizontalLayout.addWidget(self.label)
+        self.formLayout.setWidget(0, QtGui.QFormLayout.LabelRole, self.label)
         self.cboPolygonLayers = QtGui.QComboBox(MinimumNeedsBase)
         self.cboPolygonLayers.setObjectName(_fromUtf8("cboPolygonLayers"))
-        self.horizontalLayout.addWidget(self.cboPolygonLayers)
-        self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 1)
+        self.formLayout.setWidget(0, QtGui.QFormLayout.FieldRole, self.cboPolygonLayers)
+        self.label_3 = QtGui.QLabel(MinimumNeedsBase)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.formLayout.setWidget(1, QtGui.QFormLayout.LabelRole, self.label_3)
+        self.cboFields = QtGui.QComboBox(MinimumNeedsBase)
+        self.cboFields.setObjectName(_fromUtf8("cboFields"))
+        self.formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.cboFields)
+        self.gridLayout.addLayout(self.formLayout, 1, 0, 1, 1)
         self.buttonBox = QtGui.QDialogButtonBox(MinimumNeedsBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
@@ -48,4 +54,5 @@ class Ui_MinimumNeedsBase(object):
         MinimumNeedsBase.setWindowTitle(QtGui.QApplication.translate("MinimumNeedsBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("MinimumNeedsBase", "Select a layer that is already loaded in QGIS and that contains a field named \'pengungsi\'.", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MinimumNeedsBase", "Affected People Layer", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("MinimumNeedsBase", "Affected people field", None, QtGui.QApplication.UnicodeUTF8))
 

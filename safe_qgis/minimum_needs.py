@@ -17,6 +17,7 @@ from safe.storage.vector import Vector
 import logging
 
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignature
 
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 
@@ -111,14 +112,47 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
         myRegistry = QgsMapLayerRegistry.instance()
         myLayers = myRegistry.mapLayers().values()
+        myFoundFlag = False
         for myLayer in myLayers:
             myName = myLayer.name()
             mySource = str(myLayer.id())
             #check if layer is a vector polygon layer
             if isLayerPolygonal(myLayer):
+                myFoundFlag = True
                 addComboItemInOrder(self.cboPolygonLayers, myName, mySource)
+        if myFoundFlag:
+            self.cboPolygonLayers.setCurrentIndex(0)
+
+    @pyqtSignature('int')
+    def on_cboPolygonLayers_currentIndexChanged(self, theIndex=None):
+        """Automatic slot executed when the layer is changed to update fields.
+
+        Args:
+           theIndex: int - passed by the signal that triggers this slot.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        myLayerId = self.cboPolygonLayers.itemData(theIndex,
+                        QtCore.Qt.UserRole).toString()
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        myFields = myLayer.dataProvider().fieldNameMap().keys()
+        self.cboFields.clear()
+        for myField in myFields:
+            addComboItemInOrder(self.cboFields, myField, myField)
+
+
 
     def accept(self):
+        """PRocess the layer and field and generate a new layer.
+
+        .. note:: This is called on ok click.
+
+        """
+        myIndex = self.cboFields.currentIndex()
+        myFieldName = self.cboFields.itemData(myIndex,
+                                               QtCore.Qt.UserRole).toString()
+
 
         myIndex = self.cboPolygonLayers.currentIndex()
         myLayerId = self.cboPolygonLayers.itemData(myIndex,
@@ -129,7 +163,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
         myInputLayer = read_layer(myFileName)
 
-        myOutputLayer = self.minimum_needs(myInputLayer, 'pengungsi')
+        myOutputLayer = self.minimum_needs(myInputLayer, str(myFieldName))
 
         myNewFile = myFileName[:-4] + '_perka7' + '.shp'
 
