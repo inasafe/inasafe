@@ -12,15 +12,17 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import sys
 from safe.storage.core import read_layer
 from safe.storage.vector import Vector
 import logging
 
 from PyQt4 import QtGui
 
+from qgis.core import QgsMapLayerRegistry
+
 from safe_qgis.safe_interface import get_version
 from safe_qgis.minimum_needs_base import Ui_MinimumNeedsBase
+from safe_qgis.utilities import addComboItemInOrder, isLayerPolygonal
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -45,7 +47,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %1 Minimum Needs Tool').arg(get_version()))
-
+        self.polygonLayersToCombo()
 
     def minimum_needs(self, input_layer, population_name):
         """
@@ -104,6 +106,17 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                               projection=input_layer.get_projection())
         return output_layer
 
+    def polygonLayersToCombo(self):
+        """Populate the combo with all polygon layers loaded in QGIS."""
+
+        myRegistry = QgsMapLayerRegistry.instance()
+        myLayers = myRegistry.mapLayers().values()
+        for myLayer in myLayers:
+            myName = myLayer.name()
+            mySource = str(myLayer.id())
+            #check if layer is a vector polygon layer
+            if isLayerPolygonal(myLayer):
+                addComboItemInOrder(self.cboPolygonLayers, myName, mySource)
 
     def accept(self):
 

@@ -60,7 +60,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  qgisVersion,
                                  getDefaults,
                                  impactLayerAttribution,
-                                 copyInMemory)
+                                 copyInMemory,
+                                 addComboItemInOrder)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -694,7 +695,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             #check if layer is a vector polygon layer
             if isLayerPolygonal(myLayer):
-                self.addComboItemInOrder(self.cboAggregation, myTitle,
+                addComboItemInOrder(self.cboAggregation, myTitle,
                     mySource)
                 self.aggregationLayers.append(myLayer)
 
@@ -708,10 +709,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 continue
 
             if myCategory == 'hazard':
-                self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
+                addComboItemInOrder(self.cboHazard, myTitle, mySource)
                 self.hazardLayers.append(myLayer)
             elif myCategory == 'exposure':
-                self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
+                addComboItemInOrder(self.cboExposure, myTitle, mySource)
                 self.exposureLayers.append(myLayer)
 
         #handle the cboAggregation combo
@@ -783,7 +784,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # Provide function title and ID to function combo:
                 # myFunctionTitle is the text displayed in the combo
                 # myFunctionID is the canonical identifier
-                self.addComboItemInOrder(self.cboFunction,
+                addComboItemInOrder(self.cboFunction,
                                          myFunctionTitle,
                                          theItemData=myFunctionID)
         except Exception, e:
@@ -2986,35 +2987,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.hideBusy()
         #myMap.showComposer()
-
-    def addComboItemInOrder(self, theCombo, theItemText, theItemData=None):
-        """Although QComboBox allows you to set an InsertAlphabetically enum
-        this only has effect when a user interactively adds combo items to
-        an editable combo. This we have this little function to ensure that
-        combos are always sorted alphabetically.
-
-        Args:
-            * theCombo - combo box receiving the new item
-            * theItemText - display text for the combo
-            * theItemData - optional UserRole data to be associated with
-              the item
-
-        Returns:
-            None
-
-        Raises:
-
-        ..todo:: Move this to utilities
-        """
-        mySize = theCombo.count()
-        for myCount in range(0, mySize):
-            myItemText = str(theCombo.itemText(myCount))
-            # see if theItemText alphabetically precedes myItemText
-            if cmp(str(theItemText).lower(), myItemText.lower()) < 0:
-                theCombo.insertItem(myCount, theItemText, theItemData)
-                return
-        #otherwise just add it to the end
-        theCombo.insertItem(mySize, theItemText, theItemData)
 
     def getFunctionID(self, theIndex=None):
         """Get the canonical impact function ID for the currently selected
