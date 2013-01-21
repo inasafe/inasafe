@@ -136,6 +136,9 @@ the Jenkins page.
 Jenkins Configuration
 ---------------------
 
+Plugins
+.......
+
 The first thing you need to do is install some jenkins plugins. To do this
 do :menuselection:`Manage Jenkins --> Manage Plugins --> Available tab`.
 
@@ -162,8 +165,74 @@ For simplicity, I also disabled the following plugins:
 * Jenkins Subversion plugin
 * Jenkins Translation Assistance plugin
 
+System configuration
+....................
+7
+We need to provide the path to git so that Jenkins can automatically make
+checkouts of each version.
 
+:menuselection:`Jenkins --> Manage Jenkins --> Configuration --> Git
+Installations --> Path to Git executable` needs to be set. On my system I used
+the following path::
 
+    C:\Users\inasafe\AppData\Local\GitHub\PortableGit_93e8418133eb85e81a81e5e19c272776524496c6\bin\git.exe
 
+The GitHub application's git installer is a portable app and the path for you
+is going to look a little different - just lookin in your AppData dir and you
+should find it.
+
+.. note:: The Jenkins system user will need to have read permissions on the
+    above directory.
+
+Next populate the options in:
+
+* :menuselection:`Jenkins --> Manage Jenkins --> Configuration --> Git Plugins`:
+
+* :menuselection:`Global Config user.name Value` : :kbd:`<your name>`
+* :menuselection:`Global Config user.email Value` : :kbd:`<your@email.com>
+* :menuselection:`Create new accounts base on author/committer's email` : no
+
+Now click the :guiselection:`Save Button` to save your global configuration
+changes.
+
+Job Configuration
+.................
+
+Next we create our build job with the following options:
+
+* :menuselection:`Project name` : :kbd:`inasafe-win8-64` (adjust the name as
+  appropriate)
+* :menuselection:`Build a free-style software project` : select
+
+On the job configuration page use the following options:
+
+* :menuselection:`Description` : :kbd:`Windows 8 64 bit build of InaSAFE`
+* :menuselection:`GitHub project` : :kbd:`http://github.com/AIFDR/inasafe/`
+* :menuselection:`Source Code Management` section
+* :menuselection:`Git` : Check
+* :menuselection:`Repository URL` : :kbd:`git://github.com/AIFDR/inasafe.git`
+* :menuselection:`Branches to build` : :kbd:`version-1_1`
+* :menuselection:`Repository browser` : :kbd:`githubweb`
+* :menuselection:`Url` : :kbd:`http://github.com/AIFDR/inasafe/`
+
+* :menuselection:`Build triggers` section
+* :menuselection:`Poll SCM` : check and set to :kbd:`* * * * *` for
+  minutely checks.
+
+Save your changes at this point and make a commit, you should see the job
+produce output something like this the next time a commit takes place::
+
+    Started by timer
+    Building in workspace C:\Jenkins\jobs\inasafe-win8-64\workspace
+    Checkout:workspace / C:\Jenkins\jobs\inasafe-win8-64\workspace - hudson.remoting.LocalChannel@1fd5730
+    Using strategy: Default
+    Last Built Revision: Revision 5403e3ba45129b42edaa2bc0ebd12e8c9ead868e (origin/version-1_1)
+    Fetching changes from 1 remote Git repository
+    Fetching upstream changes from git://github.com/AIFDR/inasafe.git
+    Commencing build of Revision 5403e3ba45129b42edaa2bc0ebd12e8c9ead868e (origin/version-1_1)
+    Checking out Revision 5403e3ba45129b42edaa2bc0ebd12e8c9ead868e (origin/version-1_1)
+    Finished: SUCCESS
+
+That validates that at least your git checkout is working as expected.
 
 
