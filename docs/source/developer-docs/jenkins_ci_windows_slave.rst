@@ -71,14 +71,14 @@ Software Installation
 
 The following were the standard software installed on each Windows VM:
 
-QGIS Setup
-..........
+QGIS Install
+............
 
 * Install QGIS standalone from http://download.qgis.org
 * Create the .qgis\python\plugins dir
 
-GitHub for Windows Setup
-........................
+GitHub for Windows Install
+..........................
 
 * Install from http://windows.github.com
 * Do not log in with your account details (for security)
@@ -91,8 +91,8 @@ to the plugins directory use the GitHub Windows app's options dialog to find
 them by clicking the 'scan for repositories' button.
 
 
-Python Setup
-............
+Python Install
+..............
 
 
 * Download and install Python **32Bit** (even if you are running a 64 bit
@@ -104,6 +104,66 @@ Python Setup
   .qgis\python\plugins\inasafe"` (removing the '-dev') at the end.
 * Follow the processed described in :ref:`windows-nose-setup` so that you have
   a working pip, nose etc.
+
+Now run the tests and ensure that they can be run from the command line
+*before* attempting to run them via Jenkins::
+
+    C:\Users\inasafe\.qgis\python\plugins\inasafe>runtests.bat
+
+.net 3.5 Install
+................
+
+To install Jenkins, you first need to ensure you have .net 3.5 on your system.
+Windows 8 ships with .net 4+ so you need to manually install the older version
+too. First visit http://www.microsoft.com/en-us/download/details.aspx?id=21
+and either choose the .NET Framework Full Package (around 200mb, the option
+I took) or get the online installer. Note that the full package link is near
+the bottom of the page.
+
+Run the installer and accept all the defaults to install the .net 3.5
+framework.
+
+Jenkins Install
+...............
+
+Simply go to http://jenkins-ci.org/ and download the windows native package
+ and then install it, taking all the defaults.
+
+Once Jenkins is set up, open your browser at http://localhost:8080 to access
+the Jenkins page.
+
+
+Jenkins Configuration
+---------------------
+
+The first thing you need to do is install some jenkins plugins. To do this
+do :menuselection:`Manage Jenkins --> Manage Plugins --> Available tab`.
+
+Now install at least these plugins:
+
+* Jenkins GIT plugin
+* GitHub API plugin
+* GitHub plugin
+
+In addition these plugins should be available by default:
+
+* Jenkins mailer plugin
+* External Monitor Job Type Plugin
+* pam-auth
+
+For simplicity, I also disabled the following plugins:
+
+* LDAP Plugin
+* ant
+* javadoc
+* Jenkins CVS Plug-in
+* Maven Integration plugin
+* Jenkins SSH Slaves plugins
+* Jenkins Subversion plugin
+* Jenkins Translation Assistance plugin
+
+
+
 
 
 
