@@ -2148,7 +2148,9 @@ class ShakeEvent(QObject):
             'the figures shown here. Consequently decisions should not be '
             'made solely on the information presented here and should always '
             'be verified by ground truthing and other reliable information '
-            'sources.')
+            'sources. The fatality calculation assumes that '
+            'no fatalities occur for shake levels below MMI 4. Fatality '
+            'counts of less than 50 are disregarded.')
         myCredits = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the GFDRR.')
