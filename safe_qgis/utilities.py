@@ -1185,3 +1185,22 @@ def isLayerPolygonal(theLayer):
             theLayer.geometryType() == QGis.Polygon)
     except AttributeError:
         return False
+
+
+def isLayerPoint(theLayer):
+    """Tell if a QGIS layer is vector and its geometries are polygons.
+
+   Args:
+       the theLayer
+
+    Returns:
+        bool - true if the theLayer contains polygons
+
+    Raises:
+       None
+    """
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Point)
+    except AttributeError:
+        return False

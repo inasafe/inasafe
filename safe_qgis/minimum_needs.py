@@ -23,7 +23,9 @@ from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 
 from safe_qgis.safe_interface import get_version
 from safe_qgis.minimum_needs_base import Ui_MinimumNeedsBase
-from safe_qgis.utilities import addComboItemInOrder, isLayerPolygonal
+from safe_qgis.utilities import (addComboItemInOrder,
+                                 isLayerPolygonal,
+                                 isLayerPoint)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -122,7 +124,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             myName = myLayer.name()
             mySource = str(myLayer.id())
             #check if layer is a vector polygon layer
-            if isLayerPolygonal(myLayer):
+            if isLayerPolygonal(myLayer) or isLayerPoint(myLayer):
                 myFoundFlag = True
                 addComboItemInOrder(self.cboPolygonLayers, myName, mySource)
         if myFoundFlag:
