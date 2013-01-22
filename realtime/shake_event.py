@@ -2133,7 +2133,7 @@ class ShakeEvent(QObject):
         myFatalitiesCount = self.fatalityTotal
         # Calculate a lower range for the fatalities
         if myFatalitiesCount > 0:
-            myFatalitiesLowerCount = int(myFatalitiesCount/10)
+            myFatalitiesLowerCount = int(myFatalitiesCount / 10)
             myFatalitiesRange = '%i - %i' % (myFatalitiesLowerCount,
                 myFatalitiesCount)
         else:
