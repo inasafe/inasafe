@@ -1702,6 +1702,7 @@ class ShakeEvent(QObject):
             myFatalities = myResult.keywords['fatalites_per_mmi']
             myAffected = myResult.keywords['exposed_per_mmi']
             myDisplaced = myResult.keywords['displaced_per_mmi']
+            myTotalFatalities = myResult.keywords['total_fatalities']
         except:
             LOGGER.exception('fatalities_per_mmi key not found in:\n%s' %
                             myResult.keywords)
@@ -1724,10 +1725,7 @@ class ShakeEvent(QObject):
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
         self.fatalityCounts = myFatalities
-        myFatalityTotal = 0
-        for myFatality in myFatalities:
-            myFatalityTotal += myFatality
-        self.fatalityTotal = myFatalityTotal
+        self.fatalityTotal = myTotalFatalities
         self.displacedCounts = myDisplaced
         self.affectedCounts = myAffected
         LOGGER.info('***** Fatalities: %s ********' % self.fatalityCounts)
