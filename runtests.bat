@@ -1,1 +1,1 @@
-nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui
+nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis

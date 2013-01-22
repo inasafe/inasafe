@@ -17,7 +17,7 @@ We cover msysgit here, but you can also use
 if you prefer (although the tortoise git procedure is not covered here).
 
 To install msysgit (which is a command line git client), download the latest
-version of the software from the 
+version of the software from the
 `msysgit web site <http://code.google.com/p/msysgit/downloads/list>`_.
 There is no need to get the 'full install' - just fetching the latest 'preview'
 is good enough. For example at the time of writing I downloaded
@@ -29,42 +29,42 @@ illustrated below:
 .. figure:: ../static/msysgit-step1.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step2.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step3.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step4.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step5.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step6.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step7.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step8.jpg
    :align:   center
 
-   
+
 
 .. figure:: ../static/msysgit-step9.jpg
    :align:   center
@@ -95,7 +95,7 @@ The repository can now be cloned by issuing the commands listed below.::
 
    git clone https://<your username>@github.com/AIFDR/inasafe.git inasafe-dev
 
-.. note:: The items in angle brackets above should be replaced with your 
+.. note:: The items in angle brackets above should be replaced with your
    personal details as required.
 
 When the final command above runs, you should see something like this in the
@@ -125,7 +125,7 @@ The repository can now be cloned by issuing the commands listed below. (Already 
 
    git clone https://<your username>@github.com/AIFDR/inasafe_data.git inasafe_data
 
-.. note:: The items in angle brackets above should be replaced with your 
+.. note:: The items in angle brackets above should be replaced with your
    personal details as required.
 
 When the final command above runs, you should see something like this in the
@@ -164,6 +164,8 @@ but they do not have feature parity with the make scripts.
 Command line environment setup
 ------------------------------
 
+
+.. _windows_shell_launcher-label:
 Create a shell launcher
 .......................
 
@@ -172,7 +174,7 @@ and testing standalone scripts written to use the |project_name| libraries.
 
 We will create a custom shell launcher that will give you a python
 shell environment using the python that comes bundled with QGIS, and that sets
-various paths and evironment variables so everything works as expected. Save the 
+various paths and evironment variables so everything works as expected. Save the
 following listing in <QGIS Install Dir>/bin/python-shell.bat::
 
    @echo off
@@ -184,7 +186,7 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin
    path %PATH%;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
    path %PATH%;"%OSGEO4W_ROOT%\apps\Python27\Scripts\"
-   
+
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\qgis\python;
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\Python27\Lib\site-packages
    set QGIS_PREFIX_PATH=%OSGEO4W_ROOT%\apps\qgis
@@ -200,7 +202,7 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
 
 For easy access to this shell launcher, right click on the qgis-shell.bat script
 and (without releasing your initial right click) drag with the file onto your
-start / windows button in the bottom left corner of the screen. 
+start / windows button in the bottom left corner of the screen.
 
 Verifying your system path
 ..........................
@@ -240,6 +242,9 @@ the QGIS libs::
 Assuming you get no error messages, you have a functional python command
 line environment which you can use to test QGIS functionality with.
 
+
+
+.. _windows-nose-setup:
 Nose testing tools
 ------------------
 
@@ -251,12 +256,44 @@ Installing pip
 We need to install easy_install so that we can install pip so that we can
 install nosetests and other python tools. Under windows you need to run a little
 script to install easy_install and then use easy_install to install pypi.
-Download the script on 
+Download the script on
 `this page <http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py
 and save it somewhere familiar e.g. :samp:`c:\temp`.
 
-.. note:: If you use windows 32bit, do not download the .exe file as said on 
+.. note:: If you use windows 32bit, do not download the .exe file as said on
    `the page <http://pypi.python.org/pypi/setuptools#windows>`_, but just download the ez_setup.py
+
+
+Special note for Win64 bit users
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If your Windows is 64bit, you need to do a little trick to install pip.
+There are two options for doing this:
+
+* Add the following line near the end of your command shell launcher (as
+  described in :ref:`windows_shell_launcher-label`):
+
+  :samp:`set PATH=c:\python27;%PATH%`
+
+* First you have to install python 32bit and add its path to PATH variable in
+  environment variable (on Windows 7: :menuselection:`System Properties -->
+  Advanced --> Environment Variables`).
+
+To verify that you have the correct python in your path launch python and
+print sys.executable - is should show :samp:`c:\python27\python.exe` as per
+the demo session below::
+
+    C:\Users\inasafe\.qgis\python\plugins\inasafe>python
+    Python 2.7.3 (default, Apr 10 2012, 23:31:26) [MSC v.1500 32 bit (Intel)] on win
+    32
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import sys
+    >>> print sys.executable
+    c:\python27\python.exe
+    >>>
+
+For both 32 and 64 bit
+^^^^^^^^^^^^^^^^^^^^^^
 
 Next launch the shell (python-shell.bat as described in
 :ref:`windows-commandline_setup`) **as administrator** (by right clicking the
@@ -265,13 +302,13 @@ file and choosing run as administrator). Then from the command line, launch
 
    python c:\temp\ez_setup.py
 
-.. note:: You will need to launch the shell as administrator whenever you 
+.. note:: You will need to launch the shell as administrator whenever you
    need to install python packages by pypi.
 
 Now in the same shell, use easy setup to install pip (make sure you have added
-the QGIS scripts dir to your shell launcher's - which should be the case if 
+the QGIS scripts dir to your shell launcher's - which should be the case if
 you have followed the notes in :ref:`windows-commandline_setup`)::
-   
+
    easy_install pip
 
 If the installation goes successfully, you should see output like this::
@@ -295,24 +332,21 @@ If the installation goes successfully, you should see output like this::
    Installing pip-2.5-script.py script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
    Installing pip-2.5.exe script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
    Installing pip-2.5.exe.manifest script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
-   
+
    Installed c:\progra~2\quantu~1\apps\python25\lib\site-packages\pip-1.1-py2.5.egg
    Processing dependencies for pip
    Finished processing dependencies for pip
 
-.. note:: If your Windows is 64bit, you need to do a little trick to install pip.
-   First you have to install python 32bit and add its path to PATH variable in 
-   environment variable (on Windows 7: `System Properties --> Advanced --> Environment Variables`).
-   After that, run command prompt (as administrator if needed) and run `easy_install pip`
+
 
 Installing nose
 ...............
 
-`Nose <http://somethingaboutorange.com/mrl/projects/nose/>`_ is a tool for 
+`Nose <http://somethingaboutorange.com/mrl/projects/nose/>`_ is a tool for
 automation of running python unit tests. With nose you can run a whole batch
 of tests in one go. With the nosecover plugin you can also generate coverage
 reports which will indicate how many lines of your code actually have been
-tested. 
+tested.
 
 
 To install these tools, launch your python prompt as administrator and then do::
@@ -340,7 +374,7 @@ but first you need to actually install sphinx.
 Installing sphinx
 .................
 
-Launch your QGIS python shell environment (see :ref:`windows-pip-setup`) as 
+Launch your QGIS python shell environment (see :ref:`windows-pip-setup`) as
 administrator and then run the following command::
 
    pip install sphinx
@@ -391,15 +425,15 @@ Installing PyDev
 
 With Eclipse running, click  on :menuselection:`Help --> Eclipse Marketplace`
 and from the resulting dialog that appears, type :kbd:`PyDev` into the search
-box and then click :guilabel:`Go`. On the search results page, choose PyDev 
-and click the :guilabel:`Install` button next to it. Agree to the license terms 
-and accept the aptana certificate, then restart Eclipse as requested. 
+box and then click :guilabel:`Go`. On the search results page, choose PyDev
+and click the :guilabel:`Install` button next to it. Agree to the license terms
+and accept the aptana certificate, then restart Eclipse as requested.
 
 Custom Eclipse Launcher
 .......................
 
 You need to create a custom Eclipse launcher in order to use Eclipse PyDev. The
-process is similar to :ref:`windows-commandline_setup` in that you need to 
+process is similar to :ref:`windows-commandline_setup` in that you need to
 create a custom batch file that launches eclipse only after the osgeo4w
 environment has been imported. Here are the typical contexts of the file::
 
@@ -416,11 +450,11 @@ environment has been imported. Here are the typical contexts of the file::
    set QGIS_PREFIX_PATH=%OSGEO4W_ROOT%\apps\qgis
    "C:\Progra~2\eclipse\eclipse.exe"
 
-.. note:: Use the path where your eclipse was extracted. Also note that PROGRA~2 may 
+.. note:: Use the path where your eclipse was extracted. Also note that PROGRA~2 may
    be PROGRA~1 in 32bit windows.
 
 Save this file under <QGIS Install Dir>/bin/python-shell.bat and then right-drag
-it from explorer to your Windows start button to create an easily accessible 
+it from explorer to your Windows start button to create an easily accessible
 shortcut to eclipse.
 
 Creating a project
@@ -434,7 +468,7 @@ In the resulting project dialog, set the following details:
 
 * :guilabel:`Project name:` : :kbd:`inasafe`
 * :guilabel:`Use default` : :kbd:`uncheck`
-* :guilabel (windows):`Directory` : 
+* :guilabel (windows):`Directory` :
   :kbd:`C:\\Users\\<user>\\.qgis\\python\\plugins\\inasafe\\`
 * :guilabel:`Choose project type` : :kbd:`Python`
 * :guilabel:`Grammar Version` : :kbd:`2.7`
@@ -451,7 +485,7 @@ in related preferences before continuing.' And on the resulting dialog do:
 In the dialog that appears do:
 
 * :guilabel:`Interpreter Name` : :kbd:`QGIS Python 2.7`
-* :guilabel:`Interpreter Executable` : 
+* :guilabel:`Interpreter Executable` :
   :kbd:`C:\\Program Files (x86)\\Quantum GIS Lisboa\\bin\\python.exe`
 * :guilabel:`OK Button` : :kbd:`click this button`
 
@@ -463,7 +497,7 @@ your::
       _2.6.0.2012062818\\pysrc
 
 The resulting list of python paths should look something like this::
-   
+
    C:\Program Files\eclipse\plugins\org.python.pydev_2.6.0.2012062818\pysrc
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\DLLs
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib
@@ -487,7 +521,7 @@ You will be returned to the Python Interpreters list and should see an entry for
 
 :guilabel:`New`
 
-In the dialog that appears 
+In the dialog that appears
 
 :guilabel:`Name` : :kbd:`QGIS_PREFIX_PATH`
 :guilabel:`Value` : :kbd:`C:\\PROGRA~1\\QUANTU~1\\apps\\qgis`
@@ -514,8 +548,8 @@ For remote debugging, you should add pydevd to your PYTHONPATH before starting
 
 .. note::
 
-   (1) You need to add a settrace() line at the point in your code where 
-   you would like to initiate remote debugging. After that, you can insert 
+   (1) You need to add a settrace() line at the point in your code where
+   you would like to initiate remote debugging. After that, you can insert
    eclipse debugger breakpoints as per normal.
 
    (2) If you are running with remote debugging enabled, be sure to start the
@@ -524,16 +558,16 @@ For remote debugging, you should add pydevd to your PYTHONPATH before starting
 
    (3) Place the above PYTHONPATH command before the final line that launches
    QGIS!
-   
+
    (4) The exact path used will vary on your system - check in your eclipse
    plugins folder for "org.python.pydev.debug_<some date> to identify the
    correct path.
 
 To initiate a remote debugging session, add the settrace() directive to your
 source file and then start the python remote debugging service from the PyDev
-debug perspective. Then launch QGIS (or your command line application) and 
+debug perspective. Then launch QGIS (or your command line application) and
 use the application until the settrace line is encountered. QGIS will appear
-to freeze - this is normal. Now switch to Eclipse and you should see the 
+to freeze - this is normal. Now switch to Eclipse and you should see the
 settrace line has been highlighted in green and you can step through the code
 using standard Eclipse debugging tools (done most easily from the debugging
 perspective).
@@ -581,5 +615,5 @@ As with using Pydev's built in test runner, you can also run any module, class
 etc. while using the nose test runner by right clicking on the item in the
 PyDev package explorer.
 
-.. note:: Actually, we can run the test runner until this step. But, we got a 
+.. note:: Actually, we can run the test runner until this step. But, we got a
    problem, so you need to install python in your windows machine.
