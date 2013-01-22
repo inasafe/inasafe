@@ -238,7 +238,7 @@ class ShakeData:
             return myLocalPath
 
         #Otherwise try to fetch it using ftp
-        for myCounter in theRetries:
+        for myCounter in range(theRetries):
             myLastError = None
             try:
                 myClient = FtpClient()

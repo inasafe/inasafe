@@ -63,6 +63,8 @@ InaSAFE Realtime is implemented by four main python modules:
     after the shake event and are in the format of shake data as
     provided by the USGS (XXXXXX TODO fact check XXXX).
     :samp:`ftp://118.97.83.243/20110413170148.inp.zip`
+    **Note:** This data is now no longer hosted via ftp and requires an ssh
+    account in order to retrieve it.
 * **shake_event** - A rather monolithic module that 'knows' how to
     fetch, unpack, process and generate a report for a quake event.
     The module logic is based on the standard shake data packaging
