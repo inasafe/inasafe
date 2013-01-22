@@ -468,6 +468,10 @@ used with the following options:
 .. note:: The :file:`make_shakemap.sh` script is just a thin wrapper around
     the python :mod:`realtime.make_map` python module.
 
+.. note:: An english local shakemap will always be generated regardless of
+    the locale you have chosen (using the INASAFE_LOCALE env var). This en
+    version will be in addition to your chosen locale.
+
 Unit tests
 -----------
 
