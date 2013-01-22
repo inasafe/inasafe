@@ -263,7 +263,6 @@ class Plugin:
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionMinimumNeeds)
 
-
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------

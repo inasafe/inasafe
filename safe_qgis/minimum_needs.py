@@ -68,16 +68,22 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
             # Get population count
             population = attributes[population_name]
-
             # Clean up and turn into integer
             if population in ['-', None]:
                 displaced = 0
             else:
-                population = str(population).replace(',','')
-                displaced = int(population)
+                population = str(population).replace(',', '')
+                try:
+                    displaced = int(population)
+                except ValueError:
+                    QtGui.QMessageBox.information(None, 'Format error',
+                    'Please change the value of %s in '
+                    'attribute %s to integer format' %
+                     (population, population_name))
+                    raise ValueError
 
-
-            # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+            # Calculate estimated needs based on BNPB Perka 7/2008
+            # minimum bantuan
 
             # 400g per person per day
             rice = int(displaced * 2.8)
@@ -97,7 +103,6 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             attribute_dict['Air bersih'] = water
             attribute_dict['Kit keluarga'] = family_kits
             attribute_dict['Jamba'] = toilets
-
 
             # Record attributes for this feature
             needs_attributes.append(attribute_dict)
@@ -141,8 +146,6 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         for myField in myFields:
             addComboItemInOrder(self.cboFields, myField, myField)
 
-
-
     def accept(self):
         """PRocess the layer and field and generate a new layer.
 
@@ -153,7 +156,6 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         myFieldName = self.cboFields.itemData(myIndex,
                                                QtCore.Qt.UserRole).toString()
 
-
         myIndex = self.cboPolygonLayers.currentIndex()
         myLayerId = self.cboPolygonLayers.itemData(myIndex,
                                                  QtCore.Qt.UserRole).toString()
@@ -163,7 +165,10 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
         myInputLayer = read_layer(myFileName)
 
-        myOutputLayer = self.minimum_needs(myInputLayer, str(myFieldName))
+        try:
+            myOutputLayer = self.minimum_needs(myInputLayer, str(myFieldName))
+        except ValueError:
+            return
 
         myNewFile = myFileName[:-4] + '_perka7' + '.shp'
 

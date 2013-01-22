@@ -1137,6 +1137,7 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
 
     return myReport
 
+
 def addComboItemInOrder(theCombo, theItemText, theItemData=None):
     """Although QComboBox allows you to set an InsertAlphabetically enum
     this only has effect when a user interactively adds combo items to
@@ -1165,7 +1166,6 @@ def addComboItemInOrder(theCombo, theItemText, theItemData=None):
             return
         #otherwise just add it to the end
     theCombo.insertItem(mySize, theItemText, theItemData)
-
 
 
 def isLayerPolygonal(theLayer):
