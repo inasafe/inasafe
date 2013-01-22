@@ -4,9 +4,9 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>98.173309</xmin>
+            <xmin>97.674114</xmin>
             <ymin>-10.386125</ymin>
-            <xmax>121.272009</xmax>
+            <xmax>121.771204</xmax>
             <ymax>6.757289</ymax>
         </extent>
         <projections>1</projections>
@@ -24,29 +24,29 @@
         </destinationsrs>
     </mapcanvas>
     <legend updateDrawingOrder="false">
-        <legendlayer drawingOrder="4" open="false" checked="Qt::Checked" name="gadm2" showFeatureCount="0">
+        <legendlayer drawingOrder="4" open="false" checked="Qt::Checked" name="Gadm2" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="gadm220120907131545352" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="population" showFeatureCount="0">
+        <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="Population" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="population20120911162940535" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="7" open="false" checked="Qt::Checked" name="indonesia-terrain" showFeatureCount="0">
+        <legendlayer drawingOrder="7" open="false" checked="Qt::Checked" name="Indonesia-terrain" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="indonesia_terrain20121003111101754" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="8" open="false" checked="Qt::Checked" name="indonesia-bathymetry" showFeatureCount="0">
+        <legendlayer drawingOrder="8" open="false" checked="Qt::Checked" name="Indonesia-bathymetry" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="indonesia_bathymetry20121003111205159" visible="1"/>
             </filegroup>
         </legendlayer>
     </legend>
     <Composer title="Realtime" visible="1">
-        <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="2" snapGridOffsetY="0" snapping="1" numPages="1" paperHeight="297" printAsRaster="1">
+        <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="2" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="1" paperHeight="297" alignmentSnapTolerance="2" printAsRaster="1">
             <ComposerLabel valign="32" labelText="[exposure-table-name]&#xa;" halign="4" margin="1">
                 <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
@@ -58,7 +58,7 @@
             <ComposerShape shapeType="1" shapeWidth="86" outlineWidth="0.1" transparentFill="1" shapeHeight="28">
                 <OutlineColor alpha="255" red="0" blue="0" green="0"/>
                 <FillColor alpha="255" red="0" blue="0" green="0"/>
-                <ComposerItem width="86" x="116" y="224" rotation="0" height="28" frame="false" outlineWidth="0" zValue="18" lastValidViewScaleFactor="6.28188" id="" positionLock="false">
+                <ComposerItem width="86" x="116" y="224" rotation="0" height="28" frame="false" outlineWidth="0" zValue="18" lastValidViewScaleFactor="2.82938" id="" positionLock="false">
                     <FrameColor alpha="0" red="255" blue="255" green="255"/>
                     <BackgroundColor alpha="0" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -74,7 +74,7 @@
             <ComposerLabel valign="32" labelText="[legend-name]" halign="4" margin="1">
                 <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="86" x="116" y="216" rotation="0" height="8" frame="true" outlineWidth="0.1" zValue="16" lastValidViewScaleFactor="6.28188" id="" positionLock="false">
+                <ComposerItem width="86" x="116" y="216" rotation="0" height="8" frame="true" outlineWidth="0.1" zValue="16" lastValidViewScaleFactor="2.82938" id="" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -87,10 +87,18 @@
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
+            <ComposerLabel valign="32" labelText="[fatalities-name] : [fatalities-range]" halign="4" margin="1">
+                <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
+                <FontColor red="255" blue="0" green="0"/>
+                <ComposerItem width="86" x="116" y="200" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.82938" id="fatalities" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
             <ComposerLabel valign="32" labelText="[city-table-name]" halign="4" margin="1">
                 <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="81.835" x="118.478" y="107.37" rotation="0" height="7.93922" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.82938" id="" positionLock="false">
+                <ComposerItem width="86" x="116" y="106" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.82938" id="" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -98,15 +106,15 @@
             <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" halign="1" margin="1">
                 <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="198" x="4" y="48" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="6.28188" id="position-depth" positionLock="false">
+                <ComposerItem width="198" x="4" y="48" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.82938" id="position-depth" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerLabel valign="32" labelText="M [mmi]  [formatted-date-time] [fatalities-name]: [fatalities-count]" halign="1" margin="1">
+            <ComposerLabel valign="32" labelText="M [mmi]  [formatted-date-time]" halign="1" margin="1">
                 <LabelFont description="Ubuntu,10,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="98" x="4" y="40" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="6.28188" id="intensity-date" positionLock="false">
+                <ComposerItem width="98" x="4" y="40" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.82938" id="intensity-date" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -124,7 +132,7 @@
                         </layer>
                     </symbol>
                 </overviewFrame>
-                <Extent ymin="-15.7222" xmin="92.2189" ymax="10.3627" xmax="165.597"/>
+                <Extent ymin="-15.7222" xmin="92.2189" ymax="10.3626" xmax="165.597"/>
                 <LayerSet>
                     <Layer>gadm220120907131545352</Layer>
                     <Layer>population20120911162940535</Layer>
@@ -144,7 +152,7 @@
                     </symbol>
                     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="101.27" x="4.73016" y="216" rotation="0" height="36" frame="true" outlineWidth="0.1" zValue="8" lastValidViewScaleFactor="6.28188" id="overview-map" positionLock="false">
+                <ComposerItem width="101.27" x="4.73016" y="216" rotation="0" height="36" frame="true" outlineWidth="0.1" zValue="8" lastValidViewScaleFactor="2.82938" id="overview-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -195,7 +203,7 @@
                     </symbol>
                     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="98.7302" x="6" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="6.28188" id="main-map" positionLock="false">
+                <ComposerItem width="98.7302" x="6" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="2.82938" id="main-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -229,14 +237,14 @@
                         <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
                     </LayerItem>
                 </Model>
-                <ComposerItem width="26" x="142" y="228" rotation="0" height="22" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="6.28188" id="legend" positionLock="false">
+                <ComposerItem width="26" x="142" y="225" rotation="0" height="22" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.82938" id="legend" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLegend>
-            <ComposerHtml resizeMode="0" url="">
-                <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-                    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="6.28188" id="" positionLock="false">
+            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+                    <ComposerItem width="197.27" x="4.73016" y="69.3883" rotation="0" height="34.6117" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="2.82938" id="impacts-table" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -244,15 +252,15 @@
             </ComposerHtml>
             <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
                 <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-                    <ComposerItem width="86" x="116" y="117.699" rotation="0" height="92.301" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="6.28188" id="affected-cities" positionLock="false">
+                    <ComposerItem width="86" x="116" y="117.699" rotation="0" height="68.301" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.82938" id="affected-cities" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
                 </ComposerFrame>
             </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="197.27" x="4.73016" y="69.3883" rotation="0" height="34.6117" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="6.28188" id="impacts-table" positionLock="false">
+            <ComposerHtml resizeMode="0" url="">
+                <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
+                    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="6.28188" id="" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -266,7 +274,7 @@
             <datasource>./context/boundaries.shp</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>gadm2</layername>
+            <layername>Gadm2</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -376,7 +384,6 @@
                 <property key="labeling/yOffset" value="0"/>
                 <property key="labeling/yQuadOffset" value="0"/>
             </customproperties>
-            <editorlayout>generatedlayout</editorlayout>
             <displayfield>OBJECTID</displayfield>
             <label>0</label>
             <labelattributes>
@@ -456,6 +463,7 @@
             <editform>.</editform>
             <editforminit></editforminit>
             <annotationform>.</annotationform>
+            <editorlayout>generatedlayout</editorlayout>
             <excludeAttributesWMS/>
             <excludeAttributesWFS/>
             <attributeactions/>
@@ -465,7 +473,7 @@
             <datasource>./context/indonesia-bathymetry.tif</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>indonesia-bathymetry</layername>
+            <layername>Indonesia-bathymetry</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -491,7 +499,7 @@
             <datasource>./context/indonesia-terrain.tif</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>indonesia-terrain</layername>
+            <layername>Indonesia-terrain</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -521,7 +529,7 @@
             <datasource>./exposure/population.tif</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>population</layername>
+            <layername>Population</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>

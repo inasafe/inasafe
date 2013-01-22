@@ -25,14 +25,13 @@ from subprocess import call, CalledProcessError
 import logging
 import numpy
 from datetime import datetime
-#sudo apt-get install python-tz
-import pytz
+import pytz  # sudo apt-get install python-tz
 
 import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
-# TODO I think QCoreApplication is needed for tr() check hefore removing
+# TODO I think QCoreApplication is needed for tr() check before removing
 from PyQt4.QtCore import (QCoreApplication,
                           QObject,
                           QVariant,
@@ -2134,6 +2133,15 @@ class ShakeEvent(QObject):
             'each MMI level')
         myFatalitiesName = self.tr('Estimated fatalities')
         myFatalitiesCount = self.fatalityTotal
+        # Calculate a lower range for the fatalities
+        if myFatalitiesCount > 0:
+            myFatalitiesLowerCount = int(myFatalitiesCount/10)
+            myFatalitiesRange = '%i - %i' % (myFatalitiesLowerCount,
+                myFatalitiesCount)
+        else:
+            myFatalitiesLowerCount = 0
+            myFatalitiesRange = '%i' % myFatalitiesCount
+
         myCityTableName = self.tr('Places Affected')
         myLegendName = 'Population density'
         myLimitations = self.tr(
@@ -2187,6 +2195,7 @@ class ShakeEvent(QObject):
             'limitations': myLimitations,
             'credits': myCredits,
             'fatalities-name': myFatalitiesName,
+            'fatalities-range': myFatalitiesRange,
             'fatalities-count': '%s' % myFatalitiesCount,
             'mmi': '%s' % self.magnitude,
             'date': '%s-%s-%s' % (self.day,

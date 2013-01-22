@@ -380,8 +380,9 @@ your own template. More on that below in the next section.
 * **bearing-text**: bearing
 * **elapsed-time-name**: Elapsed time
 * **elapsed-time**: 26-Jul-12 02:15:35
-* **fatality-name**: Estimated Fatalities
-* **fatality-count**: 55
+* **fatalities-name**: Estimated Fatalities
+* **fatalities-range**: 5 - 55
+* **fatalities-count**: 55
 
 
 Customising the template
