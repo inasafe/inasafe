@@ -33,7 +33,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
     """Dialog implementation class for the InaSAFE keywords editor."""
 
-    def __init__(self, parent, iface, theLayer=None):
+    def __init__(self, parent):
         """Constructor for the dialog.
 
         Args:

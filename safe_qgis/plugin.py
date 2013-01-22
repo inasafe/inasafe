@@ -263,6 +263,7 @@ class Plugin:
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionMinimumNeeds)
 
+
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
@@ -389,7 +390,7 @@ class Plugin:
         # import here only so that it is AFTER i18n set up
         from safe_qgis.minimum_needs import MinimumNeeds
 
-        myDialog = MinimumNeeds(self.iface.mainWindow(), self.iface)
+        myDialog = MinimumNeeds(self.iface.mainWindow())
         myDialog.show()
 
     def showOptions(self):
