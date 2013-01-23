@@ -54,28 +54,28 @@ def processEvent(theEventId=None, theLocale='en'):
         myLocaleList.append('en')
 
     # Now generate the products
-    for myLocale in myLocaleList:
+    for myLoc in myLocaleList:
         # Extract the event
         try:
             if os.path.exists(myPopulationPath):
                 myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=myLocale,
+                                      theLocale=myLoc,
                                       theForceFlag=myForceFlag,
                                       thePopulationRasterPath=myPopulationPath)
             else:
                 myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=myLocale,
+                                      theLocale=myLoc,
                                       theForceFlag=myForceFlag)
         except (BadZipfile, URLError):
             # retry with force flag true
             if os.path.exists(myPopulationPath):
                 myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=myLocale,
+                                      theLocale=myLoc,
                                       theForceFlag=True,
                                       thePopulationRasterPath=myPopulationPath)
             else:
                 myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=myLocale,
+                                      theLocale=myLoc,
                                       theForceFlag=True)
         except:
             LOGGER.exception('An error occurred setting up the shake event.')

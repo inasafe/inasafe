@@ -262,7 +262,8 @@ class SftpShakeData:
             LOGGER.info('Fetching failed, attempt %s' % my_counter)
         LOGGER.exception('Could not fetch shake event from server %s'
                              % remote_path)
-        raise myLastError
+        raise Exception('Could not fetch shake event from server %s'
+                        % remote_path)
 
     def extractDir(self):
         """A helper method to get the path to the extracted datasets.
