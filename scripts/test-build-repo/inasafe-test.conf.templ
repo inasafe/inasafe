@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+  ServerAdmin tim@linfiniti.com
+  ServerName inasafe-test.linfiniti.com
+
+  DocumentRoot /home/web/inasafe-test/
+  DirectoryIndex plugins.xml
+
+  <Directory /home/web/inasafe-test/>
+    Order deny,allow
+    Allow from all
+  </Directory>
+
+  ErrorLog /var/log/apache2/inasafe-test.linfiniti.error.log
+  CustomLog /var/log/apache2/inasafe-test.linfiniti.access.log combined
+  ServerSignature Off
+
+</VirtualHost>

@@ -50,7 +50,7 @@ the minimal class could look like this:
 
 After that you need to import the new class into postprocessor_factory and
 update AVAILABLE_POSTPTOCESSORS to include the postprocessor prefix (e.g.
-MySuper if the class is called MySuperPostprocessor)
+MySuper if the class is called MySuperPostprocessor and its human readable name)
 
 As last step you have to update or add the *parameters* variable to the impact
 functions that you want to use the new postprocessor. This will need to include
@@ -85,6 +85,8 @@ Output
 Dock.postprocOutput will hold the result datastructure (shown below) of all the
 postprocessors. The structure is then parsed by Dock._postProcessingOutput() and
 stored in the impact layer's keywords
+If a postprocessor generates no output (for example due to calculation errors),
+then it will just be skipped from the report
 
 Data structure of results
 .........................

@@ -25,8 +25,7 @@ from subprocess import call, CalledProcessError
 import logging
 import numpy
 from datetime import datetime
-#sudo apt-get install python-tz
-import pytz
+import pytz  # sudo apt-get install python-tz
 
 import ogr
 import gdal
@@ -1707,6 +1706,7 @@ class ShakeEvent(QObject):
             myFatalities = myResult.keywords['fatalites_per_mmi']
             myAffected = myResult.keywords['exposed_per_mmi']
             myDisplaced = myResult.keywords['displaced_per_mmi']
+            myTotalFatalities = myResult.keywords['total_fatalities']
         except:
             LOGGER.exception('fatalities_per_mmi key not found in:\n%s' %
                             myResult.keywords)
@@ -1729,10 +1729,7 @@ class ShakeEvent(QObject):
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
         self.fatalityCounts = myFatalities
-        myFatalityTotal = 0
-        for myFatality in myFatalities:
-            myFatalityTotal += myFatality
-        self.fatalityTotal = myFatalityTotal
+        self.fatalityTotal = myTotalFatalities
         self.displacedCounts = myDisplaced
         self.affectedCounts = myAffected
         LOGGER.info('***** Fatalities: %s ********' % self.fatalityCounts)
@@ -2138,6 +2135,15 @@ class ShakeEvent(QObject):
             'each MMI level')
         myFatalitiesName = self.tr('Estimated fatalities')
         myFatalitiesCount = self.fatalityTotal
+        # Calculate a lower range for the fatalities
+        if myFatalitiesCount > 0:
+            myFatalitiesLowerCount = int(myFatalitiesCount / 10)
+            myFatalitiesRange = '%i - %i' % (myFatalitiesLowerCount,
+                myFatalitiesCount)
+        else:
+            myFatalitiesLowerCount = 0
+            myFatalitiesRange = '%i' % myFatalitiesCount
+
         myCityTableName = self.tr('Places Affected')
         myLegendName = 'Population density'
         myLimitations = self.tr(
@@ -2152,7 +2158,9 @@ class ShakeEvent(QObject):
             'the figures shown here. Consequently decisions should not be '
             'made solely on the information presented here and should always '
             'be verified by ground truthing and other reliable information '
-            'sources.')
+            'sources. The fatality calculation assumes that '
+            'no fatalities occur for shake levels below MMI 4. Fatality '
+            'counts of less than 50 are disregarded.')
         myCredits = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the GFDRR.')
@@ -2191,6 +2199,7 @@ class ShakeEvent(QObject):
             'limitations': myLimitations,
             'credits': myCredits,
             'fatalities-name': myFatalitiesName,
+            'fatalities-range': myFatalitiesRange,
             'fatalities-count': '%s' % myFatalitiesCount,
             'mmi': '%s' % self.magnitude,
             'date': '%s-%s-%s' % (self.day,

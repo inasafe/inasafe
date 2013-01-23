@@ -36,7 +36,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsRectangle)
 # TODO: get this via api
 from safe.impact_functions.core import format_int
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
@@ -297,8 +297,8 @@ def loadStandardLayers():
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
-    #FIXME (MB) -1 is untill we add the aggregation category because of
-    # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
+    #FIXME (MB) -1 is until we add the aggregation category because of
+    # kabupaten_jakarta* not being either hazard nor exposure layer
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
 
     return myHazardLayerCount, myExposureLayerCount
@@ -1506,6 +1506,41 @@ class DockTest(unittest.TestCase):
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 
+    def test_preprocessing(self):
+        """preprocessing results are correct."""
+
+        # See qgis project in test data: vector_preprocessing_test.qgs
+        #add additional layers
+        myFileList = ['jakarta_crosskabupaten_polygons.shp']
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        myFileList = ['kabupaten_jakarta.shp']
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=BOUNDDATA)
+
+        myRunButton = DOCK.pbnRunStop
+
+        myResult, myMessage = setupScenario(
+            theHazard='jakarta_crosskabupaten_polygons',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregation='kabupaten jakarta',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKeywordsDialog.accept()
+
+        myExpectedFeatureCount = 20
+        myMessage = ('The preprocessing should have generated %s features, '
+                     'found %s' % (myExpectedFeatureCount,
+                                   DOCK.preprocessedFeatureCount))
+        self.assertEqual(myExpectedFeatureCount, DOCK.preprocessedFeatureCount,
+                         myMessage)
+
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
         QGIS layers. For inasafe outputs, the table of results should be shown
@@ -1616,17 +1651,17 @@ Click for Diagnostic Information:
         """Function configuration button is disabled
         when layers not compatible."""
         setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        #add additional layers
         #myResult, myMessage = setupScenario(
-        #    theHazard='A flood in Jakarta like in 2007',
-        #    theExposure='Essential Buildings',
-        #    theFunction='Be flooded',
-        #    theFunctionId='Flood Building Impact Function')
+        #    heHazard='An earthquake in Yogyakarta like in 2006',
+        #    theExposure = 'Essential Buildings',
+        #    theFunction = 'Be damaged depending on building type',
+        #    theFunctionId = 'ITB Earthquake Building Damage Function')
         setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
+            theHazard='An earthquake in Yogyakarta like in 2006',
             theExposure='Essential Buildings',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function')
+            theFunction='Be damaged depending on building type',
+            theFunctionId='ITB Earthquake Building Damage Function')
         myToolButton = DOCK.toolFunctionOptions
         myFlag = myToolButton.isEnabled()
         assert not myFlag, ('Expected configuration options '

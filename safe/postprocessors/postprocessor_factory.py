@@ -19,14 +19,20 @@ import logging
 # pylint: disable=W0611
 from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
+from aggregation_postprocessor import AggregationPostprocessor
+from osm_building_type_postprocessor import OSMBuildingTypePostprocessor
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
-AVAILABLE_POSTPTOCESSORS = ['Gender', 'Age']
+AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
+                            'Age': 'Age',
+                            'Aggregation': 'Aggregation',
+                            'OSMBuildingType': 'Open Street Map building type'
+                            }
 
 
-def get_post_processors(requested_postprocessors):
+def get_postprocessors(requested_postprocessors):
     """
     Creates a dictionary of applicable postprocessor instances
 
@@ -61,7 +67,7 @@ def get_post_processors(requested_postprocessors):
         constr_id = name + 'Postprocessor'
         try:
             if values['on']:
-                if name in AVAILABLE_POSTPTOCESSORS:
+                if name in AVAILABLE_POSTPTOCESSORS.keys():
                     #http://stackoverflow.com/a/554462
                     constr = globals()[constr_id]
                     instance = constr()
@@ -88,6 +94,4 @@ def get_postprocessor_human_name(postprocesor):
     Returns:
         str with the human readable name
     """
-    # TODO (MB) this is a stub, the correct implementation will come when
-    # aggregation branch gets merged
-    return postprocesor
+    return AVAILABLE_POSTPTOCESSORS[postprocesor]

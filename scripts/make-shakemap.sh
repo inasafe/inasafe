@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 export QGIS_DEBUG=0
 export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log
 export QGIS_DEBUG_FILE=/tmp/inasafe/realtime/logs/qgis-debug.log

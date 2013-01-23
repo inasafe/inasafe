@@ -23,6 +23,7 @@ import traceback
 import logging
 import math
 import numpy
+import uuid
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
@@ -38,11 +39,15 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency,
+                       QgsVectorLayer,
+                       QgsFeature
                        )
 
 from safe_interface import temp_dir
 
-from safe_qgis.exceptions import StyleError, MethodUnavailableError
+from safe_qgis.exceptions import (StyleError,
+                                  MethodUnavailableError,
+                                  MemoryLayerCreationError)
 
 from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
@@ -901,60 +906,63 @@ def getDefaults(theDefault=None):
         return None
 
 
-#def copyInMemory(vLayer, copyName=''):
-#    """Return a memory copy of a layer
-#
-#    Input
-#        origLayer: layer
-#        copyName: the name of the copy
-#    Output
-#        memory copy of a layer
-#
-#    """
-#
-#    if copyName is '':
-#        copyName = vLayer.name() + ' TMP'
-#
-#    if vLayer.type() == QgsMapLayer.VectorLayer:
-#        vType = vLayer.geometryType()
-#        if vType == QGis.Point:
-#            typeStr = 'Point'
-#        elif vType == QGis.Line:
-#            typeStr = 'Line'
-#        elif vType == QGis.Polygon:
-#            typeStr = 'Polygon'
-#        else:
-#            raise memoryLayerCreationError('Layer is whether Point or '
-#                                           'Line or Polygon')
-#    else:
-#        raise memoryLayerCreationError('Layer is not a VectorLayer')
-#
-#    crs = vLayer.crs().authid().toLower()
-#    uri = typeStr + '?crs=' + crs + '&index=yes'
-#    memLayer = QgsVectorLayer(uri, copyName, 'memory')
-#    memProvider = memLayer.dataProvider()
-#
-#    vProvider = vLayer.dataProvider()
-#    vAttrs = vProvider.attributeIndexes()
-#    vFields = vProvider.fields()
-#
-#    fields = []
-#    for i in vFields:
-#        fields.append(vFields[i])
-#
-#    memProvider.addAttributes(fields)
-#
-#    vProvider.select(vAttrs)
-#    ft = QgsFeature()
-#    while vProvider.nextFeature(ft):
-#        memProvider.addFeatures([ft])
-#
-#    # Next two lines a workaround for a QGIS bug (lte 1.8)
-#    # preventing mem layer attributes being saved to shp.
-#    memLayer.startEditing()
-#    memLayer.commitChanges()
-#
-#    return memLayer
+def copyInMemory(vLayer, copyName=''):
+    """Return a memory copy of a layer
+
+    Input
+        origLayer: layer
+        copyName: the name of the copy
+    Output
+        memory copy of a layer
+
+    """
+
+    if copyName is '':
+        copyName = vLayer.name() + ' TMP'
+
+    if vLayer.type() == QgsMapLayer.VectorLayer:
+        vType = vLayer.geometryType()
+        if vType == QGis.Point:
+            typeStr = 'Point'
+        elif vType == QGis.Line:
+            typeStr = 'Line'
+        elif vType == QGis.Polygon:
+            typeStr = 'Polygon'
+        else:
+            raise MemoryLayerCreationError('Layer is whether Point nor '
+                                           'Line nor Polygon')
+    else:
+        raise MemoryLayerCreationError('Layer is not a VectorLayer')
+
+    crs = vLayer.crs().authid().toLower()
+    myUUID = str(uuid.uuid4())
+    uri = '%s?crs=%s&index=yes&uuid=%s' % (typeStr, crs, myUUID)
+    memLayer = QgsVectorLayer(uri, copyName, 'memory')
+    memProvider = memLayer.dataProvider()
+
+    vProvider = vLayer.dataProvider()
+    vAttrs = vProvider.attributeIndexes()
+    vFields = vProvider.fields()
+
+    fields = []
+    for i in vFields:
+        fields.append(vFields[i])
+
+    memProvider.addAttributes(fields)
+
+    vProvider.select(vAttrs)
+    ft = QgsFeature()
+    while vProvider.nextFeature(ft):
+        memProvider.addFeatures([ft])
+
+    if qgisVersion() <= 10800:
+        # Next two lines a workaround for a QGIS bug (lte 1.8)
+        # preventing mem layer attributes being saved to shp.
+        memLayer.startEditing()
+        memLayer.commitChanges()
+
+    return memLayer
+
 
 def mmToPoints(theMM, theDpi):
     """Convert measurement in points to one in mm.

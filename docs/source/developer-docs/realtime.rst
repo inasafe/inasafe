@@ -63,6 +63,8 @@ InaSAFE Realtime is implemented by four main python modules:
     after the shake event and are in the format of shake data as
     provided by the USGS (XXXXXX TODO fact check XXXX).
     :samp:`ftp://118.97.83.243/20110413170148.inp.zip`
+    **Note:** This data is now no longer hosted via ftp and requires an ssh
+    account in order to retrieve it.
 * **shake_event** - A rather monolithic module that 'knows' how to
     fetch, unpack, process and generate a report for a quake event.
     The module logic is based on the standard shake data packaging
@@ -378,8 +380,9 @@ your own template. More on that below in the next section.
 * **bearing-text**: bearing
 * **elapsed-time-name**: Elapsed time
 * **elapsed-time**: 26-Jul-12 02:15:35
-* **fatality-name**: Estimated Fatalities
-* **fatality-count**: 55
+* **fatalities-name**: Estimated Fatalities
+* **fatalities-range**: 5 - 55
+* **fatalities-count**: 55
 
 
 Customising the template
@@ -465,6 +468,10 @@ used with the following options:
 
 .. note:: The :file:`make_shakemap.sh` script is just a thin wrapper around
     the python :mod:`realtime.make_map` python module.
+
+.. note:: An english local shakemap will always be generated regardless of
+    the locale you have chosen (using the INASAFE_LOCALE env var). This en
+    version will be in addition to your chosen locale.
 
 Unit tests
 -----------
