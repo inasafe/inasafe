@@ -14,7 +14,7 @@ qgisMinimumVersion=1.7
 description=InaSAFE Disaster Scenario Assessment for Emergencies tool developed by BNPB, AusAID, World Bank
 version=1.2.0-2
 # alpha, beta, rc or final
-status=beta
+status=alpha
 
 
 # end of mandatory metadata
