@@ -1513,7 +1513,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myException = self.runner.lastException()
             if myException is not None:
                 myContext = self.tr('An exception occurred when calculating '
-                                    'the results')
+                                    'the results. %s' % self.runner.result())
                 myMessage = getExceptionWithStacktrace(myException,
                     theHtml=True,
                     theContext=myContext)
