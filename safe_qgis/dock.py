@@ -1082,77 +1082,41 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.setupCalculator()
         except CallGDALError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr(
-                'An error occurred when calling a GDAL command')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e,
-                                                   theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
+            self.spawnError(e,
+                self.tr('An error occurred when calling a GDAL command'))
             return
         except IOError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An error occurred when writing clip file')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e,
-                                                   theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
+            self.spawnError(e,
+                self.tr('An error occurred when writing clip file'))
             return
         except InsufficientOverlapError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An exception occurred when setting up the '
-                                'impact calculator.')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e,
-                                                   theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
+            self.spawnError(e,
+                self.tr('An exception occurred when setting up the '
+                    'impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An error occurred because there are no '
-                                'features visible in the current view. Try '
-                                'zooming out or panning until some features '
-                                'become visible.')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e,
-                                                   theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
+            self.spawnError(e,
+                self.tr('An error occurred because there are '
+                    'no features visible in the current view. Try '
+                    'zooming out or panning until some features '
+                    'become visible.'))
             return
         except InvalidProjectionError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An error occurred because you are using a '
-                                'layer containing density data (e.g. '
-                                'population density) which will not scale '
-                                'accurately if we re-project it from its '
-                                'native coordinate reference system to'
-                                'WGS84/GeoGraphic.')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e,
-                                                   theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
+            self.spawnError(e,
+                self.tr('An error occurred because you are '
+                    'using a layer containing density data (e.g. '
+                    'population density) which will not scale '
+                    'accurately if we re-project it from its '
+                    'native coordinate reference system to'
+                    'WGS84/GeoGraphic.'))
             return
 
         try:
             self.runner = self.calculator.getRunner()
         except (InsufficientParametersError, ReadLayerError), e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An exception occurred when setting up the '
-                                ' model runner.')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e, theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
+            self.spawnError(e,
+                self.tr('An exception occurred when setting up '
+                    'the model runner.'))
             return
 
         QtCore.QObject.connect(self.runner,
@@ -1181,14 +1145,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An exception occurred when starting'
-                                ' the model.')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e, theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
+            self.spawnError(e, self.tr('An exception occurred when starting'
+                                ' the model.'))
+
+    def spawnError(self, theException, theMessage):
+        """A helper to spawn an error and halt processing.
+
+        An exception will be logged, busy status removed and a message
+        displayed.
+
+        Args:
+            * theException: Exception - an exception that was raised.
+            * theMessage: str - a string to display.
+
+        Raises:
+            None
+
+        Exception:
+            None
+        """
+        QtGui.qApp.restoreOverrideCursor()
+        self.hideBusy()
+        LOGGER.exception(theMessage)
+        myMessage = getExceptionWithStacktrace(theException,
+                                           theHtml=True,
+                                           theContext=theMessage)
+        self.displayHtml(myMessage)
 
     def prepareInputLayerForAggregation(self, theClippedHazardFilename,
                               theClippedExposureFilename):
