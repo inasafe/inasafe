@@ -1110,6 +1110,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'native coordinate reference system to'
                     'WGS84/GeoGraphic.'))
             return
+        except MemoryError, e:
+            self.spawnError(e,
+                self.tr('An error occurred because it appears that your '
+                    'system does not have sufficient memory. Upgrading '
+                    'your computer so that it has more memory may help. '
+                    'Alternatively, consider using a smaller geographical '
+                    'area for your analysis, or using rasters with a larger '
+                    'cell size.'))
+            return
 
         try:
             self.runner = self.calculator.getRunner()
