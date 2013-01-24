@@ -21,6 +21,7 @@ import os
 import sys
 import shutil
 from xml.dom import minidom
+import math
 from subprocess import call, CalledProcessError
 import logging
 import numpy
@@ -2135,14 +2136,14 @@ class ShakeEvent(QObject):
             'each MMI level')
         myFatalitiesName = self.tr('Estimated fatalities')
         myFatalitiesCount = self.fatalityTotal
-        # Calculate a lower range for the fatalities
-        if myFatalitiesCount > 0:
-            myFatalitiesLowerCount = int(myFatalitiesCount / 10)
-            myFatalitiesRange = '%i - %i' % (myFatalitiesLowerCount,
-                myFatalitiesCount)
-        else:
-            myFatalitiesLowerCount = 0
-            myFatalitiesRange = '%i' % myFatalitiesCount
+
+        # put the estimate into neat ranges 0-100, 100-1000, 1000-10000. etc
+        myLowerLimit = 0
+        myUpperLimit = 100
+        while myFatalitiesCount > myUpperLimit:
+            myLowerLimit = myUpperLimit
+            myUpperLimit = math.pow(myUpperLimit, 2)
+        myFatalitiesRange = '%i - %i' % (myLowerLimit, myUpperLimit)
 
         myCityTableName = self.tr('Places Affected')
         myLegendName = 'Population density'
