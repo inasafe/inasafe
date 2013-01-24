@@ -29,7 +29,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 my_host = '118.97.83.243'
 my_username = 'geospasial'
-my_password = 'geospasial'
+my_password = os.environ['QUAKE_SERVER_PASSWORD']
 
 my_remote_path = 'shakemaps'
 
