@@ -33,7 +33,7 @@ from utils import shakemapCacheDir, shakemapExtractDir, mkDir, is_event_id
 
 defaultHost = '118.97.83.243'
 defUserName = 'geospasial'
-defPassword = 'geospasial'
+defPassword = os.environ['QUAKE_SERVER_PASSWORD']
 defWorkDir = 'shakemaps'
 
 
