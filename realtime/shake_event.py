@@ -2146,7 +2146,7 @@ class ShakeEvent(QObject):
         myFatalitiesRange = '%i - %i' % (myLowerLimit, myUpperLimit)
 
         myCityTableName = self.tr('Places Affected')
-        myLegendName = 'Population density'
+        myLegendName = self.tr('Population density')
         myLimitations = self.tr(
             'This impact estimation is automatically generated and only takes'
             ' into account the population and cities affected by different '
