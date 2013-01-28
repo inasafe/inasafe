@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.9.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <transparencyLevelInt>255</transparencyLevelInt>
   <renderer-v2 symbollevels="0" type="RuleRenderer">
     <rules>
@@ -244,6 +244,7 @@
     <edittype type="0" name="ALIGNMENT"/>
     <edittype type="0" name="ELEV"/>
     <edittype type="0" name="ID"/>
+    <edittype type="0" name="LEN"/>
     <edittype type="0" name="MMI"/>
     <edittype type="0" name="RGB"/>
     <edittype type="0" name="ROMAN"/>
