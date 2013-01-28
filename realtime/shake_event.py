@@ -721,6 +721,9 @@ class ShakeEvent(QObject):
         # So that we can set the label vertical alignment
         myFieldDefinition = ogr.FieldDefn('VALIGN', ogr.OFTString)
         myLayer.CreateField(myFieldDefinition)
+        # So that we can set feature length to filter out small features
+        myFieldDefinition = ogr.FieldDefn('LEN', ogr.OFTReal)
+        myLayer.CreateField(myFieldDefinition)
 
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
@@ -889,6 +892,7 @@ class ShakeEvent(QObject):
         myRomanIndex = myProvider.fieldNameIndex('ROMAN')
         myAlignIndex = myProvider.fieldNameIndex('ALIGN')
         myVAlignIndex = myProvider.fieldNameIndex('VALIGN')
+        myLengthIndex = myProvider.fieldNameIndex('LEN')
         myFeature = QgsFeature()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
@@ -913,13 +917,17 @@ class ShakeEvent(QObject):
             myX = myXMin + ((myXMax - myXMin) / 2)
 
             myAttributes = myFeature.attributeMap()
+
+            # Get length
+            myLength = myFeature.geometry().length()
+
             myMMIValue = float(myAttributes[myMMIIndex].toString())
 
-            # We only want labels on the half contours so test for that
+            # We only want labels on the whole number contours
             if myMMIValue != round(myMMIValue):
-                myRoman = self.romanize(myMMIValue)
-            else:
                 myRoman = ''
+            else:
+                myRoman = self.romanize(myMMIValue)
 
             #LOGGER.debug('MMI: %s ----> %s' % (
             #    myAttributes[myMMIIndex].toString(), myRoman))
@@ -937,6 +945,8 @@ class ShakeEvent(QObject):
                 myId, myAlignIndex, QVariant('Center'))
             myLayer.changeAttributeValue(
                 myId, myVAlignIndex, QVariant('HALF'))
+            myLayer.changeAttributeValue(
+                myId, myLengthIndex, QVariant(myLength))
 
         myLayer.commitChanges()
 
