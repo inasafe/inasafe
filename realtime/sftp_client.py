@@ -32,7 +32,7 @@ my_host = '118.97.83.243'
 my_username = 'geospasial'
 try:
     my_password = os.environ['QUAKE_SERVER_PASSWORD']
-except:
+except KeyError:
     LOGGER.exception('QUAKE_SERVER_PASSWORD not set!')
     sys.exit()
 
