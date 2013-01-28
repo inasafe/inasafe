@@ -1,4 +1,3 @@
-
 InaSAFE Realtime
 ================
 
@@ -113,18 +112,18 @@ At this point you should enter ‘yes’ when prompted::
   cd Quantum-GIS
   mkdir build
   cd build
-  cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/qgis-master \
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/qgis-realtime \
   -DCMAKE_BUILD_TYPE=Debug
   make -j4
-  sudo mkdir /usr/local/qgis-master
-  sudo chown <youruser>.<youruser> /usr/local/qgis-master
+  sudo mkdir /usr/local/qgis-realtime
+  sudo chown <youruser>.<youruser> /usr/local/qgis-realtime
   make install
 
 At this point you can test if your hand build QGIS is working by doing::
 
-  export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
-  export QGIS_PREFIX_PATH=/usr/local/qgis-master
-  export PYTHONPATH=/usr/local/qgis-master/share/qgis/python
+  export LD_LIBRARY_PATH=/usr/local/qgis-realtime/lib
+  export QGIS_PREFIX_PATH=/usr/local/qgis-realtime
+  export PYTHONPATH=/usr/local/qgis-realtime/share/qgis/python
   python
   from qgis.core import *
   ctrl-d
@@ -503,9 +502,9 @@ can be used to control batch execution. First a complete script listing::
     export QGIS_DEBUG=0
     export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log
     export QGIS_DEBUG_FILE=/tmp/inasafe/realtime/logs/qgis-debug.log
-    export QGIS_PREFIX_PATH=/usr/local/qgis-master/
-    export PYTHONPATH=/usr/local/qgis-master/share/qgis/python/:`pwd`
-    export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
+    export QGIS_PREFIX_PATH=/usr/local/qgis-realtime/
+    export PYTHONPATH=/usr/local/qgis-realtime/share/qgis/python/:`pwd`
+    export LD_LIBRARY_PATH=/usr/local/qgis-realtime/lib
     export INASAFE_WORK_DIR=/home/web/quake
     export SAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-Realtime/exposure/population.tif
     for FILE in `xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py --list | grep -v inp | grep -v Proces`
