@@ -725,7 +725,7 @@ class ShakeEvent(QObject):
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
         myBand = 1
-        myContourInterval = 0.5  # MMI not M!
+        myContourInterval = 0.5
         myContourBase = 0
         myFixedLevelList = []
         myUseNoDataFlag = 0
