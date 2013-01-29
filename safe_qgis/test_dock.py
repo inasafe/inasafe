@@ -843,6 +843,41 @@ class DockTest(unittest.TestCase):
         assert format_int(17) in myResult, myMessage
         assert format_int(7) in myResult, myMessage
 
+    def test_InsufficientOverlapIssue372(self):
+        """Test Insufficient overlap errors are caught as per issue #372.
+        ..note:: See https://github.com/AIFDR/inasafe/issues/372
+        """
+
+        # Push OK with the left mouse button
+        myButton = DOCK.pbnRunStop
+
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
+
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='Penduduk Jakarta',
+            theFunction='HKVtest',
+            theFunctionId='HKVtest')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        # Zoom to an area where there is no overlaop with layers
+        myRect = QgsRectangle(106.61001188831219, -6.130614191176471,
+                              106.67188745972703, -6.080190955882353)
+        CANVAS.setExtent(myRect)
+
+        # Press RUN
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        # Check for an error containing InsufficientOverlapError
+        myMessage = 'Result not as expected: %s' % myResult
+        myExpectedString = 'InsufficientOverlapError'
+        # This is the expected impact number
+        self.assertIn(myExpectedString, myResult, myMessage)
+
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
