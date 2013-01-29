@@ -160,6 +160,8 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_showHelp(self):
         """Test that help button works"""
         # ... and this is how you skip it using nosetests
+        #prevent unreachable code errors in pylint
+        #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
