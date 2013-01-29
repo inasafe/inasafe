@@ -863,18 +863,19 @@ class DockTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
-        # Zoom to an area where there is no overlaop with layers
-        myRect = QgsRectangle(106.61001188831219, -6.130614191176471,
-                              106.67188745972703, -6.080190955882353)
+        # Zoom to an area where there is no overlap with layers
+        myRect = QgsRectangle(106.635434302702, -6.101567666986,
+                              106.635434302817, -6.101567666888)
         CANVAS.setExtent(myRect)
 
         # Press RUN
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()   
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         # Check for an error containing InsufficientOverlapError
-        myMessage = 'Result not as expected: %s' % myResult
         myExpectedString = 'InsufficientOverlapError'
+        myMessage = 'Result not as expected %s not in: %s' % (
+            myExpectedString, myResult)
         # This is the expected impact number
         self.assertIn(myExpectedString, myResult, myMessage)
 
