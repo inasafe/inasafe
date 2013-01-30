@@ -880,7 +880,7 @@ class DockTest(unittest.TestCase):
             myExpectedString, myResult)
         # This is the expected impact number
         self.assertIn(myExpectedString, myResult, myMessage)
-        
+
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""

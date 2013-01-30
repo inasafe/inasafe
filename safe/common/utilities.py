@@ -9,8 +9,7 @@ import getpass
 from tempfile import mkstemp
 from subprocess import PIPE, Popen
 
-from safe.common.exceptions import VerificationError
-
+from safe.common.exceptions import VerificationError, WindowsError
 
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions
@@ -260,5 +259,16 @@ def get_free_memory_osx():
     Warning : this script is really not robust
     Return in MB unit
     """
-    raise NotImplementedError
-#    return 0
+    try:
+        p = Popen('echo -e "\n$(top -l 1 | awk \'/PhysMem/\';)\n"', \
+                  shell=True, stdout=PIPE)
+        stdout_string = p.communicate()[0].split('\n')[1]
+        # e.g. output (its a single line)
+        # PhysMem: 1491M wired, 3032M active, 1933M inactive,
+        # 6456M used, 1735M free.
+    except OSError:
+        raise OSError
+    stdout_list = stdout_string.split(',')
+    inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
+    free = stdout_list[4].replace('M free.', '').replace(' ', '')
+    return int(inactive) + int(free)

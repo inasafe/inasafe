@@ -102,6 +102,7 @@ LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
 
+#noinspection PyArgumentList
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
 
