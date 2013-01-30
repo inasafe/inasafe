@@ -219,6 +219,8 @@ def get_free_memory_win():
         if available_string in stdout:
             free_memory_string = stdout
             break
+    if free_memory_string is None:
+        raise
     if free_memory_string.endswith('\r'):
         free_memory_string = free_memory_string[:-1]
     free_memory_string = free_memory_string[len(available_string):]
