@@ -70,6 +70,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       get_version,
                                       temp_dir,
                                       safe_read_layer,
+                                      get_free_memory,
                                       ReadLayerError,
                                       points_in_and_outside_polygon,
                                       calculate_polygon_centroid,
@@ -2978,15 +2979,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             _ = self.getClipParameters()
         except:
             return  # ignore any error
-        myExtent = self.viewportGeoArray()
-        myWidth = myExtent[2] - myExtent[0]
-        myHeight = myExtent[3] - myExtent[1]
+
+        myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
+        myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
 
         myWidth = myWidth / myCellSize
         myHeight = myHeight / myCellSize
 
-        # Compute mem requirement in MB (assuming 32bits per cell)
-        myRequirement = ((myWidth * myHeight * (32 / 8)) / 1024 / 1024)
+        LOGGER.info('Width: %s' % myWidth)
+        LOGGER.info('Height: %s' % myHeight)
+        LOGGER.info('Pixel Size: %s' % myCellSize)
 
-        myRequirement = 'Needs %imb per raster layer' % myRequirement
+        # Compute mem requirement in MB (assuming numpy uses 8bytes by per
+        # cell) see this link:
+        # http://stackoverflow.com/questions/11784329/
+        #      python-memory-usage-of-numpy-arrays
+        myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
+        myFreeMemory = get_free_memory()
+        myRequirement = ('Needs %imb per raster layer (%imb available)' %
+                        (myRequirement, myFreeMemory))
         LOGGER.info(myRequirement)
