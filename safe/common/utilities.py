@@ -211,7 +211,7 @@ def get_free_memory_win():
     Warning : this script is really not robust
     Return in MB unit
     """
-    available_string = 'Available Physical Memory '
+    available_string = 'Available Physical Memory: '
     free_memory_string = None
     p = Popen('systeminfo', shell=True, stdout=PIPE)
     stdout_list = p.communicate()[0].split('\n')
@@ -220,14 +220,18 @@ def get_free_memory_win():
             free_memory_string = stdout
             break
     if free_memory_string is None:
-        raise
+        raise MemoryError
     if free_memory_string.endswith('\r'):
         free_memory_string = free_memory_string[:-1]
+        print '1', free_memory_string
     free_memory_string = free_memory_string[len(available_string):]
-
+    print '2', free_memory_string
     free_memory_list =  free_memory_string.split(' ')
+    print free_memory_list
     free_memory_amount = free_memory_list[0]
-    free_memory_amount = int(free_memory_amount.replace('.', '').replace(',', ''))
+    print 'free_memory_amount0', free_memory_amount
+    free_memory_amount = free_memory_amount.replace('.', '').replace(',', '')
+    print 'free_memory_amount', free_memory_amount
     free_memory_unit = free_memory_list[1]
     if free_memory_unit == 'KB':
         free_memory_amount /= 1000
