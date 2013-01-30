@@ -1,4 +1,3 @@
-
 InaSAFE Realtime
 ================
 
@@ -63,6 +62,8 @@ InaSAFE Realtime is implemented by four main python modules:
     after the shake event and are in the format of shake data as
     provided by the USGS (XXXXXX TODO fact check XXXX).
     :samp:`ftp://118.97.83.243/20110413170148.inp.zip`
+    **Note:** This data is now no longer hosted via ftp and requires an ssh
+    account in order to retrieve it.
 * **shake_event** - A rather monolithic module that 'knows' how to
     fetch, unpack, process and generate a report for a quake event.
     The module logic is based on the standard shake data packaging
@@ -111,18 +112,18 @@ At this point you should enter ‘yes’ when prompted::
   cd Quantum-GIS
   mkdir build
   cd build
-  cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/qgis-master \
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/qgis-realtime \
   -DCMAKE_BUILD_TYPE=Debug
   make -j4
-  sudo mkdir /usr/local/qgis-master
-  sudo chown <youruser>.<youruser> /usr/local/qgis-master
+  sudo mkdir /usr/local/qgis-realtime
+  sudo chown <youruser>.<youruser> /usr/local/qgis-realtime
   make install
 
 At this point you can test if your hand build QGIS is working by doing::
 
-  export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
-  export QGIS_PREFIX_PATH=/usr/local/qgis-master
-  export PYTHONPATH=/usr/local/qgis-master/share/qgis/python
+  export LD_LIBRARY_PATH=/usr/local/qgis-realtime/lib
+  export QGIS_PREFIX_PATH=/usr/local/qgis-realtime
+  export PYTHONPATH=/usr/local/qgis-realtime/share/qgis/python
   python
   from qgis.core import *
   ctrl-d
@@ -378,8 +379,9 @@ your own template. More on that below in the next section.
 * **bearing-text**: bearing
 * **elapsed-time-name**: Elapsed time
 * **elapsed-time**: 26-Jul-12 02:15:35
-* **fatality-name**: Estimated Fatalities
-* **fatality-count**: 55
+* **fatalities-name**: Estimated Fatalities
+* **fatalities-range**: 5 - 55
+* **fatalities-count**: 55
 
 
 Customising the template
@@ -466,6 +468,10 @@ used with the following options:
 .. note:: The :file:`make_shakemap.sh` script is just a thin wrapper around
     the python :mod:`realtime.make_map` python module.
 
+.. note:: An english local shakemap will always be generated regardless of
+    the locale you have chosen (using the INASAFE_LOCALE env var). This en
+    version will be in addition to your chosen locale.
+
 Unit tests
 -----------
 
@@ -496,9 +502,9 @@ can be used to control batch execution. First a complete script listing::
     export QGIS_DEBUG=0
     export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log
     export QGIS_DEBUG_FILE=/tmp/inasafe/realtime/logs/qgis-debug.log
-    export QGIS_PREFIX_PATH=/usr/local/qgis-master/
-    export PYTHONPATH=/usr/local/qgis-master/share/qgis/python/:`pwd`
-    export LD_LIBRARY_PATH=/usr/local/qgis-master/lib
+    export QGIS_PREFIX_PATH=/usr/local/qgis-realtime/
+    export PYTHONPATH=/usr/local/qgis-realtime/share/qgis/python/:`pwd`
+    export LD_LIBRARY_PATH=/usr/local/qgis-realtime/lib
     export INASAFE_WORK_DIR=/home/web/quake
     export SAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-Realtime/exposure/population.tif
     for FILE in `xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py --list | grep -v inp | grep -v Proces`

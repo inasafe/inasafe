@@ -843,6 +843,42 @@ class DockTest(unittest.TestCase):
         assert format_int(17) in myResult, myMessage
         assert format_int(7) in myResult, myMessage
 
+    def test_InsufficientOverlapIssue372(self):
+        """Test Insufficient overlap errors are caught as per issue #372.
+        ..note:: See https://github.com/AIFDR/inasafe/issues/372
+        """
+
+        # Push OK with the left mouse button
+        myButton = DOCK.pbnRunStop
+
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
+
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='Penduduk Jakarta',
+            theFunction='HKVtest',
+            theFunctionId='HKVtest')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        # Zoom to an area where there is no overlap with layers
+        myRect = QgsRectangle(106.635434302702, -6.101567666986,
+                              106.635434302817, -6.101567666888)
+        CANVAS.setExtent(myRect)
+
+        # Press RUN
+        DOCK.accept()   
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        # Check for an error containing InsufficientOverlapError
+        myExpectedString = 'InsufficientOverlapError'
+        myMessage = 'Result not as expected %s not in: %s' % (
+            myExpectedString, myResult)
+        # This is the expected impact number
+        self.assertIn(myExpectedString, myResult, myMessage)
+
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
@@ -1057,6 +1093,14 @@ class DockTest(unittest.TestCase):
         # Kawasan Rawan Bencana III	45.000	45.000
         # Kawasan Rawan Bencana II	84.000	129.000
         # Kawasan Rawan Bencana I	28.000	157.000
+
+        # We could also get a memory error here so there are
+        # two plausible outcomes:
+
+        # Outcome 1: we ran out of memory
+        if 'system does not have sufficient memory' in myResult:
+            return
+        # Outcome 2: It ran so check the results
         assert format_int(45) in myResult, myMessage
         assert format_int(84) in myResult, myMessage
         assert format_int(28) in myResult, myMessage

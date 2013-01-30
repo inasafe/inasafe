@@ -21,16 +21,18 @@ import os
 import sys
 import shutil
 from xml.dom import minidom
+import math
 from subprocess import call, CalledProcessError
 import logging
 import numpy
 from datetime import datetime
-#sudo apt-get install python-tz
-import pytz
+import pytz  # sudo apt-get install python-tz
 
 import ogr
 import gdal
 from gdalconst import GA_ReadOnly
+
+from sftp_shake_data import SftpShakeData
 
 # TODO I think QCoreApplication is needed for tr() check hefore removing
 from PyQt4.QtCore import (QCoreApplication,
@@ -80,7 +82,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
-from shake_data import ShakeData
+# from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
@@ -121,7 +123,9 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
-        self.data = ShakeData(theEventId, theForceFlag)
+#        self.data = ShakeData(theEventId, theForceFlag)
+        self.data = SftpShakeData(theEvent=theEventId,
+            theForceFlag=theForceFlag)
         self.data.extract()
         self.latitude = None
         self.longitude = None
@@ -717,11 +721,14 @@ class ShakeEvent(QObject):
         # So that we can set the label vertical alignment
         myFieldDefinition = ogr.FieldDefn('VALIGN', ogr.OFTString)
         myLayer.CreateField(myFieldDefinition)
+        # So that we can set feature length to filter out small features
+        myFieldDefinition = ogr.FieldDefn('LEN', ogr.OFTReal)
+        myLayer.CreateField(myFieldDefinition)
 
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
         myBand = 1
-        myContourInterval = 0.5  # MMI not M!
+        myContourInterval = 0.5
         myContourBase = 0
         myFixedLevelList = []
         myUseNoDataFlag = 0
@@ -885,6 +892,7 @@ class ShakeEvent(QObject):
         myRomanIndex = myProvider.fieldNameIndex('ROMAN')
         myAlignIndex = myProvider.fieldNameIndex('ALIGN')
         myVAlignIndex = myProvider.fieldNameIndex('VALIGN')
+        myLengthIndex = myProvider.fieldNameIndex('LEN')
         myFeature = QgsFeature()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
@@ -909,13 +917,17 @@ class ShakeEvent(QObject):
             myX = myXMin + ((myXMax - myXMin) / 2)
 
             myAttributes = myFeature.attributeMap()
+
+            # Get length
+            myLength = myFeature.geometry().length()
+
             myMMIValue = float(myAttributes[myMMIIndex].toString())
 
-            # We only want labels on the half contours so test for that
+            # We only want labels on the whole number contours
             if myMMIValue != round(myMMIValue):
-                myRoman = self.romanize(myMMIValue)
-            else:
                 myRoman = ''
+            else:
+                myRoman = self.romanize(myMMIValue)
 
             #LOGGER.debug('MMI: %s ----> %s' % (
             #    myAttributes[myMMIIndex].toString(), myRoman))
@@ -933,6 +945,8 @@ class ShakeEvent(QObject):
                 myId, myAlignIndex, QVariant('Center'))
             myLayer.changeAttributeValue(
                 myId, myVAlignIndex, QVariant('HALF'))
+            myLayer.changeAttributeValue(
+                myId, myLengthIndex, QVariant(myLength))
 
         myLayer.commitChanges()
 
@@ -2128,12 +2142,21 @@ class ShakeEvent(QObject):
 
         """
         myMapName = self.tr('Estimated Earthquake Impact')
-        myExposureTableName = self.tr('Estimated number of people exposed to '
+        myExposureTableName = self.tr('Estimated number of people affected by '
             'each MMI level')
         myFatalitiesName = self.tr('Estimated fatalities')
         myFatalitiesCount = self.fatalityTotal
+
+        # put the estimate into neat ranges 0-100, 100-1000, 1000-10000. etc
+        myLowerLimit = 0
+        myUpperLimit = 100
+        while myFatalitiesCount > myUpperLimit:
+            myLowerLimit = myUpperLimit
+            myUpperLimit = math.pow(myUpperLimit, 2)
+        myFatalitiesRange = '%i - %i' % (myLowerLimit, myUpperLimit)
+
         myCityTableName = self.tr('Places Affected')
-        myLegendName = 'Population density'
+        myLegendName = self.tr('Population density')
         myLimitations = self.tr(
             'This impact estimation is automatically generated and only takes'
             ' into account the population and cities affected by different '
@@ -2187,6 +2210,7 @@ class ShakeEvent(QObject):
             'limitations': myLimitations,
             'credits': myCredits,
             'fatalities-name': myFatalitiesName,
+            'fatalities-range': myFatalitiesRange,
             'fatalities-count': '%s' % myFatalitiesCount,
             'mmi': '%s' % self.magnitude,
             'date': '%s-%s-%s' % (self.day,

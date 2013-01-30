@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import shutil
+from datetime import datetime
 from safe_qgis.utilities import setupLogger as setupLoggerSQ
 
 
@@ -61,6 +62,13 @@ def shakemapDataDir():
     procesed (tifs and pickled events) data dir.
     """
     myDir = os.path.join(baseDataDir(), 'shakemaps-processed')
+    mkDir(myDir)
+    return myDir
+
+
+def shakemapCacheDir():
+    """Create (if needed) and return the path to the base shakemap zip dir"""
+    myDir = os.path.join(baseDataDir(), 'shakemaps-cache')
     mkDir(myDir)
     return myDir
 
@@ -108,3 +116,17 @@ def setupLogger():
     mySentryUrl = ('http://fda607badbe440be9a2fa6b22e759c72'
             ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
     setupLoggerSQ(theSentryUrl=mySentryUrl, theLogFile=myLogFile)
+
+
+def is_event_id(eventid):
+    """Check if an id is event id.
+    Event id is in form of yyyymmddHHMMSS or '%Y%m%d%H%M%S'
+    i.e. 20130110204706
+    """
+    if len(eventid) != 14:
+        return False
+    try:
+        datetime.strptime(eventid, '%Y%m%d%H%M%S')
+    except ValueError:
+        return False
+    return True

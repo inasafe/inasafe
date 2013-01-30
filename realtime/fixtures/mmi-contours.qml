@@ -1,25 +1,25 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.9.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <transparencyLevelInt>255</transparencyLevelInt>
   <renderer-v2 symbollevels="0" type="RuleRenderer">
     <rules>
-      <rule description="Integer MMI valued contouirs will be shown but not labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) = 0" symbol="0" label="Whole Intervals">
-        <rule filter="&quot;MMI&quot; = '2'" symbol="1" label="II"/>
-        <rule filter="&quot;MMI&quot; = '3'" symbol="2" label="III"/>
-        <rule filter="&quot;MMI&quot; = '4'" symbol="3" label="IV"/>
-        <rule filter="&quot;MMI&quot; = '5'" symbol="4" label="V"/>
-        <rule filter="&quot;MMI&quot; = '6'" symbol="5" label="VI"/>
-        <rule filter="&quot;MMI&quot; = '7'" symbol="6" label="VII"/>
-        <rule filter="&quot;MMI&quot; = '8'" symbol="7" label="VIII"/>
-        <rule filter="&quot;MMI&quot; = '9'" symbol="8" label="IX"/>
+      <rule description="Integer MMI valued contours will be shown but not labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) != 0" symbol="0" label="Half Intervals">
+        <rule filter="&quot;MMI&quot; = '1.5'" symbol="1" label="II"/>
+        <rule filter="&quot;MMI&quot; = '2.5'" symbol="2" label="III"/>
+        <rule filter="&quot;MMI&quot; = '3.5'" symbol="3" label="IV"/>
+        <rule filter="&quot;MMI&quot; = '4.5'" symbol="4" label="V"/>
+        <rule filter="&quot;MMI&quot; = '5.5'" symbol="5" label="VI"/>
+        <rule filter="&quot;MMI&quot; = '6.5'" symbol="6" label="VII"/>
+        <rule filter="&quot;MMI&quot; = '7.5'" symbol="7" label="VIII"/>
+        <rule filter="&quot;MMI&quot; = '8.5'" symbol="8" label="IX"/>
       </rule>
-      <rule description="Integer MMI valued contouirs will be hidden but labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) != 0" symbol="9" label="Half Intervals"/>
+      <rule description="Integer MMI valued contours will be hidden but labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) = 0" symbol="9" label="Whole Intervals"/>
     </rules>
     <symbols>
       <symbol outputUnit="MM" alpha="1" type="line" name="0">
         <layer pass="0" class="SimpleLine" locked="0">
           <prop k="capstyle" v="square"/>
-          <prop k="color" v="220,0,3,255"/>
+          <prop k="color" v="4,0,0,255"/>
           <prop k="customdash" v="5;2"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0"/>
@@ -178,7 +178,7 @@
     <property key="labeling/enabled" value="true"/>
     <property key="labeling/fieldName" value="ROMAN"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Ubuntu"/>
+    <property key="labeling/fontFamily" value="Lucida Grande"/>
     <property key="labeling/fontItalic" value="false"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
     <property key="labeling/fontSize" value="12"/>
@@ -244,6 +244,7 @@
     <edittype type="0" name="ALIGNMENT"/>
     <edittype type="0" name="ELEV"/>
     <edittype type="0" name="ID"/>
+    <edittype type="0" name="LEN"/>
     <edittype type="0" name="MMI"/>
     <edittype type="0" name="RGB"/>
     <edittype type="0" name="ROMAN"/>
