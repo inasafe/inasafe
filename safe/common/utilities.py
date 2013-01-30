@@ -6,6 +6,7 @@ import gettext
 from datetime import date
 import getpass
 from tempfile import mkstemp
+from subprocess import PIPE, Popen
 
 from safe.common.exceptions import VerificationError
 
@@ -192,3 +193,53 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
                 os.remove(shp_basename + ext)
 
     os.chdir(my_cwd)
+
+def get_free_memory():
+    """Return current free memory on the machine.
+    Currently supported for Windows, Linux, and OSX
+    """
+    if 'nt' in os.name:
+        # windows
+        return get_free_memory_win()
+    elif 'posix' in os.name:
+        return get_free_memory_linux()
+    elif 'mac':
+        pass
+
+def get_free_memory_win():
+    """Return current free memory on the machine for windows.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    available_string = 'Available Physical Memory '
+    free_memory_string = None
+    p = Popen('systeminfo', shell=True, stdout=PIPE)
+    stdout_list = p.communicate()[0].split('\n')
+    for stdout in stdout_list:
+        if available_string in stdout:
+            free_memory_string = stdout
+            break
+    if free_memory_string.endswith('\r'):
+        free_memory_string = free_memory_string[:-1]
+    free_memory_string = free_memory_string[len(available_string):]
+
+    free_memory_list =  free_memory_string.split(' ')
+    free_memory_amount = free_memory_list[0]
+    free_memory_amount = int(free_memory_amount.replace('.', '').replace(',', ''))
+    free_memory_unit = free_memory_list[1]
+    if free_memory_unit == 'KB':
+        free_memory_amount /= 1000
+    elif free_memory_unit == 'GB':
+        free_memory_amount *= 1000
+    return free_memory_amount
+
+def get_free_memory_linux():
+    """Return current free memory on the machine for windows.
+    Warning : this script is really not robust
+    """
+    p = Popen('free -m', shell=True, stdout=PIPE)
+    stdout_string = p.communicate()[0].split('\n')[2]
+    stdout_list = stdout_string.split(' ')
+    stdout_list = [x for x in stdout_list if x != '']
+    return int(stdout_list[3])
+
