@@ -1,6 +1,7 @@
 """Utilities for InaSAFE
 """
 import os
+import sys
 import zipfile
 import gettext
 from datetime import date
@@ -196,15 +197,18 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
 
 def get_free_memory():
     """Return current free memory on the machine.
-    Currently supported for Windows, Linux, and OSX
+    Currently supported for Windows, Linux
+    Return in MB unit
     """
-    if 'nt' in os.name:
+    if 'win32' in sys.platform:
         # windows
         return get_free_memory_win()
-    elif 'posix' in os.name:
+    elif 'linux2' in sys.platform:
+        # linux
         return get_free_memory_linux()
-    elif 'mac':
-        pass
+    elif 'darwin' in sys.platform:
+        # mac
+        return get_free_memory_osx()
 
 def get_free_memory_win():
     """Return current free memory on the machine for windows.
@@ -213,8 +217,11 @@ def get_free_memory_win():
     """
     available_string = 'Available Physical Memory: '
     free_memory_string = None
-    p = Popen('systeminfo', shell=True, stdout=PIPE)
-    stdout_list = p.communicate()[0].split('\n')
+    try:
+        p = Popen('systeminfo', shell=True, stdout=PIPE)
+        stdout_list = p.communicate()[0].split('\n')
+    except WindowsError:
+        raise WindowsError
     for stdout in stdout_list:
         if available_string in stdout:
             free_memory_string = stdout
@@ -223,15 +230,10 @@ def get_free_memory_win():
         raise MemoryError
     if free_memory_string.endswith('\r'):
         free_memory_string = free_memory_string[:-1]
-        print '1', free_memory_string
     free_memory_string = free_memory_string[len(available_string):]
-    print '2', free_memory_string
     free_memory_list =  free_memory_string.split(' ')
-    print free_memory_list
     free_memory_amount = free_memory_list[0]
-    print 'free_memory_amount0', free_memory_amount
     free_memory_amount = free_memory_amount.replace('.', '').replace(',', '')
-    print 'free_memory_amount', free_memory_amount
     free_memory_unit = free_memory_list[1]
     if free_memory_unit == 'KB':
         free_memory_amount /= 1000
@@ -240,12 +242,23 @@ def get_free_memory_win():
     return free_memory_amount
 
 def get_free_memory_linux():
-    """Return current free memory on the machine for windows.
+    """Return current free memory on the machine for linux.
     Warning : this script is really not robust
+    Return in MB unit
     """
-    p = Popen('free -m', shell=True, stdout=PIPE)
-    stdout_string = p.communicate()[0].split('\n')[2]
+    try:
+        p = Popen('free -m', shell=True, stdout=PIPE)
+        stdout_string = p.communicate()[0].split('\n')[2]
+    except OSError:
+        raise OSError
     stdout_list = stdout_string.split(' ')
     stdout_list = [x for x in stdout_list if x != '']
     return int(stdout_list[3])
 
+def get_free_memory_osx():
+    """Return current free memory on the machine for mac os.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    raise NotImplementedError
+#    return 0
