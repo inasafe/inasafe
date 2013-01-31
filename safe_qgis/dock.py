@@ -3134,7 +3134,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             mySuggestion = self.tr('Try zooming in to a smaller area or using'
                                    ' a raster layer with a coarser resolution'
                                    ' to speed up execution and reduce memory'
-                                   ' requirements.')
+                                   ' requirements. You could also try adding'
+                                   ' more RAM to your computer.')
             myHtmlMessage = ('<table class="condensed">'
                              '<tr><th class="warning '
                              'button-cell">%s</th></tr>\n'
