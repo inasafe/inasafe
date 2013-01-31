@@ -1743,7 +1743,7 @@ Click for Diagnostic Information:
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function')
-        DOCK.extentsChanged()
+        DOCK.checkMemoryUsage()
         assert 0==1
 
 if __name__ == '__main__':

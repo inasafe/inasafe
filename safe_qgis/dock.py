@@ -201,7 +201,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # check if the analysis is feasible as the extent changes
         myCanvas = self.iface.mapCanvas()
         QtCore.QObject.connect(myCanvas, QtCore.SIGNAL('extentsChanged()'),
-                               self.extentsChanged)
+                               self.checkMemoryUsage)
+
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
@@ -397,6 +398,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage += '</table>'
             return (False, myMessage)
         else:
+            # What does this todo mean? TS
             # TODO refactor impact_functions so it is accessible and user here
             myMessage = '<table class="condensed">'
             myNotes = self.tr('You can now proceed to run your model by'
@@ -1140,7 +1142,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'your computer so that it has more memory may help. '
                     'Alternatively, consider using a smaller geographical '
                     'area for your analysis, or using rasters with a larger '
-                    'cell size.'))
+                    'cell size.') + self.checkMemoryUsage())
             return
 
         try:
@@ -3068,10 +3070,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return myFunctionID
 
     @pyqtSlot()
-    def extentsChanged(self):
+    def checkMemoryUsage(self):
         """Slot to check if analysis is feasible when extents change.
 
         For simplicity, we will do all our calcs in geocrs.
+
+        Args:
+            None
+
+        Returns:
+            str: A string containing notes about how much memory is needed
+                for a single raster and if this is likely to result in an
+                error.
+
+        .. note:: The dock is also updated with a message indicating if the
+            memory usage is likely to be too much for the current system.
 
         """
         LOGGER.info('Extents changed!')
@@ -3095,20 +3108,48 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # cell) see this link:
         # http://stackoverflow.com/questions/11784329/
         #      python-memory-usage-of-numpy-arrays
+        # Also note that the on-disk requirement of the clipped tifs is about
+        # half this since the tifs as in single precision,
+        # whereas numpy arrays are in double precision.
         myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
         myFreeMemory = get_free_memory()
-        myMessage = ('Needs %imb per raster layer (%imb available). ' %
-                        (myRequirement, myFreeMemory))
         # We work on the assumption that if more than 10% of the available
         # memory is occupied by a single layer we could run out of memory
         # (depending on the impact function). This is because multiple
         # in memory copies of the layer are often made during processing.
         myWarningLimit = 10
         myUsageIndicator = (float(myRequirement) / float(myFreeMemory)) * 100
+        myCountsMessage = ('Memory requirement: about %imb per raster layer ('
+                     '%imb available). %.2f / %s' %
+                     (myRequirement, myFreeMemory, myUsageIndicator,
+                      myWarningLimit))
         if myWarningLimit <= myUsageIndicator:
-            myMessage += ('Warning - there may not be enough free memory to '
-                         'run this analysis - proceed at your own risk. %.2f '
-                         '/ %i.' % (myUsageIndicator, myWarningLimit))
-        else:
-            myMessage += '%.2f / %i' % (myUsageIndicator, myWarningLimit)
-        LOGGER.info(myMessage)
+            myMessage = self.tr('There may not be enough free memory to '
+                         'run this analysis. You can attempt to run the '
+                         'analysis anyway, but note that your computer may '
+                         'become unresponsive during execution, '
+                         'and / or the analysis may fail due to insufficient '
+                         'memory. Proceed at your own risk.')
+            mySuggestion = self.tr('Try zooming in to a smaller area or using'
+                                   ' a raster layer with a coarser resolution'
+                                   ' to speed up execution and reduce memory'
+                                   ' requirements.')
+            myHtmlMessage = ('<table class="condensed">'
+                             '<tr><th class="warning '
+                             'button-cell">%s</th></tr>\n'
+                             '<tr><td>%s</td></tr>\n'
+                             '<tr><th class="problem '
+                             'button-cell">%s</th></tr>\n'
+                             '<tr><td>%s</td></tr>\n</table>' %
+                             (
+                              self.tr('Memory usage:'),
+                              myMessage,
+                              self.tr('Suggestion'),
+                              mySuggestion))
+            _, myReadyMessage = self.validate()
+            myReadyMessage += myHtmlMessage
+            self.displayHtml(myReadyMessage)
+
+        LOGGER.info(myCountsMessage)
+        return myMessage + ' ' + myCountsMessage
+
