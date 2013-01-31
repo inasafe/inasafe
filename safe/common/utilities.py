@@ -8,8 +8,31 @@ from datetime import date
 import getpass
 from tempfile import mkstemp
 from subprocess import PIPE, Popen
+import ctypes
 
 from safe.common.exceptions import VerificationError, WindowsError
+
+class MEMORYSTATUSEX(ctypes.Structure):
+    """
+    This class is used for getting the free memory on Windows
+    """
+    _fields_ = [
+        ("dwLength", ctypes.c_ulong),
+        ("dwMemoryLoad", ctypes.c_ulong),
+        ("ullTotalPhys", ctypes.c_ulonglong),
+        ("ullAvailPhys", ctypes.c_ulonglong),
+        ("ullTotalPageFile", ctypes.c_ulonglong),
+        ("ullAvailPageFile", ctypes.c_ulonglong),
+        ("ullTotalVirtual", ctypes.c_ulonglong),
+        ("ullAvailVirtual", ctypes.c_ulonglong),
+        ("sullAvailExtendedVirtual", ctypes.c_ulonglong),
+        ]
+
+    def __init__(self):
+        # have to initialize this to the size of MEMORYSTATUSEX
+        self.dwLength = ctypes.sizeof(self)
+        super(MEMORYSTATUSEX, self).__init__()
+
 
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions
@@ -214,31 +237,9 @@ def get_free_memory_win():
     Warning : this script is really not robust
     Return in MB unit
     """
-    available_string = 'Available Physical Memory: '
-    free_memory_string = None
-    try:
-        p = Popen('systeminfo', shell=True, stdout=PIPE)
-        stdout_list = p.communicate()[0].split('\n')
-    except WindowsError:
-        raise WindowsError
-    for stdout in stdout_list:
-        if available_string in stdout:
-            free_memory_string = stdout
-            break
-    if free_memory_string is None:
-        raise MemoryError
-    if free_memory_string.endswith('\r'):
-        free_memory_string = free_memory_string[:-1]
-    free_memory_string = free_memory_string[len(available_string):]
-    free_memory_list =  free_memory_string.split(' ')
-    free_memory_amount = free_memory_list[0]
-    free_memory_amount = free_memory_amount.replace('.', '').replace(',', '')
-    free_memory_unit = free_memory_list[1]
-    if free_memory_unit == 'KB':
-        free_memory_amount /= 1000
-    elif free_memory_unit == 'GB':
-        free_memory_amount *= 1000
-    return int(free_memory_amount)
+    stat = MEMORYSTATUSEX()
+    ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(stat))
+    return int(stat.ullAvailPhys / 1024 / 1024)
 
 def get_free_memory_linux():
     """Return current free memory on the machine for linux.
