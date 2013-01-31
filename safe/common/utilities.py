@@ -238,7 +238,7 @@ def get_free_memory_win():
         free_memory_amount /= 1000
     elif free_memory_unit == 'GB':
         free_memory_amount *= 1000
-    return free_memory_amount
+    return int(free_memory_amount)
 
 def get_free_memory_linux():
     """Return current free memory on the machine for linux.
