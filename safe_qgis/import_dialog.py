@@ -101,7 +101,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setValue(20)
 
         self.progressDialog.setLabelText(
-            self.tr("Waiting For Result Available on Server..."))
+            self.tr("Waiting For Result Available on Server... (http://hot-export.geofabrik.de/jobs/%s)" % myJobId))
         myShapeUrl = self.getDownloadUrl(myJobId)
         self.progressDialog.setValue(30)
 
@@ -112,12 +112,12 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.progressDialog.setLabelText(
             self.tr("Download Shape File..."))
-        myZipPath = self.downloadShapeFile(myShapeUrl, myOutputPath)
+        self.downloadShapeFile(myShapeUrl, myOutputPath)
         self.progressDialog.setValue(90)
 
         self.progressDialog.setLabelText(
             self.tr("Extract Shape File..."))
-        self.extractZip(myZipPath)
+        self.extractZip(myOutputPath)
         self.progressDialog.setValue(100)
 
 
@@ -163,6 +163,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         ## tag upload
         ## FIXME(gigih): upload buildings preset to hot-export
         thePayload['authenticity_token'] = theToken
+        thePayload['presetfile'] = 4 ## preset mapping from jakarta
+        thePayload['default_tags'] = 'true'
         myTagResponse = requests.post(self.url + '/tagupload', thePayload)
         myId = myTagResponse.url.split('/')[-1]
 
@@ -190,6 +192,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myShapeFile = open(theOutput, 'wb')
         myShapeFile.write(myShapeResponse.content)
         myShapeFile.close()
+
 
     def extractZip(self, thePath):
         import zipfile, os
