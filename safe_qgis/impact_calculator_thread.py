@@ -31,6 +31,7 @@ from safe_qgis.exceptions import InsufficientParametersError
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class ImpactCalculatorThread(threading.Thread, QObject):
     """A threaded class to compute an impact scenario. Under
        python a thread can only be run once, so the instances

@@ -817,25 +817,6 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     addLoggingHanderOnce(myLogger, myQGISHandler)
 
 
-def isLayerPolygonal(theLayer):
-    """Tell if a QGIS layer is vector and its geometries are polygons.
-
-   Args:
-       the theLayer
-
-    Returns:
-        bool - true if the theLayer contains polygons
-
-    Raises:
-       None
-    """
-    try:
-        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
-            theLayer.geometryType() == QGis.Polygon)
-    except AttributeError:
-        return False
-
-
 def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
     """iterates over self.layer and returns all the attribute names of
        attributes that have int or string as field type and the position
@@ -1155,3 +1136,71 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     myReport += '</table>'
 
     return myReport
+
+
+def addComboItemInOrder(theCombo, theItemText, theItemData=None):
+    """Although QComboBox allows you to set an InsertAlphabetically enum
+    this only has effect when a user interactively adds combo items to
+    an editable combo. This we have this little function to ensure that
+    combos are always sorted alphabetically.
+
+    Args:
+        * theCombo - combo box receiving the new item
+        * theItemText - display text for the combo
+        * theItemData - optional UserRole data to be associated with
+          the item
+
+    Returns:
+        None
+
+    Raises:
+
+    ..todo:: Move this to utilities
+    """
+    mySize = theCombo.count()
+    for myCount in range(0, mySize):
+        myItemText = str(theCombo.itemText(myCount))
+        # see if theItemText alphabetically precedes myItemText
+        if cmp(str(theItemText).lower(), myItemText.lower()) < 0:
+            theCombo.insertItem(myCount, theItemText, theItemData)
+            return
+        #otherwise just add it to the end
+    theCombo.insertItem(mySize, theItemText, theItemData)
+
+
+def isLayerPolygonal(theLayer):
+    """Tell if a QGIS layer is vector and its geometries are polygons.
+
+   Args:
+       the theLayer
+
+    Returns:
+        bool - true if the theLayer contains polygons
+
+    Raises:
+       None
+    """
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Polygon)
+    except AttributeError:
+        return False
+
+
+def isLayerPoint(theLayer):
+    """Tell if a QGIS layer is vector and its geometries are polygons.
+
+   Args:
+       the theLayer
+
+    Returns:
+        bool - true if the theLayer contains polygons
+
+    Raises:
+       None
+    """
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Point)
+    except AttributeError:
+        return False

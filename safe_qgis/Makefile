@@ -35,6 +35,7 @@ PY_FILES = __init__.py \
 					keywords_dialog.py \
 					map_legend.py \
 					map.py \
+					minimum_needs.py \
 					options_dialog.py \
 					plugin.py \
 					qgis_interface.py \
@@ -47,6 +48,7 @@ UI_FILES = dock_base.py \
 					 options_dialog_base.py \
 					 keywords_dialog_base.py \
 					 impact_functions_doc_base.py \
+					 minimum_needs_base.py \
 					 options_dialog_base.py
 
 RESOURCE_FILES = resources.py
