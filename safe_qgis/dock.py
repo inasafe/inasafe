@@ -1835,6 +1835,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
+        global myAttrs
         try:
             self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
                 'target_field')
@@ -3096,6 +3097,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #      python-memory-usage-of-numpy-arrays
         myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
         myFreeMemory = get_free_memory()
-        myRequirement = ('Needs %imb per raster layer (%imb available)' %
+        myMessage = ('Needs %imb per raster layer (%imb available). ' %
                         (myRequirement, myFreeMemory))
-        LOGGER.info(myRequirement)
+        # We work on the assumption that if more than 10% of the available
+        # memory is occupied by a single layer we could run out of memory
+        # (depending on the impact function). This is because multiple
+        # in memory copies of the layer are often made during processing.
+        myWarningLimit = 10
+        myUsageIndicator = (float(myRequirement) / float(myFreeMemory)) * 100
+        if myWarningLimit <= myUsageIndicator:
+            myMessage += ('Warning - there may not be enough free memory to '
+                         'run this analysis - proceed at your own risk. %.2f '
+                         '/ %i.' % (myUsageIndicator, myWarningLimit))
+        else:
+            myMessage += '%.2f / %i' % (myUsageIndicator, myWarningLimit)
+        LOGGER.info(myMessage)
