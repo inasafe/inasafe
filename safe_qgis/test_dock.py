@@ -869,7 +869,7 @@ class DockTest(unittest.TestCase):
         CANVAS.setExtent(myRect)
 
         # Press RUN
-        DOCK.accept()   
+        DOCK.accept()
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         # Check for an error containing InsufficientOverlapError
