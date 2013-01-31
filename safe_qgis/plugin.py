@@ -245,6 +245,26 @@ class Plugin:
                         self.keyActionF7)
 
         #--------------------------------------
+        # Create action for import OSM Dialog
+        #--------------------------------------
+        self.actionImportDlg = QAction(
+            QIcon(':/plugins/inasafe/functions-table.png'), ## FIXME: need different icon
+            self.tr('InaSAFE Import Dialog'),
+            self.iface.mainWindow())
+        self.actionImportDlg.setStatusTip(self.tr(
+            'Open InaSAFE Import Dialog'))
+        self.actionImportDlg.setWhatsThis(self.tr(
+            'Open InaSAFE Import Dialog'))
+        QObject.connect(self.actionImportDlg, SIGNAL('triggered()'),
+            self.showImportDlg)
+
+        self.iface.addToolBarIcon(self.actionImportDlg)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+            self.actionImportDlg)
+
+
+
+        #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = Dock(self.iface)
@@ -460,3 +480,11 @@ class Plugin:
     def keyActionF7(self):
         '''Executed when user press F7'''
         self.showImpactFunctionsDoc()
+
+    def showImportDlg(self):
+        from safe_qgis.import_dialog import ImportDialog
+
+        dlg = ImportDialog(self.iface.mainWindow())
+        dlg.setModal(True)
+        dlg.show()
+
