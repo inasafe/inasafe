@@ -24,9 +24,9 @@ from import_dialog_base import Ui_ImportDialogBase
 from bs4 import BeautifulSoup
 import requests
 import time
+import os
 
 from third_party.lightmaps import LightMaps
-
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
@@ -59,16 +59,23 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.map.setGeometry(QRect(10, 10, 300, 240))
         self.map.setCenter(-6.4338, 106.7685 )
 
+        self.outDir = '/tmp'
 
     def accept(self):
 
         self.doImport()
+        self.loadShapeFile()
+
         self.done(QDialog.Accepted)
 
     def progressDlgCanceled(self):
         pass
 
     def doImport(self):
+        """
+        This function will do all actions for importing shape files from Hot-Export
+        """
+
         # creating progress dialog for download
         self.progressDialog=QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
@@ -79,6 +86,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setMaximum(100)
         self.progressDialog.setValue(0)
 
+        ## setup necessary data to create new job in Hot-Export
         myPayload = {
             'job[region_id]': '1', # 1 is indonesia
             'job[name]': 'depok test',
@@ -96,7 +104,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setValue(10)
 
         self.progressDialog.setLabelText(
-            self.tr("Upload Default Preset File..."))
+            self.tr("Set Preset to ... 'mapping from jakarta'"))
         myJobId = self.uploadTag(myPayload, myNewJobToken)
         self.progressDialog.setValue(20)
 
@@ -105,21 +113,21 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myShapeUrl = self.getDownloadUrl(myJobId)
         self.progressDialog.setValue(30)
 
-        self.progressDialog.setLabelText(
-            self.tr("Waiting For Result Available on Server..."))
-        myOutputPath = '/tmp/' + myJobId + '.shp.zip'
-        self.progressDialog.setValue(50)
-
+        ## download shape file from Hot-Export
         self.progressDialog.setLabelText(
             self.tr("Download Shape File..."))
-        self.downloadShapeFile(myShapeUrl, myOutputPath)
+        myFilePath = '/tmp/' + myJobId + '.shp.zip'
+        self.downloadShapeFile(myShapeUrl, myFilePath)
         self.progressDialog.setValue(90)
 
+        ## extract downloaded file to output directory
+        #myOutDir = os.path.join(os.path.dirname(myFilePath), myJobId)
         self.progressDialog.setLabelText(
-            self.tr("Extract Shape File..."))
-        self.extractZip(myOutputPath)
+            self.tr("Extract Shape File... %s to %s" % (myFilePath, self.outDir)) )
+        self.extractZip(myFilePath, self.outDir)
         self.progressDialog.setValue(100)
 
+        self.progressDialog.done(QDialog.Accepted)
 
     def getAuthToken(self, theContent):
         '''Get authenticity_token value
@@ -193,19 +201,43 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myShapeFile.write(myShapeResponse.content)
         myShapeFile.close()
 
+    def extractZip(self, thePath, theOutDir):
+        """
+        Extract zip file from thePath to theOutDir. If theOutDir is not exist
+        then this function will create it.
+        Args:
+           * thePath - the path of zip file
+           * theOutDir - output directory
+        """
 
-    def extractZip(self, thePath):
-        import zipfile, os
+        import zipfile
+
+        ## ensure directory is exist
+        if not os.path.exists(theOutDir):
+            os.makedirs(theOutDir)
 
         myHandle = open(thePath, 'rb')
         myZip = zipfile.ZipFile(myHandle)
         for myName in myZip.namelist():
-            #FIXME(gigih): don't put the file in temporary folder
-            myOutPath = os.path.join(os.path.dirname(thePath), myName)
+            myOutPath = os.path.join(theOutDir, myName)
             myOutFile = open(myOutPath, 'wb')
             myOutFile.write(myZip.read(myName))
             myOutFile.close()
+            print myOutPath
         myHandle.close()
+
+    def loadShapeFile(self):
+        """
+        Load downloaded shape file to QGIS Main Window.
+        """
+
+        from qgis.utils import iface
+
+        ## only load 'line' and 'polygon'
+        iface.addVectorLayer(os.path.join(self.outDir, 'planet_osm_line.shp'),
+            'line', 'ogr')
+        iface.addVectorLayer(os.path.join(self.outDir, 'planet_osm_polygon.shp'),
+            'polygon', 'ogr')
 
 
 if __name__ == '__main__':
