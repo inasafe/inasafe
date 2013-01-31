@@ -3096,9 +3096,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
         myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
-
-        myWidth = myWidth / myCellSize
-        myHeight = myHeight / myCellSize
+        try:
+            myWidth = myWidth / myCellSize
+            myHeight = myHeight / myCellSize
+        except TypeError:
+            # Could have been a vector layer for example
+            LOGGER.exception('Error: Computed cellsize was None.')
+            _, myReadyMessage = self.validate()
+            self.displayHtml(myReadyMessage)
+            return
 
         LOGGER.info('Width: %s' % myWidth)
         LOGGER.info('Height: %s' % myHeight)
