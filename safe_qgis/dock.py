@@ -3123,6 +3123,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                      '%imb available). %.2f / %s' %
                      (myRequirement, myFreeMemory, myUsageIndicator,
                       myWarningLimit))
+        myMessage = ''
         if myWarningLimit <= myUsageIndicator:
             myMessage = self.tr('There may not be enough free memory to '
                          'run this analysis. You can attempt to run the '

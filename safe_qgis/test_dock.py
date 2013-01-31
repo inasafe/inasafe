@@ -1743,8 +1743,8 @@ Click for Diagnostic Information:
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function')
-        DOCK.checkMemoryUsage()
-        assert 0==1
+        myResult = DOCK.checkMemoryUsage()
+        self.assertIn('3mb', myResult)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
