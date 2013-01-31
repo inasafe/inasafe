@@ -29,10 +29,10 @@ class AgePostprocessor(AbstractPostprocessor):
     def __init__(self):
         """
         Constructor for AgePostprocessor postprocessor class,
-        It takes care of defining self.population_total
+        It takes care of defining self.impact_total
         """
         AbstractPostprocessor.__init__(self)
-        self.population_total = None
+        self.impact_total = None
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being
@@ -46,10 +46,10 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.setup(self, None)
-        if self.population_total is not None:
+        if self.impact_total is not None:
             self._raise_error('clear needs to be called before setup')
 
-        self.population_total = params['population_total']
+        self.impact_total = params['impact_total']
         try:
             #either all 3 ratio are custom set or we use defaults
             self.youth_ratio = params['youth_ratio']
@@ -75,12 +75,16 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.process(self)
-        if self.population_total is None:
-            self._raise_error('setup needs to be called before process')
-        self._calculate_total()
-        self._calculate_youth()
-        self._calculate_adult()
-        self._calculate_elder()
+        if self.impact_total is None:
+            self._log_message('%s not all params have been correctly '
+                              'initialized, setup needs to be called before '
+                              'process. Skipping this postprocessor'
+                              % self.__class__.__name__)
+        else:
+            self._calculate_total()
+            self._calculate_youth()
+            self._calculate_adult()
+            self._calculate_elder()
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
@@ -94,7 +98,7 @@ class AgePostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.clear(self)
-        self.population_total = None
+        self.impact_total = None
 
     def _calculate_total(self):
         """Indicator that shows total population.
@@ -111,11 +115,11 @@ class AgePostprocessor(AbstractPostprocessor):
         myName = tr('Total')
 
         #FIXME (MB) Shameless hack to deal with issue #368
-        if self.population_total > 8000000000 or self.population_total < 0:
+        if self.impact_total > 8000000000 or self.impact_total < 0:
             self._append_result(myName, self.NO_DATA_TEXT)
             return
 
-        myResult = self.population_total
+        myResult = self.impact_total
         try:
             myResult = int(round(myResult))
         except ValueError:
@@ -138,11 +142,11 @@ class AgePostprocessor(AbstractPostprocessor):
         myName = tr('Youth count')
 
         #FIXME (MB) Shameless hack to deal with issue #368
-        if self.population_total > 8000000000 or self.population_total < 0:
+        if self.impact_total > 8000000000 or self.impact_total < 0:
             self._append_result(myName, self.NO_DATA_TEXT)
             return
 
-        myResult = self.population_total * self.youth_ratio
+        myResult = self.impact_total * self.youth_ratio
         try:
             myResult = int(round(myResult))
         except ValueError:
@@ -165,11 +169,11 @@ class AgePostprocessor(AbstractPostprocessor):
         myName = tr('Adult count')
 
         #FIXME (MB) Shameless hack to deal with issue #368
-        if self.population_total > 8000000000 or self.population_total < 0:
+        if self.impact_total > 8000000000 or self.impact_total < 0:
             self._append_result(myName, self.NO_DATA_TEXT)
             return
 
-        myResult = self.population_total * self.adult_ratio
+        myResult = self.impact_total * self.adult_ratio
         try:
             myResult = int(round(myResult))
         except ValueError:
@@ -192,11 +196,11 @@ class AgePostprocessor(AbstractPostprocessor):
         myName = tr('Elderly count')
 
         #FIXME (MB) Shameless hack to deal with issue #368
-        if self.population_total > 8000000000 or self.population_total < 0:
+        if self.impact_total > 8000000000 or self.impact_total < 0:
             self._append_result(myName, self.NO_DATA_TEXT)
             return
 
-        myResult = self.population_total * self.elder_ratio
+        myResult = self.impact_total * self.elder_ratio
         try:
             myResult = int(round(myResult))
         except ValueError:

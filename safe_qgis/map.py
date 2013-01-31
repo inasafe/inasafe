@@ -37,7 +37,8 @@ from safe_qgis.map_legend import MapLegend
 from safe_qgis.utilities import (setupPrinter,
                                  pointsToMM,
                                  mmToPoints,
-                                 dpiToMeters)
+                                 dpiToMeters,
+                                 qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -238,7 +239,10 @@ class Map():
                                    theTopOffset,
                                    10,
                                    10)
-        myLogo.setFrame(self.showFramesFlag)
+        if qgisVersion() >= 10800:  # 1.8 or newer
+            myLogo.setFrameEnabled(self.showFramesFlag)
+        else:
+            myLogo.setFrame(self.showFramesFlag)
         myLogo.setZValue(1)  # To ensure it overlays graticule markers
         self.composition.addItem(myLogo)
 

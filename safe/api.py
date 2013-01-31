@@ -21,9 +21,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # pylint: disable=W0611
-from safe.storage.utilities import bbox_intersection
-from safe.storage.utilities import buffered_bounding_box, verify
-from safe.storage.utilities import write_keywords, read_keywords
+from safe.storage.utilities import (bbox_intersection,
+                                    buffered_bounding_box,
+                                    verify,
+                                    write_keywords,
+                                    read_keywords,
+                                    calculate_polygon_centroid)
+
 from safe.storage.core import read_layer
 
 from safe.impact_functions import (get_plugins,
@@ -42,7 +46,11 @@ from safe.common.exceptions import (InaSAFEError,
 from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,
-                                   ugettext as safe_tr)
+                                   ugettext as safe_tr,
+                                   get_free_memory)
 from safe.common.version import get_version
+from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
+from safe.postprocessors import (get_postprocessors,
+                                 get_postprocessor_human_name)
 # pylint: enable=W0611

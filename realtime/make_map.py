@@ -20,15 +20,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import logging
+from urllib2 import URLError
 from zipfile import BadZipfile
 
 from ftp_client import FtpClient
-from safe_qgis.utilities_test import getQgisTestApp
-from realtime.utils import setupLogger, dataDir
+from sftp_client import SFtpClient
+from realtime.utils import setupLogger, dataDir, is_event_id
 from realtime.shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setupLogger()
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def processEvent(theEventId=None, theLocale='en'):
@@ -38,7 +39,7 @@ def processEvent(theEventId=None, theLocale='en'):
                           'IDN_mosaic',
                           'popmap10_all.tif')
 
-    # Used cached data where available
+    # Use cached data where available
     # Whether we should always regenerate the products
     myForceFlag = False
     if 'INASAFE_FORCE' in os.environ:
@@ -46,42 +47,44 @@ def processEvent(theEventId=None, theLocale='en'):
         if str(myForceString).capitalize() == 'Y':
             myForceFlag = True
 
-    # Extract the event
-    try:
-        if os.path.exists(myPopulationPath):
-            myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=theLocale,
+    # We always want to generate en products too so we manipulate the locale
+    # list and loop through them:
+    myLocaleList = [theLocale]
+    if 'en' not in myLocaleList:
+        myLocaleList.append('en')
+
+    # Now generate the products
+    for myLoc in myLocaleList:
+        # Extract the event
+        try:
+            if os.path.exists(myPopulationPath):
+                myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=myLoc,
                                       theForceFlag=myForceFlag,
                                       thePopulationRasterPath=myPopulationPath)
-        else:
-            myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=theLocale,
+            else:
+                myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=myLoc,
                                       theForceFlag=myForceFlag)
-    except BadZipfile:
-        # retry with force flag true
-        if os.path.exists(myPopulationPath):
-            myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=theLocale,
+        except (BadZipfile, URLError):
+            # retry with force flag true
+            if os.path.exists(myPopulationPath):
+                myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=myLoc,
                                       theForceFlag=True,
                                       thePopulationRasterPath=myPopulationPath)
-        else:
-            myShakeEvent = ShakeEvent(theEventId=theEventId,
-                                      theLocale=theLocale,
+            else:
+                myShakeEvent = ShakeEvent(theEventId=theEventId,
+                                      theLocale=myLoc,
                                       theForceFlag=True)
-    except:
-        LOGGER.exception('An error occurred setting up the shake event.')
-        return
+        except:
+            LOGGER.exception('An error occurred setting up the shake event.')
+            return
 
-    LOGGER.info('Event Id: %s', myShakeEvent)
-    LOGGER.info('-------------------------------------------')
+        LOGGER.info('Event Id: %s', myShakeEvent)
+        LOGGER.info('-------------------------------------------')
 
-    myShakeEvent.renderMap(myForceFlag)
-    #if 'en' not in myLocale:
-    # Always make an english version too ...
-    #    myShakeEvent.locale = 'en'
-    #    myShakeEvent.setupI18n()
-    #    myShakeEvent.renderMap(myEventId)
-
+        myShakeEvent.renderMap(myForceFlag)
 
 LOGGER.info('-------------------------------------------')
 
@@ -98,14 +101,16 @@ elif len(sys.argv) == 2:
 
     myEventId = sys.argv[1]
     if myEventId in '--list':
-        myFtpClient = FtpClient()
-        myListing = myFtpClient.getListing()
+#        myFtpClient = FtpClient()
+        mySftpClient = SFtpClient()
+#        myListing = myFtpClient.getListing()
+        myListing = mySftpClient.getListing(my_func=is_event_id)
         for myEvent in myListing:
             print myEvent
         sys.exit(0)
     elif myEventId in '--run-all':
         #
-        # Caution, this branch gets memory leaks, use the
+        # Caution, this code path gets memory leaks, use the
         # batch file approach rather!
         #
         myFtpClient = FtpClient()
@@ -118,7 +123,7 @@ elif len(sys.argv) == 2:
             print 'Processing %s' % myEvent
             try:
                 processEvent(myEvent, myLocale)
-            except:
+            except:  # pylint: disable=W0702
                 LOGGER.exception('Failed to process %s' % myEvent)
         sys.exit(0)
     else:
@@ -127,4 +132,7 @@ elif len(sys.argv) == 2:
 else:
     myEventId = None
     print('Processing latest shakemap')
-    processEvent(theLocale=myLocale)
+    try:
+        processEvent(theLocale=myLocale)
+    except:  # pylint: disable=W0702
+        LOGGER.exception('Process event failed')

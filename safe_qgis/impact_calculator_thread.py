@@ -21,12 +21,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import threading
 import traceback
 import sys
+import logging
 
 from PyQt4.QtCore import (QObject,
                           pyqtSignal)
 
 from safe_qgis.safe_interface import calculateSafeImpact
 from safe_qgis.exceptions import InsufficientParametersError
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class ImpactCalculatorThread(threading.Thread, QObject):
@@ -156,15 +159,26 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculateSafeImpact(theLayers=myLayers,
                                         theFunction=self._function)
-        # Catch and handle all exceptions:
+        except MemoryError, e:
+            myMessage = self.tr('An error occurred because it appears that '
+                    'your system does not have sufficient memory. Upgrading '
+                    'your computer so that it has more memory may help. '
+                    'Alternatively, consider using a smaller geographical '
+                    'area for your analysis, or using rasters with a larger '
+                    'cell size.')
+            self._exception = e
+            self._traceback = traceback.format_tb(sys.exc_info()[2])
+            self._result = myMessage
+            LOGGER.exception(myMessage)
+        # Catch and handle all other exceptions:
         # pylint: disable=W0703
         except Exception, e:
             myMessage = self.tr('Calculation error encountered:\n')
             #store the exception so that controller class can get it later
             self._exception = e
             self._traceback = traceback.format_tb(sys.exc_info()[2])
-            print myMessage
             self._result = myMessage
+            LOGGER.exception(myMessage)
         else:
             self._result = self.tr('Calculation completed successfully.')
         # pylint: enable=W0703

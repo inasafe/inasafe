@@ -1,10 +1,13 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from third_party.odict import OrderedDict
 
 
 #FIXME: need to normalise all raster data Ole/Kristy
@@ -28,6 +31,11 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
     target_field = 'ICLASS'
     title = tr('Be affected')
+    statistics_type = 'class_count'
+    statistics_classes = ['None', 1, 2, 3]
+    parameters = OrderedDict([('postprocessors', OrderedDict([
+                                  ('AggregationCategorical', {'on': True})]))
+    ])
 
     def run(self, layers):
         """Impact plugin for hazard impact
@@ -99,10 +107,10 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         table_body = [question,
                       TableRow([tr('Category'), tr('Affected')],
                                header=True),
-                      TableRow([tr('High'), count2]),
-                      TableRow([tr('Medium'), count1]),
-                      TableRow([tr('Low'), count0]),
-                      TableRow([tr('All'), N])]
+                      TableRow([tr('High'), format_int(count2)]),
+                      TableRow([tr('Medium'), format_int(count1)]),
+                      TableRow([tr('Low'), format_int(count0)]),
+                      TableRow([tr('All'), format_int(N)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Categorised hazard has only 3'
@@ -133,7 +141,9 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title,
-                             'target_field': self.target_field},
+                             'target_field': self.target_field,
+                             'statistics_type': self.statistics_type,
+                             'statistics_classes': self.statistics_classes},
                    name=name,
                    style_info=style_info)
         return V

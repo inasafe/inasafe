@@ -281,7 +281,7 @@ to be done once and then Jenkins will work for all github projects.
 Back on the server::
 
    jenkins@maps:~$ cd /tmp/
-   jenkins@maps:/tmp$ git clone git@InaSAFEGitHub:timlinux/inasafe.git
+   jenkins@maps:/tmp$ git clone git@InaSAFEGithub:AIFDR/inasafe.git
    Cloning into inasafe...
    The authenticity of host 'github.com (207.97.227.239)' can't be established.
    RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.

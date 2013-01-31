@@ -20,8 +20,7 @@ import unittest
 import sys
 import os
 import shutil
-from safe.engine.core import unique_filename
-
+from nose import SkipTest
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
@@ -34,12 +33,13 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
+from safe.engine.core import unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
 from safe_qgis.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
-from safe_qgis.utilities import getDefaults
+from safe_qgis.utilities import getDefaults, qgisVersion
 
 
 # For testing and demoing
@@ -56,7 +56,10 @@ def makePadangLayer():
     myTitle = readKeywordsFromFile(myPath, 'title')
     # myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
 
@@ -76,7 +79,10 @@ def makePadangLayerClone():
     myPath = os.path.join(HAZDATA, myFile)
     myTitle = readKeywordsFromFile(myPath, 'title')
     myLayer = QgsRasterLayer(myPath, myTitle)
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer, myFileName
 
 
@@ -89,7 +95,10 @@ def makePolygonLayer():
     except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
 
@@ -122,7 +131,10 @@ def makeKeywordlessLayer():
     myPath = os.path.abspath(os.path.join(myBasePath, myFile))
     myTitle = 'Keywordless Layer'
     myLayer = QgsRasterLayer(myPath, myTitle)
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
 
@@ -143,8 +155,14 @@ class KeywordsDialogTest(unittest.TestCase):
         """Destroy the dialog after each test"""
         clearLayers()
 
+    # This is how you skip a test when using unittest ...
+    @unittest.skip('Skipping as this test hangs Jenkins')
     def test_showHelp(self):
         """Test that help button works"""
+        # ... and this is how you skip it using nosetests
+        #prevent unreachable code errors in pylint
+        #pylint: disable=W0101
+        raise SkipTest("This test hangs Jenkins.")
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)

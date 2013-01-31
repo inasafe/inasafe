@@ -30,7 +30,7 @@ from core import check_bbox_string
 from utilities_test import same_API
 from geometry import Polygon
 from safe.common.numerics import nanallclose
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
+from safe.common.testing import TESTDATA, HAZDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as tr, unique_filename
@@ -249,6 +249,40 @@ class Test_IO(unittest.TestCase):
         assert R == L, msg
 
     test_donut_polygons.slow = True
+
+    def test_3d_polygon(self):
+        """3D polygons can be read correctly with z component dismissed
+
+        3D polygons are a specialisation of '2d' polygons which assigns
+        a 'z' to each vertex (wkbPolygon25D in ogr parlance).
+        It's normally referred to as 2.5D since the format does not
+        truly represent volumetric spaces
+
+        This test verifies that such polygons can be read as 2d - i.e.
+        with the third dimension removed.
+
+        ogrinfo reports this for 25d polygons:
+        INFO: Open of `../inasafe_data/test/25dpolygon.shp'
+        using driver `ESRI Shapefile' successful.
+        1: 25dpolygon (3D Polygon)
+
+        """
+
+        # Read real polygon with holes
+        filename = '%s/%s' % (TESTDATA, '25dpolygon.shp')
+        L = read_layer(filename)
+
+        # Write this new object, read it again and check
+        tmp_filename = unique_filename(suffix='.shp')
+        L.write_to_file(tmp_filename)
+
+        # Read back
+        R = read_layer(tmp_filename)
+        msg = ('Geometry of polygon was not preserved after reading '
+               'and re-writing')
+
+        # Check
+        assert R == L, msg
 
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
@@ -2508,7 +2542,7 @@ class Test_IO(unittest.TestCase):
 
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
-        exposure_filename = ('%s/indonesia_highway.shp' % EXPDATA)
+        exposure_filename = ('%s/indonesia_highway_sample.shp' % TESTDATA)
 
         # Read
         H = read_layer(hazard_filename)

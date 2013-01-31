@@ -28,7 +28,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       setJakartaGeoExtent,
                                       checkImages)
-from safe_qgis.utilities import setupPrinter, dpiToMeters
+from safe_qgis.utilities import setupPrinter, dpiToMeters, qgisVersion
 from safe_qgis.map import Map
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -184,7 +184,10 @@ class MapTest(unittest.TestCase):
         for i in range(10, 190, 10):
             myPicture = QgsComposerPicture(myMap.composition)
             myPicture.setPictureFile(myFilename)
-            myPicture.setFrame(False)
+            if qgisVersion() >= 10800:  # 1.8 or newer
+                myPicture.setFrameEnabled(False)
+            else:
+                myPicture.setFrame(False)
             myPicture.setItemPosition(i,  # x
                                       i,  # y
                                       10,  # width

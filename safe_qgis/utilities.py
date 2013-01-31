@@ -23,6 +23,7 @@ import traceback
 import logging
 import math
 import numpy
+import uuid
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
@@ -38,11 +39,15 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency,
+                       QgsVectorLayer,
+                       QgsFeature
                        )
 
 from safe_interface import temp_dir
 
-from safe_qgis.exceptions import StyleError, MethodUnavailableError
+from safe_qgis.exceptions import (StyleError,
+                                  MethodUnavailableError,
+                                  MemoryLayerCreationError)
 
 from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
@@ -695,10 +700,15 @@ def addLoggingHanderOnce(theLogger, theHandler):
     return True
 
 
-def setupLogger():
+def setupLogger(theLogFile=None, theSentryUrl=None):
     """Run once when the module is loaded and enable logging
 
-    Args: None
+    Args:
+        * theLogFile: str - optional full path to a file to write logs to.
+        * theSentryUrl: str - optional url to sentry api for remote logging.
+            Defaults to http://c64a83978732474ea751d432ab943a6b
+                :d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5
+            which is the sentry project for InaSAFE desktop.
 
     Returns: None
 
@@ -745,11 +755,14 @@ def setupLogger():
     # user's temporary working directory.
     myTempDir = temp_dir('logs')
     myFilename = os.path.join(myTempDir, 'inasafe.log')
-    myFileHandler = logging.FileHandler(myFilename)
+    if theLogFile is None:
+        myFileHandler = logging.FileHandler(myFilename)
+    else:
+        myFileHandler = logging.FileHandler(theLogFile)
     myFileHandler.setLevel(myDefaultHanderLevel)
     # create console handler with a higher log level
     myConsoleHandler = logging.StreamHandler()
-    myConsoleHandler.setLevel(logging.ERROR)
+    myConsoleHandler.setLevel(logging.INFO)
 
     myQGISHandler = QgsLogHandler()
 
@@ -778,17 +791,17 @@ def setupLogger():
     mySettings = QtCore.QSettings()
     myFlag = mySettings.value('inasafe/useSentry', False).toBool()
     if 'INASAFE_SENTRY' in os.environ or myFlag:
-        try:
+        if theSentryUrl is None:
             myClient = Client(
                 'http://c64a83978732474ea751d432ab943a6b'
                 ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
-            mySentryHandler = SentryHandler(myClient)
-            mySentryHandler.setFormatter(myFormatter)
-            mySentryHandler.setLevel(logging.ERROR)
-            if addLoggingHanderOnce(myLogger, mySentryHandler):
-                myLogger.debug('Sentry logging enabled')
-        except:
-            myLogger.exception('Sentry logging could not be started')
+        else:
+            myClient = Client(theSentryUrl)
+        mySentryHandler = SentryHandler(myClient)
+        mySentryHandler.setFormatter(myFormatter)
+        mySentryHandler.setLevel(logging.ERROR)
+        if addLoggingHanderOnce(myLogger, mySentryHandler):
+            myLogger.debug('Sentry logging enabled')
     else:
         myLogger.debug('Sentry logging disabled')
     #Set formatters
@@ -802,25 +815,6 @@ def setupLogger():
     addLoggingHanderOnce(myLogger, myConsoleHandler)
     #addLoggingHanderOnce(myLogger, myEmailHandler)
     addLoggingHanderOnce(myLogger, myQGISHandler)
-
-
-def isLayerPolygonal(theLayer):
-    """Tell if a QGIS layer is vector and its geometries are polygons.
-
-   Args:
-       the theLayer
-
-    Returns:
-        bool - true if the theLayer contains polygons
-
-    Raises:
-       None
-    """
-    try:
-        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
-            theLayer.geometryType() == QGis.Polygon)
-    except AttributeError:
-        return False
 
 
 def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
@@ -893,60 +887,63 @@ def getDefaults(theDefault=None):
         return None
 
 
-#def copyInMemory(vLayer, copyName=''):
-#    """Return a memory copy of a layer
-#
-#    Input
-#        origLayer: layer
-#        copyName: the name of the copy
-#    Output
-#        memory copy of a layer
-#
-#    """
-#
-#    if copyName is '':
-#        copyName = vLayer.name() + ' TMP'
-#
-#    if vLayer.type() == QgsMapLayer.VectorLayer:
-#        vType = vLayer.geometryType()
-#        if vType == QGis.Point:
-#            typeStr = 'Point'
-#        elif vType == QGis.Line:
-#            typeStr = 'Line'
-#        elif vType == QGis.Polygon:
-#            typeStr = 'Polygon'
-#        else:
-#            raise memoryLayerCreationError('Layer is whether Point or '
-#                                           'Line or Polygon')
-#    else:
-#        raise memoryLayerCreationError('Layer is not a VectorLayer')
-#
-#    crs = vLayer.crs().authid().toLower()
-#    uri = typeStr + '?crs=' + crs + '&index=yes'
-#    memLayer = QgsVectorLayer(uri, copyName, 'memory')
-#    memProvider = memLayer.dataProvider()
-#
-#    vProvider = vLayer.dataProvider()
-#    vAttrs = vProvider.attributeIndexes()
-#    vFields = vProvider.fields()
-#
-#    fields = []
-#    for i in vFields:
-#        fields.append(vFields[i])
-#
-#    memProvider.addAttributes(fields)
-#
-#    vProvider.select(vAttrs)
-#    ft = QgsFeature()
-#    while vProvider.nextFeature(ft):
-#        memProvider.addFeatures([ft])
-#
-#    # Next two lines a workaround for a QGIS bug (lte 1.8)
-#    # preventing mem layer attributes being saved to shp.
-#    memLayer.startEditing()
-#    memLayer.commitChanges()
-#
-#    return memLayer
+def copyInMemory(vLayer, copyName=''):
+    """Return a memory copy of a layer
+
+    Input
+        origLayer: layer
+        copyName: the name of the copy
+    Output
+        memory copy of a layer
+
+    """
+
+    if copyName is '':
+        copyName = vLayer.name() + ' TMP'
+
+    if vLayer.type() == QgsMapLayer.VectorLayer:
+        vType = vLayer.geometryType()
+        if vType == QGis.Point:
+            typeStr = 'Point'
+        elif vType == QGis.Line:
+            typeStr = 'Line'
+        elif vType == QGis.Polygon:
+            typeStr = 'Polygon'
+        else:
+            raise MemoryLayerCreationError('Layer is whether Point nor '
+                                           'Line nor Polygon')
+    else:
+        raise MemoryLayerCreationError('Layer is not a VectorLayer')
+
+    crs = vLayer.crs().authid().toLower()
+    myUUID = str(uuid.uuid4())
+    uri = '%s?crs=%s&index=yes&uuid=%s' % (typeStr, crs, myUUID)
+    memLayer = QgsVectorLayer(uri, copyName, 'memory')
+    memProvider = memLayer.dataProvider()
+
+    vProvider = vLayer.dataProvider()
+    vAttrs = vProvider.attributeIndexes()
+    vFields = vProvider.fields()
+
+    fields = []
+    for i in vFields:
+        fields.append(vFields[i])
+
+    memProvider.addAttributes(fields)
+
+    vProvider.select(vAttrs)
+    ft = QgsFeature()
+    while vProvider.nextFeature(ft):
+        memProvider.addFeatures([ft])
+
+    if qgisVersion() <= 10800:
+        # Next two lines a workaround for a QGIS bug (lte 1.8)
+        # preventing mem layer attributes being saved to shp.
+        memLayer.startEditing()
+        memLayer.commitChanges()
+
+    return memLayer
+
 
 def mmToPoints(theMM, theDpi):
     """Convert measurement in points to one in mm.
@@ -1139,3 +1136,71 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     myReport += '</table>'
 
     return myReport
+
+
+def addComboItemInOrder(theCombo, theItemText, theItemData=None):
+    """Although QComboBox allows you to set an InsertAlphabetically enum
+    this only has effect when a user interactively adds combo items to
+    an editable combo. This we have this little function to ensure that
+    combos are always sorted alphabetically.
+
+    Args:
+        * theCombo - combo box receiving the new item
+        * theItemText - display text for the combo
+        * theItemData - optional UserRole data to be associated with
+          the item
+
+    Returns:
+        None
+
+    Raises:
+
+    ..todo:: Move this to utilities
+    """
+    mySize = theCombo.count()
+    for myCount in range(0, mySize):
+        myItemText = str(theCombo.itemText(myCount))
+        # see if theItemText alphabetically precedes myItemText
+        if cmp(str(theItemText).lower(), myItemText.lower()) < 0:
+            theCombo.insertItem(myCount, theItemText, theItemData)
+            return
+        #otherwise just add it to the end
+    theCombo.insertItem(mySize, theItemText, theItemData)
+
+
+def isLayerPolygonal(theLayer):
+    """Tell if a QGIS layer is vector and its geometries are polygons.
+
+   Args:
+       the theLayer
+
+    Returns:
+        bool - true if the theLayer contains polygons
+
+    Raises:
+       None
+    """
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Polygon)
+    except AttributeError:
+        return False
+
+
+def isLayerPoint(theLayer):
+    """Tell if a QGIS layer is vector and its geometries are polygons.
+
+   Args:
+       the theLayer
+
+    Returns:
+        bool - true if the theLayer contains polygons
+
+    Raises:
+       None
+    """
+    try:
+        return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+            theLayer.geometryType() == QGis.Point)
+    except AttributeError:
+        return False

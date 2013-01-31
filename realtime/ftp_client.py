@@ -16,11 +16,12 @@ __date__ = '19/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import socket
 import urllib2
 import logging
 
 # The logger is intialised in utils.py by init
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class FtpClient:
@@ -53,15 +54,15 @@ class FtpClient:
         Adapted from Ole's original shake library.
 
         Args:
-          theExtension - (Optional) Filename suffix to filter the listing by.
-            Defaults to zip.
+            theExtension - (Optional) Filename suffix to filter the listing by.
+                Defaults to zip.
 
         Returns:
-          A list containing the unique filenames (if any) that match the
-          supplied extension suffix.
+            A list containing the unique filenames (if any) that match the
+                supplied extension suffix.
 
         Raises:
-          None
+            URLError on failure
         """
         LOGGER.debug('Getting ftp listing for %s', self.baseUrl)
         myUrl = 'ftp://%s' % self.baseUrl
@@ -69,14 +70,21 @@ class FtpClient:
         try:
             myFileId = urllib2.urlopen(myRequest, timeout=60)
         except urllib2.URLError, e:
-            print e.reason
+            LOGGER.exception('Error opening url for directory listing.')
             raise
 
         myList = []
-        for myLine in myFileId.readlines():
-            myFields = myLine.strip().split()
-            if myFields[-1].endswith('.%s' % theExtention):
-                myList.append(myUrl + '/' + myFields[-1])
+        try:
+            for myLine in myFileId.readlines():
+                myFields = myLine.strip().split()
+                if myFields[-1].endswith('.%s' % theExtention):
+                    myList.append(myUrl + '/' + myFields[-1])
+        except urllib2.URLError, e:
+            if isinstance(e.reason, socket.timeout):
+                LOGGER.exception('Timed out getting directory listing')
+            else:
+                LOGGER.exception('Exception getting directory listing')
+            raise
 
         return myList
 
@@ -115,7 +123,7 @@ class FtpClient:
             myFile = file(theFilePath, 'wb')
             myFile.write(myUrlHandle.read())
             myFile.close()
-        except urllib2.URLError, e:
+        except urllib2.URLError:
             LOGGER.exception('Bad Url or Timeout')
             raise
 

@@ -26,6 +26,7 @@ from utils import (baseDataDir,
                    shakemapDataDir,
                    reportDataDir,
                    logDir,
+                   is_event_id,
                    purgeWorkingData)
 
 # Clear away working dirs so we can be sure they
@@ -33,7 +34,7 @@ from utils import (baseDataDir,
 purgeWorkingData()
 # The logger is intiailsed in utils.py by init
 import logging
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Test(unittest.TestCase):
@@ -84,6 +85,14 @@ class Test(unittest.TestCase):
         if myMessage not in myLines:
             assert 'Error, expected log message not shown in logs'
         myFile.close()
+
+    def test_is_event_id(self):
+        """Test to check if a event is in server
+        """
+        assert is_event_id('20130110041009'), 'should be event id'
+        assert not is_event_id('20130110041090'), 'should not be event id'
+        assert not is_event_id('2013'), 'should not be event id'
+        assert not is_event_id('AAA'), 'should not be event id'
 
 if __name__ == '__main__':
     unittest.main()

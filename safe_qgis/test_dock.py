@@ -26,6 +26,8 @@ from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
+for p in sys.path:
+    print p + '\n'
 
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
@@ -36,7 +38,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsRectangle)
 # TODO: get this via api
 from safe.impact_functions.core import format_int
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
@@ -297,8 +299,8 @@ def loadStandardLayers():
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
-    #FIXME (MB) -1 is untill we add the aggregation category because of
-    # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
+    #FIXME (MB) -1 is until we add the aggregation category because of
+    # kabupaten_jakarta* not being either hazard nor exposure layer
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
 
     return myHazardLayerCount, myExposureLayerCount
@@ -324,7 +326,10 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
             myExposureLayerCount += 1
         # Add layer to the registry (that QGis knows about) a slot
         # in qgis_interface will also ensure it gets added to the canvas
-        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+        if qgisVersion() >= 10800:  # 1.8 or newer
+            QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+        else:
+            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
     DOCK.getLayers()
 
@@ -332,6 +337,7 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     return myHazardLayerCount, myExposureLayerCount
 
 
+#noinspection PyArgumentList
 class DockTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
@@ -446,7 +452,7 @@ class DockTest(unittest.TestCase):
         #vector hazard
         #raster exposure
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta'),
+            theHazard='A flood in Jakarta',
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard',
@@ -497,7 +503,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
-                     (myAttribute))
+                     myAttribute)
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
     def test_checkAggregationAttribute1Attr(self):
@@ -523,7 +529,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
-                     (myAttribute))
+                     myAttribute)
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
     def test_checkAggregationAttributeNoAttr(self):
@@ -549,7 +555,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.postProcessingAttributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
-                     (myAttribute))
+                     myAttribute)
         assert myAttribute is None, myMessage
 
     def test_checkAggregationAttributeNoneAttr(self):
@@ -685,7 +691,7 @@ class DockTest(unittest.TestCase):
         myMessage = ('Unexpected result returned for Earthquake guidelines'
                'function. Expected:\n "All" count of 2993, '
                'received: \n %s' % myResult)
-        assert '2993' in myResult, myMessage
+        assert format_int(2993) in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_small(self):
         """Padang 2009 fatalities estimated correctly (small extent)"""
@@ -736,12 +742,12 @@ class DockTest(unittest.TestCase):
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: fatality count of '
                      '116 , received: \n %s' % myResult)
-        assert '116' in myResult, myMessage
+        assert format_int(116) in myResult, myMessage
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: total population count of '
                      '847529 , received: \n %s' % myResult)
-        assert '847529' in myResult, myMessage
+        assert format_int(847529) in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_Padang_full(self):
         """Padang 2009 fatalities estimated correctly (large extent)"""
@@ -791,12 +797,12 @@ class DockTest(unittest.TestCase):
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: fatality count of '
                      '500 , received: \n %s' % myResult)
-        assert '500' in myResult, myMessage
+        assert format_int(500) in myResult, myMessage
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: total population count of '
                      '31372262 , received: \n %s' % myResult)
-        assert '31372262' in myResult, myMessage
+        assert format_int(31372262) in myResult, myMessage
 
     def test_runTsunamiBuildingImpactFunction(self):
         """Tsunami function runs in GUI as expected."""
@@ -836,8 +842,44 @@ class DockTest(unittest.TestCase):
         #All	        7	                17
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '17' in myResult, myMessage
-        assert '7' in myResult, myMessage
+        assert format_int(17) in myResult, myMessage
+        assert format_int(7) in myResult, myMessage
+
+    def test_InsufficientOverlapIssue372(self):
+        """Test Insufficient overlap errors are caught as per issue #372.
+        ..note:: See https://github.com/AIFDR/inasafe/issues/372
+        """
+
+        # Push OK with the left mouse button
+        myButton = DOCK.pbnRunStop
+
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
+
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='Penduduk Jakarta',
+            theFunction='HKVtest',
+            theFunctionId='HKVtest')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        # Zoom to an area where there is no overlap with layers
+        myRect = QgsRectangle(106.635434302702, -6.101567666986,
+                              106.635434302817, -6.101567666888)
+        CANVAS.setExtent(myRect)
+
+        # Press RUN
+        DOCK.accept()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        # Check for an error containing InsufficientOverlapError
+        myExpectedString = 'InsufficientOverlapError'
+        myMessage = 'Result not as expected %s not in: %s' % (
+            myExpectedString, myResult)
+        # This is the expected impact number
+        self.assertIn(myExpectedString, myResult, myMessage)
 
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
@@ -868,7 +910,7 @@ class DockTest(unittest.TestCase):
         # Marco Hartman form HKV
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected impact number
-        assert '2480' in myResult, myMessage
+        assert format_int(2480) in myResult, myMessage
 
     def test_runFloodPopulationImpactFunction_scaling(self):
         """Flood function runs in GUI with 5x5km population data
@@ -893,8 +935,9 @@ class DockTest(unittest.TestCase):
         myMessage = 'Result not as expected: %s' % myResult
 
         # Check numbers are OK (within expected errors from resampling)
+        # These are expected impact number
         assert format_int(10484) in myResult, myMessage
-        assert '977' in myResult, myMessage  # These are expected impact number
+        assert format_int(977) in myResult, myMessage
 
     def test_runFloodPopulationPolygonHazardImpactFunction(self):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
@@ -918,7 +961,7 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people needing evacuation
-        assert '134953000' in myResult, myMessage
+        assert format_int(134953000) in myResult, myMessage
 
     def test_runCategorizedHazardBuildingImpact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -942,9 +985,9 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
-        assert '535' in myResult, myMessage
-        assert '453' in myResult, myMessage
-        assert '436' in myResult, myMessage
+        assert format_int(535) in myResult, myMessage
+        assert format_int(453) in myResult, myMessage
+        assert format_int(436) in myResult, myMessage
 
     def test_runCategorisedHazardPopulationImpactFunction(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -968,10 +1011,11 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of population might be affected
-        assert '30938000' in myResult, myMessage
-        assert '68280000' in myResult, myMessage
-        assert '157551000' in myResult, myMessage
+        assert format_int(30938000) in myResult, myMessage
+        assert format_int(68280000) in myResult, myMessage
+        assert format_int(157551000) in myResult, myMessage
 
+    #noinspection PyArgumentList
     def test_runEarthquakeBuildingImpactFunction(self):
         """Earthquake function runs in GUI with An earthquake in Yogyakarta
         like in 2006 hazard data uses OSM Building Polygons exposure data."""
@@ -995,9 +1039,9 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
-        assert '786' in myResult, myMessage
-        assert '15528' in myResult, myMessage
-        assert '177' in myResult, myMessage
+        assert format_int(786) in myResult, myMessage
+        assert format_int(15528) in myResult, myMessage
+        assert format_int(177) in myResult, myMessage
 
     def test_runVolcanoBuildingImpact(self):
         """Volcano function runs in GUI with An donut (merapi hazard map)
@@ -1022,7 +1066,7 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
-        assert '288' in myResult, myMessage
+        assert format_int(288) in myResult, myMessage
 
     def test_runVolcanoPopulationImpact(self):
         """Volcano function runs in GUI with a donut (merapi hazard map)
@@ -1051,9 +1095,17 @@ class DockTest(unittest.TestCase):
         # Kawasan Rawan Bencana III	45.000	45.000
         # Kawasan Rawan Bencana II	84.000	129.000
         # Kawasan Rawan Bencana I	28.000	157.000
-        assert '45' in myResult, myMessage
-        assert '84' in myResult, myMessage
-        assert '28' in myResult, myMessage
+
+        # We could also get a memory error here so there are
+        # two plausible outcomes:
+
+        # Outcome 1: we ran out of memory
+        if 'system does not have sufficient memory' in myResult:
+            return
+        # Outcome 2: It ran so check the results
+        assert format_int(45) in myResult, myMessage
+        assert format_int(84) in myResult, myMessage
+        assert format_int(28) in myResult, myMessage
 
     def test_runVolcanoCirclePopulation(self):
         """Volcano function runs in GUI with a circular evacutation zone
@@ -1085,9 +1137,9 @@ class DockTest(unittest.TestCase):
         # 3	     15.000	15.000
         # 5	     17.000	32.000
         # 10	124.000	156.000
-        assert '15' in myResult, myMessage
-        assert '17' in myResult, myMessage
-        assert '124' in myResult, myMessage
+        assert format_int(15) in myResult, myMessage
+        assert format_int(17) in myResult, myMessage
+        assert format_int(124) in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
@@ -1185,7 +1237,7 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '2366' in myResult, myMessage
+        assert format_int(2366) in myResult, myMessage
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
@@ -1408,7 +1460,7 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '68' in myResult, myMessage
+        assert format_int(68) in myResult, myMessage
 
     def test_state(self):
         """Check if the save/restore state methods work. See also
@@ -1499,6 +1551,41 @@ class DockTest(unittest.TestCase):
         myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
+
+    def test_preprocessing(self):
+        """preprocessing results are correct."""
+
+        # See qgis project in test data: vector_preprocessing_test.qgs
+        #add additional layers
+        myFileList = ['jakarta_crosskabupaten_polygons.shp']
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        myFileList = ['kabupaten_jakarta.shp']
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=BOUNDDATA)
+
+        myRunButton = DOCK.pbnRunStop
+
+        myResult, myMessage = setupScenario(
+            theHazard='jakarta_crosskabupaten_polygons',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregation='kabupaten jakarta',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKeywordsDialog.accept()
+
+        myExpectedFeatureCount = 20
+        myMessage = ('The preprocessing should have generated %s features, '
+                     'found %s' % (myExpectedFeatureCount,
+                                   DOCK.preprocessedFeatureCount))
+        self.assertEqual(myExpectedFeatureCount, DOCK.preprocessedFeatureCount,
+                         myMessage)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
@@ -1610,17 +1697,17 @@ Click for Diagnostic Information:
         """Function configuration button is disabled
         when layers not compatible."""
         setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        #add additional layers
         #myResult, myMessage = setupScenario(
-        #    theHazard='A flood in Jakarta like in 2007',
-        #    theExposure='Essential Buildings',
-        #    theFunction='Be flooded',
-        #    theFunctionId='Flood Building Impact Function')
+        #    heHazard='An earthquake in Yogyakarta like in 2006',
+        #    theExposure = 'Essential Buildings',
+        #    theFunction = 'Be damaged depending on building type',
+        #    theFunctionId = 'ITB Earthquake Building Damage Function')
         setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
+            theHazard='An earthquake in Yogyakarta like in 2006',
             theExposure='Essential Buildings',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function')
+            theFunction='Be damaged depending on building type',
+            theFunctionId='ITB Earthquake Building Damage Function')
         myToolButton = DOCK.toolFunctionOptions
         myFlag = myToolButton.isEnabled()
         assert not myFlag, ('Expected configuration options '
@@ -1645,6 +1732,19 @@ Click for Diagnostic Information:
         myFlag = myToolButton.isEnabled()
         assert myFlag, ('Expected configuration options '
                             'button to be enabled')
+
+    def test_extentsChanged(self):
+        """Memory requirements are calculated correctly when extents change.
+        """
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='Penduduk Jakarta',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function')
+        myResult = DOCK.checkMemoryUsage()
+        self.assertIn('3mb', myResult)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')

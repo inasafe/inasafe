@@ -1,7 +1,10 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
+from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -27,22 +30,43 @@ class FloodBuildingImpactFunction(FunctionProvider):
     # Function documentation
     target_field = 'INUNDATED'
     title = tr('Be flooded')
-    synopsis = tr('To assess the impacts of inundation on building footprints '
-        'originating from OpenStreetMap (OSM).')
-    actions = tr('Provide details about where critical response areas are')
+    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
+                  'on building footprints originating from OpenStreetMap '
+                  '(OSM).')
+    actions = tr('Provide details about where critical infrastructure might '
+                 'be flooded')
     # citations must be a list
-    citations = [tr('Hutchings, Field & Parks. Assessment of Flood impacts on '
-        'buildings. Impact. Vol 66(2). 2012')]
-    detailed_description = tr('This is an area for free form text where a'
-        'detailed description of the methodology used is given.')
-    permissible_hazard_input = tr('A raster layer where each cell represents '
-        'flood depth, or a vector polygon layer where each polygon represents '
-        'an inundated area. The following attributes are recognised '
-        '(in order): Flooded (True or False), FLOODPRONE (Yes or No) and '
-        'Affected (True or False).')
-    permissible_exposure_input = tr('vector polygon layer extracted from OSM '
+    # FIXME (Ole): I don't think this citation is for real?
+    #citations = [tr('Hutchings, Field & Parks. Assessment of Flood impacts '
+    #    'on buildings. Impact. Vol 66(2). 2012')]
+    detailed_description = tr('The inundation status is calculated for each '
+        'building (using the centroid if it is a polygon) based on the hazard '
+        'levels provided. if the hazard is given as a raster a threshold of '
+        '1 meter is used. This is configurable through the InaSAFE interface. '
+        'If the hazard is given as a vector polygon layer buildings are '
+        'considered to be impacted depending on the value of hazard '
+        'attributes (in order) "affected" or "FLOODPRONE": If a building is in'
+        ' a region that has attribute "affected" set to True (or 1) it is '
+        'impacted. If attribute "affected" does not exist but "FLOODPRONE" '
+        'does, then the building is considered impacted if "FLOODPRONE" is '
+        '"yes". If neither "affected" nor "FLOODPRONE" is available, a '
+        'building will be impacted if it belongs to any polygon. The latter '
+        'behaviour is implemented through the attribute "inapolygon" which '
+        'is automatically assigned.')
+    permissible_hazard_input = tr('A hazard raster layer where each cell '
+        'represents flood depth (in meters), or a vector polygon layer '
+        'where each polygon represents an inundated area. In the latter '
+        'case, the following attributes are recognised '
+        '(in order): "affected" (True or False) or "FLOODPRONE" (Yes or No). '
+        '(True may be represented as 1, False as 0')
+    permissible_exposure_input = tr('Vector polygon layer extracted from OSM '
         'where each polygon represents the footprint of a building.')
-    limitation = tr('Lorem ipsum limitation')
+    limitation = tr('This function only flags buildings as impacted or not '
+                    'either based on a fixed threshold in case of raster '
+                    'hazard or the the attributes mentioned under input '
+                    'in case of vector hazard.')
+
+    parameters = {'postprocessors': {'BuildingType': {'on': True}}}
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
@@ -89,26 +113,29 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
                 # FIXME (Ole): Need to agree whether to use one or the
                 # other as this can be very confusing!
-                # For now look for 'Flooded first'
-                if 'Flooded' in atts:
+                # For now look for 'affected' first
+                if 'affected' in atts:
                     # E.g. from flood forecast
                     # Assume that building is wet if inside polygon
                     # as flagged by attribute Flooded
-                    res = atts['Flooded']
+                    res = atts['affected']
                     if res is None:
                         x = False
                     else:
-                        x = res
+                        x = bool(res)
+
+                    #if x:
+                    #    print 'Got affected', x
                 elif 'FLOODPRONE' in atts:
                     res = atts['FLOODPRONE']
                     if res is None:
                         x = False
                     else:
                         x = res.lower() == 'yes'
-                elif 'Affected' in atts:
+                elif DEFAULT_ATTRIBUTE in atts:
                     # Check the default attribute assigned for points
                     # covered by a polygon
-                    res = atts['Affected']
+                    res = atts[DEFAULT_ATTRIBUTE]
                     if res is None:
                         x = False
                     else:
@@ -116,8 +143,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 else:
                     # there is no flood related attribute
                     msg = ('No flood related attribute found in %s. '
-                           'I was looking fore either "Flooded", "FLOODPRONE" '
-                           'or "Affected". The latter should have been '
+                           'I was looking for either "affected", "FLOODPRONE" '
+                           'or "inapolygon". The latter should have been '
                            'automatically set by call to '
                            'assign_hazard_values_to_exposure_data(). '
                            'Sorry I can\'t help more.')
@@ -196,7 +223,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 tr('Number flooded'),
                                 tr('Total')],
                                header=True),
-                      TableRow([tr('All'), count, N])]
+                      TableRow([tr('All'), format_int(count), format_int(N)])]
 
 ##        fid.write('%s, %s, %s\n' % (tr('Building type'),
 ##                                    tr('Temporarily closed'),
@@ -229,8 +256,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 # FIXME (Sunni) : I change affected_buildings[usage] to string
                 # because it will be replace with &nbsp in html
                 building_list.append([building_type.capitalize(),
-                                      str(affected_buildings[usage]),
-                                      buildings[usage]])
+                                      format_int(affected_buildings[usage]),
+                                      format_int(buildings[usage])])
                 if building_type == 'school':
                     school_closed = affected_buildings[usage]
                 if building_type == 'hospital':
@@ -264,14 +291,14 @@ class FloodBuildingImpactFunction(FunctionProvider):
         table_body.append(TableRow(tr('Where will we locate warehouse and/or '
                                      'distribution centres?')))
         if school_closed > 0:
-            table_body.append(TableRow(tr('Where will the students from the %d'
+            table_body.append(TableRow(tr('Where will the students from the %s'
                                          ' closed schools go to study?') %
-                                         school_closed))
+                                       format_int(school_closed)))
         if hospital_closed > 0:
-            table_body.append(TableRow(tr('Where will the patients from the %d'
+            table_body.append(TableRow(tr('Where will the patients from the %s'
                                          ' closed hospitals go for treatment '
                                          'and how will we transport them?') %
-                                         hospital_closed))
+                                       format_int(hospital_closed)))
 
         table_body.append(TableRow(tr('Notes'), header=True))
         assumption = tr('Buildings are said to be flooded when ')

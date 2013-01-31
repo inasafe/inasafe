@@ -1,6 +1,8 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
@@ -24,10 +26,15 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'Shake_cls'
+    statistics_type = 'class_count'
+    statistics_classes = [0, 1, 2, 3]
     title = tr('Be affected')
     parameters = OrderedDict([('low_threshold', 6),
                   ('medium_threshold', 7),
-                  ('high_threshold', 8)])
+                  ('high_threshold', 8),
+                  ('postprocessors', OrderedDict([
+                      ('AggregationCategorical', {'on': True})]))
+    ])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
@@ -145,24 +152,24 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                                     tr('Buildings value ($M)'),
                                     tr('Contents value ($M)')],
                                    header=True),
-                          TableRow([class_1, lo,
-                                    building_values[1],
-                                    contents_values[1]]),
-                          TableRow([class_2, me,
-                                    building_values[2],
-                                    contents_values[2]]),
-                          TableRow([class_3, hi,
-                                    building_values[3],
-                                    contents_values[3]])]
+                          TableRow([class_1, format_int(lo),
+                                    format_int(building_values[1]),
+                                    format_int(contents_values[1])]),
+                          TableRow([class_2, format_int(me),
+                                    format_int(building_values[2]),
+                                    format_int(contents_values[2])]),
+                          TableRow([class_3, format_int(hi),
+                                    format_int(building_values[3]),
+                                    format_int(contents_values[3])])]
         else:
             # Generate simple impact report for unspecific buildings
             table_body = [question,
                           TableRow([tr('Hazard Level'),
                                     tr('Buildings Affected')],
                                     header=True),
-                          TableRow([class_1, str(lo)]),
-                          TableRow([class_2, str(me)]),
-                          TableRow([class_3, str(hi)])]
+                          TableRow([class_1, format_int(lo)]),
+                          TableRow([class_2, format_int(me)]),
+                          TableRow([class_3, format_int(hi)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('High hazard is defined as shake levels greater '
@@ -199,7 +206,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title,
-                             'target_field': self.target_field},
+                             'target_field': self.target_field,
+                             'statistics_type': self.statistics_type,
+                             'statistics_classes': self.statistics_classes},
                    style_info=style_info)
 
         LOGGER.debug('Created vector layer  %s' % str(V))

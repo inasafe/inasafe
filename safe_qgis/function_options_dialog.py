@@ -133,9 +133,8 @@ class FunctionOptionsDialog(QtGui.QDialog,
                 # create widget element from 'params'
                 myInputValues['params'] = OrderedDict()
                 for myKey, myValue in myOptions['params'].items():
-                    myHumanName = get_postprocessor_human_name(myKey)
                     myInputValues['params'][myKey] = self.buildWidget(
-                        myLayout, myHumanName, myValue)
+                        myLayout, myKey, myValue)
 
                 myFormLayout.addRow(myGroupBox, None)
 

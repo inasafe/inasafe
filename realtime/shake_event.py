@@ -21,16 +21,18 @@ import os
 import sys
 import shutil
 from xml.dom import minidom
+import math
 from subprocess import call, CalledProcessError
 import logging
 import numpy
 from datetime import datetime
-#sudo apt-get install python-tz
-import pytz
+import pytz  # sudo apt-get install python-tz
 
 import ogr
 import gdal
 from gdalconst import GA_ReadOnly
+
+from sftp_shake_data import SftpShakeData
 
 # TODO I think QCoreApplication is needed for tr() check hefore removing
 from PyQt4.QtCore import (QCoreApplication,
@@ -80,10 +82,10 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
-from shake_data import ShakeData
+# from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
@@ -121,7 +123,9 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
-        self.data = ShakeData(theEventId, theForceFlag)
+#        self.data = ShakeData(theEventId, theForceFlag)
+        self.data = SftpShakeData(theEvent=theEventId,
+            theForceFlag=theForceFlag)
         self.data.extract()
         self.latitude = None
         self.longitude = None
@@ -149,6 +153,8 @@ class ShakeEvent(QObject):
         self.impactKeywordsFile = None
         # number of people killed per mmi band
         self.fatalityCounts = None
+        # Total number of predicted fatalities
+        self.fatalityTotal = 0
         # number of people displaced per mmi band
         self.displacedCounts = None
         # number of people affected per mmi band
@@ -715,11 +721,14 @@ class ShakeEvent(QObject):
         # So that we can set the label vertical alignment
         myFieldDefinition = ogr.FieldDefn('VALIGN', ogr.OFTString)
         myLayer.CreateField(myFieldDefinition)
+        # So that we can set feature length to filter out small features
+        myFieldDefinition = ogr.FieldDefn('LEN', ogr.OFTReal)
+        myLayer.CreateField(myFieldDefinition)
 
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
         myBand = 1
-        myContourInterval = 0.5  # MMI not M!
+        myContourInterval = 0.5
         myContourBase = 0
         myFixedLevelList = []
         myUseNoDataFlag = 0
@@ -742,8 +751,6 @@ class ShakeEvent(QObject):
         finally:
             del myTifDataset
             myOgrDataset.Release()
-        # Now update the additional columns - X,Y, ROMAN and RGB
-        self.setContourProperties(myOutputFile)
 
         # Copy over the standard .prj file since ContourGenerate does not
         # create a projection definition
@@ -759,6 +766,13 @@ class ShakeEvent(QObject):
                                  'mmi-contours-%s.qml' % theAlgorithm)
         mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
+
+        # Now update the additional columns - X,Y, ROMAN and RGB
+        try:
+            self.setContourProperties(myOutputFile)
+        except InvalidLayerError:
+            raise
+
         return myOutputFile
 
     def romanize(self, theMMIValue):
@@ -779,7 +793,7 @@ class ShakeEvent(QObject):
         myRomanList = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
                        'IX', 'X', 'XI', 'XII']
         try:
-            myRoman = myRomanList[int(round(float(theMMIValue)))]
+            myRoman = myRomanList[int(float(theMMIValue))]
         except ValueError:
             LOGGER.exception('Error converting MMI value to roman')
             return None
@@ -862,8 +876,8 @@ class ShakeEvent(QObject):
 
         Raises: InvalidLayerError if anything is amiss with the layer.
         """
-        LOGGER.debug('setContourProperties requested.')
-        myLayer = QgsVectorLayer(theFile , 'mmi-contours', "ogr")
+        LOGGER.debug('setContourProperties requested for %s.' % theFile)
+        myLayer = QgsVectorLayer(theFile, 'mmi-contours', "ogr")
         if not myLayer.isValid():
             raise InvalidLayerError(theFile)
 
@@ -878,6 +892,7 @@ class ShakeEvent(QObject):
         myRomanIndex = myProvider.fieldNameIndex('ROMAN')
         myAlignIndex = myProvider.fieldNameIndex('ALIGN')
         myVAlignIndex = myProvider.fieldNameIndex('VALIGN')
+        myLengthIndex = myProvider.fieldNameIndex('LEN')
         myFeature = QgsFeature()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
@@ -902,13 +917,17 @@ class ShakeEvent(QObject):
             myX = myXMin + ((myXMax - myXMin) / 2)
 
             myAttributes = myFeature.attributeMap()
+
+            # Get length
+            myLength = myFeature.geometry().length()
+
             myMMIValue = float(myAttributes[myMMIIndex].toString())
 
-            # We only want labels on the half contours so test for that
+            # We only want labels on the whole number contours
             if myMMIValue != round(myMMIValue):
-                myRoman = self.romanize(myMMIValue)
-            else:
                 myRoman = ''
+            else:
+                myRoman = self.romanize(myMMIValue)
 
             #LOGGER.debug('MMI: %s ----> %s' % (
             #    myAttributes[myMMIIndex].toString(), myRoman))
@@ -926,6 +945,8 @@ class ShakeEvent(QObject):
                 myId, myAlignIndex, QVariant('Center'))
             myLayer.changeAttributeValue(
                 myId, myVAlignIndex, QVariant('HALF'))
+            myLayer.changeAttributeValue(
+                myId, myLengthIndex, QVariant(myLength))
 
         myLayer.commitChanges()
 
@@ -1087,11 +1108,15 @@ class ShakeEvent(QObject):
 
         The following fields will be created for each city feature:
 
-            QgsField("name", QVariant.String),
-            QgsField("population",  QVariant.Int),
-            QgsField("mmi", QVariant.Double),
-            QgsField("distance_to", QVariant.Double),
-            QgsField("direction_from", QVariant.Double)
+            QgsField('id', QVariant.Int),
+            QgsField('name', QVariant.String),
+            QgsField('population', QVariant.Int),
+            QgsField('mmi', QVariant.Double),
+            QgsField('dist_to', QVariant.Double),
+            QgsField('dir_to', QVariant.Double),
+            QgsField('dir_from', QVariant.Double),
+            QgsField('roman', QVariant.String),
+            QgsField('colour', QVariant.String),
 
         The 'name' and 'population' fields will be obtained from our geonames
         dataset.
@@ -1457,7 +1482,7 @@ class ShakeEvent(QObject):
             myDistanceTo = myAttributes[myDistanceToIndex].toFloat()[0]
             myCity = {'id': myId,
                       'name': myPlaceName,
-                      'mmi-int': round(myMmi),
+                      'mmi-int': int(myMmi),
                       'mmi': myMmi,
                       'population': myPopulation,
                       'roman': myRoman,
@@ -1612,8 +1637,6 @@ class ShakeEvent(QObject):
                             header=True)]
         myAffectedRow = [TableCell(self.tr('People Affected (x 1000)'),
                             header=True)]
-        myFatalitiesRow = [TableCell(self.tr('Predicted fatalities'),
-                                header=True)]
         myImpactRow = [TableCell(self.tr('Perceived Shaking'),
                             header=True)]
         for myMmi in range(2, 10):
@@ -1626,17 +1649,10 @@ class ShakeEvent(QObject):
             else:
                 myAffectedRow.append(0.00)
 
-            if myMmi in self.fatalityCounts:
-                myFatalitiesRow.append(
-                    '%0.2f' % round(self.fatalityCounts[myMmi]))
-            else:
-                myFatalitiesRow.append(0.00)
-
             myImpactRow.append(TableCell(self.mmiShaking(myMmi)))
 
         myTableBody = []
         myTableBody.append(myAffectedRow)
-        myTableBody.append(myFatalitiesRow)
         myTableBody.append(myImpactRow)
         myTable = Table(myTableBody, header_row=myHeader,
                         table_class='table table-striped table-condensed')
@@ -1701,6 +1717,7 @@ class ShakeEvent(QObject):
             myFatalities = myResult.keywords['fatalites_per_mmi']
             myAffected = myResult.keywords['exposed_per_mmi']
             myDisplaced = myResult.keywords['displaced_per_mmi']
+            myTotalFatalities = myResult.keywords['total_fatalities']
         except:
             LOGGER.exception('fatalities_per_mmi key not found in:\n%s' %
                             myResult.keywords)
@@ -1723,6 +1740,7 @@ class ShakeEvent(QObject):
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
         self.fatalityCounts = myFatalities
+        self.fatalityTotal = myTotalFatalities
         self.displacedCounts = myDisplaced
         self.affectedCounts = myAffected
         LOGGER.info('***** Fatalities: %s ********' % self.fatalityCounts)
@@ -1863,7 +1881,7 @@ class ShakeEvent(QObject):
             str - path to rendered pdf.
 
         Raises:
-            Propogates any exceptions.
+            Propagates any exceptions.
         """
         myPdfPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
@@ -1902,9 +1920,12 @@ class ShakeEvent(QObject):
         myCitiesShapeFile = None
         #for myAlgorithm in ['average', 'invdist', 'nearest']:
         for myAlgorithm in ['nearest']:
-            myContoursShapeFile = self.mmiDataToContours(
+            try:
+                myContoursShapeFile = self.mmiDataToContours(
                                            theForceFlag=theForceFlag,
                                            theAlgorithm=myAlgorithm)
+            except:
+                raise
             logging.info('Created: %s', myContoursShapeFile)
         try:
             myCitiesShapeFile = self.citiesToShapefile(
@@ -1915,7 +1936,7 @@ class ShakeEvent(QObject):
             logging.info('Created: %s', mySearchBoxFile)
             _, myCitiesHtmlPath = self.impactedCitiesTable()
             logging.info('Created: %s', myCitiesHtmlPath)
-        except:
+        except:  # pylint: disable=W0702
             logging.exception('No nearby cities found!')
 
         _, myImpactsHtmlPath = self.calculateImpacts()
@@ -2071,7 +2092,12 @@ class ShakeEvent(QObject):
         myDirectionList = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
                            'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW',
                            'NW', 'NNW']
-        myBearing = float(theBearing)
+        try:
+            myBearing = float(theBearing)
+        except ValueError:
+            LOGGER.exception('Error casting bearing to a float')
+            return None
+
         myDirectionsCount = len(myDirectionList)
         myDirectionsInterval = 360. / myDirectionsCount
         myIndex = int(round(myBearing / myDirectionsInterval))
@@ -2116,10 +2142,21 @@ class ShakeEvent(QObject):
 
         """
         myMapName = self.tr('Estimated Earthquake Impact')
-        myExposureTableName = self.tr('Estimated number of people exposed to '
+        myExposureTableName = self.tr('Estimated number of people affected by '
             'each MMI level')
+        myFatalitiesName = self.tr('Estimated fatalities')
+        myFatalitiesCount = self.fatalityTotal
+
+        # put the estimate into neat ranges 0-100, 100-1000, 1000-10000. etc
+        myLowerLimit = 0
+        myUpperLimit = 100
+        while myFatalitiesCount > myUpperLimit:
+            myLowerLimit = myUpperLimit
+            myUpperLimit = math.pow(myUpperLimit, 2)
+        myFatalitiesRange = '%i - %i' % (myLowerLimit, myUpperLimit)
+
         myCityTableName = self.tr('Places Affected')
-        myLegendName = 'Population density'
+        myLegendName = self.tr('Population density')
         myLimitations = self.tr(
             'This impact estimation is automatically generated and only takes'
             ' into account the population and cities affected by different '
@@ -2132,7 +2169,9 @@ class ShakeEvent(QObject):
             'the figures shown here. Consequently decisions should not be '
             'made solely on the information presented here and should always '
             'be verified by ground truthing and other reliable information '
-            'sources.')
+            'sources. The fatality calculation assumes that '
+            'no fatalities occur for shake levels below MMI 4. Fatality '
+            'counts of less than 50 are disregarded.')
         myCredits = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
             'Reduction, Geoscience Australia and the GFDRR.')
@@ -2170,6 +2209,9 @@ class ShakeEvent(QObject):
             'legend-name': myLegendName,
             'limitations': myLimitations,
             'credits': myCredits,
+            'fatalities-name': myFatalitiesName,
+            'fatalities-range': myFatalitiesRange,
+            'fatalities-count': '%s' % myFatalitiesCount,
             'mmi': '%s' % self.magnitude,
             'date': '%s-%s-%s' % (self.day,
                                self.month,
@@ -2344,7 +2386,7 @@ class ShakeEvent(QObject):
                 'zoomFactor': self.zoomFactor,
                 'searchBoxes': self.searchBoxes
             }
-        print str(myDict)
+
         myString = ('latitude: %(latitude)s\n'
                      'longitude: %(longitude)s\n'
                      'eventId: %(eventId)s\n'
@@ -2405,5 +2447,6 @@ class ShakeEvent(QObject):
                 raise TranslationLoadError(myMessage)
             QCoreApplication.installTranslator(self.translator)
         else:
-            myMessage = 'No translation exists for %s' % myLocaleName
-            LOGGER.exception(myMessage)
+            if myLocaleName != 'en':
+                myMessage = 'No translation exists for %s' % myLocaleName
+                LOGGER.exception(myMessage)

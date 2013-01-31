@@ -21,7 +21,7 @@ import shutil
 from zipfile import ZipFile
 # The logger is intiailsed in utils.py by init
 import logging
-LOGGER = logging.getLogger('InaSAFE-Realtime')
+LOGGER = logging.getLogger('InaSAFE')
 
 from rt_exceptions import (EventUndefinedError,
                             EventIdError,
@@ -67,7 +67,7 @@ class ShakeData:
                   that this raster is associated with. e.g. 20110413170148.
                   **If no event id is supplied, a query will be made to the
                   ftp server, and the latest event id assigned.**
-                * theData - (Optional) a string representing the ip address
+                * theHost - (Optional) a string representing the ip address
                   or host name of the server from which the data should be
                   retrieved. It assumes that the data is in the root directory.
                   Defaults to 118.97.83.243
@@ -207,7 +207,7 @@ class ShakeData:
         else:
             return self.isOnServer()
 
-    def _fetchFile(self, theEventFile):
+    def _fetchFile(self, theEventFile, theRetries=3):
         """Private helper to fetch a file from the ftp site.
 
           e.g. for event 20110413170148 this file would be fetched::
@@ -221,25 +221,44 @@ class ShakeData:
         .. note:: If a cached copy of the file exits, the path to the cache
            copy will simply be returned without invoking any network requests.
 
-        Args: None
+        Args:
+            * theEventFile: str - filename on server e.g.20110413170148.inp.zip
+            * theRetries: int - number of reattempts that should be made in
+                in case of network error etc.
 
-        Returns: A string for the dataset path on the local storage system.
+        Returns:
+            str: A string for the dataset path on the local storage system.
 
-        Raises: EventUndefinedError, NetworkError
+        Raises:
+            EventUndefinedError, NetworkError
         """
         # Return the cache copy if it exists
         myLocalPath = os.path.join(shakemapZipDir(), theEventFile)
         if os.path.exists(myLocalPath):
             return myLocalPath
+
         #Otherwise try to fetch it using ftp
-        try:
-            myClient = FtpClient()
-            myClient.getFile(theEventFile, myLocalPath)
-        except:
-            # TODO: differentiate between file not found and network errors.
-            raise NetworkError('Message failed to retrieve '
-                               'file. %s' % theEventFile)
-        return myLocalPath
+        for myCounter in range(theRetries):
+            myLastError = None
+            try:
+                myClient = FtpClient()
+                myClient.getFile(theEventFile, myLocalPath)
+            except NetworkError, e:
+                myLastError = e
+            except:
+                LOGGER.exception('Could not fetch shake event from server %s'
+                    % theEventFile)
+                raise
+
+            if myLastError is None:
+                return myLocalPath
+
+            LOGGER.info('Fetching failed, attempt %s' % myCounter)
+
+        LOGGER.exception('Could not fetch shake event from server %s'
+                             % theEventFile)
+        raise Exception('Could not fetch shake event from server %s'
+                        % theEventFile)
 
     def fetchInput(self):
         """Fetch the input file for the event id associated with this class

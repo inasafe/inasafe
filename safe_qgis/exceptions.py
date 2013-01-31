@@ -49,6 +49,12 @@ class NoFunctionsFoundError(Exception):
     pass
 
 
+class KeywordDbError(Exception):
+    """Custom exception for when an error is encountered with keyword cach db.
+    """
+    pass
+
+
 class KeywordNotFoundError(Exception):
     """Custom exception for when a no keyword can be found."""
     pass
@@ -122,9 +128,9 @@ class StyleError(Exception):
 #    pass
 #
 #
-#class memoryLayerCreationError(Exception):
-#    """Raised if an error occurs creating the cities file"""
-#    pass
+class MemoryLayerCreationError(Exception):
+    """Raised if an error occurs creating the cities file"""
+    pass
 
 
 class MethodUnavailableError(Exception):

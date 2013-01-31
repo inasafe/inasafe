@@ -1,7 +1,8 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
-from safe.impact_functions.core import format_int
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        format_int)
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
                                    get_defaults)
@@ -109,6 +110,11 @@ class ITBFatalityFunction(FunctionProvider):
         :param x: model coefficient.
         :param y: model coefficient.
         """
+        # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
+        # a fatality rate of 0 - Tim
+        if mmi < 4:
+            return 0
+
         x = self.parameters['x']
         y = self.parameters['y']
         return numpy.power(10.0, x * mmi - y)
@@ -154,12 +160,11 @@ class ITBFatalityFunction(FunctionProvider):
         R = numpy.zeros(H.shape)
         for mmi in mmi_range:
 
-            # Identify cells where MMI is in class i
-            mask = (H > mmi - self.parameters['step']) * (
-                        H <= mmi + self.parameters['step'])
-
-            # Count population affected by this shake level
-            I = numpy.where(mask, P, 0)
+            # Identify cells where MMI is in class i and
+            # count population affected by this shake level
+            I = numpy.where(
+                (H > mmi - self.parameters['step']) * (
+                    H <= mmi + self.parameters['step']), P, 0)
 
             # Calculate expected number of fatalities per level
             fatality_rate = self.fatality_rate(mmi)
@@ -196,6 +201,10 @@ class ITBFatalityFunction(FunctionProvider):
         # Compute number of fatalities
         fatalities = int(round(numpy.nansum(number_of_fatalities.values())
                                / 1000)) * 1000
+        # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
+        # will be rounded down to 0 - Tim
+        if fatalities < 50:
+            fatalities = 0
 
         # Compute number of people displaced due to building collapse
         displaced = int(round(numpy.nansum(number_of_displaced.values())
@@ -269,12 +278,16 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %i') % total,
+                           tr('Total population: %s') % format_int(total),
                            tr('People are considered to be displaced if '
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                             'regulation 7/2008'),
+                           tr('The fatality calculation assumes that '
+                             'no fatalities occur for shake levels below 4 '
+                             'and fatality counts of less than 50 are '
+                             'disregarded.')])
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in need of evacuation')

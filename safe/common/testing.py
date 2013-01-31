@@ -37,6 +37,7 @@ DATADIR = os.path.join(pardir, DATANAME)
 TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
 HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
+BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
 UNITDATA = os.path.abspath(
     os.path.join(os.path.dirname(__file__),
