@@ -180,6 +180,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #            stdoutToServer=True,
         #            stderrToServer=True)
 
+        myCanvas = self.iface.mapCanvas()
+
+        # Enable on the fly projection by default
+        myCanvas.mapRenderer().setProjectionsEnabled(True);
+
+        # Listen for changes in canvas extent so we can
+        # check if the analysis is feasible as the extent changes
+        QtCore.QObject.connect(myCanvas, QtCore.SIGNAL('extentsChanged()'),
+                               self.checkMemoryUsage)
+
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
         changing options in the options dialog.
