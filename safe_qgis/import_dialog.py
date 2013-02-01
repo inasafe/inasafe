@@ -17,17 +17,19 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import (QRect, SIGNAL)
-from PyQt4.QtGui import (QDialog, QProgressDialog)
+from PyQt4.QtCore import (QRect, SIGNAL, QCoreApplication)
+from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox)
 from import_dialog_base import Ui_ImportDialogBase
 
 from bs4 import BeautifulSoup
 import requests
+
 import time
 import os
 
 from third_party.lightmaps import LightMaps
-
+from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
+from requests.exceptions import RequestException
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
@@ -47,8 +49,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.setWindowTitle(self.tr('Import Hot-Export'))
 
-        ## base url
         self.url = 'http://hot-export.geofabrik.de'
+        self.outDir = '/tmp'
 
         ## example location: depok
         self.minLongitude.setText('106.7685')
@@ -60,17 +62,30 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.map.setGeometry(QRect(10, 10, 300, 240))
         self.map.setCenter(-6.4338, 106.7685)
 
-        self.outDir = '/tmp'
-
     def accept(self):
 
-        self.doImport()
-        self.loadShapeFile()
+        try:
+            self.doImport()
+            #self.loadShapeFile()
+            self.done(QDialog.Accepted)
+        except (ImportDialogError, RequestException) as myEx:
+            self.progressDialog.cancel()
+            QMessageBox.warning(self,
+                "Hot-Export Import Error",
+                str(myEx))
+        except CanceledImportDialogError:
+            pass
 
-        self.done(QDialog.Accepted)
+    def requestHook(self, theRequest):
+        """
+        Hook function that check if user press cancel button
+        Params:
+            * theRequest - request object
+        """
+        QCoreApplication.processEvents()
+        if self.progressDialog.wasCanceled():
+            raise CanceledImportDialogError()
 
-    def progressDlgCanceled(self):
-        pass
 
     def doImport(self):
         """
@@ -82,9 +97,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
         self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
-        self.connect(
-            self.progressDialog, SIGNAL("canceled()"),
-            self.progressDlgCanceled)
 
         self.progressDialog.show()
         self.progressDialog.setMaximum(100)
@@ -93,8 +105,10 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         ## setup necessary data to create new job in Hot-Export
         myPayload = {
             'job[region_id]': '1',  # 1 is indonesia
+            'job[name]': 'InaSAFE job',
+            'job[description]': 'This job created from import feature in InaSAFE',
             'job[name]': 'depok test',
-            'job[description]': 'just some test',
+            'job[description]': 'depok test area',
 
             'job[lonmin]': str(self.minLongitude.text()),
             'job[latmin]': str(self.minLatitude.text()),
@@ -168,10 +182,11 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myJobResponse = requests.get(self.url + '/newjob')
         myJobToken = self.getAuthToken(myJobResponse.content)
 
-        print "job token : " + myJobToken
+        #print "job token : " + myJobToken
         thePayload['authenticity_token'] = myJobToken
 
-        myWizardResponse = requests.post(self.url + '/wizard_area', thePayload)
+        myWizardResponse = requests.post(self.url + '/wizard_area',
+            thePayload, hooks=dict(response=self.requestHook))
         myWizardToken = self.getAuthToken(myWizardResponse.content)
 
         return myWizardToken
@@ -192,14 +207,15 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         thePayload['authenticity_token'] = theToken
         thePayload['presetfile'] = 4  # preset mapping from jakarta
         thePayload['default_tags'] = 'true'
-        myTagResponse = requests.post(self.url + '/tagupload', thePayload)
+        myTagResponse = requests.post(self.url + '/tagupload', thePayload,
+            hooks=dict(response=self.requestHook))
         myId = myTagResponse.url.split('/')[-1]
 
         return myId
 
     def getDownloadUrl(self, theJobId):
         """
-        Get the url of shapefile from Hot-Export
+        Get the url of shape files from Hot-Export
         Params:
             * theJobId - the id of job in Hot-Export
         Returns:
@@ -208,17 +224,36 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         myResultUrl = self.url + '/jobs/' + theJobId
         myIsReady = False
+        myCountDown = 5 # in seconds
+        mySleepTime = 0.1 # in seconds
 
         while myIsReady is False:
-            myResultResponse = requests.get(myResultUrl)
-            mySoup = BeautifulSoup(myResultResponse.content)
-            myLinks = mySoup.find_all('a', text='ESRI Shapefile (zipped)')
-            if len(myLinks) > 0:
-                myIsReady = True
-            else:
-                print "\tstill not ready. wait 5 seconds..."
-                time.sleep(5)
+            ## we need to call QCoreApplication.processEvents() because
+            ## for some reason, the signal not triggered inside this loop.
+            QCoreApplication.processEvents()
 
+            if self.progressDialog.wasCanceled():
+                raise CanceledImportDialogError()
+
+            ## check Hot-Export if shape file is ready.
+            ## we only check Hot-Export each 5 seconds because we don't
+            ## want to accidentally DDOS-ing it.
+            if myCountDown <= 0:
+                myResultResponse = requests.get(myResultUrl,
+                    hooks=dict(response=self.requestHook))
+                mySoup = BeautifulSoup(myResultResponse.content)
+                myLinks = mySoup.find_all('a', text='ESRI Shapefile (zipped)')
+
+                if len(myLinks) > 0:
+                    myIsReady = True
+                else:
+                    myCountDown = 5
+
+            ## delay
+            time.sleep(mySleepTime)
+            myCountDown -= mySleepTime
+
+        ## return the first URL
         return self.url + myLinks[0].get('href')
 
     def downloadShapeFile(self, theUrl, theOutput):
@@ -229,7 +264,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             * theOutput - path of output file
         """
 
-        myShapeResponse = requests.get(theUrl)
+        myShapeResponse = requests.get(theUrl,
+            hooks=dict(response=self.requestHook))
 
         myShapeFile = open(theOutput, 'wb')
         myShapeFile.write(myShapeResponse.content)
@@ -250,6 +286,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         if not os.path.exists(theOutDir):
             os.makedirs(theOutDir)
 
+        ## extract all files...
         myHandle = open(thePath, 'rb')
         myZip = zipfile.ZipFile(myHandle)
         for myName in myZip.namelist():
@@ -257,7 +294,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             myOutFile = open(myOutPath, 'wb')
             myOutFile.write(myZip.read(myName))
             myOutFile.close()
-            print myOutPath
+
         myHandle.close()
 
     def loadShapeFile(self):
