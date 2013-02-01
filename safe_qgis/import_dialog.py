@@ -28,6 +28,7 @@ import os
 
 from third_party.lightmaps import LightMaps
 
+
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def __init__(self, theParent=None):
@@ -57,7 +58,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.map = LightMaps(self)
         self.map.setGeometry(QRect(10, 10, 300, 240))
-        self.map.setCenter(-6.4338, 106.7685 )
+        self.map.setCenter(-6.4338, 106.7685)
 
         self.outDir = '/tmp'
 
@@ -73,14 +74,17 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def doImport(self):
         """
-        This function will do all actions for importing shape files from Hot-Export
+        This function will do all actions for importing shape files
+        from Hot-Export
         """
 
         # creating progress dialog for download
-        self.progressDialog=QProgressDialog(self)
+        self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
         self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
-        self.connect(self.progressDialog,SIGNAL("canceled()"), self.progressDlgCanceled)
+        self.connect(
+            self.progressDialog, SIGNAL("canceled()"),
+            self.progressDlgCanceled)
 
         self.progressDialog.show()
         self.progressDialog.setMaximum(100)
@@ -88,7 +92,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         ## setup necessary data to create new job in Hot-Export
         myPayload = {
-            'job[region_id]': '1', # 1 is indonesia
+            'job[region_id]': '1',  # 1 is indonesia
             'job[name]': 'depok test',
             'job[description]': 'just some test',
 
@@ -98,18 +102,21 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             'job[latmax]': str(self.maxLatitude .text()),
         }
 
+        ## create a new job in Hot-Export
         self.progressDialog.setLabelText(
             self.tr("Create A New Job on Hot-Exports..."))
         myNewJobToken = self.createNewJob(myPayload)
         self.progressDialog.setValue(10)
 
+        ## prepare tag
         self.progressDialog.setLabelText(
             self.tr("Set Preset to ... 'mapping from jakarta'"))
         myJobId = self.uploadTag(myPayload, myNewJobToken)
         self.progressDialog.setValue(20)
 
-        self.progressDialog.setLabelText(
-            self.tr("Waiting For Result Available on Server... (http://hot-export.geofabrik.de/jobs/%s)" % myJobId))
+        myLabelText = "Waiting For Result Available on Server..." \
+                      + " (http://hot-export.geofabrik.de/jobs/%1)"
+        self.progressDialog.setLabelText(self.tr(myLabelText).arg(myJobId))
         myShapeUrl = self.getDownloadUrl(myJobId)
         self.progressDialog.setValue(30)
 
@@ -121,9 +128,10 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setValue(90)
 
         ## extract downloaded file to output directory
-        #myOutDir = os.path.join(os.path.dirname(myFilePath), myJobId)
-        self.progressDialog.setLabelText(
-            self.tr("Extract Shape File... %s to %s" % (myFilePath, self.outDir)) )
+        myLabelText = "Extract Shape File... from %1 to %2"
+        myLabelText = self.tr(myLabelText).arg(myFilePath).arg(self.outDir)
+        self.progressDialog.setLabelText(myLabelText)
+
         self.extractZip(myFilePath, self.outDir)
         self.progressDialog.setValue(100)
 
@@ -141,7 +149,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         '''
 
         ## FIXME(gigih): need fail-proof method to get authenticity_token
-        myToken = theContent.split('authenticity_token" type="hidden" value="')[1]
+        myToken = theContent.split(
+            'authenticity_token" type="hidden" value="')[1]
         myToken = myToken.split('"')[0]
 
         return myToken
@@ -168,10 +177,20 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         return myWizardToken
 
     def uploadTag(self, thePayload, theToken):
-        ## tag upload
+        """
+        Go to page http://hot-export.geofabrik.de and fill the needed data.
+        Currently the preset file is set to "preset mapping from jakarta"
+        in HotExport.
+
+        Params:
+            * thePayload - dictionary containing needed data in form
+            * theToken   - authentication value from previous page
+        Returns:
+            Job Id
+        """
         ## FIXME(gigih): upload buildings preset to hot-export
         thePayload['authenticity_token'] = theToken
-        thePayload['presetfile'] = 4 ## preset mapping from jakarta
+        thePayload['presetfile'] = 4  # preset mapping from jakarta
         thePayload['default_tags'] = 'true'
         myTagResponse = requests.post(self.url + '/tagupload', thePayload)
         myId = myTagResponse.url.split('/')[-1]
@@ -179,6 +198,14 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         return myId
 
     def getDownloadUrl(self, theJobId):
+        """
+        Get the url of shapefile from Hot-Export
+        Params:
+            * theJobId - the id of job in Hot-Export
+        Returns:
+            url of shape files
+        """
+
         myResultUrl = self.url + '/jobs/' + theJobId
         myIsReady = False
 
@@ -195,6 +222,13 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         return self.url + myLinks[0].get('href')
 
     def downloadShapeFile(self, theUrl, theOutput):
+        """
+        Download shape file from theUrl and write to theOutput.
+        Params:
+            * theUrl - URL of shape file in Hot-Export
+            * theOutput - path of output file
+        """
+
         myShapeResponse = requests.get(theUrl)
 
         myShapeFile = open(theOutput, 'wb')
@@ -233,11 +267,13 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         from qgis.utils import iface
 
-        ## only load 'line' and 'polygon'
-        iface.addVectorLayer(os.path.join(self.outDir, 'planet_osm_line.shp'),
-            'line', 'ogr')
-        iface.addVectorLayer(os.path.join(self.outDir, 'planet_osm_polygon.shp'),
-            'polygon', 'ogr')
+        myLinePath = os.path.join(self.outDir, 'planet_osm_line.shp')
+        myPolygonPath = os.path.join(self.outDir, 'planet_osm_polygon.shp')
+        myPointPath = os.path.join(self.outDir, 'planet_osm_point.shp')
+
+        iface.addVectorLayer(myLinePath, 'line', 'ogr')
+        iface.addVectorLayer(myPolygonPath, 'polygon', 'ogr')
+        iface.addVectorLayer(myPointPath, 'point', 'ogr')
 
 
 if __name__ == '__main__':
