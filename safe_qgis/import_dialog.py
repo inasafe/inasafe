@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4.QtCore import (QRect, SIGNAL, QCoreApplication)
-from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox)
+from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox, QFileDialog)
 from import_dialog_base import Ui_ImportDialogBase
 
 from bs4 import BeautifulSoup
@@ -50,7 +50,11 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.setWindowTitle(self.tr('Import Hot-Export'))
 
         self.url = 'http://hot-export.geofabrik.de'
-        self.outDir = '/tmp'
+
+        # creating progress dialog for download
+        self.progressDialog = QProgressDialog(self)
+        self.progressDialog.setAutoClose(False)
+        self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
 
         ## example location: depok
         self.minLongitude.setText('106.7685')
@@ -62,19 +66,24 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.map.setGeometry(QRect(10, 10, 300, 240))
         self.map.setCenter(-6.4338, 106.7685)
 
+    def on_pBtnDir_clicked(self):
+        self.outDir.setText(QFileDialog.getExistingDirectory(self, self.tr("Select Directory")))
+
     def accept(self):
 
         try:
+            self.ensureDirExist()
             self.doImport()
-            #self.loadShapeFile()
+            self.loadShapeFile()
             self.done(QDialog.Accepted)
-        except (ImportDialogError, RequestException) as myEx:
-            self.progressDialog.cancel()
-            QMessageBox.warning(self,
-                "Hot-Export Import Error",
-                str(myEx))
         except CanceledImportDialogError:
             pass
+        except Exception as myEx:
+            QMessageBox.warning(self,
+                self.tr("Hot-Export Import Error"),
+                str(myEx))
+
+            self.progressDialog.cancel()
 
     def requestHook(self, theRequest):
         """
@@ -86,17 +95,34 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         if self.progressDialog.wasCanceled():
             raise CanceledImportDialogError()
 
+    def ensureDirExist(self):
+        """
+        Check if directory exist of not.
+        If not found, give user a dialog box to create it
+        """
+
+        myDir = str(self.outDir.text())
+
+        if os.path.exists(myDir):
+            return
+
+        myTitle = self.tr("Directory %1 not exist").arg(myDir)
+        myQuestion = self.tr(
+            "Directory %1 not exist. Are you want to create it?"
+        ).arg(myDir)
+        myAnswer = QMessageBox.question(self, myTitle,
+            myQuestion,QMessageBox.Yes | QMessageBox.No)
+
+        if myAnswer == QMessageBox.Yes:
+            os.makedirs(myDir)
+        else:
+            raise CanceledImportDialogError()
 
     def doImport(self):
         """
         This function will do all actions for importing shape files
         from Hot-Export
         """
-
-        # creating progress dialog for download
-        self.progressDialog = QProgressDialog(self)
-        self.progressDialog.setAutoClose(False)
-        self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
 
         self.progressDialog.show()
         self.progressDialog.setMaximum(100)
@@ -143,10 +169,10 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         ## extract downloaded file to output directory
         myLabelText = "Extract Shape File... from %1 to %2"
-        myLabelText = self.tr(myLabelText).arg(myFilePath).arg(self.outDir)
+        myLabelText = self.tr(myLabelText).arg(myFilePath).arg(self.outDir.text())
         self.progressDialog.setLabelText(myLabelText)
 
-        self.extractZip(myFilePath, self.outDir)
+        self.extractZip(myFilePath, str(self.outDir.text()))
         self.progressDialog.setValue(100)
 
         self.progressDialog.done(QDialog.Accepted)
@@ -282,10 +308,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         import zipfile
 
-        ## ensure directory is exist
-        if not os.path.exists(theOutDir):
-            os.makedirs(theOutDir)
-
         ## extract all files...
         myHandle = open(thePath, 'rb')
         myZip = zipfile.ZipFile(myHandle)
@@ -304,9 +326,11 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         from qgis.utils import iface
 
-        myLinePath = os.path.join(self.outDir, 'planet_osm_line.shp')
-        myPolygonPath = os.path.join(self.outDir, 'planet_osm_polygon.shp')
-        myPointPath = os.path.join(self.outDir, 'planet_osm_point.shp')
+        myDir = str(self.outDir.text())
+
+        myLinePath = os.path.join(myDir, 'planet_osm_line.shp')
+        myPolygonPath = os.path.join(myDir, 'planet_osm_polygon.shp')
+        myPointPath = os.path.join(myDir, 'planet_osm_point.shp')
 
         iface.addVectorLayer(myLinePath, 'line', 'ogr')
         iface.addVectorLayer(myPolygonPath, 'polygon', 'ogr')

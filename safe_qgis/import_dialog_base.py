@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'import_dialog.ui'
 #
-# Created: Fri Dec  7 16:15:32 2012
+# Created: Fri Feb  1 18:15:36 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,9 +17,9 @@ except AttributeError:
 class Ui_ImportDialogBase(object):
     def setupUi(self, ImportDialogBase):
         ImportDialogBase.setObjectName(_fromUtf8("ImportDialogBase"))
-        ImportDialogBase.resize(614, 318)
+        ImportDialogBase.resize(614, 365)
         self.buttonBox = QtGui.QDialogButtonBox(ImportDialogBase)
-        self.buttonBox.setGeometry(QtCore.QRect(260, 260, 341, 32))
+        self.buttonBox.setGeometry(QtCore.QRect(260, 320, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
@@ -53,6 +53,13 @@ class Ui_ImportDialogBase(object):
         self.maxLatitude = QtGui.QLineEdit(self.groupBox)
         self.maxLatitude.setObjectName(_fromUtf8("maxLatitude"))
         self.formLayout_2.setWidget(3, QtGui.QFormLayout.FieldRole, self.maxLatitude)
+        self.outDir = QtGui.QLineEdit(ImportDialogBase)
+        self.outDir.setGeometry(QtCore.QRect(30, 260, 511, 30))
+        self.outDir.setText(_fromUtf8(""))
+        self.outDir.setObjectName(_fromUtf8("outDir"))
+        self.pBtnDir = QtGui.QPushButton(ImportDialogBase)
+        self.pBtnDir.setGeometry(QtCore.QRect(550, 260, 50, 40))
+        self.pBtnDir.setObjectName(_fromUtf8("pBtnDir"))
 
         self.retranslateUi(ImportDialogBase)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ImportDialogBase.accept)
@@ -66,4 +73,5 @@ class Ui_ImportDialogBase(object):
         self.label_2.setText(QtGui.QApplication.translate("ImportDialogBase", "Min. Latitude", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("ImportDialogBase", "Max. Longitude", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("ImportDialogBase", "Max. Latitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.pBtnDir.setText(QtGui.QApplication.translate("ImportDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
 
