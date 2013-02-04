@@ -262,8 +262,18 @@ def get_free_memory_linux():
 
 def get_free_memory_osx():
     """Return current free memory on the machine for mac os.
-    Warning : this script is really not robust
-    Return in MB unit
+
+    .. warning:: This script is really not robust (Ismail)
+
+    Args:
+        None
+
+    Returns:
+        int: Return in MB unit
+
+    Raises:
+        ValueError: You should wrap calls to this function in a try...except
+
     """
     try:
         p = Popen('echo -e "\n$(top -l 1 | awk \'/PhysMem/\';)\n"',
@@ -275,6 +285,23 @@ def get_free_memory_osx():
     except OSError:
         raise OSError
     stdout_list = stdout_string.split(',')
-    inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
-    free = stdout_list[4].replace('M free.', '').replace(' ', '')
-    return int(inactive) + int(free)
+    inactive = stdout_list[2]
+    if 'M' in inactive:
+        inactive = inactive.replace('M inactive', '').replace(' ', '')
+    elif 'K' in inactive:
+        inactive = inactive.replace('K inactive', '').replace(' ', '')
+        inactive = float(inactive) / 1024.0  # express as fraction of MB
+    else:
+        inactive = 0  # anything else is assumed invalid
+
+    memfree = stdout_list[4]
+    if 'M' in memfree:
+        memfree = stdout_list[4].replace('M free.', '').replace(' ', '')
+    if 'K' in memfree:
+        memfree = stdout_list[4].replace('K free.', '').replace(' ', '')
+        memfree = int(memfree) / 1024.0  # express as fraction of MB
+    else:
+        memfree = 0  # anything else is assumed invalid
+
+    total_free = int(inactive) + int(memfree)
+    return total_free

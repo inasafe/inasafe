@@ -2605,7 +2605,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # half this since the tifs as in single precision,
         # whereas numpy arrays are in double precision.
         myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
-        myFreeMemory = get_free_memory()
+        try:
+            myFreeMemory = get_free_memory()
+        except ValueError:
+            myMessage = 'Could not determine free memory'
+            LOGGER.exception(myMessage)
+            return myMessage
+
         # We work on the assumption that if more than 10% of the available
         # memory is occupied by a single layer we could run out of memory
         # (depending on the impact function). This is because multiple
@@ -2625,9 +2631,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'and / or the analysis may fail due to insufficient '
                 'memory. Proceed at your own risk.')
             mySuggestion = self.tr('Try zooming in to a smaller area or using '
-                'a raster layer with a coarser resolution'
-                'to speed up execution and reduce memory'
-                'requirements. You could also try adding'
+                'a raster layer with a coarser resolution '
+                'to speed up execution and reduce memory '
+                'requirements. You could also try adding '
                 'more RAM to your computer.')
             myHtmlMessage = ('<table class="condensed">'
                              '<tr><th class="warning '
