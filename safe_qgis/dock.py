@@ -1972,6 +1972,135 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Disable the hourglass cursor"""
         QtGui.qApp.restoreOverrideCursor()
 
+    def getClipParameters(self):
+        """Calculate the best extents to use for the assessment.
+
+        Args:
+            None
+
+        Returns:
+            * myExtraExposureKeywords: dict - any additional keywords that
+                should be written to the exposure layer. For example if
+                rescaling is required for a raster, the original resolution
+                can be added to the keywords file.
+            * myBufferedGeoExtent: list - [xmin, ymin, xmax, ymax] - the best
+                extent that can be used given the input datasets and the
+                current viewport extents.
+            * myCellSize: float - the cell size that is the best of the
+                hazard and exposure rasters.
+            * myExposureLayer: QgsMapLayer - layer representing exposure.
+            * myGeoExtent: list - [xmin, ymin, xmax, ymax] - the unbuffered
+                intersection of the two input layers extents and the viewport.
+            * myHazardLayer: QgsMapLayer - layer representing hazard.
+
+        Raises:
+            InsufficientOverlapError
+        """
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
+        # Reproject all extents to EPSG:4326 if needed
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+        # Get the current viewport extent as an array in EPSG:4326
+        myViewportGeoExtent = self.viewportGeoArray()
+        # Get the Hazard extents as an array in EPSG:4326
+        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+                                                  myHazardLayer.crs())
+        # Get the Exposure extents as an array in EPSG:4326
+        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
+                                                    myExposureLayer.crs())
+        # Now work out the optimal extent between the two layers and
+        # the current view extent. The optimal extent is the intersection
+        # between the two layers and the viewport.
+        myGeoExtent = None
+        try:
+            # Extent is returned as an array [xmin,ymin,xmax,ymax]
+            # We will convert it to a QgsRectangle afterwards.
+            if self.clipToViewport:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                               myExposureGeoExtent,
+                                               myViewportGeoExtent)
+            else:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                               myExposureGeoExtent)
+
+        except InsufficientOverlapError, e:
+            # FIXME (MB): This branch is not covered by the tests
+            myMessage = self.tr('<p>There '
+                                'was insufficient overlap between the input '
+                                'layers '
+                                'and / or the layers and the viewable area. '
+                                'Please select '
+                                'two overlapping layers and zoom or pan to '
+                                'them or disable'
+                                ' viewable area clipping in the options dialog'
+                                '. Full details follow:</p>'
+                                '<p>Failed to obtain the optimal extent '
+                                'given:</p>'
+                                '<p>Hazard: %1</p>'
+                                '<p>Exposure: %2</p>'
+                                '<p>Viewable area Geo Extent: %3</p>'
+                                '<p>Hazard Geo Extent: %4</p>'
+                                '<p>Exposure Geo Extent: %5</p>'
+                                '<p>Viewable area clipping enabled: %6</p>'
+                                '<p>Details: %7</p>').arg(
+                myHazardLayer.source()).arg(
+                myExposureLayer.source()).arg(
+                QtCore.QString(str(myViewportGeoExtent))).arg(
+                QtCore.QString(str(myHazardGeoExtent))).arg(
+                QtCore.QString(str(myExposureGeoExtent))).arg(
+                QtCore.QString(str(self.clipToViewport))).arg(
+                str(e))
+            raise InsufficientOverlapError(myMessage)
+
+        # Next work out the ideal spatial resolution for rasters
+        # in the analysis. If layers are not native WGS84, we estimate
+        # this based on the geographic extents
+        # rather than the layers native extents so that we can pass
+        # the ideal WGS84 cell size and extents to the layer prep routines
+        # and do all preprocessing in a single operation.
+        # All this is done in the function getWGS84resolution
+        myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
+        myCellSize = None
+        myExtraExposureKeywords = {}
+        if myHazardLayer.type() == QgsMapLayer.RasterLayer:
+            # Hazard layer is raster
+            myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
+
+            if myExposureLayer.type() == QgsMapLayer.RasterLayer:
+                # In case of two raster layers establish common resolution
+                myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
+
+                if myHazardGeoCellSize < myExposureGeoCellSize:
+                    myCellSize = myHazardGeoCellSize
+                else:
+                    myCellSize = myExposureGeoCellSize
+
+                # Record native resolution to allow rescaling of exposure data
+                if not numpy.allclose(myCellSize, myExposureGeoCellSize):
+                    myExtraExposureKeywords['resolution'] =\
+                    myExposureGeoCellSize
+            else:
+                # If exposure is vector data grow hazard raster layer to
+                # ensure there are enough pixels for points at the edge of
+                # the view port to be interpolated correctly. This requires
+                # resolution to be available
+                if myExposureLayer.type() != QgsMapLayer.VectorLayer:
+                    raise RuntimeError
+                myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
+                                                        myHazardGeoCellSize)
+        else:
+            # Hazard layer is vector
+
+            # In case hazard data is a point data set, we will not clip the
+            # exposure data to it. The reason being that points may be used
+            # as centers for evacuation circles: See issue #285
+            if myHazardLayer.geometryType() == QGis.Point:
+                myGeoExtent = myExposureGeoExtent
+
+        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,\
+               myExposureLayer, myGeoExtent, myHazardLayer
+
     def optimalClip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
@@ -1994,111 +2123,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         # Get the hazard and exposure layers selected in the combos
-        myHazardLayer = self.getHazardLayer()
-        myExposureLayer = self.getExposureLayer()
-
-        # Reproject all extents to EPSG:4326 if needed
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-
-        # Get the current viewport extent as an array in EPSG:4326
-        myViewportGeoExtent = self.viewportGeoArray()
-
-        # Get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
-                                                  myHazardLayer.crs())
-
-        # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
-                                                    myExposureLayer.crs())
-
-        # Now work out the optimal extent between the two layers and
-        # the current view extent. The optimal extent is the intersection
-        # between the two layers and the viewport.
-        myGeoExtent = None
+        # and other related parameters needed for clipping.
         try:
-            # Extent is returned as an array [xmin,ymin,xmax,ymax]
-            # We will convert it to a QgsRectangle afterwards.
-            if self.clipToViewport:
-                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                               myExposureGeoExtent,
-                                               myViewportGeoExtent)
-            else:
-                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                    myExposureGeoExtent)
-
-        except InsufficientOverlapError, e:
-            # FIXME (MB): This branch is not covered by the tests
-            myMessage = self.tr('<p>There '
-                   'was insufficient overlap between the input layers '
-                   'and / or the layers and the viewable area. Please select '
-                   'two overlapping layers and zoom or pan to them or disable'
-                   ' viewable area clipping in the options dialog'
-                   '. Full details follow:</p>'
-                   '<p>Failed to obtain the optimal extent given:</p>'
-                   '<p>Hazard: %1</p>'
-                   '<p>Exposure: %2</p>'
-                   '<p>Viewable area Geo Extent: %3</p>'
-                   '<p>Hazard Geo Extent: %4</p>'
-                   '<p>Exposure Geo Extent: %5</p>'
-                   '<p>Viewable area clipping enabled: %6</p>'
-                   '<p>Details: %7</p>').arg(
-                        myHazardLayer.source()).arg(
-                        myExposureLayer.source()).arg(
-                        QtCore.QString(str(myViewportGeoExtent))).arg(
-                        QtCore.QString(str(myHazardGeoExtent))).arg(
-                        QtCore.QString(str(myExposureGeoExtent))).arg(
-                        QtCore.QString(str(self.clipToViewport))).arg(
-                        str(e))
-            raise InsufficientOverlapError(myMessage)
-
-        # Next work out the ideal spatial resolution for rasters
-        # in the analysis. If layers are not native WGS84, we estimate
-        # this based on the geographic extents
-        # rather than the layers native extents so that we can pass
-        # the ideal WGS84 cell size and extents to the layer prep routines
-        # and do all preprocessing in a single operation.
-        # All this is done in the function getWGS84resolution
-        myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
-        myCellSize = None
-        extraExposureKeywords = {}
-        if myHazardLayer.type() == QgsMapLayer.RasterLayer:
-
-            # Hazard layer is raster
-            myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
-
-            if myExposureLayer.type() == QgsMapLayer.RasterLayer:
-
-                # In case of two raster layers establish common resolution
-                myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
-
-                if myHazardGeoCellSize < myExposureGeoCellSize:
-                    myCellSize = myHazardGeoCellSize
-                else:
-                    myCellSize = myExposureGeoCellSize
-
-                # Record native resolution to allow rescaling of exposure data
-                if not numpy.allclose(myCellSize, myExposureGeoCellSize):
-                    extraExposureKeywords['resolution'] = myExposureGeoCellSize
-            else:
-                # If exposure is vector data grow hazard raster layer to
-                # ensure there are enough pixels for points at the edge of
-                # the view port to be interpolated correctly. This requires
-                # resolution to be available
-                if myExposureLayer.type() != QgsMapLayer.VectorLayer:
-                    raise RuntimeError
-                myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
-                                                        myHazardGeoCellSize)
-        else:
-            # Hazard layer is vector
-
-            # In case hazad data is a point dataset, we will not clip the
-            # exposure data to it. The reason being that points may be used
-            # as centers for evacuation cirles: See issue #285
-            if myHazardLayer.geometryType() == QGis.Point:
-                myGeoExtent = myExposureGeoExtent
-
-        # Make sure that we have EPSG:4326 versions of the input layers
+            myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,\
+            myExposureLayer, myGeoExtent, myHazardLayer =\
+            self.getClipParameters()
+        except:
+            raise
+            # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
         myTitle = self.tr('Preparing hazard data...')
@@ -2121,16 +2153,44 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMessage = self.tr('We are resampling and clipping the exposure'
                             'layer to match the intersection of the hazard'
                             'layer and the current view extents.')
-        myProgress = 44
+        myProgress = 33
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(
             theLayer=myExposureLayer,
             theExtent=myGeoExtent,
             theCellSize=myCellSize,
-            theExtraKeywords=extraExposureKeywords,
+            theExtraKeywords=myExtraExposureKeywords,
             theHardClipFlag=self.clipHard)
 
-        return myClippedHazardPath, myClippedExposurePath
+        myTitle = self.tr('Preparing aggregation layer...')
+        myMessage = self.tr('We are clipping the aggregation'
+                            'layer to match the intersection of the hazard'
+                            'and exposure layer extents.')
+        myProgress = 39
+        self.showBusy(myTitle, myMessage, myProgress)
+        #If doing entire area, create a fake feature that covers the whole
+        #myGeoExtent
+        if not self.doZonalAggregation:
+            self.postProcessingLayer.startEditing()
+            myProvider = self.postProcessingLayer.dataProvider()
+            # add a feature the size of the impact layer bounding box
+            myFeature = QgsFeature()
+            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
+                QgsPoint(myGeoExtent[0], myGeoExtent[1]),
+                QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
+            myFeature.setAttributeMap({0: QtCore.QVariant(
+                self.tr('Entire area'))})
+            myProvider.addFeatures([myFeature])
+            self.postProcessingLayer.commitChanges()
+
+        myClippedAggregationPath = clipLayer(
+            theLayer=self.postProcessingLayer,
+            theExtent=myGeoExtent,
+            theExplodeFlag=False,
+            theHardClipFlag=self.clipHard)
+
+        return myClippedHazardPath, myClippedExposurePath,\
+               myClippedAggregationPath
 
         ############################################################
         # logic checked to here..............
@@ -2518,6 +2578,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             _, myBufferedGeoExtent, myCellSize, _, _,\
             _ = self.getClipParameters()
         except:
+            LOGGER.exception('Error calculating extents.')
             return  # ignore any error
 
         myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
