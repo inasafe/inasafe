@@ -33,6 +33,28 @@ tdim = 256
 MIN_ZOOM = 2
 MAX_ZOOM = 18
 
+ZOOM_LEVEL_DEGREE = [
+    360,
+    180,
+    90,
+    45,
+    22.5,
+    11.25,
+    5.625,
+    2.813,
+    1.406,
+    0.703,
+    0.352,
+    0.176,
+    0.088,
+    0.044,
+    0.022,
+    0.011,
+    0.005,
+    0.003,
+    0.001
+]
+
 def qHash(point):
     '''Qt doesn't implement a qHash() for QPoint.'''
     return (point.x(),point.y())
@@ -113,16 +135,37 @@ class SlippyMap(QtCore.QObject):
         if emitSignal:
             self.updated.emit(QtCore.QRect(0, 0, self.width, self.height))
 
-        ### Edited by gigih aji ibrahim
-        ### set extent of top corner
-        self.tlLat = latitudeFromTile(ys, self.zoom)
-        self.tlLng = longitudeFromTile(xs, self.zoom)
-        ### set extent of bottom right
-        self.brLat = latitudeFromTile(ye, self.zoom)
-        self.brLng = longitudeFromTile(xe, self.zoom)
+        self.calculateExtent()
 
-#        print "TL : (%s, %s)" % (self.tlLat, self.tlLng)
-#        print "BR : (%s, %s)" % (self.brLat, self.brLng)
+
+    def calculateExtent(self):
+        degree = ZOOM_LEVEL_DEGREE[self.zoom]
+        tileCountX = float(self.width) / tdim
+        widthInDegree = tileCountX * degree
+        tileCountY  = float(self.height) / tdim
+        heightInDegree = tileCountY * degree
+        offsetX = widthInDegree / 2
+        offsetY = heightInDegree / 2
+
+        minX = self.latitude - offsetY
+        minY = self.longitude - offsetX
+
+        maxX = self.latitude + offsetY
+        maxY = self.longitude + offsetX
+
+        def flipNumber(n, limit):
+            if n > limit:
+                return -limit + (n - limit)
+            elif n < -limit:
+                return limit  - (n + limit)
+            else:
+                return n
+
+        self.tlLat = flipNumber(minX, 90)
+        self.brLat = flipNumber(maxX, 90)
+        self.tlLng = flipNumber(minY, 180)
+        self.brLng = flipNumber(maxY, 180)
+
 
     def render(self, painter, rect):
         for x in xrange(self.m_tilesRect.width()+1):

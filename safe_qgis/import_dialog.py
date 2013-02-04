@@ -17,7 +17,7 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import (QRect, SIGNAL, QCoreApplication)
+from PyQt4.QtCore import (QRect, QCoreApplication)
 from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox, QFileDialog)
 from import_dialog_base import Ui_ImportDialogBase
 
@@ -29,7 +29,6 @@ import os
 
 from third_party.lightmaps import LightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
-from requests.exceptions import RequestException
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
