@@ -27,7 +27,7 @@ import requests
 import time
 import os
 
-from third_party.lightmaps import LightMaps
+from inasafe_lightmaps import InasafeLightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
@@ -61,7 +61,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.maxLongitude.setText('106.8629')
         self.maxLatitude.setText('-6.3656')
 
-        self.map = LightMaps(self)
+        self.map = InasafeLightMaps(self)
         self.map.setGeometry(QRect(10, 10, 300, 240))
 
         self.map.m_normalMap.zoomTo(9)

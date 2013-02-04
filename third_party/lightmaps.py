@@ -33,27 +33,6 @@ tdim = 256
 MIN_ZOOM = 2
 MAX_ZOOM = 18
 
-ZOOM_LEVEL_DEGREE = [
-    360,
-    180,
-    90,
-    45,
-    22.5,
-    11.25,
-    5.625,
-    2.813,
-    1.406,
-    0.703,
-    0.352,
-    0.176,
-    0.088,
-    0.044,
-    0.022,
-    0.011,
-    0.005,
-    0.003,
-    0.001
-]
 
 def qHash(point):
     '''Qt doesn't implement a qHash() for QPoint.'''
@@ -135,36 +114,6 @@ class SlippyMap(QtCore.QObject):
         if emitSignal:
             self.updated.emit(QtCore.QRect(0, 0, self.width, self.height))
 
-        self.calculateExtent()
-
-
-    def calculateExtent(self):
-        degree = ZOOM_LEVEL_DEGREE[self.zoom]
-        tileCountX = float(self.width) / tdim
-        widthInDegree = tileCountX * degree
-        tileCountY  = float(self.height) / tdim
-        heightInDegree = tileCountY * degree
-        offsetX = widthInDegree / 2
-        offsetY = heightInDegree / 2
-
-        minX = self.latitude - offsetY
-        minY = self.longitude - offsetX
-
-        maxX = self.latitude + offsetY
-        maxY = self.longitude + offsetX
-
-        def flipNumber(n, limit):
-            if n > limit:
-                return -limit + (n - limit)
-            elif n < -limit:
-                return limit  - (n + limit)
-            else:
-                return n
-
-        self.tlLat = flipNumber(minX, 90)
-        self.brLat = flipNumber(maxX, 90)
-        self.tlLng = flipNumber(minY, 180)
-        self.brLng = flipNumber(maxY, 180)
 
 
     def render(self, painter, rect):
@@ -249,7 +198,7 @@ class SlippyMap(QtCore.QObject):
 
 
 class LightMaps(QtGui.QWidget):
-    def __init__(self, parent=None, pressed=False, snapped=False, zoomed=False, invert=False):
+    def __init__(self, parent=None, mapClass=SlippyMap, pressed=False, snapped=False, zoomed=False, invert=False):
         QtGui.QWidget.__init__(self, parent)
 
         self.pressed = pressed
@@ -265,8 +214,8 @@ class LightMaps(QtGui.QWidget):
 
         self.tapTimer = QtCore.QBasicTimer()
 
-        self.m_normalMap = SlippyMap(self)
-        self.m_largeMap = SlippyMap(self)
+        self.m_normalMap = mapClass(self)
+        self.m_largeMap = mapClass(self)
         self.m_normalMap.updated.connect(self.updateMap)
         self.m_largeMap.updated.connect(self.update)
 
@@ -275,9 +224,6 @@ class LightMaps(QtGui.QWidget):
         self.m_normalMap.longitude = lng
         self.m_normalMap.invalidate()
         self.m_largeMap.invalidate()
-
-    def getExtent(self):
-        return (self.m_normalMap.tlLat, self.m_normalMap.tlLng, self.m_normalMap.brLat, self.m_normalMap.brLng)
 
     def toggleNightMode(self):
         self.invert = not self.invert
