@@ -63,6 +63,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getBufferedExtent,
                                       getSafeImpactFunctions,
                                       safeTr,
+                                      get_free_memory,
                                       get_version,
                                       temp_dir,
                                       ReadLayerError,
@@ -1141,7 +1142,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                                    theContext=myMessage)
             self.displayHtml(myMessage)
             return
-
+        except MemoryError, e:
+            self.spawnError(e,
+                self.tr('An error occurred because it appears that your '
+                    'system does not have sufficient memory. Upgrading '
+                    'your computer so that it has more memory may help. '
+                    'Alternatively, consider using a smaller geographical '
+                    'area for your analysis, or using rasters with a larger '
+                    'cell size.') + self.checkMemoryUsage())
+            self.analysisDone.emit(False)
+            return
         try:
             self.runner = self.calculator.getRunner()
         except (InsufficientParametersError, ReadLayerError), e:
@@ -2484,3 +2494,95 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = str(myItemData.toString())
         return myFunctionID
+
+    @pyqtSlot()
+    def checkMemoryUsage(self):
+        """Slot to check if analysis is feasible when extents change.
+
+        For simplicity, we will do all our calcs in geocrs.
+
+        Args:
+            None
+
+        Returns:
+            str: A string containing notes about how much memory is needed
+                for a single raster and if this is likely to result in an
+                error.
+
+        .. note:: The dock is also updated with a message indicating if the
+            memory usage is likely to be too much for the current system.
+
+        """
+        LOGGER.info('Extents changed!')
+        try:
+            _, myBufferedGeoExtent, myCellSize, _, _,\
+            _ = self.getClipParameters()
+        except:
+            return  # ignore any error
+
+        myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
+        myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
+        try:
+            myWidth = myWidth / myCellSize
+            myHeight = myHeight / myCellSize
+        except TypeError:
+            # Could have been a vector layer for example
+            LOGGER.exception('Error: Computed cellsize was None.')
+            _, myReadyMessage = self.validate()
+            self.displayHtml(myReadyMessage)
+            return
+
+        LOGGER.info('Width: %s' % myWidth)
+        LOGGER.info('Height: %s' % myHeight)
+        LOGGER.info('Pixel Size: %s' % myCellSize)
+
+        # Compute mem requirement in MB (assuming numpy uses 8bytes by per
+        # cell) see this link:
+        # http://stackoverflow.com/questions/11784329/
+        #      python-memory-usage-of-numpy-arrays
+        # Also note that the on-disk requirement of the clipped tifs is about
+        # half this since the tifs as in single precision,
+        # whereas numpy arrays are in double precision.
+        myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
+        myFreeMemory = get_free_memory()
+        # We work on the assumption that if more than 10% of the available
+        # memory is occupied by a single layer we could run out of memory
+        # (depending on the impact function). This is because multiple
+        # in memory copies of the layer are often made during processing.
+        myWarningLimit = 10
+        myUsageIndicator = (float(myRequirement) / float(myFreeMemory)) * 100
+        myCountsMessage = ('Memory requirement: about %imb per raster layer ('
+                           '%imb available). %.2f / %s' %
+                           (myRequirement, myFreeMemory, myUsageIndicator,
+                            myWarningLimit))
+        myMessage = ''
+        if myWarningLimit <= myUsageIndicator:
+            myMessage = self.tr('There may not be enough free memory to '
+                'run this analysis. You can attempt to run the '
+                'analysis anyway, but note that your computer may '
+                'become unresponsive during execution, '
+                'and / or the analysis may fail due to insufficient '
+                'memory. Proceed at your own risk.')
+            mySuggestion = self.tr('Try zooming in to a smaller area or using '
+                'a raster layer with a coarser resolution'
+                'to speed up execution and reduce memory'
+                'requirements. You could also try adding'
+                'more RAM to your computer.')
+            myHtmlMessage = ('<table class="condensed">'
+                             '<tr><th class="warning '
+                             'button-cell">%s</th></tr>\n'
+                             '<tr><td>%s</td></tr>\n'
+                             '<tr><th class="problem '
+                             'button-cell">%s</th></tr>\n'
+                             '<tr><td>%s</td></tr>\n</table>' %
+                             (
+                                 self.tr('Memory usage:'),
+                                 myMessage,
+                                 self.tr('Suggestion'),
+                                 mySuggestion))
+            _, myReadyMessage = self.validate()
+            myReadyMessage += myHtmlMessage
+            self.displayHtml(myReadyMessage)
+
+        LOGGER.info(myCountsMessage)
+        return myMessage + ' ' + myCountsMessage

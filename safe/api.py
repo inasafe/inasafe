@@ -42,7 +42,8 @@ from safe.common.exceptions import (InaSAFEError,
 from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,
-                                   ugettext as safe_tr)
+                                   ugettext as safe_tr,
+                                   get_free_memory)
 from safe.common.version import get_version
 from safe.common.tables import Table, TableCell, TableRow
 # pylint: enable=W0611

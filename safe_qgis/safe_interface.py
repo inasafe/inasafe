@@ -41,10 +41,12 @@ from safe.api import (get_admissible_plugins,
                       temp_dir,
                       unique_filename,
                       safe_tr as safeTr,
+                      get_free_memory,
                       calculate_impact as safe_calculate_impact,
                       BoundingBoxError,
                       ReadLayerError,
-                      get_plugins, get_version)
+                      get_plugins,
+                      get_version)
 from safe.postprocessors import get_post_processors
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611
