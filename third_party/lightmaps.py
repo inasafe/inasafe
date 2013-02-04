@@ -113,6 +113,17 @@ class SlippyMap(QtCore.QObject):
         if emitSignal:
             self.updated.emit(QtCore.QRect(0, 0, self.width, self.height))
 
+        ### Edited by gigih aji ibrahim
+        ### set extent of top corner
+        self.tlLat = latitudeFromTile(ys, self.zoom)
+        self.tlLng = longitudeFromTile(xs, self.zoom)
+        ### set extent of bottom right
+        self.brLat = latitudeFromTile(ye, self.zoom)
+        self.brLng = longitudeFromTile(xe, self.zoom)
+
+#        print "TL : (%s, %s)" % (self.tlLat, self.tlLng)
+#        print "BR : (%s, %s)" % (self.brLat, self.brLng)
+
     def render(self, painter, rect):
         for x in xrange(self.m_tilesRect.width()+1):
             for y in xrange(self.m_tilesRect.height()+1):
@@ -221,6 +232,9 @@ class LightMaps(QtGui.QWidget):
         self.m_normalMap.longitude = lng
         self.m_normalMap.invalidate()
         self.m_largeMap.invalidate()
+
+    def getExtent(self):
+        return (self.m_normalMap.tlLat, self.m_normalMap.tlLng, self.m_normalMap.brLat, self.m_normalMap.brLng)
 
     def toggleNightMode(self):
         self.invert = not self.invert

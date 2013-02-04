@@ -64,7 +64,18 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.map = LightMaps(self)
         self.map.setGeometry(QRect(10, 10, 300, 240))
+
+        self.map.m_normalMap.zoomTo(9)
         self.map.setCenter(-6.4338, 106.7685)
+
+        self.map.m_normalMap.updated.connect(self.updateExtent)
+
+    def updateExtent(self):
+        myExtent = self.map.getExtent()
+        self.minLongitude.setText(str(myExtent[1]))
+        self.minLatitude.setText(str(myExtent[0]))
+        self.maxLongitude.setText(str(myExtent[3]))
+        self.maxLatitude.setText(str(myExtent[2]))
 
     def on_pBtnDir_clicked(self):
         self.outDir.setText(QFileDialog.getExistingDirectory(self, self.tr("Select Directory")))
