@@ -69,12 +69,13 @@ class InasafeSlippyMap(SlippyMap):
         Return:
             a number in range of -limit and +limit
         """
-        if theNumber > theLimit:
-            return -theLimit + (theNumber - theLimit)
-        elif theNumber < -theLimit:
-            return theLimit - (theNumber + theLimit)
-        else:
-            return theNumber
+        while theNumber > theLimit:
+            theNumber = theNumber - (2 * theLimit)
+
+        while theNumber < -theLimit:
+            theNumber = theNumber + (2 * theLimit)
+
+        return theNumber
 
     def calculateExtent(self):
         """
