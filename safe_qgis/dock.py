@@ -928,7 +928,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Propagates any error from :func:optimalClip()
         """
         try:
-            myHazardFilename, myExposureFilename = self.optimalClip()
+            myHazardFilename, myExposureFilename, \
+            myAggregationFilename = self.optimalClip()
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
