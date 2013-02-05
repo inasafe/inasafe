@@ -58,22 +58,40 @@ class InasafeSlippyMap(SlippyMap):
         SlippyMap.invalidate(self, theEmitSignal)
         self.calculateExtent()
 
-    def flipNumber(self, theNumber, theLimit):
+
+    def flipLatitude(self, theNumber):
         """
         This function will return a number which always in range of
-        -limit and +limit. When the number is out of range, the number
+        -90 and +90. When the number is out of range, the number
         will wrap around.
         Params:
-            * theNumber - the number
-            * theLimit  - the limit of range in positive
+            * theNumber - the number in degree
         Return:
-            a number in range of -limit and +limit
+            a number in range of -90 and +90
         """
-        while theNumber > theLimit:
-            theNumber = theNumber - (2 * theLimit)
+        if theNumber > 90:
+            theNumber =  180 - theNumber
+        if theNumber < -90:
+            theNumber =  -180 - theNumber
 
-        while theNumber < -theLimit:
-            theNumber = theNumber + (2 * theLimit)
+        return theNumber
+
+
+    def flipLongitude(self, theNumber):
+        """
+        This function will return a number which always in range of
+        -180 and +180. When the number is out of range, the number
+        will wrap around.
+        Params:
+            * theNumber - the number in degree
+        Return:
+            a number in range of -180 and +180
+        """
+        while theNumber > 180:
+            theNumber = theNumber - 360
+
+        while theNumber < -180:
+            theNumber = theNumber + 360
 
         return theNumber
 
@@ -101,10 +119,10 @@ class InasafeSlippyMap(SlippyMap):
         myMaxY = self.latitude + myOffsetY
         myMaxX = self.longitude + myOffsetX
 
-        self.tlLat = self.flipNumber(myMinY, 90)
-        self.brLat = self.flipNumber(myMaxY, 90)
-        self.tlLng = self.flipNumber(myMinX, 180)
-        self.brLng = self.flipNumber(myMaxX, 180)
+        self.tlLat = self.flipLatitude(myMinY)
+        self.brLat = self.flipLatitude(myMaxY)
+        self.tlLng = self.flipLongitude(myMinX)
+        self.brLng = self.flipLongitude(myMaxX)
 
 
 class InasafeLightMaps(LightMaps):
