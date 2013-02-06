@@ -1,4 +1,4 @@
-    """
+"""
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **QGIS plugin implementation.**
 
