@@ -32,7 +32,7 @@ class ITBFatalityFunction(FunctionProvider):
     In this study, the same functional form as Allen (2009) is adopted
     to express fatality rate as a function of intensity (see Eq. 10 in the
     report). The Matlab built-in function (fminsearch) for  Nelder-Mead
-    algorithm is used to estimate the model parameters. The objective
+    algorithm was used to estimate the model parameters. The objective
     function (L2G norm) that is minimised during the optimisation is the
     same as the one used by Jaiswal et al. (2010).
 
@@ -68,6 +68,9 @@ class ITBFatalityFunction(FunctionProvider):
         - consistency between selected GMPEs with those in use by BMKG.
           These issues will be addressed by ITB team in the final report.
 
+    Note: Because of these caveats, decisions should not be made solely on
+    the information presented here and should always be verified by ground
+    truthing and other reliable information sources.
 
     :author Hadi Ghasemi
     :rating 3
