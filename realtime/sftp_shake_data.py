@@ -237,17 +237,22 @@ class SftpShakeData:
             EventUndefinedError, NetworkError
         """
         myLocalPath = os.path.join(shakemapCacheDir(), self.eventId)
-        myXMLFile = os.path.join(myLocalPath, 'output', self.fileName())
+        myLocalParentPath = os.path.join(myLocalPath, 'output')
+        myXMLFile = os.path.join(myLocalParentPath, self.fileName())
         if os.path.exists(myXMLFile):
             return myLocalPath
 
         # fetch from sftp
         trials = [i + 1 for i in xrange(theRetries)]
         remote_path = os.path.join(self.sftpclient.workdir_path, self.eventId)
+        myXMLRemotePath = os.path.join(remote_path, 'output', self.fileName())
         for my_counter in trials:
             myLastError = None
             try:
-                self.sftpclient.download_path(remote_path, shakemapCacheDir())
+                mkDir(myLocalPath)
+                mkDir(os.path.join(myLocalPath, 'output'))
+                self.sftpclient.download_path(myXMLRemotePath,
+                    myLocalParentPath)
             except NetworkError, e:
                 myLastError = e
             except:
