@@ -18,27 +18,19 @@ class Test_real_plugins(unittest.TestCase):
         # Check empty call returns all
         P = get_admissible_plugins([])
 
-        #print
-        #for p in P:
-        #    print p, P[p]
-
         # List the known impact function names
         # based on their class names - not their titles
         msg = 'Available impact functions are: %s' % str(P.keys())
-        #assert 'Earthquake Guidelines Function' in P, msg
-        assert 'Padang Earthquake Building Damage Function' in P, msg
-        # Added by Tim to replace WB (see below)
-        assert 'Flood Building Impact Function' in P, msg
-        # Tim commented out W B Flood Evacuation Function - its in experimental
-        #assert 'W B Flood Evacuation Function' in P, msg
-        #assert 'W B Flood Evacuation Function' in P, msg
-        #assert 'Tephra Building Impact Function' in P, msg
-        #assert 'Tephra Population Impact Function' in P, msg
-        #assert 'Flood Road Impact Function' in P, msg
+        #print msg
+        assert 'Flood Evacuation Function Vector Hazard' in P, msg
         assert 'I T B Earthquake Building Damage Function' in P, msg
-        assert 'I T B Fatality Function' in P, msg
-        assert 'Categorised Hazard Building Impact Function' in P, msg
+        assert 'Earthquake Building Impact Function' in P, msg
+        assert 'P A G Fatality Function' in P, msg
         assert 'Flood Evacuation Function' in P, msg
+        assert 'Flood Building Impact Function' in P, msg
+        assert 'I T B Fatality Function' in P, msg
+        assert 'Volcano Building Impact' in P, msg
+        assert 'Volcano Polygon Hazard Population' in P, msg
 
         # This one should get 2 earthquake building impact functions
         D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
@@ -51,8 +43,7 @@ class Test_real_plugins(unittest.TestCase):
         P = get_admissible_plugins([D1, D2])
         msg = 'Expected: len(P) >= 2, Got: len(P) is %i' % len(P)
         assert len(P) >= 1, msg  # Depending on other tests there could be more
-        #assert 'Earthquake Guidelines Function' in P
-        assert 'Padang Earthquake Building Damage Function' in P
+        assert 'Earthquake Building Impact Function' in P
 
         # This one should get 3 flood population impact functions
         D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
