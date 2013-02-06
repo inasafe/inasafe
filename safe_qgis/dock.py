@@ -184,7 +184,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myCanvas = self.iface.mapCanvas()
 
         # Enable on the fly projection by default
-        myCanvas.mapRenderer().setProjectionsEnabled(True);
+        myCanvas.mapRenderer().setProjectionsEnabled(True)
 
         # Listen for changes in canvas extent so we can
         # check if the analysis is feasible as the extent changes
