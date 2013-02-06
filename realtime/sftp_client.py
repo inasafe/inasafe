@@ -16,6 +16,7 @@ __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys
 import paramiko
 import ntpath
 from stat import S_ISDIR
@@ -29,7 +30,11 @@ LOGGER = logging.getLogger('InaSAFE')
 
 my_host = '118.97.83.243'
 my_username = 'geospasial'
-my_password = os.environ['QUAKE_SERVER_PASSWORD']
+try:
+    my_password = os.environ['QUAKE_SERVER_PASSWORD']
+except KeyError:
+    LOGGER.exception('QUAKE_SERVER_PASSWORD not set!')
+    sys.exit()
 
 my_remote_path = 'shakemaps'
 
@@ -83,8 +88,9 @@ class SFtpClient:
             # download file to local_path
             file_name = get_path_tail(remote_path)
             local_file_path = os.path.join(local_path, file_name)
-            print 'file %s will be downloaded to %s' % (remote_path,
-                                                        local_file_path)
+
+            LOGGER.info('file %s will be downloaded to %s' % (remote_path,
+                                                        local_file_path))
             self.sftp.get(remote_path, local_file_path)
 
     def is_dir(self, path):

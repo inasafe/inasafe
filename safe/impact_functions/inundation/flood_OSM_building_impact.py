@@ -66,7 +66,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     'hazard or the the attributes mentioned under input '
                     'in case of vector hazard.')
 
-    parameters = {'postprocessors': {'OSMBuildingType': {'on': True}}}
+    parameters = {'postprocessors': {'BuildingType': {'on': True}}}
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)

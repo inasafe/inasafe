@@ -1,5 +1,6 @@
 import datetime
 import os
+import sys
 import subprocess
 from exceptions import WindowsError
 
@@ -43,7 +44,7 @@ def get_version(version=None):
     # This crashes on windows
     if version[3] == 'alpha' and version[4] == 0:
         # Currently failed on windows and mac
-        if 'nt' in os.name or 'posix' in os.name:
+        if 'win32' in sys.platform or 'darwin' in sys.platform:
             sub = '.dev-master'
         else:
             try:

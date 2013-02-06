@@ -41,7 +41,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
-    """Dialog implementation class for the Risk In A Box keywords editor."""
+    """Dialog implementation class for the InaSAFE keywords editor."""
 
     def __init__(self, parent, iface, theDock=None, theLayer=None):
         """Constructor for the dialog.

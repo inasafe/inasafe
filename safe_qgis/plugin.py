@@ -246,6 +246,23 @@ class Plugin:
         QObject.connect(self.keyAction, SIGNAL("triggered()"),
                         self.keyActionF7)
 
+        #---------------------------------------
+        # Create action for minimum needs dialog
+        #---------------------------------------
+        self.actionMinimumNeeds = QAction(
+            QIcon(':/plugins/inasafe/minimum_needs.png'),
+            self.tr('InaSAFE Minimum Needs Tool'), self.iface.mainWindow())
+        self.actionMinimumNeeds.setStatusTip(self.tr(
+            'Open InaSAFE minimum needs tool'))
+        self.actionMinimumNeeds.setWhatsThis(self.tr(
+            'Open InaSAFE minimum needs tool'))
+        QObject.connect(self.actionMinimumNeeds, SIGNAL('triggered()'),
+                        self.showMinimumNeeds)
+
+        self.iface.addToolBarIcon(self.actionMinimumNeeds)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+                                   self.actionMinimumNeeds)
+
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
@@ -301,6 +318,9 @@ class Plugin:
                                     self.actionOptions)
         self.iface.removeToolBarIcon(self.actionOptions)
         self.iface.removePluginMenu(self.tr('InaSAFE'),
+                                    self.actionMinimumNeeds)
+        self.iface.removeToolBarIcon(self.actionMinimumNeeds)
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionImpactFunctionsDoc)
         self.iface.removeToolBarIcon(self.actionImpactFunctionsDoc)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
@@ -350,6 +370,27 @@ class Plugin:
         else:
             self.dockWidget.setVisible(True)
             self.dockWidget.raise_()
+
+    def showMinimumNeeds(self):
+        """Show the minimum needs dialog.
+
+        This slot is called when the user clicks the minimum needs toolbar
+        icon or menu item associated with this plugin.
+
+        .. see also:: :func:`Plugin.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.minimum_needs import MinimumNeeds
+
+        myDialog = MinimumNeeds(self.iface.mainWindow())
+        myDialog.show()
 
     def showOptions(self):
         """Show the options dialog.

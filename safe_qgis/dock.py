@@ -41,7 +41,9 @@ from qgis.core import (QgsMapLayer,
                        QgsPoint,
                        QgsField,
                        QgsVectorFileWriter,
-                       QGis
+                       QGis,
+                       QgsSingleSymbolRendererV2,
+                       QgsFillSymbolV2
                        )
 from qgis.analysis import QgsZonalStatistics
 
@@ -58,7 +60,8 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  qgisVersion,
                                  getDefaults,
                                  impactLayerAttribution,
-                                 copyInMemory)
+                                 copyInMemory,
+                                 addComboItemInOrder)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -70,6 +73,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       get_version,
                                       temp_dir,
                                       safe_read_layer,
+                                      get_free_memory,
                                       ReadLayerError,
                                       points_in_and_outside_polygon,
                                       calculate_polygon_centroid,
@@ -93,6 +97,8 @@ from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
 
+from third_party.odict import OrderedDict
+
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -102,6 +108,7 @@ LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
 
+#noinspection PyArgumentList
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
 
@@ -189,6 +196,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #            port=53100,
         #            stdoutToServer=True,
         #            stderrToServer=True)
+
+        myCanvas = self.iface.mapCanvas()
+
+        # Enable on the fly projection by default
+        myCanvas.mapRenderer().setProjectionsEnabled(True)
+
+        # Listen for changes in canvas extent so we can
+        # check if the analysis is feasible as the extent changes
+        QtCore.QObject.connect(myCanvas, QtCore.SIGNAL('extentsChanged()'),
+                               self.checkMemoryUsage)
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
@@ -384,6 +401,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage += '</table>'
             return (False, myMessage)
         else:
+            # What does this todo mean? TS
             # TODO refactor impact_functions so it is accessible and user here
             myMessage = '<table class="condensed">'
             myNotes = self.tr('You can now proceed to run your model by'
@@ -690,7 +708,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             #check if layer is a vector polygon layer
             if isLayerPolygonal(myLayer):
-                self.addComboItemInOrder(self.cboAggregation, myTitle,
+                addComboItemInOrder(self.cboAggregation, myTitle,
                     mySource)
                 self.aggregationLayers.append(myLayer)
 
@@ -704,10 +722,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 continue
 
             if myCategory == 'hazard':
-                self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
+                addComboItemInOrder(self.cboHazard, myTitle, mySource)
                 self.hazardLayers.append(myLayer)
             elif myCategory == 'exposure':
-                self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
+                addComboItemInOrder(self.cboExposure, myTitle, mySource)
                 self.exposureLayers.append(myLayer)
 
         #handle the cboAggregation combo
@@ -779,7 +797,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # Provide function title and ID to function combo:
                 # myFunctionTitle is the text displayed in the combo
                 # myFunctionID is the canonical identifier
-                self.addComboItemInOrder(self.cboFunction,
+                addComboItemInOrder(self.cboFunction,
                                          myFunctionTitle,
                                          theItemData=myFunctionID)
         except Exception, e:
@@ -923,7 +941,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Propagates any error from :func:optimalClip()
         """
         try:
-            myHazardFilename, myExposureFilename = self.optimalClip()
+            myHazardFilename, myExposureFilename, \
+            myAggregationFilename = self.optimalClip()
+            # in case aggregation layer is larger than the impact layer let's
+            # trim it down to  avoid extra calculations
+            self.postProcessingLayer = QgsVectorLayer(
+                myAggregationFilename, 'myLayerName', 'ogr')
+            if not self.postProcessingLayer.isValid():
+                myMessage = self.tr('Error when reading %1').arg(
+                    self.postProcessingLayer.lastError())
+                raise ReadLayerError(myMessage)
+
             if self.doZonalAggregation:
                 myHazardFilename, myExposureFilename = \
                     self.prepareInputLayerForAggregation(
@@ -1117,7 +1145,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'your computer so that it has more memory may help. '
                     'Alternatively, consider using a smaller geographical '
                     'area for your analysis, or using rasters with a larger '
-                    'cell size.'))
+                    'cell size.') + self.checkMemoryUsage())
             return
 
         try:
@@ -1278,7 +1306,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         for myPostprocPolygonIndex, myPostprocPolygon in enumerate(
                                                            myPostprocPolygons):
-            LOGGER.debug('')
             LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
             myPolygonsCount = len(myRemainingPolygons)
             postprocProvider.featureAtId(myPostprocPolygonIndex,
@@ -1450,9 +1477,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     except TypeError:
                         LOGGER.debug('ERROR with FID %s', myMappedIndex)
 
-            LOGGER.debug('Inside %s' % myInsidePolygons)
-            LOGGER.debug('Outside %s' % myOutsidePolygons)
-            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
+#            LOGGER.debug('Inside %s' % myInsidePolygons)
+#            LOGGER.debug('Outside %s' % myOutsidePolygons)
+#            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
             if len(myNextIterPolygons) > 0:
                 #some polygons are still completely outside of the postprocPoly
                 #so go on and reiterate using only these
@@ -1574,7 +1601,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: str - a string containing the html in the requested format.
         """
 
-        LOGGER.debug(self.postProcessingOutput)
+#        LOGGER.debug(self.postProcessingOutput)
         if self.aggregationErrorSkipPostprocessing is not None:
             myHTML = ('<table class="table table-striped condensed">'
             '    <tr>'
@@ -1613,8 +1640,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHTML = ''
         for proc, resList in self.postProcessingOutput.iteritems():
             #sorting using the first indicator of a postprocessor
-            myFirstKey = resList[0][1].keyAt(0)
             try:
+                myFirstKey = resList[0][1].keyAt(0)
             # [1]['Total']['value']
             # resList is for example:
             # [
@@ -1694,8 +1721,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             ReadLayerError
         """
         myImpactLayer = self.runner.impactLayer()
-        #[West, South, East, North]
-        myImpactBBox = myImpactLayer.get_bounding_box()
 
         myTitle = self.tr('Aggregating results...')
         myMessage = self.tr('This may take a little while - we are '
@@ -1703,19 +1728,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.cboAggregation.currentText())
         myProgress = 88
         self.showBusy(myTitle, myMessage, myProgress)
-
-        if not self.doZonalAggregation:
-            self.postProcessingLayer.startEditing()
-            myProvider = self.postProcessingLayer.dataProvider()
-            # add a feature the size of the impact layer bounding box
-            myFeature = QgsFeature()
-            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
-                QgsPoint(myImpactBBox[0], myImpactBBox[1]),
-                QgsPoint(myImpactBBox[2], myImpactBBox[3]))))
-            myFeature.setAttributeMap({0: QtCore.QVariant(
-                self.tr('Entire area'))})
-            myProvider.addFeatures([myFeature])
-            self.postProcessingLayer.commitChanges()
 
         myQGISImpactLayer = self.readImpactLayer(myImpactLayer)
         if not myQGISImpactLayer.isValid():
@@ -1725,22 +1737,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 .arg(myQGISImpactLayer.name())
                 .arg(self.postProcessingLayer.name()))
 
-        # in case aggregation layer is larger than the impact layer let's
-        # trim it down to  avoid extra calculations
-        clippedAggregationLayerPath = clipLayer(
-            theLayer=self.postProcessingLayer,
-            theExtent=myImpactBBox,
-            theExplodeFlag=False,
-            theHardClipFlag=self.clipHard)
-
-        self.postProcessingLayer = QgsVectorLayer(
-            clippedAggregationLayerPath, myLayerName, 'ogr')
-        if not self.postProcessingLayer.isValid():
-            myMessage = self.tr('Error when reading %1').arg(
-                self.postProcessingLayer.lastError())
-            raise ReadLayerError(myMessage)
-
-            #delete unwanted fields
+        #delete unwanted fields
         myProvider = self.postProcessingLayer.dataProvider()
         myFields = myProvider.fields()
         myUnneededAttributes = []
@@ -1763,6 +1760,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.keywordIO.appendKeywords(
             self.postProcessingLayer, {'title': myLayerName})
 
+        #find needed statistics type
+        try:
+            self.statisticsType = self.keywordIO.readKeywords(
+                myQGISImpactLayer, 'statistics_type')
+            self.statisticsClasses = self.keywordIO.readKeywords(
+                myQGISImpactLayer, 'statistics_classes')
+
+        except KeywordNotFoundError:
+            #default to summing
+            self.statisticsType = 'sum'
+
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
             self._aggregateResultsVector(myQGISImpactLayer)
@@ -1774,44 +1782,54 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers and self.doZonalAggregation:
-            myProvider = self.postProcessingLayer.dataProvider()
-            myAttr = self.getAggregationFieldNameSum()
-            myAttrIndex = myProvider.fieldNameIndex(myAttr)
-            myProvider.select([myAttrIndex], QgsRectangle(), False)
-            myFeature = QgsFeature()
-            myHighestVal = 0
+        if (self.showPostProcLayers and self.doZonalAggregation):
+            if self.statisticsType == 'sum':
+                #style layer if we are summing
+                myProvider = self.postProcessingLayer.dataProvider()
+                myAttr = self.getAggregationFieldNameSum()
+                myAttrIndex = myProvider.fieldNameIndex(myAttr)
+                myProvider.select([myAttrIndex], QgsRectangle(), False)
+                myFeature = QgsFeature()
+                myHighestVal = 0
 
-            while myProvider.nextFeature(myFeature):
-                myAttrMap = myFeature.attributeMap()
-                myVal, ok = myAttrMap[myAttrIndex].toInt()
-                if ok and myVal > myHighestVal:
-                    myHighestVal = myVal
+                while myProvider.nextFeature(myFeature):
+                    myAttrMap = myFeature.attributeMap()
+                    myVal, ok = myAttrMap[myAttrIndex].toInt()
+                    if ok and myVal > myHighestVal:
+                        myHighestVal = myVal
 
-            myClasses = []
-            myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
-            myStep = int(myHighestVal / len(myColors))
-            LOGGER.debug('Max val %s, my step %s' % (myHighestVal, myStep))
-            myCounter = 0
-            for myColor in myColors:
-                myMin = myCounter
-                myCounter += myStep
-                myMax = myCounter
+                myClasses = []
+                myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
+                myStep = int(myHighestVal / len(myColors))
+                myCounter = 0
+                for myColor in myColors:
+                    myMin = myCounter
+                    myCounter += myStep
+                    myMax = myCounter
 
-                myClasses.append(
-                    {'min': myMin,
-                     'max': myMax,
-                     'colour': myColor,
-                     'transparency': 30,
-                     'label': '%s - %s' % (myMin, myMax)})
-                myCounter += 1
+                    myClasses.append(
+                        {'min': myMin,
+                         'max': myMax,
+                         'colour': myColor,
+                         'transparency': 30,
+                         'label': '%s - %s' % (myMin, myMax)})
+                    myCounter += 1
 
-            myStyle = {'target_field': myAttr,
-                       'style_classes': myClasses}
+                myStyle = {'target_field': myAttr,
+                           'style_classes': myClasses}
+                setVectorStyle(self.postProcessingLayer, myStyle)
+            else:
+                #make style of layer pretty much invisible
+                myProps = {'style': 'no',
+                           'color_border': '0,0,0,127',
+                           'width_border': '0.0'
+                           }
+                mySymbol = QgsFillSymbolV2.createSimple(myProps)
+                myRenderer = QgsSingleSymbolRendererV2(mySymbol)
+                self.postProcessingLayer.setRendererV2(myRenderer)
+                self.postProcessingLayer.saveDefaultStyle()
 
-            setVectorStyle(self.postProcessingLayer, myStyle)
-
-    def _aggregateResultsVector(self, myQgisImpactLayer):
+    def _aggregateResultsVector(self, myQGISImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
 
         Args:
@@ -1822,26 +1840,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
+        global myAttrs
         try:
-            self.targetField = self.keywordIO.readKeywords(myQgisImpactLayer,
+            self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
                 'target_field')
         except KeywordNotFoundError:
             myMessage = self.tr('No "target_field" keyword found in the impact'
                                 ' layer %1 keywords. The impact function'
                                 ' should define this.').arg(
-                                myQgisImpactLayer.name())
+                                myQGISImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
             return
-        myImpactProvider = myQgisImpactLayer.dataProvider()
-        myTargetFieldIndex = myQgisImpactLayer.fieldNameIndex(self.targetField)
+        myImpactProvider = myQGISImpactLayer.dataProvider()
+        myTargetFieldIndex = myQGISImpactLayer.fieldNameIndex(self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = self.tr('No attribute "%1" was found in the attribute '
                                 'table for layer "%2". The impact function '
                                 'must define this attribute for '
                                 'postprocessing to work.').arg(
-                                    self.targetField, myQgisImpactLayer.name())
+                                    self.targetField, myQGISImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.aggregationErrorSkipPostprocessing = myMessage
             return
@@ -1851,14 +1870,30 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myTotal = 0
 
-        #add the total field to the postProcessingLayer
         myPostprocessorProvider = self.postProcessingLayer.dataProvider()
         self.postProcessingLayer.startEditing()
-        myAggrField = self.getAggregationFieldNameSum()
-        myPostprocessorProvider.addAttributes([QgsField(myAggrField,
-            QtCore.QVariant.Int)])
-        self.postProcessingLayer.commitChanges()
-        myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(myAggrField)
+
+        if self.statisticsType == 'class_count':
+            #add the class count fields to the postProcessingLayer
+            myFields = [QgsField('%s_%s' % (f, self.targetField),
+                QtCore.QVariant.String) for f in self.statisticsClasses]
+            myPostprocessorProvider.addAttributes(myFields)
+            self.postProcessingLayer.commitChanges()
+
+            myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
+            myAggrFieldMap = {}
+            for k, v in myTmpAggrFieldMap.iteritems():
+                myAggrFieldMap[str(k)] = v
+
+        elif self.statisticsType == 'sum':
+            #add the total field to the postProcessingLayer
+            myAggrField = self.getAggregationFieldNameSum()
+            myPostprocessorProvider.addAttributes([QgsField(myAggrField,
+                QtCore.QVariant.Int)])
+            self.postProcessingLayer.commitChanges()
+            myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(
+                myAggrField)
+
         self.postProcessingLayer.startEditing()
 
         mySafeImpactLayer = self.runner.impactLayer()
@@ -1899,8 +1934,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myRemainingPoints = myImpactGeoms
 
                 for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
-                    myTotal = 0
-
                     if hasattr(myPolygon, 'outer_ring'):
                         outer_ring = myPolygon.outer_ring
                         inner_rings = myPolygon.inner_rings
@@ -1908,6 +1941,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         # Assume it is an array
                         outer_ring = myPolygon
                         inner_rings = None
+
                     inside, outside = points_in_and_outside_polygon(
                         myRemainingPoints,
                         outer_ring,
@@ -1915,18 +1949,59 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         closed=True,
                         check_input=True)
 
-                    #summ attributes
+                    #self.impactLayerAttributes is a list of list of dict
+                    #[
+                    #   [{...},{...},{...}],
+                    #   [{...},{...},{...}]
+                    #]
                     self.impactLayerAttributes.append([])
-                    for i in inside:
-                        try:
-                            myTotal += myRemainingValues[i][self.targetField]
-                        except TypeError:
-                            pass
-                        self.impactLayerAttributes[myPolygonIndex].append(
-                            myRemainingValues[i])
+                    if self.statisticsType == 'class_count':
+                        myResults = OrderedDict()
+                        for myClass in self.statisticsClasses:
+                            myResults[myClass] = 0
+
+                        for i in inside:
+                            myKey = myRemainingValues[i][self.targetField]
+                            try:
+                                myResults[myKey] += 1
+                            except KeyError:
+                                myError = ('StatisticsClasses %s does not '
+                                           'include the %s class which was '
+                                           'found in the data. This is a '
+                                           'problem in the %s '
+                                           'statistics_classes definition' %
+                                           (self.statisticsClasses,
+                                            myKey,
+                                            self.getFunctionID()))
+                                raise KeyError(myError)
+
+                            self.impactLayerAttributes[myPolygonIndex].append(
+                                myRemainingValues[i])
+                        myAttrs = {}
+                        for k, v in myResults.iteritems():
+                            myKey = '%s_%s' % (k, self.targetField)
+                            #FIXME (MB) remove next line when we get rid of
+                            #shape files as internal format
+                            myKey = myKey[:10]
+                            myAggrFieldIndex = myAggrFieldMap[myKey]
+                            myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
+
+                    elif self.statisticsType == 'sum':
+                        #by default summ attributes
+                        myTotal = 0
+                        for i in inside:
+                            try:
+                                myTotal += myRemainingValues[i][
+                                           self.targetField]
+                            except TypeError:
+                                pass
+
+                            #add all attributes to the impactLayerAttributes
+                            self.impactLayerAttributes[myPolygonIndex].append(
+                                myRemainingValues[i])
+                        myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
 
                     # Add features inside this polygon
-                    myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
                     myFID = myPolygonIndex
                     myPostprocessorProvider.changeAttributeValues(
                         {myFID: myAttrs})
@@ -1958,23 +2033,59 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                     'than points or polygons not implemented '
                                     'yet not implemented yet. '
                                     'Called on %1').arg(
-                    myQgisImpactLayer.name())
+                    myQGISImpactLayer.name())
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.aggregationErrorSkipPostprocessing = myMessage
                 self.postProcessingLayer.commitChanges()
                 return
         else:
-            #loop over all features in impact layer
-            self.impactLayerAttributes.append([])
-            for myImpactValueList in myImpactValues:
-                if myImpactValueList[self.targetField] == 'None':
-                    myImpactValueList[self.targetField] = None
-                try:
-                    myTotal += myImpactValueList[self.targetField]
-                except TypeError:
-                    pass
-                self.impactLayerAttributes[0].append(myImpactValueList)
-            myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+            if self.statisticsType == 'class_count':
+                #loop over all features in impact layer
+                myResults = OrderedDict()
+                for myClass in self.statisticsClasses:
+                    myResults[myClass] = 0
+
+                self.impactLayerAttributes.append([])
+                for myImpactValueList in myImpactValues:
+                    myKey = myImpactValueList[self.targetField]
+                    try:
+                        myResults[myKey] += 1
+                    except KeyError:
+                        myError = ('StatisticsClasses %s does not '
+                                   'include the %s class which was '
+                                   'found in the data. This is a '
+                                   'problem in the %s '
+                                   'statistics_classes definition' %
+                                   (self.statisticsClasses,
+                                    myKey,
+                                    self.getFunctionID()))
+                        raise KeyError(myError)
+
+                    self.impactLayerAttributes[0].append(myImpactValueList)
+
+                myAttrs = {}
+                for k, v in myResults.iteritems():
+                    myKey = '%s_%s' % (k, self.targetField)
+                    #FIXME (MB) remove next line when we get rid of
+                    #shape files as internal format
+                    myKey = myKey[:10]
+                    myAggrFieldIndex = myAggrFieldMap[myKey]
+                    myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
+
+            elif self.statisticsType == 'sum':
+                #loop over all features in impact layer
+                self.impactLayerAttributes.append([])
+                for myImpactValueList in myImpactValues:
+                    if myImpactValueList[self.targetField] == 'None':
+                        myImpactValueList[self.targetField] = None
+                    try:
+                        myTotal += myImpactValueList[self.targetField]
+                    except TypeError:
+                        pass
+                    self.impactLayerAttributes[0].append(myImpactValueList)
+                myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+
+            #apply to all area feature
             myFID = 0
             myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
 
@@ -2074,13 +2185,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
-            mySum, myResult = myAttributeMap[mySumFieldIndex].toDouble()
-            LOGGER.debug('Reading: %s %s' % (mySum, myResult))
-            LOGGER.debug('Polygon index %s\nAttr len %s' % (myPolygonIndex,
-                                            len(self.impactLayerAttributes)))
-            myGeneralParams = {'impact_total': mySum,
-                               'target_field': self.targetField,
-                                }
+            #create dictionary of attributes to pass to postprocessor
+            myGeneralParams = {'target_field': self.targetField}
+
+            if self.statisticsType == 'class_count':
+                myGeneralParams['impact_classes'] = self.statisticsClasses
+            elif self.statisticsType == 'sum':
+                myImpactTotal, _ = myAttributeMap[mySumFieldIndex].toDouble()
+                myGeneralParams['impact_total'] = myImpactTotal
+
             try:
                 myGeneralParams['impact_attrs'] = (
                     self.impactLayerAttributes[myPolygonIndex])
@@ -2110,7 +2223,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myValue.process()
                 myResults = myValue.results()
                 myValue.clear()
-                LOGGER.debug(myResults)
+#                LOGGER.debug(myResults)
                 try:
                     self.postProcessingOutput[myKey].append(
                         (myZoneName, myResults))
@@ -2118,6 +2231,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     self.postProcessingOutput[myKey] = []
                     self.postProcessingOutput[myKey].append(
                         (myZoneName, myResults))
+            #increment the index
+            myPolygonIndex += 1
 
     def _checkPostProcessingAttributes(self):
         """Checks if the postprocessing layer has all attribute keyword.
@@ -2375,6 +2490,135 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Disable the hourglass cursor"""
         QtGui.qApp.restoreOverrideCursor()
 
+    def getClipParameters(self):
+        """Calculate the best extents to use for the assessment.
+
+        Args:
+            None
+
+        Returns:
+            * myExtraExposureKeywords: dict - any additional keywords that
+                should be written to the exposure layer. For example if
+                rescaling is required for a raster, the original resolution
+                can be added to the keywords file.
+            * myBufferedGeoExtent: list - [xmin, ymin, xmax, ymax] - the best
+                extent that can be used given the input datasets and the
+                current viewport extents.
+            * myCellSize: float - the cell size that is the best of the
+                hazard and exposure rasters.
+            * myExposureLayer: QgsMapLayer - layer representing exposure.
+            * myGeoExtent: list - [xmin, ymin, xmax, ymax] - the unbuffered
+                intersection of the two input layers extents and the viewport.
+            * myHazardLayer: QgsMapLayer - layer representing hazard.
+
+        Raises:
+            InsufficientOverlapError
+        """
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
+        # Reproject all extents to EPSG:4326 if needed
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+        # Get the current viewport extent as an array in EPSG:4326
+        myViewportGeoExtent = self.viewportGeoArray()
+        # Get the Hazard extents as an array in EPSG:4326
+        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+                                                  myHazardLayer.crs())
+        # Get the Exposure extents as an array in EPSG:4326
+        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
+                                                    myExposureLayer.crs())
+        # Now work out the optimal extent between the two layers and
+        # the current view extent. The optimal extent is the intersection
+        # between the two layers and the viewport.
+        myGeoExtent = None
+        try:
+            # Extent is returned as an array [xmin,ymin,xmax,ymax]
+            # We will convert it to a QgsRectangle afterwards.
+            if self.clipToViewport:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                               myExposureGeoExtent,
+                                               myViewportGeoExtent)
+            else:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                               myExposureGeoExtent)
+
+        except InsufficientOverlapError, e:
+            # FIXME (MB): This branch is not covered by the tests
+            myMessage = self.tr('<p>There '
+                                'was insufficient overlap between the input '
+                                'layers '
+                                'and / or the layers and the viewable area. '
+                                'Please select '
+                                'two overlapping layers and zoom or pan to '
+                                'them or disable'
+                                ' viewable area clipping in the options dialog'
+                                '. Full details follow:</p>'
+                                '<p>Failed to obtain the optimal extent '
+                                'given:</p>'
+                                '<p>Hazard: %1</p>'
+                                '<p>Exposure: %2</p>'
+                                '<p>Viewable area Geo Extent: %3</p>'
+                                '<p>Hazard Geo Extent: %4</p>'
+                                '<p>Exposure Geo Extent: %5</p>'
+                                '<p>Viewable area clipping enabled: %6</p>'
+                                '<p>Details: %7</p>').arg(
+                myHazardLayer.source()).arg(
+                myExposureLayer.source()).arg(
+                QtCore.QString(str(myViewportGeoExtent))).arg(
+                QtCore.QString(str(myHazardGeoExtent))).arg(
+                QtCore.QString(str(myExposureGeoExtent))).arg(
+                QtCore.QString(str(self.clipToViewport))).arg(
+                str(e))
+            raise InsufficientOverlapError(myMessage)
+
+        # Next work out the ideal spatial resolution for rasters
+        # in the analysis. If layers are not native WGS84, we estimate
+        # this based on the geographic extents
+        # rather than the layers native extents so that we can pass
+        # the ideal WGS84 cell size and extents to the layer prep routines
+        # and do all preprocessing in a single operation.
+        # All this is done in the function getWGS84resolution
+        myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
+        myCellSize = None
+        myExtraExposureKeywords = {}
+        if myHazardLayer.type() == QgsMapLayer.RasterLayer:
+            # Hazard layer is raster
+            myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
+
+            if myExposureLayer.type() == QgsMapLayer.RasterLayer:
+                # In case of two raster layers establish common resolution
+                myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
+
+                if myHazardGeoCellSize < myExposureGeoCellSize:
+                    myCellSize = myHazardGeoCellSize
+                else:
+                    myCellSize = myExposureGeoCellSize
+
+                # Record native resolution to allow rescaling of exposure data
+                if not numpy.allclose(myCellSize, myExposureGeoCellSize):
+                    myExtraExposureKeywords['resolution'] = \
+                        myExposureGeoCellSize
+            else:
+                # If exposure is vector data grow hazard raster layer to
+                # ensure there are enough pixels for points at the edge of
+                # the view port to be interpolated correctly. This requires
+                # resolution to be available
+                if myExposureLayer.type() != QgsMapLayer.VectorLayer:
+                    raise RuntimeError
+                myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
+                                                        myHazardGeoCellSize)
+        else:
+            # Hazard layer is vector
+
+            # In case hazard data is a point data set, we will not clip the
+            # exposure data to it. The reason being that points may be used
+            # as centers for evacuation circles: See issue #285
+            if myHazardLayer.geometryType() == QGis.Point:
+                myGeoExtent = myExposureGeoExtent
+
+        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,\
+            myExposureLayer, myGeoExtent, myHazardLayer
+
     def optimalClip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
@@ -2397,110 +2641,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         # Get the hazard and exposure layers selected in the combos
-        myHazardLayer = self.getHazardLayer()
-        myExposureLayer = self.getExposureLayer()
-
-        # Reproject all extents to EPSG:4326 if needed
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-
-        # Get the current viewport extent as an array in EPSG:4326
-        myViewportGeoExtent = self.viewportGeoArray()
-
-        # Get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
-                                                  myHazardLayer.crs())
-
-        # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
-                                                    myExposureLayer.crs())
-
-        # Now work out the optimal extent between the two layers and
-        # the current view extent. The optimal extent is the intersection
-        # between the two layers and the viewport.
-        myGeoExtent = None
+        # and other related parameters needed for clipping.
         try:
-            # Extent is returned as an array [xmin,ymin,xmax,ymax]
-            # We will convert it to a QgsRectangle afterwards.
-            if self.clipToViewport:
-                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                               myExposureGeoExtent,
-                                               myViewportGeoExtent)
-            else:
-                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                    myExposureGeoExtent)
-
-        except InsufficientOverlapError, e:
-            # FIXME (MB): This branch is not covered by the tests
-            myMessage = self.tr('<p>There '
-                   'was insufficient overlap between the input layers '
-                   'and / or the layers and the viewable area. Please select '
-                   'two overlapping layers and zoom or pan to them or disable'
-                   ' viewable area clipping in the options dialog'
-                   '. Full details follow:</p>'
-                   '<p>Failed to obtain the optimal extent given:</p>'
-                   '<p>Hazard: %1</p>'
-                   '<p>Exposure: %2</p>'
-                   '<p>Viewable area Geo Extent: %3</p>'
-                   '<p>Hazard Geo Extent: %4</p>'
-                   '<p>Exposure Geo Extent: %5</p>'
-                   '<p>Viewable area clipping enabled: %6</p>'
-                   '<p>Details: %7</p>').arg(
-                        myHazardLayer.source()).arg(
-                        myExposureLayer.source()).arg(
-                        QtCore.QString(str(myViewportGeoExtent))).arg(
-                        QtCore.QString(str(myHazardGeoExtent))).arg(
-                        QtCore.QString(str(myExposureGeoExtent))).arg(
-                        QtCore.QString(str(self.clipToViewport))).arg(
-                        str(e))
-            raise InsufficientOverlapError(myMessage)
-
-        # Next work out the ideal spatial resolution for rasters
-        # in the analysis. If layers are not native WGS84, we estimate
-        # this based on the geographic extents
-        # rather than the layers native extents so that we can pass
-        # the ideal WGS84 cell size and extents to the layer prep routines
-        # and do all preprocessing in a single operation.
-        # All this is done in the function getWGS84resolution
-        myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
-        myCellSize = None
-        extraExposureKeywords = {}
-        if myHazardLayer.type() == QgsMapLayer.RasterLayer:
-
-            # Hazard layer is raster
-            myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
-
-            if myExposureLayer.type() == QgsMapLayer.RasterLayer:
-
-                # In case of two raster layers establish common resolution
-                myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
-
-                if myHazardGeoCellSize < myExposureGeoCellSize:
-                    myCellSize = myHazardGeoCellSize
-                else:
-                    myCellSize = myExposureGeoCellSize
-
-                # Record native resolution to allow rescaling of exposure data
-                if not numpy.allclose(myCellSize, myExposureGeoCellSize):
-                    extraExposureKeywords['resolution'] = myExposureGeoCellSize
-            else:
-                # If exposure is vector data grow hazard raster layer to
-                # ensure there are enough pixels for points at the edge of
-                # the view port to be interpolated correctly. This requires
-                # resolution to be available
-                if myExposureLayer.type() != QgsMapLayer.VectorLayer:
-                    raise RuntimeError
-                myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
-                                                        myHazardGeoCellSize)
-        else:
-            # Hazard layer is vector
-
-            # In case hazad data is a point dataset, we will not clip the
-            # exposure data to it. The reason being that points may be used
-            # as centers for evacuation cirles: See issue #285
-            if myHazardLayer.geometryType() == QGis.Point:
-                myGeoExtent = myExposureGeoExtent
-
+            myExtraExposureKeywords, myBufferedGeoExtent, myCellSize, \
+            myExposureLayer, myGeoExtent, myHazardLayer = \
+            self.getClipParameters()
+        except:
+            raise
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
@@ -2530,10 +2677,38 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theLayer=myExposureLayer,
             theExtent=myGeoExtent,
             theCellSize=myCellSize,
-            theExtraKeywords=extraExposureKeywords,
+            theExtraKeywords=myExtraExposureKeywords,
             theHardClipFlag=self.clipHard)
 
-        return myClippedHazardPath, myClippedExposurePath
+        myTitle = self.tr('Preparing aggregation layer...')
+        myMessage = self.tr('We are clipping the aggregation'
+                            'layer to match the intersection of the hazard'
+                            'and exposure layer extents.')
+        myProgress = 39
+        self.showBusy(myTitle, myMessage, myProgress)
+        #If doing entire area, create a fake feature that covers the whole
+        #myGeoExtent
+        if not self.doZonalAggregation:
+            self.postProcessingLayer.startEditing()
+            myProvider = self.postProcessingLayer.dataProvider()
+            # add a feature the size of the impact layer bounding box
+            myFeature = QgsFeature()
+            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
+                QgsPoint(myGeoExtent[0], myGeoExtent[1]),
+                QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
+            myFeature.setAttributeMap({0: QtCore.QVariant(
+                self.tr('Entire area'))})
+            myProvider.addFeatures([myFeature])
+            self.postProcessingLayer.commitChanges()
+
+        myClippedAggregationPath = clipLayer(
+            theLayer=self.postProcessingLayer,
+            theExtent=myGeoExtent,
+            theExplodeFlag=False,
+            theHardClipFlag=self.clipHard)
+
+        return myClippedHazardPath, myClippedExposurePath, \
+               myClippedAggregationPath
 
         ############################################################
         # logic checked to here..............
@@ -2563,7 +2738,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
 
     def viewportGeoArray(self):
-        """Obtain the map canvas current extent in EPSG:4326"""
+        """Obtain the map canvas current extent in EPSG:4326.
+
+        Args:
+            * theExtent: QgsRectangle defining a spatial extent in any CRS
+            * theSourceCrs: QgsCoordinateReferenceSystem for theExtent.
+
+        Returns:
+            list: a list in the form [xmin, ymin, xmax, ymax] where all
+                coordinates provided are in Geographic / EPSG:4326.
+
+        Raises:
+            None
+
+        .. note:: Delegates to self.extentToGeoArray()
+
+        """
 
         # get the current viewport extent
         myCanvas = self.iface.mapCanvas()
@@ -2582,7 +2772,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return self.extentToGeoArray(myRect, myCrs)
 
     def extentToGeoArray(self, theExtent, theSourceCrs):
-        """Convert the supplied extent to geographic and return as as array"""
+        """Convert the supplied extent to geographic and return as an array.
+
+        Args:
+            * theExtent: QgsRectangle defining a spatial extent in any CRS
+            * theSourceCrs: QgsCoordinateReferenceSystem for theExtent.
+
+        Returns:
+            list: a list in the form [xmin, ymin, xmax, ymax] where all
+                coordinates provided are in Geographic / EPSG:4326.
+
+        Raises:
+            None
+        """
 
         # FIXME (Ole): As there is no reference to self, this function
         #              should be a general helper outside the class
@@ -2850,35 +3052,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hideBusy()
         #myMap.showComposer()
 
-    def addComboItemInOrder(self, theCombo, theItemText, theItemData=None):
-        """Although QComboBox allows you to set an InsertAlphabetically enum
-        this only has effect when a user interactively adds combo items to
-        an editable combo. This we have this little function to ensure that
-        combos are always sorted alphabetically.
-
-        Args:
-            * theCombo - combo box receiving the new item
-            * theItemText - display text for the combo
-            * theItemData - optional UserRole data to be associated with
-              the item
-
-        Returns:
-            None
-
-        Raises:
-
-        ..todo:: Move this to utilities
-        """
-        mySize = theCombo.count()
-        for myCount in range(0, mySize):
-            myItemText = str(theCombo.itemText(myCount))
-            # see if theItemText alphabetically precedes myItemText
-            if cmp(str(theItemText).lower(), myItemText.lower()) < 0:
-                theCombo.insertItem(myCount, theItemText, theItemData)
-                return
-        #otherwise just add it to the end
-        theCombo.insertItem(mySize, theItemText, theItemData)
-
     def getFunctionID(self, theIndex=None):
         """Get the canonical impact function ID for the currently selected
            function (or the specified combo entry if theIndex is supplied.
@@ -2899,3 +3072,95 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = str(myItemData.toString())
         return myFunctionID
+
+    @pyqtSlot()
+    def checkMemoryUsage(self):
+        """Slot to check if analysis is feasible when extents change.
+
+        For simplicity, we will do all our calcs in geocrs.
+
+        Args:
+            None
+
+        Returns:
+            str: A string containing notes about how much memory is needed
+                for a single raster and if this is likely to result in an
+                error.
+
+        .. note:: The dock is also updated with a message indicating if the
+            memory usage is likely to be too much for the current system.
+
+        """
+        LOGGER.info('Extents changed!')
+        try:
+            _, myBufferedGeoExtent, myCellSize, _, _, \
+            _ = self.getClipParameters()
+        except:
+            return  # ignore any error
+
+        myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
+        myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
+        try:
+            myWidth = myWidth / myCellSize
+            myHeight = myHeight / myCellSize
+        except TypeError:
+            # Could have been a vector layer for example
+            LOGGER.exception('Error: Computed cellsize was None.')
+            _, myReadyMessage = self.validate()
+            self.displayHtml(myReadyMessage)
+            return
+
+        LOGGER.info('Width: %s' % myWidth)
+        LOGGER.info('Height: %s' % myHeight)
+        LOGGER.info('Pixel Size: %s' % myCellSize)
+
+        # Compute mem requirement in MB (assuming numpy uses 8bytes by per
+        # cell) see this link:
+        # http://stackoverflow.com/questions/11784329/
+        #      python-memory-usage-of-numpy-arrays
+        # Also note that the on-disk requirement of the clipped tifs is about
+        # half this since the tifs as in single precision,
+        # whereas numpy arrays are in double precision.
+        myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
+        myFreeMemory = get_free_memory()
+        # We work on the assumption that if more than 10% of the available
+        # memory is occupied by a single layer we could run out of memory
+        # (depending on the impact function). This is because multiple
+        # in memory copies of the layer are often made during processing.
+        myWarningLimit = 10
+        myUsageIndicator = (float(myRequirement) / float(myFreeMemory)) * 100
+        myCountsMessage = ('Memory requirement: about %imb per raster layer ('
+                     '%imb available). %.2f / %s' %
+                     (myRequirement, myFreeMemory, myUsageIndicator,
+                      myWarningLimit))
+        myMessage = ''
+        if myWarningLimit <= myUsageIndicator:
+            myMessage = self.tr('There may not be enough free memory to '
+                         'run this analysis. You can attempt to run the '
+                         'analysis anyway, but note that your computer may '
+                         'become unresponsive during execution, '
+                         'and / or the analysis may fail due to insufficient '
+                         'memory. Proceed at your own risk.')
+            mySuggestion = self.tr('Try zooming in to a smaller area or using'
+                                   ' a raster layer with a coarser resolution'
+                                   ' to speed up execution and reduce memory'
+                                   ' requirements. You could also try adding'
+                                   ' more RAM to your computer.')
+            myHtmlMessage = ('<table class="condensed">'
+                             '<tr><th class="warning '
+                             'button-cell">%s</th></tr>\n'
+                             '<tr><td>%s</td></tr>\n'
+                             '<tr><th class="problem '
+                             'button-cell">%s</th></tr>\n'
+                             '<tr><td>%s</td></tr>\n</table>' %
+                             (
+                              self.tr('Memory usage:'),
+                              myMessage,
+                              self.tr('Suggestion'),
+                              mySuggestion))
+            _, myReadyMessage = self.validate()
+            myReadyMessage += myHtmlMessage
+            self.displayHtml(myReadyMessage)
+
+        LOGGER.info(myCountsMessage)
+        return myMessage + ' ' + myCountsMessage

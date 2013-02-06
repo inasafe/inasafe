@@ -191,6 +191,8 @@ class KeywordIOTest(unittest.TestCase):
         myExpectedKeywords = self.expectedSqliteKeywords
         assert myKeywords == myExpectedKeywords, myMessage
         mySource = self.sqliteLayer.source()
+        # delete mySqliteLayer so that we can delete the file
+        del mySqliteLayer
         os.remove(myLocalPath)
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
                     myKeywords, myExpectedKeywords, mySource)

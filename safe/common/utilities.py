@@ -1,13 +1,38 @@
 """Utilities for InaSAFE
 """
 import os
+import sys
 import zipfile
 import gettext
 from datetime import date
 import getpass
 from tempfile import mkstemp
+from subprocess import PIPE, Popen
+import ctypes
 
-from safe.common.exceptions import VerificationError
+from safe.common.exceptions import VerificationError, WindowsError
+
+
+class MEMORYSTATUSEX(ctypes.Structure):
+    """
+    This class is used for getting the free memory on Windows
+    """
+    _fields_ = [
+        ("dwLength", ctypes.c_ulong),
+        ("dwMemoryLoad", ctypes.c_ulong),
+        ("ullTotalPhys", ctypes.c_ulonglong),
+        ("ullAvailPhys", ctypes.c_ulonglong),
+        ("ullTotalPageFile", ctypes.c_ulonglong),
+        ("ullAvailPageFile", ctypes.c_ulonglong),
+        ("ullTotalVirtual", ctypes.c_ulonglong),
+        ("ullAvailVirtual", ctypes.c_ulonglong),
+        ("sullAvailExtendedVirtual", ctypes.c_ulonglong),
+        ]
+
+    def __init__(self):
+        # have to initialize this to the size of MEMORYSTATUSEX
+        self.dwLength = ctypes.sizeof(self)
+        super(MEMORYSTATUSEX, self).__init__()
 
 
 def verify(statement, message=None):
@@ -192,3 +217,64 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
                 os.remove(shp_basename + ext)
 
     os.chdir(my_cwd)
+
+
+def get_free_memory():
+    """Return current free memory on the machine.
+    Currently supported for Windows, Linux
+    Return in MB unit
+    """
+    if 'win32' in sys.platform:
+        # windows
+        return get_free_memory_win()
+    elif 'linux2' in sys.platform:
+        # linux
+        return get_free_memory_linux()
+    elif 'darwin' in sys.platform:
+        # mac
+        return get_free_memory_osx()
+
+
+def get_free_memory_win():
+    """Return current free memory on the machine for windows.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    stat = MEMORYSTATUSEX()
+    ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(stat))
+    return int(stat.ullAvailPhys / 1024 / 1024)
+
+
+def get_free_memory_linux():
+    """Return current free memory on the machine for linux.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    try:
+        p = Popen('free -m', shell=True, stdout=PIPE)
+        stdout_string = p.communicate()[0].split('\n')[2]
+    except OSError:
+        raise OSError
+    stdout_list = stdout_string.split(' ')
+    stdout_list = [x for x in stdout_list if x != '']
+    return int(stdout_list[3])
+
+
+def get_free_memory_osx():
+    """Return current free memory on the machine for mac os.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    try:
+        p = Popen('echo -e "\n$(top -l 1 | awk \'/PhysMem/\';)\n"',
+                  shell=True, stdout=PIPE)
+        stdout_string = p.communicate()[0].split('\n')[1]
+        # e.g. output (its a single line)
+        # PhysMem: 1491M wired, 3032M active, 1933M inactive,
+        # 6456M used, 1735M free.
+    except OSError:
+        raise OSError
+    stdout_list = stdout_string.split(',')
+    inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
+    free = stdout_list[4].replace('M free.', '').replace(' ', '')
+    return int(inactive) + int(free)

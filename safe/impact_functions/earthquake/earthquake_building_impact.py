@@ -26,10 +26,15 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'Shake_cls'
+    statistics_type = 'class_count'
+    statistics_classes = [0, 1, 2, 3]
     title = tr('Be affected')
     parameters = OrderedDict([('low_threshold', 6),
                   ('medium_threshold', 7),
-                  ('high_threshold', 8)])
+                  ('high_threshold', 8),
+                  ('postprocessors', OrderedDict([
+                      ('AggregationCategorical', {'on': True})]))
+    ])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
@@ -201,7 +206,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title,
-                             'target_field': self.target_field},
+                             'target_field': self.target_field,
+                             'statistics_type': self.statistics_type,
+                             'statistics_classes': self.statistics_classes},
                    style_info=style_info)
 
         LOGGER.debug('Created vector layer  %s' % str(V))

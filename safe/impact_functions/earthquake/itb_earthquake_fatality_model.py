@@ -160,12 +160,11 @@ class ITBFatalityFunction(FunctionProvider):
         R = numpy.zeros(H.shape)
         for mmi in mmi_range:
 
-            # Identify cells where MMI is in class i
-            mask = (H > mmi - self.parameters['step']) * (
-                        H <= mmi + self.parameters['step'])
-
-            # Count population affected by this shake level
-            I = numpy.where(mask, P, 0)
+            # Identify cells where MMI is in class i and
+            # count population affected by this shake level
+            I = numpy.where(
+                (H > mmi - self.parameters['step']) * (
+                    H <= mmi + self.parameters['step']), P, 0)
 
             # Calculate expected number of fatalities per level
             fatality_rate = self.fatality_rate(mmi)
