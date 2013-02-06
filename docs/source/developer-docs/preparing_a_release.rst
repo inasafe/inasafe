@@ -285,6 +285,9 @@ indonesian and english.
 Compile the sphinx documentation
 ................................
 
+.. warning:: You should update the **version** and **release** options in
+    conf.py to match the release number.
+
 Once documentation is completed, it should be compiled using
 :command:`make docs` and the :command:`git status` command should be used to
 ensure that all generated documentation is also under version control.
