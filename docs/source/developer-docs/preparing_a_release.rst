@@ -193,7 +193,7 @@ shipped code base. More informationn on running unit tests is included in
 to fail are documented accordingly.
 
 User Acceptance Testing
------------------------
+.......................
 
 While unit testing provides a quantitative measure of the code's robustness,
 user acceptance testing provides a qualitative measure. The plugin should
@@ -203,20 +203,8 @@ model outputs and reports etc. should be identified at this point and remedied.
 
 **Outcome:** Software that works in real world usage.
 
-Document new features
----------------------
-
-New features in the release should be well documented using the procedure
-described in :ref:`documenting-new-features-howto-label`.
-
-You can determine which files changed between two releases like this::
-
-    git diff --name-status version-1_0 version-1_1
-
-**Outcome:** All new and existing features are adequately documented.
-
 API Documentation
------------------
+.................
 
 In addition to documenting new features, any new python modules introduced
 during the development work leading up to the release need to be included
@@ -225,9 +213,19 @@ in the API documentation. This process is described in detail in the
 
 **Outcome:** The API is completely documented with rich, relevant documentation.
 
+Document new features
+.....................
+
+New features in the release should be well documented using the procedure
+described in :ref:`documenting-new-features-howto-label`.
+
+.. note:: This is intended to provide a reference style (not a tutorial style)
+   enumeration of the various dialogs and options in InaSAFE.
+
+**Outcome:** All new and existing features are adequately documented.
 
 Update the changelog
---------------------
+....................
 
 A changelog should be maintained (:file:`docs/sources/user-docs/changelog.rst`)
 that lists the key new features and improvement made with each release. Use
@@ -237,6 +235,13 @@ additions made.
 The changelog should not exhaustively list every commit that took place. Rather
 it should list the key features and bug fixes that were made during the
 release cycle.
+
+You can determine which files changed between two releases like this::
+
+    git diff --name-status version-1_0 version-1_1
+
+You can determine what changes took place in the new release by using a gui
+app such as **gitg** (Linux) or **sourcetree** (OSX) to browse the changes.
 
 .. note:: New release changesets should be introduced to this file **at the top**
    so that the newest release is alwas listed first.
@@ -278,13 +283,13 @@ made available as part of the distribution.
 indonesian and english.
 
 Compile the sphinx documentation
---------------------------------
+................................
 
 Once documentation is completed, it should be compiled using
 :command:`make docs` and the :command:`git status` command should be used to
 ensure that all generated documentation is also under version control.
 
-**Outcome:** Sphinx documentation is compiled providing complete documentation
+***Outcome:** Sphinx documentation is compiled providing complete documentation
 to be shipped with the plugin.
 
 Update plugin metadata and version number
@@ -323,10 +328,10 @@ just prior to tagging the release.
 Both of these files should be updated to reflect the version number and the
 metadata.txt file should reflect the release status.
 
-**Outcome:** The plugin metadata to reflects the current version of InaSAFE.
+***Outcome:** The plugin metadata to reflects the current version of InaSAFE.
 
 Generate a test package
------------------------
+.......................
 
 At this point a test package should be generated that can be used to test
 the plugin in a clean room environment. A clean room environment comprises a
@@ -355,8 +360,11 @@ personal plugin directory. For example under Linux::
 Now start QGIS and enable the plugin in the QGIS plugin manager (
 :menuselection:`Plugins --> Manage Plugins`).
 
+.. note:: Prior to the release, it is suggested to create testing packages as
+  per the procedure described in :doc:`preparing_test_builds.rst`.
+
 Branch the release
-------------------
+..................
 
 This step is only done for minor and major releases, point releases are only
 tagged. The branch should be named after the major and minor version numbers
@@ -372,11 +380,11 @@ branch and then track the repository version of the branch localy::
    git checkout version-0_1
 
 
-**Outcome:** A branch on the remote repository named after the majon and minor
+***Outcome:** A branch on the remote repository named after the majon and minor
 version numbers.
 
 Tag the release
----------------
+...............
 
 Tagging the release provides a 'known good' state for the software which
 represents a point in time where all of the above items in this list have
@@ -401,7 +409,7 @@ in the future. The tagged source tree can easily be downloaded at any point by
 visiting https://github.com/AIFDR/inasafe/tags
 
 Upload the package
-------------------
+..................
 
 QGIS provides an online plugin repository that centralizes the distribution
 and retrieval of plugins. It is the most efficient way to make your plugin
@@ -411,7 +419,7 @@ available to the world at large.
 * Upload the updated package zip file to the new QGIS python plugin repository.
 
 Press announcements
--------------------
+...................
 
 Once the release has been made, an announcement should be made to inform
 interested parties about the availability of the new software. A pro-forma
