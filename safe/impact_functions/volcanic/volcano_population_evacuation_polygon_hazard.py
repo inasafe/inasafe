@@ -32,19 +32,18 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
     parameters = {'R [km]': [3, 5, 10]}
 
     def run(self, layers):
-        """Risk plugin for flood population evacuation
+        """Risk plugin for volcano population evacuation
 
         Input
           layers: List of layers expected to contain
-              H: Raster layer of volcano depth
+              H: Vector polyton layer of volcano impact zones
               P: Raster layer of population data on the same grid as H
 
-        Counts number of people exposed to flood levels exceeding
-        specified threshold.
+        Counts number of people exposed to volcano event.
 
         Return
-          Map of population exposed to flood levels exceeding the threshold
-          Table with number of people evacuated and supplies required
+          Map of population exposed to the volcano hazard zone.
+          Table with number of people evacuated and supplies required.
         """
 
         # Identify hazard and exposure layers

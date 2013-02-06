@@ -46,7 +46,7 @@ damage_curves = {1: dict(median=7.5, beta=0.11),
 
 
 class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
-    """Risk plugin for Padang earthquake damage to buildings
+    """Impact function for Padang earthquake damage to buildings
 
     :param requires category=='hazard' and \
                     subcategory=='earthquake' and \
