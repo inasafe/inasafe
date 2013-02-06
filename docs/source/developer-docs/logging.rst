@@ -1,5 +1,5 @@
 Logging
--------
+=======
 
 InaSAFE includes a logging subsystem that can be used to:
 
