@@ -101,7 +101,7 @@ class ImpactFunctionsDocTest(unittest.TestCase):
     def testRestButton(self):
         """Test when reset button is pressed."""
         # ... and this is how you skip it using nosetests
-        #pylint: disable=W010
+        #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
         myDialog = ImpactFunctionsDoc(PARENT)
         expectedTable = myDialog.if_table.toNewlineFreeString()

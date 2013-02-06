@@ -1995,7 +1995,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             * myHazardLayer: QgsMapLayer - layer representing hazard.
 
         Raises:
-            InsufficientOverlapError
+            InsufficientOverlapError, RuntimeError
         """
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
@@ -2190,7 +2190,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theExplodeFlag=False,
             theHardClipFlag=self.clipHard)
 
-        return myClippedHazardPath, myClippedExposurePath,\
+        return myClippedHazardPath, myClippedExposurePath, \
                myClippedAggregationPath
 
         ############################################################
@@ -2576,9 +2576,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         LOGGER.info('Extents changed!')
         try:
-            _, myBufferedGeoExtent, myCellSize, _, _,\
+            _, myBufferedGeoExtent, myCellSize, _, _, \
             _ = self.getClipParameters()
-        except:
+        except (RuntimeError, InsufficientOverlapError):
             LOGGER.exception('Error calculating extents.')
             return  # ignore any error
 
