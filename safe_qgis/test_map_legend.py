@@ -63,7 +63,8 @@ class MapLegendTest(unittest.TestCase):
                            'getLegend-variantWindowsXPSP3-32.png',
                            'getClassToLegend-variantUB12.04-64.png',
                            'getClassToLegend-variantUB11.04-64.png',
-                           'getLegend-variantJenkins.png']
+                           'getLegend-variantJenkins.png',
+                           'getLegend-variantOSXml.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -91,7 +92,8 @@ class MapLegendTest(unittest.TestCase):
                            'getVectorLegend-variantWindowsXPSP3-32.png',
                            'getVectorLegend-variantUB12.04-64.png',
                            'getVectorLegend-variantUB11.04-64.png',
-                           'getVectorLegend-variantJenkins.png']
+                           'getVectorLegend-variantJenkins.png',
+                           'getVectorLegend-variantOSXml.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                     myPath,
@@ -118,7 +120,8 @@ class MapLegendTest(unittest.TestCase):
                            'getRasterLegend-variantWindowsXPSP3-32.png',
                            'getRasterLegend-variantUB12.04-64.png',
                            'getRasterLegend-variantUB11.04-64.png',
-                           'getRasterLegend-variantJenkins.png']
+                           'getRasterLegend-variantJenkins.png',
+                           'getRasterLegend-variantOSXml.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -151,7 +154,8 @@ class MapLegendTest(unittest.TestCase):
                            'addSymbolToLegend-variantWindowsXPSP3-32.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
                            'addSymbolToLegend-variantUB11.04-64.png',
-                           'addSymbolToLegend-variantJenkins.png']
+                           'addSymbolToLegend-variantJenkins.png',
+                           'addSymbolToLegend-variantOSXml.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -188,7 +192,8 @@ class MapLegendTest(unittest.TestCase):
                            'getClassToLegend-variantWindowsXPSP3-32.png',
                            'getClassToLegend-variantUB12.04-64.png',
                            'getClassToLegend-variantUB11.04-64.png',
-                           'getClassToLegend-variantJenkins.png']
+                           'getClassToLegend-variantJenkins.png',
+                           'getClassToLegend-variantOSXml.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,

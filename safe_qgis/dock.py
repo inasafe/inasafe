@@ -928,8 +928,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Propagates any error from :func:optimalClip()
         """
         try:
-            myHazardFilename, myExposureFilename, \
-            myAggregationFilename = self.optimalClip()
+            # _ = syntactic trick to ignore returned var
+            myHazardFilename, myExposureFilename, _ = self.optimalClip()
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -2079,8 +2079,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(myCellSize, myExposureGeoCellSize):
-                    myExtraExposureKeywords['resolution'] =\
-                    myExposureGeoCellSize
+                    myExtraExposureKeywords['resolution'] = \
+                        myExposureGeoCellSize
             else:
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
@@ -2099,7 +2099,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if myHazardLayer.geometryType() == QGis.Point:
                 myGeoExtent = myExposureGeoExtent
 
-        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,\
+        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize, \
                myExposureLayer, myGeoExtent, myHazardLayer
 
     def optimalClip(self):
@@ -2126,9 +2126,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         try:
-            myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,\
-            myExposureLayer, myGeoExtent, myHazardLayer =\
-            self.getClipParameters()
+            myExtraExposureKeywords, myBufferedGeoExtent, myCellSize, \
+                myExposureLayer, myGeoExtent, myHazardLayer = \
+                    self.getClipParameters()
         except:
             raise
             # Make sure that we have EPSG:4326 versions of the input layers

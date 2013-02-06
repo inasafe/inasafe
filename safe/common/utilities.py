@@ -10,7 +10,7 @@ from tempfile import mkstemp
 from subprocess import PIPE, Popen
 import ctypes
 
-from safe.common.exceptions import VerificationError, WindowsError
+from safe.common.exceptions import VerificationError
 
 
 class MEMORYSTATUSEX(ctypes.Structure):
