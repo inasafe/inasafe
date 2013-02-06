@@ -18,7 +18,11 @@ Changelog for version 1.1.0
   https://github.com/AIFDR/inasafe/issues/326
 * Fix https://github.com/AIFDR/inasafe/issues/358
 * Many small 'under the hood' improvements.
-
+* Realtime quake mapping support. This is available in source tree only
+  and is a server side installable application. Indonesia specific.
+* Realtime flood mapping support. This is available in source tree only
+  and provides an experimental implementation for production of floodmaps.
+  Jakarta specific.
 
 Changelog for version 1.0.1
 ---------------------------

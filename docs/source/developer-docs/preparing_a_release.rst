@@ -209,6 +209,10 @@ Document new features
 New features in the release should be well documented using the procedure
 described in :ref:`documenting-new-features-howto-label`.
 
+You can determine which files changed between two releases like this::
+
+    git diff --name-status version-1_0 version-1_1
+
 **Outcome:** All new and existing features are adequately documented.
 
 API Documentation
