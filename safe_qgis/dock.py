@@ -197,12 +197,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #            stdoutToServer=True,
         #            stderrToServer=True)
 
+        myCanvas = self.iface.mapCanvas()
+
+        # Enable on the fly projection by default
+        myCanvas.mapRenderer().setProjectionsEnabled(True)
+
         # Listen for changes in canvas extent so we can
         # check if the analysis is feasible as the extent changes
-        myCanvas = self.iface.mapCanvas()
         QtCore.QObject.connect(myCanvas, QtCore.SIGNAL('extentsChanged()'),
                                self.checkMemoryUsage)
-
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
@@ -2593,7 +2596,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(myCellSize, myExposureGeoCellSize):
-                    myExtraExposureKeywords['resolution'] = myExposureGeoCellSize
+                    myExtraExposureKeywords['resolution'] = \
+                        myExposureGeoCellSize
             else:
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
@@ -3160,4 +3164,3 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         LOGGER.info(myCountsMessage)
         return myMessage + ' ' + myCountsMessage
-

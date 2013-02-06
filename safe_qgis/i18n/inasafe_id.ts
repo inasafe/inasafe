@@ -1431,11 +1431,6 @@ p, li { white-space: pre-wrap; }
         <translation>Perkiraan Dampak Gempa</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="2135"/>
-        <source>Estimated number of people exposed to each MMI level</source>
-        <translation>Perkiraan jumlah penduduk terpapar pada setiap tingkat getaran berbeda</translation>
-    </message>
-    <message>
         <location filename="shake_event.py" line="2148"/>
         <source>Places Affected</source>
         <translation>Kota Terdampak</translation>
@@ -1534,6 +1529,11 @@ p, li { white-space: pre-wrap; }
         <location filename="shake_event.py" line="2149"/>
         <source>Population density</source>
         <translation>Kepadatan penduduk</translation>
+    </message>
+    <message>
+        <location filename="shake_event.py" line="2135"/>
+        <source>Estimated number of people affected by each MMI level</source>
+        <translation>Perkiraan banyak penduduk yang terdampak untuk setiap tingkatan MMI</translation>
     </message>
 </context>
 <context>
