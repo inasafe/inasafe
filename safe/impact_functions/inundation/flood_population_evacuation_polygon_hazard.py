@@ -13,7 +13,7 @@ from third_party.odict import OrderedDict
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
-    """Risk plugin for flood evacuation
+    """Impact function for flood evacuation
 
     :author AIFDR
     :rating 4
@@ -30,6 +30,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     target_field = 'population'
     defaults = get_defaults()
     parameters = OrderedDict([
+        ('evacuation_percentage', 1),  # Percent of affected needing evac
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -88,7 +89,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             categories[cat] = 0
 
         # Count affected population per polygon, per category and total
-        evacuated = 0
+        affected_population = 0
         for attr in P.get_data():
 
             affected = False
@@ -132,9 +133,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 categories[cat] += pop
 
                 # Update total
-                evacuated += pop
+                affected_population += pop
 
-        # Count totals
+        # Estimate number of people in need of evacuation
+        evacuated = (affected_population *
+                     self.parameters['evacuation_percentage']
+                     / 100.0)
+
         total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
