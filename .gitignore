@@ -40,5 +40,4 @@ realtime/fixtures/context/boundaries.*
 pylint.log
 safe/test/data/hazard/keywordless_layer.tif.aux.xml
 scripts/nightly-build-repo/apache.conf
-runmake*
 .idea/dictionaries/*
