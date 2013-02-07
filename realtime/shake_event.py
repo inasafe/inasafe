@@ -813,7 +813,8 @@ class ShakeEvent(QObject):
             None
         """
 
-        myRGBList = ['#FFFFFF', '#209fff', '#00cfff', '#55ffff', '#aaffff',
+        myRGBList = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff', '#55ffff',
+                     '#aaffff',
                      '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00',
                      '#800', '#400']
         myRGB = myRGBList[int(theMMIValue)]
