@@ -2616,7 +2616,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if myHazardLayer.geometryType() == QGis.Point:
                 myGeoExtent = myExposureGeoExtent
 
-        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,\
+        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize, \
             myExposureLayer, myGeoExtent, myHazardLayer
 
     def optimalClip(self):
