@@ -143,8 +143,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             'job[region_id]': '1',  # 1 is indonesia
             'job[name]': 'InaSAFE job',
             'job[description]': 'This job created from import feature in InaSAFE',
-            'job[name]': 'depok test',
-            'job[description]': 'depok test area',
 
             'job[lonmin]': str(self.minLongitude.text()),
             'job[latmin]': str(self.minLatitude.text()),
@@ -309,8 +307,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def extractZip(self, thePath, theOutDir):
         """
-        Extract zip file from thePath to theOutDir. If theOutDir is not exist
-        then this function will create it.
+        Extract all content of zip file from thePath to theOutDir.
         Args:
            * thePath - the path of zip file
            * theOutDir - output directory
