@@ -2592,7 +2592,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             _ = self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            return  None # ignore any error
+            return  None  # ignore any error
 
         myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
         myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
