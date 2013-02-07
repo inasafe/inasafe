@@ -6,6 +6,8 @@ Whats new?
 Changelog for version 1.1.0
 ---------------------------
 
+* Flood assessment using polygons now generates evacuation totals based
+  on percent of affected people (defaults to 1%).
 * Improvements to error handling with more informative messages to user.
 * Memory requirements prediction to try to warn a user when they might not
   have enough RAM. See https://github.com/AIFDR/inasafe/issues/476.
