@@ -1,4 +1,4 @@
-    """
+"""
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **QGIS plugin implementation.**
 
@@ -36,7 +36,9 @@ try:
     # block and then display a friendly message to restart QGIS
     from safe_qgis.exceptions import TranslationLoadError
 except ImportError:
-    QMessageBox.warning(None, 'Please restart QGIS to use this plugin.')
+    # Note these strings cant be translated.
+    QMessageBox.warning(None, 'InaSAFE',
+                        'Please restart QGIS to use this plugin.')
 import utilities
 
 

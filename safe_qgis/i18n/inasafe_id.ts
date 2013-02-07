@@ -1519,7 +1519,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shake_event.py" line="2175"/>
         <source>Supported by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the GFDRR.</source>
-        <translation>Didukung oleh Australia Indonesia Facility for Disaster Reduction, Geoscience Australia, dan GFDRR.</translation>
+        <translation>Didukung oleh Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia, dan GFDRR.</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="2184"/>
