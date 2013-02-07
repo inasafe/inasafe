@@ -394,11 +394,11 @@ class ShakeEvent(QObject):
         myFile.write(self.mmiDataToDelimitedText())
         myFile.close()
 
-        # Also write the .csvt which contains metadata about field types
-        myCsvtPath = os.path.join(shakemapExtractDir(),
+        # Also write the .csv which contains metadata about field types
+        myCsvPath = os.path.join(shakemapExtractDir(),
                                   self.eventId,
                                   'mmi.csvt')
-        myFile = file(myCsvtPath, 'wt')
+        myFile = file(myCsvPath, 'wt')
         myFile.write('"Real","Real","Real"')
         myFile.close()
         return myPath
