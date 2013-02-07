@@ -53,8 +53,10 @@ from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
 sys.path.append(os.path.abspath(
         os.path.join(os.path.dirname(__file__), '..', 'third_party')))
+# pylint: disable=F0401
 from raven.handlers.logging import SentryHandler
 from raven import Client
+# pylint: enable=F0401
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
