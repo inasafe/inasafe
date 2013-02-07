@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-15 11:05+0700\n"
+"POT-Creation-Date: 2013-02-07 12:00+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1114,7 +1114,7 @@ msgstr "Jarak [km]"
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:87
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:86
 msgid "Die or be displaced"
-msgstr "Meninggal atau mengungsi"
+msgstr "Meninggal atau diungsikan"
 
 #: safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:225
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:239
@@ -1219,7 +1219,7 @@ msgstr "Jumlah Penduduk: %s"
 msgid "Total population %s in the viewable area"
 msgstr "Jumlah populasi %s pada area terlihat "
 
-#: safe/storage/test_io.py:2425 safe/storage/test_io.py:2435
+#: safe/storage/test_io.py:2459 safe/storage/test_io.py:2469
 msgid "Hello!"
 msgstr "Hi!"
 
@@ -1319,7 +1319,7 @@ msgstr "Bangunan"
 
 #: safe/impact_functions/earthquake/pager_earthquake_fatality_model.py:33
 msgid "Die or be displaced according Pager model"
-msgstr "Mati atau diungsikan berdasarkan model Pager"
+msgstr "Meninggal atau diungsikan berdasarkan model Pager"
 
 #: safe/impact_functions/inundation/flood_population_evacuation.py:214
 #, python-format
