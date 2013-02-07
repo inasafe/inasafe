@@ -45,6 +45,8 @@ from PyQt4.QtCore import (QCoreApplication,
                           QTranslator
                           )
 from PyQt4.QtXml import QDomDocument
+# pylint: disable=E0611
+# Above for pallabelling
 from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
@@ -61,7 +63,8 @@ from qgis.core import (QgsPoint,
                        QgsMapLayerRegistry,
                        QgsMapRenderer,
                        QgsPalLabeling)
-#TODO refactor this into a utilitiy class as it is no longer only used by test
+# pylint: enable=E0611
+#TODO refactor this into a utility class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
