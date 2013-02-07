@@ -59,7 +59,7 @@ class SlippyMap(QtCore.QObject):
     updated = QtCore.pyqtSignal(QtCore.QRect)
 
     def __init__(self, parent=None, width=400, height=300, zoom=15, latitude=59.9138204, longitude=10.7386413):
-        QtCore.QObject.__init__(self)
+        QtCore.QObject.__init__(self, parent)
         self.width = width
         self.height = height
         self.zoom = zoom

@@ -15,22 +15,9 @@ __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
-import logging
+from safe_qgis.inasafe_lightmaps import (InasafeSlippyMap)
 
-from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.utilities_test import (getQgisTestApp,
-                                      loadLayer,
-                                      checkImages)
-from safe_qgis.html_renderer import HtmlRenderer
-from safe_qgis.keyword_io import KeywordIO
-
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
-LOGGER = logging.getLogger('InaSAFE')
-
-
-from safe_qgis.inasafe_lightmaps import (InasafeLightMaps, InasafeSlippyMap)
 
 class SlippyMapTest(unittest.TestCase):
     """Test the Slippy map widget"""
@@ -81,8 +68,34 @@ class SlippyMapTest(unittest.TestCase):
         myNumber = self.slippyMap.flipLatitude(-200)
         assert myNumber == 20, myMessage.format(20, myNumber)
 
+    def test_calculateExtends(self):
+        """ test calculateExtends function """
 
+        self.slippyMap.zoom = 9
+        self.slippyMap.latitude = 80
+        self.slippyMap.longitude = 81
+        self.slippyMap.width = 400
+        self.slippyMap.height = 400
 
+        self.slippyMap.calculateExtent()
+
+        myMessage = "Number don't match. expect {0} but got {1} "
+
+        myNumber = self.slippyMap.tlLat
+        myResult = 79.45078125
+        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
+
+        myNumber = self.slippyMap.tlLng
+        myResult = 80.45078125
+        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
+
+        myNumber = self.slippyMap.brLat
+        myResult = 80.54921875
+        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
+
+        myNumber = self.slippyMap.brLng
+        myResult = 81.54921875
+        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(SlippyMapTest, 'test')
