@@ -952,13 +952,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.calculator.setFunction(myFunctionID)
 
     def accept(self):
-        """Execute analysis when ok button is clicked.
+        """Execute analysis when run button is clicked.
 
         .. todo:: FIXME (Tim) We may have to implement some polling logic
             because the button click accept() function and the updating
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        myMessage = self.checkMemoryUsage()
+        if myMessage is not None:
+            myResult = QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
+                self.tr('You may not have sufficient free system memory to '
+                        'carry out this analysis. See the dock panel '
+                        'message for more information. Would you like to '
+                        'continue regardless?'), QtGui.QMessageBox.Yes |
+                        QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+            if myResult == QtGui.QMessageBox.No:
+                # stop work here and return to QGIS
+                return
+
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
@@ -2580,7 +2592,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             _ = self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            return  # ignore any error
+            return  None # ignore any error
 
         myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
         myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
@@ -2592,7 +2604,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             LOGGER.exception('Error: Computed cellsize was None.')
             _, myReadyMessage = self.validate()
             self.displayHtml(myReadyMessage)
-            return
+            return None
 
         LOGGER.info('Width: %s' % myWidth)
         LOGGER.info('Height: %s' % myHeight)
@@ -2611,7 +2623,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except ValueError:
             myMessage = 'Could not determine free memory'
             LOGGER.exception(myMessage)
-            return myMessage
+            return None
 
         # We work on the assumption that if more than 10% of the available
         # memory is occupied by a single layer we could run out of memory
@@ -2623,7 +2635,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                            '%imb available). %.2f / %s' %
                            (myRequirement, myFreeMemory, myUsageIndicator,
                             myWarningLimit))
-        myMessage = ''
+        myMessage = None
         if myWarningLimit <= myUsageIndicator:
             myMessage = self.tr('There may not be enough free memory to '
                 'run this analysis. You can attempt to run the '
@@ -2653,4 +2665,5 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.displayHtml(myReadyMessage)
 
         LOGGER.info(myCountsMessage)
-        return myMessage + ' ' + myCountsMessage
+        # Caller will assume enough memory if myMessage is None
+        return myMessage
