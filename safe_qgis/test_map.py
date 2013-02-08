@@ -37,6 +37,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class MapTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
+
     def setUp(self):
         """Setup fixture run before each tests"""
         myRegistry = QgsMapLayerRegistry.instance()
@@ -113,8 +114,8 @@ class MapTest(unittest.TestCase):
         # with this.
         myTolerance = 8000
         myFlag, myMessage = checkImages(myAcceptableImages,
-                                           myImagePath,
-                                           myTolerance)
+                                        myImagePath,
+                                        myTolerance)
         assert myFlag, myMessage
 
     def test_getMapTitle(self):
@@ -153,8 +154,8 @@ class MapTest(unittest.TestCase):
         setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
         myPath = unique_filename(prefix='outTemplate',
-                                    suffix='.pdf',
-                                    dir=temp_dir('test'))
+                                 suffix='.pdf',
+                                 dir=temp_dir('test'))
         LOGGER.debug(myPath)
         myMap.renderTemplate(myInPath, myPath)
         assert os.path.exists(myPath)
@@ -211,8 +212,9 @@ class MapTest(unittest.TestCase):
                                         myImagePath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do not '
-                     'there may be rendering artifacts in windows.\n')
+                      'there may be rendering artifacts in windows.\n')
         assert myFlag, myMessage
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(MapTest, 'test')
