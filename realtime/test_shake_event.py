@@ -499,6 +499,19 @@ searchBoxes: None
         myExpectedShaking = 'Sedang'
         self.assertEqual(myExpectedShaking, myShaking)
 
+    def test_extractDateTime(self):
+        """Check that we extract date and time correctly."""
+        myShakeId = '20120726022003'
+        myShakeEvent = ShakeEvent(myShakeId, theLocale='en')
+        myShakeEvent.extractDateTime('2012-08-07T01:55:12WIB')
+        self.assertEqual('01', myShakeEvent.hour)
+        self.assertEqual('55', myShakeEvent.minute)
+        self.assertEqual('12', myShakeEvent.second)
+        myShakeEvent.extractDateTime('2013-02-07T22:22:37WIB')
+        self.assertEqual('22', myShakeEvent.hour)
+        self.assertEqual('22', myShakeEvent.minute)
+        self.assertEqual('37', myShakeEvent.second)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

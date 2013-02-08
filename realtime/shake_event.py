@@ -206,6 +206,37 @@ class ShakeEvent(QObject):
             LOGGER.error('Event file not found. %s' % myGridXmlPath)
             raise GridXmlFileNotFoundError('%s not found' % myGridXmlPath)
 
+    def extractDateTime(self, theTimeStamp):
+        """Extract the parts of a date given a timestamp as per below example.
+
+        Args:
+            theTimeStamp: str - as provided by the 'event_timestamp'
+                attribute in the grid.xml.
+
+        Returns:
+            None
+
+        Raises:
+            None
+
+        # now separate out its parts
+        # >>> e = "2012-08-07T01:55:12WIB"
+        #>>> e[0:10]
+        #'2012-08-07'
+        #>>> e[12:-3]
+        #'01:55:11'
+        #>>> e[-3:]
+        #'WIB'   (WIB = Western Indonesian Time)
+        """
+        myDateTokens = theTimeStamp[0:10].split('-')
+        self.year = int(myDateTokens[0])
+        self.month = int(myDateTokens[1])
+        self.day = int(myDateTokens[2])
+        myTimeTokens = theTimeStamp[11:-3].split(':')
+        self.hour = int(myTimeTokens[0])
+        self.minute = int(myTimeTokens[1])
+        self.second = int(myTimeTokens[2])
+
     def parseGridXml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
 
@@ -278,23 +309,7 @@ class ShakeEvent(QObject):
             # 2012-08-07T01:55:12WIB
             myTimeStamp = myEventElement.attributes[
                           'event_timestamp'].nodeValue
-            # now separate out its parts
-            # >>> e = "2012-08-07T01:55:12WIB"
-            #>>> e[0:10]
-            #'2012-08-07'
-            #>>> e[12:-3]
-            #'1:55:12'
-            #>>> e[-3:]
-            #'WIB'   (WIB = Western Indonesian Time)
-
-            myDateTokens = myTimeStamp[0:10].split('-')
-            self.year = int(myDateTokens[0])
-            self.month = int(myDateTokens[1])
-            self.day = int(myDateTokens[2])
-            myTimeTokens = myTimeStamp[12:-3].split(':')
-            self.hour = int(myTimeTokens[0])
-            self.minute = int(myTimeTokens[1])
-            self.second = int(myTimeTokens[2])
+            self.extractDateTime(myTimeStamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
             self.timeZone = myTimeStamp[-3:]
