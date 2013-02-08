@@ -46,7 +46,8 @@ def _all():
         'waterfall': 'inasafe-test.localhost',
         'spur': 'inasafe-test.localhost',
         'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
-        'linfiniti': 'inasafe-crisis.linfiniti.com'}
+        'linfiniti': 'inasafe-crisis.linfiniti.com'
+        'hostname': 'experimental.inasafe.org'}
     with hide('output'):
         env.user = env.run('whoami')
         env.hostname = env.run('hostname')
