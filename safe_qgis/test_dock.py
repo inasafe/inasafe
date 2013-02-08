@@ -1089,28 +1089,26 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         myButton = DOCK.pbnRunStop
-        try:
-            QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-            myResult = DOCK.wvResults.page().currentFrame().toPlainText()
-            LOGGER.debug(myResult)
 
-            myMessage = 'Result not as expected: %s' % myResult
-            # This is the expected number of people affected
-            # Jarak [km]	Jumlah	Kumulatif
-            # 3	     15.000	15.000
-            # 5	     17.000	32.000
-            # 10	124.000	156.000
-            assert format_int(15000) in myResult, myMessage
-            assert format_int(17000) in myResult, myMessage
-            assert format_int(124000) in myResult, myMessage
-        except MemoryError:
-            # We cant predictably check for mem errors
-            LOGGER.exception('Memory error occurred.')
-        #pylint: disable=W0703
-        except Exception as e:
-            LOGGER.exception('Failed or Exception is not expected')
-            raise e
-        #pylint: enable=W0703
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        LOGGER.debug(myResult)
+
+        myMessage = 'Result not as expected: %s' % myResult
+        myMemoryString = 'not have sufficient memory'
+        if myMemoryString in myResult:
+            # Test host did not have enough memory to run the test
+            # and user was given a nice message stating this
+            return
+        # This is the expected number of people affected
+        # Jarak [km]	Jumlah	Kumulatif
+        # 3	     15.000	15.000
+        # 5	     17.000	32.000
+        # 10	124.000	156.000
+        assert format_int(15000) in myResult, myMessage
+        assert format_int(17000) in myResult, myMessage
+        assert format_int(124000) in myResult, myMessage
+
 
     # disabled this test until further coding
     def Xtest_printMap(self):
