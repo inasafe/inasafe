@@ -331,10 +331,18 @@ just prior to tagging the release.
 Both of these files should be updated to reflect the version number and the
 metadata.txt file should reflect the release status.
 
-***Outcome:** The plugin metadata to reflects the current version of InaSAFE.
+**Outcome:** The plugin metadata to reflects the current version of InaSAFE.
 
 Generate a test package
 .......................
+
+.. note:: For a better mechanism for creating test packages see
+    :doc:`preparing_test_builds` which includes notes on how to publish test
+    builds to our testing QGIS plugin repository 'http://experimental.inasafe
+    .org/plugins.xml'
+
+When generating a test package, you should update the build number in
+metadata.txt e.g. :kbd:`1.1.0-1` would be the version number for 1.1.0 build 1.
 
 At this point a test package should be generated that can be used to test
 the plugin in a clean room environment. A clean room environment comprises a
@@ -396,9 +404,9 @@ for example :samp:`version-0_1_0`. If the release is a releas candidate or
 and alpha release the letters :samp:`rc` or :samp:`a` resepectively should
 be appended respectively, along with the related number. For example version
 0.1.0 alpha 1 would be tagged as :samp:`version-0_1_0a1`. To tag the release
-simply do it in git as illustrated below.::
+simply do it in git using an annotated tag as illustrated below.::
 
-   git tag version-0_1_0
+   git tag -a version-0_1_0 -m "Version 0.10 release"
    git push --tags origin version-0_1_0
 
 .. note:: Replace 'dot' separators with underscores for the version number.
