@@ -923,7 +923,7 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people needing evacuation
-        assert format_int(134953000) in myResult, myMessage
+        assert format_int(1349000) in myResult, myMessage
 
     def test_runCategorizedHazardBuildingImpact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
