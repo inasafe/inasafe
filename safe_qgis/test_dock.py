@@ -1106,6 +1106,8 @@ class DockTest(unittest.TestCase):
         except MemoryError:
             # We cant predictably check for mem errors
             LOGGER.exception('Memory error occurred.')
+        except AssertionError:
+            raise
         #pylint: disable=W0703
         except Exception as e:
             LOGGER.exception('Failed or Exception is not expected')
