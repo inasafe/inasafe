@@ -1746,7 +1746,6 @@ Click for Diagnostic Information:
         assert myFlag, ('Expected configuration options '
                         'button to be enabled')
 
-
     def test_extentsChanged(self):
         """Memory requirements are calculated correctly when extents change.
         """
@@ -1758,7 +1757,8 @@ Click for Diagnostic Information:
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function')
         myResult = DOCK.checkMemoryUsage()
-        self.assertIn('3mb', myResult)
+        myMessage = 'Expected "3mb" to apear in : %s' % myResult
+        assert '3mb' in myResult, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')

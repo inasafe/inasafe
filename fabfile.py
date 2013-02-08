@@ -47,7 +47,7 @@ def _all():
         'spur': 'inasafe-test.localhost',
         'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
         'linfiniti': 'inasafe-crisis.linfiniti.com',
-        'hostname': 'experimental.inasafe.org'}
+        'shiva': 'experimental.inasafe.org'}
     with hide('output'):
         env.user = env.run('whoami')
         env.hostname = env.run('hostname')
