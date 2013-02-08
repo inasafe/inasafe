@@ -1172,8 +1172,8 @@ class DockTest(unittest.TestCase):
         # later if needed.
         myMessage = ('Raster layer was not assigned a ColorRampShader'
                      ' as expected.')
-        assert (myQgisImpactLayer.colorShadingAlgorithm() ==
-                QgsRasterLayer.ColorRampShader, myMessage)
+        assert myQgisImpactLayer.colorShadingAlgorithm() == \
+                QgsRasterLayer.ColorRampShader, myMessage
 
         # Commenting out because we changed impact function to use floating
         # point quantities. Revisit in QGIS 2.0 where range based transparency
