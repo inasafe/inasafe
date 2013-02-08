@@ -119,13 +119,19 @@ class ImpactFunctionsDocTest(unittest.TestCase):
                     'is pressed.')
         assert expectedTable == realTableReset, msgReset
 
+    # This is how you skip a test when using unittest ...
+    @unittest.skip('Skipping as this test hangs Jenkins if docs not found.')
     def test_showHelp(self):
         """Test that help button works"""
+        # ... and this is how you skip it using nosetests
+        #pylint: disable=W0101
+        raise SkipTest("This test hangs Jenkins if docs dir not present.")
         myDialog = ImpactFunctionsDoc(PARENT)
-        myButton = myDialog.myButtonBox.button(QtGui.QDialogButtonBox.Help)
+        myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
+        #pylint: enable=W0101
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(ImpactFunctionsDocTest, 'test')

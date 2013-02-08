@@ -156,7 +156,7 @@ class KeywordsDialogTest(unittest.TestCase):
         clearLayers()
 
     # This is how you skip a test when using unittest ...
-    @unittest.skip('Skipping as this test hangs Jenkins')
+    @unittest.skip('Skipping as this test hangs Jenkins if docs arent found.')
     def test_showHelp(self):
         """Test that help button works"""
         # ... and this is how you skip it using nosetests
@@ -168,6 +168,7 @@ class KeywordsDialogTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
+        #pylint: enable=W0101
 
     def test_on_pbnAdvanced_toggled(self):
         """Test advanced button toggle behaviour works"""
