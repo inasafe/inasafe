@@ -1758,6 +1758,7 @@ Click for Diagnostic Information:
             theFunctionId='Flood Evacuation Function')
         myResult = DOCK.checkMemoryUsage()
         myMessage = 'Expected "3mb" to apear in : %s' % myResult
+        assert myResult is not None, 'Check memory reported None'
         assert '3mb' in myResult, myMessage
 
 if __name__ == '__main__':
