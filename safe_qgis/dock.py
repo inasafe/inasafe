@@ -1852,6 +1852,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
+
+        # Note: The next line raises a pylint error but I am not disabling the
+        # pylint warning because I think we need some redesign here. TS
         global myAttrs
         try:
             self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
