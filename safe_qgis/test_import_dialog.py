@@ -22,8 +22,13 @@ import os
 import tempfile
 import shutil
 
+from PyQt4.QtCore import QUrl, QObject, pyqtSignal
+from PyQt4.QtGui import (QDialog)
+from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
+from safe_qgis.import_dialog import (httpDownload, httpRequest)
+
 from safe_qgis import import_dialog
-from safe_qgis.utilities_test import getQgisTestApp
+from safe_qgis.utilities_test import (getQgisTestApp, assertHashForFile)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
@@ -31,8 +36,63 @@ LOGGER = logging.getLogger('InaSAFE')
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), 'test_data/test_files')
 
 
-class Mock:
-    pass
+
+class FakeQNetworkReply(QObject):
+
+    readyRead = pyqtSignal()
+    downloadProgress = pyqtSignal('qint64', 'qint64')
+
+    def __init__(self, parent=None):
+        QObject.__init__(self, parent)
+        self.progress = 0
+        self.content = ""
+        self._url = ""
+
+    def isFinished(self):
+        """ simulate download progress """
+        self.progress += 1
+        self.readyRead.emit()
+        self.downloadProgress.emit(self.progress, 4)
+        return self.progress >= 4
+
+    def readAll(self):
+        myContent = self.content
+        self.content = ""
+        return myContent
+
+    def url(self):
+        return QUrl(self._url)
+
+    def error(self):
+        return  QNetworkReply.NoError
+
+
+class FakeQNetworkAccessManager:
+    def post(self, theRequest, theData = None):
+        return self.request(theRequest)
+    def get(self, theRequest):
+        return self.request(theRequest)
+    def request(self, theRequest):
+        myUrl = str(theRequest.url().toString())
+        myReply = FakeQNetworkReply()
+
+        if myUrl == 'http://hot-export.geofabrik.de/newjob':
+            myReply.content = readAll('test-importdlg-newjob.html')
+        elif myUrl == 'http://hot-export.geofabrik.de/wizard_area':
+            myReply.content = readAll('test-importdlg-wizardarea.html')
+        elif myUrl == 'http://hot-export.geofabrik.de/tagupload':
+            myReply.content = readAll('test-importdlg-job.html')
+            myReply._url = 'http://hot-export.geofabrik.de/jobs/1990'
+        elif myUrl == 'http://hot-export.geofabrik.de/jobs/1990':
+            myReply.content = readAll('test-importdlg-job.html')
+        elif myUrl == \
+                'http://hot-export.geofabrik.de/download/' + \
+                '006113/extract.shp.zip':
+            myReply.content = readAll("test-importdlg-extractzip.zip")
+
+        return myReply
+
+
 
 
 def readAll(thePath):
@@ -45,34 +105,55 @@ def readAll(thePath):
     return myContent
 
 
-def fakeResponse(theUrl, theData=None, hooks=None):
-    """ replacement function for requests.get and requests.post """
-    myMock = Mock()
-
-    if theUrl == 'http://hot-export.geofabrik.de/newjob':
-        myMock.content = readAll('test-importdlg-newjob.html')
-    elif theUrl == 'http://hot-export.geofabrik.de/wizard_area':
-        myMock.content = readAll('test-importdlg-wizardarea.html')
-    elif theUrl == 'http://hot-export.geofabrik.de/tagupload':
-        myMock.content = readAll('test-importdlg-job.html')
-        myMock.url = 'http://hot-export.geofabrik.de/jobs/1990'
-    elif theUrl == 'http://hot-export.geofabrik.de/jobs/1990':
-        myMock.content = readAll('test-importdlg-job.html')
-    elif theUrl == \
-            'http://hot-export.geofabrik.de/download/006113/extract.shp.zip':
-        myMock.content = "HELLO WORLD!! THIS IS DUMMY CONTENT"
-
-    return myMock
-
-import_dialog.requests.get = fakeResponse
-import_dialog.requests.post = fakeResponse
-
-
 class ImportDialogTest(unittest.TestCase):
     """Test Import Dialog widget"""
 
+    # def test_httpRequest(self):
+    #     myManager = QNetworkAccessManager(PARENT)
+    #
+    #     # we use httpbin service to test HTTP Request
+    #     myUrl = 'http://httpbin.org/html'
+    #     myResponse = httpRequest(myManager, 'GET', myUrl)
+    #
+    #     myMessage = "Url don't match. Expected {0} but got {1} instead."
+    #     assert myResponse.url == myUrl, myMessage.format(myUrl, myResponse.url)
+    #
+    #     myExpectedContent = readAll('test-importdlg-httprequest.html')
+    #     assert myResponse.content == myExpectedContent, "Content don't match."
+    #
+    #     myUrl = 'http://httpbin.org/post'
+    #     myData = {'name': 'simple POST test', 'value' : 'Hello World'}
+    #     myResponse = httpRequest(myManager, 'POST', myUrl, myData)
+    #
+    #     myPos = myResponse.content.find('"name": "simple POST test"')
+    #     myMessage = "POST Request failed. The response is %s".format(
+    #         myResponse.content)
+    #     assert myPos != -1, myMessage
+    #
+    #
+    # def test_httpDownload(self):
+    #     myManager = QNetworkAccessManager(PARENT)
+    #
+    #     # NOTE(gigih):
+    #     # this is the hash of google front page.
+    #     # I think we can safely assume that the content
+    #     # of google.com never changes (probably).
+    #     #
+    #     myHash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
+    #     myUrl = 'http://google.com'
+    #     myTempFilePath = tempfile.mktemp()
+    #
+    #     import_dialog.httpDownload(myManager, myUrl, myTempFilePath)
+    #
+    #     assertHashForFile(myHash, myTempFilePath)
+
+
     def setUp(self):
         self.importDlg = import_dialog.ImportDialog(PARENT)
+
+        ## provide Fake QNetworkAccessManager for self.nam
+        self.importDlg.nam = FakeQNetworkAccessManager()
+
         self.payload = {
             'job[region_id]': '1',  # 1 is indonesia
             'job[name]': 'InaSAFE job',
@@ -94,8 +175,10 @@ class ImportDialogTest(unittest.TestCase):
 
     def test_createNewJob(self):
         myToken = self.importDlg.createNewJob(self.payload)
+        myMessage = "Token don't match. Expected %s but got %s." % (
+            self.token, myToken)
 
-        assert myToken == 'cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE='
+        assert myToken == self.token, myMessage
 
     def test_uploadTag(self):
         myJobId = self.importDlg.uploadTag(self.payload, self.token)
@@ -143,6 +226,15 @@ class ImportDialogTest(unittest.TestCase):
 
         # remove temporary folder and all of its content
         shutil.rmtree(myOutDir)
+
+    def test_doImport(self):
+        myOutDir = tempfile.mkdtemp()
+        self.importDlg.outDir.setText(myOutDir)
+        self.importDlg.doImport()
+
+        myResult = self.importDlg.progressDialog.result()
+        myMessage = "result dont match. current result is %s " % myResult
+        assert myResult == QDialog.Accepted
 
      # NOTE(gigih): this function fail because qgis.util.iface
      # don't exist outside of QGIS Application

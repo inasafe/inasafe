@@ -17,18 +17,114 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import (QRect, QCoreApplication)
+from PyQt4.QtCore import (QRect, QCoreApplication, QUrl, QFile)
 from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox, QFileDialog)
+from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest, QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
 from bs4 import BeautifulSoup
-import requests
+#import requests
 
 import time
 import os
 
 from inasafe_lightmaps import InasafeLightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
+
+class Response:
+    """ Class that contains the response of httpGet function. """
+    pass
+
+def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
+    """
+    Request the content of url through HTTP protocol.
+    This function use QNetworkAccessManager for doing the request
+    and deals with its asynchronous nature.
+
+    Params:
+        * theManager - instance of QNetworkAccessManager
+        * theMethod - 'POST' or 'GET', other http method is not supported.
+        * theUrl - url of content
+        * theData : dict - dictionary that contains data for POST request.
+                           ignored in GET request.
+        * theHook - callback function to check progress of download
+    Raises:
+        ImportDialogError - when network connection error
+    Returns:
+        A Response object.
+    """
+    myRequest = QNetworkRequest(QUrl(theUrl))
+
+    if callable(theData) and theHook is None:
+        theHook = theData
+        theData = None
+
+    if theMethod == 'GET':
+        myReply = theManager.get(myRequest)
+    elif theMethod == 'POST':
+        # prepare POST data
+        myPostData = QUrl()
+        for myKey, myValue in theData.items():
+            myPostData.addEncodedQueryItem(myKey, str(myValue))
+        myPostData = myPostData.encodedQuery()
+
+        # NOTE(gigih): this content type header don't support
+        #              file upload.
+        myRequest.setHeader(QNetworkRequest.ContentTypeHeader,
+            "application/x-www-form-urlencoded")
+
+        myReply = theManager.post(myRequest, myPostData)
+    else:
+        raise Exception('%s not implemented' % theMethod)
+
+    if theHook:
+        myReply.downloadProgress.connect(theHook)
+
+    # wait until finished
+    while not myReply.isFinished():
+        QCoreApplication.processEvents()
+        time.sleep(0.1)
+
+    if myReply.error() != QNetworkReply.NoError:
+        raise ImportDialogError(myReply.errorString())
+
+    # prepare Response object
+    myResult = Response()
+    myResult.content = str(myReply.readAll())
+    myResult.url = str(myReply.url().toString())
+
+    return myResult
+
+def httpDownload(theManager, theUrl, theOutPath):
+    """ Download file from theUrl.
+    Params:
+        * theManager - a QNetworkManager instance
+        * theUrl - url of file
+        * theOutPath - output path
+    Raises:
+        * IOError - when cannot create theOutPath
+    """
+
+    # prepare output path
+    myFile = QFile(theOutPath)
+    if not myFile.open(QFile.WriteOnly):
+        raise IOError(myFile.errorString())
+
+    def writeData():
+        myFile.write(myReply.readAll())
+
+
+    myRequest = QNetworkRequest(QUrl(theUrl))
+    myReply = theManager.get(myRequest)
+    myReply.readyRead.connect(writeData)
+
+    # wait until finished
+    while not myReply.isFinished():
+        QCoreApplication.processEvents()
+
+    myFile.close()
+
+
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
@@ -69,6 +165,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.map.m_normalMap.updated.connect(self.updateExtent)
 
+        self.nam = QNetworkAccessManager(self)
+
     def updateExtent(self):
         myExtent = self.map.getExtent()
         self.minLongitude.setText(str(myExtent[1]))
@@ -95,13 +193,18 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
             self.progressDialog.cancel()
 
-    def requestHook(self, theRequest):
+    def progressEvent(self, theReceived, theTotal):
         """
         Hook function that check if user press cancel button
         Params:
             * theRequest - request object
         """
+
         QCoreApplication.processEvents()
+
+        self.progressDialog.setMaximum(theTotal)
+        self.progressDialog.setValue(theReceived)
+
         if self.progressDialog.wasCanceled():
             raise CanceledImportDialogError()
 
@@ -154,26 +257,22 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setLabelText(
             self.tr("Create A New Job on Hot-Exports..."))
         myNewJobToken = self.createNewJob(myPayload)
-        self.progressDialog.setValue(10)
 
         ## prepare tag
         self.progressDialog.setLabelText(
             self.tr("Set Preset to ... 'mapping from jakarta'"))
         myJobId = self.uploadTag(myPayload, myNewJobToken)
-        self.progressDialog.setValue(20)
 
         myLabelText = "Waiting For Result Available on Server..." \
                       + " (http://hot-export.geofabrik.de/jobs/%1)"
         self.progressDialog.setLabelText(self.tr(myLabelText).arg(myJobId))
         myShapeUrl = self.getDownloadUrl(myJobId)
-        self.progressDialog.setValue(30)
 
         ## download shape file from Hot-Export
         self.progressDialog.setLabelText(
             self.tr("Download Shape File..."))
         myFilePath = '/tmp/' + myJobId + '.shp.zip'
         self.downloadShapeFile(myShapeUrl, myFilePath)
-        self.progressDialog.setValue(90)
 
         ## extract downloaded file to output directory
         myLabelText = "Extract Shape File... from %1 to %2"
@@ -181,7 +280,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setLabelText(myLabelText)
 
         self.extractZip(myFilePath, str(self.outDir.text()))
-        self.progressDialog.setValue(100)
 
         self.progressDialog.done(QDialog.Accepted)
 
@@ -213,16 +311,15 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
            no exceptions explicitly raised
         """
 
-        myJobResponse = requests.get(self.url + '/newjob')
+        myJobResponse = httpRequest(self.nam, 'GET', self.url + '/newjob',
+            self.progressEvent)
         myJobToken = self.getAuthToken(myJobResponse.content)
 
-        #print "job token : " + myJobToken
         thePayload['authenticity_token'] = myJobToken
 
-        myWizardResponse = requests.post(self.url + '/wizard_area',
-            thePayload, hooks=dict(response=self.requestHook))
+        myWizardResponse = httpRequest(self.nam, 'POST',
+             self.url + '/wizard_area', thePayload)
         myWizardToken = self.getAuthToken(myWizardResponse.content)
-
         return myWizardToken
 
     def uploadTag(self, thePayload, theToken):
@@ -241,8 +338,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         thePayload['authenticity_token'] = theToken
         thePayload['presetfile'] = 4  # preset mapping from jakarta
         thePayload['default_tags'] = 'true'
-        myTagResponse = requests.post(self.url + '/tagupload', thePayload,
-            hooks=dict(response=self.requestHook))
+        myTagResponse = httpRequest(self.nam, 'POST',
+            self.url + '/tagupload', thePayload,
+        )
         myId = myTagResponse.url.split('/')[-1]
 
         return myId
@@ -259,7 +357,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myResultUrl = self.url + '/jobs/' + theJobId
         myIsReady = False
         myCountDown = 5 # in seconds
-        mySleepTime = 0.1 # in seconds
+        mySleepTime = 0.05 # in seconds
 
         while myIsReady is False:
             ## we need to call QCoreApplication.processEvents() because
@@ -273,8 +371,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             ## we only check Hot-Export each 5 seconds because we don't
             ## want to accidentally DDOS-ing it.
             if myCountDown <= 0:
-                myResultResponse = requests.get(myResultUrl,
-                    hooks=dict(response=self.requestHook))
+                myResultResponse = httpRequest(self.nam, 'GET', myResultUrl)
                 mySoup = BeautifulSoup(myResultResponse.content)
                 myLinks = mySoup.find_all('a', text='ESRI Shapefile (zipped)')
 
@@ -298,12 +395,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             * theOutput - path of output file
         """
 
-        myShapeResponse = requests.get(theUrl,
-            hooks=dict(response=self.requestHook))
+        httpDownload(self.nam, theUrl, theOutput)
 
-        myShapeFile = open(theOutput, 'wb')
-        myShapeFile.write(myShapeResponse.content)
-        myShapeFile.close()
 
     def extractZip(self, thePath, theOutDir):
         """
@@ -351,6 +444,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     a = ImportDialog()
-    a.show()
-    app.exec_()
-    #a.doImport()
+    #a.show()
+    #app.exec_()
+    a.doImport()
