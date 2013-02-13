@@ -58,7 +58,6 @@ class InasafeSlippyMap(SlippyMap):
         SlippyMap.invalidate(self, theEmitSignal)
         self.calculateExtent()
 
-
     def flipLatitude(self, theNumber):
         """
         This function will return a number which always in range of
@@ -70,12 +69,11 @@ class InasafeSlippyMap(SlippyMap):
             a number in range of -90 and +90
         """
         if theNumber > 90:
-            theNumber =  180 - theNumber
+            theNumber = 180 - theNumber
         if theNumber < -90:
-            theNumber =  -180 - theNumber
+            theNumber = -180 - theNumber
 
         return theNumber
-
 
     def flipLongitude(self, theNumber):
         """

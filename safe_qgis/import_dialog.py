@@ -19,7 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4.QtCore import (QRect, QCoreApplication, QUrl, QFile)
 from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox, QFileDialog)
-from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest, QNetworkReply)
+from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
+                             QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
 from bs4 import BeautifulSoup
@@ -30,9 +31,11 @@ import os
 from inasafe_lightmaps import InasafeLightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
 
+
 class Response:
     """ Class that contains the response of httpRequest function. """
     pass
+
 
 def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
     """
@@ -71,7 +74,7 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
         # NOTE(gigih): this content type header don't support
         #              file upload.
         myRequest.setHeader(QNetworkRequest.ContentTypeHeader,
-            "application/x-www-form-urlencoded")
+                            "application/x-www-form-urlencoded")
 
         myReply = theManager.post(myRequest, myPostData)
     else:
@@ -94,6 +97,7 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
     myResult.url = str(myReply.url().toString())
 
     return myResult
+
 
 def httpDownload(theManager, theUrl, theOutPath, theHook=None):
     """ Download file from theUrl.
@@ -127,7 +131,6 @@ def httpDownload(theManager, theUrl, theOutPath, theHook=None):
         QCoreApplication.processEvents()
 
     myFile.close()
-
 
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
@@ -182,7 +185,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def on_pBtnDir_clicked(self):
         """ Show a dialog to choose directory """
-        self.outDir.setText(QFileDialog.getExistingDirectory(self, self.tr("Select Directory")))
+        self.outDir.setText(QFileDialog.getExistingDirectory(
+            self, self.tr("Select Directory")))
 
     def accept(self):
         """ Do import process """
@@ -196,8 +200,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             pass
         except Exception as myEx:
             QMessageBox.warning(self,
-                self.tr("Hot-Export Import Error"),
-                str(myEx))
+                                self.tr("Hot-Export Import Error"),
+                                str(myEx))
 
             self.progressDialog.cancel()
 
@@ -242,8 +246,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myQuestion = self.tr(
             "Directory %1 not exist. Are you want to create it?"
         ).arg(myDir)
-        myAnswer = QMessageBox.question(self, myTitle,
-            myQuestion,QMessageBox.Yes | QMessageBox.No)
+        myAnswer = QMessageBox.question(
+            self, myTitle,
+            myQuestion, QMessageBox.Yes | QMessageBox.No)
 
         if myAnswer == QMessageBox.Yes:
             os.makedirs(myDir)
@@ -263,8 +268,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myPayload = {
             'job[region_id]': '1',  # 1 is indonesia
             'job[name]': 'InaSAFE job',
-            'job[description]': 'This job created from import feature in InaSAFE',
-
+            'job[description]': 'Created from import feature in InaSAFE',
             'job[lonmin]': str(self.minLongitude.text()),
             'job[latmin]': str(self.minLatitude.text()),
             'job[lonmax]': str(self.maxLongitude.text()),
@@ -294,7 +298,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         ## extract downloaded file to output directory
         myLabelText = "Extract Shape File... from %1 to %2"
-        myLabelText = self.tr(myLabelText).arg(myFilePath).arg(self.outDir.text())
+        myLabelText = self.tr(myLabelText)
+        myLabelText = myLabelText.arg(myFilePath).arg(self.outDir.text())
         self.progressDialog.setLabelText(myLabelText)
 
         self.extractZip(myFilePath, str(self.outDir.text()))
@@ -329,14 +334,17 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
            no exceptions explicitly raised
         """
 
-        myJobResponse = httpRequest(self.nam, 'GET', self.url + '/newjob',
-            self.progressEvent)
+        myJobResponse = httpRequest(self.nam, 'GET',
+                                    self.url + '/newjob',
+                                    self.progressEvent)
         myJobToken = self.getAuthToken(myJobResponse.content)
 
         thePayload['authenticity_token'] = myJobToken
 
         myWizardResponse = httpRequest(self.nam, 'POST',
-             self.url + '/wizard_area', thePayload, self.progressEvent)
+                                       self.url + '/wizard_area',
+                                       thePayload,
+                                       self.progressEvent)
         myWizardToken = self.getAuthToken(myWizardResponse.content)
         return myWizardToken
 
@@ -356,9 +364,11 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         thePayload['authenticity_token'] = theToken
         thePayload['presetfile'] = 4  # preset mapping from jakarta
         thePayload['default_tags'] = 'true'
-        myTagResponse = httpRequest(self.nam, 'POST',
-            self.url + '/tagupload', thePayload,
-        )
+        myTagResponse = httpRequest(
+            self.nam, 'POST',
+            self.url + '/tagupload',
+            thePayload,
+            self.progressEvent)
         myId = myTagResponse.url.split('/')[-1]
 
         return myId
@@ -374,8 +384,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         myResultUrl = self.url + '/jobs/' + theJobId
         myIsReady = False
-        myCountDown = 5 # in seconds
-        mySleepTime = 0.05 # in seconds
+        myCountDown = 5     # in seconds
+        mySleepTime = 0.05  # in seconds
 
         while myIsReady is False:
             ## we need to call QCoreApplication.processEvents() because
@@ -415,7 +425,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         """
 
         httpDownload(self.nam, theUrl, theOutput, self.progressEvent)
-
 
     def extractZip(self, thePath, theOutDir):
         """

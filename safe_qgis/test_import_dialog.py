@@ -35,7 +35,6 @@ LOGGER = logging.getLogger('InaSAFE')
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), 'test_data/test_files')
 
 
-
 class FakeQNetworkReply(QObject):
 
     readyRead = pyqtSignal()
@@ -67,10 +66,12 @@ class FakeQNetworkReply(QObject):
 
 
 class FakeQNetworkAccessManager:
-    def post(self, theRequest, theData = None):
+    def post(self, theRequest, theData=None):
         return self.request(theRequest)
+
     def get(self, theRequest):
         return self.request(theRequest)
+
     def request(self, theRequest):
         myUrl = str(theRequest.url().toString())
         myReply = FakeQNetworkReply()
@@ -90,8 +91,6 @@ class FakeQNetworkAccessManager:
             myReply.content = readAll("test-importdlg-extractzip.zip")
 
         return myReply
-
-
 
 
 def readAll(thePath):
@@ -121,14 +120,13 @@ class ImportDialogTest(unittest.TestCase):
         assert myResponse.content == myExpectedContent, "Content don't match."
 
         myUrl = 'http://httpbin.org/post'
-        myData = {'name': 'simple POST test', 'value' : 'Hello World'}
+        myData = {'name': 'simple POST test', 'value': 'Hello World'}
         myResponse = httpRequest(myManager, 'POST', myUrl, myData)
 
         myPos = myResponse.content.find('"name": "simple POST test"')
         myMessage = "POST Request failed. The response is %s".format(
             myResponse.content)
         assert myPos != -1, myMessage
-
 
     def test_httpDownload(self):
         myManager = QNetworkAccessManager(PARENT)
@@ -145,7 +143,6 @@ class ImportDialogTest(unittest.TestCase):
         httpDownload(myManager, myUrl, myTempFilePath)
 
         assertHashForFile(myHash, myTempFilePath)
-
 
     def setUp(self):
         self.importDlg = ImportDialog(PARENT, IFACE)
@@ -236,23 +233,23 @@ class ImportDialogTest(unittest.TestCase):
         assert myResult == QDialog.Accepted
 
     def test_loadShapeFile(self):
-       """ test loading shape file to QGIS Main Window """
+        """ test loading shape file to QGIS Main Window """
 
-       myInput = os.path.join(TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
-       myOutDir = tempfile.mkdtemp()
+        myInput = os.path.join(TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
+        myOutDir = tempfile.mkdtemp()
 
-       self.importDlg.extractZip(myInput, myOutDir)
+        self.importDlg.extractZip(myInput, myOutDir)
 
-       # outDir must be set to myOutDir because loadShapeFile() use
-       # that variable to determine the location of shape files.
-       self.importDlg.outDir.setText(myOutDir)
+        # outDir must be set to myOutDir because loadShapeFile() use
+        # that variable to determine the location of shape files.
+        self.importDlg.outDir.setText(myOutDir)
 
-       self.importDlg.loadShapeFile()
+        self.importDlg.loadShapeFile()
 
-       #FIXME(gigih): need to check if layer is loaded to QGIS
+        #FIXME(gigih): need to check if layer is loaded to QGIS
 
-       # remove temporary folder and all of its content
-       shutil.rmtree(myOutDir)
+        # remove temporary folder and all of its content
+        shutil.rmtree(myOutDir)
 
 
 if __name__ == '__main__':
