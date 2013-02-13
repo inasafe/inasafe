@@ -23,7 +23,6 @@ from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest, QNetworkRep
 from import_dialog_base import Ui_ImportDialogBase
 
 from bs4 import BeautifulSoup
-#import requests
 
 import time
 import os
@@ -32,7 +31,7 @@ from inasafe_lightmaps import InasafeLightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
 
 class Response:
-    """ Class that contains the response of httpGet function. """
+    """ Class that contains the response of httpRequest function. """
     pass
 
 def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
@@ -49,7 +48,8 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
                            ignored in GET request.
         * theHook - callback function to check progress of download
     Raises:
-        ImportDialogError - when network connection error
+        * ImportDialogError - when network connection error.
+        * NotImplementedError - when theMethod value is not 'POST' or 'GET'.
     Returns:
         A Response object.
     """
@@ -75,7 +75,7 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
 
         myReply = theManager.post(myRequest, myPostData)
     else:
-        raise Exception('%s not implemented' % theMethod)
+        raise NotImplementedError('%s not implemented' % theMethod)
 
     if theHook:
         myReply.downloadProgress.connect(theHook)
@@ -95,12 +95,13 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
 
     return myResult
 
-def httpDownload(theManager, theUrl, theOutPath):
+def httpDownload(theManager, theUrl, theOutPath, theHook=None):
     """ Download file from theUrl.
     Params:
         * theManager - a QNetworkManager instance
         * theUrl - url of file
         * theOutPath - output path
+        * theHook - callback function to check progress of download
     Raises:
         * IOError - when cannot create theOutPath
     """
@@ -110,13 +111,16 @@ def httpDownload(theManager, theUrl, theOutPath):
     if not myFile.open(QFile.WriteOnly):
         raise IOError(myFile.errorString())
 
+    # slot to write data to file
     def writeData():
         myFile.write(myReply.readAll())
-
 
     myRequest = QNetworkRequest(QUrl(theUrl))
     myReply = theManager.get(myRequest)
     myReply.readyRead.connect(writeData)
+
+    if theHook:
+        myReply.downloadProgress.connect(theHook)
 
     # wait until finished
     while not myReply.isFinished():
@@ -168,6 +172,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.nam = QNetworkAccessManager(self)
 
     def updateExtent(self):
+        """ Update extent value in GUI based from value in map widget"""
         myExtent = self.map.getExtent()
         self.minLongitude.setText(str(myExtent[1]))
         self.minLatitude.setText(str(myExtent[0]))
@@ -175,9 +180,11 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.maxLatitude.setText(str(myExtent[2]))
 
     def on_pBtnDir_clicked(self):
+        """ Show a dialog to choose directory """
         self.outDir.setText(QFileDialog.getExistingDirectory(self, self.tr("Select Directory")))
 
     def accept(self):
+        """ Do import process """
 
         try:
             self.ensureDirExist()
@@ -195,9 +202,15 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def progressEvent(self, theReceived, theTotal):
         """
-        Hook function that check if user press cancel button
+        Hook function that called when doing http request.
+        This function will update the value of progress bar and
+        check if user press cancel button.
+
         Params:
-            * theRequest - request object
+            * theReceived : int - number of bytes received
+            * theTotal : int - total bytes of download
+        Raises:
+            CanceledImportDialogError - when user press cancel button
         """
 
         QCoreApplication.processEvents()
@@ -210,8 +223,13 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def ensureDirExist(self):
         """
-        Check if directory exist of not.
-        If not found, give user a dialog box to create it
+        Ensure directory path entered in dialog exist.
+        When the path is not exist, this function will
+        ask the user if he want to create it or not.
+
+        Raises:
+            CanceledImportDialogError - when user choose 'No'
+                        in question dialog for creating directory.
         """
 
         myDir = str(self.outDir.text())
@@ -233,8 +251,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def doImport(self):
         """
-        This function will do all actions for importing shape files
-        from Hot-Export
+        Import shape files from Hot-Export.
         """
 
         self.progressDialog.show()
@@ -318,7 +335,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         thePayload['authenticity_token'] = myJobToken
 
         myWizardResponse = httpRequest(self.nam, 'POST',
-             self.url + '/wizard_area', thePayload)
+             self.url + '/wizard_area', thePayload, self.progressEvent)
         myWizardToken = self.getAuthToken(myWizardResponse.content)
         return myWizardToken
 
@@ -371,7 +388,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             ## we only check Hot-Export each 5 seconds because we don't
             ## want to accidentally DDOS-ing it.
             if myCountDown <= 0:
-                myResultResponse = httpRequest(self.nam, 'GET', myResultUrl)
+                myResultResponse = httpRequest(self.nam, 'GET', myResultUrl,
+                                               self.progressEvent)
                 mySoup = BeautifulSoup(myResultResponse.content)
                 myLinks = mySoup.find_all('a', text='ESRI Shapefile (zipped)')
 
@@ -395,7 +413,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             * theOutput - path of output file
         """
 
-        httpDownload(self.nam, theUrl, theOutput)
+        httpDownload(self.nam, theUrl, theOutput, self.progressEvent)
 
 
     def extractZip(self, thePath, theOutDir):
@@ -404,6 +422,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         Args:
            * thePath - the path of zip file
            * theOutDir - output directory
+        Raises:
+            IOError - when cannot open thePath or theOutDir is not exist.
         """
 
         import zipfile
