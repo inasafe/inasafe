@@ -271,7 +271,6 @@ class Plugin:
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionMinimumNeeds)
 
-
         #---------------------------------------
         # Create action for converter dialog
         #---------------------------------------

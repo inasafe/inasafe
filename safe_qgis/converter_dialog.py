@@ -19,10 +19,15 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import logging
+
 from converter_dialog_base import Ui_ConverterDialogBase
 from PyQt4 import QtGui
 
 from safe_qgis.safe_interface import get_version
+
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
     """Converter Dialog for InaSAFE
@@ -44,6 +49,11 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(get_version()))
 
+    def accept(self):
+        LOGGER.debug('OK Ok OK oK oK OK')
+        self.done(self.Accepted)
+        pass
+
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenInput_clicked(self):
         """Autoconnect slot activated when the open input tool button is
@@ -56,11 +66,10 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
             None
         """
         myFilename = QtGui.QFileDialog.getOpenFileName(self,
-                                                       self.tr('Input file'),
-                                                       'grid.xml',
-                                                       self.tr('Raw grid file(*.xml)'))
+                                            self.tr('Input file'),
+                                            'grid.xml',
+                                            self.tr('Raw grid file(*.xml)'))
         self.leInputPath.setText(myFilename)
-
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenOutput_clicked(self):
@@ -74,7 +83,7 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
             None
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
-                                                       self.tr('Ouput file'),
-                                                       'ismailsunni.tif',
-                                                       self.tr('Raster file(*.tif)'))
+                                                self.tr('Ouput file'),
+                                                'ismailsunni.tif',
+                                                self.tr('Raster file(*.tif)'))
         self.leOutputPath.setText(myFilename)
