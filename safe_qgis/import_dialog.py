@@ -445,8 +445,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         Load downloaded shape file to QGIS Main Window.
         """
 
-        from qgis.utils import iface
-
         myDir = str(self.outDir.text())
 
         myLinePath = os.path.join(myDir, 'planet_osm_line.shp')
