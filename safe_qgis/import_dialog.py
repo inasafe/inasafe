@@ -23,7 +23,7 @@ from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
                              QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
-from bs4 import BeautifulSoup
+from third_party.bs4 import BeautifulSoup
 
 import time
 import os
