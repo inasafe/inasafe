@@ -275,13 +275,14 @@ class Plugin:
         # Create action for import OSM Dialog
         #--------------------------------------
         self.actionImportDlg = QAction(
-            QIcon(':/plugins/inasafe/functions-table.png'), ## FIXME: need different icon
-            self.tr('InaSAFE Import Dialog'),
+            ## FIXME(gigih): need different icon
+            QIcon(':/plugins/inasafe/functions-table.png'),
+            self.tr('InaSAFE OpenStreetMap Downloader'),
             self.iface.mainWindow())
         self.actionImportDlg.setStatusTip(self.tr(
-            'Open InaSAFE Import Dialog'))
+            'InaSAFE OpenStreetMap Downloader'))
         self.actionImportDlg.setWhatsThis(self.tr(
-            'Open InaSAFE Import Dialog'))
+            'InaSAFE OpenStreetMap Downloader'))
         QObject.connect(self.actionImportDlg, SIGNAL('triggered()'),
             self.showImportDlg)
 
