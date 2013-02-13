@@ -57,7 +57,8 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
     Returns:
         A Response object.
     """
-    myRequest = QNetworkRequest(QUrl(theUrl))
+    myUrl = QUrl(theUrl)
+    myRequest = QNetworkRequest(myUrl)
 
     if callable(theData) and theHook is None:
         theHook = theData
@@ -81,16 +82,28 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
     else:
         raise NotImplementedError('%s not implemented' % theMethod)
 
-    if theHook:
-        myReply.downloadProgress.connect(theHook)
 
-    # wait until finished
-    while not myReply.isFinished():
-        QCoreApplication.processEvents()
-        time.sleep(0.1)
+    def wait():
+        if theHook:
+            myReply.downloadProgress.connect(theHook)
 
-    if myReply.error() != QNetworkReply.NoError:
-        raise ImportDialogError(myReply.errorString())
+        # wait until finished
+        while not myReply.isFinished():
+            QCoreApplication.processEvents()
+            time.sleep(0.1)
+
+        if myReply.error() != QNetworkReply.NoError:
+            raise ImportDialogError(myReply.errorString())
+
+    wait()
+
+    ## check redirection
+    myRedirectUrl = myReply.attribute(QNetworkRequest.RedirectionTargetAttribute)
+    myRedirectUrl = myRedirectUrl.toUrl()
+
+    if not myRedirectUrl.isEmpty() and myRedirectUrl != myUrl:
+        myReply = theManager.get(QNetworkRequest(myRedirectUrl))
+        wait()
 
     # prepare Response object
     myResult = Response()
