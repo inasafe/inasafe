@@ -47,6 +47,8 @@ from PyQt4.QtCore import (QCoreApplication,
                           QTranslator
                           )
 from PyQt4.QtXml import QDomDocument
+# pylint: disable=E0611
+# Above for pallabelling
 from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
@@ -63,7 +65,8 @@ from qgis.core import (QgsPoint,
                        QgsMapLayerRegistry,
                        QgsMapRenderer,
                        QgsPalLabeling)
-#TODO refactor this into a utilitiy class as it is no longer only used by test
+# pylint: enable=E0611
+#TODO refactor this into a utility class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
@@ -203,6 +206,37 @@ class ShakeEvent(QObject):
             LOGGER.error('Event file not found. %s' % myGridXmlPath)
             raise GridXmlFileNotFoundError('%s not found' % myGridXmlPath)
 
+    def extractDateTime(self, theTimeStamp):
+        """Extract the parts of a date given a timestamp as per below example.
+
+        Args:
+            theTimeStamp: str - as provided by the 'event_timestamp'
+                attribute in the grid.xml.
+
+        Returns:
+            None
+
+        Raises:
+            None
+
+        # now separate out its parts
+        # >>> e = "2012-08-07T01:55:12WIB"
+        #>>> e[0:10]
+        #'2012-08-07'
+        #>>> e[12:-3]
+        #'01:55:11'
+        #>>> e[-3:]
+        #'WIB'   (WIB = Western Indonesian Time)
+        """
+        myDateTokens = theTimeStamp[0:10].split('-')
+        self.year = int(myDateTokens[0])
+        self.month = int(myDateTokens[1])
+        self.day = int(myDateTokens[2])
+        myTimeTokens = theTimeStamp[11:-3].split(':')
+        self.hour = int(myTimeTokens[0])
+        self.minute = int(myTimeTokens[1])
+        self.second = int(myTimeTokens[2])
+
     def parseGridXml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
 
@@ -275,23 +309,7 @@ class ShakeEvent(QObject):
             # 2012-08-07T01:55:12WIB
             myTimeStamp = myEventElement.attributes[
                           'event_timestamp'].nodeValue
-            # now separate out its parts
-            # >>> e = "2012-08-07T01:55:12WIB"
-            #>>> e[0:10]
-            #'2012-08-07'
-            #>>> e[12:-3]
-            #'1:55:12'
-            #>>> e[-3:]
-            #'WIB'   (WIB = Western Indonesian Time)
-
-            myDateTokens = myTimeStamp[0:10].split('-')
-            self.year = int(myDateTokens[0])
-            self.month = int(myDateTokens[1])
-            self.day = int(myDateTokens[2])
-            myTimeTokens = myTimeStamp[12:-3].split(':')
-            self.hour = int(myTimeTokens[0])
-            self.minute = int(myTimeTokens[1])
-            self.second = int(myTimeTokens[2])
+            self.extractDateTime(myTimeStamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
             self.timeZone = myTimeStamp[-3:]
@@ -394,11 +412,11 @@ class ShakeEvent(QObject):
         myFile.write(self.mmiDataToDelimitedText())
         myFile.close()
 
-        # Also write the .csvt which contains metadata about field types
-        myCsvtPath = os.path.join(shakemapExtractDir(),
+        # Also write the .csv which contains metadata about field types
+        myCsvPath = os.path.join(shakemapExtractDir(),
                                   self.eventId,
                                   'mmi.csvt')
-        myFile = file(myCsvtPath, 'wt')
+        myFile = file(myCsvPath, 'wt')
         myFile.write('"Real","Real","Real"')
         myFile.close()
         return myPath
@@ -810,7 +828,8 @@ class ShakeEvent(QObject):
             None
         """
 
-        myRGBList = ['#FFFFFF', '#209fff', '#00cfff', '#55ffff', '#aaffff',
+        myRGBList = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff', '#55ffff',
+                     '#aaffff',
                      '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00',
                      '#800', '#400']
         myRGB = myRGBList[int(theMMIValue)]

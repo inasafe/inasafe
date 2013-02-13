@@ -9,7 +9,7 @@ LOCALES='en id'
 for LOCALE in $LOCALES
 do
   mkdir -p public/${LOCALE}
-  cp -r /home/timlinux/dev/python/inasafe-realtime/realtime/fixtures/web/resource/ /home/web/quake/public/${LOCALE}/
+  cp -r ${HOME}/dev/python/inasafe-realtime/realtime/fixtures/web/resource/ /home/web/quake/public/${LOCALE}/
   for FILE in `find shakemaps-extracted -name *-${LOCALE}.pdf`
   do 
     BASE=`basename $FILE .pdf`

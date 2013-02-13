@@ -197,12 +197,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #            stdoutToServer=True,
         #            stderrToServer=True)
 
+        myCanvas = self.iface.mapCanvas()
+
+        # Enable on the fly projection by default
+        myCanvas.mapRenderer().setProjectionsEnabled(True)
+
         # Listen for changes in canvas extent so we can
         # check if the analysis is feasible as the extent changes
-        myCanvas = self.iface.mapCanvas()
         QtCore.QObject.connect(myCanvas, QtCore.SIGNAL('extentsChanged()'),
                                self.checkMemoryUsage)
-
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
@@ -975,13 +978,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.calculator.setFunction(myFunctionID)
 
     def accept(self):
-        """Execute analysis when ok button is clicked.
+        """Execute analysis when run button is clicked.
 
         .. todo:: FIXME (Tim) We may have to implement some polling logic
             because the button click accept() function and the updating
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        myMessage = self.checkMemoryUsage()
+        if myMessage is not None:
+            myResult = QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
+                self.tr('You may not have sufficient free system memory to '
+                        'carry out this analysis. See the dock panel '
+                        'message for more information. Would you like to '
+                        'continue regardless?'), QtGui.QMessageBox.Yes |
+                        QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+            if myResult == QtGui.QMessageBox.No:
+                # stop work here and return to QGIS
+                return
+
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
@@ -1837,6 +1852,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
+
+        # Note: The next line raises a pylint error but I am not disabling the
+        # pylint warning because I think we need some redesign here. TS
         global myAttrs
         try:
             self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
@@ -2593,7 +2611,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(myCellSize, myExposureGeoCellSize):
-                    myExtraExposureKeywords['resolution'] = myExposureGeoCellSize
+                    myExtraExposureKeywords['resolution'] = \
+                        myExposureGeoCellSize
             else:
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
@@ -2612,7 +2631,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if myHazardLayer.geometryType() == QGis.Point:
                 myGeoExtent = myExposureGeoExtent
 
-        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,\
+        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize, \
             myExposureLayer, myGeoExtent, myHazardLayer
 
     def optimalClip(self):
@@ -3091,8 +3110,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             _, myBufferedGeoExtent, myCellSize, _, _, \
             _ = self.getClipParameters()
-        except:
-            return  # ignore any error
+        except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
+            LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            return None  # ignore any error
 
         myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
         myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
@@ -3104,7 +3124,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             LOGGER.exception('Error: Computed cellsize was None.')
             _, myReadyMessage = self.validate()
             self.displayHtml(myReadyMessage)
-            return
+            return None
 
         LOGGER.info('Width: %s' % myWidth)
         LOGGER.info('Height: %s' % myHeight)
@@ -3118,7 +3138,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # half this since the tifs as in single precision,
         # whereas numpy arrays are in double precision.
         myRequirement = ((myWidth * myHeight * 8) / 1024 / 1024)
-        myFreeMemory = get_free_memory()
+        try:
+            myFreeMemory = get_free_memory()
+        except ValueError:
+            myMessage = 'Could not determine free memory'
+            LOGGER.exception(myMessage)
+            return None
+
         # We work on the assumption that if more than 10% of the available
         # memory is occupied by a single layer we could run out of memory
         # (depending on the impact function). This is because multiple
@@ -3126,22 +3152,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myWarningLimit = 10
         myUsageIndicator = (float(myRequirement) / float(myFreeMemory)) * 100
         myCountsMessage = ('Memory requirement: about %imb per raster layer ('
-                     '%imb available). %.2f / %s' %
-                     (myRequirement, myFreeMemory, myUsageIndicator,
-                      myWarningLimit))
-        myMessage = ''
+                           '%imb available). %.2f / %s' %
+                           (myRequirement, myFreeMemory, myUsageIndicator,
+                            myWarningLimit))
+        myMessage = None
         if myWarningLimit <= myUsageIndicator:
             myMessage = self.tr('There may not be enough free memory to '
-                         'run this analysis. You can attempt to run the '
-                         'analysis anyway, but note that your computer may '
-                         'become unresponsive during execution, '
-                         'and / or the analysis may fail due to insufficient '
-                         'memory. Proceed at your own risk.')
-            mySuggestion = self.tr('Try zooming in to a smaller area or using'
-                                   ' a raster layer with a coarser resolution'
-                                   ' to speed up execution and reduce memory'
-                                   ' requirements. You could also try adding'
-                                   ' more RAM to your computer.')
+                'run this analysis. You can attempt to run the '
+                'analysis anyway, but note that your computer may '
+                'become unresponsive during execution, '
+                'and / or the analysis may fail due to insufficient '
+                'memory. Proceed at your own risk.')
+            mySuggestion = self.tr('Try zooming in to a smaller area or using '
+                'a raster layer with a coarser resolution '
+                'to speed up execution and reduce memory '
+                'requirements. You could also try adding '
+                'more RAM to your computer.')
             myHtmlMessage = ('<table class="condensed">'
                              '<tr><th class="warning '
                              'button-cell">%s</th></tr>\n'
@@ -3150,14 +3176,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                              'button-cell">%s</th></tr>\n'
                              '<tr><td>%s</td></tr>\n</table>' %
                              (
-                              self.tr('Memory usage:'),
-                              myMessage,
-                              self.tr('Suggestion'),
-                              mySuggestion))
+                                 self.tr('Memory usage:'),
+                                 myMessage,
+                                 self.tr('Suggestion'),
+                                 mySuggestion))
             _, myReadyMessage = self.validate()
             myReadyMessage += myHtmlMessage
             self.displayHtml(myReadyMessage)
 
         LOGGER.info(myCountsMessage)
-        return myMessage + ' ' + myCountsMessage
-
+        # Caller will assume enough memory if myMessage is None
+        return myMessage

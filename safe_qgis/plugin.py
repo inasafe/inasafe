@@ -29,8 +29,16 @@ from PyQt4.QtCore import (QObject,
                           Qt,
                           QSettings,
                           QVariant)
-from PyQt4.QtGui import QAction, QIcon, QApplication
-from safe_qgis.exceptions import TranslationLoadError
+from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
+try:
+    # When upgrading, using the plugin manager, you may get an error when
+    # doing the following import, so we wrap it in a try except
+    # block and then display a friendly message to restart QGIS
+    from safe_qgis.exceptions import TranslationLoadError
+except ImportError:
+    # Note these strings cant be translated.
+    QMessageBox.warning(None, 'InaSAFE',
+                        'Please restart QGIS to use this plugin.')
 import utilities
 
 

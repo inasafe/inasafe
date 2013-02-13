@@ -46,6 +46,7 @@ from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
 from impact_functions_for_testing import itb_fatality_model_org
+from impact_functions_for_testing import padang_building_impact_model
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
 PAGFatalityFunction)
 # pylint: enable=W0611

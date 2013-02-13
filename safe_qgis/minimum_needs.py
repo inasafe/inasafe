@@ -78,9 +78,10 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                 try:
                     displaced = int(population)
                 except ValueError:
-                    QtGui.QMessageBox.information(None, 'Format error',
-                    'Please change the value of %s in '
-                    'attribute %s to integer format' %
+                    QtGui.QMessageBox.information(None,
+                        self.tr('Format error'),
+                        self.tr('Please change the value of %s in '
+                        'attribute %s to integer format') %
                      (population, population_name))
                     raise ValueError
 

@@ -41,21 +41,21 @@ from safe.impact_functions.core import format_int
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
 
 from safe_qgis.utilities_test import (getQgisTestApp,
-                                setCanvasCrs,
-                                setPadangGeoExtent,
-                                setBatemansBayGeoExtent,
-                                setJakartaGeoExtent,
-                                setYogyaGeoExtent,
-                                setJakartaGoogleExtent,
-                                setGeoExtent,
-                                GEOCRS,
-                                GOOGLECRS,
-                                loadLayer)
+                                      setCanvasCrs,
+                                      setPadangGeoExtent,
+                                      setBatemansBayGeoExtent,
+                                      setJakartaGeoExtent,
+                                      setYogyaGeoExtent,
+                                      setJakartaGoogleExtent,
+                                      setGeoExtent,
+                                      GEOCRS,
+                                      GOOGLECRS,
+                                      loadLayer)
 
 from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
-                          qgisVersion,
-                          getDefaults)
+                                 qgisVersion,
+                                 getDefaults)
 
 
 # Retired impact function for characterisation (Ole)
@@ -64,6 +64,10 @@ from safe_qgis.utilities import (setRasterStyle,
 from safe.engine.impact_functions_for_testing import allen_fatality_model
 from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+from safe.engine.impact_functions_for_testing import \
+    categorised_hazard_population
+from safe.engine.impact_functions_for_testing import \
+    categorised_hazard_building_impact
 #from safe.engine.impact_functions_for_testing import error_raising_functions
 # pylint: enable=W0611
 
@@ -76,7 +80,7 @@ YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
-    'test_data/test_files')
+                              'test_data/test_files')
 
 
 def getUiState(ui):
@@ -298,9 +302,10 @@ def loadStandardLayers():
                   join(TESTDATA, 'Merapi_alert.shp'),
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                       theDataDirectory=None)
-    #FIXME (MB) -1 is until we add the aggregation category because of
-    # kabupaten_jakarta* not being either hazard nor exposure layer
+        theDataDirectory=None)
+    #FIXME (MB) -1 is untill we add the aggregation category because of
+    # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
+
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
 
     return myHazardLayerCount, myExposureLayerCount
@@ -324,7 +329,7 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
             myHazardLayerCount += 1
         elif myType == 'exposure':
             myExposureLayerCount += 1
-        # Add layer to the registry (that QGis knows about) a slot
+            # Add layer to the registry (that QGis knows about) a slot
         # in qgis_interface will also ensure it gets added to the canvas
         if qgisVersion() >= 10800:  # 1.8 or newer
             QgsMapLayerRegistry.instance().addMapLayers([myLayer])
@@ -415,8 +420,10 @@ class DockTest(unittest.TestCase):
         self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
             'Entire area'), myMessage)
 
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-            'combobox should be disabled when the project has no layer.'
+        myMessage = ('The aggregation combobox should be disabled when the '
+                     'project has no layer.')
+
+        assert not DOCK.cboAggregation.isEnabled(), myMessage
 
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -609,8 +616,8 @@ class DockTest(unittest.TestCase):
         myAfterCount = len(CANVAS.layers())
         LOGGER.info("Registry list after:\n%s" %
                     len(QgsMapLayerRegistry.instance().mapLayers()))
-#        print [str(l.name()) for l in QgsMapLayerRegistry.instance(
-#           ).mapLayers().values()]
+        #        print [str(l.name()) for l in QgsMapLayerRegistry.instance(
+        #           ).mapLayers().values()]
         #LOGGER.info("Canvas list after:\n%s" % canvasList())
         myMessage = ('Expected %s items in canvas, got %s' %
                      (myBeforeCount + 1, myAfterCount))
@@ -661,7 +668,7 @@ class DockTest(unittest.TestCase):
         # Impact function
         myIndex = DOCK.cboFunction.findText('Earthquake Guidelines Function')
         myMessage = ('Earthquake Guidelines function not '
-               'found: ' + combosToString(DOCK))
+                     'found: ' + combosToString(DOCK))
         assert myIndex != -1, myMessage
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
@@ -674,7 +681,7 @@ class DockTest(unittest.TestCase):
                               'Earthquake Guidelines Function',
                           'Run Button Enabled': True}
         myMessage = 'Got:\n %s\nExpected:\n%s\n%s' % (
-                        myDict, myExpectedDict, combosToString(DOCK))
+            myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -689,8 +696,8 @@ class DockTest(unittest.TestCase):
         # Post merge of clip on steoids branch:
         #High damage (50-100%):    2993
         myMessage = ('Unexpected result returned for Earthquake guidelines'
-               'function. Expected:\n "All" count of 2993, '
-               'received: \n %s' % myResult)
+                     'function. Expected:\n "All" count of 2993, '
+                     'received: \n %s' % myResult)
         assert format_int(2993) in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_small(self):
@@ -719,7 +726,7 @@ class DockTest(unittest.TestCase):
         # Choose impact function
         myIndex = DOCK.cboFunction.findText('Earthquake Fatality Function')
         myMessage = ('Earthquake Fatality Function not '
-               'found: ' + combosToString(DOCK))
+                     'found: ' + combosToString(DOCK))
         assert myIndex != -1, myMessage
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
@@ -731,7 +738,7 @@ class DockTest(unittest.TestCase):
                               'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-                            myDict, myExpectedDict, combosToString(DOCK))
+            myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -773,7 +780,7 @@ class DockTest(unittest.TestCase):
         # Choose impact function
         myIndex = DOCK.cboFunction.findText('Earthquake Fatality Function')
         myMessage = ('Earthquake Fatality Function not '
-               'found: ' + combosToString(DOCK))
+                     'found: ' + combosToString(DOCK))
         assert myIndex != -1, myMessage
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
@@ -786,7 +793,7 @@ class DockTest(unittest.TestCase):
                               'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-                            myDict, myExpectedDict, combosToString(DOCK))
+            myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -961,7 +968,7 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people needing evacuation
-        assert format_int(134953000) in myResult, myMessage
+        assert format_int(1349000) in myResult, myMessage
 
     def test_runCategorizedHazardBuildingImpact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
@@ -1029,7 +1036,7 @@ class DockTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
-        setGeoExtent([101, -12 , 119, -4])
+        setGeoExtent([101, -12, 119, -4])
 
         # Press RUN
         myButton = DOCK.pbnRunStop
@@ -1102,13 +1109,13 @@ class DockTest(unittest.TestCase):
         # Outcome 1: we ran out of memory
         if 'system does not have sufficient memory' in myResult:
             return
-        # Outcome 2: It ran so check the results
+            # Outcome 2: It ran so check the results
         assert format_int(45) in myResult, myMessage
         assert format_int(84) in myResult, myMessage
         assert format_int(28) in myResult, myMessage
 
     def test_runVolcanoCirclePopulation(self):
-        """Volcano function runs in GUI with a circular evacutation zone
+        """Volcano function runs in GUI with a circular evacuation zone.
 
         Uses population density grid as exposure."""
 
@@ -1127,19 +1134,25 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         myButton = DOCK.pbnRunStop
+
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
-        # This is the expected number of people affected
+        myMemoryString = 'not have sufficient memory'
+        if myMemoryString in myResult:
+            # Test host did not have enough memory to run the test
+            # and user was given a nice message stating this
+            return
+            # This is the expected number of people affected
         # Jarak [km]	Jumlah	Kumulatif
         # 3	     15.000	15.000
         # 5	     17.000	32.000
         # 10	124.000	156.000
-        assert format_int(15) in myResult, myMessage
-        assert format_int(17) in myResult, myMessage
-        assert format_int(124) in myResult, myMessage
+        assert format_int(15000) in myResult, myMessage
+        assert format_int(17000) in myResult, myMessage
+        assert format_int(124000) in myResult, myMessage
 
     # disabled this test until further coding
     def Xtest_printMap(self):
@@ -1284,12 +1297,12 @@ class DockTest(unittest.TestCase):
 
         myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
         myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
-                     % (myHazardLayerCount, DOCK.cboHazard.count())
+                    % (myHazardLayerCount, DOCK.cboHazard.count())
         # pylint: disable=W0106
         self.assertEqual(DOCK.cboHazard.count(),
                          myHazardLayerCount), myMessage
         myMessage = 'Expect %s layer(s) in exposure list widget but got %s' \
-              % (myExposureLayerCount, DOCK.cboExposure.count())
+                    % (myExposureLayerCount, DOCK.cboExposure.count())
         self.assertEqual(DOCK.cboExposure.count(),
                          myExposureLayerCount), myMessage
         # pylint: disable=W0106
@@ -1307,7 +1320,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                    theDataDirectory=None)
+            theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1334,12 +1347,12 @@ class DockTest(unittest.TestCase):
                           'Impact Function Title': '',
                           'Hazard': 'A flood in Jakarta like in 2007',
                           'Exposure': 'Population density (5kmx5km)'}
-        myMessage = ('Run button was not disabled when exposure set to \n%s'
-                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-            DOCK.cboExposure.currentText(),
-            myDict,
-            myExpectedDict,
-            combosToString(DOCK))
+        myMessage = (('Run button was not disabled when exposure set to \n%s'
+                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
+                         DOCK.cboExposure.currentText(),
+                         myDict,
+                         myExpectedDict,
+                         combosToString(DOCK)))
 
         assert myExpectedDict == myDict, myMessage
 
@@ -1348,7 +1361,7 @@ class DockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         myMessage = ('Run button was not enabled when exposure set to \n%s' %
-            DOCK.cboExposure.currentText())
+                     DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
 
     def test_Issue95(self):
@@ -1363,7 +1376,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                theDataDirectory=None)
+            theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1404,7 +1417,7 @@ class DockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         myMessage = ('Run button was not enabled when exposure set to \n%s' %
-            DOCK.cboExposure.currentText())
+                     DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
 
     def test_issue_160(self):
@@ -1414,8 +1427,8 @@ class DockTest(unittest.TestCase):
         myExposure = os.path.join(UNITDATA, 'exposure',
                                   'buildings_osm_4326.shp')
         myHazard = os.path.join(UNITDATA, 'hazard',
-                                  'multipart_polygons_osm_4326.shp')
-                # See https://github.com/AIFDR/inasafe/issues/71
+                                'multipart_polygons_osm_4326.shp')
+        # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgisVersion()
         self.tearDown()
@@ -1423,7 +1436,7 @@ class DockTest(unittest.TestCase):
         # First part of scenario should have enabled run
         myFileList = [myHazard, myExposure]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                            theDataDirectory=TESTDATA)
+            theDataDirectory=TESTDATA)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1453,7 +1466,7 @@ class DockTest(unittest.TestCase):
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
         IFACE.mapCanvas().setExtent(
-                                QgsRectangle(106.788, -6.193, 106.853, -6.167))
+            QgsRectangle(106.788, -6.193, 106.853, -6.167))
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -1479,7 +1492,7 @@ class DockTest(unittest.TestCase):
         DOCK.restoreState()
         myResultDict = getUiState(DOCK)
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-                            myResultDict, myExpectedDict, combosToString(DOCK))
+            myResultDict, myExpectedDict, combosToString(DOCK))
         assert myExpectedDict == myResultDict, myMessage
 
         # Corner case test when two layers can have the
@@ -1493,7 +1506,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                  theDataDirectory=None)
+            theDataDirectory=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         DOCK.cboHazard.setCurrentIndex(0)
@@ -1508,9 +1521,9 @@ class DockTest(unittest.TestCase):
         myMessage = ('Expected selected impact function to remain unchanged '
                      'when choosing a different hazard of the same category:'
                      ' %s\nExpected: %s\n%s' % (
-                myExpectedFunction,
-                myCurrentFunction,
-                combosToString(DOCK)))
+            myExpectedFunction,
+            myCurrentFunction,
+            combosToString(DOCK)))
 
         assert myExpectedFunction == myCurrentFunction, myMessage
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
@@ -1603,8 +1616,8 @@ class DockTest(unittest.TestCase):
         myHtml = DOCK.state['report']
         myExpectedString = '4229'
         myMessage = "%s\nDoes not contain:\n%s" % (
-                                myHtml,
-                                myExpectedString)
+            myHtml,
+            myExpectedString)
         assert myExpectedString in myHtml, myMessage
 
     def test_newLayersShowInCanvas(self):
@@ -1651,7 +1664,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-#        DOCK.runtimeKeywordsDialog.accept()
+        #        DOCK.runtimeKeywordsDialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:
@@ -1731,9 +1744,11 @@ Click for Diagnostic Information:
         myToolButton = DOCK.toolFunctionOptions
         myFlag = myToolButton.isEnabled()
         assert myFlag, ('Expected configuration options '
-                            'button to be enabled')
+                        'button to be enabled')
 
-    def test_extentsChanged(self):
+    # I disabled the test for now as checkMemory now returns None unless
+    # there is a problem. TS
+    def Xtest_extentsChanged(self):
         """Memory requirements are calculated correctly when extents change.
         """
         setCanvasCrs(GEOCRS, True)
@@ -1744,7 +1759,9 @@ Click for Diagnostic Information:
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function')
         myResult = DOCK.checkMemoryUsage()
-        self.assertIn('3mb', myResult)
+        myMessage = 'Expected "3mb" to apear in : %s' % myResult
+        assert myResult is not None, 'Check memory reported None'
+        assert '3mb' in myResult, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
