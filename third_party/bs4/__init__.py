@@ -28,7 +28,7 @@ import warnings
 
 from .builder import builder_registry
 from .dammit import UnicodeDammit
-from .element import (
+from element import (
     CData,
     Comment,
     DEFAULT_OUTPUT_ENCODING,

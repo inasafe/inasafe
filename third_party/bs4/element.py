@@ -2,7 +2,7 @@ import collections
 import re
 import sys
 import warnings
-from bs4.dammit import EntitySubstitution
+from third_party.bs4.dammit import EntitySubstitution
 
 DEFAULT_OUTPUT_ENCODING = "utf-8"
 PY3K = (sys.version_info[0] > 2)

@@ -1,7 +1,7 @@
 from collections import defaultdict
 import itertools
 import sys
-from bs4.element import (
+from third_party.bs4.element import (
     CharsetMetaAttributeValue,
     ContentMetaAttributeValue,
     whitespace_re
@@ -286,7 +286,7 @@ class HTMLTreeBuilder(TreeBuilder):
 def register_treebuilders_from(module):
     """Copy TreeBuilders from the given module into this module."""
     # I'm fairly sure this is not the best way to do this.
-    this_module = sys.modules['bs4.builder']
+    this_module = sys.modules['third_party.bs4.builder']
     for name in module.__all__:
         obj = getattr(module, name)
 
@@ -300,7 +300,7 @@ def register_treebuilders_from(module):
 # builder registrations will take precedence. In general, we want lxml
 # to take precedence over html5lib, because it's faster. And we only
 # want to use HTMLParser as a last result.
-from . import _htmlparser
+import _htmlparser
 register_treebuilders_from(_htmlparser)
 try:
     from . import _html5lib

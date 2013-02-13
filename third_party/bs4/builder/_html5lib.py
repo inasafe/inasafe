@@ -3,16 +3,16 @@ __all__ = [
     ]
 
 import warnings
-from bs4.builder import (
+from third_party.bs4.builder import (
     PERMISSIVE,
     HTML,
     HTML_5,
     HTMLTreeBuilder,
     )
-from bs4.element import NamespacedAttribute
+from third_party.bs4.element import NamespacedAttribute
 import html5lib
 from html5lib.constants import namespaces
-from bs4.element import (
+from third_party.bs4.element import (
     Comment,
     Doctype,
     NavigableString,

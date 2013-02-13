@@ -24,16 +24,16 @@ CONSTRUCTOR_TAKES_STRICT = (
     or (major == 3 and minor > 2)
     or (major == 3 and minor == 2 and release >= 3))
 
-from bs4.element import (
+from third_party.bs4.element import (
     CData,
     Comment,
     Declaration,
     Doctype,
     ProcessingInstruction,
     )
-from bs4.dammit import EntitySubstitution, UnicodeDammit
+from third_party.bs4.dammit import EntitySubstitution, UnicodeDammit
 
-from bs4.builder import (
+from third_party.bs4.builder import (
     HTML,
     HTMLTreeBuilder,
     STRICT,

@@ -186,7 +186,7 @@ class ImportDialogTest(unittest.TestCase):
             'http://hot-export.geofabrik.de/download/006113/extract.shp.zip'
         myMessage = "URL don't match. Expected %s but got %s" % (
             myUrl, myExpected)
-        assert myUrl == myExpected
+        assert myUrl == myExpected, myMessage
 
     def test_downloadShapeFile(self):
         myUrl = 'http://hot-export.geofabrik.de/' + \
