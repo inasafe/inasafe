@@ -132,7 +132,7 @@ def httpDownload(theManager, theUrl, theOutPath, theHook=None):
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
-    def __init__(self, theParent=None):
+    def __init__(self, theParent=None, theIface=None):
         '''Constructor for the dialog.
 
         Args:
@@ -148,6 +148,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.setWindowTitle(self.tr('Import Hot-Export'))
 
+        self.iface = theIface
         self.url = 'http://hot-export.geofabrik.de'
 
         # creating progress dialog for download
@@ -452,9 +453,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myPolygonPath = os.path.join(myDir, 'planet_osm_polygon.shp')
         myPointPath = os.path.join(myDir, 'planet_osm_point.shp')
 
-        iface.addVectorLayer(myLinePath, 'line', 'ogr')
-        iface.addVectorLayer(myPolygonPath, 'polygon', 'ogr')
-        iface.addVectorLayer(myPointPath, 'point', 'ogr')
+        self.iface.addVectorLayer(myLinePath, 'line', 'ogr')
+        self.iface.addVectorLayer(myPolygonPath, 'polygon', 'ogr')
+        self.iface.addVectorLayer(myPointPath, 'point', 'ogr')
 
 
 if __name__ == '__main__':
@@ -464,6 +465,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     a = ImportDialog()
-    #a.show()
-    #app.exec_()
-    a.doImport()
+    a.show()
+    app.exec_()
+    #a.doImport()

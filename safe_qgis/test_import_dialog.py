@@ -25,9 +25,8 @@ import shutil
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
-from safe_qgis.import_dialog import (httpDownload, httpRequest)
+from safe_qgis.import_dialog import (httpDownload, httpRequest, ImportDialog)
 
-from safe_qgis import import_dialog
 from safe_qgis.utilities_test import (getQgisTestApp, assertHashForFile)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -108,48 +107,48 @@ def readAll(thePath):
 class ImportDialogTest(unittest.TestCase):
     """Test Import Dialog widget"""
 
-    # def test_httpRequest(self):
-    #     myManager = QNetworkAccessManager(PARENT)
-    #
-    #     # we use httpbin service to test HTTP Request
-    #     myUrl = 'http://httpbin.org/html'
-    #     myResponse = httpRequest(myManager, 'GET', myUrl)
-    #
-    #     myMessage = "Url don't match. Expected {0} but got {1} instead."
-    #     assert myResponse.url == myUrl, myMessage.format(myUrl, myResponse.url)
-    #
-    #     myExpectedContent = readAll('test-importdlg-httprequest.html')
-    #     assert myResponse.content == myExpectedContent, "Content don't match."
-    #
-    #     myUrl = 'http://httpbin.org/post'
-    #     myData = {'name': 'simple POST test', 'value' : 'Hello World'}
-    #     myResponse = httpRequest(myManager, 'POST', myUrl, myData)
-    #
-    #     myPos = myResponse.content.find('"name": "simple POST test"')
-    #     myMessage = "POST Request failed. The response is %s".format(
-    #         myResponse.content)
-    #     assert myPos != -1, myMessage
-    #
-    #
-    # def test_httpDownload(self):
-    #     myManager = QNetworkAccessManager(PARENT)
-    #
-    #     # NOTE(gigih):
-    #     # this is the hash of google front page.
-    #     # I think we can safely assume that the content
-    #     # of google.com never changes (probably).
-    #     #
-    #     myHash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
-    #     myUrl = 'http://google.com'
-    #     myTempFilePath = tempfile.mktemp()
-    #
-    #     import_dialog.httpDownload(myManager, myUrl, myTempFilePath)
-    #
-    #     assertHashForFile(myHash, myTempFilePath)
+    def test_httpRequest(self):
+        myManager = QNetworkAccessManager(PARENT)
+
+        # we use httpbin service to test HTTP Request
+        myUrl = 'http://httpbin.org/html'
+        myResponse = httpRequest(myManager, 'GET', myUrl)
+
+        myMessage = "Url don't match. Expected {0} but got {1} instead."
+        assert myResponse.url == myUrl, myMessage.format(myUrl, myResponse.url)
+
+        myExpectedContent = readAll('test-importdlg-httprequest.html')
+        assert myResponse.content == myExpectedContent, "Content don't match."
+
+        myUrl = 'http://httpbin.org/post'
+        myData = {'name': 'simple POST test', 'value' : 'Hello World'}
+        myResponse = httpRequest(myManager, 'POST', myUrl, myData)
+
+        myPos = myResponse.content.find('"name": "simple POST test"')
+        myMessage = "POST Request failed. The response is %s".format(
+            myResponse.content)
+        assert myPos != -1, myMessage
+
+
+    def test_httpDownload(self):
+        myManager = QNetworkAccessManager(PARENT)
+
+        # NOTE(gigih):
+        # this is the hash of google front page.
+        # I think we can safely assume that the content
+        # of google.com never changes (probably).
+        #
+        myHash = 'd4b691cd9d99117b2ea34586d3e7eeb8'
+        myUrl = 'http://google.com'
+        myTempFilePath = tempfile.mktemp()
+
+        httpDownload(myManager, myUrl, myTempFilePath)
+
+        assertHashForFile(myHash, myTempFilePath)
 
 
     def setUp(self):
-        self.importDlg = import_dialog.ImportDialog(PARENT)
+        self.importDlg = ImportDialog(PARENT, IFACE)
 
         ## provide Fake QNetworkAccessManager for self.nam
         self.importDlg.nam = FakeQNetworkAccessManager()
@@ -236,26 +235,24 @@ class ImportDialogTest(unittest.TestCase):
         myMessage = "result dont match. current result is %s " % myResult
         assert myResult == QDialog.Accepted
 
-     # NOTE(gigih): this function fail because qgis.util.iface
-     # don't exist outside of QGIS Application
-#    def test_loadShapeFile(self):
-#        """ test loading shape file to QGIS Main Window """
-#
-#        myInput = os.path.join(TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
-#        myOutDir = tempfile.mkdtemp()
-#
-#        self.importDlg.extractZip(myInput, myOutDir)
-#
-#        # outDir must be set to myOutDir because loadShapeFile() use
-#        # that variable to determine the location of shape files.
-#        self.importDlg.outDir.setText(myOutDir)
-#
-#        self.importDlg.loadShapeFile()
-#
-#        #FIXME(gigih): need to check if layer is loaded to QGIS
-#
-#        # remove temporary folder and all of its content
-#        shutil.rmtree(myOutDir)
+    def test_loadShapeFile(self):
+       """ test loading shape file to QGIS Main Window """
+
+       myInput = os.path.join(TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
+       myOutDir = tempfile.mkdtemp()
+
+       self.importDlg.extractZip(myInput, myOutDir)
+
+       # outDir must be set to myOutDir because loadShapeFile() use
+       # that variable to determine the location of shape files.
+       self.importDlg.outDir.setText(myOutDir)
+
+       self.importDlg.loadShapeFile()
+
+       #FIXME(gigih): need to check if layer is loaded to QGIS
+
+       # remove temporary folder and all of its content
+       shutil.rmtree(myOutDir)
 
 
 if __name__ == '__main__':

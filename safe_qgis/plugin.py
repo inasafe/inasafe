@@ -527,7 +527,7 @@ class Plugin:
     def showImportDlg(self):
         from safe_qgis.import_dialog import ImportDialog
 
-        dlg = ImportDialog(self.iface.mainWindow())
+        dlg = ImportDialog(self.iface.mainWindow(), self.iface)
         dlg.setModal(True)
         dlg.show()
 
