@@ -189,6 +189,31 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.nam = QNetworkAccessManager(self)
 
+        self.setupOptions()
+
+        self.regionExtent = {
+            1 : ['-74.82529', '17.38275', '-68.16174', '20.46002'],
+            2 : ['92.76481', '-11.60655', '141.0126', '6.519293'],
+            3 : ['-30.8', '-35.9', '61.62', '38.349'],
+            4 : ['24.5', '11.8', '88.6', '56.3'],
+            5 : ['115.6329', '4.424338', '127.8003', '21.55277']
+        }
+
+    def setupOptions(self):
+        ## FIXME(gigih): dynamicly load the option from Hot-Export website
+
+        self.cbxRegion.insertItem(0, 'Indonesia', 1)
+        self.cbxRegion.insertItem(1, 'Africa', 2)
+        self.cbxRegion.insertItem(2, 'Philippines', 3)
+        self.cbxRegion.insertItem(3, 'Central Asia/Middle East', 4)
+
+        self.cbxPreset.insertItem(0, 'Building/Gedung', 1)
+        self.cbxPreset.insertItem(1, 'Opendri Building Presets', 9)
+        self.cbxPreset.insertItem(2, 'bus_stop', 7)
+        self.cbxPreset.insertItem(3, 'Presets for Access Mapping', 2)
+        self.cbxPreset.insertItem(4, 'RW boundaries for Jakarta', 6)
+
+
     def updateExtent(self):
         """ Update extent value in GUI based from value in map widget"""
         myExtent = self.map.getExtent()
@@ -280,7 +305,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         ## setup necessary data to create new job in Hot-Export
         myPayload = {
-            'job[region_id]': '1',  # 1 is indonesia
+            'job[region_id]': str(
+                self.cbxRegion.itemData(self.cbxRegion.currentIndex()).toString()),
             'job[name]': 'InaSAFE job',
             'job[description]': 'Created from import feature in InaSAFE',
             'job[lonmin]': str(self.minLongitude.text()),
@@ -295,9 +321,12 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myNewJobToken = self.createNewJob(myPayload)
 
         ## prepare tag
+        myPresetText = self.cbxPreset.currentText()
+        myPreset = str(self.cbxPreset.itemData(
+            self.cbxPreset.currentIndex()).toString())
         self.progressDialog.setLabelText(
-            self.tr("Set Preset to ... 'mapping from jakarta'"))
-        myJobId = self.uploadTag(myPayload, myNewJobToken)
+            self.tr("Set Preset to ... '%1'").arg(myPresetText))
+        myJobId = self.uploadTag(myPayload, myPreset, myNewJobToken)
 
         myLabelText = "Waiting For Result Available on Server..." \
                       + " (http://hot-export.geofabrik.de/jobs/%1)"
@@ -362,7 +391,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myWizardToken = self.getAuthToken(myWizardResponse.content)
         return myWizardToken
 
-    def uploadTag(self, thePayload, theToken):
+    def uploadTag(self, thePayload, thePreset, theToken):
         """
         Go to page http://hot-export.geofabrik.de and fill the needed data.
         Currently the preset file is set to "preset mapping from jakarta"
@@ -376,7 +405,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         """
         ## FIXME(gigih): upload buildings preset to hot-export
         thePayload['authenticity_token'] = theToken
-        thePayload['presetfile'] = 4  # preset mapping from jakarta
+        thePayload['presetfile'] = thePreset
         thePayload['default_tags'] = 'true'
         myTagResponse = httpRequest(
             self.nam, 'POST',

@@ -64,6 +64,9 @@ class FakeQNetworkReply(QObject):
     def error(self):
         return  QNetworkReply.NoError
 
+    def attribute(self, theAttribute):
+        pass
+
 
 class FakeQNetworkAccessManager:
     def post(self, theRequest, theData=None):
@@ -104,7 +107,9 @@ def readAll(thePath):
 
 
 class ImportDialogTest(unittest.TestCase):
-    """Test Import Dialog widget"""
+    """Test Import Dialog widget
+    FIXME(gigih): add unit test for httpRequest to check redirection
+    """
 
     def test_httpRequest(self):
         myManager = QNetworkAccessManager(PARENT)
