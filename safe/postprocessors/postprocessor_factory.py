@@ -27,6 +27,8 @@ from aggregation_categorical_postprocessor import \
 
 LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
+# please put the value of this dictionary in
+# safe/common/dynamic_translations.py for the run time translation
 AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
                             'Age': 'Age',
                             'Aggregation': 'Aggregation',
