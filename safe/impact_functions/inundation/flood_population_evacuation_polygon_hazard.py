@@ -6,7 +6,7 @@ from safe.impact_functions.core import (FunctionProvider,
                                         format_int)
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
-from safe.common.tables import Table, TableRow
+from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.common.utilities import get_defaults
 from third_party.odict import OrderedDict
@@ -161,14 +161,19 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                                 '%s' % format_int(int(affected_population))],
                                header=True),
                       TableRow([tr('People needing evacuation'),
-                                '%s' % format_int(evacuated)],
+                                '%s*' % format_int(int(evacuated))],
                                header=True),
+                      TableRow([
+                          TableCell(
+                              tr('* Evacuation count rounded to nearest 1000'),
+                              col_span=2)],
+                          header=False),
                       TableRow([tr('Evacuation threshold'),
                                 '%s%%' % format_int(
                                     self.parameters['evacuation_percentage'])],
                                header=True),
                       TableRow(tr('Map shows population affected in each flood'
-                                 ' prone area ')),
+                                  ' prone area ')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
                       [tr('Rice [kg]'), format_int(int(rice))],
