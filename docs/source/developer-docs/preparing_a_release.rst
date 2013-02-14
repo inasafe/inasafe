@@ -377,8 +377,8 @@ Tag the release
 Tagging the release provides a 'known good' state for the software which
 represents a point in time where all of the above items in this list have
 been checked. The tag should be named after the major, minor and point release
-for example :samp:`version-0_1_0`. If the release is a releas candidate or
-and alpha release the letters :samp:`rc` or :samp:`a` resepectively should
+for example :samp:`version-0_1_0`. If the release is a release candidate or
+and alpha release the letters :samp:`rc` or :samp:`a` respectively should
 be appended respectively, along with the related number. For example version
 0.1.0 alpha 1 would be tagged as :samp:`version-0_1_0a1`. To tag the release
 simply do it in git as illustrated below.::
