@@ -157,11 +157,9 @@ def dynamic_translations():
     tr('Youth ratio')
     tr('Adult ratio')
     tr('Elder ratio')
-    tr('R [km]')
     tr('AggregationCategorical')
     tr('Displacement rate')
     tr('Mmi range')
-    tr('Step')
     tr('Tolerance')
     tr('Calculate displaced people')
 
