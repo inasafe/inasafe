@@ -157,8 +157,15 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Generate impact report for the pdf map
         table_body = [question,
+                      TableRow([tr('People affected'),
+                                '%s' % format_int(int(affected_population))],
+                               header=True),
                       TableRow([tr('People needing evacuation'),
                                 '%s' % format_int(evacuated)],
+                               header=True),
+                      TableRow([tr('Evacuation threshold'),
+                                '%s%%' % format_int(
+                                    self.parameters['evacuation_percentage'])],
                                header=True),
                       TableRow(tr('Map shows population affected in each flood'
                                  ' prone area ')),
