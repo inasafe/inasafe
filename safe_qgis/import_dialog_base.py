@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'import_dialog_base.ui'
+# Form implementation generated from reading ui file 'safe_qgis\import_dialog_base.ui'
 #
-# Created: Wed Feb 13 15:22:21 2013
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Fri Feb 15 14:30:52 2013
+#      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,17 +17,30 @@ except AttributeError:
 class Ui_ImportDialogBase(object):
     def setupUi(self, ImportDialogBase):
         ImportDialogBase.setObjectName(_fromUtf8("ImportDialogBase"))
-        ImportDialogBase.resize(629, 473)
-        self.buttonBox = QtGui.QDialogButtonBox(ImportDialogBase)
-        self.buttonBox.setGeometry(QtCore.QRect(250, 410, 341, 32))
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
+        ImportDialogBase.resize(683, 486)
+        self.gridLayout = QtGui.QGridLayout(ImportDialogBase)
+        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
+        self.gbxMap = QtGui.QGroupBox(ImportDialogBase)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.gbxMap.sizePolicy().hasHeightForWidth())
+        self.gbxMap.setSizePolicy(sizePolicy)
+        self.gbxMap.setMinimumSize(QtCore.QSize(400, 300))
+        self.gbxMap.setObjectName(_fromUtf8("gbxMap"))
+        self.gridLayout.addWidget(self.gbxMap, 0, 0, 1, 1)
         self.groupBox = QtGui.QGroupBox(ImportDialogBase)
-        self.groupBox.setGeometry(QtCore.QRect(320, 20, 281, 181))
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
+        self.groupBox.setSizePolicy(sizePolicy)
+        self.groupBox.setMinimumSize(QtCore.QSize(256, 300))
+        self.groupBox.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.formLayout_2 = QtGui.QFormLayout(self.groupBox)
         self.formLayout_2.setFieldGrowthPolicy(QtGui.QFormLayout.FieldsStayAtSizeHint)
+        self.formLayout_2.setLabelAlignment(QtCore.Qt.AlignCenter)
         self.formLayout_2.setObjectName(_fromUtf8("formLayout_2"))
         self.label = QtGui.QLabel(self.groupBox)
         self.label.setObjectName(_fromUtf8("label"))
@@ -53,8 +66,8 @@ class Ui_ImportDialogBase(object):
         self.maxLatitude = QtGui.QLineEdit(self.groupBox)
         self.maxLatitude.setObjectName(_fromUtf8("maxLatitude"))
         self.formLayout_2.setWidget(3, QtGui.QFormLayout.FieldRole, self.maxLatitude)
+        self.gridLayout.addWidget(self.groupBox, 0, 1, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(ImportDialogBase)
-        self.groupBox_2.setGeometry(QtCore.QRect(20, 243, 581, 151))
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
         self.formLayout = QtGui.QFormLayout(self.groupBox_2)
         self.formLayout.setObjectName(_fromUtf8("formLayout"))
@@ -83,6 +96,12 @@ class Ui_ImportDialogBase(object):
         self.pBtnDir.setObjectName(_fromUtf8("pBtnDir"))
         self.horizontalLayout.addWidget(self.pBtnDir)
         self.formLayout.setLayout(2, QtGui.QFormLayout.FieldRole, self.horizontalLayout)
+        self.gridLayout.addWidget(self.groupBox_2, 1, 0, 1, 1)
+        self.buttonBox = QtGui.QDialogButtonBox(ImportDialogBase)
+        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
+        self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
 
         self.retranslateUi(ImportDialogBase)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ImportDialogBase.accept)
@@ -91,6 +110,7 @@ class Ui_ImportDialogBase(object):
 
     def retranslateUi(self, ImportDialogBase):
         ImportDialogBase.setWindowTitle(QtGui.QApplication.translate("ImportDialogBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
+        self.gbxMap.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Map", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Coordinate", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("ImportDialogBase", "Min. Longitude", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("ImportDialogBase", "Min. Latitude", None, QtGui.QApplication.UnicodeUTF8))

@@ -18,13 +18,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4.QtCore import (QRect, QCoreApplication, QUrl, QFile)
-from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox, QFileDialog)
+from PyQt4.QtGui import (QDialog, QProgressDialog,
+                         QMessageBox, QFileDialog, QSizePolicy)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
                              QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
 from third_party.bs4 import BeautifulSoup
-#from bs4 import BeautifulSoup
 
 import time
 import os
@@ -82,28 +82,29 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
     else:
         raise NotImplementedError('%s not implemented' % theMethod)
 
-
-    def wait():
+    def wait(theReply):
+        """ block the program until requests finished. """
         if theHook:
-            myReply.downloadProgress.connect(theHook)
+            theReply.downloadProgress.connect(theHook)
 
         # wait until finished
-        while not myReply.isFinished():
+        while not theReply.isFinished():
             QCoreApplication.processEvents()
             time.sleep(0.1)
 
-        if myReply.error() != QNetworkReply.NoError:
-            raise ImportDialogError(myReply.errorString())
+        if theReply.error() != QNetworkReply.NoError:
+            raise ImportDialogError(theReply.errorString())
 
-    wait()
+    wait(myReply)
 
     ## check redirection
+    ## Its only handle one layer of redirection tough
     myRedirectUrl = myReply.attribute(QNetworkRequest.RedirectionTargetAttribute)
     myRedirectUrl = myRedirectUrl.toUrl()
 
     if not myRedirectUrl.isEmpty() and myRedirectUrl != myUrl:
         myReply = theManager.get(QNetworkRequest(myRedirectUrl))
-        wait()
+        wait(myReply)
 
     # prepare Response object
     myResult = Response()
@@ -179,8 +180,10 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.maxLongitude.setText('106.8629')
         self.maxLatitude.setText('-6.3656')
 
-        self.map = InasafeLightMaps(self)
-        self.map.setGeometry(QRect(10, 10, 300, 240))
+        self.map = InasafeLightMaps(self.gbxMap)
+        self.map.setGeometry(QRect(15, 15, 384, 256))
+        myPolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.map.setSizePolicy(myPolicy)
 
         self.map.m_normalMap.zoomTo(9)
         self.map.setCenter(-6.4338, 106.7685)
@@ -192,12 +195,15 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.setupOptions()
 
         self.regionExtent = {
-            1 : ['-74.82529', '17.38275', '-68.16174', '20.46002'],
-            2 : ['92.76481', '-11.60655', '141.0126', '6.519293'],
-            3 : ['-30.8', '-35.9', '61.62', '38.349'],
-            4 : ['24.5', '11.8', '88.6', '56.3'],
-            5 : ['115.6329', '4.424338', '127.8003', '21.55277']
+            1: ['-74.82529', '17.38275', '-68.16174', '20.46002'],
+            2: ['92.76481', '-11.60655', '141.0126', '6.519293'],
+            3: ['-30.8', '-35.9', '61.62', '38.349'],
+            4: ['24.5', '11.8', '88.6', '56.3'],
+            5: ['115.6329', '4.424338', '127.8003', '21.55277']
         }
+
+    def resizeEvent(self, theEvent):
+        self.map.resize(self.gbxMap.width() - 15, self.gbxMap.height() - 15)
 
     def setupOptions(self):
         ## FIXME(gigih): dynamicly load the option from Hot-Export website
@@ -212,7 +218,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.cbxPreset.insertItem(2, 'bus_stop', 7)
         self.cbxPreset.insertItem(3, 'Presets for Access Mapping', 2)
         self.cbxPreset.insertItem(4, 'RW boundaries for Jakarta', 6)
-
 
     def updateExtent(self):
         """ Update extent value in GUI based from value in map widget"""
@@ -403,7 +408,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         Returns:
             Job Id
         """
-        ## FIXME(gigih): upload buildings preset to hot-export
         thePayload['authenticity_token'] = theToken
         thePayload['presetfile'] = thePreset
         thePayload['default_tags'] = 'true'
@@ -421,6 +425,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         Get the url of shape files from Hot-Export
         Params:
             * theJobId - the id of job in Hot-Export
+        Raises:
+            CanceledImportDialogError - when user press cancel button
         Returns:
             url of shape files
         """
