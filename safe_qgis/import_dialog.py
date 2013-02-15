@@ -181,10 +181,14 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.maxLongitude.setText('106.8629')
         self.maxLatitude.setText('-6.3656')
 
-        self.map = InasafeLightMaps(self.gbxMap)
-        self.map.setGeometry(QRect(15, 15, 384, 256))
-        myPolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.map.setSizePolicy(myPolicy)
+        ## set map parameter based on placeholder self.map widget
+        theMap = InasafeLightMaps(self.gbxMap)
+        theMap.setGeometry(self.map.geometry())
+        theMap.setSizePolicy(self.map.sizePolicy())
+        #theMap.setGeometry(QRect(15, 15, 384, 256))
+        # myPolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        # theMap.setSizePolicy(myPolicy)
+        self.map = theMap
 
         self.map.m_normalMap.zoomTo(9)
         self.map.setCenter(-6.4338, 106.7685)
@@ -204,7 +208,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         }
 
     def resizeEvent(self, theEvent):
-        self.map.resize(self.gbxMap.width() - 15, self.gbxMap.height() - 15)
+        self.map.resize(self.gbxMap.width() - 30, self.gbxMap.height() - 30)
 
     def setupOptions(self):
         ## FIXME(gigih): dynamicly load the option from Hot-Export website
