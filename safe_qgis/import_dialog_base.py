@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'safe_qgis\import_dialog_base.ui'
 #
-# Created: Fri Feb 15 14:30:52 2013
+# Created: Fri Feb 15 14:46:22 2013
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -96,7 +96,7 @@ class Ui_ImportDialogBase(object):
         self.pBtnDir.setObjectName(_fromUtf8("pBtnDir"))
         self.horizontalLayout.addWidget(self.pBtnDir)
         self.formLayout.setLayout(2, QtGui.QFormLayout.FieldRole, self.horizontalLayout)
-        self.gridLayout.addWidget(self.groupBox_2, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.groupBox_2, 1, 0, 1, 2)
         self.buttonBox = QtGui.QDialogButtonBox(ImportDialogBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
