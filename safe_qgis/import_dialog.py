@@ -28,6 +28,7 @@ from third_party.bs4 import BeautifulSoup
 
 import time
 import os
+import tempfile
 
 from inasafe_lightmaps import InasafeLightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
@@ -341,7 +342,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         ## download shape file from Hot-Export
         self.progressDialog.setLabelText(
             self.tr("Download Shape File..."))
-        myFilePath = '/tmp/' + myJobId + '.shp.zip'
+
+        myFilePath = tempfile.mktemp('.shp.zip', 'import_' + str(myJobId))
         self.downloadShapeFile(myShapeUrl, myFilePath)
 
         ## extract downloaded file to output directory
