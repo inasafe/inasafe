@@ -151,6 +151,7 @@ def update_qgis_docs_site():
     sudo('a2ensite inasafe-docs.conf')
     sudo('service apache2 reload')
 
+
 def update_git_checkout(branch='master'):
     """Make sure there is a read only git checkout.
 

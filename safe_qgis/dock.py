@@ -1700,8 +1700,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '       <td colspan="100%">'
                        '         <strong>'
                        + self.tr('Detailed %1 report').arg(
-                                 self.tr(get_postprocessor_human_name(proc))
-                                    .toLower()) +
+                                 safeTr(get_postprocessor_human_name(proc))
+                                 .lower()) +
                        '         </strong>'
                        '       </td>'
                        '    </tr>'

@@ -169,3 +169,8 @@ def dynamic_translations():
     tr('Aggregation')
     tr('Building type')
     tr('Aggregation Categorical')
+    tr('gender')
+    tr('age')
+    tr('aggregation')
+    tr('building type')
+    tr('aggregation categorical')
