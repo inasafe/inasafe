@@ -15,6 +15,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
+from safe.common.utilities import ugettext as tr
 
 # pylint: disable=W0611
 from gender_postprocessor import GenderPostprocessor
@@ -90,4 +91,7 @@ def get_postprocessor_human_name(postprocesor):
     """
     # TODO (MB) this is a stub, the correct implementation will come when
     # aggregation branch gets merged
-    return postprocesor
+    # Sunni translate it and make it pretty for v 1.1
+    postprocesor = postprocesor.replace('_', ' ').capitalize()
+    human_name_translated = tr(postprocesor)
+    return human_name_translated

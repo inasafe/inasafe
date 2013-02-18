@@ -1364,7 +1364,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                        '       <td colspan="100%">'
                        '         <strong>'
                        + self.tr('Detailed %1 report').arg(
-                                 self.tr(proc)) +
+                                 safeTr(proc).lower()) +
                        '         </strong>'
                        '       </td>'
                        '    </tr>'
