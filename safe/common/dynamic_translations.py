@@ -162,6 +162,7 @@ def dynamic_translations():
     tr('Mmi range')
     tr('Tolerance')
     tr('Calculate displaced people')
+    tr('Evacuation percentage')
 
     # Post-processing
     tr('Gender')

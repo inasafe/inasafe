@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-15 15:04+0700\n"
+"POT-Creation-Date: 2013-02-18 11:04+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -243,7 +243,7 @@ msgstr ""
 msgid "Be inundated"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:170
+#: safe/common/dynamic_translations.py:171
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:222
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:82
 msgid "Building type"
@@ -1804,19 +1804,19 @@ msgstr ""
 msgid "Calculate displaced people"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:167
+#: safe/common/dynamic_translations.py:168
 msgid "Gender"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:168
+#: safe/common/dynamic_translations.py:169
 msgid "Age"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:169
+#: safe/common/dynamic_translations.py:170
 msgid "Aggregation"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:171
+#: safe/common/dynamic_translations.py:172
 msgid "Aggregation Categorical"
 msgstr ""
 
@@ -1832,22 +1832,26 @@ msgstr ""
 msgid "Evacuation threshold"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:172
+#: safe/common/dynamic_translations.py:173
 msgid "gender"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:173
+#: safe/common/dynamic_translations.py:174
 msgid "age"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:174
+#: safe/common/dynamic_translations.py:175
 msgid "aggregation"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:175
+#: safe/common/dynamic_translations.py:176
 msgid "building type"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:176
+#: safe/common/dynamic_translations.py:177
 msgid "aggregation categorical"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:165
+msgid "Evacuation percentage"
 msgstr ""
