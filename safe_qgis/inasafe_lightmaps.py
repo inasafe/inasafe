@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+from PyQt4.QtGui import QPushButton, QWidget
 from third_party.lightmaps import LightMaps, SlippyMap, tdim
 
 
@@ -129,6 +130,48 @@ class InasafeLightMaps(LightMaps):
     """
     def __init__(self, parent):
         LightMaps.__init__(self, parent, InasafeSlippyMap)
+
+        self.setupUi()
+
+    def setupUi(self):
+
+        ## the stylesheet for zoom level is taken from leaflet.js
+
+        self.grpZoom = QWidget(self)
+        self.grpZoom .setGeometry(15, 15, 22, 45)
+        self.grpZoom .setStyleSheet("""QWidget {
+            border: 1px solid #888888;
+            border-radius: 5px 5px 5px 5px;
+        }
+        """)
+
+        ## zoom button
+        self.btnZoomIn = QPushButton(self.grpZoom)
+        self.btnZoomIn.setText('+')
+        self.btnZoomIn.setGeometry(0, 0, 22, 22)
+        self.btnZoomIn.setStyleSheet("""QPushButton {
+            color: black;
+            font: bold 18px/24px Arial,Helvetica,sans-serif;
+            border-radius: 4px 4px 0 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid #AAAAAA;
+        }
+        """)
+
+        self.btnZoomOut = QPushButton(self.grpZoom)
+        self.btnZoomOut.setText('-')
+        self.btnZoomOut.setGeometry(0, 24, 22, 22)
+        self.btnZoomOut.setStyleSheet("""QPushButton {
+            color: black;
+            border-bottom: medium none;
+            border-radius: 0 0 4px 4px;
+            font: bold 23px/20px Tahoma,Verdana,sans-serif;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        """)
+
+        self.btnZoomIn.clicked.connect(self.m_normalMap.zoomIn)
+        self.btnZoomOut.clicked.connect(self.m_normalMap.zoomOut)
 
     def getExtent(self):
         """
