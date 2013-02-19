@@ -50,6 +50,10 @@ class InasafeSlippyMap(SlippyMap):
     Class that implement map widget based on tile osm api.
     """
 
+    def __init__(self, theParent=None):
+        SlippyMap.__init__(self, theParent)
+        self.brLat, self.brLng, self.tlLat, self.tlLng = 0, 0, 0, 0
+
     def invalidate(self, theEmitSignal=True):
         """ Function that called every time the widget is updated
         Params:

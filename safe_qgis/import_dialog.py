@@ -17,9 +17,9 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import (QRect, QCoreApplication, QUrl, QFile, QSettings)
+from PyQt4.QtCore import (QCoreApplication, QUrl, QFile, QSettings)
 from PyQt4.QtGui import (QDialog, QProgressDialog,
-                         QMessageBox, QFileDialog, QSizePolicy)
+                         QMessageBox, QFileDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
                              QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
@@ -170,28 +170,25 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.iface = theIface
         self.url = 'http://hot-export.geofabrik.de'
 
+        ## region coordinate: (latitude, longtitude, zoom_level)
+        self.regionExtent = {
+            '0': [18.87685, -71.493, 6],     # haiti
+            '1': [-2.5436300, 116.8887, 3],  # indonesia
+            '2': [1.22449, 15.40999, 2],     # africa
+            '3': [34.05, 56.55, 3],          # middle east
+            '4': [12.98855, 121.7166, 4],    # philipine
+        }
+
         # creating progress dialog for download
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
         self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
 
-        ## example location: depok
-        self.minLongitude.setText('106.7685')
-        self.minLatitude.setText('-6.4338')
-        self.maxLongitude.setText('106.8629')
-        self.maxLatitude.setText('-6.3656')
-
         ## set map parameter based on placeholder self.map widget
         theMap = InasafeLightMaps(self.gbxMap)
         theMap.setGeometry(self.map.geometry())
         theMap.setSizePolicy(self.map.sizePolicy())
-        #theMap.setGeometry(QRect(15, 15, 384, 256))
-        # myPolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        # theMap.setSizePolicy(myPolicy)
         self.map = theMap
-
-        self.map.m_normalMap.zoomTo(9)
-        self.map.setCenter(-6.4338, 106.7685)
 
         self.map.m_normalMap.updated.connect(self.updateExtent)
 
@@ -199,15 +196,14 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.setupOptions()
 
-        self.regionExtent = {
-            1: ['-74.82529', '17.38275', '-68.16174', '20.46002'],
-            2: ['92.76481', '-11.60655', '141.0126', '6.519293'],
-            3: ['-30.8', '-35.9', '61.62', '38.349'],
-            4: ['24.5', '11.8', '88.6', '56.3'],
-            5: ['115.6329', '4.424338', '127.8003', '21.55277']
-        }
 
         self.restoreState()
+        self.cbxRegion.currentIndexChanged.connect(self.regionChanged)
+
+    def regionChanged(self, theIndex):
+        myRegionIndex = str(self.cbxRegion.itemData(theIndex).toString())
+        myCenter = self.regionExtent[myRegionIndex]
+        self.map.setCenter(myCenter[0], myCenter[1], myCenter[2])
 
     def resizeEvent(self, theEvent):
         self.map.resize(self.gbxMap.width() - 30, self.gbxMap.height() - 30)
@@ -217,8 +213,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.cbxRegion.insertItem(0, 'Indonesia', 1)
         self.cbxRegion.insertItem(1, 'Africa', 2)
-        self.cbxRegion.insertItem(2, 'Philippines', 3)
-        self.cbxRegion.insertItem(3, 'Central Asia/Middle East', 4)
+        self.cbxRegion.insertItem(2, 'Philippines', 4)
+        self.cbxRegion.insertItem(3, 'Central Asia/Middle East', 3)
+        self.cbxRegion.insertItem(4, 'Haiti', 0)
 
         self.cbxPreset.insertItem(0, 'Building/Gedung', 1)
         self.cbxPreset.insertItem(1, 'Opendri Building Presets', 9)
@@ -246,6 +243,10 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         if myZoomLevel[1] is True:
             self.map.setCenter(myLatitude[0], myLongitude[0], myZoomLevel[0])
+        else:
+            # just set to indonesia extent
+            myCenter = self.regionExtent['1']
+            self.map.setCenter(myCenter[0], myCenter[1], myCenter[2])
 
     def saveState(self):
         """ Store current state of GUI to configuration file """
