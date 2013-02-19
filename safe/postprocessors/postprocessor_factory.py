@@ -15,6 +15,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
+from safe.common.utilities import ugettext as tr
 
 # pylint: disable=W0611
 from gender_postprocessor import GenderPostprocessor
@@ -27,6 +28,8 @@ from aggregation_categorical_postprocessor import \
 
 LOGGER = logging.getLogger('InaSAFE')
 #this _must_reflect the imported classes above
+# please put the value of this dictionary in
+# safe/common/dynamic_translations.py for the run time translation
 AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
                             'Age': 'Age',
                             'Aggregation': 'Aggregation',
@@ -97,4 +100,6 @@ def get_postprocessor_human_name(postprocesor):
     Returns:
         str with the human readable name
     """
-    return AVAILABLE_POSTPTOCESSORS[postprocesor]
+    # Sunni : translete it first
+    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocesor])
+    return human_name_translated

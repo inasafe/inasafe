@@ -144,9 +144,7 @@ Get InaSAFE ::
   cd dev/python
   git clone git://github.com/AIFDR/inasafe.git inasafe-realtime
   cd inasafe-realtime
-  git branch --track realtime origin/realtime
-  git checkout realtime
-  sudo apt-get install python-tz
+  sudo apt-get install python-tz paramikio
 
 Setup Apache::
 
@@ -478,7 +476,8 @@ Unit tests
 A complete set of unit tests is provided with the realtime package for InaSAFE.
 You can execute these tests like this::
 
-    nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime
+    nosetests -v --with-id --with-xcoverage --with-xunit --verbose \
+        --cover-package=realtime realtime
 
 There are also a number of Jenkins tasks provided in the Makefile for InaSAFE
 to automate testing on our continuous integration server. You can view the

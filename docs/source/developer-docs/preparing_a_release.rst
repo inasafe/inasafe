@@ -374,17 +374,62 @@ version numbers.
 Tag the release
 ---------------
 
+.. note:: As of version 1.1.0 we will be cryptographically signing the release
+  tags using GPG (Gnu Privacy Guard), and annotating the git tag.
+
+Prerequisite
+............
+
+You need to have a GPG key already (google GPG to see how to create one).
+
+You should register your key with GIT. To do this, first identify what your
+key id is::
+
+    gpg --list-sigs | grep tim
+
+Which should produce something like this::
+
+    uid                  Tim Sutton (QGIS Key) <tim@linfiniti.com>
+    sig 3        97626237 2007-07-19  Tim Sutton (QGIS Key) <tim@linfiniti.com>
+
+So in my case my GPG id is :samp:`97626237`. Now register that key with GIT::
+
+    git config --global user.signingkey 97626237
+
+Now when you tag (as shown below), your tag will be signed with your chosen
+GPG key.
+
+
+
+Tagging
+.......
+
 Tagging the release provides a 'known good' state for the software which
 represents a point in time where all of the above items in this list have
 been checked. The tag should be named after the major, minor and point release
-for example :samp:`version-0_1_0`. If the release is a releas candidate or
-and alpha release the letters :samp:`rc` or :samp:`a` resepectively should
+for example :samp:`version-0_1_0`. If the release is a release candidate or
+and alpha release the letters :samp:`rc` or :samp:`a` respectively should
 be appended respectively, along with the related number. For example version
 0.1.0 alpha 1 would be tagged as :samp:`version-0_1_0a1`. To tag the release
 simply do it in git as illustrated below.::
 
-   git tag version-0_1_0
-   git push --tags origin version-0_1_0
+   git tag -s version-1_1_0 -m "Version 1.1.0"
+
+This should generate an output similar to the example shown below::
+
+    gpg: NOTE: old default options file `/home/timlinux/.gnupg/options' ignored
+
+    You need a passphrase to unlock the secret key for
+    user: "Tim Sutton (QGIS Key) <tim@linfiniti.com>"
+    1024-bit DSA key, ID 97626237, created 2007-07-19
+
+Depending on your operating system / desktop environment, you may be prompted
+for your GPG passphrase, or it will be automatically supplied if you are using
+an agent.
+
+Now we can go ahead and push the tag to the main repository::
+
+   git push --tags origin version-1_1_0
 
 .. note:: Replace 'dot' separators with underscores for the version number.
 .. note:: You can differentiate release **branches** from release **tags** by the
