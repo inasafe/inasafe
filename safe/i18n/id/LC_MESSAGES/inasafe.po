@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-18 11:04+0700\n"
+"POT-Creation-Date: 2013-02-19 11:52+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,9 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: id_ID\n"
-"X-Source-Language: en\n"
 
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:132
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:113
@@ -646,8 +643,8 @@ msgstr "Orang-orang di 30cm sampai 50cm air: %i"
 #: safe/impact_functions/core.py:356
 #, python-format
 msgid ""
-"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might "
-"<i>%(impact)s</i>"
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
+"%(impact)s</i>"
 msgstr ""
 "Apabila terjadi <i>%(hazard)s</i> berapa banyak <i>%(exposure)s</i> yang "
 "mungkin <i>%(impact)s</i>"
@@ -688,7 +685,8 @@ msgstr "Banjir di Jakarta seperti 2007 tapi ada perbaikan struktural"
 msgid "A flood in Jakarta in RW areas identified as flood prone"
 msgstr "Banjir di Jakarta di daerah identifikas sebagai rawan banjir"
 
-#: safe/common/dynamic_translations.py:82 safe/common/dynamic_translations.py:93
+#: safe/common/dynamic_translations.py:82
+#: safe/common/dynamic_translations.py:93
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr "Gempabumi di Yogyakarta seperti 2006"
 
@@ -1395,10 +1393,10 @@ msgstr ""
 "sebuah bangunan di wilayah yang memiliki atribut \"affected\" bernilai True "
 "(atau 1) maka bangunan itu terkena dampak. Jika atribut \"terkena\" tidak "
 "ada tapi \"FLOODPRONE\" ada, maka bangunan dianggap berdampak jika "
-"\"FLOODPRONE\" bernila \"yes\". Jika tidak ada \"affected\" atau "
-"\"FLOODPRONE\" yang tersedia, bangunan akan terkena dampak jika dimiliki "
-"oleh poligon manapun. Perilaku yang terakhir diimplementasikan melalui \"\" "
-"atribut inapolygon yang secara otomatis ditetapkan."
+"\"FLOODPRONE\" bernila \"yes\". Jika tidak ada \"affected\" atau \"FLOODPRONE"
+"\" yang tersedia, bangunan akan terkena dampak jika dimiliki oleh poligon "
+"manapun. Perilaku yang terakhir diimplementasikan melalui \"\" atribut "
+"inapolygon yang secara otomatis ditetapkan."
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:56
 msgid ""

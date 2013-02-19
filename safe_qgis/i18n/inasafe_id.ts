@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -353,12 +354,6 @@
         <translation>Terjadi pengecualian ketika memulai model.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1565"/>
-        <source>No impact layer was calculated. Error message: %s
-</source>
-        <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s</translation>
-    </message>
-    <message>
         <location filename="dock.py" line="1633"/>
         <source>Postprocessing report skipped</source>
         <translation>Laporan pasca pemrosesan dilewati</translation>
@@ -584,11 +579,6 @@
         <translation>Kesalahan terjadi ketika melakukan menyeting model runner.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1569"/>
-        <source>An exception occurred when calculating the results. %s</source>
-        <translation>Kesalahan terjadi ketika melakukan penghitungan hasil.. %s</translation>
-    </message>
-    <message>
         <location filename="dock.py" line="2713"/>
         <source>Preparing aggregation layer...</source>
         <translation>Menyiapkan lapisan agregasi...</translation>
@@ -622,6 +612,17 @@
         <location filename="dock.py" line="1001"/>
         <source>You may not have sufficient free system memory to carry out this analysis. See the dock panel message for more information. Would you like to continue regardless?</source>
         <translation>Anda mungkin tidak memiliki memori bebas yang cukup untuk menjalankan analisis. Lihat panel pesan untuk informasi lebih lanjut. Apakah Anda yakin untuk melanjutkan?</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1565"/>
+        <source>No impact layer was calculated. Error message: %1
+</source>
+        <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %1</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1569"/>
+        <source>An exception occurred when calculating the results. %1</source>
+        <translation>Kesalahan terjadi ketika menghitung hasil. %1</translation>
     </message>
 </context>
 <context>
