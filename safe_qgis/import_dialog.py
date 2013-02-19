@@ -100,7 +100,8 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
 
     ## check redirection
     ## Its only handle one layer of redirection tough
-    myRedirectUrl = myReply.attribute(QNetworkRequest.RedirectionTargetAttribute)
+    myRedirectUrl = myReply.attribute(
+        QNetworkRequest.RedirectionTargetAttribute)
     myRedirectUrl = myRedirectUrl.toUrl()
 
     if not myRedirectUrl.isEmpty() and myRedirectUrl != myUrl:
@@ -190,25 +191,35 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         theMap.setSizePolicy(self.map.sizePolicy())
         self.map = theMap
 
-        self.map.m_normalMap.updated.connect(self.updateExtent)
-
         self.nam = QNetworkAccessManager(self)
 
         self.setupOptions()
 
-
         self.restoreState()
+
         self.cbxRegion.currentIndexChanged.connect(self.regionChanged)
+        self.map.m_normalMap.updated.connect(self.updateExtent)
 
     def regionChanged(self, theIndex):
+        """ Slot that called when region combo box changed.
+        Params:
+            theIndex - index of combo box
+        """
         myRegionIndex = str(self.cbxRegion.itemData(theIndex).toString())
         myCenter = self.regionExtent[myRegionIndex]
         self.map.setCenter(myCenter[0], myCenter[1], myCenter[2])
 
+    # pylint: disable=W0613
     def resizeEvent(self, theEvent):
+        """ Function that called when resize event occurred.
+        Params:
+            theEvent - QEvent instance. Not used.
+        """
         self.map.resize(self.gbxMap.width() - 30, self.gbxMap.height() - 30)
+    # pylint: disable=W0613
 
     def setupOptions(self):
+        """ Fill the options in combo box. """
         ## FIXME(gigih): dynamicly load the option from Hot-Export website
 
         self.cbxRegion.insertItem(0, 'Indonesia', 1)
@@ -352,9 +363,10 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setValue(0)
 
         ## setup necessary data to create new job in Hot-Export
+        myCurrentIndex = self.cbxRegion.currentIndex()
+        myRegionId = self.cbxRegion.itemData(myCurrentIndex).toString()
         myPayload = {
-            'job[region_id]': str(
-                self.cbxRegion.itemData(self.cbxRegion.currentIndex()).toString()),
+            'job[region_id]': str(myRegionId),
             'job[name]': 'InaSAFE job',
             'job[description]': 'Created from import feature in InaSAFE',
             'job[lonmin]': str(self.minLongitude.text()),

@@ -17,13 +17,16 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
 
 import unittest
 from safe_qgis.inasafe_lightmaps import (InasafeSlippyMap)
+from safe_qgis.utilities_test import (getQgisTestApp)
+
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class SlippyMapTest(unittest.TestCase):
     """Test the Slippy map widget"""
 
     def setUp(self):
-        self.slippyMap = InasafeSlippyMap()
+        self.slippyMap = InasafeSlippyMap(PARENT)
 
     def test_flipLatitude(self):
         """ test flipLatitude function """

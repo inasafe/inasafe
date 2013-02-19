@@ -22,7 +22,7 @@ import os
 import tempfile
 import shutil
 
-from PyQt4.QtCore import QUrl, QObject, pyqtSignal
+from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
 from safe_qgis.import_dialog import (httpDownload, httpRequest, ImportDialog)
@@ -64,13 +64,17 @@ class FakeQNetworkReply(QObject):
     def error(self):
         return  QNetworkReply.NoError
 
+    # pylint: disable=W0613
     def attribute(self, theAttribute):
-        pass
+        return QVariant()
+    # pylint: enable=W0613
 
 
 class FakeQNetworkAccessManager:
+    # pylint: disable=W0613
     def post(self, theRequest, theData=None):
         return self.request(theRequest)
+    # pylint: enable=W0613
 
     def get(self, theRequest):
         return self.request(theRequest)
@@ -166,6 +170,7 @@ class ImportDialogTest(unittest.TestCase):
             'job[latmax]': '14.8329',
         }
         self.token = "cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE="
+        self.preset = '3'
 
     def test_getAuthToken(self):
         myContent = readAll('test-importdlg-newjob.html')
@@ -182,8 +187,9 @@ class ImportDialogTest(unittest.TestCase):
         assert myToken == self.token, myMessage
 
     def test_uploadTag(self):
-        myJobId = self.importDlg.uploadTag(self.payload, self.token)
-        assert myJobId == '1990'
+        myJobId = self.importDlg.uploadTag(self.payload, self.preset, self.token)
+        myMessage = "myJobId don't match. Expected 1990 but got %s" %  myJobId
+        assert myJobId == '1990', myMessage
 
     def test_getDownloadUrl(self):
         myUrl = self.importDlg.getDownloadUrl('1990')
@@ -235,7 +241,7 @@ class ImportDialogTest(unittest.TestCase):
 
         myResult = self.importDlg.progressDialog.result()
         myMessage = "result dont match. current result is %s " % myResult
-        assert myResult == QDialog.Accepted
+        assert myResult == QDialog.Accepted, myMessage
 
     def test_loadShapeFile(self):
         """ test loading shape file to QGIS Main Window """

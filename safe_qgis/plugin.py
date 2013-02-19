@@ -290,8 +290,6 @@ class Plugin:
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
             self.actionImportDlg)
 
-
-
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
@@ -539,4 +537,3 @@ class Plugin:
         dlg = ImportDialog(self.iface.mainWindow(), self.iface)
         dlg.setModal(True)
         dlg.show()
-

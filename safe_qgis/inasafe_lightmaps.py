@@ -189,6 +189,7 @@ class InasafeLightMaps(LightMaps):
         return (self.m_normalMap.tlLat, self.m_normalMap.tlLng,
                 self.m_normalMap.brLat, self.m_normalMap.brLng)
 
+    #pylint: disable=W0221
     def setCenter(self, theLat, theLng, theZoom=None):
         """
         Set the center coordinate of map.
@@ -205,6 +206,7 @@ class InasafeLightMaps(LightMaps):
 
         self.m_normalMap.invalidate()
         self.m_largeMap.invalidate()
+    #pylint: enable=W0221
 
     def getZoomLevel(self):
         """ Get zoom level of map. """
