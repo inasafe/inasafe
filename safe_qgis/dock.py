@@ -1229,11 +1229,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Done was emitted, but no impact layer was calculated
             myResult = self.runner.result()
             myMessage = str(self.tr('No impact layer was calculated. '
-                                    'Error message: %s\n' % str(myResult)))
+                                    'Error message: %1\n').arg(str(myResult)))
             myException = self.runner.lastException()
             if myException is not None:
                 myContext = self.tr('An exception occurred when calculating '
-                                    'the results. %s' % self.runner.result())
+                                    'the results. %1').arg(
+                                    self.runner.result())
                 myMessage = getExceptionWithStacktrace(myException,
                     theHtml=True,
                     theContext=myContext)
