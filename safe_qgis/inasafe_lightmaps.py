@@ -141,3 +141,31 @@ class InasafeLightMaps(LightMaps):
 
         return (self.m_normalMap.tlLat, self.m_normalMap.tlLng,
                 self.m_normalMap.brLat, self.m_normalMap.brLng)
+
+    def setCenter(self, theLat, theLng, theZoom=None):
+        """
+        Set the center coordinate of map.
+        Params:
+            * theLat - latitude
+            * theLng - longitude
+            * theZoom - Zoom Level
+        """
+        self.m_normalMap.latitude = theLat
+        self.m_normalMap.longitude = theLng
+
+        if theZoom:
+            self.m_normalMap.zoom = theZoom
+
+        self.m_normalMap.invalidate()
+        self.m_largeMap.invalidate()
+
+    def getZoomLevel(self):
+        """ Get zoom level of map. """
+        return self.m_normalMap.zoom
+
+    def getCenter(self):
+        """ Get center coordinate of map.
+        Returns:
+            A tuple of (latitude, longitude)
+        """
+        return (self.m_normalMap.latitude, self.m_normalMap.longitude)

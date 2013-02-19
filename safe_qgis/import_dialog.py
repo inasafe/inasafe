@@ -17,7 +17,7 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import (QRect, QCoreApplication, QUrl, QFile)
+from PyQt4.QtCore import (QRect, QCoreApplication, QUrl, QFile, QSettings)
 from PyQt4.QtGui import (QDialog, QProgressDialog,
                          QMessageBox, QFileDialog, QSizePolicy)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
@@ -207,6 +207,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             5: ['115.6329', '4.424338', '127.8003', '21.55277']
         }
 
+        self.restoreState()
+
     def resizeEvent(self, theEvent):
         self.map.resize(self.gbxMap.width() - 30, self.gbxMap.height() - 30)
 
@@ -223,6 +225,39 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.cbxPreset.insertItem(2, 'bus_stop', 7)
         self.cbxPreset.insertItem(3, 'Presets for Access Mapping', 2)
         self.cbxPreset.insertItem(4, 'RW boundaries for Jakarta', 6)
+
+    def restoreState(self):
+        """ Read last state of GUI from configuration file """
+        mySetting = QSettings()
+
+        myRegion = mySetting.value('region').toInt()
+        if myRegion[1] is True:
+            self.cbxRegion.setCurrentIndex(myRegion[0])
+
+        myPreset = mySetting.value('preset').toInt()
+        if myPreset[1] is True:
+            self.cbxPreset.setCurrentIndex(myPreset[0])
+
+        self.outDir.setText(mySetting.value('directory').toString())
+
+        myZoomLevel = mySetting.value('zoom_level').toInt()
+        myLatitude = mySetting.value('latitude').toString()
+        myLongitude = mySetting.value('longitude').toString()
+
+        if myZoomLevel[1] is True:
+            self.map.setCenter(myLatitude[0], myLongitude[0], myZoomLevel[0])
+
+    def saveState(self):
+        """ Store current state of GUI to configuration file """
+        mySetting = QSettings()
+        mySetting.setValue('region', self.cbxRegion.currentIndex())
+        mySetting.setValue('preset', self.cbxPreset.currentIndex())
+        mySetting.setValue('directory', self.outDir.text())
+
+        mySetting.setValue('zoom_level', self.map.getZoomLevel())
+        myCenter = self.map.getCenter()
+        mySetting.setValue('latitude', myCenter[0])
+        mySetting.setValue('longitude', myCenter[1])
 
     def updateExtent(self):
         """ Update extent value in GUI based from value in map widget"""
@@ -241,6 +276,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         """ Do import process """
 
         try:
+            self.saveState()
+
             self.ensureDirExist()
             self.doImport()
             self.loadShapeFile()
@@ -361,7 +398,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.done(QDialog.Accepted)
 
     def getAuthToken(self, theContent):
-        '''Get authenticity_token value
+        """ Get authenticity_token value
 
         Args:
            * theContent - string containing html page from hot-exports
@@ -369,7 +406,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
            authenticity_token value
         Raises:
            no exceptions explicitly raised
-        '''
+        """
 
         ## FIXME(gigih): need fail-proof method to get authenticity_token
         myToken = theContent.split(
@@ -457,9 +494,18 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
                 myResultResponse = httpRequest(self.nam, 'GET', myResultUrl,
                                                self.progressEvent)
                 mySoup = BeautifulSoup(myResultResponse.content)
-                myLinks = mySoup.find_all('a', text='ESRI Shapefile (zipped)')
+                myJobTable = mySoup.find('table', {'class': 'jobindex'})
+                myFirstRow = myJobTable.find_all('tr')[1]
+                myState = myFirstRow.find('img', {'class': 'state'})['title']
 
-                if len(myLinks) > 0:
+                ## raise an exception when hot-export have some trouble
+                if myState == 'error':
+                    myErrorMsg = myFirstRow.find_all('td')[1].text
+                    raise ImportDialogError(self.tr(myErrorMsg))
+
+                myLink = myFirstRow.find('a', text='ESRI Shapefile (zipped)')
+
+                if myLink:
                     myIsReady = True
                 else:
                     myCountDown = 5
@@ -469,7 +515,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             myCountDown -= mySleepTime
 
         ## return the first URL
-        return self.url + myLinks[0].get('href')
+        return self.url + myLink.get('href')
 
     def downloadShapeFile(self, theUrl, theOutput):
         """
