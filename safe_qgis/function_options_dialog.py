@@ -203,12 +203,17 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         return self.bind(myWidget, 'text', myFunc)
 
-    def setDialogInfo(self, theFunctionID):
+    def setDialogInfo(self, theFunctionID, hazard_sub_category,
+                      exposure_sub_category):
 
         myText = ''
-        impactFunctionName = theFunctionID
-        myText += self.tr('Parameters for impact function "%1" that can be '
-                          'modified are:').arg(impactFunctionName)
+        # (Sunni) shameless hack
+        impactFunctionName = theFunctionID.replace('Flood', 'Inundation')
+        myText += self.tr('Parameters for impact function "%1" for "%2" on '
+                          '"%3" that can be modified are:').arg(
+                            impactFunctionName).arg(
+                            hazard_sub_category).arg(
+                            exposure_sub_category)
         myLabel = self.lblFunctionDescription
         myLabel.setText(myText)
 

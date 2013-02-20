@@ -544,8 +544,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises:
            no exceptions explicitly raised."""
+        # Get the keyword dictionaries for hazard and exposure
+        myHazardLayer = self.getHazardLayer()
+        if myHazardLayer is None:
+            return
+        myExposureLayer = self.getExposureLayer()
+        if myExposureLayer is None:
+            return
+
+        myHazardKeywords = self.keywordIO.readKeywords(myHazardLayer)
+        try:
+            hazard_sub_category = myHazardKeywords['subcategory']
+        except KeyError:
+            hazard_sub_category = 'hazard'
+        myExposureLayer = self.keywordIO.readKeywords(myExposureLayer)
+        try:
+            exposure_sub_category = myExposureLayer['subcategory']
+        except KeyError:
+            exposure_sub_category = 'exposure'
+
         myDialog = FunctionOptionsDialog(self)
-        myDialog.setDialogInfo(self.getFunctionID())
+        myDialog.setDialogInfo(self.getFunctionID(),
+                               hazard_sub_category,
+                               exposure_sub_category)
         myDialog.buildForm(self.functionParams)
 
         if myDialog.exec_():
