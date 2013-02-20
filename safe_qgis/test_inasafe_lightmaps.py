@@ -86,19 +86,19 @@ class SlippyMapTest(unittest.TestCase):
 
         myNumber = self.slippyMap.tlLat
         myResult = 79.45078125
-        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
+        assert myNumber == myResult, myMessage.format(myResult, myNumber)
 
         myNumber = self.slippyMap.tlLng
         myResult = 80.45078125
-        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
+        assert myNumber == myResult, myMessage.format(myResult, myNumber)
 
         myNumber = self.slippyMap.brLat
         myResult = 80.54921875
-        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
+        assert myNumber == myResult, myMessage.format(myResult, myNumber)
 
         myNumber = self.slippyMap.brLng
         myResult = 81.54921875
-        assert  myNumber == myResult, myMessage.format(myResult, myNumber)
+        assert myNumber == myResult, myMessage.format(myResult, myNumber)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(SlippyMapTest, 'test')

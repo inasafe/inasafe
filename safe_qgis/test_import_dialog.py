@@ -62,7 +62,7 @@ class FakeQNetworkReply(QObject):
         return QUrl(self._url)
 
     def error(self):
-        return  QNetworkReply.NoError
+        return QNetworkReply.NoError
 
     # pylint: disable=W0613
     def attribute(self, theAttribute):
@@ -187,8 +187,9 @@ class ImportDialogTest(unittest.TestCase):
         assert myToken == self.token, myMessage
 
     def test_uploadTag(self):
-        myJobId = self.importDlg.uploadTag(self.payload, self.preset, self.token)
-        myMessage = "myJobId don't match. Expected 1990 but got %s" %  myJobId
+        myJobId = self.importDlg.uploadTag(self.payload,
+                                           self.preset, self.token)
+        myMessage = "myJobId don't match. Expected 1990 but got %s" % myJobId
         assert myJobId == '1990', myMessage
 
     def test_getDownloadUrl(self):
