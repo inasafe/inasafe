@@ -17,7 +17,7 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import (QCoreApplication, QUrl, QFile, QSettings)
+from PyQt4.QtCore import (QCoreApplication, QUrl, QFile, QSettings, pyqtSignature)
 from PyQt4.QtGui import (QDialog, QProgressDialog,
                          QMessageBox, QFileDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
@@ -279,6 +279,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.maxLongitude.setText(str(myExtent[3]))
         self.maxLatitude.setText(str(myExtent[2]))
 
+    @pyqtSignature('')  # prevents actions being handled twice
     def on_pBtnDir_clicked(self):
         """ Show a dialog to choose directory """
         self.outDir.setText(QFileDialog.getExistingDirectory(
