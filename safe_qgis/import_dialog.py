@@ -249,8 +249,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.outDir.setText(mySetting.value('directory').toString())
 
         myZoomLevel = mySetting.value('zoom_level').toInt()
-        myLatitude = mySetting.value('latitude').toString()
-        myLongitude = mySetting.value('longitude').toString()
+        myLatitude = mySetting.value('latitude').toDouble()
+        myLongitude = mySetting.value('longitude').toDouble()
 
         if myZoomLevel[1] is True:
             self.map.setCenter(myLatitude[0], myLongitude[0], myZoomLevel[0])
