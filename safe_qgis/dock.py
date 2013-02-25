@@ -1443,18 +1443,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 88
         self.showBusy(myTitle, myMessage, myProgress)
 
-        if not self.doZonalAggregation:
-            self.postProcessingLayer.startEditing()
-            myProvider = self.postProcessingLayer.dataProvider()
-            # add a feature the size of the impact layer bounding box
-            myFeature = QgsFeature()
-            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
-                QgsPoint(myImpactBBox[0], myImpactBBox[1]),
-                QgsPoint(myImpactBBox[2], myImpactBBox[3]))))
-            myFeature.setAttributeMap({0: QtCore.QVariant(
-                self.tr('Entire area'))})
-            myProvider.addFeatures([myFeature])
-            self.postProcessingLayer.commitChanges()
+        # (Sunni) : I commented this out to remove extra-zero row in version 1.1
+        # see https://github.com/AIFDR/inasafe/issues/507 for more information
+        # All tests are passed :)
+        # if not self.doZonalAggregation:
+        #     self.postProcessingLayer.startEditing()
+        #     myProvider = self.postProcessingLayer.dataProvider()
+        #     # add a feature the size of the impact layer bounding box
+        #     myFeature = QgsFeature()
+        #     myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
+        #         QgsPoint(myImpactBBox[0], myImpactBBox[1]),
+        #         QgsPoint(myImpactBBox[2], myImpactBBox[3]))))
+        #     myFeature.setAttributeMap({0: QtCore.QVariant(
+        #         self.tr('Entire area'))})
+        #     myProvider.addFeatures([myFeature])
+        #     self.postProcessingLayer.commitChanges()
 
         myQGISImpactLayer = self.readImpactLayer(myImpactLayer)
         if not myQGISImpactLayer.isValid():
