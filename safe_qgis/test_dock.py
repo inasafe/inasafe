@@ -584,8 +584,9 @@ class DockTest(unittest.TestCase):
                      (myAttribute))
         assert myAttribute is None, myMessage
 
-    #the generated layers are not added to the map registry
+
     def test_checkPostProcessingLayersVisibility(self):
+        """Generated layers are not added to the map registry."""
         myRunButton = DOCK.pbnRunStop
 
         # with KAB_NAME aggregation attribute defined in .keyword using
@@ -628,6 +629,39 @@ class DockTest(unittest.TestCase):
                      (myBeforeCount + 2, myAfterCount))
         # We expect two more since we enabled showing intermedate layers
         assert myBeforeCount + 2 == myAfterCount, myMessage
+
+    def test_postProcessorOutput(self):
+        """Check that the post processor does not add spurious report rows."""
+        myRunButton = DOCK.pbnRunStop
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theOkButtonFlag=True)
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        assert myResult, myMessage
+
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('Spurious 0 filled rows added to post processing report.')
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        for line in myResult.split('\n'):
+            if 'Entire area' in line:
+                myTokens = str(line).split('\t')
+                myTokens = myTokens[1:]
+                mySum = 0
+                for myToken in myTokens:
+                    mySum += float(myToken.replace(',', '.'))
+
+                assert mySum != 0, myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -1518,7 +1552,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
-        myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
+        myMessage = ('The aggregation report should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 
