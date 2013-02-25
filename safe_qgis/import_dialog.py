@@ -17,7 +17,8 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import (QCoreApplication, QUrl, QFile, QSettings, pyqtSignature)
+from PyQt4.QtCore import (QCoreApplication, QUrl, QFile,
+                          QSettings, pyqtSignature)
 from PyQt4.QtGui import (QDialog, QProgressDialog,
                          QMessageBox, QFileDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
