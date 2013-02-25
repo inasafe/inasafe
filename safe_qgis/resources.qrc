@@ -20,5 +20,6 @@
         <file alias="basic.qpt">resources/qgis-composer-templates/basic.qpt</file>
         <file alias="edit.png">resources/img/edit.png</file>
         <file alias="minimum_needs.png">resources/img/minimum_needs.png</file>
+        <file alias="osm-download.png">resources/img/osm-download.png</file>
     </qresource>
 </RCC>
