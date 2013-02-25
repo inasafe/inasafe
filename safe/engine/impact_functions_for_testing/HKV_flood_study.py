@@ -1,10 +1,10 @@
 import numpy
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
-                                        get_exposure_layers,
-                                        format_int)
+                                        get_exposure_layers)
 from safe.storage.raster import Raster
-from safe.common.utilities import verify
+from safe.common.utilities import (verify,
+                                   format_int)
 
 # Want to use the human readably name in the impact function
 # pylint: disable=W0622

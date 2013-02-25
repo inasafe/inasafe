@@ -1,11 +1,11 @@
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
-                                        get_question,
-                                        format_int)
+                                        get_question)
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
-                                   get_defaults)
+                                   get_defaults,
+                                   format_int)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 from third_party.odict import OrderedDict

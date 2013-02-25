@@ -23,10 +23,10 @@ Class Building Type                              Median (MMI)  Beta (MMI)
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
-                                        get_question,
-                                        format_int)
+                                        get_question)
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   format_int)
 from safe.common.numerics import lognormal_cdf
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.mappings import osm2padang, sigab2padang

@@ -37,7 +37,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
 # TODO: get this via api
-from safe.impact_functions.core import format_int
+from safe_interface import format_int
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
 
 from safe_qgis.utilities_test import (getQgisTestApp,

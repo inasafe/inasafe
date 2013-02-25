@@ -3,11 +3,11 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
                                         get_question,
-                                        get_function_title,
-                                        format_int)
+                                        get_function_title)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   format_int)
 from safe.common.tables import Table, TableRow
 
 

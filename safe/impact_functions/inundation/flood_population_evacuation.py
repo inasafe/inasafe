@@ -3,12 +3,12 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
                                         get_question,
-                                        get_function_title,
-                                        format_int)
+                                        get_function_title)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
-                                   get_defaults)
+                                   get_defaults,
+                                   format_int)
 from safe.common.utilities import verify
 from safe.common.tables import Table, TableRow
 from third_party.odict import OrderedDict
