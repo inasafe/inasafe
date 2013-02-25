@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'safe_qgis\import_dialog_base.ui'
+# Form implementation generated from reading ui file 'import_dialog_base.ui'
 #
-# Created: Fri Feb 15 15:39:40 2013
-#      by: PyQt4 UI code generator 4.8.3
+# Created: Mon Feb 25 16:26:42 2013
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_ImportDialogBase(object):
     def setupUi(self, ImportDialogBase):
         ImportDialogBase.setObjectName(_fromUtf8("ImportDialogBase"))
-        ImportDialogBase.resize(683, 486)
+        ImportDialogBase.resize(683, 502)
         self.gridLayout = QtGui.QGridLayout(ImportDialogBase)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.gbxMap = QtGui.QGroupBox(ImportDialogBase)
@@ -38,7 +38,7 @@ class Ui_ImportDialogBase(object):
         self.map.setObjectName(_fromUtf8("map"))
         self.gridLayout.addWidget(self.gbxMap, 0, 0, 1, 2)
         self.groupBox = QtGui.QGroupBox(ImportDialogBase)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
@@ -46,34 +46,32 @@ class Ui_ImportDialogBase(object):
         self.groupBox.setMinimumSize(QtCore.QSize(256, 300))
         self.groupBox.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
-        self.formLayout_2 = QtGui.QFormLayout(self.groupBox)
-        self.formLayout_2.setFieldGrowthPolicy(QtGui.QFormLayout.FieldsStayAtSizeHint)
-        self.formLayout_2.setLabelAlignment(QtCore.Qt.AlignCenter)
-        self.formLayout_2.setObjectName(_fromUtf8("formLayout_2"))
+        self.verticalLayout = QtGui.QVBoxLayout(self.groupBox)
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.label = QtGui.QLabel(self.groupBox)
         self.label.setObjectName(_fromUtf8("label"))
-        self.formLayout_2.setWidget(0, QtGui.QFormLayout.LabelRole, self.label)
+        self.verticalLayout.addWidget(self.label)
         self.minLongitude = QtGui.QLineEdit(self.groupBox)
         self.minLongitude.setObjectName(_fromUtf8("minLongitude"))
-        self.formLayout_2.setWidget(0, QtGui.QFormLayout.FieldRole, self.minLongitude)
+        self.verticalLayout.addWidget(self.minLongitude)
         self.label_2 = QtGui.QLabel(self.groupBox)
         self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.formLayout_2.setWidget(1, QtGui.QFormLayout.LabelRole, self.label_2)
+        self.verticalLayout.addWidget(self.label_2)
         self.minLatitude = QtGui.QLineEdit(self.groupBox)
         self.minLatitude.setObjectName(_fromUtf8("minLatitude"))
-        self.formLayout_2.setWidget(1, QtGui.QFormLayout.FieldRole, self.minLatitude)
+        self.verticalLayout.addWidget(self.minLatitude)
         self.label_3 = QtGui.QLabel(self.groupBox)
         self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.formLayout_2.setWidget(2, QtGui.QFormLayout.LabelRole, self.label_3)
+        self.verticalLayout.addWidget(self.label_3)
         self.maxLongitude = QtGui.QLineEdit(self.groupBox)
         self.maxLongitude.setObjectName(_fromUtf8("maxLongitude"))
-        self.formLayout_2.setWidget(2, QtGui.QFormLayout.FieldRole, self.maxLongitude)
+        self.verticalLayout.addWidget(self.maxLongitude)
         self.label_4 = QtGui.QLabel(self.groupBox)
         self.label_4.setObjectName(_fromUtf8("label_4"))
-        self.formLayout_2.setWidget(3, QtGui.QFormLayout.LabelRole, self.label_4)
+        self.verticalLayout.addWidget(self.label_4)
         self.maxLatitude = QtGui.QLineEdit(self.groupBox)
         self.maxLatitude.setObjectName(_fromUtf8("maxLatitude"))
-        self.formLayout_2.setWidget(3, QtGui.QFormLayout.FieldRole, self.maxLatitude)
+        self.verticalLayout.addWidget(self.maxLatitude)
         self.gridLayout.addWidget(self.groupBox, 0, 2, 1, 1)
         self.gbxOptions = QtGui.QGroupBox(ImportDialogBase)
         self.gbxOptions.setObjectName(_fromUtf8("gbxOptions"))
@@ -109,7 +107,7 @@ class Ui_ImportDialogBase(object):
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
-        self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 3)
 
         self.retranslateUi(ImportDialogBase)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ImportDialogBase.accept)
@@ -119,11 +117,11 @@ class Ui_ImportDialogBase(object):
     def retranslateUi(self, ImportDialogBase):
         ImportDialogBase.setWindowTitle(QtGui.QApplication.translate("ImportDialogBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
         self.gbxMap.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Map", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Coordinate", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("ImportDialogBase", "Min. Longitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("ImportDialogBase", "Min. Latitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("ImportDialogBase", "Max. Longitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("ImportDialogBase", "Max. Latitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Bounding box", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("ImportDialogBase", "Minimum Longitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("ImportDialogBase", "Minimum latitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("ImportDialogBase", "Maximum longitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_4.setText(QtGui.QApplication.translate("ImportDialogBase", "Maximum latitude", None, QtGui.QApplication.UnicodeUTF8))
         self.gbxOptions.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Options", None, QtGui.QApplication.UnicodeUTF8))
         self.regionLabel.setText(QtGui.QApplication.translate("ImportDialogBase", "Region", None, QtGui.QApplication.UnicodeUTF8))
         self.presetLabel.setText(QtGui.QApplication.translate("ImportDialogBase", "Preset", None, QtGui.QApplication.UnicodeUTF8))
