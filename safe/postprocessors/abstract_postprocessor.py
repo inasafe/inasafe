@@ -13,8 +13,8 @@ __copyright__ += 'Disaster Reduction'
 import logging
 
 from safe.common.exceptions import PostProcessorError
-from safe.common.utilities import (get_defaults,
-                                   format_int)
+from safe.common.utilities import get_defaults
+from safe.impact_functions.core import format_int
 
 from third_party.odict import OrderedDict
 

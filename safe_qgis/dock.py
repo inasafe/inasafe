@@ -1443,7 +1443,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 88
         self.showBusy(myTitle, myMessage, myProgress)
 
-        # (Sunni) : I commented this out to remove extra-zero row in version 1.1
+        # (Sunni) : I commented this out to remove extra-zero row
+        # in version 1.1
         # see https://github.com/AIFDR/inasafe/issues/507 for more information
         # All tests are passed :)
         # if not self.doZonalAggregation:
