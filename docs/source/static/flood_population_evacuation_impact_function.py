@@ -24,7 +24,7 @@ class FloodPopulationEvacuationFunction(FunctionProvider):
                     layertype=='raster'
     """
 
-    title = 'Must be evacuated'
+    title = 'be evacuated'
 
     synopsis = ('To assess the impacts of (flood or tsunami) inundation '
                 'on population.')
