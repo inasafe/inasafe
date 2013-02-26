@@ -19,5 +19,6 @@
         <file alias="footer.html">resources/footer.html</file>
         <file alias="basic.qpt">resources/qgis-composer-templates/basic.qpt</file>
         <file alias="edit.png">resources/img/edit.png</file>
+        <file alias="minimum_needs.png">resources/img/minimum_needs.png</file>
     </qresource>
 </RCC>

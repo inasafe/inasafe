@@ -17,11 +17,11 @@ for impact modelling.
 Quick Installation Guide
 ========================
 
-To install the |project_name|, use the plugin manager in QGIS::
+To install the InaSAFE plugin, use the plugin manager in `QGIS <http://qgis.org>`_::
 
   Plugins -> Fetch Python Plugins
 
-Then search for '|project_name|', select it and click the install button.
+Then search for 'InaSAFE', select it and click the install button.
 The plugin will now be added to your plugins menu.
 
 
@@ -29,10 +29,9 @@ System Requirements
 -------------------
 
  - A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X
- - The Open Source Geographic Information System QGIS (http://www.qgis.org).
+ - The QGIS Open Source Geographic Information System (http://www.qgis.org).
    InaSAFE requires QGIS version 1.7 or newer.
 
-===========
 Limitations
 ===========
 
@@ -41,12 +40,11 @@ earnest in January 2012 and there is still much to be done.  However,
 we work on the philosophy that stakeholders should have access to the
 development and source code from the very beginning and invite
 comments, suggestions and contributions.  See
-https://github.com/AIFDR/inasafe/issues/milestones and
-https://github.com/AIFDR/inasafe/issues?page=1&state=open for known
-bugs and outstanding tasks.
+`our milestones list <https://github.com/AIFDR/inasafe/issues/milestones>`_ and
+`our open issues list <https://github.com/AIFDR/inasafe/issues?page=1&state=open>`_ 
+for known bugs and outstanding tasks.
 
 
-=======
 License
 =======
 
@@ -54,11 +52,10 @@ InaSAFE is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License version 3 (GPLv3) as
 published by the Free Software Foundation.
 
-The full GNU General Public License is available in LICENSE.TXT or
+The full GNU General Public License is available in LICENSE.txt or
 http://www.gnu.org/licenses/gpl.html
 
 
-==============================
 Disclaimer of Warranty (GPLv3)
 ==============================
 
@@ -72,7 +69,6 @@ is with you. Should the program prove defective, you assume the cost of
 all necessary servicing, repair or correction.
 
 
-===============================
 Limitation of Liability (GPLv3)
 ===============================
 
@@ -88,49 +84,3 @@ such damages.
 
 
 
-=============
-Documentation
-=============
-
-To generate the current documentation in English, run the command :kbd:`make
-html` in the :file:`docs` directory. You will need to use Linux, and might need
-to install some dependencies. The standard documentation is available under
-:kbd:`docs/build/html`.
-
-====================
-Internationalization
-====================
-
-Adding a language
------------------
-
-- Edit the file :file:`docs/source/pre_translate.sh` and add the two-letter
-  code for your chosen language to the :kbd:`LOCALES` list.
-- Also add it to both occurrences of the :kbd:`LOCALES` list in
-  :file:`post_translate.sh`.
-- Run :file:`pre_translate.sh`.
-- Translation files for the documentation are now available as
-  :kbd:`docs/source/i18n/[language code]/LC_MESSAGES/*.po`.
-
-Updating translation strings
-----------------------------
-
-Whenever you have changed the source documentation, or want to begin
-translating, it's a good idea to update the translation strings first:
-
-- Run :file:`pre_translate.sh`. This will ensure that the sentences you are
-  translating actually reflect the latest content.
-
-Translating documents
----------------------
-
-- Open the :kbd:`.po` files for your chosen language in a translator tool such
-  as Qt Linguist.
-- Edit and save the :kbd:`.po` files.
-
-Building translated documentation
----------------------------------
-
-- Run :file:`post_translate.sh`.
-- The output directory is :file:`docs/source/_build/html/` and contains
-  directories corresponding to the languages in :file:`post_translate.sh`. 

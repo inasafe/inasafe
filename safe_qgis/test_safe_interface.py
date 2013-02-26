@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __date__ = '04/04/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -24,8 +23,8 @@ from safe_qgis.safe_interface import (getOptimalExtent,
                                       availableFunctions,
                                       readKeywordsFromFile,
                                       readSafeLayer)
-from safe_qgis.exceptions import (KeywordNotFoundException,
-                                  InsufficientOverlapException)
+from safe_qgis.exceptions import (KeywordNotFoundError,
+                                  InsufficientOverlapError)
 from safe.common.exceptions import BoundingBoxError
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
@@ -126,7 +125,7 @@ class SafeInterfaceTest(unittest.TestCase):
         view_port = [105.3, -4.3, 110.29, -2.5]
         try:
             getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        except InsufficientOverlapException, e:
+        except InsufficientOverlapError, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'did not overlap' in str(e), myMessage
         else:
@@ -140,7 +139,7 @@ class SafeInterfaceTest(unittest.TestCase):
         except BoundingBoxError:
             #good this was expected
             pass
-        except InsufficientOverlapException, e:
+        except InsufficientOverlapError, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Invalid' in str(e), myMessage
         else:
@@ -200,7 +199,7 @@ class SafeInterfaceTest(unittest.TestCase):
         try:
             myKeyword = readKeywordsFromFile(
                             self.rasterShakePath, 'boguskeyword')
-        except KeywordNotFoundException:
+        except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
             myMessage = ('Request for bogus keyword raised incorrect '
@@ -211,32 +210,49 @@ class SafeInterfaceTest(unittest.TestCase):
 
         myExpectedKeywords = {'category': 'hazard',
                               'subcategory': 'earthquake',
+                              'source': 'USGS',
                               'unit': 'MMI',
                               'title': 'An earthquake in Padang like in 2009'}
-        myMessage = 'Expected:\n%s\nGot:\n%s' % (myKeywords,
-                                                 myExpectedKeywords)
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
-        assert myKeywords == {'category': 'exposure',
+        myExpectedKeywords = {'category': 'exposure',
+                              'source': ('Center for International Earth '
+                                       'Science Information Network (CIESIN)'),
                               'subcategory': 'population',
                               'datatype': 'density',
                               'title': 'People'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
         myKeywords = readKeywordsFromFile(self.vectorPath)
-        assert myKeywords == {'category': 'exposure',
+        myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'itb',
                               'subcategory': 'structure'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
         #  tsunami example (one layer is UTM)
         myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)
-        assert myKeywords == {'title': 'Tsunami Max Inundation',
+        myExpectedKeywords = {'title': 'Tsunami Max Inundation',
                                'category': 'hazard',
                               'subcategory': 'tsunami',
                               'unit': 'm'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
+
         myKeywords = readKeywordsFromFile(self.rasterExposurePath)
-        print myKeywords == {'category': 'exposure',
-                             'subcategory': 'building'}
+        myExpectedKeywords = {'category': 'exposure',
+                              'subcategory': 'structure',
+                              'title': 'Tsunami Building Exposure'}
+        myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
+                                                   myKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
 
 if __name__ == '__main__':

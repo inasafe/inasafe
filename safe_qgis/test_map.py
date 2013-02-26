@@ -1,20 +1,13 @@
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **GUI Test Cases.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+"""**Tests for map creation in QGIS plugin.**
 
 """
-__author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
-__date__ = '10/01/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+
+__author__ = 'Tim Sutton <tim@linfiniti.com>'
+__revision__ = '$Format:%H$'
+__date__ = '01/11/2010'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 import unittest
 from unittest import expectedFailure
@@ -32,11 +25,10 @@ from qgis.core import (QgsMapLayerRegistry,
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
-                                      assertHashesForFile,
-                                      hashForFile,
                                       loadLayer,
-                                      setJakartaGeoExtent)
-from safe_qgis.utilities import setupPrinter
+                                      setJakartaGeoExtent,
+                                      checkImages)
+from safe_qgis.utilities import setupPrinter, dpiToMeters, qgisVersion
 from safe_qgis.map import Map
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -45,6 +37,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class MapTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
+
     def setUp(self):
         """Setup fixture run before each tests"""
         myRegistry = QgsMapLayerRegistry.instance()
@@ -77,8 +70,7 @@ class MapTest(unittest.TestCase):
         mySize = os.stat(myPath).st_size
         myExpectedSize = 352798  # as rendered on linux ub 12.04 64
         myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
-            myExpectedSize, mySize
-        )
+            myExpectedSize, mySize)
         assert mySize >= myExpectedSize, myMessage
 
     def test_renderComposition(self):
@@ -94,10 +86,10 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.composeMap()
-        myImagePath, myImage, myTargetArea = myMap.renderComposition()
+        myImagePath, myControlImage, myTargetArea = myMap.renderComposition()
         LOGGER.debug(myImagePath)
 
-        assert myImage is not None
+        assert myControlImage is not None
 
         myDimensions = [myTargetArea.left(),
                         myTargetArea.top(),
@@ -105,17 +97,27 @@ class MapTest(unittest.TestCase):
                         myTargetArea.right()]
         myExpectedDimensions = [0.0, 0.0, 3507.0, 2480.0]
         myMessage = 'Expected target area to be %s, got %s' % (
-            str(myExpectedDimensions), str(myDimensions)
-        )
+            str(myExpectedDimensions), str(myDimensions))
         assert myExpectedDimensions == myDimensions, myMessage
 
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        myExpectedHashes = ['9a4ac96de64bbe1dda2616d01158913d',  # ub12.04-64
-                            'ddf3cd2e9059e85c9d5b525d9f00c7dd',  # Jenkins
-                            '']
-        assertHashesForFile(myExpectedHashes, myImagePath)
+        myAcceptableImages = ['renderComposition.png',
+                              'renderComposition-variantUB12.04.png',
+                              'renderComposition-variantUB12.10.png',
+                              'renderComposition-variantWindosVistaSP2-32.png',
+                              'renderComposition-variantJenkins.png',
+                              'renderComposition-variantUB11.10-64.png',
+                              'renderComposition-variantUB11.04-64.png']
+        # Beta version and version changes  can introduce a few extra chars
+        # into the metadata section so we set a reasonable tolerance to cope
+        # with this.
+        myTolerance = 8000
+        myFlag, myMessage = checkImages(myAcceptableImages,
+                                        myImagePath,
+                                        myTolerance)
+        assert myFlag, myMessage
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
@@ -153,8 +155,8 @@ class MapTest(unittest.TestCase):
         setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
         myPath = unique_filename(prefix='outTemplate',
-                                    suffix='.pdf',
-                                    dir=temp_dir('test'))
+                                 suffix='.pdf',
+                                 dir=temp_dir('test'))
         LOGGER.debug(myPath)
         myMap.renderTemplate(myInPath, myPath)
         assert os.path.exists(myPath)
@@ -171,38 +173,49 @@ class MapTest(unittest.TestCase):
         setupPrinter(myPath)
         myMap.setupComposition()
 
-        myPixmap = QtGui.QPixmap(10, 10)
-        #myPixmap.fill(QtGui.QColor(250, 250, 250))
+        myImage = QtGui.QImage(10, 10, QtGui.QImage.Format_RGB32)
+        myImage.setDotsPerMeterX(dpiToMeters(300))
+        myImage.setDotsPerMeterY(dpiToMeters(300))
+        #myImage.fill(QtGui.QColor(250, 250, 250))
         # Look at the output, you will see antialiasing issues around some
         # of the boxes drawn...
-        myPixmap.fill(QtGui.QColor(200, 200, 200))
+        # myImage.fill(QtGui.QColor(200, 200, 200))
+        myImage.fill(200 + 200 * 256 + 200 * 256 * 256)
         myFilename = os.path.join(temp_dir(), 'greyBox')
-        myPixmap.save(myFilename, 'PNG')
+        myImage.save(myFilename, 'PNG')
         for i in range(10, 190, 10):
             myPicture = QgsComposerPicture(myMap.composition)
             myPicture.setPictureFile(myFilename)
-            myPicture.setFrame(False)
+            if qgisVersion() >= 10800:  # 1.8 or newer
+                myPicture.setFrameEnabled(False)
+            else:
+                myPicture.setFrame(False)
             myPicture.setItemPosition(i,  # x
                                       i,  # y
                                       10,  # width
                                       10)  # height
             myMap.composition.addItem(myPicture)
             # Same drawing drawn directly as a pixmap
-            myPixmapItem = myMap.composition.addPixmap(myPixmap)
+            myPixmapItem = myMap.composition.addPixmap(
+                QtGui.QPixmap.fromImage(myImage))
             myPixmapItem.setOffset(i, i + 20)
-            # Same drawing using our drawPixmap Helper
+            # Same drawing using our drawImage Helper
             myWidthMM = 1
-            myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
+            myMap.drawImage(myImage, myWidthMM, i, i + 40)
 
         myImagePath, _, _ = myMap.renderComposition()
-        LOGGER.debug('Artifacts image path: %s' % myImagePath)
-        LOGGER.debug('Artifacts pdf path: %s' % myPath)
-        myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
-        myHash = hashForFile(myImagePath)
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
-        myMessage = 'Windows map render still draws with artifacts.'
-        assert myHash != myUnwantedHash, myMessage
+
+        myControlImages = ['windowsArtifacts.png']
+        myTolerance = 0
+        myFlag, myMessage = checkImages(myControlImages,
+                                        myImagePath,
+                                        myTolerance)
+        myMessage += ('\nWe want these images to match, if they do not '
+                      'there may be rendering artifacts in windows.\n')
+        assert myFlag, myMessage
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(MapTest, 'test')

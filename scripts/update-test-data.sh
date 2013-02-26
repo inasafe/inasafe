@@ -11,7 +11,7 @@ fi
 
 VERSION=$1
 
-echo "Updating and setting test data to revision: $VERSION"
+echo "Updating test data"
 
 if [ ! -d ../inasafe_data ]
 then
@@ -36,6 +36,7 @@ git fetch
 # any new file put under git in the detached branch.
 # More scary, any file added (but not committed or
 # not under git) under master will also disappear. Why?
+echo "Setting test data to revision: $VERSION"
 git checkout --force $VERSION
 EXITCODE=$?
 popd

@@ -3,6 +3,28 @@
 Whats new?
 ==========
 
+Changelog for version 1.1.0
+---------------------------
+
+* Flood assessment using polygons now generates evacuation totals based
+  on percent of affected people (defaults to 1%).
+* Improvements to error handling with more informative messages to user.
+* Memory requirements prediction to try to warn a user when they might not
+  have enough RAM. See https://github.com/AIFDR/inasafe/issues/476.
+* Remote logging support. This **opt in** feature lets you submit useful
+  diagnostic information to our fault logger at http://sentry.linfiniti.com.
+* Support for automatic creation of packages in a test repository for
+  early adopters to test with.
+* Fix for 2D geometries - closes https://github.com/AIFDR/inasafe/issues/471
+* Default dock panel to right of QGIS. Closes
+  https://github.com/AIFDR/inasafe/issues/326
+* Fix https://github.com/AIFDR/inasafe/issues/358
+* Many small 'under the hood' improvements.
+* Realtime quake mapping support. This is available in source tree only
+  and is a server side installable application. Indonesia specific.
+* Realtime flood mapping support. This is available in source tree only
+  and provides an experimental implementation for production of floodmaps.
+  Jakarta specific.
 
 Changelog for version 1.0.1
 ---------------------------

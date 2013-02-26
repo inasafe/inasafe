@@ -15,7 +15,6 @@
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
 __license__ = "GPL"
@@ -81,6 +80,8 @@ def separate_points_by_polygon(points, polygon,
     http://www.alienryderflex.com/polygon/
     """
 
+    # FIXME (Ole): Make sure bounding box here follows same format as
+    #              those returned by layers. Methinks they don't at the moment
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean or None'
@@ -508,8 +509,6 @@ def in_and_outside_polygon(points, polygon,
 
             # Add holde indices to outside
             outside = numpy.concatenate((outside, in_hole))
-
-        outside.sort()
 
     return inside, outside
 
@@ -1253,32 +1252,29 @@ def intersection(line0, line1):
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
+def clip_grid_by_polygons(A, geotransform, polygons):
+    """Clip raster grid by polygon.
 
-# FIXME (Ole): I think this should take list of polygon objects as input
-#              rather than specifying inner rings separately
-def clip_grid_by_polygons(A, geotransform, polygons, inner_rings=None):
-    """Clip raster grid by polygon
+    Args:
+        * A: MxN array of grid points
+        * geotransform: 6-tuple used to locate A geographically
+            (top left x, w-e pixel resolution, rotation,
+            top left y, rotation, n-s pixel resolution)
+        * polygons: list of polygon geometry objects or list of polygon arrays
 
-    Input
-        A: MxN array of grid points
-        geotransform: 6-tuple used to locate A geographically
-                      (top left x, w-e pixel resolution, rotation,
-                       top left y, rotation, n-s pixel resolution)
-        polygons: list of polygons, each an array of vertices
-        inner_rings: list of list of holes - each an array of vertices
-
-    Output
+    Returns:
         points_covered: List of (points, values) - one per input polygon.
 
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
 
-    Note: Grid points are considered to be pixel-registered which means
-          that each point represents the center of its grid cell.
-          The required half cell shifts are taken care of by the
-          function geotransform2axes
+    .. note:: Grid points are considered to be pixel-registered which means
+        that each point represents the center of its grid cell.
+        The required half cell shifts are taken care of by the
+        function :func:`geotransform2axes`.
 
-          If multiple polygons overlap, the one first encountered will be used
+        If multiple polygons overlap, the one first encountered will be used.
+
     """
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
@@ -1291,16 +1287,20 @@ def clip_grid_by_polygons(A, geotransform, polygons, inner_rings=None):
     remaining_points = points
     remaining_values = values
 
-    for i, polygon in enumerate(polygons):
+    for polygon in polygons:
         #print 'Remaining points', len(remaining_points)
 
-        if inner_rings is None:
-            holes = None
+        if hasattr(polygon, 'outer_ring'):
+            outer_ring = polygon.outer_ring
+            inner_rings = polygon.inner_rings
         else:
-            holes = inner_rings[i]
+            # Assume it is an array
+            outer_ring = polygon
+            inner_rings = None
+
         inside, outside = in_and_outside_polygon(remaining_points,
-                                                 polygon,
-                                                 holes=holes,
+                                                 outer_ring,
+                                                 holes=inner_rings,
                                                  closed=True,
                                                  check_input=False)
         # Add features inside this polygon
@@ -1318,23 +1318,24 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
     """Clip multiple lines by multiple polygons
 
     Args:
-        lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
-               where pi and qi are point coordinates (x, y).
-        polygons: list of polygons, each an array of vertices
-        closed: optional parameter to determine whether lines that fall on
-                an polygon boundary should be considered to be inside
-                (closed=True), outside (closed=False) or
-                undetermined (closed=None). The latter case will speed the
-                algorithm up but lines on boundaries may or may not be
-                deemed to fall inside the polygon and so will be
-                indeterministic
+        * lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+            where pi and qi are point coordinates (x, y).
+        * polygons: list of polygons, each an array of vertices
+        * closed: optional parameter to determine whether lines that fall on
+            an polygon boundary should be considered to be inside
+            (closed=True), outside (closed=False) or
+            undetermined (closed=None). The latter case will speed the
+            algorithm up but lines on boundaries may or may not be
+            deemed to fall inside the polygon and so will be
+            indeterministic.
 
     Returns:
-        lines_covered: List of polylines inside a polygon
-                       - one per input polygon.
+        lines_covered: List of polylines inside a polygon -o ne per input
+        polygon.
 
 
-    If multiple polygons overlap, the one first encountered will be used
+    .. note:: If multiple polygons overlap, the one first encountered will be
+        used.
     """
 
     if check_input:

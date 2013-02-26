@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -21,8 +20,7 @@ import unittest
 import sys
 import os
 import shutil
-from safe.engine.core import unique_filename
-
+from nose import SkipTest
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
@@ -31,16 +29,21 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 
 from qgis.core import (QgsRasterLayer,
+                       QgsVectorLayer,
                        QgsMapLayerRegistry)
 
-from safe_qgis.odict import OrderedDict
-from safe_qgis.utilities_test import (getQgisTestApp, unitTestDataPath)
+from third_party.odict import OrderedDict
+from safe.engine.core import unique_filename
+from safe_qgis.utilities_test import (getQgisTestApp,
+                                      unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
 from safe_qgis.keywords_dialog import KeywordsDialog
+from safe_qgis.exceptions import KeywordNotFoundError
+from safe_qgis.utilities import getDefaults, qgisVersion
 
 
 # For testing and demoing
-from safe.common.testing import HAZDATA
+from safe.common.testing import HAZDATA, TESTDATA
 
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -53,11 +56,14 @@ def makePadangLayer():
     myTitle = readKeywordsFromFile(myPath, 'title')
     # myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
 
-def copyMakePadangLayer():
+def makePadangLayerClone():
     """Helper function that copies padang keyword for testing and return it."""
     mySourceFileName = 'Shakemap_Padang_2009'
     myExts = ['.asc', '.asc.aux.xml', '.keywords',
@@ -73,8 +79,40 @@ def copyMakePadangLayer():
     myPath = os.path.join(HAZDATA, myFile)
     myTitle = readKeywordsFromFile(myPath, 'title')
     myLayer = QgsRasterLayer(myPath, myTitle)
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer, myFileName
+
+
+def makePolygonLayer():
+    """Helper function that returns a single predefined layer"""
+    myFile = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
+    myPath = os.path.join(TESTDATA, myFile)
+    try:
+        myTitle = readKeywordsFromFile(myPath, 'title')
+    except KeywordNotFoundError:
+        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
+    myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    return myLayer
+
+
+def makePointLayer():
+    """Helper function that returns a single predefined layer"""
+    myFile = 'test_buildings.shp'
+    myPath = os.path.join(TESTDATA, myFile)
+    try:
+        myTitle = readKeywordsFromFile(myPath, 'title')
+    except KeywordNotFoundError:
+        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
+    myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    return myLayer
 
 
 def removeTempFile(myFileName='temp_Shakemap_Padang_2009'):
@@ -93,7 +131,10 @@ def makeKeywordlessLayer():
     myPath = os.path.abspath(os.path.join(myBasePath, myFile))
     myTitle = 'Keywordless Layer'
     myLayer = QgsRasterLayer(myPath, myTitle)
-    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    if qgisVersion() >= 10800:  # 1.8 or newer
+        QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+    else:
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
 
@@ -114,13 +155,20 @@ class KeywordsDialogTest(unittest.TestCase):
         """Destroy the dialog after each test"""
         clearLayers()
 
+    # This is how you skip a test when using unittest ...
+    @unittest.skip('Skipping as this test hangs Jenkins if docs arent found.')
     def test_showHelp(self):
         """Test that help button works"""
+        # ... and this is how you skip it using nosetests
+        #prevent unreachable code errors in pylint
+        #pylint: disable=W0101
+        raise SkipTest("This test hangs Jenkins.")
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
+        #pylint: enable=W0101
 
     def test_on_pbnAdvanced_toggled(self):
         """Test advanced button toggle behaviour works"""
@@ -156,6 +204,91 @@ class KeywordsDialogTest(unittest.TestCase):
                      'to the keywords list.')
         assert myDialog.getValueForKey('category') == 'hazard', myMessage
 
+    def test_on_radPostprocessing_toggled(self):
+        """Test hazard radio button toggle behaviour works"""
+        myLayer = makePolygonLayer()
+        myDefaults = getDefaults()
+        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
+        myButton = myDialog.radPostprocessing
+        myButton.setChecked(False)
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myMessage = ('Toggling the postprocessing radio did not add a '
+                     'category to the keywords list.')
+        assert myDialog.getValueForKey(
+            'category') == 'postprocessing', myMessage
+
+        myMessage = ('Toggling the postprocessing radio did not add an '
+                     'aggregation attribute to the keywords list.')
+        assert myDialog.getValueForKey(
+            myDefaults['AGGR_ATTR_KEY']) == 'KAB_NAME', myMessage
+
+        myMessage = ('Toggling the postprocessing radio did not add a '
+                     'female ratio attribute to the keywords list.')
+
+        assert myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_ATTR_KEY']) == \
+               myDialog.tr('Use default'), myMessage
+
+        myMessage = ('Toggling the postprocessing radio did not add a '
+                     'female ratio default value to the keywords list.')
+        assert float(myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_KEY'])) == \
+               myDefaults['FEM_RATIO'], myMessage
+
+    def test_on_dsbFemaleRatioDefault_valueChanged(self):
+        """Test hazard radio button toggle behaviour works"""
+        myLayer = makePolygonLayer()
+        myDefaults = getDefaults()
+        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
+        myButton = myDialog.radPostprocessing
+        myButton.setChecked(False)
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myFemaleRatioAttrBox = myDialog.cboFemaleRatioAttribute
+
+        #set to Don't use
+        myIndex = myFemaleRatioAttrBox.findText(
+            myDialog.tr('Don\'t use'))
+        myMessage = (myDialog.tr('Don\'t use') + ' not found')
+        assert (myIndex != -1), myMessage
+        myFemaleRatioAttrBox.setCurrentIndex(myIndex)
+
+        myMessage = ('Toggling the female ratio attribute combo to'
+                     ' "Don\'t use" did not add it to the keywords list.')
+        assert myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_ATTR_KEY']) ==\
+               myDialog.tr('Don\'t use'), myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to'
+                     ' "Don\'t use" did not disable dsbFemaleRatioDefault.')
+        myIsEnabled = myDialog.dsbFemaleRatioDefault.isEnabled()
+        assert not myIsEnabled, myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to'
+                     ' "Don\'t use" did not remove the keyword.')
+        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is
+            None), myMessage
+
+        #set to TEST_REAL
+        myIndex = myFemaleRatioAttrBox.findText('TEST_REAL')
+        myMessage = ('TEST_REAL not found')
+        assert (myIndex != -1), myMessage
+        myFemaleRatioAttrBox.setCurrentIndex(myIndex)
+
+        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
+                     ' did not add it to the keywords list.')
+        assert myDialog.getValueForKey(
+            myDefaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
+                     ' did not disable dsbFemaleRatioDefault.')
+        myIsEnabled = myDialog.dsbFemaleRatioDefault.isEnabled()
+        assert not myIsEnabled, myMessage
+
+        myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
+                     ' did not remove the keyword.')
+        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is
+                None), myMessage
+
     def Xtest_on_radExposure_toggled(self):
         """Test exposure radio button toggle behaviour works"""
 
@@ -183,6 +316,7 @@ class KeywordsDialogTest(unittest.TestCase):
                      'to the keywords list for %s' %
                      myCombo.currentText())
         myKey = myDialog.getValueForKey('subcategory')
+
         assert myKey is not None, myMessage
         assert myKey in str(myCombo.currentText()), myMessage
 
@@ -350,7 +484,8 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
-        myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
+        myExpectedKeywords = {'source': 'USGS',
+                              'title': 'An earthquake in Padang like in 2009',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
@@ -378,9 +513,10 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
                               'category': 'hazard',
+                              'source': 'USGS',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
+        myMessage = ('\nGot:\n%s\nExpected:\n%s\n' %
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
 
@@ -401,8 +537,8 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_addKeywordWhenPressOkButton(self):
         """Test add keyword when ok button is pressed."""
-        #_, myFile = copyMakePadangLayer()
-        copyMakePadangLayer()
+        #_, myFile = makePadangLayerClone()
+        makePadangLayerClone()
         myDialog = KeywordsDialog(PARENT, IFACE)
 
         myDialog.radUserDefined.setChecked(True)

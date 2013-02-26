@@ -11,15 +11,16 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import logging
 from PyQt4 import (QtGui, QtCore)
-from safe_interface import tr
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Help(QtGui.QDialog):
@@ -47,9 +48,10 @@ class Help(QtGui.QDialog):
         """
         self.parent = theParent
         self.context = theContext
-        self.showContexthelp()
+        QtGui.QDialog.__init__(self, self.parent)
+        self.showContextHelp()
 
-    def showContexthelp(self):
+    def showContextHelp(self):
         """Load the help text into the wvResults widget."""
         if 'LANG' in os.environ:
             myLocale = os.environ['LANG']
@@ -79,13 +81,14 @@ class Help(QtGui.QDialog):
             myContextPath = os.path.abspath(os.path.join(myRootPath, 
                                             'user-docs',
                                             self.context + '.html'))
+            LOGGER.debug(os.path.isfile(myContextPath))
             if os.path.isfile(myContextPath):
                 myPath = myContextPath
 
         if not os.path.isfile(myPath):
-            QtGui.QMessageBox.warning(self.parent, tr('InaSAFE'),
-            (tr('Documentation could not be found at:\n'
-                      '%s' % myPath)))
+            QtGui.QMessageBox.warning(self.parent, self.tr('InaSAFE'),
+            (self.tr('Documentation could not be found at:\n'
+                      '%1').arg(myPath)))
         else:
             myUrl = QtCore.QUrl('file:///' + myPath)
             QtGui.QDesktopServices.openUrl(myUrl)

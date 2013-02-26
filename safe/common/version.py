@@ -1,6 +1,8 @@
 import datetime
 import os
+import sys
 import subprocess
+from exceptions import WindowsError
 
 
 def get_version(version=None):
@@ -39,10 +41,18 @@ def get_version(version=None):
     main = '.'.join(str(x) for x in version[:parts])
 
     sub = ''
+    # This crashes on windows
     if version[3] == 'alpha' and version[4] == 0:
-        git_changeset = get_git_changeset()
-        if git_changeset:
-            sub = '.dev%s' % git_changeset
+        # Currently failed on windows and mac
+        if 'win32' in sys.platform or 'darwin' in sys.platform:
+            sub = '.dev-master'
+        else:
+            try:
+                git_changeset = get_git_changeset()
+                if git_changeset:
+                    sub = '.dev%s' % git_changeset
+            except WindowsError:
+                sub = '.dev-master'
 
     elif version[3] != 'final':
         mapping = {'alpha': 'a', 'beta': 'b', 'rc': 'c'}

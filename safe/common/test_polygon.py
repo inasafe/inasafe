@@ -613,9 +613,19 @@ class Test_Polygon(unittest.TestCase):
         #(lon_ul, dlon, 0, lat_ul, 0, dlat)
         geotransform = (minx, dx, 0, maxy, 0, dy)
 
+        # Create suitable instance on the fly
+        # See
+        # http://docs.python.org/library/functions.html#type
+        # http://jjinux.blogspot.com/2005/03/
+        #      python-create-new-class-on-fly.html
+        polygon_arg = [type('', (),
+                            dict(outer_ring=outer_ring,
+                                 inner_rings=inner_rings))()]
+
+        # Call clipping function
         res = clip_grid_by_polygons(A, geotransform,
-                                    [outer_ring],
-                                    inner_rings=[inner_rings])
+                                    polygon_arg)
+
         points = res[0][0]
         values = res[0][1]
         values = [{'val': float(x)} for x in values]
@@ -991,6 +1001,8 @@ class Test_Polygon(unittest.TestCase):
             assert (is_outside_polygon(point, outer_ring) or
                     is_inside_polygon(point, inner_rings[0]) or
                     is_inside_polygon(point, inner_rings[1]))
+
+    test_clip_points_by_polygons_with_holes.slow = True
 
     def test_intersection1(self):
         """Intersection of two simple lines works

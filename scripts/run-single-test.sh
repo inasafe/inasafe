@@ -12,4 +12,4 @@ export PYTHONPATH=$QGIS_PREFIX_PATH/share/qgis/python/:`pwd`:$PYTHONPATH
 export QGIS_DEBUG=0;
 export QGIS_LOG_FILE=/dev/null;
 export QGIS_DEBUG_FILE=/dev/null;
-nosetests -v --with-id --with-coverage $1
+nosetests -v $1

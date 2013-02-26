@@ -7,10 +7,12 @@ import numpy
 
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
+from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
 from utilities import REQUIRED_KEYWORDS
 from datetime import datetime
 from socket import gethostname
+from safe.common.utilities import ugettext as tr
 import getpass
 
 # The LOGGER is intialised in utilities.py by init
@@ -47,23 +49,50 @@ def calculate_impact(layers, impact_fcn):
     # Get an instance of the passed impact_fcn
     impact_function = impact_fcn()
 
-    # start time
+    # Start time
     start_time = datetime.now()
+
     # Pass input layers to plugin
     F = impact_function.run(layers)
 
-    # end time
+    # End time
     end_time = datetime.now()
-    # elapsed time
+
+    # Elapsed time
     elapsed_time = end_time - start_time
-    elapsed_time_sec = elapsed_time.total_seconds()
-    # get current time stamp
-    # need to change : to _ because : is forbidden in keywords
+    # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
+    # elapsed_time_sec = elapsed_time.total_seconds()
+    elapsed_time_sec = elapsed_time.seconds + (elapsed_time.days * 24 * 3600)
+
+    # Eet current time stamp
+    # Need to change : to _ because : is forbidden in keywords
     time_stamp = end_time.isoformat('_')
-    # get user
+
+    # Get user
     user = getpass.getuser().replace(' ', '_')
-    # get host
+
+    # Get host
     host_name = gethostname()
+
+    # Get input layer sources
+    # NOTE: We assume here that there is only one of each
+    #       If there are more only the first one is used
+    for cat in ['hazard', 'exposure']:
+        L = extract_layers(layers, 'category', cat)
+        keywords = L[0].get_keywords()
+        not_specified = tr('Not specified')
+        if 'title' in keywords:
+            title = keywords['title']
+        else:
+            title = not_specified
+
+        if 'source' in keywords:
+            source = keywords['source']
+        else:
+            source = not_specified
+
+        F.keywords['%s_title' % cat] = title
+        F.keywords['%s_source' % cat] = source
 
     F.keywords['elapsed_time'] = elapsed_time_sec
     F.keywords['time_stamp'] = time_stamp[:19]  # remove decimal part
@@ -172,8 +201,8 @@ def check_data_integrity(layer_objects):
             if geotransform is None:
                 geotransform = layer.get_geotransform()
             else:
-                msg = ('Geotransforms in input raster layers are different: '
-                       '%s %s' % (geotransform, layer.get_geotransform()))
+                msg = ('Geotransforms in input raster layers are different:\n'
+                       '%s\n%s' % (geotransform, layer.get_geotransform()))
                 verify(numpy.allclose(geotransform,
                                       layer.get_geotransform(),
                                       rtol=tolerance), msg)

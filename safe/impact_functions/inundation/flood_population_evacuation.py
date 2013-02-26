@@ -1,12 +1,17 @@
 import numpy
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question, get_function_title
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question,
+                                        get_function_title)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   get_defaults,
+                                   format_int)
 from safe.common.utilities import verify
 from safe.common.tables import Table, TableRow
+from third_party.odict import OrderedDict
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -21,12 +26,56 @@ class FloodEvacuationFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory=='population' and \
-                    layertype=='raster' and \
-                    datatype=='density'
+                    layertype=='raster'
     """
 
     title = tr('Need evacuation')
-    parameters = {'thresholds': [0.3, 0.5, 1.0]}
+    defaults = get_defaults()
+
+    # Function documentation
+    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
+                  'on population.')
+    actions = tr('Provide details about how many people would likely need '
+                 'to be evacuated, where they are located and what resources '
+                 'would be required to support them.')
+    #citations = []
+    detailed_description = tr('The population subject to inundation '
+                              'exceeding a threshold (default 1m) is '
+                              'calculated and returned as a raster layer.'
+                              'In addition the total number and the required '
+                              'needs in terms of the BNPB (Perka 7) '
+                              'are reported. The threshold can be changed and '
+                              'even contain multiple numbers in which case '
+                              'evacuation and needs are calculated using '
+                              'the largest number with population breakdowns '
+                              'provided for the smaller numbers. The '
+                              'population '
+                              'raster is resampled to the resolution of the '
+                              'hazard raster and is rescaled so that the '
+                              'resampled population counts reflect estimates '
+                              'of population count per resampled cell. '
+                              'The resulting impact layer has the same '
+                              'resolution and reflects population count '
+                              'per cell which are affected by inundation.')
+    permissible_hazard_input = tr('A hazard raster layer where each cell '
+        'represents flood depth (in meters).')
+    permissible_exposure_input = tr('An exposure raster layer where each '
+                                    'cell '
+                                    'represent population count.')
+    limitation = tr('The default threshold of 1 meter was selected based on '
+                    'consensus, not hard evidence.')
+
+    # Configurable parameters
+    parameters = OrderedDict([
+        ('thresholds', [1.0]),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -92,26 +141,34 @@ class FloodEvacuationFunction(FunctionProvider):
             total = total // 1000 * 1000
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        rice = evacuated * 2.8
-        drinking_water = evacuated * 17.5
-        water = evacuated * 67
-        family_kits = evacuated / 5
-        toilets = evacuated / 20
+
+        # FIXME: Refactor and share
+        # 400g per person per day
+        rice = int(evacuated * 2.8)
+        # 2.5L per person per day
+        drinking_water = int(evacuated * 17.5)
+        # 15L per person per day
+        water = int(evacuated * 105)
+        # assume 5 people per family (not in perka)
+        family_kits = int(evacuated / 5)
+        # 20 people per toilet
+        toilets = int(evacuated / 20)
 
         # Generate impact report for the pdf map
         table_body = [question,
-                      TableRow([tr('People needing evacuation'),
-                                '%i' % evacuated],
+                      TableRow([(tr('People in %.1f m of water') %
+                                    thresholds[-1]),
+                                '%s' % format_int(evacuated)],
                                header=True),
                       TableRow(tr('Map shows population density needing '
                                  'evacuation')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
-            [tr('Rice [kg]'), int(rice)],
-            [tr('Drinking Water [l]'), int(drinking_water)],
-            [tr('Clean Water [l]'), int(water)],
-            [tr('Family Kits'), int(family_kits)],
-            [tr('Toilets'), int(toilets)]]
+            [tr('Rice [kg]'), format_int(rice)],
+            [tr('Drinking Water [l]'), format_int(drinking_water)],
+            [tr('Clean Water [l]'), format_int(water)],
+            [tr('Family Kits'), format_int(family_kits)],
+            [tr('Toilets'), format_int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
@@ -126,7 +183,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %i') % total,
+                           tr('Total population: %s') % format_int(total),
                            tr('People need evacuation if flood levels '
                              'exceed %(eps).1f m') % {'eps': thresholds[-1]},
                            tr('Minimum needs are defined in BNPB '
@@ -139,7 +196,7 @@ class FloodEvacuationFunction(FunctionProvider):
                 s = (tr('People in %(lo).1f m to %(hi).1f m of water: %(val)i')
                      % {'lo': thresholds[i],
                         'hi': thresholds[i + 1],
-                        'val': val})
+                        'val': format_int(val)})
                 table_body.append(TableRow(s, header=False))
 
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -151,13 +208,25 @@ class FloodEvacuationFunction(FunctionProvider):
         classes = numpy.linspace(numpy.nanmin(I.flat[:]),
                                  numpy.nanmax(I.flat[:]), 8)
 
+        # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
+        style_classes[1]['label'] = tr('Low [%.2f people/cell]') % classes[1]
+        style_classes[4]['label'] = tr('Medium [%.2f people/cell]')\
+            % classes[4]
+        style_classes[7]['label'] = tr('High [%.2f people/cell]') % classes[7]
 
-        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
-        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
+        # Override associated quantities in colour style
+        for i in range(len(classes)):
+            if i == 0:
+                transparency = 100
+            else:
+                transparency = 0
 
+            style_classes[i]['quantity'] = classes[i]
+            style_classes[i]['transparency'] = transparency
+
+        # Title
         style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return

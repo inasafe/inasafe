@@ -52,27 +52,38 @@ from safe.common.utilities import ugettext as tr
 
 # Don't call this function
 def dynamic_translations():
-    tr('DKI buildings')       # Bangunan DKI
-    tr('Jakarta 2007 flood')  # Banjir seperti 2007
+    """These listed here so they get translated apriori to loading data.
+    """
+    # Bangunan DKI
+    tr('DKI buildings')
+    # Banjir seperti 2007
     tr('Jakarta 2007 flood')
     tr('A flood in Jakarta like in 2007')
-    tr('Jakarta flood like 2007 with pump failure at Pluit Ancol and Sunter')
+    tr('Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter')
     # Banjir 2007 tanpa pompa di Pluit, Ancol dan Sunter
     tr('Jakarta flood like 2007 with pump failure at Pluit and Ancol')
     tr('A flood in Jakarta like in 2007 but with structural improvements')
-    tr('Sea wall collapse at Pluit')  # Dam Pluit Runtuh
-    tr('Jakarta flood prone areas')  # Daerah Rawan Banjir
+    # Dam Pluit Runtuh
+    tr('Sea wall collapse at Pluit')
+    # Daerah Rawan Banjir
+    tr('Jakarta flood prone areas')
     tr('A flood in Jakarta in RW areas identified as flood prone')
     # Daerah Rawan Banjir
-    tr('Population Jakarta')  # Penduduk Jakarta
+    # Penduduk Jakarta
+    tr('Population Jakarta')
     tr('People')
     tr('people')
     tr('People in Jakarta')
+    tr('Indonesian people')
+    tr('Indonesian People')
+    tr('People in Indonesia')
     tr('Flood Depth (design) Jakarta')
     tr('Flood Depth (current) Jakarta')
     tr('An earthquake in Yogyakarta like in 2006')
+    tr('Yogyakarta 2006 earthquake')
     tr('Indonesian Earthquake Hazard Map')
     tr('A tsunami in Maumere (Mw 8.1)')
+    tr('Maumere tsunami inundation')
     tr('A tsunami in Padang (Mw 8.8)')
     tr('An earthquake at the Sumatran fault (Mw 7.8)')
     # Skenario Gempabumi Sesar Sumatra Mw 7.8
@@ -81,12 +92,22 @@ def dynamic_translations():
     tr('An earthquake in Padang like in 2009')
     tr('An earthquake in Yogyakarta like in 2006')
     tr('An earthquake at the Lembang fault')
-    tr('OSM building footprints')  # Bangunan OSM
-    tr('OSM buildings')  # Bangunan OSM
+    # Bangunan OSM
+    tr('OSM building footprints')
+    tr('Structures')
+    tr('Structures in Jakarta')
+    tr('Building')
+    tr('Buildings')
+    tr('Buildings in Jakarta')
+    tr('Essential buildings')
+    tr('Essential Buildings')
+    tr('OSM buildings')
     tr('AIBEP schools')
-    tr('Population density (5kmx5km)')  # Perkiraan penduduk
+    # Perkiraan penduduk
+    tr('Population density (5kmx5km)')
     tr('Office buildings Jakarta')
-    tr('Hospitals and clinics Jakarta')  # Puskesmas dan rumah sakit
+    # Puskesmas dan rumah sakit
+    tr('Hospitals and clinics Jakarta')
     tr('Schools Jakarta')
     tr('Schools')
     tr('Industrial buildings Jakarta')
@@ -119,3 +140,38 @@ def dynamic_translations():
     tr('public building')
     tr('other')
     tr('fire station')
+
+    # impact function parameters
+    # FIXME (Sunni) It's better to be updated dynamically
+    tr('Thresholds')
+    tr('Postprocessors')
+    tr('Medium thresholds')
+    tr('High thresholds')
+    tr('Low thresholds')
+    tr('Medium threshold')
+    tr('High threshold')
+    tr('Low threshold')
+    tr('Distances')
+    tr('Volcano name')
+    tr('BuildingType')
+    tr('Youth ratio')
+    tr('Adult ratio')
+    tr('Elder ratio')
+    tr('AggregationCategorical')
+    tr('Displacement rate')
+    tr('Mmi range')
+    tr('Tolerance')
+    tr('Calculate displaced people')
+    tr('Evacuation percentage')
+
+    # Post-processing
+    tr('Gender')
+    tr('Age')
+    tr('Aggregation')
+    tr('Building type')
+    tr('Aggregation Categorical')
+    tr('gender')
+    tr('age')
+    tr('aggregation')
+    tr('building type')
+    tr('aggregation categorical')

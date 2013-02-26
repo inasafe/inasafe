@@ -10,9 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.earthquake.earthquake_building_impact import LOGGER
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -29,8 +29,16 @@ from PyQt4.QtCore import (QObject,
                           Qt,
                           QSettings,
                           QVariant)
-from PyQt4.QtGui import QAction, QIcon, QApplication
-from safe_qgis.exceptions import TranslationLoadException
+from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
+try:
+    # When upgrading, using the plugin manager, you may get an error when
+    # doing the following import, so we wrap it in a try except
+    # block and then display a friendly message to restart QGIS
+    from safe_qgis.exceptions import TranslationLoadError
+except ImportError:
+    # Note these strings cant be translated.
+    QMessageBox.warning(None, 'InaSAFE',
+                        'Please restart QGIS to use this plugin.')
 import utilities
 
 
@@ -50,9 +58,9 @@ class Plugin:
         manipulate the running QGIS instance that spawned it.
 
         Args:
-           iface - a Quantum GIS QGisAppInterface instance. This instance
-           is automatically passed to the plugin by QGIS when it loads the
-           plugin.
+            iface - a Quantum GIS QGisAppInterface instance. This instance
+                is automatically passed to the plugin by QGIS when it loads the
+                plugin.
         Returns:
            None.
         Raises:
@@ -66,6 +74,7 @@ class Plugin:
         #print self.tr('InaSAFE')
         utilities.setupLogger()
 
+    #noinspection PyArgumentList
     def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
 
@@ -79,11 +88,11 @@ class Plugin:
         Returns:
            None.
         Raises:
-           no exceptions explicitly raised.
+           TranslationLoadException
         """
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
-        myLocaleName = None
+
         if thePreferredLocale is not None:
             myLocaleName = thePreferredLocale
         elif myOverrideFlag:
@@ -91,11 +100,18 @@ class Plugin:
                                              QVariant('')).toString()
         else:
             myLocaleName = QLocale.system().name()
+            # NOTES: we split the locale name because we need the first two
+            # character i.e. 'id', 'af, etc
+            myLocaleName = str(myLocaleName).split('_')[0]
+
         # Also set the system locale to the user overridden local
         # so that the inasafe library functions gettext will work
         # .. see:: :py:func:`common.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
+        LOGGER.debug('%s %s %s %s' % (thePreferredLocale , myOverrideFlag,
+                                        QLocale.system().name(),
+                                        os.environ['LANG']))
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'safe_qgis', 'i18n',
                         'inasafe_' + str(myLocaleName) + '.qm')
@@ -104,8 +120,10 @@ class Plugin:
             myResult = self.translator.load(myTranslationPath)
             if not myResult:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
-                raise TranslationLoadException(myMessage)
+                raise TranslationLoadError(myMessage)
             QCoreApplication.installTranslator(self.translator)
+        LOGGER.debug('%s %s' % (myTranslationPath,
+                                  os.path.exists(myTranslationPath)))
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -119,6 +137,7 @@ class Plugin:
         """
         return QCoreApplication.translate('Plugin', theString)
 
+    #noinspection PyCallByClass
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
 
@@ -163,11 +182,12 @@ class Plugin:
         #--------------------------------------
         self.actionKeywordsDialog = QAction(
                             QIcon(':/plugins/inasafe/keywords.png'),
-                            self.tr('Keyword Editor'), self.iface.mainWindow())
+                            self.tr('InaSAFE Keyword Editor'),
+                            self.iface.mainWindow())
         self.actionKeywordsDialog.setStatusTip(self.tr(
-                                    'Open the keywords editor'))
+                                    'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setWhatsThis(self.tr(
-                                    'Open the keywords editor'))
+                                    'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setEnabled(False)
 
         QObject.connect(self.actionKeywordsDialog, SIGNAL('triggered()'),
@@ -215,12 +235,12 @@ class Plugin:
         #--------------------------------------
         self.actionImpactFunctionsDoc = QAction(
                         QIcon(':/plugins/inasafe/functions-table.png'),
-                        self.tr('InaSAFE Impact Functions Doc'),
+                        self.tr('InaSAFE Impact Functions Browser'),
                         self.iface.mainWindow())
         self.actionImpactFunctionsDoc.setStatusTip(self.tr(
-                                    'Open InaSAFE impact functions doc'))
+                                    'Open InaSAFE Impact Functions Browser'))
         self.actionImpactFunctionsDoc.setWhatsThis(self.tr(
-                                    'Open InaSAFE impact functions doc'))
+                                    'Open InaSAFE Impact Functions Browser'))
         QObject.connect(self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
                         self.showImpactFunctionsDoc)
 
@@ -231,15 +251,31 @@ class Plugin:
         # Short cut for Open Impact Functions Doc
         self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
         self.iface.registerMainWindowAction(self.keyAction, "F7")
-        self.iface.addPluginToMenu("&Test plugins", self.keyAction)
         QObject.connect(self.keyAction, SIGNAL("triggered()"),
                         self.keyActionF7)
+
+        #---------------------------------------
+        # Create action for minimum needs dialog
+        #---------------------------------------
+        self.actionMinimumNeeds = QAction(
+            QIcon(':/plugins/inasafe/minimum_needs.png'),
+            self.tr('InaSAFE Minimum Needs Tool'), self.iface.mainWindow())
+        self.actionMinimumNeeds.setStatusTip(self.tr(
+            'Open InaSAFE minimum needs tool'))
+        self.actionMinimumNeeds.setWhatsThis(self.tr(
+            'Open InaSAFE minimum needs tool'))
+        QObject.connect(self.actionMinimumNeeds, SIGNAL('triggered()'),
+                        self.showMinimumNeeds)
+
+        self.iface.addToolBarIcon(self.actionMinimumNeeds)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+                                   self.actionMinimumNeeds)
 
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = Dock(self.iface)
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
 
         if myLegendTab:
@@ -289,6 +325,9 @@ class Plugin:
         self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionOptions)
         self.iface.removeToolBarIcon(self.actionOptions)
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
+                                    self.actionMinimumNeeds)
+        self.iface.removeToolBarIcon(self.actionMinimumNeeds)
         self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionImpactFunctionsDoc)
         self.iface.removeToolBarIcon(self.actionImpactFunctionsDoc)
@@ -340,6 +379,27 @@ class Plugin:
             self.dockWidget.setVisible(True)
             self.dockWidget.raise_()
 
+    def showMinimumNeeds(self):
+        """Show the minimum needs dialog.
+
+        This slot is called when the user clicks the minimum needs toolbar
+        icon or menu item associated with this plugin.
+
+        .. see also:: :func:`Plugin.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.minimum_needs import MinimumNeeds
+
+        myDialog = MinimumNeeds(self.iface.mainWindow())
+        myDialog.show()
+
     def showOptions(self):
         """Show the options dialog.
 
@@ -386,6 +446,7 @@ class Plugin:
         myDialog = KeywordsDialog(self.iface.mainWindow(),
                                       self.iface,
                                       self.dockWidget)
+        myDialog.setModal(True)
         myDialog.show()
 
     def showImpactFunctionsDoc(self):

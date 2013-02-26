@@ -1,12 +1,38 @@
 """Utilities for InaSAFE
 """
 import os
+import sys
+import zipfile
 import gettext
 from datetime import date
 import getpass
 from tempfile import mkstemp
+from subprocess import PIPE, Popen
+import ctypes
 
 from safe.common.exceptions import VerificationError
+
+
+class MEMORYSTATUSEX(ctypes.Structure):
+    """
+    This class is used for getting the free memory on Windows
+    """
+    _fields_ = [
+        ("dwLength", ctypes.c_ulong),
+        ("dwMemoryLoad", ctypes.c_ulong),
+        ("ullTotalPhys", ctypes.c_ulonglong),
+        ("ullAvailPhys", ctypes.c_ulonglong),
+        ("ullTotalPageFile", ctypes.c_ulonglong),
+        ("ullAvailPageFile", ctypes.c_ulonglong),
+        ("ullTotalVirtual", ctypes.c_ulonglong),
+        ("ullAvailVirtual", ctypes.c_ulonglong),
+        ("sullAvailExtendedVirtual", ctypes.c_ulonglong),
+        ]
+
+    def __init__(self):
+        # have to initialize this to the size of MEMORYSTATUSEX
+        self.dwLength = ctypes.sizeof(self)
+        super(MEMORYSTATUSEX, self).__init__()
 
 
 def verify(statement, message=None):
@@ -53,6 +79,9 @@ def temp_dir(sub_dir='work'):
        print tmpfile
        /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C
 
+    If you specify INASAFE_WORK_DIR as an environment var, it will be
+    used in preference to the system temp directory.
+
     Args:
         sub_dir str - optional argument which will cause an additional
                 subirectory to be created e.g. /tmp/inasafe/foo/
@@ -65,12 +94,17 @@ def temp_dir(sub_dir='work'):
     """
     user = getpass.getuser().replace(' ', '_')
     current_date = date.today()
-    date_string = current_date.strftime("%d-%m-%Y")
-    # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
-    handle, filename = mkstemp()
-    os.close(handle)
-    new_directory = os.path.dirname(filename)
-    os.remove(filename)
+    date_string = current_date.isoformat()
+    if 'INASAFE_WORK_DIR' in os.environ:
+        new_directory = os.environ['INASAFE_WORK_DIR']
+    else:
+        # Following 4 lines are a workaround for tempfile.tempdir()
+        # unreliabilty
+        handle, filename = mkstemp()
+        os.close(handle)
+        new_directory = os.path.dirname(filename)
+        os.remove(filename)
+
     path = os.path.join(new_directory, 'inasafe', date_string, user, sub_dir)
 
     if not os.path.exists(path):
@@ -113,6 +147,9 @@ def unique_filename(**kwargs):
     if 'dir' not in kwargs:
         path = temp_dir('impacts')
         kwargs['dir'] = path
+    else:
+        path = temp_dir(kwargs['dir'])
+        kwargs['dir'] = path
     if not os.path.exists(kwargs['dir']):
         # Ensure that the dir mask won't conflict with the mode
         # Umask sets the new mask and returns the old
@@ -131,3 +168,145 @@ def unique_filename(**kwargs):
     except OSError:
         pass
     return filename
+
+try:
+    from safe_qgis.utilities import getDefaults as get_qgis_defaults
+
+    def get_defaults(default=None):
+        return get_qgis_defaults(theDefault=default)
+except ImportError:
+    #this is used when we are in safe without access to qgis (e.g. web )
+    from safe.defaults import DEFAULTS
+
+    def get_defaults(default=None):
+        if default is None:
+            return DEFAULTS
+        elif default in DEFAULTS:
+            return DEFAULTS[default]
+        else:
+            return None
+
+
+def zip_shp(shp_path, extra_ext=None, remove_file=False):
+    """Zip shape file and its gang (.shx, .dbf, .prj)
+    and extra_file is a list of another ext related to shapefile, if exist
+    The zip file will be put in the same directory
+    """
+
+    # go to the directory
+    my_cwd = os.getcwd()
+    shp_dir, shp_name = os.path.split(shp_path)
+    os.chdir(shp_dir)
+
+    shp_basename, _ = os.path.splitext(shp_name)
+    exts = ['.shp', '.shx', '.dbf', '.prj']
+    if extra_ext is not None:
+        exts.extend(extra_ext)
+
+    # zip files
+    zip_filename = shp_basename + '.zip'
+    zip_object = zipfile.ZipFile(zip_filename, 'w')
+    for ext in exts:
+        if os.path.isfile(shp_basename + ext):
+            zip_object.write(shp_basename + ext)
+    zip_object.close()
+
+    if remove_file:
+        for ext in exts:
+            if os.path.isfile(shp_basename + ext):
+                os.remove(shp_basename + ext)
+
+    os.chdir(my_cwd)
+
+
+def get_free_memory():
+    """Return current free memory on the machine.
+    Currently supported for Windows, Linux
+    Return in MB unit
+    """
+    if 'win32' in sys.platform:
+        # windows
+        return get_free_memory_win()
+    elif 'linux2' in sys.platform:
+        # linux
+        return get_free_memory_linux()
+    elif 'darwin' in sys.platform:
+        # mac
+        return get_free_memory_osx()
+
+
+def get_free_memory_win():
+    """Return current free memory on the machine for windows.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    stat = MEMORYSTATUSEX()
+    ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(stat))
+    return int(stat.ullAvailPhys / 1024 / 1024)
+
+
+def get_free_memory_linux():
+    """Return current free memory on the machine for linux.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    try:
+        p = Popen('free -m', shell=True, stdout=PIPE)
+        stdout_string = p.communicate()[0].split('\n')[2]
+    except OSError:
+        raise OSError
+    stdout_list = stdout_string.split(' ')
+    stdout_list = [x for x in stdout_list if x != '']
+    return int(stdout_list[3])
+
+
+def get_free_memory_osx():
+    """Return current free memory on the machine for mac os.
+    Warning : this script is really not robust
+    Return in MB unit
+    """
+    try:
+        p = Popen('echo -e "\n$(top -l 1 | awk \'/PhysMem/\';)\n"',
+                  shell=True, stdout=PIPE)
+        stdout_string = p.communicate()[0].split('\n')[1]
+        # e.g. output (its a single line)
+        # PhysMem: 1491M wired, 3032M active, 1933M inactive,
+        # 6456M used, 1735M free.
+    except OSError:
+        raise OSError
+    stdout_list = stdout_string.split(',')
+    inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
+    free = stdout_list[4].replace('M free.', '').replace(' ', '')
+    return int(inactive) + int(free)
+
+
+def format_int(x):
+    """Format integer with separator between thousands
+
+    From http://stackoverflow.com/questions/5513615/
+               add-thousands-separators-to-a-number
+
+    # FIXME (Ole)
+    Currently not using locale coz broken
+
+    Instead use this:
+    http://docs.python.org/library/string.html#formatspec
+
+    """
+
+    # This is broken
+    #import locale
+    #locale.setlocale(locale.LC_ALL, '')  # Broken, why?
+    #s = locale.format('%d', x, 1)
+
+    lang = os.getenv('LANG')
+
+    s = '{0:,}'.format(x)
+    #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+
+    # Quick solution for the moment
+    if lang == 'id':
+        # Replace commas with dots
+        s = s.replace(',', '.')
+
+    return s

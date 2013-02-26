@@ -11,13 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
 import time
 import logging
 
@@ -25,10 +23,10 @@ from PyQt4 import QtCore, QtGui, QtWebKit
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  mmToPoints,
-                                 setupPrinter)
+                                 dpiToMeters,
+                                 setupPrinter,
+                                 impactLayerAttribution)
 from safe_interface import unique_filename, temp_dir
-from safe_qgis.exceptions import KeywordNotFoundException
-from keyword_io import KeywordIO
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -38,7 +36,7 @@ class HtmlRenderer():
         """Constructor for the Map class.
 
         Args:
-            None
+            thePageDpi: int - desired resolution for image rendered outputs.
         Returns:
             None
         Raises:
@@ -49,8 +47,7 @@ class HtmlRenderer():
         self.pageDpi = thePageDpi
         # Need to keep state here for loadCompleted signals
         self.webView = None
-        self.htmlPrintedFlag = False
-        self.webView = None
+        self.htmlLoadedFlag = False
 
     def tr(self, theString):
         """We implement this since we do not inherit QObject.
@@ -64,7 +61,7 @@ class HtmlRenderer():
         """
         return QtCore.QCoreApplication.translate('HtmlRenderer', theString)
 
-    def renderHtmlToPixmap(self, theHtml, theWidthMM):
+    def renderHtmlToImage(self, theHtml, theWidthMM):
         """Render some HTML to a pixmap.
 
         Args:
@@ -74,82 +71,39 @@ class HtmlRenderer():
             * theWidthMM- width of the table in mm - will be converted to
               points based on the resolution of our page.
         Returns:
-            QPixmap
+            QImage
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
         """
-        LOGGER.debug('InaSAFE Map renderHtmlToPixmap called')
+        LOGGER.debug('InaSAFE Map renderHtmlToImage called')
+
+        myWidthPx = mmToPoints(theWidthMM, self.pageDpi)
+        self.loadAndWait(theHtmlSnippet=theHtml)
+        myFrame = self.webView.page().mainFrame()
+
         # Using 150dpi as the baseline, work out a standard text size
         # multiplier so that page renders equally well at different print
         # resolutions.
-        myBaselineDpi = 150
-        myFactor = float(self.pageDpi) / myBaselineDpi
-        myWidthPx = mmToPoints(theWidthMM, self.pageDpi)
-        myPage = QtWebKit.QWebPage()
-        myFrame = myPage.mainFrame()
-        myFrame.setTextSizeMultiplier(myFactor)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        myFrame.setHtml(myHtml)
+        #myBaselineDpi = 150
+        #myFactor = float(self.pageDpi) / myBaselineDpi
+        #myFrame.setTextSizeMultiplier(myFactor)
 
         mySize = myFrame.contentsSize()
         mySize.setWidth(myWidthPx)
-        myPage.setViewportSize(mySize)
+        self.webView.page().setViewportSize(mySize)
 
-        myPixmap = QtGui.QPixmap(mySize)
-        myPixmap.fill(QtGui.QColor(255, 255, 255))
-        myPainter = QtGui.QPainter(myPixmap)
+        myImage = QtGui.QImage(mySize, QtGui.QImage.Format_RGB32)
+        myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
+        myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
+        # Only works in Qt4.8
+        #myImage.fill(QtGui.qRgb(255, 255, 255))
+        # Works in older Qt4 versions
+        myImage.fill(255 + 255 * 256 + 255 * 256 * 256)
+        myPainter = QtGui.QPainter(myImage)
         myFrame.render(myPainter)
         myPainter.end()
-        return myPixmap
-
-    def experimentalHtmlToPrinter(self, theHtml, theOutputFilePath=None):
-        """Render an html snippet into the printer, paginating as needed.
-
-        In this one we try to print directly without needing sig/slot
-        completion notification.
-
-        Currently this doesnt work in tests (which is the whole point).
-
-        Args:
-            theHtml: str A string containing an html snippet. It will have a
-                header and footer appended to it in order to make it a valid
-                html document. The header will also apply the bootstrap theme
-                to the document.
-        Returns:
-            None
-
-        Raises:
-            None
-        """
-        LOGGER.info('InaSAFE Map printToPdf called')
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        self.webView = QtWebKit.QWebView()
-        myPage = self.webView.page()
-        myFrame = myPage.mainFrame()
-
-        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        myFrame.setHtml(myHtml)
-
-        self.printer = setupPrinter(theOutputFilePath)
-        self.webView.print_(self.printer)
-
-        return  # self.htmlPrintedFlag
+        myImage.save('/tmp/test.png')
+        return myImage
 
     def printToPdf(self, theHtml, theFilename=None):
         """Render an html snippet into the printer, paginating as needed.
@@ -176,90 +130,95 @@ class HtmlRenderer():
         else:
             # We need to cast to python string in case we receive a QString
             myHtmlPdfPath = str(theFilename)
-        myHeader = htmlHeader()
-        myFooter = htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
 
         self.printer = setupPrinter(myHtmlPdfPath)
+        self.loadAndWait(theHtmlSnippet=theHtml)
+        self.webView.print_(self.printer)
+
+        return myHtmlPdfPath
+
+    def loadAndWait(self, theHtmlPath=None, theHtmlSnippet=None):
+        """Load some html to a web view and wait till it is done."""
+        if theHtmlSnippet:
+            myHeader = htmlHeader()
+            myFooter = htmlFooter()
+            myHtml = myHeader + theHtmlSnippet + myFooter
+        else:
+            myFile = file(theHtmlPath, 'rt')
+            myHtml = myFile.readlines()
+            myFile.close()
 
         self.webView = QtWebKit.QWebView()
-        self.webView.loadFinished.connect(self.readToPrintSlot)
+        myFrame = self.webView.page().mainFrame()
+        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
+                                   QtCore.Qt.ScrollBarAlwaysOff)
+        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
+                                   QtCore.Qt.ScrollBarAlwaysOff)
 
-        self.htmlPrintedFlag = False
-
-        # This is just for debugging
-        myHtmlFilePath = os.path.splitext(myHtmlPdfPath)[0] + '.html'
-        myHtmlFile = file(myHtmlFilePath, 'wt')
-        myHtmlFile.write(myHtml)
-        myHtmlFile.close()
-        LOGGER.debug('Html written to: %s' % myHtmlFilePath)
-
-        self.webView.load(QtCore.QUrl(myHtmlFilePath))
-        #self.webView.setHtml(myHtml)
-        QtCore.QCoreApplication.processEvents()
-
+        self.webView.loadFinished.connect(self.htmlLoadedSlot)
+        self.webView.setHtml(myHtml)
+        self.htmlLoadedFlag = False
         myTimeOut = 20
         myCounter = 0
         mySleepPeriod = 1
-        while not self.htmlPrintedFlag and myCounter < myTimeOut:
+        while not self.htmlLoadedFlag and myCounter < myTimeOut:
             # Block until the event loop is done printing the page
             myCounter += 1
             time.sleep(mySleepPeriod)
             QtCore.QCoreApplication.processEvents()
 
-        if not self.htmlPrintedFlag:
-            # Bodge for if signal isnt received after 10s - doesrnt really work
-            # TODO get web page printing in unit test context where there is
-            # no event loop....TS
-            LOGGER.error('Failed to make a print out, forcing')
-            #self.readToPrintSlot()
-        return myHtmlPdfPath
+        if not self.htmlLoadedFlag:
+            LOGGER.error('Failed to load html')
 
-    def readToPrintSlot(self):
-        """Slot called when the page is loaded and ready for printing.
+    def htmlLoadedSlot(self):
+        """Slot called when the page is loaded.
 
         Args: None
         Returns: None
         Raises: None
         """
-        self.htmlPrintedFlag = True
-        LOGGER.debug('readToPrintSlot slot called')
-        self.webView.print_(self.printer)
+        self.htmlLoadedFlag = True
+        LOGGER.debug('htmlLoadedSlot slot called')
         QtCore.QObject.disconnect(self.webView,
                                   QtCore.SIGNAL("loadFinished(bool)"),
-                                  self.readToPrintSlot)
+                                  self.htmlLoadedSlot)
 
-    def printImpactTable(self, theLayer, theFilename=None):
+    def printImpactTable(self, theKeywords, theFilename=None):
         """High level table generator to print layer keywords.
 
         It gets the summary and impact table from a QgsMapLayer's keywords and
         renders to pdf, returning the resulting PDF file path.
 
         Args:
-            * theLayer: QgsMapLayer instance (required)
+            theKeywords: dic containing impact layer keywords (required)
+
+        Returns:
+            str: Path to generated pdf file.
+
+        Raises:
+            None
 
         """
         myFilePath = theFilename
+
         if theFilename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 
-        myKeywordIO = KeywordIO()
         try:
-            mySummaryTable = myKeywordIO.readKeywords(
-                theLayer, 'impact_summary')
-        except KeywordNotFoundException:
+            mySummaryTable = theKeywords['impact_summary']
+        except KeyError:
             mySummaryTable = None
 
+        myAttributionTable = impactLayerAttribution(theKeywords)
+
         try:
-            myFullTable = myKeywordIO.readKeywords(
-                theLayer, 'impact_table')
-        except KeywordNotFoundException:
+            myFullTable = theKeywords['impact_table']
+        except KeyError:
             myFullTable = None
 
         try:
-            myAggregationTable = myKeywordIO.readKeywords(
-                theLayer, 'postprocessing_report')
-        except:
+            myAggregationTable = theKeywords['postprocessing_report']
+        except KeyError:
             myAggregationTable = None
 
         myHtml = ''
@@ -268,6 +227,8 @@ class HtmlRenderer():
             myHtml += mySummaryTable
             if myAggregationTable is not None:
                 myHtml += myAggregationTable
+            if myAttributionTable is not None:
+                myHtml += myAttributionTable
             myHtml += '<h2>%s</h2>' % self.tr('Detailed Table')
             myHtml += myFullTable
         else:
@@ -275,6 +236,8 @@ class HtmlRenderer():
                 myHtml = myAggregationTable
             if myFullTable is not None:
                 myHtml += myFullTable
+            if myAttributionTable is not None:
+                myHtml += myAttributionTable
 
         # myNewFilePath should be the same as myFilePath
         myNewFilePath = self.printToPdf(myHtml, myFilePath)

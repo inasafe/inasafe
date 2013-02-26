@@ -2,6 +2,9 @@ import unittest
 import sys
 import os
 
+from unittest import expectedFailure
+from PyQt4.QtCore import QVariant
+
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -14,12 +17,21 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                               qgisVersion,
                               mmToPoints,
                               pointsToMM,
-                              humaniseSeconds)
+                              humaniseSeconds,
+                              isLayerPolygonal,
+                              getLayerAttributeNames,
+                              impactLayerAttribution,
+                              dpiToMeters,
+                              _addMinMaxToStyle)
 from safe_qgis.utilities_test import (unitTestDataPath,
                                      loadLayer,
                                      getQgisTestApp)
 from safe_qgis.exceptions import StyleError
 from safe.common.exceptions import BoundingBoxError
+from safe_qgis.test_keywords_dialog import (makePolygonLayer,
+                                            makePadangLayer,
+                                            makePointLayer)
+from safe_qgis.utilities import getDefaults
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -29,7 +41,7 @@ class UtilitiesTest(unittest.TestCase):
     """
 
     def setUp(self):
-        pass
+        os.environ['LANG'] = 'en'
 
     def tearDown(self):
         pass
@@ -45,13 +57,13 @@ class UtilitiesTest(unittest.TestCase):
         except Exception, e:
             # Display message and traceback
 
-            myMessage = getExceptionWithStacktrace(e, html=False)
+            myMessage = getExceptionWithStacktrace(e, theHtml=False)
             #print myMessage
             assert str(e) in myMessage
             assert 'line' in myMessage
             assert 'File' in myMessage
 
-            myMessage = getExceptionWithStacktrace(e, html=True)
+            myMessage = getExceptionWithStacktrace(e, theHtml=True)
             assert str(e) in myMessage
             assert '<pre id="traceback"' in myMessage
             assert 'line' in myMessage
@@ -63,8 +75,8 @@ class UtilitiesTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        myLayer, myType = loadLayer('issue126.tif')
-        del myType
+        myLayer, _ = loadLayer('issue126.tif')
+
         # Note the float quantity values below
         myStyleInfo = {}
         myStyleInfo['style_classes'] = [
@@ -79,13 +91,14 @@ class UtilitiesTest(unittest.TestCase):
             raise Exception(myMessage)
         # Now validate the transparency values were set to 255 because
         # they are floats and we cant specify pixel ranges to floats
-        myValue1 = myLayer.rasterTransparency().alphaValue(1.1)
-        myValue2 = myLayer.rasterTransparency().alphaValue(1.4)
+        # Note we don't test on the exact interval because 464c6171dd55
+        myValue1 = myLayer.rasterTransparency().alphaValue(1.2)
+        myValue2 = myLayer.rasterTransparency().alphaValue(1.5)
         myMessage = ('Transparency should be ignored when style class'
                      ' quantities are floats')
         assert myValue1 == myValue2 == 255, myMessage
 
-        # Now run the same test again
+        # Now run the same test again for int intervals
         myStyleInfo['style_classes'] = [
                         dict(colour='#38A800', quantity=2, transparency=100),
                         dict(colour='#38A800', quantity=4, transparency=0),
@@ -119,6 +132,44 @@ class UtilitiesTest(unittest.TestCase):
             setRasterStyle(myLayer, myStyleInfo)
         except Exception, e:
             raise Exception(myMessage + ': ' + str(e))
+
+    def test_transparency_of_minimum_value(self):
+        """Test that transparency of minimum value works when set to 100%
+        """
+        # This dataset has all cells with value 1.3
+        myLayer, _ = loadLayer('issue126.tif')
+
+        # Note the float quantity values below
+        myStyleInfo = {}
+        myStyleInfo['style_classes'] = [
+            {'colour': '#FFFFFF', 'transparency': 100, 'quantity': 0.0},
+            {'colour': '#38A800', 'quantity': 0.038362596547925065,
+             'transparency': 0, 'label': u'Rendah [0 orang/sel]'},
+            {'colour': '#79C900', 'transparency': 0,
+             'quantity': 0.07672519309585013},
+            {'colour': '#CEED00', 'transparency': 0,
+             'quantity': 0.1150877896437752},
+            {'colour': '#FFCC00', 'quantity': 0.15345038619170026,
+             'transparency': 0, 'label': u'Sedang [0 orang/sel]'},
+            {'colour': '#FF6600', 'transparency': 0,
+             'quantity': 0.19181298273962533},
+            {'colour': '#FF0000', 'transparency': 0,
+             'quantity': 0.23017557928755039},
+            {'colour': '#7A0000', 'quantity': 0.26853817583547546,
+             'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]
+
+        myMessage = 'Could not create raster style'
+        try:
+            setRasterStyle(myLayer, myStyleInfo)
+        except:
+            raise Exception(myMessage)
+
+        myMessage = ('Should get a single transparency class for first style '
+                     'class')
+        myTransparencyList = (myLayer.rasterTransparency().
+                transparentSingleValuePixelList())
+
+        self.assertEqual(len(myTransparencyList), 1)
 
     def test_issue121(self):
         """Test that point symbol size can be set from style (issue 121).
@@ -165,7 +216,7 @@ class UtilitiesTest(unittest.TestCase):
         try:
             bbox_intersection('aoeu', 'oaeu', [])
         except BoundingBoxError, e:
-            myMessage = getExceptionWithStacktrace(e, html=False)
+            myMessage = getExceptionWithStacktrace(e, theHtml=False)
             assert 'BoundingBoxError : Western' in myMessage, myMessage
 
     def test_issue230(self):
@@ -241,6 +292,73 @@ class UtilitiesTest(unittest.TestCase):
         myMessage = 'Got version %s of QGIS, but at least 107000 is needed'
         assert myVersion > 10700, myMessage
 
+    def test_getLayerAttributeNames(self):
+        """Test we can get the correct attributes back"""
+        myLayer = makePolygonLayer()
+
+        #with good attribute name
+        myAttrs, myPos = getLayerAttributeNames(myLayer,
+            [QVariant.Int, QVariant.String],
+            'TEST_STRIN')
+        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        myExpectedPos = 2
+        myMessage = 'myExpectedAttrs, got %s, expected %s' % (
+            myAttrs, myExpectedAttrs)
+        assert (myAttrs == myExpectedAttrs), myMessage
+        myMessage = 'myExpectedPos, got %s, expected %s' % (
+            myPos, myExpectedPos)
+        assert (myPos == myExpectedPos), myMessage
+
+        #with inexistent attribute name
+        myAttrs, myPos = getLayerAttributeNames(myLayer,
+            [QVariant.Int, QVariant.String],
+            'MISSING_ATTR')
+        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        myExpectedPos = None
+        myMessage = 'myExpectedAttrs, got %s, expected %s' % (
+            myAttrs, myExpectedAttrs)
+        assert (myAttrs == myExpectedAttrs), myMessage
+        myMessage = 'myExpectedPos, got %s, expected %s' % (
+            myPos, myExpectedPos)
+        assert (myPos == myExpectedPos), myMessage
+
+        #with raster layer
+        myLayer = makePadangLayer()
+        myAttrs, myPos = getLayerAttributeNames(myLayer, [], '')
+        myMessage = 'Should return None, None for raster layer, got %s, %s' % (
+            myAttrs, myPos)
+        assert (myAttrs is None and myPos is None), myMessage
+
+    def test_isLayerPolygonal(self):
+        """Test we can get the correct attributes back"""
+        myLayer = makePolygonLayer()
+        myMessage = 'isLayerPolygonal, %s layer should be polygonal' % myLayer
+        assert isLayerPolygonal(myLayer), myMessage
+
+        myLayer = makePointLayer()
+        myMessage = '%s layer should be polygonal' % myLayer
+        assert not isLayerPolygonal(myLayer), myMessage
+
+        myLayer = makePadangLayer()
+        myMessage = ('%s raster layer should not be polygonal'
+                    % myLayer)
+        assert not isLayerPolygonal(myLayer), myMessage
+
+    def test_getDefaults(self):
+        myExpectedDefaults = {
+            'FEM_RATIO_KEY': 'female ratio default',
+            'YOUTH_RATIO': 0.263,
+            'ELDER_RATIO': 0.078,
+            'NO_DATA': 'No data',
+            'FEM_RATIO': 0.5,
+            'AGGR_ATTR_KEY': 'aggregation attribute',
+            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
+            'ADULT_RATIO': 0.659}
+        myDefaults = getDefaults()
+        myMessage = 'Defaults: got %s, expected %s' % (
+            myDefaults, myExpectedDefaults)
+        assert (myDefaults == myExpectedDefaults), myMessage
+
     def test_mmPointConversion(self):
         """Test that conversions between pixel and page dimensions work."""
 
@@ -262,6 +380,71 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(humaniseSeconds(9000), '2 hours and 30 minutes')
         self.assertEqual(humaniseSeconds(432232),
                          '5 days, 0 hours and 3 minutes')
+
+    def test_impactLayerAttribution(self):
+        """Test we get an attribution html snippet nicely for impact layers."""
+        myKeywords = {'hazard_title': 'Sample Hazard Title',
+                      'hazard_source': 'Sample Hazard Source',
+                      'exposure_title': 'Sample Exposure Title',
+                      'exposure_source': 'Sample Exposure Source'}
+        myHtml = impactLayerAttribution(myKeywords)
+        print myHtml
+        self.assertEqual(len(myHtml), 288)
+
+    @expectedFailure
+    def test_localisedAttribution(self):
+        """Test we can localise attribution."""
+        os.environ['LANG'] = 'id'
+        myKeywords = {'hazard_title': 'Jakarta 2007 flood',
+                      'hazard_source': 'Sample Hazard Source',
+                      'exposure_title': 'People in Jakarta',
+                      'exposure_source': 'Sample Exposure Source'}
+        myHtml = impactLayerAttribution(myKeywords, True)
+        print myHtml
+        assert myHtml == '11'
+
+    def testDpiToMeters(self):
+        """Test conversion from dpi to dpm."""
+        myDpi = 300
+        myDpm = dpiToMeters(myDpi)
+        myExpectedDpm = 11811.023622
+        myMessage = ('Conversion from dpi to dpm failed\n'
+                     ' Got: %s Expected: %s\n' %
+                     (myDpm, myExpectedDpm))
+        self.assertAlmostEqual(myDpm, myExpectedDpm, msg=myMessage)
+
+    def testAddMinMaxToStyle(self):
+        """Test our add min max to style function."""
+        myClasses = [dict(colour='#38A800', quantity=2, transparency=0),
+                     dict(colour='#38A800', quantity=5, transparency=50),
+                     dict(colour='#79C900', quantity=10, transparency=50),
+                     dict(colour='#CEED00', quantity=20, transparency=50),
+                     dict(colour='#FFCC00', quantity=50, transparency=34),
+                     dict(colour='#FF6600', quantity=100, transparency=77),
+                     dict(colour='#FF0000', quantity=200, transparency=24),
+                     dict(colour='#7A0000', quantity=300, transparency=22)]
+        myExpectedClasses = [
+            {'max': 2.0, 'colour': '#38A800', 'min': 0.0, 'transparency': 0,
+             'quantity': 2},
+            {'max': 5.0, 'colour': '#38A800', 'min': 2.0000000000000004,
+             'transparency': 50, 'quantity': 5},
+            {'max': 10.0, 'colour': '#79C900', 'min': 5.0000000000000009,
+             'transparency': 50, 'quantity': 10},
+            {'max': 20.0, 'colour': '#CEED00', 'min': 10.000000000000002,
+             'transparency': 50, 'quantity': 20},
+            {'max': 50.0, 'colour': '#FFCC00', 'min': 20.000000000000004,
+             'transparency': 34, 'quantity': 50},
+            {'max': 100.0, 'colour': '#FF6600', 'min': 50.000000000000007,
+             'transparency': 77, 'quantity': 100},
+            {'max': 200.0, 'colour': '#FF0000', 'min': 100.00000000000001,
+             'transparency': 24, 'quantity': 200},
+            {'max': 300.0, 'colour': '#7A0000', 'min': 200.00000000000003,
+             'transparency': 22, 'quantity': 300}]
+
+        myActualClasses = _addMinMaxToStyle(myClasses)
+        print myActualClasses
+        self.maxDiff = None
+        self.assertListEqual(myExpectedClasses, myActualClasses)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

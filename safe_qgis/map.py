@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -32,13 +31,14 @@ from qgis.core import (QgsComposition,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundException
+from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
 from safe_qgis.utilities import (setupPrinter,
                                  pointsToMM,
                                  mmToPoints,
-                                 humaniseSeconds)
+                                 dpiToMeters,
+                                 qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -174,9 +174,13 @@ class Map():
         myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
         myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
                                QtGui.QImage.Format_ARGB32)
-        myImage.setDotsPerMeterX(self.pageDpi / 25.4 * 1000)
-        myImage.setDotsPerMeterY(self.pageDpi / 25.4 * 1000)
-        myImage.fill(0)
+        myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
+        myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
+
+        # Only works in Qt4.8
+        #myImage.fill(QtGui.qRgb(255, 255, 255))
+        # Works in older Qt4 versions
+        myImage.fill(55 + 255 * 256 + 255 * 256 * 256)
         myImagePainter = QtGui.QPainter(myImage)
         mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
                                      self.pageHeight)
@@ -235,7 +239,10 @@ class Map():
                                    theTopOffset,
                                    10,
                                    10)
-        myLogo.setFrame(self.showFramesFlag)
+        if qgisVersion() >= 10800:  # 1.8 or newer
+            myLogo.setFrameEnabled(self.showFramesFlag)
+        else:
+            myLogo.setFrame(self.showFramesFlag)
         myLogo.setZValue(1)  # To ensure it overlays graticule markers
         self.composition.addItem(myLogo)
 
@@ -607,12 +614,14 @@ class Map():
             None
         """
         LOGGER.debug('InaSAFE Map drawLegend called')
-        myLegend = MapLegend(self.layer)
+        myLegend = MapLegend(self.layer, self.pageDpi)
         self.legend = myLegend.getLegend()
         myPicture1 = QgsComposerPicture(self.composition)
-        myLegendFile = os.path.join(temp_dir(), 'legend.png')
-        self.legend.save(myLegendFile, 'PNG')
-        myPicture1.setPictureFile(myLegendFile)
+        myLegendFilePath = unique_filename(prefix='legend',
+                                       suffix='.png',
+                                       dir='work')
+        self.legend.save(myLegendFilePath, 'PNG')
+        myPicture1.setPictureFile(myLegendFilePath)
         myLegendHeight = pointsToMM(self.legend.height(), self.pageDpi)
         myLegendWidth = pointsToMM(self.legend.width(), self.pageDpi)
         myPicture1.setItemPosition(self.pageMargin,
@@ -621,10 +630,10 @@ class Map():
                                    myLegendHeight)
         myPicture1.setFrame(False)
         self.composition.addItem(myPicture1)
-        os.remove(myLegendFile)
+        os.remove(myLegendFilePath)
 
-    def drawPixmap(self, thePixmap, theWidthMM, theLeftOffset, theTopOffset):
-        """Helper to draw a pixmap directly onto the QGraphicsScene.
+    def drawImage(self, theImage, theWidthMM, theLeftOffset, theTopOffset):
+        """Helper to draw an image directly onto the QGraphicsScene.
         This is an alternative to using QgsComposerPicture which in
         some cases leaves artifacts under windows.
 
@@ -633,20 +642,20 @@ class Map():
 
         Args:
 
-            * thePixmap
-            * theWidthMM - desired width in mm of output on page
-            * theLeftOffset
-            * theTopOffset
+            * theImage: QImage that will be rendered to the layout.
+            * theWidthMM: int - desired width in mm of output on page.
+            * theLeftOffset: int - offset from left of page.
+            * theTopOffset: int - offset from top of page.
 
         Returns:
             QGraphicsSceneItem is returned
         Raises:
             None
         """
-        LOGGER.debug('InaSAFE Map drawPixmap called')
+        LOGGER.debug('InaSAFE Map drawImage called')
         myDesiredWidthMM = theWidthMM  # mm
         myDesiredWidthPX = mmToPoints(myDesiredWidthMM, self.pageDpi)
-        myActualWidthPX = thePixmap.width()
+        myActualWidthPX = theImage.width()
         myScaleFactor = myDesiredWidthPX / myActualWidthPX
 
         LOGGER.debug('%s %s %s' % (
@@ -654,7 +663,7 @@ class Map():
         myTransform = QtGui.QTransform()
         myTransform.scale(myScaleFactor, myScaleFactor)
         myTransform.rotate(0.5)
-        myItem = self.composition.addPixmap(thePixmap)
+        myItem = self.composition.addPixmap(QtGui.QPixmap.fromImage(theImage))
         myItem.setTransform(myTransform)
         myItem.setOffset(theLeftOffset / myScaleFactor,
                          theTopOffset / myScaleFactor)
@@ -675,35 +684,27 @@ class Map():
         #user: timlinux
         #host_name: ultrabook
         #time_stamp: 2012-10-13_23:10:31
-        myUser = self.keywordIO.readKeywords(self.layer, 'user')
-        myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
+        #myUser = self.keywordIO.readKeywords(self.layer, 'user')
+        #myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
         myDateTime = self.keywordIO.readKeywords(self.layer, 'time_stamp')
         myTokens = myDateTime.split('_')
         myDate = myTokens[0]
         myTime = myTokens[1]
-        myElapsedTime = self.keywordIO.readKeywords(self.layer, 'elapsed_time')
-        myElapsedTime = humaniseSeconds(myElapsedTime)
+        #myElapsedTime = self.keywordIO.readKeywords(self.layer,
+        #                                            'elapsed_time')
+        #myElapsedTime = humaniseSeconds(myElapsedTime)
         myLongVersion = get_version()
         myTokens = myLongVersion.split('.')
         myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
-        myLabelText = self.tr('Assessment carried out on host "%s"'
-                         'by user "%s" using InaSAFE release %s (QGIS '
-                         'plugin version).\n'
-                         'Date and time of assessment: %s %s\n'
-                         'Elapsed time for assessment calculation: %s\n'
-                         'Special note: This assessment is a guide - we '
-                         'strongly recommend that you ground truth the '
-                         'results shown here before deploying resources '
-                         'and / or personnel.' % (
-                         myHost,
-                         myUser,
-                         myVersion,
-                         myDate,
-                         myTime,
-                         myElapsedTime
-                         )
-        )
-        myFontSize = 8
+        myLabelText = self.tr('Date and time of assessment: %1 %2\n'
+                              'Special note: This assessment is a guide - we '
+                              'strongly recommend that you ground truth the '
+                              'results shown here before deploying resources '
+                              'and / or personnel.\n'
+                              'Assessment carried out using InaSAFE release '
+                              '%3 (QGIS plugin version).').arg(
+                              myDate).arg(myTime).arg(myVersion)
+        myFontSize = 6
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = True
         myFont = QtGui.QFont('verdana',
@@ -773,7 +774,7 @@ class Map():
         try:
             myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
             return myTitle
-        except KeywordNotFoundException:
+        except KeywordNotFoundError:
             return None
         except Exception:
             return None

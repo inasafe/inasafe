@@ -12,7 +12,7 @@ Overview
 
 **Unique Identifier**: Flood Building Impact Function
 
-**Permissible Hazard Input**: A raster layer where each cell represents flood depth, or a vector polygon layer where each polygon represents an inundated area. Optionally the user may nominate an attribute in the polygon layer that represents inundation depth.
+**Permissible Hazard Input**: A raster layer where each cell represents flood depth, or a vector polygon layer where each polygon represents an inundated area. The following attributes are recognised (in order): Flooded (True or False), FLOODPRONE (Yes or No) and Affected (True or False).
 
 **Author**: Ole Nielsen, Kristy van Putten
 

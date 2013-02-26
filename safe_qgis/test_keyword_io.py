@@ -16,8 +16,8 @@ from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 from safe.common.testing import HAZDATA, TESTDATA
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.exceptions import HashNotFoundException
-from safe_qgis.test_keywords_dialog import copyMakePadangLayer
+from safe_qgis.exceptions import HashNotFoundError
+from safe_qgis.test_keywords_dialog import makePadangLayerClone
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -51,6 +51,7 @@ class KeywordIOTest(unittest.TestCase):
                                        'datatype': 'itb',
                                        'subcategory': 'structure'}
         self.expectedRasterKeywords = {'category': 'hazard',
+                                       'source': 'USGS',
                                        'subcategory': 'earthquake',
                                        'unit': 'MMI',
                                        'title': ('An earthquake in Padang '
@@ -107,9 +108,9 @@ class KeywordIOTest(unittest.TestCase):
         try:
             myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype')
             #if the above didnt cause an exception then bad
-            myMessage = 'Expected a HashNotFoundException to be raised'
+            myMessage = 'Expected a HashNotFoundError to be raised'
             assert myMessage
-        except HashNotFoundException:
+        except HashNotFoundError:
             #we expect this outcome so good!
             pass
 
@@ -126,7 +127,7 @@ class KeywordIOTest(unittest.TestCase):
         myKeywords = self.keywordIO.readKeywords(self.fileRasterLayer)
         myExpectedKeywords = self.expectedRasterKeywords
         mySource = self.fileRasterLayer.source()
-        myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+        myMessage = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
                     myKeywords, myExpectedKeywords, mySource)
         assert myKeywords == myExpectedKeywords, myMessage
 
@@ -141,20 +142,27 @@ class KeywordIOTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
     def test_appendKeywords(self):
-        """Can we append file keywords with the generic readKeywords
-        method """
-        myLaver, _ = copyMakePadangLayer()
-        myAddKeywords = {'category': 'exposure', 'test': 'TEST'}
+        """Can we append file keywords with the generic readKeywords method."""
+        myLayer, _ = makePadangLayerClone()
+        myNewKeywords = {'category': 'exposure', 'test': 'TEST'}
+        self.keywordIO.appendKeywords(myLayer, myNewKeywords)
+        myKeywords = self.keywordIO.readKeywords(myLayer)
 
-        self.keywordIO.appendKeywords(myLaver, myAddKeywords)
-        myExpectedKeywords = {'category': 'exposure', 'test': 'TEST',
-                              'subcategory': 'earthquake', 'unit': 'MMI',
-                              'title': 'An earthquake in Padang like in 2009'}
-        myKeywords = self.keywordIO.readKeywords(myLaver)
-
-        myMessage = 'Got: %s\n\nExpected %s\n' % (
-            myKeywords, myExpectedKeywords)
-        assert myKeywords == myExpectedKeywords, myMessage
+        for myKey, myValue in myNewKeywords.iteritems():
+            myMessage = ('Layer keywords misses appended key: %s\n'
+                        'Layer keywords:\n%s\n'
+                        'Appended keywords:\n%s\n' %
+                        (myKey,
+                         myKeywords,
+                         myNewKeywords))
+            assert myKey in myKeywords, myMessage
+            myMessage = ('Layer keywords misses appended value: %s\n'
+                         'Layer keywords:\n%s\n'
+                         'Appended keywords:\n%s\n' %
+                         (myValue,
+                          myKeywords,
+                          myNewKeywords))
+            assert myKeywords[myKey] == myValue, myMessage
 
     def test_readDBKeywords(self):
         """Can we read sqlite keywords with the generic readKeywords method
@@ -183,6 +191,8 @@ class KeywordIOTest(unittest.TestCase):
         myExpectedKeywords = self.expectedSqliteKeywords
         assert myKeywords == myExpectedKeywords, myMessage
         mySource = self.sqliteLayer.source()
+        # delete mySqliteLayer so that we can delete the file
+        del mySqliteLayer
         os.remove(myLocalPath)
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
                     myKeywords, myExpectedKeywords, mySource)

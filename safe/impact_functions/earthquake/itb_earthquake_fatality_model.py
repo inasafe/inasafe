@@ -1,10 +1,14 @@
-from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question
+from safe.impact_functions.core import (FunctionProvider,
+                                        get_hazard_layer,
+                                        get_exposure_layer,
+                                        get_question)
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   get_defaults,
+                                   format_int)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
+from third_party.odict import OrderedDict
 
 import numpy
 
@@ -28,7 +32,7 @@ class ITBFatalityFunction(FunctionProvider):
     In this study, the same functional form as Allen (2009) is adopted
     to express fatality rate as a function of intensity (see Eq. 10 in the
     report). The Matlab built-in function (fminsearch) for  Nelder-Mead
-    algorithm is used to estimate the model parameters. The objective
+    algorithm was used to estimate the model parameters. The objective
     function (L2G norm) that is minimised during the optimisation is the
     same as the one used by Jaiswal et al. (2010).
 
@@ -64,6 +68,9 @@ class ITBFatalityFunction(FunctionProvider):
         - consistency between selected GMPEs with those in use by BMKG.
           These issues will be addressed by ITB team in the final report.
 
+    Note: Because of these caveats, decisions should not be made solely on
+    the information presented here and should always be verified by ground
+    truthing and other reliable information sources.
 
     :author Hadi Ghasemi
     :rating 3
@@ -79,14 +86,41 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
-    parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
-                      # Rates of people displaced for each MMI level
-                      displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                                         7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0},
-                      # Threshold below which layer should be transparent
-                      tolerance=0.01,
-                      calculate_displaced_people=True)
     title = tr('Die or be displaced')
+    defaults = get_defaults()
+    parameters = OrderedDict([
+        ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
+        # Rates of people displaced for each MMI level
+        ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
+                               7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
+        ('mmi_range', range(2, 10)),
+        ('step', 0.5),
+        # Threshold below which layer should be transparent
+        ('tolerance', 0.01),
+        ('calculate_displaced_people', True),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                      ('youth_ratio', defaults['YOUTH_RATIO']),
+                      ('adult_ratio', defaults['ADULT_RATIO']),
+                      ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
+
+    def fatality_rate(self, mmi):
+        """
+        ITB method to compute fatality rate
+        :param x: model coefficient.
+        :param y: model coefficient.
+        """
+        # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
+        # a fatality rate of 0 - Tim
+        if mmi < 4:
+            return 0
+
+        x = self.parameters['x']
+        y = self.parameters['y']
+        return numpy.power(10.0, x * mmi - y)
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
@@ -97,10 +131,6 @@ class ITBFatalityFunction(FunctionProvider):
               P: Raster layer of population density
 
         """
-
-        # Establish model coefficients
-        x = self.parameters['x']
-        y = self.parameters['y']
 
         # Define percentages of people being displaced at each mmi level
         displacement_rate = self.parameters['displacement_rate']
@@ -122,7 +152,8 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-        mmi_range = range(2, 10)
+
+        mmi_range = self.parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
@@ -132,14 +163,15 @@ class ITBFatalityFunction(FunctionProvider):
         R = numpy.zeros(H.shape)
         for mmi in mmi_range:
 
-            # Identify cells where MMI is in class i
-            mask = (H > mmi - 0.5) * (H <= mmi + 0.5)
-
-            # Count population affected by this shake level
-            I = numpy.where(mask, P, 0)
+            # Identify cells where MMI is in class i and
+            # count population affected by this shake level
+            I = numpy.where(
+                (H > mmi - self.parameters['step']) * (
+                    H <= mmi + self.parameters['step']), P, 0)
 
             # Calculate expected number of fatalities per level
-            fatality_rate = numpy.power(10.0, x * mmi - y)
+            fatality_rate = self.fatality_rate(mmi)
+
             F = fatality_rate * I
 
             # Calculate expected number of displaced people per level
@@ -172,6 +204,10 @@ class ITBFatalityFunction(FunctionProvider):
         # Compute number of fatalities
         fatalities = int(round(numpy.nansum(number_of_fatalities.values())
                                / 1000)) * 1000
+        # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
+        # will be rounded down to 0 - Tim
+        if fatalities < 50:
+            fatalities = 0
 
         # Compute number of people displaced due to building collapse
         displaced = int(round(numpy.nansum(number_of_displaced.values())
@@ -181,57 +217,62 @@ class ITBFatalityFunction(FunctionProvider):
         table_body = [question]
 
         # Add total fatality estimate
-        s = str(int(fatalities)).rjust(10)
+        #s = str(int(fatalities)).rjust(10)
+        s = format_int(fatalities)
         table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
         if self.parameters['calculate_displaced_people']:
             # Add total estimate of people displaced
-            s = str(int(displaced)).rjust(10)
+            #s = str(int(displaced)).rjust(10)
+            s = format_int(displaced)
             table_body.append(TableRow([tr('Number of people displaced'), s],
                                        header=True))
         else:
             displaced = 0
 
         # Add estimate of total population in area
-        s = str(int(total)).rjust(10)
+        #s = str(int(total)).rjust(10)
+        s = format_int(int(total))
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        rice = displaced * 2.8
-        drinking_water = displaced * 17.5
-        water = displaced * 67
-        family_kits = displaced / 5
-        toilets = displaced / 20
+        # FIXME: Refactor and share
+        rice = int(displaced * 2.8)
+        drinking_water = int(displaced * 17.5)
+        water = int(displaced * 67)
+        family_kits = int(displaced / 5)
+        toilets = int(displaced / 20)
 
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('Fatalities'),
-                                '%i' % fatalities],
+                                '%s' % format_int(fatalities)],
                                header=True),
                       TableRow([tr('People displaced'),
-                                '%i' % displaced],
+                                '%s' % format_int(displaced)],
                                header=True),
                       TableRow(tr('Map shows density estimate of '
                                   'displaced population')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
-                      [tr('Rice [kg]'), int(rice)],
-                      [tr('Drinking Water [l]'), int(drinking_water)],
-                      [tr('Clean Water [l]'), int(water)],
-                      [tr('Family Kits'), int(family_kits)],
-                      [tr('Toilets'), int(toilets)]]
+                      [tr('Rice [kg]'), format_int(rice)],
+                      [tr('Drinking Water [l]'), format_int(drinking_water)],
+                      [tr('Clean Water [l]'), format_int(water)],
+                      [tr('Family Kits'), format_int(family_kits)],
+                      [tr('Toilets'), format_int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
-                                 'units available for %i people?') %
-                                 fatalities)
+                                 'units available for %s people?') %
+                                 format_int(fatalities))
         if displaced > 0:
             table_body.append(tr('Are there enough shelters and relief items '
-                                 'available for %i people?') % displaced)
+                                 'available for %s people?')
+                              % format_int(displaced))
             table_body.append(TableRow(tr('If yes, where are they located and '
                                           'how will we distribute them?')))
             table_body.append(TableRow(tr('If no, where can we obtain '
@@ -240,12 +281,16 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %i') % total,
+                           tr('Total population: %s') % format_int(total),
                            tr('People are considered to be displaced if '
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                             'regulation 7/2008'),
+                           tr('The fatality calculation assumes that '
+                             'no fatalities occur for shake levels below 4 '
+                             'and fatality counts of less than 50 are '
+                             'disregarded.')])
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in need of evacuation')
@@ -286,6 +331,9 @@ class ITBFatalityFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'total_population': total,
                              'total_fatalities': fatalities,
+                             'fatalites_per_mmi': number_of_fatalities,
+                             'exposed_per_mmi': number_of_exposed,
+                             'displaced_per_mmi': number_of_displaced,
                              'impact_table': impact_table,
                              'map_title': map_title},
                    name=tr('Estimated displaced population'),

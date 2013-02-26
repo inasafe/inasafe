@@ -1,0 +1,24 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="plugins.xsl" ?>
+<plugins>
+    <pyqgis_plugin name="InaSAFE-Test" version="[VERSION]">
+        <description><![CDATA[InaSAFE Disaster Scenario Assessment for
+          Emergencies tool developed by BNPB, AusAID, World Bank]]>
+        </description>
+        <version>[VERSION]</version>
+        <qgis_minimum_version>1.7</qgis_minimum_version>
+        <homepage>http://www.inasafe.org/</homepage>
+        <file_name>[FILE_NAME]</file_name>
+        <icon>icon.png</icon>
+        <author_name>BNPB, AusAID and the World Bank</author_name>
+        <download_url>[URL]</download_url>
+        <uploaded_by>timlinux</uploaded_by>
+        <create_date>2012-07-04T07:35:14.112545</create_date>
+        <update_date>[DATE]</update_date>
+        <experimental>True</experimental>
+        <deprecated>False</deprecated>
+        <tracker>https://github.com/AIFDR/inasafe/issues</tracker>
+        <repository>https://github.com/AIFDR/inasafe</repository>
+        <tags>contingency planning,impact assessments,disaster scenarios,natural hazards</tags>
+    </pyqgis_plugin>
+</plugins>

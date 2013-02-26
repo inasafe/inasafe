@@ -12,11 +12,13 @@ class FloodRoadImpactFunctionExperimental(FunctionProvider):
 
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami'] and \
-                    layertype=='vector'
+                    layertype=='vector and \
+                    disabled=='True'
 
     :param requires category=='exposure' and \
                     subcategory=='road' and \
-                    layertype=='vector'
+                    layertype=='vector and \
+                    disabled=='True'
     """
 
     target_field = 'INUNDATED'
@@ -101,6 +103,7 @@ class FloodRoadImpactFunctionExperimental(FunctionProvider):
                    geometry_type=I.get_geometry_type(),
                    name=tr('Estimated roads affected'),
                    keywords={'impact_summary': impact_summary,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'target_field': self.target_field},
                    style_info=style_info)
         return V

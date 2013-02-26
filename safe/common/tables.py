@@ -250,7 +250,7 @@ class TableRow (object):
             #user instantiated the row with only a string for content\
             col = 1
             # setting colspan to 100% will force rows that were
-            # created by passing s str for the ctor to span the full
+            # created by passing str for the ctor to span the full
             # table width
             cell = TableCell(self.cells, col_span='100%', header=self.header)
             self.apply_properties(cell, col)
@@ -306,20 +306,26 @@ class Table(object):
         # style for thin borders by default
         if style is None:
             self.style = TABLE_STYLE_THINBORDER
+
+        self.table_class = table_class
         if table_class is None:
             self.table_class = DEFAULT_TABLE_CLASS
+
         self.caption = caption
         self.caption_at_bottom = caption_at_bottom
         self.width = width
         self.cellspacing = cellspacing
         self.cellpadding = cellpadding
         self.header_row = header_row
+
         self.rows = rows
         if not rows:
             self.rows = []
+
         self.attribs = attribs
         if not attribs:
             self.attribs = {}
+
         self.col_width = col_width
         self.col_align = col_align
         self.col_char = col_char

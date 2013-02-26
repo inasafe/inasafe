@@ -1,0 +1,40 @@
+In the event of a flood in jakarta like in 2007 how many people might need evacuation
+People needing evacuation	977000
+Map shows population density needing evacuation
+Needs per week	Total
+Rice [kg]	2735600
+Drinking Water [l]	17097500
+Clean Water [l]	65459000
+Family Kits	195400
+Toilets	48850
+Action Checklist:
+How will warnings be disseminated?
+How will we reach stranded people?
+Do we have enough relief items?
+If yes, where are they located and how will we distribute them?
+If no, where can we obtain additional relief items from and how will we transport them to here?
+Notes
+Total population: 10484000
+People need evacuation if flood levels exceed 1.0 m
+Minimum needs are defined in BNPB regulation 7/2008
+Detailed breakdown
+People in 0.3 m to 0.5 m of water: 327000
+People in 0.5 m to 1.0 m of water: 679000
+Detailed Gender report
+KAB_NAME	Total	Female population	Weekly hygiene packs	Additional weekly rice kg for pregnant and lactating women
+JAKARTA BARAT	278349	139175	110463	12969
+JAKARTA PUSAT	66829	33415	26521	3114
+JAKARTA SELATAN	33221	16611	13184	1548
+JAKARTA TIMUR	0	0	0	0
+JAKARTA TIMUR	0	0	0	0
+JAKARTA TIMUR	251489	125745	99803	11717
+JAKARTA UTARA	344655	172328	136776	16058
+Detailed Age report
+KAB_NAME	Total	Youth count	Adult count	Elderly count
+JAKARTA BARAT	278349	73206	183432	21990
+JAKARTA PUSAT	66829	17576	44040	5279
+JAKARTA SELATAN	33221	8737	21893	2624
+JAKARTA TIMUR	0	0	0	0
+JAKARTA TIMUR	0	0	0	0
+JAKARTA TIMUR	251489	66142	165731	19868
+JAKARTA UTARA	344655	90644	227128	27228
