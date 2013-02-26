@@ -9,7 +9,7 @@ from safe.common.tables import Table, TableRow
 from safe.storage.raster import Raster
 
 
-class FloodEvacuationTutorial(FunctionProvider):
+class FloodPopulationEvacuationFunction(FunctionProvider):
     """Impact function for flood evacuation (tutorial)
 
     :author AIFDR
