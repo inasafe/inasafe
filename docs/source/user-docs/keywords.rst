@@ -252,7 +252,7 @@ An example of the keywords editor in advanced mode is shown below.
 Invoking the keywords editor
 ----------------------------
 
-The keyword editor can easily be invoked by selecting any layer in the
+The keyword editor can easily be invoked by **selecting any layer** in the
 QGIS layers list, and then using the plugin menu to start the editor
 (:menuselection:`Plugins --> InaSAFE --> Keyword Editor`).
 Alternatively, you may use the keywords editor icon on the
@@ -260,6 +260,10 @@ plugins toolbar as illustrated below.
 
 .. figure:: ../static/keyword-editor-icon.png
    :align:   center
+
+..note:: If you have not selected a layer in the QGIS legend,
+  the keyword editor icon in the toolbar and menus will **be disabbled** and
+  appear greyed out.
 
 Saving your edits
 -----------------
