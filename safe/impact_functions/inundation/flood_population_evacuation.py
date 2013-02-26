@@ -15,7 +15,7 @@ from third_party.odict import OrderedDict
 
 
 class FloodEvacuationFunction(FunctionProvider):
-    """Risk plugin for flood evacuation
+    """Impact function for flood evacuation
 
     :author AIFDR
     :rating 4
