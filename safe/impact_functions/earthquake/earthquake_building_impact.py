@@ -1,10 +1,10 @@
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
-                                        get_question,
-                                        format_int)
+                                        get_question)
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   format_int)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from third_party.odict import OrderedDict

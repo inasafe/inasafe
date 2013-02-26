@@ -1,8 +1,8 @@
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
-                                        get_exposure_layers,
-                                        format_int)
+                                        get_exposure_layers)
 from safe.impact_functions.styles import earthquake_fatality_style
+from safe.common.utilities import format_int
 from safe.storage.raster import Raster
 import numpy
 

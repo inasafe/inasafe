@@ -47,7 +47,8 @@ from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,
                                    ugettext as safe_tr,
-                                   get_free_memory)
+                                   get_free_memory,
+                                   format_int)
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow

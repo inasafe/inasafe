@@ -49,7 +49,8 @@ from safe.api import (get_admissible_plugins,
                       in_and_outside_polygon as points_in_and_outside_polygon,
                       calculate_polygon_centroid,
                       get_postprocessors,
-                      get_postprocessor_human_name)
+                      get_postprocessor_human_name,
+                      format_int)
 
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611

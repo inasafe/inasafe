@@ -278,3 +278,35 @@ def get_free_memory_osx():
     inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
     free = stdout_list[4].replace('M free.', '').replace(' ', '')
     return int(inactive) + int(free)
+
+
+def format_int(x):
+    """Format integer with separator between thousands
+
+    From http://stackoverflow.com/questions/5513615/
+               add-thousands-separators-to-a-number
+
+    # FIXME (Ole)
+    Currently not using locale coz broken
+
+    Instead use this:
+    http://docs.python.org/library/string.html#formatspec
+
+    """
+
+    # This is broken
+    #import locale
+    #locale.setlocale(locale.LC_ALL, '')  # Broken, why?
+    #s = locale.format('%d', x, 1)
+
+    lang = os.getenv('LANG')
+
+    s = '{0:,}'.format(x)
+    #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+
+    # Quick solution for the moment
+    if lang == 'id':
+        # Replace commas with dots
+        s = s.replace(',', '.')
+
+    return s
