@@ -353,15 +353,23 @@ InaSAFE assumes that every impact function returns a raster or vector layer.
 
 
 
-This function is available in full at XXX
+This function is available in full at :download:`../static/flood_population_evacuation_impact_function.py`
 
 
 Output
 ......
 
 The output of this function looks like this:
-YY
 
+.. figure:: ../static/flood_population_evacuation_result.png
+   :scale: 30 %
+   :align:   center
+
+and the legend defined in the style_info section is available in the layer view
+
+.. figure:: ../static/flood_population_evacuation_legend.png
+   :scale: 30 %
+   :align:   center
 
 
 .. _requires:
