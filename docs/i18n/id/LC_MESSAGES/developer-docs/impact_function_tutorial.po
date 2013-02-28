@@ -1,0 +1,299 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 58c3b58439cf43c1ad344507a5dc9f2c
+#: ../../source/developer-docs/impact_function_tutorial.rst:7
+msgid "Impact Function Tutorial"
+msgstr ""
+
+# 1e4e7c48d92a47d99dc5c0a8bea739a2
+#: ../../source/developer-docs/impact_function_tutorial.rst:9
+msgid "This is a simple tutorial for writing of InaSAFE impact functions."
+msgstr ""
+
+# 6598019c0e7d4a0b8a77dba05d83a627
+#: ../../source/developer-docs/impact_function_tutorial.rst:11
+msgid ""
+"This is an old text that needs to be verified, but it may be helpful and can "
+"serve as"
+msgstr ""
+
+# 679bfe55efe7480b9cf8184aecbf3360
+#: ../../source/developer-docs/impact_function_tutorial.rst:12
+msgid "a starting point for additional documentation."
+msgstr ""
+
+# 19a839b8a00f4e2289cb7e702bf1e330
+#: ../../source/developer-docs/impact_function_tutorial.rst:17
+msgid "Introduction"
+msgstr ""
+
+# 304ac735f8e4455899a2131100a81816
+#: ../../source/developer-docs/impact_function_tutorial.rst:19
+msgid ""
+"InaSAFE contains a plugin system that allows complex impact functions to be "
+"implemented in Python (http://www.python.org) whilst (ideally) minimizing "
+"the need to understand all the complexity of the handling the hazard and "
+"exposure layers. Features of the impact function system are:"
+msgstr ""
+
+# c4a62399b4e34953a5d5ba51621d7962
+#: ../../source/developer-docs/impact_function_tutorial.rst:23
+msgid "Auto registration of new impact functions after restart"
+msgstr ""
+
+# 20c5b43da81647af8169c968a6693640
+#: ../../source/developer-docs/impact_function_tutorial.rst:24
+msgid "Derivation of more complex impact functions from simpler ones"
+msgstr ""
+
+# 0e0d8c9c19274f14863eff4d03fd588c
+#: ../../source/developer-docs/impact_function_tutorial.rst:25
+msgid ""
+"Auto hiding for impact functions that aren't appropriate (depending on the "
+"requirements)"
+msgstr ""
+
+# e430c49a52dc47888f88cf0ff51f5db5
+#: ../../source/developer-docs/impact_function_tutorial.rst:26
+msgid "Allow for additional functionality to be added easily"
+msgstr ""
+
+# 6e6112edc1384a19afd426be77d2d312
+#: ../../source/developer-docs/impact_function_tutorial.rst:27
+msgid "Provide up-to-date documentation on impact functions functionality"
+msgstr ""
+
+# 3d39c9b36ad1464ead08faf7ae045d87
+#: ../../source/developer-docs/impact_function_tutorial.rst:31
+msgid "Writing a Simple Raster impact function: Tutorial 01"
+msgstr ""
+
+# 4cc422fc349a4e149c64b5c419de6360
+#: ../../source/developer-docs/impact_function_tutorial.rst:33
+msgid ""
+"This section provides a beginners tutorial on writing a simple earthquke "
+"impact function from scratch. You will need to be familiar with the basics "
+"of Python to be able to write and debug impact functions - if you are new to "
+"Python the standard Python tutorial is a great place to start (http://docs."
+"python.org/tutorial/)."
+msgstr ""
+
+# a617dabd98084d56a5fc9978df11ab53
+#: ../../source/developer-docs/impact_function_tutorial.rst:35
+msgid ""
+"For this impact function we want to calculate a simple impact by using the "
+"following function of the severity of hazard (i.e. the amount of ground "
+"shaking - H) by the exposure (i.e. the number of people in that area - P). e."
+"g.::"
+msgstr ""
+
+# 31d6d1538f034c3485a9962faaf4583b
+#: ../../source/developer-docs/impact_function_tutorial.rst:48
+msgid "Defining the impact class"
+msgstr ""
+
+# 386f929911da4222add9c90407bd0a98
+#: ../../source/developer-docs/impact_function_tutorial.rst:50
+msgid "As the first step we need to define the impact function class.::"
+msgstr ""
+
+# 400c1d7633b946809e8008b2de88462a
+#: ../../source/developer-docs/impact_function_tutorial.rst:54
+msgid ""
+"Every impact function must be subclassed from FunctionProvider. This is the "
+"method of registration for the impact function and allows the Risiko Plugin "
+"Manager to know what impact functions are available."
+msgstr ""
+
+# 4d2c24e1462d43b0b258ffbd053b008a
+#: ../../source/developer-docs/impact_function_tutorial.rst:59
+msgid "Impact Parameters"
+msgstr ""
+
+# e1eafe41d3b345b496c8ce5671cfddcf
+#: ../../source/developer-docs/impact_function_tutorial.rst:61
+msgid ""
+"Each impact function needs to be used in the correct context. Using a flood "
+"impact function for earthquakes will likely yield misleading results at "
+"best! As such pugins may have a variety of conditions that need to be met "
+"before they can be run. Such conditions may include:"
+msgstr ""
+
+# e534cbc672ab48d3b3089b79157e0c81
+#: ../../source/developer-docs/impact_function_tutorial.rst:65
+msgid "The type of hazard"
+msgstr ""
+
+# 896bc838973243e9a1aa0cfcd8d3bbdb
+#: ../../source/developer-docs/impact_function_tutorial.rst:66
+msgid "The type of exposure"
+msgstr ""
+
+# 23bc3262610e4b889b6e8fde7f96dc64
+#: ../../source/developer-docs/impact_function_tutorial.rst:67
+msgid "The form of the layer data (raster or vector)"
+msgstr ""
+
+# 2aca7975e8ba4a41b09af55912a64ecd
+#: ../../source/developer-docs/impact_function_tutorial.rst:68
+msgid "The measure or unit type of a layer"
+msgstr ""
+
+# 0e8b681b3a3243da919454675a9999f0
+#: ../../source/developer-docs/impact_function_tutorial.rst:69
+msgid "Any other meta data defined in the layer"
+msgstr ""
+
+# 95e19b0f235541349b331e23672e2b4c
+#: ../../source/developer-docs/impact_function_tutorial.rst:71
+msgid ""
+"In the future impact functions may also support filtering by: * The "
+"geographic location * The avaliable layer meta data"
+msgstr ""
+
+# 8f5fdae9989641ecafed502b585564c8
+#: ../../source/developer-docs/impact_function_tutorial.rst:75
+msgid ""
+"InaSAFE will try to show users only those impact functions that can be "
+"validly run."
+msgstr ""
+
+# d872a09c79ee46f485f97fc1447f6b19
+#: ../../source/developer-docs/impact_function_tutorial.rst:77
+msgid ""
+"These parameters required to run the impact function, and indeed all "
+"specific parameters, are defined in the doc string of the class::"
+msgstr ""
+
+# 1b1e4d20d5dc4219b2fadec8d6cc911d
+#: ../../source/developer-docs/impact_function_tutorial.rst:93
+msgid ""
+"This tells InaSAFE that this impact function requires at a minimum inputs of"
+msgstr ""
+
+# e233189f1da24ec3b0c7354aaa7e2a77
+#: ../../source/developer-docs/impact_function_tutorial.rst:95
+msgid ""
+"category of 'hazard', with a layer subcategory of 'earthquake' and it must "
+"be a layerType of 'Raster'"
+msgstr ""
+
+# 435149392cbf40e8a779bc084daa4df6
+#: ../../source/developer-docs/impact_function_tutorial.rst:96
+msgid ""
+"category of 'exposure', with a layer subcategory of 'earthquake' and it must "
+"be a layerType of 'Raster'"
+msgstr ""
+
+# 68d090260ef8469490a53b06a306a995
+#: ../../source/developer-docs/impact_function_tutorial.rst:98
+msgid ""
+"The `require` expression can be any artibary python expression that can be "
+"evaluated."
+msgstr ""
+
+# 9541e9305a484308a3c7f44b47c723a5
+#: ../../source/developer-docs/impact_function_tutorial.rst:101
+msgid ""
+"Lines can be broken using the line continuation character '\\\\' at the end "
+"of a line"
+msgstr ""
+
+# f423a150b21a4b409c833466b31b5683
+#: ../../source/developer-docs/impact_function_tutorial.rst:102
+msgid ""
+"If any one of the conditions is not met the plugin will not be visible from "
+"the impact selection box."
+msgstr ""
+
+# 3ad4abe1a292476cadeb0c68410489be
+#: ../../source/developer-docs/impact_function_tutorial.rst:105
+msgid "The calculation function"
+msgstr ""
+
+# e1c89957d9e040b1830bbbe2135c71c2
+#: ../../source/developer-docs/impact_function_tutorial.rst:107
+msgid ""
+"Each impact function must then define a `run` method which contains the "
+"execution code::"
+msgstr ""
+
+# bebfe70a2a434e4b9d6eb4a0b7ceae14
+#: ../../source/developer-docs/impact_function_tutorial.rst:111
+msgid ""
+"The parameters are passed in as a dictionary. It is up to the framework to "
+"populate the dictionary correctly in this case with keys containing relavent "
+"data for the exposure and hazard.::"
+msgstr ""
+
+# 744757a201c44160b0b4f80d302901ef
+#: ../../source/developer-docs/impact_function_tutorial.rst:144
+msgid ""
+"At the end of the function the calculated impact layer R is returned. This "
+"return layer in our example is a Raster layer the correct projection for "
+"this layer is ensured by passing in the input layer projections."
+msgstr ""
+
+# ae770639b8da48b3a46bb1c47e1fa5e7
+#: ../../source/developer-docs/impact_function_tutorial.rst:150
+msgid "Installing the impact function"
+msgstr ""
+
+# 96c057bed8714b1ca08d37fdd198fbde
+#: ../../source/developer-docs/impact_function_tutorial.rst:152
+msgid "The whole impact function file will now read::"
+msgstr ""
+
+# a62442c20f80464bbda07a9e06dcaa1d
+#: ../../source/developer-docs/impact_function_tutorial.rst:199
+msgid ""
+"Save this as SimpleImpactEarthquakeFunction.py into into the following "
+"directory::"
+msgstr ""
+
+# e20a1b617c054047bccfd112b810df6b
+#: ../../source/developer-docs/impact_function_tutorial.rst:203
+msgid "Then start QGis and activate InaSAFE."
+msgstr ""
+
+# 93e92a0f790145a6adbaa886e10cbb3a
+#: ../../source/developer-docs/impact_function_tutorial.rst:208
+msgid "Testing the plugin"
+msgstr ""
+
+# e4d450979b7d44dda592a88bef8c0fd6
+#: ../../source/developer-docs/impact_function_tutorial.rst:210
+msgid "Load the following data"
+msgstr ""
+
+# 731d7a9f0e654258a0ed209a4888b174
+#: ../../source/developer-docs/impact_function_tutorial.rst:212
+msgid "Earthquake ground shaking"
+msgstr ""
+
+# e58604dcc0eb463e8cfe6fe744973dc5
+#: ../../source/developer-docs/impact_function_tutorial.rst:213
+msgid "Glp10ag (Population for Indonesia)"
+msgstr ""
+
+# 22314396ec54456ca4f37892a1392e2a
+#: ../../source/developer-docs/impact_function_tutorial.rst:215
+msgid "..."
+msgstr ""
