@@ -1,3 +1,4 @@
+.. _data_types:
 
 ==========
 Data Types
@@ -53,3 +54,4 @@ in each case.
   +---------+---------+---------------------------------------------------------------+--------------+
 
 
+See :ref:`writing_impact_functions` for more information.
