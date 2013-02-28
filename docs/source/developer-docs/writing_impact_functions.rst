@@ -107,9 +107,9 @@ The impact function itself is embodied in a Python class with a doc string:
                       'consensus, not hard evidence.')
 
         parameters = {'threshold': 1.0}
-    """
 
-The class name ``FloodPopulationEvacuationFunction`` is used to uniquely identify
+
+	The class name ``FloodPopulationEvacuationFunction`` is used to uniquely identify
 this impact function
 and it is important to make sure that no two impact functions share the same class name.
 If they do, one of them will be ignored.
@@ -201,7 +201,7 @@ The method ``get_data()`` returns an array if the layer is raster and takes two 
 :nan: Specify the value to use where nodata is available. In this case we use 0.0 as we only want to count hazard pixels with flooding and exposure pixels with non-zero population.
 :scaling: Optional argument controlling if data is to be scaled. In this case we set it to True which means that if the corresponding raster layer was resampled by InaSAFE, the values will be correctly scaled by the squared ratio between its current and native resolution.
 
-.. note:: # FIXME (Ole): Tim - how do we cross reference docstrings?
+.. note:: # FIXME (Ole): Tim - how do we cross reference docstrings? The problem is that we can't drop labels into them because they are auto-generated?
 
 See :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data for more details on
 the ``get_data()`` method.
