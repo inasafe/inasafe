@@ -49,13 +49,8 @@ _pseudo_inf = float(99999999)
 
 
 class Vector(Layer):
-    """Class for abstraction of vector data.
-    """
+    """InaSAFE representation of vector data.
 
-    def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None, name=None, keywords=None,
-                 style_info=None, sublayer=None):
-        """Initialise object with either geometry or filename
 
         Args:
             * data: Can be either
@@ -89,10 +84,11 @@ class Vector(Layer):
                   data file.
 
         Returns:
-            * An instance of class Vector.
+            * InaSAFE vector layer instance
 
         Raises:
-            * Propogates any exceptions encountered.
+            * TypeError, ReadLayerError, WriteLayerError, InaSAFEError,
+              GetDataError
 
         Notes:
 
@@ -114,6 +110,17 @@ class Vector(Layer):
             If polygons have holes, their geometry must be passed in as a
             list of polygon geometry objects
             (as defined in module geometry.py)
+
+    """
+
+    def __init__(self, data=None, projection=None, geometry=None,
+                 geometry_type=None, name=None, keywords=None,
+                 style_info=None, sublayer=None):
+        """Initialise object with either geometry or filename
+
+        NOTE: Doc strings in constructor are not harvested and exposed in
+        online documentation. Hence the details are specified in the
+        class docstring.
         """
 
         # Invoke common layer constructor

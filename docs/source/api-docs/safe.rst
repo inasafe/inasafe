@@ -6,10 +6,10 @@ Package::safe
 
    safe/api
    safe/defaults
-   safe/common
-   safe/impact_functions
    safe/test
+   safe/storage
    safe/i18n
    safe/engine
-   safe/storage
    safe/postprocessors
+   safe/impact_functions
+   safe/common

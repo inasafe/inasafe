@@ -591,7 +591,6 @@ class DockTest(unittest.TestCase):
                      (myAttribute))
         assert myAttribute is None, myMessage
 
-
     def test_checkPostProcessingLayersVisibility(self):
         """Generated layers are not added to the map registry."""
         myRunButton = DOCK.pbnRunStop

@@ -25,41 +25,53 @@ from utilities import (geotransform2bbox, geotransform2resolution,
 
 
 class Raster(Layer):
-    """Internal representation of raster data
+    """InaSAFE representation of raster data
+
+    Args:
+        * data: Can be either
+              * a filename of a raster file format known to GDAL
+              * an MxN array of raster data
+              * None (FIXME (Ole): Don't think we need this option)
+        * projection: Geospatial reference in WKT format.
+                      Only used if data is provide as a numeric array,
+                      if None, WGS84 geographic is assumed
+        * geotransform: GDAL geotransform (6-tuple).
+                        (top left x, w-e pixel resolution, rotation,
+                         top left y, rotation, n-s pixel resolution).
+                        See e.g. http://www.gdal.org/gdal_tutorial.html
+                        Only used if data is provide as a numeric array,
+        * name: Optional name for layer. If None, basename is used.
+        * keywords: Optional dictionary with keywords that describe the
+                    layer. When the layer is stored, these keywords will
+                    be written into an associated file with extension
+                    .keywords.
+
+                    Keywords can for example be used to display text
+                    about the layer in a web application.
+        * style_info: Dictionary with information about how this layer
+                      should be styled. See impact_functions/styles.py
+                      for examples.
+
+    Returns:
+        * InaSAFE raster layer instance
+
+    Raises:
+        * TypeError, ReadLayerError, WriteLayerError, InaSAFEError,
+          GetDataError
+
+    Note:
+        If data is a filename, all other arguments are ignored
+        as they will be inferred from the file.
+
     """
 
     def __init__(self, data=None, projection=None, geotransform=None,
                  name=None, keywords=None, style_info=None):
         """Initialise object with either data or filename
 
-        Args:
-            * data: Can be either
-                  * a filename of a raster file format known to GDAL
-                  * an MxN array of raster data
-                  * None (FIXME (Ole): Remove this option)
-            * projection: Geospatial reference in WKT format.
-                          Only used if data is provide as a numeric array,
-                          if None, WGS84 geographic is assumed
-            * geotransform: GDAL geotransform (6-tuple).
-                            (top left x, w-e pixel resolution, rotation,
-                             top left y, rotation, n-s pixel resolution).
-                            See e.g. http://www.gdal.org/gdal_tutorial.html
-                            Only used if data is provide as a numeric array,
-            * name: Optional name for layer. If None, basename is used.
-            * keywords: Optional dictionary with keywords that describe the
-                        layer. When the layer is stored, these keywords will
-                        be written into an associated file with extension
-                        .keywords.
-
-                        Keywords can for example be used to display text
-                        about the layer in a web application.
-            * style_info: Dictionary with information about how this layer
-                          should be styled. See impact_functions/styles.py
-                          for examples.
-
-        Note:
-            If data is a filename, all other arguments are ignored
-            as they will be inferred from the file.
+        NOTE: Doc strings in constructor are not harvested and exposed in
+        online documentation. Hence the details are specified in the
+        class docstring.
         """
 
         # Invoke common layer constructor
