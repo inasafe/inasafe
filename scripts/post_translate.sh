@@ -76,6 +76,12 @@ do
   # now overwrite possible available (localised) resources over the english ones
   cp -r resources/${LOCALE}/* source/static
 
+  #################################
+  #
+  #        HTML Generation
+  #
+  #################################
+
   # Now prepare the index-[locale] template which is a manually translated,
   # unique per locale page that gets copied to index.html for the doc
   # generation process.
@@ -84,9 +90,14 @@ do
   echo "Building HTML for locale '${LOCALE}'..."
   ${SPHINXBUILD} -d ${BUILDDIR}/doctrees -D language=${LOCALE} -b html source ${HTMLDIR}/${LOCALE}
 
-  # Removed the static html copy again
+  # Remove the static html copy again
   rm templates/index.html
 
+  #################################
+  #
+  #         PDF Generation
+  #
+  #################################
 
   # Compile the latex docs for that locale
   ${SPHINXBUILD} -d ${BUILDDIR}/doctrees -D language=${LOCALE} -b latex source ${BUILDDIR}/latex/${LOCALE}
