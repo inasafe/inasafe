@@ -475,6 +475,23 @@ buildings (vector data) will be affected by certain volcanic hazard areas (vecto
 TBA
 
 
+Deploying new impact functions
+------------------------------
+
+To make a new impact function visible to InaSAFE it has to be placed in a subdirectory under
+safe/impact_functions relative to where it is installed. This will typically be something like
+~/.qgis/python/plugins/inasafe/safe/impact_functions.
+
+There are a number of subdirectories with existing impact functions organised by hazard.
+The new impact function can use either of them or be located in a new subdirectory with
+the same __init_.py file as the existing ones.
+
+Next time InaSAFE is loaded, the new impact function will be included and provided its
+keywords match those of the input layers it will be available to run.
+
+
+
+
 .. _requires:
 
 Controlling which layer types impact functions work with
