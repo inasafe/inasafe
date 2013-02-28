@@ -21,6 +21,9 @@ mkdir -p i18n/pot
 # Create a (temporary) static directory in source to hold all (localised ) static content
 mkdir -p source/static
 
+# copy english resources to static to be able to do a proper sphinx-build
+cp -r resources/en/* source/static/
+
 BUILDDIR=build
 # be sure to remove an old build dir
 rm -rf ${BUILDDIR}
