@@ -13,11 +13,6 @@ SOURCE=source
 pushd .
 cd $DOCROOT
 
-LOCALES='id'
-
-
-#!/bin/bash
-#
 SPHINXBUILD=`which sphinx-build`
 
 # GENERATE PDF AND HTML FOR FOLLOWING LOCALES (EN IS ALWAYS GENERATED)
