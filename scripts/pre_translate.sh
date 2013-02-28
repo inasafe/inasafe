@@ -7,7 +7,7 @@ SOURCE=source
 # Name of the dir containing static files
 STATIC=static
 
-LOCALES='af id de'
+LOCALES='id'
 
 if [ $1 ]; then
   LOCALES=$1
@@ -21,11 +21,14 @@ mkdir -p i18n/pot
 # Create a (temporary) static directory in source to hold all (localised ) static content
 mkdir -p source/static
 
-
+BUILDDIR=build
+# be sure to remove an old build dir
+rm -rf ${BUILDDIR}
+mkdir ${BUILDDIR}
 
 # Create / update the translation catalogue - this will generate the master
 # .pot files
-sphinx-build -b gettext $SOURCE ../i18n/pot/
+sphinx-build -d ${BUILDDIR}/doctrees -b gettext $SOURCE i18n/pot/
 
 # Now iteratively update the locale specific .po files with any new strings
 # needed translation
