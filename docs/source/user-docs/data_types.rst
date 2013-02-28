@@ -1,3 +1,5 @@
+.. FIXME (Ole). I think this should move to developer documentation
+
 .. _data_types:
 
 ==========
@@ -54,4 +56,4 @@ in each case.
   +---------+---------+---------------------------------------------------------------+--------------+
 
 
-See :ref:`writing_impact_functions` for more information.
+See :ref:`writing_impact_functions` for more information and `assign_hazard_values_to_exposure_data <http://inasafe.org/api-docs/safe/engine/interpolation.html#safe.engine.interpolation.assign_hazard_values_to_exposure_data>`_ for the full documentation of this function.
