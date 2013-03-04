@@ -463,6 +463,9 @@ buildings (vector data) will be affected by earthquake ground shaking
 
 TBA
 
+This function is available in full at :download:`../static/earthquake_building_impact_function.py`
+
+
 .. _vector_vector:
 
 Impact function for polygon hazard and vector point exposure data
@@ -473,6 +476,42 @@ buildings (vector data) will be affected by certain volcanic hazard areas (vecto
 
 
 TBA
+
+Assigning hazard values to exposure data
+----------------------------------------
+
+In many cases, there is a need to tag the exposure layer with values from the hazard layer in order to calculate the impact.
+Typical examples include interpolation from gridded hazard data to point data (interpolation), from polygon hazard data to point data or, indeed, from polygon data to gridded population data. InaSAFE provides one general mechanism for this purpose called ``assign_hazard_values_to_exposure_data''and it is typically called in the beginning of the impact function to generate an intermediate layer that has all information about both hazard and exposure. A call looks like:
+
+::
+
+   I = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name='depth')
+
+In this case H could be either raster or polygon vector data and E polygon or point vector data. In either case the result I
+represents the exposure data but with an additional attribute added containing the hazard level. If H is polygon data, all its attributes will
+be transferred to I. If H is raster_data and hence has only one value, that value will be assigned to a new attribute in I as specified by
+the keyword argument attribute_name - in this example 'depth'. See full documentation of this function in section :ref:`data_types`.
+
+
+
+
+
+Deploying new impact functions
+------------------------------
+
+To make a new impact function visible to InaSAFE it has to be placed in a subdirectory under
+safe/impact_functions relative to where it is installed. This will typically be something like
+.qgis/python/plugins/inasafe.
+
+There are a number of subdirectories with existing impact functions organised by hazard.
+The new impact function can use either of them or be located in a new subdirectory with
+the same __init_.py file as the existing ones.
+
+Next time InaSAFE is loaded, the new impact function will be included and provided its
+keywords match those of the input layers it will be available to run.
+
+
 
 
 .. _requires:

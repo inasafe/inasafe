@@ -11,6 +11,9 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.common.utilities import get_defaults
 from third_party.odict import OrderedDict
 
+import logging
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     """Impact function for flood evacuation
@@ -30,7 +33,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     target_field = 'population'
     defaults = get_defaults()
     parameters = OrderedDict([
-        ('evacuation_percentage', 1),  # Percent of affected needing evac
+        ('evacuation_percentage', 1),  # Percent of affected needing evacuation
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -76,16 +79,20 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name='population')
+                                                  attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = H.get_data()
-        category_title = 'FLOODPRONE'  # FIXME: Should come from keywords
+        category_title = 'affected'  # FIXME: Should come from keywords
+        deprecated_category_title = 'FLOODPRONE'
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
-            cat = attr[category_title]
+            try:
+                cat = attr[category_title]
+            except KeyError:
+                cat = attr['FLOODPRONE']
             categories[cat] = 0
 
         # Count affected population per polygon, per category and total
@@ -95,8 +102,11 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             affected = False
             if 'affected' in attr:
                 res = attr['affected']
-                if res is not None:
-                    affected = res
+                if res is None:
+                    x = False
+                else:
+                    x = bool(res)
+                affected = x
             elif 'FLOODPRONE' in attr:
                 # If there isn't an 'affected' attribute,
                 res = attr['FLOODPRONE']
@@ -110,6 +120,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     x = False
                 else:
                     x = res
+                affected = x
             else:
                 # there is no flood related attribute
                 msg = ('No flood related attribute found in %s. '
@@ -129,7 +140,10 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 new_attributes[poly_id][self.target_field] += pop
 
                 # Update population count for each category
-                cat = new_attributes[poly_id][category_title]
+                try:
+                    cat = new_attributes[poly_id][category_title]
+                except KeyError:
+                    cat = new_attributes[poly_id][deprecated_category_title]
                 categories[cat] += pop
 
                 # Update total
@@ -178,7 +192,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                                header=True),
                       [tr('Rice [kg]'), format_int(int(rice))],
                       [tr('Drinking Water [l]'),
-                            format_int(int(drinking_water))],
+                       format_int(int(drinking_water))],
                       [tr('Clean Water [l]'), format_int(int(water))],
                       [tr('Family Kits'), format_int(int(family_kits))],
                       [tr('Toilets'), format_int(int(toilets))]]
@@ -189,18 +203,18 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         table_body.append(TableRow(tr('How will we reach stranded people?')))
         table_body.append(TableRow(tr('Do we have enough relief items?')))
         table_body.append(TableRow(tr('If yes, where are they located and how '
-                                     'will we distribute them?')))
+                                      'will we distribute them?')))
         table_body.append(TableRow(tr('If no, where can we obtain additional '
-                                     'relief items from and how will we '
-                                     'transport them to here?')))
+                                      'relief items from and how will we '
+                                      'transport them to here?')))
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
                            tr('Total population: %s') % format_int(total),
                            tr('People need evacuation if in area identified '
-                             'as "Flood Prone"'),
+                              'as "Flood Prone"'),
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                              'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People affected by flood prone areas')
 
