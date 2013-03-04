@@ -463,6 +463,9 @@ buildings (vector data) will be affected by earthquake ground shaking
 
 TBA
 
+This function is available in full at :download:`../static/earthquake_building_impact_function.py`
+
+
 .. _vector_vector:
 
 Impact function for polygon hazard and vector point exposure data
