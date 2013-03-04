@@ -8,7 +8,8 @@ This document explains the purpose of impact functions and shows how to
 write them. Some familiarity with the Python programming language will
 be helpful to fully appreciate this section. See also :ref:`impact_functions`
 for information about existing impact functions in InaSAFE.
-
+Three examples of impact functions for common combinations of input types are
+given in the sections :ref:`raster_raster`, :ref:`raster_vector` and :ref:`vector_vector`.
 
 .. note:: This section is still work in progress
 
@@ -25,8 +26,8 @@ and one exposure layer. All impact functions return
   impact such as estimated fatilities or number of buildings affected.
 
 Layers can be either raster or vector types. See :ref:`data_types`
-for a complete list of admissible layer types that can be sensibly handled by
-impact functions.
+for a complete list of admissible input layer types that can be sensibly
+handled by impact functions.
 
 Impact functions also specify which layer types they can work with and thus
 directly control under which circumstances they are made available to the
@@ -36,10 +37,104 @@ user in the impact function menu. See :ref:`requires` for more details.
 Creating impact functions
 -------------------------
 
-All impact functions follow a particular structure as outlined through example below.
-The example is a simple impact function that calculates an expected number of people
-in need of evacuation in a flood event as well as an estimate of supplies required.
+All impact functions follow a particular overall structure as outlined below:
 
+Import required modules
+.......................
+
+This section identifies functionality that is needed for the impact
+function in question.
+As a minimum, one must import functionality specific to the impact
+function framework, but depending on the usage other standard Python modules
+may be imported here. A minimal import section contains:
+::
+    from safe.impact_functions.core import (FunctionProvider,
+                                            get_hazard_layer,
+                                            get_exposure_layer,
+                                            get_question,
+                                            get_function_title)
+
+    from safe.common.tables import Table, TableRow
+
+The imported elements are
+
+.. FIXME (Ole): Create links to docstrings for each of these symbols. But how?
+.. For the moment I put in absolute urls, but that isn't robust if things change
+
+`FunctionProvider <http://inasafe.org/api-docs/safe/impact_functions/core.html#safe.impact_functions.core.FunctionProvider>`_
+    Base class that all impact function classes must inherit from for InaSAFE to recognise them. Click on link or see examples below for more details.
+
+`get_hazard_layer <http://inasafe.org/api-docs/safe/impact_functions/core.html#safe.impact_functions.core.get_hazard_layer>`_
+    Helper function to extract hazard layer from input.
+
+`get_exposure_layer <http://inasafe.org/api-docs/safe/impact_functions/core.html#safe.impact_functions.core.get_exposure_layer>`_)
+    Helper function to extract exposure layer from input.
+
+`get_question <http://inasafe.org/api-docs/safe/impact_functions/core.html#safe.impact_functions.core.get_question>`_
+    Function to paraphrase the selected scenario based on titles of hazard, exposure and impact function.
+
+`get_function_title <http://inasafe.org/api-docs/safe/impact_functions/core.html#safe.impact_functions.core.get_function_title>`_
+    Helper function which provides title of impact function.
+
+`Table <http://inasafe.org/api-docs/safe/common/tables.html#safe.common.tables.Table>`_
+    Class for representing tables for use in the InaSAFE reports.
+
+`TableRow <http://inasafe.org/api-docs/safe/common/tables.html#safe.common.tables.TableRow>`_
+    Class for representing one table row in a table.
+
+
+
+Additionally, and depending on the type of the resulting layer, a typical import section will include either:
+::
+
+    from safe.storage.raster import Raster
+
+or:
+::
+    from safe.storage.vector import Vector
+
+See `Raster <http://inasafe.org/api-docs/safe/storage/raster.html#module-safe.storage.raster>`_ and `Vector <http://inasafe.org/api-docs/safe/storage/raster.html#module-safe.storage.vector>`_ documentation for details.
+
+Define the impact function class
+................................
+
+The impact function is represented by a Python class. It must inherit from the class ``FunctionProvider``
+which is what will make it part of the InaSAFE system:
+
+::
+
+    class SomeImpactFunction(FunctionProvider):
+        """Example impact function
+
+The impact function class must have some special tags in its docstring which are used to identify it and decide which layer types it is valid for. They are:
+
+:author: Name of the individual or organisation who wrote the impact function
+:rating: A numeric rating from 1 to 4 signifying a quality rating of the function (1 is worst and 4 is best). This is used in conjunction with similar ratings of input layers and combined into a rating of the resulting impact layer. The idea is that a final result is never better than the worst of the inputs and the calculation.
+:param requires: This precedes an arbitrary boolean expression combining statements involving keyword and values. The expression must be valid Python statements and the keywords and values must be defined for each input layer - e.g. by using the keywords editor or by manually editing the keywords file. One keyword, layertype, which takes the values 'raster' or 'vector' is always present and is inferred automatically by InaSAFE. For more information about keywords please refer to :ref:`keywords_system` and refer to the examples below.
+
+Following the docstring is a collection of variables that define and document the impact function. They are
+
+:title: Specifies the title of the impact function as displayed in the InaSAFE user interface
+:parameters: A (possibly ordered) dictionary of parameters that can be configured from the
+             user interface. Anything listed here can be modified at runtime by clicking the pencil
+	     symbol next to the impact function. In this case it is the threshold used to define
+	     what water level signals evacuation.
+
+In addition, there is a collection of text variables used for various levels of documentation of this impact function. They are ``synopsis``, ``actions``, ``detailed_description``, ``permissible_hazard_input``, ``permissible_exposure_input`` and ``limitation``. See examples below for more possible usages.
+
+Impact function algorithm
+.........................
+TBA
+
+
+.. _raster_raster:
+
+Impact function for raster hazard and raster exposure data
+----------------------------------------------------------
+
+The example below is a simple impact function that calculates an
+expected number of people in need of evacuation in a flood event as
+well as an estimate of supplies required.
 
 Import section
 ..............
@@ -107,32 +202,17 @@ The impact function itself is embodied in a Python class with a doc string:
                       'consensus, not hard evidence.')
 
         parameters = {'threshold': 1.0}
-    """
 
-The class name ``FloodPopulationEvacuationFunction`` is used to uniquely identify
-this impact function
-and it is important to make sure that no two impact functions share the same class name.
-If they do, one of them will be ignored.
 
-The impact function class must inherit by the class ``FunctionProvider`` which is what will
-make it part of the InaSAFE system.
+The class name ``FloodPopulationEvacuationFunction`` is used to uniquely
+identify this impact function and it is important to make sure that no
+two impact functions share the same class name. If they do, one of them
+will be ignored.
 
-The doc string can contain any text documenting the impact function, but it must contain
-some special symbols recognised by InaSAFE. They are
+The doc string defines the author, the rating and the requirements that input layers must fulfil for this impact function. In this case, there must be a hazard layer with subcategory of either 'flood' or 'tsunami', with layertype being 'raster' and unit of meters. The other input must be tagged as 'exposure' with subcategory 'population' and also having layertype 'raster'. Except for layertype which is automatically inferred by InaSAFE all other keywords must be specified with each layer e.g. by using the InaSAFE keyword editor or by manually editing the keywords file. See also :ref:`keywords_system`.
 
-:author: Name of the individual or organisation who wrote the impact function
-:rating: A numeric rating from 1 to 4 signifying a quality rating of the function. This is used in conjunction with similar ratings of input layers and combined into a rating of the resulting impact layer. The idea is that a final result is never better than the worst of the inputs and the calculation.
-:param requires: This is a list of keyword value pairs that input layers must fulfil for this impact function. In this case, there must be a hazard layer with subcategory of either 'flood' or 'tsunami', with layertype being 'raster' and unit of meters. The other input must be tagged as 'exposure' with subcategory 'population' and also having layertype 'raster'. Except for layertype which is automatically inferred by InaSAFE all other keywords must be specified with each layer e.g. by using the InaSAFE keyword editor or by manually editing the keywords file. For more information about keywords please refer to :ref:`keywords_system`.
+The rest of this section comprise the documentation variables and the parameters dictionary which in this case makes one variable available for interactive modification from the user interface. In this case, the threshold used to determine whether people should be evacuated is made configurable. The default value is set to 1m.
 
-Following the docstrings are a collection of variables that define and document the impact function. They are
-
-:title: Specifies the title of the impact function as displayed in the InaSAFE user interface
-:parameters: A (possibly ordered) dictionary of parameters that can be configured from the
-             user interface. Anything listed here can be modified at runtime by clicking the pencil
-	     symbol next to the impact function. In this case it is the threshold used to define
-	     what water level signals evacuation.
-
-In addition, there is a collection of text variables used for various levels of documentation of this impact function.
 
 Impact function algorithm
 .........................
@@ -201,7 +281,7 @@ The method ``get_data()`` returns an array if the layer is raster and takes two 
 :nan: Specify the value to use where nodata is available. In this case we use 0.0 as we only want to count hazard pixels with flooding and exposure pixels with non-zero population.
 :scaling: Optional argument controlling if data is to be scaled. In this case we set it to True which means that if the corresponding raster layer was resampled by InaSAFE, the values will be correctly scaled by the squared ratio between its current and native resolution.
 
-.. note:: # FIXME (Ole): Tim - how do we cross reference docstrings?
+.. note:: # FIXME (Ole): Tim - how do we cross reference docstrings? The problem is that we can't drop labels into them because they are auto-generated?
 
 See :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data for more details on
 the ``get_data()`` method.
@@ -370,6 +450,68 @@ and the legend defined in the style_info section is available in the layer view
 .. figure:: ../static/flood_population_evacuation_legend.png
    :scale: 30 %
    :align:   center
+
+.. _raster_vector:
+
+Impact function for raster hazard and vector (point or polygon) exposure data
+---------------------------------------------------------------
+
+The example below is a simple impact function that identifies which
+buildings (vector data) will be affected by earthquake ground shaking
+(raster data).
+
+
+TBA
+
+This function is available in full at :download:`../static/earthquake_building_impact_function.py`
+
+
+.. _vector_vector:
+
+Impact function for polygon hazard and vector point exposure data
+-----------------------------------------------------------------
+
+The example below is a simple impact function that identifies which
+buildings (vector data) will be affected by certain volcanic hazard areas (vector polygon data).
+
+
+TBA
+
+Assigning hazard values to exposure data
+----------------------------------------
+
+In many cases, there is a need to tag the exposure layer with values from the hazard layer in order to calculate the impact.
+Typical examples include interpolation from gridded hazard data to point data (interpolation), from polygon hazard data to point data or, indeed, from polygon data to gridded population data. InaSAFE provides one general mechanism for this purpose called ``assign_hazard_values_to_exposure_data''and it is typically called in the beginning of the impact function to generate an intermediate layer that has all information about both hazard and exposure. A call looks like:
+
+::
+
+   I = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name='depth')
+
+In this case H could be either raster or polygon vector data and E polygon or point vector data. In either case the result I
+represents the exposure data but with an additional attribute added containing the hazard level. If H is polygon data, all its attributes will
+be transferred to I. If H is raster_data and hence has only one value, that value will be assigned to a new attribute in I as specified by
+the keyword argument attribute_name - in this example 'depth'. See full documentation of this function in section :ref:`data_types`.
+
+
+
+
+
+Deploying new impact functions
+------------------------------
+
+To make a new impact function visible to InaSAFE it has to be placed in a subdirectory under
+safe/impact_functions relative to where it is installed. This will typically be something like
+.qgis/python/plugins/inasafe.
+
+There are a number of subdirectories with existing impact functions organised by hazard.
+The new impact function can use either of them or be located in a new subdirectory with
+the same __init_.py file as the existing ones.
+
+Next time InaSAFE is loaded, the new impact function will be included and provided its
+keywords match those of the input layers it will be available to run.
+
+
 
 
 .. _requires:
