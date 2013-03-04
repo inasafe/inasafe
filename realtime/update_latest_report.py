@@ -28,8 +28,9 @@ LOGGER = logging.getLogger('InaSAFE')
 try:
     earth_quake_source_path = os.environ['EQ_SOURCE_PATH']
     earth_quake_public_path = os.environ['EQ_PUBLIC_PATH']
+    earth_quake_guide_path = os.environ['EQ_GUIDE_PATH']
 except KeyError:
-    LOGGER.exception('QUAKE_SERVER_PASSWORD not set!')
+    LOGGER.exception('EQ_SOURCE_PATH or EQ_PUBLIC_PATH are not set!')
     sys.exit()
 
 
@@ -54,6 +55,21 @@ def get_event_id(report_filename):
     earthquake_impact_map_20120216181705.pdf
     """
     return report_filename[-18:-4]
+
+
+def filter_zip_eq_event(zip_eq_event):
+    """Return true if zip_eq_event in the following format:
+        YYYYBBDDhhmmss.out.zip
+        for example : 20130226211002.out.zip
+    """
+    expected_len = len('20130226211002.out.zip')
+    if len(zip_eq_event) != expected_len:
+        return False
+    my_event_id = zip_eq_event[:14]
+    if is_event_id(my_event_id):
+        return True
+    else:
+        return False
 
 
 def filter_eq_map(eq_map_path):
@@ -115,12 +131,12 @@ def update_report(my_source_path, my_public_path, last_event_id):
                                    'latest_earthquake_impact_map.png')
 
     # copy file
-    shutil.copy2(pdf_path, public_pdf_path)
-    print 'copied to ' + public_pdf_path
-    shutil.copy2(pdf_path, latest_pdf_path)
-    print 'copied to ' + latest_pdf_path
     shutil.copy2(png_path, latest_png_path)
     print 'copied to ' + latest_png_path
+    shutil.copy2(pdf_path, latest_pdf_path)
+    print 'copied to ' + latest_pdf_path
+    shutil.copy2(pdf_path, public_pdf_path)
+    print 'copied to ' + public_pdf_path
 
 
 def main():
@@ -128,10 +144,16 @@ def main():
     """
     source_path = earth_quake_source_path
     public_path = earth_quake_public_path
+    # guide path is a path that has list of event id to be pushed on the
+    # website. It's caused because there is a case where we don't want to
+    # push all realtime earthquake report, but only the important one.
+    # This path usually in the specific format and is used to get the latest
+    # event id
+    guide_path = earth_quake_guide_path
 
-    source_files = get_list_dir(source_path, is_event_id)
-    source_events = source_files
-    last_source = get_last_event_id(source_events)
+    guide_files = get_list_dir(guide_path, filter_zip_eq_event)
+    guide_events = [x[:14] for x in guide_files]
+    last_guide = get_last_event_id(guide_events)
 
     public_files = get_list_dir(public_path, filter_eq_map)
     print ' public_files', public_files
@@ -139,8 +161,8 @@ def main():
     print 'public_events', public_events
     last_public = get_last_event_id(public_events)
 
-    if last_source > last_public:
-        last_event_id = last_source
+    if last_guide > last_public:
+        last_event_id = last_guide
         print 'There is new eq impact map.'
         # do_something_here()
         update_report(source_path, public_path, last_event_id)
