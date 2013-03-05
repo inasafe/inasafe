@@ -30,11 +30,11 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     statistics_classes = [0, 1, 2, 3]
     title = tr('Be affected')
     parameters = OrderedDict([('low_threshold', 6),
-                  ('medium_threshold', 7),
-                  ('high_threshold', 8),
-                  ('postprocessors', OrderedDict([
-                      ('AggregationCategorical', {'on': True})]))
-    ])
+                              ('medium_threshold', 7),
+                              ('high_threshold', 8),
+                              ('postprocessors', OrderedDict([
+                              ('AggregationCategorical', {'on': True})]))
+                              ])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
@@ -52,28 +52,28 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         class_3 = tr('High')
 
         # Extract data
-        H = get_hazard_layer(layers)    # Depth
-        E = get_exposure_layer(layers)  # Building locations
+        my_hazard = get_hazard_layer(layers)    # Depth
+        my_exposure = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
+        question = get_question(my_hazard.get_name(),
+                                my_exposure.get_name(),
                                 self)
 
         # Define attribute name for hazard levels
         hazard_attribute = 'mmi'
 
         # Determine if exposure data have NEXIS attributes
-        attribute_names = E.get_attribute_names()
+        attribute_names = my_exposure.get_attribute_names()
         if ('FLOOR_AREA' in attribute_names and
             'BUILDING_C' in attribute_names and
-            'CONTENTS_C' in attribute_names):
+                'CONTENTS_C' in attribute_names):
             is_NEXIS = True
         else:
             is_NEXIS = False
 
         # Interpolate hazard level to building locations
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name=hazard_attribute)
+        I = assign_hazard_values_to_exposure_data(
+            my_hazard, my_exposure, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
         #attribute_names = I.get_attribute_names()
@@ -166,7 +166,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             table_body = [question,
                           TableRow([tr('Hazard Level'),
                                     tr('Buildings Affected')],
-                                    header=True),
+                          header=True),
                           TableRow([class_1, format_int(lo)]),
                           TableRow([class_2, format_int(me)]),
                           TableRow([class_3, format_int(hi)])]
@@ -175,11 +175,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         table_body.append(tr('High hazard is defined as shake levels greater '
                              'than %i on the MMI scale.') % t2)
         table_body.append(tr('Medium hazard is defined as shake levels '
-                             'between %i and %i on the MMI scale.')
-                             % (t1, t2))
+                             'between %i and %i on the MMI scale.') % (t1, t2))
         table_body.append(tr('Low hazard is defined as shake levels '
-                             'between %i and %i on the MMI scale.')
-                             % (t0, t1))
+                             'between %i and %i on the MMI scale.') % (t0, t1))
         if is_NEXIS:
             table_body.append(tr('Values are in units of 1 million Australian '
                                  'Dollars'))

@@ -48,8 +48,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Vector polygon layer of flood depth
-              P: Raster layer of population data on the same grid as H
+              my_hazard : Vector polygon layer of flood depth
+              my_exposure : Raster layer of population data on the same
+                            grid as my_hazard
 
         Counts number of people exposed to areas identified as flood prone
 
@@ -58,32 +59,32 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
           Table with number of people evacuated and supplies required
         """
         # Identify hazard and exposure layers
-        H = get_hazard_layer(layers)  # Flood inundation
-        E = get_exposure_layer(layers)
+        my_hazard = get_hazard_layer(layers)  # Flood inundation
+        my_exposure = get_exposure_layer(layers)
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
+        question = get_question(my_hazard.get_name(),
+                                my_exposure.get_name(),
                                 self)
 
         # Check that hazard is polygon type
-        if not H.is_vector:
+        if not my_hazard.is_vector:
             msg = ('Input hazard %s  was not a vector layer as expected '
-                   % H.get_name())
+                   % my_hazard.get_name())
             raise Exception(msg)
 
         msg = ('Input hazard must be a polygon layer. I got %s with layer '
-               'type %s' % (H.get_name(),
-                            H.get_geometry_name()))
-        if not H.is_polygon_data:
+               'type %s' % (my_hazard.get_name(),
+                            my_hazard.get_geometry_name()))
+        if not my_hazard.is_polygon_data:
             raise Exception(msg)
 
         # Run interpolation function for polygon2raster
-        P = assign_hazard_values_to_exposure_data(H, E,
+        P = assign_hazard_values_to_exposure_data(my_hazard, my_exposure,
                                                   attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
-        new_attributes = H.get_data()
+        new_attributes = my_hazard.get_data()
         category_title = 'affected'  # FIXME: Should come from keywords
         deprecated_category_title = 'FLOODPRONE'
         categories = {}
@@ -154,7 +155,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                      self.parameters['evacuation_percentage']
                      / 100.0)
 
-        total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
+        total = int(numpy.sum(my_exposure.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
         if total > 1000:
@@ -250,8 +251,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=new_attributes,
-                   projection=H.get_projection(),
-                   geometry=H.get_geometry(),
+                   projection=my_hazard.get_projection(),
+                   geometry=my_hazard.get_geometry(),
                    name=tr('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,

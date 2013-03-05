@@ -103,9 +103,9 @@ class ITBFatalityFunction(FunctionProvider):
             ('Age', {
                 'on': True,
                 'params': OrderedDict([
-                      ('youth_ratio', defaults['YOUTH_RATIO']),
-                      ('adult_ratio', defaults['ADULT_RATIO']),
-                      ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def fatality_rate(self, mmi):
         """
@@ -268,7 +268,7 @@ class ITBFatalityFunction(FunctionProvider):
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
                                  'units available for %s people?') %
-                                 format_int(fatalities))
+                              format_int(fatalities))
         if displaced > 0:
             table_body.append(tr('Are there enough shelters and relief items '
                                  'available for %s people?')
@@ -286,18 +286,18 @@ class ITBFatalityFunction(FunctionProvider):
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008'),
+                              'regulation 7/2008'),
                            tr('The fatality calculation assumes that '
-                             'no fatalities occur for shake levels below 4 '
-                             'and fatality counts of less than 50 are '
-                             'disregarded.')])
+                              'no fatalities occur for shake levels below 4 '
+                              'and fatality counts of less than 50 are '
+                              'disregarded.')])
 
-        impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('People in need of evacuation')
+        # impact_summary = Table(table_body).toNewlineFreeString()
+        # map_title = tr('People in need of evacuation')
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '
-                            'Institute of Teknologi Bandung 2012.'))
+                             'Institute of Teknologi Bandung 2012.'))
         table_body.append(tr('Population numbers rounded to nearest 1000.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()

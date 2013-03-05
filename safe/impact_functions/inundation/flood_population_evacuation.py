@@ -60,8 +60,7 @@ class FloodEvacuationFunction(FunctionProvider):
     permissible_hazard_input = tr('A hazard raster layer where each cell '
                                   'represents flood depth (in meters).')
     permissible_exposure_input = tr('An exposure raster layer where each '
-                                    'cell '
-                                    'represent population count.')
+                                    'cell represent population count.')
     limitation = tr('The default threshold of 1 meter was selected based on '
                     'consensus, not hard evidence.')
 
@@ -94,11 +93,11 @@ class FloodEvacuationFunction(FunctionProvider):
         """
 
         # Identify hazard and exposure layers
-        inundation = get_hazard_layer(layers)  # Flood inundation [m]
-        population = get_exposure_layer(layers)
+        my_hazard = get_hazard_layer(layers)  # Flood inundation [m]
+        my_exposure = get_exposure_layer(layers)
 
-        question = get_question(inundation.get_name(),
-                                population.get_name(),
+        question = get_question(my_hazard.get_name(),
+                                my_exposure.get_name(),
                                 self)
 
         # Determine depths above which people are regarded affected [m]
@@ -109,17 +108,17 @@ class FloodEvacuationFunction(FunctionProvider):
                'Expected thresholds to be a list. Got %s' % str(thresholds))
 
         # Extract data as numeric arrays
-        D = inundation.get_data(nan=0.0)  # Depth
+        D = my_hazard.get_data(nan=0.0)  # Depth
 
         # Calculate impact as population exposed to depths > max threshold
-        P = population.get_data(nan=0.0, scaling=True)
+        P = my_exposure.get_data(nan=0.0, scaling=True)
 
         # Calculate impact to intermediate thresholds
         counts = []
         for i, lo in enumerate(thresholds):
             if i == len(thresholds) - 1:
                 # The last threshold
-                I = M = numpy.where(D >= lo, P, 0)
+                my_impact = M = numpy.where(D >= lo, P, 0)
             else:
                 # Intermediate thresholds
                 hi = thresholds[i + 1]
@@ -205,8 +204,8 @@ class FloodEvacuationFunction(FunctionProvider):
         # Generate 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
         # as imported
-        classes = numpy.linspace(numpy.nanmin(I.flat[:]),
-                                 numpy.nanmax(I.flat[:]), 8)
+        classes = numpy.linspace(numpy.nanmin(my_impact.flat[:]),
+                                 numpy.nanmax(my_impact.flat[:]), 8)
 
         # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
@@ -230,9 +229,9 @@ class FloodEvacuationFunction(FunctionProvider):
         style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return
-        R = Raster(I,
-                   projection=inundation.get_projection(),
-                   geotransform=inundation.get_geotransform(),
+        R = Raster(my_impact,
+                   projection=my_hazard.get_projection(),
+                   geotransform=my_hazard.get_geotransform(),
                    name=tr('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
