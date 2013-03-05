@@ -1,0 +1,335 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 07275858f5d042688f18b3bf805e12bd
+#: ../../source/api-docs/safe/common/tables.rst:6
+msgid "Module:  safe.common.tables"
+msgstr ""
+
+# 05593638b1144ccfb7b13e86a213da7b
+#: ../../../safe/common/tables.py:docstring of safe.common.tables:1
+msgid "tables.py - v0.04 2009-07-28 Philippe Lagadec"
+msgstr ""
+
+# fbcbfdaebe6e45cbb17a52da1d4a74db
+#: ../../../safe/common/tables.py:docstring of safe.common.tables:3
+msgid ""
+"This module provides a few classes to easily generate HTML code such as "
+"tables and lists."
+msgstr ""
+
+# 945583595b0548218b2b613a572bec9b
+#: ../../../safe/common/tables.py:docstring of safe.common.tables:6
+msgid "Project website: http://www.decalage.info/python/html"
+msgstr ""
+
+# 892ea2e936164e038b13ad4985e03f70
+#: ../../../safe/common/tables.py:docstring of safe.common.tables:9
+msgid "http://www.cecill.info"
+msgstr ""
+
+# e80393f491a947a0865f263ce8b8597e
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.List:1
+msgid ""
+"a List object is used to create an ordered or unordered list in HTML. (UL/OL "
+"tag)"
+msgstr ""
+
+# c53c4d6bc71f4338817eaeb6e313deb4
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.List:4
+msgid ""
+"Attributes: - lines: list, tuple or any iterable, containing one string for "
+"each line - ordered: bool, choice between an ordered (OL) or unordered list "
+"(UL) - attribs: dict, additional attributes for the OL/UL tag"
+msgstr ""
+
+# 41f95077f5f24a919afa9c2d11a4ba6c
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.List:9
+msgid "Reference: http://www.w3.org/tr/html4/struct/lists.html"
+msgstr ""
+
+# b1ea322c9d564675a40c7e9725e0ee2e
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:1
+msgid "a Table object is used to create a HTML table. (table tag)"
+msgstr ""
+
+# 9a6e3bb94f574603b1091ead99d085cf
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:3
+msgid ""
+"Attributes: - rows: list, tuple or any iterable, containing one iterable or "
+"TableRow"
+msgstr ""
+
+# 6936be82832244169cbf065e95794e81
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:5
+msgid "object for each row"
+msgstr ""
+
+# ec3379b57f194546b62d22e2e230c37d
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:6
+msgid ""
+"header_row: list, tuple or any iterable, containing the header row (optional)"
+msgstr ""
+
+# 5cfa38c914bc46f59e543ab36cbc27f9
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:8
+msgid "class: str, CSS class to use. Defaults to DEFAULT_TABLE_CLASS"
+msgstr ""
+
+# 69dedb144c8140aab74689db0636182a
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:9
+msgid "caption: str, caption for the table"
+msgstr ""
+
+# f4e05ec1bdfa48e59f1a0c871799a199
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:10
+msgid "border: str or int, border width"
+msgstr ""
+
+# 1de3c16f98ff4d1482ef20ee06b08253
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:11
+msgid "style: str, table style in CSS syntax (thin black borders by default)"
+msgstr ""
+
+# 29bcfb381bf94b59b1f2054f84f41c1f
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:12
+msgid "width: str, width of the table on the page"
+msgstr ""
+
+# cd917f15f0ef42b4a5b9c9f19eceb5bf
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:13
+msgid "attribs: dict, additional attributes for the table tag"
+msgstr ""
+
+# 1fa9d0d8f9114b3cb56bed5a075801a6
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:14
+msgid "col_width: list or tuple defining width for each column"
+msgstr ""
+
+# 2b8bc2ca7d4347559ab847faf50027c8
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:15
+msgid "col_align: list or tuple defining horizontal alignment for each column"
+msgstr ""
+
+# be8fe693a9764eab995de328fd1ee7ef
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:16
+msgid "col_char: list or tuple defining alignment character for each column"
+msgstr ""
+
+# f514dedb78354a289f70d4f6ab2ccb37
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:17
+msgid "col_charoff: list or tuple defining charoff attribute for each column"
+msgstr ""
+
+# c25c6ef1ca8b44bba5853d3cc857f919
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:18
+msgid "col_valign: list or tuple defining vertical alignment for each column"
+msgstr ""
+
+# 3da83c271c8242bf8a6247b1611e0723
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:19
+msgid "col_styles: list or tuple of HTML styles for each column"
+msgstr ""
+
+# 97bcbe390da24ed5a1144dfa8ca07142
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.Table:21
+msgid "Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.1"
+msgstr ""
+
+# 7b8923d2594a49efab16866032e50880
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:1
+msgid "Return a list contains all element in col-th column Args:"
+msgstr ""
+
+# a997a5b78d6b45d38e681ce07be69d8c
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:3
+msgid "col = number columnn"
+msgstr ""
+
+# 0667a78a72e54a4aa8e009a5d69aeb3e
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:4
+msgid "header = if False, doesn't include the header"
+msgstr ""
+
+# 9228f9c84e494c6396d24a41c8e7c107
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:6
+msgid "list of string represent each element"
+msgstr ""
+
+# d0d4ea4fec5e467f8d8187ac920af69b
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:8
+msgid ""
+"If there is not column number col in a row, it will be represent as empty "
+"string ''"
+msgstr ""
+
+# 33b2316f886243c9994f26c5605abad7
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.toNewlineFreeString:1
+msgid "Return a string representation of the table which contains no newlines."
+msgstr ""
+
+# a6a6bea9997a4859b35a55310edadfcf
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.toNewlineFreeString:4
+msgid "any preformatted <pre> blocks will be adversely affected by this."
+msgstr ""
+
+# 4487657588d043469ea5048ec2ed838e
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:1
+msgid "a TableCell object is used to create a cell in a HTML table. (td or th)"
+msgstr ""
+
+# 1b59ac26cbc44d7697196dd62b617810
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:3
+msgid ""
+"Attributes: - text: text in the cell (may contain HTML tags). May be any "
+"object which"
+msgstr ""
+
+# 0895f4d15eed4dd89a2c2f8e491d90f8
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:5
+msgid "can be converted to a string using str()."
+msgstr ""
+
+# 543f240af2c34a6bb2caed167c4cc914
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:6
+msgid ""
+"header: bool, false for a normal data cell (td), true for a header cell (th)"
+msgstr ""
+
+# 8df7f7ba61514e5bb02714eb18d0d3da
+# 7e8275422cdc4b78b3bbb5d27790db55
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:8
+#: safe.common.tables.TableRow:8
+msgid "bgcolor: str, background color"
+msgstr ""
+
+# 32d3fea5dc6d4cc08217784d8008626d
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:9
+msgid "width: str, width"
+msgstr ""
+
+# 503d9005966241eca0c59c768eea6bb9
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:10
+msgid ""
+"align: str, horizontal alignement (left, center, right, justify or char)"
+msgstr ""
+
+# 988f096a1b6845c39b8835d880d0ba64
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:11
+msgid "char: str, alignment character, decimal point if not specified"
+msgstr ""
+
+# 45d31770a2c5411794211c72e7cc73f4
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:12
+msgid "charoff: str, see HTML specs"
+msgstr ""
+
+# 991bdf2034534b898b20ff2212f5d4a5
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:13
+msgid "valign: str, vertical alignment (top|middle|bottom|baseline)"
+msgstr ""
+
+# 92d2d0d5191445308959f0bf95dd07b0
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:14
+msgid "style: str, CSS style"
+msgstr ""
+
+# 3c56155deaf34d4a9eebca57bc975b6a
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:15
+msgid "attribs: dict, additional attributes for the td/th tag"
+msgstr ""
+
+# 0cec5c9aabd34b02a83416fd1cf91e28
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableCell:17
+msgid "Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.6"
+msgstr ""
+
+# 21ab88e3001d4a4fa8efb73e049896e8
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableRow:1
+msgid "a TableRow object is used to create a row in a HTML table. (tr tag)"
+msgstr ""
+
+# 6d84461bbc564b9e8d1182e6198083fe
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableRow:3
+msgid ""
+"Attributes: - cells: list, tuple or any iterable, containing one string or "
+"TableCell"
+msgstr ""
+
+# a1889cac9a584f2e9f72d69bf90cca39
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableRow:5
+msgid "object for each cell"
+msgstr ""
+
+# 376492bf248c489199021f9a40671572
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableRow:6
+msgid ""
+"header: bool, true for a header row (th), false for a normal data row (td)"
+msgstr ""
+
+# a7d0795898e9435186d53b858b5b79aa
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableRow:9
+msgid ""
+"col_align, col_valign, col_char, col_charoff, col_styles: see Table class"
+msgstr ""
+
+# ef9e154737b648ab93e72c0213d49fa8
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableRow:10
+msgid "attribs: dict, additional attributes for the tr tag"
+msgstr ""
+
+# fbdc095a276b429b82eb871b4b70a41d
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.TableRow:12
+msgid "Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.5"
+msgstr ""
+
+# 14e59fa2ed69481289ddae461c3697a9
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow.apply_properties:1
+msgid "Apply properties to the row"
+msgstr ""
+
+# 541fa625e489407483c8cda65d9422cc
+#: ../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow.column_count:1
+msgid "Return the number of columns in this row"
+msgstr ""
+
+# 7be4c226fa3d463f88b352a8138bac1a
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.htmllist:1
+msgid "return HTML code for a list as a string. See List class for parameters."
+msgstr ""
+
+# 878ed77700c241288325dce1212ee2d3
+#: ../../../safe/common/tables.py:docstring of safe.common.tables.table:1
+msgid ""
+"return HTML code for a table as a string. See Table class for parameters."
+msgstr ""
+
+# ddd19d074be0468da7a117865a0843c9
+#: ../../source/api-docs/safe/common/tables.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

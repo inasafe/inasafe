@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 0f2d300a26e14bd09ac94ebf067e163b
+#: ../../source/api-docs/safe/storage/projection.rst:6
+msgid "Module:  safe.storage.projection"
+msgstr ""
+
+# 82fb086caed444deb3734de0d2c731dc
+#: ../../../safe/storage/projection.py:docstring of safe.storage.projection:1
+msgid "**Class projection**"
+msgstr ""
+
+# c89d4a72bc24419bb26051d53949400b
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection:1
+msgid "Represents projections associated with layers"
+msgstr ""
+
+# bc359a2e19984bd6a7c68e499cb3d4f4
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection.get_projection:1
+msgid "Return projection"
+msgstr ""
+
+# 99cabd5b4f70452ab6909e830453403b
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection.get_projection:5
+msgid "If False (default) projection will be returned in WKT format"
+msgstr ""
+
+# 11366b0cc8dd4464a9bc96c458571531
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection.get_projection:9
+msgid ""
+"To compare projections, use the __eq__ method directly on the projection "
+"objects: E.g. self.projection == other.projection"
+msgstr ""
+
+# 69fd0c341d2d4632b4138439b0eaf1d9
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.proj4_to_dict:1
+msgid ""
+"Helper to turn a proj4 string into a dictionary for ease of comparison See "
+"issue #304"
+msgstr ""
+
+# bafdb1e929d045b997ab6bd4c23d56da
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.proj4_to_dict:5
+msgid "P: proj4 string, such as +proj=longlat +ellps=WGS84 +no_defs"
+msgstr ""
+
+# 9659c582b58a468aa4f40fa3c5639e78
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.proj4_to_dict:9
+msgid "'+ellps': 'WGS84', '+no_defs': ''}"
+msgstr ""
+
+# 35418c83870a474d946aa62b96bf0ef1
+#: ../../source/api-docs/safe/storage/projection.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

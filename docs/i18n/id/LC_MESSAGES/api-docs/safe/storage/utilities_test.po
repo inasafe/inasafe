@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 608864f670fc4a17b740df363c95cfe8
+#: ../../source/api-docs/safe/storage/utilities_test.rst:6
+msgid "Module:  safe.storage.utilities_test"
+msgstr ""
+
+# 4d7ddb23e5344d919e51ae8d236a30d8
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test:1
+msgid "**Utilities to to support test suite**"
+msgstr ""
+
+# d54c7d8fe1cf418c9ae74b7f39fc7148
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:1
+msgid "Check that public methods of X and Y are the same."
+msgstr ""
+
+# cdb4576777c24d99906e98d3f5ca6a61
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:4
+msgid "X, Y: Python objects"
+msgstr ""
+
+# 3a82ca90ada64fc08d259ed535bab0ab
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:5
+msgid "exclude: List of names to exclude from comparison or None"
+msgstr ""
+
+# 8f0c0457d0ac48c9a5e20543a9633bf0
+#: ../../source/api-docs/safe/storage/utilities_test.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# e2e08a3f5e434ba7a35d19b3d45ed0f4
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing."
+"unspecific_building_impact_model"
+msgstr ""
+
+# ab925322dedf41e180f0da317b508b9c
+#: ../../../safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.unspecific_building_impact_model.EarthquakeBuildingDamageFunction:1
+msgid "Risk plugin for earthquake damage to buildings"
+msgstr ""
+
+# 44d4561bade24932b284cbe42169b77c
+#: ../../../safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.unspecific_building_impact_model.EarthquakeBuildingDamageFunction:3
+msgid ""
+":param requires category=='hazard' and                     subcategory."
+"startswith('earthquake') and                     layertype=='raster' :param "
+"requires category=='exposure' and                     "
+"subcategory=='structure'"
+msgstr ""
+
+# c9e995a933df499faa915fde3535002e
+#: ../../../safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.unspecific_building_impact_model.EarthquakeBuildingDamageFunction.run:1
+msgid "Risk plugin for earthquake school damage"
+msgstr ""
+
+# cfc7486afbae47af85168419437b4b10
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

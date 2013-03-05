@@ -1,0 +1,908 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 98b4208903e44a5a960d2e3ba57a0a51
+#: ../../source/developer-docs/preparing_a_release.rst:7
+msgid "Preparing a release"
+msgstr ""
+
+# dd5b4841aa224deaa9d863b43ddc1a2c
+#: ../../source/developer-docs/preparing_a_release.rst:9
+msgid ""
+"This document outlines the steps that need to be carried out in order to "
+"issue a new release of the |project_name| plugin. The steps can be outlined "
+"as follows and are described in detail below:"
+msgstr ""
+
+# 97aa28185e8d47018d4b27d4ba1db6f8
+#: ../../source/developer-docs/preparing_a_release.rst:13
+msgid "Identify what version number the new release will be assigned."
+msgstr ""
+
+# 90b45b8250e647ba956f39a7ec7032f6
+#: ../../source/developer-docs/preparing_a_release.rst:14
+msgid "Close all issues marked as blockers for the release."
+msgstr ""
+
+# 447bfed130914683ac9ef44a241b1cee
+#: ../../source/developer-docs/preparing_a_release.rst:15
+msgid "If needed, create a release branch"
+msgstr ""
+
+# 6d6a4604a4be4d70a814aedeb53cbac1
+#: ../../source/developer-docs/preparing_a_release.rst:16
+msgid "Update all source files to the new version number."
+msgstr ""
+
+# dbd1f93387364b3d8cd734fe350a7424
+#: ../../source/developer-docs/preparing_a_release.rst:17
+msgid "Update all source files for PEP8 and PEP257 compliance."
+msgstr ""
+
+# 2e0d76429f5540a9a69b712118c3a405
+#: ../../source/developer-docs/preparing_a_release.rst:18
+msgid "Ensure no assert statements are critical to code flow"
+msgstr ""
+
+# 9a16d6ceed9c4beea91bb8411abe1282
+#: ../../source/developer-docs/preparing_a_release.rst:19
+msgid "Ensure that Qt resources and user interface files have been compiled"
+msgstr ""
+
+# 31024e2473fb490d96321814eb84dfa8
+#: ../../source/developer-docs/preparing_a_release.rst:20
+msgid "Ensure that user interface files meet HIG compliance"
+msgstr ""
+
+# db42758274a94d4aa864fdc9bb1c5784
+#: ../../source/developer-docs/preparing_a_release.rst:21
+msgid ""
+"Enure all unit tests complete successfully and that tests that are expected "
+"to fail are documented."
+msgstr ""
+
+# 980c6a42244c4625bf731921613c18ae
+#: ../../source/developer-docs/preparing_a_release.rst:23
+msgid "Ensure that user acceptance testing has been carried out."
+msgstr ""
+
+# d8bd71a6d2e64b6ea43cc7ca98861a37
+#: ../../source/developer-docs/preparing_a_release.rst:24
+msgid ""
+"Ensure that all translation string lists have been updated and that the "
+"translation process has been carried out."
+msgstr ""
+
+# 24505add9e94479e82e309443b01978e
+#: ../../source/developer-docs/preparing_a_release.rst:26
+msgid "Ensure that all new and existing features are adequately documented."
+msgstr ""
+
+# d789b3d4480f4c43b491748b9f06a09b
+#: ../../source/developer-docs/preparing_a_release.rst:27
+msgid "Ensure that the API documentation is up to date."
+msgstr ""
+
+# 4f4a658220b4426c9ceac835e5d6a897
+#: ../../source/developer-docs/preparing_a_release.rst:28
+msgid "Update the changelog."
+msgstr ""
+
+# 607630470a2c4c98a3b18be0a5a75f59
+#: ../../source/developer-docs/preparing_a_release.rst:29
+msgid "Ensure that the sphinx documentation is compiled."
+msgstr ""
+
+# 23ba67ed48584b738d11277403c078e3
+#: ../../source/developer-docs/preparing_a_release.rst:30
+msgid "Generate python optimsed (.pyo) files for all sources."
+msgstr ""
+
+# b1cce68edbf4458bbb81965b11bae980
+#: ../../source/developer-docs/preparing_a_release.rst:31
+msgid "Update the plugin metadata to reflect current version."
+msgstr ""
+
+# 895e9a520071408ab05d968ed1cf3ba8
+#: ../../source/developer-docs/preparing_a_release.rst:32
+msgid "Generate a test package and validate in a clean room environment."
+msgstr ""
+
+# 00fd8dce1b9f412093f528bb0d8fbf9c
+#: ../../source/developer-docs/preparing_a_release.rst:33
+msgid "Optionally branch the release in the revision control system."
+msgstr ""
+
+# 965a208a052d41d5a4ebe7af57ab95c6
+#: ../../source/developer-docs/preparing_a_release.rst:34
+msgid "Tag the release in the revision control system."
+msgstr ""
+
+# f981b39a7379489dbd86813c4c23000e
+# 9c678feb3d2546979c34c6f9e998687a
+#: ../../source/developer-docs/preparing_a_release.rst:35
+#: ../../source/developer-docs/preparing_a_release.rst:441
+msgid ""
+"Upload the updated package zip file to old QGIS python plugin repository."
+msgstr ""
+
+# 8665eba69049422eafaa92426cbec0b1
+# 766bed3f1d3545468fa2002a0f12b32c
+#: ../../source/developer-docs/preparing_a_release.rst:36
+#: ../../source/developer-docs/preparing_a_release.rst:442
+msgid ""
+"Upload the updated package zip file to the new QGIS python plugin repository."
+msgstr ""
+
+# 04e5bbf9774e4e1a8f7f6674a6e4bc33
+#: ../../source/developer-docs/preparing_a_release.rst:37
+msgid "Make announcements and press releases as needed."
+msgstr ""
+
+# a422cbadf73448d99b85771509972775
+#: ../../source/developer-docs/preparing_a_release.rst:41
+msgid "Release numbering"
+msgstr ""
+
+# 29cc3fff9bb44ae89281a7543bb7233b
+#: ../../source/developer-docs/preparing_a_release.rst:43
+msgid ""
+"|project_name| will follow the `semantic versioning system <http://semver."
+"org/>`_. Simply put, the following scheme should be applied to version "
+"numbers:"
+msgstr ""
+
+# e4938133095a421b88c114dcbe693e7a
+#: ../../source/developer-docs/preparing_a_release.rst:49
+msgid "Version Increment"
+msgstr ""
+
+# 76fa71337aab47b3bd2955944cc64e71
+#: ../../source/developer-docs/preparing_a_release.rst:49
+msgid "Intention"
+msgstr ""
+
+# 8a93b69410cc4586815bb50e3bd5c15e
+#: ../../source/developer-docs/preparing_a_release.rst:51
+msgid "Major e.g 1.0.0"
+msgstr ""
+
+# 6511b99613534dc89ac891836de4fe5d
+#: ../../source/developer-docs/preparing_a_release.rst:51
+msgid "API incompatibility with the previous major release."
+msgstr ""
+
+# 75f22d46eeca4b0bbccfb2c31e2bee0c
+#: ../../source/developer-docs/preparing_a_release.rst:52
+msgid "Minor e.g. 1.1.0"
+msgstr ""
+
+# 4224867059004003b01dfcb2ef20b8a6
+#: ../../source/developer-docs/preparing_a_release.rst:52
+msgid "API compatibility and extension over previous minor release."
+msgstr ""
+
+# fa52fc1ee200427f9272b924c1631e58
+#: ../../source/developer-docs/preparing_a_release.rst:53
+msgid "Point e.g. 1.1.1"
+msgstr ""
+
+# bc7b86b4fa37428ea21e4bfe6ba7a93d
+#: ../../source/developer-docs/preparing_a_release.rst:53
+msgid "API compatibility, bug fixes for previous point release."
+msgstr ""
+
+# a890927d624345d39eb94093280171af
+#: ../../source/developer-docs/preparing_a_release.rst:54
+msgid "Alpha e.g. 1.0.0a"
+msgstr ""
+
+# 3d2040b8d109480da3506cdcf43fbaa0
+#: ../../source/developer-docs/preparing_a_release.rst:54
+msgid "Feature incomplete preview of a minor or major release"
+msgstr ""
+
+# fef10dd0b27b49ae9c0f9c1cdfe98325
+#: ../../source/developer-docs/preparing_a_release.rst:55
+msgid "RC e.g. 1.1.0rc1"
+msgstr ""
+
+# b8eefd3d05ba40f38a4747aa5e54aad1
+#: ../../source/developer-docs/preparing_a_release.rst:55
+msgid "Feature complete preview of a minor or major release"
+msgstr ""
+
+# e460ea81e85f45489efba35fabad686a
+#: ../../source/developer-docs/preparing_a_release.rst:58
+msgid ""
+"To identify the next release number, the table above can simply be appled. "
+"Here are a couple of examples."
+msgstr ""
+
+# 0df2359bb0c3422aa863a8180e5efcbc
+#: ../../source/developer-docs/preparing_a_release.rst:61
+msgid ""
+"You have fixed various bugs without adding new features or breaking the API, "
+"and you are ready to immediately publish your work. Result: **New point "
+"release.**"
+msgstr ""
+
+# 91cae9f6522f42508d66c2428c049475
+#: ../../source/developer-docs/preparing_a_release.rst:64
+msgid ""
+"You have implemented many new features, some of which required breaking API "
+"compatibility with the existing major release. Now you would like to make a "
+"public preview of your work before committing to a final release. Result: "
+"**New major release candidate.**"
+msgstr ""
+
+# 316512a71f6c4a6ab17f98c3c4d1d60a
+#: ../../source/developer-docs/preparing_a_release.rst:70
+msgid "**Outcome:** A version number for the next release eg. 0.1.0."
+msgstr ""
+
+# 4149a3598259442a9358ae33570e5633
+#: ../../source/developer-docs/preparing_a_release.rst:73
+msgid "Issue completion"
+msgstr ""
+
+# 337d12bdf5a045448d3c0550e01d7ed1
+#: ../../source/developer-docs/preparing_a_release.rst:75
+msgid ""
+"Having determined the release number, you should use the GitHub *labels* "
+"capability to assign a label matching the release to each blocking ticket. "
+"There is no fixed rule on which tickets should be tagged for the release - "
+"the best judgment of developers and managers should be used based on "
+"severity of issues, available time to deadline, budget etc."
+msgstr ""
+
+# ff88424a5dae4a8a9ce34a97fc6adc9e
+#: ../../source/developer-docs/preparing_a_release.rst:81
+msgid ""
+"**Outcome:** At the end of  this step all `issues <https://github.com/AIFDR/"
+"inasafe/issues>`_ tagged for the release should be closed."
+msgstr ""
+
+# 72ba40ed5c304858a8e8a0c0625d6771
+#: ../../source/developer-docs/preparing_a_release.rst:86
+msgid "Branching"
+msgstr ""
+
+# 133864feec31440db3f8e180b1703557
+#: ../../source/developer-docs/preparing_a_release.rst:88
+msgid ""
+"Branching is requred for Major and Minor releases. The process of branching "
+"is described in :doc:`version_control` whose accompanying illustration is "
+"repeated below for your convenience:"
+msgstr ""
+
+# 65b836aa80b44c99bf0463f87e56c59d
+#: ../../source/developer-docs/preparing_a_release.rst:95
+msgid ""
+"The purpose of creating a branch is to isolate incompatible and possibly "
+"unstable changes that take place in the *master branch* from stable code "
+"that forms the basis of a release. You will note from the diagram above that "
+"branches are named after the minor version, and are tagged with the point "
+"version at the point of release."
+msgstr ""
+
+# cad80237ea9a441194dca82ddf635d06
+#: ../../source/developer-docs/preparing_a_release.rst:101
+msgid ""
+"**Outcome:** If needed, create a release branch which provides a 'known "
+"good' version that can be returned to at any point in time."
+msgstr ""
+
+# 5efa1994fc6048da8d50235950c3f0cb
+#: ../../source/developer-docs/preparing_a_release.rst:105
+msgid "Updating the source version number"
+msgstr ""
+
+# 3f5b67d6cba94d869c54da69652bd90b
+#: ../../source/developer-docs/preparing_a_release.rst:107
+msgid ""
+"In the preample to any source file there should be a standard header as "
+"described in the :doc:`coding_standards` document. Included in this header "
+"section is the version number e.g.::"
+msgstr ""
+
+# 3b77e2f76c014a13a7820f05bb944f2b
+#: ../../source/developer-docs/preparing_a_release.rst:113
+msgid ""
+"This number should be updated in every source file prior to release. Under "
+"linux this can easily be done using the :command:`rpl` command (which can "
+"easily be installed (by doing for example :command:`sudo apt-get install "
+"rpl`)."
+msgstr ""
+
+# cf06ba245e214b3baef02b956d6c5d39
+#: ../../source/developer-docs/preparing_a_release.rst:117
+msgid ""
+"Using th example above, to update version numbers for minor release '0.1.1' "
+"you could issue the following command at the root of the plugin source tree::"
+msgstr ""
+
+# cbb6784c031043fa9d109f3d8d61076a
+#: ../../source/developer-docs/preparing_a_release.rst:122
+msgid ""
+"**Outcome::** Every source file should be updated to indicate the version "
+"number."
+msgstr ""
+
+# 4eedea7ace224e64985680740d2c45cd
+#: ../../source/developer-docs/preparing_a_release.rst:125
+msgid "PEP8 and PEP257 compliance"
+msgstr ""
+
+# 61a6dcec685841c7af17413c735686bd
+#: ../../source/developer-docs/preparing_a_release.rst:127
+msgid ""
+"These **Python Enhancement Proposals** (PEP) relate to the formatting of "
+"python source code. In particular they mandate spacing, layout, line lengths "
+"and so on. The outcome of PEP8 and PEP257 compliance is code that is "
+"consistently formatted accross the whole code base, regardless of authorship."
+msgstr ""
+
+# 172c727e0fe245c898117472f8b0ceaf
+#: ../../source/developer-docs/preparing_a_release.rst:132
+msgid ""
+"This consistency makes it easier to incorporate new members into the project "
+"team and to collaborate effectively within the team. A number of tools are "
+"available to help you to identify PEP8 and PEP257 transgressions, and there "
+"is a Makefile target (:command:`make pep8` which will do a PEP8 test for "
+"you). Under the Eclipse/PyDev IDE, there is also on the fly checking support "
+"which can be enabled and that will notify you of any compliance issues as "
+"illutrated in the screenshot below."
+msgstr ""
+
+# 30fc7985a6104e1dba4970ffac06e556
+#: ../../source/developer-docs/preparing_a_release.rst:144
+msgid "**Outcome:** All source files for PEP8 and PEP257 compliance."
+msgstr ""
+
+# 1183bd269fbc4f1caf81df3ed1635013
+#: ../../source/developer-docs/preparing_a_release.rst:147
+msgid "Check for assert statements"
+msgstr ""
+
+# 5fd37bd769ea4a3e83d6b986f78cc3a0
+#: ../../source/developer-docs/preparing_a_release.rst:149
+msgid ""
+"Using assert to raise exceptions in non test code can have bad side effects "
+"because if python is run in optimised mode e.g. python -O, these lines are "
+"ignored and the program logic will no longer work as expected. On some "
+"platforms the use of python optimised code is mandated and we are likely to "
+"get hard to investigate bug reports from end users at some unspecified point "
+"in the future."
+msgstr ""
+
+# 80417aa0d39b434989aee65bb179e224
+#: ../../source/developer-docs/preparing_a_release.rst:156
+msgid ""
+"This is a 'soft' requirement - since the python code for the plugin will be "
+"executed by the QGIS python internals, we can be fairly certain that python "
+"code will be executed with out the -O optimisation option for the short term."
+msgstr ""
+
+# 2d3ccb45390e4945ada4d16a86dd4aaa
+#: ../../source/developer-docs/preparing_a_release.rst:161
+msgid "**Outcome:** No assert statements used to control logic flow."
+msgstr ""
+
+# bdf718594a1c4d7ebadc822663962072
+#: ../../source/developer-docs/preparing_a_release.rst:164
+msgid "Compile Qt resources and user interface files"
+msgstr ""
+
+# 2d252cb3a28f466c8e855f3fd8e05c6b
+#: ../../source/developer-docs/preparing_a_release.rst:166
+msgid ""
+"The Qt4 resource and user interface definition files supplied with Risk in a "
+"Box need to be compiled before they can be deployed. There are two utility "
+"functions provided by Qt4 for this purpose:"
+msgstr ""
+
+# f5e1681291c04d459e33f1f62ba3fbdd
+#: ../../source/developer-docs/preparing_a_release.rst:170
+msgid ""
+":command:`pyuic4` - A tool to compile Qt4 user interface definition files (."
+"ui) into python source code. The .ui files contain xml which describes the "
+"placement of widgets within a user interface file."
+msgstr ""
+
+# c40cbbb39d064974b21de6b5040d0126
+#: ../../source/developer-docs/preparing_a_release.rst:173
+msgid ""
+":command:`pyrcc4` - A tool to compile Qt4 resource files into python source "
+"code. Qt4 resources are 'in-code' representations of application resources "
+"needed at run time. These include images, icons, html, css etc. - whatever "
+"the application may need to use at runtime without resorting to retrieving "
+"assets from the filesystem."
+msgstr ""
+
+# b3f2ca80bc1942a3a05f1a770eb17827
+#: ../../source/developer-docs/preparing_a_release.rst:179
+msgid ""
+"The compilation of these resources if the default make target in the root "
+"and *gui* python package. To compile them simply do::"
+msgstr ""
+
+# 23ff1b573ec04e65bed1e14eaea70705
+#: ../../source/developer-docs/preparing_a_release.rst:186
+msgid "**Outcome:** Qt resources and user interface files have been compiled"
+msgstr ""
+
+# 126e81c6042f46b591708d3d32f4406e
+#: ../../source/developer-docs/preparing_a_release.rst:189
+msgid "HIG Compliance"
+msgstr ""
+
+# 209cf4f066d54f21aaa0d31302d31b2a
+#: ../../source/developer-docs/preparing_a_release.rst:191
+msgid ""
+"The InaSAFE human interface guidelnes (HIG) are described in the :ref:`hig-"
+"label` document. User interface should strive to comply with these "
+"guidelines. As an over-arching principle, before any release, the user "
+"interface elements that comprise that release should be tested both for "
+"usability and to ensure that they are functional."
+msgstr ""
+
+# a73e47424e7747ea9e42d17f311094a8
+#: ../../source/developer-docs/preparing_a_release.rst:197
+msgid ""
+"There is no automated test system for HIG. Before making a release of HIG "
+"compliance, each dialog should be manually tested and inspected."
+msgstr ""
+
+# ee910ae5af2542dcbedef39cd71055f1
+#: ../../source/developer-docs/preparing_a_release.rst:200
+msgid ""
+"**Outcome:** A consistent, user friendly and functional graphical user "
+"interface environment for the software that comprises the releases."
+msgstr ""
+
+# d3fe24a8834f414c97ede7936c1ebcb3
+#: ../../source/developer-docs/preparing_a_release.rst:204
+msgid "Unit Testing"
+msgstr ""
+
+# 67e5e884466b4c63993669bd18989918
+#: ../../source/developer-docs/preparing_a_release.rst:206
+msgid ""
+"During the development process, unit tests should be written (following the "
+"principles of test driven development). A good test suite allows the code to "
+"be shipped with confidence knowing it will behave as expected. At the time "
+"of release, all the tests in the test suite should either pass or have "
+"documented reasons as to why they fail, and that they are expected to fail."
+msgstr ""
+
+# 5528db4d29234faba59d76782373fe88
+#: ../../source/developer-docs/preparing_a_release.rst:212
+msgid ""
+"In addition, tests should provide a code coverage of 80% or better of the "
+"shipped code base. More informationn on running unit tests is included in :"
+"ref:`running-tests-label`."
+msgstr ""
+
+# cff19a05a8ca40c697946dade338cc32
+#: ../../source/developer-docs/preparing_a_release.rst:216
+msgid ""
+"**Outcome:** All unit tests complete successfully, or when expected to fail "
+"are documented accordingly."
+msgstr ""
+
+# 8d78ca3874254630bd552f4b4c62674c
+#: ../../source/developer-docs/preparing_a_release.rst:220
+msgid "User Acceptance Testing"
+msgstr ""
+
+# 3788b8331c1e47e5ba5dd6229fd3b3ac
+#: ../../source/developer-docs/preparing_a_release.rst:222
+msgid ""
+"While unit testing provides a quantitative measure of the code's robustness, "
+"user acceptance testing provides a qualitative measure. The plugin should be "
+"made available to 'invested' users to test with real world data and in real "
+"world usage scenarios. Any issues with workflow, ease of use, quality of "
+"model outputs and reports etc. should be identified at this point and "
+"remedied."
+msgstr ""
+
+# c8c48b2f4205485a86eb3d7f575f021e
+#: ../../source/developer-docs/preparing_a_release.rst:228
+msgid "**Outcome:** Software that works in real world usage."
+msgstr ""
+
+# 986ad8ae80324109b43a5a883c7c2ce2
+#: ../../source/developer-docs/preparing_a_release.rst:231
+msgid "Document new features"
+msgstr ""
+
+# 2be451b803b14c9bb21aa749b6b60b08
+#: ../../source/developer-docs/preparing_a_release.rst:233
+msgid ""
+"New features in the release should be well documented using the procedure "
+"described in :ref:`documenting-new-features-howto-label`."
+msgstr ""
+
+# dc91c684405847109bf71667eeef17c5
+#: ../../source/developer-docs/preparing_a_release.rst:236
+msgid "**Outcome:** All new and existing features are adequately documented."
+msgstr ""
+
+# d7877c0669c9474583a4cc148dd070a9
+#: ../../source/developer-docs/preparing_a_release.rst:239
+msgid "API Documentation"
+msgstr ""
+
+# 15d075b3b51247c495332b08f14d36d7
+#: ../../source/developer-docs/preparing_a_release.rst:241
+msgid ""
+"In addition to documenting new features, any new python modules introduced "
+"during the development work leading up to the release need to be included in "
+"the API documentation. This process is described in detail in the :ref:`api-"
+"documentation-howto-label` document."
+msgstr ""
+
+# 9245ee4878964ef4a049b940421aa3fa
+#: ../../source/developer-docs/preparing_a_release.rst:246
+msgid ""
+"**Outcome:** The API is completely documented with rich, relevant "
+"documentation."
+msgstr ""
+
+# a3449d40c250481e9954c24a52749917
+#: ../../source/developer-docs/preparing_a_release.rst:250
+msgid "Update the changelog"
+msgstr ""
+
+# 3fa188ae0d8f45b29aa20bdf2b72a6de
+#: ../../source/developer-docs/preparing_a_release.rst:252
+msgid ""
+"A changelog should be maintained (:file:`docs/sources/user-docs/changelog."
+"rst`) that lists the key new features and improvement made with each "
+"release. Use the :doc:`../user-docs/changelog` file to guide the style of "
+"any edits and additions made."
+msgstr ""
+
+# 9a8b785eaead4e24a91be788b4e2b937
+#: ../../source/developer-docs/preparing_a_release.rst:257
+msgid ""
+"The changelog should not exhaustively list every commit that took place. "
+"Rather it should list the key features and bug fixes that were made during "
+"the release cycle."
+msgstr ""
+
+# dda641f096de43158f9e00ffbc5f0234
+#: ../../source/developer-docs/preparing_a_release.rst:261
+msgid ""
+"New release changesets should be introduced to this file **at the top** so "
+"that the newest release is alwas listed first."
+msgstr ""
+
+# 8c32e0dcd3bb474294b9c9d638121d71
+#: ../../source/developer-docs/preparing_a_release.rst:264
+msgid ""
+"**Outcome:** A succinct list of changes and improvements that were made "
+"during the release cycle."
+msgstr ""
+
+# e8250acd9d1140c98621facd285d9678
+#: ../../source/developer-docs/preparing_a_release.rst:268
+msgid "Finalise translations"
+msgstr ""
+
+# 0d97fef34d4d46f289c548206124bbe0
+#: ../../source/developer-docs/preparing_a_release.rst:270
+msgid ""
+"The |project_name| plugin is built from the ground up for "
+"internationalization. In particular the following two languages are "
+"supported as part of this project:"
+msgstr ""
+
+# a59bf95d4b924dfca8c9adf9d2e795e6
+#: ../../source/developer-docs/preparing_a_release.rst:274
+msgid "English"
+msgstr ""
+
+# 17430153da1c45f490951a9e0f870154
+#: ../../source/developer-docs/preparing_a_release.rst:275
+msgid "Bahasa Indonesian"
+msgstr ""
+
+# ab29ba8e64e7470fac686a988f8f4c55
+#: ../../source/developer-docs/preparing_a_release.rst:277
+msgid "There are three components of the project that require translation:"
+msgstr ""
+
+# 918cbcf6f69044cfa244e2bf51a18821
+#: ../../source/developer-docs/preparing_a_release.rst:279
+msgid ""
+"The Graphical User Interface - primarily the :file:`gui` python package. "
+"Qt4 .ts files are used for these translations."
+msgstr ""
+
+# 6af6d267e178437ab443c79b735e7dc2
+#: ../../source/developer-docs/preparing_a_release.rst:281
+msgid ""
+"The |project_name| libraries - these components provide the underlying "
+"functionality of the scenario assessment. Python gettext is used for these "
+"translations."
+msgstr ""
+
+# 13fb58e21fc145b190d5a7235bee2cfa
+#: ../../source/developer-docs/preparing_a_release.rst:284
+msgid "The sphinx documentation - this is translated using gettext."
+msgstr ""
+
+# 3c46d668db834ba6a45768f49ffcec19
+#: ../../source/developer-docs/preparing_a_release.rst:286
+msgid ""
+"The translation process for the first two items above is documented in "
+"detail in :doc:`i18n`. The sphinx translation process is not yet well "
+"documented, although it will be similar to the gettext process."
+msgstr ""
+
+# bbf522ef3d854458bd8a5be5c0e2f0db
+#: ../../source/developer-docs/preparing_a_release.rst:290
+msgid ""
+"The final strings should be made available to translators before the "
+"release, during which time a string freeze should be in effect on the "
+"release code tree."
+msgstr ""
+
+# 35b9ebd15e664f17bdcdb5b6afaecc85
+#: ../../source/developer-docs/preparing_a_release.rst:293
+msgid ""
+"Once the translation files have been updated, they should be converted to "
+"compiled string lists (.qm and .mo files for Qt4 and gettext respectively) "
+"and made available as part of the distribution."
+msgstr ""
+
+# e179a18668074dc2b99dd4932ea4b45d
+#: ../../source/developer-docs/preparing_a_release.rst:297
+msgid ""
+"**Outcome:** The released plugin will be multilingual supporting both "
+"indonesian and english."
+msgstr ""
+
+# 09f124ba83de4792bf061b90e58da17b
+#: ../../source/developer-docs/preparing_a_release.rst:301
+msgid "Compile the sphinx documentation"
+msgstr ""
+
+# b1bd9ebe485e4e42b9d9737eb0becff6
+#: ../../source/developer-docs/preparing_a_release.rst:303
+msgid ""
+"Once documentation is completed, it should be compiled using :command:`make "
+"docs` and the :command:`git status` command should be used to ensure that "
+"all generated documentation is also under version control."
+msgstr ""
+
+# 6da4fab6310a4f3d884c36ee2a877d76
+#: ../../source/developer-docs/preparing_a_release.rst:307
+msgid ""
+"**Outcome:** Sphinx documentation is compiled providing complete "
+"documentation to be shipped with the plugin."
+msgstr ""
+
+# fbcbb79c2da244078bdcd2e6ad8df261
+#: ../../source/developer-docs/preparing_a_release.rst:311
+msgid "Update plugin metadata"
+msgstr ""
+
+# a1b23bcf23a54fc98d8f733083c1e9ec
+#: ../../source/developer-docs/preparing_a_release.rst:313
+msgid ""
+"QGIS uses specific metadata to register the plugin. At the time of writing "
+"the mechanism for registering this metadata is in transition from an in-"
+"source based system to an .ini file based system. In the interim, both "
+"should be maintained."
+msgstr ""
+
+# 570ed57e11ed45e694e670f937f2f3bc
+#: ../../source/developer-docs/preparing_a_release.rst:318
+msgid ""
+"The in-source metadata is updated by editing the :file:`__init__.py` file in "
+"the top level directory of the source tree::"
+msgstr ""
+
+# 348cbf0e8ce542de8ad583302606e92d
+#: ../../source/developer-docs/preparing_a_release.rst:346
+msgid ""
+"In general only the version function needs to be updated to reflect the new "
+"version of the InaSAFE plugin."
+msgstr ""
+
+# 18f705c3fb764ffbae178f17d7c94066
+#: ../../source/developer-docs/preparing_a_release.rst:349
+msgid ""
+"The above will be deprecated with the release of QGIS 2.0, see below for the "
+"alternative method of describing the plugin."
+msgstr ""
+
+# ab6376a70f5548fbb1cfe1bb8930d601
+#: ../../source/developer-docs/preparing_a_release.rst:352
+msgid ""
+"For newer versions of QGIS (1.8+), the :file:`metadata.txt` will be used to "
+"store descriptive information about the plugin. Simply edit this file with a "
+"text editor and update it as needed."
+msgstr ""
+
+# 1454482603b54aa790247a7ed8c0e808
+#: ../../source/developer-docs/preparing_a_release.rst:356
+msgid ""
+"**Outcome:** The plugin metadata to reflects the current version of Risk in "
+"a Box."
+msgstr ""
+
+# eb42cd7a8284454abaccfa0d0fc5f7ac
+#: ../../source/developer-docs/preparing_a_release.rst:360
+msgid "Generate a test package"
+msgstr ""
+
+# f937d092889648aa855a7ea9136e7d38
+#: ../../source/developer-docs/preparing_a_release.rst:362
+msgid ""
+"At this point a test package should be generated that can be used to test "
+"the plugin in a clean room environment. A clean room environment comprises a "
+"system that has a fresh operating system installation with the desired "
+"version of QGIS installed, and **no other software**. It is probably a good "
+"practice to use machine virtualisation for this purpose, for example with "
+"images of a windows and a linux system installed. Some virtualisation tools "
+"such as vmware provide the ability to create a system snapshot and roll back "
+"to it."
+msgstr ""
+
+# 07e0b69ef4dc4ded86a5cdb3cc749935
+#: ../../source/developer-docs/preparing_a_release.rst:370
+msgid ""
+"To generate a test package, use the :file:`scripts/release.sh` bash script."
+msgstr ""
+
+# 4e2b50052f3a49b6b68f947e83ae4ded
+#: ../../source/developer-docs/preparing_a_release.rst:372
+msgid ""
+"For exampled to create a test package for version 0.1.0 of the software, "
+"issue the following command::"
+msgstr ""
+
+# 89db982909b344f48b60176e46d6bb1d
+#: ../../source/developer-docs/preparing_a_release.rst:377
+msgid ""
+"The generated package will be placed in the /tmp directory of your linux "
+"system."
+msgstr ""
+
+# f1ef4149558640ad812167d59044c3ad
+#: ../../source/developer-docs/preparing_a_release.rst:379
+msgid ""
+"Once the clean system is started, extract the package contents into the "
+"user's personal plugin directory. For example under Linux::"
+msgstr ""
+
+# b1f22821e35e40baae363ca250f7de14
+#: ../../source/developer-docs/preparing_a_release.rst:386
+msgid ""
+"Now start QGIS and enable the plugin in the QGIS plugin manager ( :"
+"menuselection:`Plugins --> Manage Plugins`)."
+msgstr ""
+
+# 8f6890eb0ead4387afdcd367f24e9b36
+#: ../../source/developer-docs/preparing_a_release.rst:390
+msgid "Branch the release"
+msgstr ""
+
+# dd9fef4a8a3d4af68cab6b462ae29d4c
+#: ../../source/developer-docs/preparing_a_release.rst:392
+msgid ""
+"This step is only done for minor and major releases, point releases are only "
+"tagged. The branch should be named after the major and minor version numbers "
+"only - for example: :samp:`version-1_0`. The following console log "
+"illustrates how to create a local branch, push it to the origin repository, "
+"remove the local branch and then track the repository version of the branch "
+"localy::"
+msgstr ""
+
+# 699d480e17b0457cbc071c2e695d78c3
+#: ../../source/developer-docs/preparing_a_release.rst:406
+msgid ""
+"**Outcome:** A branch on the remote repository named after the majon and "
+"minor version numbers."
+msgstr ""
+
+# 3dcf313c99a3481c91ba2fd63f5f2667
+#: ../../source/developer-docs/preparing_a_release.rst:410
+msgid "Tag the release"
+msgstr ""
+
+# 884d1cd3d9cc4063bbd59ddc5392cf5b
+#: ../../source/developer-docs/preparing_a_release.rst:412
+msgid ""
+"Tagging the release provides a 'known good' state for the software which "
+"represents a point in time where all of the above items in this list have "
+"been checked. The tag should be named after the major, minor and point "
+"release for example :samp:`version-0_1_0`. If the release is a releas "
+"candidate or and alpha release the letters :samp:`rc` or :samp:`a` "
+"resepectively should be appended respectively, along with the related "
+"number. For example version 0.1.0 alpha 1 would be tagged as :samp:"
+"`version-0_1_0a1`. To tag the release simply do it in git as illustrated "
+"below.::"
+msgstr ""
+
+# dfa4fb4bade445578d8c4599e44badbc
+#: ../../source/developer-docs/preparing_a_release.rst:424
+msgid "Replace 'dot' separators with underscores for the version number."
+msgstr ""
+
+# 3a22ddc0786d4a898fde780eb5f985eb
+#: ../../source/developer-docs/preparing_a_release.rst:425
+msgid ""
+"2) You can differentiate release **branches** from release **tags** by the "
+"fact that branch names have only the minor version number (e.g. :samp:"
+"`version-0_4`) whereas release tags are reserved for point releases (e.g. :"
+"samp:`version-0_4_1`)."
+msgstr ""
+
+# 4c0e2ceebf174c228ace95ae5ede3ba5
+#: ../../source/developer-docs/preparing_a_release.rst:430
+msgid ""
+"**Outcome:** The release is tagged in GIT and can be checked out at any "
+"point in the future. The tagged source tree can easily be downloaded at any "
+"point by visiting https://github.com/AIFDR/inasafe/tags"
+msgstr ""
+
+# d3fe100144dd4db99c1f9fc6b2ed49c7
+#: ../../source/developer-docs/preparing_a_release.rst:435
+msgid "Upload the package"
+msgstr ""
+
+# 46ee694b2d554c77a4af5dabb0ac9cc3
+#: ../../source/developer-docs/preparing_a_release.rst:437
+msgid ""
+"QGIS provides an online plugin repository that centralizes the distribution "
+"and retrieval of plugins. It is the most efficient way to make your plugin "
+"available to the world at large."
+msgstr ""
+
+# 88f865dab0c1415097b7ce4812ef353f
+#: ../../source/developer-docs/preparing_a_release.rst:445
+msgid "Press announcements"
+msgstr ""
+
+# 9d66d34a89c1490f8aa348459def2c5a
+#: ../../source/developer-docs/preparing_a_release.rst:447
+msgid ""
+"Once the release has been made, an announcement should be made to inform "
+"interested parties about the availability of the new software. A pro-forma "
+"announcement is provided below **(Trevor or Ole todo)**::"
+msgstr ""
+
+# f70a1ec7cd0648ae8f49378f7ddc41a2
+#: ../../source/developer-docs/preparing_a_release.rst:471
+msgid ""
+"A standard list of contacts should be compiled and the notification sent to "
+"all those listed."
+msgstr ""
+
+# 1a534771174c4831892d349618cc6868
+#: ../../source/developer-docs/preparing_a_release.rst:475
+msgid ""
+"**Outcome:** Interested parties are informed about the availability of the "
+"new release."
+msgstr ""

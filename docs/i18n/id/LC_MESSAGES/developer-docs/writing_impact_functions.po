@@ -1,0 +1,386 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 6b7cb7243c454256806c06de8de515a0
+#: ../../source/developer-docs/writing_impact_functions.rst:9
+msgid "Writing Impact Functions"
+msgstr ""
+
+# 8613422178244d449f597b153dcfd78a
+#: ../../source/developer-docs/writing_impact_functions.rst:11
+msgid ""
+"This document explains the purpose of impact functions and shows how to "
+"write them. Some familiarity with the Python programming language will be "
+"helpful to fully appreciate this section. See also :ref:`impact_functions` "
+"for information about existing impact functions in InaSAFE."
+msgstr ""
+
+# 14ab470a44b84d57a52b3ffbca1a459a
+#: ../../source/developer-docs/writing_impact_functions.rst:17
+msgid "This section is still work in progress"
+msgstr ""
+
+# 66d0e1968e604fa3a6f0650391da9ac5
+#: ../../source/developer-docs/writing_impact_functions.rst:20
+msgid "What is an impact function?"
+msgstr ""
+
+# ebaa419675cd46348d8d35de0f61f399
+#: ../../source/developer-docs/writing_impact_functions.rst:22
+msgid ""
+"An impact function is a short Python code that InaSAFE calls to make a "
+"specific analyses. All impact functions take as inputs one hazard layer and "
+"one exposure layer. All impact functions return"
+msgstr ""
+
+# 9d9e12b8e4944532a423caf343d1310f
+#: ../../source/developer-docs/writing_impact_functions.rst:26
+msgid ""
+"a layer that represents he result of the calculation (the impact layer)."
+msgstr ""
+
+# 54f8af29f229418aa59b43817b4541d8
+#: ../../source/developer-docs/writing_impact_functions.rst:27
+msgid "style information for the impact layer."
+msgstr ""
+
+# d2625c35fbbb4a17a2383589389048ed
+#: ../../source/developer-docs/writing_impact_functions.rst:28
+msgid ""
+"a textual report typically summarising statistical information about the "
+"impact such as estimated fatilities or number of buildings affected."
+msgstr ""
+
+# 95323e02116b4b1a9ccfd5fcca34f845
+#: ../../source/developer-docs/writing_impact_functions.rst:31
+msgid ""
+"Layers can be either raster or vector types. See :ref:`data_types` for a "
+"complete list of admissible layer types that can be sensibly handled by "
+"impact functions."
+msgstr ""
+
+# def2e14a67874eaa8edff2224b971ddf
+#: ../../source/developer-docs/writing_impact_functions.rst:35
+msgid ""
+"Impact functions also specify which layer types they can work with and thus "
+"directly control under which circumstances they are made available to the "
+"user in the impact function menu. See :ref:`requires` for more details."
+msgstr ""
+
+# 447505bcc17e422893714097081b9f10
+#: ../../source/developer-docs/writing_impact_functions.rst:41
+msgid "Creating impact functions"
+msgstr ""
+
+# 09b9380a173c4020ad4972440b2ee974
+#: ../../source/developer-docs/writing_impact_functions.rst:43
+msgid ""
+"All impact functions follow a particular structure as outlined through "
+"example below. The example is a simple impact function that calculates an "
+"expected number of people in need of evacuation in a flood event as well as "
+"an estimate of supplies required."
+msgstr ""
+
+# 9a1b4131d540416a8ddba65cff52f2d7
+#: ../../source/developer-docs/writing_impact_functions.rst:49
+msgid "Import section"
+msgstr ""
+
+# 6e81dbd6578e4b65bc63ff2b8e6065e1
+#: ../../source/developer-docs/writing_impact_functions.rst:51
+msgid ""
+"This section identifies functionality that is needed for the impact function "
+"in question. As a minimum, one must import functionality specific to the "
+"impact function framework: ::"
+msgstr ""
+
+# d492c5f0e1f0413aac15a5de8b972945
+#: ../../source/developer-docs/writing_impact_functions.rst:63
+msgid "Impact function class"
+msgstr ""
+
+# d3ff3cdbdb004b5693bbbf5485bf8f18
+#: ../../source/developer-docs/writing_impact_functions.rst:65
+msgid ""
+"The impact function itself is embodied in a Python class with a doc string:"
+msgstr ""
+
+# 9c21e7ee84844895a0f07c7a30e8a093
+#: ../../source/developer-docs/writing_impact_functions.rst:110
+msgid ""
+"The class name ``FloodEvacuationFunction`` is used to uniquely identify this "
+"impact function and it is important to make sure that no two impact "
+"functions share the same class name. If they do, one of them will be ignored."
+msgstr ""
+
+# dba63398b2e444e785ced6e4d6070750
+#: ../../source/developer-docs/writing_impact_functions.rst:114
+msgid ""
+"The impact function class must inherit by the class ``FunctionProvider`` "
+"which is what will make it part of the InaSAFE system."
+msgstr ""
+
+# 80ba1bd3beaa496d83879469f87716f7
+#: ../../source/developer-docs/writing_impact_functions.rst:117
+msgid ""
+"The doc string can contain any text documenting the impact function, but it "
+"must contain some special symbols recognised by InaSAFE. They are"
+msgstr ""
+
+# 1558b4fe00b94ee488a6ae1f4850f56e
+#: ../../source/developer-docs/writing_impact_functions.rst:120
+msgid "Name of the individual or organisation who wrote the impact function"
+msgstr ""
+
+# d25e994785ce4a988400f0b1abdd76d9
+#: ../../source/developer-docs/writing_impact_functions.rst:121
+msgid ""
+"A numeric rating from 1 to 4 signifying a quality rating of the function. "
+"This is used in conjunction with similar ratings of input layers and "
+"combined into a rating of the resulting impact layer. The idea is that a "
+"final result is never better than the worst of the inputs and the "
+"calculation."
+msgstr ""
+
+# 78733021dea7473d9d4f40f533fd8f33
+#: ../../source/developer-docs/writing_impact_functions.rst:122
+msgid ""
+"This is a list of keyword value pairs that input layers must fulfil for this "
+"impact function. In this case, there must be a hazard layer with subcategory "
+"of either 'flood' or 'tsunami', with layertype being 'raster' and unit of "
+"meters. The other input must be tagged as 'exposure' with subcategory "
+"'population' and also having layertype 'raster'. Except for layertype which "
+"is automatically inferred by InaSAFE all other keywords must be specified "
+"with each layer e.g. by using the InaSAFE keyword editor or by manually "
+"editing the keywords file. For more information about keywords please refer "
+"to :ref:`keywords_system`."
+msgstr ""
+
+# 49538cc30d4345389fe9d231f839658f
+#: ../../source/developer-docs/writing_impact_functions.rst:124
+msgid ""
+"Following the docstrings are a collection of variables that define and "
+"document the impact function. They are"
+msgstr ""
+
+# 87c4d07cc99a463385f6e005f1d55d31
+#: ../../source/developer-docs/writing_impact_functions.rst:126
+msgid ""
+"Specifies the title of the impact function as displayed in the InaSAFE user "
+"interface"
+msgstr ""
+
+# d6959d4c8fb64d87a0f139b9e0af22a1
+#: ../../source/developer-docs/writing_impact_functions.rst:127
+msgid ""
+"A (possibly ordered) dictionary of parameters that can be configured from "
+"the user interface. Anything listed here can be modified at runtime by "
+"clicking the pencil symbol next to the impact function. In this case it is "
+"the threshold used to define what water level signals evacuation."
+msgstr ""
+
+# 300e2144feb14207a5dd68a2e6a8a442
+#: ../../source/developer-docs/writing_impact_functions.rst:132
+msgid ""
+"In addition, there is a collection of text variables used for various levels "
+"of documentation of this impact function."
+msgstr ""
+
+# 6603f63c6d05433f944ddd938208d988
+#: ../../source/developer-docs/writing_impact_functions.rst:135
+msgid "Impact function algorithm"
+msgstr ""
+
+# 90ef7baf970f4788ab60490649cb2f93
+#: ../../source/developer-docs/writing_impact_functions.rst:137
+msgid ""
+"The actual calculation of the impact function is specified as a method call "
+"called ``run``. This method will be called by InaSAFE with a list of the 2 "
+"selected layers:"
+msgstr ""
+
+# 743d935611e141dfbdcf11b746cac579
+#: ../../source/developer-docs/writing_impact_functions.rst:167
+msgid ""
+"The typical way to start the calculation is to explicitly get a handle to "
+"the hazard layer and the exposure layer. In this case we name them as "
+"``inundation`` and ``population`` respectively."
+msgstr ""
+
+# e3d44b3e2aa544a280e7e97948fa2338
+#: ../../source/developer-docs/writing_impact_functions.rst:171
+msgid ""
+"We also use a built-in function ``get_question`` to paraphrase the selected "
+"scenario based on titles of hazard, exposure and impact function. For "
+"example, if the hazard and exposure layers had titles \"A flood in Jakarta "
+"like in 2007\" and \"People\", then the paraphrased question for this impact "
+"function would become:"
+msgstr ""
+
+# bf6ef793114842d98b13ef0118f2d720
+#: ../../source/developer-docs/writing_impact_functions.rst:173
+msgid ""
+"In the event of *a flood in Jakarta like in 2007* how many *people* might "
+"*need evacuation*."
+msgstr ""
+
+# 31f54442205143f49b18aead0c317b75
+#: ../../source/developer-docs/writing_impact_functions.rst:176
+msgid ""
+"The next typical step is to extract the numerical data to be used. In this "
+"case we assign the configurable parameter ``threshold`` to a variable of the "
+"same name, and because both input layers are raster data (we know this "
+"because of the requirements section) we take the numerical data as arrays. "
+"InaSAFE has a preprocessing step that automatically reprojects, aligns, "
+"resamples and possibly rescales data so that the impact function can assume "
+"the two arrays are compatible and be used safely in numerical calculations:"
+msgstr ""
+
+# 44e949d036764e078c6605f97681f7eb
+#: ../../source/developer-docs/writing_impact_functions.rst:196
+msgid ""
+"The method ``get_data()`` returns an array if the layer is raster and takes "
+"two arguments:"
+msgstr ""
+
+# 5579d72ef1cc445db2503d0b76decbb9
+#: ../../source/developer-docs/writing_impact_functions.rst:198
+msgid ""
+"Specify the value to use where nodata is available. In this case we use 0.0 "
+"as we only want to count hazard pixels with flooding and exposure pixels "
+"with non-zero population."
+msgstr ""
+
+# d831b80b9899447fb978ed64bd14ae5c
+#: ../../source/developer-docs/writing_impact_functions.rst:199
+msgid ""
+"Optional argument controlling if data is to be scaled. In this case we set "
+"it to True which means that if the corresponding raster layer was resampled "
+"by InaSAFE, the values will be correctly scaled by the squared ratio between "
+"its current and native resolution."
+msgstr ""
+
+# d48ce2520d814792b817e3380c94a274
+#: ../../source/developer-docs/writing_impact_functions.rst:201
+msgid "# FIXME (Ole): Tim - how do we cross reference docstrings?"
+msgstr ""
+
+# e450b9a8782e45e2bbb12fe5c224fabf
+#: ../../source/developer-docs/writing_impact_functions.rst:203
+msgid ""
+"See :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster."
+"get_data for more details on the ``get_data()`` method."
+msgstr ""
+
+# 3fd877a5f5c34dfd959d8686fae7265c
+#: ../../source/developer-docs/writing_impact_functions.rst:206
+msgid ""
+"Now we are ready to implement the desired calculation. In this case it is "
+"very simple as we just want to sum over population pixels where the "
+"inundation depth exceeds the threshold. As both inundation and population "
+"are numpy arrays, this is achieved by the code:"
+msgstr ""
+
+# b4223f685b43477b9a1ce32868cec047
+#: ../../source/developer-docs/writing_impact_functions.rst:220
+msgid ""
+"We can now use this estimate to calculate the needs required. In this case "
+"it is based on an Indonesian standard:"
+msgstr ""
+
+# 8410b4e62ab24da1a6f043da21571466
+#: ../../source/developer-docs/writing_impact_functions.rst:240
+msgid ""
+"With all calculations complete, we can now generate a report. This usually "
+"takes the form of a table and InaSAFE provide some primitives for generating "
+"table rows etc. InaSAFE operates with two tables, impact_table which is put "
+"on the printable map and impact_summary which is shown on the screen. They "
+"can be identical but are usually slightly different. We also define a title "
+"for the generated map:"
+msgstr ""
+
+# 8f43302b0f4b4b408587b80c42bae47b
+#: ../../source/developer-docs/writing_impact_functions.rst:277
+msgid ""
+"The impact grid calculated above must be displayed as a layer so needs some "
+"appropriate colouring. In this case we define 8 classes and label class 1 as "
+"low, class 4 as medium and class 7 as high:"
+msgstr ""
+
+# 17fcaf5709114fa2b79c46d6263a0109
+#: ../../source/developer-docs/writing_impact_functions.rst:308
+msgid ""
+"Finally, we create and return a new raster object based on the calculated "
+"impact grid ``I``. We also assign the same projection and geotransform as "
+"the hazard layer, give it a suitable name, pass the tables and title as "
+"keywords and provide the generated style."
+msgstr ""
+
+# 6d7ef279c8f44a0b85b4b326082252e5
+#: ../../source/developer-docs/writing_impact_functions.rst:312
+msgid ""
+"InaSAFE assumes that every impact function returns a raster or vector "
+"layer. ::"
+msgstr ""
+
+# 484d69b3dcd146d4a3974679ea9e5538
+#: ../../source/developer-docs/writing_impact_functions.rst:327
+msgid "This function is available in full at XXX"
+msgstr ""
+
+# 4eb2bad0998746168f67a9e9a9d3c51b
+#: ../../source/developer-docs/writing_impact_functions.rst:331
+msgid "Output"
+msgstr ""
+
+# 9e6825879d934db4b6864fc85c784f01
+#: ../../source/developer-docs/writing_impact_functions.rst:333
+msgid "The output of this function looks like this: YY"
+msgstr ""
+
+# bce30f11113c44c89a513d67c192e580
+#: ../../source/developer-docs/writing_impact_functions.rst:341
+msgid "Controlling which layer types impact functions work with"
+msgstr ""
+
+# 91e070385e9642c2ae6c0f969fb36add
+#: ../../source/developer-docs/writing_impact_functions.rst:343
+msgid ""
+"Each impact function has a requirements section embedded in its doc string "
+"that specifies which type of input layers it can work with. The requirements "
+"take the form of one or more statements that specify which keywords and "
+"values input layers must have for the impact function to run. InaSAFE uses "
+"this mechanism to determine which impact functions appear in the menu for a "
+"given selection of hazard and exposure layers."
+msgstr ""
+
+# 915ef7dadda44190afdd166e508858d2
+#: ../../source/developer-docs/writing_impact_functions.rst:350
+msgid ""
+"For example, the impact function for earthquake fatality estimation which "
+"works with two raster input layers has the requirements section"
+msgstr ""
+
+# 63b2312075b043dfbb350d8e52009270
+#: ../../source/developer-docs/writing_impact_functions.rst:365
+msgid ""
+"This means that the impact function will only be selected if it is presented "
+"with two input layers whose associated keywords match these requirements. "
+"For more information about keywords please refer to :ref:`keywords_system`."
+msgstr ""

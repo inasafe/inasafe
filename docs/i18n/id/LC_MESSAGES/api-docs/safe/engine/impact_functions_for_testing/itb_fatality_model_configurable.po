@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# ed843801dd4442fdae2f4a7424d82572
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing."
+"itb_fatality_model_configurable"
+msgstr ""
+
+# 940e6a1ef18d4c6db69b08531f209da9
+# 84f397f02e964606990cd608deed41a6
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:1
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable.run:1
+msgid "Indonesian Earthquake Fatality Model"
+msgstr ""
+
+# 2bf32dd703b243f795402828c1d10919
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:3
+msgid ""
+"This model was developed by Institut Tecknologi Bandung (ITB) and "
+"implemented by Dr Hadi Ghasemi, Geoscience Australia"
+msgstr ""
+
+# 20c452ecc1ed45258f76fa419164cd36
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:7
+msgid "Reference:"
+msgstr ""
+
+# 3ef84e72c1c44cb2abd705a385dbb5b3
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:9
+msgid ""
+"Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster "
+"Survey Guidelines Development, Bali, 27-28 February 2012, 54pp."
+msgstr ""
+
+# 1306f2c4c083499283523e143561698a
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:14
+msgid "Algorithm:"
+msgstr ""
+
+# 78c25430b9c7490ab9b706964127916f
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:16
+msgid ""
+"In this study, the same functional form as Allen (2009) is adopted to "
+"express fatality rate as a function of intensity (see Eq. 10 in the report). "
+"The Matlab built-in function (fminsearch) for  Nelder-Mead algorithm is used "
+"to estimate the model parameters. The objective function (L2G norm) that is "
+"minimised during the optimisation is the same as the one used by Jaiswal et "
+"al. (2010)."
+msgstr ""
+
+# 64d4c4fe5a16496b88cdb7ca6e2fab86
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:23
+msgid ""
+"The coefficients used in the indonesian model are x=0.62275231, "
+"y=8.03314466, zeta=2.15"
+msgstr ""
+
+# 26bb3f3f0e5443c9a677ca5d3cd363e6
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:26
+msgid ""
+"Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, "
+"K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure "
+"catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718."
+msgstr ""
+
+# bef5a80db3304509b1dd2c94eff4d416
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:31
+msgid ""
+"Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake "
+"fatality estimation, Earthq. Spectra 26, 1017-1037."
+msgstr ""
+
+# 0453804c9cb94e35ad537d163004e7bc
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:35
+msgid "Caveats and limitations:"
+msgstr ""
+
+# 3099951bbf0746788b19630e5960e499
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:37
+msgid ""
+"The current model is the result of the above mentioned workshop and reflects "
+"the best available information. However, the current model has a number of "
+"issues listed below and is expected to evolve further over time."
+msgstr ""
+
+# 40907b906eeb48298dc24c161bf439d9
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:43
+msgid "rates during 4 past fatal events."
+msgstr ""
+
+# 9adad3862d76494c83a954a647795af6
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:45
+msgid "intensities higher than VIII."
+msgstr ""
+
+# bdd69c3bff4042589af8253858d61cbf
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:47
+msgid ""
+"intensity level; however the associated uncertainty for the proposed model "
+"is not addressed."
+msgstr ""
+
+# 13deb585328e469685c3b16225650db2
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:50
+msgid "rounding MMI values to the nearest 0.5,"
+msgstr ""
+
+# a0534ce6e94b4f6fa2fcdbb88d508322
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:51
+msgid "Implementing Finite-Fault models of candidate events, and"
+msgstr ""
+
+# 1ab622027b794d88ae38cb19a9d7393f
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:52
+msgid ""
+"consistency between selected GMPEs with those in use by BMKG. These issues "
+"will be addressed by ITB team in the final report."
+msgstr ""
+
+# f43ea7b263f74250adbf669ba8e10280
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:56
+msgid ":author Hadi Ghasemi :rating 3"
+msgstr ""
+
+# 12bb74ed06b54a879319ea317ea6bae4
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:59
+msgid ""
+":param requires category=='hazard' and                     "
+"subcategory=='earthquake' and                     layertype=='raster' "
+"and                     unit=='MMI'"
+msgstr ""
+
+# dbf77c078f0d4026a9603dee1225e564
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable:61
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster'"
+msgstr ""
+
+# 1dc1ec84e0a7410d9c96367c862683d1
+#: ../../../safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.itb_fatality_model_configurable.ITBFatalityFunctionConfigurable.run:5
+msgid ""
+"H: Raster layer of MMI ground shaking P: Raster layer of population density"
+msgstr ""
+
+# 1c9dbf249106410885a4a175d7531be4
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/itb_fatality_model_configurable.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

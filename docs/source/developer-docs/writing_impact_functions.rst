@@ -441,13 +441,13 @@ Output
 
 The output of this function looks like this:
 
-.. figure:: ../static/flood_population_evacuation_result.png
+.. figure:: /static/flood_population_evacuation_result.png
    :scale: 30 %
    :align:   center
 
 and the legend defined in the style_info section is available in the layer view
 
-.. figure:: ../static/flood_population_evacuation_legend.png
+.. figure:: /static/flood_population_evacuation_legend.png
    :scale: 30 %
    :align:   center
 

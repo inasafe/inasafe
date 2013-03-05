@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 3ecca5547f4c4a39b8c55cca65169736
+#: ../../source/developer-docs/irc.rst:6
+msgid "IRC Notes for InaSAFE"
+msgstr ""
+
+# 1d9b7b6643f844f793536beecf05ffe2
+#: ../../source/developer-docs/irc.rst:8
+msgid "The IRC channel is #inasafe on freenode."
+msgstr ""
+
+# 3de5775d993942d99ad6932109e94321
+#: ../../source/developer-docs/irc.rst:10
+msgid ""
+"The channel is logged, you can read the logs at http://irclogs.geoapt.com/"
+"inasafe/."
+msgstr ""
+
+# 9670149621d847c889c0e1b912ab2f7e
+#: ../../source/developer-docs/irc.rst:12
+msgid "Tim (timlinux) has ops and has registered the channel::"
+msgstr ""
+
+# 842f06b6e74c4abcbbade476c033c20b
+#: ../../source/developer-docs/irc.rst:17
+msgid "To obtain ops after logging off do::"
+msgstr ""
+
+# c36b5defe21e4bdabb6537f981923a9e
+#: ../../source/developer-docs/irc.rst:22
+msgid "To give others op status in the channel do::"
+msgstr ""
+
+# 274a328fddd44a248b2c83d9ff803e24
+#: ../../source/developer-docs/irc.rst:26
+msgid ""
+"There is a github hook enabled 'IRC\" https://github.com/AIFDR/inasafe/admin/"
+"hooks with the following settings:"
+msgstr ""
+
+# ee562cca14bc4fb9b9febcd83c965728
+#: ../../source/developer-docs/irc.rst:29
+msgid "**server** : irc.freenode.net"
+msgstr ""
+
+# cc3d9deb1df54dc49321a7071fecf7ce
+#: ../../source/developer-docs/irc.rst:30
+msgid "**port** : 6667"
+msgstr ""
+
+# e3682f0c86874d9d9b16e6bea0126eb8
+#: ../../source/developer-docs/irc.rst:31
+msgid "**room** : inasafe"
+msgstr ""
+
+# 998411674dbb466d90567ee4a264582f
+#: ../../source/developer-docs/irc.rst:32
+msgid "**nick** : gh-inasafe"
+msgstr ""
+
+# 5482033945bd4eb5900277415583d1f5
+#: ../../source/developer-docs/irc.rst:33
+msgid "**branch regexes** : (leave blank)"
+msgstr ""
+
+# e8566ce9448b4c5db2a26ba6e1a15b57
+#: ../../source/developer-docs/irc.rst:34
+msgid "**password** : (leave blank)"
+msgstr ""
+
+# f89841f1c9254a8781d49872665ea6c4
+#: ../../source/developer-docs/irc.rst:35
+msgid "**ssl** : no"
+msgstr ""
+
+# 6678cea4c0cc42f6b7673562c782e832
+#: ../../source/developer-docs/irc.rst:36
+msgid "**message without join** : yes"
+msgstr ""
+
+# 2ee7ca198eb84fc99aacd102238fec04
+#: ../../source/developer-docs/irc.rst:37
+msgid "**no colors** : no"
+msgstr ""
+
+# fee67245c9b7441185af5896c2faf07f
+#: ../../source/developer-docs/irc.rst:38
+msgid "**Long URL** : yes"
+msgstr ""
+
+# c4cab41e24f24f8d93f418c7eebec8a9
+#: ../../source/developer-docs/irc.rst:39
+msgid "**Notice** : yes"
+msgstr ""
+
+# bfcf37f916f8419ab3e3e8ee34db5bf6
+#: ../../source/developer-docs/irc.rst:40
+msgid "**Active** : yes"
+msgstr ""
+
+# 3f582b25314642568ee6290a71bbc75d
+#: ../../source/developer-docs/irc.rst:42
+msgid ""
+"Also you need to do a mode change on the chanserv channel to enable outsider "
+"messages::"
+msgstr ""
