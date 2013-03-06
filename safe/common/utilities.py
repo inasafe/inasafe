@@ -310,3 +310,12 @@ def format_int(x):
         s = s.replace(',', '.')
 
     return s
+
+
+def round_thousand(my_int):
+    """Round an integer to the nearest thousand if my_int
+    is more than a thousand
+    """
+    if my_int > 1000:
+        my_int = my_int // 1000 * 1000
+    return my_int
