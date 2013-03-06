@@ -124,7 +124,63 @@ In addition, there is a collection of text variables used for various levels of 
 
 Impact function algorithm
 .........................
-TBA
+
+The actual calculation of the impact function is specified as a method call called ``run``. This
+method will be called by InaSAFE with a list of the 2 selected layers (hazard and exposure):
+
+::
+
+    def run(self, layers):
+        """Typical impact function
+
+        Input
+          layers: List of layers expected to contain
+              * Hazard layer of type raster or polygon
+              * Exposure layer of type raster, polygon or point
+
+        Return
+          Layer object representing the calculated impact
+        """
+
+        # Identify hazard and exposure layers
+        inundation = get_hazard_layer(layers)  # Flood inundation [m]
+        population = get_exposure_layer(layers)
+
+        question = get_question(inundation.get_name(),
+                                population.get_name(),
+                                self)
+
+
+The typical way to start the calculation is to explicitly get a handle to the hazard
+layer and the exposure layer using the two functions ``get_hazard_layer`` and ``get_exposure_layer`` both taking the input list as argument.
+
+We can also use a built-in function ``get_question`` to paraphrase the selected scenario based on titles of
+hazard, exposure and impact function. See e.g. :ref:`raster_raster` for an example.
+
+The next typical step is to extract the numerical data to be used. All layers have a methods called
+get_data() and get_geometry() which will return their data as python and numpy structures. Their exact
+return values depend on whether the layer is raster or vector as follows
+
+Getting data from raster layers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+============       =======                                                =============
+Method             Returns                                                Documentation
+---------------------------------------------------------------------------------------
+============       =======                                                =============
+get_data           2D numpy array representing pixel values               :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data
+get_geometry       Two 1D numpy arrays of corresponding coordinate axes
+get_projection     The spatial reference for the layer
+============       =======                                                =============
+
+.. See See :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data for more details on
+.. the ``get_data()`` method.
+
+
+Getting data from vector layers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:get_data:
 
 
 .. _raster_raster:
@@ -454,7 +510,7 @@ and the legend defined in the style_info section is available in the layer view
 .. _raster_vector:
 
 Impact function for raster hazard and vector (point or polygon) exposure data
----------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 The example below is a simple impact function that identifies which
 buildings (vector data) will be affected by earthquake ground shaking
