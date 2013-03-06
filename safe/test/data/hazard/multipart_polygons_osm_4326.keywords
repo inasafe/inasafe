@@ -1,3 +1,4 @@
-category: exposure
-subcategory: building
+category: hazard
+subcategory: flood
+unit: wet/dry
 title: multipart_polygons_osm_4326
