@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/api-docs/safe/postprocessors/aggregation_postprocessor.rst:6
+# f6e9a81d6e204a50a82b564159100539
+msgid "Module:  safe.postprocessors.aggregation_postprocessor"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor:1
+# d349fea6b67347fe8f2bffbcbb7c2578
+msgid "**Postprocessors package.**"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor:1
+# 1de8a5a4c80246e39efea6d4be3b96a4
+msgid "Postprocessor that calculates age related statistics. see the _calculate_* methods to see indicator specific documentation"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor:4
+# 0036babee82f4e2a9573561ba2614da5
+msgid "see :mod:`safe.defaults` for default values information"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.clear:1
+# 3e7b7310bb064f659e6459c34c40a990
+msgid "concrete implementation it takes care of the needed parameters being properly cleared"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.clear:5
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.clear:7
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.clear:9
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.process:5
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.process:7
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.process:9
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.setup:7
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.setup:9
+# 94b4827a8763411b9a3c9927f86f09ac
+# 1842788009534b6c88681af0ebf9bb4e
+# a1d902410fd94e79b2a9bc293f99e3eb
+# 67163713e4d44f088dec11d698128e5e
+# 91485b32c02c41408ee4b769e23aa7b8
+# fbf0abd6dd384405a6613621555d5e89
+# 38ed2fe06a4d42cead05f967ab52fb7e
+# a3855ba76db14e2caf13f487cc1e6ec1
+msgid "None"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.process:1
+# d5e4a9fda2654f08836109ec9201fc3b
+msgid "concrete implementation it takes care of the needed parameters being available and performs all the indicators calculations"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.setup:1
+# 90956ba7db5f42058001f714bab0d0dd
+msgid "concrete implementation it takes care of the needed parameters being initialized"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_postprocessor.py:docstring of safe.postprocessors.aggregation_postprocessor.AggregationPostprocessor.setup:5
+# a825d0c2ff0b48bdbc32a4decf9fc852
+msgid "params: dict of parameters to pass to the post processor"
+msgstr ""
+
+#: ../../source/api-docs/safe/postprocessors/aggregation_postprocessor.rst:11
+# d4f4647b0b8a4b4793783eccd43f0651
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
+

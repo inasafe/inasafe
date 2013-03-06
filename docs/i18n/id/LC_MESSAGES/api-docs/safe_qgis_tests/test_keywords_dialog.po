@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,192 @@ msgstr ""
 # c9ec2a9ef8c64eb1976297d51fbbaae7
 #: ../../source/api-docs/safe_qgis_tests/test_keywords_dialog.rst:6
 msgid "Module:  safe_qgis.test_keywords_dialog"
+msgstr ""
+
+# cdcba43ae78b421ab9091cf4de51c50b
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**GUI Test Cases.**"
+msgstr ""
+
+# 8daa877969df45c7b21acdcf6309a91c
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 69b9e360954341c89e5c0ee65d79bfe0
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 5d867ae6f927493595a71886f0fee578
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest:1
+msgid "Test the InaSAFE keywords GUI"
+msgstr ""
+
+# f78bca275c0d447daa2e7beb10ec8150
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.Xtest_on_radExposure_toggled:1
+msgid "Test exposure radio button toggle behaviour works"
+msgstr ""
+
+# 0e12c3d776b44bf885dec02bad8356bd
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.setUp:1
+msgid "Create fresh dialog for each test"
+msgstr ""
+
+# 2bd0653d5d1d436e93c5f54d54980971
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.tearDown:1
+msgid "Destroy the dialog after each test"
+msgstr ""
+
+# bea2c25c92684772aaa0602b4d3acfd3
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_addKeywordWhenPressOkButton:1
+msgid "Test add keyword when ok button is pressed."
+msgstr ""
+
+# 2924bc6230824df0a82dc81469723caa
+# b94e223efd8e4c25baf12e5baffa6445
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_addListEntry:1
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_addWarningsForColons:1
+msgid "Test add entry to list works"
+msgstr ""
+
+# a143d6340c9e44a681e4e143548b75d8
+# 2217014d2f0449c6a2831a7c1e65062d
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_checkStateWhenKeywordsAbsent:1
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_loadStateFromKeywords:1
+msgid "Test load state from keywords works"
+msgstr ""
+
+# 1aaf2e78540a41b6b56822bbff7ee06b
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_getValueForKey:1
+msgid "Test get value for key works"
+msgstr ""
+
+# d8266d152f284bf6afcb6faf28ffba4d
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_cboSubcategory_currentIndexChanged:1
+msgid "Test subcategory combo change event works"
+msgstr ""
+
+# 2aa61770f3e34358ad0eb460fa13085b
+# 4466389d432c4283b9adbc5db5b8238b
+# 5bc3af2ce3af42479c4cc4a5cd55e00b
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_dsbFemaleRatioDefault_valueChanged:1
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_radHazard_toggled:1
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_radPostprocessing_toggled:1
+msgid "Test hazard radio button toggle behaviour works"
+msgstr ""
+
+# e77098d79dbf48e38570a70cd76d1bd1
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_pbnAddToList1_clicked:1
+msgid "Test adding an item to the list using predefined form works"
+msgstr ""
+
+# 49799daef2624dd3b1b982e66ce281f0
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_pbnAddToList2_clicked:1
+msgid "Test adding an item to the list using user defened form works"
+msgstr ""
+
+# cc8d2f3911fc46c9a76fcda14c0082e3
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_pbnAdvanced_toggled:1
+msgid "Test advanced button toggle behaviour works"
+msgstr ""
+
+# da9a7a6aac874dca8a8cafa652717c54
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_on_pbnRemove_clicked:1
+msgid "Test pressing remove works on key list"
+msgstr ""
+
+# e07966f8eaa142f083e4e822e157e40f
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_removeItemByKey:1
+msgid "Test remove item by its key works"
+msgstr ""
+
+# 935f991397e745d39f1df352d20b4985
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_removeItemByValue:1
+msgid "Test remove item by its value works"
+msgstr ""
+
+# 8f41ac2dc422475ea77152d671452380
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_reset:1
+msgid "Test form reset works"
+msgstr ""
+
+# 2db7dfb26c094b59bfcfca2d44eeec4f
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_setCategory:1
+msgid "Test set category works"
+msgstr ""
+
+# bb8ae101ffea4431aee711e45c63a314
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_setSubcategoryList:1
+msgid "Test set subcategory list works"
+msgstr ""
+
+# b797882b23ad4fa7992e9d714f5485d4
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.KeywordsDialogTest.test_showHelp:1
+msgid "Test that help button works"
+msgstr ""
+
+# 08107de8e47946f2aeb6fd767da654a2
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.clearLayers:1
+msgid "Clear all the loaded layers"
+msgstr ""
+
+# 68788575cdd64a2abd57da35853457e9
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.makeKeywordlessLayer:1
+msgid "Helper function that returns a single predefined keywordless layer"
+msgstr ""
+
+# eec8097fd7734874ba615a040ca8a690
+# d946a28e802e4511b5a54ccc184c7261
+# 069551aab1fc4e2da3d6bcf54081b946
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.makePadangLayer:1
+#: safe_qgis.test_keywords_dialog.makePointLayer:1
+#: safe_qgis.test_keywords_dialog.makePolygonLayer:1
+msgid "Helper function that returns a single predefined layer"
+msgstr ""
+
+# 8433583f0ede4e5aa43b752d8a4813ae
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.makePadangLayerClone:1
+msgid "Helper function that copies padang keyword for testing and return it."
+msgstr ""
+
+# 75999e6b20274442b7f48e97b1ccb918
+#: ../../../safe_qgis/test_keywords_dialog.py:docstring of
+#: safe_qgis.test_keywords_dialog.removeTempFile:1
+msgid "Helper function that removes temp file that created during test"
 msgstr ""
 
 # 524296b3d86442c08220bb372e398049

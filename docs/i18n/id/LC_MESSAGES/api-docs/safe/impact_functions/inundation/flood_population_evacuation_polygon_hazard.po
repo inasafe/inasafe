@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,26 +57,33 @@ msgstr ""
 msgid "Risk plugin for flood population evacuation"
 msgstr ""
 
-# bf24bc6b959047ffadfe8373a77b0808
+# 4ea4fe3bfa7f44b7b347ae8131efc050
 #: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
 #: of
 #: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:5
 msgid ""
-"H: Vector polygon layer of flood depth P: Raster layer of population data on "
-"the same grid as H"
+"my_hazard : Vector polygon layer of flood depth my_exposure : Raster layer "
+"of population data on the same"
+msgstr ""
+
+# b14764e7744040f2b0777b81d9bdb0b7
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:7
+msgid "grid as my_hazard"
 msgstr ""
 
 # 359e2b28e1a24119b987b4ca24b7e91d
 #: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
 #: of
-#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:8
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:9
 msgid "Counts number of people exposed to areas identified as flood prone"
 msgstr ""
 
 # 9023849b48dd42aea2fea96bfadd0097
 #: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
 #: of
-#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:11
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:12
 msgid ""
 "Map of population exposed to flooding Table with number of people evacuated "
 "and supplies required"

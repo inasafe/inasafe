@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,72 @@ msgstr ""
 # 4874119345074bf9a3068c74cc62be6a
 #: ../../source/api-docs/safe_qgis_tests/test_map_legend.rst:6
 msgid "Module:  safe_qgis.test_map_legend"
+msgstr ""
+
+# 361af8ed49fa4472a0149b34e6e4394a
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**Map  Legend test Cases.**"
+msgstr ""
+
+# b6322432b711405ca0080fe82f128a8d
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 3b850f09ea734e3bb201ab8fc138dffb
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# b9e58caaeb2646e7baa74f678d23e0b3
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend.MapLegendTest:1
+msgid "Test the InaSAFE Map generator"
+msgstr ""
+
+# 80ec7902adb64488966de8f1b6d2d606
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend.MapLegendTest.setUp:1
+msgid "Setup fixture run before each tests"
+msgstr ""
+
+# 12ce8daee75648cb888a3cb2dd814cf3
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend.MapLegendTest.test_addClassToLegend:1
+msgid "Test we can add a class to the map legend."
+msgstr ""
+
+# b514982f042549d7b479ed332d23c8f2
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend.MapLegendTest.test_addSymbolToLegend:1
+msgid "Test we can add a symbol to the legend."
+msgstr ""
+
+# dcc298cf381c4bc8b35c9193297c6211
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend.MapLegendTest.test_getLegend:1
+msgid "Getting a legend for a generic layer works."
+msgstr ""
+
+# 507fb75af53948d5a961c736fa7f081e
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend.MapLegendTest.test_getRasterLegend:1
+msgid "Getting a legend for a raster layer works."
+msgstr ""
+
+# 880f954c7a314a2a9b5a7b789135a815
+#: ../../../safe_qgis/test_map_legend.py:docstring of
+#: safe_qgis.test_map_legend.MapLegendTest.test_getVectorLegend:1
+msgid "Getting a legend for a vector layer works."
 msgstr ""
 
 # f64774a5c0964585b82e1581d35cb5d0

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,37 @@ msgstr ""
 # 710cd6f46c244409952e963f70fbcd15
 #: ../../source/api-docs/safe_qgis/help.rst:6
 msgid "Module:  safe_qgis.help"
+msgstr ""
+
+# 47b10b0f2ee14a5f920437586f9d3aba
+#: ../../../safe_qgis/help.py:docstring of safe_qgis.help:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Help Dialog.**"
+msgstr ""
+
+# 5074f28a9cb649b0a9f0faabe02bd803
+#: ../../../safe_qgis/help.py:docstring of safe_qgis.help:3
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 5314c6aaaacc4503a40783c4e891e6b8
+#: ../../../safe_qgis/help.py:docstring of safe_qgis.help:5
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 3be763079f0343d6bd107d36cc92b5fa
+#: ../../../safe_qgis/help.py:docstring of safe_qgis.help.Help:1
+msgid "Help dialog class for the Risk In A Box plugin."
+msgstr ""
+
+# 0c8f80d2553d42388c17a2877fa73a3a
+#: ../../../safe_qgis/help.py:docstring of
+#: safe_qgis.help.Help.showContextHelp:1
+msgid "Load the help text into the wvResults widget."
 msgstr ""
 
 # 9e74bad6c85e429486cfa534fe7e638f

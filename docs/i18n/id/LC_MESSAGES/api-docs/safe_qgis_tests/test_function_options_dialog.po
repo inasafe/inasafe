@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,60 @@ msgstr ""
 # 8fca57a4e4dc480b94c8f98b713c7a18
 #: ../../source/api-docs/safe_qgis_tests/test_function_options_dialog.rst:6
 msgid "Module:  safe_qgis.test_function_options_dialog"
+msgstr ""
+
+# 13559b2e91a8431a851eeff3ac671bc4
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**GUI Test Cases.**"
+msgstr ""
+
+# b85cddc6978449c7b904816a71711ebd
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 687a12f8438e401b8a8c1e315cae48c0
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# c85fbeadf9234b5ebba2cb1adcb0d289
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog.FunctionOptionsDialogTest:1
+msgid "Test the InaSAFE GUI for Configurable Impact Functions"
+msgstr ""
+
+# 21dea27258934fa09247fb6a2e3bc0f0
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog.FunctionOptionsDialogTest.setUp:1
+msgid "Fixture run before all tests"
+msgstr ""
+
+# ddf7b559c42a457d97e7fb41e0cb63a9
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog.FunctionOptionsDialogTest.tearDown:1
+msgid "Fixture run after each test"
+msgstr ""
+
+# bd52509b4b0544caa3513847b45890aa
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog.FunctionOptionsDialogTest.tearUp:1
+msgid "Fixture run before each test"
+msgstr ""
+
+# 55cba3dd863c42f2bb60d66f51e42715
+#: ../../../safe_qgis/test_function_options_dialog.py:docstring of
+#: safe_qgis.test_function_options_dialog.FunctionOptionsDialogTest.test_buildForm:1
+msgid "Test that we can build a form by passing it a function and params."
 msgstr ""
 
 # 4cb1c95d84814a9294a11b019b94c959

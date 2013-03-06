@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,9 +42,127 @@ msgid ""
 "html OGR C++ reference: http://www.gdal.org/ogr"
 msgstr ""
 
-# f71defff0faa4055b8101f5446f90976
+# 3a3c51dc19bf4013826569a0d062d280
 #: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:1
-msgid "Class for abstraction of vector data."
+msgid "InaSAFE representation of vector data."
+msgstr ""
+
+# 4aeba63d07534fc4952b50ec8f389271
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:6
+msgid "A filename of a vector file format known to GDAL."
+msgstr ""
+
+# 59e80b05141a45578f4de5b653c1783d
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:7
+msgid ""
+"List of dictionaries of field names and attribute values associated with "
+"each point coordinate."
+msgstr ""
+
+# 4119babe9ea944a59e5d4454bb9c7a76
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:9
+msgid "None"
+msgstr ""
+
+# 919a8ce723a34da1a9ead04b81d409ce
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:11
+msgid ""
+"Only used if geometry is provided as a numeric array, if None, WGS84 "
+"geographic is assumed."
+msgstr ""
+
+# 4136372afdbc48a9a6d3750e689c2b8a
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:14
+msgid "(see note below)."
+msgstr ""
+
+# 14435da3111c4383a4135d1c76962f71
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:16
+msgid ""
+"Valid options are 'point', 'line', 'polygon' or the ogr types: 1, 2, 3. If "
+"None, a geometry_type will be inferred from the data."
+msgstr ""
+
+# e7681ff74a214c0db907a44ca7643283
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:19
+msgid "name: Optional name for layer. If None, basename is used."
+msgstr ""
+
+# ef95363bff9147a4a15c13beef39871f
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:21
+msgid ""
+"layer. When the layer is stored, these keywords will be written into an "
+"associated file with extension '.keywords'."
+msgstr ""
+
+# 83bf28d2cd5c4784b3202c16c105b453
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:25
+msgid ""
+"Keywords can for example be used to display text about the layer in an "
+"application."
+msgstr ""
+
+# 985b776a3b214b8bb82ec32350ff59ab
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:28
+msgid "should be styled. See impact_functions/styles.py for examples."
+msgstr ""
+
+# 692a7a36598a4eeb8ead4ad9a4f9a27a
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:31
+msgid ""
+"table name in case of sqlite etc.) to load. Only applicable to those "
+"dataformats supporting more than one layer in the data file."
+msgstr ""
+
+# c6df006abb4c4c7580d96c3bb3692ee9
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:36
+msgid "InaSAFE vector layer instance"
+msgstr ""
+
+# 7c72fa82b16d421488c2526afbe0e157
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:39
+msgid "TypeError, ReadLayerError, WriteLayerError, InaSAFEError, GetDataError"
+msgstr ""
+
+# a1479c87e5f240c6acffe89f46c012c4
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:42
+msgid "Notes:"
+msgstr ""
+
+# a838cfa4ccee469498b3a4c944ff9545
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:44
+msgid ""
+"If data is a filename, all other arguments are ignored as they will be "
+"inferred from the file."
+msgstr ""
+
+# e7acc5809e2a4850a41f9182f1a3af1a
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:47
+msgid ""
+"The geometry type will be inferred from the dimensions of geometry. If each "
+"entry is one set of coordinates the type will be ogr.wkbPoint, if it is an "
+"array of coordinates the type will be ogr.wkbPolygon."
+msgstr ""
+
+# e5907c659fcf4579aa85b7c9639b8478
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:52
+msgid ""
+"To cast array entries as lines set geometry_type explicitly to 'line' in the "
+"call to Vector. Otherwise, they will default to polygons."
+msgstr ""
+
+# b1663217c1144d4bbd871effe075b787
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:56
+msgid ""
+"Each polygon or line feature take the form of an Nx2 array representing "
+"vertices where line segments are joined."
+msgstr ""
+
+# a89f558298924b93a08702327da724e5
+#: ../../../safe/storage/vector.py:docstring of safe.storage.vector.Vector:59
+msgid ""
+"If polygons have holes, their geometry must be passed in as a list of "
+"polygon geometry objects (as defined in module geometry.py)"
 msgstr ""
 
 # 17740f4b8af74a86961a79581a344042

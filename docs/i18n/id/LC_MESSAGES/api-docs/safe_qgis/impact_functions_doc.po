@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,94 @@ msgstr ""
 # af76bd937c554be9b4a9736a4c5e82e2
 #: ../../source/api-docs/safe_qgis/impact_functions_doc.rst:6
 msgid "Module:  safe_qgis.impact_functions_doc"
+msgstr ""
+
+# cbad2b92b6444872a67b2f4602889f12
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Impact "
+"Functions Dialog.**"
+msgstr ""
+
+# 5b0f4a5f89d1413d8e0d4b97a8571396
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# d43a27a6ad3a4c238fcf5661986155f3
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 5a26468e6ad74406b7d3569cce3ef8d1
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc:1
+msgid "ImpactFunctions Dialog for InaSAFE."
+msgstr ""
+
+# 996d637d766e4586abfc8f2868b1345a
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.displayHtml:1
+msgid ""
+"Given an html snippet, wrap it in a page header and footer and display it in "
+"the wvResults widget."
+msgstr ""
+
+# e146bc09f05149e8b17d94aa7b1bb994
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.generate_combo_box_content:1
+msgid "Generate list for each combo box's content."
+msgstr ""
+
+# 04db4053c1064d8781af91fd31bd04c9
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.htmlFooter:1
+msgid "Get a standard html footer for wrapping content in."
+msgstr ""
+
+# 8f238f15ff7e43218b0418d34ed506e5
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.htmlHeader:1
+msgid "Get a standard html header for wrapping content in."
+msgstr ""
+
+# 6bcbeaa62e974851879aee86af1d46b5
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.populate_combo_box:1
+msgid "Populate item in each combo box."
+msgstr ""
+
+# d428ebc36f1f4bc789ada869f8ad16f0
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.reset_button_clicked:1
+msgid ""
+"Function when reset button is clicked. All combo box become No Filter. "
+"Updating table according to the filter."
+msgstr ""
+
+# 31b0f53687514596b23f9becbd67a6df
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.showHelp:1
+msgid "Load the help text for the keywords safe_qgis"
+msgstr ""
+
+# bf2a8c53b7e04d9dbd71337c8af54c93
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.showImpactFunctionsTable:1
+msgid "Show table of impact functions."
+msgstr ""
+
+# b0cd0eb0a76f4f5f8b968716ed39ef4a
+#: ../../../safe_qgis/impact_functions_doc.py:docstring of
+#: safe_qgis.impact_functions_doc.ImpactFunctionsDoc.update_table:1
+msgid "Updating table according to the filter."
 msgstr ""
 
 # 5744c37086ac4c4a8f135066c7732db4

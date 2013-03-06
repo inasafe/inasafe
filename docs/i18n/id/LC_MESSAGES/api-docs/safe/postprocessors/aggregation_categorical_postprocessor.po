@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/api-docs/safe/postprocessors/aggregation_categorical_postprocessor.rst:6
+# 57c3f916a4804ae299ce181458b62f0d
+msgid "Module:  safe.postprocessors.aggregation_categorical_postprocessor"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor:1
+# 59b89e136d3047fb81d038237939bd6c
+msgid "**Postprocessors package.**"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor:1
+# 4b9316275ac64fd7823b926aafbacfef
+msgid "Postprocessor that calculates age related statistics. see the _calculate_* methods to see indicator specific documentation"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor:4
+# d4f3097546484289959e06f98897af37
+msgid "see :mod:`safe.defaults` for default values information"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.clear:1
+# 09274846fb54423e9645deb3f60d7eb2
+msgid "concrete implementation it takes care of the needed parameters being properly cleared"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.clear:5
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.clear:7
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.clear:9
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.process:5
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.process:7
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.process:9
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.setup:7
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.setup:9
+# 87cea23ce757477fa5732c43bd24b410
+# aa63edba19934fdd8a1e85a640fc02e8
+# 13fb765b25bc4e7fab7a6cac3a0a3668
+# 3fba22acacc443f7a4d301684ae86221
+# 098968f777934ccfb1d914fc9b78614d
+# f75c9a585c7047038b487c2affdf8357
+# 7486a781568c44ee9a7deb91baeadbe2
+# 7a6e22740c044acb8875d8859750ceab
+msgid "None"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.process:1
+# 4bee786ebabc4aae8a0e7689a9e6edc9
+msgid "concrete implementation it takes care of the needed parameters being available and performs all the indicators calculations"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.setup:1
+# 0ab9173dfa744d508c8f86959443b915
+msgid "concrete implementation it takes care of the needed parameters being initialized"
+msgstr ""
+
+#: ../../../safe/postprocessors/aggregation_categorical_postprocessor.py:docstring of safe.postprocessors.aggregation_categorical_postprocessor.AggregationCategoricalPostprocessor.setup:5
+# 0fc0793577a6412088d05834004fae96
+msgid "params: dict of parameters to pass to the post processor"
+msgstr ""
+
+#: ../../source/api-docs/safe/postprocessors/aggregation_categorical_postprocessor.rst:11
+# c01d5f2e52414561bbc65da72a76c768
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
+

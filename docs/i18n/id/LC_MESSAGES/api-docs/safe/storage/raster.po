@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,9 +27,85 @@ msgstr ""
 msgid "**Class Raster**"
 msgstr ""
 
-# fe225acc38e04689ab7fb1d2c4740d2c
+# ceb1c56dd5cb40b589d0b4946779f913
 #: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:1
-msgid "Internal representation of raster data"
+msgid "InaSAFE representation of raster data"
+msgstr ""
+
+# 710f066243e14b29b54787b91a9d30e4
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:5
+msgid "a filename of a raster file format known to GDAL"
+msgstr ""
+
+# e8ad6ddc59f549679353f6c9ab78e782
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:6
+msgid "an MxN array of raster data"
+msgstr ""
+
+# 7d80dc7b03c244469f4f8eb0bff715cf
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:7
+msgid "None (FIXME (Ole): Don't think we need this option)"
+msgstr ""
+
+# 41654e90982e4039a2273a15902e2b56
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:9
+msgid ""
+"Only used if data is provide as a numeric array, if None, WGS84 geographic "
+"is assumed"
+msgstr ""
+
+# fdcfe0b6b2004f5ebb7c625546745756
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:13
+#: safe.storage.raster.Raster.get_geotransform:6
+msgid "top left y, rotation, n-s pixel resolution)."
+msgstr ""
+
+# 368a9450dc314506b653e7c8ffc935ab
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:14
+msgid ""
+"See e.g. http://www.gdal.org/gdal_tutorial.html Only used if data is provide "
+"as a numeric array,"
+msgstr ""
+
+# d22f9ca170c24e0aab769c10b78ea878
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:16
+msgid "name: Optional name for layer. If None, basename is used."
+msgstr ""
+
+# 4d8e77b9cee04869950a54da1c1d821b
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:18
+msgid ""
+"layer. When the layer is stored, these keywords will be written into an "
+"associated file with extension .keywords."
+msgstr ""
+
+# eec54a0a46ad45b2bfbcb89d44ab7388
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:22
+msgid ""
+"Keywords can for example be used to display text about the layer in a web "
+"application."
+msgstr ""
+
+# d5c09c670ce84b83915cb5f604a781be
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:25
+msgid "should be styled. See impact_functions/styles.py for examples."
+msgstr ""
+
+# 233b20b79a0f49b0a769e345fb77ec18
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:29
+msgid "InaSAFE raster layer instance"
+msgstr ""
+
+# 70b787c808b34b359ab9df4fa0fed360
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:32
+msgid "TypeError, ReadLayerError, WriteLayerError, InaSAFEError, GetDataError"
+msgstr ""
+
+# 07c75f398cdc415d8f837456a23885bc
+#: ../../../safe/storage/raster.py:docstring of safe.storage.raster.Raster:36
+msgid ""
+"If data is a filename, all other arguments are ignored as they will be "
+"inferred from the file."
 msgstr ""
 
 # 4d3dbb45fbb44bbe99925d690055c341
@@ -188,12 +264,6 @@ msgstr ""
 #: ../../../safe/storage/raster.py:docstring of
 #: safe.storage.raster.Raster.get_geotransform:3
 msgid "Returns: * geotransform: 6 digit vector"
-msgstr ""
-
-# fdcfe0b6b2004f5ebb7c625546745756
-#: ../../../safe/storage/raster.py:docstring of
-#: safe.storage.raster.Raster.get_geotransform:6
-msgid "top left y, rotation, n-s pixel resolution)."
 msgstr ""
 
 # bc7dc0050a7b408ab2db7f2807b22bda

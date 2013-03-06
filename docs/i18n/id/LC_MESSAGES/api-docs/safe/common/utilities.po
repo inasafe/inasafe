@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,6 +87,13 @@ msgstr ""
 msgid ""
 "Return current free memory on the machine for windows. Warning : this script "
 "is really not robust Return in MB unit"
+msgstr ""
+
+# f0bbcbce92714572a650b87b747448ce
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.round_thousand:1
+msgid ""
+"Round an integer to the nearest thousand if my_int is more than a thousand"
 msgstr ""
 
 # 045c922415ee4d91ac9dd0892a7d3d36

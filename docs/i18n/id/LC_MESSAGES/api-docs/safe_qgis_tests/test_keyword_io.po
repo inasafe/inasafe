@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,56 @@ msgstr ""
 # edeb0ec0d5234eb18af399049809266a
 #: ../../source/api-docs/safe_qgis_tests/test_keyword_io.rst:6
 msgid "Module:  safe_qgis.test_keyword_io"
+msgstr ""
+
+# d9a7df632a124a7c910c18b0816fd386
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest:1
+msgid "Tests for reading and writing of raster and vector data"
+msgstr ""
+
+# d558da4601904c0793a7ec9aef5e3773
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest.test_appendKeywords:1
+msgid "Can we append file keywords with the generic readKeywords method."
+msgstr ""
+
+# 27d00972fbf84d3c9ca42dece633c5bf
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest.test_areKeywordsFileBased:1
+msgid ""
+"Can we correctly determine if keywords should be written to file or to "
+"database?"
+msgstr ""
+
+# add9ae50e5c54bde84335190d82e6e78
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest.test_getHashForDatasource:1
+msgid "Test we can reliably get a hash for a uri"
+msgstr ""
+
+# c87710dde04e4dc785dd0561ee1f746d
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest.test_readDBKeywords:1
+msgid "Can we read sqlite keywords with the generic readKeywords method"
+msgstr ""
+
+# f80fcfb771874475b78527c3e2fc0f96
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest.test_readRasterFileKeywords:1
+msgid "Can we read raster file keywords using generic readKeywords method"
+msgstr ""
+
+# 8fc64e0b446f4ca4bf6deaac141dd237
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest.test_readVectorFileKeywords:1
+msgid "Can we read vector file keywords with the generic readKeywords method"
+msgstr ""
+
+# 78e9241f140149f2a0e5b43145d50d61
+#: ../../../safe_qgis/test_keyword_io.py:docstring of
+#: safe_qgis.test_keyword_io.KeywordIOTest.test_writeReadKeywordFromUri:1
+msgid "Test we can set and get keywords for a non local datasource"
 msgstr ""
 
 # 1332ad93393d4cbea4d4090cfbd7177e

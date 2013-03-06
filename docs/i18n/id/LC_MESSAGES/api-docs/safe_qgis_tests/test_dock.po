@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,447 @@ msgstr ""
 # 1967f58f8e884d1b817b9cd95c2726c5
 #: ../../source/api-docs/safe_qgis_tests/test_dock.rst:6
 msgid "Module:  safe_qgis.test_dock"
+msgstr ""
+
+# 2fc49c96a23e4cb791ac1b4bca67e112
+#: ../../../safe_qgis/test_dock.py:docstring of safe_qgis.test_dock:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**GUI Test Cases.**"
+msgstr ""
+
+# ed0739334bb642f7b7e45864e0e76b3d
+#: ../../../safe_qgis/test_dock.py:docstring of safe_qgis.test_dock:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 3ead0400c7734d46833f941a32be784a
+#: ../../../safe_qgis/test_dock.py:docstring of safe_qgis.test_dock:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# c2c7b62df1da4149b8bad44f5a141095
+#: ../../../safe_qgis/test_dock.py:docstring of safe_qgis.test_dock.DockTest:1
+msgid "Test the InaSAFE GUI"
+msgstr ""
+
+# 100181e31572480e95eb834caa040c6a
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.Xtest_extentsChanged:1
+msgid "Memory requirements are calculated correctly when extents change."
+msgstr ""
+
+# 661acaea4f7b474eaa3ed350bb74c8f6
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.Xtest_printMap:1
+msgid "Test print map, especially on Windows."
+msgstr ""
+
+# f22659ed0c224caf9d9415809f3aedbd
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.Xtest_runnerExceptions:1
+msgid "Test runner exceptions"
+msgstr ""
+
+# b5d49ea54120463eac456b8ac4c4bf67
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.Xtest_runnerIsNone:1
+msgid "Test for none runner exceptions"
+msgstr ""
+
+# 56c2e1586a874351b1084affec9445d1
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.setUp:1
+msgid "Fixture run before all tests"
+msgstr ""
+
+# 5315ffa6781147f595099e191f94402b
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.tearDown:1
+msgid "Fixture run after each test"
+msgstr ""
+
+# e8344cd7db66433cbc02778f50a0d7e0
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_InsufficientOverlapIssue372:1
+msgid ""
+"Test Insufficient overlap errors are caught as per issue #372. ..note:: See "
+"https://github.com/AIFDR/inasafe/issues/372"
+msgstr ""
+
+# eb4985ba3acd4c3985bbbf6832f8945f
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_Issue47:1
+msgid ""
+"Issue47: Problem when hazard & exposure data are in different proj to "
+"viewport. See https://github.com/AIFDR/inasafe/issues/47"
+msgstr ""
+
+# 211093424f864f3b8cdc7b4c0bb8232f
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_Issue71:1
+msgid "Test issue #71 in github - cbo changes should update ok button."
+msgstr ""
+
+# 436d499df59148128f6fba70d7df426f
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_Issue95:1
+msgid "Test issue #95 in github -check crs of impact layer."
+msgstr ""
+
+# f722655fe22e4fcdb53e6d8e0b155058
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_ResultStyling:1
+msgid ""
+"Test that ouputs from a model are correctly styled (colours and opacity."
+msgstr ""
+
+# f65c7e7a382741a2a7de7d07a1a2f9d1
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_aggregationResults:1
+msgid "Aggregation results are correct."
+msgstr ""
+
+# a08affe1262149d98295dcc44e6dde95
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_cboAggregationEmptyProject:1
+msgid "Aggregation combo changes properly according on no loaded layers"
+msgstr ""
+
+# e9ded977f5be44b497181c63afceaaa0
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_cboAggregationLoadedProject:1
+msgid "Aggregation combo changes properly according loaded layers"
+msgstr ""
+
+# 186ec2d591cd4976b9dbae4e1f222d77
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_cboAggregationToggle:1
+msgid "Aggregation Combobox toggles on and off as expected."
+msgstr ""
+
+# 136f5c2fca5e475288465dac8fcda84e
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_checkAggregationAttribute1Attr:1
+msgid ""
+"Aggregation attribute is chosen correctly when there is only one attr "
+"available."
+msgstr ""
+
+# 3862655a442848d999065e23ce6a8459
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_checkAggregationAttributeInKW:1
+msgid "Aggregation attribute is chosen correctly when present in kezwords."
+msgstr ""
+
+# a5636b57365b4d29aa219f42490b9dd6
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_checkAggregationAttributeNoAttr:1
+msgid ""
+"Aggregation attribute is chosen correctly when there is no attr available."
+msgstr ""
+
+# d48904947ec045afb00e7225aa608cf6
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_checkAggregationAttributeNoneAttr:1
+msgid ""
+"Aggregation attribute is chosen correctly when there None in the kezwords"
+msgstr ""
+
+# c27d2f9de0404634a72bba3f2162b04a
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_checkPostProcessingLayersVisibility:1
+msgid "Generated layers are not added to the map registry."
+msgstr ""
+
+# 4ace1dda46cf44daa73a1c646f738f30
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_defaults:1
+msgid "Test the GUI in its default state"
+msgstr ""
+
+# 3b7d2a5a357f4bfa994be203404ae3bb
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_hasParametersButtonDisabled:1
+msgid "Function configuration button is disabled when layers not compatible."
+msgstr ""
+
+# 6953545108cf48258f40e89a574f11ab
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_hasParametersButtonEnabled:1
+msgid "Function configuration button is enabled when layers are compatible."
+msgstr ""
+
+# a95fb3772c1e4cd08d7f8d92a3a855e2
+# 58348b2cadbc4b67be9e4460f3ea7b67
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_issue317:1
+#: safe_qgis.test_dock.DockTest.test_issue45:1
+msgid "Points near the edge of a raster hazard layer are interpolated OK"
+msgstr ""
+
+# 04bc3a35b50d47b7af45c54318a5fb98
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_issue_160:1
+msgid "Test that multipart features can be used in a scenario - issue #160"
+msgstr ""
+
+# baa6c057c6be4f54915da3becea792b1
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_layerChanged:1
+msgid ""
+"Test the metadata is updated as the user highlights different QGIS layers. "
+"For inasafe outputs, the table of results should be shown See also https://"
+"github.com/AIFDR/inasafe/issues/58"
+msgstr ""
+
+# 2e6d276ebd0843859a4e1c79e06635dd
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_loadLayers:1
+msgid "Layers can be loaded and list widget was updated appropriately"
+msgstr ""
+
+# 475ca8f2b6b54a06a135de46e92872ad
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_newLayersShowInCanvas:1
+msgid "Check that when we add a layer we can see it in the canvas list."
+msgstr ""
+
+# bee8f78a38ea4611ba2c9dad1addd5d1
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_postProcessorOutput:1
+msgid "Check that the post processor does not add spurious report rows."
+msgstr ""
+
+# f79638ce17884481ad4dec04e67aa4f6
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_preprocessing:1
+msgid "preprocessing results are correct."
+msgstr ""
+
+# 749f4e31f6f84c15bdfee0d4622b8760
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runCategorisedHazardPopulationImpactFunction:1
+msgid ""
+"Flood function runs in GUI with Flood in Jakarta hazard data Uses Penduduk "
+"Jakarta as exposure data."
+msgstr ""
+
+# 0a11581a3c4a442d97db26caf88269f6
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runCategorizedHazardBuildingImpact:1
+msgid ""
+"Flood function runs in GUI with Flood in Jakarta hazard data Uses DKI "
+"buildings exposure data."
+msgstr ""
+
+# 8d04617b71174a3e9741ea30167f9c5b
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runEarthQuakeGuidelinesFunction:1
+msgid "GUI runs with Shakemap 2009 and Padang Buildings"
+msgstr ""
+
+# 974b3de707b349e4be5c3ff5b07e7a74
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runEarthquakeBuildingImpactFunction:1
+msgid ""
+"Earthquake function runs in GUI with An earthquake in Yogyakarta like in "
+"2006 hazard data uses OSM Building Polygons exposure data."
+msgstr ""
+
+# 79dc96484f594405bea1affbb868b149
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runEarthquakeFatalityFunction_Padang_full:1
+msgid "Padang 2009 fatalities estimated correctly (large extent)"
+msgstr ""
+
+# f0e5c5eb53314ce5b2ab5d05aa2780a9
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runEarthquakeFatalityFunction_small:1
+msgid "Padang 2009 fatalities estimated correctly (small extent)"
+msgstr ""
+
+# 24810b58def34e1696405831e525f897
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runFloodPopulationImpactFunction:1
+msgid ""
+"Flood function runs in GUI with Jakarta data Raster on raster based function "
+"runs as expected."
+msgstr ""
+
+# 79addd49377c42d5abeac0c6127b9049
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runFloodPopulationImpactFunction_scaling:1
+msgid ""
+"Flood function runs in GUI with 5x5km population data Raster on raster based "
+"function runs as expected with scaling."
+msgstr ""
+
+# 5c8de3db8ab346f89b449aeca0a96535
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runFloodPopulationPolygonHazardImpactFunction:1
+msgid ""
+"Flood function runs in GUI with Jakarta polygon flood hazard data. Uses "
+"population raster exposure layer"
+msgstr ""
+
+# daa981f8f9d84e45a8adee7ed1b6cb07
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runTsunamiBuildingImpactFunction:1
+msgid "Tsunami function runs in GUI as expected."
+msgstr ""
+
+# f12369d51e6544c591e8dce616aee3de
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runVolcanoBuildingImpact:1
+msgid ""
+"Volcano function runs in GUI with An donut (merapi hazard map) hazard data "
+"uses OSM Building Polygons exposure data."
+msgstr ""
+
+# 5bbdfa8349624cad8e4294fabab52fec
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runVolcanoCirclePopulation:1
+msgid "Volcano function runs in GUI with a circular evacuation zone."
+msgstr ""
+
+# 7ec69293ff064596b8f346293c82a532
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runVolcanoCirclePopulation:3
+msgid "Uses population density grid as exposure."
+msgstr ""
+
+# 30082ab9fb1c4e44a06d15d28d770ae7
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_runVolcanoPopulationImpact:1
+msgid ""
+"Volcano function runs in GUI with a donut (merapi hazard map) hazard data "
+"uses population density grid."
+msgstr ""
+
+# d7be4821b13d4786909cbfcf20e02c51
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_setOkButtonStatus:1
+msgid "OK button changes properly according to DOCK validity"
+msgstr ""
+
+# 58722dbb18d04a588afe7662ef784fb8
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_state:1
+msgid ""
+"Check if the save/restore state methods work. See also https://github.com/"
+"AIFDR/inasafe/issues/58"
+msgstr ""
+
+# c216f7cf953445008f3bff4fa3856336
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.DockTest.test_validate:1
+msgid "Validate function work as expected"
+msgstr ""
+
+# 64ce05f4206a4f1bb614e8e7bce0b93e
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.canvasList:1
+msgid ""
+"Return a string representing the list of canvas layers (in correct order) "
+"but formatted with line breaks between each entry."
+msgstr ""
+
+# 3821e9dd057343189505aa0e665a8f2e
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.combosToString:1
+msgid ""
+"Helper to return a string showing the state of all combos (all their entries"
+msgstr ""
+
+# d5601d95735440f2b82e2b480974eca9
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.formattedList:1
+msgid ""
+"Return a string representing a list of layers (in correct order) but "
+"formatted with line breaks between each entry."
+msgstr ""
+
+# 157d03ffcbb649338dd442f37165c52c
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.getUiState:1
+msgid ""
+"Get state of the 3 combos on the DOCK ui. This method is purely for testing "
+"and not to be confused with the saveState and restoreState methods of "
+"inasafedock."
+msgstr ""
+
+# a18aecde07f5482a80bb0e94069dc4d8
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.loadLayers:1
+msgid "Helper function to load layers as defined in a python list."
+msgstr ""
+
+# 31ebc3c4ced247d993a335b0cf6a8302
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.loadStandardLayers:1
+msgid "Helper function to load standard layers into the dialog."
+msgstr ""
+
+# ab8934d723924f36beb385cd3b78db0d
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.populatemyDock:1
+msgid "A helper function to populate the DOCK and set it to a valid state."
+msgstr ""
+
+# 5659f4383f014738b9e67c5749e24b99
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.setupScenario:1
+msgid "Helper function to set the gui state to a given scenario."
+msgstr ""
+
+# 9ea1ff3a95454214aeda0b29599dadc9
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.setupScenario:4
+msgid ""
+"theHazard str - (Required) name of the hazard combo entry to set. "
+"theExposure str - (Required) name of exposure combo entry to set. "
+"theFunction - (Required) name of the function combo entry to set. "
+"theFunctionId - (Required) the impact function id that should be used. "
+"theOkButtonFlag - (Optional) Whether the ok button should be enabled"
+msgstr ""
+
+# 3086228f6a3c4ce69dd41ebd65484594
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.setupScenario:9
+msgid "after this scenario is set up."
+msgstr ""
+
+# 566de2293a9340179973e8d555ad71fa
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.setupScenario:10
+msgid ""
+"theAggregationLayer - (Optional) which layer should be used for aggregation"
+msgstr ""
+
+# cc861a3d5fba49189050b61258a3039f
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.setupScenario:13
+msgid ""
+"We require both theFunction and theFunctionId because safe allows for "
+"multiple functions with the same name but different id's so we need to be "
+"sure we have the right one."
+msgstr ""
+
+# b46e12d6718845c9af95432a50f04d22
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.setupScenario:18
+msgid "str - A message indicating why it may have failed."
+msgstr ""
+
+# e292be46c358420a80a9ecd110bdfdea
+#: ../../../safe_qgis/test_dock.py:docstring of
+#: safe_qgis.test_dock.setupScenario:20
+msgid "Raises: None"
 msgstr ""
 
 # c4381f0a200a492a85112069ba8bea96

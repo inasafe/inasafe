@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,78 @@ msgstr ""
 # 7782e17b7c814995a48b3b0d3f717e88
 #: ../../source/api-docs/safe_qgis_tests/test_html_renderer.rst:6
 msgid "Module:  safe_qgis.test_html_renderer"
+msgstr ""
+
+# 79d3ddeddec544ce95d937019ad97a91
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**GUI Test Cases.**"
+msgstr ""
+
+# 364cc5eefbf84dfeb6dd9743aeffb7b4
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 2fc0f1dd713b42dd806dfa609748b095
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# e7c43e6a29f54ed6bae9d00fc1252b6d
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest:1
+msgid "Test the InaSAFE Html Renderer"
+msgstr ""
+
+# 2446be39dbb84707a792a3949d38c004
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest.sampleHtml:1
+msgid "Helper function to generate some sample html."
+msgstr ""
+
+# 17b1e148f49b43e0873d51ef324f76ce
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest.sampleHtml:4
+msgid "theLineCount: How many lines of fake html you want. Default is 100."
+msgstr ""
+
+# 4774273748d847c392d9451dc598bbbd
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest.sampleHtml:7
+msgid "str: an html snippet containing a table with theLineCount rows."
+msgstr ""
+
+# a5e40e7983334fbdac4cf1ed6785e654
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest.sampleHtml:10
+msgid "None"
+msgstr ""
+
+# 79656a03eac245eb804b3994553886fb
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest.test_printImpactTable:1
+msgid "Test that we can render html from impact table keywords."
+msgstr ""
+
+# beaf6fe672114aa18b59752482558d26
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest.test_printToPdf:1
+msgid "Test that we can render some html to a pdf (most common use case)."
+msgstr ""
+
+# 92b677a403134c11bda8964bc9cd560f
+#: ../../../safe_qgis/test_html_renderer.py:docstring of
+#: safe_qgis.test_html_renderer.HtmlRendererTest.test_renderHtmlToImage:1
+msgid "Test that we can render html to a pixmap."
 msgstr ""
 
 # 46bb7d9688dd41eeaa8532566bae64fe

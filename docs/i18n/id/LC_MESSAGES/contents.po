@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,80 +20,4 @@ msgstr ""
 # 016d55a550114f4d9ab03a30f03b3924
 #: ../../source/contents.rst:8
 msgid "InaSAFE Documentation"
-msgstr ""
-
-# 59c1acc2195e4090999114868ed7970b
-#: ../../source/contents.rst:20
-msgid "User manual"
-msgstr ""
-
-# 7e098b01cd6646b5ac28d4f10696ba5f
-#: ../../source/contents.rst:22
-msgid ""
-":ref:`The QGIS User Manual <QGIS-manual-index-reference>`. The main project. "
-"The User manual should contain all information needed for an user to get "
-"started."
-msgstr ""
-
-# b737ec037c1d4496a6c830235e33122c
-#: ../../source/contents.rst:25
-msgid "It will be updated with every update of QGIS."
-msgstr ""
-
-# a391d4d2d6874229a74890bcb2e4c9c6
-#: ../../source/contents.rst:29
-msgid "Documentation Guidelines"
-msgstr ""
-
-# 8085dd0d5bb84227afe4c9231015ec45
-#: ../../source/contents.rst:31
-msgid ""
-":ref:`The QGIS Documentation Guidelines <QGIS-documentation-guidelines>`. "
-"These guidelines are there to let all QGIS documenation have the same look "
-"and feel."
-msgstr ""
-
-# f70e99dc98c44e5d8996ed7609d4e77e
-#: ../../source/contents.rst:34
-msgid ""
-"Before contributing to the documenation, please read and understand those "
-"guidelines"
-msgstr ""
-
-# d5fbba33d47a4db19c964b466bfd1588
-#: ../../source/contents.rst:39
-msgid "A Gentle Introduction to GIS"
-msgstr ""
-
-# 00124975bd0541fca1f44c98af27d51b
-#: ../../source/contents.rst:41
-msgid ""
-":ref:`A Gentle Introduction to GIS <A-Gentle-Introduction-To-GIS-"
-"reference>`. This introduction to GIS is an introductory text to get your "
-"feet wet in GIS"
-msgstr ""
-
-# c4a54a68d1f047f7966841b02ef295f9
-#: ../../source/contents.rst:46
-msgid "PyQGIS Developer Cookbook"
-msgstr ""
-
-# 5c13965ea795487ab6dff78e01571885
-#: ../../source/contents.rst:48
-msgid ""
-":ref:`PyQGIS Developer Cookbook <PyQGIS-Developer-Cookbook>`. This cookbook "
-"is intended to work both as a tutorial and a reference guide for peoples "
-"that want to learn QGIS Python API."
-msgstr ""
-
-# c5be216919964b65a4ca9bbb48f3a271
-#: ../../source/contents.rst:53
-msgid "QGIS Governance"
-msgstr ""
-
-# 5ecc6756340e4a3c87d0e3f66668ed4a
-#: ../../source/contents.rst:55
-msgid ""
-":ref:`QGIS Governance <QGIS-Governance>`. This document descibes official "
-"QGIS governance, bylaws, procedures etc."
 msgstr ""
