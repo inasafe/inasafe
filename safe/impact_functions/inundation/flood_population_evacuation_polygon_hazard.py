@@ -5,7 +5,9 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_question,
                                         format_int)
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   round_thousand)
+from safe.impact_functions.core import format_int
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.common.utilities import get_defaults
@@ -135,6 +137,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 # Update total
                 affected_population += pop
 
+        affected_population = round_thousand(affected_population)
         # Estimate number of people in need of evacuation
         evacuated = (affected_population *
                      self.parameters['evacuation_percentage']
@@ -143,10 +146,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
-        if total > 1000:
-            total = total // 1000 * 1000
-        if evacuated > 1000:
-            evacuated = evacuated // 1000 * 1000
+        total = round_thousand(total)
+        evacuated = round_thousand(evacuated)
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         rice = evacuated * 2.8  # 400g per person per day
@@ -158,14 +159,14 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('People affected'),
-                                '%s' % format_int(int(affected_population))],
+                                '%s*' % format_int(int(affected_population))],
                                header=True),
                       TableRow([tr('People needing evacuation'),
                                 '%s*' % format_int(int(evacuated))],
                                header=True),
                       TableRow([
                           TableCell(
-                              tr('* Evacuation count rounded to nearest 1000'),
+                              tr('* Number is rounded to the nearest 1000'),
                               col_span=2)],
                           header=False),
                       TableRow([tr('Evacuation threshold'),
