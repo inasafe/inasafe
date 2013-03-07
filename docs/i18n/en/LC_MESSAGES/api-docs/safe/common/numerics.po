@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,317 @@ msgstr ""
 # b4959146bd4547208ab9cf0d4e1fc658
 #: ../../source/api-docs/safe/common/numerics.rst:6
 msgid "Module:  safe.common.numerics"
+msgstr ""
+
+# 0f054e89eb8e4a72a2eccee1d993e475
+#: ../../../safe/common/numerics.py:docstring of safe.common.numerics:1
+msgid "**Numerical tools**"
+msgstr ""
+
+# 679525503bdd42ef88e7a19118d1f981
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:1
+msgid "Generate all combinations of grid point coordinates from x and y axes"
+msgstr ""
+
+# 6a371fd92b6f4a37a43497aa266c52e1
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:4
+msgid "x: x coordinates (array)"
+msgstr ""
+
+# 9867d98e69754a5f9c7b75dbd64356dd
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:5
+msgid "y: y coordinates (array)"
+msgstr ""
+
+# 7eab1a1c9e3b4781b26295c6da84d7a5
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:9
+msgid ""
+"grid points defined by x and y axes. The x coordinate will vary the fastest "
+"to match the way 2D numpy arrays are laid out by default ('C' order). That "
+"way, the x and y coordinates will match a corresponding 2D array A when "
+"flattened (A.flat[:] or A.reshape(-1))"
+msgstr ""
+
+# 692d32acd4e14f14bd282760320c30da
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:16
+msgid "Example"
+msgstr ""
+
+# 2e1f49047bd94951a0dd9f551f649107
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:18
+msgid "x = [1, 2, 3] y = [10, 20]"
+msgstr ""
+
+# b8087ef1aede4157bb0ee3130f33c76d
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:22
+msgid "[2, 10], [3, 10], [1, 20], [2, 20], [3, 20]]"
+msgstr ""
+
+# 3f5cb81003314bd8b7960ae6b4dcc305
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:1
+msgid "Ensure that sequence is a numeric array."
+msgstr ""
+
+# d77ca028848d47989eceff7f1b47b20f
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:5
+msgid "unaltered If not, an attempt is made to convert it to a numeric array"
+msgstr ""
+
+# e46c8adf5a734480b386468a54c985af
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:9
+msgid "that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy."
+msgstr ""
+
+# 6bda11f35ed741c9ab4b1eff20fb6593
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:10
+msgid "A: String.   Array of ASCII values (numpy can't handle this)"
+msgstr ""
+
+# d665ef27c97c4ef6ae55e2a78a7a0fdf
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:13
+msgid ""
+"If not, let numeric package decide. typecode will always be one of num."
+"float, num.int, etc."
+msgstr ""
+
+# 03f9b9846da241f5bb164393950e4358
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:17
+msgid ""
+"that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to copy "
+"only when required."
+msgstr ""
+
+# 5a088489ff4349e8a1fe9fab969e9610
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:20
+msgid "This function is necessary as array(A) can cause memory overflow."
+msgstr ""
+
+# 641e00630c284f42aec2e5bc2416fddf
+#: ../../../safe/common/numerics.py:docstring of safe.common.numerics.erf:1
+msgid "Approximation to ERF"
+msgstr ""
+
+# bf4893fb380a451bab209ade57202511
+#: ../../../safe/common/numerics.py:docstring of safe.common.numerics.erf:4
+msgid ""
+"from: http://www.cs.princeton.edu/introcs/21function/ErrorFunction.java.html "
+"Implements the Gauss error function. erf(z) = 2 / sqrt(pi) * integral(exp(-"
+"t*t), t = 0..z)"
+msgstr ""
+
+# 496383e9dc054937aa4377380da2c020
+#: ../../../safe/common/numerics.py:docstring of safe.common.numerics.erf:9
+msgid ""
+"Fractional error in math formula less than 1.2 * 10 ^ -7. although subject "
+"to catastrophic cancellation when z in very close to 0 from Chebyshev "
+"fitting formula for erf(z) from Numerical Recipes, 6.2"
+msgstr ""
+
+# 3dd1e29f40b544688b2ca1e0d4789ce4
+#: ../../../safe/common/numerics.py:docstring of safe.common.numerics.erf:13
+msgid ""
+"Source: http://stackoverflow.com/questions/457408/ is-there-an-easily-"
+"available-implementation-of-erf-for-python"
+msgstr ""
+
+# 6cee4771918140ec8193c1ae4d2bdffe
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:1
+msgid "Convert geotransform to coordinate axes"
+msgstr ""
+
+# d78443df5df54f629be52fe8eada6fbf
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:6
+msgid "top left y, rotation, n-s pixel resolution)."
+msgstr ""
+
+# 9520b39492e248cabd135c72c6137320
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:7
+msgid "nx: Number of cells in the w-e direction"
+msgstr ""
+
+# a6b727a75772494494c90af3837ff139
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:8
+msgid "ny: Number of cells in the n-s direction"
+msgstr ""
+
+# d6d70d816aa44e3b9afb3f6c33d0ad72
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:12
+msgid ""
+"Return two vectors (longitudes and latitudes) representing the grid defined "
+"by the geotransform."
+msgstr ""
+
+# 8768ee833f8641dda50f59b0fe5592ad
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:15
+msgid ""
+"The values are offset by half a pixel size to correspond to pixel "
+"registration."
+msgstr ""
+
+# 82c3e7b37e3346db917918902ebc50b0
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:18
+msgid ""
+"I.e. If the grid origin (top left corner) is (105, 10) and the resolution is "
+"1 degrees in each direction, then the vectors will take the form"
+msgstr ""
+
+# f919adfe6df7424fa490eb8d67c4129f
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:22
+msgid ""
+"longitudes = [100.5, 101.5, ..., 109.5] latitudes = [0.5, 1.5, ..., 9.5]"
+msgstr ""
+
+# a242a1e660ae45d28b266efa9c87687f
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:1
+msgid "Convert grid data to point data"
+msgstr ""
+
+# 4463d477cfd54cbd862097a91ed0453d
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:4
+msgid "A: Array of pixel values"
+msgstr ""
+
+# a8a7b92614d04e6d9a8aa02101273623
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:5
+msgid "x: Longitudes corresponding to columns in A (west->east)"
+msgstr ""
+
+# ffff400284824ae683e948cd921dfb5e
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:6
+msgid "y: Latitudes corresponding to rows in A (south->north)"
+msgstr ""
+
+# 42b7955235cc43c0b5e298be7dab9837
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:9
+msgid "P: Nx2 array of point coordinates"
+msgstr ""
+
+# 07d9a18cc2e646b9895c94feccbc8327
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:10
+msgid "V: N array of point values"
+msgstr ""
+
+# d693600d4a6e4b409a7d3ea189970fbd
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:1
+msgid "Cumulative Log Normal Distribution Function"
+msgstr ""
+
+# 2dc35d0dc98848d09256ef2c6af1bbf4
+# 5a41936591d14ce7a2c8dfb90cf7f623
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:4 safe.common.numerics.normal_cdf:4
+msgid "x: scalar or array of real numbers"
+msgstr ""
+
+# 5f540fb8e53b49eeb918e46e198c29e5
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:5
+msgid "mu: Median (exp(mean of log(x)). Default 1"
+msgstr ""
+
+# d2028273a00643d79bcd5efc396a0cad
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:6
+msgid "sigma: Log normal standard deviation. Default 1"
+msgstr ""
+
+# 1996de0e995644338277b3b26feaffa8
+# f8c07bd4f9804275abffb6d0e14a820b
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:9 safe.common.numerics.normal_cdf:9
+msgid "An approximation of the cdf of the normal"
+msgstr ""
+
+# e030da8c5bf74ae2861e71756fd13380
+# d9a6789fa51b4265a27f6505cb57a796
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:12 safe.common.numerics.normal_cdf:12
+msgid "CDF of the normal distribution is defined as"
+msgstr ""
+
+# 57e89f5b2f8c49c19084667a28420a40
+# ea8981f4c3fe4aa587fb4ad8c36ba570
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:14 safe.common.numerics.normal_cdf:14
+msgid "rac12 [1 + erf( rac{x - \\mu}{\\sigma \\sqrt{2}})], x \\in \\R"
+msgstr ""
+
+# f03def68ffc645c3a35e954bfd3cbb96
+# 41b52af4d9ee45bc91fbd3870be28985
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:17 safe.common.numerics.normal_cdf:17
+msgid "Source: http://en.wikipedia.org/wiki/Normal_distribution"
+msgstr ""
+
+# e90f72f2ec8a4378980bee89f394fcbc
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:1
+msgid "Numpy allclose function which allows NaN"
+msgstr ""
+
+# b0538cb9b73f48a78db241057c566f3a
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:4
+msgid "x, y: Either scalars or numpy arrays"
+msgstr ""
+
+# 6ddf1a96a06d45629364a441255aa4d6
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:7
+msgid "True or False"
+msgstr ""
+
+# ffba63c3957b4bbcb5ef410da2d9ebb1
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:10
+msgid "Returns True if all non-nan elements pass."
+msgstr ""
+
+# b5681385e3634443beceaf486206b35e
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.normal_cdf:1
+msgid "Cumulative Normal Distribution Function"
+msgstr ""
+
+# 4c4e4a783cee45e596e55dbb0e459e20
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.normal_cdf:5
+msgid "mu: Mean value. Default 0"
+msgstr ""
+
+# eeeb2f71322f4685a7d109fda9194eab
+#: ../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.normal_cdf:6
+msgid "sigma: Standard deviation. Default 1"
 msgstr ""
 
 # 3a2c3ab0b18940c0a5255f6a3d8e7fca

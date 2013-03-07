@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,11 @@ msgstr ""
 # a71ff499d0f04bacb8317cb772e1e8e3
 #: ../../source/api-docs/safe/engine/utilities.rst:6
 msgid "Module:  safe.engine.utilities"
+msgstr ""
+
+# ba407e00b7524d36970e4d08297a2f6e
+#: ../../../safe/engine/utilities.py:docstring of safe.engine.utilities:1
+msgid "Miscellaneous utility functions for Risk-in-a-Box (riab_core)"
 msgstr ""
 
 # 19755aeb97fc44d7b0cb47557b3ddaeb

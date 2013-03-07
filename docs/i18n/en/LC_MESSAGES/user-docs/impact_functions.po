@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,21 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 # e686b9ec96254294a00fe93dd67bc3f6
-#: ../../source/user-docs/impact_functions.rst:8
+#: ../../source/user-docs/impact_functions.rst:9
 msgid "Impact Functions"
 msgstr ""
 
-# 0d2b4ed20c3f4053ac130f732a1bd4a8
-#: ../../source/user-docs/impact_functions.rst:10
+# 49bae71364bc42cb9fdd8172769b9e4e
+#: ../../source/user-docs/impact_functions.rst:11
 msgid ""
 "This document explains the purpose of impact functions and lists the "
 "different available impact function and the requirements each has to be used "
-"effectively."
-msgstr ""
-
-# b400e446409445ac89487a15ae3c7431
-#: ../../source/user-docs/impact_functions.rst:14
-msgid "This document is still a work in progress."
+"effectively. See :ref:`writing_impact_functions` for more information about "
+"writing new impact functions."
 msgstr ""
 
 # ea40f043b9754828b5ee289e35457b39
@@ -120,17 +116,22 @@ msgid ""
 "are two avenues you can follow:"
 msgstr ""
 
-# 4a111181e083403daa3b1d1d5cab24b1
+# 009e730571754ce586d500ca00e4fbb6
 #: ../../source/user-docs/impact_functions.rst:69
 msgid ""
-"If you have basic python programming skills, you could implement a new post- "
-"processor yourself,"
+"If you have basic python programming skills, you could implement a new "
+"impact function yourself."
 msgstr ""
 
-# 69891831239c49b799b4a58f07703b4c
-#: ../../source/user-docs/impact_functions.rst:71
+# 55f772e009ed452799bd2b1175a982cc
+#: ../../source/user-docs/impact_functions.rst:70
 msgid ""
-"You can file a ticket on our `issue tracking system <https://github.com/"
-"AIFDR/inasafe/issues>`_, and if time and resources allow we will implement "
-"it for you."
+"See :ref:`writing_impact_functions` for general guidelines on writing impact "
+"functions. * You can file a ticket on our `issue tracking system <https://"
+"github.com/AIFDR/inasafe/issues>`_,"
+msgstr ""
+
+# 3152539ba4c1475fb263ea879e4d2343
+#: ../../source/user-docs/impact_functions.rst:72
+msgid "and if time and resources allow we will implement it for you."
 msgstr ""

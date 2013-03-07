@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,27 @@ msgstr ""
 # e5bde2b0c89d45898f797386dd29d2e6
 #: ../../source/api-docs/safe/common/version.rst:6
 msgid "Module:  safe.common.version"
+msgstr ""
+
+# afba516c24a04577b11b15a931c3f802
+#: ../../../safe/common/version.py:docstring of
+#: safe.common.version.get_git_changeset:1
+msgid "Returns a numeric identifier of the latest git changeset."
+msgstr ""
+
+# 4f8ab65f4417471497575b89478099d4
+#: ../../../safe/common/version.py:docstring of
+#: safe.common.version.get_git_changeset:3
+msgid ""
+"The result is the UTC timestamp of the changeset in YYYYMMDDHHMMSS format. "
+"This value isn't guaranteed to be unique, but collisions are very unlikely, "
+"so it's sufficient for generating the development version numbers."
+msgstr ""
+
+# 8fa12f99a29e433cbb7d5a1946e1390a
+#: ../../../safe/common/version.py:docstring of
+#: safe.common.version.get_version:1
+msgid "Returns a PEP 386-compliant version number from VERSION."
 msgstr ""
 
 # 483f924ed4ae4f2c88c08d84f1d199fe

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,253 @@ msgstr ""
 # 2aa4c200ce734f2c8736c186a16005d6
 #: ../../source/api-docs/safe/common/utilities.rst:6
 msgid "Module:  safe.common.utilities"
+msgstr ""
+
+# 7406efcb2544402a849e7b296bb5275b
+#: ../../../safe/common/utilities.py:docstring of safe.common.utilities:1
+msgid "Utilities for InaSAFE"
+msgstr ""
+
+# 5a3f532b80ba41219c4c37e710699495
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.MEMORYSTATUSEX:1
+msgid "This class is used for getting the free memory on Windows"
+msgstr ""
+
+# b29240fd416c41b5aaaf5127db532576
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.format_int:1
+msgid "Format integer with separator between thousands."
+msgstr ""
+
+# 388f2c6d74ec4caeac5962be94cfb8f1
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.format_int:4
+msgid "x: int - a number to be formatted in a locale friendly way."
+msgstr ""
+
+# 228d017685aa4c7cad3244e61f815997
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.format_int:8
+msgid ""
+"representing the original x. If a ValueError exception occurs, x is simply "
+"returned."
+msgstr ""
+
+# 620dec1f1bab46a098b43d00859d8b89
+# 64fd02678e0148218f3252c8f7344ca7
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.format_int:12 safe.common.utilities.verify:7
+msgid "None"
+msgstr ""
+
+# e35f08d15c374e4299d1e0f8988a8017
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.format_int:15
+msgid "add-thousands-separators-to-a-number"
+msgstr ""
+
+# 4e834e3307294cf28ea1fcd1ae3b9d80
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.format_int:17
+msgid "# FIXME (Ole) Currently not using locale coz broken"
+msgstr ""
+
+# 80c01a2ee3944d95a50bbfc6edc10a20
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.format_int:20
+msgid "Instead use this: http://docs.python.org/library/string.html#formatspec"
+msgstr ""
+
+# 6870bb09cf4e43579d6866fe70c18767
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.get_free_memory:1
+msgid ""
+"Return current free memory on the machine. Currently supported for Windows, "
+"Linux Return in MB unit"
+msgstr ""
+
+# 3540a3f18fdf460cb81ea2c6fe6bf29b
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.get_free_memory_linux:1
+msgid ""
+"Return current free memory on the machine for linux. Warning : this script "
+"is really not robust Return in MB unit"
+msgstr ""
+
+# 15fe3553a5ba4d4f90b3d1c7e843025b
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.get_free_memory_osx:1
+msgid ""
+"Return current free memory on the machine for mac os. Warning : this script "
+"is really not robust Return in MB unit"
+msgstr ""
+
+# 6647976cf3f0478baeddfea3ef13fac4
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.get_free_memory_win:1
+msgid ""
+"Return current free memory on the machine for windows. Warning : this script "
+"is really not robust Return in MB unit"
+msgstr ""
+
+# 8029c3921adf4f5aad4b5c04c48427b8
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.round_thousand:1
+msgid ""
+"Round an integer to the nearest thousand if my_int is more than a thousand"
+msgstr ""
+
+# c2fbe16f7dfb4c029afa49ff9d97bffe
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:1
+msgid "Obtain the temporary working directory for the operating system."
+msgstr ""
+
+# ccb32a1bb5f6415b99bee323778e17a9
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:3
+msgid ""
+"An inasafe subdirectory will automatically be created under this and if "
+"specified, a user subdirectory under that."
+msgstr ""
+
+# 61bb5b43a05d43b495662c8a9a041ed6
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:6
+msgid ""
+"You can use this together with unique_filename to create a file in a "
+"temporary directory under the inasafe workspace. e.g."
+msgstr ""
+
+# 031bfc3d056c445a9a4f178353602500
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:9
+msgid ""
+"tmpdir = temp_dir('testing') tmpfile = unique_filename(dir=tmpdir) print "
+"tmpfile /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C"
+msgstr ""
+
+# 349d328839e94b3f8ebadb42d09d01c0
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:14
+msgid ""
+"If you specify INASAFE_WORK_DIR as an environment var, it will be used in "
+"preference to the system temp directory."
+msgstr ""
+
+# 18c010d3c05a4742845c6dd8e65655e0
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:19
+msgid "subirectory to be created e.g. /tmp/inasafe/foo/"
+msgstr ""
+
+# 3405b4f11c8743f1ae83ea6e4711e459
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:22
+msgid "Path to the output clipped layer (placed in the system temp dir)."
+msgstr ""
+
+# 8cb0f7b2d3484481b5e3d077e941d078
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:25
+msgid "Any errors from the underlying system calls."
+msgstr ""
+
+# 4bd30239a1d443258006a1f6415e8949
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.ugettext:1
+msgid "Translation support"
+msgstr ""
+
+# ea0c724882074128aa8e71d48e696541
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:1
+msgid "Create new filename guaranteed not to exist previously"
+msgstr ""
+
+# 3e668c3af42f4f97a3697dfa8beb42c3
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:3
+msgid "Use mkstemp to create the file, then remove it and return the name"
+msgstr ""
+
+# 70c40c2cd4e24278934e4e1430b589a4
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:5
+msgid ""
+"If dir is specified, the tempfile will be created in the path specified "
+"otherwise the file will be created in a directory following this scheme:"
+msgstr ""
+
+# 207b9ac799194c31b69c2335afc9f230
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:8
+msgid ":file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'"
+msgstr ""
+
+# cab91b6b50484dd2b51e042e736e5a73
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:10
+msgid "See http://docs.python.org/library/tempfile.html for details."
+msgstr ""
+
+# 11bb4dc664954d60aabada764c38c7e1
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:12
+msgid "Example usage:"
+msgstr ""
+
+# 47ee06f1a3004a51870bd4e84de62c4c
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:14
+msgid ""
+"tempdir = temp_dir(sub_dir='test') filename = unique_filename(suffix='."
+"keywords', dir=tempdir) print filename /tmp/inasafe/23-08-2012/timlinux/test/"
+"tmpyeO5VR.keywords"
+msgstr ""
+
+# 9c921ff0435d43bc998f98ae636f2f7c
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:19
+msgid "Or with no preferred subdir, a default subdir of 'impacts' is used:"
+msgstr ""
+
+# 4938099cf5ad48d8a19235af7dc7bed2
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:21
+msgid ""
+"filename = unique_filename(suffix='.shp') print filename /tmp/"
+"inasafe/23-08-2012/timlinux/impacts/tmpoOAmOi.shp"
+msgstr ""
+
+# 8256d1e1330b49a19d5994e348290785
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.verify:1
+msgid "Verification of logical statement similar to assertions Input"
+msgstr ""
+
+# ca4e5f65725b4bd6bb0b61f7bf48330c
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.verify:3
+msgid ""
+"statement: expression message: error message in case statement evaluates as "
+"False"
+msgstr ""
+
+# 600fcbd9b85349b58cce55834d8cc01a
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.verify:9
+msgid "VerificationError in case statement evaluates to False"
+msgstr ""
+
+# 0238bd3bc87d4d289ab5a5d4702f795d
+#: ../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.zip_shp:1
+msgid ""
+"Zip shape file and its gang (.shx, .dbf, .prj) and extra_file is a list of "
+"another ext related to shapefile, if exist The zip file will be put in the "
+"same directory"
 msgstr ""
 
 # ba9e17c649ec4adbb7dd68b25039ecb7

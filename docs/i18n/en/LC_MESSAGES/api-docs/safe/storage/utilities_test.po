@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,30 @@ msgstr ""
 # 608864f670fc4a17b740df363c95cfe8
 #: ../../source/api-docs/safe/storage/utilities_test.rst:6
 msgid "Module:  safe.storage.utilities_test"
+msgstr ""
+
+# 920a11ca99974c81b2729321ee71a593
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test:1
+msgid "**Utilities to to support test suite**"
+msgstr ""
+
+# a084b36d4a734ba0bba4a20bb6b8a02e
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:1
+msgid "Check that public methods of X and Y are the same."
+msgstr ""
+
+# 2395bb47fcf248d79ce488aab44d19d6
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:4
+msgid "X, Y: Python objects"
+msgstr ""
+
+# 415ebf0aaa55466c9e2c453f93e82c9a
+#: ../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:5
+msgid "exclude: List of names to exclude from comparison or None"
 msgstr ""
 
 # 8f0c0457d0ac48c9a5e20543a9633bf0

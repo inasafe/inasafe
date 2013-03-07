@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,96 @@ msgstr ""
 # c0bc7a815373482fa5bae1fe3afa5a1f
 #: ../../source/api-docs/safe/impact_functions/earthquake/itb_building_impact_model.rst:6
 msgid "Module:  safe.impact_functions.earthquake.itb_building_impact_model"
+msgstr ""
+
+# 534524c5242e488caa95c0a7f7ed87d3
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of safe.impact_functions.earthquake.itb_building_impact_model:1
+msgid "Impact function based on ITB vulnerability model"
+msgstr ""
+
+# 536038a68dab4a858bfe1616f49dfa9f
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of safe.impact_functions.earthquake.itb_building_impact_model:3
+msgid ""
+"This model was developed by Institut Tecknologi Bandung (ITB) and "
+"implemented by Dr Hyeuk Ryu, Geoscience Australia"
+msgstr ""
+
+# 50d62030a50c47a29ac3716ec8ba2c28
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of safe.impact_functions.earthquake.itb_building_impact_model:6
+msgid "Reference:"
+msgstr ""
+
+# d048d4336b1f46ebb0d5d54fd3a0ad8e
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of safe.impact_functions.earthquake.itb_building_impact_model:8
+msgid ""
+"Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster "
+"Survey Guidelines Development, Bali, 27-28 February 2012, 54pp."
+msgstr ""
+
+# 1724bfcfc3864eca93ff8de7e9cd9e8e
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of safe.impact_functions.earthquake.itb_building_impact_model:12
+msgid ""
+"Methodology: The ITB vulnerabilty model was heuristically developed (i.e. "
+"based on expert opinion) through the Bali workshop. The model is defined "
+"with two parameters (median, and lognormal standard deviation) of cumulative "
+"lognormal distribution. The building type classification used in the model "
+"was endorsed by expert group in thel Bali workshop."
+msgstr ""
+
+# 1e6b7e4d24b748cbb2382729be6c7dfa
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of safe.impact_functions.earthquake.itb_building_impact_model:19
+msgid ""
+"Limitations: The current model contains some dummy numbers. It should be "
+"updated once ITB publishes the final report on earthquake building damage "
+"model development."
+msgstr ""
+
+# 11fd3eb7e704425ea3ac36a53bc084fe
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of
+#: safe.impact_functions.earthquake.itb_building_impact_model.AutoVivification:1
+msgid "Implementation of perl's autovivification feature."
+msgstr ""
+
+# d22650278a71470fa6f689092187fab3
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of
+#: safe.impact_functions.earthquake.itb_building_impact_model.ITBEarthquakeBuildingDamageFunction:1
+msgid "Risk plugin for ITB earthquake damage to buildings in Padang"
+msgstr ""
+
+# 1147e53f4f474031837fd75e91a61f36
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of
+#: safe.impact_functions.earthquake.itb_building_impact_model.ITBEarthquakeBuildingDamageFunction:3
+msgid ""
+":param requires category=='hazard' and                     "
+"subcategory=='earthquake' and                     layertype=='raster' "
+"and                     unit=='MMI' and                     disabled=='True'"
+msgstr ""
+
+# 97e17c34df314da89441ad5de118ccf1
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of
+#: safe.impact_functions.earthquake.itb_building_impact_model.ITBEarthquakeBuildingDamageFunction:5
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='structure' and                     layertype=='vector' "
+"and                     datatype in ['osm', 'itb', 'sigab'] "
+"and                     disabled=='True'"
+msgstr ""
+
+# 4b246ab3dccf46e5813f971251cdf33e
+#: ../../../safe/impact_functions/earthquake/itb_building_impact_model.py:docstring
+#: of
+#: safe.impact_functions.earthquake.itb_building_impact_model.ITBEarthquakeBuildingDamageFunction.run:1
+msgid "Risk plugin for Padang building survey"
 msgstr ""
 
 # a6d4a26efe454296a0ec5a255289f7ab

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,151 @@ msgstr ""
 # be9b16487385494891f489b622656b50
 #: ../../source/api-docs/safe/common/test_tables.rst:6
 msgid "Module:  safe.common.test_tables"
+msgstr ""
+
+# f176069d3fe34e44b94ccc47df50264c
+#: ../../../safe/common/test_tables.py:docstring of safe.common.test_tables:2
+msgid "**Table Tests implementation.**"
+msgstr ""
+
+# fac28b404e064ea2a3ede6c35651b3c6
+#: ../../../safe/common/test_tables.py:docstring of safe.common.test_tables:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 75f4da68e3534ec0a836eb72a8b185ec
+#: ../../../safe/common/test_tables.py:docstring of safe.common.test_tables:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# e044e05871c841109f386858a0f239eb
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest:1
+msgid "Test the SAFE Table"
+msgstr ""
+
+# 870c62d58f2143949b23bcde5f9a5662
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.setUp:1
+msgid "Fixture run before all tests"
+msgstr ""
+
+# 512882c18fa742dba63d7fe6cdaf7e04
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tearDown:1
+msgid "Fixture run after each test"
+msgstr ""
+
+# f9d9c3955f654f279781981fee026ea7
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_cell_header:1
+msgid "Test we can make a cell as a <th> element"
+msgstr ""
+
+# e69630bc1a9241dba29818e6c1e05fb8
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_cell_link:1
+msgid "Test cell links work"
+msgstr ""
+
+# a99423320d3c45908ede3468cac1aa8b
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_col_span:1
+msgid "Testing column spanning"
+msgstr ""
+
+# 3939405e24c64bba8f9113be38808c31
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_column:1
+msgid "Test to retrieve all element in a column."
+msgstr ""
+
+# 4efbde947bcb4c29900f97f040c3a90e
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_nested_table_in_cell:1
+msgid "Test nested table in cell"
+msgstr ""
+
+# 63e92ce53fac41ecb7f48c3ce1620bc4
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_row_from_string:1
+msgid "Test row from string - it should span to the table width too"
+msgstr ""
+
+# 803b406e3f0e433e897ba423b1685082
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_row_span:1
+msgid "Testing row spanning"
+msgstr ""
+
+# 700a329c796241708b14dcea160b369a
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_simple_table:1
+msgid "Test simple table creation"
+msgstr ""
+
+# da9adc44f89e4d47afe3ada7fe309b86
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_by_rows:1
+msgid "Test table from infividual rows"
+msgstr ""
+
+# 0832b9f3ddda42b8bfcd7dec87440e32
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_caption:1
+msgid "Test table caption"
+msgstr ""
+
+# dd1bbabd1d7841cb95d436a463e45800
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_cells:1
+msgid "Test table from individual cells"
+msgstr ""
+
+# 781bcbc376014ec085daf848302d7f61
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_from_string:1
+msgid "Test table from string - should be a single cell in a single row"
+msgstr ""
+
+# 075962e59ade4d49831d2e510baad47b
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_with_colalign:1
+msgid "Table columns can be right justified"
+msgstr ""
+
+# b91aeaa7152b426aa2025e989fecc2c5
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_with_header:1
+msgid "Test html render of a table with header row(s)."
+msgstr ""
+
+# 3db9b5c7bb3147648d8cd649708835e6
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:1
+msgid "Helper to get os temp dir."
+msgstr ""
+
+# 1472663474cf49ca852f8b4599bd4c04
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:3
+msgid "Args: None"
+msgstr ""
+
+# 237f13bd621e44a4ad6a2aea40a413ee
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:5
+msgid "Returns: str Absolute filesystem path to temp dir."
+msgstr ""
+
+# f4c16118797b4450b40be7dab6388015
+#: ../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:7
+msgid "Raises: None"
 msgstr ""
 
 # 812e48e7d3634fabb449b98a55736576

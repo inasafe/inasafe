@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,24 @@ msgstr ""
 # 9eadb8f4c60940579858b5fc5385fbc1
 #: ../../source/api-docs/safe/impact_functions/test_real_impact_functions.rst:6
 msgid "Module:  safe.impact_functions.test_real_impact_functions"
+msgstr ""
+
+# 10e2382a9a15461d9c49317580af674a
+#: ../../../safe/impact_functions/test_real_impact_functions.py:docstring of
+#: safe.impact_functions.test_real_impact_functions:1
+msgid "Works with real library impact functions rather than test examples"
+msgstr ""
+
+# f4000274d38744faa3d4d4eaf77bc17d
+#: ../../../safe/impact_functions/test_real_impact_functions.py:docstring of
+#: safe.impact_functions.test_real_impact_functions.Test_real_plugins:1
+msgid "Tests of Risiko calculations"
+msgstr ""
+
+# bf619babbbec476eb69cf6cdeb695a4f
+#: ../../../safe/impact_functions/test_real_impact_functions.py:docstring of
+#: safe.impact_functions.test_real_impact_functions.Test_real_plugins.test_filtering_of_impact_functions:1
+msgid "Impact functions are filtered correctly"
 msgstr ""
 
 # dd2caef4ba644830b7ee6d20595b9e7d

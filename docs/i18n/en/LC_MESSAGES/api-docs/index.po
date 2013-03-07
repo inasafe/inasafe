@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "InaSAFE's API documentation"
 msgstr ""
 
-# ee87659ca69842f685baf9027decab2c
+# b2f6e4a5dc854d3fb32db5916c503886
 #: ../../source/api-docs/index.rst:8
 msgid ""
 "This is the API documentation for the InaSAFE project. You can find out more "
-"about the InaSAFE project by visiting `riskinabox.org<http://www.inasafe.org/"
+"about the InaSAFE project by visiting `inasafe.org<http://www.inasafe.org/"
 ">`_."
 msgstr ""
 

@@ -8,41 +8,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-26 15:53\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:6
 # 7c2e8ec016f448bead9337ef0a6760a8
+#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:6
 msgid "Padang Earthquake Building Damage Function"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:9
 # 1906cfb273e44801b2f48bc962c3ad0a
+#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:9
 msgid "Overview"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:11
 # 8dc88b5d595d40138dc8aabc9c95f932
+#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:11
 msgid "**Unique Identifier**: Padang Earthquake Building Damage Function"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:13
 # 52d02809bcbb410d9c15f3c0997d38d9
+#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:13
 msgid "**Title**: Be damaged depending on building type"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:16
 # d34132aecfa24904be2a586d97bcffde
+#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:16
 msgid "Details"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:18
 # fcaecf4dd64d44d9aa69d7526ac22019
+#: ../../source/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.rst:18
 msgid "No documentation found"
 msgstr ""
-

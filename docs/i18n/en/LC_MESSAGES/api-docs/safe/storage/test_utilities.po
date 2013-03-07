@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,12 @@ msgstr ""
 # 640193c567204d3399d169995254d51a
 #: ../../source/api-docs/safe/storage/test_utilities.rst:6
 msgid "Module:  safe.storage.test_utilities"
+msgstr ""
+
+# 324f154253fd4659a95c4377bb2af3dd
+#: ../../../safe/storage/test_utilities.py:docstring of
+#: safe.storage.test_utilities:1
+msgid "**Tests for safe common utilities**"
 msgstr ""
 
 # f91e203280df4519bf20e866d9aa4a60

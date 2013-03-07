@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,655 @@ msgstr ""
 # d2f75f4c861b4f5e8797b7068abf1b07
 #: ../../source/api-docs/safe/storage/utilities.rst:6
 msgid "Module:  safe.storage.utilities"
+msgstr ""
+
+# 3f9e7d0596274003a777519fadb03b24
+#: ../../../safe/storage/utilities.py:docstring of safe.storage.utilities:1
+msgid "**Utilities for storage module**"
+msgstr ""
+
+# e6e25a5ff7054bc6b8f125c34303f6cb
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2line:1
+msgid "Convert coordinates to linear_ring"
+msgstr ""
+
+# 82d2002be2074df790623a6e7cf1b597
+# 987ab433157d45288584e972d789516f
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2line:5 safe.storage.utilities.array2wkt:5
+msgid "A can be either a numpy array or a list of coordinates."
+msgstr ""
+
+# 16ef906f031e4e4087f6cc14788bfbaa
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2line:7
+msgid "Other options include ogr.wkbLineString"
+msgstr ""
+
+# fde0d3cd29a2443aa13eb75224dde8b0
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2line:10
+msgid "ring: OGR line geometry"
+msgstr ""
+
+# 9ce9bdb4f48148a88c48fd894a192fbd
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2line:12
+msgid ""
+"Note: Based on http://www.packtpub.com/article/working-geospatial-data-python"
+msgstr ""
+
+# 92989b0973044482a318cd0dfc1a0291
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2wkt:1
+msgid "Convert coordinates to wkt format"
+msgstr ""
+
+# 9214a0bc4f6b492eacb2a29e68cb9f92
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2wkt:6
+msgid "geom_type: Determines output keyword 'POLYGON' or 'LINESTRING'"
+msgstr ""
+
+# 35db297747ee4435aa2cc42c754d338e
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2wkt:9
+msgid "wkt: geometry in the format known to ogr: Examples"
+msgstr ""
+
+# e775eb34a8394d1f9678c2e457f0c649
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.array2wkt:12
+msgid ""
+"POLYGON((1020 1030,1020 1045,1050 1045,1050 1030,1020 1030)) LINESTRING(1000 "
+"1000, 1100 1050)"
+msgstr ""
+
+# 682c3029f37b4b0a84f4782c4668f723
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.bbox_intersection:1
+msgid "Compute intersection between two or more bounding boxes"
+msgstr ""
+
+# 362e0413c5124f419fe836eb9a474c93
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.bbox_intersection:5
+msgid ""
+"Each is assumed to be a list or a tuple with four coordinates (W, S, E, N)"
+msgstr ""
+
+# db10d55624e447a4af04d2688d01a1e2
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.bbox_intersection:9
+msgid "result: The minimal common bounding box"
+msgstr ""
+
+# 5a5fb36709744d7085f63642d4ad41f6
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.buffered_bounding_box:1
+msgid "Grow bounding box with one unit of resolution in each direction"
+msgstr ""
+
+# e1ae28f07eb54fce9171428377122370
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.buffered_bounding_box:4
+msgid ""
+"This will ensure there is enough pixels to robustly provide interpolated "
+"values without having to painstakingly deal with all corner cases such as 1 "
+"x 1, 1 x 2 and 2 x 1 arrays."
+msgstr ""
+
+# 088de751b40942918898af276c9e75fa
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.buffered_bounding_box:8
+msgid ""
+"The border will also make sure that points that would otherwise fall outside "
+"the domain (as defined by a tight bounding box) get assigned values."
+msgstr ""
+
+# 1436acde28074822ac10098342d5a16f
+# eb70f58ac83846b9824124b92beb4daa
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.buffered_bounding_box:13
+#: safe.storage.utilities.minimal_bounding_box:4
+msgid "bbox: Bounding box with format [W, S, E, N]"
+msgstr ""
+
+# 682714100d1648b08571449298a14530
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.buffered_bounding_box:15
+msgid ""
+"res - Raster resolution in either direction If resolution is None bbox is "
+"returned unchanged."
+msgstr ""
+
+# 1f2e08df715740aba34988d10d189cbf
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.buffered_bounding_box:19
+msgid "Adjusted bounding box"
+msgstr ""
+
+# a49671eb7db64c258ebcb22c5027ff8f
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.buffered_bounding_box:23
+msgid "even though there are enough grid points to support it"
+msgstr ""
+
+# 5abe3d5b927040f2a248a30c7895b8eb
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.calculate_polygon_area:1
+msgid "Calculate the signed area of non-self-intersecting polygon"
+msgstr ""
+
+# 31436fd1f96c48de8f62bad8840daa43
+# fb6d9f5655a64f769321360e03a9b64a
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.calculate_polygon_area:5
+#: safe.storage.utilities.calculate_polygon_centroid:5
+msgid "to be closed, i.e. first and last points are identical"
+msgstr ""
+
+# db5eee614aac4760a86ddf754c77f6db
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.calculate_polygon_area:7
+msgid "sign:"
+msgstr ""
+
+# 370857be458541519b631cd28e2c9109
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.calculate_polygon_area:8
+msgid ""
+"If points are ordered counter clockwise, the signed area will be positive. "
+"If points are ordered clockwise, it will be negative Default is False which "
+"means that the area is always positive."
+msgstr ""
+
+# e9ac1cee8a034f3bbf1e7f4ff889f57a
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.calculate_polygon_area:15
+msgid "area: Area of polygon (subject to the value of argument signed)"
+msgstr ""
+
+# ef7fbbbda30e4adfb83addc8e9040689
+# a6f5a28f823249fa842caa6c419f1c14
+# 709a4edcc865468ca85b2192a78f15d5
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.calculate_polygon_area:19
+#: safe.storage.utilities.calculate_polygon_centroid:9
+#: safe.storage.utilities.points_along_line:12
+msgid ""
+"http://paulbourke.net/geometry/polyarea/ http://en.wikipedia.org/wiki/"
+"Centroid"
+msgstr ""
+
+# 13e347c58c7c46e8963e107342682f17
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.calculate_polygon_centroid:1
+msgid "Calculate the centroid of non-self-intersecting polygon"
+msgstr ""
+
+# ddf4e45a582740a6b950d61fec4e8a04
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.check_geotransform:1
+msgid "Check that geotransform is valid"
+msgstr ""
+
+# 7550675c63824b1ab88e16438e3bf3f6
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.check_geotransform:4
+msgid "geotransform: GDAL geotransform (6-tuple)."
+msgstr ""
+
+# 00fc5a3a87894789ad7db1d7c4c84bde
+# 195eee6329b44701b859e330d1bb0c75
+# fc4ab2b9a8564b28b76c7a40006368ae
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.check_geotransform:5
+#: safe.storage.utilities.geotransform2bbox:5
+#: safe.storage.utilities.geotransform2resolution:5
+msgid ""
+"(top left x, w-e pixel resolution, rotation, top left y, rotation, n-s pixel "
+"resolution). See e.g. http://www.gdal.org/gdal_tutorial.html"
+msgstr ""
+
+# 575627439c9e48b9b319a431a0f18917
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.check_geotransform:10
+msgid ""
+"This assumes that the spatial reference uses geographic coordinaties, so "
+"will not work for projected coordinate systems."
+msgstr ""
+
+# 801cbaca3de540349ce712cb9ac96664
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.combine_polygon_and_point_layers:1
+msgid "Combine polygon and point layers"
+msgstr ""
+
+# a2d2ae49dab84f86b749a0bd47372bd2
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.combine_polygon_and_point_layers:4
+msgid "layers: List of vector layers of type polygon or point"
+msgstr ""
+
+# decba2637dc1423ba9afccaa7fbd7368
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.combine_polygon_and_point_layers:7
+msgid ""
+"One point layer with all input point layers and centroids from all input "
+"polygon layers."
+msgstr ""
+
+# cd7dd5cb797e43769d82696facb6cf94
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.combine_polygon_and_point_layers:10
+msgid "IneSAFEError in case a0ttribute names are not the same."
+msgstr ""
+
+# 77a6ffbf495841dc8b2bfbc138fe1727
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geometrytype2string:1
+msgid "Provides string representation of numeric geometry types"
+msgstr ""
+
+# 62988f999a5c4b818b139aec69f6e927
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geometrytype2string:3
+msgid "FIXME (Ole): I can't find anything like this in ORG. Why?"
+msgstr ""
+
+# f3c9417cc98941c2a4aae0ce3783bc39
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2bbox:1
+msgid "Convert geotransform to bounding box"
+msgstr ""
+
+# 0b28cf4f5a6c40b18a1201c32526dfa1
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2bbox:8
+msgid "columns: Number of columns in grid"
+msgstr ""
+
+# ac25080c892d4a6fba50063dfdc675df
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2bbox:9
+msgid "rows: Number of rows in grid"
+msgstr ""
+
+# dc8c78fad88f411b9c8fcb0c9421dc38
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2bbox:13
+msgid "[west, south, east, north]"
+msgstr ""
+
+# d8811ccdf7d746dc9856decda2641018
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2bbox:16
+msgid ""
+"Rows and columns are needed to determine eastern and northern bounds. FIXME: "
+"Not sure if the pixel vs gridline registration issue is observed correctly "
+"here. Need to check against gdal > v1.7"
+msgstr ""
+
+# 660afa71e5204908a604c422be7c34af
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2resolution:1
+msgid "Convert geotransform to resolution"
+msgstr ""
+
+# 2a7f3b98bb4446a5b4762ad6dd58a241
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2resolution:8
+msgid "isotropic: If True, return the average (dx + dy) / 2"
+msgstr ""
+
+# e2d8096a780d467bbf87333483940b62
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.geotransform2resolution:12
+msgid ""
+"degrees ordered as longitude first, then latitude. or (resx + resy) / 2 (if "
+"isotropic is True)"
+msgstr ""
+
+# 66b067e92cdd404ba3503dfe459efa9b
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_geometry_type:1
+msgid "Determine geometry type based on data"
+msgstr ""
+
+# d3a790bc8f0640daa92d10d46a0f5666
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_geometry_type:5
+msgid "which are assumed to be numpy arrays of coordinates"
+msgstr ""
+
+# b4003a51c4fb407cbb1e69eff5e5632e
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_geometry_type:6
+msgid "geometry_type: Optional type - 'point', 'line', 'polygon' or None"
+msgstr ""
+
+# 78d93fcb43314616b4331d4e48299a43
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_geometry_type:10
+msgid "ogr.wkbPolygon"
+msgstr ""
+
+# 8fa758b8547c4b8d8f03bec3c3d04e09
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_geometry_type:13
+msgid "If geometry type cannot be determined an Exception is raised."
+msgstr ""
+
+# 7b2e1e658c1c44e69143544b98d68b6c
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_geometry_type:15
+msgid ""
+"There is no consistency check across all entries of the geometry list, only "
+"the first element is used in this determination."
+msgstr ""
+
+# 781f6cc396784d5d8ba109e1e56c6c27
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_polygondata:1
+msgid "Extract polygon data from OGR geometry"
+msgstr ""
+
+# d3a3ad7dac574c1c93a887e60c89de27
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_ringdata:1
+msgid "Extract coordinates from OGR ring object"
+msgstr ""
+
+# fa71988c6ce6426191ea6b15d0390dd7
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_ringdata:4
+msgid "OGR ring object"
+msgstr ""
+
+# 18e5807ff3d5491db37263f55b0ea88c
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.get_ringdata:6
+msgid "Nx2 numpy array of vertex coordinates (lon, lat)"
+msgstr ""
+
+# 23b6a0c2a9344f8d9f7141fcff39625a
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.is_sequence:1
+msgid "Determine if x behaves like a true sequence but not a string"
+msgstr ""
+
+# a013c1ee0d81478295635a5542750b8a
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.is_sequence:4
+msgid ""
+"This will for example return True for lists, tuples and numpy arrays but "
+"False for strings and dictionaries."
+msgstr ""
+
+# 5545014d36264d36ba4cd2dfd37765ec
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.minimal_bounding_box:1
+msgid "Grow bounding box to exceed specified resolution if needed"
+msgstr ""
+
+# afaacbeb62724af7a709ec45f7256a4b
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.minimal_bounding_box:5
+msgid "min_res: Minimal acceptable resolution to exceed"
+msgstr ""
+
+# 63b7bdcb77dd461c9808ddd6f27027fa
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.minimal_bounding_box:6
+msgid "eps: Optional tolerance that will be applied to 'buffer' result"
+msgstr ""
+
+# 5415d935f4e14cb997a04e1b7d03eb50
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.minimal_bounding_box:9
+msgid "Adjusted bounding box guaranteed to exceed specified resolution"
+msgstr ""
+
+# 1fd852f13a024dbe80dc8ef56fa62952
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.points_along_line:1
+msgid "Calculate a list of points along a line with a given delta"
+msgstr ""
+
+# cf65f28d06fb44749ffc2d7c9c44d96a
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.points_along_line:4
+msgid "line: Numeric array of points (longitude, latitude)."
+msgstr ""
+
+# 1e3d8de3056844f989fddee7d3f710a6
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.points_along_line:5
+msgid "delta: Decimal number to be used as step"
+msgstr ""
+
+# 9efe10b808044ce4b90c96f24742ea69
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.points_along_line:8
+msgid "V: Numeric array of points (longitude, latitude)."
+msgstr ""
+
+# 3ae5705bcbd547a892c351630ed72df3
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.points_between_points:1
+msgid "Creates an array of points between two points given a delta"
+msgstr ""
+
+# 81fbcfa805734002849cf44ca0e9d0f1
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.points_between_points:4
+msgid ""
+"u = (x1-x0, y1-y0)/L, where L=sqrt( (x1-x0)^2 + (y1-y0)^2). If r is the "
+"resolution, then the points will be given by (x0, y0) + u * n * r for n = 1, "
+"2, .... while len(n*u*r) < L"
+msgstr ""
+
+# bcb39e49213c4fbd9d9de5cf53f03a76
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.raster_geometry2geotransform:1
+msgid "Convert vectors of longitudes and latitudes to geotransform"
+msgstr ""
+
+# 4c269e5df42e4578beebdc54afec671b
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.raster_geometry2geotransform:4
+msgid "This is the inverse operation of Raster.get_geometry()."
+msgstr ""
+
+# 015717f1478e404582c2296dad849b94
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.raster_geometry2geotransform:7
+msgid "longitudes, latitudes: Vectors of geographic coordinates"
+msgstr ""
+
+# 81aee42d254e4d6c906cd60103196a57
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.raster_geometry2geotransform:11
+msgid "top left y, rotation, n-s pixel resolution)"
+msgstr ""
+
+# 76d9a66dcc9c43b39c8f612ddc890b77
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:1
+msgid "Read keywords dictionary from file"
+msgstr ""
+
+# 4b92edd87ede4fc3993559df3a2bd170
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:5
+msgid ""
+"The format of one line is expected to be either string: string or string"
+msgstr ""
+
+# 6d8e23e190fb4a5ba7c145b7d7b3f631
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:8
+msgid ""
+"such as sqlite or netcdf which can potentially hold more than one layer. The "
+"string should map to the layer group as per the example below. If the "
+"keywords file contains sublayer definitions but no sublayer was defined, the "
+"first layer group will be returned."
+msgstr ""
+
+# 3ea7d23dcc64478584abccdb25d6e960
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:14
+msgid ""
+"a dict of dicts, where the top level dict entries each represent a sublayer, "
+"and the values of that dict will be dicts of keyword entries."
+msgstr ""
+
+# ea9d1387a672447199a5c5aa1cadb382
+# 40880503efa6447e8ab77c33235ccefa
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:19
+#: safe.storage.utilities.write_keywords:4
+msgid "keywords: Dictionary of keyword, value pairs"
+msgstr ""
+
+# d483d4456fe74bb990fa0bc060d48578
+# 37ba9f80c9ab4bda854368f3cf73a26b
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:21
+#: safe.storage.utilities.write_keywords:16
+msgid "Raises: None"
+msgstr ""
+
+# adc9db17114842fa861abbc3fef6899e
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:23
+msgid "A keyword layer with sublayers may look like this:"
+msgstr ""
+
+# d4a8d447c8aa4715af61f1e0ed146c28
+# 231d1ed9b0f94d5ab18de2c56e65e5df
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:25
+#: safe.storage.utilities.write_keywords:20
+msgid ""
+"[osm_buildings] datatype: osm category: exposure subcategory: building "
+"purpose: dki title: buildings_osm_4326"
+msgstr ""
+
+# 9b98bc6ee50d446daf355defccb5ef87
+# e1242ef2a401434d97ae0c49eaf90c91
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:32
+#: safe.storage.utilities.write_keywords:27
+msgid ""
+"[osm_flood] datatype: flood category: hazard subcategory: building title: "
+"flood_osm_4326"
+msgstr ""
+
+# 5b591e061e7f4fe9950a07d72cad4b50
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:38
+msgid "Wheras a simple keywords file would look like this"
+msgstr ""
+
+# 6cba612bc83e474da0d6aa211ff0cfe5
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:40
+msgid ""
+"datatype: flood category: hazard subcategory: building title: flood_osm_4326"
+msgstr ""
+
+# f902b62ca7fd462c8cd9bf9b7e306f28
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.read_keywords:45
+msgid ""
+"If filename does not exist, an empty dictionary is returned Blank lines are "
+"ignored Surrounding whitespace is removed from values, but keys are "
+"unmodified If there are no ':', then the keyword is treated as a key with no "
+"value"
+msgstr ""
+
+# 888d40f2394f4f67903118ced867dec8
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.rings_equal:1
+msgid "Compares to linear rings as numpy arrays"
+msgstr ""
+
+# 261ed1baf1d14360b158126e523164bb
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.rings_equal:4
+msgid "x, y: Nx2 numpy arrays"
+msgstr ""
+
+# 71912bfd2c1f4b87bd7365bade6d5e41
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.rings_equal:7
+msgid "True if x == y or x' == y (up to the specified tolerance)"
+msgstr ""
+
+# 24eed85e67ef47c68dc6e3b4f762c6eb
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.rings_equal:9
+msgid ""
+"where x' is x reversed in the first dimension. This corresponds to linear "
+"rings being seen as equal irrespective of whether they are organised in "
+"clock wise or counter clock wise order"
+msgstr ""
+
+# 7ca26e64bb13491fbbdb3e5c3c0645df
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.write_keywords:1
+msgid "Write keywords dictonary to file"
+msgstr ""
+
+# c38eb92bbb774d06992aa390701d3c02
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.write_keywords:5
+msgid "filename: Name of keywords file. Extension expected to be .keywords"
+msgstr ""
+
+# 978b533f043546cda01763d984fba43a
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.write_keywords:7
+msgid ""
+"such as sqlite or netcdf which can potentially hold more than one layer. The "
+"string should map to the layer group as per the example below. **If the "
+"keywords file contains sublayer definitions but no sublayer was defined, "
+"keywords file content will be removed and replaced with only the keywords "
+"provided here.**"
+msgstr ""
+
+# fec248444396469d83dda046b96a3793
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.write_keywords:14
+msgid "Returns: None"
+msgstr ""
+
+# d6676f7cb2994e46a35a659e0892ef52
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.write_keywords:18
+msgid "A keyword file with sublayers may look like this:"
+msgstr ""
+
+# 30901a494bfe42b8b144211254619e1b
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.write_keywords:33
+msgid ""
+"Keys must be strings not containing the \":\" character Values can be "
+"anything that can be converted to a string (using Python's str function)"
+msgstr ""
+
+# 2eb5282ce5ea41e89a70bd2111558635
+#: ../../../safe/storage/utilities.py:docstring of
+#: safe.storage.utilities.write_keywords:37
+msgid ""
+"Surrounding whitespace is removed from values, but keys are unmodified The "
+"reason being that keys must always be valid for the dictionary they came "
+"from. For values we have decided to be flexible and treat entries like 'unit:"
+"m' the same as 'unit: m', or indeed 'unit: m '. Otherwise, unintentional "
+"whitespace in values would lead to surprising errors in the application."
 msgstr ""
 
 # a443b4fb180e43588189f1d7df3e9381

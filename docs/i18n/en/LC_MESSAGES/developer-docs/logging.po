@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,13 +113,27 @@ msgid ""
 "complete call tree."
 msgstr ""
 
-# af965a0beebb476da5667a2bb369505e
+# 5141e55c07b948989daaff6e63a8d181
 #: ../../source/developer-docs/logging.rst:65
+msgid "Logging in loops"
+msgstr ""
+
+# 423275cf25db47af9cc0a97af12ce541
+#: ../../source/developer-docs/logging.rst:68
+msgid ""
+"Please be considerate when logging into loops as this can slow execution a "
+"lot (we had a spatial analysis loop with two logged messages and it took "
+"15sec for 1000 itterations, removing logging brought it to 5sec) See also :"
+"ref:`profiling`"
+msgstr ""
+
+# af965a0beebb476da5667a2bb369505e
+#: ../../source/developer-docs/logging.rst:75
 msgid "Remote logging"
 msgstr ""
 
 # 6a564a9641d74a648b2f7da02cbcf231
-#: ../../source/developer-docs/logging.rst:67
+#: ../../source/developer-docs/logging.rst:77
 msgid ""
 "There is support for logging to a remote server. This currently intended for "
 "developer use only and will provide ongoing statistics about the number and "
@@ -127,20 +141,20 @@ msgid ""
 msgstr ""
 
 # 90002dc6d9d64603bd90fa3fa0494f5f
-#: ../../source/developer-docs/logging.rst:71
+#: ../../source/developer-docs/logging.rst:81
 msgid ""
 "For privacy / security reasons this is disabled by default and you need to "
 "jump through two hoops to make it work."
 msgstr ""
 
 # 25e6bcd0076b4a79a86509b6738a9666
-#: ../../source/developer-docs/logging.rst:74
+#: ../../source/developer-docs/logging.rst:84
 msgid ""
 "The remote server is available here: http://sentry.linfiniti.com/inasafe/"
 msgstr ""
 
 # 95cb24a016a74a33b2013a763e2b5277
-#: ../../source/developer-docs/logging.rst:76
+#: ../../source/developer-docs/logging.rst:86
 msgid ""
 "Remote logging is implemented using `raven <http://pypi.python.org/pypi/"
 "raven>`_ and `sentry <http://pypi.python.org/pypi/sentry>`_. Raven needs to "
@@ -148,31 +162,31 @@ msgid ""
 msgstr ""
 
 # 0a02a507ad5c443b827a905395439e22
-#: ../../source/developer-docs/logging.rst:82
+#: ../../source/developer-docs/logging.rst:92
 msgid ""
 "To prevent user's unwittingly sending exception reports, it is required to "
 "first set an environment variable before starting QGIS / running tests::"
 msgstr ""
 
 # 71ef1ddd1f914838a8ee1702114367d5
-#: ../../source/developer-docs/logging.rst:87
+#: ../../source/developer-docs/logging.rst:97
 msgid "The sentry logger is set to only log exceptions."
 msgstr ""
 
 # 564acb9dac0a4ccfb2b3576907300a6d
-#: ../../source/developer-docs/logging.rst:89
+#: ../../source/developer-docs/logging.rst:99
 msgid ""
 "Here is an example session which will install raven, enable sentry and then "
 "launch QGIS::"
 msgstr ""
 
 # d98da2b55fa742cc89688bf3c827a0ab
-#: ../../source/developer-docs/logging.rst:97
+#: ../../source/developer-docs/logging.rst:107
 msgid "QGIS Log Messages"
 msgstr ""
 
 # 03cf26bdcc4542749aeb9db35c69e0a4
-#: ../../source/developer-docs/logging.rst:99
+#: ../../source/developer-docs/logging.rst:109
 msgid ""
 "For the :samp:`safe_qgis` package, log messages will also be written to the "
 "QGIS log console under a tab labelled 'InaSAFE'. You can view these messages "
@@ -181,24 +195,24 @@ msgid ""
 msgstr ""
 
 # 68e36571db484a72ac560757ce44a94a
-#: ../../source/developer-docs/logging.rst:107
+#: ../../source/developer-docs/logging.rst:117
 msgid ""
 "Clicking on the triangle indicated in red above will open the log dock "
 "window in QGIS from where you can browse log messages conveniently."
 msgstr ""
 
 # 6c45f92ec26e485eb97cc725cf4c0d4d
-#: ../../source/developer-docs/logging.rst:113
+#: ../../source/developer-docs/logging.rst:123
 msgid "QGIS 1.8 or greater is required for this functionality."
 msgstr ""
 
 # 220f708ea46e4405b0b922c57677b175
-#: ../../source/developer-docs/logging.rst:116
+#: ../../source/developer-docs/logging.rst:126
 msgid "Logging with third party applications"
 msgstr ""
 
 # bb4834d31270474d9c5fe891582b1234
-#: ../../source/developer-docs/logging.rst:118
+#: ../../source/developer-docs/logging.rst:128
 msgid ""
 "If you have written your one SAFE library client, you should set up your own "
 "logger instance - just be sure that it is a named logger (called :samp:"
@@ -207,6 +221,6 @@ msgid ""
 msgstr ""
 
 # 7d9803c814064351a53777582ab8c42c
-#: ../../source/developer-docs/logging.rst:122
+#: ../../source/developer-docs/logging.rst:132
 msgid ":func:`setupLogger` function in :file:`safe_qgis/utilities.py`."
 msgstr ""
