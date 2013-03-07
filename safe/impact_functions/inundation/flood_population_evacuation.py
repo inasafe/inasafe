@@ -57,10 +57,10 @@ class FloodEvacuationFunction(FunctionProvider):
                               'The resulting impact layer has the same '
                               'resolution and reflects population count '
                               'per cell which are affected by inundation.')
-    permissible_hazard_input = tr('A hazard raster layer where each cell '
-                                  'represents flood depth (in meters).')
-    permissible_exposure_input = tr('An exposure raster layer where each '
-                                    'cell represent population count.')
+    hazard_input = tr('A hazard raster layer where each cell '
+                      'represents flood depth (in meters).')
+    exposure_input = tr('An exposure raster layer where each '
+                        'cell represent population count.')
     limitation = tr('The default threshold of 1 meter was selected based on '
                     'consensus, not hard evidence.')
 

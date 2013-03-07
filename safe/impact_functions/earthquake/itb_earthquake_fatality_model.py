@@ -100,20 +100,20 @@ class ITBFatalityFunction(FunctionProvider):
                  tr('Jaiswal, K., and Wald, D., 2010. An empirical model for '
                     'global earthquake fatality estimation, Earthq. Spectra '
                     '26, 1017-1037.')]
-    limitations = [tr('The model is based on limited number of observed '
-                      'fatality rates during 4 past fatal events.'),
-                   tr('The model clearly over-predicts the fatality rates at'
-                      'intensities higher than VIII.'),
-                   tr('The model only estimates the expected fatality rate '
-                      'for a given intensity level; however the associated '
-                      'uncertainty for the proposed model is not addressed.'),
-                   tr('There are few known mistakes in developing the current '
-                      'model:\n'
-                      '- rounding MMI values to the nearest 0.5,\n'
-                      '- Implementing Finite-Fault models of candidate '
-                      'events, and\n'
-                      '- consistency between selected GMPEs with those in '
-                      'use by BMKG.')]
+    limitation = [tr('The model is based on limited number of observed '
+                     'fatality rates during 4 past fatal events.'),
+                  tr('The model clearly over-predicts the fatality rates at'
+                     'intensities higher than VIII.'),
+                  tr('The model only estimates the expected fatality rate '
+                     'for a given intensity level; however the associated '
+                     'uncertainty for the proposed model is not addressed.'),
+                  tr('There are few known mistakes in developing the current '
+                     'model:\n'
+                     '- rounding MMI values to the nearest 0.5,\n'
+                     '- Implementing Finite-Fault models of candidate '
+                     'events, and\n'
+                     '- consistency between selected GMPEs with those in '
+                     'use by BMKG.')]
     actions = tr('Provide details about the population will be die or '
                  'displaced')
     detailed_description = \

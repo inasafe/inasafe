@@ -14,8 +14,9 @@ import os
 from shutil import rmtree
 from safe.api import get_documentation, get_plugins, is_function_enabled
 from gen_rst_script import (create_dirs, create_rst_file, insafe_dir_path)
+from third_party.odict import OrderedDict
 
-doc_dir = "docs" + os.sep + "source" + os.sep + "user-docs"
+doc_dir = os.path.join('docs', 'source', 'user-docs')
 impact_func_doc_dir = 'impact_function_docs'
 
 
@@ -36,16 +37,16 @@ def gen_rst_doc(impfunc_doc):
     :return
         None
     """
-    impact_func_doc_path = insafe_dir_path + os.sep + doc_dir + os.sep +\
-                           impact_func_doc_dir
-    for myFuncName, myDoc in impfunc_doc.iteritems():
+    impact_func_doc_path = os.path.join(insafe_dir_path, doc_dir,
+                                        impact_func_doc_dir)
+    for myFuncName, myDoc in impfunc_doc.items():
         content_rst = myFuncName
         content_rst += '\n' + '=' * len(myFuncName) + '\n\n'
         # provide documentation
         content_rst += 'Overview'
         content_rst += '\n' + '-' * len('Overview') + '\n\n'
-        if type(myDoc) is dict :
-            for mykey, myValue in myDoc.iteritems():
+        if type(myDoc) is dict or type(myDoc) is OrderedDict:
+            for mykey, myValue in myDoc.items():
                 if mykey == 'detailed_description':
                     continue
                 myPrettykey = pretty_key(mykey)
@@ -61,7 +62,7 @@ def gen_rst_doc(impfunc_doc):
                 content_rst += '\n\n'
             content_rst += 'Details'
             content_rst += '\n' + '-' * len('Details') + '\n\n'
-            if 'detailed_description' in myDoc.iterkeys():
+            if 'detailed_description' in myDoc.keys():
                 content_rst += myDoc['detailed_description']
             else:
                 content_rst += 'No documentation found'
@@ -95,14 +96,15 @@ def gen_impact_func_index(list_unique_identifier=None):
         content_rst += '   ' + impact_func_doc_dir + os.sep + \
                        ui.replace(' ', '') + '\n'
 
-    create_rst_file(insafe_dir_path + os.sep + doc_dir, 'impact_functions_doc',
-                        content_rst)
+    create_rst_file(os.path.join(insafe_dir_path, doc_dir),
+                    'impact_functions_doc',
+                    content_rst)
 
 
 if __name__ == "__main__":
     # remove old files, in case you disabled or remove impact function
-    impact_func_doc_dir_path = (insafe_dir_path + os.sep + doc_dir + os.sep +
-            impact_func_doc_dir)
+    impact_func_doc_dir_path = (os.path.join(insafe_dir_path, doc_dir,
+                                             impact_func_doc_dir))
     if os.path.exists(impact_func_doc_dir_path):
         rmtree(impact_func_doc_dir_path)
 
@@ -113,8 +115,10 @@ if __name__ == "__main__":
         if not is_function_enabled(myFunc):
             continue
         impfunc_doc[myKey] = get_documentation(myKey)
+        # print myKey, impfunc_doc[myKey]
+        # print '==============================================================='
     list_unique_identifier = [x['unique_identifier']
-                                for x in impfunc_doc.itervalues()]
+                              for x in impfunc_doc.values()]
     gen_impact_func_index(list_unique_identifier)
 
     create_dirs(impact_func_doc_dir_path)
