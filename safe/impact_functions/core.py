@@ -789,7 +789,18 @@ def is_function_enabled(func):
 
 
 def format_int(x):
-    """Format integer with separator between thousands
+    """Format integer with separator between thousands.
+
+    Args:
+        x: int - a number to be formatted in a locale friendly way.
+
+    Returns:
+        str - a locale friendly formatted string e.g. 1,000,0000.00
+            representing the original x. If any exception occurs,
+            x is simply returned.
+
+    Raises:
+        None
 
     From http://stackoverflow.com/questions/5513615/
                 add-thousands-separators-to-a-number
@@ -809,13 +820,15 @@ def format_int(x):
 
     import os
     lang = os.getenv('LANG')
+    try:
+        s = '{0:,}'.format(x)
+        #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
 
-    s = '{0:,}'.format(x)
-    #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+    except:  # see issue #526 TODO check exactly what exception is being thrown
+        return x
 
     # Quick solution for the moment
     if lang == 'id':
         # Replace commas with dots
         s = s.replace(',', '.')
-
     return s
