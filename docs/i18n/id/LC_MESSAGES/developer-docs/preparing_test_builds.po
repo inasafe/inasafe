@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, InaSAFE project
 # This file is distributed under the same license as the InaSAFE Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: InaSAFE Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-06 11:02+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 93f9a7aa56334aa0a0fa64adcac2ff09
 #: ../../source/developer-docs/preparing_test_builds.rst:7
@@ -96,8 +96,8 @@ msgstr ""
 # 9ac90413fb1e418c99cb5dbf4602e285
 #: ../../source/developer-docs/preparing_test_builds.rst:35
 msgid ""
-"You should now see the experimental versions of InaSAFE listed in the :"
-"guilabel:`Plugins` tab."
+"You should now see the experimental versions of InaSAFE listed in the "
+":guilabel:`Plugins` tab."
 msgstr ""
 
 # 9692f1d57e40403a8c11f9a6bb22994f
@@ -122,8 +122,8 @@ msgid ""
 "To host your repo, you should create a DNS domain or subdomain reserved "
 "exclusively for use of the fabric script & repo. For example during the "
 "recent floods in Jakarta (Jan 2013), we registered a new subdomain 'inasafe-"
-"crisis.linfiniti.com' by creating the following 'a record' (alias record) on "
-"our DNS server configuration panel::"
+"crisis.linfiniti.com' by creating the following 'a record' (alias record) on"
+" our DNS server configuration panel::"
 msgstr ""
 
 # 33c969f6068248edb0afccfaf1677efb
@@ -137,17 +137,17 @@ msgid ""
 "The purpose of the server/name mapping is to determine what (sub)domain to "
 "publish the repo under. This is carried out via a simple dictionary. For "
 "example running :samp:`hostname` on the deployment server might return "
-"'linfiniti' in which case to deploy the inasafe-crisis.linfiniti.com repo we "
-"would add an entry to the fabfile.py as follows::"
+"'linfiniti' in which case to deploy the inasafe-crisis.linfiniti.com repo we"
+" would add an entry to the fabfile.py as follows::"
 msgstr ""
 
 # 702e62380dd042e5a15ca49f435d1598
 #: ../../source/developer-docs/preparing_test_builds.rst:74
 msgid ""
 "Basically, this last key-value pair says 'if the hostname command on the "
-"server returns \"linfiniti\" then deploy a web site called inasafe-crisis on "
-"that server'. The resultant web site will have a new repository created that "
-"a user could add to their QGIS plugin repository list as::"
+"server returns \"linfiniti\" then deploy a web site called inasafe-crisis on"
+" that server'. The resultant web site will have a new repository created "
+"that a user could add to their QGIS plugin repository list as::"
 msgstr ""
 
 # 27d981d4cc704fdca4de4434f9573d06
@@ -191,17 +191,17 @@ msgstr ""
 # 5e8993fb312e4d5abac6e79ccfbb4bf7
 #: ../../source/developer-docs/preparing_test_builds.rst:107
 msgid ""
-"One problem you may want to consider is that if you release consecutive test "
-"builds with the same version number, the python plugin manager in QGIS will "
-"not indicate that a new package is available. For this reason we recommend "
-"adding an incremental build number to the version numbers in :file:`__init__."
-"py` and :file:`metadata.txt`. For example::"
+"One problem you may want to consider is that if you release consecutive test"
+" builds with the same version number, the python plugin manager in QGIS will"
+" not indicate that a new package is available. For this reason we recommend "
+"adding an incremental build number to the version numbers in "
+":file:`__init__.py` and :file:`metadata.txt`. For example::"
 msgstr ""
 
 # fbfccedda2624afbb2ae74c3217059c3
 #: ../../source/developer-docs/preparing_test_builds.rst:115
 msgid ""
-"In this case the '-1' at the end of the version number designates that it is "
-"build 1. You should manually increment this number and commit it **to the "
+"In this case the '-1' at the end of the version number designates that it is"
+" build 1. You should manually increment this number and commit it **to the "
 "branch you are building** each time before creating a package."
 msgstr ""

@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-06 10:58+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # ea6d8a03f16946a1a77cb196abe4b4e2
 #: ../../source/user-docs/dock.rst:7
@@ -42,16 +42,16 @@ msgstr ""
 #: ../../source/user-docs/dock.rst:17
 msgid ""
 "The |project_name| Dock panel is the main way to interact with the tools "
-"that are provided in |project_name|. After you have installed the |"
-"project_name| plugin, the dock panel will automatically load in QGIS, "
+"that are provided in |project_name|. After you have installed the "
+"|project_name| plugin, the dock panel will automatically load in QGIS, "
 "appearing on the left hand side of the screen."
 msgstr ""
 
 # 0bbf0100b6884f05884512a9139884c8
 #: ../../source/user-docs/dock.rst:25
 msgid ""
-"You can drag and drop the dock panel to reposition it in the user interface. "
-"For example, dragging the panel towards the right margin of the QGIS "
+"You can drag and drop the dock panel to reposition it in the user interface."
+" For example, dragging the panel towards the right margin of the QGIS "
 "application will dock it to the right side of the screen."
 msgstr ""
 
@@ -78,8 +78,8 @@ msgstr ""
 # fbe4195a13f540f78a12b37762f98bf4
 #: ../../source/user-docs/dock.rst:38
 msgid ""
-"At any time you can obtain help in |project_name| by clicking on the :"
-"guilabel:`help` buttons provided on each dock and dialog."
+"At any time you can obtain help in |project_name| by clicking on the "
+":guilabel:`help` buttons provided on each dock and dialog."
 msgstr ""
 
 # e93a07fc7a244ec9ab1ae51f7cbbcfda
@@ -117,8 +117,8 @@ msgid ""
 "In order to answer such questions, the |project_name| developers have built "
 "a number of **impact functions** that cover scenarios such as flood, "
 "tsunami, volcanic ash fall, earthquake and so on. You can read our impact "
-"function documentation to find out more information about the various :doc:"
-"`impact_functions` implemented."
+"function documentation to find out more information about the various "
+":doc:`impact_functions` implemented."
 msgstr ""
 
 # 0a1780ff98b047459a35ec009329bdb5
@@ -149,16 +149,16 @@ msgstr ""
 #: ../../source/user-docs/dock.rst:73
 msgid ""
 "The **impact function** (:guilabel:`Might`) will combine these two input "
-"layers in a mathematical model in order to postulate what the impacts of the "
-"hazard will be on the exposure infrastructure or people."
+"layers in a mathematical model in order to postulate what the impacts of the"
+" hazard will be on the exposure infrastructure or people."
 msgstr ""
 
 # 9bc99b00cff04b90b85d10d1304758c0
 #: ../../source/user-docs/dock.rst:77
 msgid ""
-"By selecting a combination from the :guilabel:`In the event of` and :"
-"guilabel:`How many` combo boxes, an appropriate set of impact functions will "
-"be listed in the :guilabel:`Might` combo box."
+"By selecting a combination from the :guilabel:`In the event of` and "
+":guilabel:`How many` combo boxes, an appropriate set of impact functions "
+"will be listed in the :guilabel:`Might` combo box."
 msgstr ""
 
 # f99b22b95a714e838c6b5dacfabd88b7
@@ -167,8 +167,8 @@ msgid ""
 "You may be wondering how the |project_name| plugin determines whether a "
 "layer should be listed in the :guilabel:`In the event of` or :guilabel:`How "
 "many` combo boxes? The plugin relies on simple keyword metadata to be "
-"associated with each layer. The keyword system is described in detail in :"
-"doc:`keywords`. Each layer that has a keyword allocating it's **category** "
+"associated with each layer. The keyword system is described in detail in "
+":doc:`keywords`. Each layer that has a keyword allocating it's **category** "
 "to **hazard** will be listed in the :guilabel:`In the event of` combo. "
 "Similarly, a **category** of **exposure** in the keywords for a layer will "
 "result in it being listed under the :guilabel:`How many` combo."
@@ -198,8 +198,8 @@ msgstr ""
 # f2ee3ce64f1442afacae9bac3587cf66
 #: ../../source/user-docs/dock.rst:105
 msgid ""
-"If you select an **impact layer** (i.e. a layer that was produced using an |"
-"project_name| impact function), in the QGIS layers list, this summary will "
+"If you select an **impact layer** (i.e. a layer that was produced using an "
+"|project_name| impact function), in the QGIS layers list, this summary will "
 "also be displayed in the results area."
 msgstr ""
 
@@ -214,11 +214,11 @@ msgstr ""
 # c6efeff8bb044aa6881f8ab5e93fd93a
 #: ../../source/user-docs/dock.rst:116
 msgid ""
-"The :guilabel:`Results` area is also used to display status information. For "
-"example, when a suitable combination of **hazard** (:guilabel:`In the event "
-"of`), **exposure** (:guilabel:`How many`) and **impact function** (:guilabel:"
-"`In the event of`) are selected, the results area will be updated to "
-"indicate that you can proceed to run the impact scenario calculation."
+"The :guilabel:`Results` area is also used to display status information. For"
+" example, when a suitable combination of **hazard** (:guilabel:`In the event"
+" of`), **exposure** (:guilabel:`How many`) and **impact function** "
+"(:guilabel:`In the event of`) are selected, the results area will be updated"
+" to indicate that you can proceed to run the impact scenario calculation."
 msgstr ""
 
 # c4c64c29204a482eafce074fa28061bc
@@ -238,10 +238,10 @@ msgstr ""
 # b5952a60c9cb4e36bf2901c7652cd728
 #: ../../source/user-docs/dock.rst:138
 msgid ""
-"At the bottom of error display you may see button like this: .. "
-"image:: ../../toggle-traceback.png If you click on this button, it will "
-"display a box which will contain useful diagnostic information which can be "
-"submitted as part of a bug report if you think the error was incorrect."
+"At the bottom of error display you may see button like this: .. image:: "
+"../../toggle-traceback.png If you click on this button, it will display a "
+"box which will contain useful diagnostic information which can be submitted "
+"as part of a bug report if you think the error was incorrect."
 msgstr ""
 
 # 5d07679d7c864cbcb04b5ac8a96a7350
@@ -265,15 +265,16 @@ msgstr ""
 #: ../../source/user-docs/dock.rst:151
 msgid ""
 ":guilabel:`Print...` - click on this if you wish to create a pdf of your "
-"impact scenarion project. An **impact layer** must be active before the :"
-"guilabel:`Print...` button will be enabled."
+"impact scenarion project. An **impact layer** must be active before the "
+":guilabel:`Print...` button will be enabled."
 msgstr ""
 
 # 0b1888c61e554d2d80c493c55aae889a
 #: ../../source/user-docs/dock.rst:154
 msgid ""
-":guilabel:`Run` - if the combination of options in the :guilabel:`Questions` "
-"area's combo boxes will allow you to run a scenario, this button is enabled."
+":guilabel:`Run` - if the combination of options in the :guilabel:`Questions`"
+" area's combo boxes will allow you to run a scenario, this button is "
+"enabled."
 msgstr ""
 
 # 6f26c4344efa4f7cb7bd6940f550c80a

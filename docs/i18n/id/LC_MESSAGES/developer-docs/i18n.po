@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-06 11:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 2bdb1f3e25e7498e8ba496e334f8752e
 #: ../../source/developer-docs/i18n.rst:7
@@ -69,8 +69,8 @@ msgstr ""
 # ad0dd472843f4a80a76e03c5d06a8d5a
 #: ../../source/developer-docs/i18n.rst:24
 msgid ""
-"Strings that appear in the Python code which constitutes the rest of InaSAFE "
-"including the impact functions"
+"Strings that appear in the Python code which constitutes the rest of InaSAFE"
+" including the impact functions"
 msgstr ""
 
 # 862dca1de90a4d469fd0038e82b784ba
@@ -109,8 +109,8 @@ msgstr ""
 # 0a17b275117e47aa9a57deb4bf87c72c
 #: ../../source/developer-docs/i18n.rst:40
 msgid ""
-"String replacement arguments should be provided using the QString :samp:"
-"`arg` method. Example: :samp:`self.tr('Error: %1').arg(message)`"
+"String replacement arguments should be provided using the QString "
+":samp:`arg` method. Example: :samp:`self.tr('Error: %1').arg(message)`"
 msgstr ""
 
 # 46c10bea6ce347768990c391e6caf97d
@@ -131,12 +131,12 @@ msgstr ""
 # cb9b42c1fcf348d88f1ff26d58659451
 #: ../../source/developer-docs/i18n.rst:56
 msgid ""
-"The library will use at run-time the :samp:`LANG` environment variable which "
-"should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale you "
+"The library will use at run-time the :samp:`LANG` environment variable which"
+" should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale you "
 "wish to use. This is done automatically for you by the QGIS Plugin, but if "
 "you are using the riab library in another context, be sure to set it before "
-"using any libary functions if you want them to return translated strings e."
-"g.::"
+"using any libary functions if you want them to return translated strings "
+"e.g.::"
 msgstr ""
 
 # a151e4a4708644ccb06c1bf91d5d61d7
@@ -167,8 +167,8 @@ msgstr ""
 # c31fc540823f46588627cd88067150e8
 #: ../../source/developer-docs/i18n.rst:77
 msgid ""
-"and add the name to the dictionary \"names\". E.g. :samp:`'college' = tr"
-"('college')`"
+"and add the name to the dictionary \"names\". E.g. :samp:`'college' = "
+"tr('college')`"
 msgstr ""
 
 # 965da718e66746c7b4cba9f466561a99
@@ -298,8 +298,8 @@ msgstr ""
 msgid ""
 "Translators should take heed - when refreshing the .ts file in QtLinguist, "
 "the file *must be closed* (:menuselection:`File --> Close`) and then "
-"reopened. Simply loading doing (:menuselection:`File --> Open`) and choosing "
-"the same file you already have in the workspace will not refresh the "
+"reopened. Simply loading doing (:menuselection:`File --> Open`) and choosing"
+" the same file you already have in the workspace will not refresh the "
 "workspace with any new changes that appeared on disk."
 msgstr ""
 
@@ -310,8 +310,8 @@ msgstr ""
 msgid ""
 "*make update-translation-strings* is non destructive. That is, you can "
 "safely run it as many times as you like, new strings will be added to it, "
-"deprecated strings will be left in place and already translated strings will "
-"remain translated."
+"deprecated strings will be left in place and already translated strings will"
+" remain translated."
 msgstr ""
 
 # 9061b4cbd72e45bf8af50a22d6d1b44e
@@ -324,9 +324,9 @@ msgstr ""
 # 39e106f997564e7496f6ba95bf456c6e
 #: ../../source/developer-docs/i18n.rst:140
 msgid ""
-"To add a new language, edit the :samp:`gui/riab.pro` file and append the new "
-"locale to the bottom of the file. For example, to add South African english "
-"as a new locale, change this::"
+"To add a new language, edit the :samp:`gui/riab.pro` file and append the new"
+" locale to the bottom of the file. For example, to add South African english"
+" as a new locale, change this::"
 msgstr ""
 
 # 6fe866cfeae247f2a558b06683e7c4bf
@@ -338,8 +338,8 @@ msgstr ""
 #: ../../source/developer-docs/i18n.rst:151
 msgid ""
 "Save and close the .pro file. Next run :samp:`make update-translation-"
-"strings` to generate the new .ts file under gui/i18n. Don't forget to :samp:"
-"`git add` the new file and place it under version control."
+"strings` to generate the new .ts file under gui/i18n. Don't forget to "
+":samp:`git add` the new file and place it under version control."
 msgstr ""
 
 # bbd39ad7a5e9442d81f442f073befde6
@@ -438,8 +438,8 @@ msgstr ""
 msgid ""
 "Translators should take heed - when refreshing the .po file in QtLinguist, "
 "the file *must be closed* (:menuselection:`File --> Close`) and then "
-"reopened. Simply loading doing (:menuselection:`File --< Open`) and choosing "
-"the same file you already have in the workspace will not refresh the "
+"reopened. Simply loading doing (:menuselection:`File --< Open`) and choosing"
+" the same file you already have in the workspace will not refresh the "
 "workspace with any new changes that appeared on disk."
 msgstr ""
 
@@ -512,8 +512,8 @@ msgstr ""
 # 2d6765cdd3964e4fa83a268f48728684
 #: ../../source/developer-docs/i18n.rst:284
 msgid ""
-"The above adding the impact_function *flood_population_fatality* to the list "
-"of translatable source files. Now run::"
+"The above adding the impact_function *flood_population_fatality* to the list"
+" of translatable source files. Now run::"
 msgstr ""
 
 # b2550e8b3471492093a71187bd4f8035
@@ -521,8 +521,8 @@ msgstr ""
 msgid ""
 "to generate the updated .po file and make it available to translators. When "
 "the translated file is returned, convert the .po file to a binary .mo file "
-"(which is used at runtime for the actual translation), then follow the :ref:"
-"`library-release-label` section above."
+"(which is used at runtime for the actual translation), then follow the :ref"
+":`library-release-label` section above."
 msgstr ""
 
 # d77b66e990ad47dc983527c8f65af5d9
@@ -545,7 +545,7 @@ msgstr ""
 # 2ef5c46a3c794c1baa308fcecfe59ccb
 #: ../../source/developer-docs/i18n.rst:305
 msgid ""
-"Which will create pot files which can be found under build/locale. Note that "
-"this make target needs to be tweaked so that it builds a unique directory "
+"Which will create pot files which can be found under build/locale. Note that"
+" this make target needs to be tweaked so that it builds a unique directory "
 "for each supported locale."
 msgstr ""

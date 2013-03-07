@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:26+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # e611f207c0054657a044ee981e7b9d2a
 #: ../../source/developer-docs/jenkins_ci.rst:7
@@ -39,8 +39,8 @@ msgstr ""
 # 1ed27f4516584de1882da161426e88a9
 #: ../../source/developer-docs/jenkins_ci.rst:15
 msgid ""
-"These notes are a port of notes kept during setup of Jenkins for some django "
-"projects and were written after the fact. As such, they need to be proof "
+"These notes are a port of notes kept during setup of Jenkins for some django"
+" projects and were written after the fact. As such, they need to be proof "
 "read and validated on a new server instance."
 msgstr ""
 
@@ -84,8 +84,8 @@ msgstr ""
 #: ../../source/developer-docs/jenkins_ci.rst:43
 msgid ""
 "Now create a virtual host on the server's apache installation to reverse "
-"proxy by creating this file: :file:`/etc/apache2/sites-available/3-jenkins."
-"linfiniti.com` which should contain::"
+"proxy by creating this file: :file:`/etc/apache2/sites-"
+"available/3-jenkins.linfiniti.com` which should contain::"
 msgstr ""
 
 # bd59619dbe514371b55bdfa37f4d90e6
@@ -240,7 +240,7 @@ msgstr ""
 msgid "Jenkins SSH Slaves plugin"
 msgstr ""
 
-# 697c1efb20b94316a36d8f617e41b438
+# 7e6ceba2931e4669846e987bb83f8984
 #: ../../source/developer-docs/jenkins_ci.rst:115
 msgid "xvfb"
 msgstr ""
@@ -255,15 +255,15 @@ msgstr ""
 msgid ""
 "We are hosting private repositories on the server so we want to make "
 "everything private. To do that we do: :menuselection:`Jenkins --> Manage "
-"Jenkins --> Configure System` or go to http://jenkins.linfiniti.com/"
-"configure."
+"Jenkins --> Configure System` or go to "
+"http://jenkins.linfiniti.com/configure."
 msgstr ""
 
 # 593dd321785a41b3a6817731f0069ddf
 #: ../../source/developer-docs/jenkins_ci.rst:126
 msgid ""
-"Under :guilabel:`Access control - Security Realm`, check :guilabel:"
-"`Jenkins's own user database`."
+"Under :guilabel:`Access control - Security Realm`, check "
+":guilabel:`Jenkins's own user database`."
 msgstr ""
 
 # d7ff4b7a086d4e9c8a757777db3c3d70
@@ -310,8 +310,8 @@ msgstr ""
 # 3dc48ddf96db4d7ea53f6d600bf082a5
 #: ../../source/developer-docs/jenkins_ci.rst:148
 msgid ""
-":menuselection:`Jenkins --> New Job` or go to http://jenkins.linfiniti.com/"
-"view/All/newJob."
+":menuselection:`Jenkins --> New Job` or go to "
+"http://jenkins.linfiniti.com/view/All/newJob."
 msgstr ""
 
 # 0f43f9abee7a4b60ace9f5f5659d80c9
@@ -334,7 +334,7 @@ msgid ""
 "only. This will allow anonymous read-only access to the project."
 msgstr ""
 
-# cc1eb7a4ff2c49e19667b18d0cc3f4ef
+# ed59c610b1854aa8907f6363a68e9846
 #: ../../source/developer-docs/jenkins_ci.rst:158
 msgid ":guilabel:`Xvfb` set to ticked."
 msgstr ""
@@ -348,8 +348,8 @@ msgstr ""
 # 74dbeefa0c2c460bba764fd1e83139e1
 #: ../../source/developer-docs/jenkins_ci.rst:160
 msgid ""
-":guilabel:`Source Code Management` check :guilabel:`Git` and set to :kbd:"
-"`git@github.com:AIFDR/inasafe.git`"
+":guilabel:`Source Code Management` check :guilabel:`Git` and set to "
+":kbd:`git@github.com:AIFDR/inasafe.git`"
 msgstr ""
 
 # 2a8b9add252a4fbea31676c6018c931a
@@ -386,8 +386,8 @@ msgstr ""
 # e1f2ae8b91844165b4d1efe2bf254965
 #: ../../source/developer-docs/jenkins_ci.rst:188
 msgid ""
-"In this server instance we are using a hand built QGIS. The initial 3 export "
-"lines may not be needed if you are using a package build QGIS installation."
+"In this server instance we are using a hand built QGIS. The initial 3 export"
+" lines may not be needed if you are using a package build QGIS installation."
 msgstr ""
 
 # e7bcdfc9dc674edcabd03e66f122f1ea
@@ -443,8 +443,8 @@ msgstr ""
 # 55d9baca3b974076a4fe87f09e1969ff
 #: ../../source/developer-docs/jenkins_ci.rst:211
 msgid ""
-":guilabel:`Email notification` set :guilabel:`Recipients` to :kbd:"
-"`tim@linfiniti.com`. Add any additional recipients as needed (space "
+":guilabel:`Email notification` set :guilabel:`Recipients` to "
+":kbd:`tim@linfiniti.com`. Add any additional recipients as needed (space "
 "delimited). Also I set :guilabel:`Send e-mail for every unstable build` "
 "checked and :guilabel:`Send separate e-mails to individuals who broke the "
 "build` checked."
@@ -452,21 +452,22 @@ msgstr ""
 
 # c42d872024ff4a008f846cd8ed1ba000
 #: ../../source/developer-docs/jenkins_ci.rst:217
-msgid ":guilabel:`Jenkins Sounds` set :guilabel:`Failure` to :kbd:`argh(wave)`"
+msgid ""
+":guilabel:`Jenkins Sounds` set :guilabel:`Failure` to :kbd:`argh(wave)`"
 msgstr ""
 
 # 5d72bf921ee742419ad80a5d73491fd8
 #: ../../source/developer-docs/jenkins_ci.rst:218
 msgid ""
-":guilabel:`Jenkins Sounds` set :guilabel:`Success` to :kbd:`Yahoo.Yodel(wave)"
-"`"
+":guilabel:`Jenkins Sounds` set :guilabel:`Success` to "
+":kbd:`Yahoo.Yodel(wave)`"
 msgstr ""
 
 # d6d9524236ee4561814da74bbe70fa28
 #: ../../source/developer-docs/jenkins_ci.rst:219
 msgid ""
-":guilabel:`Publish Coverage / Complexity Scatter Plot` check :guilabel:"
-"`Locate the graph at the topmost of Jenkins project page`"
+":guilabel:`Publish Coverage / Complexity Scatter Plot` check "
+":guilabel:`Locate the graph at the topmost of Jenkins project page`"
 msgstr ""
 
 # a52c4ac99c0f44f08ba7e703023305a0
@@ -612,11 +613,12 @@ msgstr ""
 # 36bf3ca5ffc44d4fb33a35f8f1250878
 #: ../../source/developer-docs/jenkins_ci.rst:336
 msgid ""
-"https://sites.google.com/site/kmmbvnr/home/django-jenkins-tutorial (probably "
-"the most usful article I found)"
+"https://sites.google.com/site/kmmbvnr/home/django-jenkins-tutorial (probably"
+" the most usful article I found)"
 msgstr ""
 
 # 3e65ac12371b4c5e837e73cb2eb0f7a8
 #: ../../source/developer-docs/jenkins_ci.rst:338
-msgid "http://blog.mathieu-leplatre.info/django-et-jenkins-fr.html (in French)"
+msgid ""
+"http://blog.mathieu-leplatre.info/django-et-jenkins-fr.html (in French)"
 msgstr ""

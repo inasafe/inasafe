@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:28+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 9e6d1ff6c026490583055abbb44ba5e1
 #: ../../source/developer-docs/postprocessors.rst:8
@@ -25,8 +25,9 @@ msgstr ""
 # aaf79e82cf734d8895b93f98353786e8
 #: ../../source/developer-docs/postprocessors.rst:10
 msgid ""
-"This document explains the purpose of postprocessors and lists the different "
-"available postprocessor and the requirements each has to be used effectively."
+"This document explains the purpose of postprocessors and lists the different"
+" available postprocessor and the requirements each has to be used "
+"effectively."
 msgstr ""
 
 # 7ee73a639a7840ff81257c8aec5fc4f9
@@ -45,8 +46,8 @@ msgid ""
 "A postprocessor is a function that takes the results from the impact "
 "function and calculates derivative indicators, for example if you have an "
 "affected population total, the Gender postprocessor will calculate gender "
-"specific indicators such as additional nutritional requirements for pregnant "
-"women"
+"specific indicators such as additional nutritional requirements for pregnant"
+" women"
 msgstr ""
 
 # d64864c57f154d17a0bf86ee73440eb8
@@ -67,7 +68,7 @@ msgstr ""
 msgid "the minimal class could look like this: ::"
 msgstr ""
 
-# 2719f642e9074d31b77110f12c6a59d3
+# 8dadb039c8784782a3e88dfeea7f3e0b
 #: ../../source/developer-docs/postprocessors.rst:55
 msgid ""
 "After that you need to import the new class into postprocessor_factory and "
@@ -101,12 +102,12 @@ msgstr ""
 msgid "Output"
 msgstr ""
 
-# e4234de9666e40749cdcfa44a5a1b9f9
+# 77f92be760b24c1d879fc896f2427a44
 #: ../../source/developer-docs/postprocessors.rst:89
 msgid ""
 "Dock.postprocOutput will hold the result datastructure (shown below) of all "
-"the postprocessors. The structure is then parsed by Dock."
-"_postProcessingOutput() and stored in the impact layer's keywords If a "
+"the postprocessors. The structure is then parsed by "
+"Dock._postProcessingOutput() and stored in the impact layer's keywords If a "
 "postprocessor generates no output (for example due to calculation errors), "
 "then it will just be skipped from the report"
 msgstr ""

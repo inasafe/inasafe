@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:24+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 49c6de2a4489461bbce733d445c911da
 #: ../../source/user-docs/keywords.rst:9
@@ -34,7 +34,7 @@ msgstr ""
 msgid "Purpose"
 msgstr ""
 
-# 36b6874c1586449882916ff9f18b7201
+# 7698336b03bd49f2a191ac7842b16cbd
 #: ../../source/user-docs/keywords.rst:17
 msgid ""
 "The keywords system is used by the :ref:`impact_functions` to determine the "
@@ -46,8 +46,8 @@ msgstr ""
 msgid ""
 "Each input GIS dataset used by |project_name| needs to have an accompanying "
 "keywords file. The purpose of the keywords file is to provide additional "
-"metadata needed by the impact functions. For example, the keywords file will "
-"indicate whether a given dataset should be treated as a *hazard* or an "
+"metadata needed by the impact functions. For example, the keywords file will"
+" indicate whether a given dataset should be treated as a *hazard* or an "
 "*impact* layer. It is also used to indicate the context of the layer (e.g. "
 "\"it's a *flood* layer, it's an *earthquake* layer)."
 msgstr ""
@@ -85,8 +85,8 @@ msgid ""
 "Currently keywords are not validated by the library. This means if you for "
 "example misspell a keyword, use the wrong letter case (e.g. upper case "
 "instead of lower case) or provide the wrong keyword for the context (e.g. "
-"provide a subcategory of flood to an exposure category), the system will not "
-"be able to determine what to do with the file. For that reason you should "
+"provide a subcategory of flood to an exposure category), the system will not"
+" be able to determine what to do with the file. For that reason you should "
 "follow the guidelines below carefully to ensure you have entered your "
 "keywords correctly."
 msgstr ""
@@ -308,8 +308,8 @@ msgstr ""
 # 41babd09fc8e4a0a968b93c08dd7106d
 #: ../../source/user-docs/keywords.rst:142
 msgid ""
-"In the case where the units are m (meters) or feet, the input dataset should "
-"be a raster layer where each cell in the raster represents a depth in the "
+"In the case where the units are m (meters) or feet, the input dataset should"
+" be a raster layer where each cell in the raster represents a depth in the "
 "units specified."
 msgstr ""
 
@@ -334,15 +334,16 @@ msgstr ""
 # ead09c7c0bbf404e876181cc82597e98
 #: ../../source/user-docs/keywords.rst:160
 msgid ""
-"In this case the dataset should be a raster layer where each cell represents "
-"the kilograms per meters squared of ash fall on that cell."
+"In this case the dataset should be a raster layer where each cell represents"
+" the kilograms per meters squared of ash fall on that cell."
 msgstr ""
 
 # 6434ef2a9f2c436da22807441fecac60
 #: ../../source/user-docs/keywords.rst:163
 msgid ""
-"'units' and 'datatype' (described below) should be considered to be mutually "
-"exclusive - i.e. they should not both be present in any given keywords file."
+"'units' and 'datatype' (described below) should be considered to be mutually"
+" exclusive - i.e. they should not both be present in any given keywords "
+"file."
 msgstr ""
 
 # 691428bb3a754b24b3c4846ad3de5d97
@@ -519,9 +520,9 @@ msgstr ""
 msgid ""
 "**Advanced mode**: In this mode several extra options are provided in "
 "addition to the minimal mode options. Unlike minimal mode, in advanced mode "
-"only basic validation is performed and the user is given more flexibility to "
-"manually define and remove key/value pairs. Three sections are provided for "
-"this:"
+"only basic validation is performed and the user is given more flexibility to"
+" manually define and remove key/value pairs. Three sections are provided for"
+" this:"
 msgstr ""
 
 # a8ad07176fbd4540838e2a8b32a00a1e
@@ -546,9 +547,9 @@ msgid ""
 "**Current keywords** - In this area a complete list of all the keywords for "
 "the dataset are displayed. The keywords list here is updated when any "
 "changes are made in both the simple and advanced mode editors. It is also "
-"possible in this area to manually remove unwanted keywords using the 'remove "
-"selected' button. Multiple keywords can be removed in a single operation by :"
-"kbd:`Control-clicking` on multiple keyword entries in the current keyword "
+"possible in this area to manually remove unwanted keywords using the 'remove"
+" selected' button. Multiple keywords can be removed in a single operation by"
+" :kbd:`Control-clicking` on multiple keyword entries in the current keyword "
 "list and then clicking :guilabel:`Remove selected`"
 msgstr ""
 
@@ -562,16 +563,17 @@ msgstr ""
 msgid "Invoking the keywords editor"
 msgstr ""
 
-# 06edaa82bcb8425f828656bc10aedeaa
+# 72573db464014f75a002bd84a1fee7f7
 #: ../../source/user-docs/keywords.rst:260
 msgid ""
 "The keyword editor can easily be invoked by **selecting any layer** in the "
-"QGIS layers list, and then using the plugin menu to start the editor (:"
-"menuselection:`Plugins --> InaSAFE --> Keyword Editor`). Alternatively, you "
-"may use the keywords editor icon on the plugins toolbar as illustrated below."
+"QGIS layers list, and then using the plugin menu to start the editor "
+"(:menuselection:`Plugins --> InaSAFE --> Keyword Editor`). Alternatively, "
+"you may use the keywords editor icon on the plugins toolbar as illustrated "
+"below."
 msgstr ""
 
-# 369431e863784e8a8bd6f62527ab84eb
+# 88e0d674303b4de6b5c01849459dd5dd
 #: ../../source/user-docs/keywords.rst:270
 msgid ""
 "the keyword editor icon in the toolbar and menus will **be disabbled** and "
@@ -586,8 +588,8 @@ msgstr ""
 # 43a16c60196244fcbe3b27a9ba3914b8
 #: ../../source/user-docs/keywords.rst:276
 msgid ""
-"To save your keyword edits, simply press the :guilabel:`OK` button and the ."
-"keywords file will be written to disk."
+"To save your keyword edits, simply press the :guilabel:`OK` button and the "
+".keywords file will be written to disk."
 msgstr ""
 
 # d65686483aec470cb12fd8e0f6c2cbf5
@@ -622,9 +624,9 @@ msgstr ""
 msgid ""
 "You may wish to use a different location for the :file:`keywords.db` "
 "keywords database - you can configure this by using the InaSAFE options "
-"dialog. The options dialog can be launched by clicking on the InaSAFE plugin "
-"toolbar's options icon (as shown below) or by doing :menuselection:`Plugins "
-"--> InaSAFE --> InaSAFE Options`."
+"dialog. The options dialog can be launched by clicking on the InaSAFE plugin"
+" toolbar's options icon (as shown below) or by doing :menuselection:`Plugins"
+" --> InaSAFE --> InaSAFE Options`."
 msgstr ""
 
 # f2d81bde8ac64c8b8d511f3caa63b3b5
@@ -685,17 +687,17 @@ msgstr ""
 msgid ""
 "For certain resources (e.g. ArcInfo coverages, Spatialite databases) where "
 "the keywords cache is also used, you should take care to use a common mount "
-"point or network share to access the data if you wish to successfull hit the "
-"cache with the layer's URI. For example you could have all users mount your "
-"data to the same place. Under Unix like operating systems this could look "
+"point or network share to access the data if you wish to successfull hit the"
+" cache with the layer's URI. For example you could have all users mount your"
+" data to the same place. Under Unix like operating systems this could look "
 "something like this::"
 msgstr ""
 
 # 5afb0ddd5716445689d26605df651395
 #: ../../source/user-docs/keywords.rst:350
 msgid ""
-"Under Windows you could always the same drive letter and path the to share e."
-"g.::"
+"Under Windows you could always the same drive letter and path the to share "
+"e.g.::"
 msgstr ""
 
 # 7c295d73e28d4e4386e8e5ed08e337cd
@@ -706,6 +708,7 @@ msgstr ""
 # 71b2d69a127c48fa9a29e576cb1d458d
 #: ../../source/user-docs/keywords.rst:359
 msgid ""
-"If you need help using the keywords editor, you can click on the :guilabel:"
-"`Help` button at the bottom of the dialog and this page will be displayed."
+"If you need help using the keywords editor, you can click on the "
+":guilabel:`Help` button at the bottom of the dialog and this page will be "
+"displayed."
 msgstr ""

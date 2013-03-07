@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-06 11:00+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 225098ec4172424c9d74c43bb9e6f4a8
 #: ../../source/developer-docs/faq.rst:6
@@ -31,8 +31,9 @@ msgstr ""
 #: ../../source/developer-docs/faq.rst:12
 msgid ""
 "The |project_name| documentation files are written using the RST format "
-"(`quickreference guide <http://docutils.sourceforge.net/docs/user/rst/"
-"quickref.html>`_) and stored with the source code in github::"
+"(`quickreference guide "
+"<http://docutils.sourceforge.net/docs/user/rst/quickref.html>`_) and stored "
+"with the source code in github::"
 msgstr ""
 
 # db43b84d0d3240a88236ea31e1cdb0b2
@@ -40,8 +41,8 @@ msgstr ""
 msgid ""
 "HTML files generated using Sphinx (http://sphinx.pocoo.org) by running "
 "https://github.com/AIFDR/inasafe/blob/master/docs/Makefile. These files are "
-"accessible through both the file browser and the help button available in |"
-"project_name|"
+"accessible through both the file browser and the help button available in "
+"|project_name|"
 msgstr ""
 
 # 5d40b2d1db5b4bf997bfa379452cdc6a
@@ -55,9 +56,9 @@ msgstr ""
 # 0d221cc7b36f4324a1ff4fffedf03f56
 #: ../../source/developer-docs/faq.rst:27
 msgid ""
-"Register the project on the dashboard at ReadTheDocs (http://readthedocs.org/"
-"dashboard/inasafe/edit). In particular, this form points to the github "
-"repository where the RST files reside."
+"Register the project on the dashboard at ReadTheDocs "
+"(http://readthedocs.org/dashboard/inasafe/edit). In particular, this form "
+"points to the github repository where the RST files reside."
 msgstr ""
 
 # a6cea76b6bc04347a19386f1ecb6fbe5
@@ -76,8 +77,8 @@ msgstr ""
 # a93b1a851c094c65b37e3d9fd54a5c7e
 #: ../../source/developer-docs/faq.rst:40
 msgid ""
-"To replace string layer_type, say, with layertype across all python files in "
-"project, do::"
+"To replace string layer_type, say, with layertype across all python files in"
+" project, do::"
 msgstr ""
 
 # 71cccaf4899246c8be425de86457ef42
@@ -93,8 +94,9 @@ msgstr ""
 # 6ca9497fb5024058ae2101be3f4b9972
 #: ../../source/developer-docs/faq.rst:54
 msgid ""
-"For details on the find command see `this article <http://rushi.wordpress."
-"com/2008/08/05/find-replace-across-multiple-files-in-linux/>`_."
+"For details on the find command see `this article "
+"<http://rushi.wordpress.com/2008/08/05/find-replace-across-multiple-files-"
+"in-linux/>`_."
 msgstr ""
 
 # dc9f248007414d0d950a680eff8f3db7
@@ -105,8 +107,9 @@ msgstr ""
 # 8a74e8c723cd47fdba7f0a87650e3ed9
 #: ../../source/developer-docs/faq.rst:61
 msgid ""
-"The format was derived using the `git log format tag <http://schacon.github."
-"com/git/git-log.html>`_. It is stored in the source of each python as::"
+"The format was derived using the `git log format tag "
+"<http://schacon.github.com/git/git-log.html>`_. It is stored in the source "
+"of each python as::"
 msgstr ""
 
 # 0aed83a435e3423b9b9d6e7347bf907b
@@ -135,8 +138,8 @@ msgstr ""
 # 93823ff399294a98a23cba5f71c0c7ae
 #: ../../source/developer-docs/faq.rst:85
 msgid ""
-"The deployment of version tagged files is automated by using the :file:"
-"`scripts\\release.sh` script."
+"The deployment of version tagged files is automated by using the "
+":file:`scripts\\release.sh` script."
 msgstr ""
 
 # d15de8f5de85499f9bdcf3646991df99
@@ -147,8 +150,8 @@ msgstr ""
 # 0b02d3c079644b12aea8cabb0890ff30
 #: ../../source/developer-docs/faq.rst:92
 msgid ""
-"sudo apt-get install python-profiler python -m cProfile -s time safe/common/"
-"test_polygon.py"
+"sudo apt-get install python-profiler python -m cProfile -s time "
+"safe/common/test_polygon.py"
 msgstr ""
 
 # 201f3cf640f04b62b63886d6f4f1d35a
@@ -159,15 +162,15 @@ msgstr ""
 # 7e1f1801e6c1446598e033b8cf4ecb93
 #: ../../source/developer-docs/faq.rst:97
 msgid ""
-"sudo easy_install pycallgraph sudo apt-get install graphviz pycallgraph safe/"
-"common/test_polygon.py"
+"sudo easy_install pycallgraph sudo apt-get install graphviz pycallgraph "
+"safe/common/test_polygon.py"
 msgstr ""
 
 # 6a310ecf34fe4247b1dbf55028cb5a93
 #: ../../source/developer-docs/faq.rst:103
 msgid ""
-"See also http://stackoverflow.com/questions/582336/how-can-you-profile-a-"
-"python-script"
+"See also http://stackoverflow.com/questions/582336/how-can-you-profile-a"
+"-python-script"
 msgstr ""
 
 # bb6c09494db4478a88815bb5ed7f253d
@@ -197,6 +200,6 @@ msgstr ""
 # 48c18c8835ed4c40a4c1386a7b3e7904
 #: ../../source/developer-docs/faq.rst:117
 msgid ""
-"You'll need to convert the 1e+24 to NaN value manually if you want to use it "
-"without InaSAFE."
+"You'll need to convert the 1e+24 to NaN value manually if you want to use it"
+" without InaSAFE."
 msgstr ""

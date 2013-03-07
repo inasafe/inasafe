@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-06 11:00+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 54ea901df0b64c558f271821d0c35c93
 #: ../../source/developer-docs/version_control.rst:7
@@ -52,9 +52,9 @@ msgstr ""
 #: ../../source/developer-docs/version_control.rst:25
 msgid ""
 "*Releases* should take place in long lived branches named after the minor "
-"version number (we follow the `semantic versioning scheme <http://semver.org/"
-">`_) so for example the first release would be version 0.1 and would be in a "
-"branch from master called *release_0-1*."
+"version number (we follow the `semantic versioning scheme "
+"<http://semver.org/>`_) so for example the first release would be version "
+"0.1 and would be in a branch from master called *release_0-1*."
 msgstr ""
 
 # 82f609919f4d4226b34c696614fb9adb
@@ -88,9 +88,9 @@ msgstr ""
 # 0cc86b7406654d29b8fffc46a1f1735f
 #: ../../source/developer-docs/version_control.rst:38
 msgid ""
-"After the release, development should take place in master. Additional short "
-"lived branches can be made off master while new features are worked on, and "
-"then merged into master when they are ready."
+"After the release, development should take place in master. Additional short"
+" lived branches can be made off master while new features are worked on, and"
+" then merged into master when they are ready."
 msgstr ""
 
 # 892b77f0242a42dc90869773f4211423
@@ -171,8 +171,8 @@ msgstr ""
 # aa3846b0e0e64061b9ba7f38ac09fc79
 #: ../../source/developer-docs/version_control.rst:76
 msgid ""
-"git merge --no-ff <featurebranch> (possibly resolve conflict and verify test "
-"suite runs)"
+"git merge --no-ff <featurebranch> (possibly resolve conflict and verify test"
+" suite runs)"
 msgstr ""
 
 # dd14d10c96b44f7abc8bd6b75652d5c9
@@ -200,8 +200,8 @@ msgstr ""
 # e3593c210ea04f8e99b6c076b108c710
 #: ../../source/developer-docs/version_control.rst:93
 msgid ""
-"Create a local `tracking branch <http://book.git-scm.com/4_tracking_branches."
-"html>`_::"
+"Create a local `tracking branch <http://book.git-"
+"scm.com/4_tracking_branches.html>`_::"
 msgstr ""
 
 # 4fd5bbbfef1b4b54baa46db3a2c490f7
@@ -304,6 +304,6 @@ msgstr ""
 # 812854710d0441a682e121570557d8d5
 #: ../../source/developer-docs/version_control.rst:143
 msgid ""
-"For subsequent pull requests on that branch you can just do TortoiseGIT-"
-">Pull from the context menu and press ok"
+"For subsequent pull requests on that branch you can just do "
+"TortoiseGIT->Pull from the context menu and press ok"
 msgstr ""
