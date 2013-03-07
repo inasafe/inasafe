@@ -823,8 +823,8 @@ def format_int(x):
     try:
         s = '{0:,}'.format(x)
         #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
-
-    except:  # see issue #526 TODO check exactly what exception is being thrown
+    # see issue #526 TODO check exactly what exception is being thrown
+    except:  # pylint: disable=W0702
         return x
 
     # Quick solution for the moment
