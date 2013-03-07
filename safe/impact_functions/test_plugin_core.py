@@ -1,3 +1,4 @@
+import os
 import unittest
 import logging
 
@@ -10,8 +11,8 @@ from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
 from core import get_documentation
+from core import format_int
 from utilities import pretty_string
-# from safe.impact_functions.core import get_dict_doc_func
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -235,11 +236,25 @@ class Test_plugin_core(unittest.TestCase):
         """Test get_documentation for a function"""
         dict_doc = get_documentation('Basic Function')
         myMsg = ('title should be Basic Function but found %s \n'
-                % (dict_doc['title']))
+                 % (dict_doc['title']))
         myMsg += str(dict_doc)
         for key, value in dict_doc.iteritems():
             print key + ':\t' + str(value)
         assert dict_doc['title'] == 'Basic Function', myMsg
+
+    def test_format_int(self):
+        """Test formatting integer
+        """
+        my_int = 10000000
+        lang = os.getenv('LANG')
+        my_formated_int = format_int(my_int)
+        if lang == 'id':
+            expected_str = '10.000.000'
+        else:
+            expected_str = '10,000,000'
+        my_msg = 'Format integer is not valid'
+        assert (my_formated_int == expected_str or
+                my_formated_int == str(my_int)), my_msg
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')
