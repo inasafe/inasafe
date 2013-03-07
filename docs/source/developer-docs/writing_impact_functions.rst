@@ -489,7 +489,7 @@ InaSAFE assumes that every impact function returns a raster or vector layer.
 
 
 
-This function is available in full at :download:`../static/flood_population_evacuation_impact_function.py`
+This function is available in full at :download:`/static/flood_population_evacuation_impact_function.py`
 
 
 Output
@@ -519,7 +519,7 @@ buildings (vector data) will be affected by earthquake ground shaking
 
 TBA
 
-This function is available in full at :download:`../static/earthquake_building_impact_function.py`
+This function is available in full at :download:`/static/earthquake_building_impact_function.py`
 
 
 .. _vector_vector:
