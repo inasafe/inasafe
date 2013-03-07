@@ -530,6 +530,7 @@ Impact function for polygon hazard and vector point exposure data
 The example below is a simple impact function that identifies which
 buildings (vector data) will be affected by certain volcanic hazard areas (vector polygon data).
 
+.. This should be the volcano impact function as it uses polygons
 
 TBA
 
