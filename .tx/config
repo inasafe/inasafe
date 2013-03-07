@@ -295,3 +295,15 @@ source_file = docs/i18n/en/LC_MESSAGES/tutorial-docs/tutorial.po
 source_lang = en
 type = PO
 
+[inasafe.developer-docs-impact-function-tutorial]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/impact_function_tutorial.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/impact_function_tutorial.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-writing-impact-functions]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/writing_impact_functions.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/writing_impact_functions.po
+source_lang = en
+type = PO
+

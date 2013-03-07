@@ -7,6 +7,11 @@
 #
 # Tim Sutton, March 2013
 
+
+#
+# Sphinx documentation first
+#
+
 for ITEM in user-docs developer-docs tutorial-docs
 do
   for POFILE in `find docs/i18n/en/LC_MESSAGES/${ITEM}/ -type f -name '*.po'`
@@ -25,6 +30,26 @@ do
       --execute
   done
 done
+
+#
+# Now safe package
+#
+
+POPATH=safe/i18n/<lang>/LC_MESSAGES/inasafe.po
+tx set -t PO --auto-local -r inasafe.safe \
+    "$POPATH" \
+    --source-lang en \
+    --execute
+
+#
+# Now safe_qgis package
+#
+
+TSPATH=safe_qgis/inasafe_<lang>.ts
+tx set -t QT --auto-local -r inasafe.safe_qgis \
+  "$TSPATH" \
+  --source-lang en \
+  --execute
 
 #Print out a listing of all registered resources
 tx status
