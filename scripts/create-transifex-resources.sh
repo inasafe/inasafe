@@ -19,7 +19,7 @@ do
     BASE=`basename $GENERICFILE .po`
     BASE=`echo $BASE | sed 's/_/-/g' | sed 's/ /-/g'`
     # Register each po file as a transifex resource (an individual translatable file)
-    tx set --auto-local -r inasafe.${ITEM}-$BASE \
+    tx set -t PO --auto-local -r inasafe.${ITEM}-$BASE \
       "$GENERICFILE" \
       --source-lang en \
       --execute
@@ -28,3 +28,6 @@ done
 
 #Print out a listing of all registered resources
 tx status
+
+# Push all the resources to the tx server
+tx push -s
