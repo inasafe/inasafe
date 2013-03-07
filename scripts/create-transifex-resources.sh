@@ -34,22 +34,19 @@ done
 #
 # Now safe package
 #
-set -x
-POPATH="safe/i18n/<lang>/LC_MESSAGES/inasafe.po"
 tx set -t PO --auto-local -r inasafe.safe \
-    "$POPATH" \
-    --source-lang en \
-    --execute
+  'safe/i18n/<lang>/LC_MESSAGES/inasafe.po' \
+  --source safe/i18n/en/LC_MESSAGES/inasafe.po \
+  --source-lang en --execute
 
-exit
 #
 # Now safe_qgis package
 #
 
-TSPATH="safe_qgis/inasafe_<lang>.ts"
 tx set -t QT --auto-local -r inasafe.safe_qgis \
-  "$TSPATH" \
+  'safe_qgis/i18n/inasafe_<lang>.ts' \
   --source-lang en \
+  --source safe_qgis/i18n/inasafe_en.ts \
   --execute
 
 #Print out a listing of all registered resources
