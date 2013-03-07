@@ -22,8 +22,7 @@ class EarthquakeBuildingImpactFunction1(FunctionProvider):
     target_field = 'Shake_cls'
     statistics_type = 'class_count'
     statistics_classes = [0, 1, 2, 3]
-    title = 'Be affected1'
-
+    title = 'Be affected'
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from Open Street Map)
@@ -87,7 +86,6 @@ class EarthquakeBuildingImpactFunction1(FunctionProvider):
                 cls = 0
 
             attributes[i][self.target_field] = cls
-
 
         # Generate simple impact report for unspecific buildings
         table_body = [question,
