@@ -796,7 +796,7 @@ def format_int(x):
 
     Returns:
         str - a locale friendly formatted string e.g. 1,000,0000.00
-            representing the original x. If any exception occurs,
+            representing the original x. If a ValueError exception occurs,
             x is simply returned.
 
     Raises:
@@ -823,8 +823,8 @@ def format_int(x):
     try:
         s = '{0:,}'.format(x)
         #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
-    # see issue #526 TODO check exactly what exception is being thrown
-    except:  # pylint: disable=W0702
+    # see issue #526
+    except ValueError:
         return x
 
     # Quick solution for the moment
