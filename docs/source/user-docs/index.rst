@@ -9,6 +9,7 @@ This section of the documention describes how to use the |project_name| system.
    install
    screenshots
    dock
+   functionality
    keywords
    options
    impact_functions
