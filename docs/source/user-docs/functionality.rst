@@ -24,7 +24,7 @@ The hazard layers supported are
 +-----------+-------------+-------------------+---------------+--------------------+--------------+
 |Volcano    |Point        |Distance from vent |Name           |text                |Radius [km]   |
 +-----------+-------------+-------------------+---------------+--------------------+--------------+
-|Volcano    |Polygon      |Category [1,2,3]   |               |text                |              |
+|Volcano    |Polygon      |Category           |KRB            |text                |              |
 +-----------+-------------+-------------------+---------------+--------------------+--------------+
 |Earthquake |Raster       |Shakemap           |N/A            |MMI                 |              |
 +-----------+-------------+-------------------+---------------+--------------------+--------------+
@@ -43,6 +43,6 @@ Exposure layers
 Exposure    Spatial type Exposure type       Attribute name Hazard units/fields
 ==========  ============ ==================  ============== ===================
 Population  Raster       Density             N/A            People per pixel
-Buildings   Point        Building type       type           text
-Buildings   Polygon      Building type       type           text
+Structures  Point        Structure type      type           text
+Structures  Polygon      Structure type      type           text
 ==========  ============ ==================  ============== ===================
