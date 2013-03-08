@@ -6,11 +6,11 @@ Overview
 
 **Unique Identifier**: Volcano Building Impact
 
+**Author**: AIFDR
+
 **Rating**: 4
 
 **Title**: Be affected
-
-**Author**: AIFDR
 
 Details
 -------

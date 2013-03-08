@@ -1,16 +1,16 @@
-I T B Fatality Function
+P A G Fatality Function
 =======================
 
 Overview
 --------
 
-**Unique Identifier**: I T B Fatality Function
+**Unique Identifier**: P A G Fatality Function
 
-**Author**: Hadi Ghasemi
+**Author**: Helen Crowley
 
 **Rating**: 3
 
-**Title**: Die or be displaced
+**Title**: Die or be displaced according Pager model
 
 **Synopsis**: To asses the impact of earthquake on population based on earthquake model developed by ITB
 
