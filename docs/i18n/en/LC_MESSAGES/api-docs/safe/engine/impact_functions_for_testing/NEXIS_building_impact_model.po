@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,32 @@ msgstr ""
 #: ../../source/api-docs/safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.rst:6
 msgid ""
 "Module:  safe.engine.impact_functions_for_testing.NEXIS_building_impact_model"
+msgstr ""
+
+# c4d41808fe874d19b77e2ad8c01a29d2
+#: ../../../safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.NEXIS_building_impact_model.TsunamiBuildingLossFunction:1
+msgid "Risk plugin for earthquake damage based on empirical results"
+msgstr ""
+
+# 65d71b216f284221a672d973c2ab027d
+#: ../../../safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.NEXIS_building_impact_model.TsunamiBuildingLossFunction:3
+msgid ""
+":param requires category=='hazard' and                     subcategory."
+"startswith('tsunami') and                     layertype=='raster' :param "
+"requires category=='exposure' and                     "
+"subcategory=='structure' and                     layertype=='vector' "
+"and                     nothing=='never'"
+msgstr ""
+
+# 1242c1f1fded4f4baebd79f76c85b4b7
+#: ../../../safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.NEXIS_building_impact_model.TsunamiBuildingLossFunction.run:1
+msgid "Risk plugin for tsunami building damage"
 msgstr ""
 
 # 0e2e7b43dc574fa7a3f264da0e5dcab6

@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:25+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 6ed9726d2ad54fee9bae45a59e42de0f
 #: ../../source/developer-docs/coding_standards.rst:7
@@ -46,24 +46,25 @@ msgstr ""
 # 54245889d0b149dea5b9ddb6e5aeb0af
 #: ../../source/developer-docs/coding_standards.rst:16
 msgid ""
-"Coding must follow a style guide. In case of Python it is `pep8 <http://www."
-"python.org/dev/peps/pep-0008>`_ and using the command line tool pep8 (or :"
-"samp:`make pep8`) to enforce this. The pep8 checks E121-E128 have been "
-"disabled until pep8 version 1.3 becomes widely available."
+"Coding must follow a style guide. In case of Python it is `pep8 "
+"<http://www.python.org/dev/peps/pep-0008>`_ and using the command line tool "
+"pep8 (or :samp:`make pep8`) to enforce this. The pep8 checks E121-E128 have "
+"been disabled until pep8 version 1.3 becomes widely available."
 msgstr ""
 
 # 97d8635ea2c94cc796858850b012cc19
 #: ../../source/developer-docs/coding_standards.rst:20
-msgid "`Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_"
+msgid ""
+"`Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_"
 msgstr ""
 
 # fd98b37673e244da8add28a3cacbd1aa
 #: ../../source/developer-docs/coding_standards.rst:21
 msgid ""
-"Comments should be complete sentences. If a comment is a phrase or sentence, "
-"its first word should be capitalized, unless it is an identifier that begins "
-"with a lower case letter (never alter the case of identifiers!). Comments "
-"should start with a # and a single space."
+"Comments should be complete sentences. If a comment is a phrase or sentence,"
+" its first word should be capitalized, unless it is an identifier that "
+"begins with a lower case letter (never alter the case of identifiers!). "
+"Comments should start with a # and a single space."
 msgstr ""
 
 # d7887ba248b141c282ce72876ac013d8
@@ -102,11 +103,11 @@ msgstr ""
 # 73b61f3752b8466684a4c019579ba9b9
 #: ../../source/developer-docs/coding_standards.rst:31
 msgid ""
-"Code must pass a pylint validation (http://www.logilab.org/card/"
-"pylint_manual#what-is-pylint). You can test this using the make target "
-"``make pylint``. In some cases you may wish to override a line or group of "
-"lines so that they are not validated by lint. You can do this by adding "
-"either::"
+"Code must pass a pylint validation "
+"(http://www.logilab.org/card/pylint_manual#what-is-pylint). You can test "
+"this using the make target ``make pylint``. In some cases you may wish to "
+"override a line or group of lines so that they are not validated by lint. "
+"You can do this by adding either::"
 msgstr ""
 
 # 572e6caad6f941c091553214ddfe8536
@@ -118,23 +119,23 @@ msgstr ""
 #: ../../source/developer-docs/coding_standards.rst:45
 msgid ""
 "The relevant id (W1234) is provided on the output of the above mentioned "
-"lint command's output. A complete list of codes is available at http://"
-"pylint-messages.wikidot.com/all-codes."
+"lint command's output. A complete list of codes is available at http"
+"://pylint-messages.wikidot.com/all-codes."
 msgstr ""
 
 # 296eb42da859489a9094f446b42e97e2
 #: ../../source/developer-docs/coding_standards.rst:49
 msgid ""
-"You can globally ignore messages by adding them to :file:`pylintrc` in the :"
-"samp:`[MESSAGES CONTROL]` section."
+"You can globally ignore messages by adding them to :file:`pylintrc` in the "
+":samp:`[MESSAGES CONTROL]` section."
 msgstr ""
 
 # 27025769894946aa85bb7e37ac290afc
 #: ../../source/developer-docs/coding_standards.rst:52
 msgid ""
 "The following pylint messages have been thus globally excluded from the "
-"check. For a discussion of these see also github issue https://github.com/"
-"AIFDR/inasafe/issues/245."
+"check. For a discussion of these see also github issue "
+"https://github.com/AIFDR/inasafe/issues/245."
 msgstr ""
 
 # f382ca3fd37849aaa145f93d14168168
@@ -210,8 +211,8 @@ msgstr ""
 # d64af6bca2cb4536a51a8c8d30f86d6f
 #: ../../source/developer-docs/coding_standards.rst:71
 msgid ""
-"It is of course possible to run all pylint checks on any part of the code if "
-"desired: E.g pylint safe/storage/raster.py"
+"It is of course possible to run all pylint checks on any part of the code if"
+" desired: E.g pylint safe/storage/raster.py"
 msgstr ""
 
 # f24a07f8961e4e0aa89a2e012cce7272
@@ -245,14 +246,14 @@ msgid ""
 "documenting functions and class methods::"
 msgstr ""
 
-# f6eababd1cf6478cab020ada8439e8e6
+# bb2ff5c79ca8490287d09b0274e72796
 #: ../../source/developer-docs/coding_standards.rst:121
 msgid ""
 "If you use a few lines of code in more than one place, refactor them into "
 "their own function."
 msgstr ""
 
-# 10249356b82146dca5047b42e5cdc660
+# 7ad24d4720b64cdda06b31c567cf9e02
 #: ../../source/developer-docs/coding_standards.rst:123
 msgid ""
 "If you use a literal string or expression in more than one place, refactor "
@@ -263,8 +264,8 @@ msgstr ""
 #: ../../source/developer-docs/coding_standards.rst:127
 msgid ""
 "Various other sphinx markup elements may be used in the docstrings too. For "
-"more information see also: http://thomas-cokelaer.info/tutorials/sphinx/"
-"docstring_python.html"
+"more information see also: http://thomas-"
+"cokelaer.info/tutorials/sphinx/docstring_python.html"
 msgstr ""
 
 # f81f1d65b99b40918a456f400a897bde
@@ -275,8 +276,8 @@ msgstr ""
 # e3daaf2608bb42a58608077c8c2b1500
 #: ../../source/developer-docs/coding_standards.rst:137
 msgid ""
-"For consistency of user experience, the user interfaces created in Risk in a "
-"Box should adhere to the QGIS Human Interface Guidelines (HIG) which are "
+"For consistency of user experience, the user interfaces created in Risk in a"
+" Box should adhere to the QGIS Human Interface Guidelines (HIG) which are "
 "listed here for your convenience:"
 msgstr ""
 
@@ -292,8 +293,8 @@ msgstr ""
 # a544cc3c34ef45f89305077155ede083
 #: ../../source/developer-docs/coding_standards.rst:145
 msgid ""
-"Capitalise first letter only in labels: Labels (and group box labels) should "
-"be written as a phrase with leading capital letter, and all remaing words "
+"Capitalise first letter only in labels: Labels (and group box labels) should"
+" be written as a phrase with leading capital letter, and all remaing words "
 "written with lower case first letters"
 msgstr ""
 
@@ -335,8 +336,8 @@ msgstr ""
 # 0690645d4665402ebbe2e274ff4bc86b
 #: ../../source/developer-docs/coding_standards.rst:163
 msgid ""
-"Widget stacks should be avoided if at all possible. They cause problems with "
-"layouts and inexplicable (to the user) resizing of dialogs to accommodate "
+"Widget stacks should be avoided if at all possible. They cause problems with"
+" layouts and inexplicable (to the user) resizing of dialogs to accommodate "
 "widgets that are not visible."
 msgstr ""
 
@@ -348,7 +349,7 @@ msgid ""
 "'Text' instead of 'String' and so on."
 msgstr ""
 
-# 750686f7cbf9403e8da21ca9b23a81b7
+# d5aaeda216d343c0893b489eafa57d87
 #: ../../source/developer-docs/coding_standards.rst:169
 msgid ""
 "Use consistent iconography. If you need an icon or icon elements, please "
@@ -375,8 +376,8 @@ msgstr ""
 # ac93a48250ec4d9898bc13da243a1cf3
 #: ../../source/developer-docs/coding_standards.rst:177
 msgid ""
-"Don't add options for the sake of having lots of options. Strive to keep the "
-"user interface minimalistic and use sensible defaults."
+"Don't add options for the sake of having lots of options. Strive to keep the"
+" user interface minimalistic and use sensible defaults."
 msgstr ""
 
 # 075dc8a32a0b4254a070595c086277dd

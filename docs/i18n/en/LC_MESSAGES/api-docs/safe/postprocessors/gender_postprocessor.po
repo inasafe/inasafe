@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,76 @@ msgstr ""
 # 8e1ce418b7064105ad137718e15ac0d8
 #: ../../source/api-docs/safe/postprocessors/gender_postprocessor.rst:6
 msgid "Module:  safe.postprocessors.gender_postprocessor"
+msgstr ""
+
+# b75f67e69ada4e8a82bb98e1d5c183f5
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor:1
+msgid "**Postprocessors package.**"
+msgstr ""
+
+# 9da4922a069a4ef0a9c03877ad7e2cb5
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor:1
+msgid ""
+"Postprocessor that calculates gender related statistics. see the "
+"_calculate_* methods to see indicator specific documentation"
+msgstr ""
+
+# 9653d6f4afa5488eb6f60a18ed17bc40
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor:4
+msgid "see :mod:`safe.defaults` for default values information"
+msgstr ""
+
+# 39d9f467fbf6410c93e859cb474c7a07
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.clear:1
+msgid ""
+"concrete implementation it takes care of the needed parameters being "
+"properly cleared"
+msgstr ""
+
+# 043c7483f7e64de08569683700f3c955
+# e31f38f2e1b944a399424cb7a2ef3029
+# 35625ccb67b6425bbf038c38c219ed0c
+# 659e6ff5c08541f694f7539748b4986f
+# 5756e64ebfec4868a26cd489c501731e
+# 6ccef4d4fd36475aac959ebb995c70ce
+# aee0809d03b64d93b84173483f34332c
+# b40399fd035e42c595783388bc2c18f9
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.clear:5
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.clear:7
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.clear:9
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.process:5
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.process:7
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.process:9
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.setup:7
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.setup:9
+msgid "None"
+msgstr ""
+
+# ecda3e7a88ce4a9d8b5ae2f13be15c0e
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.process:1
+msgid ""
+"concrete implementation it takes care of the needed parameters being "
+"available and performs all the indicators calculations"
+msgstr ""
+
+# 9cf120d1c69f46eaad93fdc0dd668375
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.setup:1
+msgid ""
+"concrete implementation it takes care of the needed parameters being "
+"initialized"
+msgstr ""
+
+# b5bb0f7878794f7b9dc9fb4ae760692d
+#: ../../../safe/postprocessors/gender_postprocessor.py:docstring of
+#: safe.postprocessors.gender_postprocessor.GenderPostprocessor.setup:5
+msgid "params: Dict of parameters to pass to the post processor"
 msgstr ""
 
 # 4ebb91899d714f61896c837a09446e42

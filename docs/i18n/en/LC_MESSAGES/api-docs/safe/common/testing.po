@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,17 @@ msgstr ""
 # 50896fcb6fd441cb9f19bbb04518e2d3
 #: ../../source/api-docs/safe/common/testing.rst:6
 msgid "Module:  safe.common.testing"
+msgstr ""
+
+# 987b32aabd7b499fb3b988bdd5c75801
+#: ../../../safe/common/testing.py:docstring of safe.common.testing:1
+msgid "Common functionality used by regression tests"
+msgstr ""
+
+# be1666a88ec545f2b394639ce54670b2
+#: ../../../safe/common/testing.py:docstring of
+#: safe.common.testing.combine_coordinates:1
+msgid "Make list of all combinations of points for x and y coordinates"
 msgstr ""
 
 # 6c573d9983074e898508a82a6ce3571c

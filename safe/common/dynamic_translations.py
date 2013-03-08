@@ -163,6 +163,9 @@ def dynamic_translations():
     tr('Tolerance')
     tr('Calculate displaced people')
     tr('Evacuation percentage')
+    tr('Threshold [m]')
+    tr('Thresholds [m]')
+    tr('Distances [km]')
 
     # Post-processing
     tr('Gender')

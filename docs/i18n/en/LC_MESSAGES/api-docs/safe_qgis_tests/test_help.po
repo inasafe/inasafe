@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,53 @@ msgstr ""
 # 8a83e0c5b1514d81b507b5c3c62bc6fd
 #: ../../source/api-docs/safe_qgis_tests/test_help.rst:6
 msgid "Module:  safe_qgis.test_help"
+msgstr ""
+
+# 5214c6ab1a4a4046b4338e27a4715dfe
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**GUI Test Cases.**"
+msgstr ""
+
+# 43b38c2a497048118dac61e9fada6258
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# da8709394f3d4539b4585750d2ad96c1
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# d46786c37396451d86f70c252982201c
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help.HelpTest:1
+msgid ""
+"Test the InaSAFE help GUI .. note:: Currently these tests will all fail "
+"unless you comment out the APP.exec_() lines because the web view does not "
+"load content without the main application event loop running."
+msgstr ""
+
+# c6bac9d4f66e4e5f992b3e345cdf3898
+#: ../../../safe_qgis/test_help.py:docstring of
+#: safe_qgis.test_help.HelpTest.XtestDialogLoads:1
+msgid "Basic test to ensure the keyword dialog has loaded"
+msgstr ""
+
+# 00f84d89d417484a8d74a197f88e645c
+#: ../../../safe_qgis/test_help.py:docstring of
+#: safe_qgis.test_help.HelpTest.XtestDockHelp:1
+msgid "Test help dialog works with context set to 'dock'"
+msgstr ""
+
+# fc8f0d45c65a46e49ebbf170452b02f2
+#: ../../../safe_qgis/test_help.py:docstring of
+#: safe_qgis.test_help.HelpTest.XtestKeywordsHelp:1
+msgid "Test help dialog works with context set to 'keywords'"
 msgstr ""
 
 # 202b7064837b466f95229999a214c9b5

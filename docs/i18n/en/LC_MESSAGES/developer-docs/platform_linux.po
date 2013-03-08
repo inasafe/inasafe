@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -267,11 +267,6 @@ msgstr ""
 msgid ""
 "Optionally you can enable nose achievments which is a motivational tool that "
 "gives you little achievement awards based on your test results::"
-msgstr ""
-
-# 1b6bb33f1df54c97a77eb7d842b110db
-#: ../../source/developer-docs/platform_linux.rst:139
-msgid "sudo pip install git+git://github.com/exogen/nose-achievements.git"
 msgstr ""
 
 # 432989861d46463a82c1ceb83b2f820a

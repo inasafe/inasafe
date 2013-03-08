@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,527 @@ msgstr ""
 # a0922729b47a455fad606d2212d8802b
 #: ../../source/api-docs/safe/engine/interpolation.rst:6
 msgid "Module:  safe.engine.interpolation"
+msgstr ""
+
+# cf4a4a1fe476487891bc9774bb6d461f
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation:1
+msgid "**Interpolation from hazard to exposure layers.**"
+msgstr ""
+
+# 629dc0dd57bf4b05adcf3f606ace7989
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation:3
+msgid ""
+"Provides interpolation functionality to assign values from one layer "
+"instance to another irrespective of layer types."
+msgstr ""
+
+# 7a066af4463c429a8e47e33d44226c25
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:1
+msgid "Assign hazard values to exposure data"
+msgstr ""
+
+# 35c564d258e84d95b3410fa5d77e9f04
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:3
+msgid ""
+"This is the high level wrapper around interpolation functions for different "
+"combinations of data types."
+msgstr ""
+
+# 7fd57088f84141ac9ebec35c95a112f8
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:7
+msgid "hazard: Layer representing the hazard levels"
+msgstr ""
+
+# f7030fcc49334fd6b0435e6bd17740bf
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:8
+msgid "exposure: Layer representing the exposure data"
+msgstr ""
+
+# 8f58b88edc424db1b4e66a7b43b8d515
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:10
+msgid ""
+"If None (default) the name of the exposure layer is used for the returned "
+"layer."
+msgstr ""
+
+# ae7aefb9ae184d7ba180ffe7a6f66c3a
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:13
+msgid ""
+"If hazard layer is of type raster, this will be the name for new attribute "
+"in the result containing the hazard level. If None (default) the name of "
+"hazard layer is used."
+msgstr ""
+
+# 49a76a0927904c89aabd468e9b788913
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:17
+msgid ""
+"If hazard layer is polygon and exposure layer raster, this will be the name "
+"of the new attribute containing the raster value at each point."
+msgstr ""
+
+# 93f78ee2e36a4d8785d9e3a545bd8d93
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:21
+msgid ""
+"If hazard and exposure layers are both of type vector, this attribute is "
+"ignored."
+msgstr ""
+
+# b3170286bb3d4d3d9c0c1477e121bf3f
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:24
+msgid ""
+"If hazard and exposure layers are both of type raster, this attribute is "
+"ignored."
+msgstr ""
+
+# a0a8e06380c041559916ec8d4c5b5f4f
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:27
+msgid "Interpolation mode for raster to point interpolation only"
+msgstr ""
+
+# 2d11a9a905d5453b9ac226470c547b97
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:30
+msgid "Layer representing the exposure data with hazard levels assigned."
+msgstr ""
+
+# 69887b33f26f4c31a2e58c0222092a12
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:33
+msgid "Underlying exceptions are propagated"
+msgstr ""
+
+# 238da7b38ef14897b0f246c3781fe4ce
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:35
+msgid "Note:"
+msgstr ""
+
+# 954944a4ffa44a6b92320b75bd24ce6c
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:37
+msgid "Admissible combinations of input layer types are"
+msgstr ""
+
+# 75551f706c8e411e9a091c0083faf588
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:39
+msgid "Exposure |  Raster     Polygon    Line     Point"
+msgstr ""
+
+# 76ecd989e7964f23973959649cbb28ec
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:42
+msgid ""
+"Polygon         |  Y          Y          Y        Y Raster          |  "
+"Y          Y          Y        Y"
+msgstr ""
+
+# ab5ae0eaccd64ff0ae2ebf0784802e7c
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:45
+msgid "with the following methodologies used:"
+msgstr ""
+
+# 9bad61cc5f29422682245e2932ae7e86
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:48
+msgid "to them."
+msgstr ""
+
+# cf6b73de848c452ebb1c8c20d692e910
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:49
+msgid ""
+"Polygon-Line:    * Not Implemented * Polygon-Polygon: * Not Implemented * "
+"Polygon-Raster:  Convert raster to points, clip to polygon,"
+msgstr ""
+
+# 39f59a53c4974ee784fb48af4e35561a
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:52
+msgid "assign values and return point data"
+msgstr ""
+
+# a69d669bd3c84580a8695d88169567d0
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:54
+msgid "implemented"
+msgstr ""
+
+# 99649b65c1ea48cd91eedf1202bfad56
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:55
+msgid ""
+"Raster-Line:     * Not Implemented * Raster-Polygon:  Calculate centroids "
+"and use Raster - Point algorithm Raster-Raster:   Exposure raster is "
+"returned as is"
+msgstr ""
+
+# fd3e2c503c5e4572a88e0b8f6d1295a2
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:60
+msgid ""
+"The data type of the resulting layer depends on the combination of input "
+"types as follows:"
+msgstr ""
+
+# 1b676ef0b9b04c0bb36d8d810d1398e3
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.assign_hazard_values_to_exposure_data:63
+msgid ""
+"Polygon-Point:   Point data Polygon-Line:    N/A Polygon-Polygon: N/A "
+"Polygon-Raster:  Point data Raster-Point:    Point data Raster-Line:     N/A "
+"Raster-Polygon:  Polygon data Raster-Raster:   Raster data"
+msgstr ""
+
+# 7b86b88c3cdc47848bb548a4a26abad7
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:1
+msgid "Check inputs and establish default values"
+msgstr ""
+
+# 51f611bc246649ef862beb0c3ef097e3
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:4
+msgid "hazard: Hazard layer instance (any type)"
+msgstr ""
+
+# 8c0ab84805624e97a78894d74f110151
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:5
+msgid "exposure: Exposure layer instance (any type)"
+msgstr ""
+
+# 30a5960aea474c018e39e41010ec0437
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:6
+msgid "layer_name: Name of returned layer or None"
+msgstr ""
+
+# 1174dd3cc47c483fadb15c55a90d19bb
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:7
+msgid "attribute_name: Name of interpolated attribute or None"
+msgstr ""
+
+# 9c2c360af93446438e9a59f3e622931b
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:10
+msgid "layer_name"
+msgstr ""
+
+# ebcfa8a6de554c9db280fcc04df91788
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:11
+msgid "attribute_name"
+msgstr ""
+
+# 3a16e67f13d948ddad98837de29a3135
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.check_inputs:14
+msgid "VerificationError"
+msgstr ""
+
+# 96a099c395b240f0910055f1e71da146
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_lines:1
+msgid "Interpolate from polygon vector layer to line vector data"
+msgstr ""
+
+# cbabbdaf2b3d464c91321cfeba7723d0
+# 3f0ade08cbe1450b8d9b4dc32981c84a
+# 53a1aca59cab4579954ada9407d7fba6
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_lines:4
+#: safe.engine.interpolation.interpolate_polygon_points:4
+#: safe.engine.interpolation.interpolate_polygon_vector:4
+msgid "source: Vector data set (polygon)"
+msgstr ""
+
+# 5109307042ea41ec9861f1b17716e6cb
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_lines:5
+msgid "target: Vector data set (lines)"
+msgstr ""
+
+# 40a37ba33933449bb6fe60a1d6505ea0
+# 956c2001dca345f38a3c87e3fff483bd
+# b8f27ffd26db493baa900e127a504257
+# 17500b75f7364542921cc80fd24f651b
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_lines:7
+#: safe.engine.interpolation.interpolate_polygon_points:7
+#: safe.engine.interpolation.interpolate_polygon_vector:7
+#: safe.engine.interpolation.interpolate_raster_vector_points:7
+msgid "If None the name of target is used for the returned layer."
+msgstr ""
+
+# 90867026038e4c628eb6cc6e01cc22e0
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_lines:11
+msgid ""
+"Attributes are combined from polygon they fall into and line that was "
+"clipped."
+msgstr ""
+
+# 1b0730447a5c4b86a3d819460ba0dc3a
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_lines:14
+msgid "Lines not in any polygon are ignored."
+msgstr ""
+
+# fab59bb6e0a4432b817458538390c247
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_points:1
+msgid "Interpolate from polygon vector layer to point vector data"
+msgstr ""
+
+# 8d7a46f40f8d49d3898e743e424c67a6
+# 8e9bf5efe0064df1ad1be9b4bb30b89b
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_points:5
+#: safe.engine.interpolation.interpolate_raster_vector_points:5
+msgid "target: Vector data set (points)"
+msgstr ""
+
+# f9ab7b98c4ae4dd78e74bb6cc995cd88
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_points:10
+msgid ""
+"I: Vector data set; points located as target with values interpolated from "
+"source"
+msgstr ""
+
+# fc44a261dd5f411e90dc9421bb00dde8
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_points:14
+msgid ""
+"All attribute names from polygons are transferred to the points that are "
+"inside them."
+msgstr ""
+
+# 690493cb2a514c9cbace3c7914ef213a
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_raster:1
+msgid "Interpolate from polygon layer to raster data"
+msgstr ""
+
+# 9e2dfdfe86d041a6b39e61a46e53ae06
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_raster:4
+msgid "source: Polygon data set"
+msgstr ""
+
+# 7e8b91e1411141cda1af1e7ed7cd74ff
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_raster:5
+msgid "target: Raster data set"
+msgstr ""
+
+# a911a266431246db95cfcb009089b3fb
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_raster:7
+msgid "If None the name of source is used for the returned layer."
+msgstr ""
+
+# a9ce91b4272241eebfc5e943257ea8ee
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_raster:9
+msgid "If None (default) the name of layer target is used"
+msgstr ""
+
+# 57316f678f1e4b9e9f92d0650435e16c
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_raster:12
+msgid "values interpolated from source"
+msgstr ""
+
+# 2c9375554294422dab1b1b9a8ef13bc7
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_raster:15
+msgid ""
+"Each point in the resulting dataset will have an attribute 'polygon_id' "
+"which refers to the polygon it belongs to."
+msgstr ""
+
+# a2207ff8f1d04a0581465683097e3188
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_vector:1
+msgid "Interpolate from polygon vector layer to vector data"
+msgstr ""
+
+# 53275bc17a8940a682fe2b00c75c57af
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_vector:5
+msgid "target: Vector data set (points or polygons)  - TBA also lines"
+msgstr ""
+
+# c6994c96bc8f414889a600fa7bbaeef8
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_vector:11
+msgid "from source"
+msgstr ""
+
+# 46cfe1e2d8064828b0d21cff0f5ad6b1
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_polygon_vector:14
+msgid ""
+"If target geometry is polygon, data will be interpolated to its centroids "
+"and the output is a point data set."
+msgstr ""
+
+# 63d3e43f477747d0ad3b4c74aaaad45f
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_raster:1
+msgid "Check for alignment and returns target layer as is"
+msgstr ""
+
+# 1481a12e8c6b46e593076bc52586a5ae
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector:1
+msgid "Interpolate from raster layer to vector data"
+msgstr ""
+
+# 44223278532e412f9be938e6aa3320a9
+# 2f664e334b6f4a0c87fd6418e008edf6
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector:4
+#: safe.engine.interpolation.interpolate_raster_vector_points:4
+msgid "source: Raster data set (grid)"
+msgstr ""
+
+# 09b7a2b3cea141ab8e06727403f8abfb
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector:5
+msgid "target: Vector data set (points or polygons)"
+msgstr ""
+
+# 72771c7e6a25472eb96665ee0abaf1c5
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector:7
+msgid "If None the name of V is used for the returned layer."
+msgstr ""
+
+# 3433b8b3350e448681cd8416e2e55727
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector:9
+msgid "If None (default) the name of R is used"
+msgstr ""
+
+# bf71a03d7c6f4c93af4d60a59fed87d7
+# 4a010d6554324446a678c757e567a823
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector:13
+#: safe.engine.interpolation.interpolate_raster_vector_points:15
+msgid "interpolated from source"
+msgstr ""
+
+# 5087d3caa96b442194b7f78e058849dc
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector:15
+msgid ""
+"Note: If target geometry is polygon, data will be interpolated to its "
+"centroids and the output is a point data set."
+msgstr ""
+
+# 1a8c79c4ed7042eb93ed073ef7a03330
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector_points:1
+msgid "Interpolate from raster layer to point data"
+msgstr ""
+
+# 66fc1a669e7b40e2baa8ebc350bd17eb
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector_points:9
+msgid "If None (default) the name of layer source is used"
+msgstr ""
+
+# 9bae8bb2c8a4449681cd6760203c474d
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.interpolate_raster_vector_points:11
+msgid "from grid to points should be bilinear or piecewise constant"
+msgstr ""
+
+# a92fb7958477408784388560ad9145f2
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.make_circular_polygon:1
+msgid "Create circular polygon in geographic coordinates"
+msgstr ""
+
+# da507997cf0f4cacaadd7619f18c51c2
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.make_circular_polygon:4
+msgid ""
+"centers: list of (longitude, latitude) radii: desired approximate radii in "
+"meters (must be"
+msgstr ""
+
+# 6d9af2da60c244859e22cd157a2ff0bf
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.make_circular_polygon:6
+msgid "monotonically ascending)."
+msgstr ""
+
+# b0e4d8e3dec14d438886bdb88ccdd6f3
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.make_circular_polygon:7
+msgid ""
+"Can be either one number or list of numbers attributes (optional): "
+"Attributes for each center"
+msgstr ""
+
+# 1a804bd81b444b26a50d090f7165c78b
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.make_circular_polygon:10
+msgid "Vector polygon layer representing circle in WGS84"
+msgstr ""
+
+# 31f9b2bc9eec48f2a5cc14121ddb546d
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.tag_polygons_by_grid:1
+msgid "Tag polygons by raster values"
+msgstr ""
+
+# 7cdfa9a0353041b09f4cc5071a73ced1
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.tag_polygons_by_grid:4
+msgid "polygons: Polygon layer"
+msgstr ""
+
+# cc8f1f3b9f0644838b04f6ddf99f1e00
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.tag_polygons_by_grid:5
+msgid "grid: Raster layer"
+msgstr ""
+
+# 0a1b3676587a4b79b26ae4b7badeb86c
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.tag_polygons_by_grid:6
+msgid "threshold: Threshold for grid value to tag polygon"
+msgstr ""
+
+# ac7b5f0bbe104ea48b453712086c3dfa
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.tag_polygons_by_grid:7
+msgid "tag: Name of new tag"
+msgstr ""
+
+# ec132a9f11ab484f9a00161ce4c05ae5
+#: ../../../safe/engine/interpolation.py:docstring of
+#: safe.engine.interpolation.tag_polygons_by_grid:11
+msgid "set according to grid values"
 msgstr ""
 
 # c50987e2bb484189bc58dda55ee6628f

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,47 @@ msgstr ""
 # b5259afde06d410aba41e63e2723d2cf
 #: ../../source/api-docs/safe/impact_functions/styles.rst:6
 msgid "Module:  safe.impact_functions.styles"
+msgstr ""
+
+# c1252cc7b7b74c7893e404bbee5717a8
+#: ../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:1
+msgid "Library of styles that can be used by impact functions"
+msgstr ""
+
+# acc9d3aa4483405d9320fc9910979ed7
+#: ../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:3
+msgid "E.g."
+msgstr ""
+
+# cf64cc61cd10464e909003e39d7cc0e9
+#: ../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:5
+msgid ""
+"from impact_functions.styles import flood_population_style as style_info "
+"from impact_functions.core import get_function_title"
+msgstr ""
+
+# bdd8749c23f64e628cc1f29c0238da8e
+#: ../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:8
+msgid "# Create raster object with this style and return R = Raster(I,"
+msgstr ""
+
+# 35537cb7ba284c0ba9225ea3f2ca1e8a
+#: ../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:10
+msgid ""
+"projection=inundation.get_projection(), geotransform=inundation."
+"get_geotransform(), name='Penduduk yang %s' % (get_function_title(self)), "
+"keywords={'impact_summary': impact_summary}, style_info=style_info)"
+msgstr ""
+
+# 50e25c26bb1841e1924cfe14e0e7c2ee
+#: ../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:15
+msgid "return R"
 msgstr ""
 
 # ca0ad88392b34ba08fb9df416656a3a8

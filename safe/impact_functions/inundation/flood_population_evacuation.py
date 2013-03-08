@@ -66,7 +66,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
     # Configurable parameters
     parameters = OrderedDict([
-        ('thresholds', [1.0]),
+        ('thresholds [m]', [1.0]),
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -102,7 +102,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = self.parameters['thresholds']
+        thresholds = self.parameters['thresholds [m]']
 
         verify(isinstance(thresholds, list),
                'Expected thresholds to be a list. Got %s' % str(thresholds))

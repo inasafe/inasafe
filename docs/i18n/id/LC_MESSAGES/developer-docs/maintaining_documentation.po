@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-06 11:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # ae7ae0c4a66c4fdf9fdbd362e2517b9f
 #: ../../source/developer-docs/maintaining_documentation.rst:8
@@ -25,21 +25,22 @@ msgstr ""
 # 0a2604772e974fb8a5a4a8f11b1b6e84
 #: ../../source/developer-docs/maintaining_documentation.rst:10
 msgid ""
-"The documentation for |project_name| is written using ReSTructured text (."
-"rst) and the Sphinx documenation builder. The best way to learn how to "
+"The documentation for |project_name| is written using ReSTructured text "
+"(.rst) and the Sphinx documenation builder. The best way to learn how to "
 "write .rst is to look at the source of existing documentation - the markup "
-"syntax is very simple. There are a number of useful tags that you can use to "
-"make your documentation clear and visually interesting, the more commonly "
+"syntax is very simple. There are a number of useful tags that you can use to"
+" make your documentation clear and visually interesting, the more commonly "
 "used in this document are listed below. For a more detailed list, please "
-"visit the `Spinx Inline Markup page <http://sphinx.pocoo.org/markup/inline."
-"html>`_"
+"visit the `Spinx Inline Markup page "
+"<http://sphinx.pocoo.org/markup/inline.html>`_"
 msgstr ""
 
 # 43d21260fe334b668b1d9eb2abe09aa2
 #: ../../source/developer-docs/maintaining_documentation.rst:18
 msgid ""
-"A complete list of supported .rst markup is also available `here <http://"
-"docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quotes>`_."
+"A complete list of supported .rst markup is also available `here "
+"<http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-"
+"quotes>`_."
 msgstr ""
 
 # c723e1ae1df64e019f20880669047ac2
@@ -61,8 +62,8 @@ msgstr ""
 #: ../../source/developer-docs/maintaining_documentation.rst:69
 msgid ""
 "Each class method and function in the code base must include a docstring "
-"explaining its usage and purpose as per the example listed below (taken from "
-"the riab.py setupI18n method)::"
+"explaining its usage and purpose as per the example listed below (taken from"
+" the riab.py setupI18n method)::"
 msgstr ""
 
 # df7c80b0939c487c84b267a100c63316
@@ -96,25 +97,25 @@ msgstr ""
 # 26b766207f1d4dcdb59c27353a30c9a0
 #: ../../source/developer-docs/maintaining_documentation.rst:99
 msgid ""
-"Create a new file in :file:`docs/source/api-docs/<package_name>` named after "
-"the module. For example, for the gui/riab.py module we would create :file:"
-"`docs/source/api-docs/gui/riab.rst` (note the .rst extension). See below for "
-"an example of its contents"
+"Create a new file in :file:`docs/source/api-docs/<package_name>` named after"
+" the module. For example, for the gui/riab.py module we would create "
+":file:`docs/source/api-docs/gui/riab.rst` (note the .rst extension). See "
+"below for an example of its contents"
 msgstr ""
 
 # c6fba523769a45d794fb5fdf2792aa8c
 #: ../../source/developer-docs/maintaining_documentation.rst:103
 msgid ""
-"Add the new file to the API docs master index (:file:`docs/source/api-docs/"
-"index.rst`). The .rst extension is not needed or desired when adding to the "
-"index list."
+"Add the new file to the API docs master index (:file:`docs/source/api-"
+"docs/index.rst`). The .rst extension is not needed or desired when adding to"
+" the index list."
 msgstr ""
 
 # ebca21501b2e4ac29fce9593afd76d04
 #: ../../source/developer-docs/maintaining_documentation.rst:106
 msgid ""
-"Regenerate the documentation using the :command:`make docs` command from the "
-"top level directory in the source tree."
+"Regenerate the documentation using the :command:`make docs` command from the"
+" top level directory in the source tree."
 msgstr ""
 
 # 0cac6eb521f74d5bb364c1aa0e057a4c
@@ -182,8 +183,8 @@ msgstr ""
 # afd38045c4334a6cabda6fae08a9b437
 #: ../../source/developer-docs/maintaining_documentation.rst:142
 msgid ""
-"New features should be well documented and that documentation should be made "
-"available uder the :file:`user-docs` subfolder of the sphinx sources tree."
+"New features should be well documented and that documentation should be made"
+" available uder the :file:`user-docs` subfolder of the sphinx sources tree."
 msgstr ""
 
 # c33e01171f5845b7a51b9f1ae23688d9
@@ -198,8 +199,8 @@ msgstr ""
 # 9f8b017d0eff4b40b401a198ec3e914b
 #: ../../source/developer-docs/maintaining_documentation.rst:156
 msgid ""
-"Where the 'keywords' parameter indicates the user-docs/\\*.rst document that "
-"should be opened when the help button is clicked. The general style and "
+"Where the 'keywords' parameter indicates the user-docs/\\*.rst document that"
+" should be opened when the help button is clicked. The general style and "
 "approach used in existing documentation should inform your documentation "
 "process so that all the documentation is constent."
 msgstr ""
@@ -238,15 +239,16 @@ msgstr ""
 # a275b883ca5340e2ac80988f276e8251
 #: ../../source/developer-docs/maintaining_documentation.rst:177
 msgid ""
-"Enable gh-pages in the gh project `admin page <https://github.com/AIFDR/"
-"inasafe/admin>`_. On your local system do something like this::"
+"Enable gh-pages in the gh project `admin page "
+"<https://github.com/AIFDR/inasafe/admin>`_. On your local system do "
+"something like this::"
 msgstr ""
 
 # 7525812e412a4a13bc5254221a6887bd
 #: ../../source/developer-docs/maintaining_documentation.rst:196
 msgid ""
-"Now wait ten minutes or so and the pages should be visble here at http://"
-"aifdr.github.com/inasafe/"
+"Now wait ten minutes or so and the pages should be visble here at "
+"http://aifdr.github.com/inasafe/"
 msgstr ""
 
 # 7094d5308e1344b990f28f3c30bd8ab3
@@ -291,8 +293,8 @@ msgstr ""
 # fae41ed3c0e34bc4890f783a24bfa212
 #: ../../source/developer-docs/maintaining_documentation.rst:212
 msgid ""
-"After this the changes should be visible here http://aifdr.github.com/"
-"inasafe/ and http://inasafe.org."
+"After this the changes should be visible here "
+"http://aifdr.github.com/inasafe/ and http://inasafe.org."
 msgstr ""
 
 # 261fcac23dbc4d6eae637cf9dcaea814

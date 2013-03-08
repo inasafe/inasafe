@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 523a415539a3495bbfd47326df5baacc
+#: ../../source/api-docs/safe/postprocessors/building_type_postprocessor.rst:6
+msgid "Module:  safe.postprocessors.building_type_postprocessor"
+msgstr ""
+
+# 55b0e672570540aba42b351d6e434fab
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor:1
+msgid "**Postprocessors package.**"
+msgstr ""
+
+# ec4a4ea4b0ef464f927fb11f34e6df11
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor:1
+msgid ""
+"Postprocessor that calculates age related statistics. see the _calculate_* "
+"methods to see indicator specific documentation"
+msgstr ""
+
+# f4650b22fcb1492aa71127f4cc4194e3
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor:4
+msgid "see :mod:`safe.defaults` for default values information"
+msgstr ""
+
+# 3fa6b35e16424bca8a715d24d553aef1
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.clear:1
+msgid ""
+"concrete implementation it takes care of the needed parameters being "
+"properly cleared"
+msgstr ""
+
+# 90310a3de51e42f7965d73ccddc3167d
+# ea0f7fe404604eb2becf4f82385ee341
+# c2f1095d35ed401c8b449bd1dec29483
+# 9e5fe59e76654a9194e20cbb8b8ba9b0
+# 426c90b63e4a4aa1b4e90ce7b93cc4ea
+# eef37d15ada44dc8955fdf4b8eef792c
+# 16cbeffe367c4e9dbc2bc4fd636dee1c
+# e3e88dca61764e1191fc97b7c4617187
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.clear:5
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.clear:7
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.clear:9
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.process:5
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.process:7
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.process:9
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.setup:7
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.setup:9
+msgid "None"
+msgstr ""
+
+# 7491a9d66e2d4b40be8625f79dc82c1a
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.process:1
+msgid ""
+"concrete implementation it takes care of the needed parameters being "
+"available and performs all the indicators calculations"
+msgstr ""
+
+# 596802c3d98d48299df8ad13bcb89dd2
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.setup:1
+msgid ""
+"concrete implementation it takes care of the needed parameters being "
+"initialized"
+msgstr ""
+
+# 93a316bc6ae84faaaa1b13d58ccc921f
+#: ../../../safe/postprocessors/building_type_postprocessor.py:docstring of
+#: safe.postprocessors.building_type_postprocessor.BuildingTypePostprocessor.setup:5
+msgid "params: dict of parameters to pass to the post processor"
+msgstr ""
+
+# d3fc1df48c344a5a81b41adfdacbd144
+#: ../../source/api-docs/safe/postprocessors/building_type_postprocessor.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

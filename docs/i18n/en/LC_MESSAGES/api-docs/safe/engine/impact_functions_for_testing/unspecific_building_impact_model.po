@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,31 @@ msgstr ""
 msgid ""
 "Module:  safe.engine.impact_functions_for_testing."
 "unspecific_building_impact_model"
+msgstr ""
+
+# 2fea2d63e9e94321827e99317ae40868
+#: ../../../safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.unspecific_building_impact_model.EarthquakeBuildingDamageFunction:1
+msgid "Risk plugin for earthquake damage to buildings"
+msgstr ""
+
+# dd4c7238a8dc4e87928928e010f757e6
+#: ../../../safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.unspecific_building_impact_model.EarthquakeBuildingDamageFunction:3
+msgid ""
+":param requires category=='hazard' and                     subcategory."
+"startswith('earthquake') and                     layertype=='raster' :param "
+"requires category=='exposure' and                     "
+"subcategory=='structure'"
+msgstr ""
+
+# 5dd65b5b38874870bf6405ccbdccc77a
+#: ../../../safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.unspecific_building_impact_model.EarthquakeBuildingDamageFunction.run:1
+msgid "Risk plugin for earthquake school damage"
 msgstr ""
 
 # cfc7486afbae47af85168419437b4b10

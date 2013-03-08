@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,12 @@ msgstr ""
 # f958f91b1c634598b26aeb101f4bbf9a
 #: ../../source/api-docs/safe/storage/test_vector.rst:6
 msgid "Module:  safe.storage.test_vector"
+msgstr ""
+
+# fd6cfdd696b24561bcdb70cec31974ae
+#: ../../../safe/storage/test_vector.py:docstring of
+#: safe.storage.test_vector:1
+msgid "**Tests for safe vector layer class**"
 msgstr ""
 
 # f54d0c08d7cc4d7f823d96da44443125

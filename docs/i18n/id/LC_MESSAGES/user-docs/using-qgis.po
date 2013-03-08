@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-06 10:57+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # b53bf8314a3b4a4f93b03c2161b2835e
 #: ../../source/user-docs/using-qgis.rst:7
@@ -27,9 +27,9 @@ msgstr ""
 msgid ""
 "|project_name| uses `Quantum GIS (QGIS) <http://qgis.org>`_ - as the "
 "platform on which to provide its functionality. QGIS itself has good "
-"documentation and a very helpful user community. In this section we focus on "
-"those aspects of QGIS functionality that will be helpful to someone wanting "
-"to carry out impact scenario assessments using |project_name|."
+"documentation and a very helpful user community. In this section we focus on"
+" those aspects of QGIS functionality that will be helpful to someone wanting"
+" to carry out impact scenario assessments using |project_name|."
 msgstr ""
 
 # d918e49818e5411489581cd3b7149270
@@ -51,8 +51,8 @@ msgstr ""
 #: ../../source/user-docs/using-qgis.rst:21
 msgid ""
 "The `QGIS User Manual <http://qgis.org/en/documentation/manuals.html>`_ - "
-"also an electronic book that serves as a reference guide to the QGIS Desktop "
-"Application."
+"also an electronic book that serves as a reference guide to the QGIS Desktop"
+" Application."
 msgstr ""
 
 # 7652e5ace75b428a9b48ef6910bea5a1

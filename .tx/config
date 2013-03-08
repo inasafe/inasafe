@@ -1,0 +1,321 @@
+[main]
+host = https://www.transifex.com
+
+[inasafe.user-docs]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/postprocessors.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/postprocessors.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-faq]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/faq.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/faq.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-CategorisedHazardBuildingImpactFunction]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-ITBFatalityFunction]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/ITBFatalityFunction.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/ITBFatalityFunction.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-FloodEvacuationFunctionVectorHazard]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-FloodBuildingImpactFunction]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/FloodBuildingImpactFunction.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/FloodBuildingImpactFunction.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-FloodRoadImpactFunctionExperimental]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/FloodRoadImpactFunctionExperimental.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/FloodRoadImpactFunctionExperimental.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-FloodEvacuationFunction]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/FloodEvacuationFunction.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/FloodEvacuationFunction.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-VolcanoPolygonHazardPopulation]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/VolcanoPolygonHazardPopulation.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/VolcanoPolygonHazardPopulation.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-EarthquakeBuildingImpactFunction]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/EarthquakeBuildingImpactFunction.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/EarthquakeBuildingImpactFunction.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-VolcanoBuildingImpact]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/VolcanoBuildingImpact.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/VolcanoBuildingImpact.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-PadangEarthquakeBuildingDamageFunction]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/PadangEarthquakeBuildingDamageFunction.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-CategorisedHazardPopulationImpactFunction]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-inasafe-projects]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/inasafe_projects.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/inasafe_projects.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-index]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/index.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/index.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-using-qgis]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/using-qgis.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/using-qgis.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-impact-functions]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_functions.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_functions.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-getting-involved]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/getting_involved.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/getting_involved.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-known-issues]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/known_issues.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/known_issues.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-keywords]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/keywords.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/keywords.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-dock]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/dock.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/dock.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-install]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/install.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/install.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-screenshots]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/screenshots.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/screenshots.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-options]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/options.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/options.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-impact-functions-doc]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/impact_functions_doc.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/impact_functions_doc.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-changelog]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/changelog.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/changelog.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-data-types]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/data_types.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/data_types.po
+source_lang = en
+type = PO
+
+[inasafe.user-docs-postprocessors]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/postprocessors.po
+source_file = docs/i18n/en/LC_MESSAGES/user-docs/postprocessors.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-faq]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/faq.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/faq.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-coding-standards]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/coding_standards.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/coding_standards.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-index]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/index.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/index.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-version-control]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/version_control.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/version_control.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-irc]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/irc.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/irc.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-platform-linux]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/platform_linux.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/platform_linux.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-maintaining-documentation]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/maintaining_documentation.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/maintaining_documentation.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-i18n]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/i18n.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/i18n.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-jenkins-ci]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/jenkins_ci.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/jenkins_ci.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-realtime]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/realtime.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/realtime.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-preparing-test-builds]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/preparing_test_builds.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/preparing_test_builds.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-preparing-a-release]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/preparing_a_release.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/preparing_a_release.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-profiling]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/profiling.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/profiling.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-todo]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/todo.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/todo.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-logging]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/logging.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/logging.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-jenkins-ci-windows-slave]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/jenkins_ci_windows_slave.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/jenkins_ci_windows_slave.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-platform-windows]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/platform_windows.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/platform_windows.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-postprocessors]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/postprocessors.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/postprocessors.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-bug-reporting]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/bug_reporting.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/bug_reporting.po
+source_lang = en
+type = PO
+
+[inasafe.tutorial-docs-index]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/tutorial-docs/index.po
+source_file = docs/i18n/en/LC_MESSAGES/tutorial-docs/index.po
+source_lang = en
+type = PO
+
+[inasafe.tutorial-docs-tutorial]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/tutorial-docs/tutorial.po
+source_file = docs/i18n/en/LC_MESSAGES/tutorial-docs/tutorial.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-impact-function-tutorial]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/impact_function_tutorial.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/impact_function_tutorial.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-writing-impact-functions]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/writing_impact_functions.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/writing_impact_functions.po
+source_lang = en
+type = PO
+
+[inasafe.safe_qgis]
+file_filter = safe_qgis/i18n/inasafe_<lang>.ts
+source_file = safe_qgis/i18n/inasafe_en.ts
+source_lang = en
+type = QT
+
+[inasafe.safe]
+file_filter = safe/i18n/<lang>/LC_MESSAGES/inasafe.po
+source_file = safe/i18n/en/LC_MESSAGES/inasafe.po
+source_lang = en
+type = PO
+

@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-06 11:31\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:25+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 04928b74dd784a55bc7de629007dd6b4
 #: ../../source/user-docs/data_types.rst:11
@@ -27,15 +27,15 @@ msgstr ""
 msgid ""
 "The impact functions essentially combine spatial data in different formats "
 "through a common interpolation library. This essentially allows values from "
-"one data set to be assigned to another independent of their types. Given two "
-"layers H and E, say, the call::"
+"one data set to be assigned to another independent of their types. Given two"
+" layers H and E, say, the call::"
 msgstr ""
 
 # 926ba7a9493c4094b75c2a19b3043c06
 #: ../../source/user-docs/data_types.rst:20
 msgid ""
-"will produce a new layer with all values from H transferred to E in a manner "
-"appropriate for the data types of H and E. Generally, existing values in E "
+"will produce a new layer with all values from H transferred to E in a manner"
+" appropriate for the data types of H and E. Generally, existing values in E "
 "will be also be carried over to I. Conceptually, the new layer I represents "
 "the values of H interpolated to E."
 msgstr ""
@@ -62,9 +62,9 @@ msgstr ""
 # ca839f397f514e42b81281a1c6d8db52
 #: ../../source/user-docs/data_types.rst:30
 msgid ""
-"If hazard layer is of type raster, this is the name for new attribute in the "
-"result containing the hazard level. If None (default) the name of hazard is "
-"used"
+"If hazard layer is of type raster, this is the name for new attribute in the"
+" result containing the hazard level. If None (default) the name of hazard is"
+" used"
 msgstr ""
 
 # fd56afbf79224df699aa324ecd7e6cf2
@@ -78,8 +78,8 @@ msgstr ""
 # 62a07342971241dbb2b1d291e7c6ed57
 #: ../../source/user-docs/data_types.rst:34
 msgid ""
-"mode: Interpolation mode for raster to point interpolation only. Options are "
-"'linear' (default) or 'constant'"
+"mode: Interpolation mode for raster to point interpolation only. Options are"
+" 'linear' (default) or 'constant'"
 msgstr ""
 
 # b2a97808783a4619b573ddc81ba8886c
@@ -191,12 +191,11 @@ msgstr ""
 msgid "Check that rasters are aligned and return E"
 msgstr ""
 
-# 42f22e6c5c0a49e09acde66630e76b48
+# 30bac2fc36fb4cc4bde8a144484948f2
 #: ../../source/user-docs/data_types.rst:63
 msgid ""
 "See :ref:`writing_impact_functions` for more information and "
-"`assign_hazard_values_to_exposure_data <http://inasafe.org/api-docs/safe/"
-"engine/interpolation.html#safe.engine.interpolation."
-"assign_hazard_values_to_exposure_data>`_ for the full documentation of this "
-"function."
+"`assign_hazard_values_to_exposure_data <http://inasafe.org/api-"
+"docs/safe/engine/interpolation.html#safe.engine.interpolation.assign_hazard_values_to_exposure_data>`_"
+" for the full documentation of this function."
 msgstr ""

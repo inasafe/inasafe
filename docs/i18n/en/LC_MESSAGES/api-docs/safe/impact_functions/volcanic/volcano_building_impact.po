@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,64 @@ msgstr ""
 # bdd2946e00484012b10c585ae9f00e11
 #: ../../source/api-docs/safe/impact_functions/volcanic/volcano_building_impact.rst:6
 msgid "Module:  safe.impact_functions.volcanic.volcano_building_impact"
+msgstr ""
+
+# 5d416921cc2a427d957852eacd154523
+#: ../../../safe/impact_functions/volcanic/volcano_building_impact.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_building_impact.VolcanoBuildingImpact:1
+msgid "Risk plugin for volvano evacuation"
+msgstr ""
+
+# c833ece93b3b40cebcba817b345076d7
+#: ../../../safe/impact_functions/volcanic/volcano_building_impact.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_building_impact.VolcanoBuildingImpact:3
+msgid ""
+":author AIFDR :rating 4 :param requires category=='hazard' "
+"and                     subcategory in ['volcano'] and                     "
+"layertype=='vector'"
+msgstr ""
+
+# 81a93328e825493a84f24baed521a9a1
+#: ../../../safe/impact_functions/volcanic/volcano_building_impact.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_building_impact.VolcanoBuildingImpact:7
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='structure' and                     layertype=='vector'"
+msgstr ""
+
+# f12f7c76b68244629e67954326964ea3
+#: ../../../safe/impact_functions/volcanic/volcano_building_impact.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_building_impact.VolcanoBuildingImpact.run:1
+msgid "Risk plugin for flood population evacuation"
+msgstr ""
+
+# f136050af6d5418ba64c6b45b3aab13b
+#: ../../../safe/impact_functions/volcanic/volcano_building_impact.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_building_impact.VolcanoBuildingImpact.run:5
+msgid ""
+"H: Raster layer of volcano depth P: Raster layer of population data on the "
+"same grid as H"
+msgstr ""
+
+# c30d956072fd4e8fa10a0ac1fb645166
+#: ../../../safe/impact_functions/volcanic/volcano_building_impact.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_building_impact.VolcanoBuildingImpact.run:8
+msgid "Counts number of people exposed to each volcano hazard zones."
+msgstr ""
+
+# 70728e8271f64c9bab83944ad695ab66
+#: ../../../safe/impact_functions/volcanic/volcano_building_impact.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_building_impact.VolcanoBuildingImpact.run:11
+msgid ""
+"Map of population exposed to volcanic hazard zones Table with number of "
+"buildings affected"
 msgstr ""
 
 # 218d06c23fd64c5c9bcb5d69338278ff

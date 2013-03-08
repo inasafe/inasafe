@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,12 @@ msgstr ""
 # e752beff6615421fb72d0db837977df0
 #: ../../source/api-docs/safe/impact_functions/test_mappings.rst:6
 msgid "Module:  safe.impact_functions.test_mappings"
+msgstr ""
+
+# 1b17d0123dfc426b8bc4b5e21d15a735
+#: ../../../safe/impact_functions/test_mappings.py:docstring of
+#: safe.impact_functions.test_mappings:1
+msgid "Test mappings for impact functions"
 msgstr ""
 
 # 178d7a475f714cc4865e15e14a0189db

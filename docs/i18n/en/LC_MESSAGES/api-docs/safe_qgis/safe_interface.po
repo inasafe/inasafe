@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,472 @@ msgstr ""
 # d1a873ae156a4dbdbd0a65ee902981a6
 #: ../../source/api-docs/safe_qgis/safe_interface.rst:6
 msgid "Module:  safe_qgis.safe_interface"
+msgstr ""
+
+# e8081cef18c34c67a5cac7b7aac4b9e0
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **IS Safe "
+"Interface.**"
+msgstr ""
+
+# 2866ee4fca35416da5135623b19e3736
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface:4
+msgid ""
+"The purpose of the module is to centralise interactions between the gui "
+"package and the underlying InaSAFE packages. This should be the only place "
+"where SAFE modules are imported directly."
+msgstr ""
+
+# 74c325dc13b142bd96d1fe886f5d2152
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface:8
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# f97ccd0a821249a7ab6d22531b1d84a8
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface:10
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 58cc1221e67d477e8ca58dea901a2d8b
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.availableFunctions:1
+msgid "Query the inasafe engine to see what plugins are available."
+msgstr ""
+
+# 8ec41d4e68ff491981c8ee3aa81e9f84
+# e596d50015464f0186b408809823f255
+# 2d28ecf48c4e4c5884e95f8e5a7715a4
+# 08e9af15e6c944a69d35040c84e0b307
+# dbf248f4d91a46ba8b5430ac0da47fa1
+# c2980303c7e4414586567f30a4a8a27c
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.availableFunctions:3
+#: safe_qgis.safe_interface.getBufferedExtent:3
+#: safe_qgis.safe_interface.getOptimalExtent:12
+#: safe_qgis.safe_interface.getStyleInfo:3
+#: safe_qgis.safe_interface.readKeywordsFromFile:10
+#: safe_qgis.safe_interface.readKeywordsFromLayer:6
+msgid "Args:"
+msgstr ""
+
+# 884b49016ef840b795451612a9f57516
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.availableFunctions:5
+msgid ""
+"theKeywordList - an optional parameter which should contain a list of 2 "
+"dictionaries (the number of items in the list is not enforced). The "
+"dictionaries should be obtained by using readKeywordsFromFile e.g.::"
+msgstr ""
+
+# cd2d4d78ad304f4a9e3089498bf06eda
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.availableFunctions:18
+msgid "A dictionary of strings where each is a plugin name."
+msgstr ""
+
+# bf5ca50786d641699e7e7a89dff8c6f8
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.availableFunctions:20
+msgid ""
+"If theKeywordList is not provided, all available plugins will be returned in "
+"the list."
+msgstr ""
+
+# 10d8aca6f7cf4b15ba43275514d87f5b
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.availableFunctions:24
+msgid "NoFunctionsFoundError if no functions are found."
+msgstr ""
+
+# 106fea94233f44e2a7354fc435c19c7a
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.calculateSafeImpact:1
+msgid "Thin wrapper around the safe calculate_impact function."
+msgstr ""
+
+# d1d940284d5d41cd93f502b3e929bca0
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.calculateSafeImpact:4
+msgid ""
+"theLayers - a list of layers to be used. They should be ordered with hazard "
+"layer first and exposure layer second."
+msgstr ""
+
+# 2cf4750d2b6b467c916c2cc63b37646d
+# f50fe8a4a0bc418e8d1562b3231ce60d
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.calculateSafeImpact:6
+#: safe_qgis.safe_interface.getFunctionTitle:4
+msgid "theFunction - SAFE impact function instance to be used"
+msgstr ""
+
+# 65842ab476dc46b79c49bc4de3295fc8
+# 2c67e48f528c40aaa07120b982dcf0d6
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.calculateSafeImpact:8
+#: safe_qgis.safe_interface.getSafeImpactFunctions:7
+msgid "A safe impact function is returned"
+msgstr ""
+
+# 3f1fbfb9418149bbbfb8ee18a04e9d3b
+# bab97c07e5684fe1a304bf36aa1674ba
+# 9d982e9b46644f26b92c202f4f8a1454
+# ddeb188bc6954c64bb01679c64c22520
+# 05fda3578eae4eccae686cdad7a0c721
+# 88e494b412a84c4ca1bcc40730e386bd
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.calculateSafeImpact:10
+#: safe_qgis.safe_interface.getBufferedExtent:15
+#: safe_qgis.safe_interface.getFunctionTitle:8
+#: safe_qgis.safe_interface.getSafeImpactFunctions:9
+#: safe_qgis.safe_interface.readSafeLayer:8
+#: safe_qgis.safe_interface.writeKeywordsToFile:11
+msgid "Any exceptions are propogated"
+msgstr ""
+
+# 174d5592fee64887b4cb853ebe8229dd
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getBufferedExtent:1
+msgid "Grow bounding box with one unit of resolution in each direction."
+msgstr ""
+
+# 0c5b8fc27ae545598a3802a4ced26ebb
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getBufferedExtent:5
+msgid "theGeoExtent - Bounding box with format [W, S, E, N]"
+msgstr ""
+
+# 5da80efd7c184001bd85605c7360550e
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getBufferedExtent:6
+msgid "theCellSize - (resx, resy) Raster resolution in each direction."
+msgstr ""
+
+# de7e008a3d7c43a9871445ab8ed8c93a
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getBufferedExtent:8
+msgid "If resolution is None bbox is returned unchanged."
+msgstr ""
+
+# 28dfedaeab224e629358b8fdf0a8af7e
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getBufferedExtent:11
+msgid "Adjusted bounding box"
+msgstr ""
+
+# a5ba48451b404222afa7254b3f87ab57
+# e567740aee5146b5913ff0320031f275
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getBufferedExtent:13
+#: safe_qgis.safe_interface.getStyleInfo:10
+msgid "Raises:"
+msgstr ""
+
+# 19bc4289fefb4b25841c71b3b7e9f8e3
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getBufferedExtent:17
+msgid "for more details."
+msgstr ""
+
+# dca8599e12ce48e9a1cba357d4dc863e
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getFunctionTitle:1
+msgid "Thin wrapper around the safe get_function_title."
+msgstr ""
+
+# 4f6b0b45862b413889a3770b2a498025
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getFunctionTitle:6
+msgid "The title of a safe impact function is returned"
+msgstr ""
+
+# c70d5d9551c8414481ba55f170947999
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getOptimalExtent:1
+msgid ""
+"A helper function to determine what the optimal extent is. Optimal extent "
+"should be considered as the intersection between the three inputs. The "
+"inasafe library will perform various checks to ensure that the extent is "
+"tenable, includes data from both etc."
+msgstr ""
+
+# 2dbfd2730aa642c5b4afa1705c6877e2
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getOptimalExtent:7
+msgid "This is just a thin wrapper around safe.api.bbox_intersection."
+msgstr ""
+
+# b8809cc7762c4ccf9e90d67131d661ea
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getOptimalExtent:9
+msgid ""
+"Typically the result of this function will be used to clip input layers to a "
+"commone extent before processing."
+msgstr ""
+
+# 462ad18e9b7847248a0a7c36665a8a29
+# de3c24408b9c4382868008a5e6537c95
+# 4a80a00d6ded489da859cfa38da7263a
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getOptimalExtent:15
+#: safe_qgis.safe_interface.getOptimalExtent:19
+#: safe_qgis.safe_interface.getOptimalExtent:23
+msgid ""
+"extents in the form [xmin, ymin, xmax, ymax]. It is assumed that the "
+"coordinates are in EPSG:4326 although currently no checks are made to "
+"enforce this."
+msgstr ""
+
+# 5143fd627a8745949bd175fec56b712d
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getOptimalExtent:28
+msgid "care of it for us."
+msgstr ""
+
+# e34bc4a83bfe4480b9ea18abb0ced8a5
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getOptimalExtent:31
+msgid ""
+"An array containing an extent in the form [xmin, ymin, xmax, ymax] e.g.::"
+msgstr ""
+
+# 668f7faae7a24ca1a82a12d216a76167
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getOptimalExtent:37
+msgid "Any exceptions raised by the InaSAFE library will be propogated."
+msgstr ""
+
+# 9084a0f7321b46328249faa8cc885fc1
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getSafeImpactFunctions:1
+msgid "Thin wrapper around the safe impact_functions function."
+msgstr ""
+
+# 62b636955ca6444d9d3786595d4b8fca
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getSafeImpactFunctions:4
+msgid ""
+"theFunction - optional str giving a specific plugins name that should be "
+"fetched."
+msgstr ""
+
+# ecaf4e22bcc14ac993aac10a74ca6fb0
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getStyleInfo:1
+msgid "Get styleinfo associated with a layer."
+msgstr ""
+
+# 0daa925150334a279aba7ef22dd95a48
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getStyleInfo:5
+msgid "theLayer - InaSAFE layer (raster or vector)"
+msgstr ""
+
+# 657af75dc1dd464b99e02e2066ae7544
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getStyleInfo:8
+msgid "A list of dictionaries containing styleinfo info for a layer."
+msgstr ""
+
+# 94cb6ac377d545d1a716d098f706f034
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getStyleInfo:12
+msgid "StyleInfoNotFoundError if the style is not found."
+msgstr ""
+
+# af1dd4208b3b41ae89f872068261c270
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.getStyleInfo:13
+msgid "InvalidParameterError if the paramers are not correct."
+msgstr ""
+
+# 8abf5e2d096d436e9d584ccc3039639c
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.makeAscii:1
+msgid "Convert QgsString to ASCII"
+msgstr ""
+
+# d46126b9dc134d428db5962cfb74a344
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromFile:1
+msgid ""
+"Get metadata from the keywords file associated with a local file in the file "
+"system."
+msgstr ""
+
+# 5ade6dd746d54ad8b77cda86e3aed804
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromFile:4
+msgid ""
+"Requires a str representing a file path instance as parameter As opposed to "
+"readKeywordsFromLayer which takes a inasafe file object as parameter."
+msgstr ""
+
+# 09a751c075b542eabb55d7c767972520
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromFile:13
+msgid "(e.g. '/tmp/foo.shp', '/tmp/foo.tif')"
+msgstr ""
+
+# 3b30b307d6d74c6ab5bd4140d1937cc3
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromFile:14
+msgid "theKeyword - optional - the metadata keyword to retrieve e.g. 'title'"
+msgstr ""
+
+# 7d71b4edd7bc457aa2afb36d4e4310f2
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromFile:17
+msgid ""
+"A string containing the retrieved value for the keyword if the keyword "
+"argument is specified, otherwise the complete keywords dictionary is "
+"returned."
+msgstr ""
+
+# f0c94a6a5c0e4c53a4b99e4d2ceceebe
+# 1d29c9baef174550b9faa5018e645f18
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromFile:22
+#: safe_qgis.safe_interface.readKeywordsFromLayer:15
+msgid "KeywordNotFoundError if the keyword is not recognised."
+msgstr ""
+
+# bab894092bfa4f6fa9cf7ba8676020ba
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromLayer:1
+msgid "Get metadata from the keywords file associated with a layer."
+msgstr ""
+
+# 50bf9964044441639c5301a15ccf9e7e
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromLayer:3
+msgid "Requires a inasafe layer instance as parameter."
+msgstr ""
+
+# 28bfc0c530fb41d49469d2467be405b7
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromLayer:8
+msgid "theLayer - a InaSAFE layer (vector or raster)"
+msgstr ""
+
+# 216ea4a33484469ebedd2e6a28cb6821
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromLayer:9
+msgid "keyword - the metadata keyword to retrieve e.g. 'title'"
+msgstr ""
+
+# 1dbb93e089274dfe86c2bee1c8532bb1
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readKeywordsFromLayer:12
+msgid "A string containing the retrieved value for the keyword."
+msgstr ""
+
+# 64fe381abfd34082aafd3cc64ac55294
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readSafeLayer:1
+msgid "Thin wrapper around the safe read_layer function."
+msgstr ""
+
+# 5e9706ef67f94e97887293b1e9915243
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readSafeLayer:4
+msgid "thePath - str representing path to layer that must be opened."
+msgstr ""
+
+# b91d789c1950415f843d551a51811e0f
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.readSafeLayer:6
+msgid "A safe readSafeLayer object is returned."
+msgstr ""
+
+# 16c7114cf1674df4ab0ce53453f09def
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.tr:1
+msgid ""
+"We define a tr() alias here since the is_safe_interface implementation below "
+"is not a class and does not inherit from QObject."
+msgstr ""
+
+# 6891c5a8e32b4ae28871e896198fe797
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.tr:4
+msgid "see http://tinyurl.com/pyqt-differences"
+msgstr ""
+
+# c932efaf6fb54f3cbb29c5601ccf2391
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.tr:7
+msgid "theText - string to be translated"
+msgstr ""
+
+# 52b6575cda3a4415b329559bfe4da5b4
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.tr:9
+msgid ""
+"Translated version of the given string if available, otherwise the original "
+"string."
+msgstr ""
+
+# c4fcc590f4bd497499680fc28ae0778f
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.verify:1
+msgid "This is just a thin wrapper around safe.api.verify."
+msgstr ""
+
+# 7605e49cb059490b9f5ca24b5c8db1ac
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.verify:4
+msgid "theStatement - expression to verify"
+msgstr ""
+
+# 25ba92c85ce0462e8e373a12348429e2
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.verify:5
+msgid "theMessage - message to display on failure"
+msgstr ""
+
+# 5a9ba752bab14e2e83f76a43a2c39db4
+# c2654b6a7aed4280844e83c1a46162d6
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.verify:7
+#: safe_qgis.safe_interface.writeKeywordsToFile:9
+msgid "None"
+msgstr ""
+
+# 14d4906eb4fd402a9ea0b6e3ad7a0462
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.verify:9
+msgid "VerificationError"
+msgstr ""
+
+# 824e3585ff6b499bbbda28af825bc62a
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.writeKeywordsToFile:1
+msgid "Thin wrapper around the safe write_keywords function."
+msgstr ""
+
+# 33648b1026c54066a49472bbb14d93c3
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.writeKeywordsToFile:4
+msgid ""
+"thePath - str representing path to layer that must be written. If the file "
+"does not end in .keywords, its extension will be stripped off and the "
+"basename + .keywords will be used as the file."
+msgstr ""
+
+# c1d3b5ccd46f4ebe962934acc0ebd4bf
+#: ../../../safe_qgis/safe_interface.py:docstring of
+#: safe_qgis.safe_interface.writeKeywordsToFile:7
+msgid "theKeywords - a dictionary of keywords to be written"
 msgstr ""
 
 # 12553f976a4a4ba7892b2e93c776b1e1

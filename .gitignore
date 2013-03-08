@@ -42,3 +42,4 @@ safe/test/data/hazard/keywordless_layer.tif.aux.xml
 scripts/nightly-build-repo/apache.conf
 .idea/dictionaries/*
 docs/output
+docs/release-approval-docs
