@@ -31,7 +31,7 @@ class VolcanoBuildingImpact(FunctionProvider):
     target_field = 'buildings'
 
     parameters = OrderedDict([
-        ('distances', [1000, 2000, 3000, 5000, 10000]),
+        ('distances [km]', [1, 2, 3, 5, 10]),
         ('volcano_name', 'All')])
 
     def run(self, layers):
@@ -72,11 +72,12 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         if H.is_point_data:
             # Use concentric circles
-            radii = self.parameters['distances']
+            radii = self.parameters['distances [km]']
 
             centers = H.get_geometry()
             attributes = H.get_data()
-            Z = make_circular_polygon(centers, radii, attributes=attributes)
+            rad_m = [x * 1000 for x in radii]  # Convert to meters
+            Z = make_circular_polygon(centers, rad_m, attributes=attributes)
             Z.write_to_file('Marapi_evac_zone_%s.shp' % str(radii))  # To check
             category_title = 'Radius'
             H = Z
@@ -131,9 +132,10 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Generate simple impact report
         table_body = [question,
-                    TableRow([tr('Buildings'), tr('Total'), tr('Cumulative')],
+                      TableRow([tr('Buildings'), tr('Total'),
+                                tr('Cumulative')],
                                header=True),
-                    TableRow([tr('All'), format_int(total_affected), ''])]
+                      TableRow([tr('All'), format_int(total_affected), ''])]
 
         cum = 0
         for name in category_names:
@@ -143,15 +145,15 @@ class VolcanoBuildingImpact(FunctionProvider):
                                         format_int(cum)]))
 
         table_body.append(TableRow(tr('Map shows buildings affected in '
-                                     'each of volcano hazard polygons.')))
+                                      'each of volcano hazard polygons.')))
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
                            tr('Total number of buildings %s in the viewable '
-                             'area') % format_int(total),
+                              'area') % format_int(total),
                            tr('Only buildings available in OpenStreetMap '
-                             'are considered.')])
+                              'are considered.')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Buildings affected by volcanic hazard zone')
 
