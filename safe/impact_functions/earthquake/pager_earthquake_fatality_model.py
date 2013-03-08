@@ -36,6 +36,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     'using an empirical approach. U.S. Geological Survey '
                     'Open-File Report 2009-1136.')]
     limitation = ''
+    detailed_description = ''
     title = tr('Die or be displaced according Pager model')
     defaults = get_defaults()
     parameters = dict(Theta=11.067, Beta=0.106,  # Model coefficients
