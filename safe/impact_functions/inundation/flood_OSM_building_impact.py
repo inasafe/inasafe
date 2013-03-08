@@ -75,14 +75,14 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
     # parameters = {'postprocessors': {'BuildingType': {'on': True}}}
     parameters = OrderedDict([
-        ('thresholds', 1.0),
+        ('threshold [m]', 1.0),
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))])
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
         """
 
-        threshold = self.parameters['thresholds']  # Flood threshold [m]
+        threshold = self.parameters['threshold [m]']  # Flood threshold [m]
 
         verify(isinstance(threshold, float),
                'Expected thresholds to be a float. Got %s' % str(threshold))
