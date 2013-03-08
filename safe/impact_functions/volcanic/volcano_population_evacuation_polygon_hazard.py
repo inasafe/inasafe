@@ -28,7 +28,18 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
     title = tr('Need evacuation')
     target_field = 'population'
-
+    # Function documentation
+    synopsis = tr('To assess the impacts of volcano eruption on population.')
+    actions = tr('Provide details about how many population would likely be '
+                 'affected by each hazard zones.')
+    hazard_input = tr('A hazard vector layer can be polygon or point. '
+                      'If polygon, it must have "KRB" attribute and the value'
+                      'for it are "Kawasan Rawan Bencana I", "Kawasan Rawan '
+                      'Bencana II", or "Kawasan Rawan Bencana III."')
+    exposure_input = tr('An exposure raster layer where each '
+                        'cell represent population count.')
+    output = tr('Vector layer contains population affected and the minimum'
+                'needs based on the population affected.')
     parameters = {'R [km]': [3, 5, 10]}
 
     def run(self, layers):
@@ -36,7 +47,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Vector polyton layer of volcano impact zones
+              H: Vector polygon layer of volcano impact zones
               P: Raster layer of population data on the same grid as H
 
         Counts number of people exposed to volcano event.
@@ -194,7 +205,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                       TableRow([tr('People needing evacuation'),
                                 '%s' % format_int(evacuated),
                                 blank_cell],
-                                header=True),
+                               header=True),
                       TableRow([category_header,
                                 tr('Total'), tr('Cumulative')],
                                header=True)]

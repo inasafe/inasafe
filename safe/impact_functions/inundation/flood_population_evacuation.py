@@ -39,7 +39,6 @@ class FloodEvacuationFunction(FunctionProvider):
     actions = tr('Provide details about how many people would likely need '
                  'to be evacuated, where they are located and what resources '
                  'would be required to support them.')
-    #citations = []
     detailed_description = \
         tr('The population subject to inundation exceeding a threshold '
            '(default 1m) is calculated and returned as a raster layer.'

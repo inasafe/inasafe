@@ -115,8 +115,6 @@ if __name__ == "__main__":
         if not is_function_enabled(myFunc):
             continue
         impfunc_doc[myKey] = get_documentation(myKey)
-        # print myKey, impfunc_doc[myKey]
-        # print '==============================================================='
     list_unique_identifier = [x['unique_identifier']
                               for x in impfunc_doc.values()]
     gen_impact_func_index(list_unique_identifier)
