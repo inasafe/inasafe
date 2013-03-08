@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,109 @@ msgstr ""
 # 2601c7dfd21848798d24b9d4d1b43eea
 #: ../../source/api-docs/safe/postprocessors/abstract_postprocessor.rst:6
 msgid "Module:  safe.postprocessors.abstract_postprocessor"
+msgstr ""
+
+# 62d4ac134049459b950030162e982819
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor:1
+msgid "**Abstract postprocessor class, do not instantiate directly**"
+msgstr ""
+
+# ea81ab3c9dd642dd81ba52871e8b58b7
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor:1
+msgid ""
+"Abstract postprocessor class, do not instantiate directly. but instantiate "
+"the PostprocessorFactory class which will take care of setting up many "
+"prostprocessors. Alternatively you can as well instantiate directly a sub "
+"class of AbstractPostprocessor."
+msgstr ""
+
+# a1b79d6743ff438e86692e1db64d0235
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor:6
+msgid ""
+"Each subclass has to overload the process method and call its parent like "
+"this: AbstractPostprocessor.process(self) if a postprocessor needs "
+"parmeters, then it should override the setup and clear methods as well and "
+"call respectively AbstractPostprocessor.setup(self) and "
+"AbstractPostprocessor.clear(self)."
+msgstr ""
+
+# 3417f38b8c464719a28d9fb10c904546
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor:12
+msgid ""
+"for implementation examples see AgePostprocessor which uses mandatory and "
+"optional parameters"
+msgstr ""
+
+# 24b066b5bfb44ee6b12566b9c8c0bd12
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.clear:1
+msgid ""
+"Abstract method to be called from the concrete implementation with "
+"AbstractPostprocessor.process(self) it takes care of results being cleared"
+msgstr ""
+
+# 1e364296095b4b879a24d954a37b38d8
+# 53ef57043f394542a90bbfa40ce0a33c
+# e7b2cb68ed01404e9616174e035ecfdc
+# 16718b2c22264c54b274701b17e4b0e8
+# 04d41e2b090f4f44823f006a28cbeac0
+# 73cc8fc9e02e414280a0f04280b6c314
+# 0c4d581a77214434a1c7b26acaaeb80f
+# 43691e7c12394f3daf3af3ed4abda2bd
+# 3d4d14200ed444f3b35f8bab8a8a53c7
+# a9302fbd117243b1b4fe683cffe23465
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.clear:6
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.clear:8
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.clear:10
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.process:6
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.process:8
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.process:10
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.results:4
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.results:8
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.setup:8
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.setup:10
+msgid "None"
+msgstr ""
+
+# f9eff558cfae40d2a1f145b435e77df8
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.process:1
+msgid ""
+"Abstract method to be called from the concrete implementation with "
+"AbstractPostprocessor.process(self) it takes care of results being "
+"initialized"
+msgstr ""
+
+# 3f193de3d7c2412bb26e876e9860ffaf
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.results:1
+msgid "Returns the postprocessors results"
+msgstr ""
+
+# 9ae2d313ca664d04bab73724c3871120
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.results:6
+msgid "Odict of results"
+msgstr ""
+
+# 7803e376ddd34d308bfb2dce779b3448
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.setup:1
+msgid ""
+"Abstract method to be called from the concrete implementation with "
+"AbstractPostprocessor.setup(self, None) it takes care of results being "
+"initialized"
+msgstr ""
+
+# 84b3479207c24493b68831917f202235
+#: ../../../safe/postprocessors/abstract_postprocessor.py:docstring of
+#: safe.postprocessors.abstract_postprocessor.AbstractPostprocessor.setup:6
+msgid "params: dict of parameters to pass to the post processor"
 msgstr ""
 
 # 91743f04268c486385ec35e1ca33f3f7

@@ -8,51 +8,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-26 15:53\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:6
 # cf8277bf51b84ff3a8cfdcc157127905
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:6
 msgid "I T B Fatality Function"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:9
 # 839ef2c69bd7413fa1f20212f86be0e1
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:9
 msgid "Overview"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:11
 # c4b5b834848c4ca0ab0034e6676fa5d1
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:11
 msgid "**Unique Identifier**: I T B Fatality Function"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:13
 # aa36289f7fc0441582d57f5ee0ea344a
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:13
 msgid "**Rating**: 3"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:15
 # 8d5c41a377d64fe882382261abdb08e7
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:15
 msgid "**Title**: Die or be displaced"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:17
 # 774840cda5564bc59f76cbba2c63c975
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:17
 msgid "**Author**: Hadi Ghasemi"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:20
 # af604908b1e64474913de07fbb8fd2a0
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:20
 msgid "Details"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:22
 # 736198a1063c45669d60abda3ff0e809
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:22
 msgid "No documentation found"
 msgstr ""
-

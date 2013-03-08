@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,64 @@ msgstr ""
 msgid ""
 "Module:  safe.impact_functions.volcanic."
 "volcano_population_evacuation_polygon_hazard"
+msgstr ""
+
+# 1bea71163269469b98d4da49a1b42df1
+#: ../../../safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_population_evacuation_polygon_hazard.VolcanoPolygonHazardPopulation:1
+msgid "Impact function for volcano hazard zones impact on population"
+msgstr ""
+
+# f2e15f3d3f3a4df8a57f93526f388d3c
+#: ../../../safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_population_evacuation_polygon_hazard.VolcanoPolygonHazardPopulation:3
+msgid ""
+":author AIFDR :rating 4 :param requires category=='hazard' "
+"and                     subcategory in ['volcano'] and                     "
+"layertype=='vector'"
+msgstr ""
+
+# ba787ace1e494452a556ac0452d16c88
+#: ../../../safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_population_evacuation_polygon_hazard.VolcanoPolygonHazardPopulation:7
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster'"
+msgstr ""
+
+# 6998cbcaaab641b89380ec36dc5a8d94
+#: ../../../safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_population_evacuation_polygon_hazard.VolcanoPolygonHazardPopulation.run:1
+msgid "Risk plugin for volcano population evacuation"
+msgstr ""
+
+# b5cc3645b81f4ae6af39de5c747989d5
+#: ../../../safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_population_evacuation_polygon_hazard.VolcanoPolygonHazardPopulation.run:5
+msgid ""
+"H: Vector polyton layer of volcano impact zones P: Raster layer of "
+"population data on the same grid as H"
+msgstr ""
+
+# 3f80bb9663bb4e3e8299e5b63896d977
+#: ../../../safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_population_evacuation_polygon_hazard.VolcanoPolygonHazardPopulation.run:8
+msgid "Counts number of people exposed to volcano event."
+msgstr ""
+
+# 99b20180de5747619f1d69920796e34c
+#: ../../../safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.volcanic.volcano_population_evacuation_polygon_hazard.VolcanoPolygonHazardPopulation.run:11
+msgid ""
+"Map of population exposed to the volcano hazard zone. Table with number of "
+"people evacuated and supplies required."
 msgstr ""
 
 # fb8a8b2cd9344757a72d4ee0f5afd3cb

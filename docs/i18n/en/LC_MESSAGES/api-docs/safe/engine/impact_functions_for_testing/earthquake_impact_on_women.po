@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,81 @@ msgstr ""
 #: ../../source/api-docs/safe/engine/impact_functions_for_testing/earthquake_impact_on_women.rst:6
 msgid ""
 "Module:  safe.engine.impact_functions_for_testing.earthquake_impact_on_women"
+msgstr ""
+
+# 48aafeb46c84419f979c8a5b8ca204f8
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:1
+msgid "Earthquake Impact on Women"
+msgstr ""
+
+# aa9a02cfa7b842a39ddcf72e75c61703
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:3
+msgid ""
+"This model is proof of concept only and assumes an input dataset with "
+"gridded counts of females."
+msgstr ""
+
+# 517b808a891948a793ab4d3559651348
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:6
+msgid ""
+"It also assume the existence of the likely ration of pregnancies in the "
+"female population."
+msgstr ""
+
+# bbc1bfe1f40c40eeb882342c866c02d7
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:9
+msgid ""
+"Some stats are derived from SP2010_agregat_data_perProvinsin.dbf from http://"
+"dds.bps.go.id/eng/"
+msgstr ""
+
+# 4d9625a2ef344639aff4ea1f8f52ca72
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:13
+msgid ":author Ole Nielsen :rating 1"
+msgstr ""
+
+# e0f00feee19a437688dd472c7795544c
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:16
+msgid ""
+":param requires category=='hazard' and                     "
+"subcategory=='earthquake' and                     layertype=='raster' "
+"and                     unit=='MMI'"
+msgstr ""
+
+# 7821494d85784071be229c770a6eeef3
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:18
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster'"
+msgstr ""
+
+# 3ca870ec781b434ab1254fb1d7f09c50
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction.run:1
+msgid "Gender specific earthquake impact model"
+msgstr ""
+
+# 3b7fb826593a4b6c9a90ed11df7e6ea9
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction.run:5
+msgid ""
+"H: Raster layer of MMI ground shaking P: Raster layer of population density"
 msgstr ""
 
 # 5b4afd2ec9344502abc1154473650f06

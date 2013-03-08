@@ -1,41 +1,38 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2012, BNPB/AIFDR/GFDRR
-# This file is distributed under the same license as the InaSAFE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: InaSAFE 0.4.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2013-03-06 11:21+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Language: id\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
-# 5a01b60d7c6f48bc9f7782bcb914fb06
+# b5a6bab7b4e94960942cecaad2448d08
 #: ../../source/tutorial-docs/tutorial.rst:7
-#, fuzzy
 msgid "InaSAFE Tutorial"
-msgstr "Plugin.InaSAFE."
+msgstr ""
 
-# 009c1b8c155a48ffbb0508611ef9b242
+# 18f3576b53434df884862e11943f17b4
 #: ../../source/tutorial-docs/tutorial.rst:10
-#, fuzzy
 msgid "Overview"
-msgstr "Tinjauan"
+msgstr ""
 
-# 1e2f8514505a474495cec7b958a5c06d
+# fec6fa30f3ed4daf89449ad684bddc73
 #: ../../source/tutorial-docs/tutorial.rst:13
 msgid "Description"
 msgstr "Deskripsi"
 
-# 7e49ee88d0454daa9d75ea5b7fad70db
+# 27dac4fc097549aba96db2aed2d486e1
 #: ../../source/tutorial-docs/tutorial.rst:15
 msgid ""
 "InaSAFE is a plugin for QGIS software. It aims to produce realistic natural "
@@ -48,298 +45,245 @@ msgid ""
 "present material to give you the ability to learn how to manipulate data in "
 "InaSAFE, what the requirements of the data are and what kind of results you "
 "can expect out of the data."
-msgstr ""
-"InaSAFE merupakan plugin untuk perangkat lunak QGIS. InaSAFE bertujuan untuk "
-"menghasilkan skenario dampak bahaya alam yang realistis untuk perencanaan, "
-"kesiapsiagaan dan kegiatan respon yang lebih baik, dengan menggunakan data "
-"geografis bahaya dan keterdampakan. Sebuah panduan pengguna dikembangkan "
-"oleh Ole Moeller Nielsen dan Tim Sutton dapat melengkapi materi pelatihan "
-"yang singkat ini. Selama pelatihan ini, Anda akan mengeksplorasi komponen-"
-"komponen yang berbeda dari plugin InaSAFE dan penggunaannya untuk skenario "
-"risiko dan dampak bencana yang mudah digunakan. Sampel data akan disediakan "
-"dengan materi ini untuk memberikan Anda kemampuan untuk belajar bagaimana "
-"memanipulasi data dalam InaSAFE, apa saja persyaratan data dan apa jenis "
-"hasil yang dapat Anda harapkan dari data tersebut."
+msgstr "InaSAFE merupakan plugin untuk perangkat lunak QGIS. InaSAFE bertujuan untuk menghasilkan skenario dampak bahaya alam yang realistis untuk perencanaan, kesiapsiagaan dan kegiatan respon yang lebih baik, dengan menggunakan data geografis bahaya dan keterdampakan. Sebuah panduan pengguna dikembangkan oleh Ole Moeller Nielsen dan Tim Sutton dapat melengkapi materi pelatihan yang singkat ini. Selama pelatihan ini, Anda akan mengeksplorasi komponen-komponen yang berbeda dari plugin InaSAFE dan penggunaannya untuk skenario risiko dan dampak bencana yang mudah digunakan. Sampel data akan disediakan dengan materi ini untuk memberikan Anda kemampuan untuk belajar bagaimana memanipulasi data dalam InaSAFE, apa saja persyaratan data dan apa jenis hasil yang dapat Anda harapkan dari data tersebut."
 
-# 04c0c651b047434b855530acecada019
+# 12938b5cfd504c239960d7e5d361a58b
 #: ../../source/tutorial-docs/tutorial.rst:27
 msgid "Prerequisites"
 msgstr "Prasyarat"
 
-# ea1a1ca0637f4e36920ff8de96cddd96
+# 1c8cb3f108b342dabd1a72daa6438a9b
 #: ../../source/tutorial-docs/tutorial.rst:29
 msgid ""
 "This training is designed for those with a basic or intermediate knowledge "
 "of GIS, who wants to integrate scientific-based risk impact scenario in "
 "their decision-making. Since the tool is a QGIS plugin, some knowledge of "
 "the QGIS environment will help, but not required."
-msgstr ""
-"Pelatihan ini dirancang bagi mereka dengan pengetahuan dasar atau menengah "
-"mengenai SIG yang ingin mengintegrasikan skenario risiko dan dampak bencana "
-"berbasis sains pada proses pengambilan keputusan mereka. Karena tool ini "
-"merupakan plugin QGIS, beberapa pengetahuan tentang lingkungan QGIS akan "
-"membantu, tetapi tidak diharuskan."
+msgstr "Pelatihan ini dirancang bagi mereka dengan pengetahuan dasar atau menengah mengenai SIG yang ingin mengintegrasikan skenario risiko dan dampak bencana berbasis sains pada proses pengambilan keputusan mereka. Karena tool ini merupakan plugin QGIS, beberapa pengetahuan tentang lingkungan QGIS akan membantu, tetapi tidak diharuskan."
 
-# 21e5857340af4082818d07cb8ea6f58f
+# a3fbc17f117c4670bd42ba376b4e96e3
 #: ../../source/tutorial-docs/tutorial.rst:35
 msgid "Goals"
 msgstr "Tujuan"
 
-# 49500493e0f344b18eb25858232bdc1a
+# c2b812fc5cce4a67b2977ede52281df0
 #: ../../source/tutorial-docs/tutorial.rst:37
 msgid "After the training, you will be able to:"
 msgstr "Setelah pelatihan, Anda akan dapat:"
 
-# 3bff7c5287a94422808bed8443e082b8
+# 48e6b12bc7444c96944b4b01bb4467d1
 #: ../../source/tutorial-docs/tutorial.rst:39
 msgid "install a plugin in QGIS and understand its usage for spatial analysis"
-msgstr ""
-"melakukan instalasi plugin pada QGIS dan memahami penggunaannya untuk "
-"analisis spasial"
+msgstr "melakukan instalasi plugin pada QGIS dan memahami penggunaannya untuk analisis spasial"
 
-# 5a4a513006cf4f748d0dd67a1ce24b70
+# 61d46a127ed04a39a46ed61ecf56ea8b
 #: ../../source/tutorial-docs/tutorial.rst:40
 msgid ""
 "understand what are hazard and exposure data and how they can be used to "
 "estimate impacts"
-msgstr ""
-"memahami apa itu data bahaya dan keterdampakan dan bagaimana mereka dapat "
-"digunakan untuk memperkirakan dampak bencana"
+msgstr "memahami apa itu data bahaya dan keterdampakan dan bagaimana mereka dapat digunakan untuk memperkirakan dampak bencana"
 
-# 733736b8bae84fe5bf2812a5a36f62d0
+# cab40996763842cf9cc4e520fe8a3c32
 #: ../../source/tutorial-docs/tutorial.rst:42
 msgid "learn how to prepare the data to be able to use it in InaSAFE"
-msgstr ""
-"mempelajari bagaimana mempersiapkan data untuk dapat menggunakannya dalam "
-"InaSAFE"
+msgstr "mempelajari bagaimana mempersiapkan data untuk dapat menggunakannya dalam InaSAFE"
 
-# ce9de629aced4b8d9658bdd89f1b1738
+# 10a4310f1b5e4a10942e8ec5ef28c490
 #: ../../source/tutorial-docs/tutorial.rst:43
 msgid "perform a risk scenario using flood and earthquake data"
 msgstr "melakukan skenario risiko menggunakan data banjir dan gempa bumi"
 
-# 3f6e4324874b4d04a254031a68eb6faf
+# 967d8925b3c24281ba9488b34744ff07
 #: ../../source/tutorial-docs/tutorial.rst:44
 msgid "analyze estimated impact of the example scenarios"
 msgstr "menganalisis dampak yang diperkirakan dari contoh-contoh skenario"
 
-# bfd1854a34e245b69670c9d65627f911
+# 29d6f916960a4057b6572f79c67fcbd3
 #: ../../source/tutorial-docs/tutorial.rst:45
 msgid "learn how to print and save the result of the simulation"
 msgstr "mempelajari bagaimana mencetak dan menyimpan hasil simulasi"
 
-# 9fa84c95882d48cc8cfc5c21b5d6344d
+# 8d13bf834b514df0ab42923df75e4f97
 #: ../../source/tutorial-docs/tutorial.rst:48
 msgid "Software Requirements"
 msgstr "Kebutuhan Perangkat Lunak"
 
-# 551f0cb0c7a04a5282ebd407ba67d57c
+# d838dec031064f48a7d5c56c71711ced
 #: ../../source/tutorial-docs/tutorial.rst:50
 msgid ""
 "To complete the exercise, you need a standard computer with at least 4GB of "
 "RAM running Windows, Linux or Mac OS X. You also need to install the "
 "following on your computer:"
-msgstr ""
-"Untuk menyelesaikan latihan-latihan, Anda memerlukan sebuah komputer standar "
-"dengan setidaknya 4GB RAM untuk menjalankan Windows, Linux atau Mac OS X. "
-"Anda juga perlu melakukan instalasi berikut pada komputer Anda:"
+msgstr "Untuk menyelesaikan latihan-latihan, Anda memerlukan sebuah komputer standar dengan setidaknya 4GB RAM untuk menjalankan Windows, Linux atau Mac OS X. Anda juga perlu melakukan instalasi berikut pada komputer Anda:"
 
-# 2b8f8f7971a4449891e134ab75621e10
+# bd5dd66389a64c419bd6356b4ec5fdc9
 #: ../../source/tutorial-docs/tutorial.rst:54
 msgid "QGIS"
 msgstr "QGIS"
 
-# 5a01b60d7c6f48bc9f7782bcb914fb06
+# 6436db3795674d3b81090e1ad30dd128
 #: ../../source/tutorial-docs/tutorial.rst:55
 msgid "InaSAFE plugin."
 msgstr "Plugin.InaSAFE."
 
-# 577487110ae54b4294179eaaf6f0fdf6
+# b17ad4843e794d37be6a822c1b82ef84
 #: ../../source/tutorial-docs/tutorial.rst:58
 msgid "Reference"
 msgstr "Referensi"
 
-# d1c8ec65b9f34c58b2d86bef0be4129d
+# 358090a088c647f39d3f8d64add13ae4
 #: ../../source/tutorial-docs/tutorial.rst:60
 msgid ""
 "“InaSAFE Documentation, Release 0.4.0-alpha”, Ole Moeller Nielsen & Tim "
 "Sutton, June 2012.  For more information, please visit `www.inasafe.org "
 "<http://inasafe.org>`_."
-msgstr ""
-"“Documentasi InaSAFE, Release 0.4.0-alpha”, Ole Moeller Nielsen & Tim "
-"Sutton, Juni 2012. Untuk informasi lebih lanjut, silahkan kunjungi `www."
-"inasafe.org <http://inasafe.org>`_."
+msgstr "“Documentasi InaSAFE, Release 0.4.0-alpha”, Ole Moeller Nielsen & Tim Sutton, Juni 2012. Untuk informasi lebih lanjut, silahkan kunjungi `www.inasafe.org <http://inasafe.org>`_."
 
-# a08ba6d2877d4ce68d756c2a8dd4e795
+# 2c6cd8db9ec54fd09c247464abc3a51d
 #: ../../source/tutorial-docs/tutorial.rst:64
 msgid "Installation"
 msgstr "Instalasi"
 
-# b7c58b6f94614bc38e42dd45405cf033
+# f74922a4baf34cc8a535deb22b4c8211
 #: ../../source/tutorial-docs/tutorial.rst:67
 msgid "Install QGIS"
 msgstr "Install QGIS"
 
-# c0885830c90845609b2bd0f11c857107
+# bb3f8a49599c4606abf96dc0a996e916
 #: ../../source/tutorial-docs/tutorial.rst:69
 msgid "You need QGIS version 1.7 or newer."
 msgstr "Anda membutuhkan QGIS versi 1.7 atau yang lebih baru."
 
-# ebd0e82647f44d01a507e47640874526
+# 1579145571dc4a01b4a84006f892c628
 #: ../../source/tutorial-docs/tutorial.rst:71
 msgid "You can download the software from http://download.qgis.org."
 msgstr "Anda dapat men-download software ini dari http://download.qgis.org."
 
-# 4252e623d3b94ad890bdf9f6ef922005
+# 88f6092bd8ea4797bb4d18ce2e45e21b
 #: ../../source/tutorial-docs/tutorial.rst:74
 msgid "Install InaSAFE Plugin"
 msgstr "Install Plugin InaSAFE"
 
-# 575fbde7087e476587a3084e8b38044c
+# 9df067a4aeb843cc97a413f7f42d355c
 #: ../../source/tutorial-docs/tutorial.rst:77
 msgid "Option 1: From QGIS Repository:"
 msgstr "Pilihan 1: Dari Repositoty QGIS:"
 
-# e52fd140a5e144938469fb8edfb5208e
+# 9b3c0301e59e49a081d18f273fe195a6
 #: ../../source/tutorial-docs/tutorial.rst:79
 msgid "To install the InaSAFE, use the plugin manager in QGIS:"
 msgstr "Untuk menginstal InaSAFE, gunakan plugin manager pada QGIS:"
 
-# 6d7f6afe297b46e7b0de3c9abea89a04
+# a95590e9d5a4441296f1bf5218da01d4
 #: ../../source/tutorial-docs/tutorial.rst:81
 msgid ""
-":menuselection:`Plugins --> Fetch Python Plugins` Then search for ‘InaSAFE‘, "
-"select it and click the install button. The plugin will now be added to your "
-"plugins menu."
-msgstr ""
-":menuselection:`Plugins --> Fetch Python Plugins` Selanjutnya lakukan "
-"pencarian untuk ‘InaSAFE‘, pilih dan klik tombol install. Plugin tersebut "
-"sekarang akan ditambahkan ke menu plugin anda."
+":menuselection:`Plugins --> Fetch Python Plugins` Then search for ‘InaSAFE‘,"
+" select it and click the install button. The plugin will now be added to "
+"your plugins menu."
+msgstr ":menuselection:`Plugins --> Fetch Python Plugins` Selanjutnya lakukan pencarian untuk ‘InaSAFE‘, pilih dan klik tombol install. Plugin tersebut sekarang akan ditambahkan ke menu plugin anda."
 
-# 4a304ef819c942228ebf97e63f9b66ab
+# 4773e15f08e447f8bffbf3c6fefba4f3
 #: ../../source/tutorial-docs/tutorial.rst:86
 msgid "Option 2: Manual Installation:"
 msgstr "Option 2: Instalasi Secara Manual:"
 
-# b54ce61ea146450d87a6eb47997d4276
+# b7cdcb30b8e84c619a4030b8dd7d66a4
 #: ../../source/tutorial-docs/tutorial.rst:88
 msgid ""
-"To install the InaSAFE plugin, go to https://github.com/AIFDR/inasafe/"
-"downloads."
-msgstr ""
-"Untuk melakukan instalasi plugin InaSAFE, kunjungi https://github.com/AIFDR/"
-"inasafe/downloads."
+"To install the InaSAFE plugin, go to "
+"https://github.com/AIFDR/inasafe/downloads."
+msgstr "Untuk melakukan instalasi plugin InaSAFE, kunjungi https://github.com/AIFDR/inasafe/downloads."
 
-# c011835143d54cc1adfc4e7d6daa2e0d
+# a6fde4046d1b4658824e4f6810042457
 #: ../../source/tutorial-docs/tutorial.rst:91
 msgid ""
 "The application package comes as a zip file. Please select the most updated "
 "version."
-msgstr ""
-"Paket aplikasi terdapat dalam format file zip. Silakan pilih versi yang "
-"paling baru."
+msgstr "Paket aplikasi terdapat dalam format file zip. Silakan pilih versi yang paling baru."
 
-# 093fcfbfd1e0456b94e624150c8a5cea
+# 8d4e6cf6b74c4dbcb429d0839115cee2
 #: ../../source/tutorial-docs/tutorial.rst:94
 msgid ""
 "Extract the zip file into the QGIS directory :file:`C:\\Users\\<your "
 "username>\\.qgis\\python\\plugins`."
-msgstr ""
-"Lakukan ekstraksi file zip ke dalam direktori QGIS :file:`C:\\Users"
-"\\<username anda>\\.qgis\\python\\plugins`."
+msgstr "Lakukan ekstraksi file zip ke dalam direktori QGIS :file:`C:\\Users\\<username anda>\\.qgis\\python\\plugins`."
 
-# f929dc2c72ea498aa9cf5670fd8d4f80
+# df7398b3ec014becbd11e7f05a685bc1
 #: ../../source/tutorial-docs/tutorial.rst:97
 msgid ""
-"After extracting the plugin, it should be available as :file:`C:\\Users"
-"\\<yourusername>\\.qgis\\python\\plugins\\inasafe`"
-msgstr ""
-"Setelah melakukan ekstraksi plugin, plugin tersebut seharusnya tersedia "
-"pada :file:`C:\\Users\\<usernameanda>\\.qgis\\python\\plugins\\inasafe`"
+"After extracting the plugin, it should be available as "
+":file:`C:\\Users\\<yourusername>\\.qgis\\python\\plugins\\inasafe`"
+msgstr "Setelah melakukan ekstraksi plugin, plugin tersebut seharusnya tersedia pada :file:`C:\\Users\\<usernameanda>\\.qgis\\python\\plugins\\inasafe`"
 
-# b2ea4e1da2464bb28e7aa5a1e914c774
+# 8df5b15e05d740eea43371a50d455e99
 #: ../../source/tutorial-docs/tutorial.rst:100
 msgid ""
-"Mac and Linux users need to follow the same procedure but instead the plugin "
-"directory will be under your :file:`$HOME` directory."
-msgstr ""
-"Pengguna Mac dan Linux perlu mengikuti prosedur yang sama tetapi direktori "
-"plugin akan berada di bawah directori :file:`$HOME`."
+"Mac and Linux users need to follow the same procedure but instead the plugin"
+" directory will be under your :file:`$HOME` directory."
+msgstr "Pengguna Mac dan Linux perlu mengikuti prosedur yang sama tetapi direktori plugin akan berada di bawah directori :file:`$HOME`."
 
-# de6b7aaa47944b68bb3bb108800d45a9
+# bfce84973fde480c88f121f9b38e05f4
 #: ../../source/tutorial-docs/tutorial.rst:104
 msgid "Enable InaSAFE Plugin in QGIS"
 msgstr "Mengaktifkan Plugin InaSAFE di QGIS"
 
-# 5eecd0447cb540708c5c894641ed251a
+# f0a926a8cfed47d8bf6b5bbb1ba928bc
 #: ../../source/tutorial-docs/tutorial.rst:106
 msgid ""
-"Once the plugin is extracted in QGIS plugin directory, start QGIS and enable "
-"it from the plugin manager.  To do this, open **Manage Plugins** from the "
+"Once the plugin is extracted in QGIS plugin directory, start QGIS and enable"
+" it from the plugin manager.  To do this, open **Manage Plugins** from the "
 "**Plugins** menu on the menu toolbar."
-msgstr ""
-"Begitu plugin diekstraksi pada direktori plugin QGIS, mulai QGIS dan "
-"aktifkan dari plugin manager. Untuk melakukan hal ini, buka **Manage "
-"Plugins** dari menu **Plugins** pada toolbar menu."
+msgstr "Begitu plugin diekstraksi pada direktori plugin QGIS, mulai QGIS dan aktifkan dari plugin manager. Untuk melakukan hal ini, buka **Manage Plugins** dari menu **Plugins** pada toolbar menu."
 
-# a605be4a632c4abf8aa4958df3306de9
+# 991c5ac38d334889b2cd6504b0aa20e1
 #: ../../source/tutorial-docs/tutorial.rst:113
 msgid ""
 "A pop-up window that lists all available plugins in your current QGIS "
 "project will appear. Type **InaSAFE** in the filter box. You should see the "
 "InaSAFE plugin appear in the list. Now **tick the checkbox** next to it to "
 "enable the plugin."
-msgstr ""
-"Sebuah jendela *pop-up* yang berisi daftar semua plugin yang tersedia pada "
-"proyek QGIS Anda saat ini akan muncul. Ketik **InaSAFE** di kotak filter. "
-"Anda akan melihat plugin InaSAFE muncul dalam daftar. Sekarang centang pada "
-"checkbox di sebelahnya untuk mengaktifkan plugin tersebut."
+msgstr "Sebuah jendela *pop-up* yang berisi daftar semua plugin yang tersedia pada proyek QGIS Anda saat ini akan muncul. Ketik **InaSAFE** di kotak filter. Anda akan melihat plugin InaSAFE muncul dalam daftar. Sekarang centang pada checkbox di sebelahnya untuk mengaktifkan plugin tersebut."
 
-# 6808feef9de24462b0f6fbd3c4c6c5f8
+# 4ea1e55871284e84a065cedfe1c8ab53
 #: ../../source/tutorial-docs/tutorial.rst:121
 msgid "The plugin now will be added to your **Plugins** menu."
 msgstr "Plugin InaSAFE sekarang akan ditambahkan pada menu **Plugins.**"
 
-# 49c674dfab83408297324f1d3202908f
+# cf963776dc564640a86ff3c8248d399f
 #: ../../source/tutorial-docs/tutorial.rst:123
 msgid ""
-"Now you will need to add the INASAFE panel on your QGIS interface. For that, "
-"select **Toggle Inasafe Dock** in the INASAFE plugin scroll list."
-msgstr ""
-"Sekarang Anda harus menambahkan panel INASAFE pada penghubung QGIS. Untuk "
-"itu, pilih **Toggle Inasafe Dock** pada scroll list plugin INASAFE ."
+"Now you will need to add the INASAFE panel on your QGIS interface. For that,"
+" select **Toggle Inasafe Dock** in the INASAFE plugin scroll list."
+msgstr "Sekarang Anda harus menambahkan panel INASAFE pada penghubung QGIS. Untuk itu, pilih **Toggle Inasafe Dock** pada scroll list plugin INASAFE ."
 
-# 04f44e60d5664246aab5b5e589919109
+# 3a04dc478f334ecfaad6c8d08c4324ea
 #: ../../source/tutorial-docs/tutorial.rst:129
 msgid ""
 "The InaSAFE dock panel will then appear on the left of your QGIS window."
-msgstr ""
-"Panel dock InaSAFE akan muncul kemudian pada sebelah kiri jendela QGIS Anda."
+msgstr "Panel dock InaSAFE akan muncul kemudian pada sebelah kiri jendela QGIS Anda."
 
-# 4aa3e03f045d404cb13aa31da27dac95
+# 701e51a4c56d4be6aa7122a125125fe4
 #: ../../source/tutorial-docs/tutorial.rst:134
 msgid ""
 "It is the main way to interact with the tools that are provided in InaSAFE."
-msgstr ""
-"Panel ini merupakan cara yang paling pokok untuk berinteraksi dengan tool-"
-"tool yang tersedia dalam InaSAFE"
+msgstr "Panel ini merupakan cara yang paling pokok untuk berinteraksi dengan tool-tool yang tersedia dalam InaSAFE"
 
-# 94bcb885608d47a2809592972a3d03b4
+# 2cf0844f00bf4dcbb446d022acc6bc46
 #: ../../source/tutorial-docs/tutorial.rst:136
 msgid "Also, an InaSAFE icon will appear on the QGIS toolbar."
 msgstr "Juga, sebuah ikon InaSAFE akan muncul pada toolbar QGIS."
 
-# c22241b5b1a149518f29bb138f6990b6
+# b95a7d64840545f1871af0d70abf8b48
 #: ../../source/tutorial-docs/tutorial.rst:142
 msgid "Using InaSAFE"
 msgstr "Menggunakan InaSAFE"
 
-# bc35c402761d4b44b56316ea9fedcd03
+# 716c9a8dfb6b4534aaa4a0de3a66c4bc
 #: ../../source/tutorial-docs/tutorial.rst:145
 msgid "InaSAFE Options"
 msgstr "Opsi-opsi InaSAFE"
 
-# 61d8be623704432c8cb7bbe07e146418
+# 76837e1ef87646a9ae36a6558bf9f72f
 #: ../../source/tutorial-docs/tutorial.rst:147
 msgid ""
 "The InaSAFE plugin provides an options dialog which allows you to define "
@@ -347,48 +291,35 @@ msgid ""
 "be launched by clicking on the InaSAFE plugin toolbar’s options icon (as "
 "shown below) or from QGIS :menuselection:`Plugins --> InaSAFE --> InaSAFE "
 "Options`."
-msgstr ""
-"Plugin InaSAFE menyediakan kotak dialog pilihan yang memungkinkan Anda untuk "
-"menentukan berbagai opsi yang berhubungan dengan bagaimana InaSAFE "
-"berfungsi. Kotak dialog pilihan ini dapat dijalankan dengan mengklik ikon "
-"pilihan pada toolbar InaSAFE (seperti gambar yang ditunjukkan di bawah) atau "
-"dari QGIS :menuselection:`Plugins --> InaSAFE --> InaSAFE Options`."
+msgstr "Plugin InaSAFE menyediakan kotak dialog pilihan yang memungkinkan Anda untuk menentukan berbagai opsi yang berhubungan dengan bagaimana InaSAFE berfungsi. Kotak dialog pilihan ini dapat dijalankan dengan mengklik ikon pilihan pada toolbar InaSAFE (seperti gambar yang ditunjukkan di bawah) atau dari QGIS :menuselection:`Plugins --> InaSAFE --> InaSAFE Options`."
 
-# 67284f85af21483794eac04437cb4129
+# 4b54617d927a4e4d9953c5511d5c328b
 #: ../../source/tutorial-docs/tutorial.rst:155
 msgid "Then the dialog will appear, looking something like this:"
-msgstr ""
-"Kemudian kotak dialog akan muncul, dan memperlihatkan gambar seperti di "
-"bawah ini:"
+msgstr "Kemudian kotak dialog akan muncul, dan memperlihatkan gambar seperti di bawah ini:"
 
-# be34549e87e049aa907569fd6810d1ff
+# ed8ee043066a4743b9ddfd98fc80786f
 #: ../../source/tutorial-docs/tutorial.rst:160
 msgid ""
 "You can click on the Help button at any time and it will open the help "
 "documentation browser to this page."
-msgstr ""
-"Anda dapat mengklik tombol Help kapan saja dan ia akan membuka dokumentasi "
-"bantuan ke halaman ini."
+msgstr "Anda dapat mengklik tombol Help kapan saja dan ia akan membuka dokumentasi bantuan ke halaman ini."
 
-# e9ac992a2a9a47669869751d9cb60a34
+# e16ef44f9e8a4058a812478308434226
 #: ../../source/tutorial-docs/tutorial.rst:163
 msgid "The following options are available on the Options Dialog:"
 msgstr "Pilihan-pilhan di bawah ini tersedia pada kotak dialog *Options*:"
 
-# d4f9f28fe1434073b219f919d88b506d
+# 3d34a773c7b74418ac561f5eec59b1f9
 #: ../../source/tutorial-docs/tutorial.rst:165
 msgid ""
-"**Only show visible layers in the InaSAFE dock:** This option will determine "
-"whether (when unchecked) all hazard, exposure and impact layers should be "
+"**Only show visible layers in the InaSAFE dock:** This option will determine"
+" whether (when unchecked) all hazard, exposure and impact layers should be "
 "listed in the InaSAFE dock’s combo boxes; or (when checked) only visible "
 "layers."
-msgstr ""
-"**Only show visible layers in the InaSAFE dock:** Pilihan ini menentukan "
-"apakah (bila tidak dicentang) semua layer bahaya, layer ekposure dan layer "
-"dampak akan muncul pada combo-box InaSAFE, atau (ketika dicentang) hanya "
-"layer yang terlihat pada peta saja yang akan muncul."
+msgstr "**Only show visible layers in the InaSAFE dock:** Pilihan ini menentukan apakah (bila tidak dicentang) semua layer bahaya, layer ekposure dan layer dampak akan muncul pada combo-box InaSAFE, atau (ketika dicentang) hanya layer yang terlihat pada peta saja yang akan muncul."
 
-# 6d091df2b98444d7a6c59789017adbdb
+# 14fb25cec432491ea93eb8b621daa438
 #: ../../source/tutorial-docs/tutorial.rst:169
 msgid ""
 "**Set QGIS layer name from ‘title’ in keywords:** This option will (when "
@@ -396,606 +327,457 @@ msgid ""
 "keyword in the layer’s keywords file. If the layer has no ‘title’ in its "
 "keywords, or it has no keywords at all, the normal QGIS behavior for naming "
 "layers will apply."
-msgstr ""
-"**Set QGIS layer name from  ‘title’ in keywords:** Pilihan ini akan (saat "
-"diaktifkan) mengakibatkan QGIS memberi nama layer-layer yang ada pada "
-"*Layers tree* menggunakan kata kunci  ‘title’ (judul) pada file kata kunci "
-"layer tersebut. Jika layer ini tidak memiliki  ‘title’ dalam kata kunci, "
-"atau tidak memiliki kata kunci sama sekali, penamaan layer yang normal pada "
-"QGIS akan berlaku."
+msgstr "**Set QGIS layer name from  ‘title’ in keywords:** Pilihan ini akan (saat diaktifkan) mengakibatkan QGIS memberi nama layer-layer yang ada pada *Layers tree* menggunakan kata kunci  ‘title’ (judul) pada file kata kunci layer tersebut. Jika layer ini tidak memiliki  ‘title’ dalam kata kunci, atau tidak memiliki kata kunci sama sekali, penamaan layer yang normal pada QGIS akan berlaku."
 
-# dddfff7ef7384b299bb1c3cd0cbf48aa
+# 5b18b80b8d94460aa95991bd9343104b
 #: ../../source/tutorial-docs/tutorial.rst:174
 msgid ""
 "**Zoom to impact layer on scenario estimate completion:** This option will "
-"cause the map view to zoom in/out in order to completely contain the InaSAFE "
-"impact scenario map output when an analysis is completed."
-msgstr ""
-"**Zoom to impact layer on scenario estimate completion:** Pilihan ini akan "
-"menyebabkan Pilihan ini akan menyebabkan tampilan peta membesar/mengecil "
-"untuk sepenuhnya memuat peta keluaran dari skenario dampak InaSAFE pada saat "
-"analisis selesai."
+"cause the map view to zoom in/out in order to completely contain the InaSAFE"
+" impact scenario map output when an analysis is completed."
+msgstr "**Zoom to impact layer on scenario estimate completion:** Pilihan ini akan menyebabkan Pilihan ini akan menyebabkan tampilan peta membesar/mengecil untuk sepenuhnya memuat peta keluaran dari skenario dampak InaSAFE pada saat analisis selesai."
 
-# f7b1d11bbb3a4eb295e8238027b1f9b3
+# df4a7eaf89b24381b6ac05309a443d52
 #: ../../source/tutorial-docs/tutorial.rst:177
 msgid ""
 "**Hide exposure layer on scenario estimate completion:** This option will "
 "cause QGIS to turn off the exposure layer used when InaSAFE completes the "
 "current analysis. You can re-enable the layer visibility again by checking "
 "its checkbox in the legend."
-msgstr ""
-"**Hide exposure layer on scenario estimate completion:** Pilihan ini akan "
-"menyebabkan QGIS mematikan layer eksposure (dampak) yang digunakan pada saat "
-"InaSAFE selesai menganalisis. Anda dapat mengaktifkan kembali kenampakan "
-"layer dengan mencentang checkbox pada legenda."
+msgstr "**Hide exposure layer on scenario estimate completion:** Pilihan ini akan menyebabkan QGIS mematikan layer eksposure (dampak) yang digunakan pada saat InaSAFE selesai menganalisis. Anda dapat mengaktifkan kembali kenampakan layer dengan mencentang checkbox pada legenda."
 
-# 47aad334c41140a4842150a8741d350b
+# 6678b2e07c024944bb53637525a0e325
 #: ../../source/tutorial-docs/tutorial.rst:181
 msgid ""
 "**Keyword cache for remote datasources:** This option is used to determine "
 "where keywords are stored for datasets where it is not possible to write "
 "them into a .keywords file. See Keywords System for more information on the "
 "keywords system."
-msgstr ""
-"**Keyword cache for remote datasources:** Pilihan ini digunakan untuk "
-"menentukan di mana kata kunci (keywords) disimpan untuk dataset, dimana "
-"tidak mungkin untuk menulis kata kunci tersebut ke dalam file *.keywords. "
-"Lihat *Keywords System* untuk informasi lebih lanjut."
+msgstr "**Keyword cache for remote datasources:** Pilihan ini digunakan untuk menentukan di mana kata kunci (keywords) disimpan untuk dataset, dimana tidak mungkin untuk menulis kata kunci tersebut ke dalam file *.keywords. Lihat *Keywords System* untuk informasi lebih lanjut."
 
-# eefc6d4a10d644baa98e7816909bfa78
+# 11f070b768be41cb8a4e8df004935792
 #: ../../source/tutorial-docs/tutorial.rst:185
 msgid ""
 "**Run analysis in separate thread (experimental):** This option cause the "
 "analysis to be run in its own thread."
-msgstr ""
-"**Run analysis in separate thread (experimental):** Pilihan ini akan "
-"mengakibatkan analisis dijalankan pada masing-masing threadnya sendiri."
+msgstr "**Run analysis in separate thread (experimental):** Pilihan ini akan mengakibatkan analisis dijalankan pada masing-masing threadnya sendiri."
 
-# e461ef9c55b94b96bd726f0ca15a86f8
+# efd12e14c6b0473199f7a72e41df6685
 #: ../../source/tutorial-docs/tutorial.rst:188
 msgid "**WARNING!**"
 msgstr "**PERINGATAN!**"
 
-# d3d4d0cb0e0f44bbbf6b58ff4beb03d4
+# 6525e84b912d432a9cfe691ab2cc87ba
 #: ../../source/tutorial-docs/tutorial.rst:190
 msgid ""
 "It is not recommended to use the threaded implementation at this time. For "
 "this reason it is disabled by default."
-msgstr ""
-"Tidak disarankan menggunakan implementasi threaded saat ini. Untuk alasan "
-"ini, implementasi ini dinonaktifkan secara default."
+msgstr "Tidak disarankan menggunakan implementasi threaded saat ini. Untuk alasan ini, implementasi ini dinonaktifkan secara default."
 
-# bcb64ab6700a45669ac8f1bed96f9bfa
+# 35bdb0972a8e49d0832abb82789959a2
 #: ../../source/tutorial-docs/tutorial.rst:192
 msgid ""
 "Pressing Cancel at any time will close the options dialog and any changes "
 "made will not be applied."
-msgstr ""
-"Menekan tombol *Cancel* (Batal) setiap saat akan menutup kotak dialog "
-"pilihan dan setiap perubahan yang dilakukan tidak akan diterapkan."
+msgstr "Menekan tombol *Cancel* (Batal) setiap saat akan menutup kotak dialog pilihan dan setiap perubahan yang dilakukan tidak akan diterapkan."
 
-# 7e42643ee8eb483b96e6ff93509db8d2
+# 4f84c1ef60474995b63a07961f7efd6f
 #: ../../source/tutorial-docs/tutorial.rst:194
 msgid ""
 "Pressing Ok at any time will close the options dialog and any changes made "
 "will be applied immediately."
-msgstr ""
-"Menekan tombol OK setiap saat akan menutup kotak dialog pilihan dan setiap "
-"perubahan yang dibuat akan diterapkan segera."
+msgstr "Menekan tombol OK setiap saat akan menutup kotak dialog pilihan dan setiap perubahan yang dibuat akan diterapkan segera."
 
-# 91e675fcdb5448f38c0993699db25b1b
+# 9d84dbbc560343e1893cdcbdc64edc63
 #: ../../source/tutorial-docs/tutorial.rst:196
 msgid ""
 "The exact button order shown on this dialog may differ depending on your "
 "operating system or desktop environment."
-msgstr ""
-"Urutan tombol yang tepat yang ditampilkan pada kotak dialog ini mungkin "
-"berbeda tergantung pada sistem operasi atau lingkungan desktop Anda."
+msgstr "Urutan tombol yang tepat yang ditampilkan pada kotak dialog ini mungkin berbeda tergantung pada sistem operasi atau lingkungan desktop Anda."
 
-# b14127bbb19b49839291d8bda7b8842b
+# e04dd7f6f58442789e1494e302098fd5
 #: ../../source/tutorial-docs/tutorial.rst:200
 msgid "Adjust Projection"
 msgstr "Menyesuaikan Proyeksi"
 
-# 8917a46d1a3e4c6fba3892a58af4abb6
+# 1b7c37c15dd04eaa99b8f9d8ca5eac33
 #: ../../source/tutorial-docs/tutorial.rst:202
 msgid ""
 "Before continuing we need to turn one more QGIS functionality on, to enable "
 "all data layers display in one projection (no matter what their projection)."
-msgstr ""
-"Sebelum melanjutkan ke tahap berikutnya, kita harus mengaktifkan satu lagi "
-"fungsi pada QGIS, untuk memungkinkan semua layer data ditampilkan dalam satu "
-"bidang proyeksi (tanpa melihat proyeksi apa yang dipakai)."
+msgstr "Sebelum melanjutkan ke tahap berikutnya, kita harus mengaktifkan satu lagi fungsi pada QGIS, untuk memungkinkan semua layer data ditampilkan dalam satu bidang proyeksi (tanpa melihat proyeksi apa yang dipakai)."
 
-# 64de9e4fcf7d461fa5881da3a03480c2
+# 718816cd164c4739b6da556a2ba0657c
 #: ../../source/tutorial-docs/tutorial.rst:205
 msgid "For that, go to QGIS **Settings/Project Properties.**"
 msgstr "Untuk itu, arahkan ke QGIS **Settings/Project Properties.**"
 
-# 8fa95f1b1a3a41848b994b7d5eaad96c
+# d332b9d78e9a4a36b0f766dd066bc5a4
 #: ../../source/tutorial-docs/tutorial.rst:210
 msgid ""
 "Click on **Coordinate Reference System (CRS)** tab in the new dialog box. "
 "Tick the **Enable ‘on the fly’ CRS transformation** box. And then **OK.**"
-msgstr ""
-"Klik pada tab **Coordinate Reference System (CRS)** dalam kotak dialog baru. "
-"Centang kotak **Enable ‘on the fly’  CRS transformation,** dan kemudian "
-"tekan **OK.**"
+msgstr "Klik pada tab **Coordinate Reference System (CRS)** dalam kotak dialog baru. Centang kotak **Enable ‘on the fly’  CRS transformation,** dan kemudian tekan **OK.**"
 
-# 3076166b438d4e8896a3194dc6763490
+# a2cac58c1665438a826f6f52b76517d7
 #: ../../source/tutorial-docs/tutorial.rst:216
 msgid ""
-"Now, any data layer that we will integrate into our project will be adjusted "
-"on the same coordinate."
-msgstr ""
-"Sekarang, setiap data yang akan kita integrasikan ke dalam proyek akan "
-"disesuaikan dalam proyeksi yang sama."
+"Now, any data layer that we will integrate into our project will be adjusted"
+" on the same coordinate."
+msgstr "Sekarang, setiap data yang akan kita integrasikan ke dalam proyek akan disesuaikan dalam proyeksi yang sama."
 
-# 116cbdfc47554eedb77aed2abc139e03
+# d798782ce2574f62b3936cc973972880
 #: ../../source/tutorial-docs/tutorial.rst:220
 msgid "Exploring InaSAFE Plugin"
 msgstr "Menjelajahi Plugin InaSAFE"
 
-# 7ba6395766a04220857032cd0308b69b
+# 3e98303fa2a64bee9918c607bbe01ef7
 #: ../../source/tutorial-docs/tutorial.rst:222
 msgid ""
-"You can drag and drop the dock panel to reposition it in the user interface. "
-"For example, dragging the panel towards the right margin of the QGIS "
+"You can drag and drop the dock panel to reposition it in the user interface."
+" For example, dragging the panel towards the right margin of the QGIS "
 "application will dock it to the right side of the screen."
-msgstr ""
-"Anda dapat menyeret dan meletakkan panel dock untuk mengatur ulang posisinya "
-"pada user interface. Misalnya, Dengan menyeret panel ke margin kanan pada "
-"aplikasi QGIS akan membuat posisi dock berada pada sisi kanan layar."
+msgstr "Anda dapat menyeret dan meletakkan panel dock untuk mengatur ulang posisinya pada user interface. Misalnya, Dengan menyeret panel ke margin kanan pada aplikasi QGIS akan membuat posisi dock berada pada sisi kanan layar."
 
-# d3eef582194d43c5ad47883a1e71dd47
+# 8886318b67824109a8a136bd6dba6f9b
 #: ../../source/tutorial-docs/tutorial.rst:226
 msgid ""
 "Depending on your preference you could show the **Layer** and **InaSAFE** "
 "panel at the same time."
-msgstr ""
-"Tergantung pada tampilan Anda, Anda dapat menampilkan panel **Layer** dan "
-"**InaSAFE** pada waktu yang bersamaan."
+msgstr "Tergantung pada tampilan Anda, Anda dapat menampilkan panel **Layer** dan **InaSAFE** pada waktu yang bersamaan."
 
-# f40542bed9794ba6a4c76c2e6f655d97
+# 00286fd53b3b45c0940c39e3cecfa780
 #: ../../source/tutorial-docs/tutorial.rst:232
 msgid "Or have the **Layer** and **InaSAFE** panels in a tab systems."
-msgstr ""
-"Atau menampilkan panel **Layer** dan panel **InaSAFE** pada sebuah sistem "
-"tab."
+msgstr "Atau menampilkan panel **Layer** dan panel **InaSAFE** pada sebuah sistem tab."
 
-# 7de35ccba02541f38dcb5203932e613f
+# 66e6dd867f814a6584dd1097e96ed4d0
 #: ../../source/tutorial-docs/tutorial.rst:237
 msgid "Or for more convenience, having them on top of each other."
-msgstr ""
-"Atau agar lebih nyaman, buat kedua panel tersebut bertumpuk satu sama lain."
+msgstr "Atau agar lebih nyaman, buat kedua panel tersebut bertumpuk satu sama lain."
 
-# 1c1bafa241734f47b30ab87ff7f3d7d3
+# ecf8d62243d34f698295a817d22eb40b
 #: ../../source/tutorial-docs/tutorial.rst:242
 msgid ""
-"The INASAFE panel contains 3 sections: **Questions, Results** and **Buttons."
-"** We will explore those sections one by one."
-msgstr ""
-"Panel InaSAFE terdiri dari tiga bagian yaitu: **Questions, Results** and "
-"**Buttons.** Kita akan mengeksplor ketiga bagian tersebut satu per satu."
+"The INASAFE panel contains 3 sections: **Questions, Results** and "
+"**Buttons.** We will explore those sections one by one."
+msgstr "Panel InaSAFE terdiri dari tiga bagian yaitu: **Questions, Results** and **Buttons.** Kita akan mengeksplor ketiga bagian tersebut satu per satu."
 
-# e84b8247c2b5465285e1e2032def67c1
+# 603a910478a54341ab1a936ccaca37a6
 #: ../../source/tutorial-docs/tutorial.rst:246
 msgid "The Questions Section"
 msgstr "Bagian Pertanyaan"
 
-# 660dfc5d67ec4201b163d1b968f8fd47
+# 0e5a0d09d9de4c599f3e6bf6dba803f9
 #: ../../source/tutorial-docs/tutorial.rst:248
 msgid ""
 "The intention of InaSAFE is to make it really simple and easy to perform "
 "your impact analysis. The Questions area provides a simple way for you to "
 "formulate what it is you want to find out? All questions are formulated in "
 "the form:"
-msgstr ""
-"Tujuan dari InaSAFE adalah untuk membuat analisis dampak Anda sangat "
-"sederhana dan mudah untuk dilakukan. Bagian Pertanyaan menyediakan cara yang "
-"mudah bagi Anda untuk merumuskan, apa itu yang Anda ingin cari? Semua "
-"pertanyaan yang ada dirumuskan dalam bentuk sebagai berikut:"
+msgstr "Tujuan dari InaSAFE adalah untuk membuat analisis dampak Anda sangat sederhana dan mudah untuk dilakukan. Bagian Pertanyaan menyediakan cara yang mudah bagi Anda untuk merumuskan, apa itu yang Anda ingin cari? Semua pertanyaan yang ada dirumuskan dalam bentuk sebagai berikut:"
 
-# c8567df8f12b4ee2834d114a5f0f2a70
+# 8d1ac91e8c87476d93788f670f94f239
 #: ../../source/tutorial-docs/tutorial.rst:252
 msgid ""
-"*In the event of* **[hazard]** *how many* **[exposure]** *might* **[impact]."
-"**"
-msgstr ""
-"*Apabila terjadi* **[hazard]** *berapa banyak* **[exposure]** *yang mungkin* "
+"*In the event of* **[hazard]** *how many* **[exposure]** *might* "
 "**[impact].**"
+msgstr "*Apabila terjadi* **[hazard]** *berapa banyak* **[exposure]** *yang mungkin* **[impact].**"
 
-# f01a2df3f06745a0ba8cb932904d7564
+# f20a6a16ce704319a9e15bb89a5d2a79
 #: ../../source/tutorial-docs/tutorial.rst:254
 msgid ""
 "For example: “In the event of a **flood** how many **buildings** might be "
 "**closed**?”"
-msgstr ""
-"Misalnya: “Pada saat kejadian **banjir** berapa banyak **bangunan** yang "
-"mungkin **ditutup**?”"
+msgstr "Misalnya: “Pada saat kejadian **banjir** berapa banyak **bangunan** yang mungkin **ditutup**?”"
 
-# bec8b6b65c3b44efa7f5dd479c991ce8
+# 1e2006eb66f6469598c6fc664ee7c92b
 #: ../../source/tutorial-docs/tutorial.rst:257
 msgid "Let’s practice this exercise."
 msgstr "Mari kita mempraktekan latihan ini."
 
-# f05423433768424f8ed931dcd505e103
+# cb0a032531134565b930eb880596f075
 #: ../../source/tutorial-docs/tutorial.rst:259
 msgid ""
 "In order to answer such question, InaSAFE developers have built a number of "
 "impact functions that cover risk scenarios such as flood, tsunami, volcanic "
 "ash fall, earthquake and so on. In our case, we will use the flood impact "
 "function."
-msgstr ""
-"Untuk menjawab pertanyaan semacam itu, Pengembang InaSAFE telah membangun "
-"sejumlah fungsi dampak yang mencakup skenario risiko seperti banjir, "
-"tsunami, abu vulkanik, gempa dan sebagainya. Pada kasus kita, kami akan "
-"menggunakan fungsi dampak banjir."
+msgstr "Untuk menjawab pertanyaan semacam itu, Pengembang InaSAFE telah membangun sejumlah fungsi dampak yang mencakup skenario risiko seperti banjir, tsunami, abu vulkanik, gempa dan sebagainya. Pada kasus kita, kami akan menggunakan fungsi dampak banjir."
 
-# dcce3038210943589b79ac77f109b836
+# 25f7d39d98dc46bc8a584dcbd4bb8f32
 #: ../../source/tutorial-docs/tutorial.rst:263
 msgid ""
-"To answer our question “In the event of a flood, how many buildings might be "
-"closed”, we need to complete all the areas in the Questions section: hazard, "
-"exposure, impact."
-msgstr ""
-"Untuk menjawab pertanyaan kita “Pada saat kejadian banjir, berapa banyak "
-"bangunan yang mungkin ditutup?”, Kita perlu melengkapi semua bagian dalam "
-"pertanyaan ini: Bahaya, paparan (exposure) dan dampak."
+"To answer our question “In the event of a flood, how many buildings might be"
+" closed”, we need to complete all the areas in the Questions section: "
+"hazard, exposure, impact."
+msgstr "Untuk menjawab pertanyaan kita “Pada saat kejadian banjir, berapa banyak bangunan yang mungkin ditutup?”, Kita perlu melengkapi semua bagian dalam pertanyaan ini: Bahaya, paparan (exposure) dan dampak."
 
-# e8b01690815d47a9849199b5aac35004
+# 9691d6802ddb422aa4767717cdcfd022
 #: ../../source/tutorial-docs/tutorial.rst:268
 msgid "Hazard"
 msgstr "Bahaya"
 
-# f0994ee60e4249358a0f15293ad45532
+# a7a0896084174b5b80928b98d9a2ad84
 #: ../../source/tutorial-docs/tutorial.rst:270
 msgid "Hazard is the physical event that creates the risk."
 msgstr "Bahaya adalah peristiwa fisik yang menyebabkan risiko."
 
-# 961eeaf52daa4c19ac84b624ab4f46e7
+# 7decff4afe634f5aa2a531903826e7ba
 #: ../../source/tutorial-docs/tutorial.rst:272
 msgid ""
-"A hazard (in **the event of**) may be represented as a raster layer or as an "
-"area (polygon). For example:"
-msgstr ""
-"Sebuah bahaya (pada **saat kejadian**) dapat direpresentasikan sebagai "
-"sebuah layer raster atau area (poligon). Sebagai contoh:"
+"A hazard (in **the event of**) may be represented as a raster layer or as an"
+" area (polygon). For example:"
+msgstr "Sebuah bahaya (pada **saat kejadian**) dapat direpresentasikan sebagai sebuah layer raster atau area (poligon). Sebagai contoh:"
 
-# ad01b466b2e244f0ae820299ffc9927d
+# c50d8eb69f9e45f9bba888bdaf720322
 #: ../../source/tutorial-docs/tutorial.rst:275
 msgid ""
 "**Raster:** where each pixel in the raster represents the current flood "
 "depth following an inundation event."
-msgstr ""
-"**Raster:** dimana setiap pixel dalam raster mewakili kedalaman banjir pada "
-"saat terjadinya peristiwa genangan."
+msgstr "**Raster:** dimana setiap pixel dalam raster mewakili kedalaman banjir pada saat terjadinya peristiwa genangan."
 
-# 1733d10a50124ba19d1b3d4db8ec905d
+# ab202dc0466a49e2b5a780a5698d6f46
 #: ../../source/tutorial-docs/tutorial.rst:277
 msgid ""
 "**Polygon:** where it has been identified that flood has existed in that "
 "area (this will not have depth related information)"
-msgstr ""
-"**Polygon:** dimana telah diidentifikasi bahwa banjir terjadi di daerah "
-"tersebut (jenis ini tidak memiliki informasi terkait kedalaman)"
+msgstr "**Polygon:** dimana telah diidentifikasi bahwa banjir terjadi di daerah tersebut (jenis ini tidak memiliki informasi terkait kedalaman)"
 
-# bb4cc0c9290f4d87a4cb547cbed7f69b
+# af3bb66612b6478da58715fd1aca1ac7
 #: ../../source/tutorial-docs/tutorial.rst:280
 msgid ""
-"For our exercise, we will use an example from Jakarta, Indonesia. Those data "
-"are already installed on your computer at :file:`C:\\Users\\<your username>"
-"\\desktop\\inasafe_data`. If they are not, you can load the data on your "
-"desktop using the thumb drive distributed with this material."
-msgstr ""
-"Untuk latihan kita, kita akan menggunakan sebuah contoh dari Jakarta, "
-"Indonesia. Data-data tersebut sudah terinstal pada komputer Anda di :file:`C:"
-"\\Users\\<username anda>\\desktop\\inasafe_data`. Jika tidak ada, Anda dapat "
-"memuatnya dari komputer Anda dengan menggunakan USB drive yang terdistribusi "
-"bersama materi ini."
+"For our exercise, we will use an example from Jakarta, Indonesia. Those data"
+" are already installed on your computer at :file:`C:\\Users\\<your "
+"username>\\desktop\\inasafe_data`. If they are not, you can load the data on"
+" your desktop using the thumb drive distributed with this material."
+msgstr "Untuk latihan kita, kita akan menggunakan sebuah contoh dari Jakarta, Indonesia. Data-data tersebut sudah terinstal pada komputer Anda di :file:`C:\\Users\\<username anda>\\desktop\\inasafe_data`. Jika tidak ada, Anda dapat memuatnya dari komputer Anda dengan menggunakan USB drive yang terdistribusi bersama materi ini."
 
-# 9946c3564d7e4feb874fd874c70fdb0d
+# a562b406b2ed44b49d3e0fac3846c340
 #: ../../source/tutorial-docs/tutorial.rst:285
 msgid ""
 "The inasafe_data package contains various geographic data that we will use "
 "along the workshop."
-msgstr ""
-"Paket inasafe_data berisi berbagai data geografis yang akan kita gunakan "
-"sepanjang workshop."
+msgstr "Paket inasafe_data berisi berbagai data geografis yang akan kita gunakan sepanjang workshop."
 
-# 2b1b9faaee0044afb5a28cbc9d178079
+# d636b655bc3244e8b2e9400eb96dd142
 #: ../../source/tutorial-docs/tutorial.rst:288
 msgid ""
 "Now, we will add the hazard layer in the INASAFE dock. For that, we need to "
-"add the hazard layer from QGIS first. The flood layer is in a raster format, "
-"so we will go to the QGIS menu, click on **Layer,** and select **Add Raster "
-"Layer.**"
-msgstr ""
-"Sekarang, kita akan menambahkan layer hazard ke dalam dock INASAFE. Untuk "
-"itu, kita perlu menambahkan layer hazard pada QGIS terlebih dahulu. Layer "
-"flood ada dalam bentuk format raster, sehingga kita akan menuju ke menu "
-"QGIS, kemudian klik pada **Layer** dan pilih **Add Raster Layer.**"
+"add the hazard layer from QGIS first. The flood layer is in a raster format,"
+" so we will go to the QGIS menu, click on **Layer,** and select **Add Raster"
+" Layer.**"
+msgstr "Sekarang, kita akan menambahkan layer hazard ke dalam dock INASAFE. Untuk itu, kita perlu menambahkan layer hazard pada QGIS terlebih dahulu. Layer flood ada dalam bentuk format raster, sehingga kita akan menuju ke menu QGIS, kemudian klik pada **Layer** dan pilih **Add Raster Layer.**"
 
-# 3927a392b4a6417ea8678517839bb917
+# 8fa507b94e82464580f4fd091bfb44f9
 #: ../../source/tutorial-docs/tutorial.rst:295
 msgid ""
 "Once you click on that, a pop-up window will appear where you will have to "
 "fetch your flood data.  Please select the "
-"**“Flood_Design_Depth_Jakarta_geographic.asc”** file from the hazard folder. "
-"This is a raster data (in ASCII format) that represents flooding depth in "
-"the Jakarta province. The display name is **Jakarta 2007 flood with dredging."
-"**"
-msgstr ""
-"Begitu Anda mengkliknya, sebuah jendela pop-up akan muncul dimana Anda akan "
-"mengambil data banjir Anda. Pilih file **?"
-"Flood_Design_Depth_Jakarta_geographic.asc?** dari folder hazard. Data ini "
-"adalah data raster (dalam format ASCII) yang mewakili kedalaman banjir di "
-"Provinsi DKI Jakarta. Nama yang tampil adalah **Jakarta 2007 flood with "
+"**“Flood_Design_Depth_Jakarta_geographic.asc”** file from the hazard folder."
+" This is a raster data (in ASCII format) that represents flooding depth in "
+"the Jakarta province. The display name is **Jakarta 2007 flood with "
 "dredging.**"
+msgstr "Begitu Anda mengkliknya, sebuah jendela pop-up akan muncul dimana Anda akan mengambil data banjir Anda. Pilih file **?Flood_Design_Depth_Jakarta_geographic.asc?** dari folder hazard. Data ini adalah data raster (dalam format ASCII) yang mewakili kedalaman banjir di Provinsi DKI Jakarta. Nama yang tampil adalah **Jakarta 2007 flood with dredging.**"
 
-# be5d81d7b6bf46a7ac401b2d88cc939a
+# 70df48090b324b6ba397daf9c9fe81a4
 #: ../../source/tutorial-docs/tutorial.rst:301
 msgid ""
-"You will notice that the layer filled automatically the “hazard” area in the "
-"InaSAFE dock panel. There are two important things to note when **uploading "
-"data** in InaSAFE."
-msgstr ""
-"Anda akan melihat bahwa layer tersebut mengisi area “hazard” secara otomatis "
-"pada panel dock InaSAFE. Ada dua hal penting yang perlu diingat ketika "
-"**meng-upload data** dalam InaSAFE."
+"You will notice that the layer filled automatically the “hazard” area in the"
+" InaSAFE dock panel. There are two important things to note when **uploading"
+" data** in InaSAFE."
+msgstr "Anda akan melihat bahwa layer tersebut mengisi area “hazard” secara otomatis pada panel dock InaSAFE. Ada dua hal penting yang perlu diingat ketika **meng-upload data** dalam InaSAFE."
 
-# 8b57df699b404ce9a53878d195c024df
+# 3d4595cfc0c8461098af34f01c73f5fa
 #: ../../source/tutorial-docs/tutorial.rst:305
 msgid ""
 "Data should follow a keyword metadata system that allows InaSAFE to "
 "determine if the layer is a hazard or if it is an exposure."
-msgstr ""
-"Data harus mengikuti sistem metadata *keyword* yang memungkinkan InaSAFE "
-"untuk menentukan apakah layer tersebut hazard atau apakah layer tersebut "
-"eksposure."
+msgstr "Data harus mengikuti sistem metadata *keyword* yang memungkinkan InaSAFE untuk menentukan apakah layer tersebut hazard atau apakah layer tersebut eksposure."
 
-# e095b0220e8146caaa42eea002507451
+# 95787a76825d4e6f929d62fd6258deb7
 #: ../../source/tutorial-docs/tutorial.rst:307
 msgid "The area of analysis should overlap."
 msgstr "Area analisis harus bertumpukan satu sama lain (overlap)."
 
-# 4639dde9cd0b4d46aef9d045caf0adbc
+# 44b7c92ebe054018b0c776a78b7921aa
 #: ../../source/tutorial-docs/tutorial.rst:310
 msgid "Adding keyword metadata"
 msgstr "Menambahkan metadata keyword"
 
-# 25c0e4e7107c4b53964813621841c061
+# 8a6ff7275dd24494933c49bf8c8edde1
 #: ../../source/tutorial-docs/tutorial.rst:312
 msgid ""
 "You may be wondering how the InaSAFE plugin determines whether a layer "
-"should be listed in the “In the event of” “How many” combo boxes? The plugin "
-"relies on simple keyword metadata to be associated with each layer (*The "
+"should be listed in the “In the event of” “How many” combo boxes? The plugin"
+" relies on simple keyword metadata to be associated with each layer (*The "
 "keyword system is described in detail in the user’s manual under Keywords "
 "System*). Each layer that has a keyword allocating it’s category to hazard "
 "will be listed in the “In the event of” combo. Similarly, a category of "
 "exposure in the keywords for a layer will result in it being listed under "
-"the “How many” combo. InaSAFE uses the combination of category, subcategory, "
-"units and datatype keywords to determine which impact functions will be "
+"the “How many” combo. InaSAFE uses the combination of category, subcategory,"
+" units and datatype keywords to determine which impact functions will be "
 "listed in the “Might” combo."
-msgstr ""
-"Anda mungkin bertanya-tanya bagaimana plugin InaSAFE menentukan apakah suatu "
-"layer harus dicantumkan dalam “Pada suatu peristiwa” “Berapa banyak” kotak "
-"kombo? InaSAFE bergantung pada keyword metadata sederhana untuk dihubungkan "
-"dengan setiap layer (*Sistem keyword dijelaskan secara rinci dalam manual "
-"pengguna pada Keywords system*). Setiap layer yang memiliki keyword "
-"mengalokasikan kategori itu untuk bahaya akan terdaftar dalam combo “In the "
-"event of”. Demikian pula dengan keyword categori eksposure untuk sebuah "
-"layer, akan terdaftar pada combo “How Many”. InaSAFE menggunakan kombinasi "
-"dari kategori, subkategori, unit dan keywords tipe data untuk menentukan "
-"fungsi dampak mana yang akan terdaftar dalam combo “Might”."
+msgstr "Anda mungkin bertanya-tanya bagaimana plugin InaSAFE menentukan apakah suatu layer harus dicantumkan dalam “Pada suatu peristiwa” “Berapa banyak” kotak kombo? InaSAFE bergantung pada keyword metadata sederhana untuk dihubungkan dengan setiap layer (*Sistem keyword dijelaskan secara rinci dalam manual pengguna pada Keywords system*). Setiap layer yang memiliki keyword mengalokasikan kategori itu untuk bahaya akan terdaftar dalam combo “In the event of”. Demikian pula dengan keyword categori eksposure untuk sebuah layer, akan terdaftar pada combo “How Many”. InaSAFE menggunakan kombinasi dari kategori, subkategori, unit dan keywords tipe data untuk menentukan fungsi dampak mana yang akan terdaftar dalam combo “Might”."
 
-# 6105803bb1664a3790362f16610959cc
+# 2559920d1d814b04a2dff0e5c0d3b693
 #: ../../source/tutorial-docs/tutorial.rst:322
 msgid ""
 "In our exercise, the keywords were already created, so the data could fill "
 "automatically the “In the event of” “How many combo” boxes. If the keywords "
 "were not created in advance, then we will create them by following one of "
 "the two steps:"
-msgstr ""
-"Dalam latihan kita, keywords sudah dibuat, sehingga data tersebut dapat "
-"diisi secara otomatis pada kotak “In the event of” “How many combo”. Jika "
-"keyword tidak dibuat di awal, maka kita akan membuat keyword tersebut dengan "
-"mengikuti salah satu dari dua tahap berikut ini :"
+msgstr "Dalam latihan kita, keywords sudah dibuat, sehingga data tersebut dapat diisi secara otomatis pada kotak “In the event of” “How many combo”. Jika keyword tidak dibuat di awal, maka kita akan membuat keyword tersebut dengan mengikuti salah satu dari dua tahap berikut ini :"
 
-# 9c9bc1e630c3485391b6a3a7bac27b1d
+# 620ac66dc63546f2af720befa7f7b49c
 #: ../../source/tutorial-docs/tutorial.rst:327
 msgid ""
-"Go to the Inasafe tools on the toolbar, click on the **Keyword Editor** icon."
-msgstr ""
-"Arahkan pada piranti Inasafe pada toolbar, klik pada ikon **Keyword Editor**."
+"Go to the Inasafe tools on the toolbar, click on the **Keyword Editor** "
+"icon."
+msgstr "Arahkan pada piranti Inasafe pada toolbar, klik pada ikon **Keyword Editor**."
 
-# 5720e117240f4f8a8ffb913511869f6e
+# e33068b38bb54a8290be3aa550812698
 #: ../../source/tutorial-docs/tutorial.rst:332
 msgid ""
 "Or, open the **Plugin** menu on QGIS toolbar, click on **InaSAFE,** then "
 "click on the **Keyword Editor** in the scroll list."
-msgstr ""
-"Atau, buka menu **Plugin** pada toolbar QGIS, klik pada **InaSAFE,** "
-"kemudian klik pada **Keyword Editor** pada scroll list."
+msgstr "Atau, buka menu **Plugin** pada toolbar QGIS, klik pada **InaSAFE,** kemudian klik pada **Keyword Editor** pada scroll list."
 
-# 171cf64b20ca4d969e8918f16cabaeb0
+# 418e3ded86ee4a7c992589db3509c2c0
 #: ../../source/tutorial-docs/tutorial.rst:338
 msgid ""
-"Once you click on the Keyword Editor, a dialog box containing the flood data "
-"will be prompted. Since the flood data is a hazard layer, pinpoint the "
+"Once you click on the Keyword Editor, a dialog box containing the flood data"
+" will be prompted. Since the flood data is a hazard layer, pinpoint the "
 "**Hazard** Category. In the Subcategory, we will choose flood [m] because "
 "our data represents depth of flood in Jakarta in meter unit."
-msgstr ""
-"Setelah Anda mengklik pada Keyword Editor, sebuah kotak dialog berisi data "
-"banjir akan diminta. Karena data banjir adalah layer hazard, arahkan pada "
-"kategori **Hazard**. Pada sub-kategori, kita akan memilih flood (m) karena "
-"data kita merepresentasikan kedalaman banjir di Jakarta dengan unit satuan "
-"meter."
+msgstr "Setelah Anda mengklik pada Keyword Editor, sebuah kotak dialog berisi data banjir akan diminta. Karena data banjir adalah layer hazard, arahkan pada kategori **Hazard**. Pada sub-kategori, kita akan memilih flood (m) karena data kita merepresentasikan kedalaman banjir di Jakarta dengan unit satuan meter."
 
-# bbac3c7ee2ec415bb38b8ac120204e32
+# 4a781232c5244aebb79dbd3c47296961
 #: ../../source/tutorial-docs/tutorial.rst:346
 msgid "Then click **OK.**"
 msgstr "Kemudian klik **OK.**"
 
-# 249f906e0a2b441aae7a242eb3f7f5cb
+# ae0e8dd470b44ed9960d9e679738c603
 #: ../../source/tutorial-docs/tutorial.rst:348
 msgid ""
 "Now the data follow the keyword rule, and can be used in the InaSAFE "
 "function."
-msgstr ""
-"Sekarang, data kita mengikuti aturan keyword dan bisa digunakan pada fungsi "
-"InaSAFE."
+msgstr "Sekarang, data kita mengikuti aturan keyword dan bisa digunakan pada fungsi InaSAFE."
 
-# cc33a00e7fbf4de3858b580fe042c1e2
+# c6a338c388784f0aa41e36813e8c247c
 #: ../../source/tutorial-docs/tutorial.rst:351
 msgid "Exposure"
 msgstr "Exposure"
 
-# 534b77b9b9c6442389385d55fa9cf8d5
+# 3d98c8977a624555b2ca1875d2dad1ac
 #: ../../source/tutorial-docs/tutorial.rst:353
 msgid "Exposure is the sum of assets and population that are at risks."
 msgstr "Exposure adalah jumlah aset dan populasi yang beresiko."
 
-# b1b56d34b8d5404b8a930cf39fe3e368
+# 73e3fc07cd674f38844e0f9df7cf4863
 #: ../../source/tutorial-docs/tutorial.rst:355
 msgid ""
 "An exposure (How **many**) layer could be represented, for example, as "
 "vector polygon data representing building outlines, or a raster outline "
 "where each pixel represents the number of people resident in that cell."
-msgstr ""
-"Sebuah layer eksposure (seberapa **banyak**) dapat direpresentasikan, "
-"contohnya, sebagai data vektor poligon yang merepresentasikan garis luar "
-"sebuah bangunan, atau garis luar raster dimana setiap pixel "
-"merepresentasikan jumlah pemukiman penduduk pada sel itu."
+msgstr "Sebuah layer eksposure (seberapa **banyak**) dapat direpresentasikan, contohnya, sebagai data vektor poligon yang merepresentasikan garis luar sebuah bangunan, atau garis luar raster dimana setiap pixel merepresentasikan jumlah pemukiman penduduk pada sel itu."
 
-# 8978638f35f64fc48dbaf5ca207fcf0a
+# eab3a4f3af36497e83f0f1050765da48
 #: ../../source/tutorial-docs/tutorial.rst:359
 msgid ""
 "Now, we will add the exposure layer in our InaSAFE project. For that, we "
 "need to add the exposure layer to QGIS first. For our exercise, we will use "
 "the OpenStreetMap (OSM) data that represents buildings in Jakarta Province."
-msgstr ""
-"Sekarang, kita akan menambahkan layer eksposure dalam proyek InaSAFE. Untuk "
-"itu, kita perlu menambahkan layer ke QGIS terlebih dahulu. Pada contoh kita "
-"saat ini, kita akan menggunakan data OpenStreetMap (OSM) yang "
-"merepresentasikan bangunan di Provinsi DKI Jakarta."
+msgstr "Sekarang, kita akan menambahkan layer eksposure dalam proyek InaSAFE. Untuk itu, kita perlu menambahkan layer ke QGIS terlebih dahulu. Pada contoh kita saat ini, kita akan menggunakan data OpenStreetMap (OSM) yang merepresentasikan bangunan di Provinsi DKI Jakarta."
 
-# d920578402c24ed1a56f8cf5b0ddcb74
+# 46604a27129a4aeb8304b117585ec2f9
 #: ../../source/tutorial-docs/tutorial.rst:363
 msgid ""
-"The OSM building layer is in a vector format, so we will go to the QGIS menu "
-"toolbar, click on **Layer,** and select **Add Vector Layer.**"
-msgstr ""
-"Layer bangunan OSM adalah format vektor, sehingga kita akan menuju ke "
-"toolbar menu QGIS, klik pada **Layer** dan pilih **Add Vector Layer.**"
+"The OSM building layer is in a vector format, so we will go to the QGIS menu"
+" toolbar, click on **Layer,** and select **Add Vector Layer.**"
+msgstr "Layer bangunan OSM adalah format vektor, sehingga kita akan menuju ke toolbar menu QGIS, klik pada **Layer** dan pilih **Add Vector Layer.**"
 
-# 8038121ac6a54e8fa2e9dc480f090c6f
+# 4a8ad8457dd04fc0a626fdc4c893adba
 #: ../../source/tutorial-docs/tutorial.rst:369
 msgid ""
 "Once you click on that, a pop-up window will appear where you will have to "
 "fetch your OSM buildings data."
-msgstr ""
-"Saat Anda mengklik **Add Vector Layer,** sebuah jendela pop-up akan muncul "
-"dimana Anda harus mengambil data bangunan OSM Anda."
+msgstr "Saat Anda mengklik **Add Vector Layer,** sebuah jendela pop-up akan muncul dimana Anda harus mengambil data bangunan OSM Anda."
 
-# 63498e6cecaa4bf285625c6d0822fe63
+# e362fa6d3c09474387672311a22780da
 #: ../../source/tutorial-docs/tutorial.rst:375
 msgid ""
 "Please select the “OSM_building_footprints_20120629_Jakarta_All.shp” file "
 "from the exposure folder."
-msgstr ""
-"Pilih file ?OSM_building_footprints_20120629_Jakarta_All.shp? dari folder "
-"exposure."
+msgstr "Pilih file ?OSM_building_footprints_20120629_Jakarta_All.shp? dari folder exposure."
 
-# 6ae423cfadef4300b394727a7515bb6b
+# 14a11f3e6d7a458f9b19ffa61f38482e
 #: ../../source/tutorial-docs/tutorial.rst:378
 msgid "Click **Open.**"
 msgstr "Klik **Open.**"
 
-# b1ab49b3ce4c40a1a456630dcf5ccc47
+# 6341498a8c384c86b1846f0923fb98b3
 #: ../../source/tutorial-docs/tutorial.rst:380
 msgid ""
 "This is a vector data (in ESRI SHP format) that represents buildings data "
 "gathered by the Jakarta province community using the OSM participatory "
 "tools. The display name is “OSM **buildings** ”."
-msgstr ""
-"Ini adalah data vektor (dalam format ESRI SHP) yang merepresentasikan "
-"kumpulan data bangunan dari komunitas Provinsi DKI Jakarta menggunakan tool "
-"partisipatif OSM. Nama tampilannya adalah ?OSM **buildings** ?."
+msgstr "Ini adalah data vektor (dalam format ESRI SHP) yang merepresentasikan kumpulan data bangunan dari komunitas Provinsi DKI Jakarta menggunakan tool partisipatif OSM. Nama tampilannya adalah ?OSM **buildings** ?."
 
-# c7aa01236b9e4537823c7c26c489eb60
+# cbaf3d80d8394d389701f11af9a2e59f
 #: ../../source/tutorial-docs/tutorial.rst:384
 msgid ""
-"Please note that the exposure data should follow the same **keyword system** "
-"that we explained earlier for the hazard data."
-msgstr ""
-"Perlu diketahui bahwa data eksposure harus mengikuti **sistem keyword** yang "
-"sama yang telah kita jelaskan sebelumnya untuk data bahaya."
+"Please note that the exposure data should follow the same **keyword system**"
+" that we explained earlier for the hazard data."
+msgstr "Perlu diketahui bahwa data eksposure harus mengikuti **sistem keyword** yang sama yang telah kita jelaskan sebelumnya untuk data bahaya."
 
-# 7b81154d87354c41b1f7b86eb16de528
+# 5ff9721804ae49f1bea97d09b426d57b
 #: ../../source/tutorial-docs/tutorial.rst:387
 msgid ""
-"In our case, the keyword was already created. If the keyword was not created "
-"in advance, then we will create it by using the **Keyword Editor** in "
+"In our case, the keyword was already created. If the keyword was not created"
+" in advance, then we will create it by using the **Keyword Editor** in "
 "InaSAFE from the toolbar or from the **Plugins** menu."
-msgstr ""
-"Untuk kasus kita, keyword sudah dibuat. Jika keywor belum dibuat di awal, "
-"maka kita akan membuatnya dengan menggunakan **Keyword Editor** dalam "
-"InaSAFE yang ada di toolbar atau dari menu **Plugins.**"
+msgstr "Untuk kasus kita, keyword sudah dibuat. Jika keywor belum dibuat di awal, maka kita akan membuatnya dengan menggunakan **Keyword Editor** dalam InaSAFE yang ada di toolbar atau dari menu **Plugins.**"
 
-# 09e89603f5f9428ba85622f260a6ea89
+# f6b78f516c5542e7a95ed0aa11cdfcf4
 #: ../../source/tutorial-docs/tutorial.rst:391
 msgid ""
-"Go to the **Plugin menu** on QGIS toolbar. Click on **InaSAFE.** Then, click "
-"on the **Keyword Editor** in the dialog box. Pinpoint the **Exposure** "
-"category. Choose **building [OSM]** in the **Subcategory** scroll box. Click "
-"**OK.**"
-msgstr ""
-"Arahkan ke **Plugin menu** pada toolbar QGIS. Klik aktif pada **InaSAFE.** "
-"Then, klik pada **Keyword Editor** di kotak dialog. Tunjuk pada kategori "
-"**Ekposure.** Pilih **Building [OSM]** dalam kotak gulir Subcategory. Pilih "
-"**OK.**"
+"Go to the **Plugin menu** on QGIS toolbar. Click on **InaSAFE.** Then, click"
+" on the **Keyword Editor** in the dialog box. Pinpoint the **Exposure** "
+"category. Choose **building [OSM]** in the **Subcategory** scroll box. Click"
+" **OK.**"
+msgstr "Arahkan ke **Plugin menu** pada toolbar QGIS. Klik aktif pada **InaSAFE.** Then, klik pada **Keyword Editor** di kotak dialog. Tunjuk pada kategori **Ekposure.** Pilih **Building [OSM]** dalam kotak gulir Subcategory. Pilih **OK.**"
 
-# ea84ce58b075411bb5c2dd28402d8360
+# 249c7984fb5b40aa831ca5297642c0a5
 #: ../../source/tutorial-docs/tutorial.rst:398
 msgid ""
 "Now our OSM building exposure data can be used in INASAFE and was "
 "automatically entered in the **How many box** of the INASAFE dock panel."
-msgstr ""
-"Sekarang data bangunan OSM kita dapat digunakan dalam InaSAFE dan secara "
-"otomatis masuk dalam kotak **How many** pada panel dock InaSAFE."
+msgstr "Sekarang data bangunan OSM kita dapat digunakan dalam InaSAFE dan secara otomatis masuk dalam kotak **How many** pada panel dock InaSAFE."
 
-# d7fb553f167041abbeeaebf50b16978b
+# 1dc35c5695484d03a2a0b3fc8e1a4d5d
 #: ../../source/tutorial-docs/tutorial.rst:404
 msgid ""
 "Also note that the 2 datasets are sitting on top of one another even though "
 "they are different projections."
-msgstr ""
-"Juga catat bahwa ada dua dataset yang berada di atas atau saling bertumpukan "
-"satu sama lain meskipun mereka berada pada proyeksi yang berbeda."
+msgstr "Juga catat bahwa ada dua dataset yang berada di atas atau saling bertumpukan satu sama lain meskipun mereka berada pada proyeksi yang berbeda."
 
-# 638360f9e7354267973fed52ab83bdd9
+# 5f0b7437f97e49fa811e59b551334c74
 #: ../../source/tutorial-docs/tutorial.rst:408
 msgid "Impact Analysis"
 msgstr "Analisis Dampak"
 
-# 8ebc6558b65b4bacbe5f248df4fc8de3
+# 1964e482546342dc9cb703a61c6c34f1
 #: ../../source/tutorial-docs/tutorial.rst:410
 msgid ""
 "The impact function (**Might**) will spatially combine the hazard and "
 "exposure input layers in order to postulate what the impacts of the hazard "
-"will be on the exposure infrastructure or people. By selecting a combination "
-"from the “In the event of” and “How many” combo boxes, an appropriate set of "
-"impact functions will be listed in the “Might” combo box."
-msgstr ""
-"Fungsi dampak (**Might**) akan menggabungkan layer masukan baik layer hazard "
-"maupun layer eksposure secara spasial sehingga dapat dipakai untuk "
-"memberikan dampak apa yang ada pada infrastruktur eksposure atau orang. "
-"Dengan menyeleksi kombinasi dari ?In the event of? dan ?How many? pada combo-"
-"box, aturan yang sesuai dengan fungsi dampak akan terdaftar dalam combo-box ?"
-"Might?."
+"will be on the exposure infrastructure or people. By selecting a combination"
+" from the “In the event of” and “How many” combo boxes, an appropriate set "
+"of impact functions will be listed in the “Might” combo box."
+msgstr "Fungsi dampak (**Might**) akan menggabungkan layer masukan baik layer hazard maupun layer eksposure secara spasial sehingga dapat dipakai untuk memberikan dampak apa yang ada pada infrastruktur eksposure atau orang. Dengan menyeleksi kombinasi dari ?In the event of? dan ?How many? pada combo-box, aturan yang sesuai dengan fungsi dampak akan terdaftar dalam combo-box ?Might?."
 
-# 39aa07f0d937440697b02d273278cb72
+# 21f267b2148c41af897eb24c660075be
 #: ../../source/tutorial-docs/tutorial.rst:416
 msgid ""
 "Impact scenarios are predefined depending on what the decision-maker is "
@@ -1004,323 +786,245 @@ msgid ""
 "might be temporarily closed?** As we see on the previous step, this is "
 "filled automatically by default in the InaSAFE panel dock as soon as the "
 "hazard [flood] and exposure [buildings] layers are entered correctly."
-msgstr ""
-"Dampak skenario yang telah ditetapkan tergantung pada apa yang dicari oleh "
-"pembuat keputusan. Untuk analisis banjir di Jakarta, kita hanya mengaktifkan "
-"fungsi dampak standar, yang meminta: **Dalam kasus peristiwa banjir, berapa "
-"banyak bangunan yang mungkin ditutup sementara?** Seperti yang kita lihat "
-"pada langkah sebelumnya, pertanyaan ini teriisi secara otomatis sesuai "
-"default di panel dock InaSAFE segera setelah layer bahaya [flood] dan "
-"eksposure [buildings] dimasukkan dengan benar."
+msgstr "Dampak skenario yang telah ditetapkan tergantung pada apa yang dicari oleh pembuat keputusan. Untuk analisis banjir di Jakarta, kita hanya mengaktifkan fungsi dampak standar, yang meminta: **Dalam kasus peristiwa banjir, berapa banyak bangunan yang mungkin ditutup sementara?** Seperti yang kita lihat pada langkah sebelumnya, pertanyaan ini teriisi secara otomatis sesuai default di panel dock InaSAFE segera setelah layer bahaya [flood] dan eksposure [buildings] dimasukkan dengan benar."
 
-# 9d9a0cbc9f26487592c6601c4c397360
+# 0957424165404f6c9110455ee3d919f8
 #: ../../source/tutorial-docs/tutorial.rst:424
 msgid "The Results section"
 msgstr "Bagian Hasil"
 
-# b3ce0a9492844e07ada69b67691f13f5
+# cf6efda190074ff3b71680c3b1a919b0
 #: ../../source/tutorial-docs/tutorial.rst:426
 msgid ""
-"Now that we have our two input layers and that we know what impacts we would "
-"like to assess, click on the **Run** button at the bottom to start the "
+"Now that we have our two input layers and that we know what impacts we would"
+" like to assess, click on the **Run** button at the bottom to start the "
 "impact analysis. At the end of the process, figures will be shown in the "
 "**Results** section, a new layer will be added in the QGIS layer panel "
 "representing the result of the impact function, and the map will "
 "differentiate affected and non-affected building."
-msgstr ""
-"Setelah kita memiliki dua layer masukan dan kita mengetahui dampak apa yang "
-"akan kita nilai, klik pada tombol **Run** di bagian bawah untuk memulai "
-"analisis dampak. Pada akhir proses, angka akan ditampilkan pada bagian "
-"**Results,** sebuah layer baru akan ditambahkan pada panel layer QGIS yang "
-"menggambarkan hasil dari fungsi dampak, dan peta akan membedakan bangunan "
-"yang terdampak dan tidak terdampak."
+msgstr "Setelah kita memiliki dua layer masukan dan kita mengetahui dampak apa yang akan kita nilai, klik pada tombol **Run** di bagian bawah untuk memulai analisis dampak. Pada akhir proses, angka akan ditampilkan pada bagian **Results,** sebuah layer baru akan ditambahkan pada panel layer QGIS yang menggambarkan hasil dari fungsi dampak, dan peta akan membedakan bangunan yang terdampak dan tidak terdampak."
 
-# 464bab9e94a0405eb163afd41d3ab4dc
+# 9d4d4b97f7944d3cab6afec2af02762d
 #: ../../source/tutorial-docs/tutorial.rst:439
 msgid ""
-"The result shows **total number of buildings** and the **number of buildings "
-"that might be temporarily closed** in the event of a flood. Also, there is "
+"The result shows **total number of buildings** and the **number of buildings"
+" that might be temporarily closed** in the event of a flood. Also, there is "
 "an **Action Checklist** where the question: *Are the critical facilities "
 "still open?* And a **Note** description explaining that buildings are said "
 "flooded when the flood level exceeds 1m."
-msgstr ""
-"Hasilnya menunjukkan **jumlah total bangunan** dan **jumlah bangunan yang "
-"mungkin ditutup sementara** dalam peristiwa banjir. Selain itu, ada **Action "
-"Checklist** dimana pertanyaan: *Apakah fasilitas yang penting masih terbuka?"
-"* dan deskripsi *Note* menjelaskan bahwa bangunan dikatakan banjir ketika "
-"tingkat banjir melebihi 1m."
+msgstr "Hasilnya menunjukkan **jumlah total bangunan** dan **jumlah bangunan yang mungkin ditutup sementara** dalam peristiwa banjir. Selain itu, ada **Action Checklist** dimana pertanyaan: *Apakah fasilitas yang penting masih terbuka?* dan deskripsi *Note* menjelaskan bahwa bangunan dikatakan banjir ketika tingkat banjir melebihi 1m."
 
-# 25a6639bb03c49ef996bf6d7578cb517
+# 6449335b420e40bfaaf9dae0090ce5a8
 #: ../../source/tutorial-docs/tutorial.rst:446
 msgid "Enhancing the Map Output"
 msgstr "Meningkatkan Keluaran Peta"
 
-# 4db91ec4383749c7be3636c4a9cfe4b0
+# af6641a73f354c6289618f3cb5fe14e6
 #: ../../source/tutorial-docs/tutorial.rst:448
 msgid ""
 "The final output map can be enhanced using cartographic functions in QGIS. "
 "Styles can be changed, background layer or other relevant layers can be "
 "added, layout can be changed using the **Print Composer** in QGIS."
-msgstr ""
-"Peta hasil akhir dapat ditingkatkan dengan menggunakan fungsi kartografi di "
-"QGIS. Styles dapat diubah, latar belakang lapisan atau lapisan lain yang "
-"relevan dapat ditambahkan, layout dapat diubah menggunakan **Print "
-"Composer** di QGIS."
+msgstr "Peta hasil akhir dapat ditingkatkan dengan menggunakan fungsi kartografi di QGIS. Styles dapat diubah, latar belakang lapisan atau lapisan lain yang relevan dapat ditambahkan, layout dapat diubah menggunakan **Print Composer** di QGIS."
 
-# db169696157c4f2ea73e986a50089392
+# d3e97bfb15024b25b56216ba7fe44fb7
 #: ../../source/tutorial-docs/tutorial.rst:452
 msgid ""
 "If you would like to add openlayer background to your map, all you need to "
 "do is add a new plugin called **OpenLayer Plugin** in QGIS and follow the "
 "same steps as we did to acquire the InaSAFE plugin."
-msgstr ""
-"Jika Anda ingin menambahkan latar belakang openlayer untuk peta Anda, yang "
-"perlu Anda lakukan hanyalah menambahkan sebuah plugin baru yang disebut "
-"**OpenLayer Plugin** di QGIS dan ikuti langkah yang sama seperti yang kita "
-"lakukan untuk mendapatkan plugin InaSAFE."
+msgstr "Jika Anda ingin menambahkan latar belakang openlayer untuk peta Anda, yang perlu Anda lakukan hanyalah menambahkan sebuah plugin baru yang disebut **OpenLayer Plugin** di QGIS dan ikuti langkah yang sama seperti yang kita lakukan untuk mendapatkan plugin InaSAFE."
 
-# aa8d806f397d4468b4f683ff96b4d77e
+# 2273146dd28d4ca6acf4eec279490d17
 #: ../../source/tutorial-docs/tutorial.rst:456
 msgid ""
-"You can download the plugin from the website http://build.sourcepole.ch/qgis/"
-"plugins.xml, and put it in the QGIS plugin directory :file:`C:\\Users\\<your "
-"username>\\.qgis\\python\\plugins`."
-msgstr ""
-"Anda dapat mendownload plugin dari http://build.sourcepole.ch/qgis/plugins."
-"xml website, dan meletakkannya di direktori plugin QGIS :file:`C:\\Users"
-"\\<username anda>\\.qgis\\python\\plugins`."
+"You can download the plugin from the website "
+"http://build.sourcepole.ch/qgis/plugins.xml, and put it in the QGIS plugin "
+"directory :file:`C:\\Users\\<your username>\\.qgis\\python\\plugins`."
+msgstr "Anda dapat mendownload plugin dari http://build.sourcepole.ch/qgis/plugins.xml website, dan meletakkannya di direktori plugin QGIS :file:`C:\\Users\\<username anda>\\.qgis\\python\\plugins`."
 
-# 403c6a8f353d408e9edb0fd90ccabd10
+# 0038be763fd24e40ab9fd10505a0fdbe
 #: ../../source/tutorial-docs/tutorial.rst:460
 msgid ""
-"To enable the OpenLayer plugin, go to the QGIS **Plugin Manager** and select "
-"**OpenLayers Plugin.**"
-msgstr ""
-"Untuk mengaktifkan plugin OpenLayer, arahkan ke **Plugin Manager** QGIS dan "
-"pilih **OpenLayers Plugin.**"
+"To enable the OpenLayer plugin, go to the QGIS **Plugin Manager** and select"
+" **OpenLayers Plugin.**"
+msgstr "Untuk mengaktifkan plugin OpenLayer, arahkan ke **Plugin Manager** QGIS dan pilih **OpenLayers Plugin.**"
 
-# 87f93c0272ef4604805c459ef8620d65
+# d667ca209c90442aabbf4c9f137bee5e
 #: ../../source/tutorial-docs/tutorial.rst:463
 msgid ""
 "Once installed you should be able to use background imagery and tiles from "
 "google, yahoo, bing and openstreetmap."
-msgstr ""
-"Setelah terinstal, anda harusnya dapat menggunakan citra latar belakang dan "
-"tile citra dari google, yahoo, bing dan OpenStreetMap."
+msgstr "Setelah terinstal, anda harusnya dapat menggunakan citra latar belakang dan tile citra dari google, yahoo, bing dan OpenStreetMap."
 
-# 0b3f7812544e4a8a9676d877ae4287ab
+# 69355a5e603d49fbbc9a7393235030c5
 #: ../../source/tutorial-docs/tutorial.rst:469
 msgid ""
 "For our exercise, let’s add the Google Satellite view to our map as a "
 "background. Make sure that the background is not on top of the other active "
 "layers."
-msgstr ""
-"Untuk latihan kita, mari tambahkan tampilan Google Satellite dalam peta kita "
-"sebagai background. Pastikan pahwa background tidak berada di atas layer-"
-"layer lain yang aktif."
+msgstr "Untuk latihan kita, mari tambahkan tampilan Google Satellite dalam peta kita sebagai background. Pastikan pahwa background tidak berada di atas layer-layer lain yang aktif."
 
-# 745a30d037c8440b8ce2c6ba291e6a10
+# 51c832d6433141d58073538df527bdf9
 #: ../../source/tutorial-docs/tutorial.rst:474
 msgid "Print Results"
 msgstr "Mencetak Hasil"
 
-# 113638dde9684b7f8c6eaef0e0a2814d
+# 423be8f8eba840d4bab9145ac24dc317
 #: ../../source/tutorial-docs/tutorial.rst:476
 msgid ""
-"The data shown on the screen can be saved into a **PDF file** by clicking on "
-"**Print** at the bottom of the InaSAFE panel. The PDF file contains then the "
-"**legend** for the result of the impact assessment, the **map** created and "
-"a **table** summarizing the results from the impact function."
-msgstr ""
-"Data yang ditampilkan pada layar dapat disimpan ke dalam bentuk **PDF file** "
-"dengan mengklik **Print** di bagian bawah panel InaSAFE. File PDF tersebut "
-"berisi **legenda** untuk hasil dari penilaian dampak, **peta** yang telah "
-"dibuat, dan sebuah **tabel** yang merangkum hasil dari fungsi dampak."
+"The data shown on the screen can be saved into a **PDF file** by clicking on"
+" **Print** at the bottom of the InaSAFE panel. The PDF file contains then "
+"the **legend** for the result of the impact assessment, the **map** created "
+"and a **table** summarizing the results from the impact function."
+msgstr "Data yang ditampilkan pada layar dapat disimpan ke dalam bentuk **PDF file** dengan mengklik **Print** di bagian bawah panel InaSAFE. File PDF tersebut berisi **legenda** untuk hasil dari penilaian dampak, **peta** yang telah dibuat, dan sebuah **tabel** yang merangkum hasil dari fungsi dampak."
 
-# 7cea7b9cefde4c2787bf9671f9cdcd14
+# 7485c5c2458249e19f03e1b7b757e8b8
 #: ../../source/tutorial-docs/tutorial.rst:481
 msgid ""
-"However, any change that you want to make into the final map document should "
-"be done **before** clicking on the **Print** button of the INASAFE dock "
+"However, any change that you want to make into the final map document should"
+" be done **before** clicking on the **Print** button of the INASAFE dock "
 "panel. The print should be only use once the data is exactly as you want it "
 "to be displayed."
-msgstr ""
-"Meskipun demikian, berbagai perubahan yang Anda inginkan untuk dibuat ke "
-"dalam peta akhir dokumen harus dilakukan **sebelum** mengklik pada tombol "
-"Print pada panel InaSAFE dock. Tombol print hanya boleh digunakan begitu "
-"data tersebut sesuai dengan yang Anda inginkan untuk ditampilkan."
+msgstr "Meskipun demikian, berbagai perubahan yang Anda inginkan untuk dibuat ke dalam peta akhir dokumen harus dilakukan **sebelum** mengklik pada tombol Print pada panel InaSAFE dock. Tombol print hanya boleh digunakan begitu data tersebut sesuai dengan yang Anda inginkan untuk ditampilkan."
 
-# 8c783d418a7749088249488b741b802c
+# 2277176938d947398ddba924f3562d4d
 #: ../../source/tutorial-docs/tutorial.rst:490
 msgid "Save results and QGIS project"
 msgstr "Menyimpan hasil dan proyek QGIS"
 
-# e208c18561ae40ceae1d55764a05ecb2
+# 7e826b7babdc4637840be4042223e21b
 #: ../../source/tutorial-docs/tutorial.rst:492
 msgid ""
 "The output layer result of the assessment can be saved by right clicking on "
 "the layer."
-msgstr ""
-"Layer hasil dari penilaian dapat disimpan dengan klik kanan pada layer."
+msgstr "Layer hasil dari penilaian dapat disimpan dengan klik kanan pada layer."
 
-# 69d2f0379493439daaa1edcbbc22e7ee
+# 671f9633f041414bbf6ea1e2107f8a61
 #: ../../source/tutorial-docs/tutorial.rst:498
 msgid ""
 "Then **Save As** a shapefile or a raster. However the keywords and "
 "statistics do not get saved."
-msgstr ""
-"Kemudian klik **Save As** sebagai sebuah shapefile atau raster. Meskipun "
-"demikian keywords dan statistik tidak ikut tersimpan."
+msgstr "Kemudian klik **Save As** sebagai sebuah shapefile atau raster. Meskipun demikian keywords dan statistik tidak ikut tersimpan."
 
-# 9ef87557cb234a9b9b73bfd1567cf031
+# 93d507e79cd446ba852d33e2e60a1d68
 #: ../../source/tutorial-docs/tutorial.rst:504
 msgid ""
-"You can also save the project under QGIS so that you can access your current "
-"window view anytime needed. For that, go to the **File** menu on QGIS "
+"You can also save the project under QGIS so that you can access your current"
+" window view anytime needed. For that, go to the **File** menu on QGIS "
 "toolbar. Click on **Save Project As.**"
-msgstr ""
-"Anda juga dapat menyimpan proyek dalam QGIS sehingga Anda dapat mengakses "
-"tampilan jendela Anda saat ini setiap saat Anda butuhkan. Terkait hal "
-"tersebut, klik menu **File** pada toolbar QGIS. Klik pada **Save Project As."
-"**"
+msgstr "Anda juga dapat menyimpan proyek dalam QGIS sehingga Anda dapat mengakses tampilan jendela Anda saat ini setiap saat Anda butuhkan. Terkait hal tersebut, klik menu **File** pada toolbar QGIS. Klik pada **Save Project As.**"
 
-# 823ae1247f2c465bb91a47c4889f2e7f
+# 693cf4b4752b4083a2764d14152c4784
 #: ../../source/tutorial-docs/tutorial.rst:511
 msgid ""
 "Give a name to the project and put it in the directory you want to store "
 "your work. Then click on **Save.**"
-msgstr ""
-"Berikan nama pada proyek tersebut dan letakkan pada direktori yang Anda "
-"inginkan untuk menyimpan pekerjaan Anda. Kemudian klik **Save.**"
+msgstr "Berikan nama pada proyek tersebut dan letakkan pada direktori yang Anda inginkan untuk menyimpan pekerjaan Anda. Kemudian klik **Save.**"
 
-# f14d44480c584ddeacc5b562b90170c8
+# bcb315772c844bf396b0f0f343b12214
 #: ../../source/tutorial-docs/tutorial.rst:517
 msgid ""
 "Now that the project is saved under QGIS, you can go back to your work "
 "anytime you need. However, the statistical data will be lost whenever the "
 "project is closed. To get the data back, you will need to redo the impact "
 "analysis process we described above from **Run.**"
-msgstr ""
-"Sekarang setelah proyek telah disimpan di dalam QGIS, Anda dapat kembali ke "
-"pekerjaan Anda sewaktu-waktu Anda membutuhkannya. Meskipun demikian, data "
-"statistik akan hilang ketika proyek ditutup. Untuk mendapatkannya kembali, "
-"Anda akan perlu melakukan *redo* pada proses analisis dampak yang telah kita "
-"jelaskan di atas dari **Run.**"
+msgstr "Sekarang setelah proyek telah disimpan di dalam QGIS, Anda dapat kembali ke pekerjaan Anda sewaktu-waktu Anda membutuhkannya. Meskipun demikian, data statistik akan hilang ketika proyek ditutup. Untuk mendapatkannya kembali, Anda akan perlu melakukan *redo* pada proses analisis dampak yang telah kita jelaskan di atas dari **Run.**"
 
-# ed353a18f64a4b37b7427eee80edeeb6
+# 7925df9ae85f4b2f9a2c28cdc3e9b332
 #: ../../source/tutorial-docs/tutorial.rst:522
 msgid ""
 "The impact assessment can also be replicated for flood zone areas; the only "
 "change is to add the layer as a vector and using keyword flood (wet/dry)."
-msgstr ""
-"Penilaian dampak juga dapat diterapkan untuk daerah zona banjir; "
-"perubahannya adalah hanya menambahkan layer sebagai vektor dan menggunakan "
-"keyword banjir (basah/kering) (flood (wet/dry))."
+msgstr "Penilaian dampak juga dapat diterapkan untuk daerah zona banjir; perubahannya adalah hanya menambahkan layer sebagai vektor dan menggunakan keyword banjir (basah/kering) (flood (wet/dry))."
 
-# 0fb02cfdfda846ebaca1b5ee6f8c64a7
+# 806fb688503f4d4ba80d228b367d2ef8
 #: ../../source/tutorial-docs/tutorial.rst:525
 msgid "Go to QGIS **Layer/Add Vector Layer.**"
 msgstr "Arahkan ke **Layer/Add Vector Layer** pada QGIS."
 
-# 8c2c47bf2d1c41ba98514746f3b55639
+# 84cc1ee0dd3f46299ad38e29fc540d48
 #: ../../source/tutorial-docs/tutorial.rst:530
 msgid "Add the **Jakarta_RW_2007flood.shp**"
 msgstr "Tambahkan file **Jakarta_RW_2007flood.shp**"
 
-# 31014d351dc64fb6a381c57dc465bbac
+# 72712e2989454e6d9c548ccad04dcdb9
 #: ../../source/tutorial-docs/tutorial.rst:535
 msgid ""
 "The impact functions can also be modified to pull out certain attributes "
-"from the input layers, in this case it can tease out the breakup of building "
-"types."
-msgstr ""
-"Fungsi dampak (impact) juga dapat dimodifikasi untuk menarik atribut "
-"tertentu dari layer masukan, dalam kasus ini dapat menggunakan tipe bangunan."
+"from the input layers, in this case it can tease out the breakup of building"
+" types."
+msgstr "Fungsi dampak (impact) juga dapat dimodifikasi untuk menarik atribut tertentu dari layer masukan, dalam kasus ini dapat menggunakan tipe bangunan."
 
-# 6405ccfa4b394ebc844872135ba150ef
+# 1f50fad79b2d4c9d88f017169cb13272
 #: ../../source/tutorial-docs/tutorial.rst:541
 msgid ""
-"The flood zone areas were derived from sub-village administration boundaries "
-"and defined as areas that were flooded in the last large flood in Jakarta in "
-"2007."
-msgstr ""
-"Daerah zona banjir diperoleh dari batas administrasi dusun dan didefinisikan "
-"sebagai daerah yang terkena banjir pada banjir besar di Jakarta pada tahun "
-"2007 lalu."
+"The flood zone areas were derived from sub-village administration boundaries"
+" and defined as areas that were flooded in the last large flood in Jakarta "
+"in 2007."
+msgstr "Daerah zona banjir diperoleh dari batas administrasi dusun dan didefinisikan sebagai daerah yang terkena banjir pada banjir besar di Jakarta pada tahun 2007 lalu."
 
-# eab6f347735e4ced9b7ec8a964c92ab2
+# c8f3d203b5c8400ba8911844cbb8d6af
 #: ../../source/tutorial-docs/tutorial.rst:546
 msgid "International Language"
 msgstr "Bahasa International"
 
-# 9a813eb58e594d8ca4667d616eb1d89d
+# a1421397921c4650b3c4a3c0d62a569e
 #: ../../source/tutorial-docs/tutorial.rst:548
 msgid "Both QGIS and InaSAFE come with multi-lingual support."
 msgstr "Baik QGIS dan InaSAFE dibuat dengan dukungan multi-lingual."
 
-# bc6ffad970cd4dbbac1c6527264ea6dd
+# 49074d139615468f851c760558078f1f
 #: ../../source/tutorial-docs/tutorial.rst:550
 msgid "Go to QGIS Settings/options."
 msgstr "Klik Setting/Options pada QGIS."
 
-# ba78b8bc33a845db9996ec4d28d5c8c9
+# 9bf08c9ca47441d993b51896a093c64d
 #: ../../source/tutorial-docs/tutorial.rst:555
 msgid ""
 "Go to the Locale tab, and click to **Override system locale.** You must "
 "close the QGIS project and reopen for the language to take hold."
-msgstr ""
-"Klik pada tab Locale, dan klik **Override system locale.** Anda harus "
-"menutup proyek QGIS dan membukanya kembali agar bahasa yang dipilih menjadi "
-"aktif."
+msgstr "Klik pada tab Locale, dan klik **Override system locale.** Anda harus menutup proyek QGIS dan membukanya kembali agar bahasa yang dipilih menjadi aktif."
 
-# fdd817abbd3f43af96ae8f4faceada6b
+# 46f1eedc778143dd97451c3f81be71fe
 #: ../../source/tutorial-docs/tutorial.rst:561
 msgid ""
 "At this point InaSAFE has only been translated into Indonesian, however "
 "there is a framework that can support all languages outlined in QGIS."
-msgstr ""
-"Sejauh ini, InaSAFE baru diterjemahkan ke dalam Bahasa Indonesia, meskipun "
-"demikian ada garis besar kerangka yang mendukung semua bahasa dalam QGIS."
+msgstr "Sejauh ini, InaSAFE baru diterjemahkan ke dalam Bahasa Indonesia, meskipun demikian ada garis besar kerangka yang mendukung semua bahasa dalam QGIS."
 
-# 6c6954c34003464889c81c628a78b98a
+# b8a01ff84dbc4eb896799e003d924e88
 #: ../../source/tutorial-docs/tutorial.rst:566
 msgid "Thank You"
 msgstr "Terima Kasih"
 
-# 789f6ad0771849d8a8ac3d09a3fae9bf
+# d74945d15af24215b211b5ae715e5716
 #: ../../source/tutorial-docs/tutorial.rst:568
 msgid "THANK YOU FOR YOUR PARTICIPATION! :)"
 msgstr "TERIMA KASIH ATAS PARTISIPASI ANDA! :)"
 
-# d5ed04bbe0234ba484a6c3ce83733b05
+# 47ab61c80ffb4f0ebe57ce4205f1553d
 #: ../../source/tutorial-docs/tutorial.rst:570
 msgid ""
 "Let us know how you enjoyed the training and what you think about the tool."
-msgstr ""
-"Kabari kami bagaimana Anda menikmati pelatihan dan apa yang Anda pikirkan "
-"tentang tool InaSAFE."
+msgstr "Kabari kami bagaimana Anda menikmati pelatihan dan apa yang Anda pikirkan tentang tool InaSAFE."
 
-# c86991e2294645ad8efe63783c404c2f
+# 73e0daa48fcd4e90a000c1c1edafbeac
 #: ../../source/tutorial-docs/tutorial.rst:572
 msgid "THE INASAFE TEAM"
 msgstr "THE INASAFE TEAM"
 
-# a069f2fdf40f4863812ae1b2a580dad7
+# 79cc2b7f96604054aa31b2491f4c8584
 #: ../../source/tutorial-docs/tutorial.rst:574
 msgid "Indonesian Disaster Management Agency (BNPB)"
 msgstr "Badan Nasinal Penanggulangan Bencana (BNPB)"
 
-# a31b3a0855e84905a8be1ed49ff45fb3
+# 0eb9b45f7b2945e1b18eda3a701c8dca
 #: ../../source/tutorial-docs/tutorial.rst:575
 msgid "AusAID - Australia-Indonesia Facility for Disaster Reduction"
 msgstr "AusAID - Australia-Indonesia Facility for Disaster Reduction"
 
-# 6afcbe56cdc64497a7be7185fec0c7cf
+# 9f51e14fc09a424085f94227fd7bd8f5
 #: ../../source/tutorial-docs/tutorial.rst:576
 msgid "World Bank - Global Facility for Disaster Reduction and Recovery"
 msgstr "Bank Dunia - Global Facility for Disaster Reduction and Recovery"
-
-# ff56cf911e5c422b9b58d555c6c5f8a1
-#, fuzzy
-#~ msgid "|project_name| Tutorial"
-#~ msgstr "Tutorial |project_name|"

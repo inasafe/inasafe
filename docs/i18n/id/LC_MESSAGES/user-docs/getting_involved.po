@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2013-03-06 10:57+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 339420142250436893239b72c54373be
 #: ../../source/user-docs/getting_involved.rst:6
@@ -38,8 +38,8 @@ msgstr ""
 msgid ""
 "**Visit our web site!** The web site will always represent the latest "
 "information on how to use InaSAFE. We encourage anyone who wants to get "
-"involved with the project to first read the content available on the site to "
-"familiarise themselves with the content. The website is available at:"
+"involved with the project to first read the content available on the site to"
+" familiarise themselves with the content. The website is available at:"
 msgstr ""
 
 # 445f3d6839b841519370f0d8d66d3188
@@ -50,9 +50,9 @@ msgstr ""
 # 5b150a6a099f49bc9f097a8038ee0b70
 #: ../../source/user-docs/getting_involved.rst:22
 msgid ""
-"**Join our mailing list!** If you would like to discuss methodologies, using "
-"the software or any issues you encounter, you can join our google group (you "
-"do not need a google account to use this forum) by sending an email to:"
+"**Join our mailing list!** If you would like to discuss methodologies, using"
+" the software or any issues you encounter, you can join our google group "
+"(you do not need a google account to use this forum) by sending an email to:"
 msgstr ""
 
 # 68f0b7f247484ac888c83a0e3fb9c8ce
@@ -92,11 +92,11 @@ msgstr ""
 # 1ff24efe345644b9843bba041d2e876b
 #: ../../source/user-docs/getting_involved.rst:41
 msgid ""
-"**Chat live to developers on IRC!** Internet Relay Chat (IRC) is a chat room "
-"environment where you can talk (by typing messages) to other inasafe users "
+"**Chat live to developers on IRC!** Internet Relay Chat (IRC) is a chat room"
+" environment where you can talk (by typing messages) to other inasafe users "
 "and developers to discuss ideas and get help. You can use your own IRC "
-"client and join #inasafe on the irc.freenode.net network. Alternatively, you "
-"can use your web browser to join the chat room using the link below:"
+"client and join #inasafe on the irc.freenode.net network. Alternatively, you"
+" can use your web browser to join the chat room using the link below:"
 msgstr ""
 
 # 67e7efd3c41d4bc2ac1dec7ece2f5a91
@@ -107,9 +107,9 @@ msgstr ""
 # 3f1d8f0b21b84bff8223bb1e321cae79
 #: ../../source/user-docs/getting_involved.rst:49
 msgid ""
-"On the form that appears, choose a user name, enter #inasafe in the :"
-"guilabel:` Channels:` box and complete the rest of the details in the form. "
-"After logging in wait a few moments and you will be take to the #inasafe "
+"On the form that appears, choose a user name, enter #inasafe in the "
+":guilabel:` Channels:` box and complete the rest of the details in the form."
+" After logging in wait a few moments and you will be take to the #inasafe "
 "channel."
 msgstr ""
 
@@ -124,12 +124,13 @@ msgstr ""
 # ac9b53f9f2754c2d98c27f2b22a7dd64
 #: ../../source/user-docs/getting_involved.rst:57
 msgid ""
-"**Submit your code!** We would really like to emphasise that InaSAFE is Free "
-"and Open Source. That means anyone (or any organisation) can freely modify, "
-"adapt and improve the software. We will welcome any contributions to "
-"InaSAFE. The easiest way to do this is to `fork <https://help.github.com/"
-"articles/fork-a-repo>`_ the InaSAFE code base on GitHub and then send us a "
-"`pull request <https://help.github.com/articles/using-pull-requests>`_."
+"**Submit your code!** We would really like to emphasise that InaSAFE is Free"
+" and Open Source. That means anyone (or any organisation) can freely modify,"
+" adapt and improve the software. We will welcome any contributions to "
+"InaSAFE. The easiest way to do this is to `fork "
+"<https://help.github.com/articles/fork-a-repo>`_ the InaSAFE code base on "
+"GitHub and then send us a `pull request <https://help.github.com/articles"
+"/using-pull-requests>`_."
 msgstr ""
 
 # d6a18f8c99684cfbabb1b5f9a080bbcc
@@ -145,6 +146,6 @@ msgid ""
 "We have strict requirements that all code submitted to InaSAFE is compliant "
 "with high :doc:`/developer-docs/coding_standards` and is continually tested "
 "by a comprehensive regression testing system. We have this requirement in "
-"place to ensure a good experience for our users and to ensure that users can "
-"have confidence in the results produced by InaSAFE."
+"place to ensure a good experience for our users and to ensure that users can"
+" have confidence in the results produced by InaSAFE."
 msgstr ""

@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:28+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 067db24ea58442f5b0dfb46a3c089980
 #: ../../source/developer-docs/platform_windows.rst:7
@@ -43,20 +43,20 @@ msgstr ""
 #: ../../source/developer-docs/platform_windows.rst:18
 msgid ""
 "To check out the code for development, you first need to install a git "
-"client. We cover msysgit here, but you can also use `tortoisegit <http://"
-"code.google.com/p/tortoisegit/downloads/list>`_ if you prefer (although the "
-"tortoise git procedure is not covered here)."
+"client. We cover msysgit here, but you can also use `tortoisegit "
+"<http://code.google.com/p/tortoisegit/downloads/list>`_ if you prefer "
+"(although the tortoise git procedure is not covered here)."
 msgstr ""
 
 # 3fe1d8dd07e24d7b9f2771c78cff0087
 #: ../../source/developer-docs/platform_windows.rst:23
 msgid ""
-"To install msysgit (which is a command line git client), download the latest "
-"version of the software from the `msysgit web site <http://code.google.com/p/"
-"msysgit/downloads/list>`_. There is no need to get the 'full install' - just "
-"fetching the latest 'preview' is good enough. For example at the time of "
-"writing I downloaded :samp:`Git-1.7.9-preview20120201.exe`. The download is "
-"around 14mb in size."
+"To install msysgit (which is a command line git client), download the latest"
+" version of the software from the `msysgit web site "
+"<http://code.google.com/p/msysgit/downloads/list>`_. There is no need to get"
+" the 'full install' - just fetching the latest 'preview' is good enough. For"
+" example at the time of writing I downloaded "
+":samp:`Git-1.7.9-preview20120201.exe`. The download is around 14mb in size."
 msgstr ""
 
 # 25587db4dd9f43fbafa26dee8af0bdf7
@@ -108,8 +108,8 @@ msgstr ""
 #: ../../source/developer-docs/platform_windows.rst:105
 #: ../../source/developer-docs/platform_windows.rst:135
 msgid ""
-"When the final command above runs, you should see something like this in the "
-"console when the clone process is completed::"
+"When the final command above runs, you should see something like this in the"
+" console when the clone process is completed::"
 msgstr ""
 
 # 93d68f3da2df43dbbef00db0ae50a590
@@ -139,9 +139,9 @@ msgstr ""
 # 69bf7505bded402ab3c1a5d1ed5db9df
 #: ../../source/developer-docs/platform_windows.rst:149
 msgid ""
-"Download the latest QGIS 'standalone' installer from http://download.qgis."
-"org and install it by running the installation wizard and accepting the "
-"defaults throughout."
+"Download the latest QGIS 'standalone' installer from "
+"http://download.qgis.org and install it by running the installation wizard "
+"and accepting the defaults throughout."
 msgstr ""
 
 # 8e1782f94f45431cb99f670db509ccfe
@@ -162,9 +162,9 @@ msgstr ""
 #: ../../source/developer-docs/platform_windows.rst:160
 msgid ""
 "Our primary development platform is Linux (specifically Ubuntu Linux). Some "
-"features of the development environment - particularly the **Make** tools do "
-"not run on Windows. Some helper scripts have been written to substitute for "
-"make but they do not have feature parity with the make scripts."
+"features of the development environment - particularly the **Make** tools do"
+" not run on Windows. Some helper scripts have been written to substitute for"
+" make but they do not have feature parity with the make scripts."
 msgstr ""
 
 # 17e9dbcf8f504098a2e50a64797b0bc3
@@ -190,8 +190,8 @@ msgstr ""
 msgid ""
 "We will create a custom shell launcher that will give you a python shell "
 "environment using the python that comes bundled with QGIS, and that sets "
-"various paths and evironment variables so everything works as expected. Save "
-"the following listing in <QGIS Install Dir>/bin/python-shell.bat::"
+"various paths and evironment variables so everything works as expected. Save"
+" the following listing in <QGIS Install Dir>/bin/python-shell.bat::"
 msgstr ""
 
 # 84e396e3470b462486788348f4ae13dd
@@ -229,8 +229,9 @@ msgstr ""
 # be3430b34f274f89a57466b77dfc2849
 #: ../../source/developer-docs/platform_windows.rst:214
 msgid ""
-"To verify your path, launch your python shell (by clicking the python-shell."
-"bat) and then start a python shell. Now enter the follow simple script::"
+"To verify your path, launch your python shell (by clicking the python-"
+"shell.bat) and then start a python shell. Now enter the follow simple "
+"script::"
 msgstr ""
 
 # 612efff579dd4cb0bd23b6f5d0992c7a
@@ -241,8 +242,8 @@ msgstr ""
 # fb13f2457bac4321b42d79e6a24dc40e
 #: ../../source/developer-docs/platform_windows.rst:239
 msgid ""
-"It is particularly the second and third lines that you need to have in place "
-"so that the QGIS libs can found. Now dow a simple test to see if you can "
+"It is particularly the second and third lines that you need to have in place"
+" so that the QGIS libs can found. Now dow a simple test to see if you can "
 "import the QGIS libs::"
 msgstr ""
 
@@ -269,44 +270,44 @@ msgid ""
 "We need to install easy_install so that we can install pip so that we can "
 "install nosetests and other python tools. Under windows you need to run a "
 "little script to install easy_install and then use easy_install to install "
-"pypi. Download the script on `this page <http://pypi.python.org/pypi/"
-"setuptools#windows>`_ called ez_setup.py and save it somewhere familiar e."
-"g. :samp:`c:\\temp`."
+"pypi. Download the script on `this page "
+"<http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py and "
+"save it somewhere familiar e.g. :samp:`c:\\temp`."
 msgstr ""
 
 # d1786f82c1804fce8d9b3763e246b63e
 #: ../../source/developer-docs/platform_windows.rst:267
 msgid ""
-"If you use windows 32bit, do not download the .exe file as said on `the page "
-"<http://pypi.python.org/pypi/setuptools#windows>`_, but just download the "
+"If you use windows 32bit, do not download the .exe file as said on `the page"
+" <http://pypi.python.org/pypi/setuptools#windows>`_, but just download the "
 "ez_setup.py"
 msgstr ""
 
-# 10b87266bb8646efb2ee2c3bdd507ea3
+# 150b835da5694a8ba7da0d30c9f51550
 #: ../../source/developer-docs/platform_windows.rst:272
 msgid "Special note for Win64 bit users"
 msgstr ""
 
-# 46307c712ffb464ba450fdbf3aea9485
+# e871f2147c6547edb5231edae374c770
 #: ../../source/developer-docs/platform_windows.rst:274
 msgid ""
 "If your Windows is 64bit, you need to do a little trick to install pip. "
 "There are two options for doing this:"
 msgstr ""
 
-# 6c1a7708e18447d387e1142ed03267dc
+# 7119c6df7b6447c0aa1c994ab78d03ff
 #: ../../source/developer-docs/platform_windows.rst:277
 msgid ""
 "Add the following line near the end of your command shell launcher (as "
 "described in :ref:`windows_shell_launcher-label`):"
 msgstr ""
 
-# 3d6b64fec3d84e1e87e89abaed98dcda
+# e3785756fb8e4271b31adcaa5514f709
 #: ../../source/developer-docs/platform_windows.rst:280
 msgid ":samp:`set PATH=c:\\python27;%PATH%`"
 msgstr ""
 
-# 04bd0a81234a41028c399eac57ce1bdb
+# 8b332072192e49d0812507b1dfae3558
 #: ../../source/developer-docs/platform_windows.rst:282
 msgid ""
 "First you have to install python 32bit and add its path to PATH variable in "
@@ -314,7 +315,7 @@ msgid ""
 "Advanced --> Environment Variables`)."
 msgstr ""
 
-# c0006a6d4a3f466497777aea3a08f093
+# 41ab0502703a49578df896325349f9a6
 #: ../../source/developer-docs/platform_windows.rst:286
 msgid ""
 "To verify that you have the correct python in your path launch python and "
@@ -322,7 +323,7 @@ msgid ""
 "per the demo session below::"
 msgstr ""
 
-# 5b7e1b5b06734084a5c186c99074afb7
+# 3d17b964dcbd452fa9515a15dc1abae3
 #: ../../source/developer-docs/platform_windows.rst:300
 msgid "For both 32 and 64 bit"
 msgstr ""
@@ -332,8 +333,8 @@ msgstr ""
 msgid ""
 "Next launch the shell (python-shell.bat as described in :ref:`windows-"
 "commandline_setup`) **as administrator** (by right clicking the file and "
-"choosing run as administrator). Then from the command line, launch :command:"
-"`ez_setup.py` by typing this::"
+"choosing run as administrator). Then from the command line, launch "
+":command:`ez_setup.py` by typing this::"
 msgstr ""
 
 # e22f4979f0314addb6695df17bd2fc00
@@ -366,10 +367,10 @@ msgstr ""
 #: ../../source/developer-docs/platform_windows.rst:349
 msgid ""
 "`Nose <http://somethingaboutorange.com/mrl/projects/nose/>`_ is a tool for "
-"automation of running python unit tests. With nose you can run a whole batch "
-"of tests in one go. With the nosecover plugin you can also generate coverage "
-"reports which will indicate how many lines of your code actually have been "
-"tested."
+"automation of running python unit tests. With nose you can run a whole batch"
+" of tests in one go. With the nosecover plugin you can also generate "
+"coverage reports which will indicate how many lines of your code actually "
+"have been tested."
 msgstr ""
 
 # b8e0234e172b43639c1de1e70c082916
@@ -387,8 +388,8 @@ msgstr ""
 # 26e5a450db73464cb63c10673998880b
 #: ../../source/developer-docs/platform_windows.rst:363
 msgid ""
-"Once they are installed, you can run the nose tests from windows by going to "
-"the plugin directory/inasafe-dev folder (in your python-shell.bat shell "
+"Once they are installed, you can run the nose tests from windows by going to"
+" the plugin directory/inasafe-dev folder (in your python-shell.bat shell "
 "session) and running::"
 msgstr ""
 
@@ -439,8 +440,8 @@ msgstr ""
 # 9733d8873ff942f4a05d4cc2d09df5ce
 #: ../../source/developer-docs/platform_windows.rst:397
 msgid ""
-"Only the html make target has been tested. To use other make targets you may "
-"need to perform further system administrative tasks."
+"Only the html make target has been tested. To use other make targets you may"
+" need to perform further system administrative tasks."
 msgstr ""
 
 # 1cb2083f8dbe45baa6122ad04d2f4169
@@ -451,9 +452,9 @@ msgstr ""
 # 43ebf7f97d714a4da802e2e2a94cd9d7
 #: ../../source/developer-docs/platform_windows.rst:403
 msgid ""
-"The documentation can be viewed from withing QGIS by clicking the :guilabel:"
-"`help` button on the |project_name| dock panel, or you can view it in your "
-"browser by opening a url similar to this one::"
+"The documentation can be viewed from withing QGIS by clicking the "
+":guilabel:`help` button on the |project_name| dock panel, or you can view it"
+" in your browser by opening a url similar to this one::"
 msgstr ""
 
 # b34a71785bf34e6984687b94dfac6616
@@ -566,8 +567,8 @@ msgstr ""
 # b523087a4ed24977aee8515547fb0a97
 #: ../../source/developer-docs/platform_windows.rst:475
 msgid ""
-":guilabel (windows):`Directory` : :kbd:`C:\\\\Users\\\\<user>\\\\.qgis\\"
-"\\python\\\\plugins\\\\inasafe\\\\`"
+":guilabel (windows):`Directory` : "
+":kbd:`C:\\\\Users\\\\<user>\\\\.qgis\\\\python\\\\plugins\\\\inasafe\\\\`"
 msgstr ""
 
 # 29aa953590d94db8870acedb84fd2741
@@ -595,9 +596,9 @@ msgstr ""
 # 5efe60f19e1e469698317b87c3dc8d6e
 #: ../../source/developer-docs/platform_windows.rst:484
 msgid ""
-"At this point you should should click the link entitled 'Please configure an "
-"interpreter in related preferences before continuing.' And on the resulting "
-"dialog do:"
+"At this point you should should click the link entitled 'Please configure an"
+" interpreter in related preferences before continuing.' And on the resulting"
+" dialog do:"
 msgstr ""
 
 # d9ad0710480943e0b9cd9699e497b7c5
@@ -618,8 +619,8 @@ msgstr ""
 # 842fce7cab914199a3c691612272ab4d
 #: ../../source/developer-docs/platform_windows.rst:492
 msgid ""
-":guilabel:`Interpreter Executable` : :kbd:`C:\\\\Program Files (x86)\\"
-"\\Quantum GIS Lisboa\\\\bin\\\\python.exe`"
+":guilabel:`Interpreter Executable` : :kbd:`C:\\\\Program Files "
+"(x86)\\\\Quantum GIS Lisboa\\\\bin\\\\python.exe`"
 msgstr ""
 
 # 326c41488b17414697dc40d4df0707bb
@@ -650,8 +651,8 @@ msgstr ""
 # d4d8d78adf8a46d09389694a48cadac6
 #: ../../source/developer-docs/platform_windows.rst:523
 msgid ""
-"You will be returned to the Python Interpreters list and should see an entry "
-"for **QGIS Python 2.7** listed there. Now do in the **Environment** tab:"
+"You will be returned to the Python Interpreters list and should see an entry"
+" for **QGIS Python 2.7** listed there. Now do in the **Environment** tab:"
 msgstr ""
 
 # 55add70dd6134411a4619064230ae3ef
@@ -667,8 +668,8 @@ msgstr ""
 # fbfb33f246fa4f8c8c835d8cbf8d8515
 #: ../../source/developer-docs/platform_windows.rst:530
 msgid ""
-":guilabel:`Name` : :kbd:`QGIS_PREFIX_PATH` :guilabel:`Value` : :kbd:`C:\\"
-"\\PROGRA~1\\\\QUANTU~1\\\\apps\\\\qgis`"
+":guilabel:`Name` : :kbd:`QGIS_PREFIX_PATH` :guilabel:`Value` : "
+":kbd:`C:\\\\PROGRA~1\\\\QUANTU~1\\\\apps\\\\qgis`"
 msgstr ""
 
 # 12991810b6394898bf6deadf8541618c
@@ -701,8 +702,8 @@ msgstr ""
 msgid ""
 "For remote debugging, you should add pydevd to your PYTHONPATH before "
 "starting *QGIS*. Under Windows, the best way to do this is to add the "
-"following line to :command:`qgis.bat` under C:\\Program Files (x86)\\Quantum "
-"GIS Wroclaw\\bin::"
+"following line to :command:`qgis.bat` under C:\\Program Files (x86)\\Quantum"
+" GIS Wroclaw\\bin::"
 msgstr ""
 
 # dc06bba89b414156a24d5aaefeac0915
@@ -739,13 +740,13 @@ msgstr ""
 # 0f28bbcd8f914bbea0b0f1bbcd034782
 #: ../../source/developer-docs/platform_windows.rst:570
 msgid ""
-"To initiate a remote debugging session, add the settrace() directive to your "
-"source file and then start the python remote debugging service from the "
-"PyDev debug perspective. Then launch QGIS (or your command line application) "
-"and use the application until the settrace line is encountered. QGIS will "
+"To initiate a remote debugging session, add the settrace() directive to your"
+" source file and then start the python remote debugging service from the "
+"PyDev debug perspective. Then launch QGIS (or your command line application)"
+" and use the application until the settrace line is encountered. QGIS will "
 "appear to freeze - this is normal. Now switch to Eclipse and you should see "
-"the settrace line has been highlighted in green and you can step through the "
-"code using standard Eclipse debugging tools (done most easily from the "
+"the settrace line has been highlighted in green and you can step through the"
+" code using standard Eclipse debugging tools (done most easily from the "
 "debugging perspective)."
 msgstr ""
 
@@ -808,9 +809,9 @@ msgstr ""
 # 99960dadda844726968a86c9949eee27
 #: ../../source/developer-docs/platform_windows.rst:601
 msgid ""
-"If you run the test suite for the entire inasafe package, it will mistakenly "
-"treat the sphinx documentation conf.py (docs.source.conf) as a test and fail "
-"for that test. This is 'normal' and can be ignored."
+"If you run the test suite for the entire inasafe package, it will mistakenly"
+" treat the sphinx documentation conf.py (docs.source.conf) as a test and "
+"fail for that test. This is 'normal' and can be ignored."
 msgstr ""
 
 # f61575cb7c5d44aaaaedbc968be64d22
@@ -841,13 +842,13 @@ msgstr ""
 #: ../../source/developer-docs/platform_windows.rst:618
 msgid ""
 "As with using Pydev's built in test runner, you can also run any module, "
-"class etc. while using the nose test runner by right clicking on the item in "
-"the PyDev package explorer."
+"class etc. while using the nose test runner by right clicking on the item in"
+" the PyDev package explorer."
 msgstr ""
 
 # fecd3fd5c92549608e88882cf67065d1
 #: ../../source/developer-docs/platform_windows.rst:622
 msgid ""
-"Actually, we can run the test runner until this step. But, we got a problem, "
-"so you need to install python in your windows machine."
+"Actually, we can run the test runner until this step. But, we got a problem,"
+" so you need to install python in your windows machine."
 msgstr ""

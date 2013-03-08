@@ -295,3 +295,27 @@ source_file = docs/i18n/en/LC_MESSAGES/tutorial-docs/tutorial.po
 source_lang = en
 type = PO
 
+[inasafe.developer-docs-impact-function-tutorial]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/impact_function_tutorial.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/impact_function_tutorial.po
+source_lang = en
+type = PO
+
+[inasafe.developer-docs-writing-impact-functions]
+file_filter = docs/i18n/<lang>/LC_MESSAGES/developer-docs/writing_impact_functions.po
+source_file = docs/i18n/en/LC_MESSAGES/developer-docs/writing_impact_functions.po
+source_lang = en
+type = PO
+
+[inasafe.safe_qgis]
+file_filter = safe_qgis/i18n/inasafe_<lang>.ts
+source_file = safe_qgis/i18n/inasafe_en.ts
+source_lang = en
+type = QT
+
+[inasafe.safe]
+file_filter = safe/i18n/<lang>/LC_MESSAGES/inasafe.po
+source_file = safe/i18n/en/LC_MESSAGES/inasafe.po
+source_lang = en
+type = PO
+

@@ -8,86 +8,98 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-26 15:53\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:6
 # 73836be917b4496aa826147ea2814e47
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:6
 msgid "Flood Building Impact Function"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:9
 # b76f56d0cbe640bab51ddbe8a2559919
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:9
 msgid "Overview"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:11
 # 5c824c2d6b1f4966b30ace9c36b91bfd
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:11
 msgid "**Rating**: 0"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:13
 # 723575173e594c65af5401d3cdf4f209
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:13
 msgid "**Limitation**: Lorem ipsum limitation"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:15
 # 363eeb73e44e4dcdb03da27e559a5452
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:15
 msgid "**Title**: Be flooded"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:17
 # 911197660f524064b52cf7d052b0d0c8
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:17
 msgid "**Unique Identifier**: Flood Building Impact Function"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:19
 # 7318353c74f5429c9f7f2405e994dc5f
-msgid "**Permissible Hazard Input**: A raster layer where each cell represents flood depth, or a vector polygon layer where each polygon represents an inundated area. The following attributes are recognised (in order): Flooded (True or False), FLOODPRONE (Yes or No) and Affected (True or False)."
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:19
+msgid ""
+"**Permissible Hazard Input**: A raster layer where each cell represents "
+"flood depth, or a vector polygon layer where each polygon represents an "
+"inundated area. The following attributes are recognised (in order): Flooded "
+"(True or False), FLOODPRONE (Yes or No) and Affected (True or False)."
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:21
 # e09f9b7af8d145c9a140b3d59fa1c8e7
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:21
 msgid "**Author**: Ole Nielsen, Kristy van Putten"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:23
 # 0e7f4bc362b14daf8c619b667e7700de
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:23
 msgid "**Actions**: Provide details about where critical response areas are"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:25
 # 745f090972914f3885a5a411fe474289
-msgid "**Synopsis**: To assess the impacts of inundation on building footprints originating from OpenStreetMap (OSM)."
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:25
+msgid ""
+"**Synopsis**: To assess the impacts of inundation on building footprints "
+"originating from OpenStreetMap (OSM)."
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:27
 # 31391015a113406da1e9dcefe0f2afa6
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:27
 msgid "**Citations**:"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:29
 # c80b897785de497480154a94feb65764
-msgid "Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. Vol 66(2). 2012"
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:29
+msgid ""
+"Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. "
+"Vol 66(2). 2012"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:32
 # 3e10082e16d34b1faaa8b3236cf2c9a4
-msgid "**Permissible Exposure Input**: vector polygon layer extracted from OSM where each polygon represents the footprint of a building."
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:32
+msgid ""
+"**Permissible Exposure Input**: vector polygon layer extracted from OSM "
+"where each polygon represents the footprint of a building."
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:35
 # 7fc6e58927a943eaa72ece6d700872de
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:35
 msgid "Details"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:37
 # cc4498ac0fa64c339cd9ae79d14918a1
-msgid "This is an area for free form text where adetailed description of the methodology used is given."
+#: ../../source/user-docs/impact_function_docs/FloodBuildingImpactFunction.rst:37
+msgid ""
+"This is an area for free form text where adetailed description of the "
+"methodology used is given."
 msgstr ""
-

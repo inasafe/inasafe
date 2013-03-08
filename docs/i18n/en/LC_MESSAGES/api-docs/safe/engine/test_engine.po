@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,20 @@ msgstr ""
 # b5ed46c34b1a4d0b8983ffde97db0f43
 #: ../../source/api-docs/safe/engine/test_engine.rst:6
 msgid "Module:  safe.engine.test_engine"
+msgstr ""
+
+# 9dc1c60e549e4124a116c8c842c3f8e2
+#: ../../../safe/engine/test_engine.py:docstring of
+#: safe.engine.test_engine.linear_function:1
+msgid "Auxiliary function for use with interpolation test"
+msgstr ""
+
+# 163abd9b1888412fa5448e1a8ab7dd98
+#: ../../../safe/engine/test_engine.py:docstring of
+#: safe.engine.test_engine.padang_check_results:1
+msgid ""
+"Check calculated results through a lookup table returns False if the lookup "
+"fails and an exception if more than one lookup returned"
 msgstr ""
 
 # c19befb1bbce4f5989c6a1144b3bfb47

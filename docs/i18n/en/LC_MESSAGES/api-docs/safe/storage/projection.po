@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,57 @@ msgstr ""
 # 0f2d300a26e14bd09ac94ebf067e163b
 #: ../../source/api-docs/safe/storage/projection.rst:6
 msgid "Module:  safe.storage.projection"
+msgstr ""
+
+# 74ed9ab7ea964a2da15bc36cc1a938e9
+#: ../../../safe/storage/projection.py:docstring of safe.storage.projection:1
+msgid "**Class projection**"
+msgstr ""
+
+# 2b72984214844d49b6dc9f859e80a482
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection:1
+msgid "Represents projections associated with layers"
+msgstr ""
+
+# a24409e6c5214da38973ffa32ceb87b6
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection.get_projection:1
+msgid "Return projection"
+msgstr ""
+
+# 48ef21ec6dcc4e8285ea382b6bbec128
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection.get_projection:5
+msgid "If False (default) projection will be returned in WKT format"
+msgstr ""
+
+# 233fba9188c84e6cace83c20dd0c9123
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.Projection.get_projection:9
+msgid ""
+"To compare projections, use the __eq__ method directly on the projection "
+"objects: E.g. self.projection == other.projection"
+msgstr ""
+
+# dbb21a4458614cf4a323d8686e2bf164
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.proj4_to_dict:1
+msgid ""
+"Helper to turn a proj4 string into a dictionary for ease of comparison See "
+"issue #304"
+msgstr ""
+
+# fff1dae9f8b04998a24e83e117d409e4
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.proj4_to_dict:5
+msgid "P: proj4 string, such as +proj=longlat +ellps=WGS84 +no_defs"
+msgstr ""
+
+# e9d32a6fc73748cea633b39663877347
+#: ../../../safe/storage/projection.py:docstring of
+#: safe.storage.projection.proj4_to_dict:9
+msgid "'+ellps': 'WGS84', '+no_defs': ''}"
 msgstr ""
 
 # 35418c83870a474d946aa62b96bf0ef1

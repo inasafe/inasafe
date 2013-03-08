@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -245,8 +245,22 @@ msgid ""
 "documenting functions and class methods::"
 msgstr ""
 
+# bb2ff5c79ca8490287d09b0274e72796
+#: ../../source/developer-docs/coding_standards.rst:121
+msgid ""
+"If you use a few lines of code in more than one place, refactor them into "
+"their own function."
+msgstr ""
+
+# 7ad24d4720b64cdda06b31c567cf9e02
+#: ../../source/developer-docs/coding_standards.rst:123
+msgid ""
+"If you use a literal string or expression in more than one place, refactor "
+"it into a function or variable."
+msgstr ""
+
 # 927208de4cd14ed4bdabdbcd53c30d19
-#: ../../source/developer-docs/coding_standards.rst:122
+#: ../../source/developer-docs/coding_standards.rst:127
 msgid ""
 "Various other sphinx markup elements may be used in the docstrings too. For "
 "more information see also: http://thomas-cokelaer.info/tutorials/sphinx/"
@@ -254,12 +268,12 @@ msgid ""
 msgstr ""
 
 # f81f1d65b99b40918a456f400a897bde
-#: ../../source/developer-docs/coding_standards.rst:130
+#: ../../source/developer-docs/coding_standards.rst:135
 msgid "Human Interface Guidelines"
 msgstr ""
 
 # e3daaf2608bb42a58608077c8c2b1500
-#: ../../source/developer-docs/coding_standards.rst:132
+#: ../../source/developer-docs/coding_standards.rst:137
 msgid ""
 "For consistency of user experience, the user interfaces created in Risk in a "
 "Box should adhere to the QGIS Human Interface Guidelines (HIG) which are "
@@ -267,7 +281,7 @@ msgid ""
 msgstr ""
 
 # 318bc45e9e6d494c9a0a58041a05a86e
-#: ../../source/developer-docs/coding_standards.rst:136
+#: ../../source/developer-docs/coding_standards.rst:141
 msgid ""
 "Group related elements using group boxes: Try to identify elements that can "
 "be grouped together and then use group boxes with a label to identify the "
@@ -276,7 +290,7 @@ msgid ""
 msgstr ""
 
 # a544cc3c34ef45f89305077155ede083
-#: ../../source/developer-docs/coding_standards.rst:140
+#: ../../source/developer-docs/coding_standards.rst:145
 msgid ""
 "Capitalise first letter only in labels: Labels (and group box labels) should "
 "be written as a phrase with leading capital letter, and all remaing words "
@@ -284,7 +298,7 @@ msgid ""
 msgstr ""
 
 # ce0601b9bc854e22b9e020dfcbea4fd7
-#: ../../source/developer-docs/coding_standards.rst:143
+#: ../../source/developer-docs/coding_standards.rst:148
 msgid ""
 "Do not end labels for widgets or group boxes with a colon: Adding a colon "
 "causes visual noise and does not impart additional meaning, so don't use "
@@ -293,7 +307,7 @@ msgid ""
 msgstr ""
 
 # 2a16ba009c8a4817a6b145a5f8b4788b
-#: ../../source/developer-docs/coding_standards.rst:147
+#: ../../source/developer-docs/coding_standards.rst:152
 msgid ""
 "Keep harmful actions away from harmless ones: If you have actions for "
 "'delete', 'remove' etc, try to impose adequate space between the harmful "
@@ -302,7 +316,7 @@ msgid ""
 msgstr ""
 
 # d55866f818764cefa16da905b79b6909
-#: ../../source/developer-docs/coding_standards.rst:151
+#: ../../source/developer-docs/coding_standards.rst:156
 msgid ""
 "Always use a QButtonBox for 'OK', 'Cancel' etc buttons: Using a button box "
 "will ensure that the order of 'OK' and 'Cancel' etc, buttons is consistent "
@@ -311,7 +325,7 @@ msgid ""
 msgstr ""
 
 # d604d1b4b3bb4516a517d241b2aae7a2
-#: ../../source/developer-docs/coding_standards.rst:155
+#: ../../source/developer-docs/coding_standards.rst:160
 msgid ""
 "Tabs should not be nested. If you use tabs, follow the style of the tabs "
 "used in QgsVectorLayerProperties / QgsProjectProperties etc. i.e. tabs at "
@@ -319,7 +333,7 @@ msgid ""
 msgstr ""
 
 # 0690645d4665402ebbe2e274ff4bc86b
-#: ../../source/developer-docs/coding_standards.rst:158
+#: ../../source/developer-docs/coding_standards.rst:163
 msgid ""
 "Widget stacks should be avoided if at all possible. They cause problems with "
 "layouts and inexplicable (to the user) resizing of dialogs to accommodate "
@@ -327,22 +341,29 @@ msgid ""
 msgstr ""
 
 # 0756e71194c04ac4a0381a65cb017388
-#: ../../source/developer-docs/coding_standards.rst:161
+#: ../../source/developer-docs/coding_standards.rst:166
 msgid ""
 "Try to avoid technical terms and rather use a laymans equivalent e.g. use "
 "the word 'Transparency' rather than 'Alpha Channel' (contrived example), "
 "'Text' instead of 'String' and so on."
 msgstr ""
 
+# d5aaeda216d343c0893b489eafa57d87
+#: ../../source/developer-docs/coding_standards.rst:169
+msgid ""
+"Use consistent iconography. If you need an icon or icon elements, please "
+"contact Robert Szczepanek on the mailing list for assistance."
+msgstr ""
+
 # 00dafd8be61d4c6d9ec47f24feb12655
-#: ../../source/developer-docs/coding_standards.rst:164
+#: ../../source/developer-docs/coding_standards.rst:171
 msgid ""
 "Place long lists of widgets into scroll boxes. No dialog should exceed 580 "
 "pixels in height and 1000 pixels in width."
 msgstr ""
 
 # 4802494b59d1420fa984da4dc87aa6c4
-#: ../../source/developer-docs/coding_standards.rst:166
+#: ../../source/developer-docs/coding_standards.rst:173
 msgid ""
 "Separate advanced options from basic ones. Novice users should be able to "
 "quickly access the items needed for basic activities without needing to "
@@ -352,35 +373,35 @@ msgid ""
 msgstr ""
 
 # ac93a48250ec4d9898bc13da243a1cf3
-#: ../../source/developer-docs/coding_standards.rst:170
+#: ../../source/developer-docs/coding_standards.rst:177
 msgid ""
 "Don't add options for the sake of having lots of options. Strive to keep the "
 "user interface minimalistic and use sensible defaults."
 msgstr ""
 
 # 075dc8a32a0b4254a070595c086277dd
-#: ../../source/developer-docs/coding_standards.rst:172
+#: ../../source/developer-docs/coding_standards.rst:179
 msgid ""
 "If clicking a button will spawn a new dialog, an ellipsis (...) should be "
 "suffixed to the button text."
 msgstr ""
 
 # 1424dff313f44b41b0341ea1888b0da7
-#: ../../source/developer-docs/coding_standards.rst:178
+#: ../../source/developer-docs/coding_standards.rst:184
 msgid "Code statistics"
 msgstr ""
 
 # 86010bf7ba4349ebb45664ca4cad7b73
-#: ../../source/developer-docs/coding_standards.rst:180
+#: ../../source/developer-docs/coding_standards.rst:186
 msgid "https://www.ohloh.net/p/inasafe/analyses/latest"
 msgstr ""
 
 # 8490d21b1997435488ec1411aadc73f6
-#: ../../source/developer-docs/coding_standards.rst:181
+#: ../../source/developer-docs/coding_standards.rst:187
 msgid "https://github.com/AIFDR/inasafe/network"
 msgstr ""
 
 # 52747f941aaa45f992a60bf765810a24
-#: ../../source/developer-docs/coding_standards.rst:182
+#: ../../source/developer-docs/coding_standards.rst:188
 msgid "https://github.com/AIFDR/inasafe/graphs"
 msgstr ""

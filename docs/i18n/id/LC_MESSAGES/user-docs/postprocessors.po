@@ -1,39 +1,40 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
+# Ismail Sunni <imajimatika@gmail.com>, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-19 11:09\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2013-03-06 10:04+0000\n"
+"Last-Translator: Ismail Sunni <imajimatika@gmail.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # cfb10658ca654eb996dc92e11852831e
 #: ../../source/user-docs/postprocessors.rst:8
 msgid "Post-processors"
-msgstr ""
+msgstr "Pasca-prosesor"
 
 # ec58a2a22da04869ae109d274f94861e
 #: ../../source/user-docs/postprocessors.rst:10
 msgid ""
 "This document explains the purpose of post-processors and lists the "
-"different available post-processors and the requirements each has to be used "
-"effectively."
-msgstr ""
+"different available post-processors and the requirements each has to be used"
+" effectively."
+msgstr "Dokumen ini menjelaskan tujuan dari pasca-prosesor dan daftar pasca-prosesor berbeda yang tersedia dan kebutuhan yang diperlukan untuk digunakan dengan efektif."
 
 # 99e51da4290944568fd5955d448115b7
 #: ../../source/user-docs/postprocessors.rst:15
 msgid "What is a post-processor?"
-msgstr ""
+msgstr "Apa itu pasca-prosesor?"
 
 # 77957f61bc0544f4b0048169e40d59c2
 #: ../../source/user-docs/postprocessors.rst:17
@@ -48,14 +49,14 @@ msgstr ""
 # ce69e7d985444dceafd84d4aaf4b9e23
 #: ../../source/user-docs/postprocessors.rst:23
 msgid "Selecting a post-processor"
-msgstr ""
+msgstr "Memilih pasca-prosesor"
 
 # 0f1883f5cd5e4154822e9fb5dcf73417
 #: ../../source/user-docs/postprocessors.rst:25
 msgid ""
 "Post-processors and their settings can be edited in the user configurable "
-"function parameters dialog. To disable a post-processor simply change the :"
-"guilabel:`Postprocessors` :samp:`\"'on': True\" to \"'on': False\"`. The "
+"function parameters dialog. To disable a post-processor simply change the "
+":guilabel:`Postprocessors` :samp:`\"'on': True\" to \"'on': False\"`. The "
 "same is valid for any other setting you might encounter there. If you don't "
 "see a post-processors field, it means that the impact function you are "
 "trying to use does not support any post processor"
@@ -72,13 +73,13 @@ msgstr ""
 # ec3661a9f45c4b97a958aa156a6e63f5
 #: ../../source/user-docs/postprocessors.rst:40
 msgid "Creating post-processors"
-msgstr ""
+msgstr "Membuat pasca-prosesor"
 
 # 2db450087c8f46f7ba8f04c83ae95db0
 #: ../../source/user-docs/postprocessors.rst:42
 msgid ""
-"If you feel there is an important post-processor which is missing, there are "
-"two avenues you can follow:"
+"If you feel there is an important post-processor which is missing, there are"
+" two avenues you can follow:"
 msgstr ""
 
 # e9208c5db1c648489bfa5f54f3c8cec9
@@ -91,7 +92,7 @@ msgstr ""
 # a5f463be8e7b4f1ba1aeff8a991653f9
 #: ../../source/user-docs/postprocessors.rst:47
 msgid ""
-"You can file a ticket on our `issue tracking system <https://github.com/"
-"AIFDR/inasafe/issues>`_, and if time and resources allow we will implement "
-"it for you."
+"You can file a ticket on our `issue tracking system "
+"<https://github.com/AIFDR/inasafe/issues>`_, and if time and resources allow"
+" we will implement it for you."
 msgstr ""

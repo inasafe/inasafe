@@ -8,51 +8,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-26 15:53\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:6
 # 27d482ffed944f65b3d85ca5fe667f6b
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:6
 msgid "Volcano Building Impact"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:9
 # 03a45415653743a9b819f0f2775370d7
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:9
 msgid "Overview"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:11
 # 4a5d51596af24f33adbc1f1a50046128
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:11
 msgid "**Unique Identifier**: Volcano Building Impact"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:13
 # 7241a57d5b4f4d498b8371f53fccb08e
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:13
 msgid "**Rating**: 4"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:15
 # b64f2fc9477f4392aefdb35b1ced336d
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:15
 msgid "**Title**: Be affected"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:17
 # 247d2cc17f50465fba25487fdb046a57
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:17
 msgid "**Author**: AIFDR"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:20
 # 81029193122a4669b5a69c6ad7f0cd01
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:20
 msgid "Details"
 msgstr ""
 
-#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:22
 # 4f60799f508b4f7980bb96d18b3de351
+#: ../../source/user-docs/impact_function_docs/VolcanoBuildingImpact.rst:22
 msgid "No documentation found"
 msgstr ""
-

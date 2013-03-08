@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, InaSAFE project
 # This file is distributed under the same license as the InaSAFE Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: InaSAFE Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-06 11:02+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 904f058684ef4519b4162d92a2ad8c62
 #: ../../source/developer-docs/realtime.rst:6
@@ -26,8 +26,8 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:8
 msgid ""
 "InaSAFE Realtime is a component of the InaSAFE project designed for "
-"deployment on a server and creation of Impact Maps a short interval after an "
-"event occurs."
+"deployment on a server and creation of Impact Maps a short interval after an"
+" event occurs."
 msgstr ""
 
 # 336e95da68eb4e0182fd958dfbda71b0
@@ -42,7 +42,8 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:15
 msgid ""
 "This work was funded by the Australia-Indonesia Facility for Disaster "
-"Reduction, Geoscience Australia and the GFDRR. We thank you for your support."
+"Reduction, Geoscience Australia and the GFDRR. We thank you for your "
+"support."
 msgstr ""
 
 # 77b9c143c7cb448eaa91b37ed7475c57
@@ -53,8 +54,8 @@ msgstr ""
 # 1bec49437ac94be480ca8bd07b151197
 #: ../../source/developer-docs/realtime.rst:22
 msgid ""
-"The original prototype of the realtime system was implemented by Ole Nielsen "
-"(AusAID). The subsequent port of the realtime system to InaSAFE was "
+"The original prototype of the realtime system was implemented by Ole Nielsen"
+" (AusAID). The subsequent port of the realtime system to InaSAFE was "
 "implemented by Tim Sutton (Linfiniti Consulting CC., funded by The World "
 "Bank and the AIFDR)."
 msgstr ""
@@ -145,11 +146,11 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:64
 msgid ""
 "an ftp server. There is an expectation that the server layout follows a "
-"simple flat structure where files are named after the shake event and are in "
-"the format of shake data as provided by the USGS (XXXXXX TODO fact check "
+"simple flat structure where files are named after the shake event and are in"
+" the format of shake data as provided by the USGS (XXXXXX TODO fact check "
 "XXXX). :samp:`ftp://118.97.83.243/20110413170148.inp.zip` **Note:** This "
-"data is now no longer hosted via ftp and requires an ssh account in order to "
-"retrieve it."
+"data is now no longer hosted via ftp and requires an ssh account in order to"
+" retrieve it."
 msgstr ""
 
 # 646d982521f949fabc136b0e009c309b
@@ -157,8 +158,9 @@ msgstr ""
 msgid ""
 "fetch, unpack, process and generate a report for a quake event. The module "
 "logic is based on the standard shake data packaging format supplied by the "
-"USGS. We have restricted out implementation to require only the :file:`grid."
-"xml` file contained in the inp.zip file in the downloaded zip file."
+"USGS. We have restricted out implementation to require only the "
+":file:`grid.xml` file contained in the inp.zip file in the downloaded zip "
+"file."
 msgstr ""
 
 # 3fa00856f1194be1aa4c7a72c26c7fed
@@ -186,10 +188,10 @@ msgid ""
 "Two of these dependencies is a template QGIS project and a map composition "
 "template. We have designed the realtime reporting engine to allow end users "
 "to customise the map report to their needs with little or no programming. "
-"The primary way to achieve this is by opening the custom template :file:"
-"`realtime/fixtures/realtime-template.qpt` in QGIS and modifying its "
-"contents. You could also build a new template from scratch provided the item "
-"IDs listed in the section that follows are used."
+"The primary way to achieve this is by opening the custom template "
+":file:`realtime/fixtures/realtime-template.qpt` in QGIS and modifying its "
+"contents. You could also build a new template from scratch provided the item"
+" IDs listed in the section that follows are used."
 msgstr ""
 
 # e62a8fd9c08b4c89bea5ba91150976c3
@@ -315,7 +317,8 @@ msgstr ""
 
 # 60da5c7479ac4a9d8ca9ed59083a743a
 #: ../../source/developer-docs/realtime.rst:247
-msgid "You also need to have the standard datasets needed for the cartography:"
+msgid ""
+"You also need to have the standard datasets needed for the cartography:"
 msgstr ""
 
 # 0145f842342243658846bb8cae39a0a1
@@ -337,8 +340,8 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:255
 msgid ""
 "This section describes the various elements that comprise the standard map "
-"template, and which you can modify directly in the template. These fall into "
-"three groups:"
+"template, and which you can modify directly in the template. These fall into"
+" three groups:"
 msgstr ""
 
 # 34dcaf1690f5427bbbbd9998ca876f9d
@@ -389,7 +392,8 @@ msgstr ""
 
 # 272c0b234c3740b8bb9c49f52b2c2b1c
 #: ../../source/developer-docs/realtime.rst:275
-msgid "the population layer. It is locked and limited to the population layer."
+msgid ""
+"the population layer. It is locked and limited to the population layer."
 msgstr ""
 
 # d867eaf7b6684352b0df3e81682c8d3c
@@ -415,15 +419,16 @@ msgstr ""
 # 2424e7b4311543af95c4b2679b7f761f
 #: ../../source/developer-docs/realtime.rst:289
 msgid ""
-"label contains the following replacement tokens: :samp:`M[mmi] [date] [time]`"
+"label contains the following replacement tokens: :samp:`M[mmi] [date] "
+"[time]`"
 msgstr ""
 
 # 7f47dac2e4e94fda8f9901c74c227fbf
 #: ../../source/developer-docs/realtime.rst:292
 msgid ""
-"default this label contains the following replacement tokens: :samp:`"
-"[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-"
-"name] [depth-value] [depth-unit]`"
+"default this label contains the following replacement tokens: :samp"
+":`[longitude-name] [longitude-value] [latitude-name] [latitude-value] "
+"[depth-name] [depth-value] [depth-unit]`"
 msgstr ""
 
 # 3c7a0fdcfb944a21878c8a60d2c3d5d2
@@ -431,7 +436,8 @@ msgstr ""
 msgid ""
 "the nearest major populated place. By default this label contains the "
 "following replacement tokens: :samp:`[located-label] [distance] [distance-"
-"unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-name]`"
+"unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-"
+"name]`"
 msgstr ""
 
 # 6aeea26bcdad492a85c129e8ab44a5b2
@@ -467,15 +473,15 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:313
 msgid ""
 "In this case any content that may be present in the element is completely "
-"replaced by the realtime map renderer, although certain styling options (e."
-"g. graticule settings on the map) will remain in effect."
+"replaced by the realtime map renderer, although certain styling options "
+"(e.g. graticule settings on the map) will remain in effect."
 msgstr ""
 
 # 5fa4da5ccee1486abc963c7069c8ecfe
 #: ../../source/developer-docs/realtime.rst:318
 msgid ""
-"number of modelled affected people in each of the MMI bands. This is an HTML "
-"element and output will fail if it is not present."
+"number of modelled affected people in each of the MMI bands. This is an HTML"
+" element and output will fail if it is not present."
 msgstr ""
 
 # b3dcccd84668483eae99c67159933ff6
@@ -520,7 +526,8 @@ msgstr ""
 # 0c009594aab840e4945544e9caed57c9
 #: ../../source/developer-docs/realtime.rst:343
 msgid ""
-"**exposure-table-name**: Estimated number of people exposed to each MMI level"
+"**exposure-table-name**: Estimated number of people exposed to each MMI "
+"level"
 msgstr ""
 
 # 2d97abeb9eda419699898b9b059c2846
@@ -537,15 +544,15 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:346
 msgid ""
 "**limitations**: This impact estimation is automatically generated and only "
-"takes into account the population and cities affected by different levels of "
-"ground shaking. The estimate is based on ground shaking data from BMKG, "
-"population density data from asiapop .org, place information from geonames."
-"org and software developed by BNPB. Limitations in the estimates of ground "
-"shaking, population  data and place names datasets may result in significant "
-"misrepresentation of the on-the-ground situation in the figures shown here. "
-"Consequently decisions should not be made solely on the information "
-"presented here and should always be verified by ground truthing and other "
-"reliable information sources."
+"takes into account the population and cities affected by different levels of"
+" ground shaking. The estimate is based on ground shaking data from BMKG, "
+"population density data from asiapop .org, place information from "
+"geonames.org and software developed by BNPB. Limitations in the estimates of"
+" ground shaking, population  data and place names datasets may result in "
+"significant misrepresentation of the on-the-ground situation in the figures "
+"shown here. Consequently decisions should not be made solely on the "
+"information presented here and should always be verified by ground truthing "
+"and other reliable information sources."
 msgstr ""
 
 # d5ec5183f6814b55bada224b528de267
@@ -568,8 +575,8 @@ msgstr ""
 # 863e15c5c5a14541a2cafbd66ffa9ad7
 #: ../../source/developer-docs/realtime.rst:362
 msgid ""
-"**location-info**: M 5.0 26-7-2012 2:15:35 Latitude: 12 '36.00\"S Longitude: "
-"124'27'0.00\"E Depth: 11.0km Located 2.50km SSW of Tondano"
+"**location-info**: M 5.0 26-7-2012 2:15:35 Latitude: 12 '36.00\"S Longitude:"
+" 124'27'0.00\"E Depth: 11.0km Located 2.50km SSW of Tondano"
 msgstr ""
 
 # 98b30af0cd11421caaf062703ed97a82
@@ -704,7 +711,8 @@ msgstr ""
 # 8c02053e66ad476ab0f7194ef8fe1b27
 #: ../../source/developer-docs/realtime.rst:397
 msgid ""
-"Moving replacement tags into different elements, or removing them completely."
+"Moving replacement tags into different elements, or removing them "
+"completely."
 msgstr ""
 
 # 35a0433078694d699582bc830138af23
@@ -730,9 +738,9 @@ msgstr ""
 # 206878238b2c4f7bbe997b3d407826f7
 #: ../../source/developer-docs/realtime.rst:410
 msgid ""
-"If you wish to use your own custom template, you need to specify the :samp:"
-"`INSAFE_REALTIME_TEMPLATE` environment variable, populating it with the path "
-"to your preferred template file."
+"If you wish to use your own custom template, you need to specify the "
+":samp:`INSAFE_REALTIME_TEMPLATE` environment variable, populating it with "
+"the path to your preferred template file."
 msgstr ""
 
 # 660d372c06ae4d24bf4ddb9555efc7a2
@@ -743,10 +751,10 @@ msgstr ""
 # 0988e41b69534cb78db9422b6144eb8f
 #: ../../source/developer-docs/realtime.rst:417
 msgid ""
-"The cartography provided in the realtime maps is loaded from the :file:"
-"`realtime/fixtures/realtime.qgs` QGIS project file. You can open this file "
-"using QGIS, change the layers and their symbology, and your changes will be "
-"reflected in the generated realtime shake report."
+"The cartography provided in the realtime maps is loaded from the "
+":file:`realtime/fixtures/realtime.qgs` QGIS project file. You can open this "
+"file using QGIS, change the layers and their symbology, and your changes "
+"will be reflected in the generated realtime shake report."
 msgstr ""
 
 # 078efc16f3db4456882ee7dc56280c7f
@@ -764,15 +772,16 @@ msgstr ""
 msgid ""
 "The main map should always have a population layer with grayscale legend "
 "matching that provided in the original. If you do remove / change the "
-"population layer you should also remove / change the population layer legend."
+"population layer you should also remove / change the population layer "
+"legend."
 msgstr ""
 
 # 65b1540702904c5bb4604cb279c06a5b
 #: ../../source/developer-docs/realtime.rst:429
 msgid ""
-"If you wish to use your own custom project, you need to specify the :samp:"
-"`INSAFE_REALTIME_PROJECT` environment variable, populating it with the path "
-"to your preferred project file."
+"If you wish to use your own custom project, you need to specify the "
+":samp:`INSAFE_REALTIME_PROJECT` environment variable, populating it with the"
+" path to your preferred project file."
 msgstr ""
 
 # 687a41ad7b574633a581beeaae0ca9f5
@@ -839,8 +848,8 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:463
 msgid ""
 "events on the server in batch mode. **Note:** this is experimental and not "
-"production ready - we recommend to use the approach described in :ref:"
-"`realtime-batch`."
+"production ready - we recommend to use the approach described in :ref"
+":`realtime-batch`."
 msgstr ""
 
 # 26af26ddf8734379920c2efc7dc4effa
@@ -853,8 +862,8 @@ msgstr ""
 # 6d3dd7087ccb41908c3d5acba81e29b9
 #: ../../source/developer-docs/realtime.rst:470
 msgid ""
-"The :file:`make_shakemap.sh` script is just a thin wrapper around the "
-"python :mod:`realtime.make_map` python module."
+"The :file:`make_shakemap.sh` script is just a thin wrapper around the python"
+" :mod:`realtime.make_map` python module."
 msgstr ""
 
 # 35832175611a496c949008d42cc17bf6
@@ -907,7 +916,8 @@ msgstr ""
 
 # 10224fe80ce34012843e819b22e4c8c2
 #: ../../source/developer-docs/realtime.rst:522
-msgid "An example of the output produced from such a batch run is provided at:"
+msgid ""
+"An example of the output produced from such a batch run is provided at:"
 msgstr ""
 
 # e72b181d8a234de0a873d9e9b0e73c1c
@@ -923,8 +933,8 @@ msgstr ""
 # c621c1c1a99f4c0290ba708ae83633a1
 #: ../../source/developer-docs/realtime.rst:531
 msgid ""
-"In this section we describe how to easily host the shakemaps on a public web "
-"site."
+"In this section we describe how to easily host the shakemaps on a public web"
+" site."
 msgstr ""
 
 # 9f952cfef18b4d719d9d4f8162bc8c57
@@ -946,8 +956,8 @@ msgstr ""
 # 965820359b2d458081219cc18244847d
 #: ../../source/developer-docs/realtime.rst:541
 msgid ""
-"First create a file (as root / sudo) with this content in your :file:`/etc/"
-"apache2/sites-available/quake-apache.conf.` for example::"
+"First create a file (as root / sudo) with this content in your "
+":file:`/etc/apache2/sites-available/quake-apache.conf.` for example::"
 msgstr ""
 
 # e2f323cb0c714523bed604a75a098e84
@@ -973,7 +983,8 @@ msgstr ""
 #: ../../source/developer-docs/realtime.rst:587
 msgid ""
 "You can customise the look and feel of the hosted site by editing the files "
-"in :file:`/home/web/quake/public/resource` (assumes basic knowledge of HTML)."
+"in :file:`/home/web/quake/public/resource` (assumes basic knowledge of "
+"HTML)."
 msgstr ""
 
 # 54f7017762694754807d6d90a4477f41

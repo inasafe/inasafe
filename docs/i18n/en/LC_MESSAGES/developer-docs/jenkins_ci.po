@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -240,6 +240,11 @@ msgstr ""
 msgid "Jenkins SSH Slaves plugin"
 msgstr ""
 
+# 7e6ceba2931e4669846e987bb83f8984
+#: ../../source/developer-docs/jenkins_ci.rst:115
+msgid "xvfb"
+msgstr ""
+
 # bee152ba9a5b43b89ca528c58ddc6e33
 #: ../../source/developer-docs/jenkins_ci.rst:119
 msgid "Lock down access"
@@ -329,31 +334,36 @@ msgid ""
 "only. This will allow anonymous read-only access to the project."
 msgstr ""
 
-# ad088eaa783f47f5bc8e36db125d4d2e
+# ed59c610b1854aa8907f6363a68e9846
 #: ../../source/developer-docs/jenkins_ci.rst:158
+msgid ":guilabel:`Xvfb` set to ticked."
+msgstr ""
+
+# ad088eaa783f47f5bc8e36db125d4d2e
+#: ../../source/developer-docs/jenkins_ci.rst:159
 msgid ""
 ":guilabel:`GitHub project` set to :kbd:`https://github.com/AIFDR/inasafe/`"
 msgstr ""
 
 # 74dbeefa0c2c460bba764fd1e83139e1
-#: ../../source/developer-docs/jenkins_ci.rst:159
+#: ../../source/developer-docs/jenkins_ci.rst:160
 msgid ""
 ":guilabel:`Source Code Management` check :guilabel:`Git` and set to :kbd:"
 "`git@github.com:AIFDR/inasafe.git`"
 msgstr ""
 
 # 2a8b9add252a4fbea31676c6018c931a
-#: ../../source/developer-docs/jenkins_ci.rst:161
+#: ../../source/developer-docs/jenkins_ci.rst:162
 msgid ":guilabel:`Branch Specifier (blank for default)` set to :kbd:`master`"
 msgstr ""
 
 # 70f2d71b687d4994beab70565ec57a20
-#: ../../source/developer-docs/jenkins_ci.rst:162
+#: ../../source/developer-docs/jenkins_ci.rst:163
 msgid ":guilabel:`Repository browser` set to :kbd:`auto`"
 msgstr ""
 
 # ca60e0c56e2949c29dcec86750162149
-#: ../../source/developer-docs/jenkins_ci.rst:163
+#: ../../source/developer-docs/jenkins_ci.rst:164
 msgid ""
 ":guilabel:`Build Triggers` set to :kbd:`Build when a change is pushed to "
 "GitHub` - this will cause the project to build every time a new commit is "
@@ -362,43 +372,43 @@ msgid ""
 msgstr ""
 
 # 22a0a7b1c4944b1f826a95e053ffc2ee
-#: ../../source/developer-docs/jenkins_ci.rst:168
+#: ../../source/developer-docs/jenkins_ci.rst:169
 msgid "**Build Actions**"
 msgstr ""
 
 # f2921d4fc1694f45af539849378fa0f4
-#: ../../source/developer-docs/jenkins_ci.rst:170
+#: ../../source/developer-docs/jenkins_ci.rst:171
 msgid ""
 ":guilabel:`Build` add an :kbd:`Execute Shell` step and set the script as "
 "follows::"
 msgstr ""
 
 # e1f2ae8b91844165b4d1efe2bf254965
-#: ../../source/developer-docs/jenkins_ci.rst:187
+#: ../../source/developer-docs/jenkins_ci.rst:188
 msgid ""
 "In this server instance we are using a hand built QGIS. The initial 3 export "
 "lines may not be needed if you are using a package build QGIS installation."
 msgstr ""
 
 # e7bcdfc9dc674edcabd03e66f122f1ea
-#: ../../source/developer-docs/jenkins_ci.rst:191
+#: ../../source/developer-docs/jenkins_ci.rst:192
 msgid ""
 ":guilabel:`Add build step` set to :kbd:`play a sound` and choose a sound "
 "which will play when the build completes (optional)"
 msgstr ""
 
 # 7c3066734ff346d49606e22c303f5195
-#: ../../source/developer-docs/jenkins_ci.rst:194
+#: ../../source/developer-docs/jenkins_ci.rst:195
 msgid "**Post-build Actions**"
 msgstr ""
 
 # e84f3bdc76b64220900e669f26bad480
-#: ../../source/developer-docs/jenkins_ci.rst:196
+#: ../../source/developer-docs/jenkins_ci.rst:197
 msgid "Add the following actions and settings:"
 msgstr ""
 
 # 1a11338d181f45a99d1ad0d8f644b928
-#: ../../source/developer-docs/jenkins_ci.rst:198
+#: ../../source/developer-docs/jenkins_ci.rst:199
 msgid ""
 ":guilabel:`Publish Cobertura Coverage Report` set :guilabel:`Cobertura xml "
 "report pattern` to :kbd:`coverage.xml`. For the rest take the defaults or "
@@ -406,7 +416,7 @@ msgid ""
 msgstr ""
 
 # c5799b7776c2461bb4d32042d24cc760
-#: ../../source/developer-docs/jenkins_ci.rst:202
+#: ../../source/developer-docs/jenkins_ci.rst:203
 msgid ""
 "to :kbd:`nosetests.xml`. I also disabled :guilabel:`Retain long standard "
 "output/error` (you can enable it temporarily while debugging server side "
@@ -414,24 +424,24 @@ msgid ""
 msgstr ""
 
 # 91ccfc4725724ee29eabcb7c25f70737
-#: ../../source/developer-docs/jenkins_ci.rst:205
+#: ../../source/developer-docs/jenkins_ci.rst:206
 msgid ""
 ":guilabel:`Publish SLOCCount analysis reports` set :guilabel:`SLOCcount "
 "reports` to :kbd:`sloccount.sc`"
 msgstr ""
 
 # 9dfb82e2f41647c0b55ae4996ffd78d6
-#: ../../source/developer-docs/jenkins_ci.rst:208
+#: ../../source/developer-docs/jenkins_ci.rst:209
 msgid ":guilabel:`pep8` to :kbd:`pep8.log`"
 msgstr ""
 
 # 4a0d874f61bc400c9b39d93c59b4bb22
-#: ../../source/developer-docs/jenkins_ci.rst:209
+#: ../../source/developer-docs/jenkins_ci.rst:210
 msgid ":guilabel:`pylint` to :kbd:`pylint.log`"
 msgstr ""
 
 # 55d9baca3b974076a4fe87f09e1969ff
-#: ../../source/developer-docs/jenkins_ci.rst:210
+#: ../../source/developer-docs/jenkins_ci.rst:211
 msgid ""
 ":guilabel:`Email notification` set :guilabel:`Recipients` to :kbd:"
 "`tim@linfiniti.com`. Add any additional recipients as needed (space "
@@ -441,63 +451,63 @@ msgid ""
 msgstr ""
 
 # c42d872024ff4a008f846cd8ed1ba000
-#: ../../source/developer-docs/jenkins_ci.rst:216
+#: ../../source/developer-docs/jenkins_ci.rst:217
 msgid ":guilabel:`Jenkins Sounds` set :guilabel:`Failure` to :kbd:`argh(wave)`"
 msgstr ""
 
 # 5d72bf921ee742419ad80a5d73491fd8
-#: ../../source/developer-docs/jenkins_ci.rst:217
+#: ../../source/developer-docs/jenkins_ci.rst:218
 msgid ""
 ":guilabel:`Jenkins Sounds` set :guilabel:`Success` to :kbd:`Yahoo.Yodel(wave)"
 "`"
 msgstr ""
 
 # d6d9524236ee4561814da74bbe70fa28
-#: ../../source/developer-docs/jenkins_ci.rst:218
+#: ../../source/developer-docs/jenkins_ci.rst:219
 msgid ""
 ":guilabel:`Publish Coverage / Complexity Scatter Plot` check :guilabel:"
 "`Locate the graph at the topmost of Jenkins project page`"
 msgstr ""
 
 # a52c4ac99c0f44f08ba7e703023305a0
-#: ../../source/developer-docs/jenkins_ci.rst:220
+#: ../../source/developer-docs/jenkins_ci.rst:221
 msgid ":guilabel:`Status Monitor` enable (this is optional)"
 msgstr ""
 
 # b712aafcb8e44bc5a96a56a785b523b5
-#: ../../source/developer-docs/jenkins_ci.rst:222
+#: ../../source/developer-docs/jenkins_ci.rst:223
 msgid "Click :guilabel:`Save`"
 msgstr ""
 
 # 47d92c9fc7264ce3aef79d7878194e5b
-#: ../../source/developer-docs/jenkins_ci.rst:225
+#: ../../source/developer-docs/jenkins_ci.rst:226
 msgid "Server Configuration in the shell"
 msgstr ""
 
 # e49ac1480ac24223bf785c38a553e9b2
-#: ../../source/developer-docs/jenkins_ci.rst:227
+#: ../../source/developer-docs/jenkins_ci.rst:228
 msgid "We need to do the following on the server as the jenkins user:"
 msgstr ""
 
 # 5b3476fc95cf4ef287941d41bccae4ee
-#: ../../source/developer-docs/jenkins_ci.rst:230
+#: ../../source/developer-docs/jenkins_ci.rst:231
 msgid "Create an ssh key for Jenkins"
 msgstr ""
 
 # cca478f64c6e4a6fbad072033a2dbffb
-#: ../../source/developer-docs/jenkins_ci.rst:232
+#: ../../source/developer-docs/jenkins_ci.rst:233
 msgid ""
 "This key will be used to enable Jenkins access to private repos on GitHub. "
 "You only need to do this once on the server for each project::"
 msgstr ""
 
 # 23b476b88c384142ad700f1222441555
-#: ../../source/developer-docs/jenkins_ci.rst:259
+#: ../../source/developer-docs/jenkins_ci.rst:260
 msgid "Here's our key::"
 msgstr ""
 
 # 48c392d5f1bc4c51a5d524eb23455f0c
-#: ../../source/developer-docs/jenkins_ci.rst:269
+#: ../../source/developer-docs/jenkins_ci.rst:270
 msgid ""
 "You need to create an ssh host alias so that when doing a git checkout, the "
 "correct keypair is used. Add this to the :file:`~/.ssh/config` of the "
@@ -505,14 +515,14 @@ msgid ""
 msgstr ""
 
 # 1031f3eae96448e39affbb53674b2f8a
-#: ../../source/developer-docs/jenkins_ci.rst:277
+#: ../../source/developer-docs/jenkins_ci.rst:278
 msgid ""
 "Now go to https://github.com/AIFDR/inasafe/admin/keys and add the above key "
 "as a deploy key."
 msgstr ""
 
 # 671bf98e90c941bbafd9a62b2c42e161
-#: ../../source/developer-docs/jenkins_ci.rst:280
+#: ../../source/developer-docs/jenkins_ci.rst:281
 msgid ""
 "Next we add the github key to the Jenkins user's allowed hosts. The easiest "
 "way to do this is just to make a temporary clone of the repo. Again this "
@@ -521,17 +531,17 @@ msgid ""
 msgstr ""
 
 # 46be795c293d4d77aef7037a45de47d9
-#: ../../source/developer-docs/jenkins_ci.rst:284
+#: ../../source/developer-docs/jenkins_ci.rst:285
 msgid "Back on the server::"
 msgstr ""
 
 # 7bffd72b5ffb4283a33bb996e81ee9db
-#: ../../source/developer-docs/jenkins_ci.rst:293
+#: ../../source/developer-docs/jenkins_ci.rst:294
 msgid "Also you should set the Jenkins git user and email::"
 msgstr ""
 
 # b9f3b053b56e4b04b6836582a35b9575
-#: ../../source/developer-docs/jenkins_ci.rst:298
+#: ../../source/developer-docs/jenkins_ci.rst:299
 msgid "The source tree will be in :file:`~/jobs/InaSAFE/workspace/`."
 msgstr ""
 
@@ -582,32 +592,31 @@ msgstr ""
 msgid "Here are some useful resources we found while getting things set up."
 msgstr ""
 
+# 7e58358a1cca4431b5a1c29820818969
+#: ../../source/developer-docs/jenkins_ci.rst:333
+msgid "http://www.alexconrad.org/2011/10/jenkins-and-python.html"
+msgstr ""
+
 # 6802b7aa218f409788e236cb0e0bef07
 # 03fd39a769a7402b9409cbe0d383c1ff
-#: ../../source/developer-docs/jenkins_ci.rst:333
-#: ../../source/developer-docs/jenkins_ci.rst:335
+#: ../../source/developer-docs/jenkins_ci.rst:334
 msgid ""
 "http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html"
 msgstr ""
 
-# 7e58358a1cca4431b5a1c29820818969
-#: ../../source/developer-docs/jenkins_ci.rst:334
-msgid "http://www.alexconrad.org/2011/10/jenkins-and-python.html"
-msgstr ""
-
 # a11eccd5702b4dacbfd6d4696c4929dc
-#: ../../source/developer-docs/jenkins_ci.rst:336
+#: ../../source/developer-docs/jenkins_ci.rst:335
 msgid "http://blog.jvc26.org/2011/06/13/jenkins-ci-and-django-howto"
 msgstr ""
 
 # 36bf3ca5ffc44d4fb33a35f8f1250878
-#: ../../source/developer-docs/jenkins_ci.rst:337
+#: ../../source/developer-docs/jenkins_ci.rst:336
 msgid ""
 "https://sites.google.com/site/kmmbvnr/home/django-jenkins-tutorial (probably "
 "the most usful article I found)"
 msgstr ""
 
 # 3e65ac12371b4c5e837e73cb2eb0f7a8
-#: ../../source/developer-docs/jenkins_ci.rst:339
+#: ../../source/developer-docs/jenkins_ci.rst:338
 msgid "http://blog.mathieu-leplatre.info/django-et-jenkins-fr.html (in French)"
 msgstr ""

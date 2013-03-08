@@ -8,811 +8,998 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-26 15:53\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../source/developer-docs/realtime.rst:6
 # 904f058684ef4519b4162d92a2ad8c62
+#: ../../source/developer-docs/realtime.rst:6
 msgid "InaSAFE Realtime"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:8
 # 6c6f90a3513446a19a05073b1e517eab
-msgid "InaSAFE Realtime is a component of the InaSAFE project designed for deployment on a server and creation of Impact Maps a short interval after an event occurs."
+#: ../../source/developer-docs/realtime.rst:8
+msgid ""
+"InaSAFE Realtime is a component of the InaSAFE project designed for "
+"deployment on a server and creation of Impact Maps a short interval after an "
+"event occurs."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:11
 # 336e95da68eb4e0182fd958dfbda71b0
-msgid "Currently the realtime system supports Earthquake fatality impact assessments, though in future we envisage additional support for other disaster types being facilitated."
+#: ../../source/developer-docs/realtime.rst:11
+msgid ""
+"Currently the realtime system supports Earthquake fatality impact "
+"assessments, though in future we envisage additional support for other "
+"disaster types being facilitated."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:15
 # c5830ce532ae41c9a530fed4de12c3e5
-msgid "This work was funded by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the GFDRR. We thank you for your support."
+#: ../../source/developer-docs/realtime.rst:15
+msgid ""
+"This work was funded by the Australia-Indonesia Facility for Disaster "
+"Reduction, Geoscience Australia and the GFDRR. We thank you for your support."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:20
 # 77b9c143c7cb448eaa91b37ed7475c57
+#: ../../source/developer-docs/realtime.rst:20
 msgid "Historical Note"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:22
 # 1bec49437ac94be480ca8bd07b151197
-msgid "The original prototype of the realtime system was implemented by Ole Nielsen (AusAID). The subsequent port of the realtime system to InaSAFE was implemented by Tim Sutton (Linfiniti Consulting CC., funded by The World Bank and the AIFDR)."
+#: ../../source/developer-docs/realtime.rst:22
+msgid ""
+"The original prototype of the realtime system was implemented by Ole Nielsen "
+"(AusAID). The subsequent port of the realtime system to InaSAFE was "
+"implemented by Tim Sutton (Linfiniti Consulting CC., funded by The World "
+"Bank and the AIFDR)."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:29
 # 50a1141ec6db4a23b7fcd8bfb34b9c36
+#: ../../source/developer-docs/realtime.rst:29
 msgid "Supported Platforms"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:31
 # 3cc4dc66a30946abb8d79a1b2ed16364
-msgid "Currently only Ubuntu 12.04 is supported. The software may work or can easily be made to work on other platforms but it is untested."
+#: ../../source/developer-docs/realtime.rst:31
+msgid ""
+"Currently only Ubuntu 12.04 is supported. The software may work or can "
+"easily be made to work on other platforms but it is untested."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:35
 # 6cd3d6670a5d4a869ceca00c2fe3be85
+#: ../../source/developer-docs/realtime.rst:35
 msgid "Generated Products"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:37
 # 46ded588da0946c1bb14edf2513efb32
+#: ../../source/developer-docs/realtime.rst:37
 msgid "For every shake event, the tool produces a number of GIS products:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:40
 # 2d2427cfa1bd4458a0bfc37a28f14e05
+#: ../../source/developer-docs/realtime.rst:40
 msgid "according to the MMI scale colours."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:42
 # 6613c4afbc1a4cec8e4e0f85598933a3
+#: ../../source/developer-docs/realtime.rst:42
 msgid "symbolized according to the MMI scale colours."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:44
 # 7d62153f75c945de95d3d6ad43a8e099
+#: ../../source/developer-docs/realtime.rst:44
 msgid "the MMI scale colours."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:46
 # 685a7b4f971a40c7af79c7dc67006f94
-msgid "data such as distance from and direction to epicenter, number of people resident in the city, mmi exposure etc."
+#: ../../source/developer-docs/realtime.rst:46
+msgid ""
+"data such as distance from and direction to epicenter, number of people "
+"resident in the city, mmi exposure etc."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:48
 # bf8d773239d04524b87f34446e91619c
-msgid "In addition to the above mentioned GIS products, the following 3 files are created for each event:"
+#: ../../source/developer-docs/realtime.rst:48
+msgid ""
+"In addition to the above mentioned GIS products, the following 3 files are "
+"created for each event:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:51
 # 2f7e6642ef3346af87f07a1443c5c096
+#: ../../source/developer-docs/realtime.rst:51
 msgid "A PNG file containing a single page report as illustrated above."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:53
 # 367aea2c44784f5abd7c43d002119bd3
+#: ../../source/developer-docs/realtime.rst:53
 msgid "an image format."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:54
 # 8958ee116a1c4a58863426a42bf624eb
-msgid "A thumbnail PNG image which contains a reduced size image of the report."
+#: ../../source/developer-docs/realtime.rst:54
+msgid ""
+"A thumbnail PNG image which contains a reduced size image of the report."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:57
 # a0bbc8c84c6c464a9e29125beedb26d5
+#: ../../source/developer-docs/realtime.rst:57
 msgid "Architecture"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:59
 # 585ba1c854b64139bd9641955568261a
+#: ../../source/developer-docs/realtime.rst:59
 msgid "InaSAFE Realtime is implemented by four main python modules:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:62
 # 22917011ab42483dac8da101101f9722
+#: ../../source/developer-docs/realtime.rst:62
 msgid "files from a remote server."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:64
 # f9a4e1b583c549a1afb729b7f50a8b30
-msgid "an ftp server. There is an expectation that the server layout follows a simple flat structure where files are named after the shake event and are in the format of shake data as provided by the USGS (XXXXXX TODO fact check XXXX). :samp:`ftp://118.97.83.243/20110413170148.inp.zip` **Note:** This data is now no longer hosted via ftp and requires an ssh account in order to retrieve it."
+#: ../../source/developer-docs/realtime.rst:64
+msgid ""
+"an ftp server. There is an expectation that the server layout follows a "
+"simple flat structure where files are named after the shake event and are in "
+"the format of shake data as provided by the USGS (XXXXXX TODO fact check "
+"XXXX). :samp:`ftp://118.97.83.243/20110413170148.inp.zip` **Note:** This "
+"data is now no longer hosted via ftp and requires an ssh account in order to "
+"retrieve it."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:72
 # 646d982521f949fabc136b0e009c309b
-msgid "fetch, unpack, process and generate a report for a quake event. The module logic is based on the standard shake data packaging format supplied by the USGS. We have restricted out implementation to require only the :file:`grid.xml` file contained in the inp.zip file in the downloaded zip file."
+#: ../../source/developer-docs/realtime.rst:72
+msgid ""
+"fetch, unpack, process and generate a report for a quake event. The module "
+"logic is based on the standard shake data packaging format supplied by the "
+"USGS. We have restricted out implementation to require only the :file:`grid."
+"xml` file contained in the inp.zip file in the downloaded zip file."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:78
 # 3fa00856f1194be1aa4c7a72c26c7fed
+#: ../../source/developer-docs/realtime.rst:78
 msgid "analyses."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:80
 # b3fa0a20ce3d45ecb2be766996e939b2
-msgid "InaSAFE has strong dependencies on QGIS (http://qgis.org) which is used for much of the data processing and reporting functionality."
+#: ../../source/developer-docs/realtime.rst:80
+msgid ""
+"InaSAFE has strong dependencies on QGIS (http://qgis.org) which is used for "
+"much of the data processing and reporting functionality."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:83
 # 5ab3e5ce3981427fa615b269aa18791f
-msgid "Currently version 779e16603ee3fb8781c85a0e95913a1f6bbd2d6a is the 'known good' SHA1."
+#: ../../source/developer-docs/realtime.rst:83
+msgid ""
+"Currently version 779e16603ee3fb8781c85a0e95913a1f6bbd2d6a is the 'known "
+"good' SHA1."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:86
 # 3dbe15dc229d4717b5b278abb57ec0a9
-msgid "Two of these dependencies is a template QGIS project and a map composition template. We have designed the realtime reporting engine to allow end users to customise the map report to their needs with little or no programming. The primary way to achieve this is by opening the custom template :file:`realtime/fixtures/realtime-template.qpt` in QGIS and modifying its contents. You could also build a new template from scratch provided the item IDs listed in the section that follows are used."
+#: ../../source/developer-docs/realtime.rst:86
+msgid ""
+"Two of these dependencies is a template QGIS project and a map composition "
+"template. We have designed the realtime reporting engine to allow end users "
+"to customise the map report to their needs with little or no programming. "
+"The primary way to achieve this is by opening the custom template :file:"
+"`realtime/fixtures/realtime-template.qpt` in QGIS and modifying its "
+"contents. You could also build a new template from scratch provided the item "
+"IDs listed in the section that follows are used."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:95
 # e62a8fd9c08b4c89bea5ba91150976c3
+#: ../../source/developer-docs/realtime.rst:95
 msgid "Installation"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:97
 # 22dad55b64f94b40a0961d20cec2dbe9
-msgid "The supported platform is currently Ubuntu 12.04 LTS. The instructions provided below are for that OS. First we are going to hand build QGIS. This may not be needed in future once 2.0 packages are available, but for now it is recommended.::"
+#: ../../source/developer-docs/realtime.rst:97
+msgid ""
+"The supported platform is currently Ubuntu 12.04 LTS. The instructions "
+"provided below are for that OS. First we are going to hand build QGIS. This "
+"may not be needed in future once 2.0 packages are available, but for now it "
+"is recommended.::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:114
 # ef5268b85e8d4f43ac0393eed05210eb
+#: ../../source/developer-docs/realtime.rst:114
 msgid "At this point you should enter ‘yes’ when prompted::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:126
 # f42a56546a6d4933a0e442b59dcff0c7
-msgid "At this point you can test if your hand build QGIS is working by doing::"
+#: ../../source/developer-docs/realtime.rst:126
+msgid ""
+"At this point you can test if your hand build QGIS is working by doing::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:135
 # 2590fb9afa044436a010b71b55edd3aa
+#: ../../source/developer-docs/realtime.rst:135
 msgid "You should see something like the listing below::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:144
 # 3deec184ff524ffa9c26ca0429073700
+#: ../../source/developer-docs/realtime.rst:144
 msgid "Get InaSAFE ::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:153
 # 673b1170f49e40719c4334d11004a7b5
+#: ../../source/developer-docs/realtime.rst:153
 msgid "Setup Apache::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:162
 # 1aa981d63db54e61a863dfd57dc7e2e6
-msgid "For local testing only you can use quake.localhost for your host then add this to your /etc/hosts::"
+#: ../../source/developer-docs/realtime.rst:162
+msgid ""
+"For local testing only you can use quake.localhost for your host then add "
+"this to your /etc/hosts::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:166
 # 6631aff29b024cee81ba20912c2e130c
+#: ../../source/developer-docs/realtime.rst:166
 msgid "Now deploy your site:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:168
 # 7e5e5860a0144a60a633986e33bd988b
-msgid "sudo a2dissite default sudo a2enssite quake.apache.conf cd /home chmod a+X web mkdir web/quake chmod a+X web/quake cd /home/web/quake"
+#: ../../source/developer-docs/realtime.rst:168
+msgid ""
+"sudo a2dissite default sudo a2enssite quake.apache.conf cd /home chmod a+X "
+"web mkdir web/quake chmod a+X web/quake cd /home/web/quake"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:176
 # 4310a1fabca54f8cbed01ea4e5a7b102
+#: ../../source/developer-docs/realtime.rst:176
 msgid "Just for testing do::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:182
 # 952c2265ad444ab4ac617583e71cd120
+#: ../../source/developer-docs/realtime.rst:182
 msgid "Open your web browser and point it to : http://quake.localhost"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:184
 # 78927c5659d147508a5c04f835c75163
+#: ../../source/developer-docs/realtime.rst:184
 msgid "You should see a basic directory listing containing file foo."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:186
 # 82c9c2d69d98458aab8fed78597779fd
+#: ../../source/developer-docs/realtime.rst:186
 msgid "Now copy over some required datasets::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:202
 # b3e027d87c3341c9a09dc29e8a70df5d
+#: ../../source/developer-docs/realtime.rst:202
 msgid "Running your first report::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:207
 # 4f4d5d67341342b09f564c7fffe8741c
+#: ../../source/developer-docs/realtime.rst:207
 msgid "Running all back reports::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:212
 # a42a5550522b46f2a87a6e2af111f32b
+#: ../../source/developer-docs/realtime.rst:212
 msgid "Listing shake files on ftp server::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:218
 # e0de099396414dd79a7ceb3698137cf4
+#: ../../source/developer-docs/realtime.rst:218
 msgid "Cron Jobs::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:220
 # 14e0827a01a644eda4c600192682976a
-msgid "There are two cron jobs - one to run the latest shake event regularly, and one to synchronise all the shake outputs::"
+#: ../../source/developer-docs/realtime.rst:220
+msgid ""
+"There are two cron jobs - one to run the latest shake event regularly, and "
+"one to synchronise all the shake outputs::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:225
 # f010b9e8f1fa41ada869df9b84bee5f6
+#: ../../source/developer-docs/realtime.rst:225
 msgid "Now add these lines (replacing <yourname>)::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:231
 # 751e57604fca464994ecb4f5ca948b1d
+#: ../../source/developer-docs/realtime.rst:231
 msgid "Finally make a small script to run the analysis every minute::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:239
 # 18082b238bf14d16b15b89c11f955f8c
+#: ../../source/developer-docs/realtime.rst:239
 msgid "Now edit the file and set its content to this::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:247
 # 60da5c7479ac4a9d8ca9ed59083a743a
+#: ../../source/developer-docs/realtime.rst:247
 msgid "You also need to have the standard datasets needed for the cartography:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:249
 # 0145f842342243658846bb8cae39a0a1
+#: ../../source/developer-docs/realtime.rst:249
 msgid "population"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:250
 # 05937878878b4772a281a317011281fc
+#: ../../source/developer-docs/realtime.rst:250
 msgid "indonesia.sqlite (can be changed by adjusting the QGIS project)."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:253
 # 75eebca5322545e78c04b2ba410328b4
+#: ../../source/developer-docs/realtime.rst:253
 msgid "QGIS Map Template Elements"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:255
 # 52abf2308deb4e56a01695a1e05726ee
-msgid "This section describes the various elements that comprise the standard map template, and which you can modify directly in the template. These fall into three groups:"
+#: ../../source/developer-docs/realtime.rst:255
+msgid ""
+"This section describes the various elements that comprise the standard map "
+"template, and which you can modify directly in the template. These fall into "
+"three groups:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:259
 # 34dcaf1690f5427bbbbd9998ca876f9d
+#: ../../source/developer-docs/realtime.rst:259
 msgid "**Static elements**."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:260
 # d84b8f54267848388a3f3078176ee6a4
+#: ../../source/developer-docs/realtime.rst:260
 msgid "**Elements containing tokens for replacement**."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:261
 # 2ecc2b03df3e4a69b41a3d2f3fc7430e
+#: ../../source/developer-docs/realtime.rst:261
 msgid "**Elements that are directly updated by the renderer**."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:264
 # ba36b5c0a1df4c7fa91624f7c68da93b
+#: ../../source/developer-docs/realtime.rst:264
 msgid "Static Elements"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:266
 # 7ea1297d43654fb6a68383576493ef3f
-msgid "These are e.g. logos which are not touched by the realtime map renderer at all. You can remove or replace them with your own elements as needed."
+#: ../../source/developer-docs/realtime.rst:266
+msgid ""
+"These are e.g. logos which are not touched by the realtime map renderer at "
+"all. You can remove or replace them with your own elements as needed."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:269
 # ba5cb7a316974bf4900c07fe2c92dd81
-msgid "**logo-left** - the logo element at the top left corner of the map layout."
+#: ../../source/developer-docs/realtime.rst:269
+msgid ""
+"**logo-left** - the logo element at the top left corner of the map layout."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:270
 # 0d5a678e8ffd453a884773403a139da2
-msgid "**right-logo** - the logo element at the top right corner of the map layout."
+#: ../../source/developer-docs/realtime.rst:270
+msgid ""
+"**right-logo** - the logo element at the top right corner of the map layout."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:272
 # 844b3e2532d94dcbb087ec5dae0f108a
-msgid "is the overview frame for map-0 (the main map in the layout). It is locked and limited to show the population layer only."
+#: ../../source/developer-docs/realtime.rst:272
+msgid ""
+"is the overview frame for map-0 (the main map in the layout). It is locked "
+"and limited to show the population layer only."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:275
 # 272c0b234c3740b8bb9c49f52b2c2b1c
+#: ../../source/developer-docs/realtime.rst:275
 msgid "the population layer. It is locked and limited to the population layer."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:278
 # d867eaf7b6684352b0df3e81682c8d3c
+#: ../../source/developer-docs/realtime.rst:278
 msgid "Elements containing tokens for replacement"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:280
 # b9e840f2c8f44a22814e6fba5911c4f4
-msgid "In this case the element name is not significant, only the token(s) it contains. At render time any of the tokens in these elements will be replaced with translated (if an alternative locale is in effect) content from the map renderer according to the keywords listed below in this document."
+#: ../../source/developer-docs/realtime.rst:280
+msgid ""
+"In this case the element name is not significant, only the token(s) it "
+"contains. At render time any of the tokens in these elements will be "
+"replaced with translated (if an alternative locale is in effect) content "
+"from the map renderer according to the keywords listed below in this "
+"document."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:286
 # b4266b33d19e49669e2112e6cf5bbd1d
+#: ../../source/developer-docs/realtime.rst:286
 msgid "element contains the keyword: :samp:`[map-name]`."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:289
 # 2424e7b4311543af95c4b2679b7f761f
-msgid "label contains the following replacement tokens: :samp:`M[mmi] [date] [time]`"
+#: ../../source/developer-docs/realtime.rst:289
+msgid ""
+"label contains the following replacement tokens: :samp:`M[mmi] [date] [time]`"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:292
 # 7f47dac2e4e94fda8f9901c74c227fbf
-msgid "default this label contains the following replacement tokens: :samp:`[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]`"
+#: ../../source/developer-docs/realtime.rst:292
+msgid ""
+"default this label contains the following replacement tokens: :samp:`"
+"[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-"
+"name] [depth-value] [depth-unit]`"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:295
 # 3c7a0fdcfb944a21878c8a60d2c3d5d2
-msgid "the nearest major populated place. By default this label contains the following replacement tokens: :samp:`[located-label] [distance] [distance-unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-name]`"
+#: ../../source/developer-docs/realtime.rst:295
+msgid ""
+"the nearest major populated place. By default this label contains the "
+"following replacement tokens: :samp:`[located-label] [distance] [distance-"
+"unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-name]`"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:299
 # 6aeea26bcdad492a85c129e8ab44a5b2
-msgid "was generated. By default this label contains the following replacement tokens: :samp:`[elapsed-time-label] [elapsed-time]`"
+#: ../../source/developer-docs/realtime.rst:299
+msgid ""
+"was generated. By default this label contains the following replacement "
+"tokens: :samp:`[elapsed-time-label] [elapsed-time]`"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:303
 # bd9ae8a3623543fd8ce6e98219fbe1ab
+#: ../../source/developer-docs/realtime.rst:303
 msgid "This is **Currently disabled**."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:305
 # b3c860e059174dcfa59775921c51fe31
-msgid "interpretive information and so on. This contains the following replacement tokens: :samp:`[limitations]`."
+#: ../../source/developer-docs/realtime.rst:305
+msgid ""
+"interpretive information and so on. This contains the following replacement "
+"tokens: :samp:`[limitations]`."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:308
 # 75e99189db60400ab1a790409a0c81ac
+#: ../../source/developer-docs/realtime.rst:308
 msgid "This contains the following replacement tokens: :samp:`[credits]`."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:311
 # ac4d7f64205f485f98cb36fbade1970d
+#: ../../source/developer-docs/realtime.rst:311
 msgid "Elements that are directly updated by the renderer"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:313
 # a6b32578a4304a8cae5e7da074323e38
-msgid "In this case any content that may be present in the element is completely replaced by the realtime map renderer, although certain styling options (e.g. graticule settings on the map) will remain in effect."
+#: ../../source/developer-docs/realtime.rst:313
+msgid ""
+"In this case any content that may be present in the element is completely "
+"replaced by the realtime map renderer, although certain styling options (e."
+"g. graticule settings on the map) will remain in effect."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:318
 # 5fa4da5ccee1486abc963c7069c8ecfe
-msgid "number of modelled affected people in each of the MMI bands. This is an HTML element and output will fail if it is not present."
+#: ../../source/developer-docs/realtime.rst:318
+msgid ""
+"number of modelled affected people in each of the MMI bands. This is an HTML "
+"element and output will fail if it is not present."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:321
 # b3dcccd84668483eae99c67159933ff6
-msgid "Developers can set a minimum number of neighbouring towns to display using the ShakeEvent api. This is a map element and output will fail if it is not present. This is an HTML element and output will fail if it is not present."
+#: ../../source/developer-docs/realtime.rst:321
+msgid ""
+"Developers can set a minimum number of neighbouring towns to display using "
+"the ShakeEvent api. This is a map element and output will fail if it is not "
+"present. This is an HTML element and output will fail if it is not present."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:326
 # ddb176285c154bfd8e9b608532bdadb2
-msgid "closes N cities (configurable using the ShakeEvent api) listed in order of shake intensity then number of people likely to be affected."
+#: ../../source/developer-docs/realtime.rst:326
+msgid ""
+"closes N cities (configurable using the ShakeEvent api) listed in order of "
+"shake intensity then number of people likely to be affected."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:331
 # 4524bf9d491e47aabf238bb2e5fc99da
+#: ../../source/developer-docs/realtime.rst:331
 msgid "Replaceable Keywords"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:333
 # 84523ec505014fbca7adf9f8382f6fe0
-msgid "This section describes tokenised keywords that are passed to the map template. To insert any of these keywords into the map template, simply enclose the key in [] (e.g. [place-name]) and it will be replaced by the text value (e.g. Tondano). The list includes static phrases which have been internationalised (and so will display in the language of the selected map local, defaulting to English where no translation if available. In cases where static definitions are used (e.g. [credits]) you can substitute your own definitions by creating your own template. More on that below in the next section."
+#: ../../source/developer-docs/realtime.rst:333
+msgid ""
+"This section describes tokenised keywords that are passed to the map "
+"template. To insert any of these keywords into the map template, simply "
+"enclose the key in [] (e.g. [place-name]) and it will be replaced by the "
+"text value (e.g. Tondano). The list includes static phrases which have been "
+"internationalised (and so will display in the language of the selected map "
+"local, defaulting to English where no translation if available. In cases "
+"where static definitions are used (e.g. [credits]) you can substitute your "
+"own definitions by creating your own template. More on that below in the "
+"next section."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:342
 # 7684cdd5363e4b52b50dceb831a03617
+#: ../../source/developer-docs/realtime.rst:342
 msgid "**map-name**: Estimated Earthquake Impact"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:343
 # 0c009594aab840e4945544e9caed57c9
-msgid "**exposure-table-name**: Estimated number of people exposed to each MMI level"
+#: ../../source/developer-docs/realtime.rst:343
+msgid ""
+"**exposure-table-name**: Estimated number of people exposed to each MMI level"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:344
 # 2d97abeb9eda419699898b9b059c2846
+#: ../../source/developer-docs/realtime.rst:344
 msgid "**city-table-name**: Places Affected"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:345
 # 5a31f840df1e4a99b536bcf847cd1329
+#: ../../source/developer-docs/realtime.rst:345
 msgid "**legend-name**: Population density"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:346
 # 7437bc7800374fcf91276646a6282972
-msgid "**limitations**: This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population density data from asiapop .org, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population  data and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources."
+#: ../../source/developer-docs/realtime.rst:346
+msgid ""
+"**limitations**: This impact estimation is automatically generated and only "
+"takes into account the population and cities affected by different levels of "
+"ground shaking. The estimate is based on ground shaking data from BMKG, "
+"population density data from asiapop .org, place information from geonames."
+"org and software developed by BNPB. Limitations in the estimates of ground "
+"shaking, population  data and place names datasets may result in significant "
+"misrepresentation of the on-the-ground situation in the figures shown here. "
+"Consequently decisions should not be made solely on the information "
+"presented here and should always be verified by ground truthing and other "
+"reliable information sources."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:358
 # d5ec5183f6814b55bada224b528de267
-msgid "**credits**: Supported by the Australia-Indonesia Facility for Disaster Reduction and Geoscience Australia."
+#: ../../source/developer-docs/realtime.rst:358
+msgid ""
+"**credits**: Supported by the Australia-Indonesia Facility for Disaster "
+"Reduction and Geoscience Australia."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:360
 # de4c955efbb747be91686b9bcface916
+#: ../../source/developer-docs/realtime.rst:360
 msgid "**place-name**: Tondano"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:361
 # 1c99ca6a76dd4da9b54c3dcb08b0dc94
+#: ../../source/developer-docs/realtime.rst:361
 msgid "**depth-name**: Depth"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:362
 # 863e15c5c5a14541a2cafbd66ffa9ad7
-msgid "**location-info**: M 5.0 26-7-2012 2:15:35 Latitude: 12 '36.00\"S Longitude: 124'27'0.00\"E Depth: 11.0km Located 2.50km SSW of Tondano"
+#: ../../source/developer-docs/realtime.rst:362
+msgid ""
+"**location-info**: M 5.0 26-7-2012 2:15:35 Latitude: 12 '36.00\"S Longitude: "
+"124'27'0.00\"E Depth: 11.0km Located 2.50km SSW of Tondano"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:364
 # 98b30af0cd11421caaf062703ed97a82
+#: ../../source/developer-docs/realtime.rst:364
 msgid "**depth-unit**: km"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:365
 # 248d74ba2df142709d70ad35674a15df
+#: ../../source/developer-docs/realtime.rst:365
 msgid "**bearing-compass**: SSW"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:366
 # 44909d466b6c43b59cff2a4af44d2ff1
+#: ../../source/developer-docs/realtime.rst:366
 msgid "**distance-unit**: km"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:367
 # 8988b6c812714fdeb1d86c706c32a35c
+#: ../../source/developer-docs/realtime.rst:367
 msgid "**mmi**: 5.0"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:368
 # aec7bc66e219433aa214b827141945c5
+#: ../../source/developer-docs/realtime.rst:368
 msgid "**longitude-name**: Longitude"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:369
 # 44beeb460dfa41368585ccc69e18fc81
+#: ../../source/developer-docs/realtime.rst:369
 msgid "**date**: 26-7-2012"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:370
 # c613a98da2d841db8066e544a1861d8b
+#: ../../source/developer-docs/realtime.rst:370
 msgid "**time**: 2:15:35"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:371
 # eb070eb9848441b2993d1fd0c5524d8c
+#: ../../source/developer-docs/realtime.rst:371
 msgid "**formatted-date-time: 26-Jul-12 02:15:35"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:372
 # 9cf438dfcb2b4924a57996e4e680ea5b
+#: ../../source/developer-docs/realtime.rst:372
 msgid "**located-label**: Located"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:373
 # 07ba7ffb138b49a99ead9ab4e1191824
+#: ../../source/developer-docs/realtime.rst:373
 msgid "**bearing-degrees**: -163.055923462"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:374
 # 29073cb040e4437b8955fa65dd56c478
+#: ../../source/developer-docs/realtime.rst:374
 msgid "**distance**: 2.50"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:375
 # 444a3ce0e1354be0b9eab3d5bcaa24a3
+#: ../../source/developer-docs/realtime.rst:375
 msgid "**direction-relation**: of"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:376
 # 7f57518fe7924cfc92a50d0a83f89309
+#: ../../source/developer-docs/realtime.rst:376
 msgid "**latitude-name**: Latitude"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:377
 # f5064beba4864ec493edc262fd7540fc
+#: ../../source/developer-docs/realtime.rst:377
 msgid "**latitude-value**: 12'36.00\"S"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:378
 # ec25411735004fd6a1111992786c42d4
+#: ../../source/developer-docs/realtime.rst:378
 msgid "**longitude-value**: 12'4'27.00"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:379
 # 227dc1b679414a1cae82013e2a10a339
+#: ../../source/developer-docs/realtime.rst:379
 msgid "**depth-value**: 11.0"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:380
 # b01c6cbd80b24197930dcacc5d7b0545
+#: ../../source/developer-docs/realtime.rst:380
 msgid "**version**: Version: 1.0.1"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:381
 # d54220ba81074e8394f5706d39c3646a
+#: ../../source/developer-docs/realtime.rst:381
 msgid "**bearing-text**: bearing"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:382
 # 882ebb6bb26e4a2cb2b6f1d24623784f
+#: ../../source/developer-docs/realtime.rst:382
 msgid "**elapsed-time-name**: Elapsed time"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:383
 # dacb95aa1df24e9889a9bd87c2665e2f
+#: ../../source/developer-docs/realtime.rst:383
 msgid "**elapsed-time**: 26-Jul-12 02:15:35"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:384
 # 31fa19e1f65140b3838689ee03a63e49
+#: ../../source/developer-docs/realtime.rst:384
 msgid "**fatalities-name**: Estimated Fatalities"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:385
 # ec99fa84dc1a460dada868af41918948
+#: ../../source/developer-docs/realtime.rst:385
 msgid "**fatalities-range**: 5 - 55"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:386
 # 2ffe47d497884b699580944243c4f084
+#: ../../source/developer-docs/realtime.rst:386
 msgid "**fatalities-count**: 55"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:390
 # ac5f0d9719f04150bfb33e114ad2fec7
+#: ../../source/developer-docs/realtime.rst:390
 msgid "Customising the template"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:392
 # 4941f54b4b0d44a289694342fe6cdf08
-msgid "You have a few options to customise the template - we have gone to great lengths to ensure that you can flexibly adjust the report composition **without doing any programming**. There are three primary ways you can achieve this:"
+#: ../../source/developer-docs/realtime.rst:392
+msgid ""
+"You have a few options to customise the template - we have gone to great "
+"lengths to ensure that you can flexibly adjust the report composition "
+"**without doing any programming**. There are three primary ways you can "
+"achieve this:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:397
 # 8c02053e66ad476ab0f7194ef8fe1b27
-msgid "Moving replacement tags into different elements, or removing them completely."
+#: ../../source/developer-docs/realtime.rst:397
+msgid ""
+"Moving replacement tags into different elements, or removing them completely."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:399
 # 35a0433078694d699582bc830138af23
+#: ../../source/developer-docs/realtime.rst:399
 msgid "completely."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:401
 # ddc3e4e412464688b31ce7c7bfc17d49
+#: ../../source/developer-docs/realtime.rst:401
 msgid "your preferred template."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:404
 # bfde9621455d4ba79d0c5651ca670c79
-msgid "The template is provided as :file:`realtime/fixtures/realtime-template.qpt` and can be modified by opening the template using the QGIS map composer, making your changes and then overwriting the template. You should take care to test your template changes before deploying them to a live server, and after deploying them to a live server."
+#: ../../source/developer-docs/realtime.rst:404
+msgid ""
+"The template is provided as :file:`realtime/fixtures/realtime-template.qpt` "
+"and can be modified by opening the template using the QGIS map composer, "
+"making your changes and then overwriting the template. You should take care "
+"to test your template changes before deploying them to a live server, and "
+"after deploying them to a live server."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:410
 # 206878238b2c4f7bbe997b3d407826f7
-msgid "If you wish to use your own custom template, you need to specify the :samp:`INSAFE_REALTIME_TEMPLATE` environment variable, populating it with the path to your preferred template file."
+#: ../../source/developer-docs/realtime.rst:410
+msgid ""
+"If you wish to use your own custom template, you need to specify the :samp:"
+"`INSAFE_REALTIME_TEMPLATE` environment variable, populating it with the path "
+"to your preferred template file."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:415
 # 660d372c06ae4d24bf4ddb9555efc7a2
+#: ../../source/developer-docs/realtime.rst:415
 msgid "QGIS Realtime Project"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:417
 # 0988e41b69534cb78db9422b6144eb8f
-msgid "The cartography provided in the realtime maps is loaded from the :file:`realtime/fixtures/realtime.qgs` QGIS project file. You can open this file using QGIS, change the layers and their symbology, and your changes will be reflected in the generated realtime shake report."
+#: ../../source/developer-docs/realtime.rst:417
+msgid ""
+"The cartography provided in the realtime maps is loaded from the :file:"
+"`realtime/fixtures/realtime.qgs` QGIS project file. You can open this file "
+"using QGIS, change the layers and their symbology, and your changes will be "
+"reflected in the generated realtime shake report."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:422
 # 078efc16f3db4456882ee7dc56280c7f
+#: ../../source/developer-docs/realtime.rst:422
 msgid "There are however some caveats to this:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:424
 # 25bd1b03bef44b439d4337b01c7bf21d
+#: ../../source/developer-docs/realtime.rst:424
 msgid "The overview map has locked layers"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:425
 # 0efe1b27d83f4cce91594fb901582b52
-msgid "The main map should always have a population layer with grayscale legend matching that provided in the original. If you do remove / change the population layer you should also remove / change the population layer legend."
+#: ../../source/developer-docs/realtime.rst:425
+msgid ""
+"The main map should always have a population layer with grayscale legend "
+"matching that provided in the original. If you do remove / change the "
+"population layer you should also remove / change the population layer legend."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:429
 # 65b1540702904c5bb4604cb279c06a5b
-msgid "If you wish to use your own custom project, you need to specify the :samp:`INSAFE_REALTIME_PROJECT` environment variable, populating it with the path to your preferred project file."
+#: ../../source/developer-docs/realtime.rst:429
+msgid ""
+"If you wish to use your own custom project, you need to specify the :samp:"
+"`INSAFE_REALTIME_PROJECT` environment variable, populating it with the path "
+"to your preferred project file."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:434
 # 687a41ad7b574633a581beeaae0ca9f5
+#: ../../source/developer-docs/realtime.rst:434
 msgid "Configuration of population data"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:436
 # f5bcaf98831d41eab2405550ef1741f9
-msgid "Population data is used as the 'exposure' dataset for shake reports. The following priority will be used to determine the path of the population raster dataset. # the class attribute **self.populationRasterPath**"
+#: ../../source/developer-docs/realtime.rst:436
+msgid ""
+"Population data is used as the 'exposure' dataset for shake reports. The "
+"following priority will be used to determine the path of the population "
+"raster dataset. # the class attribute **self.populationRasterPath**"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:440
 # 64ca7e1e6a1144e38f8f5ca6a1da832d
+#: ../../source/developer-docs/realtime.rst:440
 msgid "will be checked and if not None it will be used."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:442
 # 15ca973e91a9452e94687a7abf104584
+#: ../../source/developer-docs/realtime.rst:442
 msgid "checked if set it will be used."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:444
 # 23767b5eb763492dab131f0e8c98c066
+#: ../../source/developer-docs/realtime.rst:444
 msgid ":file:`/fixtures/exposure/population.tif` will be checked."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:446
 # 18029e46aee645a9b9b6f522cecbfdd0
+#: ../../source/developer-docs/realtime.rst:446
 msgid ":file:`/usr/local/share/inasafe/exposure/population.tif` will be used."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:450
 # f6a67b36c8e648a2bc46222e77c22138
+#: ../../source/developer-docs/realtime.rst:450
 msgid "Running a shake event"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:452
 # 2e35b3fbe5244bb3931df6801f0f5279
-msgid "To run a single event locally on a system with an X-Server you can use the provided script :file:`scripts/make-shakemap.sh`. The script can be used with the following options:"
+#: ../../source/developer-docs/realtime.rst:452
+msgid ""
+"To run a single event locally on a system with an X-Server you can use the "
+"provided script :file:`scripts/make-shakemap.sh`. The script can be used "
+"with the following options:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:457
 # 4738a7c2c00842bd9230d27536eec01d
-msgid "all known shake events on the server. Events are listed as their full ftp url e.g. :file:`ftp://118.97.83.243/20121106084105.out.zip` and both *inp* and *out* files are listed."
+#: ../../source/developer-docs/realtime.rst:457
+msgid ""
+"all known shake events on the server. Events are listed as their full ftp "
+"url e.g. :file:`ftp://118.97.83.243/20121106084105.out.zip` and both *inp* "
+"and *out* files are listed."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:461
 # ff65ea9d7e9348bd83f320694b0beeed
-msgid "and process a single shake event. A pdf, png and thumbnail will be produced."
+#: ../../source/developer-docs/realtime.rst:461
+msgid ""
+"and process a single shake event. A pdf, png and thumbnail will be produced."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:463
 # 6d0d5ea0eaca4c7886feba2a38269887
-msgid "events on the server in batch mode. **Note:** this is experimental and not production ready - we recommend to use the approach described in :ref:`realtime-batch`."
+#: ../../source/developer-docs/realtime.rst:463
+msgid ""
+"events on the server in batch mode. **Note:** this is experimental and not "
+"production ready - we recommend to use the approach described in :ref:"
+"`realtime-batch`."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:467
 # 26af26ddf8734379920c2efc7dc4effa
-msgid "the latest existing shake dataset. This is typically what you would want to use as the target of a cron job."
+#: ../../source/developer-docs/realtime.rst:467
+msgid ""
+"the latest existing shake dataset. This is typically what you would want to "
+"use as the target of a cron job."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:470
 # 6d3dd7087ccb41908c3d5acba81e29b9
-msgid "The :file:`make_shakemap.sh` script is just a thin wrapper around the python :mod:`realtime.make_map` python module."
+#: ../../source/developer-docs/realtime.rst:470
+msgid ""
+"The :file:`make_shakemap.sh` script is just a thin wrapper around the "
+"python :mod:`realtime.make_map` python module."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:473
 # 35832175611a496c949008d42cc17bf6
-msgid "An english local shakemap will always be generated regardless of the locale you have chosen (using the INASAFE_LOCALE env var). This en version will be in addition to your chosen locale."
+#: ../../source/developer-docs/realtime.rst:473
+msgid ""
+"An english local shakemap will always be generated regardless of the locale "
+"you have chosen (using the INASAFE_LOCALE env var). This en version will be "
+"in addition to your chosen locale."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:478
 # 273a8838c491423d98e1eb5966a934c2
+#: ../../source/developer-docs/realtime.rst:478
 msgid "Unit tests"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:480
 # f7be091b8c474e95a0bd25a729dcaf53
-msgid "A complete set of unit tests is provided with the realtime package for InaSAFE. You can execute these tests like this::"
+#: ../../source/developer-docs/realtime.rst:480
+msgid ""
+"A complete set of unit tests is provided with the realtime package for "
+"InaSAFE. You can execute these tests like this::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:486
 # 5ed5d0728a8c4622b9923de88c5f28c0
-msgid "There are also a number of Jenkins tasks provided in the Makefile for InaSAFE to automate testing on our continuous integration server. You can view the current state of these tests by visiting this URL:"
+#: ../../source/developer-docs/realtime.rst:486
+msgid ""
+"There are also a number of Jenkins tasks provided in the Makefile for "
+"InaSAFE to automate testing on our continuous integration server. You can "
+"view the current state of these tests by visiting this URL:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:490
 # ee4b70c5ddcc4aa093ac065e26210316
+#: ../../source/developer-docs/realtime.rst:490
 msgid "http://jenkins.linfiniti.com/job/InaSAFE-Realtime/"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:495
 # 0c9a2d8e72f741abbb7897635750a7af
+#: ../../source/developer-docs/realtime.rst:495
 msgid "Batch validation & running"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:498
 # 2ad13c493cf946e9ba2a0b097ba15baf
-msgid "The :file:`scripts/make-all-shakemaps.sh` provided in the InaSAFE source tree will automate the production of one shakemap report per event found on the shake ftp server. It contains a number of environment variable settings which can be used to control batch execution. First a complete script listing::"
+#: ../../source/developer-docs/realtime.rst:498
+msgid ""
+"The :file:`scripts/make-all-shakemaps.sh` provided in the InaSAFE source "
+"tree will automate the production of one shakemap report per event found on "
+"the shake ftp server. It contains a number of environment variable settings "
+"which can be used to control batch execution. First a complete script "
+"listing::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:522
 # 10224fe80ce34012843e819b22e4c8c2
+#: ../../source/developer-docs/realtime.rst:522
 msgid "An example of the output produced from such a batch run is provided at:"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:524
 # e72b181d8a234de0a873d9e9b0e73c1c
+#: ../../source/developer-docs/realtime.rst:524
 msgid "http://quake.linfiniti.com/"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:529
 # 83aeb296c31d41cea0c988614b98c15c
+#: ../../source/developer-docs/realtime.rst:529
 msgid "Hosting the shakemaps"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:531
 # c621c1c1a99f4c0290ba708ae83633a1
-msgid "In this section we describe how to easily host the shakemaps on a public web site."
+#: ../../source/developer-docs/realtime.rst:531
+msgid ""
+"In this section we describe how to easily host the shakemaps on a public web "
+"site."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:534
 # 9f952cfef18b4d719d9d4f8162bc8c57
-msgid "An apache configuration file and a set of resources are provided to make it easy to host the shakemap outputs. The resources provided can easily be modified to provide a pleasing, user friendly directory listing of shakemap reports."
+#: ../../source/developer-docs/realtime.rst:534
+msgid ""
+"An apache configuration file and a set of resources are provided to make it "
+"easy to host the shakemap outputs. The resources provided can easily be "
+"modified to provide a pleasing, user friendly directory listing of shakemap "
+"reports."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:538
 # ec390cc3582c40fbb1c949f1a3433c8c
-msgid "You should adapt the paths used below to match the configuration of your system."
+#: ../../source/developer-docs/realtime.rst:538
+msgid ""
+"You should adapt the paths used below to match the configuration of your "
+"system."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:541
 # 965820359b2d458081219cc18244847d
-msgid "First create a file (as root / sudo) with this content in your :file:`/etc/apache2/sites-available/quake-apache.conf.` for example::"
+#: ../../source/developer-docs/realtime.rst:541
+msgid ""
+"First create a file (as root / sudo) with this content in your :file:`/etc/"
+"apache2/sites-available/quake-apache.conf.` for example::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:571
 # e2f323cb0c714523bed604a75a098e84
-msgid "Now make the :file:`/home/web/quake/public` directory in which the outputs will be hosted::"
+#: ../../source/developer-docs/realtime.rst:571
+msgid ""
+"Now make the :file:`/home/web/quake/public` directory in which the outputs "
+"will be hosted::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:576
 # ae8af654d42149718bfe47567cfdb4f5
-msgid "Unpack the :file:`realtime/fixtures/web/resource` directory into the above mentioned public directory. For example::"
+#: ../../source/developer-docs/realtime.rst:576
+msgid ""
+"Unpack the :file:`realtime/fixtures/web/resource` directory into the above "
+"mentioned public directory. For example::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:582
 # 3cd2c234e559436596e36bdf1baab2c9
+#: ../../source/developer-docs/realtime.rst:582
 msgid "Next ensure that apache has read access to your hosting directory::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:587
 # 73982192733d4a7b9b60abc42ceb5e15
-msgid "You can customise the look and feel of the hosted site by editing the files in :file:`/home/web/quake/public/resource` (assumes basic knowledge of HTML)."
+#: ../../source/developer-docs/realtime.rst:587
+msgid ""
+"You can customise the look and feel of the hosted site by editing the files "
+"in :file:`/home/web/quake/public/resource` (assumes basic knowledge of HTML)."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:590
 # 54f7017762694754807d6d90a4477f41
-msgid "Lastly, you should regularly run a script to move generated pdf and png outputs into the public directory. An example of such a script is provided as :file:`realtime/fixtures/web/make-public.sh`. To run this script regularly, you could add it to a cron job e.g.::"
+#: ../../source/developer-docs/realtime.rst:590
+msgid ""
+"Lastly, you should regularly run a script to move generated pdf and png "
+"outputs into the public directory. An example of such a script is provided "
+"as :file:`realtime/fixtures/web/make-public.sh`. To run this script "
+"regularly, you could add it to a cron job e.g.::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:597
 # 5614220e8ec34da7bad774b714b3ffdf
+#: ../../source/developer-docs/realtime.rst:597
 msgid "And then add a line like this to the cron file::"
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:601
 # aade8521e9a940b99bfa4b495df494e4
-msgid "The resources used in the above examples are all available in the source code under :file:`realtime/fixtures/web`."
+#: ../../source/developer-docs/realtime.rst:601
+msgid ""
+"The resources used in the above examples are all available in the source "
+"code under :file:`realtime/fixtures/web`."
 msgstr ""
 
-#: ../../source/developer-docs/realtime.rst:612
 # 391740ed26354dffa212923cb420b4c3
-msgid "http://paradox460.newsvine.com/_news/2008/04/05/1413490-how2-stylish-apache-directory-listings"
+#: ../../source/developer-docs/realtime.rst:612
+msgid ""
+"http://paradox460.newsvine.com/_news/2008/04/05/1413490-how2-stylish-apache-"
+"directory-listings"
 msgstr ""
-

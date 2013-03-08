@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2012, QGIS project
 # This file is distributed under the same license as the QGIS Documentation Project package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 10:26\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:26+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # 68a0757d88524105bd8013c0751b7c33
 #: ../../source/developer-docs/platform_linux.rst:7
@@ -25,8 +25,8 @@ msgstr ""
 # 198d3a0027ca4795b500977c20e3c0ee
 #: ../../source/developer-docs/platform_linux.rst:9
 msgid ""
-"Risk-in-a-box is built in python and runs as a plugin in `QGIS <http://qgis."
-"org>`_."
+"Risk-in-a-box is built in python and runs as a plugin in `QGIS "
+"<http://qgis.org>`_."
 msgstr ""
 
 # 3d292b515833464c9452a7b5533109e0
@@ -98,13 +98,13 @@ msgstr ""
 # 11ac900b55d44639b020d05be893edef
 #: ../../source/developer-docs/platform_linux.rst:45
 msgid ""
-"The Graphical User Interface components are built using `PyQt4 <http://www."
-"riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS plugin API "
-"(useful resources: `the QGIS Python Cookbook <http://qgis.org/pyqgis-"
-"cookbook/>`_ and `the QGIS C++ API documentation <http://qgis.org/api/>`_).  "
-"As such it is helpful if you are familiar with these technologies (python, "
-"Qt4, PyQt4, QGIS). In addition, the following are needed on your machine in "
-"order to work effectively with the code base:"
+"The Graphical User Interface components are built using `PyQt4 "
+"<http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS "
+"plugin API (useful resources: `the QGIS Python Cookbook <http://qgis.org"
+"/pyqgis-cookbook/>`_ and `the QGIS C++ API documentation "
+"<http://qgis.org/api/>`_).  As such it is helpful if you are familiar with "
+"these technologies (python, Qt4, PyQt4, QGIS). In addition, the following "
+"are needed on your machine in order to work effectively with the code base:"
 msgstr ""
 
 # 86dc2e680b1e4394b1c30e1972817dc2
@@ -187,9 +187,10 @@ msgstr ""
 # a57b6632bee04a31b6f4b15645f30b6c
 #: ../../source/developer-docs/platform_linux.rst:79
 msgid ""
-"To develop on the plugin, you first need to copy it to your local system. If "
-"you are a developer, the simplest way to do that is go to `~/.qgis/python/"
-"plugins` and clone inasafe from our GitHub repository page like this::"
+"To develop on the plugin, you first need to copy it to your local system. If"
+" you are a developer, the simplest way to do that is go to "
+"`~/.qgis/python/plugins` and clone inasafe from our GitHub repository page "
+"like this::"
 msgstr ""
 
 # a01ef00cd1e6436c8049d295120b17ac
@@ -265,23 +266,23 @@ msgstr ""
 # 66469fcab3fc440db0890e7ff9164bf5
 #: ../../source/developer-docs/platform_linux.rst:135
 msgid ""
-"Optionally you can enable nose achievments which is a motivational tool that "
-"gives you little achievement awards based on your test results::"
+"Optionally you can enable nose achievments which is a motivational tool that"
+" gives you little achievement awards based on your test results::"
 msgstr ""
 
 # 432989861d46463a82c1ceb83b2f820a
 #: ../../source/developer-docs/platform_linux.rst:141
 msgid ""
-"Now create this file in the root of your inasafe git checkout :file:`setup."
-"cfg`::"
+"Now create this file in the root of your inasafe git checkout "
+":file:`setup.cfg`::"
 msgstr ""
 
 # f1c4ec1055ab44239dd2a44c26e32e85
 #: ../../source/developer-docs/platform_linux.rst:147
 msgid ""
-"When you run tests occasionally achievements will be displayed to you at the "
-"end of the test run. See the achievements home page at http://exogen.github."
-"com/nose-achievements/."
+"When you run tests occasionally achievements will be displayed to you at the"
+" end of the test run. See the achievements home page at "
+"http://exogen.github.com/nose-achievements/."
 msgstr ""
 
 # 345f9de4dd464855884b7fd8951f26ef
@@ -336,15 +337,15 @@ msgstr ""
 # 4dedd97f44db48b5b0e2f59a41508d3d
 #: ../../source/developer-docs/platform_linux.rst:172
 msgid ""
-":guilabel (linux):`Directory` : :kbd:`/home/<your user name/.qgis/python/"
-"plugins/inasafe/`"
+":guilabel (linux):`Directory` : :kbd:`/home/<your user "
+"name/.qgis/python/plugins/inasafe/`"
 msgstr ""
 
 # b7a6bc7cd83a4656bc0b6ccc3241c2ba
 #: ../../source/developer-docs/platform_linux.rst:173
 msgid ""
-":guilabel (windows):`Directory` : :kbd:`/home/<your user name/.qgis/python/"
-"plugins/inasafe/`"
+":guilabel (windows):`Directory` : :kbd:`/home/<your user "
+"name/.qgis/python/plugins/inasafe/`"
 msgstr ""
 
 # af45f74676fb4605bfabf6edf0f17cb9
@@ -365,9 +366,9 @@ msgstr ""
 # 90fff44d147147deb6b7cddac0b53846
 #: ../../source/developer-docs/platform_linux.rst:178
 msgid ""
-"At this point you should should click the link entitled 'Please configure an "
-"interpreter in related preferences before continuing.' And on the resulting "
-"dialog do:"
+"At this point you should should click the link entitled 'Please configure an"
+" interpreter in related preferences before continuing.' And on the resulting"
+" dialog do:"
 msgstr ""
 
 # be958e546bed4664867c5b296bdc96b6
@@ -412,8 +413,8 @@ msgstr ""
 # 267cf64e96024a87ae0465a60e5c68f1
 #: ../../source/developer-docs/platform_linux.rst:198
 msgid ""
-"You will be returned to the Python Interpreters list and should see an entry "
-"for System Python 2.7 listed there. Now do in the *Libraries* tab:"
+"You will be returned to the Python Interpreters list and should see an entry"
+" for System Python 2.7 listed there. Now do in the *Libraries* tab:"
 msgstr ""
 
 # 148e78d483c04b3c91aab848e845e375
@@ -437,9 +438,9 @@ msgstr ""
 # 84dd18d123e547b19f8f8ae864bb8e54
 #: ../../source/developer-docs/platform_linux.rst:213
 msgid ""
-"If you are running with remote debugging enabled, be sure to start the PyDev "
-"debug server first before launching the Risk-in-a-box QGIS plugin otherwise "
-"QGIS will likely crash when it can't find the debug server."
+"If you are running with remote debugging enabled, be sure to start the PyDev"
+" debug server first before launching the Risk-in-a-box QGIS plugin otherwise"
+" QGIS will likely crash when it can't find the debug server."
 msgstr ""
 
 # 7582007951854cffa5251f313358b128
@@ -500,7 +501,7 @@ msgstr ""
 # 4bd05e9696284aa08a615fcaad4386c1
 #: ../../source/developer-docs/platform_linux.rst:241
 msgid ""
-"If you run the test suite for the entire inasafe package, it will mistakenly "
-"treat the sphinx documentation conf.py (docs.source.conf) as a test and fail "
-"for that test. This is 'normal' and can be ignored."
+"If you run the test suite for the entire inasafe package, it will mistakenly"
+" treat the sphinx documentation conf.py (docs.source.conf) as a test and "
+"fail for that test. This is 'normal' and can be ignored."
 msgstr ""

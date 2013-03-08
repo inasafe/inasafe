@@ -23,7 +23,8 @@ GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
 
 # LOCALES = space delimited list of iso codes to generate po files for
-LOCALES = id af
+# Please dont remove en here
+LOCALES = en id af
 
 default: compile
 
@@ -43,7 +44,9 @@ docs: compile
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
+        #update sphinx docs strings
 	@scripts/pre_translate.sh $(LOCALES)
+        #update application strings
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
 

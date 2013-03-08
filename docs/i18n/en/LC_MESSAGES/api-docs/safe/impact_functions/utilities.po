@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,107 @@ msgstr ""
 # c742efa9710c422484adcd778f846467
 #: ../../source/api-docs/safe/impact_functions/utilities.rst:6
 msgid "Module:  safe.impact_functions.utilities"
+msgstr ""
+
+# d247f7b39eb6441abddbee6e5edf1d74
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities:1
+msgid ""
+"Module to create damage curves from point data and additional logging utils "
+"relevant to impact_functions."
+msgstr ""
+
+# 9a4bdb2b540f43fa9d337526107ba1ac
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.Damage_curve:1
+msgid "Class for implementation of damage curves based on point data"
+msgstr ""
+
+# b02fc22f8ba145b8ad01a9f335885c98
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:1
+msgid "A helper to write the admissible plugin list to a string."
+msgstr ""
+
+# c1f3a0cd57dc4434ac3e736647d00f65
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:3
+msgid ""
+"Intended for use with the LOGGER so that admissible plugins can be pretty "
+"printed to the logs."
+msgstr ""
+
+# 5533dd034b0f46529a0457dcae0e6ddf
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:6
+msgid "Args: plugin_list str (required). A list of plugins"
+msgstr ""
+
+# 35630d8c62e34b6cb0b0bab23558711f
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:8
+msgid "Returns: A string representing the plugin list with nice formatting."
+msgstr ""
+
+# 44d62c8333c24597867d8f5f7be05fa9
+# 3cb6455d56c045eb8fe6a9359bca9448
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:10
+#: safe.impact_functions.utilities.keywords_to_str:10
+msgid "Raises: None"
+msgstr ""
+
+# d4017cf96f944619bc5ecee080f86971
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:1
+msgid "Pretty print keywords dict or list of dicts to a string."
+msgstr ""
+
+# 3d24b3d579be4f3281829ea0052127f7
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:3
+msgid ""
+"Intended for use with the LOGGER so that keywords can be pretty printed to "
+"the logs."
+msgstr ""
+
+# b393782507a644fba919d035a054288b
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:6
+msgid "Args: keywords dict or list (required). A list or dict of keywords."
+msgstr ""
+
+# 9028ffdc5034469dbd060078be272493
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:8
+msgid "Returns: A string representing the keyword list with nice formatting."
+msgstr ""
+
+# 4c189025552c4f8ba5c372af75b81ab1
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.pretty_string:1
+msgid ""
+"A helper function that return a pretty string according to the args Args:"
+msgstr ""
+
+# 5313f53a83c94449aa5c46f3d67b637c
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.pretty_string:3
+msgid "myArs = string or list"
+msgstr ""
+
+# e47fe7f340c64ecda1790a9ff86cda12
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.pretty_string:6
+msgid "if myArgs is list return each element as string separated by ','"
+msgstr ""
+
+# 145c8397d714448a9fff1a4325b2d582
+#: ../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.remove_double_spaces:1
+msgid ""
+"Remove double spaces from a string. Return the string without any dobule "
+"spaces"
 msgstr ""
 
 # 10b4154c4386497580e98feb2be51442
