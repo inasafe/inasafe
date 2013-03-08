@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,183 @@ msgstr ""
 # 9e3b81ffe75848e3bd9e64cbaec5c7fa
 #: ../../source/api-docs/safe_qgis_tests/test_clipper.rst:6
 msgid "Module:  safe_qgis.test_clipper"
+msgstr ""
+
+# 55ed119126e848649f7e50b9b72f0e0e
+#: ../../../safe_qgis/test_clipper.py:docstring of safe_qgis.test_clipper:2
+msgid "**ISClipper test suite.**"
+msgstr ""
+
+# 35ff1963f7614e7c92233a37ed220572
+#: ../../../safe_qgis/test_clipper.py:docstring of safe_qgis.test_clipper:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# e6a6035bdcb34f648e3f4ef402701652
+#: ../../../safe_qgis/test_clipper.py:docstring of safe_qgis.test_clipper:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 6af02378b25f47adbbaa0a611dca2c2c
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest:1
+msgid "Test the InaSAFE clipper"
+msgstr ""
+
+# 605c7ba96c5e4d0690fdb2b56fbf0a17
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling:1
+msgid "Raster layers can be scaled when resampled"
+msgstr ""
+
+# 04e82b676bae478686ab4fc270347e20
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling:3
+msgid "This is a test for ticket #52"
+msgstr ""
+
+# 264a364623a44b43a47bda3fb624f3f3
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling:5
+msgid "Native test .asc data has"
+msgstr ""
+
+# 0b6dbc2dfca54203804f7835701ef831
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling:7
+msgid ""
+"Population_Jakarta_geographic.asc ncols         638 nrows         649 "
+"cellsize      0.00045228819716044"
+msgstr ""
+
+# 3f5133090b3545bba6573b2a75897687
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling:12
+msgid ""
+"Population_2010.asc ncols         5525 nrows         2050 cellsize      "
+"0.0083333333333333"
+msgstr ""
+
+# bad8d75ebc47436c9ef26657f1886461
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling:17
+msgid ""
+"Scaling is necessary for raster data that represents density such as "
+"population per km^2"
+msgstr ""
+
+# 9a06b8f377ce4ac5a298df5dbaa29730
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling_projected:1
+msgid "Attempt to scale projected density raster layers raise exception"
+msgstr ""
+
+# f6715d322d7a49c7bb08cd0025bfacbb
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling_projected:3
+msgid ""
+"Automatic scaling when resampling density data does not currently work for "
+"projected layers. See issue #123."
+msgstr ""
+
+# 7ade0d56d59e4ad6b16eadddcdb6c888
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.testRasterScaling_projected:6
+msgid ""
+"For the time being this test checks that an exception is raised when scaling "
+"is attempted on projected layers. When we resolve issue #123, this test "
+"should be rewritten."
+msgstr ""
+
+# 6db101cf94b744128751171bd9a079e6
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_clipBoth:1
+msgid "Raster and Vector layers can be clipped"
+msgstr ""
+
+# 5b9b7c7e1680474e902614ac32845429
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_clipGeometry:1
+msgid "Test that we can clip a geometry using another geometry."
+msgstr ""
+
+# 6657abb5e0c347a1ab921a61ddf67131
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_clipRaster:1
+msgid "Raster layers can be clipped"
+msgstr ""
+
+# 7437ba0b1e3e43c2934dcb4db84f77bd
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_clipVector:1
+msgid "Vector layers can be clipped"
+msgstr ""
+
+# a1f8467a5ca743e09ed03cc074cab3ef
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_clipVectorHard:1
+msgid "Vector layers can be hard clipped."
+msgstr ""
+
+# 3eac4ecce17d472390e6d43cfcf41a41
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_clipVectorHard:3
+msgid "Hard clipping will remove any dangling, non intersecting elements."
+msgstr ""
+
+# e1b0b4316e8a4d2b951a3adb0f882e34
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_explodeMultiLineGeometry:1
+msgid "Test exploding LINES multipart to single part geometries works"
+msgstr ""
+
+# 0d0b4e853609428eaf09dc26582f19e5
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_explodeMultiPointGeometry:1
+msgid "Test exploding POINT multipart to single part geometries works"
+msgstr ""
+
+# f17c16e0bcb74310b0dd716deeb45d39
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_explodeMultiPolygonGeometry:1
+msgid "Test exploding POLY multipart to single part geometries works"
+msgstr ""
+
+# dedc6589d6fb44ee93c32453e7a28bb4
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_extentToKml:1
+msgid "Test if extent to KML is working."
+msgstr ""
+
+# a907a25a291e45e39e994ae582e30f3e
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_invalidFilenamesCaught:1
+msgid "Invalid filenames raise appropriate exceptions"
+msgstr ""
+
+# 0fd5840303454d4bbb2a7414c2e0c90a
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_invalidFilenamesCaught:3
+msgid ""
+"Wrote this test because test_clipBoth raised the wrong error when file was "
+"missing. Instead of reporting that, it gave Western boundary must be less "
+"than eastern. I got [0.0, 0.0, 0.0, 0.0]"
+msgstr ""
+
+# 2d69cc0945904e72978f18e075cb15df
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_invalidFilenamesCaught:7
+msgid "See issue #170"
+msgstr ""
+
+# 2388d111c815465bbfb8d13e9258885b
+#: ../../../safe_qgis/test_clipper.py:docstring of
+#: safe_qgis.test_clipper.ClipperTest.test_vectorProjections:1
+msgid "Test that vector input data is reprojected properly during clip"
 msgstr ""
 
 # 058ab9233f674e37b7a1b234b7a29822

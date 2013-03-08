@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QGIS Documentation Project 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-19 11:09\n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,58 @@ msgstr ""
 # fa3bec4d55a74772baa5e94f4925b740
 #: ../../source/api-docs/safe_qgis_tests/test_map.rst:6
 msgid "Module:  safe_qgis.test_map"
+msgstr ""
+
+# a693f1c174cb4ec3a490e504ebbd4027
+#: ../../../safe_qgis/test_map.py:docstring of safe_qgis.test_map:1
+msgid "**Tests for map creation in QGIS plugin.**"
+msgstr ""
+
+# 7ccb25a6a5954e8e95d3dfd33cf55eaf
+#: ../../../safe_qgis/test_map.py:docstring of safe_qgis.test_map.MapTest:1
+msgid "Test the InaSAFE Map generator"
+msgstr ""
+
+# 301994c867ff4947adc76b8577f97584
+#: ../../../safe_qgis/test_map.py:docstring of
+#: safe_qgis.test_map.MapTest.Xtest_renderTemplate:1
+msgid "Test that load template works"
+msgstr ""
+
+# 6fdaf43cc931475ea8d966e8372460b4
+#: ../../../safe_qgis/test_map.py:docstring of
+#: safe_qgis.test_map.MapTest.setUp:1
+msgid "Setup fixture run before each tests"
+msgstr ""
+
+# f0ed693296f54b17a0ff07ae41716cf2
+#: ../../../safe_qgis/test_map.py:docstring of
+#: safe_qgis.test_map.MapTest.test_getMapTitle:1
+msgid "Getting the map title from the keywords"
+msgstr ""
+
+# 55641ba5b85247378f973c0e2bf0c148
+#: ../../../safe_qgis/test_map.py:docstring of
+#: safe_qgis.test_map.MapTest.test_handleMissingMapTitle:1
+msgid "Missing map title from the keywords fails gracefully"
+msgstr ""
+
+# 6e05139fd1a14c1eabb90fc8d953ae85
+#: ../../../safe_qgis/test_map.py:docstring of
+#: safe_qgis.test_map.MapTest.test_printToPdf:1
+msgid "Test making a pdf of the map - this is the most typical use of map."
+msgstr ""
+
+# 3d76958047a242339bae27ed61bf119d
+#: ../../../safe_qgis/test_map.py:docstring of
+#: safe_qgis.test_map.MapTest.test_renderComposition:1
+msgid "Test making an image of the map only."
+msgstr ""
+
+# 4a67f368d79d4859a3e7e3a1e02add14
+#: ../../../safe_qgis/test_map.py:docstring of
+#: safe_qgis.test_map.MapTest.test_windowsDrawingArtifacts:1
+msgid "Test that windows rendering does not make artifacts"
 msgstr ""
 
 # 4aa9d7670df04c289a385d8164a5bd7b

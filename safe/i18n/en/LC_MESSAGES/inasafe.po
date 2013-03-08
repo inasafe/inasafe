@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-07 10:30+0200\n"
+"POT-Creation-Date: 2013-03-08 10:03+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:131
 #: safe/engine/impact_functions_for_testing/padang_building_impact_model.py:127
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:183
-#: safe/impact_functions/volcanic/volcano_building_impact.py:134
+#: safe/impact_functions/volcanic/volcano_building_impact.py:135
 msgid "Buildings"
 msgstr ""
 
@@ -34,7 +34,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:192
 #: safe/impact_functions/inundation/flood_population_evacuation.py:164
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
-#: safe/impact_functions/volcanic/volcano_building_impact.py:134
+#: safe/impact_functions/volcanic/volcano_building_impact.py:135
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:199
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:209
 #: safe/postprocessors/age_postprocessor.py:115
@@ -50,7 +50,7 @@ msgstr ""
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:184
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:238
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:86
-#: safe/impact_functions/volcanic/volcano_building_impact.py:136
+#: safe/impact_functions/volcanic/volcano_building_impact.py:138
 msgid "All"
 msgstr ""
 
@@ -243,7 +243,7 @@ msgstr ""
 msgid "Be inundated"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:171
+#: safe/common/dynamic_translations.py:174
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:234
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:82
 msgid "Building type"
@@ -1054,7 +1054,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:315
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:213
 #: safe/impact_functions/inundation/flood_population_evacuation.py:184
-#: safe/impact_functions/volcanic/volcano_building_impact.py:150
+#: safe/impact_functions/volcanic/volcano_building_impact.py:152
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:224
 msgid "Notes"
 msgstr ""
@@ -1082,13 +1082,13 @@ msgid "People in Jakarta"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:237
-#: safe/impact_functions/volcanic/volcano_building_impact.py:173
+#: safe/impact_functions/volcanic/volcano_building_impact.py:175
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:247
 msgid "0"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:240
-#: safe/impact_functions/volcanic/volcano_building_impact.py:175
+#: safe/impact_functions/volcanic/volcano_building_impact.py:177
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:249
 #, python-format
 msgid "%i - %i"
@@ -1223,12 +1223,12 @@ msgstr ""
 msgid "An eruption"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:134
+#: safe/impact_functions/volcanic/volcano_building_impact.py:136
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:199
 msgid "Cumulative"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:145
+#: safe/impact_functions/volcanic/volcano_building_impact.py:147
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 
@@ -1239,12 +1239,12 @@ msgstr ""
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:156
-#: safe/impact_functions/volcanic/volcano_building_impact.py:190
+#: safe/impact_functions/volcanic/volcano_building_impact.py:158
+#: safe/impact_functions/volcanic/volcano_building_impact.py:192
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:184
+#: safe/impact_functions/volcanic/volcano_building_impact.py:186
 msgid "Building Count"
 msgstr ""
 
@@ -1621,11 +1621,11 @@ msgstr ""
 msgid "High [%.2f people/cell]"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:153
+#: safe/impact_functions/volcanic/volcano_building_impact.py:155
 msgid "Only buildings available in OpenStreetMap are considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:151
+#: safe/impact_functions/volcanic/volcano_building_impact.py:153
 #, python-format
 msgid "Total number of buildings %s in the viewable area"
 msgstr ""
@@ -1803,19 +1803,19 @@ msgstr ""
 msgid "Calculate displaced people"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:168
+#: safe/common/dynamic_translations.py:171
 msgid "Gender"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:169
+#: safe/common/dynamic_translations.py:172
 msgid "Age"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:170
+#: safe/common/dynamic_translations.py:173
 msgid "Aggregation"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:172
+#: safe/common/dynamic_translations.py:175
 msgid "Aggregation Categorical"
 msgstr ""
 
@@ -1830,23 +1830,23 @@ msgstr ""
 msgid "Evacuation threshold"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:173
+#: safe/common/dynamic_translations.py:176
 msgid "gender"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:174
+#: safe/common/dynamic_translations.py:177
 msgid "age"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:175
+#: safe/common/dynamic_translations.py:178
 msgid "aggregation"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:176
+#: safe/common/dynamic_translations.py:179
 msgid "building type"
 msgstr ""
 
-#: safe/common/dynamic_translations.py:177
+#: safe/common/dynamic_translations.py:180
 msgid "aggregation categorical"
 msgstr ""
 
@@ -1856,4 +1856,16 @@ msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:183
 msgid "* Number is rounded to the nearest 1000"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:166
+msgid "Threshold [m]"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:167
+msgid "Thresholds [m]"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:168
+msgid "Distances [km]"
 msgstr ""
