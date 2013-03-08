@@ -35,7 +35,7 @@ compile:
 	@echo "-----------------"
 	make -C safe_qgis
 
-docs: compile
+docs: compile gen_impact_function_doc gen_rst
 	@echo
 	@echo "-------------------------------"
 	@echo "Compile documentation into html"
@@ -252,6 +252,14 @@ gen_impact_function_doc:
 	@echo "Generate impact functions' documentation"
 	@echo "-----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_impfunc_doc.py
+	@echo $(PYTHONPATH)
+
+gen_rst:
+	@echo
+	@echo "-----------------------------------"
+	@echo "Generate InaSAFE API documentation"
+	@echo "-----------------------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_rst_script.py
 	@echo $(PYTHONPATH)
 
 pylint-count:
