@@ -9,7 +9,8 @@ from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
                                    get_defaults,
                                    format_int,
-                                   verify)
+                                   verify,
+                                   round_thousand)
 from safe.common.tables import Table, TableRow
 from third_party.odict import OrderedDict
 
@@ -34,33 +35,29 @@ class FloodEvacuationFunction(FunctionProvider):
 
     # Function documentation
     synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
-                  'on population.')
+                  'in raster format on population.')
     actions = tr('Provide details about how many people would likely need '
                  'to be evacuated, where they are located and what resources '
                  'would be required to support them.')
-    #citations = []
-    detailed_description = tr('The population subject to inundation '
-                              'exceeding a threshold (default 1m) is '
-                              'calculated and returned as a raster layer.'
-                              'In addition the total number and the required '
-                              'needs in terms of the BNPB (Perka 7) '
-                              'are reported. The threshold can be changed and '
-                              'even contain multiple numbers in which case '
-                              'evacuation and needs are calculated using '
-                              'the largest number with population breakdowns '
-                              'provided for the smaller numbers. The '
-                              'population '
-                              'raster is resampled to the resolution of the '
-                              'hazard raster and is rescaled so that the '
-                              'resampled population counts reflect estimates '
-                              'of population count per resampled cell. '
-                              'The resulting impact layer has the same '
-                              'resolution and reflects population count '
-                              'per cell which are affected by inundation.')
-    permissible_hazard_input = tr('A hazard raster layer where each cell '
-                                  'represents flood depth (in meters).')
-    permissible_exposure_input = tr('An exposure raster layer where each '
-                                    'cell represent population count.')
+    detailed_description = \
+        tr('The population subject to inundation exceeding a threshold '
+           '(default 1m) is calculated and returned as a raster layer.'
+           'In addition the total number and the required needs in terms '
+           'of the BNPB (Perka 7) are reported. The threshold can be '
+           'changed and even contain multiple numbers in which case '
+           'evacuation and needs are calculated using the largest number '
+           'with population breakdowns provided for the smaller numbers. The '
+           'population raster is resampled to the resolution of the '
+           'hazard raster and is rescaled so that the resampled population '
+           'counts reflect estimates of population count per resampled cell. '
+           'The resulting impact layer has the same resolution and reflects '
+           'population count per cell which are affected by inundation.')
+    hazard_input = tr('A hazard raster layer where each cell '
+                      'represents flood depth (in meters).')
+    exposure_input = tr('An exposure raster layer where each '
+                        'cell represent population count.')
+    output = tr('Raster layer contains population affected and the minimum'
+                'needs based on the population affected.')
     limitation = tr('The default threshold of 1 meter was selected based on '
                     'consensus, not hard evidence.')
 
@@ -128,16 +125,14 @@ class FloodEvacuationFunction(FunctionProvider):
             val = int(numpy.sum(M))
 
             # Don't show digits less than a 1000
-            if val > 1000:
-                val = val // 1000 * 1000
+            val = round_thousand(val)
             counts.append(val)
 
         # Count totals
         evacuated = counts[-1]
         total = int(numpy.sum(P))
         # Don't show digits less than a 1000
-        if total > 1000:
-            total = total // 1000 * 1000
+        total = round_thousand(total)
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
 

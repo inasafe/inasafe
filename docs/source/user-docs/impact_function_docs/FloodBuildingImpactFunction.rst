@@ -4,30 +4,27 @@ Flood Building Impact Function
 Overview
 --------
 
-**Rating**: 0
-
-**Limitation**: Lorem ipsum limitation
-
-**Title**: Be flooded
-
 **Unique Identifier**: Flood Building Impact Function
-
-**Permissible Hazard Input**: A raster layer where each cell represents flood depth, or a vector polygon layer where each polygon represents an inundated area. The following attributes are recognised (in order): Flooded (True or False), FLOODPRONE (Yes or No) and Affected (True or False).
 
 **Author**: Ole Nielsen, Kristy van Putten
 
-**Actions**: Provide details about where critical response areas are
+**Rating**: 0
 
-**Synopsis**: To assess the impacts of inundation on building footprints originating from OpenStreetMap (OSM).
+**Title**: Be flooded
 
-**Citations**: 
+**Synopsis**: To assess the impacts of (flood or tsunami) inundation on building footprints originating from OpenStreetMap (OSM).
 
-* Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. Vol 66(2). 2012
+**Actions**: Provide details about where critical infrastructure might be flooded
 
+**Hazard Input**: A hazard raster layer where each cell represents flood depth (in meters), or a vector polygon layer where each polygon represents an inundated area. In the latter case, the following attributes are recognised (in order): "affected" (True or False) or "FLOODPRONE" (Yes or No). (True may be represented as 1, False as 0
 
-**Permissible Exposure Input**: vector polygon layer extracted from OSM where each polygon represents the footprint of a building.
+**Exposure Input**: Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.
+
+**Output**: Vector layer contains building is estimated to be flooded and the breakdown of the building by type.
+
+**Limitation**: This function only flags buildings as impacted or not either based on a fixed threshold in case of raster hazard or the the attributes mentioned under input in case of vector hazard.
 
 Details
 -------
 
-This is an area for free form text where adetailed description of the methodology used is given.
+The inundation status is calculated for each building (using the centroid if it is a polygon) based on the hazard levels provided. if the hazard is given as a raster a threshold of 1 meter is used. This is configurable through the InaSAFE interface. If the hazard is given as a vector polygon layer buildings are considered to be impacted depending on the value of hazard attributes (in order) "affected" or "FLOODPRONE": If a building is in a region that has attribute "affected" set to True (or 1) it is impacted. If attribute "affected" does not exist but "FLOODPRONE" does, then the building is considered impacted if "FLOODPRONE" is "yes". If neither "affected" nor "FLOODPRONE" is available, a building will be impacted if it belongs to any polygon. The latter behaviour is implemented through the attribute "inapolygon" which is automatically assigned.

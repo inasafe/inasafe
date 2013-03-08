@@ -15,12 +15,12 @@ import string
 
 # Constant
 insafe_dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-'..'))
-_docs_dir = "docs" + os.sep + "source" + os.sep + "api-docs"
+                                  '..'))
+_docs_dir = os.path.join("docs", "source", "api-docs")
 _safe_qgis_dir = "safe_qgis"
-_safe_qgis_path = insafe_dir_path + os.sep + _safe_qgis_dir
+_safe_qgis_path = os.path.join(insafe_dir_path, _safe_qgis_dir)
 _safe_qgis_tests_dir = "safe_qgis_tests"
-_safe_qgis_tests_path = insafe_dir_path + os.sep + _safe_qgis_tests_dir
+_safe_qgis_tests_path = os.path.join(insafe_dir_path, _safe_qgis_tests_dir)
 
 # Default Value
 def_max_depth = 2
@@ -117,17 +117,18 @@ def create_rst_file(path_file, file_name, content):
     """Shorter procedure for creating rst file
     """
 
-    create_dirs(os.path.split(path_file + os.sep + file_name)[0])
+    create_dirs(os.path.split(os.path.join(path_file, file_name))[0])
     try:
-        fl = open(path_file + os.sep + file_name + '.rst', 'w+')
+        fl = open(os.path.join(path_file, file_name + '.rst'), 'w+')
         fl.write(content)
         fl.close()
 
     except Exception, e:
-        print 'Creating ' + path_file + os.sep + file_name + '.rst failed: ', e
+        print 'Creating ', os.path.join(path_file, file_name + '.rst'), \
+              ' failed: ', e
 
 
-def generate_rst(dir_path, doc_path=insafe_dir_path + os.sep + _docs_dir):
+def generate_rst(dir_path, doc_path=os.path.join(insafe_dir_path, _docs_dir)):
     """Function for generating .rst file for all .py file in dir_path folder.
         dir_path : path of the folder
     """
@@ -140,21 +141,22 @@ def generate_rst(dir_path, doc_path=insafe_dir_path + os.sep + _docs_dir):
         if '__init__.py' not in files:
             continue
         # Creating directory for the package
-        create_dirs(doc_path + os.sep + path[len_dir_path:])
+        create_dirs(os.path.join(doc_path, path[len_dir_path:]))
 
         # Create index_file for the directory
         python_files = python_file_siever(files)
         package = string.replace(path[len_dir_path:], os.sep, '.')
         index_file_text = create_package_index(package, def_max_depth,
-        python_files, dirs)
+                                               python_files, dirs)
         create_rst_file(doc_path, path[len_dir_path:], index_file_text)
 
         # Creating .rst file for each .py file
         for py_file in python_files:
-            py_module_text = create_text_module(
-            string.replace(path[len_dir_path:] + '.' + py_file, os.sep, '.'))
-            create_rst_file(doc_path + os.sep + path[len_dir_path:],
-            py_file[:-3], py_module_text)
+            py_module_text = \
+                create_text_module(string.replace(
+                    path[len_dir_path:] + '.' + py_file, os.sep, '.'))
+            create_rst_file(os.path.join(doc_path, path[len_dir_path:]),
+                            py_file[:-3], py_module_text)
 
 
 def main():
@@ -172,18 +174,18 @@ def main():
             python_module_files.append(content)
 
     # Create docs directory
-    docs_dir_path = insafe_dir_path + os.sep + _docs_dir
+    docs_dir_path = os.path.join(insafe_dir_path, _docs_dir)
     create_dirs(docs_dir_path)
 
     #creating index.rst file
     module_text = create_index('Packages safe_qgis', def_max_depth,
-    ['safe_qgis'])
+                               ['safe_qgis'])
     test_module_text = create_index('Unit Tests', def_max_depth,
-    ['safe_qgis_tests'])
+                                    ['safe_qgis_tests'])
     safe_package_text = create_index('Packages safe', def_max_depth,
-    ['safe'])
+                                     ['safe'])
     create_rst_file(docs_dir_path, 'index', index_header + module_text +
-    test_module_text + safe_package_text)
+                    test_module_text + safe_package_text)
 
     # Creating safe_qgis.rst file
     safe_qgis_text = create_package_index('safe_qgis', 2, python_module_files)
@@ -191,18 +193,18 @@ def main():
 
     # Creating safe_qgis_tests.rst file
     safe_qgis_test_text = create_package_index('safe_qgis_tests', 2,
-    python_test_files)
+                                               python_test_files)
     create_rst_file(docs_dir_path, 'safe_qgis_tests', safe_qgis_test_text)
 
     # Creating each module folder and the contents
-    docs_safe_qgis_path = docs_dir_path + os.sep + 'safe_qgis'
+    docs_safe_qgis_path = os.path.join(docs_dir_path, 'safe_qgis')
     create_dirs(docs_safe_qgis_path)
 
     for module in python_module_files:
         module_text = create_text_module('safe_qgis.' + module)
         create_rst_file(docs_safe_qgis_path, module[:-3], module_text)
 
-    docs_safe_qgis_tests_path = docs_dir_path + os.sep + 'safe_qgis_tests'
+    docs_safe_qgis_tests_path = os.path.join(docs_dir_path, 'safe_qgis_tests')
     create_dirs(docs_safe_qgis_tests_path)
 
     for module in python_test_files:
@@ -210,12 +212,13 @@ def main():
         create_rst_file(docs_safe_qgis_tests_path, module[:-3], module_text)
 
     # For general packages and modules in safe package
-    generate_rst(insafe_dir_path + os.sep + 'safe')
+    generate_rst(os.path.join(insafe_dir_path, 'safe'))
 
 
 if __name__ == "__main__":
     # Remove old .rst files, incase you deleted python files
     # print insafe_dir_path
-    if os.path.exists(insafe_dir_path + os.sep + _docs_dir):
-        rmtree(insafe_dir_path + os.sep + _docs_dir)
+    old_path = os.path.join(insafe_dir_path, _docs_dir)
+    if os.path.exists(old_path):
+        rmtree(old_path)
     main()

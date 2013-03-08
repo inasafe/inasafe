@@ -57,16 +57,18 @@ class FloodBuildingImpactFunction(FunctionProvider):
            'building will be impacted if it belongs to any polygon. The latter'
            ' behaviour is implemented through the attribute "inapolygon" which'
            ' is automatically assigned.')
-    permissible_hazard_input = \
+    hazard_input = \
         tr('A hazard raster layer where each cell '
            'represents flood depth (in meters), or a vector polygon layer '
            'where each polygon represents an inundated area. In the latter '
            'case, the following attributes are recognised '
            '(in order): "affected" (True or False) or "FLOODPRONE" '
            '(Yes or No). (True may be represented as 1, False as 0')
-    permissible_exposure_input = \
+    exposure_input = \
         tr('Vector polygon layer extracted from OSM '
            'where each polygon represents the footprint of a building.')
+    output = tr('Vector layer contains building is estimated to be flooded '
+                'and the breakdown of the building by type.')
     limitation = tr('This function only flags buildings as impacted or not '
                     'either based on a fixed threshold in case of raster '
                     'hazard or the the attributes mentioned under input '

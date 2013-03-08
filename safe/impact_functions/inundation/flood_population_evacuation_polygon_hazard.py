@@ -6,10 +6,10 @@ from safe.impact_functions.core import (FunctionProvider,
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr,
                                    format_int,
-                                   round_thousand)
+                                   round_thousand,
+                                   get_defaults)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.common.utilities import get_defaults
 from third_party.odict import OrderedDict
 
 import logging
@@ -17,7 +17,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
-    """Impact function for flood evacuation
+    """Impact function for vector flood evacuation
 
     :author AIFDR
     :rating 4
@@ -31,6 +31,27 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     """
 
     title = tr('Need evacuation')
+    # Function documentation
+    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
+                  'in vector format on population.')
+    actions = tr('Provide details about how many people would likely need '
+                 'to be evacuated, where they are located and what resources '
+                 'would be required to support them.')
+
+    detailed_description = \
+        tr('The population subject to inundation is determined whether in'
+           'an area which affected or not. You can also set an evacuation'
+           'percentage to calculate how many percent of the total population'
+           'affected to be evacuated. This number will be used to estimate'
+           'needs based on BNPB Perka 7/2008 minimum bantuan.')
+
+    hazard_input = tr('A hazard vector layer which has attribute affected '
+                      'the value is either 1 or 0')
+    exposure_input = tr('An exposure raster layer where each cell represent '
+                        'population count.')
+    output = tr('Vector layer contains population affected and the minimum'
+                'needs based on evacuation percentage.')
+
     target_field = 'population'
     defaults = get_defaults()
     parameters = OrderedDict([
