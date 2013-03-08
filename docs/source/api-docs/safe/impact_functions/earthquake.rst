@@ -5,6 +5,6 @@ Package::safe.impact_functions.earthquake
    :maxdepth: 2
 
    earthquake/earthquake_building_impact
-   earthquake/itb_building_impact_model
-   earthquake/pager_earthquake_fatality_model
    earthquake/itb_earthquake_fatality_model
+   earthquake/pager_earthquake_fatality_model
+   earthquake/itb_building_impact_model
