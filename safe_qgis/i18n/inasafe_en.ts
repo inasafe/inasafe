@@ -3,11 +3,6 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="test_plugin.py" line="70"/>
-        <source>A volcano eruption</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="safe_interface.py" line="145"/>
         <source>theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: /ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s</source>
         <translation type="unfinished"></translation>
@@ -57,6 +52,61 @@
     <message>
         <location filename="safe_interface.py" line="379"/>
         <source>No styleInfo was found for layer %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="396"/>
+        <source>Layer or Extent passed to clip is None.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="163"/>
+        <source>Expected a vector layer but received a %s.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="194"/>
+        <source>Clip geometry must be an extent or a single partpolygon based geometry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="203"/>
+        <source>Could not obtain data provider from layer &quot;%s&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="229"/>
+        <source>Error when creating shapefile: &lt;br&gt;Filename:%s&lt;br&gt;Error: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="263"/>
+        <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.If hazard and exposure data doesn&apos;t overlap at all, it is not possible to do an analysis.Another possibility is that the layers do overlap but because they may have different spatial references, they appear to be disjoint. If this is the case, try to turn on reproject on-the-fly in QGIS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="400"/>
+        <source>Expected a raster layer but received a %s.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="408"/>
+        <source>Input file to be clipped &quot;%s&quot; does not have the expected keywords file %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="476"/>
+        <source>Process could not be started.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="clipper.py" line="477"/>
+        <source>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="test_plugin.py" line="70"/>
+        <source>A volcano eruption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -159,56 +209,6 @@
         <source>InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="clipper.py" line="396"/>
-        <source>Layer or Extent passed to clip is None.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="163"/>
-        <source>Expected a vector layer but received a %s.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="194"/>
-        <source>Clip geometry must be an extent or a single partpolygon based geometry.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="203"/>
-        <source>Could not obtain data provider from layer &quot;%s&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="229"/>
-        <source>Error when creating shapefile: &lt;br&gt;Filename:%s&lt;br&gt;Error: %s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="263"/>
-        <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.If hazard and exposure data doesn&apos;t overlap at all, it is not possible to do an analysis.Another possibility is that the layers do overlap but because they may have different spatial references, they appear to be disjoint. If this is the case, try to turn on reproject on-the-fly in QGIS.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="400"/>
-        <source>Expected a raster layer but received a %s.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="408"/>
-        <source>Input file to be clipped &quot;%s&quot; does not have the expected keywords file %s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="476"/>
-        <source>Process could not be started.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="clipper.py" line="477"/>
-        <source>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DOCK</name>
@@ -245,11 +245,6 @@
 </context>
 <context>
     <name>Dock</name>
-    <message>
-        <location filename="dock.py" line="147"/>
-        <source>InaSAFE %1 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="dock.py" line="367"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
@@ -621,67 +616,72 @@
         <source>Suggestion</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="dock.py" line="147"/>
+        <source>InaSAFE %1 %2 </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DockBase</name>
     <message>
-        <location filename="dock_base.ui" line="18"/>
+        <location filename="dock_base.py" line="164"/>
         <source>InaSAFE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="101"/>
-        <source>Supported by:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="173"/>
-        <source>Question: In the event of</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="201"/>
-        <source>How many</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="218"/>
-        <source>&amp;Might</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="265"/>
-        <source>Configure Impact Function Parameter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="268"/>
-        <source>...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="286"/>
-        <source>Aggregate results by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="298"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="318"/>
-        <source>Print...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_base.ui" line="338"/>
-        <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="55"/>
         <source>about:blank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="165"/>
+        <source>Supported by:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="166"/>
+        <source>Question: In the event of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="167"/>
+        <source>How many</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="168"/>
+        <source>&amp;Might</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="169"/>
+        <source>Configure Impact Function Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="170"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="171"/>
+        <source>Aggregate results by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="172"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="173"/>
+        <source>Print...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.py" line="174"/>
+        <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -988,122 +988,122 @@ to%s: %s</source>
 <context>
     <name>KeywordsDialogBase</name>
     <message>
-        <location filename="keywords_dialog_base.ui" line="20"/>
+        <location filename="keywords_dialog_base.py" line="234"/>
         <source>InaSAFE - Keyword Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="58"/>
+        <location filename="keywords_dialog_base.py" line="235"/>
         <source>Quick edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="67"/>
+        <location filename="keywords_dialog_base.py" line="236"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="74"/>
+        <location filename="keywords_dialog_base.py" line="237"/>
         <source>Subcategory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="90"/>
+        <location filename="keywords_dialog_base.py" line="238"/>
         <source>Aggregation attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="97"/>
+        <location filename="keywords_dialog_base.py" line="239"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="106"/>
+        <location filename="keywords_dialog_base.py" line="240"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="109"/>
+        <location filename="keywords_dialog_base.py" line="241"/>
         <source>Hazard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="116"/>
+        <location filename="keywords_dialog_base.py" line="242"/>
         <source>Where people and property are situated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="119"/>
+        <location filename="keywords_dialog_base.py" line="243"/>
         <source>Exposure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="129"/>
+        <location filename="keywords_dialog_base.py" line="244"/>
         <source>Postprocessing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="141"/>
+        <location filename="keywords_dialog_base.py" line="245"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="148"/>
+        <location filename="keywords_dialog_base.py" line="246"/>
         <source>Female ratio attribute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="155"/>
+        <location filename="keywords_dialog_base.py" line="247"/>
         <source>Female ratio default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="181"/>
+        <location filename="keywords_dialog_base.py" line="248"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="197"/>
+        <location filename="keywords_dialog_base.py" line="249"/>
         <source>Advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="205"/>
+        <location filename="keywords_dialog_base.py" line="250"/>
         <source>Predefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="212"/>
+        <location filename="keywords_dialog_base.py" line="251"/>
         <source>User defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="230"/>
+        <location filename="keywords_dialog_base.py" line="252"/>
         <source>Keyword</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="301"/>
+        <location filename="keywords_dialog_base.py" line="256"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="314"/>
+        <location filename="keywords_dialog_base.py" line="257"/>
         <source>Add to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="288"/>
+        <location filename="keywords_dialog_base.py" line="255"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="324"/>
+        <location filename="keywords_dialog_base.py" line="258"/>
         <source>Current keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="360"/>
+        <location filename="keywords_dialog_base.py" line="259"/>
         <source>Remove selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1178,22 +1178,22 @@ Message: %s</source>
 <context>
     <name>MinimumNeedsBase</name>
     <message>
-        <location filename="minimum_needs_base.ui" line="14"/>
+        <location filename="minimum_needs_base.py" line="54"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="minimum_needs_base.ui" line="20"/>
+        <location filename="minimum_needs_base.py" line="55"/>
         <source>Select a layer that is already loaded in QGIS and that contains a field named &apos;pengungsi&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="minimum_needs_base.ui" line="32"/>
+        <location filename="minimum_needs_base.py" line="56"/>
         <source>Affected People Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="minimum_needs_base.ui" line="42"/>
+        <location filename="minimum_needs_base.py" line="57"/>
         <source>Affected people field</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1219,117 +1219,117 @@ Message: %s</source>
 <context>
     <name>OptionsDialogBase</name>
     <message>
-        <location filename="options_dialog_base.py" line="209"/>
+        <location filename="options_dialog_base.ui" line="14"/>
         <source>InaSAFE - Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="210"/>
+        <location filename="options_dialog_base.ui" line="62"/>
         <source>Not yet implemented</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="211"/>
+        <location filename="options_dialog_base.ui" line="71"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="212"/>
+        <location filename="options_dialog_base.ui" line="81"/>
         <source>Location for results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="225"/>
+        <location filename="options_dialog_base.ui" line="275"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="214"/>
+        <location filename="options_dialog_base.ui" line="112"/>
         <source>Report template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="216"/>
+        <location filename="options_dialog_base.ui" line="143"/>
         <source>Logo for maps (must be x x y) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="218"/>
+        <location filename="options_dialog_base.ui" line="174"/>
         <source>Organisation name (for maps, reports etc.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="220"/>
+        <location filename="options_dialog_base.ui" line="207"/>
         <source>DPI (Maps and reports)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="221"/>
+        <location filename="options_dialog_base.ui" line="226"/>
         <source>Only show visible layers in InaSAFE dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="222"/>
+        <location filename="options_dialog_base.ui" line="236"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="223"/>
+        <location filename="options_dialog_base.ui" line="246"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="224"/>
+        <location filename="options_dialog_base.ui" line="256"/>
         <source>Keyword cache for remote datasources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="226"/>
+        <location filename="options_dialog_base.ui" line="284"/>
         <source>Run analysis in a separate thread (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="227"/>
+        <location filename="options_dialog_base.ui" line="294"/>
         <source>Hide exposure layer on scenario estimate completion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="228"/>
+        <location filename="options_dialog_base.ui" line="301"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="229"/>
+        <location filename="options_dialog_base.ui" line="304"/>
         <source>Clip datasets to visible extent before analysis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="230"/>
+        <location filename="options_dialog_base.ui" line="314"/>
         <source>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="231"/>
+        <location filename="options_dialog_base.ui" line="317"/>
         <source>Show intermediate layers generated by postprocessing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="232"/>
+        <location filename="options_dialog_base.ui" line="326"/>
         <source>Female ratio default value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="233"/>
+        <location filename="options_dialog_base.ui" line="348"/>
         <source>When clipping, also clip features (e.g. will clip polygon smaller)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="234"/>
+        <location filename="options_dialog_base.ui" line="355"/>
         <source>Help to improve InaSAFE by submitting errors to a remote server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="235"/>
+        <location filename="options_dialog_base.ui" line="368"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
