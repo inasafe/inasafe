@@ -745,6 +745,7 @@ def get_documentation(func):
     hazard_input = 'hazard_input'
     exposure_input = 'exposure_input'
     limitation = 'limitation'
+    output = 'output'
 
     if hasattr(func, '__doc__') and func.__doc__:
         doc_str = func.__doc__
@@ -771,6 +772,8 @@ def get_documentation(func):
         retval[hazard_input] = func.hazard_input
     if hasattr(func, exposure_input):
         retval[exposure_input] = func.exposure_input
+    if hasattr(func, output):
+        retval[output] = func.output
     if hasattr(func, limitation):
         retval[limitation] = func.limitation
     return retval
