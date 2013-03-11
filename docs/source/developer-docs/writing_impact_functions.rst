@@ -195,7 +195,15 @@ get_projection     The spatial reference for the layer                    http:/
 Getting data from vector layers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:get_data:
+The main methods for vector data are
+
+================   ====================================================   ========================================================================================
+Method             Returns                                                Documentation
+================   ====================================================   ========================================================================================
+get_data           List of dictionaries of vector attributes              http://inasafe.org/api-docs/safe/storage/vector.html#safe.storage.vector.Vector.get_data
+get_geometry       Return geometry for vector layer (e.g. point coords)   http://inasafe.org/api-docs/safe/storage/vector.html#safe.storage.vector.Vector.get_geometry
+get_projection     The spatial reference for the layer                    http://inasafe.org/api-docs/safe/storage/layer.html#safe.storage.layer.Layer.get_projection
+================   ====================================================   ========================================================================================
 
 
 .. _raster_raster:
