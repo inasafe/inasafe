@@ -4,9 +4,13 @@ Earthquake Building Impact Function
 Overview
 --------
 
-**Unique Identifier**: Earthquake Building Impact Function
+**Unique Identifier**: 
 
-**Title**: Be affected
+Earthquake Building Impact Function
+
+**Title**: 
+
+Be affected
 
 Details
 -------

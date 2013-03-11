@@ -4,23 +4,41 @@ Volcano Building Impact
 Overview
 --------
 
-**Unique Identifier**: Volcano Building Impact
+**Unique Identifier**: 
 
-**Author**: AIFDR
+Volcano Building Impact
 
-**Rating**: 4
+**Author**: 
 
-**Title**: Be affected
+AIFDR
 
-**Synopsis**: To assess the impacts of volcano eruption on building.
+**Rating**: 
 
-**Actions**: Provide details about how many building would likely be affected by each hazard zones.
+4
 
-**Hazard Input**: A hazard vector layer can be polygon or point. If polygon, it must have "KRB" attribute and the valuefor it are "Kawasan Rawan Bencana I", "Kawasan Rawan Bencana II", or "Kawasan Rawan Bencana III."
+**Title**: 
 
-**Exposure Input**: Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.
+Be affected
 
-**Output**: vector layer contains Map of building exposed to volcanic hazard zones for each Kawasan Rawan Bencana or radius.
+**Synopsis**: 
+
+To assess the impacts of volcano eruption on building.
+
+**Actions**: 
+
+Provide details about how many building would likely be affected by each hazard zones.
+
+**Hazard Input**: 
+
+A hazard vector layer can be polygon or point. If polygon, it must have "KRB" attribute and the valuefor it are "Kawasan Rawan Bencana I", "Kawasan Rawan Bencana II", or "Kawasan Rawan Bencana III."
+
+**Exposure Input**: 
+
+Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.
+
+**Output**: 
+
+Vector layer contains Map of building exposed to volcanic hazard zones for each Kawasan Rawan Bencana or radius.
 
 Details
 -------

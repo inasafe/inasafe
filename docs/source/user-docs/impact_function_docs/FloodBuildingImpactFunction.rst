@@ -4,25 +4,45 @@ Flood Building Impact Function
 Overview
 --------
 
-**Unique Identifier**: Flood Building Impact Function
+**Unique Identifier**: 
 
-**Author**: Ole Nielsen, Kristy van Putten
+Flood Building Impact Function
 
-**Rating**: 0
+**Author**: 
 
-**Title**: Be flooded
+Ole Nielsen, Kristy van Putten
 
-**Synopsis**: To assess the impacts of (flood or tsunami) inundation on building footprints originating from OpenStreetMap (OSM).
+**Rating**: 
 
-**Actions**: Provide details about where critical infrastructure might be flooded
+0
 
-**Hazard Input**: A hazard raster layer where each cell represents flood depth (in meters), or a vector polygon layer where each polygon represents an inundated area. In the latter case, the following attributes are recognised (in order): "affected" (True or False) or "FLOODPRONE" (Yes or No). (True may be represented as 1, False as 0
+**Title**: 
 
-**Exposure Input**: Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.
+Be flooded
 
-**Output**: Vector layer contains building is estimated to be flooded and the breakdown of the building by type.
+**Synopsis**: 
 
-**Limitation**: This function only flags buildings as impacted or not either based on a fixed threshold in case of raster hazard or the the attributes mentioned under input in case of vector hazard.
+To assess the impacts of (flood or tsunami) inundation on building footprints originating from OpenStreetMap (OSM).
+
+**Actions**: 
+
+Provide details about where critical infrastructure might be flooded
+
+**Hazard Input**: 
+
+A hazard raster layer where each cell represents flood depth (in meters), or a vector polygon layer where each polygon represents an inundated area. In the latter case, the following attributes are recognised (in order): "affected" (True or False) or "FLOODPRONE" (Yes or No). (True may be represented as 1, False as 0
+
+**Exposure Input**: 
+
+Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.
+
+**Output**: 
+
+Vector layer contains building is estimated to be flooded and the breakdown of the building by type.
+
+**Limitation**: 
+
+This function only flags buildings as impacted or not either based on a fixed threshold in case of raster hazard or the the attributes mentioned under input in case of vector hazard.
 
 Details
 -------

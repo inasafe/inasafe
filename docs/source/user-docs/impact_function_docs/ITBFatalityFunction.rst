@@ -4,34 +4,47 @@ I T B Fatality Function
 Overview
 --------
 
-**Unique Identifier**: I T B Fatality Function
+**Unique Identifier**: 
 
-**Author**: Hadi Ghasemi
+I T B Fatality Function
 
-**Rating**: 3
+**Author**: 
 
-**Title**: Die or be displaced
+Hadi Ghasemi
 
-**Synopsis**: To asses the impact of earthquake on population based on earthquake model developed by ITB
+**Rating**: 
 
-**Actions**: Provide details about the population will be die or displaced
+3
+
+**Title**: 
+
+Die or be displaced
+
+**Synopsis**: 
+
+To asses the impact of earthquake on population based on earthquake model developed by ITB
+
+**Actions**: 
+
+Provide details about the population will be die or displaced
 
 **Citations**: 
 
-* Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster Survey Guidelines Development Bali, 27-28 February 2012, 54pp.
-* Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.
-* Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.
+ * Indonesian Earthquake Building-Damage and Fatality Models and    Post Disaster Survey Guidelines Development Bali, 27-28    February 2012, 54pp.
+ * Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D.,    Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas    of ShakeMaps and population exposure catalog for    earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.
+ * Jaiswal, K., and Wald, D., 2010. An empirical model for    global earthquake fatality estimation, Earthq. Spectra    26, 1017-1037.
 
 
 **Limitation**: 
 
-* The model is based on limited number of observed fatality rates during 4 past fatal events.
-* The model clearly over-predicts the fatality rates atintensities higher than VIII.
-* The model only estimates the expected fatality rate for a given intensity level; however the associated uncertainty for the proposed model is not addressed.
-* There are few known mistakes in developing the current model:
-- rounding MMI values to the nearest 0.5,
-- Implementing Finite-Fault models of candidate events, and
-- consistency between selected GMPEs with those in use by BMKG.
+ - The model is based on limited number of observed fatality    rates during 4 past fatal events. 
+ - The model clearly over-predicts the fatality rates at    intensities higher than VIII.
+ - The model only estimates the expected fatality rate    for a given intensity level; however the associated    uncertainty for the proposed model is not addressed.
+ - There are few known mistakes in developing the current    model:
+
+   * rounding MMI values to the nearest 0.5,
+   * Implementing Finite-Fault models of candidate events, and
+   * consistency between selected GMPEs with those in use by      BMKG.
 
 
 Details
