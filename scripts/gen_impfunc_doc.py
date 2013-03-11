@@ -49,20 +49,17 @@ def gen_rst_doc(impfunc_doc):
             for mykey, myValue in myDoc.items():
                 if mykey == 'detailed_description':
                     continue
-                myPrettykey = pretty_key(mykey)
-                content_rst += '**' + myPrettykey + '**' + ': '
-                if type(myValue) is list and len(myValue) > 0:
-                    content_rst += '\n\n'
-                    for myVal in myValue:
-                        content_rst += '* ' + myVal + '\n'
-                elif myValue is None or len(myValue) == 0:
+                my_pretty_key = pretty_key(mykey)
+                content_rst += '**' + my_pretty_key + '**' + ': \n\n'
+                if myValue is None or len(myValue) == 0:
                     content_rst += 'No documentation found'
                 else:
                     content_rst += myValue
                 content_rst += '\n\n'
             content_rst += 'Details'
             content_rst += '\n' + '-' * len('Details') + '\n\n'
-            if 'detailed_description' in myDoc.keys():
+            if ('detailed_description' in myDoc.keys()) and \
+                    (len(myDoc['detailed_description']) > 0):
                 content_rst += myDoc['detailed_description']
             else:
                 content_rst += 'No documentation found'
