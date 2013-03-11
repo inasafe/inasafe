@@ -51,7 +51,7 @@ from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  getWGS84resolution,
-                                 isLayerPolygonal,
+                                 isPolygonLayer,
                                  getLayerAttributeNames,
                                  setVectorStyle,
                                  htmlHeader,
@@ -719,7 +719,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # NOTE : I commented out this due to
             # https://github.com/AIFDR/inasafe/issues/528
             # check if layer is a vector polygon layer
-            # if isLayerPolygonal(myLayer):
+            # if isPolygonLayer(myLayer):
             #     addComboItemInOrder(self.cboAggregation, myTitle,
             #                         mySource)
             #     self.aggregationLayers.append(myLayer)
@@ -1256,7 +1256,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
 #        import cProfile
-        if isLayerPolygonal(myHazardLayer):
+        if isPolygonLayer(myHazardLayer):
             # http://stackoverflow.com/questions/1031657/
             # profiling-self-and-arguments-in-python
 #            cProfile.runctx('self.preparePolygonLayerForAggr(
@@ -1265,7 +1265,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theClippedHazardFilename = self.preparePolygonLayerForAggr(
                 theClippedHazardFilename, myHazardLayer)
 
-        if isLayerPolygonal(myExposureLayer):
+        if isPolygonLayer(myExposureLayer):
             mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
                 'subcategory')
             if mySubcategory != 'structure':

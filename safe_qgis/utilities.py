@@ -1176,7 +1176,7 @@ def addComboItemInOrder(theCombo, theItemText, theItemData=None):
     theCombo.insertItem(mySize, theItemText, theItemData)
 
 
-def isLayerPolygonal(theLayer):
+def isPolygonLayer(theLayer):
     """Tell if a QGIS layer is vector and its geometries are polygons.
 
    Args:
@@ -1195,7 +1195,7 @@ def isLayerPolygonal(theLayer):
         return False
 
 
-def isLayerPoint(theLayer):
+def isPointLayer(theLayer):
     """Tell if a QGIS layer is vector and its geometries are points.
 
    Args:

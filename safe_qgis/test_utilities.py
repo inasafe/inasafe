@@ -18,7 +18,7 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
                               mmToPoints,
                               pointsToMM,
                               humaniseSeconds,
-                              isLayerPolygonal,
+                              isPolygonLayer,
                               getLayerAttributeNames,
                               impactLayerAttribution,
                               dpiToMeters,
@@ -332,17 +332,17 @@ class UtilitiesTest(unittest.TestCase):
     def test_isLayerPolygonal(self):
         """Test we can get the correct attributes back"""
         myLayer = makePolygonLayer()
-        myMessage = 'isLayerPolygonal, %s layer should be polygonal' % myLayer
-        assert isLayerPolygonal(myLayer), myMessage
+        myMessage = 'isPolygonLayer, %s layer should be polygonal' % myLayer
+        assert isPolygonLayer(myLayer), myMessage
 
         myLayer = makePointLayer()
         myMessage = '%s layer should be polygonal' % myLayer
-        assert not isLayerPolygonal(myLayer), myMessage
+        assert not isPolygonLayer(myLayer), myMessage
 
         myLayer = makePadangLayer()
         myMessage = ('%s raster layer should not be polygonal'
                     % myLayer)
-        assert not isLayerPolygonal(myLayer), myMessage
+        assert not isPolygonLayer(myLayer), myMessage
 
     def test_getDefaults(self):
         myExpectedDefaults = {
