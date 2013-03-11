@@ -428,11 +428,7 @@ class DockTest(unittest.TestCase):
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
         myLayerList = [DOCK.tr('Entire area'),
-                       DOCK.tr('A flood in Jakarta'),
-                       DOCK.tr('donut'),
-                       DOCK.tr('Essential buildings'),
-                       DOCK.tr('kabupaten jakarta singlepart'),
-                       DOCK.tr('OSM Building Polygons')]
+                       DOCK.tr('kabupaten jakarta singlepart')]
         currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(DOCK
         .cboAggregation.count())]
 
