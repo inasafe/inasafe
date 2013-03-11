@@ -116,7 +116,8 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
         try:
             myMin = float(myClass['min'])
         except TypeError:
-            raise StyleError('Class break lower bound should be a number.'
+            raise StyleError(
+                'Class break lower bound should be a number.'
                 'I got %s' % myClass['min'])
 
         try:
@@ -332,7 +333,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
         if myTransparencyPercent > 0:
             # Always assign the transparency to the class' specified quantity
             myPixel = \
-                    QgsRasterTransparency.TransparentSingleValuePixel()
+                QgsRasterTransparency.TransparentSingleValuePixel()
             myPixel.pixelValue = myMax
             myPixel.percentTransparent = myTransparencyPercent
             myTransparencyList.append(myPixel)
@@ -349,7 +350,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                 myRange = range(myLastValue, myMax)
                 for myValue in myRange:
                     myPixel = \
-                    QgsRasterTransparency.TransparentSingleValuePixel()
+                        QgsRasterTransparency.TransparentSingleValuePixel()
                     myPixel.pixelValue = myValue
                     myPixel.percentTransparent = myTransparencyPercent
                     myTransparencyList.append(myPixel)
@@ -366,7 +367,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
 
     # Now set the raster transparency
     theQgsRasterLayer.rasterTransparency()\
-    .setTransparentSingleValuePixelList(myTransparencyList)
+        .setTransparentSingleValuePixelList(myTransparencyList)
 
     theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
@@ -543,8 +544,9 @@ def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
             myErrorMessage = ('<b>' + theException.__class__.__name__ +
                               '</b> : ' + myWrappedMessage)
 
-        myTraceback = ('<pre id="traceback" class="prettyprint"'
-              ' style="display: none;">\n' + myTraceback + '</pre>')
+        myTraceback = (
+            '<pre id="traceback" class="prettyprint"'
+            ' style="display: none;">\n' + myTraceback + '</pre>')
 
         # Wrap string in theHtml
         s = '<table class="condensed">'
@@ -553,8 +555,9 @@ def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
                   + tr('Error:') + '</th></tr>\n'
                   '<tr><td>' + theContext + '</td></tr>\n')
         # now the string from the error itself
-        s += ('<tr><th class="problem button-cell">'
-              + tr('Problem:') + '</th></tr>\n'
+        s += (
+            '<tr><th class="problem button-cell">'
+            + tr('Problem:') + '</th></tr>\n'
             '<tr><td>' + myErrorMessage + '</td></tr>\n')
             # now the traceback heading
         s += ('<tr><th class="info button-cell" style="cursor:pointer;"'
@@ -577,8 +580,9 @@ def getWGS84resolution(theLayer):
     If not, work it out based on EPSG:4326 representations of its extent
     """
 
-    msg = tr('Input layer to getWGS84resolution must be a raster layer. '
-           'I got: %s' % str(theLayer.type())[1:-1])
+    msg = tr(
+        'Input layer to getWGS84resolution must be a raster layer. '
+        'I got: %s' % str(theLayer.type())[1:-1])
     if not theLayer.type() == QgsMapLayer.RasterLayer:
         raise RuntimeError(msg)
 
@@ -1026,8 +1030,9 @@ def setupPrinter(theFilename,
     myPrinter = QtGui.QPrinter()
     myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
     myPrinter.setOutputFileName(theFilename)
-    myPrinter.setPaperSize(QtCore.QSizeF(thePageWidth, thePageHeight),
-                            QtGui.QPrinter.Millimeter)
+    myPrinter.setPaperSize(
+        QtCore.QSizeF(thePageWidth, thePageHeight),
+        QtGui.QPrinter.Millimeter)
     myPrinter.setFullPage(True)
     myPrinter.setColorMode(QtGui.QPrinter.Color)
     myPrinter.setResolution(theResolution)
@@ -1138,12 +1143,13 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
 
     if theInaSAFEFlag:
         myReport += '<tr><th>%s</th></tr>' % tr('Software notes')
-        myInaSAFEPhrase = tr('This report was created using InaSAFE '
-                              'version %1. Visit http://inasafe.org to get '
-                              'your free copy of this software!').arg(
-                                get_version())
-        myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
-                               ' BNPB, AusAid & the World Bank')
+        myInaSAFEPhrase = tr(
+            'This report was created using InaSAFE '
+            'version %1. Visit http://inasafe.org to get '
+            'your free copy of this software!').arg(get_version())
+        myInaSAFEPhrase += tr(
+            'InaSAFE has been jointly developed by'
+            ' BNPB, AusAid & the World Bank')
         myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
 
     myReport += '</table>'
