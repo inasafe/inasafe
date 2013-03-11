@@ -7,12 +7,12 @@ import hashlib
 import logging
 
 from PyQt4 import QtGui, QtCore
-from qgis.core import (QgsApplication,
-                      QgsVectorLayer,
-                      QgsRasterLayer,
-                      QgsRectangle,
-                      QgsCoordinateReferenceSystem,
-                      )
+from qgis.core import (
+    QgsApplication,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsRectangle,
+    QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
@@ -30,7 +30,8 @@ IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
-CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__),
+CONTROL_IMAGE_DIR = os.path.join(
+    os.path.dirname(__file__),
     'test_data/test_images')
 
 
@@ -42,8 +43,9 @@ def assertHashesForFile(theHashes, theFilename):
                  '\nExpected: %s'
                  '\nPlease check graphics %s visually '
                  'and add to list of expected hashes '
-                 'if it is OK on this platform.'
-                  % (myHash, theHashes, theFilename))
+                 'if it is OK on this platform.' % (myHash,
+                                                    theHashes,
+                                                    theFilename))
     assert myHash in theHashes, myMessage
 
 
@@ -258,11 +260,10 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
     """
     myMessages = ''
     for myControlImage in theControlImages:
-        myFullPath = os.path.join(CONTROL_IMAGE_DIR,
-                                      myControlImage)
-        myFlag, myMessage = checkImage(myFullPath,
-                                          theTestImagePath,
-                                          theTolerance)
+        myFullPath = os.path.join(
+            CONTROL_IMAGE_DIR, myControlImage)
+        myFlag, myMessage = checkImage(
+            myFullPath, theTestImagePath, theTolerance)
         myMessages += myMessage
         # As soon as one passes we are done!
         if myFlag:
@@ -310,7 +311,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
         return False, myMessage
 
     if (myControlImage.width() != myTestImage.width()
-        or myControlImage.height() != myTestImage.height()):
+            or myControlImage.height() != myTestImage.height()):
         myMessage = ('Control and test images are different sizes.\n'
                      'Control image   : %s (%i x %i)\n'
                      'Test image      : %s (%i x %i)\n'
@@ -334,14 +335,12 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                                      QtGui.QImage.Format_ARGB32_Premultiplied)
     myDifferenceImage.fill(152 + 219 * 256 + 249 * 256 * 256)
 
-    myControlPixel = QtGui.QColor().rgb()
-    myTestPixel = QtGui.QColor().rgb()
     for myY in range(myImageHeight):
         for myX in range(myImageWidth):
             myControlPixel = myControlImage.pixel(myX, myY)
             myTestPixel = myTestImage.pixel(myX, myY)
-            if (myControlPixel != myTestPixel):
-                myMismatchCount = myMismatchCount + 1
+            if myControlPixel != myTestPixel:
+                myMismatchCount += 1
                 myDifferenceImage.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
     myDifferenceFilePath = unique_filename(prefix='difference',
                                            suffix='.png',
@@ -394,6 +393,11 @@ class RedirectStdStreams(object):
     """
 
     def __init__(self, stdout=None, stderr=None):
+        """
+
+        :param stdout:
+        :param stderr:
+        """
         self._stdout = stdout or sys.stdout
         self._stderr = stderr or sys.stderr
 
