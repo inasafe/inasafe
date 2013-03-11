@@ -779,6 +779,12 @@ def get_documentation(func):
     return retval
 
 
+def get_doc_string(func):
+    """Return doc string of an impact function
+    """
+    return func.__doc__
+
+
 def is_function_enabled(func):
     """Check whether a function is enabled or not
     :param func:

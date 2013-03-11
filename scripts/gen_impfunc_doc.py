@@ -12,7 +12,10 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 from shutil import rmtree
-from safe.api import get_documentation, get_plugins, is_function_enabled
+from safe.api import (get_documentation,
+                      get_plugins,
+                      is_function_enabled,
+                      get_doc_string)
 from gen_rst_script import (create_dirs, create_rst_file, insafe_dir_path)
 from third_party.odict import OrderedDict
 
@@ -30,7 +33,7 @@ def pretty_key(myKey):
     return MyPrettyKey
 
 
-def gen_rst_doc(impfunc_doc):
+def gen_rst_doc(impfunc_doc, impfunc_doc_str):
     """Generate .rst file
     :param
         impfunc_doc : dictionary that contains documentation
@@ -50,7 +53,7 @@ def gen_rst_doc(impfunc_doc):
                 if mykey == 'detailed_description':
                     continue
                 my_pretty_key = pretty_key(mykey)
-                content_rst += '**' + my_pretty_key + '**' + ': \n\n'
+                content_rst += '**' + my_pretty_key + '**' + ': \n'
                 if myValue is None or len(myValue) == 0:
                     content_rst += 'No documentation found'
                 else:
@@ -65,6 +68,11 @@ def gen_rst_doc(impfunc_doc):
                 content_rst += 'No documentation found'
         else:
             content_rst += 'No documentation found'
+        if myFuncName in impfunc_doc_str:
+            my_doc_str = impfunc_doc_str[myFuncName]
+            content_rst += '\n\nDocstring'
+            content_rst += '\n' + '-' * len('Doc String') + '\n\n'
+            content_rst += my_doc_str
 
         create_rst_file(impact_func_doc_path, myFuncName.replace(' ', ''),
                         content_rst)
@@ -106,15 +114,17 @@ if __name__ == "__main__":
         rmtree(impact_func_doc_dir_path)
 
     impfunc_doc = {}
+    impfunc_doc_str = {}
     # Get all impact functions
     plugins_dict = get_plugins()
     for myKey, myFunc in plugins_dict.iteritems():
         if not is_function_enabled(myFunc):
             continue
         impfunc_doc[myKey] = get_documentation(myKey)
+        impfunc_doc_str[myKey] = get_doc_string(myFunc)
     list_unique_identifier = [x['unique_identifier']
                               for x in impfunc_doc.values()]
     gen_impact_func_index(list_unique_identifier)
 
     create_dirs(impact_func_doc_dir_path)
-    gen_rst_doc(impfunc_doc)
+    gen_rst_doc(impfunc_doc, impfunc_doc_str)
