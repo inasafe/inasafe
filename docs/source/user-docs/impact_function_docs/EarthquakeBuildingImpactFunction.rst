@@ -5,14 +5,22 @@ Overview
 --------
 
 **Unique Identifier**: 
-
 Earthquake Building Impact Function
 
 **Title**: 
-
 Be affected
 
 Details
 -------
 
 No documentation found
+
+Doc String
+----------
+
+Earthquake impact on building data
+
+    :param requires category=='hazard' and                     subcategory=='earthquake'
+
+    :param requires category=='exposure' and                     subcategory=='structure' and                     layertype=='vector'
+    
