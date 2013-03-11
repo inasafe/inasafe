@@ -164,14 +164,14 @@ return values depend on whether the layer is raster or vector as follows
 Getting data from raster layers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-============       =======                                                =============
+================   ====================================================   ========================================================================================
 Method             Returns                                                Documentation
----------------------------------------------------------------------------------------
-============       =======                                                =============
-get_data           2D numpy array representing pixel values               :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data
-get_geometry       Two 1D numpy arrays of corresponding coordinate axes
-get_projection     The spatial reference for the layer
-============       =======                                                =============
+================   ====================================================   ========================================================================================
+get_data           2D numpy array representing pixel values               http://inasafe.org/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data
+get_geometry       Two 1D numpy arrays of corresponding coordinate axes   http://inasafe.org/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_geometry
+get_geotransform   Needed e.g. to create new raster layers                http://inasafe.org/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_geotransform
+get_projection     The spatial reference for the layer                    http://inasafe.org/api-docs/safe/storage/layer.html#safe.storage.layer.Layer.get_projection
+================   ====================================================   ========================================================================================
 
 .. See See :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data for more details on
 .. the ``get_data()`` method.
@@ -338,9 +338,13 @@ The method ``get_data()`` returns an array if the layer is raster and takes two 
 :scaling: Optional argument controlling if data is to be scaled. In this case we set it to True which means that if the corresponding raster layer was resampled by InaSAFE, the values will be correctly scaled by the squared ratio between its current and native resolution.
 
 .. note:: # FIXME (Ole): Tim - how do we cross reference docstrings? The problem is that we can't drop labels into them because they are auto-generated?
+.. note:: #              Would like something like :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data
+.. note:: #              but decided to use URLs directly for the time being (see issue https://github.com/AIFDR/inasafe/issues/487#issuecomment-14103214)
 
-See :ref:/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data for more details on
-the ``get_data()`` method.
+See http://inasafe.org/api-docs/safe/storage/raster.html#safe.storage.raster.Raster.get_data for more details on the ``get_data()`` method.
+
+
+
 
 Now we are ready to implement the desired calculation. In this case it is very simple as
 we just want to sum over population pixels where the inundation depth exceeds the threshold.
