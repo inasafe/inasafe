@@ -161,8 +161,23 @@ The next typical step is to extract the numerical data to be used. All layers ha
 get_data() and get_geometry() which will return their data as python and numpy structures. Their exact
 return values depend on whether the layer is raster or vector as follows
 
+InaSAFE layers provide a range of methods for getting information from them. Some of the most important ones for raster data are listed here. For the full list,
+please consult the source documentation
+
+=================  =============
+Spatial data type  Documentation
+=================  =============
+Raster             http://inasafe.org/api-docs/safe/storage/raster.html
+Vector             http://inasafe.org/api-docs/safe/storage/vector.html
+Common to both     http://inasafe.org/api-docs/safe/storage/layer.html
+=================  =============
+
+
+
 Getting data from raster layers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The main methods for raster data are
 
 ================   ====================================================   ========================================================================================
 Method             Returns                                                Documentation
