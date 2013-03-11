@@ -825,7 +825,7 @@ def format_int(x):
         #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
     # see issue #526
     except ValueError:
-        return x
+        return str(x)
 
     # Quick solution for the moment
     if lang == 'id':
