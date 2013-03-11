@@ -36,6 +36,8 @@ sudo pip install transifex-client python-transifex
 sudo apt-get install sloccount
 # For gettext translation, translation statistics
 sudo apt-get install gettext
+# For tex2pdf command
+sudo apt-get install texinfo
 
 # Setup environment variable.
 if grep -q InaSAFEQGIS ~/.bash_aliases
