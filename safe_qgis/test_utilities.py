@@ -23,7 +23,8 @@ from safe_qgis.utilities import (
     getLayerAttributeNames,
     impactLayerAttribution,
     dpiToMeters,
-    _addMinMaxToStyle)
+    _addMinMaxToStyle,
+    which)
 from safe_qgis.utilities_test import (
     unitTestDataPath,
     loadLayer,
@@ -446,6 +447,13 @@ class UtilitiesTest(unittest.TestCase):
         print myActualClasses
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
+
+    def testWhich(self):
+        """Test that the which command works as expected."""
+        myBinary = 'gdalwarp'
+        myPath = which(myBinary)
+        # Check we found at least one match
+        assert len(myPath) > 0
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
