@@ -121,7 +121,8 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
         try:
             myMin = float(myClass['min'])
         except TypeError:
-            raise StyleError('Class break lower bound should be a number.'
+            raise StyleError(
+                'Class break lower bound should be a number.'
                 'I got %s' % myClass['min'])
 
         try:
@@ -337,7 +338,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
         if myTransparencyPercent > 0:
             # Always assign the transparency to the class' specified quantity
             myPixel = \
-                    QgsRasterTransparency.TransparentSingleValuePixel()
+                QgsRasterTransparency.TransparentSingleValuePixel()
             myPixel.pixelValue = myMax
             myPixel.percentTransparent = myTransparencyPercent
             myTransparencyList.append(myPixel)
@@ -354,7 +355,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                 myRange = range(myLastValue, myMax)
                 for myValue in myRange:
                     myPixel = \
-                    QgsRasterTransparency.TransparentSingleValuePixel()
+                        QgsRasterTransparency.TransparentSingleValuePixel()
                     myPixel.pixelValue = myValue
                     myPixel.percentTransparent = myTransparencyPercent
                     myTransparencyList.append(myPixel)
@@ -371,7 +372,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
 
     # Now set the raster transparency
     theQgsRasterLayer.rasterTransparency()\
-    .setTransparentSingleValuePixelList(myTransparencyList)
+        .setTransparentSingleValuePixelList(myTransparencyList)
 
     theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
@@ -548,8 +549,9 @@ def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
             myErrorMessage = ('<b>' + theException.__class__.__name__ +
                               '</b> : ' + myWrappedMessage)
 
-        myTraceback = ('<pre id="traceback" class="prettyprint"'
-              ' style="display: none;">\n' + myTraceback + '</pre>')
+        myTraceback = (
+            '<pre id="traceback" class="prettyprint"'
+            ' style="display: none;">\n' + myTraceback + '</pre>')
 
         # Wrap string in theHtml
         s = '<table class="condensed">'
@@ -558,8 +560,9 @@ def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
                   + tr('Error:') + '</th></tr>\n'
                   '<tr><td>' + theContext + '</td></tr>\n')
         # now the string from the error itself
-        s += ('<tr><th class="problem button-cell">'
-              + tr('Problem:') + '</th></tr>\n'
+        s += (
+            '<tr><th class="problem button-cell">'
+            + tr('Problem:') + '</th></tr>\n'
             '<tr><td>' + myErrorMessage + '</td></tr>\n')
             # now the traceback heading
         s += ('<tr><th class="info button-cell" style="cursor:pointer;"'
@@ -582,8 +585,9 @@ def getWGS84resolution(theLayer):
     If not, work it out based on EPSG:4326 representations of its extent
     """
 
-    msg = tr('Input layer to getWGS84resolution must be a raster layer. '
-           'I got: %s' % str(theLayer.type())[1:-1])
+    msg = tr(
+        'Input layer to getWGS84resolution must be a raster layer. '
+        'I got: %s' % str(theLayer.type())[1:-1])
     if not theLayer.type() == QgsMapLayer.RasterLayer:
         raise RuntimeError(msg)
 
@@ -1015,8 +1019,9 @@ def setupPrinter(theFilename,
     myPrinter = QtGui.QPrinter()
     myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
     myPrinter.setOutputFileName(theFilename)
-    myPrinter.setPaperSize(QtCore.QSizeF(thePageWidth, thePageHeight),
-                            QtGui.QPrinter.Millimeter)
+    myPrinter.setPaperSize(
+        QtCore.QSizeF(thePageWidth, thePageHeight),
+        QtGui.QPrinter.Millimeter)
     myPrinter.setFullPage(True)
     myPrinter.setColorMode(QtGui.QPrinter.Color)
     myPrinter.setResolution(theResolution)
@@ -1127,12 +1132,13 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
 
     if theInaSAFEFlag:
         myReport += '<tr><th>%s</th></tr>' % tr('Software notes')
-        myInaSAFEPhrase = tr('This report was created using InaSAFE '
-                              'version %1. Visit http://inasafe.org to get '
-                              'your free copy of this software!').arg(
-                                get_version())
-        myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
-                               ' BNPB, AusAid & the World Bank')
+        myInaSAFEPhrase = tr(
+            'This report was created using InaSAFE '
+            'version %1. Visit http://inasafe.org to get '
+            'your free copy of this software!').arg(get_version())
+        myInaSAFEPhrase += tr(
+            'InaSAFE has been jointly developed by'
+            ' BNPB, AusAid & the World Bank')
         myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
 
     myReport += '</table>'
@@ -1170,7 +1176,7 @@ def addComboItemInOrder(theCombo, theItemText, theItemData=None):
     theCombo.insertItem(mySize, theItemText, theItemData)
 
 
-def isLayerPolygonal(theLayer):
+def isPolygonLayer(theLayer):
     """Tell if a QGIS layer is vector and its geometries are polygons.
 
    Args:
@@ -1189,8 +1195,8 @@ def isLayerPolygonal(theLayer):
         return False
 
 
-def isLayerPoint(theLayer):
-    """Tell if a QGIS layer is vector and its geometries are polygons.
+def isPointLayer(theLayer):
+    """Tell if a QGIS layer is vector and its geometries are points.
 
    Args:
        the theLayer
@@ -1206,3 +1212,44 @@ def isLayerPoint(theLayer):
             theLayer.geometryType() == QGis.Point)
     except AttributeError:
         return False
+
+
+def which(name, flags=os.X_OK):
+    """Search PATH for executable files with the given name.
+
+    ..note:: This function was taken verbatim from the twisted framework,
+      licence available here:
+      http://twistedmatrix.com/trac/browser/tags/releases/twisted-8.2.0/LICENSE
+
+    On newer versions of MS-Windows, the PATHEXT environment variable will be
+    set to the list of file extensions for files considered executable. This
+    will normally include things like ".EXE". This fuction will also find files
+    with the given name ending with any of these extensions.
+
+    On MS-Windows the only flag that has any meaning is os.F_OK. Any other
+    flags will be ignored.
+
+    @type name: C{str}
+    @param name: The name for which to search.
+
+    @type flags: C{int}
+    @param flags: Arguments to L{os.access}.
+
+    @rtype: C{list}
+    @param: A list of the full paths to files found, in the
+    order in which they were found.
+    """
+    result = []
+    exts = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
+    path = os.environ.get('PATH', None)
+    if path is None:
+        return []
+    for p in os.environ.get('PATH', '').split(os.pathsep):
+        p = os.path.join(p, name)
+        if os.access(p, flags):
+            result.append(p)
+        for e in exts:
+            pext = p + e
+            if os.access(pext, flags):
+                result.append(pext)
+    return result

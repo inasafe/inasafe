@@ -11,21 +11,24 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe.api import bbox_intersection
-from safe_qgis.utilities import (getExceptionWithStacktrace,
-                              setVectorStyle,
-                              setRasterStyle,
-                              qgisVersion,
-                              mmToPoints,
-                              pointsToMM,
-                              humaniseSeconds,
-                              isLayerPolygonal,
-                              getLayerAttributeNames,
-                              impactLayerAttribution,
-                              dpiToMeters,
-                              _addMinMaxToStyle)
-from safe_qgis.utilities_test import (unitTestDataPath,
-                                     loadLayer,
-                                     getQgisTestApp)
+from safe_qgis.utilities import (
+    getExceptionWithStacktrace,
+    setVectorStyle,
+    setRasterStyle,
+    qgisVersion,
+    mmToPoints,
+    pointsToMM,
+    humaniseSeconds,
+    isPolygonLayer,
+    getLayerAttributeNames,
+    impactLayerAttribution,
+    dpiToMeters,
+    _addMinMaxToStyle,
+    which)
+from safe_qgis.utilities_test import (
+    unitTestDataPath,
+    loadLayer,
+    getQgisTestApp)
 from safe_qgis.exceptions import StyleError
 from safe.common.exceptions import BoundingBoxError
 from safe_qgis.test_keywords_dialog import (makePolygonLayer,
@@ -78,13 +81,13 @@ class UtilitiesTest(unittest.TestCase):
         myLayer, _ = loadLayer('issue126.tif')
 
         # Note the float quantity values below
-        myStyleInfo = {}
-        myStyleInfo['style_classes'] = [
-                        dict(colour='#38A800', quantity=1.1, transparency=100),
-                        dict(colour='#38A800', quantity=1.4, transparency=0),
-                        dict(colour='#79C900', quantity=10.1, transparency=0)]
-        myMessage = ('Setting style info with float based ranges should fail '
-                    'gracefully.')
+        myStyleInfo = {'style_classes': [
+            dict(colour='#38A800', quantity=1.1, transparency=100),
+            dict(colour='#38A800', quantity=1.4, transparency=0),
+            dict(colour='#79C900', quantity=10.1, transparency=0)]}
+        myMessage = (
+            'Setting style info with float based ranges should fail '
+            'gracefully.')
         try:
             setRasterStyle(myLayer, myStyleInfo)
         except:
@@ -100,9 +103,9 @@ class UtilitiesTest(unittest.TestCase):
 
         # Now run the same test again for int intervals
         myStyleInfo['style_classes'] = [
-                        dict(colour='#38A800', quantity=2, transparency=100),
-                        dict(colour='#38A800', quantity=4, transparency=0),
-                        dict(colour='#79C900', quantity=10, transparency=0)]
+            dict(colour='#38A800', quantity=2, transparency=100),
+            dict(colour='#38A800', quantity=4, transparency=0),
+            dict(colour='#79C900', quantity=10, transparency=0)]
         myMessage = ('Setting style info with generate valid transparent '
                      'pixel entries.')
         try:
@@ -122,9 +125,9 @@ class UtilitiesTest(unittest.TestCase):
         # integers
         # See https://github.com/AIFDR/inasafe/issues/126#issuecomment-5978416
         myStyleInfo['style_classes'] = [
-                        dict(colour='#38A800', quantity=2.0, transparency=100),
-                        dict(colour='#38A800', quantity=4.0, transparency=0),
-                        dict(colour='#79C900', quantity=10.0, transparency=0)]
+            dict(colour='#38A800', quantity=2.0, transparency=100),
+            dict(colour='#38A800', quantity=4.0, transparency=0),
+            dict(colour='#79C900', quantity=10.0, transparency=0)]
         myMessage = ('Broken: Setting style info with generate valid '
                      'transparent '
                      'floating point pixel entries such as 2.0, 3.0')
@@ -140,8 +143,7 @@ class UtilitiesTest(unittest.TestCase):
         myLayer, _ = loadLayer('issue126.tif')
 
         # Note the float quantity values below
-        myStyleInfo = {}
-        myStyleInfo['style_classes'] = [
+        myStyleInfo = {'style_classes': [
             {'colour': '#FFFFFF', 'transparency': 100, 'quantity': 0.0},
             {'colour': '#38A800', 'quantity': 0.038362596547925065,
              'transparency': 0, 'label': u'Rendah [0 orang/sel]'},
@@ -156,7 +158,7 @@ class UtilitiesTest(unittest.TestCase):
             {'colour': '#FF0000', 'transparency': 0,
              'quantity': 0.23017557928755039},
             {'colour': '#7A0000', 'quantity': 0.26853817583547546,
-             'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]
+             'transparency': 0, 'label': u'Tinggi [0 orang/sel]'}]}
 
         myMessage = 'Could not create raster style'
         try:
@@ -164,10 +166,11 @@ class UtilitiesTest(unittest.TestCase):
         except:
             raise Exception(myMessage)
 
-        myMessage = ('Should get a single transparency class for first style '
-                     'class')
-        myTransparencyList = (myLayer.rasterTransparency().
-                transparentSingleValuePixelList())
+        #myMessage = ('Should get a single transparency class for first style '
+        #             'class')
+        myTransparencyList = (
+            myLayer.rasterTransparency().
+            transparentSingleValuePixelList())
 
         self.assertEqual(len(myTransparencyList), 1)
 
@@ -178,15 +181,14 @@ class UtilitiesTest(unittest.TestCase):
         myLayer, myType = loadLayer('kecamatan_jakarta_osm_centroids.shp')
         del myType
         # Note the float quantity values below
-        myStyleInfo = {'target_field': 'KEPADATAN',
-                       'style_classes':
-                           [{'opacity': 1, 'max': 200, 'colour': '#fecc5c',
-                             'min': 45, 'label': 'Low', 'size': 1},
-                            {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
-                             'min': 201, 'label': 'Medium', 'size': 2},
-                            {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
-                             'min': 351, 'label': 'High', 'size': 3}]}
-        myMessage = ('Setting style with point sizes should work.')
+        myStyleInfo = {'target_field': 'KEPADATAN', 'style_classes': [
+            {'opacity': 1, 'max': 200, 'colour': '#fecc5c',
+             'min': 45, 'label': 'Low', 'size': 1},
+            {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
+             'min': 201, 'label': 'Medium', 'size': 2},
+            {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
+             'min': 351, 'label': 'High', 'size': 3}]}
+        myMessage = 'Setting style with point sizes should work.'
         try:
             setVectorStyle(myLayer, myStyleInfo)
         except:
@@ -297,8 +299,8 @@ class UtilitiesTest(unittest.TestCase):
         myLayer = makePolygonLayer()
 
         #with good attribute name
-        myAttrs, myPos = getLayerAttributeNames(myLayer,
-            [QVariant.Int, QVariant.String],
+        myAttrs, myPos = getLayerAttributeNames(myLayer, [
+            QVariant.Int, QVariant.String],
             'TEST_STRIN')
         myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         myExpectedPos = 2
@@ -310,7 +312,8 @@ class UtilitiesTest(unittest.TestCase):
         assert (myPos == myExpectedPos), myMessage
 
         #with inexistent attribute name
-        myAttrs, myPos = getLayerAttributeNames(myLayer,
+        myAttrs, myPos = getLayerAttributeNames(
+            myLayer,
             [QVariant.Int, QVariant.String],
             'MISSING_ATTR')
         myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
@@ -332,17 +335,16 @@ class UtilitiesTest(unittest.TestCase):
     def test_isLayerPolygonal(self):
         """Test we can get the correct attributes back"""
         myLayer = makePolygonLayer()
-        myMessage = 'isLayerPolygonal, %s layer should be polygonal' % myLayer
-        assert isLayerPolygonal(myLayer), myMessage
+        myMessage = 'isPolygonLayer, %s layer should be polygonal' % myLayer
+        assert isPolygonLayer(myLayer), myMessage
 
         myLayer = makePointLayer()
         myMessage = '%s layer should be polygonal' % myLayer
-        assert not isLayerPolygonal(myLayer), myMessage
+        assert not isPolygonLayer(myLayer), myMessage
 
         myLayer = makePadangLayer()
-        myMessage = ('%s raster layer should not be polygonal'
-                    % myLayer)
-        assert not isLayerPolygonal(myLayer), myMessage
+        myMessage = ('%s raster layer should not be polygonal' % myLayer)
+        assert not isPolygonLayer(myLayer), myMessage
 
     def test_getDefaults(self):
         myExpectedDefaults = {
@@ -445,6 +447,13 @@ class UtilitiesTest(unittest.TestCase):
         print myActualClasses
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
+
+    def testWhich(self):
+        """Test that the which command works as expected."""
+        myBinary = 'gdalwarp'
+        myPath = which(myBinary)
+        # Check we found at least one match
+        assert len(myPath) > 0
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

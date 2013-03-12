@@ -89,31 +89,31 @@ class ITBFatalityFunction(FunctionProvider):
     title = tr('Die or be displaced')
     synopsis = tr('To asses the impact of earthquake on population based on '
                   'earthquake model developed by ITB')
-    citations = [tr('Indonesian Earthquake Building-Damage and Fatality '
-                    'Models and Post Disaster Survey Guidelines Development '
-                    'Bali, 27-28 February 2012, 54pp.'),
-                 tr('Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., '
-                    'Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas '
-                    'of ShakeMaps and population exposure catalog for '
-                    'earthquake loss modeling, Bull. Earthq. Eng. 7, '
-                    '701-718.'),
-                 tr('Jaiswal, K., and Wald, D., 2010. An empirical model for '
-                    'global earthquake fatality estimation, Earthq. Spectra '
-                    '26, 1017-1037.')]
-    limitation = [tr('The model is based on limited number of observed '
-                     'fatality rates during 4 past fatal events.'),
-                  tr('The model clearly over-predicts the fatality rates at'
-                     'intensities higher than VIII.'),
-                  tr('The model only estimates the expected fatality rate '
-                     'for a given intensity level; however the associated '
-                     'uncertainty for the proposed model is not addressed.'),
-                  tr('There are few known mistakes in developing the current '
-                     'model:\n'
-                     '- rounding MMI values to the nearest 0.5,\n'
-                     '- Implementing Finite-Fault models of candidate '
-                     'events, and\n'
-                     '- consistency between selected GMPEs with those in '
-                     'use by BMKG.')]
+    citations = \
+        tr(' * Indonesian Earthquake Building-Damage and Fatality Models and '
+           '   Post Disaster Survey Guidelines Development Bali, 27-28 '
+           '   February 2012, 54pp.\n'
+           ' * Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., '
+           '   Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas '
+           '   of ShakeMaps and population exposure catalog for '
+           '   earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.\n'
+           ' * Jaiswal, K., and Wald, D., 2010. An empirical model for '
+           '   global earthquake fatality estimation, Earthq. Spectra '
+           '   26, 1017-1037.\n')
+    limitation = \
+        tr(' - The model is based on limited number of observed fatality '
+           '   rates during 4 past fatal events. \n'
+           ' - The model clearly over-predicts the fatality rates at '
+           '   intensities higher than VIII.\n'
+           ' - The model only estimates the expected fatality rate '
+           '   for a given intensity level; however the associated '
+           '   uncertainty for the proposed model is not addressed.\n'
+           ' - There are few known mistakes in developing the current '
+           '   model:\n\n'
+           '   * rounding MMI values to the nearest 0.5,\n'
+           '   * Implementing Finite-Fault models of candidate events, and\n'
+           '   * consistency between selected GMPEs with those in use by '
+           '     BMKG.\n')
     actions = tr('Provide details about the population will be die or '
                  'displaced')
     detailed_description = \

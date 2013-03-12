@@ -41,7 +41,7 @@ class VolcanoBuildingImpact(FunctionProvider):
     exposure_input = tr('Vector polygon layer extracted from OSM '
                         'where each polygon represents the footprint of '
                         'a building.')
-    output = tr('vector layer contains Map of building exposed to volcanic '
+    output = tr('Vector layer contains Map of building exposed to volcanic '
                 'hazard zones for each Kawasan Rawan Bencana or radius.')
 
     parameters = OrderedDict([

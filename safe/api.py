@@ -31,10 +31,11 @@ from safe.storage.utilities import (bbox_intersection,
 from safe.storage.core import read_layer
 
 from safe.impact_functions import (get_plugins,
-                                    get_function_title,
-                                    get_admissible_plugins,
-                                    is_function_enabled,
-                                    get_documentation)
+                                   get_function_title,
+                                   get_admissible_plugins,
+                                   is_function_enabled,
+                                   get_documentation)
+from safe.impact_functions.core import get_doc_string
 
 from safe.engine.core import calculate_impact
 
