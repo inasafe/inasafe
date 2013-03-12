@@ -122,8 +122,8 @@ Following the docstring is a collection of variables that define and document th
 
 In addition, there is a collection of text variables used for various levels of documentation of this impact function. They are ``synopsis``, ``actions``, ``detailed_description``, ``permissible_hazard_input``, ``permissible_exposure_input`` and ``limitation``. See examples below for more possible usages.
 
-Impact function algorithm
-.........................
+Impact function method
+......................
 
 The actual calculation of the impact function is specified as a method call called ``run``. This
 method will be called by InaSAFE with a list of the 2 selected layers (hazard and exposure):
@@ -204,6 +204,35 @@ get_data           List of dictionaries of vector attributes              http:/
 get_geometry       Return geometry for vector layer (e.g. point coords)   http://inasafe.org/api-docs/safe/storage/vector.html#safe.storage.vector.Vector.get_geometry
 get_projection     The spatial reference for the layer                    http://inasafe.org/api-docs/safe/storage/layer.html#safe.storage.layer.Layer.get_projection
 ================   ====================================================   ========================================================================================
+
+
+Impact function calculation
+...........................
+
+With the numerical data from raster or vector layers quite arbitrary calculations can be made.
+However, one typical operation is to create a combined layer where the exposure data is augmented with the hazard level. How this is done and used depends
+on the spatial data types but the call is always the same
+
+::
+
+   I = assign_hazard_values_to_exposure_data(H, E, <optional keyword arguments>)
+
+where H is the hazard layer, either raster or polygon vector data, and E the exposure layer, either of spatial type raster, polygon or point vector data.
+In either case the result I represents the exposure data with hazard levels assigned. A number of options are also available as keyword arguments
+(depending on the data types):
+
+================  ==================
+Keyword argument  Description
+================  ==================
+layer_name        Optional name of returned layer
+attribute_name    Name of new attribute in exposure layer depending on input data types
+mode              Interpolation mode: 'linear' (default) or 'constant. Only used when hazard is a raster layer
+================  ==================
+
+See full documentation of the is function in section :ref:`data_types` an in the source code
+http://inasafe.org/api-docs/safe/engine/interpolation.html#module-safe.engine.interpolation
+
+See also examples of use in the impact function examples below.
 
 
 .. _raster_raster:
