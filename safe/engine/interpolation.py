@@ -51,7 +51,12 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
              If hazard and exposure layers are both of type raster,
              this attribute is ignored.
         * mode:
-             Interpolation mode for raster to point interpolation only
+             Interpolation mode for raster to point interpolation only.
+             Permissible values are 'linear' (default) which will employ
+             bilinear interpolation and 'constant' which will employ a
+             piecewise constant interpolation. This parameter is passed
+             all the way down to the underlying interpolation function
+             interpolate2d (module common/interpolation2d.py)
 
     Returns:
         Layer representing the exposure data with hazard levels assigned.
