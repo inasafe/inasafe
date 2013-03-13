@@ -39,7 +39,7 @@ Details
 
 The inundation status is calculated for each building (using the centroid if it is a polygon) based on the hazard levels provided. if the hazard is given as a raster a threshold of 1 meter is used. This is configurable through the InaSAFE interface. If the hazard is given as a vector polygon layer buildings are considered to be impacted depending on the value of hazard attributes (in order) "affected" or "FLOODPRONE": If a building is in a region that has attribute "affected" set to True (or 1) it is impacted. If attribute "affected" does not exist but "FLOODPRONE" does, then the building is considered impacted if "FLOODPRONE" is "yes". If neither "affected" nor "FLOODPRONE" is available, a building will be impacted if it belongs to any polygon. The latter behaviour is implemented through the attribute "inapolygon" which is automatically assigned.
 
-Doc String
+Docstring
 ----------
 
 Inundation impact on building data

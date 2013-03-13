@@ -15,7 +15,7 @@ Details
 
 No documentation found
 
-Doc String
+Docstring
 ----------
 
 Earthquake impact on building data
