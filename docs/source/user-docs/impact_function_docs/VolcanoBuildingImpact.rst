@@ -36,7 +36,7 @@ Details
 
 No documentation found
 
-Doc String
+Docstring
 ----------
 
 Risk plugin for volcano evacuation

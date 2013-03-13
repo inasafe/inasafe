@@ -36,7 +36,7 @@ Details
 
 No documentation found
 
-Doc String
+Docstring
 ----------
 
 Impact function for volcano hazard zones impact on population

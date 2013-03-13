@@ -47,7 +47,7 @@ Algorithm:
 In this study, the same functional form as Allen (2009) is adopted o express fatality rate as a function of intensity (see Eq. 10 in the report). The Matlab built-in function (fminsearch) for  Nelder-Mead algorithm was used to estimate the model parameters. The objective function (L2G norm) that is minimized during the optimisation is the same as the one used by Jaiswal et al. (2010).
 The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15
 
-Doc String
+Docstring
 ----------
 
 Indonesian Earthquake Fatality Model
