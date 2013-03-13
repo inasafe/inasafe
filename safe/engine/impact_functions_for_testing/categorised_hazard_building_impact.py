@@ -14,9 +14,8 @@ from third_party.odict import OrderedDict
 class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
-    :author The Author
-    :rating The Rating
-    :detail The Detail
+    :author AIFDR
+    :rating 2
     :param requires category=='hazard' and \
                     unit=='normalised' and \
                     layertype=='raster'
@@ -24,17 +23,34 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory=='structure' and \
                     layertype=='vector'
-    :citation citation1
-    :citation citation2 \
-                next citation2
     """
 
     target_field = 'ICLASS'
+    # Function documentation
     title = tr('Be affected')
+    synopsis = tr('To assess the impacts of categorized hazard in raster'
+                  'format on structure/building raster layer.')
+    actions = tr('Provide details about how many building would likely need '
+                 'to be affected for each cateogory.')
+    hazard_input = tr('A hazard raster layer where each cell represents '
+                      'the categori of the hazard. There should be 3 '
+                      'categories: 1, 2, dan 3.')
+    exposure_input = \
+        tr('Vector polygon layer which can be extracted from OSM '
+           'where each polygon represents the footprint of a building.')
+    output = tr('Map of structure exposed to high category and a table with '
+                'number of structure in each category')
+    detailed_description = \
+        tr('The function will calculated how many building will be affected'
+           'per each category for all categories in hazard layer. Currently'
+           'there should be 3 categories in the hazard layer. After that'
+           'it will show the result and the total of building will be affected'
+           'for the hazard given.')
+    limitation = tr('The number of categories is three.')
     statistics_type = 'class_count'
     statistics_classes = ['None', 1, 2, 3]
     parameters = OrderedDict([('postprocessors', OrderedDict([
-                                  ('AggregationCategorical', {'on': True})]))
+        ('AggregationCategorical', {'on': True})]))
     ])
 
     def run(self, layers):
@@ -51,8 +67,8 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
         # Interpolate hazard level to building locations
         H = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name='hazard_lev',
-                                             mode='constant')
+                                                  attribute_name='hazard_lev',
+                                                  mode='constant')
 
         # Extract relevant numerical data
         coordinates = H.get_geometry()
@@ -114,7 +130,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Categorised hazard has only 3'
-                            ' classes, high, medium and low.'))
+                             ' classes, high, medium and low.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
