@@ -42,7 +42,7 @@ from safe_qgis.exceptions import (
     CallGDALError,
     InvalidProjectionError,
     InvalidClipGeometryError)
-from safe_qgis.utilities import  which
+from safe_qgis.utilities import which
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
