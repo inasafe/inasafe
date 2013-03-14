@@ -581,7 +581,7 @@ class Vector(Layer):
                              self.projection.spatial_reference,
                              self.geometry_type)
         if lyr is None:
-            msg = 'Could not create layer %s' % layername
+            msg = 'Could not create layer %s as %s' % (layername, filename)
             raise WriteLayerError(msg)
 
         # Define attributes if any
