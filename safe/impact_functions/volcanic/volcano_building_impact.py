@@ -78,7 +78,10 @@ class VolcanoBuildingImpact(FunctionProvider):
             attributes = H.get_data()
             rad_m = [x * 1000 for x in radii]  # Convert to meters
             Z = make_circular_polygon(centers, rad_m, attributes=attributes)
-            Z.write_to_file('Marapi_evac_zone_%s.shp' % str(rad_m))  # To check
+            # NOTE (Sunni) : I commented out this one because there will be
+            # a permission problem on windows
+            # Z.write_to_file('Marapi_evac_zone_%s.shp' % str(rad_m))
+            # To check
             category_title = 'Radius'
             H = Z
 

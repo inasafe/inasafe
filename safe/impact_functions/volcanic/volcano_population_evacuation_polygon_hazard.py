@@ -78,6 +78,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             H = make_circular_polygon(centers,
                                       rad_m,
                                       attributes=attributes)
+            # NOTE (Sunni) : I commented out this one because there will be
+            # a permission problem on windows
             #H.write_to_file('Evac_zones_%s.shp' % str(radii))  # To check
 
             category_title = 'Radius'
