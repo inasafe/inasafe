@@ -152,8 +152,10 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body = [question,
                       TableRow([(tr('People in %.1f m of water') %
                                thresholds[-1]),
-                                '%s' % format_int(evacuated)],
+                                '%s*' % format_int(evacuated)],
                                header=True),
+                      TableRow(tr('* Number is rounded to the nearest 1000'),
+                               header=False),
                       TableRow(tr('Map shows population density needing '
                                   'evacuation')),
                       TableRow([tr('Needs per week'), tr('Total')],
