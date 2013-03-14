@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the QGIS Documentation Project package.
 # 
 # Translators:
+# Ismail Sunni <imajimatika@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-07 10:27\n"
-"PO-Revision-Date: 2013-03-07 09:21+0000\n"
-"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"PO-Revision-Date: 2013-03-14 09:24+0000\n"
+"Last-Translator: Ismail Sunni <imajimatika@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,12 +21,12 @@ msgstr ""
 # 34b4bd6016a04758bea8eb16fdb032e3
 #: ../../source/user-docs/faq.rst:6
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Pertanyaan yang Sering Diajukan"
 
 # ca77148212e746c794240817360e33aa
 #: ../../source/user-docs/faq.rst:9
 msgid "I found a bug, how should I report it?"
-msgstr ""
+msgstr "Saya menemukan bug, bagaimana saya melaporkannya?"
 
 # d26563729b964df98ee297f802d095eb
 #: ../../source/user-docs/faq.rst:11
@@ -45,7 +46,7 @@ msgstr ""
 # f0ffc69de3054a51ab5f495ffb88c70f
 #: ../../source/user-docs/faq.rst:20
 msgid "No, the software is completely Free and Open Source."
-msgstr ""
+msgstr "Tidak , perangkat lunak ini Gratis dan Open Source"
 
 # 154e53d7da9b4cf8806d2a6092a40fbb
 #: ../../source/user-docs/faq.rst:23
