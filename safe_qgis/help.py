@@ -64,7 +64,7 @@ class Help(QtGui.QDialog):
         myRootPath = os.path.abspath(os.path.join(myRootPath,
                                      '..',
                                      'docs',
-                                     'build',
+                                     'output',
                                      'html'))
 
         if (os.path.exists(os.path.join(myRootPath, myLocale))and
