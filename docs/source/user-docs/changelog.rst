@@ -3,6 +3,24 @@
 Whats new?
 ==========
 
+Changelog for version 1.1.1
+---------------------------
+
+* 16cd582 - Fix error with mmi=None, and disable AggregationCategorical options by default.
+* 425ac28 - [BACKPORT] remove unused creating temp file.
+* c1152d3 - Added some extra diagnostics for when write vector fails - see issue #533
+* 133e1c5 - Use 'affected' instead 'FLOODPRONE', but 'FLOODPRONE' still works if no 'affected' 
+* 699d01e - Fix the regressions in #530
+* a807e57 - Add notes in the result window for rounding number in FloodEvacuationFunction #525.
+* 46724ec - Fix issue #528, limit postprocessing layers.
+* df5ea9c - Fix issue #525, round thousand more consistent.
+* 28b82f6 - Add unit to parameters in impact functions.
+* 4db307f - cherry pick issue #521, add depth threshold
+* 0029d91 - Merge branch 'version-1_1' of github.com:AIFDR/inasafe into version-1_1
+* fa0d17a - Test for format_int due to #526
+* 2679e1f - Use more explicit exception handler for #526
+* 25f4d10 - Workaround for crash on formatting as per #526 (11 days ago) <Tim Sutton>
+
 Changelog for version 1.1.0
 ---------------------------
 
