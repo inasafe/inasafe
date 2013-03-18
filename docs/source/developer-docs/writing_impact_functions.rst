@@ -120,7 +120,7 @@ Following the docstring is a collection of variables that define and document th
 	     symbol next to the impact function. In this case it is the threshold used to define
 	     what water level signals evacuation.
 
-In addition, there is a collection of text variables used for various levels of documentation of this impact function. They are ``synopsis``, ``actions``, ``detailed_description``, ``permissible_hazard_input``, ``permissible_exposure_input`` and ``limitation``. See examples below for more possible usages.
+In addition, there is a collection of text variables used for various levels of documentation of this impact function. They are ``synopsis``, ``actions``, ``detailed_description``, ``hazard_input``, ``exposure_input`` and ``limitation``. See examples below for more possible usages.
 
 Impact function method
 ......................
@@ -301,11 +301,11 @@ The impact function itself is embodied in a Python class with a doc string:
                                 'In addition the total number and the required '
                                 'needs in terms of the BNPB (Perka 7) ')
 
-        permissible_hazard_input = ('A hazard raster layer where each cell '
-                                    'represents flood depth (in meters).')
-        permissible_exposure_input = ('An exposure raster layer where each '
-                                      'cell '
-                                      'represent population count.')
+        hazard_input = ('A hazard raster layer where each cell '
+                        'represents flood depth (in meters).')
+        exposure_input = ('An exposure raster layer where each '
+                          'cell '
+                          'represent population count.')
         limitation = ('The default threshold of 1 meter was selected based on '
                       'consensus, not hard evidence.')
 
@@ -594,7 +594,7 @@ Assigning hazard values to exposure data
 ----------------------------------------
 
 In many cases, there is a need to tag the exposure layer with values from the hazard layer in order to calculate the impact.
-Typical examples include interpolation from gridded hazard data to point data (interpolation), from polygon hazard data to point data or, indeed, from polygon data to gridded population data. InaSAFE provides one general mechanism for this purpose called ``assign_hazard_values_to_exposure_data''and it is typically called in the beginning of the impact function to generate an intermediate layer that has all information about both hazard and exposure. A call looks like:
+Typical examples include interpolation from gridded hazard data to point data (interpolation), from polygon hazard data to point data or, indeed, from polygon data to gridded population data. InaSAFE provides one general mechanism for this purpose called ``assign_hazard_values_to_exposure_data`` and it is typically called in the beginning of the impact function to generate an intermediate layer that has all information about both hazard and exposure. A call looks like:
 
 ::
 
@@ -624,7 +624,8 @@ the same __init_.py file as the existing ones.
 Next time InaSAFE is loaded, the new impact function will be included and provided its
 keywords match those of the input layers it will be available to run.
 
-
+If you want to disable an impact function, just put ``disabled=='True'`` in ``:param requires``
+in the impact function's doc string. Please see section :ref:`requires`
 
 
 .. _requires:
