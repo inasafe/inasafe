@@ -33,7 +33,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                               ('medium_threshold', 7),
                               ('high_threshold', 8),
                               ('postprocessors', OrderedDict([
-                              ('AggregationCategorical', {'on': True})]))
+                              ('AggregationCategorical', {'on': False})]))
                               ])
 
     def run(self, layers):
@@ -72,14 +72,14 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             is_NEXIS = False
 
         # Interpolate hazard level to building locations
-        I = assign_hazard_values_to_exposure_data(
+        my_interpolate_result = assign_hazard_values_to_exposure_data(
             my_hazard, my_exposure, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
-        #attribute_names = I.get_attribute_names()
-        attributes = I.get_data()
+        #attribute_names = my_interpolate_result.get_attribute_names()
+        attributes = my_interpolate_result.get_data()
 
-        N = len(I)
+        N = len(my_interpolate_result)
 
         # Calculate building impact
         lo = 0
@@ -90,7 +90,6 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         for key in range(4):
             building_values[key] = 0
             contents_values[key] = 0
-
         for i in range(N):
             # Classify building according to shake level
             # and calculate dollar losses
@@ -117,7 +116,10 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 building_value = building_value_density * area
                 contents_value = contents_value_density * area
 
-            x = float(attributes[i][hazard_attribute])  # MMI
+            try:
+                x = float(attributes[i][hazard_attribute])  # MMI
+            except TypeError:
+                x = 0.0
             if t0 <= x < t1:
                 lo += 1
                 cls = 1
@@ -198,8 +200,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=attributes,
-                   projection=I.get_projection(),
-                   geometry=I.get_geometry(),
+                   projection=my_interpolate_result.get_projection(),
+                   geometry=my_interpolate_result.get_geometry(),
                    name=tr('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
