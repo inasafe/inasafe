@@ -47,18 +47,18 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         class_3 = tr('High')
 
         # Extract data
-        H = get_hazard_layer(layers)    # Depth
-        E = get_exposure_layer(layers)  # Building locations
+        my_hazard = get_hazard_layer(layers)    # Depth
+        my_exposure = get_exposure_layer(layers)  # Building locations
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
+        question = get_question(my_hazard.get_name(),
+                                my_exposure.get_name(),
                                 self)
 
         # Define attribute name for hazard levels
         hazard_attribute = 'mmi'
 
         # Determine if exposure data have NEXIS attributes
-        attribute_names = E.get_attribute_names()
+        attribute_names = my_exposure.get_attribute_names()
         if ('FLOOR_AREA' in attribute_names and
             'BUILDING_C' in attribute_names and
             'CONTENTS_C' in attribute_names):
@@ -67,14 +67,14 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             is_NEXIS = False
 
         # Interpolate hazard level to building locations
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name=hazard_attribute)
+        my_interpolate_result = assign_hazard_values_to_exposure_data(
+            my_hazard, my_exposure, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
-        #attribute_names = I.get_attribute_names()
-        attributes = I.get_data()
+        #attribute_names = my_interpolate_result.get_attribute_names()
+        attributes = my_interpolate_result.get_data()
 
-        N = len(I)
+        N = len(my_interpolate_result)
 
         # Calculate building impact
         lo = 0
@@ -85,7 +85,6 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         for key in range(4):
             building_values[key] = 0
             contents_values[key] = 0
-
         for i in range(N):
             # Classify building according to shake level
             # and calculate dollar losses
@@ -112,7 +111,10 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 building_value = building_value_density * area
                 contents_value = contents_value_density * area
 
-            x = float(attributes[i][hazard_attribute])  # MMI
+            try:
+                x = float(attributes[i][hazard_attribute])  # MMI
+            except TypeError:
+                x = 0.0
             if t0 <= x < t1:
                 lo += 1
                 cls = 1
@@ -195,8 +197,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=attributes,
-                   projection=I.get_projection(),
-                   geometry=I.get_geometry(),
+                   projection=my_interpolate_result.get_projection(),
+                   geometry=my_interpolate_result.get_geometry(),
                    name=tr('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
