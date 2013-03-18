@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: inasafe\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-07 10:27\n"
-"PO-Revision-Date: 2013-03-14 09:24+0000\n"
+"PO-Revision-Date: 2013-03-18 02:07+0000\n"
 "Last-Translator: Ismail Sunni <imajimatika@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgstr ""
 # 7dcec272744f4b5ea2290c98f5b27ef9
 #: ../../source/user-docs/faq.rst:34
 msgid "How is the project funded?"
-msgstr ""
+msgstr "Bagaimana proyek ini didanai?"
 
 # b0cea9264cff44bc84234accee0c06a8
 #: ../../source/user-docs/faq.rst:36
