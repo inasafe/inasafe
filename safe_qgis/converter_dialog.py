@@ -50,7 +50,8 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(get_version()))
 
     def accept(self):
-        LOGGER.debug('OK Ok OK oK oK OK')
+        LOGGER.debug("Input : " + self.leInputPath.text())
+        LOGGER.debug("Output : " + self.leOutputPath.text())
         self.done(self.Accepted)
         pass
 
@@ -65,10 +66,9 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         Raises:
             None
         """
-        myFilename = QtGui.QFileDialog.getOpenFileName(self,
-                                            self.tr('Input file'),
-                                            'grid.xml',
-                                            self.tr('Raw grid file(*.xml)'))
+        myFilename = QtGui.QFileDialog.getOpenFileName(
+            self, self.tr('Input file'), 'grid.xml',
+            self.tr('Raw grid file(*.xml)'))
         self.leInputPath.setText(myFilename)
 
     @pyqtSignature('')  # prevents actions being handled twice
@@ -82,8 +82,7 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         Raises:
             None
         """
-        myFilename = QtGui.QFileDialog.getSaveFileName(self,
-                                                self.tr('Ouput file'),
-                                                'ismailsunni.tif',
-                                                self.tr('Raster file(*.tif)'))
+        myFilename = QtGui.QFileDialog.getSaveFileName(
+            self, self.tr('Ouput file'), 'ismailsunni.tif',
+            self.tr('Raster file(*.tif)'))
         self.leOutputPath.setText(myFilename)

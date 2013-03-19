@@ -37,7 +37,7 @@ from PyQt4.QtCore import (QString,
 from qgis.core import (QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem)
 #TODO refactor this into a utility class as it is no longer only used by test
-from realtime.utils import shakemapExtractDir, dataDir
+from realtime.utils import dataDir
 from realtime.rt_exceptions import (GridXmlFileNotFoundError,
                                     GridXmlParseError,
                                     ContourCreationError,
@@ -52,7 +52,7 @@ class ShakeEvent():
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, gridXMLPath):
+    def __init__(self, gridXMLPath, outputDir=None):
         """Constructor for the shake event class.
 
         Args:
@@ -111,13 +111,13 @@ class ShakeEvent():
         #'id': 57,
         #'population': 33317}
         self.mostAffectedCity = None
-        self.outputPath = None
+        if outputDir is None:
+            self.outputDir = os.path.dirname(gridXMLPath)
+        else:
+            self.outputDir = outputDir
+        print 'outputDir : ', self.outputDir
         self.gridXmlPath = gridXMLPath
         self.parseGridXml()
-
-    def setOutputDirectory(self, outputPathDir):
-        """Set output
-        """
 
     def extractDateTime(self, theTimeStamp):
         """Extract the parts of a date given a timestamp as per below example.
@@ -322,7 +322,7 @@ class ShakeEvent():
         """
         LOGGER.debug('mmiDataToDelimitedText requested.')
 
-        myPath = os.path.join(shakemapExtractDir(),
+        myPath = os.path.join(self.outputDir,
                               'mmi.csv')
         #short circuit if the csv is already created.
         if os.path.exists(myPath) and theForceFlag is not True:
@@ -332,7 +332,7 @@ class ShakeEvent():
         myFile.close()
 
         # Also write the .csv which contains metadata about field types
-        myCsvPath = os.path.join(shakemapExtractDir(),
+        myCsvPath = os.path.join(self.outputDir,
                                  'mmi.csvt')
         myFile = file(myCsvPath, 'wt')
         myFile.write('"Real","Real","Real"')
@@ -352,7 +352,7 @@ class ShakeEvent():
         # Ensure the delimited mmi file exists
         LOGGER.debug('mmiDataToVrt requested.')
 
-        myVrtPath = os.path.join(shakemapExtractDir(),
+        myVrtPath = os.path.join(self.outputDir,
                                  'mmi.vrt')
 
         #short circuit if the vrt is already created.
@@ -448,7 +448,7 @@ class ShakeEvent():
         """
         LOGGER.debug('mmiDataToShapefile requested.')
 
-        myShpPath = os.path.join(shakemapExtractDir(),
+        myShpPath = os.path.join(self.outputDir,
                                  'mmi-points.shp')
         # Short circuit if the tif is already created.
         if os.path.exists(myShpPath) and theForceFlag is not True:
@@ -460,24 +460,22 @@ class ShakeEvent():
         #now generate the tif using default interpoation options
 
         myCommand = (('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '
-                      '%(shp)s %(vrt)s mmi') % {
-                         'shp': myShpPath,
-                         'vrt': myVrtPath
-                     })
+                      '%(shp)s %(vrt)s mmi') %
+                     {'shp': myShpPath, 'vrt': myVrtPath})
 
         LOGGER.info('Created this gdal command:\n%s' % myCommand)
         # Now run GDAL warp scottie...
         self._runCommand(myCommand)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        myQmlPath = os.path.join(shakemapExtractDir(),
+        myQmlPath = os.path.join(self.outputDir,
                                  'mmi-points.qml')
         mySourceQml = os.path.join(dataDir(), 'mmi-shape.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myShpPath
 
     def mmiDataToRaster(self, theForceFlag=False,
-                        theAlgorithm='nearest', tifPath=None):
+                        theAlgorithm='nearest'):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -523,7 +521,7 @@ class ShakeEvent():
         if theAlgorithm is None:
             theAlgorithm = 'nearest'
 
-        myTifPath = os.path.join(shakemapExtractDir(),
+        myTifPath = os.path.join(self.outputDir,
                                  'mmi-%s.tif' % theAlgorithm)
         #short circuit if the tif is already created.
         if os.path.exists(myTifPath) and theForceFlag is not True:
@@ -544,7 +542,8 @@ class ShakeEvent():
         myCommand = (('gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
                       '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
                       '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
-                      '%(vrt)s %(tif)s') % {
+                      '%(vrt)s %(tif)s') %
+                     {
                          'alg': myAlgorithm,
                          'xMin': self.xMinimum,
                          'xMax': self.xMaximum,
@@ -561,12 +560,12 @@ class ShakeEvent():
         self._runCommand(myCommand)
 
         # copy the keywords file from fixtures for this layer
-        myKeywordPath = os.path.join(shakemapExtractDir(),
+        myKeywordPath = os.path.join(self.outputDir,
                                      'mmi-%s.keywords' % theAlgorithm)
         mySourceKeywords = os.path.join(dataDir(), 'mmi.keywords')
         shutil.copyfile(mySourceKeywords, myKeywordPath)
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        myQmlPath = os.path.join(shakemapExtractDir(),
+        myQmlPath = os.path.join(self.outputDir,
                                  'mmi-%s.qml' % theAlgorithm)
         mySourceQml = os.path.join(dataDir(), 'mmi.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
@@ -599,7 +598,7 @@ class ShakeEvent():
         """
         LOGGER.debug('mmiDataToContours requested.')
         # TODO: Use sqlite rather?
-        myOutputFileBase = os.path.join(shakemapExtractDir(),
+        myOutputFileBase = os.path.join(self.outputDir,
                                         'mmi-contours-%s.' % theAlgorithm)
         myOutputFile = myOutputFileBase + 'shp'
         if os.path.exists(myOutputFile) and theForceFlag is not True:
@@ -611,8 +610,8 @@ class ShakeEvent():
                 os.remove(myOutputFileBase + 'dbf')
                 os.remove(myOutputFileBase + 'prj')
             except OSError:
-                LOGGER.exception('Old contour files not deleted'
-                            ' - this may indicate a file permissions issue.')
+                LOGGER.exception('Old contour files not deleted - this may '
+                                 'indicate a file permissions issue.')
 
         myTifPath = self.mmiDataToRaster(theForceFlag, theAlgorithm)
         # Based largely on
@@ -684,13 +683,13 @@ class ShakeEvent():
 
         # Copy over the standard .prj file since ContourGenerate does not
         # create a projection definition
-        myQmlPath = os.path.join(shakemapExtractDir(),
+        myQmlPath = os.path.join(self.outputDir,
                                  'mmi-contours-%s.prj' % theAlgorithm)
         mySourceQml = os.path.join(dataDir(), 'mmi-contours.prj')
         shutil.copyfile(mySourceQml, myQmlPath)
 
         # Lastly copy over the standard qml (QGIS Style file)
-        myQmlPath = os.path.join(shakemapExtractDir(),
+        myQmlPath = os.path.join(self.outputDir,
                                  'mmi-contours-%s.qml' % theAlgorithm)
         mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
@@ -734,7 +733,7 @@ class ShakeEvent():
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
-        myOutputFileBase = os.path.join(shakemapExtractDir(),
+        myOutputFileBase = os.path.join(self.outputDir,
                                         '%s.' % theFileName)
         myOutputFile = myOutputFileBase + 'shp'
         if os.path.exists(myOutputFile) and theForceFlag is not True:
@@ -746,8 +745,8 @@ class ShakeEvent():
                 os.remove(myOutputFileBase + 'dbf')
                 os.remove(myOutputFileBase + 'prj')
             except OSError:
-                LOGGER.exception('Old shape files not deleted'
-                            ' - this may indicate a file permissions issue.')
+                LOGGER.exception('Old shape files not deleted - this may '
+                                 'indicate a file permissions issue.')
 
         # Next two lines a workaround for a QGIS bug (lte 1.8)
         # preventing mem layer attributes being saved to shp.
@@ -784,7 +783,7 @@ class ShakeEvent():
                 'Failed with error: %s' % myResult)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        myQmlPath = os.path.join(shakemapExtractDir(),
+        myQmlPath = os.path.join(self.outputDir(),
                                  '%s.qml' % theFileName)
         mySourceQml = os.path.join(dataDir(), '%s.qml' % theFileName)
         shutil.copyfile(mySourceQml, myQmlPath)
@@ -793,6 +792,5 @@ class ShakeEvent():
 
 
 if __name__ == '__main__':
-    a = ShakeEvent(gridXMLPath='/home/sunnii/Downloads/grid.xml')
-    print a.mmiDataToRaster()
-    print 'a'
+    myShakeEvent = ShakeEvent(gridXMLPath='/home/sunnii/Downloads/grid.xml', outputDir='/home/sunni/Documents')
+    print myShakeEvent.mmiDataToRaster()
