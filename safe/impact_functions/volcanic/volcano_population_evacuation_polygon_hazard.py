@@ -29,7 +29,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
     title = tr('Need evacuation')
     target_field = 'population'
 
-    parameters = {'R [km]': [3, 5, 10]}
+    parameters = {'distance [km]': [3, 5, 10]}
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -70,7 +70,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         if H.is_point_data:
             # Use concentric circles
-            radii = self.parameters['R [km]']
+            radii = self.parameters['distance [km]']
 
             centers = H.get_geometry()
             attributes = H.get_data()
