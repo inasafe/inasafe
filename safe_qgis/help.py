@@ -67,7 +67,7 @@ class Help(QtGui.QDialog):
                                      'output',
                                      'html'))
 
-        if (os.path.exists(os.path.join(myRootPath, myLocale))and
+        if (os.path.exists(os.path.join(myRootPath, myLocale)) and
             myLocale != 'en'):
             myRootPath = os.path.join(myRootPath, myLocale)
         else:

@@ -12,7 +12,7 @@
 # Sphinx documentation first
 #
 
-LOCALES=id
+LOCALES=`ls docs/i18n`
 
 for ITEM in user-docs developer-docs tutorial-docs
 do
@@ -33,8 +33,8 @@ do
       --source-lang en \
       --execute
     #set +x
-    # now register the languate translations for the localised po file against
-    # this resources.
+    # Now register the language translations for the localised po file against
+    # this resource.
     for LOCALE in $LOCALES
     do
         LOCALEFILE=`echo $POFILE | sed "s/\/en\//\/$LOCALE\//g"`

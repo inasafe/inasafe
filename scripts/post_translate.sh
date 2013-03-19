@@ -93,14 +93,23 @@ do
   #         PDF Generation
   #
   #################################
+  # experimental sphinxbuild using rst2pdf...
+  #${SPHINXBUILD} -d ${BUILDDIR}/doctrees -D language=${LOCALE} -b pdf source ${BUILDDIR}/latex/${LOCALE}
 
+  # Traditional using texi2pdf....
   # Compile the latex docs for that locale
   ${SPHINXBUILD} -d ${BUILDDIR}/doctrees -D language=${LOCALE} -b latex source ${BUILDDIR}/latex/${LOCALE}
   # Compile the pdf docs for that locale
   # we use texi2pdf since latexpdf target is not available via
   # sphinx-build which we need to use since we need to pass language flag
   pushd .
+  cp resources/InaSAFE_footer.png ${BUILDDIR}/latex/${LOCALE}/
   cd ${BUILDDIR}/latex/${LOCALE}/
+  # Manipulate our latex a little - first add a standard footer
+  
+  FOOTER1="\usepackage{wallpaper}"
+  FOOTER2="\LRCornerWallPaper{1}{InaSAFE_footer.png}"
+  
   # need to build 3x to have proper toc and index
   texi2pdf --quiet InaSAFE-Documentation.tex
   texi2pdf --quiet InaSAFE-Documentation.tex
@@ -110,6 +119,6 @@ do
 done
 
 rm -rf source/static
-rm -rf ${BUILDDIR}
+#rm -rf ${BUILDDIR}
 
 popd

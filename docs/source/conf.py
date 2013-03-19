@@ -25,7 +25,7 @@ sys.path.append(os.path.abspath('../..'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',
               'sphinx.ext.coverage', 'sphinx.ext.viewcode',
-              'sphinx.ext.pngmath']
+              'sphinx.ext.pngmath', 'rst2pdf.pdfbuilder']
 
 
 # Add any paths that contain templates here, relative to this directory.
@@ -213,14 +213,17 @@ latex_documents = [
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
-#latex_logo = None
+latex_logo = '../../icon.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
 #latex_use_parts = False
 
 # Additional stuff for the LaTeX preamble.
-#latex_preamble = ''
+latex_preamble = (
+    '% Added by Tim\n'
+    '\\usepackage{wallpaper}\n'
+    '\\LRCornerWallPaper{1}{InaSAFE_footer.png}\n')
 
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []
@@ -245,7 +248,8 @@ pdf_stylesheets = ['sphinx', 'kerning', 'a4']
 # Create a compressed PDF
 # Use True/False or 1/0
 # Example: compressed=True
-#pdf_compressed=False
+# Enabled by Tim
+pdf_compressed = True
 
 # A colon-separated list of folders to search for fonts. Example:
 # pdf_font_path=['/usr/share/fonts', '/usr/share/texmf-dist/fonts/']
