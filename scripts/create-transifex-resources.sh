@@ -12,6 +12,8 @@
 # Sphinx documentation first
 #
 
+LOCALES=id
+
 for ITEM in user-docs developer-docs tutorial-docs
 do
   for POFILE in `find docs/i18n/en/LC_MESSAGES/${ITEM}/ -type f -name '*.po'`
@@ -23,11 +25,31 @@ do
     # name when registering the resource
     BASE=`basename $GENERICFILE .po`
     BASE=`echo $BASE | sed 's/_/-/g' | sed 's/ /-/g'`
+    RESOURCE=inasafe.${ITEM}-$BASE
     # Register each po file as a transifex resource (an individual translatable file)
-    tx set -t PO --auto-local -r inasafe.${ITEM}-$BASE \
+    tx set -t PO --auto-local -r $RESOURCE \
       "$GENERICFILE" \
       --source-lang en \
       --execute
+    # now register the languate translations for the localised po file against
+    # this resources.
+    for LOCALE in $LOCALES
+    do
+        LOCALEFILE=`echo $POFILE | sed "s/\/en\//\/$LOCALE\//g"`
+        set -x
+        tx set -r $RESOURCE -l $LOCALE  "$LOCALEFILE" 
+        set +x
+    done 
+    # When we are done in this block we should have created a section in the
+    # .tx/config file that looks like this:
+    #
+    #
+    #	[inasafe.user-docs-faq]
+    #	file_filter = docs/i18n/<lang>/LC_MESSAGES/user-docs/faq.po
+    #	source_file = docs/i18n/en/LC_MESSAGES/user-docs/faq.po
+    #	source_lang = en
+    #	trans.id = docs/i18n/id/LC_MESSAGES/user-docs/faq.po
+    #	type = PO
   done
 done
 
