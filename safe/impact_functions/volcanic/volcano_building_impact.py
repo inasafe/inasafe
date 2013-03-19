@@ -149,7 +149,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Generate simple impact report
         table_body = [question,
-                      TableRow([tr('Buildings'), tr('Total'),
+                      TableRow([tr('Distance [km]'), tr('Total'),
                                 tr('Cumulative')],
                                header=True),
                       TableRow([tr('All'), format_int(total_affected), ''])]
@@ -158,7 +158,8 @@ class VolcanoBuildingImpact(FunctionProvider):
         for name in category_names:
             count = categories[name]
             cum += count
-            table_body.append(TableRow([name, format_int(count),
+            name_km = int(name / 1000)  # convert to km
+            table_body.append(TableRow([name_km, format_int(count),
                                         format_int(cum)]))
 
         table_body.append(TableRow(tr('Map shows buildings affected in '
