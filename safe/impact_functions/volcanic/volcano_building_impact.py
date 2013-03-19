@@ -66,6 +66,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Identify hazard and exposure layers
         my_hazard = get_hazard_layer(layers)  # Volcano hazard layer
         my_exposure = get_exposure_layer(layers)
+        is_point_data = False
 
         question = get_question(my_hazard.get_name(),
                                 my_exposure.get_name(),
@@ -87,6 +88,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         if my_hazard.is_point_data:
             # Use concentric circles
             radii = self.parameters['distances [km]']
+            is_point_data = True
 
             centers = my_hazard.get_geometry()
             attributes = my_hazard.get_data()
@@ -158,8 +160,9 @@ class VolcanoBuildingImpact(FunctionProvider):
         for name in category_names:
             count = categories[name]
             cum += count
-            name_km = int(name / 1000)  # convert to km
-            table_body.append(TableRow([name_km, format_int(count),
+            if is_point_data:
+                name = int(name) / 1000
+            table_body.append(TableRow([name, format_int(count),
                                         format_int(cum)]))
 
         table_body.append(TableRow(tr('Map shows buildings affected in '
