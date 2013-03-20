@@ -102,6 +102,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
             #category_names = ['%s m' % x for x in radii]
             category_names = rad_m
+            name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
         else:
             # Use hazard map
             category_title = 'KRB'
@@ -110,6 +111,21 @@ class VolcanoBuildingImpact(FunctionProvider):
             category_names = ['Kawasan Rawan Bencana III',
                               'Kawasan Rawan Bencana II',
                               'Kawasan Rawan Bencana I']
+            name_attribute = 'GUNUNG'  # As in e.g. BNPB hazard map
+
+        # Get names of volcanos considered
+        if name_attribute in my_hazard.get_attribute_names():
+            D = {}
+            for att in my_hazard.get_data():
+                # Run through all polygons and get unique names
+                D[att[name_attribute]] = None
+
+            volcano_names = ''
+            for name in D:
+                volcano_names += '%s, ' % name
+            volcano_names = volcano_names[:-2]  # Strip trailing ', '
+        else:
+            volcano_names = tr('Not specified in data')
 
         if not category_title in my_hazard.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
@@ -149,7 +165,11 @@ class VolcanoBuildingImpact(FunctionProvider):
         total = len(my_exposure)
 
         # Generate simple impact report
+        blank_cell = ''
         table_body = [question,
+                      TableRow([tr('Volcanos considered'),
+                                '%s' % volcano_names, blank_cell],
+                               header=True),
                       TableRow([tr('Distance [km]'), tr('Total'),
                                 tr('Cumulative')],
                                header=True)]
