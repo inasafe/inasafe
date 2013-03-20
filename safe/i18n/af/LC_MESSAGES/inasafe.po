@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-19 13:50+0700\n"
+"POT-Creation-Date: 2013-03-20 13:45+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:192
 #: safe/impact_functions/inundation/flood_population_evacuation.py:168
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
-#: safe/impact_functions/volcanic/volcano_building_impact.py:138
+#: safe/impact_functions/volcanic/volcano_building_impact.py:158
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:202
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:212
 #: safe/postprocessors/age_postprocessor.py:111
@@ -47,7 +47,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:239
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:86
-#: safe/impact_functions/volcanic/volcano_building_impact.py:141
 msgid "All"
 msgstr ""
 
@@ -1052,7 +1051,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:316
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:213
 #: safe/impact_functions/inundation/flood_population_evacuation.py:188
-#: safe/impact_functions/volcanic/volcano_building_impact.py:156
+#: safe/impact_functions/volcanic/volcano_building_impact.py:176
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:227
 msgid "Notes"
 msgstr ""
@@ -1080,13 +1079,13 @@ msgid "People in Jakarta"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:237
-#: safe/impact_functions/volcanic/volcano_building_impact.py:179
+#: safe/impact_functions/volcanic/volcano_building_impact.py:199
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:250
 msgid "0"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:240
-#: safe/impact_functions/volcanic/volcano_building_impact.py:181
+#: safe/impact_functions/volcanic/volcano_building_impact.py:201
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:252
 #, python-format
 msgid "%i - %i"
@@ -1221,12 +1220,12 @@ msgstr ""
 msgid "An eruption"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:139
+#: safe/impact_functions/volcanic/volcano_building_impact.py:159
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:202
 msgid "Cumulative"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:151
+#: safe/impact_functions/volcanic/volcano_building_impact.py:171
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 
@@ -1237,12 +1236,12 @@ msgstr ""
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:162
-#: safe/impact_functions/volcanic/volcano_building_impact.py:196
+#: safe/impact_functions/volcanic/volcano_building_impact.py:182
+#: safe/impact_functions/volcanic/volcano_building_impact.py:216
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:190
+#: safe/impact_functions/volcanic/volcano_building_impact.py:210
 msgid "Building Count"
 msgstr ""
 
@@ -1376,6 +1375,7 @@ msgstr ""
 msgid "Estimated roads affected"
 msgstr ""
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:113
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:115
 msgid "Not specified in data"
 msgstr ""
@@ -1386,6 +1386,7 @@ msgstr ""
 msgid "Dodo"
 msgstr ""
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:155
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:194
 msgid "Volcanos considered"
 msgstr ""
@@ -1430,7 +1431,7 @@ msgstr ""
 msgid "Number flooded"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:138
+#: safe/impact_functions/volcanic/volcano_building_impact.py:158
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:86
 msgid "Distance [km]"
 msgstr ""
@@ -1620,11 +1621,11 @@ msgstr ""
 msgid "High [%.2f people/cell]"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:159
+#: safe/impact_functions/volcanic/volcano_building_impact.py:179
 msgid "Only buildings available in OpenStreetMap are considered."
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:157
+#: safe/impact_functions/volcanic/volcano_building_impact.py:177
 #, python-format
 msgid "Total number of buildings %s in the viewable area"
 msgstr ""

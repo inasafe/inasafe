@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-19 13:50+0700\n"
+"POT-Creation-Date: 2013-03-20 13:45+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,9 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: id_ID\n"
-"X-Source-Language: en\n"
 
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:132
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:184
@@ -26,7 +23,6 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:239
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:86
-#: safe/impact_functions/volcanic/volcano_building_impact.py:141
 msgid "All"
 msgstr "Semua"
 
@@ -56,7 +52,7 @@ msgstr "Gedung-gedung"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:192
 #: safe/impact_functions/inundation/flood_population_evacuation.py:168
 #: safe/impact_functions/inundation/flood_road_impact_experimental.py:84
-#: safe/impact_functions/volcanic/volcano_building_impact.py:138
+#: safe/impact_functions/volcanic/volcano_building_impact.py:158
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:202
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:212
 #: safe/postprocessors/age_postprocessor.py:111
@@ -643,8 +639,8 @@ msgstr "Orang-orang di 30cm sampai 50cm air: %i"
 #: safe/impact_functions/core.py:356
 #, python-format
 msgid ""
-"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might "
-"<i>%(impact)s</i>"
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
+"%(impact)s</i>"
 msgstr ""
 "Apabila terjadi <i>%(hazard)s</i> berapa banyak <i>%(exposure)s</i> yang "
 "mungkin <i>%(impact)s</i>"
@@ -685,7 +681,8 @@ msgstr "Banjir di Jakarta seperti 2007 tapi ada perbaikan struktural"
 msgid "A flood in Jakarta in RW areas identified as flood prone"
 msgstr "Banjir di Jakarta di daerah identifikas sebagai rawan banjir"
 
-#: safe/common/dynamic_translations.py:82 safe/common/dynamic_translations.py:93
+#: safe/common/dynamic_translations.py:82
+#: safe/common/dynamic_translations.py:93
 msgid "An earthquake in Yogyakarta like in 2006"
 msgstr "Gempabumi di Yogyakarta seperti 2006"
 
@@ -786,7 +783,7 @@ msgstr "Fungsi Dampak Yang Tersedia"
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:316
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:213
 #: safe/impact_functions/inundation/flood_population_evacuation.py:188
-#: safe/impact_functions/volcanic/volcano_building_impact.py:156
+#: safe/impact_functions/volcanic/volcano_building_impact.py:176
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:227
 msgid "Notes"
 msgstr "Catatan"
@@ -810,13 +807,13 @@ msgid "People in Jakarta"
 msgstr "Warga di Jakarta"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:237
-#: safe/impact_functions/volcanic/volcano_building_impact.py:179
+#: safe/impact_functions/volcanic/volcano_building_impact.py:199
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:250
 msgid "0"
 msgstr "0"
 
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:240
-#: safe/impact_functions/volcanic/volcano_building_impact.py:181
+#: safe/impact_functions/volcanic/volcano_building_impact.py:201
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:252
 #, python-format
 msgid "%i - %i"
@@ -949,12 +946,12 @@ msgstr "Terkena banjir"
 msgid "An eruption"
 msgstr "Letusan gunung api"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:139
+#: safe/impact_functions/volcanic/volcano_building_impact.py:159
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:202
 msgid "Cumulative"
 msgstr "Kumulatif"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:151
+#: safe/impact_functions/volcanic/volcano_building_impact.py:171
 msgid "Map shows buildings affected in each of volcano hazard polygons."
 msgstr ""
 "Peta menunjukkan bangunan yang terkena dampak di setiap wilayah rawan "
@@ -967,13 +964,13 @@ msgstr "Total bangunan %i di area terlihat"
 msgid "Only buildings available in Open Street Mapare considered."
 msgstr "Hanya bangunan yang tersedia di Open Street Map yang diperhitungkan."
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:162
-#: safe/impact_functions/volcanic/volcano_building_impact.py:196
+#: safe/impact_functions/volcanic/volcano_building_impact.py:182
+#: safe/impact_functions/volcanic/volcano_building_impact.py:216
 msgid "Buildings affected by volcanic hazard zone"
 msgstr ""
 "Bangunan yang terkena dampak daerah rawan ancaman letusan gunung berapi"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:190
+#: safe/impact_functions/volcanic/volcano_building_impact.py:210
 msgid "Building Count"
 msgstr "Jumlah Bangunan"
 
@@ -1059,10 +1056,12 @@ msgstr "Jalan raya yang tergenang"
 msgid "Estimated roads affected"
 msgstr "Perkiraan jalan raya yang terdampak"
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:113
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:115
 msgid "Not specified in data"
 msgstr "Tidak ada rincian pada data"
 
+#: safe/impact_functions/volcanic/volcano_building_impact.py:155
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:194
 msgid "Volcanos considered"
 msgstr "Nama gunung api yang dipilih"
@@ -1107,7 +1106,7 @@ msgstr "Tidak ditentukan"
 msgid "Number flooded"
 msgstr "Jumlah kebanjiran"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:138
+#: safe/impact_functions/volcanic/volcano_building_impact.py:158
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:86
 msgid "Distance [km]"
 msgstr "Jarak [km]"
@@ -1232,7 +1231,7 @@ msgstr "Gempabumi Yogyakarta 2006"
 msgid "Maumere tsunami inundation"
 msgstr "Genangan tsunami Maumere"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:159
+#: safe/impact_functions/volcanic/volcano_building_impact.py:179
 msgid "Only buildings available in OpenStreetMap are considered."
 msgstr "Hanya bangunan yang tersedia di OpenStreetMap yang diperhitungkan."
 
@@ -1337,7 +1336,7 @@ msgstr "Menengah [%.2f orang/sel]"
 msgid "High [%.2f people/cell]"
 msgstr "Tinggi [%.2f orang/sel]"
 
-#: safe/impact_functions/volcanic/volcano_building_impact.py:157
+#: safe/impact_functions/volcanic/volcano_building_impact.py:177
 #, python-format
 msgid "Total number of buildings %s in the viewable area"
 msgstr "Total bangunan %s di area terlihat"
@@ -1393,10 +1392,10 @@ msgstr ""
 "sebuah bangunan di wilayah yang memiliki atribut \"affected\" bernilai True "
 "(atau 1) maka bangunan itu terkena dampak. Jika atribut \"terkena\" tidak "
 "ada tapi \"FLOODPRONE\" ada, maka bangunan dianggap berdampak jika "
-"\"FLOODPRONE\" bernila \"yes\". Jika tidak ada \"affected\" atau "
-"\"FLOODPRONE\" yang tersedia, bangunan akan terkena dampak jika dimiliki "
-"oleh poligon manapun. Perilaku yang terakhir diimplementasikan melalui \"\" "
-"atribut inapolygon yang secara otomatis ditetapkan."
+"\"FLOODPRONE\" bernila \"yes\". Jika tidak ada \"affected\" atau \"FLOODPRONE"
+"\" yang tersedia, bangunan akan terkena dampak jika dimiliki oleh poligon "
+"manapun. Perilaku yang terakhir diimplementasikan melalui \"\" atribut "
+"inapolygon yang secara otomatis ditetapkan."
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:62
 msgid ""
