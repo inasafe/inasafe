@@ -160,89 +160,99 @@ class Plugin:
         # Create action for plugin dockable window (show/hide)
         #--------------------------------------
         # pylint: disable=W0201
-        self.actionDock = QAction(QIcon(':/plugins/inasafe/icon.png'),
-                    self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
+        self.actionDock = QAction(
+            QIcon(':/plugins/inasafe/icon.svg'),
+            self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
         self.actionDock.setObjectName('InaSAFEDockToggle')
         self.actionDock.setStatusTip(self.tr(
-                            'Show/hide InaSAFE dock widget'))
+            'Show/hide InaSAFE dock widget'))
         self.actionDock.setWhatsThis(self.tr(
-                            'Show/hide InaSAFE dock widget'))
+            'Show/hide InaSAFE dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
-        QObject.connect(self.actionDock, SIGNAL('triggered()'),
-                        self.showHideDockWidget)
+        QObject.connect(
+            self.actionDock, SIGNAL('triggered()'),
+            self.showHideDockWidget)
         # add to plugin toolbar
         self.iface.addToolBarIcon(self.actionDock)
         # add to plugin menu
-        self.iface.addPluginToMenu(self.tr('InaSAFE'),
-                                   self.actionDock)
+        self.iface.addPluginToMenu(
+            self.tr('InaSAFE'),
+            self.actionDock)
 
         #--------------------------------------
         # Create action for keywords editor
         #--------------------------------------
         self.actionKeywordsDialog = QAction(
-                            QIcon(':/plugins/inasafe/keywords.png'),
-                            self.tr('InaSAFE Keyword Editor'),
-                            self.iface.mainWindow())
+            QIcon(':/plugins/inasafe/show-keyword-editor.svg'),
+            self.tr('InaSAFE Keyword Editor'),
+            self.iface.mainWindow())
         self.actionKeywordsDialog.setStatusTip(self.tr(
-                                    'Open InaSAFE keywords editor'))
+            'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setWhatsThis(self.tr(
-                                    'Open InaSAFE keywords editor'))
+            'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setEnabled(False)
 
-        QObject.connect(self.actionKeywordsDialog, SIGNAL('triggered()'),
-                        self.showKeywordsEditor)
+        QObject.connect(
+            self.actionKeywordsDialog, SIGNAL('triggered()'),
+            self.showKeywordsEditor)
 
         self.iface.addToolBarIcon(self.actionKeywordsDialog)
-        self.iface.addPluginToMenu(self.tr('InaSAFE'),
-                                   self.actionKeywordsDialog)
+        self.iface.addPluginToMenu(
+            self.tr('InaSAFE'),
+            self.actionKeywordsDialog)
         #--------------------------------------
         # Create action for reset icon
         #--------------------------------------
         self.actionResetDock = QAction(
-                            QIcon(':/plugins/inasafe/reload.png'),
-                            self.tr('Reset Dock'), self.iface.mainWindow())
+            QIcon(':/plugins/inasafe/reset-dock.svg'),
+            self.tr('Reset Dock'), self.iface.mainWindow())
         self.actionResetDock.setStatusTip(self.tr(
-                                    'Reset the InaSAFE Dock'))
+            'Reset the InaSAFE Dock'))
         self.actionResetDock.setWhatsThis(self.tr(
-                                    'Reset the InaSAFE Dock'))
-        QObject.connect(self.actionResetDock, SIGNAL('triggered()'),
-                        self.resetDock)
+            'Reset the InaSAFE Dock'))
+        QObject.connect(
+            self.actionResetDock, SIGNAL('triggered()'),
+            self.resetDock)
 
         self.iface.addToolBarIcon(self.actionResetDock)
-        self.iface.addPluginToMenu(self.tr('InaSAFE'),
-                                   self.actionResetDock)
+        self.iface.addPluginToMenu(
+            self.tr('InaSAFE'),
+            self.actionResetDock)
 
         #--------------------------------------
         # Create action for options dialog
         #--------------------------------------
         self.actionOptions = QAction(
-                        QIcon(':/plugins/inasafe/options.png'),
-                        self.tr('InaSAFE Options'), self.iface.mainWindow())
+            QIcon(':/plugins/inasafe/configure-inasafe.svg'),
+            self.tr('InaSAFE Options'), self.iface.mainWindow())
         self.actionOptions.setStatusTip(self.tr(
-                                    'Open InaSAFE options dialog'))
+            'Open InaSAFE options dialog'))
         self.actionOptions.setWhatsThis(self.tr(
-                                    'Open InaSAFE options dialog'))
-        QObject.connect(self.actionOptions, SIGNAL('triggered()'),
-                        self.showOptions)
+            'Open InaSAFE options dialog'))
+        QObject.connect(
+            self.actionOptions, SIGNAL('triggered()'),
+            self.showOptions)
 
         self.iface.addToolBarIcon(self.actionOptions)
-        self.iface.addPluginToMenu(self.tr('InaSAFE'),
-                                   self.actionOptions)
+        self.iface.addPluginToMenu(
+            self.tr('InaSAFE'),
+            self.actionOptions)
 
         #--------------------------------------
         # Create action for impact functions doc dialog
         #--------------------------------------
         self.actionImpactFunctionsDoc = QAction(
-                        QIcon(':/plugins/inasafe/functions-table.png'),
-                        self.tr('InaSAFE Impact Functions Browser'),
-                        self.iface.mainWindow())
+            QIcon(':/plugins/inasafe/show-impact-functions.svg'),
+            self.tr('InaSAFE Impact Functions Browser'),
+            self.iface.mainWindow())
         self.actionImpactFunctionsDoc.setStatusTip(self.tr(
-                                    'Open InaSAFE Impact Functions Browser'))
+            'Open InaSAFE Impact Functions Browser'))
         self.actionImpactFunctionsDoc.setWhatsThis(self.tr(
-                                    'Open InaSAFE Impact Functions Browser'))
-        QObject.connect(self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
-                        self.showImpactFunctionsDoc)
+            'Open InaSAFE Impact Functions Browser'))
+        QObject.connect(
+            self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
+            self.showImpactFunctionsDoc)
 
         self.iface.addToolBarIcon(self.actionImpactFunctionsDoc)
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
@@ -258,7 +268,7 @@ class Plugin:
         # Create action for minimum needs dialog
         #---------------------------------------
         self.actionMinimumNeeds = QAction(
-            QIcon(':/plugins/inasafe/minimum_needs.png'),
+            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
             self.tr('InaSAFE Minimum Needs Tool'), self.iface.mainWindow())
         self.actionMinimumNeeds.setStatusTip(self.tr(
             'Open InaSAFE minimum needs tool'))
@@ -280,12 +290,13 @@ class Plugin:
 
         if myLegendTab:
             self.iface.mainWindow().tabifyDockWidget(
-                                            myLegendTab, self.dockWidget)
+                myLegendTab, self.dockWidget)
             self.dockWidget.raise_()
         #
         # Hook up a slot for when the current layer is changed
         #
-        QObject.connect(self.iface,
+        QObject.connect(
+            self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
             self.layerChanged)
 
@@ -293,7 +304,8 @@ class Plugin:
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
         #
-        QObject.connect(self.dockWidget,
+        QObject.connect(
+            self.dockWidget,
             SIGNAL("visibilityChanged (bool)"),
             self.toggleActionDock)
 

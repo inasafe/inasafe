@@ -1,24 +1,27 @@
 <RCC>
     <qresource prefix="/plugins/inasafe">
-        <file alias="icon.png">resources/img/icon.png</file>
-        <file alias="functions-table.png">resources/img/functions-table.png</file>
-        <file alias="keywords.png">resources/img/keywords.png</file>
-        <file alias="reload.png">resources/img/reload.png</file>
-        <file alias="options.png">resources/img/options.png</file>
-        <file alias="bnpb_logo.png">resources/img/bnpb_logo.png</file>
-        <file alias="bnpb_logo_64.png">resources/img/bnpb_logo_64.png</file>
-        <file alias="bnpb_logo_32.png">resources/img/bnpb_logo_32.png</file>
-        <file alias="wb-logo-small.png">resources/img/wblogo-small.png</file>
-        <file alias="Australian-AID-Identifier_blue-red-small.png">resources/img/Australian-AID-Identifier_blue-red-small.png</file>
-        <file alias="logo-flower.png">resources/img/logo-flower.png</file>
+        <file alias="icon.svg">resources/img/icons/icon.svg</file>
+        <file alias="show-impact-functions.svg">resources/img/icons/show-impact-functions.svg</file>
+        <file alias="show-keyword-editor.svg">resources/img/icons/show-keyword-editor.svg</file>
+        <file alias="reset-dock.svg">resources/img/icons/reset-dock.svg</file>
+        <file alias="configure-inasafe.svg">resources/img/icons/configure-inasafe.svg</file>
+        <file alias="show-keyword-editor.svg">resources/img/icons/show-keyword-editor.svg</file>
+        <file alias="show-minimum-needs.svg">resources/img/icons/show-minimum-needs.svg</file>
+	<!-- logos -->
+        <file alias="bnpb_logo.png">resources/img/logos/bnpb_logo.png</file>
+        <file alias="bnpb_logo_64.png">resources/img/logos/bnpb_logo_64.png</file>
+        <file alias="bnpb_logo_32.png">resources/img/logos/bnpb_logo_32.png</file>
+        <file alias="wb-logo-small.png">resources/img/logos/wblogo-small.png</file>
+        <file alias="Australian-AID-Identifier_blue-red-small.png">resources/img/logos/Australian-AID-Identifier_blue-red-small.png</file>
+        <file alias="logo-flower.png">resources/img/logos/logo-flower.png</file>
+	<!-- web resources -->
         <file alias="ajax-loader.gif">resources/img/ajax-loader.gif</file>
         <file alias="css/bootstrap.css">resources/css/bootstrap.css</file>
         <file alias="css/InaSAFE.css">resources/css/InaSAFE.css</file>
         <file alias="js/jquery-1.7.1.min.js">resources/js/jquery-1.7.1.min.js</file>
         <file alias="header.html">resources/header.html</file>
         <file alias="footer.html">resources/footer.html</file>
+	<!-- composer templates -->
         <file alias="basic.qpt">resources/qgis-composer-templates/basic.qpt</file>
-        <file alias="edit.png">resources/img/edit.png</file>
-        <file alias="minimum_needs.png">resources/img/minimum_needs.png</file>
     </qresource>
 </RCC>
