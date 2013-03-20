@@ -31,8 +31,7 @@ class VolcanoBuildingImpact(FunctionProvider):
     target_field = 'buildings'
 
     parameters = OrderedDict([
-        ('distances [km]', [1, 2, 3, 5, 10]),
-        ('volcano_name', 'All')])
+        ('distances [km]', [3, 5, 10])])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -116,7 +115,7 @@ class VolcanoBuildingImpact(FunctionProvider):
             categories[cat] = 0
 
         # Count affected population per polygon and total
-        total_affected = 0
+        # total_affected = 0
         for attr in P.get_data():
 
             # Update building count for associated polygon
@@ -129,7 +128,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                 categories[cat] += 1
 
             # Update total
-            total_affected += 1
+            # total_affected += 1
 
         # Count totals
         total = len(E)
@@ -138,8 +137,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         table_body = [question,
                       TableRow([tr('Distance [km]'), tr('Total'),
                                 tr('Cumulative')],
-                               header=True),
-                      TableRow([tr('All'), format_int(total_affected), ''])]
+                               header=True)]
 
         cum = 0
         for name in category_names:
