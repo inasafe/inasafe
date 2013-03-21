@@ -37,7 +37,10 @@ class VolcanoBuildingImpact(FunctionProvider):
     hazard_input = tr('A hazard vector layer can be polygon or point. '
                       'If polygon, it must have "KRB" attribute and the value'
                       'for it are "Kawasan Rawan Bencana I", "Kawasan Rawan '
-                      'Bencana II", or "Kawasan Rawan Bencana III."')
+                      'Bencana II", or "Kawasan Rawan Bencana III." If you'
+                      'want to see the name of the volcano in the result, '
+                      'you need to add "NAME" attribute for point data or '
+                      '"GUNUNG" attribute for polygon data.')
     exposure_input = tr('Vector polygon layer extracted from OSM '
                         'where each polygon represents the footprint of '
                         'a building.')
@@ -52,8 +55,9 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Hazard layer of volcano
-              P: Vector layer of structure data on the same grid as H
+              my_hazard: Hazard layer of volcano
+              my_exposure: Vector layer of structure data on
+              the same grid as my_hazard
 
         Counts number of building exposed to each volcano hazard zones.
 
@@ -100,7 +104,6 @@ class VolcanoBuildingImpact(FunctionProvider):
             category_title = 'Radius'
             my_hazard = Z
 
-            #category_names = ['%s m' % x for x in radii]
             category_names = rad_m
             name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
         else:

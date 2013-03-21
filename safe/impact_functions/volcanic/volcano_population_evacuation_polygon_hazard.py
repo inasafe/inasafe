@@ -35,7 +35,10 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
     hazard_input = tr('A hazard vector layer can be polygon or point. '
                       'If polygon, it must have "KRB" attribute and the value'
                       'for it are "Kawasan Rawan Bencana I", "Kawasan Rawan '
-                      'Bencana II", or "Kawasan Rawan Bencana III."')
+                      'Bencana II", or "Kawasan Rawan Bencana III."If you'
+                      'want to see the name of the volcano in the result, '
+                      'you need to add "NAME" attribute for point data or '
+                      '"GUNUNG" attribute for polygon data.')
     exposure_input = tr('An exposure raster layer where each '
                         'cell represent population count.')
     output = tr('Vector layer contains population affected and the minimum'
