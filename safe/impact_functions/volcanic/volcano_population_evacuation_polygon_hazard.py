@@ -5,7 +5,8 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_question)
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr,
-                                   format_int)
+                                   format_int,
+                                   round_thousand)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (assign_hazard_values_to_exposure_data,
                                        make_circular_polygon)
@@ -164,8 +165,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         total = int(numpy.sum(E.get_data(nan=0)))
 
         # Don't show digits less than a 1000
-        if total > 1000:
-            total = total // 1000 * 1000
+        total = round_thousand(total)
 
         # Count number and cumulative for each zone
         cum = 0
@@ -179,12 +179,10 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
             pop = int(categories[key])
 
-            if pop > 1000:
-                pop = pop // 1000 * 1000
+            pop = round_thousand(pop)
 
             cum += pop
-            if cum > 1000:
-                cum = cum // 1000 * 1000
+            cum = round_thousand(cum)
 
             pops[name] = pop
             cums[name] = cum
@@ -238,7 +236,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population %s in the viewable area')
+                           tr('Total population %s in the exposure layer')
                            % format_int(total),
                            tr('People need evacuation if they are within the '
                               'volcanic hazard zones.')])
