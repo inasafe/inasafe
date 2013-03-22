@@ -90,8 +90,9 @@ class Plugin:
         Raises:
            TranslationLoadException
         """
-        myOverrideFlag = QSettings().value('locale/overrideFlag',
-                                            QVariant(False)).toBool()
+        myOverrideFlag = QSettings().value(
+            'locale/overrideFlag',
+            QVariant(False)).toBool()
 
         if thePreferredLocale is not None:
             myLocaleName = thePreferredLocale
@@ -109,12 +110,17 @@ class Plugin:
         # .. see:: :py:func:`common.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
-        LOGGER.debug('%s %s %s %s' % (thePreferredLocale , myOverrideFlag,
-                                        QLocale.system().name(),
-                                        os.environ['LANG']))
+        LOGGER.debug('%s %s %s %s' % (
+            thePreferredLocale,
+            myOverrideFlag,
+            QLocale.system().name(),
+            os.environ['LANG']))
+
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        myTranslationPath = os.path.join(myRoot, 'safe_qgis', 'i18n',
-                        'inasafe_' + str(myLocaleName) + '.qm')
+        myTranslationPath = os.path.join(
+            myRoot, 'safe_qgis', 'i18n',
+            'inasafe_' + str(myLocaleName) + '.qm')
+
         if os.path.exists(myTranslationPath):
             self.translator = QTranslator()
             myResult = self.translator.load(myTranslationPath)
@@ -122,8 +128,10 @@ class Plugin:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadError(myMessage)
             QCoreApplication.installTranslator(self.translator)
-        LOGGER.debug('%s %s' % (myTranslationPath,
-                                  os.path.exists(myTranslationPath)))
+
+        LOGGER.debug('%s %s' % (
+            myTranslationPath,
+            os.path.exists(myTranslationPath)))
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -346,7 +354,8 @@ class Plugin:
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
-        QObject.disconnect(self.iface,
+        QObject.disconnect(
+            self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
             self.layerChanged)
 
@@ -430,9 +439,10 @@ class Plugin:
         # import here only so that it is AFTER i18n set up
         from safe_qgis.options_dialog import OptionsDialog
 
-        myDialog = OptionsDialog(self.iface.mainWindow(),
-                                      self.iface,
-                                      self.dockWidget)
+        myDialog = OptionsDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dockWidget)
         myDialog.show()
 
     def showKeywordsEditor(self):
@@ -445,8 +455,10 @@ class Plugin:
 
         Args:
            None.
+
         Returns:
            None.
+
         Raises:
            no exceptions explicitly raised.
         """
@@ -455,9 +467,10 @@ class Plugin:
 
         if self.iface.activeLayer() is None:
             return
-        myDialog = KeywordsDialog(self.iface.mainWindow(),
-                                      self.iface,
-                                      self.dockWidget)
+        myDialog = KeywordsDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dockWidget)
         myDialog.setModal(True)
         myDialog.show()
 
@@ -521,5 +534,5 @@ class Plugin:
         self.dockWidget.layerChanged(theLayer)
 
     def keyActionF7(self):
-        '''Executed when user press F7'''
+        """Executed when user press F7"""
         self.showImpactFunctionsDoc()
