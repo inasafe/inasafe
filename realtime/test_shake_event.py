@@ -257,15 +257,18 @@ searchBoxes: None
         myShakeEvent = ShakeEvent(myShakeId)
         myResult, myFatalitiesHtml = myShakeEvent.calculateImpacts()
 
-        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
-                           '/20120726022003/impact-nearest.tif')
+        myExpectedResult = (
+            '/tmp/inasafe/realtime/shakemaps-extracted'
+            '/20120726022003/impact-nearest.tif')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
-        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
-                            '/20120726022003/impacts.html')
+        myExpectedResult = (
+            '/tmp/inasafe/realtime/shakemaps-extracted'
+            '/20120726022003/impacts.html')
 
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml,
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
+            myFatalitiesHtml,
             myExpectedResult)
         assert myFatalitiesHtml == myExpectedResult, myMessage
 
@@ -279,7 +282,7 @@ searchBoxes: None
                                 9: 0.0}
 
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
-                myShakeEvent.fatalityCounts, myExpectedFatalities)
+            myShakeEvent.fatalityCounts, myExpectedFatalities)
         assert myShakeEvent.fatalityCounts == myExpectedFatalities, myMessage
 
     def testBoundsToRect(self):
@@ -287,8 +290,9 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myBounds = myShakeEvent.boundsToRectangle().toString()
-        myExpectedResult = ('122.4500000000000028,-2.2100000000000000 : '
-                           '126.4500000000000028,1.7900000000000000')
+        myExpectedResult = (
+            '122.4500000000000028,-2.2100000000000000 : '
+            '126.4500000000000028,1.7900000000000000')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myBounds, myExpectedResult)
         assert myBounds == myExpectedResult, myMessage
 
@@ -370,8 +374,9 @@ searchBoxes: None
                     (myResult, myExpectedResult, myTable))
         assert myResult == myExpectedResult, myMessage
 
-        myExpectedPath = ('/tmp/inasafe/realtime/shakemaps-extracted/'
-                         '20120726022003/affected-cities.html')
+        myExpectedPath = (
+            '/tmp/inasafe/realtime/shakemaps-extracted/'
+            '20120726022003/affected-cities.html')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myPath, myExpectedPath)
         assert myPath == myExpectedPath, myMessage
 
@@ -382,8 +387,9 @@ searchBoxes: None
         myShakeEvent.calculateImpacts()
         myResult = myShakeEvent.impactTable()
         # TODO compare actual content of impact table...
-        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted/'
-                           '20120726022003/impacts.html')
+        myExpectedResult = (
+            '/tmp/inasafe/realtime/shakemaps-extracted/'
+            '20120726022003/impacts.html')
         myMessage = ('Got:\n%s\nExpected:\n%s' %
                     (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage

@@ -34,9 +34,9 @@ class SFtpClientTest(unittest.TestCase):
         my_ssh_client = SFtpClient(the_working_dir='shakemaps')
         assert(my_ssh_client is not None)
 
-        remote_path = os.path.join(my_ssh_client.sftp.getcwd(),
-                                '20130113003746/output/grid.xml')
-        local_path = '/home/sunnii/Documents/inasafe/'
+        remote_path = os.path.join(
+            my_ssh_client.sftp.getcwd(), '20130113003746/output/grid.xml')
+        local_path = '/tmp/inasafe/'
         print local_path
         my_ssh_client.download_path(remote_path, local_path)
 
