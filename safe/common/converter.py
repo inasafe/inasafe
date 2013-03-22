@@ -37,7 +37,6 @@ from PyQt4.QtCore import (QString,
 from qgis.core import (QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem)
 #TODO refactor this into a utility class as it is no longer only used by test
-from realtime.utils import dataDir
 from realtime.rt_exceptions import (GridXmlFileNotFoundError,
                                     GridXmlParseError,
                                     ContourCreationError,
@@ -46,6 +45,13 @@ from realtime.rt_exceptions import (GridXmlFileNotFoundError,
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
+
+
+def dataDir():
+    """Return the path to the standard data dir for e.g. geonames data"""
+    myDir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                         'converter_data'))
+    return myDir
 
 
 class ShakeEvent():
@@ -792,5 +798,5 @@ class ShakeEvent():
 
 
 if __name__ == '__main__':
-    myShakeEvent = ShakeEvent(gridXMLPath='/home/sunnii/Downloads/grid.xml', outputDir='/home/sunni/Documents')
+    myShakeEvent = ShakeEvent(gridXMLPath='/home/sunnii/Downloads/grid.xml', outputDir='/home/sunnii/Documents')
     print myShakeEvent.mmiDataToRaster()
