@@ -37,7 +37,7 @@ from PyQt4.QtCore import (QString,
 from qgis.core import (QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem)
 #TODO refactor this into a utility class as it is no longer only used by test
-from realtime.rt_exceptions import (GridXmlFileNotFoundError,
+from safe.common.exceptions import (GridXmlFileNotFoundError,
                                     GridXmlParseError,
                                     ContourCreationError,
                                     InvalidLayerError,
@@ -799,4 +799,4 @@ class ShakeEvent():
 
 if __name__ == '__main__':
     myShakeEvent = ShakeEvent(gridXMLPath='/home/sunnii/Downloads/grid.xml', outputDir='/home/sunnii/Documents')
-    print myShakeEvent.mmiDataToRaster()
+    print myShakeEvent.mmiDataToRaster(theAlgorithm="invdist")

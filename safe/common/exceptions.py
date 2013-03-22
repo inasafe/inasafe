@@ -69,3 +69,28 @@ class PostProcessorError(Exception):
 class WindowsError(Exception):
     """For windows specific errors."""
     pass
+
+
+class GridXmlFileNotFoundError(Exception):
+    """An exception for when an grid.xml could not be found"""
+    pass
+
+
+class GridXmlParseError(Exception):
+    """An exception for when something went wrong parsing the grid.xml """
+    pass
+
+
+class ContourCreationError(Exception):
+    """An exception for when creating contours from shakemaps goes wrong"""
+    pass
+
+
+class InvalidLayerError(Exception):
+    """Raised when a gis layer is invalid"""
+    pass
+
+
+class ShapefileCreationError(Exception):
+    """Raised if an error occurs creating the cities file"""
+    pass
