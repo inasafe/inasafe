@@ -48,6 +48,7 @@ from safe.common.utilities import (VerificationError,
                                    unique_filename,
                                    ugettext as safe_tr,
                                    get_free_memory)
+from safe.common.converter import convert_mmi_data
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow

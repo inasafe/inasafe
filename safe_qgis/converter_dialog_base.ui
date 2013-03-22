@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
-    <height>316</height>
+    <width>393</width>
+    <height>318</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>270</y>
-     <width>381</width>
+     <width>361</width>
      <height>32</height>
     </rect>
    </property>
@@ -29,11 +29,11 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_1">
+  <widget class="QLabel" name="lblSubtitle">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>20</y>
+     <y>10</y>
      <width>381</width>
      <height>34</height>
     </rect>
@@ -52,10 +52,16 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>70</y>
-     <width>99</width>
+     <y>50</y>
+     <width>371</width>
      <height>17</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="text">
     <string>Input : Grid file</string>
@@ -68,7 +74,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>90</y>
+     <y>70</y>
      <width>351</width>
      <height>27</height>
     </rect>
@@ -80,8 +86,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>90</y>
+     <x>360</x>
+     <y>70</y>
      <width>23</width>
      <height>25</height>
     </rect>
@@ -97,10 +103,16 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>140</y>
-     <width>128</width>
+     <y>110</y>
+     <width>371</width>
      <height>17</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="text">
     <string>Output : Raster file</string>
@@ -108,12 +120,12 @@
   </widget>
   <widget class="QToolButton" name="tBtnOpenOutput">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>180</y>
+     <x>360</x>
+     <y>150</y>
      <width>23</width>
      <height>25</height>
     </rect>
@@ -124,12 +136,12 @@
   </widget>
   <widget class="QLineEdit" name="leOutputPath">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
+     <y>150</y>
      <width>351</width>
      <height>27</height>
     </rect>
@@ -139,19 +151,25 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
-     <width>165</width>
+     <y>130</y>
+     <width>371</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
     <string>Use default location</string>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QCheckBox" name="cBLoadLayer">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>240</y>
      <width>193</width>
      <height>22</height>
@@ -159,6 +177,41 @@
    </property>
    <property name="text">
     <string>Load output file to QGIS</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cboAlgorithm">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>200</y>
+     <width>371</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblAlgotrithm">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>180</y>
+     <width>371</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Algorithm</string>
    </property>
   </widget>
  </widget>

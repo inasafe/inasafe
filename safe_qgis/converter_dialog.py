@@ -21,10 +21,13 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
+from qgis.core import (QgsRasterLayer,
+                       QgsMapLayerRegistry)
 from converter_dialog_base import Ui_ConverterDialogBase
 from PyQt4 import QtGui
+from PyQt4.QtCore import QFileInfo
 
-from safe_qgis.safe_interface import get_version
+from safe_qgis.safe_interface import get_version, convert_mmi_data
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -47,13 +50,34 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         QtGui.QDialog.__init__(self, theParent)
         self.parent = theParent
         self.setupUi(self)
-        self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(get_version()))
+        self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(
+            get_version()))
+        self.populate_algorithm()
+        self.leInputPath.setText('/home/sunnii/Downloads/grid.xml')
+
+    def populate_algorithm(self):
+        """Populate algorithm for converting grid.xml
+        """
+        self.cboAlgorithm.addItems(['Nearest', 'Invdist'])
 
     def accept(self):
-        LOGGER.debug("Input : " + self.leInputPath.text())
-        LOGGER.debug("Output : " + self.leOutputPath.text())
+        input_path = str(self.leInputPath.text())
+        if self.cBDefaultOuputLocation.isChecked():
+            output_path = None
+        else:
+            output_path = str(self.leOutputPath.text())
+        my_algorithm = str(self.cboAlgorithm.currentText()).lower()
+        fileName = convert_mmi_data(input_path, output_path,
+                                    the_algorithm=my_algorithm)
+        if self.cBLoadLayer.isChecked():
+            fileInfo = QFileInfo(fileName)
+            baseName = fileInfo.baseName()
+            rlayer = QgsRasterLayer(fileName, baseName)
+            if not rlayer.isValid():
+                LOGGER.debug("Failed to load")
+            else:
+                QgsMapLayerRegistry.instance().addMapLayer(rlayer)
         self.done(self.Accepted)
-        pass
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenInput_clicked(self):

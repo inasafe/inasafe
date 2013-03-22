@@ -797,6 +797,19 @@ class ShakeEvent():
         return myOutputFile
 
 
+def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None):
+    """This is static interface function for converter
+    Use this function.
+    """
+    if output_path is not None:
+        my_output_dir = os.path.dirname(output_path)
+    else:
+        my_output_dir = output_path
+    myShakeEvent = ShakeEvent(gridXMLPath, my_output_dir)
+    return myShakeEvent.mmiDataToRaster(theForceFlag=True,
+                                        theAlgorithm=the_algorithm)
+
+
 if __name__ == '__main__':
     myShakeEvent = ShakeEvent(gridXMLPath='/home/sunnii/Downloads/grid.xml', outputDir='/home/sunnii/Documents')
     print myShakeEvent.mmiDataToRaster(theAlgorithm="invdist")
