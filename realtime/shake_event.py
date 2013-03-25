@@ -64,7 +64,9 @@ from qgis.core import (QgsPoint,
                        QgsComposition,
                        QgsMapLayerRegistry,
                        QgsMapRenderer,
-                       QgsPalLabeling)
+                       QgsPalLabeling,
+                       QgsFeatureRequest,
+                       QgsFields)
 # pylint: enable=E0611
 #TODO refactor this into a utility class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
@@ -903,21 +905,11 @@ class ShakeEvent(QObject):
             raise InvalidLayerError(theFile)
 
         myProvider = myLayer.dataProvider()
-        myIndexes = myProvider.attributeIndexes()
-        myLayer.select(myIndexes)
-        # Setup field indexes of our input dataset
-        myMMIIndex = myProvider.fieldNameIndex('MMI')
-        myRGBIndex = myProvider.fieldNameIndex('RGB')
-        myXIndex = myProvider.fieldNameIndex('X')
-        myYIndex = myProvider.fieldNameIndex('Y')
-        myRomanIndex = myProvider.fieldNameIndex('ROMAN')
-        myAlignIndex = myProvider.fieldNameIndex('ALIGN')
-        myVAlignIndex = myProvider.fieldNameIndex('VALIGN')
-        myLengthIndex = myProvider.fieldNameIndex('LEN')
-        myFeature = QgsFeature()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
-        while myProvider.nextFeature(myFeature):
+        myRequest = QgsFeatureRequest()
+
+        for myFeature in myLayer.getFeatures(myRequest):
             if not myFeature.isValid():
                 LOGGER.debug('Skipping feature')
                 continue
@@ -937,12 +929,10 @@ class ShakeEvent(QObject):
                     myXMax = myX
             myX = myXMin + ((myXMax - myXMin) / 2)
 
-            myAttributes = myFeature.attributeMap()
-
             # Get length
             myLength = myFeature.geometry().length()
 
-            myMMIValue = float(myAttributes[myMMIIndex].toString())
+            myMMIValue = float(myFeature['MMI'].toString())
 
             # We only want labels on the whole number contours
             if myMMIValue != round(myMMIValue):
@@ -958,16 +948,20 @@ class ShakeEvent(QObject):
 
             # Now update the feature
             myId = myFeature.id()
-            myLayer.changeAttributeValue(myId, myXIndex, QVariant(myX))
-            myLayer.changeAttributeValue(myId, myYIndex, QVariant(myY))
-            myLayer.changeAttributeValue(myId, myRGBIndex, QVariant(myRGB))
-            myLayer.changeAttributeValue(myId, myRomanIndex, QVariant(myRoman))
             myLayer.changeAttributeValue(
-                myId, myAlignIndex, QVariant('Center'))
+                myId, myFeature['X'], QVariant(myX))
             myLayer.changeAttributeValue(
-                myId, myVAlignIndex, QVariant('HALF'))
+                myId, myFeature['Y'], QVariant(myY))
             myLayer.changeAttributeValue(
-                myId, myLengthIndex, QVariant(myLength))
+                myId, myFeature['RGB'], QVariant(myRGB))
+            myLayer.changeAttributeValue(
+                myId, myFeature['ROMAN'], QVariant(myRoman))
+            myLayer.changeAttributeValue(
+                myId, myFeature['ALIGN'], QVariant('Center'))
+            myLayer.changeAttributeValue(
+                myId, myFeature['VALIGN'], QVariant('HALF'))
+            myLayer.changeAttributeValue(
+                myId, myFeature['LEN'], QVariant(myLength))
 
         myLayer.commitChanges()
 
@@ -1194,12 +1188,7 @@ class ShakeEvent(QObject):
         myLayer = QgsVectorLayer(myUri.uri(), 'Towns', 'spatialite')
         if not myLayer.isValid():
             raise InvalidLayerError(myDBPath)
-        myLayerProvider = myLayer.dataProvider()
-        myIndexes = myLayerProvider.attributeIndexes()
-        myFetchGeometryFlag = True
-        myUseIntersectionFlag = True
         myRectangle = self.boundsToRectangle()
-        myFeature = QgsFeature()
 
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
@@ -1208,17 +1197,18 @@ class ShakeEvent(QObject):
         myMinimumCityCount = 1
         myFoundFlag = False
         mySearchBoxes = []
+        myRequest = None
         LOGGER.debug('Search polygons for cities:')
         for _ in range(myAttemptsLimit):
             LOGGER.debug(myRectangle.asWktPolygon())
             myLayer.removeSelection()
-            myLayer.select(myIndexes, myRectangle,
-                           myFetchGeometryFlag, myUseIntersectionFlag)
+            myRequest = QgsFeatureRequest().setFilterRect(myRectangle)
+            myRequest.setFlags(QgsFeatureRequest.ExactIntersect)
             # This is klunky - must be a better way in the QGIS api!?
             # but myLayer.selectedFeatureCount() relates to gui
             # selection it seems...
             myCount = 0
-            while myLayerProvider.nextFeature(myFeature):
+            for _ in myLayer.getFeatures(myRequest):
                 myCount += 1
             # Store the box plus city count so we can visualise it later
             myRecord = {'city_count': myCount, 'geometry': myRectangle}
@@ -1239,44 +1229,38 @@ class ShakeEvent(QObject):
                 '%s times.' % (myMinimumCityCount, myAttemptsLimit))
         # Setup field indexes of our input and out datasets
         myCities = []
-        myLayerIdIndex = myLayerProvider.fieldNameIndex('id')
-        myLayerCodeIndex = myLayerProvider.fieldNameIndex('fcode')
-        myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
-        myLayerPopulationIndex = myLayerProvider.fieldNameIndex('population')
-        myIdIndex = 0
-        myPlaceNameIndex = 1
-        myPopulationIndex = 2
-        myMmiIndex = 3
-        myDistanceIndex = 4
-        myDirectionToIndex = 5
-        myDirectionFromIndex = 6
-        myRomanIndex = 7
-        myColourIndex = 8
+
+        myFields = QgsFields()
+        myFields.append(QgsField('id', QVariant.Int))
+        myFields.append(QgsField('name', QVariant.String))
+        myFields.append(QgsField('population', QVariant.Int))
+        myFields.append(QgsField('mmi', QVariant.Double))
+        myFields.append(QgsField('dist_to', QVariant.Double))
+        myFields.append(QgsField('dir_to', QVariant.Double))
+        myFields.append(QgsField('dir_from', QVariant.Double))
+        myFields.append(QgsField('roman', QVariant.String))
+        myFields.append(QgsField('colour', QVariant.String))
 
         # For measuring distance and direction from each city to epicenter
         myEpicenter = QgsPoint(self.longitude, self.latitude)
 
-        # Should not need this to be repeated here but not working without it
-        myLayer.select(
-            myIndexes, myRectangle, myFetchGeometryFlag, myUseIntersectionFlag)
         # Now loop through the db adding selected features to mem layer
-        while myLayerProvider.nextFeature(myFeature):
+        for myFeature in myLayer.getFeatures(myRequest):
             if not myFeature.isValid():
                 LOGGER.debug('Skipping feature')
                 continue
                 #LOGGER.debug('Writing feature to mem layer')
             # calculate the distance and direction from this point
             # to and from the epicenter
-            myAttributes = myFeature.attributeMap()
-            myId = str(myAttributes[myLayerIdIndex].toString())
+            myId = str(myFeature.id)
 
             # Make sure the fcode contains PPL (populated place)
-            myCode = str(myAttributes[myLayerCodeIndex].toString())
+            myCode = str(myFeature['fcode'].toString())
             if 'PPL' not in myCode:
                 continue
 
             # Make sure the place is populated
-            myPopulation = myAttributes[myLayerPopulationIndex].toInt()[0]
+            myPopulation = myFeature['population'].toInt()[0]
             if myPopulation < 1:
                 continue
 
@@ -1284,7 +1268,7 @@ class ShakeEvent(QObject):
             myDistance = myPoint.sqrDist(myEpicenter)
             myDirectionTo = myPoint.azimuth(myEpicenter)
             myDirectionFrom = myEpicenter.azimuth(myPoint)
-            myPlaceName = str(myAttributes[myLayerPlaceNameIndex].toString())
+            myPlaceName = str(myFeature['asciiname'].toString())
 
             myNewFeature = QgsFeature()
             myNewFeature.setGeometry(myFeature.geometry())
@@ -1311,19 +1295,21 @@ class ShakeEvent(QObject):
             if myRoman is None:
                 continue
 
-            myAttributeMap = {
-                myIdIndex: myId,
-                myPlaceNameIndex: myPlaceName,
-                myPopulationIndex: myPopulation,
-                myMmiIndex: QVariant(myMmi),
-                myDistanceIndex: QVariant(myDistance),
-                myDirectionToIndex: QVariant(myDirectionTo),
-                myDirectionFromIndex: QVariant(myDirectionFrom),
-                myRomanIndex: QVariant(myRoman),
-                myColourIndex: QVariant(self.mmiColour(myMmi))
+            myNewFeature.setFields(myFields)
+            myAttributes = {
+                myFeature.fieldNameIndex('id'): myId,
+                myFeature.fieldNameIndex('name'): myPlaceName,
+                myFeature.fieldNameIndex('population'): myPopulation,
+                myFeature.fieldNameIndex('mmi'): QVariant(myMmi),
+                myFeature.fieldNameIndex('dist_to'): QVariant(myDistance),
+                myFeature.fieldNameIndex('dir_to'): QVariant(myDirectionTo),
+                myFeature.fieldNameIndex('dir_from'): QVariant(
+                    myDirectionFrom),
+                myFeature.fieldNameIndex('roman'): QVariant(myRoman),
+                myFeature.fieldNameIndex('colour'): QVariant(
+                    self.mmiColour(myMmi))
             }
-            #LOGGER.debug('Attribute Map: %s' % str(myAttributeMap))
-            myNewFeature.setAttributeMap(myAttributeMap)
+            myFeature.setAttributes(myAttributes)
             myCities.append(myNewFeature)
         return myCities
 
