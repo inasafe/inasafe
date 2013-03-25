@@ -823,8 +823,8 @@ def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None):
                                         theAlgorithm=the_algorithm)
 
 
-if __name__ == '__main__':
-    myShakeEvent = ShakeEvent(
-        gridXMLPath='/home/sunnii/Downloads/grid.xml',
-        outputDir='/home/sunnii/Documents')
-    print myShakeEvent.mmiDataToRaster(theAlgorithm="invdist")
+#if __name__ == '__main__':
+#    myShakeEvent = ShakeEvent(
+#        gridXMLPath='/home/sunnii/Downloads/grid.xml',
+#        outputDir='/home/sunnii/Documents')
+#    print myShakeEvent.mmiDataToRaster(theAlgorithm="invdist")

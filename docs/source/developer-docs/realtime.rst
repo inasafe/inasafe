@@ -144,9 +144,7 @@ Get InaSAFE ::
   cd dev/python
   git clone git://github.com/AIFDR/inasafe.git inasafe-realtime
   cd inasafe-realtime
-  git branch --track realtime origin/realtime
-  git checkout realtime
-  sudo apt-get install python-tz
+  sudo apt-get install python-tz paramikio
 
 Setup Apache::
 
@@ -161,10 +159,10 @@ For local testing only you can use quake.localhost for your host then add this t
 
   127.0.0.1 localhost quake.localhost
 
-Now deploy your site:
+Now deploy your site::
 
   sudo a2dissite default
-  sudo a2enssite quake.apache.conf
+  sudo a2enssite quake-apache.conf
   cd /home
   chmod a+X web
   mkdir web/quake
@@ -478,7 +476,8 @@ Unit tests
 A complete set of unit tests is provided with the realtime package for InaSAFE.
 You can execute these tests like this::
 
-    nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime
+    nosetests -v --with-id --with-xcoverage --with-xunit --verbose \
+        --cover-package=realtime realtime
 
 There are also a number of Jenkins tasks provided in the Makefile for InaSAFE
 to automate testing on our continuous integration server. You can view the

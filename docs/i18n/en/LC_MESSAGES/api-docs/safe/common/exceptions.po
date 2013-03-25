@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# b1c59946720d477b832bc935f9ef59dd
+#: ../../source/api-docs/safe/common/exceptions.rst:6
+msgid "Module:  safe.common.exceptions"
+msgstr ""
+
+# beb5e37c78254a7d83e9c598c05358f4
+#: ../../../safe/common/exceptions.py:docstring of safe.common.exceptions:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Exception "
+"Classes.**"
+msgstr ""
+
+# 557cceb255494dc88b9b791794ad26f3
+#: ../../../safe/common/exceptions.py:docstring of safe.common.exceptions:4
+msgid "Custom exception classes for the SAFE library"
+msgstr ""
+
+# 456d1ff4f12745818a67cd8652528155
+#: ../../../safe/common/exceptions.py:docstring of safe.common.exceptions:6
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 7a9bb45fad01411187b973c815e4ae83
+#: ../../../safe/common/exceptions.py:docstring of safe.common.exceptions:8
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 6dc1e9578bbf481996b995417fe65954
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.BoundingBoxError:1
+msgid "For errors relating to bboxes"
+msgstr ""
+
+# 109f2fc203724f32a19ccec5f37dab10
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.BoundsError:1
+msgid "For points falling outside interpolation grid"
+msgstr ""
+
+# 775e7057b69f46c0af9a2a73a59a0376
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.GetDataError:1
+msgid "When layer data cannot be obtained"
+msgstr ""
+
+# 291265b1f7fc48888d6816346ff10af6
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.InaSAFEError:1
+msgid "Base class for all user defined execptions"
+msgstr ""
+
+# 5663ac16476c4c7a8f4e7a1e86b1d044
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.PolygonInputError:1
+msgid "For invalid inputs to numeric polygon functions"
+msgstr ""
+
+# 0c5bb870b9f14f61891d29adf3b5ed8a
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.PostProcessorError:1
+msgid "Raised when requested import cannot be performed if QGIS is too old."
+msgstr ""
+
+# 2870d0a5bf784fee8ce724206c7f46c0
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.ReadLayerError:1
+msgid "When a layer can't be read"
+msgstr ""
+
+# fa853aeadea3403fbbe75c4894adfb6d
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.VerificationError:1
+msgid "Exception thrown by verify()"
+msgstr ""
+
+# 99c506468d8d412b9706e264ed3a269b
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.WindowsError:1
+msgid "For windows specific errors."
+msgstr ""
+
+# ee8f99cf9cac4d41b9e78e0c5537b8ab
+#: ../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.WriteLayerError:1
+msgid "When a layer can't be written"
+msgstr ""
+
+# 58989bea389a46cea80acda4927d6cae
+#: ../../source/api-docs/safe/common/exceptions.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

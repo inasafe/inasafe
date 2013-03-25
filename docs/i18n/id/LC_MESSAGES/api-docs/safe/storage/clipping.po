@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# a3d7a3e55a1e440cb459e99b1d11b400
+#: ../../source/api-docs/safe/storage/clipping.rst:6
+msgid "Module:  safe.storage.clipping"
+msgstr ""
+
+# f4f4c336f3d64490a471de5fe854fe9a
+#: ../../../safe/storage/clipping.py:docstring of safe.storage.clipping:1
+msgid "Raster clipping by polygons"
+msgstr ""
+
+# 34b0e8de9dbd4078a80849e206293630
+#: ../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:1
+msgid "Separate raster grid points by polygons"
+msgstr ""
+
+# 8b21374a41a54b23ad490b894f3bbf26
+#: ../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:4
+msgid "R: Raster layer"
+msgstr ""
+
+# ae6bfd554309432aa887da4d35699e30
+#: ../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:5
+msgid "P: Polygon layer"
+msgstr ""
+
+# 5aa97d4ab2db4f3a9e9c2c42d6e34822
+#: ../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:9
+msgid "One item for each polygon"
+msgstr ""
+
+# 16b810f1c19144bc9355714864969660
+#: ../../source/api-docs/safe/storage/clipping.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

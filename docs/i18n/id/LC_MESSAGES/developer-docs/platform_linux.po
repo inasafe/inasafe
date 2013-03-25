@@ -1,0 +1,507 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:26+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# 68a0757d88524105bd8013c0751b7c33
+#: ../../source/developer-docs/platform_linux.rst:7
+msgid "Development under Gnu/Linux"
+msgstr ""
+
+# 198d3a0027ca4795b500977c20e3c0ee
+#: ../../source/developer-docs/platform_linux.rst:9
+msgid ""
+"Risk-in-a-box is built in python and runs as a plugin in `QGIS "
+"<http://qgis.org>`_."
+msgstr ""
+
+# 3d292b515833464c9452a7b5533109e0
+#: ../../source/developer-docs/platform_linux.rst:14
+msgid "Quick Installation Guide - Linux (Debian based)"
+msgstr ""
+
+# 61995973338946db971c29ae60be57e3
+#: ../../source/developer-docs/platform_linux.rst:16
+msgid ""
+"These instructions are for setting up a development version on a Debian "
+"based linux system such as Ubuntu or Mint."
+msgstr ""
+
+# 2fd16b018e41405583313206567e25af
+#: ../../source/developer-docs/platform_linux.rst:19
+msgid "Goto the area where you do development, e.g cd ~/sandbox"
+msgstr ""
+
+# 4a3fd59484b2490da7bd24e38ee5d8e7
+#: ../../source/developer-docs/platform_linux.rst:20
+msgid "wget bit.ly/inasafe-install"
+msgstr ""
+
+# 3a4e3d4e513c4b459b66e5a0582bf527
+#: ../../source/developer-docs/platform_linux.rst:21
+msgid "source ./inasafe-install"
+msgstr ""
+
+# d6bde1eab7c54e2691d278f7a8585261
+#: ../../source/developer-docs/platform_linux.rst:23
+msgid ""
+"To verify that the installation works you can run the test suite from the "
+"command line::"
+msgstr ""
+
+# 7d8a170a683b4af6a0bffe84d602947b
+#: ../../source/developer-docs/platform_linux.rst:29
+msgid ""
+"This will run all the regression tests and also highlight any code issues. "
+"Note that first time the tests are run they will pull 250MB of test data "
+"from our git repository. See further notes on running tests below."
+msgstr ""
+
+# 1fe7a78cf34348dea61fe6fb81e8ebc7
+#: ../../source/developer-docs/platform_linux.rst:33
+msgid ""
+"To run the plugin start QGIS and enable it from the :menuselection:`Plugins "
+"--> Manage Plugins` menu."
+msgstr ""
+
+# e6c6f9b87ff6493f8505e22f81cd8afe
+#: ../../source/developer-docs/platform_linux.rst:36
+msgid ""
+"If this doesn't work see section towards the end of this document about "
+"dependencies and try to do a manual install."
+msgstr ""
+
+# 6426fc1a260f458ebecf45c93811df29
+#: ../../source/developer-docs/platform_linux.rst:40
+msgid "Manual Installation Guide - Linux (Debian based)"
+msgstr ""
+
+# 4a221e92a1ec4c5d851675c625b0c0c4
+#: ../../source/developer-docs/platform_linux.rst:43
+msgid "Dependencies"
+msgstr ""
+
+# 11ac900b55d44639b020d05be893edef
+#: ../../source/developer-docs/platform_linux.rst:45
+msgid ""
+"The Graphical User Interface components are built using `PyQt4 "
+"<http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS "
+"plugin API (useful resources: `the QGIS Python Cookbook <http://qgis.org"
+"/pyqgis-cookbook/>`_ and `the QGIS C++ API documentation "
+"<http://qgis.org/api/>`_).  As such it is helpful if you are familiar with "
+"these technologies (python, Qt4, PyQt4, QGIS). In addition, the following "
+"are needed on your machine in order to work effectively with the code base:"
+msgstr ""
+
+# 86dc2e680b1e4394b1c30e1972817dc2
+#: ../../source/developer-docs/platform_linux.rst:53
+msgid "git"
+msgstr ""
+
+# 77da56fdeb584839964a478e10306a7b
+#: ../../source/developer-docs/platform_linux.rst:54
+msgid "rsync"
+msgstr ""
+
+# e6354a3c8be24e8d83010adc0e1cde0a
+#: ../../source/developer-docs/platform_linux.rst:55
+msgid "pep8"
+msgstr ""
+
+# 07623bdae6994fa080b679c597c2d9f8
+#: ../../source/developer-docs/platform_linux.rst:56
+msgid "nosetests (with coverage plugin)"
+msgstr ""
+
+# eb7169906b8245c0b282156f8384fa62
+#: ../../source/developer-docs/platform_linux.rst:57
+msgid "python-numpy (for numerical computations)"
+msgstr ""
+
+# bbcf1c3d7a1a46d18c7f265ba568d9f3
+#: ../../source/developer-docs/platform_linux.rst:58
+msgid "python-gdal (python bindings to underlying gis functionality)"
+msgstr ""
+
+# 365a6c31cc5e41b092748859f47bec0f
+#: ../../source/developer-docs/platform_linux.rst:59
+msgid "python-sphinx (compilation of documents)"
+msgstr ""
+
+# c66a2515d527421a98962b80696ccd5b
+#: ../../source/developer-docs/platform_linux.rst:60
+msgid "cloud-sptheme (sphinx theme)"
+msgstr ""
+
+# df6b6676c41f43cd9b90edf7d5100b09
+#: ../../source/developer-docs/platform_linux.rst:61
+msgid "pyqt4-dev-tools (compiling ui and resources)"
+msgstr ""
+
+# 52d848273a83467e89255a918440eada
+#: ../../source/developer-docs/platform_linux.rst:62
+msgid "qt4-doc (qt4 API documentation)"
+msgstr ""
+
+# 6ec137e5c7cd4df1998e36c1f13b276e
+#: ../../source/developer-docs/platform_linux.rst:63
+msgid "pyflakes (test for bad coding style like unused imports / vars)"
+msgstr ""
+
+# 1ed8a90cece6498783daece888e711a6
+#: ../../source/developer-docs/platform_linux.rst:64
+msgid "python-nosexcover and python-coverage (code coverage reporting)"
+msgstr ""
+
+# d259b787213b41ef803f42136cf00a0d
+#: ../../source/developer-docs/platform_linux.rst:66
+msgid "On an ubuntu system you can install these requirements using apt::"
+msgstr ""
+
+# 554ff9a3c0594b418b0bef99fdc99cac
+#: ../../source/developer-docs/platform_linux.rst:73
+msgid ""
+"In some cases these dependencies may already be on your system via "
+"installation process you followed for QGIS."
+msgstr ""
+
+# dd07607a88004b87bf42fb4737129786
+#: ../../source/developer-docs/platform_linux.rst:77
+msgid "Cloning the source code from git"
+msgstr ""
+
+# a57b6632bee04a31b6f4b15645f30b6c
+#: ../../source/developer-docs/platform_linux.rst:79
+msgid ""
+"To develop on the plugin, you first need to copy it to your local system. If"
+" you are a developer, the simplest way to do that is go to "
+"`~/.qgis/python/plugins` and clone inasafe from our GitHub repository page "
+"like this::"
+msgstr ""
+
+# a01ef00cd1e6436c8049d295120b17ac
+#: ../../source/developer-docs/platform_linux.rst:89
+msgid "QGIS installed in a non-standard location"
+msgstr ""
+
+# 5d6d5832c13c41d3ae2770e3d79ae805
+#: ../../source/developer-docs/platform_linux.rst:91
+msgid ""
+"For running unit tests that need QGIS, you may need to adjust *PYTHONPATH* "
+"and *QGIS_PREFIX_PATH* if QGIS is running in a non standard location. For "
+"example with QGIS built from source into /usr/local (and python bindings "
+"global install option disabled), you could run these commands (or add them "
+"to your ~/.bashrc)::"
+msgstr ""
+
+# 9e3d51af2e4e42afad3e1a591b91f5b8
+#: ../../source/developer-docs/platform_linux.rst:99
+msgid ""
+"The above can be set within Eclipse's project properties if you are running "
+"your tests using the PyDev IDE environment."
+msgstr ""
+
+# ca44f95058904e1aba51db136e34011b
+#: ../../source/developer-docs/platform_linux.rst:104
+msgid "Adding inasafe to your python path:"
+msgstr ""
+
+# f69690e811f044318fb420e43b40b62d
+#: ../../source/developer-docs/platform_linux.rst:106
+msgid ""
+"Lastly, you should add the inasafe plugin folder to your PYTHONPATH so that "
+"package and module paths can be resolved correctly. E.g::"
+msgstr ""
+
+# 8d2d0c3eecb54d84b1038d4eb4824b2e
+#: ../../source/developer-docs/platform_linux.rst:111
+msgid ""
+"Once again you could add this to your .bashrc or set it in Eclipse for "
+"convenience if needed."
+msgstr ""
+
+# 6092d5e3fb554271a2fba2ae6f9cc7fb
+#: ../../source/developer-docs/platform_linux.rst:117
+msgid "Running tests"
+msgstr ""
+
+# 676f93975b604ef99c87f05931ee0926
+#: ../../source/developer-docs/platform_linux.rst:119
+msgid ""
+"You can run all tests (which includes code coverage reports and other "
+"diagnostics) by doing this within the inasafe plugin folder::"
+msgstr ""
+
+# 682b4d9214da477bb4566b3447692ebc
+#: ../../source/developer-docs/platform_linux.rst:124
+msgid ""
+"You can also run individual tests using nose. For example to run the "
+"riabclipper test you would do::"
+msgstr ""
+
+# 216a3c71974a4e849d35c890cccd5e2f
+#: ../../source/developer-docs/platform_linux.rst:130
+msgid "Achievements"
+msgstr ""
+
+# 9a0ea6a7c3254507ac6aaf5fefa1785f
+#: ../../source/developer-docs/platform_linux.rst:132
+msgid "This is optional and thus not hard coded into the makefile."
+msgstr ""
+
+# 66469fcab3fc440db0890e7ff9164bf5
+#: ../../source/developer-docs/platform_linux.rst:135
+msgid ""
+"Optionally you can enable nose achievments which is a motivational tool that"
+" gives you little achievement awards based on your test results::"
+msgstr ""
+
+# 432989861d46463a82c1ceb83b2f820a
+#: ../../source/developer-docs/platform_linux.rst:141
+msgid ""
+"Now create this file in the root of your inasafe git checkout "
+":file:`setup.cfg`::"
+msgstr ""
+
+# f1c4ec1055ab44239dd2a44c26e32e85
+#: ../../source/developer-docs/platform_linux.rst:147
+msgid ""
+"When you run tests occasionally achievements will be displayed to you at the"
+" end of the test run. See the achievements home page at "
+"http://exogen.github.com/nose-achievements/."
+msgstr ""
+
+# 345f9de4dd464855884b7fd8951f26ef
+#: ../../source/developer-docs/platform_linux.rst:152
+msgid "Developing using Eclipse (Linux)"
+msgstr ""
+
+# 0ff1c111223e4e96b022240f6df002c6
+#: ../../source/developer-docs/platform_linux.rst:153
+msgid ""
+"This is optional - you can use any environment you like for editing python, "
+"or even a simple text editor."
+msgstr ""
+
+# 37f36467c9a04d84a6b6ba4dc6985fd6
+#: ../../source/developer-docs/platform_linux.rst:157
+msgid ""
+"If you wish to use an IDE for development, please refer to `this article "
+"<http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-"
+"pydev/>`_ for detailed information on how to get the basic Eclipse with "
+"PyDev setup."
+msgstr ""
+
+# 6a0e392c2a964a49bd6fdb8bea9b1e8f
+#: ../../source/developer-docs/platform_linux.rst:162
+msgid "Creating a project"
+msgstr ""
+
+# 1b7e0eb989f542db8d347f4b58760bdf
+#: ../../source/developer-docs/platform_linux.rst:164
+msgid ""
+"The procedure for doing this is to do: :menuselection:`File --> New --> "
+"Project...` and then from the resulting dialog do :menuselection:`PyDev --> "
+"PyDev Project`."
+msgstr ""
+
+# 1dce52238e2040dc94c1013f40590b9f
+#: ../../source/developer-docs/platform_linux.rst:168
+msgid "In the resulting project dialog, set the following details:"
+msgstr ""
+
+# a640c451facc4f089fe1568e435c96bb
+#: ../../source/developer-docs/platform_linux.rst:170
+msgid ":guilabel:`Project name:` : :kbd:`inasafe`"
+msgstr ""
+
+# 80df8d59142d4194987c2dcfe36a10f1
+#: ../../source/developer-docs/platform_linux.rst:171
+msgid ":guilabel:`Use default` : :kbd:`uncheck`"
+msgstr ""
+
+# 4dedd97f44db48b5b0e2f59a41508d3d
+#: ../../source/developer-docs/platform_linux.rst:172
+msgid ""
+":guilabel (linux):`Directory` : :kbd:`/home/<your user "
+"name/.qgis/python/plugins/inasafe/`"
+msgstr ""
+
+# b7a6bc7cd83a4656bc0b6ccc3241c2ba
+#: ../../source/developer-docs/platform_linux.rst:173
+msgid ""
+":guilabel (windows):`Directory` : :kbd:`/home/<your user "
+"name/.qgis/python/plugins/inasafe/`"
+msgstr ""
+
+# af45f74676fb4605bfabf6edf0f17cb9
+#: ../../source/developer-docs/platform_linux.rst:174
+msgid ":guilabel:`Choose project type` : :kbd:`Python`"
+msgstr ""
+
+# c1675bf4ef7c47ffa60671a69ee5ab71
+#: ../../source/developer-docs/platform_linux.rst:175
+msgid ":guilabel:`Grammar Version` : :kbd:`2.7`"
+msgstr ""
+
+# 159c5dce460c451d942d7a6daaf15fc0
+#: ../../source/developer-docs/platform_linux.rst:176
+msgid ":guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`"
+msgstr ""
+
+# 90fff44d147147deb6b7cddac0b53846
+#: ../../source/developer-docs/platform_linux.rst:178
+msgid ""
+"At this point you should should click the link entitled 'Please configure an"
+" interpreter in related preferences before continuing.' And on the resulting"
+" dialog do:"
+msgstr ""
+
+# be958e546bed4664867c5b296bdc96b6
+#: ../../source/developer-docs/platform_linux.rst:181
+msgid ":guilabel:`Python Interpreters: New...` : :kbd:`click this button`"
+msgstr ""
+
+# 1cb7a5521745445f982e5f74a36784c8
+#: ../../source/developer-docs/platform_linux.rst:183
+msgid "In the dialog that appears do:"
+msgstr ""
+
+# 8970e69181354919b50ce1eaca327cfb
+#: ../../source/developer-docs/platform_linux.rst:185
+msgid ":guilabel:`Interpreter Name` : :kbd:`System Python 2.7`"
+msgstr ""
+
+# 055b080ac1304727869fa466b8771d6e
+#: ../../source/developer-docs/platform_linux.rst:186
+msgid ":guilabel:`Interpreter Executable` : :kbd:`/usr/bin/python`"
+msgstr ""
+
+# 2ca6ccd2bdb24632b95af00b79730ec5
+# 330ba1d8850341588c9209a5ac24b5b7
+#: ../../source/developer-docs/platform_linux.rst:187
+#: ../../source/developer-docs/platform_linux.rst:196
+msgid ":guilabel:`OK Button` : :kbd:`click this button`"
+msgstr ""
+
+# 95f686cdcfbf4a08b5cfa35688f588c6
+#: ../../source/developer-docs/platform_linux.rst:189
+msgid ""
+"Another dialog will appear. Tick the first entry in the list that points to "
+"your::"
+msgstr ""
+
+# 6cf1ea3096334b2eb325ec58c9e55408
+#: ../../source/developer-docs/platform_linux.rst:194
+msgid "(or simply click the 'Select All' button)"
+msgstr ""
+
+# 267cf64e96024a87ae0465a60e5c68f1
+#: ../../source/developer-docs/platform_linux.rst:198
+msgid ""
+"You will be returned to the Python Interpreters list and should see an entry"
+" for System Python 2.7 listed there. Now do in the *Libraries* tab:"
+msgstr ""
+
+# 148e78d483c04b3c91aab848e845e375
+#: ../../source/developer-docs/platform_linux.rst:201
+msgid ":guilabel:`Finish` : :kbd:`click this button`"
+msgstr ""
+
+# 086fd8bfaea7422c8021604921019e8d
+#: ../../source/developer-docs/platform_linux.rst:204
+msgid "Remote Debugging with Eclipse"
+msgstr ""
+
+# 9081471397544413a12bb83977a6ad9f
+#: ../../source/developer-docs/platform_linux.rst:206
+msgid ""
+"For remote debugging, you should add pydevd to your PYTHONPATH before "
+"starting *QGIS* for example (you will need to adjust these paths to match "
+"your system)::"
+msgstr ""
+
+# 84dd18d123e547b19f8f8ae864bb8e54
+#: ../../source/developer-docs/platform_linux.rst:213
+msgid ""
+"If you are running with remote debugging enabled, be sure to start the PyDev"
+" debug server first before launching the Risk-in-a-box QGIS plugin otherwise"
+" QGIS will likely crash when it can't find the debug server."
+msgstr ""
+
+# 7582007951854cffa5251f313358b128
+#: ../../source/developer-docs/platform_linux.rst:217
+msgid ""
+"You will need to ensure that the PYTHONPATH containing your pydev package "
+"folder is set before you launch QGIS - for example by adding the above line "
+"to your ~/.bashrc or by making a small batch file containing the above "
+"export and then sourcing the file before launching QGIS e.g.::"
+msgstr ""
+
+# aae15ebf8d054516a9984b0192f57be8
+#: ../../source/developer-docs/platform_linux.rst:226
+msgid "Running Unit tests from the IDE"
+msgstr ""
+
+# 17c5e748a61748a0b7e9f560358459e1
+#: ../../source/developer-docs/platform_linux.rst:228
+msgid ""
+"Python has very good integrated support for unit testing. The first thing "
+"you should do after setting up the IDE project is to run the tests. You can "
+"run tests in the following ways:"
+msgstr ""
+
+# 330acb46b2f0478ebc156032b83da25f
+#: ../../source/developer-docs/platform_linux.rst:232
+msgid "For the entire inasafe package"
+msgstr ""
+
+# 36c4e851172d4f6fb08eca9d07bd74db
+#: ../../source/developer-docs/platform_linux.rst:233
+msgid ""
+"For individual sub packages (e.g. engine, gui, storage, impact_functions)"
+msgstr ""
+
+# cee5f422c68842bb8dc27c023389e946
+#: ../../source/developer-docs/platform_linux.rst:234
+msgid "for an individual test module within a package"
+msgstr ""
+
+# 563a880c019d4d5d8b78388ed01d121e
+#: ../../source/developer-docs/platform_linux.rst:235
+msgid "for an class within a test module"
+msgstr ""
+
+# 056111ae00d146f99a6262a4c5aed5de
+#: ../../source/developer-docs/platform_linux.rst:236
+msgid "for an individual method within a test class"
+msgstr ""
+
+# 77e89e7d16b3440980818b9f8eed282c
+#: ../../source/developer-docs/platform_linux.rst:238
+msgid ""
+"You can view these individual entities by browsing and expanding nodes in "
+"the project panel in the left of the IDE."
+msgstr ""
+
+# 4bd05e9696284aa08a615fcaad4386c1
+#: ../../source/developer-docs/platform_linux.rst:241
+msgid ""
+"If you run the test suite for the entire inasafe package, it will mistakenly"
+" treat the sphinx documentation conf.py (docs.source.conf) as a test and "
+"fail for that test. This is 'normal' and can be ignored."
+msgstr ""

@@ -1,0 +1,190 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 0958818dbddb42c0bc0fd1c88f511aa6
+#: ../../source/api-docs/safe_qgis/html_renderer.rst:6
+msgid "Module:  safe_qgis.html_renderer"
+msgstr ""
+
+# db84b77972704aa4bb7cba4d8b99913c
+#: ../../../safe_qgis/html_renderer.py:docstring of safe_qgis.html_renderer:2
+msgid "**InaSAFE map making module.**"
+msgstr ""
+
+# 804fe549615a4d48a38b3c68b36c94b4
+#: ../../../safe_qgis/html_renderer.py:docstring of safe_qgis.html_renderer:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 7a4b5ff9ce4e4fbaa93f9be785eb9926
+#: ../../../safe_qgis/html_renderer.py:docstring of safe_qgis.html_renderer:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# c33a71a173c64a47a815dc29bbb14c79
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer:1
+msgid "A class for creating a map."
+msgstr ""
+
+# 028b6d0fd55847b795dc6e10f9be1936
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.htmlLoadedSlot:1
+msgid "Slot called when the page is loaded."
+msgstr ""
+
+# 49abed28889f458a977891a157bc25ac
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.htmlLoadedSlot:3
+msgid "Args: None Returns: None Raises: None"
+msgstr ""
+
+# 7bfeb49b63f2493ebc475a516749e6e5
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.loadAndWait:1
+msgid "Load some html to a web view and wait till it is done."
+msgstr ""
+
+# 3c3cc67f23804175a7673dd923e96fb8
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printImpactTable:1
+msgid "High level table generator to print layer keywords."
+msgstr ""
+
+# a2f1283d57a84c3383d63d73ff7c70de
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printImpactTable:3
+msgid ""
+"It gets the summary and impact table from a QgsMapLayer's keywords and "
+"renders to pdf, returning the resulting PDF file path."
+msgstr ""
+
+# a06020d2c4634312b8792a2ed0d834cd
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printImpactTable:7
+msgid "theKeywords: dic containing impact layer keywords (required)"
+msgstr ""
+
+# 2be43e79ec8a41aeaee8026839997ba0
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printImpactTable:10
+msgid "str: Path to generated pdf file."
+msgstr ""
+
+# 2e56eb9ba016414f9545e498b859c762
+# c6b5694bb7484403b8cf45756cb9bebb
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printImpactTable:13
+#: safe_qgis.html_renderer.HtmlRenderer.printToPdf:15
+msgid "None"
+msgstr ""
+
+# 1eed51d87ee5405c8efa4c5635aeccc2
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printToPdf:1
+msgid "Render an html snippet into the printer, paginating as needed."
+msgstr ""
+
+# 3c6e3944fc734fcfb5033d3c36b9b06d
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printToPdf:5
+msgid ""
+"header and footer appended to it in order to make it a valid html document. "
+"The header will also apply the bootstrap theme to the document."
+msgstr ""
+
+# 732b8e4e74c740fab883d62ffbdd675e
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printToPdf:9
+msgid "output will be written to."
+msgstr ""
+
+# 50ebd6ede59e4e878b03cdbb2473980c
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.printToPdf:12
+msgid "theFilename parameter if it was specified."
+msgstr ""
+
+# 4d18d89f477643b494dace815f442097
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.renderHtmlToImage:1
+msgid "Render some HTML to a pixmap."
+msgstr ""
+
+# e9624c3566bc47aba1f03129d31fc9f5
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.renderHtmlToImage:4
+msgid ""
+"theHtml - HTML to be rendered. It is assumed that the html is a snippet "
+"only, containing no body element - a standard header and footer will be "
+"appended."
+msgstr ""
+
+# b94cc0896ea7483a8874baf69f369ed9
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.renderHtmlToImage:7
+msgid ""
+"theWidthMM- width of the table in mm - will be converted to points based on "
+"the resolution of our page."
+msgstr ""
+
+# ef9f8a54955e4985a86050113fcddfea
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.renderHtmlToImage:10
+msgid "QImage"
+msgstr ""
+
+# 444c8480718041939d1f167b7c7b9491
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.renderHtmlToImage:12
+msgid "Any exceptions raised by the InaSAFE library will be propagated."
+msgstr ""
+
+# 3fd4bf37a7f2402b90c5c2bbb1a5c6ad
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.tr:1
+msgid "We implement this since we do not inherit QObject."
+msgstr ""
+
+# 5f86dd17a9754fb3b729a5658b901829
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.tr:4
+msgid "theString - string for translation."
+msgstr ""
+
+# 21f623fe915649e9834faf3548c1a7dc
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.tr:6
+msgid "Translated version of theString."
+msgstr ""
+
+# 2cb9450967ce48738701821ec2cf43a4
+#: ../../../safe_qgis/html_renderer.py:docstring of
+#: safe_qgis.html_renderer.HtmlRenderer.tr:8
+msgid "no exceptions explicitly raised."
+msgstr ""
+
+# cbee090868f347ac97208d23bb2bf0ea
+#: ../../source/api-docs/safe_qgis/html_renderer.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

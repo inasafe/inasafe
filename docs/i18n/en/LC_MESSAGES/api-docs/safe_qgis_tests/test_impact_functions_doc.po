@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 305235c93f5f463f98564327bf3e2c82
+#: ../../source/api-docs/safe_qgis_tests/test_impact_functions_doc.rst:6
+msgid "Module:  safe_qgis.test_impact_functions_doc"
+msgstr ""
+
+# b9939e965f5f4b15a01ea11fa59f4fa8
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**GUI Test Cases.**"
+msgstr ""
+
+# dd63c300fa844d0ea8cea6eb8a7a3cb7
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# cc18e0217aee4ae3ab5cf6bed4776e12
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 1ea9157795e8432f9a4b85a8d8f03cd2
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc.verifyColumn:1
+msgid "Helper function to verify the element in column. Args:"
+msgstr ""
+
+# 0929e35473e545e5a961245904a80a22
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc.verifyColumn:3
+msgid "table = table to be verified"
+msgstr ""
+
+# 77890ee55e614993b61705e534358bd4
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc.verifyColumn:4
+msgid "col = (integer) column number"
+msgstr ""
+
+# f22eed2ec6ca48d291c4d6a40cc8b827
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc.verifyColumn:5
+msgid "strFilter = (string)"
+msgstr ""
+
+# 8a89714e93ee4b348b82e0cc14f93a2e
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc.verifyColumn:6
+msgid "mode = enum(only, included, excluded)"
+msgstr ""
+
+# ec95241974d448a6a800a46dac8de3fd
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc.verifyColumn:8
+msgid "bool = True or False about the verify"
+msgstr ""
+
+# cf43469931f141b8a7ab345a6bbce0ff
+#: ../../../safe_qgis/test_impact_functions_doc.py:docstring of
+#: safe_qgis.test_impact_functions_doc.verifyColumn:9
+msgid "string contains message"
+msgstr ""
+
+# 75541090f25044d89e0917395aada1b7
+#: ../../source/api-docs/safe_qgis_tests/test_impact_functions_doc.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

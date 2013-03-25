@@ -50,7 +50,8 @@ from safe.api import (get_admissible_plugins,
                       calculate_polygon_centroid,
                       get_postprocessors,
                       get_postprocessor_human_name,
-                      convert_mmi_data)
+                      convert_mmi_data,
+                      format_int)
 
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611

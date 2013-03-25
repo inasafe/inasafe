@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 078333a810054bfd84a13689c5596a21
+#: ../../source/api-docs/safe/impact_functions/earthquake/earthquake_building_impact.rst:6
+msgid "Module:  safe.impact_functions.earthquake.earthquake_building_impact"
+msgstr ""
+
+# 24ab4b16c09c447c9457cb4ac3386e66
+#: ../../../safe/impact_functions/earthquake/earthquake_building_impact.py:docstring
+#: of
+#: safe.impact_functions.earthquake.earthquake_building_impact.EarthquakeBuildingImpactFunction:1
+msgid "Earthquake impact on building data"
+msgstr ""
+
+# b9ecf84672394446928fc3d5bb6baaa3
+#: ../../../safe/impact_functions/earthquake/earthquake_building_impact.py:docstring
+#: of
+#: safe.impact_functions.earthquake.earthquake_building_impact.EarthquakeBuildingImpactFunction:3
+msgid ""
+":param requires category=='hazard' and                     "
+"subcategory=='earthquake'"
+msgstr ""
+
+# fe76bc5fd86d4f32a5a8aa61c8482a42
+#: ../../../safe/impact_functions/earthquake/earthquake_building_impact.py:docstring
+#: of
+#: safe.impact_functions.earthquake.earthquake_building_impact.EarthquakeBuildingImpactFunction:5
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='structure' and                     layertype=='vector'"
+msgstr ""
+
+# bc5f871d3520464a8a7cdcf9a51fc9a7
+#: ../../../safe/impact_functions/earthquake/earthquake_building_impact.py:docstring
+#: of
+#: safe.impact_functions.earthquake.earthquake_building_impact.EarthquakeBuildingImpactFunction.run:1
+msgid "Earthquake impact to buildings (e.g. from Open Street Map)"
+msgstr ""
+
+# 4e20381dd55f4a539f3e003466639a24
+#: ../../source/api-docs/safe/impact_functions/earthquake/earthquake_building_impact.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

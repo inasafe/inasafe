@@ -1,0 +1,215 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# eddca3eeb8de4ad59b0041976ea0d789
+#: ../../source/api-docs/safe/common/interpolation2d.rst:6
+msgid "Module:  safe.common.interpolation2d"
+msgstr ""
+
+# c4bd61200feb44ecbb6730bea6442e89
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:1
+msgid "**Module for 2D interpolation over a rectangular mesh**"
+msgstr ""
+
+# bf619b4a83494e5faeb83eefd6bac145
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:3
+msgid "This module:"
+msgstr ""
+
+# 909345ae8a864e8db6f7666944d19315
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:5
+msgid ""
+"provides piecewise constant (nearest neighbour) and bilinear interpolation"
+msgstr ""
+
+# 30bf921d90fb45519ab338aa79f12311
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:6
+msgid "is fast (based on numpy vector operations)"
+msgstr ""
+
+# 344c4e7e4aaa4a2a856893ca8cf7b991
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:7
+msgid "depends only on numpy"
+msgstr ""
+
+# a66da732579d46ca9bc603d151fba1e2
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:8
+msgid ""
+"guarantees that interpolated values never exceed the four nearest neighbours"
+msgstr ""
+
+# 0f40f4e5b95247a480a8bbd9c15e9dbc
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:9
+msgid "handles missing values in domain sensibly using NaN"
+msgstr ""
+
+# b5ee92a0d43445b9a85bd80a1a25a7ff
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:10
+msgid "is unit tested with a range of common and corner cases"
+msgstr ""
+
+# e594e8b31aa64d44b5a2f69c231b4680
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:12
+msgid ""
+"See end of this file for documentation of the mathematical derivation used."
+msgstr ""
+
+# 5b96cc2a46514272b48675fbeedc0267
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.check_inputs:1
+msgid "Check inputs for interpolate2d function"
+msgstr ""
+
+# 16d586ef2c394e2e81286042616f5261
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:1
+msgid "Fundamental 2D interpolation routine"
+msgstr ""
+
+# fe43a9981e934ff582e12c0dba24da70
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:4
+msgid "x: 1D array of x-coordinates of the mesh on which to interpolate"
+msgstr ""
+
+# 0ed00097cfac482c973832d4f4df9a0d
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:5
+msgid "y: 1D array of y-coordinates of the mesh on which to interpolate"
+msgstr ""
+
+# 1b4c286f604f4d84b312a64af267e55e
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:6
+msgid "Z: 2D array of values for each x, y pair"
+msgstr ""
+
+# 146ef27377bd436ea49158c63cd98075
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:7
+msgid "points: Nx2 array of coordinates where interpolated values are sought"
+msgstr ""
+
+# f780af2d86a74c198f0e6fc58a60deca
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:8
+msgid "mode: Determines the interpolation order. Options are"
+msgstr ""
+
+# 58cbf0e9996148dfbef62317d0cd68a2
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:10
+msgid "'constant' - piecewise constant nearest neighbour interpolation"
+msgstr ""
+
+# 2defed12d2e342cc9eb6e8d225e50add
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:12
+msgid "nearest neighbours (default)"
+msgstr ""
+
+# 0bbd2a77fdc248e3bbdc3d1808d0bdbe
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:15
+msgid ""
+"will be raised when interpolated values are requested outside the domain of "
+"the input data. If False, nan is returned for those values"
+msgstr ""
+
+# df955e47a4d446898d24abb1cbb5abd1
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:20
+msgid "1D array with same length as points with interpolated values"
+msgstr ""
+
+# 20512e1d76af4a05a2bc18c3d481e8c3
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:22
+msgid "Raises: Exception, BoundsError (see note about bounds_error)"
+msgstr ""
+
+# 71e52125cd074fcf8e5a14bec000ed70
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:25
+msgid ""
+"Input coordinates x and y are assumed to be monotonically increasing, but "
+"need not be equidistantly spaced. No such assumption regarding ordering of "
+"points is made."
+msgstr ""
+
+# 4c1f1c736c1e4cac83fedd3e0fc75c02
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:29
+msgid ""
+"Z is assumed to have dimension M x N, where M = len(x) and N = len(y). In "
+"other words it is assumed that the x values follow the first (vertical) axis "
+"downwards and y values the second (horizontal) axis from left to right."
+msgstr ""
+
+# 9137ba518381432f80b4cadf5f4f0b00
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:34
+msgid ""
+"If this routine is to be used for interpolation of raster grids where data "
+"is typically organised with longitudes (x) going from left to right and "
+"latitudes (y) from left to right then user interpolate_raster in this module"
+msgstr ""
+
+# 7a9da62f47f3468da25b137fffacd5c7
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:1
+msgid "2D interpolation of raster data"
+msgstr ""
+
+# da519c042e0b46929d279ee1482cf763
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:3
+msgid ""
+"It is assumed that data is organised in matrix Z as latitudes from bottom up "
+"along the first dimension and longitudes from west to east along the second "
+"dimension."
+msgstr ""
+
+# dca51fc008354ec0b1f060424f1c2327
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:7
+msgid ""
+"Further it is assumed that x is the vector of longitudes and y the vector of "
+"latitudes."
+msgstr ""
+
+# c44b7ff486294395959ea0491e2e9f3e
+#: ../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:10
+msgid "See interpolate2d for details of the interpolation routine"
+msgstr ""
+
+# dfdc9f307b2e4bd9b39b90ba1beda12c
+#: ../../source/api-docs/safe/common/interpolation2d.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

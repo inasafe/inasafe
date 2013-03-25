@@ -1,0 +1,128 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# ceb079330ae043b5982970eb45c9c352
+#: ../../source/api-docs/safe_qgis_tests/test_utilities.rst:6
+msgid "Module:  safe_qgis.test_utilities"
+msgstr ""
+
+# dc2bda1f01ca4a99bbb10af73957efeb
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest:1
+msgid "Tests for reading and writing of raster and vector data"
+msgstr ""
+
+# 7e21642d3341420abf053b119d2d7150
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.testAddMinMaxToStyle:1
+msgid "Test our add min max to style function."
+msgstr ""
+
+# f1dfbef894734b7dac4ed1fdaa80bc3b
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.testDpiToMeters:1
+msgid "Test conversion from dpi to dpm."
+msgstr ""
+
+# 31b09b8a73df4a80b4514654ac8c94a4
+# d2616b228e3e421a9a3d441fa7ec0702
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_getLayerAttributeNames:1
+#: safe_qgis.test_utilities.UtilitiesTest.test_isLayerPolygonal:1
+msgid "Test we can get the correct attributes back"
+msgstr ""
+
+# 362c41fc58fe41e1897f417c53cc6396
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_getQgisVersion:1
+msgid "Test we can get the version of QGIS"
+msgstr ""
+
+# 7d3fee9649c14bd08ab86ac35038a608
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_humaniseSeconds:1
+msgid "Test that humanise seconds works."
+msgstr ""
+
+# 2b9623d8fb024014bbd7429fd022f2a7
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_impactLayerAttribution:1
+msgid "Test we get an attribution html snippet nicely for impact layers."
+msgstr ""
+
+# 35f215ca93974f6fb33ec37c16006f96
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_issue121:1
+msgid ""
+"Test that point symbol size can be set from style (issue 121). .. seealso:: "
+"https://github.com/AIFDR/inasafe/issues/121"
+msgstr ""
+
+# 1a266faa8ba84ca1afd72b6ce97333a6
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_issue126:1
+msgid ""
+"Test that non integer transparency ranges fail gracefully. .. seealso:: "
+"https://github.com/AIFDR/inasafe/issues/126"
+msgstr ""
+
+# ca14bbf09a5f47598c165b1d3163b9c7
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_issue157:1
+msgid ""
+"Verify that we get the error class name back - issue #157 .. seealso:: "
+"https://github.com/AIFDR/inasafe/issues/121"
+msgstr ""
+
+# 5648af94dd1843daa7a2c12ae4bf42a4
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_issue230:1
+msgid ""
+"Verify that we give informative errors when style is not correct .. "
+"seealso:: https://github.com/AIFDR/inasafe/issues/230"
+msgstr ""
+
+# 50ad7466670842f894bb59123b6a38f3
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_localisedAttribution:1
+msgid "Test we can localise attribution."
+msgstr ""
+
+# dc6c91dbbe3544928eccde1717bfc857
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_mmPointConversion:1
+msgid "Test that conversions between pixel and page dimensions work."
+msgstr ""
+
+# cd7f007cd33b480fadb8903a145617de
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_stacktrace_html:1
+msgid "Stack traces can be caught and rendered as html"
+msgstr ""
+
+# 63b91500fc584e4b93e5f5bf0cba2cdd
+#: ../../../safe_qgis/test_utilities.py:docstring of
+#: safe_qgis.test_utilities.UtilitiesTest.test_transparency_of_minimum_value:1
+msgid "Test that transparency of minimum value works when set to 100%"
+msgstr ""
+
+# 8e665c014d9645c99cbce3d5f90c15a8
+#: ../../source/api-docs/safe_qgis_tests/test_utilities.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

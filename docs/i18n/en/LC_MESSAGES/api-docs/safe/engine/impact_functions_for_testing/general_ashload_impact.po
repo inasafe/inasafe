@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# c6c08b75f2b94e85835ab5ba896a378a
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/general_ashload_impact.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.general_ashload_impact"
+msgstr ""
+
+# eeb241c5b3ac49879e6415bb5004dcff
+#: ../../../safe/engine/impact_functions_for_testing/general_ashload_impact.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.general_ashload_impact.TephraBuildingImpactFunction:1
+msgid "Risk plugin for tephra damage (FIXME: Origin?)"
+msgstr ""
+
+# d61c3b3de2424bc481eed87b4756de6b
+#: ../../../safe/engine/impact_functions_for_testing/general_ashload_impact.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.general_ashload_impact.TephraBuildingImpactFunction:3
+msgid ""
+":param requires category=='hazard' and                     subcategory."
+"startswith('tephra') and                     layertype=='raster' "
+"and                     unit=='kg/m^2'"
+msgstr ""
+
+# 5dc62299743a45c5895b3638e2b0843b
+#: ../../../safe/engine/impact_functions_for_testing/general_ashload_impact.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.general_ashload_impact.TephraBuildingImpactFunction:5
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='structure' and                     layertype=='vector'"
+msgstr ""
+
+# 90997a328caf49ebaeba1cb22d031ced
+#: ../../../safe/engine/impact_functions_for_testing/general_ashload_impact.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.general_ashload_impact.TephraBuildingImpactFunction.generate_style:1
+msgid "Generates and SLD file based on the data values"
+msgstr ""
+
+# 290ef7b47dbf4c699c26b0af6a53fb52
+#: ../../../safe/engine/impact_functions_for_testing/general_ashload_impact.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.general_ashload_impact.TephraBuildingImpactFunction.run:1
+msgid "Risk plugin for tephra impact"
+msgstr ""
+
+# 36a5c5c69ee7441497ae06a0b76eebd8
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/general_ashload_impact.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

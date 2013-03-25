@@ -1,0 +1,50 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: 2013-03-06 10:57+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# ccbce63b4c3b47f5b55166f8524dc446
+#: ../../source/user-docs/known_issues.rst:6
+msgid "Known Issues"
+msgstr ""
+
+# a0d50f8d03b4472faf1bbb68111b3476
+#: ../../source/user-docs/known_issues.rst:11
+msgid "Population density grids must be in geographic coordinates"
+msgstr ""
+
+# 775781a7154e437d9b8bf46128b54194
+#: ../../source/user-docs/known_issues.rst:13
+msgid ""
+"Currently, if population density grids are projected they won't be scaled "
+"correctly if resampled. See also ticket `#123 "
+"<https://github.com/AIFDR/inasafe/issues/123>`_"
+msgstr ""
+
+# 7dcef8852eaf4b1dbe0719d40c416142
+#: ../../source/user-docs/known_issues.rst:18
+msgid "Help documentation has no style under windows"
+msgstr ""
+
+# d4035c2d37c9422485ce32d9e181712d
+#: ../../source/user-docs/known_issues.rst:20
+msgid ""
+"Currently if you open the help documentation for InaSAFE, not styling is "
+"applied and images may not show, so it looks rather plain. We are working to"
+" fix this in a future release. See also ticket `#163 "
+"<https://github.com/AIFDR/inasafe/issues/163>`_"
+msgstr ""

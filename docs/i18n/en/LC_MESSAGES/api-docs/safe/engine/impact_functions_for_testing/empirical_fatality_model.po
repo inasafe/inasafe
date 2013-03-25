@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 6209057068924a7693361ec1d93b93cd
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/empirical_fatality_model.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.empirical_fatality_model"
+msgstr ""
+
+# 18e3140b07714d6bb46cece0caf65243
+#: ../../../safe/engine/impact_functions_for_testing/empirical_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.empirical_fatality_model.EmpiricalFatalityFunction:1
+msgid "Risk plugin for earthquake damage based on empirical results"
+msgstr ""
+
+# d301730eeebe49e482cb5e0a94e64450
+#: ../../../safe/engine/impact_functions_for_testing/empirical_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.empirical_fatality_model.EmpiricalFatalityFunction:3
+msgid ":author Hadi Ghasemi :rating 2"
+msgstr ""
+
+# 3738dfb6870a40af984d032a3aa0e44a
+#: ../../../safe/engine/impact_functions_for_testing/empirical_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.empirical_fatality_model.EmpiricalFatalityFunction:6
+msgid ""
+":param requires category=='doesnotexist' :param requires title=='neverwas'"
+msgstr ""
+
+# 14ca0136c2cb441da2c2c92151e51f49
+#: ../../../safe/engine/impact_functions_for_testing/empirical_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.empirical_fatality_model.EmpiricalFatalityFunction.run:1
+msgid "Risk plugin for earthquake fatalities"
+msgstr ""
+
+# e4f10fb7799149a9abb25b4a0d51830f
+#: ../../../safe/engine/impact_functions_for_testing/empirical_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.empirical_fatality_model.EmpiricalFatalityFunction.run:4
+msgid "H: Numerical array of hazard data E: Numerical array of exposure data"
+msgstr ""
+
+# b2e0c6bfb9fe45808b47c4305ca819c2
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/empirical_fatality_model.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

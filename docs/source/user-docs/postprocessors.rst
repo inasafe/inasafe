@@ -25,7 +25,7 @@ The same is valid for any other setting you might encounter there.
 If you don't see a post-processors field, it means that the impact function
 you are trying to use does not support any post processor
 
-.. figure:: ../static/postprocessor-config.png
+.. figure:: /static/postprocessor-config.png
    :align:   center
 
 Each activated post-processor will create an additional report in the dock and

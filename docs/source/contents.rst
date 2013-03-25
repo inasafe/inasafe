@@ -1,21 +1,12 @@
-.. _contents:
 
-Contents
-========
+=====================
+InaSAFE Documentation
+=====================
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 1
 
-   tutorial-docs/tutorial
-   user-docs/index
-   developer-docs/index
-   api-docs/index
-   authors
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    tutorial-docs/index
+    user-docs/index
+    developer-docs/index
+    api-docs/index

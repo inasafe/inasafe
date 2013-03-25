@@ -42,21 +42,33 @@ def _all():
 
     # Key is hostname as it resolves by running hostname directly on the server
     # value is desired web site url to publish the repo as.
-    site_names = {
+    doc_site_names = {
+        'waterfall': 'inasafe-docs.localhost',
+        'spur': 'inasafe-docs.localhost',
+        'maps.linfiniti.com': 'inasafe-docs.linfiniti.com',
+        'linfiniti': 'inasafe-docs.linfiniti.com',
+        'shiva': 'docs.inasafe.org'}
+    repo_site_names = {
         'waterfall': 'inasafe-test.localhost',
         'spur': 'inasafe-test.localhost',
         'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
         'linfiniti': 'inasafe-crisis.linfiniti.com',
         'shiva': 'experimental.inasafe.org'}
+
     with hide('output'):
         env.user = env.run('whoami')
         env.hostname = env.run('hostname')
-        if env.hostname not in site_names:
-            print 'Error: %s not in: \n%s' % (env.hostname, site_names)
+        if env.hostname not in repo_site_names:
+            print 'Error: %s not in: \n%s' % (env.hostname, repo_site_names)
+            exit
+        elif env.hostname not in doc_site_names:
+            print 'Error: %s not in: \n%s' % (env.hostname, repo_site_names)
             exit
         else:
-            env.site_name = site_names[env.hostname]
+            env.repo_site_name = repo_site_names[env.hostname]
+            env.doc_site_name = doc_site_names[env.hostname]
             env.plugin_repo_path = '/home/web/inasafe-test'
+            env.inasafe_docs_path = '/home/web/inasafe-docs'
             env.home = os.path.join('/home/', env.user)
             env.repo_path = os.path.join(env.home,
                                          'dev',
@@ -82,11 +94,11 @@ def update_qgis_plugin_repo():
     env.run('cp %s/plugin* %s' % (local_path, env.plugin_repo_path))
     env.run('cp %s/icon* %s' % (code_path, env.plugin_repo_path))
     env.run('cp %(local_path)s/inasafe-test.conf.templ '
-        '%(local_path)s/inasafe-test.conf' % {'local_path': local_path})
+            '%(local_path)s/inasafe-test.conf' % {'local_path': local_path})
 
     sed('%s/inasafe-test.conf' % local_path,
         'inasafe-test.linfiniti.com',
-        env.site_name)
+        env.repo_site_name)
 
     with cd('/etc/apache2/sites-available/'):
         if exists('inasafe-test.conf'):
@@ -99,9 +111,44 @@ def update_qgis_plugin_repo():
     # Add a hosts entry for local testing - only really useful for localhost
     hosts = '/etc/hosts'
     if not contains(hosts, 'inasafe-test'):
-        append(hosts, '127.0.0.1 %s' % env.site_name, use_sudo=True)
+        append(hosts, '127.0.0.1 %s' % env.repo_site_name, use_sudo=True)
 
     sudo('a2ensite inasafe-test.conf')
+    sudo('service apache2 reload')
+
+
+def update_qgis_docs_site():
+    """Initialise an InaSAFE docs sote where we host test pdf."""
+    code_path = os.path.join(env.repo_path, env.repo_alias)
+    local_path = '%s/scripts/test-build-repo' % code_path
+
+    if not exists(env.inasafe_docs_path):
+        sudo('mkdir -p %s' % env.inasafe_docs_path)
+        sudo('chown %s.%s %s' % (env.user, env.user, env.inasafe_docs_path))
+
+    env.run('cp %s/plugin* %s' % (local_path, env.plugin_repo_path))
+    env.run('cp %s/icon* %s' % (code_path, env.plugin_repo_path))
+    env.run('cp %(local_path)s/inasafe-test.conf.templ '
+            '%(local_path)s/inasafe-test.conf' % {'local_path': local_path})
+
+    sed('%s/inasafe-test.conf' % local_path,
+        'inasafe-test.linfiniti.com',
+        env.repo_site_name)
+
+    with cd('/etc/apache2/sites-available/'):
+        if exists('inasafe-docs.conf'):
+            sudo('a2dissite inasafe-docs.conf')
+            fastprint('Removing old apache2 conf', False)
+            sudo('rm inasafe-docs.conf')
+
+        sudo('ln -s %s/inasafe-docs.conf .' % local_path)
+
+    # Add a hosts entry for local testing - only really useful for localhost
+    hosts = '/etc/hosts'
+    if not contains(hosts, 'inasafe-docs'):
+        append(hosts, '127.0.0.1 %s' % env.repo_site_name, use_sudo=True)
+
+    sudo('a2ensite inasafe-docs.conf')
     sudo('service apache2 reload')
 
 
@@ -147,6 +194,23 @@ def update_git_checkout(branch='master'):
         clone = env.run('git pull')
 
 
+def install_latex():
+    """Ensure that the target system has a usable latex installation.
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    Raises:
+        None
+    """
+    clone = env.run('which pdflatex')
+    if '' == clone:
+        env.run('sudo apt-get install texlive-latex-extra python-sphinx '
+                'texinfo dvi2png')
+
 ###############################################################################
 # Next section contains actual tasks
 ###############################################################################
@@ -157,7 +221,7 @@ def build_test_package(branch='master'):
 
     Args:
         branch: str - a string representing the name of the branch to build
-            from. Defaults to 'master'
+            from. Defaults to 'master'.
 
     To run e.g.::
 
@@ -201,11 +265,46 @@ def build_test_package(branch='master'):
         sed(plugins_xml, '\[VERSION\]', plugin_version)
         sed(plugins_xml, '\[FILE_NAME\]', package_name)
         sed(plugins_xml, '\[URL\]', 'http://%s/%s' %
-                                    (env.site_name, package_name))
+                                    (env.repo_site_name, package_name))
         sed(plugins_xml, '\[DATE\]', str(datetime.now()))
 
         fastprint('Add http://%s/plugins.xml to QGIS plugin manager to use.'
-            % env.site_name)
+                  % env.repo_site_name)
+
+
+def build_documentation(branch='master'):
+    """Create a pdf and html doc tree and publish them online.
+
+    Args:
+        branch: str - a string representing the name of the branch to build
+            from. Defaults to 'master'.
+
+    To run e.g.::
+
+        fab -H 188.40.123.80:8697 remote build_documentation
+
+        or to package up a specific branch (in this case minimum_needs)
+
+        fab -H 88.198.36.154:8697 remote build_documentation:version-1_1
+
+    .. note:: Using the branch option will not work for branches older than 1.1
+    """
+
+    update_git_checkout(branch)
+    install_latex()
+
+    dir_name = os.path.join(env.repo_path, env.repo_alias, 'docs')
+    with cd(dir_name):
+        # build the tex file
+        env.run('make latex')
+
+    dir_name = os.path.join(env.repo_path, env.repo_alias,
+                            'docs', 'build', 'latex')
+    with cd(dir_name):
+        # Now compile it to pdf
+        env.run('pdflatex -interaction=nonstopmode InaSAFE.tex')
+        # run 2x to ensure indices are generated?
+        env.run('pdflatex -interaction=nonstopmode InaSAFE.tex')
 
 
 def show_environment():
@@ -213,7 +312,7 @@ def show_environment():
     fastprint('\n-------------------------------------------------\n')
     fastprint('User: %s\n' % env.user)
     fastprint('Host: %s\n' % env.hostname)
-    fastprint('Site Name: %s\n' % env.site_name)
+    fastprint('Site Name: %s\n' % env.repo_site_name)
     fastprint('Dest Path: %s\n' % env.plugin_repo_path)
     fastprint('Home Path: %s\n' % env.home)
     fastprint('Repo Path: %s\n' % env.repo_path)

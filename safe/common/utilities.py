@@ -26,8 +26,7 @@ class MEMORYSTATUSEX(ctypes.Structure):
         ("ullAvailPageFile", ctypes.c_ulonglong),
         ("ullTotalVirtual", ctypes.c_ulonglong),
         ("ullAvailVirtual", ctypes.c_ulonglong),
-        ("sullAvailExtendedVirtual", ctypes.c_ulonglong),
-        ]
+        ("sullAvailExtendedVirtual", ctypes.c_ulonglong)]
 
     def __init__(self):
         # have to initialize this to the size of MEMORYSTATUSEX
@@ -278,3 +277,56 @@ def get_free_memory_osx():
     inactive = stdout_list[2].replace('M inactive', '').replace(' ', '')
     free = stdout_list[4].replace('M free.', '').replace(' ', '')
     return int(inactive) + int(free)
+
+
+def format_int(x):
+    """Format integer with separator between thousands.
+
+    Args:
+        x: int - a number to be formatted in a locale friendly way.
+
+    Returns:
+        str - a locale friendly formatted string e.g. 1,000,0000.00
+            representing the original x. If a ValueError exception occurs,
+            x is simply returned.
+
+    Raises:
+        None
+
+    From http://stackoverflow.com/questions/5513615/
+                add-thousands-separators-to-a-number
+
+    # FIXME (Ole)
+    Currently not using locale coz broken
+
+    Instead use this:
+    http://docs.python.org/library/string.html#formatspec
+
+    """
+
+    # This is broken
+    #import locale
+    #locale.setlocale(locale.LC_ALL, '')  # Broken, why?
+    #s = locale.format('%d', x, 1)
+    lang = os.getenv('LANG')
+    try:
+        s = '{0:,}'.format(x)
+        #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+    # see issue #526
+    except ValueError:
+        return x
+
+    # Quick solution for the moment
+    if lang == 'id':
+        # Replace commas with dots
+        s = s.replace(',', '.')
+    return s
+
+
+def round_thousand(my_int):
+    """Round an integer to the nearest thousand if my_int
+    is more than a thousand
+    """
+    if my_int > 1000:
+        my_int = my_int // 1000 * 1000
+    return my_int

@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 99cf4dbd77f64188bf9daf35eeea03b2
+#: ../../source/api-docs/safe/storage/geometry.rst:6
+msgid "Module:  safe.storage.geometry"
+msgstr ""
+
+# 7c8dd1386aac4b399bce42bb43c959d8
+#: ../../../safe/storage/geometry.py:docstring of
+#: safe.storage.geometry.Geometry:1
+msgid "Common class for geometries"
+msgstr ""
+
+# 1ba35c8b94ac4f418924b8a6c267f646
+#: ../../../safe/storage/geometry.py:docstring of
+#: safe.storage.geometry.Polygon:1
+msgid "Polygon geometry"
+msgstr ""
+
+# 93fd1605f1674917a42e5493b91ba0b9
+#: ../../../safe/storage/geometry.py:docstring of
+#: safe.storage.geometry.Polygon:3
+msgid "Contains outer ring and optionally list of inner rings"
+msgstr ""
+
+# dc8361e061cb43809852ab68e5109a06
+#: ../../../safe/storage/geometry.py:docstring of
+#: safe.storage.geometry.Polygon:5
+msgid ""
+"All rings are assumed to be Nx2 numpy arrays of vertex coordinates lon, lat"
+msgstr ""
+
+# 678fe56def4d426980c50bdce7f09293
+#: ../../source/api-docs/safe/storage/geometry.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

@@ -1,11 +1,11 @@
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
-                                        get_question,
-                                        format_int)
+                                        get_question)
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
-                                   get_defaults)
+                                   get_defaults,
+                                   format_int)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 from third_party.odict import OrderedDict
@@ -87,6 +87,48 @@ class ITBFatalityFunction(FunctionProvider):
     """
 
     title = tr('Die or be displaced')
+    synopsis = tr('To asses the impact of earthquake on population based on '
+                  'earthquake model developed by ITB')
+    citations = \
+        tr(' * Indonesian Earthquake Building-Damage and Fatality Models and '
+           '   Post Disaster Survey Guidelines Development Bali, 27-28 '
+           '   February 2012, 54pp.\n'
+           ' * Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., '
+           '   Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas '
+           '   of ShakeMaps and population exposure catalog for '
+           '   earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.\n'
+           ' * Jaiswal, K., and Wald, D., 2010. An empirical model for '
+           '   global earthquake fatality estimation, Earthq. Spectra '
+           '   26, 1017-1037.\n')
+    limitation = \
+        tr(' - The model is based on limited number of observed fatality '
+           '   rates during 4 past fatal events. \n'
+           ' - The model clearly over-predicts the fatality rates at '
+           '   intensities higher than VIII.\n'
+           ' - The model only estimates the expected fatality rate '
+           '   for a given intensity level; however the associated '
+           '   uncertainty for the proposed model is not addressed.\n'
+           ' - There are few known mistakes in developing the current '
+           '   model:\n\n'
+           '   * rounding MMI values to the nearest 0.5,\n'
+           '   * Implementing Finite-Fault models of candidate events, and\n'
+           '   * consistency between selected GMPEs with those in use by '
+           '     BMKG.\n')
+    actions = tr('Provide details about the population will be die or '
+                 'displaced')
+    detailed_description = \
+        tr('This model was developed by Institut Tecknologi Bandung (ITB) '
+           'and implemented by Dr Hadi Ghasemi, Geoscience Australia\n'
+           'Algorithm:\n'
+           'In this study, the same functional form as Allen (2009) is '
+           'adopted o express fatality rate as a function of intensity '
+           '(see Eq. 10 in the report). The Matlab built-in function '
+           '(fminsearch) for  Nelder-Mead algorithm was used to estimate '
+           'the model parameters. The objective function (L2G norm) that '
+           'is minimized during the optimisation is the same as the one '
+           'used by Jaiswal et al. (2010).\n'
+           'The coefficients used in the indonesian model are x=0.62275231, '
+           'y=8.03314466, zeta=2.15')
     defaults = get_defaults()
     parameters = OrderedDict([
         ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
@@ -103,9 +145,9 @@ class ITBFatalityFunction(FunctionProvider):
             ('Age', {
                 'on': True,
                 'params': OrderedDict([
-                      ('youth_ratio', defaults['YOUTH_RATIO']),
-                      ('adult_ratio', defaults['ADULT_RATIO']),
-                      ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def fatality_rate(self, mmi):
         """
@@ -268,7 +310,7 @@ class ITBFatalityFunction(FunctionProvider):
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
                                  'units available for %s people?') %
-                                 format_int(fatalities))
+                              format_int(fatalities))
         if displaced > 0:
             table_body.append(tr('Are there enough shelters and relief items '
                                  'available for %s people?')
@@ -286,18 +328,18 @@ class ITBFatalityFunction(FunctionProvider):
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008'),
+                              'regulation 7/2008'),
                            tr('The fatality calculation assumes that '
-                             'no fatalities occur for shake levels below 4 '
-                             'and fatality counts of less than 50 are '
-                             'disregarded.')])
+                              'no fatalities occur for shake levels below 4 '
+                              'and fatality counts of less than 50 are '
+                              'disregarded.')])
 
-        impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('People in need of evacuation')
+        # impact_summary = Table(table_body).toNewlineFreeString()
+        # map_title = tr('People in need of evacuation')
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '
-                            'Institute of Teknologi Bandung 2012.'))
+                             'Institute of Teknologi Bandung 2012.'))
         table_body.append(tr('Population numbers rounded to nearest 1000.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()

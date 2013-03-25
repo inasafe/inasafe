@@ -1,0 +1,140 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# df39c74322b0407cb44b74e4aba669f1
+#: ../../source/api-docs/safe/common/geodesy.rst:6
+msgid "Module:  safe.common.geodesy"
+msgstr ""
+
+# b70605a381774601bde16592ddb03edb
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy:1
+msgid "point.py - Represents a generic point on a sphere as a Python object."
+msgstr ""
+
+# 1672a1daae2041febd674523fac41e87
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy:3
+msgid "See documentation of class Point for details. Ole Nielsen, ANU 2002"
+msgstr ""
+
+# ef5bd52043344749840e75945aac29a3
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.Point:1
+msgid "Definition of a generic point on the sphere."
+msgstr ""
+
+# 67b7be10f1ac4599817e8842732f1a02
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.Point:3
+msgid ""
+"Defines a point in terms of latitude and longitude and computes distances to "
+"other points on the sphere."
+msgstr ""
+
+# 2409dcf15cc343b1a8246cd7913059b1
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.Point:7
+msgid "Point(lat, lon), where lat and lon are in decimal degrees (dd.dddd)"
+msgstr ""
+
+# df8177402654499a83dd5679bc57cfc6
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.Point:10
+msgid "distance_to(P) bearing_to(P) dist(P)"
+msgstr ""
+
+# 9d5f0317c6e8445ca89cd3daeba1bc2e
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.Point:14
+msgid "Author: Ole Nielsen, ANU 2002"
+msgstr ""
+
+# 7d778cdf52594354b00642c7d61b4967
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.Point.AZ:1
+msgid "Compute Azimuth bearing (AZ) from current point to P"
+msgstr ""
+
+# c003f21c85654b6d90e572bacf0013bc
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.GCA:1
+msgid "Compute the Creat Circle Angle (GCA) between current point and P"
+msgstr ""
+
+# f599eaba3f554326891f89d4233eeb45
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.approximate_distance_to:1
+msgid "Very cheap and rough approximation to distance"
+msgstr ""
+
+# 22b15bcb4de441e9b50e4fb0d1d56513
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.bearing_to:1
+msgid "Bearing (in degrees) to point P"
+msgstr ""
+
+# 016ab1fd74bf46ed94f46fcac06e0b65
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.distance_to:1
+msgid "Distance to point P"
+msgstr ""
+
+# 3ffc84ac0d6d42ce91cf75465b9b93bd
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.generate_circle:1
+msgid "Make a circle about this point."
+msgstr ""
+
+# 4508782a46c34df19cd65ba788d68828
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.generate_circle:4
+msgid "radius: The desired cirle radius [m]"
+msgstr ""
+
+# 7e09e76f87784720b8707ae59aeb4986
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.generate_circle:5
+msgid ""
+"resolution (optional): Radial distance (degrees) between points on circle. "
+"Default is 1 making the circle consist of 360 points"
+msgstr ""
+
+# be5c21c0ad104ae699e67e6fbc3d6c1e
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.generate_circle:9
+msgid "list of lon, lat coordinates defining the circle"
+msgstr ""
+
+# 68e432b661184e8d96f940feea1e0167
+#: ../../../safe/common/geodesy.py:docstring of
+#: safe.common.geodesy.Point.generate_circle:13
+msgid ""
+"The circle is defined in geographic coordinates so the distance in meters "
+"will be greater than the specified radius in the north south direction."
+msgstr ""
+
+# 370d4d77df9f4d6aa1e48158d2c52498
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.acos:1
+msgid "acos -  Safe inverse cosine"
+msgstr ""
+
+# 4d3d2c1a574b4412beccbd13ee87f455
+#: ../../../safe/common/geodesy.py:docstring of safe.common.geodesy.acos:3
+msgid ""
+"Input argument c is shrunk to admissible interval to avoid case where a "
+"small rounding error causes a math domain error."
+msgstr ""
+
+# a71d7f89e46049aeabaa48a2b0d9ce85
+#: ../../source/api-docs/safe/common/geodesy.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

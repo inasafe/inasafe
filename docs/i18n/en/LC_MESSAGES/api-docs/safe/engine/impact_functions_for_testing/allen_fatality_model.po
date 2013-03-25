@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 4aeb129f5de64ca5becefc009d424328
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/allen_fatality_model.rst:6
+msgid "Module:  safe.engine.impact_functions_for_testing.allen_fatality_model"
+msgstr ""
+
+# f96f3ea3892d4d598d6ba6149eb25098
+#: ../../../safe/engine/impact_functions_for_testing/allen_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.allen_fatality_model.EarthquakeFatalityFunction:1
+msgid "Risk plugin for earthquake damage"
+msgstr ""
+
+# e376b4e40d3a4f8a9fdf76386a8708ea
+#: ../../../safe/engine/impact_functions_for_testing/allen_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.allen_fatality_model.EarthquakeFatalityFunction:3
+msgid ""
+":author Allen :rating 1 :param requires category=='hazard' "
+"and                 subcategory.startswith('earthquake') and                 "
+"layertype=='raster' and                 unit=='MMI'"
+msgstr ""
+
+# d4679cdeefad455c8963572a6d461d87
+#: ../../../safe/engine/impact_functions_for_testing/allen_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.allen_fatality_model.EarthquakeFatalityFunction:7
+msgid ""
+":param requires category=='exposure' and                 subcategory."
+"startswith('population') and                 layertype=='raster'"
+msgstr ""
+
+# 026ef0d7deae4240bc75dc936f2ad153
+#: ../../../safe/engine/impact_functions_for_testing/allen_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.allen_fatality_model.EarthquakeFatalityFunction.run:1
+msgid "Risk plugin for earthquake fatalities"
+msgstr ""
+
+# 4a41c744184e40679b05cb7ef87f4d0a
+#: ../../../safe/engine/impact_functions_for_testing/allen_fatality_model.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.allen_fatality_model.EarthquakeFatalityFunction.run:5
+msgid ""
+"H: Raster layer of MMI ground shaking P: Raster layer of population data on "
+"the same grid as H"
+msgstr ""
+
+# 12adba96b49c4102b9b2724aacc68e8c
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/allen_fatality_model.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

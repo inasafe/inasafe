@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# d58dab687885441094a3dda0ce9a294c
+#: ../../source/api-docs/safe/postprocessors/postprocessor_factory.rst:6
+msgid "Module:  safe.postprocessors.postprocessor_factory"
+msgstr ""
+
+# 9692005b6eed4a1688ccf60e53f11f65
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory:1
+msgid "**Postprocessors package.**"
+msgstr ""
+
+# ffa1f90c88854817a191386fed2a48d9
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory:4
+msgid ""
+"import like this from safe.postprocessors import get_post_processors and "
+"then call get_post_processors(requested_postprocessors)"
+msgstr ""
+
+# 45ae353db12941b59bee6dbcbc5c464e
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessor_human_name:1
+msgid "Returns the human readable name of  post processor"
+msgstr ""
+
+# 68e4015ffe3a4027aef4b60a8f114090
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessor_human_name:4
+msgid "postprocessor: Machine name of the postprocessor"
+msgstr ""
+
+# eb8b03a659154eb480e0b241bded54e9
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessor_human_name:7
+msgid "str with the human readable name"
+msgstr ""
+
+# 5b78357353dd49d38ca7cbe5c2b2dbfd
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessors:1
+msgid "Creates a dictionary of applicable postprocessor instances"
+msgstr ""
+
+# eb1ea6cb8c004aa9a4bc49e2030c8211
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessors:5
+msgid "postprocessors such as { 'Gender': {'on': True}, 'Age': {'on': True,"
+msgstr ""
+
+# 1285553003f84f37971c2abdf24d478d
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessors:10
+msgid ""
+"'youth_ratio': defaults['YOUTH_RATIO'], 'adult_ratio': defaults"
+"['ADULT_RATIO'], 'elder_ratio': defaults['ELDER_RATIO'] }"
+msgstr ""
+
+# 4938eaceecfe4a289167f8fbfff572e0
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessors:14
+msgid "}"
+msgstr ""
+
+# 4edb9611307a45aabf5bf74344c8125f
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessors:15
+msgid ""
+"} with 'PostprocessorName': {'on': True} being the minimum needed to "
+"activate a postprocessor. If asked for unimplemented postprocessors, the "
+"factory will just skip it returning the valid ones"
+msgstr ""
+
+# 03c9b42722554e7fb4b338d1caa5da8c
+#: ../../../safe/postprocessors/postprocessor_factory.py:docstring of
+#: safe.postprocessors.postprocessor_factory.get_postprocessors:22
+msgid "{'Gender':GenderPostprocessors instance}"
+msgstr ""
+
+# f2a21d154bef47a9b4493f86b56432e9
+#: ../../source/api-docs/safe/postprocessors/postprocessor_factory.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

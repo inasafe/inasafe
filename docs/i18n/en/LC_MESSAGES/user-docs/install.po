@@ -1,0 +1,118 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 84532a53ceb546069178b8f0764250aa
+#: ../../source/user-docs/install.rst:7
+msgid "Installing InaSAFE"
+msgstr ""
+
+# de560f7bf3214242b397574a580bc9ae
+#: ../../source/user-docs/install.rst:10
+msgid ""
+"|project_name| is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so "
+"QGIS must be installed first."
+msgstr ""
+
+# c333eff83bfa46aaa75980d6459c172d
+#: ../../source/user-docs/install.rst:14
+msgid "Via QGIS Python Plugin Repository"
+msgstr ""
+
+# 1f25467e6b1a4798acd75cc97c797aab
+#: ../../source/user-docs/install.rst:16
+msgid "To install the |project_name|, use the plugin manager in QGIS::"
+msgstr ""
+
+# eb0987a14b0541489be851c5e159638d
+#: ../../source/user-docs/install.rst:20
+msgid ""
+"Then search for '|project_name|', select it and click the install button. "
+"The plugin will now be added to your plugins menu."
+msgstr ""
+
+# 4458a2f98e154505a24e1d763b5ddebd
+#: ../../source/user-docs/install.rst:24
+msgid "From Zip Archive"
+msgstr ""
+
+# 100ce322ad214f1cb3c35640071b6126
+#: ../../source/user-docs/install.rst:26
+msgid ""
+"This installation method is not recommended unless you have no internet "
+"access or wish to use a specific version of InaSAFE. Please install using "
+"the plugin repository described above rather."
+msgstr ""
+
+# d968f70689a9488b93d262dc1d749a17
+#: ../../source/user-docs/install.rst:30
+msgid ""
+"We make regular releases of the InaSAFE plugin and they are available at "
+"https://github.com/AIFDR/inasafe/downloads. Simply choose the most recent (i."
+"e. the one with the largest version number) and save it to your hard disk."
+msgstr ""
+
+# d398f8f24f24448297b91a61c6fafbb9
+#: ../../source/user-docs/install.rst:34
+msgid ""
+"Now extract the zip file into the QGIS plugins directory. Under windows the "
+"plugins directory is under :file:`c:\\\\Users\\\\<your username>\\\\.qgis\\"
+"\\python\\\\plugins`."
+msgstr ""
+
+# b2757383226f48e9847532c56cfb444f
+#: ../../source/user-docs/install.rst:38
+msgid ""
+"After extracting the plugin, it should be available as :file:`c:\\\\Users\\"
+"\\<your username>\\\\.qgis\\\\python\\\\plugins\\\\inasafe\\\\`."
+msgstr ""
+
+# 37a917eb90e94a92a85c45b5885d6174
+#: ../../source/user-docs/install.rst:41
+msgid ""
+"Mac and Linux users need to follow the same procedure but instead the plugin "
+"directory will be under your $HOME directory."
+msgstr ""
+
+# 5e840898cf114039b97f2eefb90f216a
+#: ../../source/user-docs/install.rst:44
+msgid ""
+"Once the plugin is extracted, start QGIS and enable it from the plugin "
+"manager. To do this open the plugin manager (:menuselection:`Plugins --> "
+"Manage plugins...`) and type :samp:`insafe` into the filter box. You should "
+"see the InaSAFE plugin appear in the list. Now tick the checkbox next to it "
+"to enable the plugin."
+msgstr ""
+
+# 04500bb6ebdc4c838533371397b1adde
+#: ../../source/user-docs/install.rst:55
+msgid "System Requirements"
+msgstr ""
+
+# 8f9cfedacd2d45c8a6bdc32b61d21ece
+#: ../../source/user-docs/install.rst:57
+msgid ""
+"A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X"
+msgstr ""
+
+# 5914f665b0244fffbc40cd1329bb089f
+#: ../../source/user-docs/install.rst:58
+msgid ""
+"The Open Source Geographic Information System QGIS (http://www.qgis.org). "
+"InaSAFE requires QGIS version 1.7 or newer."
+msgstr ""

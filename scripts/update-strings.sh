@@ -87,7 +87,7 @@ then
     echo "safe_qgis/i18n/inasafe_"$LOCALE".ts"
     # Note we don't use pylupdate with qt .pro file approach as it is flakey
     # about what is made available.
-    pylupdate4 -noobsolete $python_all -ts safe_qgis/i18n/inasafe_id.ts
+    pylupdate4 -noobsolete $python_all -ts safe_qgis/i18n/inasafe_${LOCALE}.ts
   done
 else
   echo "No need to edit any translation files (.ts) because no python files "

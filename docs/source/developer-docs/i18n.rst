@@ -16,13 +16,16 @@ Quick Reference
 
 The translation system works differently for different parts of the project:
 
-* Strings that appear in the InaSAFE graphical user interface (gui module). These include buttons, help strings, menu items etc
-* Strings that appear in the Python code which constitutes the rest of InaSAFE including the impact functions
+* Strings that appear in the InaSAFE graphical user interface (gui module).
+  These include buttons, help strings, menu items etc
+* Strings that appear in the Python code which constitutes the rest of
+  InaSAFE including the impact functions
 * Strings that appear in data and keywords used by InaSAFE
+* Strings that appear in this documentation and the web site
 
-Flagging strings for translation is done differently for these three cases
-and are treated separately in the next three sections. However, making and
-deploying the translations is unified and takes care of all three and
+Flagging strings for translation is done differently for these four cases
+and are treated separately in the next sections. However, making and
+deploying the translations is unified and takes care of all aspects and is
 described in section "Make translations" below.
 
 
@@ -31,7 +34,7 @@ Translation of strings in the gui module
 
 * Classes and anonymous functions that do not inherit from the class QObject
   should use the format
-  :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
+  :samp:`QCoreApplication.translate('InaSAFE', 'Translations loaded')`
 * Classes that inherit from QObject should use the form :samp:`self.tr('foo')`
 * String replacement arguments should be provided using the QString
   :samp:`arg` method. Example: :samp:`self.tr('Error: %1').arg(message)`
@@ -42,10 +45,12 @@ Translation of strings *not* in the gui such as impact functions
 
 * Import the gettext helper e.g::
 
-   from safe.common.utilities import ugettext as _
+   from safe.common.utilities import ugettext as tr
 
-   (Note that you must have the sequence "import ugettext" in the statement. It will not work as part of a multiple import such as import x, y, ugettext as _)
-* All strings should be wrapped using the _ helper e.g::
+   (Note that you must have the sequence "import ugettext" in the statement.
+   It will not work as part of a multiple import such as import x, y,
+   ugettext as tr)
+* All strings should be wrapped using the tr helper e.g::
 
     tr('Are there enough shelters available for %i people?') % displaced
 

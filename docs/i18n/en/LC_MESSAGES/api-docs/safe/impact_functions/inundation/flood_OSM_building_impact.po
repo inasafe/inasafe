@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 3925fa88957b4f7489e6904d2f502b7c
+#: ../../source/api-docs/safe/impact_functions/inundation/flood_OSM_building_impact.rst:6
+msgid "Module:  safe.impact_functions.inundation.flood_OSM_building_impact"
+msgstr ""
+
+# dbf68485b38447d4b9229aaffb55906c
+#: ../../../safe/impact_functions/inundation/flood_OSM_building_impact.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_OSM_building_impact.FloodBuildingImpactFunction:1
+msgid "Inundation impact on building data"
+msgstr ""
+
+# 5be8927cd152422982398c18fe5bd30f
+#: ../../../safe/impact_functions/inundation/flood_OSM_building_impact.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_OSM_building_impact.FloodBuildingImpactFunction:3
+msgid ""
+":author Ole Nielsen, Kristy van Putten # this rating below is only for "
+"testing a function, not the real one :rating 0 :param requires "
+"category=='hazard' and                     subcategory in ['flood', "
+"'tsunami']"
+msgstr ""
+
+# 160f0b409ba24ea0973e202769ead585
+#: ../../../safe/impact_functions/inundation/flood_OSM_building_impact.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_OSM_building_impact.FloodBuildingImpactFunction:8
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='structure' and                     layertype=='vector'"
+msgstr ""
+
+# 831bf36032d04885ad2f1a31f93a29ff
+#: ../../../safe/impact_functions/inundation/flood_OSM_building_impact.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_OSM_building_impact.FloodBuildingImpactFunction.run:1
+msgid "Flood impact to buildings (e.g. from Open Street Map)"
+msgstr ""
+
+# 6d200d30b9be42d4bdc2c3a72d4d95a3
+#: ../../source/api-docs/safe/impact_functions/inundation/flood_OSM_building_impact.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

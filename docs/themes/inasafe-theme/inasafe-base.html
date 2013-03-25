@@ -1,0 +1,169 @@
+{% extends "basic/layout.html" %}
+
+{# Sphinx also brings it's own jquery, but this one is too old for bootstrap.
+TODO get rid of the one from Sphinx #}
+{# we copied the bootstrap/jquery.js to the _static directory to override the
+sphinx jquery. The native
+jquery.js from sphinx is a 1.4 version, while bootstrap uses 1.8 version
+and two versions together clash (besides the bootstrap stuff, also the
+sphinx search stuff)  #}
+
+{#% set script_files = script_files + ['_static/bootstrap/js/jquery.js'] %#}
+{% set script_files = script_files + ['_static/bootstrap/js/bootstrap.js'] %}
+{% set script_files = script_files + ['_static/jQuery.equalHeights.js'] %}
+
+
+
+
+{% set css_files = css_files + ['_static/bootstrap/css/bootstrap.min.css'] %}
+<!-- theme.css BEFORE bootstrap-responsive -->
+{% set css_files = css_files + ['_static/theme.css'] %}
+{% set css_files = css_files + ['_static/bootstrap/css/bootstrap-responsive.min.css'] %}
+
+
+{% block extrahead %}
+{# without this part, the responsive-css for bootstrap kill some rules
+TODO: remove this, or make this obsolete ?? #}
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("{{ pathto('_static/img/logo.png', 1)}}");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 60px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = '{{current_page_name}}.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+    })
+
+    {#  load current page in a different language #}
+    function gotoLang(lang) {
+        var currentPage = '{{current_page_name}}.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+{# HTML5 shim, for IE6-8 support of HTML5 elements #}
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+{# Fav and touch icons #}
+<link rel="shortcut icon" href="{{ pathto('_static/img/favicon.ico', 1)}}">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="{{ pathto('_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png', 1)}}">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="{{ pathto('_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png', 1)}}">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="{{ pathto('_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png', 1)}}">
+<link rel="apple-touch-icon-precomposed"
+      href="{{ pathto('_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png', 1)}}">
+{% endblock %}
+{# overriding relbar1: NO relbar above the content we make it manually below #}
+{% block relbar1 %}{% endblock %}
+{% block content %}
+    {# bootstrap stuff from fluid.html example #}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                {# this is used to provide a menu toggle button on small screens #}
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>{# This is the main menu list #}
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="http://inasafe.org">InaSAFE Home</a></li>
+                        <li class="active"><a href="{{ pathto(master_doc) }}">Documentation</a>
+                        </li>
+                        <li><a href="https://github.com/AIFDR/inasafe/issues">Report
+                            an issue</a>
+                        </li>
+                        <li><a href="https://github.com/AIFDR/inasafe">Get the code</a>
+                        </li>
+                    </ul>
+                </div>{# end of nav-collapse #}
+            </div>
+        </div>
+        {# Manually implementing breadcrumbs because sphinx strips markup away when
+        doing it in macro #}
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                {# These are the prev | next | index links to the right #}
+                {% for rellink in rellinks %}
+                <li class="right"
+                {% if loop.first %}style="margin-right: 10px"{% endif %}>
+                <a href="{{ pathto(rellink[0]) }}"
+                   title="{{ rellink[1]|striptags }}"
+                   style="z-index:{{ loop.counter }};"
+                {{ accesskey(rellink[2]) }}>{{ rellink[3] }}</a>
+                </li>
+                {% endfor %}
+
+                {# Static breadcrumb first entry now #}
+                <li class="first">
+                    <a style="z-index:100;" href="{{ pathto(master_doc) }}"> {{
+                        shorttitle|e }} </a>
+                </li>
+                {# auto breadcrumbs on the left comes now #}
+                {% for parent in parents %}
+                <li>
+                    <a href="{{ parent.link|e }}"
+                       style="z-index: 1;" {# broken 4 z : {{ loop.revcounter }} #}
+                    {% if loop.last %}{{ accesskey("U") }}{% endif %}>
+                    {{ parent.title }}</a>
+                </li>
+                {% endfor %}
+                <li><a href="#">{{ title }}</a></li>
+            </ul>{# Breadcrumbs end #}
+        </div>{# Related div end #}
+    </div> {# Navbar ends #}
+
+    {# Default layout is a simple 12 spanned block with no sidebars #}
+    {# See layout.html template for sidebar implementation #}
+    {% block user_content %}
+        <div class="container">
+            <div class="hero-unit">
+                    {% block hero %} {% endblock %}
+            </div> {# span 12 ends #}
+            {% block body %} {% endblock %}
+        </div>{# fluid-container ends #}
+    {% endblock %}{# user-content block end #}
+    {# Now our standard footer #}
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact ole.moller.nielsen@gmail.com for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.
+        </div>
+    </div>
+{% endblock %}{# content block end #}
+{# Suppress bottom links #}`
+{%- block relbar2 %}{% endblock %}

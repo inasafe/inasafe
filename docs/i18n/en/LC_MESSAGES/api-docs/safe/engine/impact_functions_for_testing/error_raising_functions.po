@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 8b8fbc13b7df42b9825f1fece4350ca4
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/error_raising_functions.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.error_raising_functions"
+msgstr ""
+
+# b6f1e2805a4241ceb9df2c89b7061211
+# 59c479a8511f41d89bbc08fd7eee08ea
+#: ../../../safe/engine/impact_functions_for_testing/error_raising_functions.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.error_raising_functions.ExceptionRaisingImpactFunction:1
+#: safe.engine.impact_functions_for_testing.error_raising_functions.NoneReturningImpactFunction:1
+msgid "Risk plugin for error Rising"
+msgstr ""
+
+# 8be57beceb364c0e8cde91b159c7fa81
+# 6ac6536722504cb7b353e48950442e9c
+#: ../../../safe/engine/impact_functions_for_testing/error_raising_functions.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.error_raising_functions.ExceptionRaisingImpactFunction:4
+#: safe.engine.impact_functions_for_testing.error_raising_functions.NoneReturningImpactFunction:4
+msgid "layertype=='raster'"
+msgstr ""
+
+# b1b724ede318406497efe41c047fd9f8
+# 363d117d8b1b4c8e833fc774a5396679
+#: ../../../safe/engine/impact_functions_for_testing/error_raising_functions.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.error_raising_functions.ExceptionRaisingImpactFunction:6
+#: safe.engine.impact_functions_for_testing.error_raising_functions.NoneReturningImpactFunction:6
+msgid ""
+":param requires category=='exposure' and                     "
+"layertype=='raster'"
+msgstr ""
+
+# 9bd535a1d66e4e9a8c46b2500948d89f
+# fcdfb4d889ce405586d897b9eafe4c07
+#: ../../../safe/engine/impact_functions_for_testing/error_raising_functions.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.error_raising_functions.ExceptionRaisingImpactFunction.run:1
+#: safe.engine.impact_functions_for_testing.error_raising_functions.NoneReturningImpactFunction.run:1
+msgid "Risk plugin for tephra impact"
+msgstr ""
+
+# 39cb1664f9404a5db6c2838ebbc5dc46
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/error_raising_functions.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

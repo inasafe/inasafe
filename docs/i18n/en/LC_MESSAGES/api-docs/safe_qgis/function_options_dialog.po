@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# de47dc6d934d4f049e8e28b8700c534e
+#: ../../source/api-docs/safe_qgis/function_options_dialog.rst:6
+msgid "Module:  safe_qgis.function_options_dialog"
+msgstr ""
+
+# b5a47d0ee7aa41ca86b256652d8e1cb1
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Impact "
+"Functions Dialog.**"
+msgstr ""
+
+# 7f21e21624b94e6ea255e400004eb292
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 1828b38b853e4ef7a9532c0302966395
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 1b4696059f0a452ea6d8f1182f58c491
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog:1
+msgid "ConfigurableImpactFunctions Dialog for InaSAFE."
+msgstr ""
+
+# 90e03914a909431abbdd86c5ac53db9a
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.accept:1
+msgid "Override the default accept function"
+msgstr ""
+
+# 987fedd5cebe478e943df0d58653e066
+# e18f4c90bbdf4c95b2127f8454cb4815
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.accept:3
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildForm:3
+msgid "see http://tinyurl.com/pyqt-differences"
+msgstr ""
+
+# 2ebb02b823824ad1aea567e4886c69e6
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.accept:5
+msgid "Args:"
+msgstr ""
+
+# c91de9b05f094ade91d61681d5d3700e
+# 7a231eed336b4ef5ab902b6c18fc58a0
+# 28c310ae4dac4b3bbe4e4029b5822abe
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.accept:8
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildForm:8
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildPostProcessorForm:6
+msgid "not applicable"
+msgstr ""
+
+# b8f488ddb89b47ed92ef4d46d194e3db
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.bind:1
+msgid ""
+"Create a function that return the QWidget property of object and convert the "
+"value to type."
+msgstr ""
+
+# 510ea1fc3c0e4c39bd69f0fdbaf6868f
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.bind:5
+msgid "theObject - QWidget instance"
+msgstr ""
+
+# e3ec922b455e4464877eb1acd5e1ac2f
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.bind:6
+msgid "theProperty - the name of property inside QWidget instance"
+msgstr ""
+
+# ee29730ef7ac443784ba00f1fde46f0e
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.bind:7
+msgid "theType - a function to convert the property value"
+msgstr ""
+
+# dd5991ecffd549bd966e1cc41607831d
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.bind:9
+msgid "a function that return the property value of theObject"
+msgstr ""
+
+# 6ef29ef2859145fa9cd7187958a8923c
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildForm:1
+msgid "we build a form from impact functions parameter"
+msgstr ""
+
+# d9b1e9c953e548de974da09c3073ad18
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildForm:6
+msgid "params - parameters to be edited"
+msgstr ""
+
+# c3be2ab1026f43ebaccf26ee687442ef
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildPostProcessorForm:1
+msgid "Build Post Processor Tab"
+msgstr ""
+
+# fff865d93408431780c1e9d62c7b8d09
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildPostProcessorForm:4
+msgid "theParams - dictionary containing element of form"
+msgstr ""
+
+# 71f5189e28954ba9b94809bc2e057b60
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildWidget:1
+msgid ""
+"Create a new form element dynamically based from theValue type. The element "
+"will be inserted to theFormLayout."
+msgstr ""
+
+# 4e56162791e4482895076bf7f45c6d89
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildWidget:5
+msgid "theFormLayout: QFormLayout Mandatory a layout instance"
+msgstr ""
+
+# 53cfb84e3a5241baa4d722db48929daf
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildWidget:7
+msgid "function configurable parameters dictionary."
+msgstr ""
+
+# 2dd43ac590554a6cb770ee434df41242
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildWidget:9
+msgid "referenced by the key."
+msgstr ""
+
+# f4ad485568d648408cf940016b097e2c
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildWidget:12
+msgid "a function that return the value of widget"
+msgstr ""
+
+# 00f0bc3350214076878bdacee64f8dc6
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.buildWidget:15
+msgid "None"
+msgstr ""
+
+# 6280cecdb43048069c8afdf44baeae4b
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.parseInput:1
+msgid "Parse the input value of widget. Args:"
+msgstr ""
+
+# 81828b37f469431184a5f3e8f2cbe7d1
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.parseInput:3
+msgid "theInput: dictionary that holds all value of element"
+msgstr ""
+
+# 6b2cb5f07e6f4883ac6311038b11b376
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.parseInput:6
+msgid "a dictionary that can be consumed for impact functions."
+msgstr ""
+
+# c372697c4fb64577bc9b4559b75efe2d
+#: ../../../safe_qgis/function_options_dialog.py:docstring of
+#: safe_qgis.function_options_dialog.FunctionOptionsDialog.parseInput:10
+msgid "to suitable type."
+msgstr ""
+
+# f4098b6a60524ddbbd335244d4421233
+#: ../../source/api-docs/safe_qgis/function_options_dialog.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

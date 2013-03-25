@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 81f78310cc264611b77c1c477b410dcf
+#: ../../source/api-docs/safe/impact_functions/inundation/flood_population_evacuation.rst:6
+msgid "Module:  safe.impact_functions.inundation.flood_population_evacuation"
+msgstr ""
+
+# 25e8e403df20408dada7ebe89192d9c9
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation.FloodEvacuationFunction:1
+msgid "Impact function for flood evacuation"
+msgstr ""
+
+# cd3b23eb1b994434998785eab5c68532
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation.FloodEvacuationFunction:3
+msgid ""
+":author AIFDR :rating 4 :param requires category=='hazard' "
+"and                     subcategory in ['flood', 'tsunami'] "
+"and                     layertype=='raster' and                     unit=='m'"
+msgstr ""
+
+# 6896d077bc97417db08eb3d96fe2a93d
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation.FloodEvacuationFunction:7
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster'"
+msgstr ""
+
+# 611c3ed166c04a74be313bc2d91ac31e
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation.FloodEvacuationFunction.run:1
+msgid "Risk plugin for flood population evacuation"
+msgstr ""
+
+# a62b9c2e73a84cabbca3f52017c1de74
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation.FloodEvacuationFunction.run:5
+msgid ""
+"H: Raster layer of flood depth P: Raster layer of population data on the "
+"same grid as H"
+msgstr ""
+
+# b1a81316ad1e4bfa86f5ed94e4715ab0
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation.FloodEvacuationFunction.run:8
+msgid ""
+"Counts number of people exposed to flood levels exceeding specified "
+"threshold."
+msgstr ""
+
+# 7404cefb84324063b9ad36dcc4ba6140
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation.FloodEvacuationFunction.run:12
+msgid ""
+"Map of population exposed to flood levels exceeding the threshold Table with "
+"number of people evacuated and supplies required"
+msgstr ""
+
+# 9c563670bc174362b123fb5e10b6297a
+#: ../../source/api-docs/safe/impact_functions/inundation/flood_population_evacuation.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

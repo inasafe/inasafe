@@ -31,10 +31,11 @@ from safe.storage.utilities import (bbox_intersection,
 from safe.storage.core import read_layer
 
 from safe.impact_functions import (get_plugins,
-                                    get_function_title,
-                                    get_admissible_plugins,
-                                    is_function_enabled,
-                                    get_documentation)
+                                   get_function_title,
+                                   get_admissible_plugins,
+                                   is_function_enabled,
+                                   get_documentation)
+from safe.impact_functions.core import get_doc_string
 
 from safe.engine.core import calculate_impact
 
@@ -47,7 +48,8 @@ from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,
                                    ugettext as safe_tr,
-                                   get_free_memory)
+                                   get_free_memory,
+                                   format_int)
 from safe.common.converter import convert_mmi_data
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon

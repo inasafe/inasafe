@@ -1,0 +1,183 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:24+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# e35eb4f3840343e7bdb6905cb3e89690
+#: ../../source/user-docs/options.rst:7
+msgid "InaSAFE Options"
+msgstr ""
+
+# d509596def214350b7b4c3cab2cf7680
+#: ../../source/user-docs/options.rst:9
+msgid ""
+"The |project_name| plugin provides an options dialog which allows you to "
+"define various options relating to how InaSAFE will behave. The options "
+"dialog can be launched by clicking on the InaSAFE plugin toolbar's options "
+"icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE --> "
+"InaSAFE Options`."
+msgstr ""
+
+# 0f1962627bfb4372b986bed30048986f
+#: ../../source/user-docs/options.rst:18
+msgid "Then the dialog will appear, looking something like this:"
+msgstr ""
+
+# 29ced6834a43486294adca862b3dd03f
+#: ../../source/user-docs/options.rst:23
+msgid ""
+"You can click on the :guilabel:`Help` button at any time and it will open "
+"the help documentation browser to this page."
+msgstr ""
+
+# a0b3893e99a5496494146e97e9a0dd62
+#: ../../source/user-docs/options.rst:26
+msgid "The following options are available on the :guilabel:`Options Dialog`:"
+msgstr ""
+
+# 10ae8de39caf42f28feac5ea22d563ec
+#: ../../source/user-docs/options.rst:28
+msgid ""
+":guilabel:`Only show visible layers in the InaSAFE dock` : This option will "
+"determine whether **all** (when unchecked) hazard and impact layers should "
+"be listed in the InaSAFE dock's combo boxes. or (when checked) only visible "
+"layers."
+msgstr ""
+
+# bb1093720ce0439aaaa5f19a865ebcce
+#: ../../source/user-docs/options.rst:32
+msgid ""
+":guilabel:`Set QGIS layer name from 'title' in keywords` : This option will "
+"(when enabled) cause QGIS to name layers in the :guilabel:`Layers tree` "
+"using the `title` keyword in the layer's keywords file. If the layer has no "
+"'title' in its keywords, or it has no keywords at all, the normal QGIS "
+"behaviour for naming layers will apply."
+msgstr ""
+
+# c9ee43fe2a564466bd471d29e2764ea3
+#: ../../source/user-docs/options.rst:37
+msgid ""
+":guilabel:`Zoom to impact layer on scenario estimate completion` : This "
+"option will cause the map view to zoom in/out in order to completely contain"
+" the InaSAFE impact scenario map output when an analysis completes."
+msgstr ""
+
+# ed273803b3c34008a60f709be9e33372
+#: ../../source/user-docs/options.rst:40
+msgid ""
+":guilabel:`Hide exposure layer on scenario estimate completion` : This "
+"option will cause QGIS to turn off the exposure layer used when InaSAFE "
+"completes the current analysis. You can re-enable the layer visibility again"
+" by checking its checkbox in the legend."
+msgstr ""
+
+# 6d47ebafd49e4c43aaa311f02a1959bd
+#: ../../source/user-docs/options.rst:44
+msgid ""
+":guilabel:`Clip datasets to visible extent before analysis` : This option "
+"will cause QGIS to clip hazard and exposure layers to the currently visible "
+"extent on the map canvas."
+msgstr ""
+
+# 39247a0384a14ecf8d4b4df79e9e3f19
+#: ../../source/user-docs/options.rst:47
+msgid ""
+":guilabel:`When clipping, also clip features (e.g. will clip polygon "
+"smaller)` : This option will any polygons that extend beyond the analysis "
+"extents to be clipped so that they are contained by the analysis extents. "
+"For example if you have a flood hazard polygon layer that extends far beyond"
+" your area of interest, the flood polygons will be reduced so that only the "
+"part inside of your area of interested is retained. This can speed up "
+"processing time somewhat."
+msgstr ""
+
+# 53e9eeb79a444ab68ae095722c383b1f
+#: ../../source/user-docs/options.rst:54
+msgid ""
+":guilabel:`Help to improve InaSAFE by submitting errors to a remote server` "
+": This option, when enabled, will submit diagnostic information back to an "
+"InaSAFE project server in the event of any error taking place that we are "
+"able to trap. The information provided is useful to the InaSAFE team to "
+"improve the robustness of the software we produce and to spot trends in "
+"issues people encounter. Please note the warning text below this option "
+"which is included here in full: \"Note: The above setting requires a QGIS "
+"restart to disable / enable. Error messages and diagnostic information will "
+"be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions"
+" may not allow you to enable this feature - check with your network "
+"administrator if unsure. Although the data is submitted anonymously, the "
+"information contained in tracebacks may contain file system paths which "
+"reveal your identity or other information from your system.\""
+msgstr ""
+
+# 8193d77e4b934054a25df94d3d0c0fb4
+#: ../../source/user-docs/options.rst:67
+msgid ""
+":guilabel:`Show intermediate layers generated by postprocessing` : This "
+"option will cause QGIS to show the intermediate files generated by the "
+"postprocessing steps in the map canvas."
+msgstr ""
+
+# 5bcab7a471784497ad9d3313bf1a4718
+#: ../../source/user-docs/options.rst:70
+msgid ""
+":guilabel:`Default female ratio` : This is the default female to total "
+"population ratio used por generating Gender breakdowns"
+msgstr ""
+
+# 829f2d99cdbc444288b614cfbacdff6a
+#: ../../source/user-docs/options.rst:72
+msgid ""
+":guilabel:`Keyword cache for remote datasources` : This option is used to "
+"determine where keywords are stored for datasets where it is not possible to"
+" write them into a .keywords file. See :doc:`keywords` for more information "
+"on the keywords system."
+msgstr ""
+
+# c23a5af4a1924a868a878913bf2f8814
+#: ../../source/user-docs/options.rst:76
+msgid ""
+":guilabel:`Run analysis in separate thread (experimental)` : This option "
+"cause the analysis to be run in its own thread."
+msgstr ""
+
+# 24ee26d541734b6189ed6e66a0038c87
+#: ../../source/user-docs/options.rst:79
+msgid ""
+"It is not recommended to use the threaded implementation at this time. For "
+"this reason it is disabled by default."
+msgstr ""
+
+# 153b76291b964330923cb3eb343e205b
+#: ../../source/user-docs/options.rst:82
+msgid ""
+"Pressing :guilabel:`Cancel` at any time will close the options dialog and "
+"any changes made will **not** be applied."
+msgstr ""
+
+# ef6b509cbee54d39b4bd3b904df774b4
+#: ../../source/user-docs/options.rst:85
+msgid ""
+"Pressing :guilabel:`Ok` at any time will close the options dialog and any "
+"changes made **will** be applied immediately."
+msgstr ""
+
+# 8234d833ead844a096640c620e555e35
+#: ../../source/user-docs/options.rst:88
+msgid ""
+"The exact button order shown on this dialog may differ depending on your "
+"operating system or desktop environment."
+msgstr ""

@@ -30,7 +30,7 @@ from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 isLayerPolygonal,
+                                 isPolygonLayer,
                                  getLayerAttributeNames,
                                  getDefaults)
 
@@ -720,7 +720,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.lblLayerName.setText('')
 
-        if not isLayerPolygonal(self.layer):
+        if not isPolygonLayer(self.layer):
             self.radPostprocessing.setEnabled(False)
 
         #adapt gui if we are in postprocessing category

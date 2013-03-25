@@ -1,0 +1,104 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 516d806f3d7c407a9ef02b8e12271c6e
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/earthquake_impact_on_women.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.earthquake_impact_on_women"
+msgstr ""
+
+# 95a521cb919c4b939b2ff9ec197d2c2a
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:1
+msgid "Earthquake Impact on Women"
+msgstr ""
+
+# 5ae5fd309b3943d4ba153c1e969eaf46
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:3
+msgid ""
+"This model is proof of concept only and assumes an input dataset with "
+"gridded counts of females."
+msgstr ""
+
+# e3f37142b7dd4fc7a9867969ab14e513
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:6
+msgid ""
+"It also assume the existence of the likely ration of pregnancies in the "
+"female population."
+msgstr ""
+
+# 59c9c7798f8d4e7e959a43a382ded95d
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:9
+msgid ""
+"Some stats are derived from SP2010_agregat_data_perProvinsin.dbf from http://"
+"dds.bps.go.id/eng/"
+msgstr ""
+
+# 438035b5c90c40cfbc4337edddd63191
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:13
+msgid ":author Ole Nielsen :rating 1"
+msgstr ""
+
+# aa0362d60c934c218e8463ac6fc26b2b
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:16
+msgid ""
+":param requires category=='hazard' and                     "
+"subcategory=='earthquake' and                     layertype=='raster' "
+"and                     unit=='MMI'"
+msgstr ""
+
+# 2da7ac1b586345a1905b426419f0d9d7
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction:18
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster'"
+msgstr ""
+
+# 25ccc82f28304715adc81e3d405a274b
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction.run:1
+msgid "Gender specific earthquake impact model"
+msgstr ""
+
+# 09b8690b4a8b494596cda31fd80f8bb9
+#: ../../../safe/engine/impact_functions_for_testing/earthquake_impact_on_women.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.earthquake_impact_on_women.EarthquakeWomenImpactFunction.run:5
+msgid ""
+"H: Raster layer of MMI ground shaking P: Raster layer of population density"
+msgstr ""
+
+# 5b4afd2ec9344502abc1154473650f06
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/earthquake_impact_on_women.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

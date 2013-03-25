@@ -1,0 +1,961 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# e49e215bd38e492c8c499f536d4536a2
+#: ../../source/api-docs/safe_qgis/dock.rst:6
+msgid "Module:  safe_qgis.dock"
+msgstr ""
+
+# 871eed2c393f4a35b5a271f8b16af6f5
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**"
+msgstr ""
+
+# d94f293ecdc64d21acbf36f36c536e91
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock:3
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# bbafbc97227c4c29b237934982e54231
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock:5
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# d8fcf9766add4d03b3e447953e13610c
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock:1
+msgid "Dock implementation class for the inaSAFE plugin."
+msgstr ""
+
+# 74ae5f948fa94028b065df631986c52f
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.accept:1
+msgid "Execute analysis when run button is clicked."
+msgstr ""
+
+# 8201af825be04491a4571bbc14111acc
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.acceptCancelled:1
+msgid "Deal with user cancelling post processing option dialog."
+msgstr ""
+
+# ebd5152cf9f64d51a7dd06f6f295d1ba
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.acceptCancelled:4
+msgid "theOldKeywords: dict - keywords dictionary to reinstate."
+msgstr ""
+
+# 4024f67041674ca4a7f0cc8ec5e4383c
+# 707ee3b64cb74275a069b6cd94d5392e
+# 9f1795b1710e4306bbded8d5a5f5d39d
+# 131df6c57010407bb17ec28a2aae6a94
+# b3e3fd129b99426490607ba11812efdf
+# 775c252ac670445bad2ab354b6a1b2e4
+# f3bf52b35cf24f2fbb3ca23257e865b3
+# af6867b248e746ed837f90b15dedcb73
+# 28626f68b577440584f83219451b347b
+# 4343a89e86364275ade39b5bd261a7cd
+# a808c150127e493a8320c4a1cb8fcf68
+# f38421782229442880d77596b5756c7a
+# 633ab481561e4ba0892ab3e4e905c133
+# 037017acb3e3423c9b0352e46dc59b58
+# b068ae921bca4a5aa62e3b8161a0ecb9
+# 2d7e7e3fa5054b24bf4bb19d9be8d311
+# 28294670b1ec4332a02ffe125adc9f4b
+# 7b1d7efedad54331894898c3ee63acf1
+# 9c2d87a6113d4b2daf6479eb6ffa5d70
+# bf2e4f4e94574cc0b75a84d11d4bc00c
+# 709fb156eac740ef9f4b6538776b3f4e
+# 470795e7f98a47ce84dc4164946ffa48
+# 903e99c630694534a9ebce616d93dc52
+# 3ae0a1cf6d97401d9064da626119486c
+# 5af7c794d9554b12b752f5e19f970867
+# 7fa32a15a2634c2197fedee78f7f0786
+# e34fe46e3fcc4ccfa3c8fb9c78c9ed95
+# f4f491f56e8f4025928c66bca9d389b0
+# 933782af719f4c5cb3f9e4a3611c51f9
+# 81f175f647a446ffb1f6718ac04624e6
+# afda14392c31434a82ef819b6d0b9faf
+# 1b39a8876cef4e7d905be01654aa7ee3
+# 4d2c7734eb884732b02c4147cf40a542
+# d0b003a92f7e4648ba525219ef0d1cb3
+# caf3af24bbd34caca907ae67cb23b761
+# d208b7d92da242f28adac96f076b4be7
+# e11933e0cb224dadb724e0dfb3b11811
+# 0d9ae26df1cf44d5b9fec7046e4125bb
+# 46acfaca0dcc42c7804aa8105399f4eb
+# 0a40ffa0e6f94965baab01e1752a5537
+# 6e437e51d0c8487e864bbd8eeed2fe44
+# 52b65077e1994c20a3f2cb7a7dd17f58
+# 12abd8c3d1c844fc99fe76633bb7b3b0
+# 9477d8b4166e45ccbc7050f963b1e5ac
+# 41be38c26dd049c4b03260dd237ca3cf
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.acceptCancelled:7
+#: safe_qgis.dock.Dock.acceptCancelled:10
+#: safe_qgis.dock.Dock.canvasLayersetChanged:8
+#: safe_qgis.dock.Dock.canvasLayersetChanged:11
+#: safe_qgis.dock.Dock.checkMemoryUsage:6
+#: safe_qgis.dock.Dock.connectLayerListener:7
+#: safe_qgis.dock.Dock.connectLayerListener:10
+#: safe_qgis.dock.Dock.connectLayerListener:13
+#: safe_qgis.dock.Dock.disconnectLayerListener:7
+#: safe_qgis.dock.Dock.disconnectLayerListener:10
+#: safe_qgis.dock.Dock.disconnectLayerListener:13
+#: safe_qgis.dock.Dock.displayHtml:7 safe_qgis.dock.Dock.displayHtml:10
+#: safe_qgis.dock.Dock.extentToGeoArray:12
+#: safe_qgis.dock.Dock.getClipParameters:4
+#: safe_qgis.dock.Dock.getExposureLayer:7
+#: safe_qgis.dock.Dock.getExposureLayer:13
+#: safe_qgis.dock.Dock.getFunctionID:11 safe_qgis.dock.Dock.getFunctions:6
+#: safe_qgis.dock.Dock.getHazardLayer:7 safe_qgis.dock.Dock.getHazardLayer:13
+#: safe_qgis.dock.Dock.getLayers:14
+#: safe_qgis.dock.Dock.getPostProcessingLayer:7
+#: safe_qgis.dock.Dock.getPostProcessingLayer:15
+#: safe_qgis.dock.Dock.optimalClip:12 safe_qgis.dock.Dock.postProcess:6
+#: safe_qgis.dock.Dock.postProcess:9
+#: safe_qgis.dock.Dock.postProcessingTables:4 safe_qgis.dock.Dock.printMap:4
+#: safe_qgis.dock.Dock.printMap:6 safe_qgis.dock.Dock.readSettings:5
+#: safe_qgis.dock.Dock.readSettings:7 safe_qgis.dock.Dock.readSettings:9
+#: safe_qgis.dock.Dock.restoreFunctionState:6
+#: safe_qgis.dock.Dock.restoreState:4 safe_qgis.dock.Dock.restoreState:6
+#: safe_qgis.dock.Dock.saveState:5 safe_qgis.dock.Dock.saveState:7
+#: safe_qgis.dock.Dock.setupCalculator:4 safe_qgis.dock.Dock.setupCalculator:7
+#: safe_qgis.dock.Dock.showBusy:11 safe_qgis.dock.Dock.spawnError:11
+#: safe_qgis.dock.Dock.spawnError:14
+#: safe_qgis.dock.Dock.toggleAggregationCombo:9
+#: safe_qgis.dock.Dock.viewportGeoArray:12
+msgid "None"
+msgstr ""
+
+# 12e59a7568734ea5ad82bf5a4bd73934
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.canvasLayersetChanged:1
+msgid "A helper slot to update dock combos if canvas layerset changes."
+msgstr ""
+
+# 0d80385dacb04080ab179995e2023e79
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.canvasLayersetChanged:3
+msgid ""
+"Activated when the layerset has been changed (e.g. one or more layer "
+"visibilities changed). If self.showOnlyVisibleLayersFlag is set to False "
+"this method will simply return, doing nothing."
+msgstr ""
+
+# e22f0bd09e7d42a5a37e1f7a790cf56b
+# 279dc39dbee44bd5b7c50db18315f8dc
+# cda3bf8e79e34cffa33427f8fa4543c1
+# bdae9f2653c749bdbb55fb799ffb8262
+# 3206657ae8bf481bbdf3aaf82c09d048
+# 5468125d3b3c4e57b35cb40c37533e7a
+# 62799f3295a343e4b4ef0a784d98cd28
+# 6871dcd5aa59463e88a9b19dd4231572
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.canvasLayersetChanged:14
+#: safe_qgis.dock.Dock.optimalClip:18
+#: safe_qgis.dock.Dock.preparePolygonLayerForAggr:15
+#: safe_qgis.dock.Dock.printMap:8 safe_qgis.dock.Dock.restoreFunctionState:8
+#: safe_qgis.dock.Dock.restoreState:8 safe_qgis.dock.Dock.saveState:9
+#: safe_qgis.dock.Dock.showBusy:14
+msgid "Any exceptions raised by the InaSAFE library will be propagated."
+msgstr ""
+
+# b57637ab64e94098b7322b2a54f824a1
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.checkMemoryUsage:1
+msgid "Slot to check if analysis is feasible when extents change."
+msgstr ""
+
+# 570bb4416329419c817836d7d8396cbe
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.checkMemoryUsage:3
+msgid "For simplicity, we will do all our calcs in geocrs."
+msgstr ""
+
+# e6d78452aa29445d81be210b1652d38b
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.checkMemoryUsage:10
+msgid "for a single raster and if this is likely to result in an error."
+msgstr ""
+
+# e1fe8527e91a4477b090edf4bcc8dc82
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.checkMemoryUsage:13
+msgid ""
+"The dock is also updated with a message indicating if the memory usage is "
+"likely to be too much for the current system."
+msgstr ""
+
+# fabadb88c48440b3b41db43e9b8534db
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.completed:1
+msgid "Slot activated when the process is done."
+msgstr ""
+
+# 1a4f7fd18fa64ac1a8ec1ce1d196a459
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.connectLayerListener:1
+msgid ""
+"Establish a signal/slot to listen for changes in the layers loaded in QGIS."
+msgstr ""
+
+# 89eab6a5233e4ecab068c3be79520003
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.connectLayerListener:4
+msgid "..seealso:: disconnectLayerListener"
+msgstr ""
+
+# e78c596781d6420182a5738fff0649b2
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.disableBusyCursor:1
+msgid "Disable the hourglass cursor"
+msgstr ""
+
+# 7fee4858f4b44e86aa362739ca1047b8
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.disconnectLayerListener:1
+msgid ""
+"Destroy the signal/slot to listen for changes in the layers loaded in QGIS."
+msgstr ""
+
+# 6a570bf458ea40528e6a867e89388400
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.disconnectLayerListener:4
+msgid "..seealso:: connectLayerListener"
+msgstr ""
+
+# 138ed1115bb8463db898f9a18636470b
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.displayHtml:1
+msgid "Apply header and footer to html snippet and display in wvResults."
+msgstr ""
+
+# c17c5d00b0ae48059f543cd4f6e14121
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.displayHtml:4
+msgid "theMessage: An html snippet. Do not include head and body elements."
+msgstr ""
+
+# 86151c0b26fc4c83b1f9170e3ef070dc
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.enableBusyCursor:1
+msgid "Set the hourglass enabled."
+msgstr ""
+
+# fbb64be5551a4f8b8f831a9aa921dba9
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.extentToGeoArray:1
+msgid "Convert the supplied extent to geographic and return as an array."
+msgstr ""
+
+# 2eb45275a6de452e80677b59684cb5dd
+# 2dd636dcf75d4e7297fc7e6cd1066a36
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.extentToGeoArray:4
+#: safe_qgis.dock.Dock.viewportGeoArray:4
+msgid "theExtent: QgsRectangle defining a spatial extent in any CRS"
+msgstr ""
+
+# ccef1a3ef0704efd850f43b717a1830e
+# 0411c31abd504df7a4768d176d911f51
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.extentToGeoArray:5
+#: safe_qgis.dock.Dock.viewportGeoArray:5
+msgid "theSourceCrs: QgsCoordinateReferenceSystem for theExtent."
+msgstr ""
+
+# 3da615acfd274845969a36903d813c6b
+# e05a47024c9e44b893c4eb90deb8f765
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.extentToGeoArray:9
+#: safe_qgis.dock.Dock.viewportGeoArray:9
+msgid "coordinates provided are in Geographic / EPSG:4326."
+msgstr ""
+
+# cf08d37ca41b4f17834e5dc243912003
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:1
+msgid "Calculate the best extents to use for the assessment."
+msgstr ""
+
+# 57a14ef4e5a447aa9ae44086465de5f5
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:8
+msgid ""
+"should be written to the exposure layer. For example if rescaling is "
+"required for a raster, the original resolution can be added to the keywords "
+"file."
+msgstr ""
+
+# ced6dbc80ffb4f319eaef19f88aac621
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:12
+msgid ""
+"extent that can be used given the input datasets and the current viewport "
+"extents."
+msgstr ""
+
+# c2dc1354a46241c6a9ee0cafbef0a407
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:15
+msgid "hazard and exposure rasters."
+msgstr ""
+
+# 51b6b65272e34aa4b489a0a73516660a
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:16
+msgid "myExposureLayer: QgsMapLayer - layer representing exposure."
+msgstr ""
+
+# 9a5a123d79d24e87aa6d2765391f6498
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:18
+msgid "intersection of the two input layers extents and the viewport."
+msgstr ""
+
+# 6277946be1674a3ab71a3dcff11a918a
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:19
+msgid "myHazardLayer: QgsMapLayer - layer representing hazard."
+msgstr ""
+
+# 39b72557c43049a18f371719cf8d365b
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getClipParameters:22
+msgid "InsufficientOverlapError"
+msgstr ""
+
+# f113ddef03ea40d48103a9ed9306036c
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getExposureLayer:1
+msgid "Get the QgsMapLayer currently selected in the exposure combo."
+msgstr ""
+
+# 896de54237fb4342baab2d090ffd396e
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getExposureLayer:3
+msgid ""
+"Obtain QgsMapLayer id from the userrole of the QtCombo for exposure and "
+"return it as a QgsMapLayer."
+msgstr ""
+
+# dd72817bd5914f059ac5c1ce8794c546
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getExposureLayer:10
+msgid "QgsMapLayer - currently selected map layer in the exposure combo."
+msgstr ""
+
+# 8045e8fe6cb14d0aa97dddfcd48d3889
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getFunctionID:1
+msgid ""
+"Get the canonical impact function ID for the currently selected function (or "
+"the specified combo entry if theIndex is supplied. Args:"
+msgstr ""
+
+# 51a172f04787404899a6c7d68f68a0ad
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getFunctionID:5
+msgid ""
+"want the function id for. Defaults to None. If not set / None the currently "
+"selected combo item's function id will be returned."
+msgstr ""
+
+# 4a37e0fc5e2e425fb1e879b256a3e580
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getFunctionID:9
+msgid "myFunctionID str - String that identifies the function"
+msgstr ""
+
+# b356646831fd4a069eeaa2fa39c8d5a4
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getFunctions:1
+msgid "Obtain a list of impact functions from the impact calculator."
+msgstr ""
+
+# 55b8158edb354241a4c75ae6c43d47b5
+# 6afc8811cb41447f89f4172a2b628d7d
+# ab4af8b41f6948f1932e5404d243a1e1
+# d482dd9f0f6c4c5aa302726888e74ec9
+# 2b55bf006dfd46fbb46770e6e59cdb29
+# 945f2828179f401f99e9c52534a0fa50
+# c80c8f0dce4049ea8eebe851c35dabe7
+# 91238369532642a8be6ff7f6bb40fc68
+# dd8be9693fbc408ba0b74acc9996e65e
+# 22340c653d7b4217a6045a9622b44468
+# ba023bba311644d3aab87bb7e4142329
+# eb2e01c463bc403683d4b76e2f52a8b7
+# 49b91b7828344567a68129909146fafc
+# a2575dd58edb439ea210d751131d8b5f
+# 50fe2550ede04b4daf4a50f0ccaae3eb
+# 218f9348bbc54f26b0d291b12cfd0457
+# 14723ad841f044668219bdd78f4ea76e
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getFunctions:4
+#: safe_qgis.dock.Dock.getLayers:12 safe_qgis.dock.Dock.layerChanged:10
+#: safe_qgis.dock.Dock.on_cboExposure_currentIndexChanged:8
+#: safe_qgis.dock.Dock.on_cboExposure_currentIndexChanged:11
+#: safe_qgis.dock.Dock.on_cboFunction_currentIndexChanged:6
+#: safe_qgis.dock.Dock.on_cboFunction_currentIndexChanged:9
+#: safe_qgis.dock.Dock.on_cboHazard_currentIndexChanged:8
+#: safe_qgis.dock.Dock.on_cboHazard_currentIndexChanged:11
+#: safe_qgis.dock.Dock.on_toolFunctionOptions_clicked:4
+#: safe_qgis.dock.Dock.on_toolFunctionOptions_clicked:7
+#: safe_qgis.dock.Dock.setFunctionOptionsStatus:7
+#: safe_qgis.dock.Dock.setFunctionOptionsStatus:9
+#: safe_qgis.dock.Dock.setOkButtonStatus:4
+#: safe_qgis.dock.Dock.setOkButtonStatus:6
+#: safe_qgis.dock.Dock.toggleAggregationCombo:7
+#: safe_qgis.dock.Dock.validate:11
+msgid "None."
+msgstr ""
+
+# c857468a1188412fbfb63a1e5fa1fcf1
+# 5f13ae7a44914414b822cace6dc3648a
+# 8664d76ea6fd4fea9b0780408debc1c3
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getFunctions:8
+#: safe_qgis.dock.Dock.getLayers:16
+#: safe_qgis.dock.Dock.toggleAggregationCombo:11
+msgid "no"
+msgstr ""
+
+# 5f536499850444c888dff4843c20b4fb
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getHazardLayer:1
+msgid "Get the QgsMapLayer currently selected in the hazard combo."
+msgstr ""
+
+# 6d4a481118f64a88bca79aa7cc31e849
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getHazardLayer:3
+msgid ""
+"Obtain QgsMapLayer id from the userrole of the QtCombo for hazard and return "
+"it as a QgsMapLayer."
+msgstr ""
+
+# 41fa1c1f4fad45ddbf75de365e4a8345
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getHazardLayer:10
+msgid "QgsMapLayer - currently selected map layer in the hazard combo."
+msgstr ""
+
+# 9bcb3c2f2ce24b4a902254795f473819
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getLayers:1
+msgid "Helper function to obtain a list of layers currently loaded in QGIS."
+msgstr ""
+
+# 2adfd6dee3234a90b0146d3cfa4f2a6b
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.getLayers:3
+msgid ""
+"On invocation, this method will populate cboHazard, cboExposure and "
+"cboAggregate on the dialog with a list of available layers. Only "
+"**singleband raster** layers will be added to the hazard layer list,only "
+"**point vector** layers will be added to the exposure layer list and Only "
+"**polygon vector** layers will be added to the aggregate list"
+msgstr ""
+
+# 3f4541118bdd4da7abfd6b8cb440a281
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getPostProcessingLayer:1
+msgid "Get the QgsMapLayer currently selected in the post processing combo."
+msgstr ""
+
+# 3ca1ccb2917f43468e884b803f88b3a9
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getPostProcessingLayer:3
+msgid ""
+"Obtain QgsMapLayer id from the userrole of the QtCombo for post processing "
+"combo return it as a QgsMapLayer."
+msgstr ""
+
+# 00d4123f1af243629f0b428dc594adce
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getPostProcessingLayer:11
+msgid "disabled, otherwise:"
+msgstr ""
+
+# b8feb9424def4323a065a594066a5c2b
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.getPostProcessingLayer:12
+msgid "QgsMapLayer - a polygon layer."
+msgstr ""
+
+# 293fa1a0d9b94636b5a35ed71c3ca306
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.hideBusy:1
+msgid "A helper function to indicate processing is done."
+msgstr ""
+
+# 4b1840be7029497b9564e37d7c257259
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.htmlFooter:1
+msgid "Get a standard html footer for wrapping content in."
+msgstr ""
+
+# 0549d7a2bdff4dfa9a71564faf9075f8
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.htmlHeader:1
+msgid "Get a standard html header for wrapping content in."
+msgstr ""
+
+# de210f663843495b883c5580d1519326
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.initializePostProcessor:1
+msgid "Initializes and clears self._postProcessingOutput."
+msgstr ""
+
+# 7873ecb7deb44436bafc83d8c2915461
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.initializePostProcessor:3
+msgid "Needs to run at the end of postProcess."
+msgstr ""
+
+# cfabbc1a55a9437eb188884f7f39b4a0
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.initializePostProcessor:5
+msgid "Args: None Returns: None"
+msgstr ""
+
+# 18b6c3bb292442a08811945aabca7804
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layerChanged:1
+msgid ""
+"Handler for when the QGIS active layer is changed. If the active layer is "
+"changed and it has keywords and a report, show the report.."
+msgstr ""
+
+# 2c58b9548ea7489cb2eac75633604941
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layerChanged:8
+msgid "theLayer - the QgsMapLayer instance that is now active.."
+msgstr ""
+
+# 6eda54851ce94b24979a86f43506a05d
+# 59e5318671d34d6794767fc885bbd5d6
+# f073a34aaca646d58bba3ca0c9acae01
+# 133b9c20ec454d58aa06692a7e75289d
+# dc0ed65fa60443698533a0d02e5f34f6
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layerChanged:12
+#: safe_qgis.dock.Dock.on_cboFunction_currentIndexChanged:12
+#: safe_qgis.dock.Dock.on_toolFunctionOptions_clicked:10
+#: safe_qgis.dock.Dock.setFunctionOptionsStatus:11
+#: safe_qgis.dock.Dock.setOkButtonStatus:8
+msgid "no exceptions explicitly raised."
+msgstr ""
+
+# 8720158a96794c5da51b7d1d4f1d45ac
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layerWasAdded:1
+msgid "QGIS <= 1.7.x slot to notify us when a layer was added."
+msgstr ""
+
+# 375138c3a7944ca5a84b9eb6244c0424
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layerWasAdded:3
+msgid ""
+"Slot for the old (pre QGIS 1.8 api) to notify us when a layer is added. This "
+"is suboptimal since if many layers are added this slot gets called multiple "
+"times. This slot simply delegates to getLayers and is only implemented here "
+"to make the connections between the different signals and slots clearer and "
+"better documented."
+msgstr ""
+
+# 0537f08f6dcb4ea1a080eaecd70100ad
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.layerWasAdded:11
+msgid "eventually."
+msgstr ""
+
+# aeb132c072f34883ae437d39a0d3ee9e
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.layerWillBeRemoved:1
+msgid ""
+"Slot for the old (pre QGIS 1.8 api) to notify us when a layer is removed. "
+"This is suboptimal since if many layers are removed this slot gets called "
+"multiple times. This slot simply delegates to getLayers and is only "
+"implemented here to make the connections between the different signals and "
+"slots clearer and better documented."
+msgstr ""
+
+# 2760e0fab9164c95bcdc3ebef44d731b
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layersAdded:1
+msgid "QGIS 1.8+ slot to notify us when a group of layers are added."
+msgstr ""
+
+# db4bd47f1a524a4faf834e173b7eee95
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layersAdded:3
+msgid ""
+"Slot for the new (QGIS 1.8 and beyond api) to notify us when a group of "
+"layers is are added. This is optimal since if many layers are added this "
+"slot gets called only once. This slot simply delegates to getLayers and is "
+"only implemented here to make the connections between the different signals "
+"and slots clearer and better documented."
+msgstr ""
+
+# 0af72aba6c5740f7a439db287d0459a7
+# 5258c16015ea4bbb91476d8bfa37ba47
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.layersAdded:10
+#: safe_qgis.dock.Dock.layersWillBeRemoved:7
+msgid "Requires QGIS 1.8 and better api."
+msgstr ""
+
+# 6cde36ffd72845c7a651ecf8a87a41da
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.layersWillBeRemoved:1
+msgid ""
+"QGIS 1.8+ slot to notify us when a group of layers are removed. This is "
+"optimal since if many layers are removed this slot gets called only once. "
+"This slot simply delegates to getLayers and is only implemented here to make "
+"the connections between the different signals and slots clearer and better "
+"documented."
+msgstr ""
+
+# ffdb1ea9f5e34a0ab89c585cca186d9d
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.on_cboExposure_currentIndexChanged:1
+msgid "Automatic slot executed when the Exposure combo is changed."
+msgstr ""
+
+# abb5113f2cab44c899c6324e1a780a10
+# 27a1d3df910142ecb5021f1539a43947
+# e70ba5972297457798176f9a0c743b85
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.on_cboExposure_currentIndexChanged:3
+#: safe_qgis.dock.Dock.on_cboFunction_currentIndexChanged:3
+#: safe_qgis.dock.Dock.on_cboHazard_currentIndexChanged:3
+msgid "This is here so that we can see if the ok button should be enabled."
+msgstr ""
+
+# e705659318cd4146b7e397b1a42563d9
+# b368e8481a4742fea6be5454b49d5d02
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.on_cboExposure_currentIndexChanged:5
+#: safe_qgis.dock.Dock.on_cboHazard_currentIndexChanged:5
+msgid "Don't use the @pyqtSlot() decorator for autoslots!"
+msgstr ""
+
+# bc1b514c4d0945f9b8eb1c49926fdaff
+# f8a475cc6c204e76bddef9d239acfee9
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.on_cboExposure_currentIndexChanged:14
+#: safe_qgis.dock.Dock.on_cboHazard_currentIndexChanged:14
+msgid "No exceptions explicitly raised."
+msgstr ""
+
+# 7d4fbe1f070b42389cad29ebd07c5718
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.on_cboFunction_currentIndexChanged:1
+msgid "Automatic slot executed when the Function combo is changed."
+msgstr ""
+
+# 23df8c138f4745caa7af2d31411d3588
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.on_cboHazard_currentIndexChanged:1
+msgid "Automatic slot executed when the Hazard combo is changed."
+msgstr ""
+
+# 35ec2ca533a14192a05a8933bc790a6e
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.on_toolFunctionOptions_clicked:1
+msgid "Automatic slot executed when toolFunctionOptions is clicked."
+msgstr ""
+
+# a8b51ab3aea2411c89a8147d427f45e3
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.optimalClip:1
+msgid ""
+"A helper function to perform an optimal clip of the input data. Optimal "
+"extent should be considered as the intersection between the three inputs. "
+"The inasafe library will perform various checks to ensure that the extent is "
+"tenable, includes data from both etc."
+msgstr ""
+
+# 7fb94f7efcaa47a193535aaddab6f83c
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.optimalClip:7
+msgid ""
+"The result of this function will be two layers which are clipped and "
+"resampled if needed, and in the EPSG:4326 geographic coordinate reference "
+"system."
+msgstr ""
+
+# a8cea7fca5054d7db6eb308042776dad
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.optimalClip:14
+msgid ""
+"A two-tuple containing the paths to the clipped hazard and exposure layers."
+msgstr ""
+
+# 184cc0998a9744e1a45ebf91d60bcb47
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.postProcess:1
+msgid "Run all post processing steps."
+msgstr ""
+
+# d03acc3eb6044ed6b81f7d941a50ac72
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.postProcess:3
+msgid "Called on self.runner SIGNAL('done()') starts all postprocessing steps"
+msgstr ""
+
+# f64c94dfea2f448b8dc206a319703ed9
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.postProcessingTables:1
+msgid "Parses the postprocessing output as one table per postprocessor."
+msgstr ""
+
+# d40748475d414e9c96c52da9fc5511b8
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.postProcessingTables:7
+msgid "str - a string containing the html"
+msgstr ""
+
+# 59594e39d1bc44269d640ce980683d18
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.preparePolygonLayerForAggr:1
+msgid ""
+"A helper function to align the polygons to the postprocLayer polygons. If "
+"one input polygon is in two or more postprocLayer polygons then it is "
+"divided so that each part is within only one of the postprocLayer polygons. "
+"this allows to aggregate in postrocessing using centroid in polygon."
+msgstr ""
+
+# 0e6aefce86c74a6eacb208e84c855241
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.preparePolygonLayerForAggr:7
+msgid "The function assumes EPSG:4326 but no checks are enforced"
+msgstr ""
+
+# 81d96f13550042ce97ba1622bc248016
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.preparePolygonLayerForAggr:10
+msgid "theLayerFilename str of the file to be processed"
+msgstr ""
+
+# af1e05c43191407d9bfab25c38069c86
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.preparePolygonLayerForAggr:12
+msgid "str of the processed file"
+msgstr ""
+
+# 65aeba75c8fe431ab92fb9f378ef2a75
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.printMap:1
+msgid "Slot to print map when print map button pressed."
+msgstr ""
+
+# 8a1be23bc5974c2fac648b250ef529c7
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.readImpactLayer:1
+msgid "Helper function to read and validate layer."
+msgstr ""
+
+# 60f6dddc28f74409aac55a48a7243091
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.readImpactLayer:4
+msgid "myEngineImpactLayer: Layer object as provided by InaSAFE engine."
+msgstr ""
+
+# 736f667cc5934a74835afd2dee4db105
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.readImpactLayer:7
+msgid "validated QGIS layer or None"
+msgstr ""
+
+# 5cf4ec228ad74eafb2da2770d2c4f4bb
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.readImpactLayer:10
+msgid "Exception if layer is not valid"
+msgstr ""
+
+# c87324006a3e46679a86eb0e869e9bc4
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.readSettings:1
+msgid ""
+"Set the dock state from QSettings. Do this on init and after changing "
+"options in the options dialog."
+msgstr ""
+
+# ab77d56f0ecf482a8cbba51c6cb3cff5
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.restoreFunctionState:1
+msgid "Restore the function combo to a known state."
+msgstr ""
+
+# 0ba89e4070fb46e08191047b56ece036
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.restoreFunctionState:4
+msgid "theOriginalFunction - name of function that should be selected"
+msgstr ""
+
+# d6b41c5f42634314b3561bb8ac6de54a
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.restoreState:1
+msgid "Restore the state of the dock to the last known state."
+msgstr ""
+
+# f0f2e7e25813468ab9db87822d536be8
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.run:1
+msgid "Execute analysis when ok button on settings is clicked."
+msgstr ""
+
+# 564b986359004d929be79736e0d4bc1d
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.saveState:1
+msgid ""
+"Save the current state of the ui to an internal class member so that it can "
+"be restored again easily."
+msgstr ""
+
+# e88c2cbc7e7f480dba545f7f2a5de277
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.setFunctionOptionsStatus:1
+msgid "Helper function to toggle the tool function button based on context."
+msgstr ""
+
+# dabd0b5536a043078fa0b0bdb99cec8d
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.setFunctionOptionsStatus:3
+msgid ""
+"If there are function parameters to configure then enable it, otherwise "
+"disable it."
+msgstr ""
+
+# 8a7878e9032a48f9b3047cfe90ef094e
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.setOkButtonStatus:1
+msgid "Helper function to set the ok button status based on form validity."
+msgstr ""
+
+# 259be10ad03d45c4a48921bd0754371e
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.setupCalculator:1
+msgid "Initialise ImpactCalculator based on the current state of the ui."
+msgstr ""
+
+# 564283f6b05e40aead7683ddd2ca7ebf
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.setupCalculator:10
+msgid "Propagates any error from :func:optimalClip()"
+msgstr ""
+
+# 381da15be61a4a9b8217b93213157674
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.showBusy:1
+msgid "A helper function to indicate the plugin is processing."
+msgstr ""
+
+# 144e373a9c42485dbffd7587fee18c93
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.showBusy:4
+msgid ""
+"theTitle - an optional title for the status update. Should be plain text only"
+msgstr ""
+
+# adc5cd569d0b404f83947b0e26c61106
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.showBusy:6
+msgid ""
+"theMessage - an optional message to pass to the busy indicator. Can be an "
+"html snippet."
+msgstr ""
+
+# 8ffa22765a1e4b51b8b89733d97f5bf6
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.showBusy:8
+msgid "theProgress - a number between 0 and 100 indicating % complete"
+msgstr ""
+
+# e6b5f5c72b714c46a43272a75f2a7d7a
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.showBusy:16
+msgid "..note:: Uses bootstrap css for progress bar."
+msgstr ""
+
+# 8854e5a5a385448bb40262f4a76bfdbc
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.showHelp:1
+msgid "Load the help text into the wvResults widget"
+msgstr ""
+
+# d8edbb86cc2b4a8a8a77845f042f1a39
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.spawnError:1
+msgid "A helper to spawn an error and halt processing."
+msgstr ""
+
+# b783ed58524f4ed3b8d2e97094bb01b5
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.spawnError:3
+msgid ""
+"An exception will be logged, busy status removed and a message displayed."
+msgstr ""
+
+# 8b822eee59f642d0b04216d556399c91
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.spawnError:7
+msgid "theException: Exception - an exception that was raised."
+msgstr ""
+
+# 3413ca6875e4411bac16bb34c8b82fa6
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.spawnError:8
+msgid "theMessage: str - a string to display."
+msgstr ""
+
+# 78e12772085449cf973e8f8bfda0fdd6
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.toggleAggregationCombo:1
+msgid "Helper function to toggle the aggregation combo enabled status."
+msgstr ""
+
+# caa79c45ce804c25bc78f723c8a949e7
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.toggleAggregationCombo:3
+msgid ""
+"Whether the combo is toggled on or off will depend on the current dock "
+"status."
+msgstr ""
+
+# 6ee034955c6d45f59073c73f7bdff785
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.validate:1
+msgid ""
+"Helper method to evaluate the current state of the dialog and determine if "
+"it is appropriate for the OK button to be enabled or not."
+msgstr ""
+
+# 96fa1bd60b0744638cac2112980fbe4d
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.validate:5
+msgid ""
+"The enabled state of the OK button on the dialog will NOT be updated (set "
+"True or False) depending on the outcome of the UI readiness tests performed "
+"- **only** True or False will be returned by the function."
+msgstr ""
+
+# eb1342eedb154a1b8d90de66f7335b57
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.validate:13
+msgid "A two-tuple consisting of:"
+msgstr ""
+
+# 73eeb69ff09c4c149f418b2b0cfc16ac
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.validate:15
+msgid "Boolean reflecting the results of the valudation tests."
+msgstr ""
+
+# 958e85ebfc214cc3b07eb4eb0707ed69
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.validate:16
+msgid "A message indicating any reason why the validation may have failed."
+msgstr ""
+
+# a7920d775a66406e88549ede0e104f43
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.validate:19
+msgid "Example::"
+msgstr ""
+
+# 97959509ed9445b88200171e4503e909
+#: ../../../safe_qgis/dock.py:docstring of safe_qgis.dock.Dock.validate:24
+msgid "no exceptions explicitly raised"
+msgstr ""
+
+# 88092e9e3620442cb4e058e747b093b7
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.viewportGeoArray:1
+msgid "Obtain the map canvas current extent in EPSG:4326."
+msgstr ""
+
+# e40a13600bff48e59f5e01f82d916431
+#: ../../../safe_qgis/dock.py:docstring of
+#: safe_qgis.dock.Dock.viewportGeoArray:14
+msgid "Delegates to self.extentToGeoArray()"
+msgstr ""
+
+# 4a5e8ddbe72d475abfe552a2450eabc2
+#: ../../source/api-docs/safe_qgis/dock.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

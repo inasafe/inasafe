@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/api-docs/safe_qgis/minimum_needs.rst:6
+# 6bcba79c26384b84adf49230ac338b83
+msgid "Module:  safe_qgis.minimum_needs"
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs:1
+# 83fcb1bc01fb407597f40f2ffbdfd697
+msgid "**Minimum Needs Implementation.**"
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs:3
+# 0dab0a2558f84a4785019608596a7389
+msgid "Provides minimum needs assessment for a polygon layer containing counts of people affected per polygon."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds:1
+# 7ba0d8144be449fb8c50ea6ddada0bdf
+msgid "Dialog implementation class for the InaSAFE keywords editor."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.accept:1
+# 934084cf05cc480eb2d460472ea9aac2
+msgid "PRocess the layer and field and generate a new layer."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.accept:3
+# ae0870cf486440a8a8b4d79b60c5a96d
+msgid "This is called on ok click."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.minimum_needs:3
+# 1bae024f24f2458986464698397faf13
+msgid "population counts"
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.minimum_needs:4
+# 3b2bdc8efe1348529efc015c834787e8
+msgid "population_name: Attribute name that holds population count"
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.minimum_needs:6
+# 5e67af31a7aa4599bdf500f8a7f77fd1
+msgid "InaSAFE layer with attributes for minimum needs as per Perka 7"
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.on_cboPolygonLayers_currentIndexChanged:1
+# aabab8f49047415890b8a666f7aa9190
+msgid "Automatic slot executed when the layer is changed to update fields."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.on_cboPolygonLayers_currentIndexChanged:4
+# bd35264036ec4f7b874342ebe0b4bf46
+msgid "theIndex: int - passed by the signal that triggers this slot."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.on_cboPolygonLayers_currentIndexChanged:6
+# e6e22f9c679a443881c5dc30d0d2bfe7
+msgid "None."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.on_cboPolygonLayers_currentIndexChanged:8
+# 97f294cb678244fa8d14e172652f5d06
+msgid "no exceptions explicitly raised."
+msgstr ""
+
+#: ../../../safe_qgis/minimum_needs.py:docstring of safe_qgis.minimum_needs.MinimumNeeds.polygonLayersToCombo:1
+# 5289ad4850de43d79058930fc7d75955
+msgid "Populate the combo with all polygon layers loaded in QGIS."
+msgstr ""
+
+#: ../../source/api-docs/safe_qgis/minimum_needs.rst:11
+# ea45c2a0d35c4517991bf1490418a5da
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
+

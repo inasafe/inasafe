@@ -12,9 +12,11 @@ Package::safe_qgis
    safe_qgis/exceptions
    safe_qgis/dock_base
    safe_qgis/map
+   safe_qgis/minimum_needs_base
    safe_qgis/clipper
    safe_qgis/plugin
    safe_qgis/options_dialog_base
+   safe_qgis/minimum_needs
    safe_qgis/impact_functions_doc
    safe_qgis/keywords_dialog_base
    safe_qgis/keywords_dialog

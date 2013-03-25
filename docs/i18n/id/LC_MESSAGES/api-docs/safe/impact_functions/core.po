@@ -1,0 +1,518 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# a49afe5d151640d0aebe466796f65722
+#: ../../source/api-docs/safe/impact_functions/core.rst:6
+msgid "Module:  safe.impact_functions.core"
+msgstr ""
+
+# 42ef04066a694de3947957a0bc17d76f
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core:1
+msgid "Function to manage self-registering plugins"
+msgstr ""
+
+# f760834941ce469abad5db0ea1b7d3e3
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core:3
+msgid "The design is based on http://effbot.org/zone/metaclass-plugins.htm"
+msgstr ""
+
+# 14f5cb63322c4f95a8ed944649982a9b
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core:5
+msgid ""
+"To register the plugin, the module must be imported by the Python process "
+"using it."
+msgstr ""
+
+# cc0232572ee9405093dbedd62a2a78b4
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:1
+msgid "Mount point for plugins which refer to actions that can be performed."
+msgstr ""
+
+# 6d1893f120384009acbc5f99758fe6d3
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:3
+msgid ""
+"Plugins implementing this reference should provide the following method:"
+msgstr ""
+
+# 826ebaca03814b2da84a6c148df74141
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:5
+msgid "run(layers)"
+msgstr ""
+
+# 6c432da15e6f4b7297e61922ab49b457
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:8
+msgid "layers"
+msgstr ""
+
+# be3a2cbdf1d545419876c70ef9a0f32e
+# 36455edc533b455b9d02bf2176ab1bc1
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:8
+#: safe.impact_functions.core.FunctionProvider:9
+msgid "A list of layers"
+msgstr ""
+
+# 8d3843ee47f2432382dde88be59b5399
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:9
+msgid "result"
+msgstr ""
+
+# 6e52482fe72f44e992a490391a116697
+# 70f9a5daad2344ec9651a44ec84ab122
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:1
+#: safe.impact_functions.core.aggregate_point_data:1
+msgid "Clip data to boundaries and aggregate their values for each."
+msgstr ""
+
+# 9eefe26d23e448f2a5974c967d7d2db4
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:4
+msgid ""
+"data: Point or Raster dataset boundaries: Polygon dataset attribute_name: "
+"Name of attribute to aggrate over."
+msgstr ""
+
+# f423b20315ad4233847b84f7d256d727
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:7
+msgid "This is only applicable for vector data"
+msgstr ""
+
+# 79e044e8502d4e22acd969dd6e73ad8f
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:8
+msgid "aggregation_function: Function to apply ('count' or 'sum')"
+msgstr ""
+
+# affc789d521b4fc7ac0195ee5019cf06
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:11
+msgid "Dictionary of {boundary_name: aggregated value}"
+msgstr ""
+
+# 7a8b53f817a747eabc7bfe49edb9147c
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:4
+msgid ""
+"data: Point dataset boundaries: Polygon dataset attribute_name: Name of "
+"attribute to aggrate over. aggregation_function: Function to apply ('count' "
+"or 'sum')"
+msgstr ""
+
+# 10e0bd6d07444e668dffdfdc7f1cbdfa
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:10
+msgid "List of aggregated values for each polygon."
+msgstr ""
+
+# 49e874062fa846a0a076623d63b68ee6
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:13
+msgid ""
+"Aggregated values depend on aggregation function: 'sum': Sum of values for "
+"attribute_name 'count': Dictionary with counts of occurences of each value"
+msgstr ""
+
+# 83f09f262b9044a2bcf628a88492d3f3
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:16
+msgid "of attribute_name"
+msgstr ""
+
+# c20bd2605a844f36854ae4bd8170764a
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.compatible_layers:1
+msgid "Fetches all the layers that match the plugin requirements."
+msgstr ""
+
+# 2f4dbbbc22ec45d584bed737abc89ba7
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.compatible_layers:4
+msgid ""
+"func: ? (FIXME(Ole): Ted, can you fill in here? layer_descriptor: Layer "
+"names and meta data (keywords, type, etc)"
+msgstr ""
+
+# 1f12bcecd0004320893d3714c87da87a
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.compatible_layers:8
+msgid "Array of compatible layers, can be an empty list."
+msgstr ""
+
+# 7d87223d9fcb462499578d7302c8b185
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.extract_layers:1
+msgid "Extract layers with specified keyword/value pair"
+msgstr ""
+
+# 4eebcc07af9b4b4d9a69fa465defacd4
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:1
+msgid "Get plugins that match specified keywords"
+msgstr ""
+
+# 71bedd1b804f4abb8f5b9f047b8be130
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:5
+msgid ""
+"layer keywords of the form {'category': 'hazard', 'subcategory': "
+"'flood', ...}"
+msgstr ""
+
+# 51f43d3678084339bef988f76470c5c1
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:8
+msgid "If None or empty all plugins are returned"
+msgstr ""
+
+# def95842947246d2ac8c40628f856672
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:9
+msgid ""
+"#        name: Optional impact function name (or part of function name) "
+"#              used to further filter the result. #              If None all "
+"names are considered to match"
+msgstr ""
+
+# 8e5c41145670488199dc87468783870b
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:14
+msgid "Dictionary of impact functions ({name: class})"
+msgstr ""
+
+# 09266d19ce6e4381a085cea2880eabf4
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_documentation:1
+msgid "Collect documentaion of a impact function and return it as a dictionary"
+msgstr ""
+
+# 45b6935097f34ff5bd752e0bc4701b53
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_documentation:4
+msgid "func : name of function"
+msgstr ""
+
+# d4f71a0ab180413fa59f1cfce5acb19c
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_documentation:7
+msgid ""
+"author : string (identified by :author) synopsis : string (first line) "
+"rating : integer (identified by :rating) param_req : list of param "
+"(identified by :param requires) detail : detail description (function "
+"properties) citation : list of citation in string (function properties) "
+"limitation : string (function properties)"
+msgstr ""
+
+# 8f83b8a7fcde446c96e35f0a8104e543
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layer:1
+msgid "Get exposure layer from list of layers"
+msgstr ""
+
+# 742d4f68442142d989bb304cdc04de2c
+# 033f9a1cb2d34aa3b1a23c313c24ace4
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layer:3
+#: safe.impact_functions.core.get_hazard_layer:3
+msgid ""
+"If there are more than one, only the first is returned. Use "
+"get_hazard_layers if more are expected and needed"
+msgstr ""
+
+# b1a87a7127234d3db4789398c1fa1c31
+# 03fad6dda4e24ab1b90e6e7c3c243cb6
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layer:6
+#: safe.impact_functions.core.get_hazard_layer:6
+msgid "If no layers fit the description None is returned"
+msgstr ""
+
+# eb64be2386bc496d87657bce2f86e0ef
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layers:1
+msgid "Get list of layers that have category=='exposure'"
+msgstr ""
+
+# e429ae7a88d645fb86374d290bdd305d
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_function_title:1
+msgid "Get title for impact function"
+msgstr ""
+
+# 3a213dfc4e0f4e6c886f40825ee804d2
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_function_title:4
+msgid "func: Impact function class"
+msgstr ""
+
+# ccf54d0246964d74b991ac5b43311747
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_function_title:7
+msgid ""
+"it's title if available as an attribute in the class description, otherwise "
+"what is returned by the function pretty_function_name."
+msgstr ""
+
+# db743017b0884635a008e8af687f629e
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_hazard_layer:1
+msgid "Get hazard layer from list of layers"
+msgstr ""
+
+# 20b76b95456649a399af99f555bebb8e
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_hazard_layers:1
+msgid "Get list of layers that have category=='hazard'"
+msgstr ""
+
+# c21ddeb68eef4ed986f0d181ce4ae08a
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugin:1
+msgid "Get plugin that matches given name"
+msgstr ""
+
+# 981520c48d374a139894073f0b91ff5f
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugin:3
+msgid ""
+"This is just a wrapper around get_plugins to simplify the overly complicated "
+"way of extracting the function"
+msgstr ""
+
+# 0be762750382476ca4b17353ea75501b
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins:1
+msgid "Retrieve a list of plugins that match the name you pass"
+msgstr ""
+
+# 510c13608b414faa8d7de432a48d49ca
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins:3
+msgid "Or all of them if no name is passed."
+msgstr ""
+
+# a3b62eef1c2a41a187397e64e2ca71c6
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:1
+msgid "Retrieve a table listing all plugins and their requirements."
+msgstr ""
+
+# 4d6182af014c4337a620d5058e1fa411
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:3
+msgid "Or just a single plugin if name is passed."
+msgstr ""
+
+# edfb18a560f44fb8a7a8bd1d7c92a178
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:7
+msgid "id = list_id"
+msgstr ""
+
+# 6422a175878e413fa3aae3933cd90bd7
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:8
+msgid "title = list_title"
+msgstr ""
+
+# b1308fc5e6d4438bb21a2dd4f7fe22ea
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:9
+msgid "category : list_category"
+msgstr ""
+
+# 1e7de569389b4d8a8d28c16b219022e5
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:10
+msgid "subcategory : list_subcategory"
+msgstr ""
+
+# 72da5460474d44628069d933e4a513ac
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:11
+msgid "layertype : list_layertype"
+msgstr ""
+
+# 330a9c8a969841f3b0546d63066e982a
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:12
+msgid "datatype : list_datatype"
+msgstr ""
+
+# 8abb585ef99e47e780e0a6b8d919ac40
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:13
+msgid "unit: list_unit"
+msgstr ""
+
+# ac31cc79c54e400ba9311ab551e8db89
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:14
+msgid "disabled : list_disabled # not included"
+msgstr ""
+
+# 1c9fa068d34f45488b611074327485b4
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:17
+msgid "table contains plugins match with dict_filter"
+msgstr ""
+
+# 6ea808baf23644c3abb2bb287bd9db4f
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:19
+msgid "Raises: None"
+msgstr ""
+
+# 86666d17b4884bd0b4a71f11c2ae20bd
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_question:1
+msgid "Rephrase the question asked"
+msgstr ""
+
+# 25dd9fc9d7fa4534a8481cf05bd79064
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_question:4
+msgid "hazard_title: string exposure_title: string func: impact function class"
+msgstr ""
+
+# 38023d02b47c419d81b5dd3a4d3e6c2e
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_thresholds:1
+msgid "Extract thresholds form layer keywords if present"
+msgstr ""
+
+# 9dc4338c0d9742bdb7588df571980a52
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_unique_values:1
+msgid ""
+"Get unique possible value for each column in impact functions doc table."
+msgstr ""
+
+# 8fb5dccf719d4366b2c8a37b8a60a7c7
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_unique_values:4
+msgid "Args: None"
+msgstr ""
+
+# 52ca9aee4f9c44a59fc18fff9d83af9b
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_unique_values:7
+msgid "Dictionary contains list unique value for each column"
+msgstr ""
+
+# 4434cd04a6cb4a158bf8444bb9e2391e
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.is_function_enabled:1
+msgid ""
+"Check whether a function is enabled or not :param func: :return: False is "
+"disabled param is True"
+msgstr ""
+
+# 60117adca3e94ad7a3791b105f86b8cf
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.parse_single_requirement:1
+msgid ""
+"Parse single requirement from impact function's doc to category, "
+"subcategory, layertype, datatype, unit, and disabled."
+msgstr ""
+
+# ed389fdd4d1d42dfa5901ca13e0733c2
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.pretty_function_name:1
+msgid ""
+"Return a human readable name for the function if the function has a func."
+"plugin_name use this otherwise turn underscores to spaces and Caps to spaces"
+msgstr ""
+
+# ecf3cfdfd59042d79f5b54041b595517
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirement_check:1
+msgid ""
+"Checks a dictionary params against the requirements defined in require_str. "
+"Require_str must be a valid python expression and evaluate to True or False"
+msgstr ""
+
+# 7df2e1974928453ab0cf4316abc8ee47
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:1
+msgid "Collect the requirements from the plugin function doc"
+msgstr ""
+
+# 97fc386e669e48c6be335e65c3a8c2ff
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:4
+msgid ":param requires <valid python expression>"
+msgstr ""
+
+# d53bf129c7154458807e869351f7e1a5
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:5
+msgid ""
+"The layer keywords are put into the local name space each requires should be "
+"on a new line a '' at the end of a line will be a continuation"
+msgstr ""
+
+# ca200bb6ceed4f9394bf487f64aa8a22
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:9
+msgid "returns a (possibly empty) list of Python expressions"
+msgstr ""
+
+# 2a22ed7c571f4137a37ac79e372ccb82
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:11
+msgid ""
+"Example of valid requirements expression :param requires category=='hazard' "
+"and                     subcategory in ['flood', 'tsunami'] "
+"and                     layertype=='raster' and                     unit=='m'"
+msgstr ""
+
+# 19d4424ac9e744fa967800a48db0949c
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_met:1
+msgid "Checks the plugin can run with a given layer."
+msgstr ""
+
+# b24ee58e677242b5b5f668bca4fe1851
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_met:3
+msgid "Based on the requirements specified in the doc string."
+msgstr ""
+
+# ed8cb2b6458b4086a24cc3963ff371a3
+#: ../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_met:6
+msgid ""
+"True:  if there are no requirements or they are all met. False: if it has "
+"requirements and none of them are met."
+msgstr ""
+
+# 3bf91ceee7fc4af8a919f435b9f29b9f
+#: ../../source/api-docs/safe/impact_functions/core.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
