@@ -1711,9 +1711,10 @@ class ShakeEvent(QObject):
             None
 
         """
-        if thePopulationRasterPath is None or (
-        not os.path.isfile(thePopulationRasterPath) and not
-        os.path.islink(thePopulationRasterPath)):
+        if (
+                thePopulationRasterPath is None or (
+                not os.path.isfile(thePopulationRasterPath) and not
+                os.path.islink(thePopulationRasterPath))):
 
             myExposurePath = self._getPopulationPath()
         else:
@@ -1843,10 +1844,10 @@ class ShakeEvent(QObject):
             theCellSize=myCellSize)
 
         myClippedExposurePath = clipLayer(
-                                    theLayer=myExposureLayer,
-                                    theExtent=myHazardGeoExtent,
-                                    theCellSize=myCellSize,
-                                    theExtraKeywords=extraExposureKeywords)
+            theLayer=myExposureLayer,
+            theExtent=myHazardGeoExtent,
+            theCellSize=myCellSize,
+            theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
@@ -1879,9 +1880,8 @@ class ShakeEvent(QObject):
         https://github.com/AIFDR/inasafe/issues/381
         """
         # When used via the scripts make_shakemap.sh
-        myFixturePath = os.path.join(dataDir(),
-                        'exposure',
-                        'population.tif')
+        myFixturePath = os.path.join(
+            dataDir(), 'exposure', 'population.tif')
 
         myLocalPath = '/usr/local/share/inasafe/exposure/population.tif'
         if self.populationRasterPath is not None:
@@ -1937,6 +1937,7 @@ class ShakeEvent(QObject):
 
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
         myMmiShapeFile = self.mmiDataToShapefile(theForceFlag=theForceFlag)
@@ -1947,17 +1948,17 @@ class ShakeEvent(QObject):
         for myAlgorithm in ['nearest']:
             try:
                 myContoursShapeFile = self.mmiDataToContours(
-                                           theForceFlag=theForceFlag,
-                                           theAlgorithm=myAlgorithm)
+                    theForceFlag=theForceFlag,
+                    theAlgorithm=myAlgorithm)
             except:
                 raise
             logging.info('Created: %s', myContoursShapeFile)
         try:
             myCitiesShapeFile = self.citiesToShapefile(
-                                            theForceFlag=theForceFlag)
+                theForceFlag=theForceFlag)
             logging.info('Created: %s', myCitiesShapeFile)
             mySearchBoxFile = self.citySearchBoxesToShapefile(
-                                            theForceFlag=theForceFlag)
+                theForceFlag=theForceFlag)
             logging.info('Created: %s', mySearchBoxFile)
             _, myCitiesHtmlPath = self.impactedCitiesTable()
             logging.info('Created: %s', myCitiesHtmlPath)
@@ -1972,14 +1973,14 @@ class ShakeEvent(QObject):
             myProjectPath = os.environ['INSAFE_REALTIME_PROJECT']
         else:
             myProjectPath = os.path.join(dataDir(), 'realtime.qgs')
+        # noinspection PyArgumentList
         QgsProject.instance().setFileName(myProjectPath)
         QgsProject.instance().read()
 
         if 'INSAFE_REALTIME_TEMPLATE' in os.environ:
             myTemplatePath = os.environ['INSAFE_REALTIME_TEMPLATE']
         else:
-            myTemplatePath = os.path.join(dataDir(),
-                                     'realtime-template.qpt')
+            myTemplatePath = os.path.join(dataDir(), 'realtime-template.qpt')
 
         myTemplateFile = file(myTemplatePath, 'rt')
         myTemplateContent = myTemplateFile.read()
@@ -2062,14 +2063,16 @@ class ShakeEvent(QObject):
             LOGGER.info('No nearby cities found.')
 
         # Load the contours and cities shapefile into the map
-        myContoursLayer = QgsVectorLayer(myContoursShapeFile,
-                                         'mmi-contours', "ogr")
+        myContoursLayer = QgsVectorLayer(
+            myContoursShapeFile,
+            'mmi-contours', "ogr")
         QgsMapLayerRegistry.instance().addMapLayers([myContoursLayer])
 
         myCitiesLayer = None
         if myCitiesShapeFile is not None:
-            myCitiesLayer = QgsVectorLayer(myCitiesShapeFile,
-                                       'mmi-cities', "ogr")
+            myCitiesLayer = QgsVectorLayer(
+                myCitiesShapeFile,
+                'mmi-cities', "ogr")
             if myCitiesLayer.isValid():
                 QgsMapLayerRegistry.instance().addMapLayers([myCitiesLayer])
 
@@ -2096,8 +2099,8 @@ class ShakeEvent(QObject):
         LOGGER.info('Generated Image: %s' % myImagePath)
         # Save a thumbnail
         mySize = QSize(200, 200)
-        myThumbnailImage = myImage.scaled(mySize,
-            Qt.KeepAspectRatioByExpanding)
+        myThumbnailImage = myImage.scaled(
+            mySize, Qt.KeepAspectRatioByExpanding)
         myThumbnailImage.save(myThumbnailImagePath)
         LOGGER.info('Generated Thumbnail: %s' % myThumbnailImagePath)
 
@@ -2150,8 +2153,7 @@ class ShakeEvent(QObject):
                     '%(depth-name)s: %(depth-value)s%(depth-unit)s '
                     '%(located-label)s %(distance)s%(distance-unit)s '
                     '%(bearing-compass)s '
-                    '%(direction-relation)s %(place-name)s'
-                   ) % myDict
+                    '%(direction-relation)s %(place-name)s') % myDict
         return myString
 
     def eventDict(self):
@@ -2167,8 +2169,8 @@ class ShakeEvent(QObject):
 
         """
         myMapName = self.tr('Estimated Earthquake Impact')
-        myExposureTableName = self.tr('Estimated number of people affected by '
-            'each MMI level')
+        myExposureTableName = self.tr(
+            'Estimated number of people affected by each MMI level')
         myFatalitiesName = self.tr('Estimated fatalities')
         myFatalitiesCount = self.fatalityTotal
 
@@ -2238,12 +2240,10 @@ class ShakeEvent(QObject):
             'fatalities-range': myFatalitiesRange,
             'fatalities-count': '%s' % myFatalitiesCount,
             'mmi': '%s' % self.magnitude,
-            'date': '%s-%s-%s' % (self.day,
-                               self.month,
-                               self.year),
-            'time': '%s:%s:%s' % (self.hour,
-                               self.minute,
-                               self.second),
+            'date': '%s-%s-%s' % (
+                self.day, self.month, self.year),
+            'time': '%s:%s:%s' % (
+                self.hour, self.minute, self.second),
             'formatted-date-time': self.elapsedTime()[0],
             'latitude-name': self.tr('Latitude'),
             'latitude-value': '%s' % myLatitude,
@@ -2381,66 +2381,65 @@ class ShakeEvent(QObject):
         else:
             mmiData = 'Not populated'
 
-        myDict = {
-                'latitude': self.latitude,
-                'longitude': self.longitude,
-                'eventId': self.eventId,
-                'magnitude': self.magnitude,
-                'depth': self.depth,
-                'description': self.description,
-                'location': self.location,
-                'day': self.day,
-                'month': self.month,
-                'year': self.year,
-                'time': self.time,
-                'timeZone': self.timeZone,
-                'xMinimum': self.xMinimum,
-                'xMaximum': self.xMaximum,
-                'yMinimum': self.yMinimum,
-                'yMaximum': self.yMaximum,
-                'rows': self.rows,
-                'columns': self.columns,
-                'mmiData': mmiData,
-                'populationRasterPath': self.populationRasterPath,
-                'impactFile': self.impactFile,
-                'impactKeywordsFile': self.impactKeywordsFile,
-                'fatalityCounts': self.fatalityCounts,
-                'displacedCounts': self.displacedCounts,
-                'affectedCounts': self.affectedCounts,
-                'extentWithCities': myExtentWithCities,
-                'zoomFactor': self.zoomFactor,
-                'searchBoxes': self.searchBoxes
-            }
+        myDict = {'latitude': self.latitude,
+                  'longitude': self.longitude,
+                  'eventId': self.eventId,
+                  'magnitude': self.magnitude,
+                  'depth': self.depth,
+                  'description': self.description,
+                  'location': self.location,
+                  'day': self.day,
+                  'month': self.month,
+                  'year': self.year,
+                  'time': self.time,
+                  'timeZone': self.timeZone,
+                  'xMinimum': self.xMinimum,
+                  'xMaximum': self.xMaximum,
+                  'yMinimum': self.yMinimum,
+                  'yMaximum': self.yMaximum,
+                  'rows': self.rows,
+                  'columns': self.columns,
+                  'mmiData': mmiData,
+                  'populationRasterPath': self.populationRasterPath,
+                  'impactFile': self.impactFile,
+                  'impactKeywordsFile': self.impactKeywordsFile,
+                  'fatalityCounts': self.fatalityCounts,
+                  'displacedCounts': self.displacedCounts,
+                  'affectedCounts': self.affectedCounts,
+                  'extentWithCities': myExtentWithCities,
+                  'zoomFactor': self.zoomFactor,
+                  'searchBoxes': self.searchBoxes}
 
-        myString = ('latitude: %(latitude)s\n'
-                     'longitude: %(longitude)s\n'
-                     'eventId: %(eventId)s\n'
-                     'magnitude: %(magnitude)s\n'
-                     'depth: %(depth)s\n'
-                     'description: %(description)s\n'
-                     'location: %(location)s\n'
-                     'day: %(day)s\n'
-                     'month: %(month)s\n'
-                     'year: %(year)s\n'
-                     'time: %(time)s\n'
-                     'timeZone: %(timeZone)s\n'
-                     'xMinimum: %(xMinimum)s\n'
-                     'xMaximum: %(xMaximum)s\n'
-                     'yMinimum: %(yMinimum)s\n'
-                     'yMaximum: %(yMaximum)s\n'
-                     'rows: %(rows)s\n'
-                     'columns: %(columns)s\n'
-                     'mmiData: %(mmiData)s\n'
-                     'populationRasterPath: %(populationRasterPath)s\n'
-                     'impactFile: %(impactFile)s\n'
-                     'impactKeywordsFile: %(impactKeywordsFile)s\n'
-                     'fatalityCounts: %(fatalityCounts)s\n'
-                     'displacedCounts: %(displacedCounts)s\n'
-                     'affectedCounts: %(affectedCounts)s\n'
-                     'extentWithCities: %(extentWithCities)s\n'
-                     'zoomFactor: %(zoomFactor)s\n'
-                     'searchBoxes: %(searchBoxes)s\n'
-                      % myDict)
+        myString = (
+            'latitude: %(latitude)s\n'
+            'longitude: %(longitude)s\n'
+            'eventId: %(eventId)s\n'
+            'magnitude: %(magnitude)s\n'
+            'depth: %(depth)s\n'
+            'description: %(description)s\n'
+            'location: %(location)s\n'
+            'day: %(day)s\n'
+            'month: %(month)s\n'
+            'year: %(year)s\n'
+            'time: %(time)s\n'
+            'timeZone: %(timeZone)s\n'
+            'xMinimum: %(xMinimum)s\n'
+            'xMaximum: %(xMaximum)s\n'
+            'yMinimum: %(yMinimum)s\n'
+            'yMaximum: %(yMaximum)s\n'
+            'rows: %(rows)s\n'
+            'columns: %(columns)s\n'
+            'mmiData: %(mmiData)s\n'
+            'populationRasterPath: %(populationRasterPath)s\n'
+            'impactFile: %(impactFile)s\n'
+            'impactKeywordsFile: %(impactKeywordsFile)s\n'
+            'fatalityCounts: %(fatalityCounts)s\n'
+            'displacedCounts: %(displacedCounts)s\n'
+            'affectedCounts: %(affectedCounts)s\n'
+            'extentWithCities: %(extentWithCities)s\n'
+            'zoomFactor: %(zoomFactor)s\n'
+            'searchBoxes: %(searchBoxes)s\n'
+            % myDict)
         return myString
 
     def setupI18n(self):
@@ -2460,8 +2459,9 @@ class ShakeEvent(QObject):
         os.environ['LANG'] = str(myLocaleName)
 
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        myTranslationPath = os.path.join(myRoot, 'safe_qgis', 'i18n',
-                                     'inasafe_' + str(myLocaleName) + '.qm')
+        myTranslationPath = os.path.join(
+            myRoot, 'safe_qgis', 'i18n',
+            'inasafe_' + str(myLocaleName) + '.qm')
         if os.path.exists(myTranslationPath):
             self.translator = QTranslator()
             myResult = self.translator.load(myTranslationPath)
