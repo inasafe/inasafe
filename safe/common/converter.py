@@ -31,17 +31,11 @@ from gdalconst import GA_ReadOnly
 
 
 # TODO I think QCoreApplication is needed for tr() check hefore removing
-from PyQt4.QtCore import (QString,
-                          QStringList
-                          )
-from qgis.core import (QgsVectorFileWriter,
-                       QgsCoordinateReferenceSystem)
 #TODO refactor this into a utility class as it is no longer only used by test
 from safe.common.exceptions import (GridXmlFileNotFoundError,
                                     GridXmlParseError,
                                     ContourCreationError,
-                                    InvalidLayerError,
-                                    ShapefileCreationError)
+                                    InvalidLayerError)
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
@@ -718,94 +712,6 @@ class ShakeEvent():
             self.setContourProperties(myOutputFile)
         except InvalidLayerError:
             raise
-
-        return myOutputFile
-
-    def memoryLayerToShapefile(self,
-                               theFileName,
-                               theMemoryLayer,
-                               theForceFlag=False):
-        """Write a memory layer to a shapefile.
-
-        .. note:: The file will be asved into the shakemap extract dir
-           event id folder. If a qml matching theFileName.qml can be
-           found it will automatically copied over to the output dir.
-           Any existing shp by the same name will be overridden if
-           theForceFlag is True, otherwise the existing file will be returned.
-
-        Args:
-            theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
-            theMemoryLayer: QGIS memory layer instance.
-            theForceFlag: bool (Optional). Whether to force the overwrite
-                of any existing data. Defaults to False.
-
-        Returns: str Path to the created shapefile
-
-        Raises: ShapefileCreationError
-        """
-        LOGGER.debug('memoryLayerToShapefile requested.')
-
-        LOGGER.debug(str(theMemoryLayer.dataProvider().attributeIndexes()))
-        if theMemoryLayer.featureCount() < 1:
-            raise ShapefileCreationError('Memory layer has no features')
-
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-
-        myOutputFileBase = os.path.join(self.outputDir,
-                                        '%s.' % theFileName)
-        myOutputFile = myOutputFileBase + 'shp'
-        if os.path.exists(myOutputFile) and theForceFlag is not True:
-            return myOutputFile
-        elif os.path.exists(myOutputFile):
-            try:
-                os.remove(myOutputFileBase + 'shp')
-                os.remove(myOutputFileBase + 'shx')
-                os.remove(myOutputFileBase + 'dbf')
-                os.remove(myOutputFileBase + 'prj')
-            except OSError:
-                LOGGER.exception('Old shape files not deleted - this may '
-                                 'indicate a file permissions issue.')
-
-        # Next two lines a workaround for a QGIS bug (lte 1.8)
-        # preventing mem layer attributes being saved to shp.
-        theMemoryLayer.startEditing()
-        theMemoryLayer.commitChanges()
-
-        LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
-        # Explicitly giving all options, not really needed but nice for clarity
-        myErrorMessage = QString()
-        myOptions = QStringList()
-        myLayerOptions = QStringList()
-        mySelectedOnlyFlag = False
-        mySkipAttributesFlag = False
-        # May differ from myOutputFile
-        myActualNewFileName = QString()
-        myResult = QgsVectorFileWriter.writeAsVectorFormat(
-            theMemoryLayer,
-            myOutputFile,
-            'utf-8',
-            myGeoCrs,
-            "ESRI Shapefile",
-            mySelectedOnlyFlag,
-            myErrorMessage,
-            myOptions,
-            myLayerOptions,
-            mySkipAttributesFlag,
-            myActualNewFileName
-        )
-
-        if myResult == QgsVectorFileWriter.NoError:
-            LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
-        else:
-            raise ShapefileCreationError(
-                'Failed with error: %s' % myResult)
-
-        # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        myQmlPath = os.path.join(self.outputDir(),
-                                 '%s.qml' % theFileName)
-        mySourceQml = os.path.join(dataDir(), '%s.qml' % theFileName)
-        shutil.copyfile(mySourceQml, myQmlPath)
 
         return myOutputFile
 
