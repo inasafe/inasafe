@@ -35,7 +35,9 @@ from safe.impact_functions import (get_plugins,
                                    get_admissible_plugins,
                                    is_function_enabled,
                                    get_documentation)
-from safe.impact_functions.core import get_doc_string
+from safe.impact_functions.core import (get_doc_string,
+                                        get_unique_values,
+                                        get_plugins_as_table)
 
 from safe.engine.core import calculate_impact
 

@@ -51,7 +51,9 @@ from safe.api import (get_admissible_plugins,
                       get_postprocessors,
                       get_postprocessor_human_name,
                       convert_mmi_data,
-                      format_int)
+                      format_int,
+                      get_unique_values,
+                      get_plugins_as_table)
 
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611
