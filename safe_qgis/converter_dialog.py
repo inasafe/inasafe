@@ -24,7 +24,7 @@ import logging
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 from converter_dialog_base import Ui_ConverterDialogBase
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo
 
 from safe_qgis.safe_interface import get_version, convert_mmi_data
@@ -52,23 +52,57 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(
             get_version()))
-        self.populate_algorithm()
         self.leInputPath.setText('/home/sunnii/Downloads/grid.xml')
+        self.populate_algorithm()
+        # Event register
+        QtCore.QObject.connect(self.cBDefaultOutputLocation,
+                               QtCore.SIGNAL('toggled(bool)'),
+                               self.update_output_location)
+        QtCore.QObject.connect(self.leInputPath,
+                               QtCore.SIGNAL('textChanged(QString)'),
+                               self.update_output_location)
 
     def populate_algorithm(self):
         """Populate algorithm for converting grid.xml
         """
         self.cboAlgorithm.addItems(['Nearest', 'Invdist'])
 
+    def update_output_location(self):
+        """Update output location if cBDefaultOutputLocation
+        is toggled.
+        """
+        if self.cBDefaultOutputLocation.isChecked():
+            self.get_output_from_input()
+
+    def get_output_from_input(self):
+        """Basically, it just get from input file location and
+        create default output location for it
+        """
+        my_input_path = str(self.leInputPath.text())
+        if my_input_path.endswith('.xml'):
+            my_output_path = my_input_path[:-3] + 'tif'
+        else:
+            last_dot = my_input_path.rfind('.')
+            my_output_path = my_input_path[:last_dot + 1] + 'tif'
+        self.leOutputPath.setText(my_output_path)
+
+    def on_leInputPath_textChanged(self):
+        """Event handler when leInputPath changed its text
+        """
+        if self.cBDefaultOutputLocation.isChecked():
+            self.get_output_from_input()
+
     def accept(self):
         input_path = str(self.leInputPath.text())
-        if self.cBDefaultOuputLocation.isChecked():
-            output_path = None
-        else:
-            output_path = str(self.leOutputPath.text())
+        # if self.cBDefaultOutputLocation.isChecked():
+        #     output_path = None
+        # else:
+        #     output_path = str(self.leOutputPath.text())
+        output_path = str(self.leOutputPath.text())
         my_algorithm = str(self.cboAlgorithm.currentText()).lower()
         fileName = convert_mmi_data(input_path, output_path,
-                                    the_algorithm=my_algorithm)
+                                    the_algorithm=my_algorithm,
+                                    algorithm_name=False)
         if self.cBLoadLayer.isChecked():
             fileInfo = QFileInfo(fileName)
             baseName = fileInfo.baseName()

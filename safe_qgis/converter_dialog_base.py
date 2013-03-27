@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'converter_dialog_base.ui'
 #
-# Created: Fri Mar 22 14:22:01 2013
+# Created: Tue Mar 26 13:10:06 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -59,21 +59,21 @@ class Ui_ConverterDialogBase(object):
         self.leOutputPath.setEnabled(False)
         self.leOutputPath.setGeometry(QtCore.QRect(10, 150, 351, 27))
         self.leOutputPath.setObjectName(_fromUtf8("leOutputPath"))
-        self.cBDefaultOuputLocation = QtGui.QCheckBox(ConverterDialogBase)
-        self.cBDefaultOuputLocation.setGeometry(QtCore.QRect(10, 130, 371, 22))
-        self.cBDefaultOuputLocation.setChecked(True)
-        self.cBDefaultOuputLocation.setObjectName(_fromUtf8("cBDefaultOuputLocation"))
+        self.cBDefaultOutputLocation = QtGui.QCheckBox(ConverterDialogBase)
+        self.cBDefaultOutputLocation.setGeometry(QtCore.QRect(10, 130, 371, 22))
+        self.cBDefaultOutputLocation.setChecked(True)
+        self.cBDefaultOutputLocation.setObjectName(_fromUtf8("cBDefaultOutputLocation"))
         self.cBLoadLayer = QtGui.QCheckBox(ConverterDialogBase)
         self.cBLoadLayer.setEnabled(True)
         self.cBLoadLayer.setGeometry(QtCore.QRect(10, 240, 193, 22))
         self.cBLoadLayer.setChecked(True)
         self.cBLoadLayer.setObjectName(_fromUtf8("cBLoadLayer"))
         self.cboAlgorithm = QtGui.QComboBox(ConverterDialogBase)
-        self.cboAlgorithm.setGeometry(QtCore.QRect(10, 200, 371, 25))
+        self.cboAlgorithm.setGeometry(QtCore.QRect(10, 210, 371, 25))
         self.cboAlgorithm.setObjectName(_fromUtf8("cboAlgorithm"))
         self.lblAlgotrithm = QtGui.QLabel(ConverterDialogBase)
         self.lblAlgotrithm.setEnabled(True)
-        self.lblAlgotrithm.setGeometry(QtCore.QRect(10, 180, 371, 21))
+        self.lblAlgotrithm.setGeometry(QtCore.QRect(10, 190, 371, 21))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
@@ -83,6 +83,8 @@ class Ui_ConverterDialogBase(object):
         self.retranslateUi(ConverterDialogBase)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ConverterDialogBase.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ConverterDialogBase.reject)
+        QtCore.QObject.connect(self.cBDefaultOutputLocation, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.leOutputPath.setDisabled)
+        QtCore.QObject.connect(self.cBDefaultOutputLocation, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.tBtnOpenOutput.setDisabled)
         QtCore.QMetaObject.connectSlotsByName(ConverterDialogBase)
 
     def retranslateUi(self, ConverterDialogBase):
@@ -92,7 +94,7 @@ class Ui_ConverterDialogBase(object):
         self.tBtnOpenInput.setText(QtGui.QApplication.translate("ConverterDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.lblOutput.setText(QtGui.QApplication.translate("ConverterDialogBase", "Output : Raster file", None, QtGui.QApplication.UnicodeUTF8))
         self.tBtnOpenOutput.setText(QtGui.QApplication.translate("ConverterDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.cBDefaultOuputLocation.setText(QtGui.QApplication.translate("ConverterDialogBase", "Use default location", None, QtGui.QApplication.UnicodeUTF8))
+        self.cBDefaultOutputLocation.setText(QtGui.QApplication.translate("ConverterDialogBase", "Use default location", None, QtGui.QApplication.UnicodeUTF8))
         self.cBLoadLayer.setText(QtGui.QApplication.translate("ConverterDialogBase", "Load output file to QGIS", None, QtGui.QApplication.UnicodeUTF8))
         self.lblAlgotrithm.setText(QtGui.QApplication.translate("ConverterDialogBase", "Algorithm", None, QtGui.QApplication.UnicodeUTF8))
 

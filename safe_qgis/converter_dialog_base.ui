@@ -147,7 +147,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QCheckBox" name="cBDefaultOuputLocation">
+  <widget class="QCheckBox" name="cBDefaultOutputLocation">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -186,7 +186,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>200</y>
+     <y>210</y>
      <width>371</width>
      <height>25</height>
     </rect>
@@ -199,7 +199,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
+     <y>190</y>
      <width>371</width>
      <height>21</height>
     </rect>
@@ -246,6 +246,38 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cBDefaultOutputLocation</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>leOutputPath</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>195</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>185</x>
+     <y>163</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cBDefaultOutputLocation</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>tBtnOpenOutput</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>195</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>371</x>
+     <y>162</y>
     </hint>
    </hints>
   </connection>

@@ -30,14 +30,14 @@ import gdal
 from gdalconst import GA_ReadOnly
 
 
-# TODO I think QCoreApplication is needed for tr() check hefore removing
-#TODO refactor this into a utility class as it is no longer only used by test
+# TODO I think QCoreApplication is needed for tr() check before removing
+# TODO refactor this into a utility class as it is no longer only used by test
 from safe.common.exceptions import (GridXmlFileNotFoundError,
                                     GridXmlParseError,
                                     ContourCreationError,
                                     InvalidLayerError)
 
-# The logger is intialised in utils.py by init
+# The logger is initialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -52,12 +52,13 @@ class ShakeEvent():
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, gridXMLPath, outputDir=None, outputBasename=None):
+    def __init__(self, gridXMLPath, outputDir=None, outputBasename=None,
+                 algorithm_name=True):
         """Constructor for the shake event class.
 
         Args:
-            * theForceFlag: bool Whether to force retrieval of the dataset from
-                the ftp server.
+            * theForceFlag: bool Whether to force retrieval of the data set
+            from the ftp server.
 
         Returns: Instance
 
@@ -119,7 +120,7 @@ class ShakeEvent():
             self.outputBasename = "mmi"
         else:
             self.outputBasename = outputBasename
-        print 'outputDir : ', self.outputDir
+        self.algorithm_name = algorithm_name
         self.gridXmlPath = gridXMLPath
         self.parseGridXml()
 
@@ -326,8 +327,10 @@ class ShakeEvent():
         """
         LOGGER.debug('mmiDataToDelimitedText requested.')
 
+        # TODO(Sunni): I'm not sure how this 'mmi' will work
         myPath = os.path.join(self.outputDir,
-                              self.outputBasename + '.csv')
+                              'mmi.csv')
+        # TODO(Sunni): I'm not sure how this 'mmi' will work
         #short circuit if the csv is already created.
         if os.path.exists(myPath) and theForceFlag is not True:
             return myPath
@@ -363,7 +366,7 @@ class ShakeEvent():
         if os.path.exists(myVrtPath) and theForceFlag is not True:
             return myVrtPath
 
-        myCsvPath = self.mmiDataToDelimitedFile(theForceFlag)
+        myCsvPath = self.mmiDataToDelimitedFile(True)
 
         myVrtString = ('<OGRVRTDataSource>'
                        '  <OGRVRTLayer name="mmi">'
@@ -409,7 +412,7 @@ class ShakeEvent():
 
         Returns: None
 
-        Raises: Any exceptions will be propogated.
+        Raises: Any exceptions will be propagated.
         """
 
         myCommand = self._addExecutablePrefix(theCommand)
@@ -433,7 +436,7 @@ class ShakeEvent():
                 raise Exception(myMessage)
 
     def mmiDataToShapefile(self, theForceFlag=False):
-        """Convert grid.xml's mmi column to a vector shp file using ogr2ogr.
+        """Convert grid.xml' s mmi column to a vector shp file using ogr2ogr.
 
         An ESRI shape file will be created.
 
@@ -461,7 +464,7 @@ class ShakeEvent():
         # Ensure the vrt mmi file exists (it will generate csv too if needed)
         myVrtPath = self.mmiDataToVrt(theForceFlag)
 
-        #now generate the tif using default interpoation options
+        #now generate the tif using default interpolation options
 
         myCommand = (('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '
                       '%(shp)s %(vrt)s mmi') %
@@ -474,21 +477,20 @@ class ShakeEvent():
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         myQmlPath = os.path.join(self.outputDir,
                                  self.outputBasename + '-points.qml')
-        mySourceQml = os.path.join(dataDir(),
-                                   self.outputBasename + '-shape.qml')
+        mySourceQml = os.path.join(dataDir(), 'mmi-shape.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myShpPath
 
     def mmiDataToRaster(self, theForceFlag=False,
                         theAlgorithm='nearest'):
-        """Convert the grid.xml's mmi column to a raster using gdal_grid.
+        """Convert the grid.xml' s mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
 
         Unfortunately no python bindings exist for doing this so we are
         going to do it using a shell call.
 
-        .. seealso:: http://www.gdal.org/gdal_grid.html
+        .. see also:: http://www.gdal.org/gdal_grid.html
 
         Example of the gdal_grid call we generate::
 
@@ -501,10 +503,10 @@ class ShakeEvent():
         Args:
           theForceFlag bool (Optional). Whether to force the regeneration
             of the output file. Defaults to False.
-          theAlgorithm str (Optional). Which resampling algorithm to use.
-            vallid options are 'nearest' (for nearest neighbour), 'invdist'
+          theAlgorithm str (Optional). Which re-sampling algorithm to use.
+            valid options are 'nearest' (for nearest neighbour), 'invdist'
             (for inverse distance), 'average' (for moving average). Defaults
-            to 'nearest' if not specified. Note that passing resampling alg
+            to 'nearest' if not specified. Note that passing re-sampling alg
             parameters is currently not supported. If None is passed it will
             be replaced with 'nearest'.
 
@@ -512,7 +514,7 @@ class ShakeEvent():
         Return: str Path to the resulting tif file.
 
         .. note:: For interest you can also make quite beautiful smoothed
-          rasters using this:
+          raster using this:
 
           gdal_grid -zfield "mmi" -a_srs EPSG:4326
           -a invdist:power=2.0:smoothing=1.0 -txe 122.45 126.45
@@ -526,9 +528,13 @@ class ShakeEvent():
         if theAlgorithm is None:
             theAlgorithm = 'nearest'
 
-        myTifPath = os.path.join(self.outputDir,
-                                 '%s-%s.tif' % (
-                                     self.outputBasename, theAlgorithm))
+        if self.algorithm_name:
+            myTifPath = os.path.join(self.outputDir,
+                                     '%s-%s.tif' % (
+                                         self.outputBasename, theAlgorithm))
+        else:
+            myTifPath = os.path.join(self.outputDir,
+                                     '%s.tif' % self.outputBasename)
         #short circuit if the tif is already created.
         if os.path.exists(myTifPath) and theForceFlag is not True:
             return myTifPath
@@ -536,7 +542,7 @@ class ShakeEvent():
         # Ensure the vrt mmi file exists (it will generate csv too if needed)
         myVrtPath = self.mmiDataToVrt(theForceFlag)
 
-        # now generate the tif using default nearest neighbour interpoation
+        # now generate the tif using default nearest neighbour interpolation
         # options. This gives us the same output as the mi.grd generated by
         # the earthquake server.
 
@@ -545,6 +551,7 @@ class ShakeEvent():
         else:
             myAlgorithm = theAlgorithm
 
+        # TODO(Sunni): I'm not sure how this 'mmi' will work
         myCommand = (('gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
                       '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
                       '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
@@ -566,16 +573,24 @@ class ShakeEvent():
         self._runCommand(myCommand)
 
         # copy the keywords file from fixtures for this layer
-        myKeywordPath = os.path.join(self.outputDir,
-                                     '%s-%s.keywords'
-                                     % (self.outputBasename, theAlgorithm))
+        if self.algorithm_name:
+            myKeywordPath = os.path.join(self.outputDir,
+                                         '%s-%s.keywords'
+                                         % (self.outputBasename, theAlgorithm))
+        else:
+            myKeywordPath = os.path.join(self.outputDir,
+                                         '%s.keywords' % self.outputBasename)
         mySourceKeywords = os.path.join(dataDir(), 'mmi.keywords')
         shutil.copyfile(mySourceKeywords, myKeywordPath)
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-        myQmlPath = os.path.join(self.outputDir,
-                                 '%s-%s.qml'
-                                 % (self.outputBasename, theAlgorithm))
-        mySourceQml = os.path.join(dataDir(), self.outputBasename + '.qml')
+        if self.algorithm_name:
+            myQmlPath = os.path.join(self.outputDir,
+                                     '%s-%s.qml'
+                                     % (self.outputBasename, theAlgorithm))
+        else:
+            myQmlPath = os.path.join(self.outputDir,
+                                     '%s.qml' % self.outputBasename)
+        mySourceQml = os.path.join(dataDir(), 'mmi.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myTifPath
 
@@ -589,7 +604,7 @@ class ShakeEvent():
            myShakeEvent = myShakeData.shakeEvent()
            myContourPath = myShakeEvent.mmiToContours()
 
-        which will return the contour dataset for the latest event on the
+        which will return the contour data set for the latest event on the
         ftp server.
 
         Args: theForceFlag bool - (Optional). Whether to force the regeneration
@@ -599,16 +614,22 @@ class ShakeEvent():
               **Only enforced if theForceFlag is true!**
 
         Returns: An absolute filesystem path pointing to the generated
-            contour dataset.
+            contour data set.
 
         Raises: ContourCreationError
 
         """
         LOGGER.debug('mmiDataToContours requested.')
         # TODO: Use sqlite rather?
-        myOutputFileBase = os.path.join(self.outputDir,
-                                        '%s-contours-%s.'
-                                        % (self.outputBasename, theAlgorithm))
+        if self.algorithm_name:
+            myOutputFileBase = os.path.join(self.outputDir,
+                                            '%s-contours-%s.'
+                                            % (self.outputBasename,
+                                               theAlgorithm))
+        else:
+            myOutputFileBase = os.path.join(self.outputDir,
+                                            '%s-contours.'
+                                            % self.outputBasename)
         myOutputFile = myOutputFileBase + 'shp'
         if os.path.exists(myOutputFile) and theForceFlag is not True:
             return myOutputFile
@@ -695,16 +716,18 @@ class ShakeEvent():
         myQmlPath = os.path.join(self.outputDir,
                                  '%s-contours-%s.prj' % (
                                      self.outputBasename, theAlgorithm))
-        mySourceQml = os.path.join(dataDir(),
-                                   self.outputBasename + '-contours.prj')
+        mySourceQml = os.path.join(dataDir(), 'mmi-contours.prj')
         shutil.copyfile(mySourceQml, myQmlPath)
 
         # Lastly copy over the standard qml (QGIS Style file)
-        myQmlPath = os.path.join(self.outputDir,
-                                 '%s-contours-%s.qml' % (
-                                     self.outputBasename, theAlgorithm))
-        mySourceQml = os.path.join(dataDir(),
-                                   self.outputBasename + '-contours.qml')
+        if self.algorithm_name:
+            myQmlPath = os.path.join(self.outputDir,
+                                     '%s-contours-%s.qml' % (
+                                         self.outputBasename, theAlgorithm))
+        else:
+            myQmlPath = os.path.join(self.outputDir,
+                                     '%s-contours.qml' % self.outputBasename)
+        mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
 
         # Now update the additional columns - X,Y, ROMAN and RGB
@@ -716,21 +739,20 @@ class ShakeEvent():
         return myOutputFile
 
 
-def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None):
+def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None,
+                     algorithm_name=True):
     """This is static interface function for converter
     Use this function.
     """
+    print output_path
     if output_path is not None:
-        my_output_dir = os.path.dirname(output_path)
+        my_output_dir, my_output_basename = os.path.split(output_path)
+        my_output_basename, _ = os.path.splitext(my_output_basename)
+        LOGGER.debug('my_output_dir : ' + my_output_dir +
+                     'my_output_basename : ' + my_output_basename)
     else:
         my_output_dir = output_path
-    myShakeEvent = ShakeEvent(gridXMLPath, my_output_dir)
+    myShakeEvent = ShakeEvent(gridXMLPath, my_output_dir, my_output_basename,
+                              algorithm_name)
     return myShakeEvent.mmiDataToRaster(theForceFlag=True,
                                         theAlgorithm=the_algorithm)
-
-
-#if __name__ == '__main__':
-#    myShakeEvent = ShakeEvent(
-#        gridXMLPath='/home/sunnii/Downloads/grid.xml',
-#        outputDir='/home/sunnii/Documents')
-#    print myShakeEvent.mmiDataToRaster(theAlgorithm="invdist")
