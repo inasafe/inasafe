@@ -573,15 +573,8 @@ class ShakeEvent():
         self._runCommand(myCommand)
 
         # copy the keywords file from fixtures for this layer
-        if self.algorithm_name:
-            myKeywordPath = os.path.join(self.outputDir,
-                                         '%s-%s.keywords'
-                                         % (self.outputBasename, theAlgorithm))
-        else:
-            myKeywordPath = os.path.join(self.outputDir,
-                                         '%s.keywords' % self.outputBasename)
-        mySourceKeywords = os.path.join(dataDir(), 'mmi.keywords')
-        shutil.copyfile(mySourceKeywords, myKeywordPath)
+        self.create_keyword_file(theAlgorithm)
+
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         if self.algorithm_name:
             myQmlPath = os.path.join(self.outputDir,
@@ -650,7 +643,7 @@ class ShakeEvent():
         myOgrDataset = myDriver.CreateDataSource(myOutputFile)
         if myOgrDataset is None:
             # Probably the file existed and could not be overriden
-            raise ContourCreationError('Could not create datasource for:\n%s'
+            raise ContourCreationError('Could not create data source for:\n%s'
                                        'Check that the file does not already '
                                        'exist and that you '
                                        'do not have file system permissions '
@@ -738,6 +731,24 @@ class ShakeEvent():
 
         return myOutputFile
 
+    def create_keyword_file(self, theAlgorithm):
+        """Create keyword file for the raster file created
+        Basically copy a template from keyword file in converter data
+        and add extra keyword (usually a title)
+        """
+        if self.algorithm_name:
+            myKeywordPath = os.path.join(self.outputDir,
+                                         '%s-%s.keywords'
+                                         % (self.outputBasename, theAlgorithm))
+        else:
+            myKeywordPath = os.path.join(self.outputDir,
+                                         '%s.keywords' % self.outputBasename)
+        mySourceKeywords = os.path.join(dataDir(), 'mmi.keywords')
+        shutil.copyfile(mySourceKeywords, myKeywordPath)
+        # append title to the keywords file
+        with open(myKeywordPath, 'a') as my_file:
+            my_file.write('title: ' + self.outputBasename)
+
 
 def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None,
                      algorithm_name=True):
@@ -752,6 +763,7 @@ def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None,
                      'my_output_basename : ' + my_output_basename)
     else:
         my_output_dir = output_path
+        my_output_basename = None
     myShakeEvent = ShakeEvent(gridXMLPath, my_output_dir, my_output_basename,
                               algorithm_name)
     return myShakeEvent.mmiDataToRaster(theForceFlag=True,
