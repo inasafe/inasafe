@@ -19,6 +19,7 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
+import os
 
 from PyQt4.QtCore import (QFileInfo, pyqtSignature, SIGNAL, QObject)
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
@@ -51,17 +52,21 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
         self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(
             get_version()))
         # I'm too lazy to put a text :)
-        self.leInputPath.setText('/home/sunnii/Downloads/grid.xml')
+        # self.leInputPath.setText('/home/sunnii/Downloads/grid.xml')
         self.list_algorithm = ['Nearest', 'Invdist']
         self.test_mode = False
         self.populate_algorithm()
+        self.warning_text = set()
+        self.on_leInputPath_textChanged()
+        self.on_leOutputPath_textChanged()
+        self.update_warning()
         # Event register
         QObject.connect(self.cBDefaultOutputLocation,
                         SIGNAL('toggled(bool)'),
-                        self.update_output_location)
+                        self.get_output_from_input)
         QObject.connect(self.leInputPath,
                         SIGNAL('textChanged(QString)'),
-                        self.update_output_location)
+                        self.on_leInputPath_textChanged)
         QObject.connect(self.leOutputPath,
                         SIGNAL('textChanged(QString)'),
                         self.on_leOutputPath_textChanged)
@@ -75,19 +80,52 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
         """Action when output file name is changed
         """
         output_path = str(self.leOutputPath.text())
+        output_not_xml_msg = str(self.tr('output file is not .tif'))
         if not output_path.endswith('.tif'):
-            self.lblWarning.setVisible(True)
-            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
-        else:
-            self.lblWarning.setVisible(False)
-            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(True)
+            self.warning_text.add(output_not_xml_msg)
+        elif output_not_xml_msg in self.warning_text:
+            self.warning_text.remove(output_not_xml_msg)
+        self.update_warning()
 
-    def update_output_location(self):
-        """Update output location if cBDefaultOutputLocation
-        is toggled.
+    def on_leInputPath_textChanged(self):
+        """Action when input file name is changed
         """
+        input_path = str(self.leInputPath.text())
+        # input_not_exist_msg = str(self.tr('input file is not existed'))
+        input_not_grid_msg = str(self.tr('input file is not .xml'))
+        # NOTE(Sunni): I think it take big resource and make a delay
+        # if not os.path.exists(input_path):
+        #     self.warning_text.add(input_not_exist_msg)
+        # elif input_not_exist_msg in self.warning_text:
+        #     self.warning_text.remove(input_not_exist_msg)
+
+        if not input_path.endswith('.xml'):
+            self.warning_text.add(input_not_grid_msg)
+        elif input_not_grid_msg in self.warning_text:
+            self.warning_text.remove(input_not_grid_msg)
+
         if self.cBDefaultOutputLocation.isChecked():
             self.get_output_from_input()
+        self.update_warning()
+
+    # def update_output_location(self):
+    #     """Update output location if cBDefaultOutputLocation
+    #     is toggled.
+    #     """
+    #     if self.cBDefaultOutputLocation.isChecked():
+    #         self.get_output_from_input()
+
+    def update_warning(self):
+        """Update warning message and enable/disable Ok button
+        """
+        if len(self.warning_text) > 0:
+            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
+            pretty_msg = 'Warning : ' + ', '.join(self.warning_text)
+            self.lblWarning.setText(pretty_msg)
+            self.lblWarning.setVisible(True)
+        else:
+            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(True)
+            self.lblWarning.setVisible(False)
 
     def get_output_from_input(self):
         """Basically, it just get from input file location and
@@ -96,16 +134,15 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
         my_input_path = str(self.leInputPath.text())
         if my_input_path.endswith('.xml'):
             my_output_path = my_input_path[:-3] + 'tif'
+        elif my_input_path == '':
+            my_output_path = ''
         else:
             last_dot = my_input_path.rfind('.')
-            my_output_path = my_input_path[:last_dot + 1] + 'tif'
+            if last_dot == -1:
+                my_output_path = ''
+            else:
+                my_output_path = my_input_path[:last_dot + 1] + 'tif'
         self.leOutputPath.setText(my_output_path)
-
-    def on_leInputPath_textChanged(self):
-        """Event handler when leInputPath changed its text
-        """
-        if self.cBDefaultOutputLocation.isChecked():
-            self.get_output_from_input()
 
     def accept(self):
         input_path = str(self.leInputPath.text())
@@ -114,6 +151,11 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
             QMessageBox.warning(
                 self.parent, self.tr('InaSAFE'),
                 (self.tr('Output file name must be tif file')))
+        if not os.path.exists(input_path):
+            QMessageBox.warning(
+                self.parent, self.tr('InaSAFE'),
+                (self.tr('Input file is not exist')))
+            return
         my_algorithm = str(self.cboAlgorithm.currentText()).lower()
         fileName = convert_mmi_data(input_path, output_path,
                                     the_algorithm=my_algorithm,
