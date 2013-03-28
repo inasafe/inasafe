@@ -293,7 +293,7 @@ class Plugin:
         # Create action for converter dialog
         #---------------------------------------
         self.actionConverter = QAction(
-            QIcon(':/plugins/inasafe/minimum_needs.png'),
+            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
             self.tr('InaSAFE Converter'), self.iface.mainWindow())
         self.actionConverter.setStatusTip(self.tr(
             'Open InaSAFE Converter'))
