@@ -10,6 +10,7 @@ Package::safe_qgis_tests
    safe_qgis_tests/test_map_legend
    safe_qgis_tests/test_help
    safe_qgis_tests/test_keywords_dialog
+   safe_qgis_tests/test_converter_dialog
    safe_qgis_tests/test_plugin
    safe_qgis_tests/test_safe_interface
    safe_qgis_tests/test_function_options_dialog
