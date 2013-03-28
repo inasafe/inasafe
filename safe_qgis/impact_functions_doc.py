@@ -20,21 +20,19 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import (QtGui, QtCore, QtWebKit,)
 from impact_functions_doc_base import Ui_ImpactFunctionsDocBase
-# TODO: use safe_qgis.safe_interface here rather
-from safe.impact_functions import core
-# TODO: and here
-from safe.impact_functions.core import get_unique_values
 from safe_qgis.help import Help
-from safe_qgis.safe_interface import get_version
+from safe_qgis.safe_interface import (get_version,
+                                      get_unique_values,
+                                      get_plugins_as_table)
 from utilities import htmlFooter, htmlHeader
 
 
 class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
-    '''ImpactFunctions Dialog for InaSAFE.
-    '''
+    """ImpactFunctions Dialog for InaSAFE.
+    """
 
     def __init__(self, theParent=None, dict_filter=None):
-        '''Constructor for the dialog.
+        """Constructor for the dialog.
 
                 This dialog will show the user impact function documentation.
 
@@ -44,16 +42,15 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
            not applicable
         Raises:
            no exceptions explicitly raised
-        '''
+        """
         QtGui.QDialog.__init__(self, theParent)
         self.parent = theParent
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
         # Set up the user interface from Designer.
         self.setupUi(self)
-        self.setWindowTitle(self.tr(
-                            'InaSAFE %1 Impact Functions Browser').arg(
-                             get_version()))
+        self.setWindowTitle(
+            self.tr('InaSAFE %1 Impact Functions Browser').arg(get_version()))
         self.no_filter = self.tr('No Filter')
         if dict_filter is None:
             dict_filter = {'id': [],
@@ -70,8 +67,9 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
         resetButton = self.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
-        QtCore.QObject.connect(resetButton, QtCore.SIGNAL('clicked()'),
-                                   self.reset_button_clicked)
+        QtCore.QObject.connect(
+            resetButton,
+            QtCore.SIGNAL('clicked()'), self.reset_button_clicked)
 
         # Set up help dialog showing logic.
         self.helpDialog = None
@@ -102,16 +100,16 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
                                self.update_table)
 
     def showImpactFunctionsTable(self):
-        '''Show table of impact functions.
-        '''
-        self.if_table = core.get_plugins_as_table(self.dict_filter)
+        """Show table of impact functions.
+        """
+        self.if_table = get_plugins_as_table(self.dict_filter)
         self.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
         self.displayHtml(QtCore.QString(str(self.if_table)))
 
     def generate_combo_box_content(self):
-        '''Generate list for each combo box's content.
-        '''
+        """Generate list for each combo box's content.
+        """
         unique_values = get_unique_values()
         for item in unique_values.itervalues():
             item.insert(0, self.no_filter)
@@ -119,8 +117,8 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         return unique_values
 
     def populate_combo_box(self):
-        '''Populate item in each combo box.
-        '''
+        """Populate item in each combo box.
+        """
         if self.combo_box_content is None:
             self.combo_box_content = self.generate_combo_box_content()
 
@@ -128,25 +126,26 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.comboBox_id.addItems(self.combo_box_content['id'])
         self.comboBox_category.addItems(self.combo_box_content['category'])
         self.comboBox_subcategory.addItems(
-                                        self.combo_box_content['subcategory'])
+            self.combo_box_content['subcategory'])
         self.comboBox_layertype.addItems(
-                                        self.combo_box_content['layertype'])
+            self.combo_box_content['layertype'])
         self.comboBox_datatype.addItems(self.combo_box_content['datatype'])
         self.comboBox_unit.addItems(self.combo_box_content['unit'])
 
     def update_table(self):
-        """Updating table according to the filter."""
+        """Updating table according to the filter.
+        """
         # get filter
         self.dict_filter['title'] = [str(self.comboBox_title.currentText())]
         self.dict_filter['id'] = [str(self.comboBox_id.currentText())]
-        self.dict_filter['category'] = (
-                                [str(self.comboBox_category.currentText())])
-        self.dict_filter['subcategory'] = (
-                            [str(self.comboBox_subcategory.currentText())])
-        self.dict_filter['layertype'] = (
-                            [str(self.comboBox_layertype.currentText())])
-        self.dict_filter['datatype'] = (
-                                [str(self.comboBox_datatype.currentText())])
+        self.dict_filter['category'] = \
+            ([str(self.comboBox_category.currentText())])
+        self.dict_filter['subcategory'] = \
+            ([str(self.comboBox_subcategory.currentText())])
+        self.dict_filter['layertype'] = \
+            ([str(self.comboBox_layertype.currentText())])
+        self.dict_filter['datatype'] = \
+            ([str(self.comboBox_datatype.currentText())])
         self.dict_filter['unit'] = [str(self.comboBox_unit.currentText())]
         for key, value in self.dict_filter.iteritems():
             for val in value:

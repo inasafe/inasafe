@@ -65,7 +65,7 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
-                                      getFunctionTitle,
+                                      get_function_title,
                                       getOptimalExtent,
                                       getBufferedExtent,
                                       getSafeImpactFunctions,
@@ -801,7 +801,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Populate the hazard combo with the available functions
             for myFunctionID in myDict:
                 myFunction = myDict[myFunctionID]
-                myFunctionTitle = getFunctionTitle(myFunction)
+                myFunctionTitle = get_function_title(myFunction)
 
                 # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
                 #print

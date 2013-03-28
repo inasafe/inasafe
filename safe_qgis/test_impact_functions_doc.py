@@ -10,18 +10,19 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from PyQt4 import QtGui
 
 __author__ = 'ismailsunni@yahoo.co.id'
 __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
 import unittest
 from nose import SkipTest
 from impact_functions_doc import ImpactFunctionsDoc
 from safe_qgis.utilities_test import getQgisTestApp
 from PyQt4.QtTest import QTest
-from PyQt4 import QtCore
+from PyQt4.QtCore import Qt
+from PyQt4.QtGui import QDialogButtonBox
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -41,6 +42,8 @@ def verifyColumn(table, col, strFilter, mode):
     retval = True
     msg = 'Verified'
     elmt_col = table.column(col)
+    elmt = ''
+    verb = ''
     if mode == 'only':
         for elmt in elmt_col:
             if elmt != strFilter:
@@ -66,7 +69,7 @@ def verifyColumn(table, col, strFilter, mode):
 
     if not retval:
         msg = ('Expected column %d %s %s but found %s'
-                        % (col, verb, strFilter, elmt))
+               % (col, verb, strFilter, elmt))
     assert retval, msg
 
 
@@ -108,10 +111,9 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         expectedTable = myDialog.if_table.toNewlineFreeString()
         myDialog.comboBox_category.setCurrentIndex(1)
         myDialog.comboBox_subcategory.setCurrentIndex(1)
+        resetButton = myDialog.myButtonBox.button(QDialogButtonBox.Reset)
         realTableFilter = myDialog.if_table.toNewlineFreeString()
-        resetButton = myDialog.myButtonBox.button(
-                                            QtGui.QDialogButtonBox.Reset)
-        QTest.mouseClick(resetButton, QtCore.Qt.LeftButton)
+        QTest.mouseClick(resetButton, Qt.LeftButton)
         realTableReset = myDialog.if_table.toNewlineFreeString()
         msgFilter = 'It should be different table because it is filtered.'
         assert expectedTable != realTableFilter, msgFilter
@@ -127,8 +129,8 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins if docs dir not present.")
         myDialog = ImpactFunctionsDoc(PARENT)
-        myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton = myDialog.buttonBox.button(QDialogButtonBox.Help)
+        QTest.mouseClick(myButton, Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
         #pylint: enable=W0101
