@@ -52,6 +52,8 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
             get_version()))
         # I'm too lazy to put a text :)
         self.leInputPath.setText('/home/sunnii/Downloads/grid.xml')
+        self.list_algorithm = ['Nearest', 'Invdist']
+        self.test_mode = False
         self.populate_algorithm()
         # Event register
         QObject.connect(self.cBDefaultOutputLocation,
@@ -67,7 +69,7 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
     def populate_algorithm(self):
         """Populate algorithm for converting grid.xml
         """
-        self.cboAlgorithm.addItems(['Nearest', 'Invdist'])
+        self.cboAlgorithm.addItems(self.list_algorithm)
 
     def on_leOutputPath_textChanged(self):
         """Action when output file name is changed
@@ -125,10 +127,11 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
             else:
                 QgsMapLayerRegistry.instance().addMapLayer(my_raster_layer)
         self.done(self.Accepted)
-        QMessageBox.warning(
-            self.parent, self.tr('InaSAFE'),
-            (self.tr('Success to convert %1 to %2').
-             arg(input_path).arg(output_path)))
+        if not self.test_mode:
+            QMessageBox.warning(
+                self.parent, self.tr('InaSAFE'),
+                (self.tr('Success to convert %1 to %2').
+                 arg(input_path).arg(output_path)))
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenInput_clicked(self):
