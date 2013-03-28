@@ -58,4 +58,5 @@ from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
 from safe.postprocessors import (get_postprocessors,
                                  get_postprocessor_human_name)
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
 # pylint: enable=W0611

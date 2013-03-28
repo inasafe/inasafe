@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Functionality related to shake events.**
+- **Functionality related to convert format file.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -25,17 +25,9 @@ from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
 
-import ogr
-import gdal
-from gdalconst import GA_ReadOnly
 
-
-# TODO I think QCoreApplication is needed for tr() check before removing
-# TODO refactor this into a utility class as it is no longer only used by test
 from safe.common.exceptions import (GridXmlFileNotFoundError,
-                                    GridXmlParseError,
-                                    ContourCreationError,
-                                    InvalidLayerError)
+                                    GridXmlParseError)
 
 # The logger is initialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')

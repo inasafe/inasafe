@@ -53,7 +53,8 @@ from safe.api import (get_admissible_plugins,
                       convert_mmi_data,
                       format_int,
                       get_unique_values,
-                      get_plugins_as_table)
+                      get_plugins_as_table,
+                      HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
 
 from safe.defaults import DEFAULTS
 # pylint: enable=W0611
