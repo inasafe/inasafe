@@ -111,7 +111,7 @@ def temp_dir(sub_dir='work'):
         # Umask sets the new mask and returns the old
         old_mask = os.umask(0000)
         os.makedirs(path, 0777)
-        # Resinstate the old mask for tmp
+        # Reinstate the old mask for tmp
         os.umask(old_mask)
     return path
 
