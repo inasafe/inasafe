@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from PyQt4.QtCore import pyqtSignature
 
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -21,18 +20,17 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 
-from qgis.core import (QgsRasterLayer,
-                       QgsMapLayerRegistry)
-from converter_dialog_base import Ui_ConverterDialogBase
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QFileInfo
+from PyQt4.QtCore import (QFileInfo, pyqtSignature, SIGNAL, QObject)
+from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 
+from converter_dialog_base import Ui_ConverterDialogBase
+from qgis.core import (QgsRasterLayer, QgsMapLayerRegistry)
 from safe_qgis.safe_interface import get_version, convert_mmi_data
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
+class ConverterDialog(QDialog, Ui_ConverterDialogBase):
     """Converter Dialog for InaSAFE
     """
     def __init__(self, theParent=None):
@@ -47,25 +45,40 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         Raises:
            no exceptions explicitly raised
         """
-        QtGui.QDialog.__init__(self, theParent)
+        QDialog.__init__(self, theParent)
         self.parent = theParent
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(
             get_version()))
+        # I'm too lazy to put a text :)
         self.leInputPath.setText('/home/sunnii/Downloads/grid.xml')
         self.populate_algorithm()
         # Event register
-        QtCore.QObject.connect(self.cBDefaultOutputLocation,
-                               QtCore.SIGNAL('toggled(bool)'),
-                               self.update_output_location)
-        QtCore.QObject.connect(self.leInputPath,
-                               QtCore.SIGNAL('textChanged(QString)'),
-                               self.update_output_location)
+        QObject.connect(self.cBDefaultOutputLocation,
+                        SIGNAL('toggled(bool)'),
+                        self.update_output_location)
+        QObject.connect(self.leInputPath,
+                        SIGNAL('textChanged(QString)'),
+                        self.update_output_location)
+        QObject.connect(self.leOutputPath,
+                        SIGNAL('textChanged(QString)'),
+                        self.on_leOutputPath_textChanged)
 
     def populate_algorithm(self):
         """Populate algorithm for converting grid.xml
         """
         self.cboAlgorithm.addItems(['Nearest', 'Invdist'])
+
+    def on_leOutputPath_textChanged(self):
+        """Action when output file name is changed
+        """
+        output_path = str(self.leOutputPath.text())
+        if not output_path.endswith('.tif'):
+            self.lblWarning.setVisible(True)
+            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
+        else:
+            self.lblWarning.setVisible(False)
+            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(True)
 
     def update_output_location(self):
         """Update output location if cBDefaultOutputLocation
@@ -94,11 +107,11 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
 
     def accept(self):
         input_path = str(self.leInputPath.text())
-        # if self.cBDefaultOutputLocation.isChecked():
-        #     output_path = None
-        # else:
-        #     output_path = str(self.leOutputPath.text())
         output_path = str(self.leOutputPath.text())
+        if not output_path.endswith('.tif'):
+            QMessageBox.warning(
+                self.parent, self.tr('InaSAFE'),
+                (self.tr('Output file name must be tif file')))
         my_algorithm = str(self.cboAlgorithm.currentText()).lower()
         fileName = convert_mmi_data(input_path, output_path,
                                     the_algorithm=my_algorithm,
@@ -106,12 +119,16 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         if self.cBLoadLayer.isChecked():
             fileInfo = QFileInfo(fileName)
             baseName = fileInfo.baseName()
-            rlayer = QgsRasterLayer(fileName, baseName)
-            if not rlayer.isValid():
+            my_raster_layer = QgsRasterLayer(fileName, baseName)
+            if not my_raster_layer.isValid():
                 LOGGER.debug("Failed to load")
             else:
-                QgsMapLayerRegistry.instance().addMapLayer(rlayer)
+                QgsMapLayerRegistry.instance().addMapLayer(my_raster_layer)
         self.done(self.Accepted)
+        QMessageBox.warning(
+            self.parent, self.tr('InaSAFE'),
+            (self.tr('Success to convert %1 to %2').
+             arg(input_path).arg(output_path)))
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenInput_clicked(self):
@@ -124,7 +141,7 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         Raises:
             None
         """
-        myFilename = QtGui.QFileDialog.getOpenFileName(
+        myFilename = QFileDialog.getOpenFileName(
             self, self.tr('Input file'), 'grid.xml',
             self.tr('Raw grid file(*.xml)'))
         self.leInputPath.setText(myFilename)
@@ -140,7 +157,7 @@ class ConverterDialog(QtGui.QDialog, Ui_ConverterDialogBase):
         Raises:
             None
         """
-        myFilename = QtGui.QFileDialog.getSaveFileName(
+        myFilename = QFileDialog.getSaveFileName(
             self, self.tr('Ouput file'), 'ismailsunni.tif',
             self.tr('Raster file(*.tif)'))
         self.leOutputPath.setText(myFilename)

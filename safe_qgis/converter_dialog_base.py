@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'converter_dialog_base.ui'
 #
-# Created: Tue Mar 26 13:10:06 2013
+# Created: Thu Mar 28 09:42:29 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,9 +17,9 @@ except AttributeError:
 class Ui_ConverterDialogBase(object):
     def setupUi(self, ConverterDialogBase):
         ConverterDialogBase.setObjectName(_fromUtf8("ConverterDialogBase"))
-        ConverterDialogBase.resize(393, 318)
+        ConverterDialogBase.resize(393, 346)
         self.buttonBox = QtGui.QDialogButtonBox(ConverterDialogBase)
-        self.buttonBox.setGeometry(QtCore.QRect(20, 270, 361, 32))
+        self.buttonBox.setGeometry(QtCore.QRect(20, 300, 361, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
@@ -79,6 +79,13 @@ class Ui_ConverterDialogBase(object):
         font.setWeight(75)
         self.lblAlgotrithm.setFont(font)
         self.lblAlgotrithm.setObjectName(_fromUtf8("lblAlgotrithm"))
+        self.lblWarning = QtGui.QLabel(ConverterDialogBase)
+        self.lblWarning.setGeometry(QtCore.QRect(10, 260, 381, 34))
+        font = QtGui.QFont()
+        font.setItalic(True)
+        self.lblWarning.setFont(font)
+        self.lblWarning.setWordWrap(True)
+        self.lblWarning.setObjectName(_fromUtf8("lblWarning"))
 
         self.retranslateUi(ConverterDialogBase)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ConverterDialogBase.accept)
@@ -97,4 +104,5 @@ class Ui_ConverterDialogBase(object):
         self.cBDefaultOutputLocation.setText(QtGui.QApplication.translate("ConverterDialogBase", "Use default location", None, QtGui.QApplication.UnicodeUTF8))
         self.cBLoadLayer.setText(QtGui.QApplication.translate("ConverterDialogBase", "Load output file to QGIS", None, QtGui.QApplication.UnicodeUTF8))
         self.lblAlgotrithm.setText(QtGui.QApplication.translate("ConverterDialogBase", "Algorithm", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblWarning.setText(QtGui.QApplication.translate("ConverterDialogBase", "Output filename must be .tif format", None, QtGui.QApplication.UnicodeUTF8))
 
