@@ -405,7 +405,9 @@ searchBoxes: None
                               u'Estimated fatalities'),
                           'fatalities-count': u'0',  # 44 only after render
                           'elapsed-time': u'',  # empty as it will change
-                          'legend-name': 'Population density',
+                          'legend-name': PyQt4.QtCore.QString(
+                              u'Population density'),
+                          'fatalities-range': '0 - 100',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
                           'located-label': PyQt4.QtCore.QString(u'Located'),
                           'distance-unit': PyQt4.QtCore.QString(u'km'),
@@ -454,6 +456,8 @@ searchBoxes: None
         myResult['elapsed-time'] = u''
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedDict)
         self.maxDiff = None
+        myDifference = DictDiffer(myResult, myExpectedDict)
+        print myDifference.all()
         self.assertDictEqual(myExpectedDict, myResult, myMessage)
 
     def testEventInfoString(self):
@@ -517,6 +521,44 @@ searchBoxes: None
         self.assertEqual('22', myShakeEvent.minute)
         self.assertEqual('37', myShakeEvent.second)
 
+
+class DictDiffer(object):
+    """
+    Taken from
+    http://stackoverflow.com/questions/1165352/
+                  fast-comparison-between-two-python-dictionary
+    Calculate the difference between two dictionaries as:
+    (1) items added
+    (2) items removed
+    (3) keys same in both but changed values
+    (4) keys same in both and unchanged values
+    """
+
+    def __init__(self, current_dict, past_dict):
+        self.current_dict, self.past_dict = current_dict, past_dict
+        self.set_current, self.set_past = set(current_dict.keys()), set(
+            past_dict.keys())
+        self.intersect = self.set_current.intersection(self.set_past)
+
+    def added(self):
+        return self.set_current - self.intersect
+
+    def removed(self):
+        return self.set_past - self.intersect
+
+    def changed(self):
+        return set(o for o in self.intersect if
+                   self.past_dict[o] != self.current_dict[o])
+
+    def unchanged(self):
+        return set(o for o in self.intersect if
+                   self.past_dict[o] == self.current_dict[o])
+
+    def all(self):
+        string = 'Added: %s\n' % self.added()
+        string += 'Removed: %s\n' % self.removed()
+        string += 'changed: %s\n' % self.changed()
+        return string
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

@@ -554,7 +554,7 @@ def extentToGeoArray(theExtent, theSourceCrs):
     """
 
     myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromEpsg(4326)
+    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(
         theSourceCrs,
         myGeoCrs)

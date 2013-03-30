@@ -904,7 +904,6 @@ class ShakeEvent(QObject):
         if not myLayer.isValid():
             raise InvalidLayerError(theFile)
 
-        myProvider = myLayer.dataProvider()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
         myRequest = QgsFeatureRequest()
@@ -1295,21 +1294,19 @@ class ShakeEvent(QObject):
             if myRoman is None:
                 continue
 
-            myNewFeature.setFields(myFields)
-            myAttributes = {
-                myFeature.fieldNameIndex('id'): myId,
-                myFeature.fieldNameIndex('name'): myPlaceName,
-                myFeature.fieldNameIndex('population'): myPopulation,
-                myFeature.fieldNameIndex('mmi'): QVariant(myMmi),
-                myFeature.fieldNameIndex('dist_to'): QVariant(myDistance),
-                myFeature.fieldNameIndex('dir_to'): QVariant(myDirectionTo),
-                myFeature.fieldNameIndex('dir_from'): QVariant(
-                    myDirectionFrom),
-                myFeature.fieldNameIndex('roman'): QVariant(myRoman),
-                myFeature.fieldNameIndex('colour'): QVariant(
-                    self.mmiColour(myMmi))
-            }
-            myFeature.setAttributes(myAttributes)
+            # myNewFeature.setFields(myFields)
+            # Column positions are determined by setFields above
+            myAttributes = [
+                myId,
+                myPlaceName,
+                myPopulation,
+                QVariant(myMmi),
+                QVariant(myDistance),
+                QVariant(myDirectionTo),
+                QVariant(myDirectionFrom),
+                QVariant(myRoman),
+                QVariant(self.mmiColour(myMmi))]
+            myNewFeature.setAttributes(myAttributes)
             myCities.append(myNewFeature)
         return myCities
 
@@ -1325,6 +1322,7 @@ class ShakeEvent(QObject):
         LOGGER.debug('localCitiesMemoryLayer requested.')
         # Now store the selection in a temporary memory layer
         myMemoryLayer = QgsVectorLayer('Point', 'affected_cities', 'memory')
+
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
         myMemoryProvider.addAttributes([
@@ -1375,19 +1373,18 @@ class ShakeEvent(QObject):
                                        'memory')
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
-        myMemoryProvider.addAttributes([
-            QgsField('cities_found', QVariant.Int)])
-
+        myField = QgsField('cities_found', QVariant.Int)
+        myFields = QgsFields()
+        myFields.append(myField)
+        myMemoryProvider.addAttributes(myFields)
         myFeatures = []
         for mySearchBox in self.searchBoxes:
             myNewFeature = QgsFeature()
             myRectangle = mySearchBox['geometry']
             myGeometry = QgsGeometry.fromWkt(myRectangle.asWktPolygon())
             myNewFeature.setGeometry(myGeometry)
-            myAttributeMap = {
-                0: QVariant(mySearchBox['city_count']),
-            }
-            myNewFeature.setAttributeMap(myAttributeMap)
+            myNewFeature.setFields(myFields)
+            myNewFeature.setAttribute(0, mySearchBox['city_count'])
             myFeatures.append(myNewFeature)
 
         myResult = myMemoryProvider.addFeatures(myFeatures)
@@ -1449,44 +1446,37 @@ class ShakeEvent(QObject):
 
         """
         myLayer = self.localCitiesMemoryLayer()
-        myLayerProvider = myLayer.dataProvider()
+        myFields = myLayer.dataProvider().fields()
         myCities = []
 
-        myIdIndex = myLayerProvider.fieldNameIndex('id')
-        myPlaceNameIndex = myLayerProvider.fieldNameIndex('name')
-        myMmiIndex = myLayerProvider.fieldNameIndex('mmi')
-        myPopulationIndex = myLayerProvider.fieldNameIndex('population')
-        myRomanIndex = myLayerProvider.fieldNameIndex('roman')
-        myDirectionToIndex = myLayerProvider.fieldNameIndex('dir_to')
-        myDirectionFromIndex = myLayerProvider.fieldNameIndex('dir_from')
-        myDistanceToIndex = myLayerProvider.fieldNameIndex('dist_to')
-        # Should not need this NEXT line to be repeated here but not working
-        # without it!
-        myLayerProvider = myLayer.dataProvider()
-        myIndexes = myLayerProvider.attributeIndexes()
-
-        myLayer.select(myIndexes)
-        # Now loop through the db adding selected features to mem layer
         myCount = 0
-        myFeature = QgsFeature()
-        while myLayerProvider.nextFeature(myFeature) and myCount < theCount:
+        # Now loop through the db adding selected features to mem layer
+        myRequest = QgsFeatureRequest()
+
+        for myFeature in myLayer.getFeatures(myRequest):
             if not myFeature.isValid():
                 LOGGER.debug('Skipping feature')
                 continue
             myCount += 1
             # calculate the distance and direction from this point
             # to and from the epicenter
-            myAttributes = myFeature.attributeMap()
-            myId = myAttributes[myIdIndex].toInt()[0]
-            myPlaceName = str(myAttributes[myPlaceNameIndex].toString())
-            # TODO: figure out why it gets a tuple back instead of just a
-            # float. For now [0] at end gets the tupe[0] element which is float
-            myMmi = myAttributes[myMmiIndex].toFloat()[0]
-            myPopulation = myAttributes[myPopulationIndex].toInt()[0]
-            myRoman = str(myAttributes[myRomanIndex].toString())
-            myDirectionTo = myAttributes[myDirectionToIndex].toFloat()[0]
-            myDirectionFrom = myAttributes[myDirectionFromIndex].toFloat()[0]
-            myDistanceTo = myAttributes[myDistanceToIndex].toFloat()[0]
+            myId = myFeature.id()
+            # We should be able to do this:
+            # myPlaceName = str(myFeature['name'].toString())
+            # But its not working so we do this:
+            myPlaceName = str(
+                myFeature[myFields.indexFromName('name')].toString())
+            myMmi = myFeature[myFields.indexFromName('mmi')].toFloat()[0]
+            myPopulation = (
+                myFeature[myFields.indexFromName('population')].toInt()[0])
+            myRoman = str(
+                myFeature[myFields.indexFromName('name')].toString())
+            myDirectionTo = (
+                myFeature[myFields.indexFromName('dir_to')].toFloat()[0])
+            myDirectionFrom = (
+                myFeature[myFields.indexFromName('dir_from')].toFloat()[0])
+            myDistanceTo = (
+                myFeature[myFields.indexFromName('dist_to')].toFloat()[0])
             myCity = {'id': myId,
                       'name': myPlaceName,
                       'mmi-int': int(myMmi),
@@ -1515,6 +1505,9 @@ class ShakeEvent(QObject):
             self.mostAffectedCity = mySortedCities[0]
         else:
             self.mostAffectedCity = None
+        # Slice off just the top theCount records now
+        if len(mySortedCities) > 5:
+            mySortedCities = mySortedCities[0: theCount]
         return mySortedCities
 
     def writeHtmlTable(self, theFileName, theTable):
