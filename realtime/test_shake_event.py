@@ -452,8 +452,7 @@ searchBoxes: None
                           'latitude-value': u'0\xb012\'36.00"S',
                           'time': '2:15:35', 'depth-value': '11.0'}
         myResult['elapsed-time'] = u''
-        myMessage = ('Got:\n%s\nExpected:\n%s\n' %
-             (myResult, myExpectedDict))
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedDict)
         self.maxDiff = None
         self.assertDictEqual(myExpectedDict, myResult, myMessage)
 
