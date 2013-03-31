@@ -415,7 +415,7 @@ searchBoxes: None
                           'elapsed-time-name': PyQt4.QtCore.QString(
                               u'Elapsed time since event'),
                           'exposure-table-name': PyQt4.QtCore.QString(
-                              u'Estimated number of people exposed to each '
+                              u'Estimated number of people affected by each '
                               u'MMI level'),
                           'longitude-value': u'124\xb027\'0.00"E',
                           'city-table-name': PyQt4.QtCore.QString(
@@ -438,7 +438,10 @@ searchBoxes: None
                               u' be made solely on the information presented '
                               u'here and should always be verified by ground '
                               u'truthing and other reliable information '
-                              u'sources.'),
+                              u'sources. The fatality calculation assumes '
+                              u'that no fatalities occur for shake levels '
+                              u'below MMI 4. Fatality counts of less than 50 '
+                              u'are disregarded.'),
                           'depth-unit': PyQt4.QtCore.QString(u'km'),
                           'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
                           'mmi': '5.0', 'map-name': PyQt4.QtCore.QString(
