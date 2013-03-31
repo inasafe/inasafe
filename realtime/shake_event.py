@@ -907,6 +907,7 @@ class ShakeEvent(QObject):
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
         myRequest = QgsFeatureRequest()
+        myFields = myLayer.dataProvider().fields()
 
         for myFeature in myLayer.getFeatures(myRequest):
             if not myFeature.isValid():
@@ -948,19 +949,19 @@ class ShakeEvent(QObject):
             # Now update the feature
             myId = myFeature.id()
             myLayer.changeAttributeValue(
-                myId, myFeature['X'], QVariant(myX))
+                myId, myFields.indexFromName('X'), QVariant(myX))
             myLayer.changeAttributeValue(
-                myId, myFeature['Y'], QVariant(myY))
+                myId, myFields.indexFromName('Y'), QVariant(myY))
             myLayer.changeAttributeValue(
-                myId, myFeature['RGB'], QVariant(myRGB))
+                myId, myFields.indexFromName('RGB'), QVariant(myRGB))
             myLayer.changeAttributeValue(
-                myId, myFeature['ROMAN'], QVariant(myRoman))
+                myId, myFields.indexFromName('ROMAN'), QVariant(myRoman))
             myLayer.changeAttributeValue(
-                myId, myFeature['ALIGN'], QVariant('Center'))
+                myId, myFields.indexFromName('ALIGN'), QVariant('Center'))
             myLayer.changeAttributeValue(
-                myId, myFeature['VALIGN'], QVariant('HALF'))
+                myId, myFields.indexFromName('VALIGN'), QVariant('HALF'))
             myLayer.changeAttributeValue(
-                myId, myFeature['LEN'], QVariant(myLength))
+                myId, myFields.indexFromName('LEN'), QVariant(myLength))
 
         myLayer.commitChanges()
 
@@ -1470,7 +1471,7 @@ class ShakeEvent(QObject):
             myPopulation = (
                 myFeature[myFields.indexFromName('population')].toInt()[0])
             myRoman = str(
-                myFeature[myFields.indexFromName('name')].toString())
+                myFeature[myFields.indexFromName('roman')].toString())
             myDirectionTo = (
                 myFeature[myFields.indexFromName('dir_to')].toFloat()[0])
             myDirectionFrom = (

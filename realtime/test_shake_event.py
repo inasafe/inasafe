@@ -24,7 +24,7 @@ import unittest
 import logging
 import difflib
 import PyQt4
-from qgis.core import QgsFeature
+from qgis.core import QgsFeatureRequest
 from safe.api import unique_filename, temp_dir
 from safe_qgis.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir, dataDir
@@ -196,17 +196,16 @@ searchBoxes: None
         myCitiesLayer = myShakeEvent.localCitiesMemoryLayer()
         myProvider = myCitiesLayer.dataProvider()
 
-        myFeature = QgsFeature()
-        myAttributes = myProvider.attributeIndexes()
-        myProvider.select(myAttributes)
         myExpectedFeatureCount = 6
         self.assertEquals(myProvider.featureCount(), myExpectedFeatureCount)
         myStrings = []
-        while myProvider.nextFeature(myFeature):
+        myRequest = QgsFeatureRequest()
+        for myFeature in myCitiesLayer.getFeatures(myRequest):
             # fetch map of attributes
-            myAttributes = myFeature.attributeMap()
-            for (myKey, myValue) in myAttributes.iteritems():
-                myStrings.append("%d: %s\n" % (myKey, myValue.toString()))
+            myAttributes = myCitiesLayer.dataProvider().attributeIndexes()
+            for myKey in myAttributes:
+                myStrings.append("%d: %s\n" % (myKey,
+                                               myFeature[myKey].toString()))
             myStrings.append('------------------\n')
         LOGGER.debug('Mem table:\n %s' % myStrings)
         myFilePath = unique_filename(prefix='testLocalCities',
@@ -272,8 +271,8 @@ searchBoxes: None
             myExpectedResult)
         assert myFatalitiesHtml == myExpectedResult, myMessage
 
-        myExpectedFatalities = {2: 0.47386375223673427,
-                                3: 0.024892573693488258,
+        myExpectedFatalities = {2: 0.0,  # rounded from 0.47386375223673427,
+                                3: 0.0,  # rounded from 0.024892573693488258,
                                 4: 0.0,
                                 5: 0.0,
                                 6: 0.0,
@@ -315,18 +314,9 @@ searchBoxes: None
         myShakeEvent = ShakeEvent(myShakeId)
 
         myValues = range(0, 12)
-        myExpectedResult = ['#FFFFFF',
-                            '#209fff',
-                            '#00cfff',
-                            '#55ffff',
-                            '#aaffff',
-                            '#fff000',
-                            '#ffa800',
-                            '#ff7000',
-                            '#ff0000',
-                            '#D00',
-                            '#800',
-                            '#400']
+        myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
+                            '#55ffff', '#aaffff', '#fff000', '#ffa800',
+                            '#ff7000', '#ff0000', '#D00', '#800']
         myResult = []
         for myValue in myValues:
             myResult.append(myShakeEvent.mmiColour(myValue))
@@ -516,13 +506,13 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId, theLocale='en')
         myShakeEvent.extractDateTime('2012-08-07T01:55:12WIB')
-        self.assertEqual('01', myShakeEvent.hour)
-        self.assertEqual('55', myShakeEvent.minute)
-        self.assertEqual('12', myShakeEvent.second)
+        self.assertEqual(1, myShakeEvent.hour)
+        self.assertEqual(55, myShakeEvent.minute)
+        self.assertEqual(12, myShakeEvent.second)
         myShakeEvent.extractDateTime('2013-02-07T22:22:37WIB')
-        self.assertEqual('22', myShakeEvent.hour)
-        self.assertEqual('22', myShakeEvent.minute)
-        self.assertEqual('37', myShakeEvent.second)
+        self.assertEqual(22, myShakeEvent.hour)
+        self.assertEqual(22, myShakeEvent.minute)
+        self.assertEqual(37, myShakeEvent.second)
 
 
 class DictDiffer(object):

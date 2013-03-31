@@ -25,8 +25,8 @@ from zipfile import BadZipfile
 
 from ftp_client import FtpClient
 from sftp_client import SFtpClient
-from realtime.utils import setupLogger, dataDir, is_event_id
-from realtime.shake_event import ShakeEvent
+from utils import setupLogger, dataDir, is_event_id
+from shake_event import ShakeEvent
 # Loading from package __init__ not working in this context so manually doing
 setupLogger()
 LOGGER = logging.getLogger('InaSAFE')
