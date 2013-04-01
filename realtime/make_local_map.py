@@ -12,7 +12,7 @@ myShakeEvent = ShakeEvent(
     theDataIsLocalFlag=True)
 myShakeEvent.renderMap(theForceFlag=False)
 
-myId = '20120118231542_se'
+myId = '20120118231552_se'
 myShakeEvent = ShakeEvent(
     theEventId=myId,
     theLocale='id',
@@ -21,7 +21,7 @@ myShakeEvent = ShakeEvent(
 myShakeEvent.renderMap(theForceFlag=False)
 
 
-myId = '20120118231542_se'
+myId = '20120118231562_se'
 myShakeEvent = ShakeEvent(
     theEventId=myId,
     theLocale='id',
