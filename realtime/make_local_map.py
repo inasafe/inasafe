@@ -1,0 +1,30 @@
+# Simple helper for when you already have the grid.xml and you just want a
+# map.
+#
+# Tim Sutton, April 2013
+
+from shake_event import ShakeEvent
+myId = '20120118231542_se'
+myShakeEvent = ShakeEvent(
+    theEventId=myId,
+    theLocale='id',
+    theForceFlag=False,
+    theDataIsLocalFlag=True)
+myShakeEvent.renderMap(theForceFlag=False)
+
+myId = '20120118231542_se'
+myShakeEvent = ShakeEvent(
+    theEventId=myId,
+    theLocale='id',
+    theForceFlag=False,
+    theDataIsLocalFlag=True)
+myShakeEvent.renderMap(theForceFlag=False)
+
+
+myId = '20120118231542_se'
+myShakeEvent = ShakeEvent(
+    theEventId=myId,
+    theLocale='id',
+    theForceFlag=False,
+    theDataIsLocalFlag=True)
+myShakeEvent.renderMap(theForceFlag=False)
