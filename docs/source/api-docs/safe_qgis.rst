@@ -6,6 +6,7 @@ Package::safe_qgis
 
    safe_qgis/dock
    safe_qgis/options_dialog
+   safe_qgis/converter_dialog
    safe_qgis/map_legend
    safe_qgis/impact_calculator
    safe_qgis/qgis_interface
@@ -17,6 +18,7 @@ Package::safe_qgis
    safe_qgis/plugin
    safe_qgis/options_dialog_base
    safe_qgis/minimum_needs
+   safe_qgis/converter_dialog_base
    safe_qgis/impact_functions_doc
    safe_qgis/keywords_dialog_base
    safe_qgis/keywords_dialog

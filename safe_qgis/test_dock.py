@@ -36,9 +36,8 @@ from qgis.core import (QgsRasterLayer,
                        QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
-# TODO: get this via api
-from safe_interface import format_int
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
+from safe_interface import (format_int,
+                            HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       setCanvasCrs,

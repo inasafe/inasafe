@@ -78,11 +78,12 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                 try:
                     displaced = int(population)
                 except ValueError:
-                    QtGui.QMessageBox.information(None,
+                    QtGui.QMessageBox.information(
+                        None,
                         self.tr('Format error'),
                         self.tr('Please change the value of %s in '
-                        'attribute %s to integer format') %
-                     (population, population_name))
+                                'attribute %s to integer format') %
+                        (population, population_name))
                     raise ValueError
 
             # Calculate estimated needs based on BNPB Perka 7/2008
@@ -105,7 +106,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             attribute_dict['Air minum'] = drinking_water
             attribute_dict['Air bersih'] = water
             attribute_dict['Kit keluarga'] = family_kits
-            attribute_dict['Jamba'] = toilets
+            attribute_dict['Jamban'] = toilets
 
             # Record attributes for this feature
             needs_attributes.append(attribute_dict)
@@ -141,8 +142,8 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        myLayerId = self.cboPolygonLayers.itemData(theIndex,
-                        QtCore.Qt.UserRole).toString()
+        myLayerId = self.cboPolygonLayers.itemData(
+            theIndex, QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         myFields = myLayer.dataProvider().fieldNameMap().keys()
         self.cboFields.clear()
@@ -150,18 +151,18 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             addComboItemInOrder(self.cboFields, myField, myField)
 
     def accept(self):
-        """PRocess the layer and field and generate a new layer.
+        """Process the layer and field and generate a new layer.
 
         .. note:: This is called on ok click.
 
         """
         myIndex = self.cboFields.currentIndex()
-        myFieldName = self.cboFields.itemData(myIndex,
-                                               QtCore.Qt.UserRole).toString()
+        myFieldName = self.cboFields.itemData(
+            myIndex, QtCore.Qt.UserRole).toString()
 
         myIndex = self.cboPolygonLayers.currentIndex()
-        myLayerId = self.cboPolygonLayers.itemData(myIndex,
-                                                 QtCore.Qt.UserRole).toString()
+        myLayerId = self.cboPolygonLayers.itemData(
+            myIndex, QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 
         myFileName = str(myLayer.source())

@@ -289,6 +289,23 @@ class Plugin:
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionMinimumNeeds)
 
+        #---------------------------------------
+        # Create action for converter dialog
+        #---------------------------------------
+        self.actionConverter = QAction(
+            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
+            self.tr('InaSAFE Converter'), self.iface.mainWindow())
+        self.actionConverter.setStatusTip(self.tr(
+            'Open InaSAFE Converter'))
+        self.actionConverter.setWhatsThis(self.tr(
+            'Open InaSAFE Converter'))
+        QObject.connect(self.actionConverter, SIGNAL('triggered()'),
+                        self.showConverter)
+
+        self.iface.addToolBarIcon(self.actionConverter)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+                                   self.actionConverter)
+
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
@@ -475,7 +492,7 @@ class Plugin:
         myDialog.show()
 
     def showImpactFunctionsDoc(self):
-        """Show the keywords editor.
+        """Show the impact function doc
 
         This slot is called when the user clicks the impact functions
         toolbar icon or menu item associated with this plugin
@@ -493,6 +510,27 @@ class Plugin:
         from safe_qgis.impact_functions_doc import ImpactFunctionsDoc
 
         myDialog = ImpactFunctionsDoc(self.iface.mainWindow())
+        myDialog.show()
+
+    def showConverter(self):
+        """Show the converter dialog.
+
+        This slot is called when the user clicks the impact functions
+        toolbar icon or menu item associated with this plugin
+
+        .. see also:: :func:`Plugin.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.converter_dialog import ConverterDialog
+
+        myDialog = ConverterDialog(self.iface.mainWindow())
         myDialog.show()
 
     def resetDock(self):
@@ -534,5 +572,5 @@ class Plugin:
         self.dockWidget.layerChanged(theLayer)
 
     def keyActionF7(self):
-        """Executed when user press F7"""
-        self.showImpactFunctionsDoc()
+        '''Executed when user press F7'''
+        self.showConverter()

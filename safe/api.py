@@ -35,7 +35,9 @@ from safe.impact_functions import (get_plugins,
                                    get_admissible_plugins,
                                    is_function_enabled,
                                    get_documentation)
-from safe.impact_functions.core import get_doc_string
+from safe.impact_functions.core import (get_doc_string,
+                                        get_unique_values,
+                                        get_plugins_as_table)
 
 from safe.engine.core import calculate_impact
 
@@ -50,9 +52,11 @@ from safe.common.utilities import (VerificationError,
                                    ugettext as safe_tr,
                                    get_free_memory,
                                    format_int)
+from safe.common.converter import convert_mmi_data
 from safe.common.version import get_version
 from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
 from safe.postprocessors import (get_postprocessors,
                                  get_postprocessor_human_name)
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
 # pylint: enable=W0611
