@@ -4,9 +4,9 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>117.211848</xmin>
+            <xmin>116.045099</xmin>
             <ymin>-11.770600</ymin>
-            <xmax>123.488152</xmax>
+            <xmax>124.654901</xmax>
             <ymax>-7.629400</ymax>
         </extent>
         <projections>1</projections>
@@ -24,9 +24,9 @@
         </destinationsrs>
     </mapcanvas>
     <legend updateDrawingOrder="false">
-        <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="mmi-contours-nearest" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="mmi-contours" showFeatureCount="0">
             <filegroup open="true" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="mmi_contours_nearest20130401141550817" visible="1"/>
+                <legendlayerfile isInOverview="0" layerid="mmi_contours20130401155846632" visible="1"/>
             </filegroup>
         </legendlayer>
         <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="gadm" showFeatureCount="0">
@@ -177,7 +177,7 @@
                         </layer>
                     </symbol>
                 </overviewFrame>
-                <Extent ymin="-1.87921" xmin="122.271" ymax="1.59288" xmax="125.699"/>
+                <Extent ymin="-18.6136" xmin="111.607" ymax="-1.17257" xmax="128.827"/>
                 <LayerSet/>
                 <Grid gridStyle="1" crossLength="1" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1">
                     <symbol alpha="1" type="line" name="">
@@ -674,11 +674,11 @@
             <attributeactions/>
         </maplayer>
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Line" type="vector" hasScaleBasedVisibilityFlag="0">
-            <id>mmi_contours_nearest20130401141550817</id>
+            <id>mmi_contours20130401155846632</id>
             <datasource>/tmp/inasafe/realtime/shakemaps-extracted/20130327002834/mmi-contours-nearest.shp</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>mmi-contours-nearest</layername>
+            <layername>mmi-contours</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
