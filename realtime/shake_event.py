@@ -44,8 +44,7 @@ from PyQt4.QtCore import (QCoreApplication,
                           QUrl,
                           QSize,
                           Qt,
-                          QTranslator
-                          )
+                          QTranslator)
 from PyQt4.QtXml import QDomDocument
 # pylint: disable=E0611
 # Above for pallabelling
@@ -96,10 +95,12 @@ class ShakeEvent(QObject):
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, theEventId=None,
+    def __init__(self,
+                 theEventId=None,
                  theLocale='en',
                  thePopulationRasterPath=None,
-                 theForceFlag=False):
+                 theForceFlag=False,
+                 theDataIsLocalFlag=False):
         """Constructor for the shake event class.
 
         Args:
@@ -119,6 +120,9 @@ class ShakeEvent(QObject):
                 specified before calling :func:`calculateImpacts`.
             * theForceFlag: bool Whether to force retrieval of the dataset from
                 the ftp server.
+            * theDataIsLocalFlag: bool Whether the data is already extracted
+                and exists locally. Use this in cases where you manually want
+                to run a grid.xml without first doing a download.
 
         Returns: Instance
 
@@ -126,14 +130,20 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
-#        self.data = ShakeData(theEventId, theForceFlag)
-        self.data = SftpShakeData(
-            theEvent=theEventId,
-            theForceFlag=theForceFlag)
-        self.data.extract()
+
+        if theDataIsLocalFlag:
+            self.eventId = theEventId
+        else:
+            # fetch the data from (s)ftp
+            #self.data = ShakeData(theEventId, theForceFlag)
+            self.data = SftpShakeData(
+                theEvent=theEventId,
+                theForceFlag=theForceFlag)
+            self.data.extract()
+            self.eventId = self.data.eventId
+
         self.latitude = None
         self.longitude = None
-        self.eventId = self.data.eventId
         self.magnitude = None
         self.depth = None
         self.description = None
@@ -1944,15 +1954,16 @@ class ShakeEvent(QObject):
         logging.info('Created: %s', myMmiShapeFile)
         myCitiesHtmlPath = None
         myCitiesShapeFile = None
-        #for myAlgorithm in ['average', 'invdist', 'nearest']:
-        for myAlgorithm in ['nearest']:
-            try:
-                myContoursShapeFile = self.mmiDataToContours(
-                    theForceFlag=theForceFlag,
-                    theAlgorithm=myAlgorithm)
-            except:
-                raise
-            logging.info('Created: %s', myContoursShapeFile)
+
+        # 'average', 'invdist', 'nearest' - currently only nearest works
+        myAlgorithm = 'nearest'
+        try:
+            myContoursShapeFile = self.mmiDataToContours(
+                theForceFlag=theForceFlag,
+                theAlgorithm=myAlgorithm)
+        except:
+            raise
+        logging.info('Created: %s', myContoursShapeFile)
         try:
             myCitiesShapeFile = self.citiesToShapefile(
                 theForceFlag=theForceFlag)
@@ -2076,7 +2087,7 @@ class ShakeEvent(QObject):
             if myCitiesLayer.isValid():
                 QgsMapLayerRegistry.instance().addMapLayers([myCitiesLayer])
 
-        # Now add out layers to the renderer so they appear in the print out
+        # Now add our layers to the renderer so they appear in the print out
         myLayers = reversed(CANVAS.layers())
         myLayerList = []
         for myLayer in myLayers:
