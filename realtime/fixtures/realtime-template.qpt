@@ -102,7 +102,7 @@
     </symbol>
     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="101.27" x="4.73016" transparency="0" y="207" rotation="0" height="36" positionMode="0" frame="true" outlineWidth="0.1" zValue="9" lastValidViewScaleFactor="2.58054" uuid="{a0e6744e-2495-4fbb-95b3-3ee52ba8e0c5}" id="overview-map" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="101.27" x="4.73016" transparency="0" y="207" rotation="0" height="36" positionMode="0" frame="true" outlineWidth="0.1" zValue="9" lastValidViewScaleFactor="3.38255" uuid="{a0e6744e-2495-4fbb-95b3-3ee52ba8e0c5}" id="overview-map" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -130,7 +130,7 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-18.6136" xmin="111.607" ymax="-1.17257" xmax="128.827"/>
+   <Extent ymin="-3.12162" xmin="96.3336" ymax="0.996066" xmax="100.399"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="1" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1">
     <symbol alpha="1" type="line" name="">
@@ -150,7 +150,7 @@
     </symbol>
     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="98.7302" x="6" transparency="0" y="100" rotation="0" height="100" positionMode="0" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="2.58054" uuid="{7e7d9469-9f21-46d2-aa9e-148098edb85b}" id="main-map" background="false" blendMode="0" positionLock="false">
+   <ComposerItem width="98.7302" x="6" transparency="0" y="100" rotation="0" height="100" positionMode="0" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="3.38255" uuid="{7e7d9469-9f21-46d2-aa9e-148098edb85b}" id="main-map" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -210,14 +210,6 @@
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLegend>
-  <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-   <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-    <ComposerItem width="194.91" x="4.73016" transparency="0" y="69.3883" rotation="0" height="28.6117" positionMode="0" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="4.04027" uuid="{6057f5c8-eb69-4df4-9a6d-957624dd51ea}" id="impacts-table" background="false" blendMode="0" positionLock="false">
-     <FrameColor alpha="255" red="0" blue="0" green="0"/>
-     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-    </ComposerItem>
-   </ComposerFrame>
-  </ComposerHtml>
   <ComposerHtml resizeMode="0" url="">
    <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
     <ComposerItem width="0" x="151.747" transparency="0" y="179.212" rotation="0" height="0" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.02013" uuid="{e8d7573f-3afc-43ee-a2b3-68247f2b2784}" id="" background="false" blendMode="0" positionLock="false">
@@ -226,9 +218,17 @@
     </ComposerItem>
    </ComposerFrame>
   </ComposerHtml>
+  <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+   <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+    <ComposerItem width="194.91" x="4.73016" transparency="0" y="69.3883" rotation="0" height="28.6117" positionMode="0" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="4.04027" uuid="{6057f5c8-eb69-4df4-9a6d-957624dd51ea}" id="impacts-table" background="false" blendMode="0" positionLock="false">
+     <FrameColor alpha="255" red="0" blue="0" green="0"/>
+     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+    </ComposerItem>
+   </ComposerFrame>
+  </ComposerHtml>
   <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
    <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-    <ComposerItem width="86" x="116" transparency="0" y="117.699" rotation="0" height="68.301" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="4.04027" uuid="{aa4218e7-2f91-4f00-aa72-83bf75a3cd33}" id="affected-cities" background="false" blendMode="0" positionLock="false">
+    <ComposerItem width="86" x="116" transparency="0" y="117.699" rotation="0" height="68.301" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="2.41275" uuid="{aa4218e7-2f91-4f00-aa72-83bf75a3cd33}" id="affected-cities" background="false" blendMode="0" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
