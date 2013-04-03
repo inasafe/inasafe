@@ -37,7 +37,7 @@ class KeywordIOTest(unittest.TestCase):
         myUri.setDatabase(os.path.join(TESTDATA, 'jk.sqlite'))
         myUri.setDataSource('', 'osm_buildings', 'Geometry')
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
-                                       'spatialite')
+                                          'spatialite')
         myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
         self.fileRasterLayer, myType = loadLayer(myHazardPath,
                                                  theDirectory=None)
@@ -70,7 +70,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_writeReadKeywordFromUri(self):
         """Test we can set and get keywords for a non local datasource"""
         myHandle, myFilename = tempfile.mkstemp('.db', 'keywords_',
-                                            temp_dir())
+                                                temp_dir())
 
         # Ensure the file is deleted before we try to write to it
         # fixes windows specific issue where you get a message like this
@@ -150,8 +150,8 @@ class KeywordIOTest(unittest.TestCase):
 
         for myKey, myValue in myNewKeywords.iteritems():
             myMessage = ('Layer keywords misses appended key: %s\n'
-                        'Layer keywords:\n%s\n'
-                        'Appended keywords:\n%s\n' %
+                         'Layer keywords:\n%s\n'
+                         'Appended keywords:\n%s\n' %
                         (myKey,
                          myKeywords,
                          myNewKeywords))
@@ -183,7 +183,7 @@ class KeywordIOTest(unittest.TestCase):
         mySqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
         myExpectedSource = ('dbname=\'../jk.sqlite\' table="osm_buildings"'
-             ' (Geometry) sql=')
+                            ' (Geometry) sql=')
         myMessage = 'Got source: %s\n\nExpected %s\n' % (
                     mySqliteLayer.source, myExpectedSource)
         assert mySqliteLayer.source() == myExpectedSource, myMessage

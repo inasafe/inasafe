@@ -52,7 +52,7 @@ from safe_qgis.exceptions import (StyleError,
 from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
 sys.path.append(os.path.abspath(
-        os.path.join(os.path.dirname(__file__), '..', 'third_party')))
+    os.path.join(os.path.dirname(__file__), '..', 'third_party')))
 # pylint: disable=F0401
 from raven.handlers.logging import SentryHandler
 from raven import Client

@@ -69,7 +69,8 @@ class MapLegendTest(unittest.TestCase):
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-            'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
         LOGGER.debug('test_getLegend done')
 
@@ -93,11 +94,10 @@ class MapLegendTest(unittest.TestCase):
                            'getVectorLegend-variantUB11.04-64.png',
                            'getVectorLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages,
-                                    myPath,
-                                    myTolerance)
+        myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
     def test_getRasterLegend(self):
@@ -124,7 +124,8 @@ class MapLegendTest(unittest.TestCase):
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
     def test_addSymbolToLegend(self):
@@ -134,10 +135,10 @@ class MapLegendTest(unittest.TestCase):
         mySymbol = QgsSymbol()
         mySymbol.setColor(QtGui.QColor(12, 34, 56))
         myMapLegend.addSymbolToLegend(mySymbol,
-                                theMin=0,
-                                theMax=2,
-                                theCategory=None,
-                                theLabel='Foo')
+                                      theMin=0,
+                                      theMax=2,
+                                      theCategory=None,
+                                      theLabel='Foo')
         myPath = unique_filename(prefix='addSymblToLegend',
                                  suffix='.png',
                                  dir=temp_dir('test'))
@@ -157,7 +158,8 @@ class MapLegendTest(unittest.TestCase):
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
     def test_addClassToLegend(self):
@@ -166,15 +168,15 @@ class MapLegendTest(unittest.TestCase):
         myMapLegend = MapLegend(myLayer)
         myColour = QtGui.QColor(12, 34, 126)
         myMapLegend.addClassToLegend(myColour,
-                               theMin=None,
-                               theMax=None,
-                               theCategory=None,
-                               theLabel='bar')
+                                     theMin=None,
+                                     theMax=None,
+                                     theCategory=None,
+                                     theLabel='bar')
         myMapLegend.addClassToLegend(myColour,
-                               theMin=None,
-                               theMax=None,
-                               theCategory=None,
-                               theLabel='foo')
+                                     theMin=None,
+                                     theMax=None,
+                                     theCategory=None,
+                                     theLabel='foo')
         myPath = unique_filename(prefix='addClassToLegend',
                                  suffix='.png',
                                  dir=temp_dir('test'))
@@ -194,7 +196,8 @@ class MapLegendTest(unittest.TestCase):
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
 if __name__ == '__main__':
