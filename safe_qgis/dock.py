@@ -3156,6 +3156,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         """
         LOGGER.info('Extents changed!')
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
+        if not (myHazardLayer and myExposureLayer):
+            return
         try:
             _, myBufferedGeoExtent, myCellSize, _, _, _ = \
                 self.getClipParameters()
