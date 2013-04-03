@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from Tix import _dummyComboBox
+
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
@@ -2094,6 +2096,28 @@ class ShakeEvent(QObject):
             mySize, Qt.KeepAspectRatioByExpanding)
         myThumbnailImage.save(myThumbnailImagePath)
         LOGGER.info('Generated Thumbnail: %s' % myThumbnailImagePath)
+
+        # Save a QGIS Composer template that you can open in QGIS
+        myTemplateDocument = QDomDocument()
+        myElement = myTemplateDocument.createElement('Composer')
+        myComposition.writeXML(
+            myElement, myTemplateDocument)
+        myTemplateDocument.appendChild(myElement)
+        myTemplatePath = os.path.join(
+            shakemapExtractDir(),
+            self.eventId,
+            'composer-template.qpt')
+        myFile = file(myTemplatePath, 'wt')
+        myFile.write(myTemplateDocument.toByteArray())
+        myFile.close()
+
+        # Save a QGIS project that you can open in QGIS
+        myProject = QgsProject.instance()
+        myProjectPath = os.path.join(
+            shakemapExtractDir(),
+            self.eventId,
+            'project.qgs')
+        myProject.write(QFileInfo(myProjectPath))
 
     def bearingToCardinal(self, theBearing):
         """Given a bearing in degrees return it as compass units e.g. SSE.
