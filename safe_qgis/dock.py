@@ -368,12 +368,36 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'To use this tool you need to add some layers to your '
                 'QGIS project. Ensure that at least one <em>hazard</em> layer '
                 '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
-                'dwellings) re available. When you are ready, click the <em>'
+                'dwellings) are available. When you are ready, click the <em>'
                 'run</em> button below.')
             myMessage += ('<tr><th class="info button-cell">'
                           + self.tr('Getting started:') + '</th></tr>\n'
                           '<tr><td>' + myNotes + '</td></tr>\n')
-            myMessage += '</table>'
+            my_limitations_msg = (
+                '<ol>'
+                + '<li>' + self.tr('InaSAFE is not hazard modelling tools')
+                + '</li>'
+                + '<li>' + self.tr('Exposure data in the form of roads (or any'
+                                   ' other line feature) is not supported.')
+                + '</li>'
+                + '<li>' + self.tr('Polygon area analysis (such as land use) '
+                                   'is not supported.')
+                + '</li>'
+                + '<li>' + self.tr('Population density data must be provided '
+                                   'in WGS84 geographic coordinates')
+                + '</li>'
+                + '<li>' + self.tr('Neither AIFDR nor GFDRR take any '
+                                   'responsibility for the correctness of '
+                                   'outputs from InaSAFE or decisions derived '
+                                   'as a consequence')
+                + '</ol>'
+            )
+            my_limitations = ('<tr><th class="info button-cell">'
+                              + self.tr('Limitations:')
+                              + '</th></tr>\n<tr><td>'
+                              + my_limitations_msg
+                              + '</td></tr>\n')
+            myMessage += my_limitations + '</table>'
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
