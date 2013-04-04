@@ -10,7 +10,6 @@ from PyQt4.QtCore import QVariant
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from safe.api import bbox_intersection
 from safe_qgis.utilities import (
     getExceptionWithStacktrace,
     setVectorStyle,
@@ -30,11 +29,11 @@ from safe_qgis.utilities_test import (
     loadLayer,
     getQgisTestApp)
 from safe_qgis.exceptions import StyleError
-from safe.common.exceptions import BoundingBoxError
 from safe_qgis.test_keywords_dialog import (makePolygonLayer,
                                             makePadangLayer,
                                             makePointLayer)
 from safe_qgis.utilities import getDefaults
+from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 

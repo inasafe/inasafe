@@ -31,6 +31,7 @@ from qgis.gui import QgsMapCanvas
 from safe_qgis.qgis_interface import QgisInterface
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.plugin import Plugin
+from safe_interface import safeTr
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -56,7 +57,6 @@ class PluginTest(unittest.TestCase):
     def test_ImpactFunctionI18n(self):
         """Library translations are working."""
         # Import this late so that i18n setup is already in place
-        from safe.common.utilities import ugettext as tr
 
         # Test indonesian too
         myParent = QWidget()
@@ -65,7 +65,7 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
-        myTranslation = tr('A volcano eruption')
+        myTranslation = safeTr('A volcano eruption')
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     ('A volcano eruption', myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage
@@ -86,10 +86,9 @@ class PluginTest(unittest.TestCase):
         # (see http://effbot.org/zone/metaclass-plugins.htm)
         # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
-        from safe.common.utilities import ugettext as tr
         myUntranslatedString = 'Temporarily Closed'
         myExpectedString = 'Tydelik gesluit'  # afrikaans
-        myTranslation = tr(myUntranslatedString)
+        myTranslation = safeTr(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     (myUntranslatedString, myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage

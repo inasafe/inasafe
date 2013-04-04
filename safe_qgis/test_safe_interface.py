@@ -22,11 +22,11 @@ import unittest
 from safe_qgis.safe_interface import (getOptimalExtent,
                                       availableFunctions,
                                       readKeywordsFromFile,
-                                      readSafeLayer)
+                                      readSafeLayer,
+                                      TESTDATA, HAZDATA, EXPDATA,
+                                      BoundingBoxError)
 from safe_qgis.exceptions import (KeywordNotFoundError,
                                   InsufficientOverlapError)
-from safe.common.exceptions import BoundingBoxError
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
 
 class SafeInterfaceTest(unittest.TestCase):

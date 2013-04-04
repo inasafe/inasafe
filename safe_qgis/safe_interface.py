@@ -44,6 +44,7 @@ from safe.api import (get_admissible_plugins,
                       get_free_memory,
                       calculate_impact as safe_calculate_impact,
                       BoundingBoxError,
+                      GetDataError,
                       ReadLayerError,
                       get_plugins, get_version,
                       in_and_outside_polygon as points_in_and_outside_polygon,
@@ -54,9 +55,11 @@ from safe.api import (get_admissible_plugins,
                       format_int,
                       get_unique_values,
                       get_plugins_as_table,
-                      HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
+                      HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA,
+                      Vector,
+                      nanallclose,
+                      DEFAULTS)
 
-from safe.defaults import DEFAULTS
 # pylint: enable=W0611
 
 # InaSAFE GUI specific functionality
@@ -66,7 +69,6 @@ from safe_qgis.exceptions import (KeywordNotFoundError,
                                   InvalidParameterError,
                                   InsufficientOverlapError)
 
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
 LOGGER = logging.getLogger('InaSAFE')
 
 

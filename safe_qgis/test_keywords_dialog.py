@@ -33,17 +33,15 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
-from safe.engine.core import unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       unitTestDataPath)
-from safe_qgis.safe_interface import readKeywordsFromFile
+from safe_qgis.safe_interface import (readKeywordsFromFile,
+                                      unique_filename,
+                                      HAZDATA, TESTDATA)
 from safe_qgis.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.utilities import getDefaults, qgisVersion
 
-
-# For testing and demoing
-from safe.common.testing import HAZDATA, TESTDATA
 
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

@@ -21,6 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # pylint: disable=W0611
+from safe.storage.vector import Vector
+from safe.defaults import DEFAULTS
 from safe.storage.utilities import (bbox_intersection,
                                     buffered_bounding_box,
                                     verify,
@@ -45,7 +47,8 @@ from safe.common.numerics import nanallclose
 from safe.common.exceptions import (InaSAFEError,
                                     BoundingBoxError,
                                     ReadLayerError,
-                                    InaSAFEError)
+                                    InaSAFEError,
+                                    GetDataError)
 from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,

@@ -9,7 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -18,7 +17,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import sys
 import tempfile
 import logging
 
@@ -33,7 +31,8 @@ from qgis.core import (QGis,
                        QgsGeometry)
 
 from safe_qgis.safe_interface import (verify,
-                                      readKeywordsFromFile)
+                                      readKeywordsFromFile,
+                                      temp_dir)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (

@@ -17,10 +17,10 @@ from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
 # For testing and demoing
-from safe.common.testing import TESTDATA
 from safe_qgis.safe_interface import (readKeywordsFromFile,
                                       temp_dir,
-                                      unique_filename)
+                                      unique_filename,
+                                      TESTDATA, UNITDATA)
 LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
@@ -127,8 +127,6 @@ def unitTestDataPath(theSubdir=None):
        * theSubdir: (Optional) Additional subdir to add to the path - typically
          'hazard' or 'exposure'.
     """
-    from safe.common.testing import UNITDATA
-
     myPath = UNITDATA
 
     if theSubdir is not None:

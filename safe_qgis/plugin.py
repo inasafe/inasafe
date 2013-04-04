@@ -10,7 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.earthquake.earthquake_building_impact import LOGGER
+import logging
+
+LOGGER = logging.getLogger('InaSAFE')
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'

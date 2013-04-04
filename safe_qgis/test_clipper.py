@@ -32,8 +32,11 @@ from qgis.core import (QgsVectorLayer,
                        QgsGeometry,
                        QgsPoint)
 
-from safe_qgis.safe_interface import readSafeLayer
-from safe_qgis.safe_interface import getOptimalExtent
+from safe_qgis.safe_interface import (readSafeLayer,
+                                      getOptimalExtent,
+                                      HAZDATA, TESTDATA, EXPDATA, UNITDATA,
+                                      GetDataError,
+                                      nanallclose)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.clipper import (clipLayer,
                                extentToKml,
@@ -47,10 +50,6 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       DEVNULL,
                                       GEOCRS,
                                       setJakartaGeoExtent)
-
-from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
-from safe.common.exceptions import GetDataError
-from safe.api import nanallclose
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')

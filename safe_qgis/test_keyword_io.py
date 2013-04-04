@@ -5,7 +5,6 @@ import tempfile
 import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-from safe.common.utilities import temp_dir
 
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
@@ -13,11 +12,11 @@ sys.path.append(pardir)
 from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
 # For testing and demoing
-from safe.common.testing import HAZDATA, TESTDATA
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
 from safe_qgis.test_keywords_dialog import makePadangLayerClone
+from safe_interface import temp_dir, HAZDATA, TESTDATA
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
