@@ -12,8 +12,6 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from safe.storage.core import read_layer
-from safe.storage.vector import Vector
 import logging
 
 from PyQt4 import QtGui, QtCore
@@ -21,7 +19,7 @@ from PyQt4.QtCore import pyqtSignature
 
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 
-from safe_qgis.safe_interface import get_version
+from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
 from safe_qgis.minimum_needs_base import Ui_MinimumNeedsBase
 from safe_qgis.utilities import (addComboItemInOrder,
                                  isPolygonLayer,
@@ -167,7 +165,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
         myFileName = str(myLayer.source())
 
-        myInputLayer = read_layer(myFileName)
+        myInputLayer = safe_read_layer(myFileName)
 
         try:
             myOutputLayer = self.minimum_needs(myInputLayer, str(myFieldName))

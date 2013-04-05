@@ -51,8 +51,7 @@ from safe_qgis.exceptions import (StyleError,
 
 from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
-sys.path.append(
-    os.path.abspath(
+sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', 'third_party')))
 # pylint: disable=F0401
 from raven.handlers.logging import SentryHandler
@@ -71,8 +70,8 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary.
 
     For **opaque** a value of **0** can be used. For **fully transparent**, a
-    value of **100** can be used. The function should take care to scale the
-    transparency level to between 0 and 100.
+    value of **100** can be used. The calling function should take care to
+    scale the transparency level to between 0 and 100.
 
     Args:
         * theQgisVectorLayer: QgsMapLayer
@@ -277,6 +276,9 @@ def _addMinMaxToStyle(theStyle):
         myQuantity = float(myClass['quantity'])
         myClass['min'] = myLastMax
         myClass['max'] = myQuantity
+        if myQuantity == myLastMax:
+            # skip it as it does not represent a class increment
+            continue
         myLastMax = numpy.nextafter(myQuantity, sys.float_info.max)
         myNewStyles.append(myClass)
     return myNewStyles
@@ -1227,9 +1229,20 @@ def which(name, flags=os.X_OK):
     result = []
     exts = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
     path = os.environ.get('PATH', None)
+    # In c6c9b26 we removed this hard coding for issue #529 but I am
+    # adding it back here in case the user's path does not include the
+    # gdal binary dir on OSX but it is actually there. (TS)
+    if sys.platform == 'darwin':  # Mac OS X
+        myGdalPrefix = ('/Library/Frameworks/GDAL.framework/'
+                        'Versions/1.9/Programs/')
+        path = '%s:%s' % (path, myGdalPrefix)
+
+    LOGGER.debug('Search path: %s' % path)
+
     if path is None:
         return []
-    for p in os.environ.get('PATH', '').split(os.pathsep):
+
+    for p in path.split(os.pathsep):
         p = os.path.join(p, name)
         if os.access(p, flags):
             result.append(p)
@@ -1237,4 +1250,5 @@ def which(name, flags=os.X_OK):
             pext = p + e
             if os.access(pext, flags):
                 result.append(pext)
+
     return result

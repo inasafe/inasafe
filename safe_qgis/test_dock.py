@@ -63,8 +63,6 @@ from safe_qgis.utilities import (setRasterStyle,
 from safe.engine.impact_functions_for_testing import allen_fatality_model
 from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
-from safe.impact_functions.generic import \
-    categorised_hazard_population
 from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
 #from safe.engine.impact_functions_for_testing import error_raising_functions

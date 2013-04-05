@@ -25,9 +25,8 @@ from PyQt4.QtGui import (
     QLabel, QCheckBox, QFormLayout, QWidget)
 from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
 
-from safe_interface import safeTr
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessor_human_name)
+from safe_interface import (safeTr,
+                            get_postprocessor_human_name)
 from third_party.odict import OrderedDict
 
 try:

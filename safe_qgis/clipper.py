@@ -9,7 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -18,7 +17,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import sys
 import tempfile
 import logging
 
@@ -33,7 +31,8 @@ from qgis.core import (QGis,
                        QgsGeometry)
 
 from safe_qgis.safe_interface import (verify,
-                                      readKeywordsFromFile)
+                                      readKeywordsFromFile,
+                                      temp_dir)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
@@ -450,6 +449,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
     myBinaryList = which('gdalwarp')
+    LOGGER.debug('Path for gdalwarp: %s' % myBinaryList)
     if len(myBinaryList) < 1:
         raise CallGDALError(
             tr('gdalwarp could not be found on your computer'))

@@ -183,7 +183,10 @@ class FloodEvacuationFunction(FunctionProvider):
                            tr('People need evacuation if flood levels '
                               'exceed %(eps).1f m') % {'eps': thresholds[-1]},
                            tr('Minimum needs are defined in BNPB '
-                              'regulation 7/2008')])
+                              'regulation 7/2008'),
+                           tr('All values are rounded up to the nearest '
+                              'integer in order to avoid representing human '
+                              'lives as fractionals.')])
 
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
@@ -207,10 +210,10 @@ class FloodEvacuationFunction(FunctionProvider):
         # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
-        style_classes[1]['label'] = tr('Low [%.2f people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%.2f people/cell]')\
+        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
+        style_classes[4]['label'] = tr('Medium [%i people/cell]')\
             % classes[4]
-        style_classes[7]['label'] = tr('High [%.2f people/cell]') % classes[7]
+        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
 
         # Override associated quantities in colour style
         for i in range(len(classes)):
@@ -219,7 +222,10 @@ class FloodEvacuationFunction(FunctionProvider):
             else:
                 transparency = 0
 
-            style_classes[i]['quantity'] = classes[i]
+            # int & round Added by Tim in 1.2 - class is rounded to the
+            # nearest int because we prefer to not categorise people as being
+            # e.g. '0.4 people'. Fixes #542
+            style_classes[i]['quantity'] = int(round(classes[i]))
             style_classes[i]['transparency'] = transparency
 
         # Title

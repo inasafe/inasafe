@@ -42,9 +42,8 @@ class TestInit(unittest.TestCase):
                               'email',
                               'author']
 
-        myFilePath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                  os.pardir,
-                                  '__init__.py'))
+        myFilePath = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), os.pardir, '__init__.py'))
         LOGGER.info(myFilePath)
         myFile = file(myFilePath, 'rt')
         myContent = myFile.read()
@@ -55,14 +54,15 @@ class TestInit(unittest.TestCase):
         while myCounter < len(myLines):
             if re.search('def\s+([^\(]+)', myLines[myCounter]):
                 myMatch = re.search('def\s+([^\(]+)',
-                                  myLines[myCounter]).groups()[0]
+                                    myLines[myCounter]).groups()[0]
                 myCounter += 1
                 while myCounter < len(myLines) and myLines[myCounter] != '':
                     if re.search('return\s+["\']?([^"\']+)["\']?',
                                  myLines[myCounter]):
-                        myMetadata.append((myMatch,
+                        myMetadata.append(
+                            (myMatch,
                                 re.search('return\s+["\']?([^"\']+)["\']?',
-                                myLines[myCounter]).groups()[0]))
+                                          myLines[myCounter]).groups()[0]))
                         break
                     myCounter += 1
             myCounter += 1
@@ -72,12 +72,14 @@ class TestInit(unittest.TestCase):
         for myItem in myRequiredMetadata:
             if not myItem in dict(myMetadata) or not dict(myMetadata)[myItem]:
                 assert False, ('Cannot find myMetadata "%s" '
-                'in myMetadata source (%s). Please bear in mind '
-                'that the current implementation of the __init__.py '
-                'validator is based on regular expressions, check that '
-                'your myMetadata functions directly return myMetadata values '
-                'as strings.') % (
-                    myItem, dict(myMetadata).get('metadata_source'))
+                               'in myMetadata source (%s). Please bear in mind'
+                               ' that the current implementation of the '
+                               '__init__.py validator is based on regular '
+                               'expressions, check that your myMetadata '
+                               'functions directly return myMetadata values as'
+                               ' strings.') % (myItem,
+                                               dict(myMetadata).get(
+                                                   'metadata_source'))
 
 if __name__ == '__main__':
     unittest.main()
