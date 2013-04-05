@@ -449,6 +449,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
     myBinaryList = which('gdalwarp')
+    LOGGER.debug('Path for gdalwarp: %s' % myBinaryList)
     if len(myBinaryList) < 1:
         raise CallGDALError(
             tr('gdalwarp could not be found on your computer'))

@@ -1242,9 +1242,20 @@ def which(name, flags=os.X_OK):
     result = []
     exts = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
     path = os.environ.get('PATH', None)
+    # In c6c9b26 we removed this hard coding for issue #529 but I am
+    # adding it back here in case the user's path does not include the
+    # gdal binary dir on OSX but it is actually there. (TS)
+    if sys.platform == 'darwin':  # Mac OS X
+        myGdalPrefix = ('/Library/Frameworks/GDAL.framework/'
+                        'Versions/1.9/Programs/')
+        path = '%s:%s' % (path, myGdalPrefix)
+
+    LOGGER.debug('Search path: %s' % path)
+
     if path is None:
         return []
-    for p in os.environ.get('PATH', '').split(os.pathsep):
+
+    for p in path.split(os.pathsep):
         p = os.path.join(p, name)
         if os.access(p, flags):
             result.append(p)
@@ -1252,4 +1263,5 @@ def which(name, flags=os.X_OK):
             pext = p + e
             if os.access(pext, flags):
                 result.append(pext)
+
     return result
