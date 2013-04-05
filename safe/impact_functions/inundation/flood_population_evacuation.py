@@ -183,7 +183,10 @@ class FloodEvacuationFunction(FunctionProvider):
                            tr('People need evacuation if flood levels '
                               'exceed %(eps).1f m') % {'eps': thresholds[-1]},
                            tr('Minimum needs are defined in BNPB '
-                              'regulation 7/2008')])
+                              'regulation 7/2008'),
+                           tr('All values are rounded up to the nearest '
+                              'integer in order to avoid representing human '
+                              'lives as fractionals.')])
 
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
@@ -221,7 +224,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
             # int & round Added by Tim in 1.2 - class is rounded to the
             # nearest int because we prefer to not categorise people as being
-            # e.g. '0.4 people'
+            # e.g. '0.4 people'. Fixes #542
             style_classes[i]['quantity'] = int(round(classes[i]))
             style_classes[i]['transparency'] = transparency
 
