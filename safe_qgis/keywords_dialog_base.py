@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Wed Mar 20 16:03:36 2013
+# Created: Fri Apr  5 10:18:51 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -142,6 +142,7 @@ class Ui_KeywordsDialogBase(object):
         self.cboKeyword.setItemText(1, _fromUtf8("unit"))
         self.cboKeyword.addItem(_fromUtf8(""))
         self.cboKeyword.setItemText(2, _fromUtf8("datatype"))
+        self.cboKeyword.addItem(_fromUtf8(""))
         self.horizontalLayout.addWidget(self.cboKeyword)
         self.label_5 = QtGui.QLabel(self.framePredefined)
         self.label_5.setObjectName(_fromUtf8("label_5"))
@@ -250,6 +251,7 @@ class Ui_KeywordsDialogBase(object):
         self.radPredefined.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Predefined", None, QtGui.QApplication.UnicodeUTF8))
         self.radUserDefined.setText(QtGui.QApplication.translate("KeywordsDialogBase", "User defined", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Keyword", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(3, QtGui.QApplication.translate("KeywordsDialogBase", "source", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Value", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnAddToList1.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Add to list", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Key", None, QtGui.QApplication.UnicodeUTF8))
