@@ -557,7 +557,8 @@ def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None,
     """This is static interface function for converter
     Use this function.
     """
-    print output_path
+    LOGGER.debug(gridXMLPath)
+    LOGGER.debug(output_path)
     if output_path is not None:
         my_output_dir, my_output_basename = os.path.split(output_path)
         my_output_basename, _ = os.path.splitext(my_output_basename)
