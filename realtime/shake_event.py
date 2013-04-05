@@ -69,7 +69,6 @@ from qgis.core import (QgsPoint,
                        QgsFeatureRequest,
                        QgsFields)
 # pylint: enable=E0611
-#TODO refactor this into a utility class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
