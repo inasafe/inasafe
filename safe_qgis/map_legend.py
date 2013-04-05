@@ -276,7 +276,7 @@ class MapLegend():
         myLabel = ''
         if theLabel:
             myLabel = theLabel
-        if theMin is not None and theMax is not None:
+        if theMin is not None and theMax is not None and theLabel == '':
             myLabel += ' [' + str(theMin) + ', ' + str(theMax) + ']'
         if theCategory is not None:
             myLabel = ' (' + theCategory + ')'
@@ -315,10 +315,10 @@ class MapLegend():
             myPainter.drawText(10, 25, self.tr('Legend'))
         else:
             # extend the existing legend down for the next class
-            myImage = QtGui.QImage(self.legendWidth,
-                                     self.legendImage.height() +
-                                          self.legendIncrement,
-                                     QtGui.QImage.Format_RGB32)
+            myImage = QtGui.QImage(
+                self.legendWidth,
+                self.legendImage.height() + self.legendIncrement,
+                QtGui.QImage.Format_RGB32)
             myImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             myImage.setDotsPerMeterY(dpiToMeters(self.dpi))
             # Only works in Qt4.8
