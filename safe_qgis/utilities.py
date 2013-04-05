@@ -70,8 +70,8 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary.
 
     For **opaque** a value of **0** can be used. For **fully transparent**, a
-    value of **100** can be used. The function should take care to scale the
-    transparency level to between 0 and 100.
+    value of **100** can be used. The calling function should take care to
+    scale the transparency level to between 0 and 100.
 
     Args:
         * theQgisVectorLayer: QgsMapLayer
@@ -276,6 +276,9 @@ def _addMinMaxToStyle(theStyle):
         myQuantity = float(myClass['quantity'])
         myClass['min'] = myLastMax
         myClass['max'] = myQuantity
+        if myQuantity == myLastMax:
+            # skip it as it does not represent a class increment
+            continue
         myLastMax = numpy.nextafter(myQuantity, sys.float_info.max)
         myNewStyles.append(myClass)
     return myNewStyles
