@@ -180,7 +180,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                                header=True),
                       TableRow([
                           TableCell(
-                              tr('* Number is rounded to the nearest 1000'),
+                              tr('* Number is rounded down (in thousands)'),
                               col_span=2)],
                           header=False),
                       TableRow([tr('Evacuation threshold'),

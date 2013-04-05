@@ -275,7 +275,14 @@ class ITBFatalityFunction(FunctionProvider):
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                              'regulation 7/2008'),
+                           tr('The fatality calculation assumes that '
+                              'no fatalities occur for shake levels below 4 '
+                              'and fatality counts of less than 50 are '
+                              'disregarded.'),
+                           tr('All values are rounded up to the nearest '
+                              'integer in order to avoid representing human '
+                              'lives as fractionals.')])
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in need of evacuation')
@@ -293,21 +300,29 @@ class ITBFatalityFunction(FunctionProvider):
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
                                  numpy.nanmax(R.flat[:]), 5)
 
-        style_classes = [dict(colour='#EEFFEE', quantity=classes[0],
-                              transparency=100,
-                              label=tr('%.2f people/cell') % classes[0]),
-                         dict(colour='#FFFF7F', quantity=classes[1],
-                              transparency=30),
-                         dict(colour='#E15500', quantity=classes[2],
-                              transparency=30,
-                              label=tr('%.2f people/cell') % classes[2]),
-                         dict(colour='#E4001B', quantity=classes[3],
-                              transparency=30),
-                         dict(colour='#730000', quantity=classes[4],
-                              transparency=30,
-                              label=tr('%.2f people/cell') % classes[4])]
-        style_info = dict(target_field=None,
-                          style_classes=style_classes)
+        # int & round Added by Tim in 1.2 - class is rounded to the
+        # nearest int because we prefer to not categorise people as being
+        # e.g. '0.4 people'. Fixes #542
+        style_classes = [
+            dict(colour='#EEFFEE',
+                 quantity=int(round(classes[0])),
+                 transparency=100,
+                 label=tr('%i people/cell') % int(round(classes[0]))),
+            dict(colour='#FFFF7F',
+                 quantity=int(round(classes[1])),
+                 transparency=30),
+            dict(colour='#E15500',
+                 quantity=int(round(classes[2])),
+                 transparency=30,
+                 label=tr('%i people/cell') % int(round(classes[2]))),
+            dict(colour='#E4001B',
+                 quantity=int(round(classes[3])),
+                 transparency=30),
+            dict(colour='#730000',
+                 quantity=int(round(classes[4])),
+                 transparency=30,
+                 label=tr('%i people/cell') % int(round(classes[4])))]
+        style_info = dict(target_field=None, style_classes=style_classes)
 
         # Create new layer and return
         L = Raster(R,
