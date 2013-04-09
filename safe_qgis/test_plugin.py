@@ -65,7 +65,7 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
-        myTranslation = tr('A volcano eruption')
+        myTranslation = safeTr('A volcano eruption')
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     ('A volcano eruption', myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage
