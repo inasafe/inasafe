@@ -1,6 +1,6 @@
 #!/bin/bash
 
-QGISPATH=/Applications/QGIS-Realtime.app
+QGISPATH=/Users/timlinux/Applications/QGIS.app
 
 export QGIS_PREFIX_PATH=${QGISPATH}/contents/MacOS
 

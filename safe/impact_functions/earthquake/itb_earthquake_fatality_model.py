@@ -356,6 +356,17 @@ class ITBFatalityFunction(FunctionProvider):
         # int & round Added by Tim in 1.2 - class is rounded to the
         # nearest int because we prefer to not categorise people as being
         # e.g. '0.4 people'. Fixes #542
+
+        # This should not be needed as numpynanmin should automatically
+        # exlude nans.
+        #nanfree_classes = []
+        #for c in classes:
+        #    if numpy.isnan(c):
+        #        nanfree_classes.append(0)
+        #    else:
+        #        nanfree_classes.append(c)
+        #classes = nanfree_classes
+
         style_classes = [
             dict(colour='#EEFFEE',
                  quantity=int(round(classes[0])),
