@@ -1231,7 +1231,9 @@ def which(name, flags=os.X_OK):
     order in which they were found.
     """
     result = []
+    #pylint: disable=W0141
     exts = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
+    #pylint: enable=W0141
     path = os.environ.get('PATH', None)
     # In c6c9b26 we removed this hard coding for issue #529 but I am
     # adding it back here in case the user's path does not include the
