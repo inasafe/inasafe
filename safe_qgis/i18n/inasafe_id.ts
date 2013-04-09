@@ -38,87 +38,87 @@
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="583"/>
+        <location filename="utilities.py" line="586"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="558"/>
+        <location filename="utilities.py" line="561"/>
         <source>Problem:</source>
         <translation>Permasalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="554"/>
+        <location filename="utilities.py" line="557"/>
         <source>Error:</source>
         <translation>Kesalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="563"/>
+        <location filename="utilities.py" line="566"/>
         <source>Click for Diagnostic Information:</source>
         <translation>Klik untuk informasi diagnostik:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="531"/>
+        <location filename="utilities.py" line="534"/>
         <source>No details provided</source>
         <translation>Tidak ada detil yang tersedia</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1066"/>
+        <location filename="utilities.py" line="1069"/>
         <source>%i seconds</source>
         <translation>%i detik</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1068"/>
+        <location filename="utilities.py" line="1071"/>
         <source>a minute</source>
         <translation>satu menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1070"/>
+        <location filename="utilities.py" line="1073"/>
         <source>minutes</source>
         <translation>menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1072"/>
+        <location filename="utilities.py" line="1075"/>
         <source>over an hour</source>
         <translation>lebih dari satu jam</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1074"/>
+        <location filename="utilities.py" line="1077"/>
         <source>%i hours and %i minutes</source>
         <translation>%i jam dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1077"/>
+        <location filename="utilities.py" line="1080"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation>%i hari, %i jam dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1100"/>
+        <location filename="utilities.py" line="1103"/>
         <source>sourced from</source>
         <translation>sumber dari</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1101"/>
+        <location filename="utilities.py" line="1104"/>
         <source>Hazard details</source>
         <translation>Detil ancaman</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1104"/>
+        <location filename="utilities.py" line="1107"/>
         <source>Exposure details</source>
         <translation>Detil keterpaparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1112"/>
+        <location filename="utilities.py" line="1115"/>
         <source>Hazard layer</source>
         <translation>Lapisan ancaman</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1123"/>
+        <location filename="utilities.py" line="1126"/>
         <source>Exposure layer</source>
         <translation>Lapisan keterpaparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1150"/>
+        <location filename="utilities.py" line="1153"/>
         <source>InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank</source>
         <translation>InaSAFE telah dikembangkan bersama-sama oleh BNPB, AusAid &amp; World Bank</translation>
     </message>
@@ -177,17 +177,17 @@
         <translation>Tidak ada informasi gaya ditemukan pada lapisan %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1128"/>
+        <location filename="utilities.py" line="1131"/>
         <source>an unknown source</source>
         <translation>sumber tidak diketahui</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1145"/>
+        <location filename="utilities.py" line="1148"/>
         <source>Software notes</source>
         <translation>Catatan perangkat lunak</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1146"/>
+        <location filename="utilities.py" line="1149"/>
         <source>This report was created using InaSAFE version %1. Visit http://inasafe.org to get your free copy of this software!</source>
         <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %1. Kunjungi http://inasafe.org untuk mendapatkan perangkat lunak ini secara gratis!</translation>
     </message>
@@ -963,122 +963,122 @@ ke %s: %s</translation>
 <context>
     <name>KeywordsDialogBase</name>
     <message>
-        <location filename="keywords_dialog_base.ui" line="20"/>
+        <location filename="keywords_dialog_base.py" line="234"/>
         <source>InaSAFE - Keyword Editor</source>
         <translation>InaSAFE - Editor kata kunci</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="97"/>
+        <location filename="keywords_dialog_base.py" line="239"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="106"/>
+        <location filename="keywords_dialog_base.py" line="240"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation>Ancaman merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="109"/>
+        <location filename="keywords_dialog_base.py" line="241"/>
         <source>Hazard</source>
         <translation>Ancaman</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="116"/>
+        <location filename="keywords_dialog_base.py" line="242"/>
         <source>Where people and property are situated.</source>
         <translation>Dimana lokasi manusia dan harta benda.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="119"/>
+        <location filename="keywords_dialog_base.py" line="243"/>
         <source>Exposure</source>
         <translation>Keterpaparan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="74"/>
+        <location filename="keywords_dialog_base.py" line="237"/>
         <source>Subcategory</source>
         <translation>Sub-kategori</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="67"/>
+        <location filename="keywords_dialog_base.py" line="236"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation>Sub-kategori menunjukan jenis ancaman.</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="197"/>
+        <location filename="keywords_dialog_base.py" line="249"/>
         <source>Advanced editor</source>
         <translation>Editor lanjutan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="230"/>
+        <location filename="keywords_dialog_base.py" line="252"/>
         <source>Keyword</source>
         <translation>Kata kunci</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="301"/>
+        <location filename="keywords_dialog_base.py" line="256"/>
         <source>Value</source>
         <translation>Nilai</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="314"/>
+        <location filename="keywords_dialog_base.py" line="257"/>
         <source>Add to list</source>
         <translation>Tambahkan ke dalam daftar</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="324"/>
+        <location filename="keywords_dialog_base.py" line="258"/>
         <source>Current keywords</source>
         <translation>Kata kunci saat ini</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="360"/>
+        <location filename="keywords_dialog_base.py" line="259"/>
         <source>Remove selected</source>
         <translation>Hilangkan yang dipilih</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="205"/>
+        <location filename="keywords_dialog_base.py" line="250"/>
         <source>Predefined</source>
         <translation>Yang telah ditentukan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="288"/>
+        <location filename="keywords_dialog_base.py" line="255"/>
         <source>Key</source>
         <translation>kunci</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="58"/>
+        <location filename="keywords_dialog_base.py" line="235"/>
         <source>Quick edit</source>
         <translation>Edit cepat</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="141"/>
+        <location filename="keywords_dialog_base.py" line="245"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="181"/>
+        <location filename="keywords_dialog_base.py" line="248"/>
         <source>Show advanced editor</source>
         <translation>Tampilkan editor lanjutan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="212"/>
+        <location filename="keywords_dialog_base.py" line="251"/>
         <source>User defined</source>
         <translation>Yang ditentukan oleh pengguna</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="129"/>
+        <location filename="keywords_dialog_base.py" line="244"/>
         <source>Postprocessing</source>
         <translation>Pasca pemrosesan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="90"/>
+        <location filename="keywords_dialog_base.py" line="238"/>
         <source>Aggregation attribute</source>
         <translation>Atribut agregasi</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="148"/>
+        <location filename="keywords_dialog_base.py" line="246"/>
         <source>Female ratio attribute</source>
         <translation>Atribut perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="155"/>
+        <location filename="keywords_dialog_base.py" line="247"/>
         <source>Female ratio default</source>
         <translation>Nilai default perbandingan wanita</translation>
     </message>
@@ -1156,117 +1156,117 @@ Pesan: %s</translation>
 <context>
     <name>OptionsDialogBase</name>
     <message>
-        <location filename="options_dialog_base.py" line="209"/>
+        <location filename="options_dialog_base.ui" line="14"/>
         <source>InaSAFE - Options</source>
         <translation>InaSAFE - Opsi-opsi</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="221"/>
+        <location filename="options_dialog_base.ui" line="226"/>
         <source>Only show visible layers in InaSAFE dock</source>
         <translation>Hanya tampilkan lapisan yang terlihat di InaSAFE</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="222"/>
+        <location filename="options_dialog_base.ui" line="236"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
         <translation>Menggunakan &apos;judul&apos; pada Editor Kata Kunci sebagai nama lapisan QGIS</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="224"/>
+        <location filename="options_dialog_base.ui" line="256"/>
         <source>Keyword cache for remote datasources</source>
         <translation>Cache Kata Kunci untuk sumber data jarak jauh</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="225"/>
+        <location filename="options_dialog_base.ui" line="275"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="210"/>
+        <location filename="options_dialog_base.ui" line="62"/>
         <source>Not yet implemented</source>
         <translation>Belum diiplementasikan</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="211"/>
+        <location filename="options_dialog_base.ui" line="71"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
         <translation>Gelembung keterpaparan dan lapisan ancaman ke atas saat dipilih</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="212"/>
+        <location filename="options_dialog_base.ui" line="81"/>
         <source>Location for results</source>
         <translation>Lokasi untuk hasil-hasil</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="214"/>
+        <location filename="options_dialog_base.ui" line="112"/>
         <source>Report template</source>
         <translation>Template laporan</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="216"/>
+        <location filename="options_dialog_base.ui" line="143"/>
         <source>Logo for maps (must be x x y) </source>
         <translation>Logo untuk peta-peta (harus dalam x x y) </translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="218"/>
+        <location filename="options_dialog_base.ui" line="174"/>
         <source>Organisation name (for maps, reports etc.)</source>
         <translation>Nama organisasi (untuk peta, laporan-laporan dll.)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="220"/>
+        <location filename="options_dialog_base.ui" line="207"/>
         <source>DPI (Maps and reports)</source>
         <translation>DPI (Peta-peta dan laporan-laporan)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="226"/>
+        <location filename="options_dialog_base.ui" line="284"/>
         <source>Run analysis in a separate thread (experimental)</source>
         <translation>Jalankan analisis dalam thread terpisah (percobaan)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="223"/>
+        <location filename="options_dialog_base.ui" line="246"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
         <translation>Zoom ke lapisan dampak saat perhitungan dampak selesai</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="227"/>
+        <location filename="options_dialog_base.ui" line="294"/>
         <source>Hide exposure layer on scenario estimate completion</source>
         <translation>Sembunyikan lapisan keterpaparan saat perhitungan dampak selesai</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="229"/>
+        <location filename="options_dialog_base.ui" line="304"/>
         <source>Clip datasets to visible extent before analysis</source>
         <translation>Saat melakukan analisis, dataset yang digunakan hanya sebatas yang tertampil</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="228"/>
+        <location filename="options_dialog_base.ui" line="301"/>
         <source>Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas</source>
         <translation>Nyalakan untuk memotong lapisan ancaman dan keterpaparan ke tampilan yang terlihat pada kanvas peta</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="230"/>
+        <location filename="options_dialog_base.ui" line="314"/>
         <source>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</source>
         <translation>Hidupkan untuk melihat berkas intermediate yang dibuat oleh tahapan pasca pemrosesan pada kanvas peta</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="231"/>
+        <location filename="options_dialog_base.ui" line="317"/>
         <source>Show intermediate layers generated by postprocessing</source>
         <translation>Tampilkan lapisan intermediate yang dibuat oleh pasca pemrosesan</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="232"/>
+        <location filename="options_dialog_base.ui" line="326"/>
         <source>Female ratio default value</source>
         <translation>Nilai default perbandingan wanita</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="233"/>
+        <location filename="options_dialog_base.ui" line="348"/>
         <source>When clipping, also clip features (e.g. will clip polygon smaller)</source>
         <translation>Ketika melakukan kliping, juga mengklip fitur (contoh akan mengklip poligon yang lebih kecil)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="234"/>
+        <location filename="options_dialog_base.ui" line="355"/>
         <source>Help to improve InaSAFE by submitting errors to a remote server</source>
         <translation>Bantu untuk pengembangan InaSAFE dengan mengirimkan kesalahan kepada remote server</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.py" line="235"/>
+        <location filename="options_dialog_base.ui" line="368"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
