@@ -4,10 +4,10 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>81.066588</xmin>
-            <ymin>-26.112076</ymin>
-            <xmax>175.566592</xmax>
-            <ymax>32.028733</ymax>
+            <xmin>87.760000</xmin>
+            <ymin>-9.076181</ymin>
+            <xmax>108.760000</xmax>
+            <ymax>7.196181</ymax>
         </extent>
         <projections>1</projections>
         <destinationsrs>
@@ -23,7 +23,12 @@
             </spatialrefsys>
         </destinationsrs>
     </mapcanvas>
-    <legend updateDrawingOrder="false">
+    <legend updateDrawingOrder="true">
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Population" showFeatureCount="0">
+            <filegroup open="false" hidden="false">
+                <legendlayerfile isInOverview="0" layerid="population20120911162940535" visible="1"/>
+            </filegroup>
+        </legendlayer>
         <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="gadm" showFeatureCount="0">
             <filegroup open="true" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="gadm20130128111117297" visible="1"/>
@@ -34,235 +39,7 @@
                 <legendlayerfile isInOverview="0" layerid="TM_WORLD_BORDERS_0_320130128103448809" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="Population" showFeatureCount="0">
-            <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="population20120911162940535" visible="1"/>
-            </filegroup>
-        </legendlayer>
     </legend>
-    <Composer title="Realtime" visible="1">
-        <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="2" snapGridOffsetY="0" snapping="1" numPages="1" paperHeight="297" printAsRaster="1">
-            <ComposerLabel valign="32" labelText="[exposure-table-name]&#xa;" halign="4" margin="1">
-                <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="197.27" x="4.73016" y="62" rotation="0" height="9.0396" frame="false" outlineWidth="0.3" zValue="20" lastValidViewScaleFactor="6.28188" id="mmi-table-header" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="[elapsed-time-name] [elapsed-time]" halign="2" margin="1">
-                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="96" x="106" y="40" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="19" lastValidViewScaleFactor="6.28188" id="elapsed-time" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="[legend-name]" halign="4" margin="1">
-                <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="86" x="116" y="207" rotation="0" height="8" frame="true" outlineWidth="0.1" zValue="18" lastValidViewScaleFactor="3.31544" id="" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="[located-label] [distance] [distance-unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-name]" halign="1" margin="1">
-                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="198" x="4" y="54" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="17" lastValidViewScaleFactor="6.28188" id="location-description" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="[city-table-name]" halign="4" margin="1">
-                <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="86" x="116" y="100" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="16" lastValidViewScaleFactor="3.31544" id="" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="[fatalities-name] : [fatalities-range]" halign="4" margin="1">
-                <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="255" blue="0" green="0"/>
-                <ComposerItem width="86" x="116" y="196" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="3.27181" id="fatalities" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" halign="1" margin="1">
-                <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="198" x="4" y="48" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.82938" id="position-depth" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="M [mmi]  [formatted-date-time]" halign="1" margin="1">
-                <LabelFont description="Ubuntu,10,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="98" x="4" y="40" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.82938" id="intensity-date" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerMap keepLayerSet="true" overviewFrameMap="0" id="1" previewMode="Cache" drawCanvasItems="true">
-                <overviewFrame overviewFrameMap="0">
-                    <symbol outputUnit="MM" alpha="1" type="fill" name="">
-                        <layer pass="0" class="SimpleFill" locked="0">
-                            <prop k="color" v="255,0,0,255"/>
-                            <prop k="color_border" v="255,0,0,255"/>
-                            <prop k="offset" v="0,0"/>
-                            <prop k="style" v="no"/>
-                            <prop k="style_border" v="solid"/>
-                            <prop k="width_border" v="0.3"/>
-                        </layer>
-                    </symbol>
-                </overviewFrame>
-                <Extent ymin="-15.7222" xmin="92.2189" ymax="10.3626" xmax="165.597"/>
-                <LayerSet>
-                    <Layer>TM_WORLD_BORDERS_0_320130128103448809</Layer>
-                    <Layer>population20120911162940535</Layer>
-                </LayerSet>
-                <Grid gridStyle="1" crossLength="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1">
-                    <symbol outputUnit="MM" alpha="1" type="line" name="">
-                        <layer pass="0" class="SimpleLine" locked="0">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="0,0,0,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="0"/>
-                        </layer>
-                    </symbol>
-                    <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
-                </Grid>
-                <ComposerItem width="101.27" x="4.73016" y="207" rotation="0" height="36" frame="true" outlineWidth="0.1" zValue="9" lastValidViewScaleFactor="3.109" id="overview-map" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerMap>
-            <ComposerLabel valign="32" labelText="[limitations]" halign="1" margin="2">
-                <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="197.27" x="4.73016" y="248" rotation="0" height="35.4539" frame="true" outlineWidth="0.1" zValue="8" lastValidViewScaleFactor="3.31544" id="disclaimer" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Render" drawCanvasItems="true">
-                <overviewFrame overviewFrameMap="-1">
-                    <symbol outputUnit="MM" alpha="0.3" type="fill" name="">
-                        <layer pass="0" class="SimpleFill" locked="0">
-                            <prop k="color" v="255,0,0,76"/>
-                            <prop k="color_border" v="0,0,0,76"/>
-                            <prop k="offset" v="0,0"/>
-                            <prop k="style" v="solid"/>
-                            <prop k="style_border" v="no"/>
-                            <prop k="width_border" v="0.26"/>
-                        </layer>
-                    </symbol>
-                </overviewFrame>
-                <Extent ymin="-1.87921" xmin="122.271" ymax="1.59288" xmax="125.699"/>
-                <LayerSet/>
-                <Grid gridStyle="1" crossLength="1" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1">
-                    <symbol outputUnit="MM" alpha="1" type="line" name="">
-                        <layer pass="0" class="SimpleLine" locked="0">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="172,172,172,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="0"/>
-                        </layer>
-                    </symbol>
-                    <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
-                </Grid>
-                <ComposerItem width="98.7302" x="6" y="100" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="3.109" id="main-map" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerMap>
-            <ComposerLabel valign="32" labelText="[credits]" halign="4" margin="1">
-                <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="192.174" x="7.46623" y="283.513" rotation="0" height="13.8378" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.82938" id="credits" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerLabel valign="32" labelText="[map-name]" halign="4" margin="1">
-                <LabelFont description="Ubuntu,28,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="127.567" x="40" y="12" rotation="0" height="24.1693" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="6.28188" id="main-title" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
-            <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="172" y="8" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="6.28188" id="right-logo" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerPicture>
-            <ComposerPicture pictureWidth="30" file="./bnpb_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="4" y="8" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="6.28188" id="logo-left" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerPicture>
-            <ComposerShape shapeType="1" shapeWidth="86" outlineWidth="0.1" transparentFill="1" shapeHeight="28">
-                <OutlineColor alpha="255" red="0" blue="0" green="0"/>
-                <FillColor alpha="255" red="0" blue="0" green="0"/>
-                <ComposerItem width="86" x="116" y="215" rotation="0" height="28" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="3.31544" id="" positionLock="false">
-                    <FrameColor alpha="0" red="255" blue="255" green="255"/>
-                    <BackgroundColor alpha="0" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerShape>
-            <ComposerLegend symbolWidth="4" title="" groupSpace="2" itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0" symbolSpace="0" map="1" layerSpace="5" titleFont="Verdana,12,-1,5,75,0,0,0,0,0" wrapChar=" " layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" columnCount="1" iconLabelSpace="2" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" columnSpace="2" symbolHeight="4" equalColumnWidth="0" splitLayer="0" boxSpace="2">
-                <Model autoUpdate="0">
-                    <LayerItem layerId="population20120911162940535" text="" showFeatureCount="0">
-                        <RasterClassificationItem layerId="population20120911162940535" color="#fafafa" text="1000-10000"/>
-                        <RasterClassificationItem layerId="population20120911162940535" color="#bcbcbc" text="100-1000"/>
-                        <RasterClassificationItem layerId="population20120911162940535" color="#7f7f7f" text="10-100"/>
-                        <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1-10"/>
-                    </LayerItem>
-                </Model>
-                <ComposerItem width="26" x="142" y="215" rotation="0" height="22" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.31544" id="legend" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLegend>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="194.91" x="4.73016" y="69.3883" rotation="0" height="28.6117" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="3.27181" id="impacts-table" positionLock="false">
-                        <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                        <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                    </ComposerItem>
-                </ComposerFrame>
-            </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
-                <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-                    <ComposerItem width="86" x="116" y="117.699" rotation="0" height="68.301" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="3.31544" id="affected-cities" positionLock="false">
-                        <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                        <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                    </ComposerItem>
-                </ComposerFrame>
-            </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="">
-                <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-                    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="3.109" id="" positionLock="false">
-                        <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                        <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                    </ComposerItem>
-                </ComposerFrame>
-            </ComposerHtml>
-        </Composition>
-    </Composer>
     <projectlayers layercount="3">
         <maplayer minimumScale="1.80996e+07" maximumScale="9e+07" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="1">
             <id>TM_WORLD_BORDERS_0_320130128103448809</id>
@@ -287,11 +64,13 @@
             <vectorjoins/>
             <renderer-v2 symbollevels="0" type="singleSymbol">
                 <symbols>
-                    <symbol outputUnit="MM" alpha="1" type="fill" name="0">
+                    <symbol alpha="1" type="fill" name="0">
                         <layer pass="0" class="SimpleFill" locked="0">
+                            <prop k="border_width_unit" v="MM"/>
                             <prop k="color" v="161,68,43,255"/>
                             <prop k="color_border" v="0,0,0,255"/>
                             <prop k="offset" v="0,0"/>
+                            <prop k="offset_unit" v="MM"/>
                             <prop k="style" v="no"/>
                             <prop k="style_border" v="solid"/>
                             <prop k="width_border" v="0.26"/>
@@ -314,27 +93,27 @@
                 <property key="labeling/bufferSizeInMapUnits" value="false"/>
                 <property key="labeling/bufferTransp" value="0"/>
                 <property key="labeling/centroidWhole" value="false"/>
-                <property key="labeling/dataDefinedProperty0" value=""/>
-                <property key="labeling/dataDefinedProperty1" value=""/>
-                <property key="labeling/dataDefinedProperty10" value=""/>
-                <property key="labeling/dataDefinedProperty11" value=""/>
-                <property key="labeling/dataDefinedProperty12" value=""/>
-                <property key="labeling/dataDefinedProperty13" value=""/>
-                <property key="labeling/dataDefinedProperty14" value=""/>
-                <property key="labeling/dataDefinedProperty15" value=""/>
-                <property key="labeling/dataDefinedProperty16" value=""/>
-                <property key="labeling/dataDefinedProperty17" value=""/>
-                <property key="labeling/dataDefinedProperty18" value=""/>
-                <property key="labeling/dataDefinedProperty19" value=""/>
-                <property key="labeling/dataDefinedProperty2" value=""/>
-                <property key="labeling/dataDefinedProperty20" value=""/>
-                <property key="labeling/dataDefinedProperty3" value=""/>
-                <property key="labeling/dataDefinedProperty4" value=""/>
-                <property key="labeling/dataDefinedProperty5" value=""/>
-                <property key="labeling/dataDefinedProperty6" value=""/>
-                <property key="labeling/dataDefinedProperty7" value=""/>
-                <property key="labeling/dataDefinedProperty8" value=""/>
-                <property key="labeling/dataDefinedProperty9" value=""/>
+                <property key="labeling/dataDefined/AlwaysShow" value=""/>
+                <property key="labeling/dataDefined/Bold" value=""/>
+                <property key="labeling/dataDefined/BufferColor" value=""/>
+                <property key="labeling/dataDefined/BufferSize" value=""/>
+                <property key="labeling/dataDefined/BufferTransp" value=""/>
+                <property key="labeling/dataDefined/Color" value=""/>
+                <property key="labeling/dataDefined/Family" value=""/>
+                <property key="labeling/dataDefined/FontTransp" value=""/>
+                <property key="labeling/dataDefined/Hali" value=""/>
+                <property key="labeling/dataDefined/Italic" value=""/>
+                <property key="labeling/dataDefined/LabelDistance" value=""/>
+                <property key="labeling/dataDefined/MaxScale" value=""/>
+                <property key="labeling/dataDefined/MinScale" value=""/>
+                <property key="labeling/dataDefined/PositionX" value=""/>
+                <property key="labeling/dataDefined/PositionY" value=""/>
+                <property key="labeling/dataDefined/Rotation" value=""/>
+                <property key="labeling/dataDefined/Show" value=""/>
+                <property key="labeling/dataDefined/Size" value=""/>
+                <property key="labeling/dataDefined/Strikeout" value=""/>
+                <property key="labeling/dataDefined/Underline" value=""/>
+                <property key="labeling/dataDefined/Vali" value=""/>
                 <property key="labeling/decimals" value="0"/>
                 <property key="labeling/displayAll" value="false"/>
                 <property key="labeling/dist" value="0"/>
@@ -391,7 +170,7 @@
                 <property key="labeling/yOffset" value="0"/>
                 <property key="labeling/yQuadOffset" value="0"/>
             </customproperties>
-            <editorlayout>generatedlayout</editorlayout>
+            <blendMode>0</blendMode>
             <displayfield>FIPS</displayfield>
             <label>0</label>
             <labelattributes>
@@ -415,21 +194,22 @@
                 <selectedonly on=""/>
             </labelattributes>
             <edittypes>
-                <edittype type="0" name="AREA"/>
-                <edittype type="0" name="FIPS"/>
-                <edittype type="0" name="ISO2"/>
-                <edittype type="0" name="ISO3"/>
-                <edittype type="0" name="LAT"/>
-                <edittype type="0" name="LON"/>
-                <edittype type="0" name="NAME"/>
-                <edittype type="0" name="POP2005"/>
-                <edittype type="0" name="REGION"/>
-                <edittype type="0" name="SUBREGION"/>
-                <edittype type="0" name="UN"/>
+                <edittype editable="1" type="0" name="AREA"/>
+                <edittype editable="1" type="0" name="FIPS"/>
+                <edittype editable="1" type="0" name="ISO2"/>
+                <edittype editable="1" type="0" name="ISO3"/>
+                <edittype editable="1" type="0" name="LAT"/>
+                <edittype editable="1" type="0" name="LON"/>
+                <edittype editable="1" type="0" name="NAME"/>
+                <edittype editable="1" type="0" name="POP2005"/>
+                <edittype editable="1" type="0" name="REGION"/>
+                <edittype editable="1" type="0" name="SUBREGION"/>
+                <edittype editable="1" type="0" name="UN"/>
             </edittypes>
             <editform>.</editform>
             <editforminit></editforminit>
             <annotationform>.</annotationform>
+            <editorlayout>generatedlayout</editorlayout>
             <excludeAttributesWMS/>
             <excludeAttributesWFS/>
             <attributeactions/>
@@ -457,11 +237,13 @@
             <vectorjoins/>
             <renderer-v2 symbollevels="0" type="singleSymbol">
                 <symbols>
-                    <symbol outputUnit="MM" alpha="1" type="fill" name="0">
+                    <symbol alpha="1" type="fill" name="0">
                         <layer pass="0" class="SimpleFill" locked="0">
+                            <prop k="border_width_unit" v="MM"/>
                             <prop k="color" v="170,146,122,255"/>
                             <prop k="color_border" v="0,0,0,255"/>
                             <prop k="offset" v="0,0"/>
+                            <prop k="offset_unit" v="MM"/>
                             <prop k="style" v="no"/>
                             <prop k="style_border" v="solid"/>
                             <prop k="width_border" v="0.26"/>
@@ -484,27 +266,27 @@
                 <property key="labeling/bufferSizeInMapUnits" value="false"/>
                 <property key="labeling/bufferTransp" value="0"/>
                 <property key="labeling/centroidWhole" value="false"/>
-                <property key="labeling/dataDefinedProperty0" value=""/>
-                <property key="labeling/dataDefinedProperty1" value=""/>
-                <property key="labeling/dataDefinedProperty10" value=""/>
-                <property key="labeling/dataDefinedProperty11" value=""/>
-                <property key="labeling/dataDefinedProperty12" value=""/>
-                <property key="labeling/dataDefinedProperty13" value=""/>
-                <property key="labeling/dataDefinedProperty14" value=""/>
-                <property key="labeling/dataDefinedProperty15" value=""/>
-                <property key="labeling/dataDefinedProperty16" value=""/>
-                <property key="labeling/dataDefinedProperty17" value=""/>
-                <property key="labeling/dataDefinedProperty18" value=""/>
-                <property key="labeling/dataDefinedProperty19" value=""/>
-                <property key="labeling/dataDefinedProperty2" value=""/>
-                <property key="labeling/dataDefinedProperty20" value=""/>
-                <property key="labeling/dataDefinedProperty3" value=""/>
-                <property key="labeling/dataDefinedProperty4" value=""/>
-                <property key="labeling/dataDefinedProperty5" value=""/>
-                <property key="labeling/dataDefinedProperty6" value=""/>
-                <property key="labeling/dataDefinedProperty7" value=""/>
-                <property key="labeling/dataDefinedProperty8" value=""/>
-                <property key="labeling/dataDefinedProperty9" value=""/>
+                <property key="labeling/dataDefined/AlwaysShow" value=""/>
+                <property key="labeling/dataDefined/Bold" value=""/>
+                <property key="labeling/dataDefined/BufferColor" value=""/>
+                <property key="labeling/dataDefined/BufferSize" value=""/>
+                <property key="labeling/dataDefined/BufferTransp" value=""/>
+                <property key="labeling/dataDefined/Color" value=""/>
+                <property key="labeling/dataDefined/Family" value=""/>
+                <property key="labeling/dataDefined/FontTransp" value=""/>
+                <property key="labeling/dataDefined/Hali" value=""/>
+                <property key="labeling/dataDefined/Italic" value=""/>
+                <property key="labeling/dataDefined/LabelDistance" value=""/>
+                <property key="labeling/dataDefined/MaxScale" value=""/>
+                <property key="labeling/dataDefined/MinScale" value=""/>
+                <property key="labeling/dataDefined/PositionX" value=""/>
+                <property key="labeling/dataDefined/PositionY" value=""/>
+                <property key="labeling/dataDefined/Rotation" value=""/>
+                <property key="labeling/dataDefined/Show" value=""/>
+                <property key="labeling/dataDefined/Size" value=""/>
+                <property key="labeling/dataDefined/Strikeout" value=""/>
+                <property key="labeling/dataDefined/Underline" value=""/>
+                <property key="labeling/dataDefined/Vali" value=""/>
                 <property key="labeling/decimals" value="0"/>
                 <property key="labeling/displayAll" value="false"/>
                 <property key="labeling/dist" value="0"/>
@@ -561,7 +343,7 @@
                 <property key="labeling/yOffset" value="0"/>
                 <property key="labeling/yQuadOffset" value="0"/>
             </customproperties>
-            <editorlayout>generatedlayout</editorlayout>
+            <blendMode>0</blendMode>
             <displayfield>name_0</displayfield>
             <label>0</label>
             <labelattributes>
@@ -585,64 +367,65 @@
                 <selectedonly on=""/>
             </labelattributes>
             <edittypes>
-                <edittype type="0" name="PK_UID"/>
-                <edittype type="0" name="cc_1"/>
-                <edittype type="0" name="cc_2"/>
-                <edittype type="0" name="engtype4"/>
-                <edittype type="0" name="engtype_1"/>
-                <edittype type="0" name="engtype_2"/>
-                <edittype type="0" name="engtype_3"/>
-                <edittype type="0" name="engtype_4"/>
-                <edittype type="0" name="engtype_5"/>
-                <edittype type="0" name="gid"/>
-                <edittype type="0" name="hasc_1"/>
-                <edittype type="0" name="hasc_2"/>
-                <edittype type="0" name="hasc_3"/>
-                <edittype type="0" name="id_0"/>
-                <edittype type="0" name="id_1"/>
-                <edittype type="0" name="id_2"/>
-                <edittype type="0" name="id_3"/>
-                <edittype type="0" name="id_4"/>
-                <edittype type="0" name="id_5"/>
-                <edittype type="0" name="iso"/>
-                <edittype type="0" name="name_0"/>
-                <edittype type="0" name="name_1"/>
-                <edittype type="0" name="name_2"/>
-                <edittype type="0" name="name_3"/>
-                <edittype type="0" name="name_4"/>
-                <edittype type="0" name="name_5"/>
-                <edittype type="0" name="nl_name_1"/>
-                <edittype type="0" name="nl_name_2"/>
-                <edittype type="0" name="nl_name_3"/>
-                <edittype type="0" name="objectid"/>
-                <edittype type="0" name="remarks_1"/>
-                <edittype type="0" name="remarks_2"/>
-                <edittype type="0" name="remarks_3"/>
-                <edittype type="0" name="remarks_4"/>
-                <edittype type="0" name="shape_area"/>
-                <edittype type="0" name="shape_leng"/>
-                <edittype type="0" name="type4"/>
-                <edittype type="0" name="type_1"/>
-                <edittype type="0" name="type_2"/>
-                <edittype type="0" name="type_3"/>
-                <edittype type="0" name="type_4"/>
-                <edittype type="0" name="type_5"/>
-                <edittype type="0" name="validfr_1"/>
-                <edittype type="0" name="validfr_2"/>
-                <edittype type="0" name="validfr_3"/>
-                <edittype type="0" name="validfr_4"/>
-                <edittype type="0" name="validto_1"/>
-                <edittype type="0" name="validto_2"/>
-                <edittype type="0" name="validto_3"/>
-                <edittype type="0" name="validto_4"/>
-                <edittype type="0" name="varname_1"/>
-                <edittype type="0" name="varname_2"/>
-                <edittype type="0" name="varname_3"/>
-                <edittype type="0" name="varname_4"/>
+                <edittype editable="1" type="0" name="PK_UID"/>
+                <edittype editable="1" type="0" name="cc_1"/>
+                <edittype editable="1" type="0" name="cc_2"/>
+                <edittype editable="1" type="0" name="engtype4"/>
+                <edittype editable="1" type="0" name="engtype_1"/>
+                <edittype editable="1" type="0" name="engtype_2"/>
+                <edittype editable="1" type="0" name="engtype_3"/>
+                <edittype editable="1" type="0" name="engtype_4"/>
+                <edittype editable="1" type="0" name="engtype_5"/>
+                <edittype editable="1" type="0" name="gid"/>
+                <edittype editable="1" type="0" name="hasc_1"/>
+                <edittype editable="1" type="0" name="hasc_2"/>
+                <edittype editable="1" type="0" name="hasc_3"/>
+                <edittype editable="1" type="0" name="id_0"/>
+                <edittype editable="1" type="0" name="id_1"/>
+                <edittype editable="1" type="0" name="id_2"/>
+                <edittype editable="1" type="0" name="id_3"/>
+                <edittype editable="1" type="0" name="id_4"/>
+                <edittype editable="1" type="0" name="id_5"/>
+                <edittype editable="1" type="0" name="iso"/>
+                <edittype editable="1" type="0" name="name_0"/>
+                <edittype editable="1" type="0" name="name_1"/>
+                <edittype editable="1" type="0" name="name_2"/>
+                <edittype editable="1" type="0" name="name_3"/>
+                <edittype editable="1" type="0" name="name_4"/>
+                <edittype editable="1" type="0" name="name_5"/>
+                <edittype editable="1" type="0" name="nl_name_1"/>
+                <edittype editable="1" type="0" name="nl_name_2"/>
+                <edittype editable="1" type="0" name="nl_name_3"/>
+                <edittype editable="1" type="0" name="objectid"/>
+                <edittype editable="1" type="0" name="remarks_1"/>
+                <edittype editable="1" type="0" name="remarks_2"/>
+                <edittype editable="1" type="0" name="remarks_3"/>
+                <edittype editable="1" type="0" name="remarks_4"/>
+                <edittype editable="1" type="0" name="shape_area"/>
+                <edittype editable="1" type="0" name="shape_leng"/>
+                <edittype editable="1" type="0" name="type4"/>
+                <edittype editable="1" type="0" name="type_1"/>
+                <edittype editable="1" type="0" name="type_2"/>
+                <edittype editable="1" type="0" name="type_3"/>
+                <edittype editable="1" type="0" name="type_4"/>
+                <edittype editable="1" type="0" name="type_5"/>
+                <edittype editable="1" type="0" name="validfr_1"/>
+                <edittype editable="1" type="0" name="validfr_2"/>
+                <edittype editable="1" type="0" name="validfr_3"/>
+                <edittype editable="1" type="0" name="validfr_4"/>
+                <edittype editable="1" type="0" name="validto_1"/>
+                <edittype editable="1" type="0" name="validto_2"/>
+                <edittype editable="1" type="0" name="validto_3"/>
+                <edittype editable="1" type="0" name="validto_4"/>
+                <edittype editable="1" type="0" name="varname_1"/>
+                <edittype editable="1" type="0" name="varname_2"/>
+                <edittype editable="1" type="0" name="varname_3"/>
+                <edittype editable="1" type="0" name="varname_4"/>
             </edittypes>
             <editform>.</editform>
             <editforminit></editforminit>
             <annotationform>.</annotationform>
+            <editorlayout>generatedlayout</editorlayout>
             <excludeAttributesWMS/>
             <excludeAttributesWFS/>
             <attributeactions/>
@@ -680,7 +463,10 @@
                     <algorithm>1</algorithm>
                 </contrastEnhancement>
             </rasterrenderer>
+            <brightnesscontrast brightness="0" contrast="0"/>
+            <huesaturation colorizeGreen="128" colorizeOn="0" colorizeRed="255" colorizeBlue="128" grayscaleMode="0" saturation="0" colorizeStrength="100"/>
             <rasterresampler maxOversampling="2"/>
+            <blendMode>0</blendMode>
         </maplayer>
     </projectlayers>
     <properties>

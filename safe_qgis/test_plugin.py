@@ -65,7 +65,7 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
-        myTranslation = safeTr('A volcano eruption')
+        myTranslation = tr('A volcano eruption')
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     ('A volcano eruption', myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage
@@ -86,9 +86,10 @@ class PluginTest(unittest.TestCase):
         # (see http://effbot.org/zone/metaclass-plugins.htm)
         # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
+        from safe.common.utilities import ugettext as tr
         myUntranslatedString = 'Temporarily Closed'
         myExpectedString = 'Tydelik gesluit'  # afrikaans
-        myTranslation = safeTr(myUntranslatedString)
+        myTranslation = tr(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
                     (myUntranslatedString, myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage

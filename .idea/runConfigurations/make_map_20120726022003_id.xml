@@ -14,7 +14,7 @@
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
     <option name="IS_MODULE_SDK" value="true" />
-    <module name="inasafe-realtime" />
+    <module name="inasafe-dev" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/make_map.py" />
     <option name="PARAMETERS" value="20120726022003" />

@@ -779,20 +779,6 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
 
     myQGISHandler = QgsLogHandler()
 
-    # TODO: User opt in before we enable email based logging.
-    # Email handler for errors
-    #myEmailServer = 'localhost'
-    #myEmailServerPort = 25
-    #mySenderAddress = 'logs@inasafe.org'
-    #myRecipientAddresses = ['tim@linfiniti.com']
-    #mySubject = 'Error'
-    #myEmailHandler = logging.handlers.SMTPHandler(
-    #    (myEmailServer, myEmailServerPort),
-    #                                      mySenderAddress,
-    #                                      myRecipientAddresses,
-    #                                      mySubject)
-    #myEmailHandler.setLevel(logging.ERROR)
-
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
     # logging messages will be sent to http://sentry.linfiniti.com
@@ -820,13 +806,11 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     #Set formatters
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
-    #myEmailHandler.setFormatter(myFormatter)
     myQGISHandler.setFormatter(myFormatter)
 
     # add the handlers to the logger
     addLoggingHanderOnce(myLogger, myFileHandler)
     addLoggingHanderOnce(myLogger, myConsoleHandler)
-    #addLoggingHanderOnce(myLogger, myEmailHandler)
     addLoggingHanderOnce(myLogger, myQGISHandler)
 
 
@@ -1063,7 +1047,7 @@ def humaniseSeconds(theSeconds):
     if theSeconds < 120:
         return tr('a minute')
     if theSeconds < 3600:
-        return tr('minutes' % myMinutes)
+        return tr('%s minutes' % myMinutes)
     if theSeconds < 7200:
         return tr('over an hour')
     if theSeconds < 86400:
