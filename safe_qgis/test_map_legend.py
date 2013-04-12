@@ -61,6 +61,7 @@ class MapLegendTest(unittest.TestCase):
         myControlImages = ['getLegend.png',
                            'getLegend-variantWindosVistaSP2-32.png',
                            'getLegend-variantWindowsXPSP3-32.png',
+                           'getLegend-variantOSXml.png',
                            'getClassToLegend-variantUB12.04-64.png',
                            'getClassToLegend-variantUB11.04-64.png',
                            'getLegend-variantJenkins.png']
@@ -90,6 +91,7 @@ class MapLegendTest(unittest.TestCase):
         myControlImages = ['getVectorLegend.png',
                            'getVectorLegend-variantWindosVistaSP2-32.png',
                            'getVectorLegend-variantWindowsXPSP3-32.png',
+                           'getVectorLegend-variantOSXml.png',
                            'getVectorLegend-variantUB12.04-64.png',
                            'getVectorLegend-variantUB11.04-64.png',
                            'getVectorLegend-variantJenkins.png']
@@ -116,6 +118,7 @@ class MapLegendTest(unittest.TestCase):
         myControlImages = ['getRasterLegend.png',
                            'getRasterLegend-variantWindosVistaSP2-32.png',
                            'getRasterLegend-variantWindowsXPSP3-32.png',
+                           'getRasterLegend-variantOSXml.png',
                            'getRasterLegend-variantUB12.04-64.png',
                            'getRasterLegend-variantUB11.04-64.png',
                            'getRasterLegend-variantJenkins.png']
@@ -136,10 +139,11 @@ class MapLegendTest(unittest.TestCase):
         mySymbol.setColor(QtGui.QColor(12, 34, 56))
         myMapLegend.addSymbolToLegend(mySymbol,
                                       theMin=0,
-                                      theMax=2,
+                                      # expect 2.0303 in legend
+                                      theMax=2.02030,
                                       theCategory=None,
                                       theLabel='Foo')
-        myPath = unique_filename(prefix='addSymblToLegend',
+        myPath = unique_filename(prefix='addSymbolToLegend',
                                  suffix='.png',
                                  dir=temp_dir('test'))
         myMapLegend.getLegend().save(myPath, 'PNG')
@@ -150,6 +154,7 @@ class MapLegendTest(unittest.TestCase):
         myControlImages = ['addSymbolToLegend.png',
                            'addSymbolToLegend-variantWindosVistaSP2-32.png',
                            'addSymbolToLegend-variantWindowsXPSP3-32.png',
+                           'addSymbolToLegend-variantOSXml.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
                            'addSymbolToLegend-variantUB11.04-64.png',
                            'addSymbolToLegend-variantJenkins.png']
@@ -185,12 +190,13 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getClassToLegend.png',
-                           'getClassToLegend-variantWindosVistaSP2-32.png',
-                           'getClassToLegend-variantWindowsXPSP3-32.png',
-                           'getClassToLegend-variantUB12.04-64.png',
-                           'getClassToLegend-variantUB11.04-64.png',
-                           'getClassToLegend-variantJenkins.png']
+        myControlImages = ['addClassToLegend.png',
+                           'addClassToLegend-variantWindosVistaSP2-32.png',
+                           'addClassToLegend-variantWindowsXPSP3-32.png',
+                           'addClassToLegend-variantOSXml.png',
+                           'addClassToLegend-variantUB12.04-64.png',
+                           'addClassToLegend-variantUB11.04-64.png',
+                           'addClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
