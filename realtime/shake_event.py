@@ -1204,7 +1204,7 @@ class ShakeEvent(QObject):
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
 
-        myAttemptsLimit = 5
+        myAttemptsLimit = 15
         myMinimumCityCount = 1
         myFoundFlag = False
         mySearchBoxes = []
@@ -1223,6 +1223,7 @@ class ShakeEvent(QObject):
                 myCount += 1
             # Store the box plus city count so we can visualise it later
             myRecord = {'city_count': myCount, 'geometry': myRectangle}
+            LOGGER.debug('Found cities in search box: %s' % myRecord)
             mySearchBoxes.append(myRecord)
             if myCount < myMinimumCityCount:
                 myRectangle.scale(self.zoomFactor)
@@ -1241,16 +1242,16 @@ class ShakeEvent(QObject):
         # Setup field indexes of our input and out datasets
         myCities = []
 
-        myFields = QgsFields()
-        myFields.append(QgsField('id', QVariant.Int))
-        myFields.append(QgsField('name', QVariant.String))
-        myFields.append(QgsField('population', QVariant.Int))
-        myFields.append(QgsField('mmi', QVariant.Double))
-        myFields.append(QgsField('dist_to', QVariant.Double))
-        myFields.append(QgsField('dir_to', QVariant.Double))
-        myFields.append(QgsField('dir_from', QVariant.Double))
-        myFields.append(QgsField('roman', QVariant.String))
-        myFields.append(QgsField('colour', QVariant.String))
+        #myFields = QgsFields()
+        #myFields.append(QgsField('id', QVariant.Int))
+        #myFields.append(QgsField('name', QVariant.String))
+        #myFields.append(QgsField('population', QVariant.Int))
+        #myFields.append(QgsField('mmi', QVariant.Double))
+        #myFields.append(QgsField('dist_to', QVariant.Double))
+        #myFields.append(QgsField('dir_to', QVariant.Double))
+        #myFields.append(QgsField('dir_from', QVariant.Double))
+        #myFields.append(QgsField('roman', QVariant.String))
+        #myFields.append(QgsField('colour', QVariant.String))
 
         # For measuring distance and direction from each city to epicenter
         myEpicenter = QgsPoint(self.longitude, self.latitude)
@@ -1287,7 +1288,7 @@ class ShakeEvent(QObject):
             # Populate the mmi field by raster lookup
             # Get a {int, QVariant} back
             myRasterValues = myRasterLayer.dataProvider().identify(
-                myPoint, QgsRasterDataProvider.IdentifyFormatValue)
+                myPoint, QgsRasterDataProvider.IdentifyFormatValue).results()
             myRasterValues = myRasterValues.values()
             if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster
@@ -1386,17 +1387,14 @@ class ShakeEvent(QObject):
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
         myField = QgsField('cities_found', QVariant.Int)
-        myFields = QgsFields()
-        myFields.append(myField)
-        myMemoryProvider.addAttributes(myFields)
+        myMemoryProvider.addAttributes([myField])
         myFeatures = []
         for mySearchBox in self.searchBoxes:
             myNewFeature = QgsFeature()
             myRectangle = mySearchBox['geometry']
             myGeometry = QgsGeometry.fromWkt(myRectangle.asWktPolygon())
             myNewFeature.setGeometry(myGeometry)
-            myNewFeature.setFields(myFields)
-            myNewFeature.setAttribute(0, mySearchBox['city_count'])
+            myNewFeature.setAttributes([mySearchBox['city_count']])
             myFeatures.append(myNewFeature)
 
         myResult = myMemoryProvider.addFeatures(myFeatures)
