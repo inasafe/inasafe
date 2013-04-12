@@ -5,6 +5,7 @@ import os
 import sys
 import hashlib
 import logging
+import platform
 
 from PyQt4 import QtGui, QtCore
 from qgis.core import (
@@ -257,7 +258,39 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
         None
     """
     myMessages = ''
-    for myControlImage in theControlImages:
+    myPlatform = platformName()
+    myControlImages = theControlImages
+    myPlatformMatchFlag = False
+    # if possible, only test images for this platform
+    for myControlImage in myControlImages:
+        if myPlatform in myControlImage:
+            myPlatformMatchFlag = True
+            # Take it out so we dont double test it  in the second loop below
+            myControlImages.remove(myControlImage)
+            LOGGER.debug('Testing if %s matches' % myControlImage)
+            myFullPath = os.path.join(
+                CONTROL_IMAGE_DIR, myControlImage)
+            myFlag, myMessage = checkImage(
+                myFullPath, theTestImagePath, theTolerance)
+            myMessages += myMessage
+            # As soon as one passes we are done!
+            if myFlag:
+                return myFlag, myMessages
+            else:
+                LOGGER.debug('No match for %s' % myControlImage)
+
+    if not myPlatformMatchFlag:
+        LOGGER.debug('No platform specific control image could be found,\n'
+                     'testing against all control images. Try adding %s in\n '
+                     'the file name if you want it to be detected for this\n'
+                     'platform which will speed up image comparison tests.' %
+                     myPlatform)
+    else:
+        return
+
+    # Otherwise test all control images because we dont know what platform
+    # we are on.
+    for myControlImage in myControlImages:
         myFullPath = os.path.join(
             CONTROL_IMAGE_DIR, myControlImage)
         myFlag, myMessage = checkImage(
@@ -266,6 +299,7 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
         # As soon as one passes we are done!
         if myFlag:
             break
+        LOGGER.debug('No match for control image %s' % myControlImage)
 
     return myFlag, myMessages
 
@@ -291,6 +325,8 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
 
     try:
         if not os.path.exists(theTestImagePath):
+            LOGGER.debug('checkImage: Test image does not exist:\n%s' %
+                         theTestImagePath)
             raise OSError
         myTestImage = QtGui.QImage(theTestImagePath)
     except OSError:
@@ -299,6 +335,8 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
 
     try:
         if not os.path.exists(theControlImagePath):
+            LOGGER.debug('checkImage: Control image does not exist:\n%s' %
+                         theControlImagePath)
             raise OSError
         myControlImage = QtGui.QImage(theControlImagePath)
     except OSError:
@@ -322,6 +360,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                       theTestImagePath,
                       myTestImage.width(),
                       myTestImage.height()))
+        LOGGER.debug(myMessage)
         return False, myMessage
 
     myImageWidth = myControlImage.width()
@@ -340,9 +379,11 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
             if myControlPixel != myTestPixel:
                 myMismatchCount += 1
                 myDifferenceImage.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
-    myDifferenceFilePath = unique_filename(prefix='difference',
-                                           suffix='.png',
-                                           dir=temp_dir('test'))
+    myDifferenceFilePath = unique_filename(
+        prefix='difference-%s' % os.path.basename(theControlImagePath),
+        suffix='.png',
+        dir=temp_dir('test'))
+    LOGGER.debug('Saving difference image as: %s' % myDifferenceFilePath)
     myDifferenceImage.save(myDifferenceFilePath, "PNG")
 
     #allow pixel deviation of 1 percent
@@ -410,3 +451,16 @@ class RedirectStdStreams(object):
         self._stderr.flush()
         sys.stdout = self.old_stdout
         sys.stderr = self.old_stderr
+
+
+def platformName():
+    """Get a platform name for this host.
+
+        e.g OSX10.8
+    """
+    if platform.system() == 'Darwin':
+        myName = 'OSX'
+        myName += '.'.join(platform.mac_ver()[0].split('.')[0:2])
+        return myName
+    else:
+        return None
