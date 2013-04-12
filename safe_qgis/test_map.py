@@ -68,10 +68,13 @@ class MapTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
-        myExpectedSize = 352798  # as rendered on linux ub 12.04 64
-        myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
-            myExpectedSize, mySize)
-        assert mySize >= myExpectedSize, myMessage
+        myExpectedSizes = [
+            352798,  # as rendered on linux ub 12.04 64
+            234806,  # as rendered on osx mountain lion 10.8
+        ]
+        myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
+            myExpectedSizes, mySize)
+        self.assertIn(mySize, myExpectedSizes, myMessage)
 
     def test_renderComposition(self):
         """Test making an image of the map only."""
@@ -106,6 +109,7 @@ class MapTest(unittest.TestCase):
         myAcceptableImages = ['renderComposition.png',
                               'renderComposition-variantUB12.04.png',
                               'renderComposition-variantUB12.10.png',
+                              'renderComposition-variantOSXml.png',
                               'renderComposition-variantWindosVistaSP2-32.png',
                               'renderComposition-variantJenkins.png',
                               'renderComposition-variantUB11.10-64.png',
