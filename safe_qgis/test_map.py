@@ -71,6 +71,7 @@ class MapTest(unittest.TestCase):
         myExpectedSizes = [
             352798,  # as rendered on linux ub 12.04 64
             234806,  # as rendered on osx mountain lion 10.8
+            447827,  # as rendered on linux mint Nadia 14
         ]
         myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
             myExpectedSizes, mySize)
@@ -106,16 +107,16 @@ class MapTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        myAcceptableImages = ['renderComposition.png',
-                              'renderComposition-variantUB12.04.png',
-                              'renderComposition-variantUB12.10.png',
-                              'renderComposition-variantOSXml.png',
-                              'renderComposition-variantWindosVistaSP2-32.png',
-                              'renderComposition-variantJenkins.png',
-                              'renderComposition-variantUB11.10-64.png',
-                              'renderComposition-variantLinuxMint-14-x86_64.'
-                              'png',
-                              'renderComposition-variantUB11.04-64.png']
+        myAcceptableImages = [
+            'renderComposition.png',
+            'renderComposition-variantUB12.04.png',
+            'renderComposition-variantUB12.10.png',
+            'renderComposition-variantOSXml.png',
+            'renderComposition-variantWindosVistaSP2-32.png',
+            'renderComposition-variantJenkins.png',
+            'renderComposition-variantUB11.10-64.png',
+            'renderComposition-variantLinuxMint-14-x86_64.png',
+            'renderComposition-variantUB11.04-64.png']
         # Beta version and version changes  can introduce a few extra chars
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.

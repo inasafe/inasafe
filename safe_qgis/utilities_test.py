@@ -468,7 +468,6 @@ def platformName():
         return myName
     if my_platform_system == 'Linux':
         myName = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
-        print myName
         return myName
     else:
         return None

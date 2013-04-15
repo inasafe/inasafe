@@ -123,6 +123,7 @@ class MapLegendTest(unittest.TestCase):
                            'getRasterLegend-variantWindowsXPSP3-32.png',
                            'getRasterLegend-variantOSXml.png',
                            'getRasterLegend-variantUB12.04-64.png',
+                           'getRasterLegend-variantUB12.10-64.png',
                            'getRasterLegend-variantUB11.04-64.png',
                            'getRasterLegend-variantLinuxMint-14-x86_64.png',
                            'getRasterLegend-variantJenkins.png']
@@ -160,6 +161,7 @@ class MapLegendTest(unittest.TestCase):
                            'addSymbolToLegend-variantWindowsXPSP3-32.png',
                            'addSymbolToLegend-variantOSXml.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
+                           'addSymbolToLegend-variantUB12.10-64.png',
                            'addSymbolToLegend-variantUB11.04-64.png',
                            'addSymbolToLegend-variantLinuxMint-14-x86_64.png',
                            'addSymbolToLegend-variantJenkins.png']
@@ -200,6 +202,7 @@ class MapLegendTest(unittest.TestCase):
                            'addClassToLegend-variantWindowsXPSP3-32.png',
                            'addClassToLegend-variantOSXml.png',
                            'addClassToLegend-variantUB12.04-64.png',
+                           'addClassToLegend-variantUB12.10-64.png',
                            'addClassToLegend-variantUB11.04-64.png',
                            'addClassToLegend-variantLinuxMint-14-x86_64.png',
                            'addClassToLegend-variantJenkins.png']

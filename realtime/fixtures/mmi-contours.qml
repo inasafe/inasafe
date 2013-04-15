@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.9.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" minLabelScale="1" maxLabelScale="1e+08" hasScaleBasedVisibilityFlag="0" scaleBasedLabelVisibilityFlag="0">
+<qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" minLabelScale="1" maxLabelScale="1e+08" hasScaleBasedVisibilityFlag="0" scaleBasedLabelVisibilityFlag="0">
   <renderer-v2 symbollevels="0" type="RuleRenderer">
     <rules>
       <rule filter=" &quot;MMI&quot;  = 0.5" symbol="0" label="0"/>
@@ -372,9 +372,9 @@
     <edittype editable="1" type="0" name="X"/>
     <edittype editable="1" type="0" name="Y"/>
   </edittypes>
-  <editform>.</editform>
+  <editform>/Users/timlinux/dev/python/inasafe-dev/realtime/fixtures</editform>
   <editforminit></editforminit>
-  <annotationform>.</annotationform>
+  <annotationform>/Users/timlinux/dev/python/inasafe-dev/realtime/fixtures</annotationform>
   <editorlayout>generatedlayout</editorlayout>
   <excludeAttributesWMS/>
   <excludeAttributesWFS/>
