@@ -29,68 +29,71 @@ from functools import partial
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 
-from qgis.core import (QgsMapLayer,
-                       QgsVectorLayer,
-                       QgsRasterLayer,
-                       QgsGeometry,
-                       QgsMapLayerRegistry,
-                       QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform,
-                       QgsFeature,
-                       QgsRectangle,
-                       QgsPoint,
-                       QgsField,
-                       QgsVectorFileWriter,
-                       QGis,
-                       QgsSingleSymbolRendererV2,
-                       QgsFillSymbolV2
-                       )
+from qgis.core import (
+    QgsMapLayer,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsGeometry,
+    QgsMapLayerRegistry,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsFeature,
+    QgsRectangle,
+    QgsPoint,
+    QgsField,
+    QgsVectorFileWriter,
+    QGis,
+    QgsSingleSymbolRendererV2,
+    QgsFillSymbolV2)
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
-from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 getWGS84resolution,
-                                 isPolygonLayer,
-                                 getLayerAttributeNames,
-                                 setVectorStyle,
-                                 htmlHeader,
-                                 htmlFooter,
-                                 setRasterStyle,
-                                 qgisVersion,
-                                 getDefaults,
-                                 impactLayerAttribution,
-                                 copyInMemory,
-                                 addComboItemInOrder)
+from safe_qgis.utilities import (
+    getExceptionWithStacktrace,
+    getWGS84resolution,
+    isPolygonLayer,
+    getLayerAttributeNames,
+    setVectorStyle,
+    htmlHeader,
+    htmlFooter,
+    setRasterStyle,
+    qgisVersion,
+    getDefaults,
+    impactLayerAttribution,
+    copyInMemory,
+    addComboItemInOrder)
 
 from safe_qgis.impact_calculator import ImpactCalculator
-from safe_qgis.safe_interface import (availableFunctions,
-                                      get_function_title,
-                                      getOptimalExtent,
-                                      getBufferedExtent,
-                                      getSafeImpactFunctions,
-                                      safeTr,
-                                      get_version,
-                                      temp_dir,
-                                      safe_read_layer,
-                                      get_free_memory,
-                                      ReadLayerError,
-                                      points_in_and_outside_polygon,
-                                      calculate_polygon_centroid,
-                                      unique_filename,
-                                      get_postprocessors,
-                                      get_postprocessor_human_name)
+from safe_qgis.safe_interface import (
+    availableFunctions,
+    get_function_title,
+    getOptimalExtent,
+    getBufferedExtent,
+    getSafeImpactFunctions,
+    safeTr,
+    get_version,
+    temp_dir,
+    safe_read_layer,
+    get_free_memory,
+    ReadLayerError,
+    points_in_and_outside_polygon,
+    calculate_polygon_centroid,
+    unique_filename,
+    get_postprocessors,
+    get_postprocessor_human_name)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
-from safe_qgis.exceptions import (KeywordNotFoundError,
-                                  KeywordDbError,
-                                  InsufficientOverlapError,
-                                  InvalidParameterError,
-                                  InsufficientParametersError,
-                                  HashNotFoundError,
-                                  CallGDALError,
-                                  NoFeaturesInExtentError,
-                                  InvalidProjectionError)
+from safe_qgis.exceptions import (
+    KeywordNotFoundError,
+    KeywordDbError,
+    InsufficientOverlapError,
+    InvalidParameterError,
+    InsufficientParametersError,
+    HashNotFoundError,
+    CallGDALError,
+    NoFeaturesInExtentError,
+    InvalidProjectionError)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
@@ -349,7 +352,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
            A two-tuple consisting of:
 
-           * Boolean reflecting the results of the valudation tests.
+           * Boolean reflecting the results of the validation tests.
            * A message indicating any reason why the validation may
              have failed.
 
@@ -398,7 +401,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                               + my_limitations_msg
                               + '</td></tr>\n')
             myMessage += my_limitations + '</table>'
-            return (False, myMessage)
+            return False, myMessage
 
         if self.cboFunction.currentIndex() == -1:
             #myHazardFilename = self.getHazardLayer().source()
@@ -429,7 +432,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 + self.tr('Exposure keywords:') + '</th></tr>\n'
                 '<tr><td>' + myExposureKeywords + '</td></tr>\n')
             myMessage += '</table>'
-            return (False, myMessage)
+            return False, myMessage
         else:
             # What does this todo mean? TS
             # TODO refactor impact_functions so it is accessible and user here
@@ -442,7 +445,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 + self.tr('Ready') + '</th></tr>\n'
                 '<tr><td>' + myNotes + '</td></tr>\n')
             myMessage += '</table>'
-            return (True, myMessage)
+            return True, myMessage
 
     def on_cboHazard_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Hazard combo is changed.
@@ -702,8 +705,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = []
         self.aggregationLayers = []
         # Map registry may be invalid if QGIS is shutting down
-        myRegistry = None
         # pylint: disable=W0702
+        # noinspection PyBroadException
         try:
             myRegistry = QgsMapLayerRegistry.instance()
         except:
@@ -719,14 +722,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     (myLayer not in myCanvasLayers)):
                 continue
 
-         # .. todo:: check raster is single band
-         #    store uuid in user property of list widget for layers
+            # .. todo:: check raster is single band
+            #    store uuid in user property of list widget for layers
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
 
+            # noinspection PyBroadException
             try:
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:  # pylint: disable=W0702
