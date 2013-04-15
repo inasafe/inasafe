@@ -87,7 +87,7 @@ def _all():
                                          'dev',
                                          'python')
             env.git_url = 'git://github.com/AIFDR/inasafe.git'
-            env.qgis_git_url = 'git@github.com:qgis/Quantum-GIS.git'
+            env.qgis_git_url = 'git://github.com/qgis/Quantum-GIS.git'
             env.repo_alias = 'inasafe-test'
             env.code_path = os.path.join(env.repo_path, env.repo_alias)
 
@@ -249,7 +249,7 @@ def clone_qgis(branch='master'):
     if not exists(code_path):
         fastprint('Repo checkout does not exist, creating.')
         run('mkdir -p %s' % code_base)
-        with cd(code_path):
+        with cd(code_base):
             run('git clone %s' % env.qgis_git_url)
     else:
         fastprint('Repo checkout does exist, updating.')
@@ -298,7 +298,11 @@ def install_qgis1_8():
 
 @task
 def install_qgis2():
-    """Install QGIS 2 under /usr/local/qgis-master."""
+    """Install QGIS 2 under /usr/local/qgis-master.
+
+    TODO: create one function from this and the 1.8 function above for DRY.
+
+    """
     _all()
     add_ubuntugis_ppa()
     sudo('apt-get build-dep qgis')
@@ -317,6 +321,12 @@ def install_qgis2():
             owner=env.user)
         run('make install')
 
+
+def setup_realtime():
+    """Set up a working environment for the realtime quake report generator."""
+    _all()
+    install_qgis2()
+    update_git_checkout()
 
 
 ###############################################################################
