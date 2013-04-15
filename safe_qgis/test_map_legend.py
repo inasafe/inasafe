@@ -59,12 +59,13 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getLegend.png',
-                           'getLegend-variantWindosVistaSP2-32.png',
+                           'getLegend-variantWindowsVistaSP2-32.png',
                            'getLegend-variantWindowsXPSP3-32.png',
                            'getLegend-variantOSXml.png',
                            'getLegend-variantUB12.04-64.png',
                            'getLegend-variantUB11.04-64.png',
                            'getLegend-variantLinuxMint-14-x86_64.png',
+                           'getLegend-variantWindows7-SP1-AMD64.png',
                            'getLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
 
@@ -91,12 +92,13 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getVectorLegend.png',
-                           'getVectorLegend-variantWindosVistaSP2-32.png',
+                           'getVectorLegend-variantWindowsVistaSP2-32.png',
                            'getVectorLegend-variantWindowsXPSP3-32.png',
                            'getVectorLegend-variantOSXml.png',
                            'getVectorLegend-variantUB12.04-64.png',
                            'getVectorLegend-variantUB11.04-64.png',
                            'getVectorLegend-variantLinuxMint-14-x86_64.png',
+                           'getVectorLegend-variantWindows7-SP1-AMD64.png',
                            'getVectorLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)
@@ -119,13 +121,14 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getRasterLegend.png',
-                           'getRasterLegend-variantWindosVistaSP2-32.png',
+                           'getRasterLegend-variantWindowsVistaSP2-32.png',
                            'getRasterLegend-variantWindowsXPSP3-32.png',
                            'getRasterLegend-variantOSXml.png',
                            'getRasterLegend-variantUB12.04-64.png',
                            'getRasterLegend-variantUB12.10-64.png',
                            'getRasterLegend-variantUB11.04-64.png',
                            'getRasterLegend-variantLinuxMint-14-x86_64.png',
+                           'getRasterLegend-variantWindows7-SP1-AMD64.png',
                            'getRasterLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -157,13 +160,14 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['addSymbolToLegend.png',
-                           'addSymbolToLegend-variantWindosVistaSP2-32.png',
+                           'addSymbolToLegend-variantWindowsVistaSP2-32.png',
                            'addSymbolToLegend-variantWindowsXPSP3-32.png',
                            'addSymbolToLegend-variantOSXml.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
                            'addSymbolToLegend-variantUB12.10-64.png',
                            'addSymbolToLegend-variantUB11.04-64.png',
                            'addSymbolToLegend-variantLinuxMint-14-x86_64.png',
+                           'addSymbolToLegend-variantWindows7-SP1-AMD64.png',
                            'addSymbolToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -198,13 +202,14 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['addClassToLegend.png',
-                           'addClassToLegend-variantWindosVistaSP2-32.png',
+                           'addClassToLegend-variantWindowsVistaSP2-32.png',
                            'addClassToLegend-variantWindowsXPSP3-32.png',
                            'addClassToLegend-variantOSXml.png',
                            'addClassToLegend-variantUB12.04-64.png',
                            'addClassToLegend-variantUB12.10-64.png',
                            'addClassToLegend-variantUB11.04-64.png',
                            'addClassToLegend-variantLinuxMint-14-x86_64.png',
+                           'addClassToLegend-variantWindows7-SP1-AMD64.png',
                            'addClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
