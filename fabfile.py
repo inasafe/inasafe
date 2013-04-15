@@ -275,6 +275,7 @@ def clone_qgis(branch='master'):
         run('git pull')
 
 
+@task
 def install_qgis1_8():
     """Install QGIS 1.8 under /usr/local/qgis-1.8."""
     _all()
@@ -287,12 +288,13 @@ def install_qgis1_8():
     code_path = '%s/Quantum-GIS' % code_base
     build_path = '%s/build-qgis18' % code_path
     build_prefix = '/usr/local/qgis-1.8'
+    require.directory(build_path)
     with cd(build_path):
-        run('ccmake -D CMAKE_INSTALL_PREFIX=%s' % build_prefix)
         fabtools.require.directory(
             build_prefix,
             use_sudo=True,
             owner=env.user)
+        run('cmake .. -DCMAKE_INSTALL_PREFIX=%s' % build_prefix)
         run('make install')
 
 
@@ -313,12 +315,14 @@ def install_qgis2():
     code_path = '%s/Quantum-GIS' % code_base
     build_path = '%s/build-master' % code_path
     build_prefix = '/usr/local/qgis-master'
+    require.directory(build_path)
     with cd(build_path):
-        run('ccmake -D CMAKE_INSTALL_PREFIX=%s' % build_prefix)
         fabtools.require.directory(
             build_prefix,
             use_sudo=True,
             owner=env.user)
+        run('cmake .. -DCMAKE_INSTALL_PREFIX=%s' % build_prefix)
+
         run('make install')
 
 
