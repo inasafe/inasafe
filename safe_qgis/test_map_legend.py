@@ -62,10 +62,12 @@ class MapLegendTest(unittest.TestCase):
                            'getLegend-variantWindosVistaSP2-32.png',
                            'getLegend-variantWindowsXPSP3-32.png',
                            'getLegend-variantOSXml.png',
-                           'getClassToLegend-variantUB12.04-64.png',
-                           'getClassToLegend-variantUB11.04-64.png',
+                           'getLegend-variantUB12.04-64.png',
+                           'getLegend-variantUB11.04-64.png',
+                           'getLegend-variantLinuxMint-14-x86_64.png',
                            'getLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
+
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
                                         myTolerance)
@@ -94,6 +96,7 @@ class MapLegendTest(unittest.TestCase):
                            'getVectorLegend-variantOSXml.png',
                            'getVectorLegend-variantUB12.04-64.png',
                            'getVectorLegend-variantUB11.04-64.png',
+                           'getVectorLegend-variantLinuxMint-14-x86_64.png',
                            'getVectorLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)
@@ -121,6 +124,7 @@ class MapLegendTest(unittest.TestCase):
                            'getRasterLegend-variantOSXml.png',
                            'getRasterLegend-variantUB12.04-64.png',
                            'getRasterLegend-variantUB11.04-64.png',
+                           'getRasterLegend-variantLinuxMint-14-x86_64.png',
                            'getRasterLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -157,6 +161,7 @@ class MapLegendTest(unittest.TestCase):
                            'addSymbolToLegend-variantOSXml.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
                            'addSymbolToLegend-variantUB11.04-64.png',
+                           'addSymbolToLegend-variantLinuxMint-14-x86_64.png',
                            'addSymbolToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
@@ -196,6 +201,7 @@ class MapLegendTest(unittest.TestCase):
                            'addClassToLegend-variantOSXml.png',
                            'addClassToLegend-variantUB12.04-64.png',
                            'addClassToLegend-variantUB11.04-64.png',
+                           'addClassToLegend-variantLinuxMint-14-x86_64.png',
                            'addClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,

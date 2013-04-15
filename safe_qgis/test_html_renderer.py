@@ -152,6 +152,7 @@ class HtmlRendererTest(unittest.TestCase):
                            'renderHtmlToImage-variantWindosVistaSP2-32.png',
                            'renderHtmlToImage-variantWindowsXPSP3-32.png',
                            'renderHtmlToImage-variantUB11.04-64.png',
+                           'renderHtmlToImage -variantLinuxMint-14-x86_64.png',
                            'renderHtmlToImage-variantUB11.10-64.png']
         myTolerance = 1000  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)

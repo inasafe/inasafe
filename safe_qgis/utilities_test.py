@@ -263,7 +263,7 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
     myPlatformMatchFlag = False
     # if possible, only test images for this platform
     for myControlImage in myControlImages:
-        if myPlatform in myControlImage:
+        if myPlatform is not None and myPlatform in myControlImage:
             myPlatformMatchFlag = True
             # Take it out so we dont double test it  in the second loop below
             myControlImages.remove(myControlImage)
@@ -279,6 +279,7 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
             else:
                 LOGGER.debug('No match for %s' % myControlImage)
 
+    # print myPlatformMatchFlag, 'myPlatformMatchFlag'
     if not myPlatformMatchFlag:
         LOGGER.debug('No platform specific control image could be found,\n'
                      'testing against all control images. Try adding %s in\n '
@@ -287,9 +288,10 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
                      myPlatform)
     else:
         return
-
+    print 'You shall not pass'
     # Otherwise test all control images because we dont know what platform
     # we are on.
+    i = 0
     for myControlImage in myControlImages:
         myFullPath = os.path.join(
             CONTROL_IMAGE_DIR, myControlImage)
@@ -298,6 +300,7 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
         myMessages += myMessage
         # As soon as one passes we are done!
         if myFlag:
+            print 'match with: ', myControlImage
             break
         LOGGER.debug('No match for control image %s' % myControlImage)
 
@@ -458,9 +461,14 @@ def platformName():
 
         e.g OSX10.8
     """
-    if platform.system() == 'Darwin':
+    my_platform_system = platform.system()
+    if my_platform_system == 'Darwin':
         myName = 'OSX'
         myName += '.'.join(platform.mac_ver()[0].split('.')[0:2])
+        return myName
+    if my_platform_system == 'Linux':
+        myName = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
+        print myName
         return myName
     else:
         return None
