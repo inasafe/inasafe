@@ -1,21 +1,20 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
-  <transparencyLevelInt>255</transparencyLevelInt>
+<qgis version="1.9.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" minLabelScale="1" maxLabelScale="1e+08" hasScaleBasedVisibilityFlag="0" scaleBasedLabelVisibilityFlag="0">
   <renderer-v2 symbollevels="0" type="RuleRenderer">
     <rules>
-      <rule filter=" &quot;ROMAN&quot;  = '0'" symbol="0"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'I'" symbol="1"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'II'" symbol="2"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'III'" symbol="3"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'IV'" symbol="4"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'V'" symbol="5"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'VI'" symbol="6"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'VII'" symbol="7"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'VIII'" symbol="8"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'IX'" symbol="9"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'X'" symbol="10"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'XI'" symbol="11"/>
-      <rule filter=" &quot;ROMAN&quot;  = 'XII'" symbol="12"/>
+      <rule filter=" &quot;MMI&quot;  = 0.5" symbol="0" label="0"/>
+      <rule filter="&quot;MMI&quot; = 1.5" symbol="1" label="1"/>
+      <rule filter="&quot;MMI&quot; = 2.5" symbol="2" label="2"/>
+      <rule filter="&quot;MMI&quot; = 3.5" symbol="3" label="3"/>
+      <rule filter="&quot;MMI&quot; = 4.5" symbol="4" label="4"/>
+      <rule filter="&quot;MMI&quot; = 5.5" symbol="5" label="5"/>
+      <rule filter="&quot;MMI&quot; = 6.5" symbol="6" label="6"/>
+      <rule filter="&quot;MMI&quot; = 7.5" symbol="7" label="7"/>
+      <rule filter="&quot;MMI&quot; = 8.5" symbol="8" label="8"/>
+      <rule filter="&quot;MMI&quot; = 9.5" symbol="9" label="9"/>
+      <rule filter="&quot;MMI&quot; = 10.5" symbol="10" label="10"/>
+      <rule filter="&quot;MMI&quot; = 11.5" symbol="11" label="11"/>
+      <rule filter="&quot;MMI&quot; = 12.5" symbol="12" label="12"/>
     </rules>
     <symbols>
       <symbol alpha="1" type="line" name="0">
@@ -221,6 +220,7 @@
     <property key="labeling/angleOffset" value="0"/>
     <property key="labeling/blendMode" value="0"/>
     <property key="labeling/bufferBlendMode" value="0"/>
+    <property key="labeling/bufferColorA" value="255"/>
     <property key="labeling/bufferColorB" value="255"/>
     <property key="labeling/bufferColorG" value="255"/>
     <property key="labeling/bufferColorR" value="255"/>
@@ -258,7 +258,7 @@
     <property key="labeling/enabled" value="true"/>
     <property key="labeling/fieldName" value="ROMAN"/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Ubuntu"/>
+    <property key="labeling/fontFamily" value="Lucida Grande"/>
     <property key="labeling/fontItalic" value="false"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
     <property key="labeling/fontLimitPixelSize" value="false"/>
@@ -296,6 +296,35 @@
     <property key="labeling/rightDirectionSymbol" value=">"/>
     <property key="labeling/scaleMax" value="0"/>
     <property key="labeling/scaleMin" value="0"/>
+    <property key="labeling/shapeBlendMode" value="0"/>
+    <property key="labeling/shapeBorderColorA" value="255"/>
+    <property key="labeling/shapeBorderColorB" value="128"/>
+    <property key="labeling/shapeBorderColorG" value="128"/>
+    <property key="labeling/shapeBorderColorR" value="128"/>
+    <property key="labeling/shapeBorderWidth" value="0"/>
+    <property key="labeling/shapeBorderWidthUnits" value="1"/>
+    <property key="labeling/shapeDraw" value="false"/>
+    <property key="labeling/shapeFillColorA" value="255"/>
+    <property key="labeling/shapeFillColorB" value="255"/>
+    <property key="labeling/shapeFillColorG" value="255"/>
+    <property key="labeling/shapeFillColorR" value="255"/>
+    <property key="labeling/shapeJoinStyle" value="64"/>
+    <property key="labeling/shapeOffsetUnits" value="1"/>
+    <property key="labeling/shapeOffsetX" value="0"/>
+    <property key="labeling/shapeOffsetY" value="0"/>
+    <property key="labeling/shapeRadiiUnits" value="1"/>
+    <property key="labeling/shapeRadiiX" value="0"/>
+    <property key="labeling/shapeRadiiY" value="0"/>
+    <property key="labeling/shapeRotation" value="0"/>
+    <property key="labeling/shapeRotationType" value="0"/>
+    <property key="labeling/shapeSVGFile" value=""/>
+    <property key="labeling/shapeSizeType" value="0"/>
+    <property key="labeling/shapeSizeUnits" value="1"/>
+    <property key="labeling/shapeSizeX" value="0"/>
+    <property key="labeling/shapeSizeY" value="0"/>
+    <property key="labeling/shapeTransparency" value="0"/>
+    <property key="labeling/shapeType" value="0"/>
+    <property key="labeling/textColorA" value="255"/>
     <property key="labeling/textColorB" value="255"/>
     <property key="labeling/textColorG" value="255"/>
     <property key="labeling/textColorR" value="255"/>
