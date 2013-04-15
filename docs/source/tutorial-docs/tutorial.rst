@@ -386,7 +386,7 @@ the toolbar or from the **Plugins** menu.
 
 Go to the **Plugin menu** on QGIS toolbar. Click on **InaSAFE.** Then, click on
 the **Keyword Editor** in the dialog box. Pinpoint the **Exposure** category.
-Choose **building [OSM]** in the **Subcategory** scroll box. Click **OK.**
+Choose **structure** in the **Subcategory** scroll box. Click **OK.**
 
 .. image:: ../static/tutorial/019.png
    :align: center

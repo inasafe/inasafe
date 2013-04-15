@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from Tix import _dummyComboBox
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -1204,7 +1203,7 @@ class ShakeEvent(QObject):
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
 
-        myAttemptsLimit = 15
+        myAttemptsLimit = 5
         myMinimumCityCount = 1
         myFoundFlag = False
         mySearchBoxes = []
@@ -1288,7 +1287,7 @@ class ShakeEvent(QObject):
             # Populate the mmi field by raster lookup
             # Get a {int, QVariant} back
             myRasterValues = myRasterLayer.dataProvider().identify(
-                myPoint, QgsRasterDataProvider.IdentifyFormatValue).results()
+                myPoint, QgsRasterDataProvider.IdentifyFormatValue)
             myRasterValues = myRasterValues.values()
             if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster

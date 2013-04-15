@@ -7,9 +7,9 @@ Package::safe
    safe/api
    safe/defaults
    safe/common
-   safe/impact_functions
-   safe/test
-   safe/i18n
    safe/engine
-   safe/storage
+   safe/i18n
+   safe/impact_functions
    safe/postprocessors
+   safe/storage
+   safe/test

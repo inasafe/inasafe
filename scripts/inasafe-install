@@ -84,7 +84,7 @@ echo "Downloading InaSAFE"
 checkup ${InaSAFEREPO} ${InaSAFEDIR} master
 
 echo "Create symlink $InaSAFEQGIS from QGis plugin area"
-sudo chown $USER ~/.qgis
+chown $USER ~/.qgis
 mkdir ~/.qgis/python
 mkdir ~/.qgis/python/plugins
 pushd ~/.qgis/python/plugins
