@@ -36,19 +36,16 @@ from fabtools.vagrant import vagrant
 
 # Usage fab localhost [command]
 #    or fab remote [command]
-#  e.g. fab localhost update_qgis_plugin_repo
+#  e.g. fab localhost initialise_qgis_plugin_repo
 
 # Global options
 env.env_set = False
 
-def localhost():
-    """Set up things so that commands run locally."""
-    env.hosts = ['localhost']
 
 def _all():
     """Things to do regardless of whether command is local or remote."""
     if env.env_set:
-	fastprint('Environment already set!\n')
+        fastprint('Environment already set!\n')
         return
 
     fastprint('Setting environment!\n')
@@ -59,6 +56,7 @@ def _all():
         'spur': 'inasafe-docs.localhost',
         'maps.linfiniti.com': 'inasafe-docs.linfiniti.com',
         'linfiniti': 'inasafe-docs.linfiniti.com',
+        #vagrant instance
         'precise64': 'inasafe-docs.vagrant.localhost',
         'shiva': 'docs.inasafe.org'}
     repo_site_names = {
@@ -66,6 +64,7 @@ def _all():
         'spur': 'inasafe-test.localhost',
         'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
         'linfiniti': 'inasafe-crisis.linfiniti.com',
+        #vagrant instance
         'precise64': 'experimental.vagrant.localhost',
         'shiva': 'experimental.inasafe.org'}
 
@@ -74,10 +73,10 @@ def _all():
         env.hostname = run('hostname')
         if env.hostname not in repo_site_names:
             print 'Error: %s not in: \n%s' % (env.hostname, repo_site_names)
-            exit
+            exit()
         elif env.hostname not in doc_site_names:
             print 'Error: %s not in: \n%s' % (env.hostname, repo_site_names)
-            exit
+            exit()
         else:
             env.repo_site_name = repo_site_names[env.hostname]
             env.doc_site_name = doc_site_names[env.hostname]
@@ -89,6 +88,7 @@ def _all():
                                          'python')
             env.git_url = 'git://github.com/AIFDR/inasafe.git'
             env.repo_alias = 'inasafe-test'
+            env.code_path = os.path.join(env.repo_path, env.repo_alias)
 
     env.env_set = True
     fastprint('env.env_set = %s' % env.env_set)
@@ -98,9 +98,10 @@ def _all():
 ###############################################################################
 
 
-@task
-def update_qgis_plugin_repo():
+def initialise_qgis_plugin_repo():
     """Initialise a QGIS plugin repo where we host test builds."""
+    _all()
+    fabtools.require.deb.package('libapache2-mod-wsgi')
     code_path = os.path.join(env.repo_path, env.repo_alias)
     local_path = '%s/scripts/test-build-repo' % code_path
 
@@ -134,9 +135,10 @@ def update_qgis_plugin_repo():
     sudo('service apache2 reload')
 
 
-@task
-def update_docs_site():
+def initialise_docs_site():
     """Initialise an InaSAFE docs sote where we host test pdf."""
+    _all()
+    fabtools.require.deb.package('libapache2-mod-wsgi')
     code_path = os.path.join(env.repo_path, env.repo_alias)
     local_path = '%s/scripts/test-build-repo' % code_path
 
@@ -170,7 +172,6 @@ def update_docs_site():
     sudo('service apache2 reload')
 
 
-@task
 def update_git_checkout(branch='master'):
     """Make sure there is a read only git checkout.
 
@@ -183,37 +184,37 @@ def update_git_checkout(branch='master'):
         fab -H 188.40.123.80:8697 remote update_git_checkout
 
     """
-
-    if not exists(os.path.join(env.repo_path, env.repo_alias)):
+    _all()
+    fabtools.require.deb.package('git')
+    if not exists(env.code_path):
         fastprint('Repo checkout does not exist, creating.')
-        run('mkdir -p %s' % (env.repo_path))
+        run('mkdir -p %s' % env.repo_path)
         with cd(env.repo_path):
-            clone = run('git clone %s %s' % (env.git_url, env.repo_alias))
+            run('git clone %s %s' % (env.git_url, env.repo_alias))
     else:
         fastprint('Repo checkout does exist, updating.')
-        with cd(os.path.join(env.repo_path, env.repo_alias)):
+        with cd(env.code_path):
             # Get any updates first
-            clone = run('git fetch')
+            run('git fetch')
             # Get rid of any local changes
-            clone = run('git reset --hard')
+            run('git reset --hard')
             # Get back onto master branch
-            clone = run('git checkout master')
+            run('git checkout master')
             # Remove any local changes in master
-            clone = run('git reset --hard')
+            run('git reset --hard')
             # Delete all local branches
-            clone = run('git branch | grep -v \* | xargs git branch -D')
+            run('git branch | grep -v \* | xargs git branch -D')
 
-    with cd(os.path.join(env.repo_path, env.repo_alias)):
+    with cd(env.code_path):
         if branch != 'master':
-            clone = run('git branch --track %s origin/%s' %
-                        (branch, branch))
-            clone = run('git checkout %s' % branch)
+            run('git branch --track %s origin/%s' %
+                (branch, branch))
+            run('git checkout %s' % branch)
         else:
-            clone = run('git checkout master')
-        clone = run('git pull')
+            run('git checkout master')
+        run('git pull')
 
 
-@task
 def install_latex():
     """Ensure that the target system has a usable latex installation.
 
@@ -226,6 +227,7 @@ def install_latex():
     Raises:
         None
     """
+    _all()
     clone = run('which pdflatex')
     if '' == clone:
         run('sudo apt-get install texlive-latex-extra python-sphinx '
@@ -254,9 +256,9 @@ def build_test_package(branch='master'):
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """
-
+    _all()
     update_git_checkout(branch)
-    update_qgis_plugin_repo()
+    initialise_qgis_plugin_repo()
 
     dir_name = os.path.join(env.repo_path, env.repo_alias)
     with cd(dir_name):
@@ -311,7 +313,7 @@ def build_documentation(branch='master'):
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """
-
+    _all()
     update_git_checkout(branch)
     install_latex()
 
