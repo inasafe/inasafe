@@ -120,6 +120,7 @@ class MapLegendTest(unittest.TestCase):
                            'getRasterLegend-variantWindowsXPSP3-32.png',
                            'getRasterLegend-variantOSXml.png',
                            'getRasterLegend-variantUB12.04-64.png',
+                           'getRasterLegend-variantUB12.10-64.png',
                            'getRasterLegend-variantUB11.04-64.png',
                            'getRasterLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
@@ -156,6 +157,7 @@ class MapLegendTest(unittest.TestCase):
                            'addSymbolToLegend-variantWindowsXPSP3-32.png',
                            'addSymbolToLegend-variantOSXml.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
+                           'addSymbolToLegend-variantUB12.10-64.png',
                            'addSymbolToLegend-variantUB11.04-64.png',
                            'addSymbolToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
@@ -195,6 +197,7 @@ class MapLegendTest(unittest.TestCase):
                            'addClassToLegend-variantWindowsXPSP3-32.png',
                            'addClassToLegend-variantOSXml.png',
                            'addClassToLegend-variantUB12.04-64.png',
+                           'addClassToLegend-variantUB12.10-64.png',
                            'addClassToLegend-variantUB11.04-64.png',
                            'addClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
