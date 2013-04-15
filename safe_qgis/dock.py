@@ -29,68 +29,71 @@ from functools import partial
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 
-from qgis.core import (QgsMapLayer,
-                       QgsVectorLayer,
-                       QgsRasterLayer,
-                       QgsGeometry,
-                       QgsMapLayerRegistry,
-                       QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform,
-                       QgsFeature,
-                       QgsRectangle,
-                       QgsPoint,
-                       QgsField,
-                       QgsVectorFileWriter,
-                       QGis,
-                       QgsSingleSymbolRendererV2,
-                       QgsFillSymbolV2
-                       )
+from qgis.core import (
+    QgsMapLayer,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsGeometry,
+    QgsMapLayerRegistry,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsFeature,
+    QgsRectangle,
+    QgsPoint,
+    QgsField,
+    QgsVectorFileWriter,
+    QGis,
+    QgsSingleSymbolRendererV2,
+    QgsFillSymbolV2)
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
-from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 getWGS84resolution,
-                                 isPolygonLayer,
-                                 getLayerAttributeNames,
-                                 setVectorStyle,
-                                 htmlHeader,
-                                 htmlFooter,
-                                 setRasterStyle,
-                                 qgisVersion,
-                                 getDefaults,
-                                 impactLayerAttribution,
-                                 copyInMemory,
-                                 addComboItemInOrder)
+from safe_qgis.utilities import (
+    getExceptionWithStacktrace,
+    getWGS84resolution,
+    isPolygonLayer,
+    getLayerAttributeNames,
+    setVectorStyle,
+    htmlHeader,
+    htmlFooter,
+    setRasterStyle,
+    qgisVersion,
+    getDefaults,
+    impactLayerAttribution,
+    copyInMemory,
+    addComboItemInOrder)
 
 from safe_qgis.impact_calculator import ImpactCalculator
-from safe_qgis.safe_interface import (availableFunctions,
-                                      get_function_title,
-                                      getOptimalExtent,
-                                      getBufferedExtent,
-                                      getSafeImpactFunctions,
-                                      safeTr,
-                                      get_version,
-                                      temp_dir,
-                                      safe_read_layer,
-                                      get_free_memory,
-                                      ReadLayerError,
-                                      points_in_and_outside_polygon,
-                                      calculate_polygon_centroid,
-                                      unique_filename,
-                                      get_postprocessors,
-                                      get_postprocessor_human_name)
+from safe_qgis.safe_interface import (
+    availableFunctions,
+    get_function_title,
+    getOptimalExtent,
+    getBufferedExtent,
+    getSafeImpactFunctions,
+    safeTr,
+    get_version,
+    temp_dir,
+    safe_read_layer,
+    get_free_memory,
+    ReadLayerError,
+    points_in_and_outside_polygon,
+    calculate_polygon_centroid,
+    unique_filename,
+    get_postprocessors,
+    get_postprocessor_human_name)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
-from safe_qgis.exceptions import (KeywordNotFoundError,
-                                  KeywordDbError,
-                                  InsufficientOverlapError,
-                                  InvalidParameterError,
-                                  InsufficientParametersError,
-                                  HashNotFoundError,
-                                  CallGDALError,
-                                  NoFeaturesInExtentError,
-                                  InvalidProjectionError)
+from safe_qgis.exceptions import (
+    KeywordNotFoundError,
+    KeywordDbError,
+    InsufficientOverlapError,
+    InvalidParameterError,
+    InsufficientParametersError,
+    HashNotFoundError,
+    CallGDALError,
+    NoFeaturesInExtentError,
+    InvalidProjectionError)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
