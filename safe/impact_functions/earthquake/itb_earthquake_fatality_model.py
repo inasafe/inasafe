@@ -1,3 +1,5 @@
+import numpy
+import logging
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
@@ -5,12 +7,13 @@ from safe.impact_functions.core import (FunctionProvider,
                                         format_int)
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
-                                   get_defaults)
+                                   get_defaults,
+                                   humanize_class)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 from third_party.odict import OrderedDict
 
-import numpy
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class ITBFatalityFunction(FunctionProvider):
@@ -124,7 +127,6 @@ class ITBFatalityFunction(FunctionProvider):
 
         """
 
-        # Define percentages of people being displaced at each mmi level
         displacement_rate = self.parameters['displacement_rate']
 
         # Tolerance for transparency
@@ -289,7 +291,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '
-                            'Institute of Teknologi Bandung 2012.'))
+                             'Institute of Teknologi Bandung 2012.'))
         table_body.append(tr('Population numbers rounded to nearest 1000.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -299,29 +301,49 @@ class ITBFatalityFunction(FunctionProvider):
         # Create style info dynamically
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
                                  numpy.nanmax(R.flat[:]), 5)
+        LOGGER.debug('nanmin : ' + str(numpy.nanmin(R.flat[:])))
+        LOGGER.debug('nanmin : ' + str(numpy.nanmax(R.flat[:])))
+        LOGGER.debug('Classes : ' + str(classes))
 
         # int & round Added by Tim in 1.2 - class is rounded to the
         # nearest int because we prefer to not categorise people as being
         # e.g. '0.4 people'. Fixes #542
-        style_classes = [
-            dict(colour='#EEFFEE',
-                 quantity=int(round(classes[0])),
-                 transparency=100,
-                 label=tr('%i people/cell') % int(round(classes[0]))),
-            dict(colour='#FFFF7F',
-                 quantity=int(round(classes[1])),
-                 transparency=30),
-            dict(colour='#E15500',
-                 quantity=int(round(classes[2])),
-                 transparency=30,
-                 label=tr('%i people/cell') % int(round(classes[2]))),
-            dict(colour='#E4001B',
-                 quantity=int(round(classes[3])),
-                 transparency=30),
-            dict(colour='#730000',
-                 quantity=int(round(classes[4])),
-                 transparency=30,
-                 label=tr('%i people/cell') % int(round(classes[4])))]
+        # The classes are equals space except for the first class which start
+        # at 0 and end with nanmin value.
+        # Example :
+        # a = numpy.linspace(0.58, 23013, 5)
+        # array([  5.80000000e-01,   5.75368500e+03,   1.15067900e+04,
+        # 1.72598950e+04,   2.30130000e+04])
+        # would have the first class as [0, 5.80000000e-01]
+        # Subsequent classes would be incremented by the value as calculated
+        # below:
+        # In [5]: a[4] - a[3]
+        # Out[5]: 5753.1049999999996
+        interval_classes = humanize_class(classes)
+        style_classes = []
+        colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
+        i = 0
+        for my_class in interval_classes:
+            transparency = 30
+            min_value = my_class[0]
+            max_value = my_class[1]
+            if min_value == 0:
+                transparency = 100
+            colour = colours.pop(0)
+
+            style_classes.append(
+                dict(
+                    colour=colour,
+                    quantity=int(round(classes[i])),
+                    transparency=transparency,
+                    # people/cell will be added
+                    label=tr('%s - %s') % (
+                        min_value,
+                        max_value)
+                )
+            )
+            i += 1
+
         style_info = dict(target_field=None, style_classes=style_classes)
 
         # Create new layer and return
@@ -336,7 +358,7 @@ class ITBFatalityFunction(FunctionProvider):
                              'displaced_per_mmi': number_of_displaced,
                              'impact_table': impact_table,
                              'map_title': map_title},
-                   name=tr('Estimated displaced population'),
+                   name=tr('Estimated displaced population per cell'),
                    style_info=style_info)
 
         # Maybe return a shape file with contours instead

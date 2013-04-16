@@ -9,6 +9,7 @@ import getpass
 from tempfile import mkstemp
 from subprocess import PIPE, Popen
 import ctypes
+from numbers import Integral
 
 from safe.common.exceptions import VerificationError
 
@@ -314,3 +315,148 @@ def round_thousand(my_int):
     if my_int > 1000:
         my_int = my_int // 1000 * 1000
     return my_int
+
+
+def humanize_min_max(min_value, max_value, interval):
+    """Return humanize value format for max and min.
+    If the range between the max and min is less than one, the original
+    value will be returned.
+
+    Args:
+        * min_value
+        * max_value
+        * interval - (float): the interval between classes in the the
+            class list where the results will be used.
+
+    Returns:
+        A two-tuple consisting of a string for min_value and a string for
+            max_value.
+
+    """
+    current_interval = max_value - min_value
+    if interval > 1:
+        # print 'case 1. Curent interval : ', current_interval
+        humanize_min_value = format_int(int(round(min_value)))
+        humanize_max_value = format_int(int(round(max_value)))
+
+    else:
+        # print 'case 2. Curent interval : ', current_interval
+        humanize_min_value = format_decimal(current_interval, min_value)
+        humanize_max_value = format_decimal(current_interval, max_value)
+    return humanize_min_value, humanize_max_value
+
+
+def format_decimal(interval, my_number):
+    """Return formated decimal according to interval decimal place
+    For example:
+    interval = 0.33 (two decimal places)
+    my_float = 1.1215454
+    Return 1.12 (return only two decimal places as string)
+    If interval is an integer return integer part of my_number
+    If my_number is an integer return as is
+    """
+    if isinstance(interval, Integral) or isinstance(my_number, Integral):
+        return format_int(int(my_number))
+    decimal_places = len(str(interval).split('.')[1])
+    my_number_int = str(my_number).split('.')[0]
+    my_number_decimal = str(my_number).split('.')[1][:decimal_places]
+    return my_number_int + '.' + my_number_decimal
+
+
+def humanize_class(my_classes):
+    """Return humanize interval of an array
+    For example:
+    Original Array :                    Result:
+    1.1  -  5754.1                      0  -  1
+    5754.1  -  11507.1                  1  -  5,754
+                                        5,754  -  11,507
+
+    Original Array :                    Result:
+    0.1  -  0.5                         0  -  0.1
+    0.5  -  0.9                         0.1  -  0.5
+                                        0.5  -  0.9
+
+    Original Array :                    Result:
+    7.1  -  7.5                         0  -  7.1
+    7.5  -  7.9                         7.1  -  7.5
+                                        7.5  -  7.9
+
+    Original Array :                    Result:
+    6.1  -  7.2                         0  -  6
+    7.2  -  8.3                         6  -  7
+    8.3  -  9.4                         7  -  8
+                                        8  -  9
+    """
+    min_value = 0
+    humanize_classes = []
+    interval = my_classes[-1] - my_classes[-2]
+    for max_value in my_classes:
+        humanize_classes.append(humanize_min_max(min_value, max_value,
+                                                 interval))
+        min_value = max_value
+        try:
+            if humanize_classes[-1][0] == humanize_classes[-1][-1]:
+                print 'Unhuman'
+                print humanize_classes
+                return unhumanize_class(my_classes)
+        except IndexError:
+            continue
+    return humanize_classes
+
+
+def unhumanize_class(my_classes):
+    """Return class as interval without formating
+    """
+    my_result = []
+    interval = my_classes[-1] - my_classes[-2]
+    min_value = 0
+    for max_value in my_classes:
+        my_result.append((format_decimal(interval, min_value),
+                          format_decimal(interval, max_value)))
+        min_value = max_value
+    return my_result
+
+
+def format_int(x):
+    """Format integer with separator between thousands.
+
+    Args:
+        x: int - a number to be formatted in a locale friendly way.
+
+    Returns:
+        str - a locale friendly formatted string e.g. 1,000,0000.00
+            representing the original x. If a ValueError exception occurs,
+            x is simply returned.
+
+    Raises:
+        None
+
+    From http://stackoverflow.com/questions/5513615/
+                add-thousands-separators-to-a-number
+
+    # FIXME (Ole)
+    Currently not using locale coz broken
+
+    Instead use this:
+    http://docs.python.org/library/string.html#formatspec
+
+    """
+
+    # This is broken
+    #import locale
+    #locale.setlocale(locale.LC_ALL, '')  # Broken, why?
+    #s = locale.format('%d', x, 1)
+
+    lang = os.getenv('LANG')
+    try:
+        s = '{0:,}'.format(x)
+        #s = '{0:n}'.format(x)  # n means locale aware (read up on this)
+    # see issue #526
+    except ValueError:
+        return str(x)
+
+    # Quick solution for the moment
+    if lang == 'id':
+        # Replace commas with dots
+        s = s.replace(',', '.')
+    return s
