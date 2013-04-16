@@ -49,24 +49,26 @@ from PyQt4.QtCore import (QCoreApplication,
 from PyQt4.QtXml import QDomDocument
 # pylint: disable=E0611
 # Above for pallabelling
-from qgis.core import (QgsPoint,
-                       QgsField,
-                       QgsFeature,
-                       QgsGeometry,
-                       QgsVectorLayer,
-                       QgsRasterLayer,
-                       QgsRasterDataProvider,
-                       QgsRectangle,
-                       QgsDataSourceURI,
-                       QgsVectorFileWriter,
-                       QgsCoordinateReferenceSystem,
-                       QgsProject,
-                       QgsComposition,
-                       QgsMapLayerRegistry,
-                       QgsMapRenderer,
-                       QgsPalLabeling,
-                       QgsFeatureRequest,
-                       QgsFields)
+from qgis.core import (
+    QgsPoint,
+    QgsField,
+    QgsFeature,
+    QgsGeometry,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsRasterDataProvider,
+    QgsRectangle,
+    QgsDataSourceURI,
+    QgsVectorFileWriter,
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsComposition,
+    QgsMapLayerRegistry,
+    QgsMapRenderer,
+    QgsPalLabeling,
+    QgsProviderRegistry,
+    QgsFeatureRequest,
+    QgsFields)
 # pylint: enable=E0611
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
@@ -85,7 +87,8 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            ShapefileCreationError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
-                           MapComposerError)
+                           MapComposerError,
+                           EnvironmentError)
 # from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
@@ -132,6 +135,8 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
+
+        self.checkEnvironment()
 
         if theDataIsLocalFlag:
             self.eventId = theEventId
@@ -198,6 +203,20 @@ class ShakeEvent(QObject):
         self.locale = theLocale
         self.setupI18n()
         self.parseGridXml()
+
+    def checkEnvironment(self):
+        """A helper class to check that QGIS is correctly initialised.
+
+        Args: None
+
+        Returns: None
+
+        Raises: EnvironmentError if the environment is not correct.
+        """
+        myRegistry = QgsProviderRegistry.instance()
+        myList = myRegistry.pluginList()
+        if len(myList) < 1:
+            raise EnvironmentError('QGIS data provider list is empty!')
 
     def gridFilePath(self):
         """A helper to retrieve the path to the grid.xml file
@@ -1287,7 +1306,7 @@ class ShakeEvent(QObject):
             # Populate the mmi field by raster lookup
             # Get a {int, QVariant} back
             myRasterValues = myRasterLayer.dataProvider().identify(
-                myPoint, QgsRasterDataProvider.IdentifyFormatValue)
+                myPoint, QgsRasterDataProvider.IdentifyFormatValue).results()
             myRasterValues = myRasterValues.values()
             if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster
@@ -1391,6 +1410,7 @@ class ShakeEvent(QObject):
         for mySearchBox in self.searchBoxes:
             myNewFeature = QgsFeature()
             myRectangle = mySearchBox['geometry']
+            # noinspection PyArgumentList
             myGeometry = QgsGeometry.fromWkt(myRectangle.asWktPolygon())
             myNewFeature.setGeometry(myGeometry)
             myNewFeature.setAttributes([mySearchBox['city_count']])
@@ -1496,6 +1516,7 @@ class ShakeEvent(QObject):
                       'dir_to': myDirectionTo,
                       'dir_from': myDirectionFrom}
             myCities.append(myCity)
+        LOGGER.debug('%s features added to sorted impacted cities list.')
         #LOGGER.exception(myCities)
         mySortedCities = sorted(myCities,
                                 key=lambda d: (
@@ -1654,6 +1675,7 @@ class ShakeEvent(QObject):
                           cell_class='mmi-%s' % myMmi,
                           header=True))
             if myMmi in self.affectedCounts:
+                # noinspection PyTypeChecker
                 myAffectedRow.append(
                     '%i' % round(self.affectedCounts[myMmi] / 1000))
             else:
