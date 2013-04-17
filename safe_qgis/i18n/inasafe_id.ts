@@ -38,87 +38,87 @@
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="586"/>
+        <location filename="utilities.py" line="590"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="561"/>
+        <location filename="utilities.py" line="565"/>
         <source>Problem:</source>
         <translation>Permasalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="557"/>
+        <location filename="utilities.py" line="561"/>
         <source>Error:</source>
         <translation>Kesalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="566"/>
+        <location filename="utilities.py" line="570"/>
         <source>Click for Diagnostic Information:</source>
         <translation>Klik untuk informasi diagnostik:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="534"/>
+        <location filename="utilities.py" line="538"/>
         <source>No details provided</source>
         <translation>Tidak ada detil yang tersedia</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1069"/>
+        <location filename="utilities.py" line="1073"/>
         <source>%i seconds</source>
         <translation>%i detik</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1071"/>
+        <location filename="utilities.py" line="1075"/>
         <source>a minute</source>
         <translation>satu menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1073"/>
+        <location filename="utilities.py" line="1077"/>
         <source>minutes</source>
         <translation>menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1075"/>
+        <location filename="utilities.py" line="1079"/>
         <source>over an hour</source>
         <translation>lebih dari satu jam</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1077"/>
+        <location filename="utilities.py" line="1081"/>
         <source>%i hours and %i minutes</source>
         <translation>%i jam dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1080"/>
+        <location filename="utilities.py" line="1084"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation>%i hari, %i jam dan %i menit</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1103"/>
+        <location filename="utilities.py" line="1107"/>
         <source>sourced from</source>
         <translation>sumber dari</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1104"/>
+        <location filename="utilities.py" line="1108"/>
         <source>Hazard details</source>
         <translation>Detil ancaman</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1107"/>
+        <location filename="utilities.py" line="1111"/>
         <source>Exposure details</source>
         <translation>Detil keterpaparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1115"/>
+        <location filename="utilities.py" line="1119"/>
         <source>Hazard layer</source>
         <translation>Lapisan ancaman</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1126"/>
+        <location filename="utilities.py" line="1130"/>
         <source>Exposure layer</source>
         <translation>Lapisan keterpaparan</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1153"/>
+        <location filename="utilities.py" line="1157"/>
         <source>InaSAFE has been jointly developed by BNPB, AusAid &amp; the World Bank</source>
         <translation>InaSAFE telah dikembangkan bersama-sama oleh BNPB, AusAid &amp; World Bank</translation>
     </message>
@@ -177,17 +177,17 @@
         <translation>Tidak ada informasi gaya ditemukan pada lapisan %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1131"/>
+        <location filename="utilities.py" line="1135"/>
         <source>an unknown source</source>
         <translation>sumber tidak diketahui</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1148"/>
+        <location filename="utilities.py" line="1152"/>
         <source>Software notes</source>
         <translation>Catatan perangkat lunak</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="1149"/>
+        <location filename="utilities.py" line="1153"/>
         <source>This report was created using InaSAFE version %1. Visit http://inasafe.org to get your free copy of this software!</source>
         <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %1. Kunjungi http://inasafe.org untuk mendapatkan perangkat lunak ini secara gratis!</translation>
     </message>
