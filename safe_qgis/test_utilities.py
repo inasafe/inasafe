@@ -169,7 +169,7 @@ class UtilitiesTest(unittest.TestCase):
         myTransparencyList = (myLayer.rasterTransparency().
                 transparentSingleValuePixelList())
 
-        self.assertEqual(len(myTransparencyList), 1)
+        self.assertEqual(len(myTransparencyList), 2)
 
     def test_issue121(self):
         """Test that point symbol size can be set from style (issue 121).
