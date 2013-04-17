@@ -1,0 +1,297 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# c7d8b3c345cc48e3a644589e22b3477a
+#: ../../source/api-docs/safe_qgis/utilities_test.rst:6
+msgid "Module:  safe_qgis.utilities_test"
+msgstr ""
+
+# f2821d2ccfc041e8a1aaf1d55920c448
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test:1
+msgid "Helper module for gui test suite"
+msgstr ""
+
+# 8ac358597b8842d0a07c16fe38ad135e
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.RedirectStdStreams:1
+msgid "Context manager for redirection of stdout and stderr"
+msgstr ""
+
+# a42911de80414c779ccd44f670c9b74b
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.RedirectStdStreams:3
+msgid ""
+"This is from http://stackoverflow.com/questions/6796492/ python-temporarily-"
+"redirect-stdout-stderr"
+msgstr ""
+
+# daae09789c754e0683360ca0e59663e2
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.RedirectStdStreams:7
+msgid ""
+"In this context, the class is used to get rid of QGIS output in the test "
+"suite - BUT IT DOESN'T WORK (Maybe because QGIS starts its providers in a "
+"different process?)"
+msgstr ""
+
+# 15fa37b658164304b413f9ccb2ee4190
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.RedirectStdStreams:11
+msgid "Usage:"
+msgstr ""
+
+# 7648294d54c74c3d861360433b8270eb
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.RedirectStdStreams:13
+msgid "devnull = open(os.devnull, 'w') print('Fubar')"
+msgstr ""
+
+# 83885efe27624d52b4b8a4192fe6f701
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.RedirectStdStreams:17
+msgid "print(\"You'll never see me\")"
+msgstr ""
+
+# 3817912718d54bf8a1b963115dcdccce
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.RedirectStdStreams:19
+msgid "print(\"I'm back!\")"
+msgstr ""
+
+# 90ca80816fdb43c49849b57ef70b70e1
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.assertHashForFile:1
+msgid "Assert that a files has matches its expected hash"
+msgstr ""
+
+# d80496ae02414e55a9be125109c9cd0d
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.assertHashesForFile:1
+msgid "Assert that a files has matches one of a list of expected hashes"
+msgstr ""
+
+# a254165b172a455ab90f91cd1ea4176f
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImage:1
+msgid "Compare a test image against a known good image."
+msgstr ""
+
+# 9184a707328348c38f04faf4472ae011
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImage:4
+msgid "theControlImagePath: The image representing expected output"
+msgstr ""
+
+# 021b2673ae7241aa97f8412a9361e1bc
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImage:6
+msgid "as the control image)."
+msgstr ""
+
+# 05206f2f516b43b68d60d47bc7aea534
+# bce9b037dc604e63a65296be2113addd
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImage:8
+#: safe_qgis.utilities_test.checkImages:9
+msgid "two images."
+msgstr ""
+
+# 7ea383ebd3c2465f953121117ab14b61
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImage:11
+msgid ""
+"(bool, str, str) where: * bool is success or failure indicator * str is a "
+"message providing analysis comparison notes"
+msgstr ""
+
+# cf5e7e50f1d4468c86a6b2f3ad3ed026
+# 4215209ec7024557aa46b64bdceb6de4
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImage:16
+#: safe_qgis.utilities_test.checkImages:18
+msgid "None"
+msgstr ""
+
+# 120ee2711efe4fa5b891563b4ddce09f
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImages:1
+msgid "Compare a test image against a collection of known good images."
+msgstr ""
+
+# 765f9e379cc54d23ac048e7c926d213a
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImages:5
+msgid "as the test image path (CONTROL_IMAGE_DIR) will be prepended."
+msgstr ""
+
+# 085d013a1b8849429144387149e1ed14
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImages:7
+msgid "as the control image). Must be full path to image."
+msgstr ""
+
+# aa52f768e35848dea8f38eb5ba2f8e28
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.checkImages:12
+msgid ""
+"(bool, str, str) where: * bool is success or failure indicator * str is the "
+"file path of the resulting difference image * str is a message providing "
+"analysis comparison notes"
+msgstr ""
+
+# 077914c765d74705ad0f8cd6f8b1e1ad
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.getQgisTestApp:1
+msgid "Start one QGis application to test agaist"
+msgstr ""
+
+# 6e2fdd0ba49144d5a0a28c36ddbe73a1
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.getQgisTestApp:4
+msgid "NIL"
+msgstr ""
+
+# 9e4e0fc3a39f4cb0a52abae0f4215a9e
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.getQgisTestApp:7
+msgid "handle to qgis app"
+msgstr ""
+
+# 4c54fde9946e4278812e180a5c0023a0
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.getQgisTestApp:10
+msgid "If QGis is already running the handle to that app will be returned"
+msgstr ""
+
+# 8f547d62ea7f4bb59903ee1987da67bd
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.hashForFile:1
+msgid "Return an md5 checksum for a file"
+msgstr ""
+
+# 14235fe989064a3da546b1f5102731c4
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.loadLayer:1
+msgid "Helper to load and return a single QGIS layer"
+msgstr ""
+
+# cc519e03876e41f68a5d49b29edcdf5b
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.loadLayer:4
+msgid ""
+"theLayerFile: Pathname to raster or vector file DIR: Optional parameter "
+"stating the parent dir. If None,"
+msgstr ""
+
+# 1fb67b89ee234afdb70a6fccc2e15461
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.loadLayer:6
+msgid "pathname is assumed to be absolute"
+msgstr ""
+
+# 72a3cbf770cb43768f12400fcb9da0c5
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.loadLayer:8
+msgid "Returns: QgsMapLayer, str (for layer type)"
+msgstr ""
+
+# 956e8d3357ad49598afe28b434e159ea
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setBatemansBayGeoExtent:1
+msgid "Zoom to an area occupied by both Batemans Bay layers in geo crs"
+msgstr ""
+
+# 871465ab61f247769b9eb00d3c76e92c
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setCanvasCrs:1
+msgid "Helper to set the crs for the CANVAS before a test is run."
+msgstr ""
+
+# 5ee6f9c2fcea47f6b34105b929207d28
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setCanvasCrs:3
+msgid "Args:"
+msgstr ""
+
+# f204c44a9170420bb78b250e2b22dd0c
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setCanvasCrs:5
+msgid "theEpsgId  - Valid EPSG identifier (int)"
+msgstr ""
+
+# 4c150f53313b48ae965a52059c0c5ab4
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setCanvasCrs:7
+msgid "on the CANVAS. Default to False."
+msgstr ""
+
+# 2e044a07306149fca8f8bc6f50ce9f16
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setGeoExtent:1
+msgid "Zoom to an area specified given bounding box (list)"
+msgstr ""
+
+# 634e82cd1d15404e84d0c4f1635b69c9
+# 9c3c08ef460e4811bfcf37abb7270f1a
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setJakartaGeoExtent:1
+#: safe_qgis.utilities_test.setYogyaGeoExtent:1
+msgid "Zoom to an area occupied by both Jakarta layers in Geo"
+msgstr ""
+
+# ce82c437d0864eae8738c153bf3f5689
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setJakartaGoogleExtent:1
+msgid "Zoom to an area occupied by both Jakarta layers in 900913 crs"
+msgstr ""
+
+# 9201c361a8844669bcbe787f43e6ef34
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.setPadangGeoExtent:1
+msgid "Zoom to an area occupied by both both Padang layers"
+msgstr ""
+
+# 4e4560adf30146e2b97391623d9fdb16
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.unitTestDataPath:1
+msgid "Return the absolute path to the InaSAFE unit test data dir."
+msgstr ""
+
+# 6c68903c0c0341abb4c22749c50714ea
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.unitTestDataPath:3
+msgid ""
+"This is not the same thing as the SVN inasafe_data dir. Rather this is a new "
+"dataset where the test datasets are all tiny for fast testing and the "
+"datasets live in the same repo as the code."
+msgstr ""
+
+# d6681d89e03248b9b8da1958d6c34fc4
+#: ../../../safe_qgis/utilities_test.py:docstring of
+#: safe_qgis.utilities_test.unitTestDataPath:8
+msgid ""
+"theSubdir: (Optional) Additional subdir to add to the path - typically "
+"'hazard' or 'exposure'."
+msgstr ""
+
+# ac2ec04bd4504fe18ebc8c0f8142cd5e
+#: ../../source/api-docs/safe_qgis/utilities_test.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

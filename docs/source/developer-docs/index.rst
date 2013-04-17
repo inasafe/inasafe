@@ -22,6 +22,8 @@ Developer Documentation Contents:
    i18n
    version_control
    maintaining_documentation
+   writing_impact_functions
+   impact_function_tutorial
    postprocessors
    bug_reporting
    preparing_a_release

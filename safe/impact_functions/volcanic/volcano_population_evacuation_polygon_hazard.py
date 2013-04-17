@@ -5,7 +5,8 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_question)
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr,
-                                   format_int)
+                                   format_int,
+                                   round_thousand)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (assign_hazard_values_to_exposure_data,
                                        make_circular_polygon)
@@ -28,15 +29,29 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
     title = tr('Need evacuation')
     target_field = 'population'
-
-    parameters = {'R [km]': [3, 5, 10]}
+    # Function documentation
+    synopsis = tr('To assess the impacts of volcano eruption on population.')
+    actions = tr('Provide details about how many population would likely be '
+                 'affected by each hazard zones.')
+    hazard_input = tr('A hazard vector layer can be polygon or point. '
+                      'If polygon, it must have "KRB" attribute and the value'
+                      'for it are "Kawasan Rawan Bencana I", "Kawasan Rawan '
+                      'Bencana II", or "Kawasan Rawan Bencana III."If you'
+                      'want to see the name of the volcano in the result, '
+                      'you need to add "NAME" attribute for point data or '
+                      '"GUNUNG" attribute for polygon data.')
+    exposure_input = tr('An exposure raster layer where each '
+                        'cell represent population count.')
+    output = tr('Vector layer contains population affected and the minimum'
+                'needs based on the population affected.')
+    parameters = {'distance [km]': [3, 5, 10]}
 
     def run(self, layers):
         """Risk plugin for volcano population evacuation
 
         Input
           layers: List of layers expected to contain
-              H: Vector polyton layer of volcano impact zones
+              H: Vector polygon layer of volcano impact zones
               P: Raster layer of population data on the same grid as H
 
         Counts number of people exposed to volcano event.
@@ -69,7 +84,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         if H.is_point_data:
             # Use concentric circles
-            radii = self.parameters['R [km]']
+            radii = self.parameters['distance [km]']
 
             centers = H.get_geometry()
             attributes = H.get_data()
@@ -77,6 +92,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             H = make_circular_polygon(centers,
                                       rad_m,
                                       attributes=attributes)
+            # NOTE (Sunni) : I commented out this one because there will be
+            # a permission problem on windows
             #H.write_to_file('Evac_zones_%s.shp' % str(radii))  # To check
 
             category_title = 'Radius'
@@ -148,8 +165,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         total = int(numpy.sum(E.get_data(nan=0)))
 
         # Don't show digits less than a 1000
-        if total > 1000:
-            total = total // 1000 * 1000
+        total = round_thousand(total)
 
         # Count number and cumulative for each zone
         cum = 0
@@ -163,12 +179,10 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
             pop = int(categories[key])
 
-            if pop > 1000:
-                pop = pop // 1000 * 1000
+            pop = round_thousand(pop)
 
             cum += pop
-            if cum > 1000:
-                cum = cum // 1000 * 1000
+            cum = round_thousand(cum)
 
             pops[name] = pop
             cums[name] = cum
@@ -194,7 +208,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                       TableRow([tr('People needing evacuation'),
                                 '%s' % format_int(evacuated),
                                 blank_cell],
-                                header=True),
+                               header=True),
                       TableRow([category_header,
                                 tr('Total'), tr('Cumulative')],
                                header=True)]
@@ -222,7 +236,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population %s in the viewable area')
+                           tr('Total population %s in the exposure layer')
                            % format_int(total),
                            tr('People need evacuation if they are within the '
                               'volcanic hazard zones.')])

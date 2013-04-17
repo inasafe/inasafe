@@ -1,4 +1,0 @@
-// I help catch consoleLog() statements
-
-@importedJS2: "<script class=\"extras\" type=\"text/javascript\">function consoleLogger(msg, msgType, objName) {var prefix = 'Kickstrap: 'br-if(objName) {console.log([msg, objName])br-}else{switch(msgType) {case 'warn':console.warn(prefix + msg)br-breakbr-case 'error':console.error(prefix + msg)br-breakbr-default:console.log(prefix + msg)br-breakbr-}}}</script>";
-script#console {content: @importedJS2; ie8: @importedJS2;}

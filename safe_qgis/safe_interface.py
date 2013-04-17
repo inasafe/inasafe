@@ -44,15 +44,22 @@ from safe.api import (get_admissible_plugins,
                       get_free_memory,
                       calculate_impact as safe_calculate_impact,
                       BoundingBoxError,
+                      GetDataError,
                       ReadLayerError,
                       get_plugins, get_version,
                       in_and_outside_polygon as points_in_and_outside_polygon,
                       calculate_polygon_centroid,
                       get_postprocessors,
                       get_postprocessor_human_name,
-                      format_int)
+                      convert_mmi_data,
+                      format_int,
+                      get_unique_values,
+                      get_plugins_as_table,
+                      HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA,
+                      Vector,
+                      nanallclose,
+                      DEFAULTS)
 
-from safe.defaults import DEFAULTS
 # pylint: enable=W0611
 
 # InaSAFE GUI specific functionality
@@ -62,7 +69,6 @@ from safe_qgis.exceptions import (KeywordNotFoundError,
                                   InvalidParameterError,
                                   InsufficientOverlapError)
 
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -144,7 +150,7 @@ def getOptimalExtent(theHazardGeoExtent,
     #
     myMessage = tr('theHazardGeoExtent or theExposureGeoExtent cannot be None.'
                    'Found: /ntheHazardGeoExtent: %s '
-                    '/ntheExposureGeoExtent: %s' %
+                   '/ntheExposureGeoExtent: %s' %
                    (theHazardGeoExtent, theExposureGeoExtent))
 
     if (theHazardGeoExtent is None) or (theExposureGeoExtent is None):
@@ -152,13 +158,15 @@ def getOptimalExtent(theHazardGeoExtent,
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
-    myOptimalExtent = bbox_intersection(theHazardGeoExtent,
-        theExposureGeoExtent,
-        theViewportGeoExtent)
+    myOptimalExtent = \
+        bbox_intersection(theHazardGeoExtent,
+                          theExposureGeoExtent,
+                          theViewportGeoExtent)
 
     if myOptimalExtent is None:
         # Bounding boxes did not overlap
-        myMessage = tr('Bounding boxes of hazard data, exposure data '
+        myMessage = \
+            tr('Bounding boxes of hazard data, exposure data '
                'and viewport did not overlap, so no computation was '
                'done. Please make sure you pan to where the data is and '
                'that hazard and exposure data overlaps.')
@@ -251,12 +259,14 @@ def readKeywordsFromLayer(theLayer, keyword):
     try:
         myValue = theLayer.get_keywords(keyword)
     except Exception, e:
-        myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+        myMessage = \
+            tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 theLayer.get_filename(), keyword, str(e)))
         raise KeywordNotFoundError(myMessage)
     if not myValue or myValue == '':
-        myMessage = tr('No value was found for keyword %s in layer %s' % (
-                    theLayer.get_filename(), keyword))
+        myMessage = \
+            tr('No value was found for keyword %s in layer %s' % (
+                theLayer.get_filename(), keyword))
         raise KeywordNotFoundError(myMessage)
     return myValue
 
@@ -303,7 +313,8 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     try:
         myDictionary = read_keywords(myKeywordFilePath)
     except Exception, e:
-        myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+        myMessage = \
+            tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 myKeywordFilePath, theKeyword, str(e)))
         raise KeywordNotFoundError(myMessage)
 
@@ -311,8 +322,9 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     if theKeyword is None:
         return myDictionary
     if not theKeyword in myDictionary:
-        myMessage = tr('No value was found in file %s for keyword %s' % (
-                    myKeywordFilePath, theKeyword))
+        myMessage = \
+            tr('No value was found in file %s for keyword %s' % (
+                myKeywordFilePath, theKeyword))
         raise KeywordNotFoundError(myMessage)
 
     try:
@@ -364,19 +376,22 @@ def getStyleInfo(theLayer):
         raise InvalidParameterError()
 
     if not hasattr(theLayer, 'get_style_info'):
-        myMessage = tr('Argument "%s" was not a valid layer instance' %
+        myMessage = \
+            tr('Argument "%s" was not a valid layer instance' %
                theLayer)
         raise StyleInfoNotFoundError(myMessage)
 
     try:
         myValue = theLayer.get_style_info()
     except Exception, e:
-        myMessage = tr('Styleinfo retrieval failed for %s\n %s' % (
-                    theLayer.get_filename(), str(e)))
+        myMessage = \
+            tr('Styleinfo retrieval failed for %s\n %s' % (
+                theLayer.get_filename(), str(e)))
         raise StyleInfoNotFoundError(myMessage)
 
     if not myValue or myValue == '':
-        myMessage = tr('No styleInfo was found for layer %s' % (
+        myMessage = \
+            tr('No styleInfo was found for layer %s' % (
                 theLayer.get_filename()))
         raise StyleInfoNotFoundError(myMessage)
     return myValue
@@ -418,28 +433,6 @@ def getSafeImpactFunctions(theFunction=None):
     """
     try:
         return safe_get_plugins(makeAscii(theFunction))
-    except:
-        raise
-
-
-def getFunctionTitle(theFunction):
-    """Thin wrapper around the safe get_function_title.
-
-    Args:
-        * theFunction - SAFE impact function instance to be used
-    Returns:
-        The title of a safe impact function is returned
-    Raises:
-        Any exceptions are propogated
-    """
-
-    # FIXME (Ole): I don't think we have to do try-except-raise.
-    #              It would be the same just to call the function
-    #              and let Python's normal exception handling
-    #              propagate exceptions (just saving some lines and
-    #              complexity)
-    try:
-        return get_function_title(theFunction)
     except:
         raise
 

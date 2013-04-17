@@ -2,7 +2,7 @@ import math
 import numpy
 
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
- ITBFatalityFunction)
+    ITBFatalityFunction)
 from safe.common.utilities import ugettext as tr
 
 from safe.common.utilities import get_defaults
@@ -29,7 +29,15 @@ class PAGFatalityFunction(ITBFatalityFunction):
                     subcategory=='population' and \
                     layertype=='raster'
     """
-
+    synopsis = tr('To asses the impact of earthquake on population based on '
+                  'Population Vulnerability Model Pager')
+    citations = \
+        tr(' * Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
+           '   Estimating casualties for large worldwide earthquakes using '
+           '   an empirical approach. U.S. Geological Survey Open-File '
+           '   Report 2009-1136.')
+    limitation = ''
+    detailed_description = ''
     title = tr('Die or be displaced according Pager model')
     defaults = get_defaults()
     parameters = dict(Theta=11.067, Beta=0.106,  # Model coefficients
@@ -45,11 +53,14 @@ class PAGFatalityFunction(ITBFatalityFunction):
                       tolerance=0.01,
                       calculate_displaced_people=True,
                       postprocessors={'Gender': {'on': True},
-                          'Age': {'on': True,
-                              'params':
-                                  {'youth_ratio': defaults['YOUTH_RATIO'],
-                                   'adult_ratio': defaults['ADULT_RATIO'],
-                                   'elder_ratio': defaults['ELDER_RATIO']}}})
+                                      'Age': {'on': True,
+                                      'params': {
+                                          'youth_ratio':
+                                              defaults['YOUTH_RATIO'],
+                                          'adult_ratio':
+                                              defaults['ADULT_RATIO'],
+                                          'elder_ratio':
+                                              defaults['ELDER_RATIO']}}})
 
     def fatality_rate(self, mmi):
         """Pager method to compute fatality rate"""

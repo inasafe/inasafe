@@ -13,6 +13,7 @@ from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string, remove_double_spaces
+from third_party.odict import OrderedDict
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -354,7 +355,7 @@ def get_question(hazard_title, exposure_title, func):
 
     function_title = get_function_title(func)
     return (tr('In the event of <i>%(hazard)s</i> how many '
-              '<i>%(exposure)s</i> might <i>%(impact)s</i>')
+               '<i>%(exposure)s</i> might <i>%(impact)s</i>')
             % {'hazard': hazard_title.lower(),
                'exposure': exposure_title.lower(),
                'impact': function_title.lower()})
@@ -587,7 +588,7 @@ def get_plugins_as_table(dict_filter=None):
     table_body = []
     # use this list for avoiding wrong order in dict
     atts = ['category', 'subcategory', 'layertype',
-                           'datatype', 'unit']
+            'datatype', 'unit']
     header = TableRow([tr('Title'), tr('ID'), tr('Category'),
                        tr('Sub Category'), tr('Layer type'), tr('Data type'),
                        tr('Unit')],
@@ -652,7 +653,7 @@ def get_plugins_as_table(dict_filter=None):
                 row.append(key)
                 for myKey in atts:
                     myValue = pretty_string(dict_req.get(myKey,
-                                                not_found_value))
+                                                         not_found_value))
                     row.append(myValue)
                 table_body.append(TableRow(row))
 
@@ -722,7 +723,8 @@ def get_documentation(func):
                 citation : list of citation in string (function properties)
                 limitation : string (function properties)
     """
-    retval = {'unique_identifier': func}
+    retval = OrderedDict()
+    retval['unique_identifier'] = func
 
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
@@ -740,9 +742,10 @@ def get_documentation(func):
     # citations must be a list
     citations = 'citations'
     detailed_description = 'detailed_description'
-    permissible_hazard_input = 'permissible_hazard_input'
-    permissible_exposure_input = 'permissible_exposure_input'
+    hazard_input = 'hazard_input'
+    exposure_input = 'exposure_input'
     limitation = 'limitation'
+    output = 'output'
 
     if hasattr(func, '__doc__') and func.__doc__:
         doc_str = func.__doc__
@@ -752,7 +755,7 @@ def get_documentation(func):
 
             if doc_line.startswith(author_tag):
                 retval['author'] = remove_double_spaces(
-                                        doc_line[len(author_tag) + 1:])
+                    doc_line[len(author_tag) + 1:])
             elif doc_line.startswith(rating_tag):
                 retval['rating'] = doc_line[len(rating_tag) + 1:]
     retval['title'] = get_function_title(func)
@@ -765,13 +768,21 @@ def get_documentation(func):
         retval[citations] = func.citations
     if hasattr(func, detailed_description):
         retval[detailed_description] = func.detailed_description
-    if hasattr(func, permissible_hazard_input):
-        retval[permissible_hazard_input] = func.permissible_hazard_input
-    if hasattr(func, permissible_exposure_input):
-        retval[permissible_exposure_input] = func.permissible_exposure_input
+    if hasattr(func, hazard_input):
+        retval[hazard_input] = func.hazard_input
+    if hasattr(func, exposure_input):
+        retval[exposure_input] = func.exposure_input
+    if hasattr(func, output):
+        retval[output] = func.output
     if hasattr(func, limitation):
         retval[limitation] = func.limitation
     return retval
+
+
+def get_doc_string(func):
+    """Return doc string of an impact function
+    """
+    return func.__doc__
 
 
 def is_function_enabled(func):

@@ -1,0 +1,474 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 70b46f86a2844d11811bf5240484fd48
+#: ../../source/api-docs/safe_qgis/keywords_dialog.rst:6
+msgid "Module:  safe_qgis.keywords_dialog"
+msgstr ""
+
+# dd39e05013064f02a1d34653bf9ea3cd
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Keywords "
+"Dialog.**"
+msgstr ""
+
+# ced7434d46aa4348a8022c5dd0e86adc
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 4ddcf1faa91b4cbb9928665ba3e6f21c
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 4648d03a3e4545d18eae9414f4590092
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog:1
+msgid "Dialog implementation class for the InaSAFE keywords editor."
+msgstr ""
+
+# 297e2f7f3a9743518e6988c641a9773b
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.accept:1
+msgid "Automatic slot executed when the ok button is pressed."
+msgstr ""
+
+# 63e9d71f19d34b15ad65226648d76d4e
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.accept:3
+msgid "It will write out the keywords for the layer that is active."
+msgstr ""
+
+# 85c790dc0bfd4bd7b66628049278606f
+# ce93133f983d4fed852efe940ba10537
+# f0787bc1e66847a796a2c3e31e154563
+# cf1b5eae18e04e2fb5e6eea11608f7fd
+# a21561c21a704049821a32178094f84f
+# ec87472f39f44885b9a106699dd32aa8
+# 7fbc4f2fbc1846c886eef1bc4637934e
+# 13032d1ea8534603906a1467e77f2178
+# d0c433c9531c46cba40fba753f858a07
+# de1a95e083f14720ac5dbcac903a5c79
+# 0ae20dcd738043ce96c904f44aa45285
+# a9b00227f5a44470b14ddd9a37a231a0
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.accept:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.getKeywords:4
+#: safe_qgis.keywords_dialog.KeywordsDialog.loadStateFromKeywords:5
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_cboSubcategory_currentIndexChanged:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_leTitle_textEdited:5
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList1_clicked:4
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList2_clicked:4
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnRemove_clicked:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByKey:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByValue:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.reset:7
+#: safe_qgis.keywords_dialog.KeywordsDialog.updateControlsFromList:5
+msgid "None"
+msgstr ""
+
+# 3e9fa5c8fdda45b1a5464725a206414c
+# 7d20e1ff23824e02aae0b81d768e142a
+# 2dc12f0c9ac44dd2aaf8d59715d33cae
+# dd4945ff633b44e6bb672b21134b8614
+# 15c8b8ea98884918a3a652c68d1860c3
+# a665a5da95cc4e7aa84f6edb33826308
+# 86f57d9235884ed9b1e1aab177702249
+# b258da32ab9140a78b1a084797092266
+# b17841d998e745fe9adc45ef0f3fb2cf
+# b404177615f84257af725f57ef7ca404
+# c9b1a2535332480ead8dab84c6535fa0
+# a9cd15f24d1d4044947df22083db2345
+# 009506c42bf842bd914a92f3e7b70d27
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.accept:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:21
+#: safe_qgis.keywords_dialog.KeywordsDialog.loadStateFromKeywords:7
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_cboSubcategory_currentIndexChanged:10
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList1_clicked:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList2_clicked:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAdvanced_toggled:10
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnRemove_clicked:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radExposure_toggled:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radHazard_toggled:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radPostprocessing_toggled:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.setSubcategoryList:14
+#: safe_qgis.keywords_dialog.KeywordsDialog.updateControlsFromList:7
+msgid "None."
+msgstr ""
+
+# 89c0e85c03a54fe9a919b40a98e036d8
+# e60576c55c9d456884425820492aad19
+# 80c59e3931454f0baf5afc6b27ebd87b
+# 1cb4299617804edabbf47f6f7887d64d
+# 1cf7d4cfdc3243b3936e904f43a687d0
+# 02fbfb0793374a14968f627a3ae8e506
+# 5d6873187d3b4046b8602dee87214599
+# d58d11e0a27441a7804ac735983b70c0
+# fe4c178de72541e89682d99aa8b99002
+# bdff212db231412e976d9fd4c2b27035
+# aff47cbad23e43d4aaa09b9a93799b17
+# ba5cb99087944b0fbc1a7eadde1e8aaf
+# a0166c3895344ad98247a88c8f90bf93
+# cf05f26bc0cd465aa47ea2db708072f4
+# 0016d161ae8f436cb3d9e85b42706bbc
+# ade9c65154d845788d38af7658ba944d
+# ac423326114f4d78b7f4944802f2cc41
+# e4511bde2fb045c9971483839731c4cf
+# 1e2d0a12e588450f95b8ad1ad64469f7
+# 3cbccd6dddea4a68a294d3f2fbe9a628
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.accept:10
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:23
+#: safe_qgis.keywords_dialog.KeywordsDialog.getKeywords:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.getValueForKey:9
+#: safe_qgis.keywords_dialog.KeywordsDialog.loadStateFromKeywords:9
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_cboSubcategory_currentIndexChanged:12
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_leTitle_textEdited:9
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList1_clicked:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList2_clicked:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAdvanced_toggled:12
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnRemove_clicked:10
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radExposure_toggled:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radHazard_toggled:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radPostprocessing_toggled:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByKey:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByValue:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.reset:9
+#: safe_qgis.keywords_dialog.KeywordsDialog.setCategory:9
+#: safe_qgis.keywords_dialog.KeywordsDialog.setSubcategoryList:16
+#: safe_qgis.keywords_dialog.KeywordsDialog.updateControlsFromList:9
+msgid "no exceptions explicitly raised."
+msgstr ""
+
+# 7a8335960b2f4e7f87d3add52df98b8c
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:1
+msgid "Add an item to the keywords list given its key/value."
+msgstr ""
+
+# 39f9c5a9279f449489d82fa706953b1e
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:3
+msgid ""
+"The key and value must both be valid, non empty strings or an "
+"InvalidKVPError will be raised."
+msgstr ""
+
+# 46b43a81ab0e404ea7ba6cb99789241e
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:6
+msgid ""
+"If an entry with the same key exists, it's value will be replaced with "
+"theValue."
+msgstr ""
+
+# 2bafb4a982714285ba40151850f83b6b
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:9
+msgid ""
+"It will add the current key/value pair to the list if it is not already "
+"present. The kvp will also be stored in the data of the listwidgetitem as a "
+"simple string delimited with a bar ('|')."
+msgstr ""
+
+# e667702d15d44a229eefe74b8e637544
+# 77b7ed9aa15641bb87ae250baa7ef3b0
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:13
+#: safe_qgis.keywords_dialog.KeywordsDialog.setSubcategoryList:3
+msgid "Args:"
+msgstr ""
+
+# 1db6e3e43d2342dc9ce242512169f847
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:15
+msgid "theKey - string representing the key part of the key value pair (kvp)"
+msgstr ""
+
+# 3df91c66bed94a4ebc54f09a2fd4b1db
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.addListEntry:17
+msgid ""
+"theValue - string representing the value part of the key value pair (kvp)"
+msgstr ""
+
+# b350e23d84ea45fc8cd44befe87c068c
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.applyPendingChanges:1
+msgid ""
+"Apply any pending changes e.g. keywords entered without being added. See "
+"https://github.com/AIFDR/inasafe/issues/249"
+msgstr ""
+
+# ab75a440090d45a98002d82355afa14b
+# adf741137108475d81118b1ca12fd7da
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.applyPendingChanges:4
+#: safe_qgis.keywords_dialog.KeywordsDialog.makeKeyValueEditable:3
+msgid "Args: None"
+msgstr ""
+
+# 4054ce2fac964b7b8f26b7963be41fb5
+# abe865153de94b2ebe0b131fd66d68a4
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.applyPendingChanges:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.makeKeyValueEditable:5
+msgid "Returns: None"
+msgstr ""
+
+# 16a7a1e8072544deb14aece624c0ecc1
+# 59af5375968e4c38aa624343b357a375
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.applyPendingChanges:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.makeKeyValueEditable:7
+msgid "Raises: None"
+msgstr ""
+
+# 90c0a92d8a6b40a3bd9fa8d74a1f0d5c
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.getKeywords:1
+msgid "Obtain the state of the dialog as a keywords dict"
+msgstr ""
+
+# c91d03df303248bc9b9465e4bf323c92
+# cbc5e63c17eb4fa593c30245956a74bd
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.getKeywords:6
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_leTitle_textEdited:7
+msgid "dict - a dictionary of keyword reflecting the state of the dialog."
+msgstr ""
+
+# a96de0e180fa46639e698b606dde339b
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.getValueForKey:1
+msgid ""
+"Check if our key list contains a specific key, and return its value if "
+"present."
+msgstr ""
+
+# f4f2e329c349418bb7dc164dec0d60cd
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.getValueForKey:5
+msgid "theKey- String representing the key to search for"
+msgstr ""
+
+# a3ef49dbf13041308dd91323150eb67c
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.getValueForKey:7
+msgid "Value of key if matched otherwise none"
+msgstr ""
+
+# 3b41ae49445846e0a4d91bb02344ec7f
+# 3ecdef7fae6b4245b8b9431f9c916aec
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.loadStateFromKeywords:1
+#: safe_qgis.keywords_dialog.KeywordsDialog.updateControlsFromList:1
+msgid "Set the ui state to match the keywords of the currently active layer."
+msgstr ""
+
+# 65d3c1213d4947929e10987098da6c78
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.makeKeyValueEditable:1
+msgid "Set leKey and leValue to the clicked item in the lstKeywords."
+msgstr ""
+
+# 648e8db7b4f344cdbecef046f7597e36
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_cboSubcategory_currentIndexChanged:1
+msgid "Automatic slot executed when the subcategory is changed."
+msgstr ""
+
+# 4bdaa756a22b43fba9a292596ced5806
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_cboSubcategory_currentIndexChanged:3
+msgid ""
+"When the user changes the subcategory, we will extract the subcategory and "
+"dataype or unit (depending on if it is a hazard or exposure subcategory) "
+"from the [] after the name."
+msgstr ""
+
+# a75572db09a34fc193ce710baa8fa305
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_leTitle_textEdited:1
+msgid ""
+"Update the keywords list whenver the user changes the title. This slot is "
+"not called is the title is changed programmatically."
+msgstr ""
+
+# bef7489aa8784d088d0ee7280d2de389
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList1_clicked:1
+msgid "Automatic slot executed when the pbnAddToList1 button is pressed."
+msgstr ""
+
+# 39b478b1b1f54db5a9cc34b152c5bc13
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAddToList2_clicked:1
+msgid "Automatic slot executed when the pbnAddToList2 button is pressed."
+msgstr ""
+
+# 60c2b30942674ba39313fc9079320c7c
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAdvanced_toggled:1
+msgid "Automatic slot executed when the advanced button is toggled."
+msgstr ""
+
+# 2f1d0874123a420a9a6f1b97c5920d42
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAdvanced_toggled:3
+msgid ""
+"some of the behaviour for hiding widgets is done using the signal/slot "
+"editor in designer, so if you are trying to figure out how the interactions "
+"work, look there too!"
+msgstr ""
+
+# 3cc3db296c38467daf2cc3c7c458bd37
+# 356e76401de7421d8d18023a2bf9d253
+# 142acbb6fdd440f8bd56cdf285b9ae8a
+# 691db631ad914d249a924fc211416dcd
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnAdvanced_toggled:8
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radExposure_toggled:4
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radHazard_toggled:4
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radPostprocessing_toggled:4
+msgid "theFlag - boolean indicating the new checked state of the button"
+msgstr ""
+
+# 57cd72465b3b441fabeceead034b5ede
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnRemove_clicked:1
+msgid "Automatic slot executed when the pbnRemove button is pressed."
+msgstr ""
+
+# cf9ccd7a62e24b7489737c929fa59d50
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_pbnRemove_clicked:3
+msgid "It will remove any selected items in the keywords list."
+msgstr ""
+
+# ab7bc4e901c94c39a3064129d7d1b482
+# b650be47b46a4be1a70db3e09d668b38
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radExposure_toggled:1
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radPostprocessing_toggled:1
+msgid "Automatic slot executed when the hazard radio is toggled on."
+msgstr ""
+
+# e049a894baf84d0ba65b978e631b14bc
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.on_radHazard_toggled:1
+msgid "Automatic slot executed when the hazard radio is toggled."
+msgstr ""
+
+# b1f7bdb9323f49eda838f1476a4608f5
+# 6d4c0963efa240528b4bbe0e97ba61ae
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByKey:1
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByValue:1
+msgid "Remove an item from the kvp list given its key."
+msgstr ""
+
+# 808377cc9d5b457d8612a851f565f114
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByKey:4
+msgid "theKey - key of item to be removed."
+msgstr ""
+
+# 82063d9240c54d3bb48305b891ddd2dc
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.removeItemByValue:4
+msgid "theValue - value of item to be removed."
+msgstr ""
+
+# 1912dd2e9d444d838eb66ab8807c7559
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.reset:1
+msgid "Reset all controls to a blank state."
+msgstr ""
+
+# 15edf13352da4fb3a6b39aa8f00d9f78
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.reset:4
+msgid ""
+"thePrimaryKeywordsOnlyFlag - if True (the default), only reset Subcategory, "
+"datatype and units."
+msgstr ""
+
+# 02e42fe1cec442b08e67c6bca34c6a6e
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.setCategory:1
+msgid "Set the category radio button based on theCategory."
+msgstr ""
+
+# 1e9d94d86e52492ea18b45586e890606
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.setCategory:5
+msgid "or 'postprocessing'."
+msgstr ""
+
+# 97b44234a2ff4aea90234aba897d6ae9
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.setCategory:7
+msgid "False if the radio button could not be updated"
+msgstr ""
+
+# c4b1c40523514fa9ac28e63d066c4d51
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.setSubcategoryList:1
+msgid "Helper to populate the subcategory list based on category context."
+msgstr ""
+
+# 83f1937a37814be9942e04821150da02
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.setSubcategoryList:5
+msgid ""
+"theEntries - an OrderedDict of subcategories. The dict entries should be "
+"('earthquake', self.tr('earthquake')). See http://www.voidspace.org.uk/"
+"python/odict.html for info on OrderedDict."
+msgstr ""
+
+# 7f7bf2e569dd47bdb8aebd32ad6f504b
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.setSubcategoryList:9
+msgid ""
+"theSelectedItem - optional parameter indicating which item should be "
+"selected in the combo. If the selected item is not in theList, it will be "
+"appended to it."
+msgstr ""
+
+# a6a9edc480d2425e80b996cb228ed718
+#: ../../../safe_qgis/keywords_dialog.py:docstring of
+#: safe_qgis.keywords_dialog.KeywordsDialog.showHelp:1
+msgid "Load the help text for the keywords safe_qgis"
+msgstr ""
+
+# 56611df78d144894818f1d4641731dad
+#: ../../source/api-docs/safe_qgis/keywords_dialog.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-06 10:55+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# 6c5ab64146b142eda7666dc6fbae84ca
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:6
+msgid "Categorised Hazard Building Impact Function"
+msgstr ""
+
+# 0808b29e20c144dd98aa0b7f9fbfeae1
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:9
+msgid "Overview"
+msgstr ""
+
+# d5229336e6cf49758b2adef308c902d9
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:11
+msgid "**Unique Identifier**: Categorised Hazard Building Impact Function"
+msgstr ""
+
+# e4e5b899943b49e68ca24c44189d3138
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:13
+msgid "**Rating**: The Rating"
+msgstr ""
+
+# 5a5d1e5b72ab491caf00aa2bc8b6f8ac
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:15
+msgid "**Title**: Be affected"
+msgstr ""
+
+# 28f712c188ea44bd932cb1ac80e7cf49
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:17
+msgid "**Author**: The Author"
+msgstr ""
+
+# f4be2b8f952b4f3697a86103e645b41d
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:20
+msgid "Details"
+msgstr ""
+
+# fb84353e7d1c41699479b2c6c1acb2d0
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardBuildingImpactFunction.rst:22
+msgid "No documentation found"
+msgstr ""

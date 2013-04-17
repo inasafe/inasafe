@@ -1,0 +1,174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 8e293c3aa800448ebe71f157b58c1464
+#: ../../source/api-docs/safe_qgis/impact_calculator_thread.rst:6
+msgid "Module:  safe_qgis.impact_calculator_thread"
+msgstr ""
+
+# 5955d5723e7343cab29e57bc16347749
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - "
+"**ISImpactCalculatorThread.**"
+msgstr ""
+
+# f4c33ac8a72d443da02837a5e7398217
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread:4
+msgid "The module provides a high level interface for running SAFE scenarios."
+msgstr ""
+
+# cef820467a4a4cf68eb48eb08ebdc7a6
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread:6
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 120d78e7249f4d33a47daa2a8db427b1
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread:8
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 9eabc9bbf3fe4966b84cc2b26911149e
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread:1
+msgid ""
+"A threaded class to compute an impact scenario. Under python a thread can "
+"only be run once, so the instances based on this class are designed to be "
+"short lived. We inherit from QObject so that we can use Qt translation self."
+"tr calls and emit signals."
+msgstr ""
+
+# 0527f73b779d463199d330cc2332d088
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread:14
+msgid ""
+"Users of this of this class can listen for signals indicating when "
+"processing is done. For example::"
+msgstr ""
+
+# 3fbd83c521084e00b2500723106341f9
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread:22
+msgid "Prints 'hello' to the console"
+msgstr ""
+
+# 9b478bc55bb64feba9896e11f1435443
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread:28
+msgid "for an alternative (maybe nicer?) approach."
+msgstr ""
+
+# fe46572f2a724cc89ea9fbc6e75a509a
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.impactLayer:1
+msgid ""
+"Return the InaSAFE layer instance which is the output from the last run."
+msgstr ""
+
+# 1bfdaa85021e414eb52a1bf1856b9f7c
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.lastException:1
+msgid "Return any exception that may have been raised while running"
+msgstr ""
+
+# 92ff56093c5b41abb0ba597eee67fee5
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.lastTraceback:1
+msgid ""
+"Return the strack trace for any exception that may of occurred while running."
+msgstr ""
+
+# aa14bc25abf8405cb80bd5e0fb818b41
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.result:1
+msgid "Return the result of the last run."
+msgstr ""
+
+# 4f5e22cb4ee247e4a4c00130bbc86de8
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:1
+msgid ""
+"Main function for hazard impact calculation thread. Requires three "
+"properties to be set before execution can take place:"
+msgstr ""
+
+# f58634df44e240068b5786c2e7aed2e9
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:5
+msgid "Hazard layer - a path to a raster,"
+msgstr ""
+
+# c208aec3d2ca49e6b375facb56ad3744
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:6
+msgid "Exposure layer - a path to a vector points layer."
+msgstr ""
+
+# c18b37001c4249949d98d4b4e6d53f35
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:7
+msgid ""
+"Function - a function that defines how the Hazard assessment will be "
+"computed."
+msgstr ""
+
+# c5d5688b68c74be1bf5818f61c552ab4
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:10
+msgid ""
+"After the thread is complete, you can use the filename and result accessors "
+"to determine what the result of the analysis was::"
+msgstr ""
+
+# fef6d470a73045388440e6771796a8d4
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:27
+msgid "None."
+msgstr ""
+
+# 2c35f4a58f324bcca060e6e46d7c1c5c
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:29
+msgid "None"
+msgstr ""
+
+# e6fb087ab8f348a8ae277f35cae5a2f6
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.run:31
+msgid "InsufficientParametersError set."
+msgstr ""
+
+# d8a5cc5c9b1d406ebff8e4be2b1c3f9c
+#: ../../../safe_qgis/impact_calculator_thread.py:docstring of
+#: safe_qgis.impact_calculator_thread.ImpactCalculatorThread.showMessage:1
+msgid "For testing only"
+msgstr ""
+
+# 4fd50535c6cc40929beb51de674cba3e
+#: ../../source/api-docs/safe_qgis/impact_calculator_thread.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

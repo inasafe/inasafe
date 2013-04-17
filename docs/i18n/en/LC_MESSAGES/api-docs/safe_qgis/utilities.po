@@ -1,0 +1,704 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 1bf2867924fc43b8b26ce50b19f53e0b
+#: ../../source/api-docs/safe_qgis/utilities.rst:6
+msgid "Module:  safe_qgis.utilities"
+msgstr ""
+
+# 1302068aee004bacb39face54b71a3f3
+#: ../../../safe_qgis/utilities.py:docstring of safe_qgis.utilities:2
+msgid "**IS Utilitles implementation.**"
+msgstr ""
+
+# 5a0014af9f7943bf835ab2c119c66ef7
+#: ../../../safe_qgis/utilities.py:docstring of safe_qgis.utilities:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# b4b527002c5541b1b237ee4b33e3b3cc
+#: ../../../safe_qgis/utilities.py:docstring of safe_qgis.utilities:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 18c9fad7136c47df9f548759d98fe358
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.QgsLogHandler:1
+msgid "A logging handler that will log messages to the QGIS logging console."
+msgstr ""
+
+# f9b6f3307f824c3197452ccac44a12d8
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.QgsLogHandler.emit:1
+msgid "Try to log the message to QGIS if available, otherwise do nothing."
+msgstr ""
+
+# 6899654d0810498daba9a92d3a696700
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.QgsLogHandler.emit:5
+msgid "logged."
+msgstr ""
+
+# 7fc13ee6117242da944102e8890f375e
+# cf3ca2d669354039a9e1cad25e055c61
+# 37238ee9736345bf80a2ce52a20ff1ff
+# 298de7fd388e44f3b813855e130fb632
+# 633de0bd22b345499e9bb9c6823b0617
+# b09a728cf20244a7a5e265e2df700170
+# 0b497205e6b64dc0962343adbf9fc9cc
+# 531bf76253dd4851b24e1c3e0afbcbfc
+# 55c40eab053e44818163af6ce5a6858e
+# 6ed89a59072c47bbb55f9ad27b5264f4
+# 30535d280530408f82b275beeb1cfc7f
+# ba5d77db84f549b9b3d744dda0e3b7c0
+# c55afbada9a24dd58c00a534738ee267
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.QgsLogHandler.emit:7
+#: safe_qgis.utilities.QgsLogHandler.emit:9
+#: safe_qgis.utilities.addComboItemInOrder:13
+#: safe_qgis.utilities.addLoggingHanderOnce:12
+#: safe_qgis.utilities.humaniseSeconds:15
+#: safe_qgis.utilities.impactLayerAttribution:14
+#: safe_qgis.utilities.isLayerPoint:10 safe_qgis.utilities.isLayerPolygonal:10
+#: safe_qgis.utilities.qgisVersion:3 safe_qgis.utilities.qgisVersion:7
+#: safe_qgis.utilities.setVectorStyle:15 safe_qgis.utilities.setupPrinter:6
+#: safe_qgis.utilities.setupPrinter:8
+msgid "None"
+msgstr ""
+
+# ebd016b891d4476fb1574687173865d2
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addComboItemInOrder:1
+msgid ""
+"Although QComboBox allows you to set an InsertAlphabetically enum this only "
+"has effect when a user interactively adds combo items to an editable combo. "
+"This we have this little function to ensure that combos are always sorted "
+"alphabetically."
+msgstr ""
+
+# 5821289c768c4fb297ff5e798049e789
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addComboItemInOrder:7
+msgid "theCombo - combo box receiving the new item"
+msgstr ""
+
+# 51adc680aef848949d3198fc65596514
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addComboItemInOrder:8
+msgid "theItemText - display text for the combo"
+msgstr ""
+
+# 92847e37238b4c5791cfd9d626e7343f
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addComboItemInOrder:9
+msgid "theItemData - optional UserRole data to be associated with the item"
+msgstr ""
+
+# 31a843fb1b0c45f88c03d6f953409a61
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addComboItemInOrder:15
+msgid "Raises:"
+msgstr ""
+
+# fb127add53ab4ca7bb3fea16b8a864b4
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addComboItemInOrder:17
+msgid "..todo:: Move this to utilities"
+msgstr ""
+
+# bf59013ebf0b4d55a29b79a6d1befab5
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addLoggingHanderOnce:1
+msgid ""
+"A helper to add a handler to a logger, ensuring there are no duplicates."
+msgstr ""
+
+# bccfc3475431472baaef7a84b0fde25c
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addLoggingHanderOnce:4
+msgid "theLogger: logging.logger instance"
+msgstr ""
+
+# 03ca3ea3c61b442d86a0bdc72945fe98
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addLoggingHanderOnce:6
+msgid "added if an instance of that Handler subclass already exists."
+msgstr ""
+
+# e387671be8fe42b2955f986ad7add558
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.addLoggingHanderOnce:9
+msgid "bool: True if the logging handler was added"
+msgstr ""
+
+# 77d60f33fe694244adb47824ca298939
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.copyInMemory:1
+msgid "Return a memory copy of a layer"
+msgstr ""
+
+# 9e7677368efa4491b42fe6af50322c3b
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.copyInMemory:4
+msgid "origLayer: layer copyName: the name of the copy"
+msgstr ""
+
+# 850af33ed4364fdca7e54b2bc0641722
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.copyInMemory:7
+msgid "memory copy of a layer"
+msgstr ""
+
+# a1b66523d35448d19ca362ba01c4e1ac
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.dpiToMeters:1
+msgid "Convert dots per inch (dpi) to dots perMeters."
+msgstr ""
+
+# d75a1aeec9614808abd13c5a67130417
+# e925688183b44df6a9a39492b073b390
+# 34771e0000ab43ba9b9fbf1a52784365
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.dpiToMeters:4 safe_qgis.utilities.mmToPoints:5
+#: safe_qgis.utilities.pointsToMM:5
+msgid "theDpi: int - dots per inch in the print / display medium"
+msgstr ""
+
+# 8c95bc1ba2724f16b4133c6c48785f8e
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.dpiToMeters:6
+msgid "int - dpm converted value"
+msgstr ""
+
+# 721b9e8a30524a10b2ab5b89262ce8b5
+# 1f2c5f17cf7a44c5a122bd38d378f750
+# 499226238b0e4d44a8669aeeafe89394
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.dpiToMeters:8 safe_qgis.utilities.mmToPoints:9
+#: safe_qgis.utilities.pointsToMM:9
+msgid "Any exceptions raised by the InaSAFE library will be propagated."
+msgstr ""
+
+# 2014f37db3094f74bf606233a14abbca
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getDefaults:1
+msgid ""
+"returns a dictionary of defaults values to be used it takes the DEFAULTS "
+"from safe and modifies them according to qgis"
+msgstr ""
+
+# 79b6d35b55c8469ba6115d59fd8aec22
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getDefaults:3
+msgid "QSettings"
+msgstr ""
+
+# ee222c701c1540338a5e467fbfd69446
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getDefaults:6
+msgid "theDefault: a key of the defaults dictionary"
+msgstr ""
+
+# 5ebd2028c7734161a7c6aac1be49202a
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getDefaults:9
+msgid "A dictionary of defaults values to be used"
+msgstr ""
+
+# 1bdd99dc23fa4effb81f7140a16f9379
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getDefaults:10
+msgid "or the default value if a key is passed"
+msgstr ""
+
+# fcd1bcdfb5ed4fc9a77477803bc8ce98
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getDefaults:11
+msgid "or None if the requested default value is not valid"
+msgstr ""
+
+# 0f55b023905240509238bd721fead40e
+# 3174d7d2dd9b43f587d63629fee16da1
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getDefaults:13
+#: safe_qgis.utilities.getLayerAttributeNames:17
+msgid "no exceptions explicitly raised"
+msgstr ""
+
+# 7aa680fd05764af3a401570c02d398b7
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getExceptionWithStacktrace:1
+msgid "Convert exception into a string containing a stack trace."
+msgstr ""
+
+# 7f15746dde5f4c519312c12fc930e655
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getExceptionWithStacktrace:8
+msgid "theException: Exception object."
+msgstr ""
+
+# 81340ea933804cc2a6fa5a2f38065d86
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getExceptionWithStacktrace:9
+msgid "theHtml: Optional flag if output is to be wrapped as theHtml."
+msgstr ""
+
+# 01b3a52ea6be4253b3b131b4ae9b4428
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getExceptionWithStacktrace:10
+msgid "theContext: Optional theContext message."
+msgstr ""
+
+# 20332781164e4831b6eeeb76589b2d87
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getExceptionWithStacktrace:13
+msgid "Exception: with stack trace info suitable for display."
+msgstr ""
+
+# c075aa22204540ce97e18c44aae83814
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getLayerAttributeNames:1
+msgid ""
+"iterates over self.layer and returns all the attribute names of attributes "
+"that have int or string as field type and the position"
+msgstr ""
+
+# 1503d685460f459fa346f071a631b92a
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getLayerAttributeNames:3
+msgid "of the theCurrentKeyword in the attribute names list"
+msgstr ""
+
+# afc8b6a5baec43059437cb799389895f
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getLayerAttributeNames:7
+msgid ""
+"acceptable for the attribute. e.g.: [QtCore.QVariant.Int, QtCore.QVariant."
+"String]"
+msgstr ""
+
+# 78d0037591ba489ca33e4e39373ad5a4
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getLayerAttributeNames:9
+msgid "theCurrentKeyword - the currently stored keyword for the attribute"
+msgstr ""
+
+# a4bf197ba9fa4d9bbbfefbe64939d2ef
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getLayerAttributeNames:13
+msgid "field type"
+msgstr ""
+
+# f33b3e6bd43343bda08d05d67a32795f
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getLayerAttributeNames:15
+msgid "this is None if theCurrentKeyword is not in the lis of attributes"
+msgstr ""
+
+# 8d61a699245f40e3bbfef68cbefaab1a
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getWGS84resolution:1
+msgid "Return resolution of raster layer in EPSG:4326"
+msgstr ""
+
+# 244126f469a84470b7a385cb7bc72981
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getWGS84resolution:4
+msgid "theLayer: Raster layer"
+msgstr ""
+
+# a13ee5ab1e4b4cb0a92907647ebea7e5
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getWGS84resolution:6
+msgid "resolution."
+msgstr ""
+
+# 93488f49542643368023278a9769adf8
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.getWGS84resolution:8
+msgid ""
+"If input layer is already in EPSG:4326, simply return the resolution If not, "
+"work it out based on EPSG:4326 representations of its extent"
+msgstr ""
+
+# 1524cedb7a61498cbe6d1352f031e816
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.htmlFooter:1
+msgid "Get a standard html footer for wrapping content in."
+msgstr ""
+
+# 1d0e087ccd8c48329ee8ad408b9f43a8
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.htmlHeader:1
+msgid "Get a standard html header for wrapping content in."
+msgstr ""
+
+# 1cc61635d3c74f8692ddedf88ba9de52
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.humaniseSeconds:1
+msgid "Utility function to humanise seconds value into e.g. 10 seconds ago."
+msgstr ""
+
+# 9a3f58ffc60c4897a80d5c176112f608
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.humaniseSeconds:3
+msgid ""
+"The function will try to make a nice phrase of the seconds count provided."
+msgstr ""
+
+# 4c73a052f99f4cbfab0971984216b513
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.humaniseSeconds:6
+msgid "Currently theSeconds that amount to days are not supported."
+msgstr ""
+
+# 251e27a6dd83427d8eafba205dd15624
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.humaniseSeconds:9
+msgid "theSeconds: int - mandatory seconds value e.g. 1100"
+msgstr ""
+
+# 386164901cd042ef8bdaf1dfcf55ce0c
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.humaniseSeconds:12
+msgid "str: A humanised version of the seconds count."
+msgstr ""
+
+# 32e04fa0360247b39f5aaab8a5c14e00
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.impactLayerAttribution:1
+msgid "Make a little table for attribution of data sources used in impact."
+msgstr ""
+
+# c95e45a5ab644797a2768cbbd7cd64e3
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.impactLayerAttribution:4
+msgid "theKeywords: dict{} - a keywords dict for an impact layer."
+msgstr ""
+
+# 282f3c98b49e45ad919d451a71e2dec6
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.impactLayerAttribution:6
+msgid "text in the attribution output. Defaults to False."
+msgstr ""
+
+# 219d172ad2624395bb40819279ab6330
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.impactLayerAttribution:10
+msgid ""
+"layer. If no keywords are present or no appropriate keywords are present, "
+"None is returned."
+msgstr ""
+
+# a10bf655392c4a97b9299849aab138e0
+# ad1689fdc4664ff2a81fd8511969060b
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.isLayerPoint:1 safe_qgis.utilities.isLayerPolygonal:1
+msgid "Tell if a QGIS layer is vector and its geometries are polygons."
+msgstr ""
+
+# 08e16a825f854a7f8963d79a30e08073
+# ca8f79294c1142cb83126fa7c64cb5f9
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.isLayerPoint:4 safe_qgis.utilities.isLayerPolygonal:4
+msgid "the theLayer"
+msgstr ""
+
+# 6d91677fa56d45b081f2cba46dd6eabb
+# b5cec36f8ecf4857be8b25778e34faa4
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.isLayerPoint:7 safe_qgis.utilities.isLayerPolygonal:7
+msgid "bool - true if the theLayer contains polygons"
+msgstr ""
+
+# d3f583eaf65b4c11b237470f506cff2f
+# 685f8b9370a7413fbc51c9310d1218fc
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.mmToPoints:1 safe_qgis.utilities.pointsToMM:1
+msgid "Convert measurement in points to one in mm."
+msgstr ""
+
+# d7ccbdd21dac40219f789448ef9e1513
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.mmToPoints:4
+msgid "theMM: int - distance in millimeters"
+msgstr ""
+
+# f8faa678715049a5a3632bd52d8d7455
+# 0184cbc85af04794b13ec0b5585c68d5
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.mmToPoints:7 safe_qgis.utilities.pointsToMM:7
+msgid "mm converted value"
+msgstr ""
+
+# 63b916be533f4a92a06f79cfe4a6365d
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.pointsToMM:4
+msgid "thePoints: int - number of points in display / print medium"
+msgstr ""
+
+# 3ae19d41fceb48cbb4cf5175e56e8df6
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.qgisVersion:1
+msgid "Get the version of QGIS Args:"
+msgstr ""
+
+# de5c1ea246034cca824db62e72fd5727
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.qgisVersion:5
+msgid "QGIS Version where 10700 represents QGIS 1.7 etc."
+msgstr ""
+
+# 76f1775f171c4272b9cfc2b40bc81e82
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setRasterStyle:1
+msgid "Set QGIS raster style based on InaSAFE style dictionary."
+msgstr ""
+
+# 8a6807018a714d55919a3eee5139dc2d
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setRasterStyle:3
+msgid ""
+"This function will set both the colour map and the transparency for the "
+"passed in layer."
+msgstr ""
+
+# e8f88c93fbe44f1db0e6fcaae7129855
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setRasterStyle:7
+msgid "theQgsRasterLayer: QgsRasterLayer"
+msgstr ""
+
+# 150f450fe0a44e1cbd172251ce851c41
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setRasterStyle:8
+msgid "style: dict - Dictionary of the form as in the example below."
+msgstr ""
+
+# 6154b3b259754b5fbb07b78e35aa1c89
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setRasterStyle:12
+msgid ""
+"dict(colour='#38A800', quantity=5, transparency=50), dict(colour='#79C900', "
+"quantity=10, transparency=50), dict(colour='#CEED00', quantity=20, "
+"transparency=50), dict(colour='#FFCC00', quantity=50, transparency=34), dict"
+"(colour='#FF6600', quantity=100, transparency=77), dict(colour='#FF0000', "
+"quantity=200, transparency=24), dict(colour='#7A0000', quantity=300, "
+"transparency=22)]"
+msgstr ""
+
+# 376a60cf68024eb78e9cf49dfb4c3fb9
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setRasterStyle:21
+msgid "list: RangeList list: TransparencyList"
+msgstr ""
+
+# 05d60f712d0542b49ab256a87f8f7c7b
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:1
+msgid "Set QGIS vector style based on InaSAFE style dictionary."
+msgstr ""
+
+# eb7d852b6de04656bd352ab9a20fe250
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:3
+msgid ""
+"For **opaque** a value of **0** can be used. For **fully transparent**, a "
+"value of **100** can be used. The function should take care to scale the "
+"transparency level to between 0 and 100."
+msgstr ""
+
+# 5aa6335d70ae493fb20704616e8699e6
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:8
+msgid "theQgisVectorLayer: QgsMapLayer"
+msgstr ""
+
+# d5faf938fefc4e3eaebf503cb6b51eec
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:9
+msgid "theStyle: dict - Dictionary of the form as in the example below"
+msgstr ""
+
+# 355b7b23c04f4f1fab9ea4b64fd6db96
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:12
+msgid "None - Sets and saves style for theQgisVectorLayer"
+msgstr ""
+
+# 75cabf9da4f54d34a63d9411733b98d8
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:17
+msgid "Example:"
+msgstr ""
+
+# 09b711c434bd4082bbf1bc429d29e395
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:19
+msgid ""
+"{'target_field': 'DMGLEVEL', 'style_classes': [{'transparency': 1, 'max': "
+"1.5, 'colour': '#fecc5c',"
+msgstr ""
+
+# 974bab8a974f47fd9951f5e6960b2720
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:22
+msgid "'min': 0.5, 'label': 'Low damage', 'size' : 1},"
+msgstr ""
+
+# ed3f220fca554cf99f6cbb98d02e55c8
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:24
+msgid "'min': 1.5, 'label': 'Medium damage', 'size' : 1},"
+msgstr ""
+
+# 3059fe5afdbe4e5f9f7c2603c54c6223
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:26
+msgid "'min': 2.5, 'label': 'High damage', 'size' : 1}]}"
+msgstr ""
+
+# 25d1272c056044fa8594e160628d3ffd
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setVectorStyle:28
+msgid ""
+"The transparency and size keys are optional. Size applies to points only."
+msgstr ""
+
+# a44a41e541b746549e82e4d3d011be2c
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:1
+msgid "Run once when the module is loaded and enable logging"
+msgstr ""
+
+# bd4528b16b214446a93c0299ccb416c6
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:4
+msgid "theLogFile: str - optional full path to a file to write logs to."
+msgstr ""
+
+# 8f0fbfe5e4e1473cac1dd2d7e3b7a2e6
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:7
+msgid ":d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5"
+msgstr ""
+
+# a50476619d644dd29b191c327f7a6e22
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:8
+msgid "which is the sentry project for InaSAFE desktop."
+msgstr ""
+
+# edafb649fc0344acbf2b2bec1e49c242
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:10
+msgid "Returns: None"
+msgstr ""
+
+# 974c321cd0e0464b928aebae50fbbe8c
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:12
+msgid "Raises: None"
+msgstr ""
+
+# dd69f983116144e780f49ce34a5cf3dc
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:14
+msgid ""
+"Borrowed heavily from this: http://docs.python.org/howto/logging-cookbook."
+"html"
+msgstr ""
+
+# 4b5d1cb11fb14893805e77b8ad7ac86b
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:17
+msgid "Use this to first initialise the logger (see safe/__init__.py)::"
+msgstr ""
+
+# 03b2ac3ced7244109ccaa95aa48f7303
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:22
+msgid ""
+"You would typically only need to do the above once ever as the safe modle is "
+"initialised early and will set up the logger globally so it is available to "
+"all packages / subpackages as shown below."
+msgstr ""
+
+# 6c9ce9c936984b928183fe76c0821cdb
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:27
+msgid ""
+"In a module that wants to do logging then use this example as a guide to get "
+"the initialised logger instance::"
+msgstr ""
+
+# 1a1fbabefb9d4ae2b82489b91efc4b97
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:34
+msgid "Now to log a message do::"
+msgstr ""
+
+# 78c85c3c4931434a84a10a651de7f36e
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupLogger:38
+msgid ""
+"The file logs are written to the inasafe user tmp dir e.g.: /tmp/"
+"inasafe/23-08-2012/timlinux/logs/inasafe.log"
+msgstr ""
+
+# 43379dc9a1c6489d93698b0adbf6e95a
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupPrinter:1
+msgid "Create a QPrinter instance defaulted to print to an A4 portrait pdf"
+msgstr ""
+
+# c9b2312f816848e5bb2bda88dde5adb6
+#: ../../../safe_qgis/utilities.py:docstring of
+#: safe_qgis.utilities.setupPrinter:4
+msgid "theFilename - filename for pdf generated using this printer"
+msgstr ""
+
+# 1ec1468341dd4e2fb029edc3f2c0132b
+#: ../../../safe_qgis/utilities.py:docstring of safe_qgis.utilities.tr:1
+msgid ""
+"We define a tr() alias here since the utilities implementation below is not "
+"a class and does not inherit from QObject. .. note:: see http://tinyurl.com/"
+"pyqt-differences Args:"
+msgstr ""
+
+# 8655e873299940b7815e5214ca022bdb
+#: ../../../safe_qgis/utilities.py:docstring of safe_qgis.utilities.tr:5
+msgid "theText - string to be translated"
+msgstr ""
+
+# 8e87f689a03e42efb89df2de6a962a46
+#: ../../../safe_qgis/utilities.py:docstring of safe_qgis.utilities.tr:7
+msgid ""
+"Translated version of the given string if available, otherwise the original "
+"string."
+msgstr ""
+
+# 0564ac72e8b4400c9305137bb7532231
+#: ../../source/api-docs/safe_qgis/utilities.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

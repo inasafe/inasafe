@@ -22,11 +22,11 @@ import unittest
 from safe_qgis.safe_interface import (getOptimalExtent,
                                       availableFunctions,
                                       readKeywordsFromFile,
-                                      readSafeLayer)
+                                      readSafeLayer,
+                                      TESTDATA, HAZDATA, EXPDATA,
+                                      BoundingBoxError)
 from safe_qgis.exceptions import (KeywordNotFoundError,
                                   InsufficientOverlapError)
-from safe.common.exceptions import BoundingBoxError
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
 
 class SafeInterfaceTest(unittest.TestCase):
@@ -37,8 +37,8 @@ class SafeInterfaceTest(unittest.TestCase):
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')
-        self.rasterTsunamiPath = os.path.join(TESTDATA,
-                                'tsunami_max_inundation_depth_utm56s.tif')
+        self.rasterTsunamiPath = os.path.join(
+            TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif')
         self.rasterExposurePath = os.path.join(TESTDATA,
                                                'tsunami_building_exposure.shp')
 
@@ -130,7 +130,7 @@ class SafeInterfaceTest(unittest.TestCase):
             assert 'did not overlap' in str(e), myMessage
         else:
             myMessage = ('Non ovelapping bounding boxes should have raised '
-                   'an exception')
+                         'an exception')
             raise Exception(myMessage)
 
         # Try with wrong input data
@@ -143,7 +143,7 @@ class SafeInterfaceTest(unittest.TestCase):
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Invalid' in str(e), myMessage
         else:
-            myMessage = ('Wrong input data should have raised an exception')
+            myMessage = 'Wrong input data should have raised an exception'
             raise Exception(myMessage)
 
         try:
@@ -152,7 +152,7 @@ class SafeInterfaceTest(unittest.TestCase):
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'cannot be None' in str(e), myMessage
         else:
-            myMessage = ('Wrong input data should have raised an exception')
+            myMessage = 'Wrong input data should have raised an exception'
             raise Exception(myMessage)
 
         try:
@@ -161,7 +161,7 @@ class SafeInterfaceTest(unittest.TestCase):
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Instead i got "aoeush"' in str(e), myMessage
         else:
-            myMessage = ('Wrong input data should have raised an exception')
+            myMessage = 'Wrong input data should have raised an exception'
             raise Exception(myMessage)
 
     def test_availableFunctions(self):
@@ -188,8 +188,7 @@ class SafeInterfaceTest(unittest.TestCase):
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""
 
-        myKeyword = readKeywordsFromFile(
-                                    self.rasterShakePath, 'category')
+        myKeyword = readKeywordsFromFile(self.rasterShakePath, 'category')
         myExpectedKeyword = 'hazard'
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeyword, myExpectedKeyword, self.rasterShakePath)
@@ -197,8 +196,8 @@ class SafeInterfaceTest(unittest.TestCase):
 
         # Test we get an exception if keyword is not found
         try:
-            myKeyword = readKeywordsFromFile(
-                            self.rasterShakePath, 'boguskeyword')
+            _ = readKeywordsFromFile(self.rasterShakePath,
+                                     'boguskeyword')
         except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
@@ -220,7 +219,8 @@ class SafeInterfaceTest(unittest.TestCase):
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
         myExpectedKeywords = {'category': 'exposure',
                               'source': ('Center for International Earth '
-                                       'Science Information Network (CIESIN)'),
+                                         'Science Information Network '
+                                         '(CIESIN)'),
                               'subcategory': 'population',
                               'datatype': 'density',
                               'title': 'People'}
@@ -239,7 +239,7 @@ class SafeInterfaceTest(unittest.TestCase):
         #  tsunami example (one layer is UTM)
         myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)
         myExpectedKeywords = {'title': 'Tsunami Max Inundation',
-                               'category': 'hazard',
+                              'category': 'hazard',
                               'subcategory': 'tsunami',
                               'unit': 'm'}
         myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,

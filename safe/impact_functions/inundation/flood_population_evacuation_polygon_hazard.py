@@ -5,15 +5,19 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_question)
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr,
-                                   format_int)
+                                   format_int,
+                                   round_thousand,
+                                   get_defaults)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.common.utilities import get_defaults
 from third_party.odict import OrderedDict
+
+import logging
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
-    """Impact function for flood evacuation
+    """Impact function for vector flood evacuation
 
     :author AIFDR
     :rating 4
@@ -27,10 +31,31 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     """
 
     title = tr('Need evacuation')
+    # Function documentation
+    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
+                  'in vector format on population.')
+    actions = tr('Provide details about how many people would likely need '
+                 'to be evacuated, where they are located and what resources '
+                 'would be required to support them.')
+
+    detailed_description = \
+        tr('The population subject to inundation is determined whether in'
+           'an area which affected or not. You can also set an evacuation'
+           'percentage to calculate how many percent of the total population'
+           'affected to be evacuated. This number will be used to estimate'
+           'needs based on BNPB Perka 7/2008 minimum bantuan.')
+
+    hazard_input = tr('A hazard vector layer which has attribute affected '
+                      'the value is either 1 or 0')
+    exposure_input = tr('An exposure raster layer where each cell represent '
+                        'population count.')
+    output = tr('Vector layer contains population affected and the minimum'
+                'needs based on evacuation percentage.')
+
     target_field = 'population'
     defaults = get_defaults()
     parameters = OrderedDict([
-        ('evacuation_percentage', 1),  # Percent of affected needing evac
+        ('evacuation_percentage', 1),  # Percent of affected needing evacuation
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -45,8 +70,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Vector polygon layer of flood depth
-              P: Raster layer of population data on the same grid as H
+              my_hazard : Vector polygon layer of flood depth
+              my_exposure : Raster layer of population data on the same
+                            grid as my_hazard
 
         Counts number of people exposed to areas identified as flood prone
 
@@ -55,37 +81,41 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
           Table with number of people evacuated and supplies required
         """
         # Identify hazard and exposure layers
-        H = get_hazard_layer(layers)  # Flood inundation
-        E = get_exposure_layer(layers)
+        my_hazard = get_hazard_layer(layers)  # Flood inundation
+        my_exposure = get_exposure_layer(layers)
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
+        question = get_question(my_hazard.get_name(),
+                                my_exposure.get_name(),
                                 self)
 
         # Check that hazard is polygon type
-        if not H.is_vector:
+        if not my_hazard.is_vector:
             msg = ('Input hazard %s  was not a vector layer as expected '
-                   % H.get_name())
+                   % my_hazard.get_name())
             raise Exception(msg)
 
         msg = ('Input hazard must be a polygon layer. I got %s with layer '
-               'type %s' % (H.get_name(),
-                            H.get_geometry_name()))
-        if not H.is_polygon_data:
+               'type %s' % (my_hazard.get_name(),
+                            my_hazard.get_geometry_name()))
+        if not my_hazard.is_polygon_data:
             raise Exception(msg)
 
         # Run interpolation function for polygon2raster
-        P = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name='population')
+        P = assign_hazard_values_to_exposure_data(my_hazard, my_exposure,
+                                                  attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
-        new_attributes = H.get_data()
-        category_title = 'FLOODPRONE'  # FIXME: Should come from keywords
+        new_attributes = my_hazard.get_data()
+        category_title = 'affected'  # FIXME: Should come from keywords
+        deprecated_category_title = 'FLOODPRONE'
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
-            cat = attr[category_title]
+            try:
+                cat = attr[category_title]
+            except KeyError:
+                cat = attr['FLOODPRONE']
             categories[cat] = 0
 
         # Count affected population per polygon, per category and total
@@ -95,8 +125,11 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             affected = False
             if 'affected' in attr:
                 res = attr['affected']
-                if res is not None:
-                    affected = res
+                if res is None:
+                    x = False
+                else:
+                    x = bool(res)
+                affected = x
             elif 'FLOODPRONE' in attr:
                 # If there isn't an 'affected' attribute,
                 res = attr['FLOODPRONE']
@@ -110,6 +143,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     x = False
                 else:
                     x = res
+                affected = x
             else:
                 # there is no flood related attribute
                 msg = ('No flood related attribute found in %s. '
@@ -129,24 +163,26 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 new_attributes[poly_id][self.target_field] += pop
 
                 # Update population count for each category
-                cat = new_attributes[poly_id][category_title]
+                try:
+                    cat = new_attributes[poly_id][category_title]
+                except KeyError:
+                    cat = new_attributes[poly_id][deprecated_category_title]
                 categories[cat] += pop
 
                 # Update total
                 affected_population += pop
 
+        affected_population = round_thousand(affected_population)
         # Estimate number of people in need of evacuation
         evacuated = (affected_population *
                      self.parameters['evacuation_percentage']
                      / 100.0)
 
-        total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
+        total = int(numpy.sum(my_exposure.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
-        if total > 1000:
-            total = total // 1000 * 1000
-        if evacuated > 1000:
-            evacuated = evacuated // 1000 * 1000
+        total = round_thousand(total)
+        evacuated = round_thousand(evacuated)
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         rice = evacuated * 2.8  # 400g per person per day
@@ -158,14 +194,14 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('People affected'),
-                                '%s' % format_int(int(affected_population))],
+                                '%s*' % format_int(int(affected_population))],
                                header=True),
                       TableRow([tr('People needing evacuation'),
                                 '%s*' % format_int(int(evacuated))],
                                header=True),
                       TableRow([
                           TableCell(
-                              tr('* Evacuation count rounded to nearest 1000'),
+                              tr('* Number is rounded to the nearest 1000'),
                               col_span=2)],
                           header=False),
                       TableRow([tr('Evacuation threshold'),
@@ -178,7 +214,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                                header=True),
                       [tr('Rice [kg]'), format_int(int(rice))],
                       [tr('Drinking Water [l]'),
-                            format_int(int(drinking_water))],
+                       format_int(int(drinking_water))],
                       [tr('Clean Water [l]'), format_int(int(water))],
                       [tr('Family Kits'), format_int(int(family_kits))],
                       [tr('Toilets'), format_int(int(toilets))]]
@@ -189,18 +225,18 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         table_body.append(TableRow(tr('How will we reach stranded people?')))
         table_body.append(TableRow(tr('Do we have enough relief items?')))
         table_body.append(TableRow(tr('If yes, where are they located and how '
-                                     'will we distribute them?')))
+                                      'will we distribute them?')))
         table_body.append(TableRow(tr('If no, where can we obtain additional '
-                                     'relief items from and how will we '
-                                     'transport them to here?')))
+                                      'relief items from and how will we '
+                                      'transport them to here?')))
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
                            tr('Total population: %s') % format_int(total),
                            tr('People need evacuation if in area identified '
-                             'as "Flood Prone"'),
+                              'as "Flood Prone"'),
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                              'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People affected by flood prone areas')
 
@@ -236,8 +272,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=new_attributes,
-                   projection=H.get_projection(),
-                   geometry=H.get_geometry(),
+                   projection=my_hazard.get_projection(),
+                   geometry=my_hazard.get_geometry(),
                    name=tr('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,

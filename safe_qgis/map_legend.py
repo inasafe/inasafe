@@ -226,7 +226,7 @@ class MapLegend():
                          theMin=None,
                          theMax=None,
                          theCategory=None,
-                         theLabel=None):
+                         theLabel=''):
         """Add a class to the current legend. If the legend is not defined,
         a new one will be created. A legend is just an image file with nicely
         rendered classes in it.
@@ -273,14 +273,23 @@ class MapLegend():
         myExtraVerticalSpace = 8  # hack to get label centered on graphic
         myOffset += myCenterVerticalPadding + myExtraVerticalSpace
         myPainter.setFont(myFont)
-        myLabel = ''
-        if theLabel:
-            myLabel = theLabel
+        if theLabel != '':
+            theLabel += ' '
         if theMin is not None and theMax is not None:
-            myLabel += ' [' + str(theMin) + ', ' + str(theMax) + ']'
+            if float(theMin) - int(theMin) == 0.0:
+                myMinString = '%i' % theMin
+            else:
+                myMinString = str(theMin)
+
+            if float(theMax) - int(theMax) == 0.0:
+                myMaxString = '%i' % theMax
+            else:
+                myMaxString = str(theMax)
+
+            theLabel += '[' + myMinString + ', ' + myMaxString + ']'
         if theCategory is not None:
-            myLabel = ' (' + theCategory + ')'
-        myPainter.drawText(myLabelX, myOffset + 25, myLabel)
+            theLabel = ' (' + theCategory + ')'
+        myPainter.drawText(myLabelX, myOffset + 25, theLabel)
 
     def extendLegend(self):
         """Grow the legend pixmap enough to accommodate one more legend entry.
@@ -315,10 +324,10 @@ class MapLegend():
             myPainter.drawText(10, 25, self.tr('Legend'))
         else:
             # extend the existing legend down for the next class
-            myImage = QtGui.QImage(self.legendWidth,
-                                     self.legendImage.height() +
-                                          self.legendIncrement,
-                                     QtGui.QImage.Format_RGB32)
+            myImage = QtGui.QImage(
+                self.legendWidth,
+                self.legendImage.height() + self.legendIncrement,
+                QtGui.QImage.Format_RGB32)
             myImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             myImage.setDotsPerMeterY(dpiToMeters(self.dpi))
             # Only works in Qt4.8

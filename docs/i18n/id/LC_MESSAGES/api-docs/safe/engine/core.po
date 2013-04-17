@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-28 10:26\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# cfb8c7ce50f745c390fac68ab97b0231
+#: ../../source/api-docs/safe/engine/core.rst:6
+msgid "Module:  safe.engine.core"
+msgstr ""
+
+# 82f3cb5850c34dc091c6da97d59ba53e
+#: ../../../safe/engine/core.py:docstring of safe.engine.core:1
+msgid "Computational engine for InaSAFE core."
+msgstr ""
+
+# 6053f2474baa496db65f8f5bfaf8dbab
+#: ../../../safe/engine/core.py:docstring of safe.engine.core:3
+msgid "Provides the function calculate_impact()"
+msgstr ""
+
+# ffedf73f56e7478c988b14affa8fb861
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.calculate_impact:1
+msgid "Calculate impact levels as a function of list of input layers"
+msgstr ""
+
+# 93d95ca0e0ac47a498c696ff333dca0e
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.calculate_impact:4
+msgid "layers: List of Raster and Vector layer objects to be used for analysis"
+msgstr ""
+
+# 24d71cbb56124d1799be9bfecd3d6c44
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.calculate_impact:6
+msgid "impact_fcn: Function of the form f(layers)"
+msgstr ""
+
+# f278f5bf90f14a8db3adcc5410b4a15a
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.calculate_impact:9
+msgid ""
+"filename of resulting impact layer (GML). Comment is embedded as metadata. "
+"Filename is generated from input data and date."
+msgstr ""
+
+# 2a5ac458a20b4d05b063cea64b67d53e
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.calculate_impact:13
+msgid ""
+"The admissible file types are tif and asc/prj for raster and gml or shp for "
+"vector data"
+msgstr ""
+
+# b76b9b6c777f4e3799046b9da3c51018
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.calculate_impact:17
+msgid "All layers are in WGS84 geographic coordinates"
+msgstr ""
+
+# d832baa1f7974e10a2e428143cfecf50
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.calculate_impact:18
+msgid "Layers are equipped with metadata such as names and categories"
+msgstr ""
+
+# 7dde02841e4141eb9999c6be89e39d14
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.check_data_integrity:1
+msgid "Check list of layer objects"
+msgstr ""
+
+# 1005a4de62474d438039b7ee9fdfd2d0
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.check_data_integrity:4
+msgid "layer_objects: List of InaSAFE layer instances"
+msgstr ""
+
+# b3b1b9eca06c4c20a328aef970ba2f4e
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.check_data_integrity:7
+msgid "Nothing"
+msgstr ""
+
+# afccc9e307f14b15a6b6c75825588b68
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.check_data_integrity:10
+msgid "Exceptions for a range of errors"
+msgstr ""
+
+# 4b81da667e5e467ba79e3b08ec5b56a0
+#: ../../../safe/engine/core.py:docstring of
+#: safe.engine.core.check_data_integrity:12
+msgid ""
+"This function checks that * Layers have correct keywords * That they have "
+"the same georeferences"
+msgstr ""
+
+# 1ec84d7534b3448dab955d35799b2022
+#: ../../source/api-docs/safe/engine/core.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

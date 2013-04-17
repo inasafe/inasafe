@@ -59,17 +59,22 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getLegend.png',
-                           'getLegend-variantWindosVistaSP2-32.png',
+                           'getLegend-variantWindowsVistaSP2-32.png',
                            'getLegend-variantWindowsXPSP3-32.png',
-                           'getClassToLegend-variantUB12.04-64.png',
-                           'getClassToLegend-variantUB11.04-64.png',
+                           'getLegend-variantOSXml.png',
+                           'getLegend-variantUB12.04-64.png',
+                           'getLegend-variantUB11.04-64.png',
+                           'getLegend-variantLinuxMint-14-x86_64.png',
+                           'getLegend-variantWindows7-SP1-AMD64.png',
                            'getLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
+
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-            'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
         LOGGER.debug('test_getLegend done')
 
@@ -87,17 +92,19 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getVectorLegend.png',
-                           'getVectorLegend-variantWindosVistaSP2-32.png',
+                           'getVectorLegend-variantWindowsVistaSP2-32.png',
                            'getVectorLegend-variantWindowsXPSP3-32.png',
+                           'getVectorLegend-variantOSXml.png',
                            'getVectorLegend-variantUB12.04-64.png',
                            'getVectorLegend-variantUB11.04-64.png',
+                           'getVectorLegend-variantLinuxMint-14-x86_64.png',
+                           'getVectorLegend-variantWindows7-SP1-AMD64.png',
                            'getVectorLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages,
-                                    myPath,
-                                    myTolerance)
+        myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
     def test_getRasterLegend(self):
@@ -114,17 +121,22 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getRasterLegend.png',
-                           'getRasterLegend-variantWindosVistaSP2-32.png',
+                           'getRasterLegend-variantWindowsVistaSP2-32.png',
                            'getRasterLegend-variantWindowsXPSP3-32.png',
+                           'getRasterLegend-variantOSXml.png',
                            'getRasterLegend-variantUB12.04-64.png',
+                           'getRasterLegend-variantUB12.10-64.png',
                            'getRasterLegend-variantUB11.04-64.png',
+                           'getRasterLegend-variantLinuxMint-14-x86_64.png',
+                           'getRasterLegend-variantWindows7-SP1-AMD64.png',
                            'getRasterLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
     def test_addSymbolToLegend(self):
@@ -134,11 +146,12 @@ class MapLegendTest(unittest.TestCase):
         mySymbol = QgsSymbol()
         mySymbol.setColor(QtGui.QColor(12, 34, 56))
         myMapLegend.addSymbolToLegend(mySymbol,
-                                theMin=0,
-                                theMax=2,
-                                theCategory=None,
-                                theLabel='Foo')
-        myPath = unique_filename(prefix='addSymblToLegend',
+                                      theMin=0,
+                                      # expect 2.0303 in legend
+                                      theMax=2.02030,
+                                      theCategory=None,
+                                      theLabel='Foo')
+        myPath = unique_filename(prefix='addSymbolToLegend',
                                  suffix='.png',
                                  dir=temp_dir('test'))
         myMapLegend.getLegend().save(myPath, 'PNG')
@@ -147,17 +160,22 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['addSymbolToLegend.png',
-                           'addSymbolToLegend-variantWindosVistaSP2-32.png',
+                           'addSymbolToLegend-variantWindowsVistaSP2-32.png',
                            'addSymbolToLegend-variantWindowsXPSP3-32.png',
+                           'addSymbolToLegend-variantOSXml.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
+                           'addSymbolToLegend-variantUB12.10-64.png',
                            'addSymbolToLegend-variantUB11.04-64.png',
+                           'addSymbolToLegend-variantLinuxMint-14-x86_64.png',
+                           'addSymbolToLegend-variantWindows7-SP1-AMD64.png',
                            'addSymbolToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
     def test_addClassToLegend(self):
@@ -166,15 +184,15 @@ class MapLegendTest(unittest.TestCase):
         myMapLegend = MapLegend(myLayer)
         myColour = QtGui.QColor(12, 34, 126)
         myMapLegend.addClassToLegend(myColour,
-                               theMin=None,
-                               theMax=None,
-                               theCategory=None,
-                               theLabel='bar')
+                                     theMin=None,
+                                     theMax=None,
+                                     theCategory=None,
+                                     theLabel='bar')
         myMapLegend.addClassToLegend(myColour,
-                               theMin=None,
-                               theMax=None,
-                               theCategory=None,
-                               theLabel='foo')
+                                     theMin=None,
+                                     theMax=None,
+                                     theCategory=None,
+                                     theLabel='foo')
         myPath = unique_filename(prefix='addClassToLegend',
                                  suffix='.png',
                                  dir=temp_dir('test'))
@@ -183,18 +201,23 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getClassToLegend.png',
-                           'getClassToLegend-variantWindosVistaSP2-32.png',
-                           'getClassToLegend-variantWindowsXPSP3-32.png',
-                           'getClassToLegend-variantUB12.04-64.png',
-                           'getClassToLegend-variantUB11.04-64.png',
-                           'getClassToLegend-variantJenkins.png']
+        myControlImages = ['addClassToLegend.png',
+                           'addClassToLegend-variantWindowsVistaSP2-32.png',
+                           'addClassToLegend-variantWindowsXPSP3-32.png',
+                           'addClassToLegend-variantOSXml.png',
+                           'addClassToLegend-variantUB12.04-64.png',
+                           'addClassToLegend-variantUB12.10-64.png',
+                           'addClassToLegend-variantUB11.04-64.png',
+                           'addClassToLegend-variantLinuxMint-14-x86_64.png',
+                           'addClassToLegend-variantWindows7-SP1-AMD64.png',
+                           'addClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
-                'copy the test image generated to create a new control image.')
+                      'copy the test image generated to create a new control '
+                      'image.')
         assert myFlag, myMessage
 
 if __name__ == '__main__':

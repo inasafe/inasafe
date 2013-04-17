@@ -24,7 +24,7 @@ import unittest
 import logging
 import difflib
 import PyQt4
-from qgis.core import QgsFeature
+from qgis.core import QgsFeatureRequest
 from safe.api import unique_filename, temp_dir
 from safe_qgis.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir, dataDir
@@ -196,17 +196,16 @@ searchBoxes: None
         myCitiesLayer = myShakeEvent.localCitiesMemoryLayer()
         myProvider = myCitiesLayer.dataProvider()
 
-        myFeature = QgsFeature()
-        myAttributes = myProvider.attributeIndexes()
-        myProvider.select(myAttributes)
         myExpectedFeatureCount = 6
         self.assertEquals(myProvider.featureCount(), myExpectedFeatureCount)
         myStrings = []
-        while myProvider.nextFeature(myFeature):
+        myRequest = QgsFeatureRequest()
+        for myFeature in myCitiesLayer.getFeatures(myRequest):
             # fetch map of attributes
-            myAttributes = myFeature.attributeMap()
-            for (myKey, myValue) in myAttributes.iteritems():
-                myStrings.append("%d: %s\n" % (myKey, myValue.toString()))
+            myAttributes = myCitiesLayer.dataProvider().attributeIndexes()
+            for myKey in myAttributes:
+                myStrings.append("%d: %s\n" % (myKey,
+                                               myFeature[myKey].toString()))
             myStrings.append('------------------\n')
         LOGGER.debug('Mem table:\n %s' % myStrings)
         myFilePath = unique_filename(prefix='testLocalCities',
@@ -257,20 +256,23 @@ searchBoxes: None
         myShakeEvent = ShakeEvent(myShakeId)
         myResult, myFatalitiesHtml = myShakeEvent.calculateImpacts()
 
-        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
-                           '/20120726022003/impact-nearest.tif')
+        myExpectedResult = (
+            '/tmp/inasafe/realtime/shakemaps-extracted'
+            '/20120726022003/impact-nearest.tif')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
-        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
-                            '/20120726022003/impacts.html')
+        myExpectedResult = (
+            '/tmp/inasafe/realtime/shakemaps-extracted'
+            '/20120726022003/impacts.html')
 
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml,
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
+            myFatalitiesHtml,
             myExpectedResult)
         assert myFatalitiesHtml == myExpectedResult, myMessage
 
-        myExpectedFatalities = {2: 0.47386375223673427,
-                                3: 0.024892573693488258,
+        myExpectedFatalities = {2: 0.0,  # rounded from 0.47386375223673427,
+                                3: 0.0,  # rounded from 0.024892573693488258,
                                 4: 0.0,
                                 5: 0.0,
                                 6: 0.0,
@@ -279,7 +281,7 @@ searchBoxes: None
                                 9: 0.0}
 
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
-                myShakeEvent.fatalityCounts, myExpectedFatalities)
+            myShakeEvent.fatalityCounts, myExpectedFatalities)
         assert myShakeEvent.fatalityCounts == myExpectedFatalities, myMessage
 
     def testBoundsToRect(self):
@@ -287,8 +289,9 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myBounds = myShakeEvent.boundsToRectangle().toString()
-        myExpectedResult = ('122.4500000000000028,-2.2100000000000000 : '
-                           '126.4500000000000028,1.7900000000000000')
+        myExpectedResult = (
+            '122.4500000000000028,-2.2100000000000000 : '
+            '126.4500000000000028,1.7900000000000000')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myBounds, myExpectedResult)
         assert myBounds == myExpectedResult, myMessage
 
@@ -311,18 +314,9 @@ searchBoxes: None
         myShakeEvent = ShakeEvent(myShakeId)
 
         myValues = range(0, 12)
-        myExpectedResult = ['#FFFFFF',
-                            '#209fff',
-                            '#00cfff',
-                            '#55ffff',
-                            '#aaffff',
-                            '#fff000',
-                            '#ffa800',
-                            '#ff7000',
-                            '#ff0000',
-                            '#D00',
-                            '#800',
-                            '#400']
+        myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
+                            '#55ffff', '#aaffff', '#fff000', '#ffa800',
+                            '#ff7000', '#ff0000', '#D00', '#800']
         myResult = []
         for myValue in myValues:
             myResult.append(myShakeEvent.mmiColour(myValue))
@@ -370,8 +364,9 @@ searchBoxes: None
                     (myResult, myExpectedResult, myTable))
         assert myResult == myExpectedResult, myMessage
 
-        myExpectedPath = ('/tmp/inasafe/realtime/shakemaps-extracted/'
-                         '20120726022003/affected-cities.html')
+        myExpectedPath = (
+            '/tmp/inasafe/realtime/shakemaps-extracted/'
+            '20120726022003/affected-cities.html')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myPath, myExpectedPath)
         assert myPath == myExpectedPath, myMessage
 
@@ -382,8 +377,9 @@ searchBoxes: None
         myShakeEvent.calculateImpacts()
         myResult = myShakeEvent.impactTable()
         # TODO compare actual content of impact table...
-        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted/'
-                           '20120726022003/impacts.html')
+        myExpectedResult = (
+            '/tmp/inasafe/realtime/shakemaps-extracted/'
+            '20120726022003/impacts.html')
         myMessage = ('Got:\n%s\nExpected:\n%s' %
                     (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
@@ -399,7 +395,9 @@ searchBoxes: None
                               u'Estimated fatalities'),
                           'fatalities-count': u'0',  # 44 only after render
                           'elapsed-time': u'',  # empty as it will change
-                          'legend-name': 'Population density',
+                          'legend-name': PyQt4.QtCore.QString(
+                              u'Population density'),
+                          'fatalities-range': '0 - 100',
                           'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
                           'located-label': PyQt4.QtCore.QString(u'Located'),
                           'distance-unit': PyQt4.QtCore.QString(u'km'),
@@ -407,7 +405,7 @@ searchBoxes: None
                           'elapsed-time-name': PyQt4.QtCore.QString(
                               u'Elapsed time since event'),
                           'exposure-table-name': PyQt4.QtCore.QString(
-                              u'Estimated number of people exposed to each '
+                              u'Estimated number of people affected by each '
                               u'MMI level'),
                           'longitude-value': u'124\xb027\'0.00"E',
                           'city-table-name': PyQt4.QtCore.QString(
@@ -430,7 +428,10 @@ searchBoxes: None
                               u' be made solely on the information presented '
                               u'here and should always be verified by ground '
                               u'truthing and other reliable information '
-                              u'sources.'),
+                              u'sources. The fatality calculation assumes '
+                              u'that no fatalities occur for shake levels '
+                              u'below MMI 4. Fatality counts of less than 50 '
+                              u'are disregarded.'),
                           'depth-unit': PyQt4.QtCore.QString(u'km'),
                           'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
                           'mmi': '5.0', 'map-name': PyQt4.QtCore.QString(
@@ -446,9 +447,10 @@ searchBoxes: None
                           'latitude-value': u'0\xb012\'36.00"S',
                           'time': '2:15:35', 'depth-value': '11.0'}
         myResult['elapsed-time'] = u''
-        myMessage = ('Got:\n%s\nExpected:\n%s\n' %
-             (myResult, myExpectedDict))
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedDict)
         self.maxDiff = None
+        myDifference = DictDiffer(myResult, myExpectedDict)
+        print myDifference.all()
         self.assertDictEqual(myExpectedDict, myResult, myMessage)
 
     def testEventInfoString(self):
@@ -504,14 +506,52 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId, theLocale='en')
         myShakeEvent.extractDateTime('2012-08-07T01:55:12WIB')
-        self.assertEqual('01', myShakeEvent.hour)
-        self.assertEqual('55', myShakeEvent.minute)
-        self.assertEqual('12', myShakeEvent.second)
+        self.assertEqual(1, myShakeEvent.hour)
+        self.assertEqual(55, myShakeEvent.minute)
+        self.assertEqual(12, myShakeEvent.second)
         myShakeEvent.extractDateTime('2013-02-07T22:22:37WIB')
-        self.assertEqual('22', myShakeEvent.hour)
-        self.assertEqual('22', myShakeEvent.minute)
-        self.assertEqual('37', myShakeEvent.second)
+        self.assertEqual(22, myShakeEvent.hour)
+        self.assertEqual(22, myShakeEvent.minute)
+        self.assertEqual(37, myShakeEvent.second)
 
+
+class DictDiffer(object):
+    """
+    Taken from
+    http://stackoverflow.com/questions/1165352/
+                  fast-comparison-between-two-python-dictionary
+    Calculate the difference between two dictionaries as:
+    (1) items added
+    (2) items removed
+    (3) keys same in both but changed values
+    (4) keys same in both and unchanged values
+    """
+
+    def __init__(self, current_dict, past_dict):
+        self.current_dict, self.past_dict = current_dict, past_dict
+        self.set_current, self.set_past = set(current_dict.keys()), set(
+            past_dict.keys())
+        self.intersect = self.set_current.intersection(self.set_past)
+
+    def added(self):
+        return self.set_current - self.intersect
+
+    def removed(self):
+        return self.set_past - self.intersect
+
+    def changed(self):
+        return set(o for o in self.intersect if
+                   self.past_dict[o] != self.current_dict[o])
+
+    def unchanged(self):
+        return set(o for o in self.intersect if
+                   self.past_dict[o] == self.current_dict[o])
+
+    def all(self):
+        string = 'Added: %s\n' % self.added()
+        string += 'Removed: %s\n' % self.removed()
+        string += 'changed: %s\n' % self.changed()
+        return string
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

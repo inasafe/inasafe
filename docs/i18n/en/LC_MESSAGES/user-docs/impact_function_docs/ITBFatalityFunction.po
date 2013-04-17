@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# cf8277bf51b84ff3a8cfdcc157127905
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:6
+msgid "I T B Fatality Function"
+msgstr ""
+
+# 839ef2c69bd7413fa1f20212f86be0e1
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:9
+msgid "Overview"
+msgstr ""
+
+# c4b5b834848c4ca0ab0034e6676fa5d1
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:11
+msgid "**Unique Identifier**: I T B Fatality Function"
+msgstr ""
+
+# aa36289f7fc0441582d57f5ee0ea344a
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:13
+msgid "**Rating**: 3"
+msgstr ""
+
+# 8d5c41a377d64fe882382261abdb08e7
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:15
+msgid "**Title**: Die or be displaced"
+msgstr ""
+
+# 774840cda5564bc59f76cbba2c63c975
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:17
+msgid "**Author**: Hadi Ghasemi"
+msgstr ""
+
+# af604908b1e64474913de07fbb8fd2a0
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:20
+msgid "Details"
+msgstr ""
+
+# 736198a1063c45669d60abda3ff0e809
+#: ../../source/user-docs/impact_function_docs/ITBFatalityFunction.rst:22
+msgid "No documentation found"
+msgstr ""

@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 838af702341f4bd2a4470ec5fdaaee39
+#: ../../source/api-docs/safe_qgis_tests/test_qgis_environment.rst:6
+msgid "Module:  safe_qgis.test_qgis_environment"
+msgstr ""
+
+# 2fba906136f44122a5b152dc8b9b464e
+#: ../../../safe_qgis/test_qgis_environment.py:docstring of
+#: safe_qgis.test_qgis_environment:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **ISClipper test "
+"suite.**"
+msgstr ""
+
+# d25bcd91e8634be9b7d740511c6debe3
+#: ../../../safe_qgis/test_qgis_environment.py:docstring of
+#: safe_qgis.test_qgis_environment:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 861b13d84b6846e6b1ea2c4459d914e0
+#: ../../../safe_qgis/test_qgis_environment.py:docstring of
+#: safe_qgis.test_qgis_environment:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 67ea6e14ba26430a96a40d6d39ac36df
+#: ../../../safe_qgis/test_qgis_environment.py:docstring of
+#: safe_qgis.test_qgis_environment.QGISTest:1
+msgid "Test the QGIS Environment"
+msgstr ""
+
+# 018f2b8e21964c86990e1ef59466596f
+#: ../../../safe_qgis/test_qgis_environment.py:docstring of
+#: safe_qgis.test_qgis_environment.QGISTest.testProjInterpretation:1
+msgid ""
+"Test that QGIS properly parses a proj4 string. see https://github.com/AIFDR/"
+"inasafe/issues/349"
+msgstr ""
+
+# 7103ab0b1f4e4174854b3ef82effa0f6
+#: ../../../safe_qgis/test_qgis_environment.py:docstring of
+#: safe_qgis.test_qgis_environment.QGISTest.test_QGISEnvironment:1
+msgid "QGIS environment has the expected providers"
+msgstr ""
+
+# 85045526b93d40b49cc361f2e2279c50
+#: ../../source/api-docs/safe_qgis_tests/test_qgis_environment.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

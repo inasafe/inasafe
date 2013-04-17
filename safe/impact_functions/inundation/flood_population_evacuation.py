@@ -8,14 +8,15 @@ from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
                                    get_defaults,
-                                   format_int)
-from safe.common.utilities import verify
+                                   format_int,
+                                   verify,
+                                   round_thousand)
 from safe.common.tables import Table, TableRow
 from third_party.odict import OrderedDict
 
 
 class FloodEvacuationFunction(FunctionProvider):
-    """Risk plugin for flood evacuation
+    """Impact function for flood evacuation
 
     :author AIFDR
     :rating 4
@@ -34,40 +35,35 @@ class FloodEvacuationFunction(FunctionProvider):
 
     # Function documentation
     synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
-                  'on population.')
+                  'in raster format on population.')
     actions = tr('Provide details about how many people would likely need '
                  'to be evacuated, where they are located and what resources '
                  'would be required to support them.')
-    #citations = []
-    detailed_description = tr('The population subject to inundation '
-                              'exceeding a threshold (default 1m) is '
-                              'calculated and returned as a raster layer.'
-                              'In addition the total number and the required '
-                              'needs in terms of the BNPB (Perka 7) '
-                              'are reported. The threshold can be changed and '
-                              'even contain multiple numbers in which case '
-                              'evacuation and needs are calculated using '
-                              'the largest number with population breakdowns '
-                              'provided for the smaller numbers. The '
-                              'population '
-                              'raster is resampled to the resolution of the '
-                              'hazard raster and is rescaled so that the '
-                              'resampled population counts reflect estimates '
-                              'of population count per resampled cell. '
-                              'The resulting impact layer has the same '
-                              'resolution and reflects population count '
-                              'per cell which are affected by inundation.')
-    permissible_hazard_input = tr('A hazard raster layer where each cell '
-        'represents flood depth (in meters).')
-    permissible_exposure_input = tr('An exposure raster layer where each '
-                                    'cell '
-                                    'represent population count.')
+    detailed_description = \
+        tr('The population subject to inundation exceeding a threshold '
+           '(default 1m) is calculated and returned as a raster layer.'
+           'In addition the total number and the required needs in terms '
+           'of the BNPB (Perka 7) are reported. The threshold can be '
+           'changed and even contain multiple numbers in which case '
+           'evacuation and needs are calculated using the largest number '
+           'with population breakdowns provided for the smaller numbers. The '
+           'population raster is resampled to the resolution of the '
+           'hazard raster and is rescaled so that the resampled population '
+           'counts reflect estimates of population count per resampled cell. '
+           'The resulting impact layer has the same resolution and reflects '
+           'population count per cell which are affected by inundation.')
+    hazard_input = tr('A hazard raster layer where each cell '
+                      'represents flood depth (in meters).')
+    exposure_input = tr('An exposure raster layer where each '
+                        'cell represent population count.')
+    output = tr('Raster layer contains population affected and the minimum'
+                'needs based on the population affected.')
     limitation = tr('The default threshold of 1 meter was selected based on '
                     'consensus, not hard evidence.')
 
     # Configurable parameters
     parameters = OrderedDict([
-        ('thresholds', [1.0]),
+        ('thresholds [m]', [1.0]),
         ('postprocessors', OrderedDict([
             ('Gender', {'on': True}),
             ('Age', {
@@ -94,32 +90,32 @@ class FloodEvacuationFunction(FunctionProvider):
         """
 
         # Identify hazard and exposure layers
-        inundation = get_hazard_layer(layers)  # Flood inundation [m]
-        population = get_exposure_layer(layers)
+        my_hazard = get_hazard_layer(layers)  # Flood inundation [m]
+        my_exposure = get_exposure_layer(layers)
 
-        question = get_question(inundation.get_name(),
-                                population.get_name(),
+        question = get_question(my_hazard.get_name(),
+                                my_exposure.get_name(),
                                 self)
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = self.parameters['thresholds']
+        thresholds = self.parameters['thresholds [m]']
 
         verify(isinstance(thresholds, list),
                'Expected thresholds to be a list. Got %s' % str(thresholds))
 
         # Extract data as numeric arrays
-        D = inundation.get_data(nan=0.0)  # Depth
+        D = my_hazard.get_data(nan=0.0)  # Depth
 
         # Calculate impact as population exposed to depths > max threshold
-        P = population.get_data(nan=0.0, scaling=True)
+        P = my_exposure.get_data(nan=0.0, scaling=True)
 
         # Calculate impact to intermediate thresholds
         counts = []
         for i, lo in enumerate(thresholds):
             if i == len(thresholds) - 1:
                 # The last threshold
-                I = M = numpy.where(D >= lo, P, 0)
+                my_impact = M = numpy.where(D >= lo, P, 0)
             else:
                 # Intermediate thresholds
                 hi = thresholds[i + 1]
@@ -129,16 +125,14 @@ class FloodEvacuationFunction(FunctionProvider):
             val = int(numpy.sum(M))
 
             # Don't show digits less than a 1000
-            if val > 1000:
-                val = val // 1000 * 1000
+            val = round_thousand(val)
             counts.append(val)
 
         # Count totals
         evacuated = counts[-1]
         total = int(numpy.sum(P))
         # Don't show digits less than a 1000
-        if total > 1000:
-            total = total // 1000 * 1000
+        total = round_thousand(total)
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
 
@@ -157,18 +151,20 @@ class FloodEvacuationFunction(FunctionProvider):
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([(tr('People in %.1f m of water') %
-                                    thresholds[-1]),
-                                '%s' % format_int(evacuated)],
+                               thresholds[-1]),
+                                '%s*' % format_int(evacuated)],
                                header=True),
+                      TableRow(tr('* Number is rounded to the nearest 1000'),
+                               header=False),
                       TableRow(tr('Map shows population density needing '
-                                 'evacuation')),
+                                  'evacuation')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
-            [tr('Rice [kg]'), format_int(rice)],
-            [tr('Drinking Water [l]'), format_int(drinking_water)],
-            [tr('Clean Water [l]'), format_int(water)],
-            [tr('Family Kits'), format_int(family_kits)],
-            [tr('Toilets'), format_int(toilets)]]
+                      [tr('Rice [kg]'), format_int(rice)],
+                      [tr('Drinking Water [l]'), format_int(drinking_water)],
+                      [tr('Clean Water [l]'), format_int(water)],
+                      [tr('Family Kits'), format_int(family_kits)],
+                      [tr('Toilets'), format_int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
@@ -176,18 +172,21 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body.append(TableRow(tr('How will we reach stranded people?')))
         table_body.append(TableRow(tr('Do we have enough relief items?')))
         table_body.append(TableRow(tr('If yes, where are they located and how '
-                                     'will we distribute them?')))
+                                      'will we distribute them?')))
         table_body.append(TableRow(tr('If no, where can we obtain additional '
-                                     'relief items from and how will we '
-                                     'transport them to here?')))
+                                      'relief items from and how will we '
+                                      'transport them to here?')))
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
                            tr('Total population: %s') % format_int(total),
                            tr('People need evacuation if flood levels '
-                             'exceed %(eps).1f m') % {'eps': thresholds[-1]},
+                              'exceed %(eps).1f m') % {'eps': thresholds[-1]},
                            tr('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                              'regulation 7/2008'),
+                           tr('All values are rounded up to the nearest '
+                              'integer in order to avoid representing human '
+                              'lives as fractionals.')])
 
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
@@ -205,16 +204,16 @@ class FloodEvacuationFunction(FunctionProvider):
         # Generate 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
         # as imported
-        classes = numpy.linspace(numpy.nanmin(I.flat[:]),
-                                 numpy.nanmax(I.flat[:]), 8)
+        classes = numpy.linspace(numpy.nanmin(my_impact.flat[:]),
+                                 numpy.nanmax(my_impact.flat[:]), 8)
 
         # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
-        style_classes[1]['label'] = tr('Low [%.2f people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%.2f people/cell]')\
+        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
+        style_classes[4]['label'] = tr('Medium [%i people/cell]')\
             % classes[4]
-        style_classes[7]['label'] = tr('High [%.2f people/cell]') % classes[7]
+        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
 
         # Override associated quantities in colour style
         for i in range(len(classes)):
@@ -223,16 +222,19 @@ class FloodEvacuationFunction(FunctionProvider):
             else:
                 transparency = 0
 
-            style_classes[i]['quantity'] = classes[i]
+            # int & round Added by Tim in 1.2 - class is rounded to the
+            # nearest int because we prefer to not categorise people as being
+            # e.g. '0.4 people'. Fixes #542
+            style_classes[i]['quantity'] = int(round(classes[i]))
             style_classes[i]['transparency'] = transparency
 
         # Title
         style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return
-        R = Raster(I,
-                   projection=inundation.get_projection(),
-                   geotransform=inundation.get_geotransform(),
+        R = Raster(my_impact,
+                   projection=my_hazard.get_projection(),
+                   geotransform=my_hazard.get_geotransform(),
                    name=tr('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,

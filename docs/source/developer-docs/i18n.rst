@@ -16,13 +16,16 @@ Quick Reference
 
 The translation system works differently for different parts of the project:
 
-* Strings that appear in the InaSAFE graphical user interface (gui module). These include buttons, help strings, menu items etc
-* Strings that appear in the Python code which constitutes the rest of InaSAFE including the impact functions
+* Strings that appear in the InaSAFE graphical user interface (gui module).
+  These include buttons, help strings, menu items etc
+* Strings that appear in the Python code which constitutes the rest of
+  InaSAFE including the impact functions
 * Strings that appear in data and keywords used by InaSAFE
+* Strings that appear in this documentation and the web site
 
-Flagging strings for translation is done differently for these three cases
-and are treated separately in the next three sections. However, making and
-deploying the translations is unified and takes care of all three and
+Flagging strings for translation is done differently for these four cases
+and are treated separately in the next sections. However, making and
+deploying the translations is unified and takes care of all aspects and is
 described in section "Make translations" below.
 
 
@@ -31,7 +34,7 @@ Translation of strings in the gui module
 
 * Classes and anonymous functions that do not inherit from the class QObject
   should use the format
-  :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
+  :samp:`QCoreApplication.translate('InaSAFE', 'Translations loaded')`
 * Classes that inherit from QObject should use the form :samp:`self.tr('foo')`
 * String replacement arguments should be provided using the QString
   :samp:`arg` method. Example: :samp:`self.tr('Error: %1').arg(message)`
@@ -42,10 +45,12 @@ Translation of strings *not* in the gui such as impact functions
 
 * Import the gettext helper e.g::
 
-   from safe.common.utilities import ugettext as _
+   from safe.common.utilities import ugettext as tr
 
-   (Note that you must have the sequence "import ugettext" in the statement. It will not work as part of a multiple import such as import x, y, ugettext as _)
-* All strings should be wrapped using the _ helper e.g::
+   (Note that you must have the sequence "import ugettext" in the statement.
+   It will not work as part of a multiple import such as import x, y,
+   ugettext as tr)
+* All strings should be wrapped using the tr helper e.g::
 
     tr('Are there enough shelters available for %i people?') % displaced
 
@@ -301,3 +306,40 @@ Initial notes on the process::
 Which will create pot files which can be found under build/locale. Note that
 this make target needs to be tweaked so that it builds a unique directory
 for each supported locale.
+
+Transifex
+----------
+
+[3:16:23 PM] Tim Sutton: scripts/pre_translate.sh
+[3:16:40 PM] Tim Sutton: git commit -m "Regenerated translation po files" -a
+[3:17:13 PM] Tim Sutton: scripts/create-transifex-resources.sh
+[3:17:22 PM] Tim Sutton: and then wait quite a long time
+[3:17:30 PM] Tim Sutton: the script basically does this:
+[3:17:50 PM] Tim Sutton: - makes sure each po source file is registered as a transifex resource
+[3:18:16 PM] Tim Sutton: - adds a translation source for each locale (determined by subdirs of i18n dir)
+[3:18:29 PM] Tim Sutton:   for each resource
+[3:18:47 PM] Tim Sutton: - pushes the resources and their translation files to transifex
+[3:18:52 PM] Tim Sutton: eof
+[3:19:17 PM] Tim Sutton: when you want to collect any translations from transifex, it is the reverse process so you do:
+[3:19:25 PM] Tim Sutton: tx pull
+[3:19:32 PM] Tim Sutton: scripts/post_translate.sh
+[3:20:01 PM] Tim Sutton: git commit -m "Updated translations from transifex community edited translation files" -a
+[3:20:07 PM] Tim Sutton: eof
+[3:20:25 PM] Tim Sutton: that will basically ensure that any translations done on transifex get put into git
+[3:20:55 PM] Tim Sutton: note that in scripts/create-transifex-resources.sh there is a VERSION variable that must be configured for each QGIS release
+[3:21:07 PM] Tim Sutton: in the form 1-8 (. char is not allowed)
+[3:21:28 PM] Tim Sutton: so that is the theoretical procedure
+[3:21:46 PM] Tim Sutton: you can also push a po file individually using the command line client like this:
+[3:22:07 PM] Tim Sutton: tx push -s -t -l de -r qgis-documentation.v1-8-docs-qgis-gui
+[3:22:54 PM] Tim Sutton: that will push the source (-s) and translation file (-t) for language (-l) de for the resource (-r) qgis-documentation.v1-8-docs-qgis-gui up to the transifex web server
+[3:23:04 PM] Tim Sutton: however running that I see the same error you reported:
+[3:23:11 PM] Tim Sutton: Remote server replied: Error uploading file: There is a syntax error in your file
+[3:23:26 PM] Tim Sutton: so lets try that msgfrmt -c command and see if we can figure out why
+
+[3:23:53 PM] Otto Dassau: usually there is a "fuzzy" word in the header
+[3:24:26 PM] Otto Dassau: and somewhere in the text might be some etxra "" in the translation part that shouldn't be there.
+[3:24:53 PM] Tim Sutton: timlinux@waterfall:~/dev/cpp/QGIS-Documentation$ msgfmt -c i18n/en/LC_MESSAGES/docs/user_manual/introduction/qgis_gui.po
+msgfmt: i18n/en/LC_MESSAGES/docs/user_manual/introduction/qgis_gui.po: warning: PO file header fuzzy
+                                                                       warning: older versions of msgfmt will give an error on this
+[3:25:10 PM] Tim Sutton: ok so I dont have a good solution on how to deal with that
+[3:25:25 PM] Tim Sutton: does linguist also have the same issues

@@ -5,9 +5,11 @@ from safe.impact_functions.core import (FunctionProvider,
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.utilities import (ugettext as tr,
-                                   format_int)
+                                   format_int,
+                                   verify)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from third_party.odict import OrderedDict
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')
@@ -36,43 +38,55 @@ class FloodBuildingImpactFunction(FunctionProvider):
     actions = tr('Provide details about where critical infrastructure might '
                  'be flooded')
     # citations must be a list
-    # FIXME (Ole): I don't think this citation is for real?
+    # This is just an example, fiction example actually
     #citations = [tr('Hutchings, Field & Parks. Assessment of Flood impacts '
     #    'on buildings. Impact. Vol 66(2). 2012')]
-    detailed_description = tr('The inundation status is calculated for each '
-        'building (using the centroid if it is a polygon) based on the hazard '
-        'levels provided. if the hazard is given as a raster a threshold of '
-        '1 meter is used. This is configurable through the InaSAFE interface. '
-        'If the hazard is given as a vector polygon layer buildings are '
-        'considered to be impacted depending on the value of hazard '
-        'attributes (in order) "affected" or "FLOODPRONE": If a building is in'
-        ' a region that has attribute "affected" set to True (or 1) it is '
-        'impacted. If attribute "affected" does not exist but "FLOODPRONE" '
-        'does, then the building is considered impacted if "FLOODPRONE" is '
-        '"yes". If neither "affected" nor "FLOODPRONE" is available, a '
-        'building will be impacted if it belongs to any polygon. The latter '
-        'behaviour is implemented through the attribute "inapolygon" which '
-        'is automatically assigned.')
-    permissible_hazard_input = tr('A hazard raster layer where each cell '
-        'represents flood depth (in meters), or a vector polygon layer '
-        'where each polygon represents an inundated area. In the latter '
-        'case, the following attributes are recognised '
-        '(in order): "affected" (True or False) or "FLOODPRONE" (Yes or No). '
-        '(True may be represented as 1, False as 0')
-    permissible_exposure_input = tr('Vector polygon layer extracted from OSM '
-        'where each polygon represents the footprint of a building.')
+    detailed_description = \
+        tr('The inundation status is calculated for each '
+           'building (using the centroid if it is a polygon) based on the '
+           'hazard levels provided. if the hazard is given as a raster a '
+           'threshold of 1 meter is used. This is configurable through the '
+           'InaSAFE interface. If the hazard is given as a vector polygon '
+           'layer buildings are considered to be impacted depending on the '
+           'value of hazard attributes (in order) "affected" or "FLOODPRONE":'
+           ' If a building is in a region that has attribute "affected" set '
+           'to True (or 1) it is impacted. If attribute "affected" does not '
+           'exist but "FLOODPRONE" does, then the building is considered '
+           'impacted if "FLOODPRONE" is '
+           '"yes". If neither "affected" nor "FLOODPRONE" is available, a '
+           'building will be impacted if it belongs to any polygon. The latter'
+           ' behaviour is implemented through the attribute "inapolygon" which'
+           ' is automatically assigned.')
+    hazard_input = \
+        tr('A hazard raster layer where each cell '
+           'represents flood depth (in meters), or a vector polygon layer '
+           'where each polygon represents an inundated area. In the latter '
+           'case, the following attributes are recognised '
+           '(in order): "affected" (True or False) or "FLOODPRONE" '
+           '(Yes or No). (True may be represented as 1, False as 0')
+    exposure_input = \
+        tr('Vector polygon layer extracted from OSM '
+           'where each polygon represents the footprint of a building.')
+    output = tr('Vector layer contains building is estimated to be flooded '
+                'and the breakdown of the building by type.')
     limitation = tr('This function only flags buildings as impacted or not '
                     'either based on a fixed threshold in case of raster '
                     'hazard or the the attributes mentioned under input '
                     'in case of vector hazard.')
 
-    parameters = {'postprocessors': {'BuildingType': {'on': True}}}
+    # parameters = {'postprocessors': {'BuildingType': {'on': True}}}
+    parameters = OrderedDict([
+        ('threshold [m]', 1.0),
+        ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))])
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
         """
 
-        threshold = 1.0  # Flood threshold [m]
+        threshold = self.parameters['threshold [m]']  # Flood threshold [m]
+
+        verify(isinstance(threshold, float),
+               'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
         H = get_hazard_layer(layers)    # Depth
@@ -91,8 +105,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
             hazard_attribute = None
 
         # Interpolate hazard level to building locations
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name=hazard_attribute)
+        I = assign_hazard_values_to_exposure_data(
+            H, E, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
         attribute_names = I.get_attribute_names()
@@ -151,7 +165,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     raise Exception(msg)
             else:
                 msg = (tr('Unknown hazard type %s. '
-                         'Must be either "depth" or "grid"')
+                          'Must be either "depth" or "grid"')
                        % mode)
                 raise Exception(msg)
 
@@ -281,23 +295,23 @@ class FloodBuildingImpactFunction(FunctionProvider):
 ##        fid.close()
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('Are the critical facilities still '
-                                     'open?')))
+                                      'open?')))
         table_body.append(TableRow(tr('Which structures have warning capacity '
-                                     '(eg. sirens, speakers, etc.)?')))
+                                      '(eg. sirens, speakers, etc.)?')))
         table_body.append(TableRow(tr('Which buildings will be evacuation '
-                                     'centres?')))
+                                      'centres?')))
         table_body.append(TableRow(tr('Where will we locate the operations '
-                                     'centre?')))
+                                      'centre?')))
         table_body.append(TableRow(tr('Where will we locate warehouse and/or '
-                                     'distribution centres?')))
+                                      'distribution centres?')))
         if school_closed > 0:
             table_body.append(TableRow(tr('Where will the students from the %s'
-                                         ' closed schools go to study?') %
+                                          ' closed schools go to study?') %
                                        format_int(school_closed)))
         if hospital_closed > 0:
             table_body.append(TableRow(tr('Where will the patients from the %s'
-                                         ' closed hospitals go for treatment '
-                                         'and how will we transport them?') %
+                                          ' closed hospitals go for treatment '
+                                          'and how will we transport them?') %
                                        format_int(hospital_closed)))
 
         table_body.append(TableRow(tr('Notes'), header=True))

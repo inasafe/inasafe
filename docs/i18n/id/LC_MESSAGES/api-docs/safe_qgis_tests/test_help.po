@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 8a83e0c5b1514d81b507b5c3c62bc6fd
+#: ../../source/api-docs/safe_qgis_tests/test_help.rst:6
+msgid "Module:  safe_qgis.test_help"
+msgstr ""
+
+# d1c6d7feb92148168faffac09dff385e
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid and World Bank - "
+"**GUI Test Cases.**"
+msgstr ""
+
+# 5e97d9d8d3334e269c15662a7540e5b6
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 21389effacf74fc39d70d958582ed4cd
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# fbd1cf49226a49bc92b80e7a42dc00f8
+#: ../../../safe_qgis/test_help.py:docstring of safe_qgis.test_help.HelpTest:1
+msgid ""
+"Test the InaSAFE help GUI .. note:: Currently these tests will all fail "
+"unless you comment out the APP.exec_() lines because the web view does not "
+"load content without the main application event loop running."
+msgstr ""
+
+# c86709f74448445395355c186b54e3eb
+#: ../../../safe_qgis/test_help.py:docstring of
+#: safe_qgis.test_help.HelpTest.XtestDialogLoads:1
+msgid "Basic test to ensure the keyword dialog has loaded"
+msgstr ""
+
+# e985e7ba5d2a45a0a8706e15e1f0bb7a
+#: ../../../safe_qgis/test_help.py:docstring of
+#: safe_qgis.test_help.HelpTest.XtestDockHelp:1
+msgid "Test help dialog works with context set to 'dock'"
+msgstr ""
+
+# a058604f7906450faf8f7f49cceb87f4
+#: ../../../safe_qgis/test_help.py:docstring of
+#: safe_qgis.test_help.HelpTest.XtestKeywordsHelp:1
+msgid "Test help dialog works with context set to 'keywords'"
+msgstr ""
+
+# 202b7064837b466f95229999a214c9b5
+#: ../../source/api-docs/safe_qgis_tests/test_help.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

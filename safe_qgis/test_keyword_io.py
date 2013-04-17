@@ -5,7 +5,6 @@ import tempfile
 import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-from safe.common.utilities import temp_dir
 
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
@@ -13,11 +12,11 @@ sys.path.append(pardir)
 from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
 # For testing and demoing
-from safe.common.testing import HAZDATA, TESTDATA
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
 from safe_qgis.test_keywords_dialog import makePadangLayerClone
+from safe_interface import temp_dir, HAZDATA, TESTDATA
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -37,7 +36,7 @@ class KeywordIOTest(unittest.TestCase):
         myUri.setDatabase(os.path.join(TESTDATA, 'jk.sqlite'))
         myUri.setDataSource('', 'osm_buildings', 'Geometry')
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
-                                       'spatialite')
+                                          'spatialite')
         myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
         self.fileRasterLayer, myType = loadLayer(myHazardPath,
                                                  theDirectory=None)
@@ -70,7 +69,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_writeReadKeywordFromUri(self):
         """Test we can set and get keywords for a non local datasource"""
         myHandle, myFilename = tempfile.mkstemp('.db', 'keywords_',
-                                            temp_dir())
+                                                temp_dir())
 
         # Ensure the file is deleted before we try to write to it
         # fixes windows specific issue where you get a message like this
@@ -150,8 +149,8 @@ class KeywordIOTest(unittest.TestCase):
 
         for myKey, myValue in myNewKeywords.iteritems():
             myMessage = ('Layer keywords misses appended key: %s\n'
-                        'Layer keywords:\n%s\n'
-                        'Appended keywords:\n%s\n' %
+                         'Layer keywords:\n%s\n'
+                         'Appended keywords:\n%s\n' %
                         (myKey,
                          myKeywords,
                          myNewKeywords))
@@ -183,7 +182,7 @@ class KeywordIOTest(unittest.TestCase):
         mySqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
         myExpectedSource = ('dbname=\'../jk.sqlite\' table="osm_buildings"'
-             ' (Geometry) sql=')
+                            ' (Geometry) sql=')
         myMessage = 'Got source: %s\n\nExpected %s\n' % (
                     mySqliteLayer.source, myExpectedSource)
         assert mySqliteLayer.source() == myExpectedSource, myMessage

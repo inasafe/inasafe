@@ -6,11 +6,11 @@
       <env name="PYTHONUNBUFFERED" value="1" />
       <env name="QGIS_DEBUG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
       <env name="QGISDEBUG" value="0" />
-      <env name="QGIS_PREFIX_PATH" value="/usr/local/qgis-realtime" />
+      <env name="QGIS_PREFIX_PATH" value="/usr/local/qgis-master" />
       <env name="QGIS_LOG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
-      <env name="PYTHONPATH" value="/usr/local/qgis-realtime/share/qgis/python" />
+      <env name="PYTHONPATH" value="/usr/local/qgis-master/share/qgis/python:/home/timlinux/dev/python/inasafe-dev/" />
       <env name="INASAFE_POPULATION_PATH" value="realtime/fixtures/exposure/population.tif" />
-      <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-realtime/lib" />
+      <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />

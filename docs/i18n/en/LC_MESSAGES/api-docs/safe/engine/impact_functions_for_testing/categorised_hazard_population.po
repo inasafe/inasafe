@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE Documentation Project 1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 63a87888127147e49a0f9c46265303c4
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/categorised_hazard_population.rst:6
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing."
+"categorised_hazard_population"
+msgstr ""
+
+# 098e04d5db6a4675851fb51e288ac396
+# a50307e8aa384ce08bcd5b7259ccb922
+#: ../../../safe/engine/impact_functions_for_testing/categorised_hazard_population.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.categorised_hazard_population.CategorisedHazardPopulationImpactFunction:1
+#: safe.engine.impact_functions_for_testing.categorised_hazard_population.CategorisedHazardPopulationImpactFunction.run:1
+msgid "Plugin for impact of population as derived by categorised hazard"
+msgstr ""
+
+# e84e740b582f4224a15c18caaf266389
+#: ../../../safe/engine/impact_functions_for_testing/categorised_hazard_population.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.categorised_hazard_population.CategorisedHazardPopulationImpactFunction:3
+msgid ""
+":author AIFDR :rating 2 :param requires category=='hazard' "
+"and                     unit=='normalised' and                     "
+"layertype=='raster'"
+msgstr ""
+
+# 5e28f3be40b84519b84897590000b86d
+#: ../../../safe/engine/impact_functions_for_testing/categorised_hazard_population.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.categorised_hazard_population.CategorisedHazardPopulationImpactFunction:7
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster' :"
+"citation citation1 :citation citation2                 next citation2 :"
+"detail The Detail"
+msgstr ""
+
+# fd40fee89aae4c27bc37d154a00b9411
+#: ../../../safe/engine/impact_functions_for_testing/categorised_hazard_population.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.categorised_hazard_population.CategorisedHazardPopulationImpactFunction.run:5
+msgid ""
+"H: Raster layer of categorised hazard P: Raster layer of population data"
+msgstr ""
+
+# 8122ab0299224227af672830774c2662
+#: ../../../safe/engine/impact_functions_for_testing/categorised_hazard_population.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.categorised_hazard_population.CategorisedHazardPopulationImpactFunction.run:8
+msgid "Counts number of people exposed to each category of the hazard"
+msgstr ""
+
+# 7da8b3616f73417db5e118d27a06653d
+#: ../../../safe/engine/impact_functions_for_testing/categorised_hazard_population.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.categorised_hazard_population.CategorisedHazardPopulationImpactFunction.run:11
+msgid ""
+"Map of population exposed to high category Table with number of people in "
+"each category"
+msgstr ""
+
+# 361a3a68366f4a46a76a5c15a2c269c3
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/categorised_hazard_population.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

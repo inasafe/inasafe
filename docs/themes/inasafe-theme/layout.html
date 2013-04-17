@@ -1,0 +1,30 @@
+{% extends "inasafe-base.html" %}
+{% block user_content %}
+<div class="container">
+    <div class="row">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <ul id="locales">
+                    <li id="flag_en"><a href="#" onclick="gotoLang('en');"><img
+                            src="{{ pathto('_static/img/flags/gb.png', 1)}}"/></a>
+                    </li>
+                    <li id="flag_id"><a href="#" onclick="gotoLang('id');"><img
+                            src="{{ pathto('_static/img/flags/id.png', 1)}}"/></a>
+                    </li>
+                </ul>{# ends locales #}
+                <span style="clear:both">&nbsp;</span>
+                {%- if sidebars != None %}
+                {#- new style sidebar: explicitly include/exclude templates #}
+                {%- for sidebartemplate in sidebars %}
+                {%- include sidebartemplate %}
+                {%- endfor %}
+                {%- endif %}
+            </div>{# well ends #}
+        </div>{# span 3 ends #}
+        <div class="span9">
+                {% block body %} {% endblock %}
+        </div> {# span 9 ends #}
+        <hr>
+    </div>
+</div>{# fluid-container ends #}
+{% endblock %}{# user-content block end #}

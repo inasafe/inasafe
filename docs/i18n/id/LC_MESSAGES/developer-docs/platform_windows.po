@@ -1,0 +1,854 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-07 09:28+0000\n"
+"Last-Translator: timlinux <tim@linfiniti.com>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# 067db24ea58442f5b0dfb46a3c089980
+#: ../../source/developer-docs/platform_windows.rst:7
+msgid "Development under MS Windows"
+msgstr ""
+
+# ddf10313718242108e4185b5d26c92a8
+#: ../../source/developer-docs/platform_windows.rst:9
+msgid ""
+"In this document we will walk you through the different activities you will "
+"need to do as a windows developer wishing to work on the InaSAFE codebase."
+msgstr ""
+
+# 5b288c78c9804e8487db38b242c36fac
+#: ../../source/developer-docs/platform_windows.rst:13
+msgid "Installation of version control tools"
+msgstr ""
+
+# f3fd49917fae4aeda094b498f094d063
+#: ../../source/developer-docs/platform_windows.rst:16
+msgid "Setup msysgit"
+msgstr ""
+
+# 11d9dad970a5439698a8ce4adba67a75
+#: ../../source/developer-docs/platform_windows.rst:18
+msgid ""
+"To check out the code for development, you first need to install a git "
+"client. We cover msysgit here, but you can also use `tortoisegit "
+"<http://code.google.com/p/tortoisegit/downloads/list>`_ if you prefer "
+"(although the tortoise git procedure is not covered here)."
+msgstr ""
+
+# 3fe1d8dd07e24d7b9f2771c78cff0087
+#: ../../source/developer-docs/platform_windows.rst:23
+msgid ""
+"To install msysgit (which is a command line git client), download the latest"
+" version of the software from the `msysgit web site "
+"<http://code.google.com/p/msysgit/downloads/list>`_. There is no need to get"
+" the 'full install' - just fetching the latest 'preview' is good enough. For"
+" example at the time of writing I downloaded "
+":samp:`Git-1.7.9-preview20120201.exe`. The download is around 14mb in size."
+msgstr ""
+
+# 25587db4dd9f43fbafa26dee8af0bdf7
+#: ../../source/developer-docs/platform_windows.rst:30
+msgid ""
+"Once the file is downloaded, run it and respond to the installer prompts as "
+"illustrated below:"
+msgstr ""
+
+# 43a66a3dc614401283df1999ce3b563f
+#: ../../source/developer-docs/platform_windows.rst:78
+msgid "Check out the code and the test data"
+msgstr ""
+
+# 387ac40a851a45f4bd2a0c39e1224427
+#: ../../source/developer-docs/platform_windows.rst:80
+msgid ""
+"In this section we actually check out the source code and the test data "
+"using the tools we installed above."
+msgstr ""
+
+# 7e9fc1cb210d4c6c96764f756aa7b1f9
+#: ../../source/developer-docs/platform_windows.rst:84
+msgid "Clone the code repository"
+msgstr ""
+
+# b1a6da7c6c5249cba825828f22abadef
+#: ../../source/developer-docs/platform_windows.rst:86
+msgid "First open a GIT bash prompt as illustrated below:"
+msgstr ""
+
+# c820cc9a489942f69d485fdf9e3fbb1f
+#: ../../source/developer-docs/platform_windows.rst:92
+msgid ""
+"The repository can now be cloned by issuing the commands listed below.::"
+msgstr ""
+
+# 7422a98c98934803971066d7bd88104a
+# 717d301484194f87b88f13304b159b83
+#: ../../source/developer-docs/platform_windows.rst:102
+#: ../../source/developer-docs/platform_windows.rst:132
+msgid ""
+"The items in angle brackets above should be replaced with your personal "
+"details as required."
+msgstr ""
+
+# ba21d4fa1e6243659be8ffdb776be7af
+# 47ec70cd59ab4f808117c9332fc21ac7
+#: ../../source/developer-docs/platform_windows.rst:105
+#: ../../source/developer-docs/platform_windows.rst:135
+msgid ""
+"When the final command above runs, you should see something like this in the"
+" console when the clone process is completed::"
+msgstr ""
+
+# 93d68f3da2df43dbbef00db0ae50a590
+#: ../../source/developer-docs/platform_windows.rst:118
+msgid "Checkout the test data"
+msgstr ""
+
+# a1dffc17c17b4c648fcc824589e20bda
+#: ../../source/developer-docs/platform_windows.rst:120
+msgid ""
+"To check out the test data from git, first open a GIT bash prompt as "
+"illustrated below:"
+msgstr ""
+
+# 6da64f45f04f4dceb3f6fd7ffcac8a98
+#: ../../source/developer-docs/platform_windows.rst:126
+msgid ""
+"The repository can now be cloned by issuing the commands listed below. "
+"(Already completed in previous step)::"
+msgstr ""
+
+# 575f7b882b7a43abbc747c07bfaa8032
+#: ../../source/developer-docs/platform_windows.rst:147
+msgid "Install QGIS"
+msgstr ""
+
+# 69bf7505bded402ab3c1a5d1ed5db9df
+#: ../../source/developer-docs/platform_windows.rst:149
+msgid ""
+"Download the latest QGIS 'standalone' installer from "
+"http://download.qgis.org and install it by running the installation wizard "
+"and accepting the defaults throughout."
+msgstr ""
+
+# 8e1782f94f45431cb99f670db509ccfe
+#: ../../source/developer-docs/platform_windows.rst:153
+msgid ""
+"After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS "
+"Lisboa --> Quantum GIS Desktop (1.8.0)`) you need to enable the plugin from "
+"the plugin menu by doing :menuselection:`Plugins --> Manage Plugins` and "
+"then search for the |project_name| plugin in the list and enable it."
+msgstr ""
+
+# 860e2cf5f751415380cb9e38c9618e33
+#: ../../source/developer-docs/platform_windows.rst:158
+msgid "Windows Caveats"
+msgstr ""
+
+# 022cd73d91e94f7f956cf6552d696a94
+#: ../../source/developer-docs/platform_windows.rst:160
+msgid ""
+"Our primary development platform is Linux (specifically Ubuntu Linux). Some "
+"features of the development environment - particularly the **Make** tools do"
+" not run on Windows. Some helper scripts have been written to substitute for"
+" make but they do not have feature parity with the make scripts."
+msgstr ""
+
+# 17e9dbcf8f504098a2e50a64797b0bc3
+#: ../../source/developer-docs/platform_windows.rst:169
+msgid "Command line environment setup"
+msgstr ""
+
+# b802941b1adb497c81fcfc50fad7ea1a
+#: ../../source/developer-docs/platform_windows.rst:174
+msgid "Create a shell launcher"
+msgstr ""
+
+# f235200f7e2649a99a8c5bdf2e04676b
+#: ../../source/developer-docs/platform_windows.rst:176
+msgid ""
+"A command line environment is useful for running unit tests and for "
+"developing and testing standalone scripts written to use the |project_name| "
+"libraries."
+msgstr ""
+
+# 1ce3b75820d74041b2335215a076b057
+#: ../../source/developer-docs/platform_windows.rst:179
+msgid ""
+"We will create a custom shell launcher that will give you a python shell "
+"environment using the python that comes bundled with QGIS, and that sets "
+"various paths and evironment variables so everything works as expected. Save"
+" the following listing in <QGIS Install Dir>/bin/python-shell.bat::"
+msgstr ""
+
+# 84e396e3470b462486788348f4ae13dd
+#: ../../source/developer-docs/platform_windows.rst:200
+msgid "The QGIS_PREFIX_PATH environment variable should be unquoted!."
+msgstr ""
+
+# c8e4f6feb46d432095cda01d71ba411c
+#: ../../source/developer-docs/platform_windows.rst:202
+msgid ""
+"You may need to replace PROGRA~1 above with PROGRA~2 if you are on 64bit "
+"windows."
+msgstr ""
+
+# 9776e2e9be194bad9b98627e87db3694
+#: ../../source/developer-docs/platform_windows.rst:205
+msgid ""
+"This script is for QGIS 1.8. You may need to do some adjustment if you are "
+"using another version of QGIS"
+msgstr ""
+
+# 2d7869f946e34cfda716770da55fe2a5
+#: ../../source/developer-docs/platform_windows.rst:207
+msgid ""
+"For easy access to this shell launcher, right click on the qgis-shell.bat "
+"script and (without releasing your initial right click) drag with the file "
+"onto your start / windows button in the bottom left corner of the screen."
+msgstr ""
+
+# ef068238c4364626b20a467a53ebf634
+#: ../../source/developer-docs/platform_windows.rst:212
+msgid "Verifying your system path"
+msgstr ""
+
+# be3430b34f274f89a57466b77dfc2849
+#: ../../source/developer-docs/platform_windows.rst:214
+msgid ""
+"To verify your path, launch your python shell (by clicking the python-"
+"shell.bat) and then start a python shell. Now enter the follow simple "
+"script::"
+msgstr ""
+
+# 612efff579dd4cb0bd23b6f5d0992c7a
+#: ../../source/developer-docs/platform_windows.rst:221
+msgid "Which should produce output like this::"
+msgstr ""
+
+# fb13f2457bac4321b42d79e6a24dc40e
+#: ../../source/developer-docs/platform_windows.rst:239
+msgid ""
+"It is particularly the second and third lines that you need to have in place"
+" so that the QGIS libs can found. Now dow a simple test to see if you can "
+"import the QGIS libs::"
+msgstr ""
+
+# 958b815b4fc3413389398925fa840483
+#: ../../source/developer-docs/platform_windows.rst:246
+msgid ""
+"Assuming you get no error messages, you have a functional python command "
+"line environment which you can use to test QGIS functionality with."
+msgstr ""
+
+# 754c2e3d38c24c76954be262dcda13a4
+#: ../../source/developer-docs/platform_windows.rst:253
+msgid "Nose testing tools"
+msgstr ""
+
+# 0001dfd00a174faf8b8788f2d1afecec
+#: ../../source/developer-docs/platform_windows.rst:258
+msgid "Installing pip"
+msgstr ""
+
+# 42f3fca5bcb44ef58bc3033a4989ad31
+#: ../../source/developer-docs/platform_windows.rst:260
+msgid ""
+"We need to install easy_install so that we can install pip so that we can "
+"install nosetests and other python tools. Under windows you need to run a "
+"little script to install easy_install and then use easy_install to install "
+"pypi. Download the script on `this page "
+"<http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py and "
+"save it somewhere familiar e.g. :samp:`c:\\temp`."
+msgstr ""
+
+# d1786f82c1804fce8d9b3763e246b63e
+#: ../../source/developer-docs/platform_windows.rst:267
+msgid ""
+"If you use windows 32bit, do not download the .exe file as said on `the page"
+" <http://pypi.python.org/pypi/setuptools#windows>`_, but just download the "
+"ez_setup.py"
+msgstr ""
+
+# 150b835da5694a8ba7da0d30c9f51550
+#: ../../source/developer-docs/platform_windows.rst:272
+msgid "Special note for Win64 bit users"
+msgstr ""
+
+# e871f2147c6547edb5231edae374c770
+#: ../../source/developer-docs/platform_windows.rst:274
+msgid ""
+"If your Windows is 64bit, you need to do a little trick to install pip. "
+"There are two options for doing this:"
+msgstr ""
+
+# 7119c6df7b6447c0aa1c994ab78d03ff
+#: ../../source/developer-docs/platform_windows.rst:277
+msgid ""
+"Add the following line near the end of your command shell launcher (as "
+"described in :ref:`windows_shell_launcher-label`):"
+msgstr ""
+
+# e3785756fb8e4271b31adcaa5514f709
+#: ../../source/developer-docs/platform_windows.rst:280
+msgid ":samp:`set PATH=c:\\python27;%PATH%`"
+msgstr ""
+
+# 8b332072192e49d0812507b1dfae3558
+#: ../../source/developer-docs/platform_windows.rst:282
+msgid ""
+"First you have to install python 32bit and add its path to PATH variable in "
+"environment variable (on Windows 7: :menuselection:`System Properties --> "
+"Advanced --> Environment Variables`)."
+msgstr ""
+
+# 41ab0502703a49578df896325349f9a6
+#: ../../source/developer-docs/platform_windows.rst:286
+msgid ""
+"To verify that you have the correct python in your path launch python and "
+"print sys.executable - is should show :samp:`c:\\python27\\python.exe` as "
+"per the demo session below::"
+msgstr ""
+
+# 3d17b964dcbd452fa9515a15dc1abae3
+#: ../../source/developer-docs/platform_windows.rst:300
+msgid "For both 32 and 64 bit"
+msgstr ""
+
+# f1390cfc5dd6406897d96f09964e0af6
+#: ../../source/developer-docs/platform_windows.rst:302
+msgid ""
+"Next launch the shell (python-shell.bat as described in :ref:`windows-"
+"commandline_setup`) **as administrator** (by right clicking the file and "
+"choosing run as administrator). Then from the command line, launch "
+":command:`ez_setup.py` by typing this::"
+msgstr ""
+
+# e22f4979f0314addb6695df17bd2fc00
+#: ../../source/developer-docs/platform_windows.rst:309
+msgid ""
+"You will need to launch the shell as administrator whenever you need to "
+"install python packages by pypi."
+msgstr ""
+
+# 1980ee3e460b417fac9e59a88b5bd3d5
+#: ../../source/developer-docs/platform_windows.rst:312
+msgid ""
+"Now in the same shell, use easy setup to install pip (make sure you have "
+"added the QGIS scripts dir to your shell launcher's - which should be the "
+"case if you have followed the notes in :ref:`windows-commandline_setup`)::"
+msgstr ""
+
+# 957144fa5c2e43f1bb96e90e3ba2bdd1
+#: ../../source/developer-docs/platform_windows.rst:318
+msgid ""
+"If the installation goes successfully, you should see output like this::"
+msgstr ""
+
+# eb7fc1458a6b4c51bacf5c48dbd85919
+#: ../../source/developer-docs/platform_windows.rst:347
+msgid "Installing nose"
+msgstr ""
+
+# 2dccbaa3a7a14f1286741e36061d53e3
+#: ../../source/developer-docs/platform_windows.rst:349
+msgid ""
+"`Nose <http://somethingaboutorange.com/mrl/projects/nose/>`_ is a tool for "
+"automation of running python unit tests. With nose you can run a whole batch"
+" of tests in one go. With the nosecover plugin you can also generate "
+"coverage reports which will indicate how many lines of your code actually "
+"have been tested."
+msgstr ""
+
+# b8e0234e172b43639c1de1e70c082916
+#: ../../source/developer-docs/platform_windows.rst:356
+msgid ""
+"To install these tools, launch your python prompt as administrator and then "
+"do::"
+msgstr ""
+
+# 785c2486dd614e14b3559ce9f91a072e
+#: ../../source/developer-docs/platform_windows.rst:361
+msgid "Running tests using nose"
+msgstr ""
+
+# 26e5a450db73464cb63c10673998880b
+#: ../../source/developer-docs/platform_windows.rst:363
+msgid ""
+"Once they are installed, you can run the nose tests from windows by going to"
+" the plugin directory/inasafe-dev folder (in your python-shell.bat shell "
+"session) and running::"
+msgstr ""
+
+# 51abdf71dfcc4f2bbbef204ae09edcf5
+#: ../../source/developer-docs/platform_windows.rst:370
+msgid "Building sphinx documentation"
+msgstr ""
+
+# 917993f32c8c449fa321037e63d296dd
+#: ../../source/developer-docs/platform_windows.rst:372
+msgid ""
+"`Sphinx <http://sphinx.pocoo.org>`_ is a tool for building documentation "
+"that has been written in the ReSTructured text markup language (a simple "
+"wiki like format). You can build the sphinx documentation under windows "
+"using a helper script provided in the docs directory of the |project_name| "
+"source directory, but first you need to actually install sphinx."
+msgstr ""
+
+# 84b7f75db6b94519bf6ed078139dcfc3
+#: ../../source/developer-docs/platform_windows.rst:379
+msgid "Installing sphinx"
+msgstr ""
+
+# 11cd93d14ec849c4818c07f89c661d1f
+#: ../../source/developer-docs/platform_windows.rst:381
+msgid ""
+"Launch your QGIS python shell environment (see :ref:`windows-pip-setup`) as "
+"administrator and then run the following command::"
+msgstr ""
+
+# fc69395d023249c5bb489b659d0c8756
+#: ../../source/developer-docs/platform_windows.rst:386
+msgid "The cloud-sptheme package installs the sphinx theme we are using."
+msgstr ""
+
+# a70d1fa5a402490eb34f361fcdc95935
+#: ../../source/developer-docs/platform_windows.rst:390
+msgid "Building the documentation"
+msgstr ""
+
+# de9fe81844e447e28ce1affcbf1eb2a8
+#: ../../source/developer-docs/platform_windows.rst:392
+msgid ""
+"To build the documentation, open a QGIS python shell (no need to be admin) "
+"and go into your inasafe-dev/docs directory. Now run the following command::"
+msgstr ""
+
+# 9733d8873ff942f4a05d4cc2d09df5ce
+#: ../../source/developer-docs/platform_windows.rst:397
+msgid ""
+"Only the html make target has been tested. To use other make targets you may"
+" need to perform further system administrative tasks."
+msgstr ""
+
+# 1cb2083f8dbe45baa6122ad04d2f4169
+#: ../../source/developer-docs/platform_windows.rst:401
+msgid "Viewing the documentation"
+msgstr ""
+
+# 43ebf7f97d714a4da802e2e2a94cd9d7
+#: ../../source/developer-docs/platform_windows.rst:403
+msgid ""
+"The documentation can be viewed from withing QGIS by clicking the "
+":guilabel:`help` button on the |project_name| dock panel, or you can view it"
+" in your browser by opening a url similar to this one::"
+msgstr ""
+
+# b34a71785bf34e6984687b94dfac6616
+#: ../../source/developer-docs/platform_windows.rst:411
+msgid "Developing using Eclipse (Windows)"
+msgstr ""
+
+# 49474587727d4eb78c510cbe29dc7dc4
+#: ../../source/developer-docs/platform_windows.rst:413
+msgid ""
+"This is optional - you can use any environment you like for editing python, "
+"or even a simple text editor."
+msgstr ""
+
+# 18d690a89ee3401c94b3c09cd1ead246
+#: ../../source/developer-docs/platform_windows.rst:416
+msgid ""
+"If you wish to use an IDE for development, please refer to `this article "
+"<http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-"
+"pydev/>`_ for detailed information on how to get the basic Eclipse with "
+"PyDev setup."
+msgstr ""
+
+# 694fb89d610949d89784c60ebb8b144d
+#: ../../source/developer-docs/platform_windows.rst:421
+msgid "Installing Eclipse"
+msgstr ""
+
+# c3505d2dd05e4dafbf23468a6bf2a6e2
+#: ../../source/developer-docs/platform_windows.rst:423
+msgid ""
+"You can download and install eclipse by getting the latest installer at "
+"`eclipse.org <http://eclipse.org>`_. Just run the installer accepting all "
+"defaults."
+msgstr ""
+
+# f942751ff7764b8ea586a18be22259c3
+#: ../../source/developer-docs/platform_windows.rst:428
+msgid "Installing PyDev"
+msgstr ""
+
+# 3936a96a834e4a7c8bb31f5edac3fc8e
+#: ../../source/developer-docs/platform_windows.rst:430
+msgid ""
+"With Eclipse running, click  on :menuselection:`Help --> Eclipse "
+"Marketplace` and from the resulting dialog that appears, type :kbd:`PyDev` "
+"into the search box and then click :guilabel:`Go`. On the search results "
+"page, choose PyDev and click the :guilabel:`Install` button next to it. "
+"Agree to the license terms and accept the aptana certificate, then restart "
+"Eclipse as requested."
+msgstr ""
+
+# 8a81a364432446dbbe0a7ed37f7ab3c8
+#: ../../source/developer-docs/platform_windows.rst:437
+msgid "Custom Eclipse Launcher"
+msgstr ""
+
+# d3a44f92f53141c9be1f69ab0c9165ee
+#: ../../source/developer-docs/platform_windows.rst:439
+msgid ""
+"You need to create a custom Eclipse launcher in order to use Eclipse PyDev. "
+"The process is similar to :ref:`windows-commandline_setup` in that you need "
+"to create a custom batch file that launches eclipse only after the osgeo4w "
+"environment has been imported. Here are the typical contexts of the file::"
+msgstr ""
+
+# cf34e67f94434e8fbae8550b908ad80d
+#: ../../source/developer-docs/platform_windows.rst:457
+msgid ""
+"Use the path where your eclipse was extracted. Also note that PROGRA~2 may "
+"be PROGRA~1 in 32bit windows."
+msgstr ""
+
+# 9922ab6592114c0aad1fce4c41bcfa78
+#: ../../source/developer-docs/platform_windows.rst:460
+msgid ""
+"Save this file under <QGIS Install Dir>/bin/python-shell.bat and then right-"
+"drag it from explorer to your Windows start button to create an easily "
+"accessible shortcut to eclipse."
+msgstr ""
+
+# 2c369bd09de944298e4b843c599bf221
+#: ../../source/developer-docs/platform_windows.rst:465
+msgid "Creating a project"
+msgstr ""
+
+# 356c03546a1e45d4a6cc57a1d0a6ae2d
+#: ../../source/developer-docs/platform_windows.rst:467
+msgid ""
+"The procedure for doing this is to do: :menuselection:`File --> New --> "
+"Project...` and then from the resulting dialog do :menuselection:`PyDev --> "
+"PyDev Project`."
+msgstr ""
+
+# 723ac75168c444d193b2b35086d0c3a1
+#: ../../source/developer-docs/platform_windows.rst:471
+msgid "In the resulting project dialog, set the following details:"
+msgstr ""
+
+# 95359ba3c3d5462b92ed389bc84486c6
+#: ../../source/developer-docs/platform_windows.rst:473
+msgid ":guilabel:`Project name:` : :kbd:`inasafe`"
+msgstr ""
+
+# 9419779e15cb4c2db5594f89d340c606
+#: ../../source/developer-docs/platform_windows.rst:474
+msgid ":guilabel:`Use default` : :kbd:`uncheck`"
+msgstr ""
+
+# b523087a4ed24977aee8515547fb0a97
+#: ../../source/developer-docs/platform_windows.rst:475
+msgid ""
+":guilabel (windows):`Directory` : "
+":kbd:`C:\\\\Users\\\\<user>\\\\.qgis\\\\python\\\\plugins\\\\inasafe\\\\`"
+msgstr ""
+
+# 29aa953590d94db8870acedb84fd2741
+#: ../../source/developer-docs/platform_windows.rst:477
+msgid ":guilabel:`Choose project type` : :kbd:`Python`"
+msgstr ""
+
+# c3a3818ff0d14f2d8798562da35ad736
+#: ../../source/developer-docs/platform_windows.rst:478
+msgid ":guilabel:`Grammar Version` : :kbd:`2.7`"
+msgstr ""
+
+# fa27ea673a2d461eb9f396f99ae89ff5
+#: ../../source/developer-docs/platform_windows.rst:479
+msgid ":guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`"
+msgstr ""
+
+# 0c1fb597b5074396bb425242d26256f0
+#: ../../source/developer-docs/platform_windows.rst:481
+msgid ""
+"The python shipped with QGIS for windows is version 2.7 so you should avoid "
+"using any additions to the python spec introduced in later versions."
+msgstr ""
+
+# 5efe60f19e1e469698317b87c3dc8d6e
+#: ../../source/developer-docs/platform_windows.rst:484
+msgid ""
+"At this point you should should click the link entitled 'Please configure an"
+" interpreter in related preferences before continuing.' And on the resulting"
+" dialog do:"
+msgstr ""
+
+# d9ad0710480943e0b9cd9699e497b7c5
+#: ../../source/developer-docs/platform_windows.rst:487
+msgid ":guilabel:`Python Interpreters: New...` : :kbd:`click this button`"
+msgstr ""
+
+# 3e5f15d5c0124aaca12bf26f51ae979a
+#: ../../source/developer-docs/platform_windows.rst:489
+msgid "In the dialog that appears do:"
+msgstr ""
+
+# 5769b620790f467292cee0a890df8286
+#: ../../source/developer-docs/platform_windows.rst:491
+msgid ":guilabel:`Interpreter Name` : :kbd:`QGIS Python 2.7`"
+msgstr ""
+
+# 842fce7cab914199a3c691612272ab4d
+#: ../../source/developer-docs/platform_windows.rst:492
+msgid ""
+":guilabel:`Interpreter Executable` : :kbd:`C:\\\\Program Files "
+"(x86)\\\\Quantum GIS Lisboa\\\\bin\\\\python.exe`"
+msgstr ""
+
+# 326c41488b17414697dc40d4df0707bb
+# 74623ead39d64b40a2db5960ff090539
+#: ../../source/developer-docs/platform_windows.rst:494
+#: ../../source/developer-docs/platform_windows.rst:521
+msgid ":guilabel:`OK Button` : :kbd:`click this button`"
+msgstr ""
+
+# f6e0bfeb87a84314b55e90ee4386d3de
+#: ../../source/developer-docs/platform_windows.rst:497
+msgid ""
+"Another dialog will appear. Tick the first entry in the list that points to "
+"your::"
+msgstr ""
+
+# de91ca2376404d4ca7407dc0f15ae240
+#: ../../source/developer-docs/platform_windows.rst:503
+msgid "The resulting list of python paths should look something like this::"
+msgstr ""
+
+# 2644b64dffbb47d0811b60620a3ecb61
+#: ../../source/developer-docs/platform_windows.rst:517
+msgid ""
+"Click on the :guilabel:`New folder` button and add the QGIS python dir::"
+msgstr ""
+
+# d4d8d78adf8a46d09389694a48cadac6
+#: ../../source/developer-docs/platform_windows.rst:523
+msgid ""
+"You will be returned to the Python Interpreters list and should see an entry"
+" for **QGIS Python 2.7** listed there. Now do in the **Environment** tab:"
+msgstr ""
+
+# 55add70dd6134411a4619064230ae3ef
+#: ../../source/developer-docs/platform_windows.rst:526
+msgid ":guilabel:`New`"
+msgstr ""
+
+# 895693b0edbc4ec49ab3cd1b2f834beb
+#: ../../source/developer-docs/platform_windows.rst:528
+msgid "In the dialog that appears"
+msgstr ""
+
+# fbfb33f246fa4f8c8c835d8cbf8d8515
+#: ../../source/developer-docs/platform_windows.rst:530
+msgid ""
+":guilabel:`Name` : :kbd:`QGIS_PREFIX_PATH` :guilabel:`Value` : "
+":kbd:`C:\\\\PROGRA~1\\\\QUANTU~1\\\\apps\\\\qgis`"
+msgstr ""
+
+# 12991810b6394898bf6deadf8541618c
+#: ../../source/developer-docs/platform_windows.rst:533
+msgid "Then click ok to close the environment variable editor."
+msgstr ""
+
+# f61fdd51a5c044c4a55e8296c7cfaa51
+#: ../../source/developer-docs/platform_windows.rst:535
+msgid ":guilabel:`Ok` : :kbd:`click this button`"
+msgstr ""
+
+# 6b30b679d34c4d5d8d72e3af71a107e8
+#: ../../source/developer-docs/platform_windows.rst:537
+msgid "Then click finsih to finish the new project dialog ."
+msgstr ""
+
+# 3935941e35cb4fc9ad474688d0210279
+#: ../../source/developer-docs/platform_windows.rst:540
+msgid ":guilabel:`Finish` : :kbd:`click this button`"
+msgstr ""
+
+# 5ec5b1d956ac43559613d699244b39de
+#: ../../source/developer-docs/platform_windows.rst:544
+msgid "Remote Debugging with Eclipse"
+msgstr ""
+
+# 8edc73498deb457690bd4e0fa0a58b87
+#: ../../source/developer-docs/platform_windows.rst:546
+msgid ""
+"For remote debugging, you should add pydevd to your PYTHONPATH before "
+"starting *QGIS*. Under Windows, the best way to do this is to add the "
+"following line to :command:`qgis.bat` under C:\\Program Files (x86)\\Quantum"
+" GIS Wroclaw\\bin::"
+msgstr ""
+
+# dc06bba89b414156a24d5aaefeac0915
+#: ../../source/developer-docs/platform_windows.rst:555
+msgid ""
+"(1) You need to add a settrace() line at the point in your code where you "
+"would like to initiate remote debugging. After that, you can insert eclipse "
+"debugger breakpoints as per normal."
+msgstr ""
+
+# e9f44d38fbc74f3eb2beca25fc90758c
+#: ../../source/developer-docs/platform_windows.rst:559
+msgid ""
+"(2) If you are running with remote debugging enabled, be sure to start the "
+"PyDev debug server first before launching the Risk-in-a-box QGIS plugin "
+"otherwise QGIS will likely crash when it can't find the debug server."
+msgstr ""
+
+# 683f06a3d9d248a9ad00a9db61971a11
+#: ../../source/developer-docs/platform_windows.rst:563
+msgid ""
+"(3) Place the above PYTHONPATH command before the final line that launches "
+"QGIS!"
+msgstr ""
+
+# 1218db9134b244f389e1eeb7b6ddc5ae
+#: ../../source/developer-docs/platform_windows.rst:566
+msgid ""
+"(4) The exact path used will vary on your system - check in your eclipse "
+"plugins folder for \"org.python.pydev.debug_<some date> to identify the "
+"correct path."
+msgstr ""
+
+# 0f28bbcd8f914bbea0b0f1bbcd034782
+#: ../../source/developer-docs/platform_windows.rst:570
+msgid ""
+"To initiate a remote debugging session, add the settrace() directive to your"
+" source file and then start the python remote debugging service from the "
+"PyDev debug perspective. Then launch QGIS (or your command line application)"
+" and use the application until the settrace line is encountered. QGIS will "
+"appear to freeze - this is normal. Now switch to Eclipse and you should see "
+"the settrace line has been highlighted in green and you can step through the"
+" code using standard Eclipse debugging tools (done most easily from the "
+"debugging perspective)."
+msgstr ""
+
+# ff6b3d6eacca4bc8b1780e8a73ebb3a5
+#: ../../source/developer-docs/platform_windows.rst:579
+msgid "Always remove or comment out settrace() when are done debugging!"
+msgstr ""
+
+# dceea503c67444e8aa98d4084e9d72e9
+#: ../../source/developer-docs/platform_windows.rst:583
+msgid "Running Unit tests from the IDE"
+msgstr ""
+
+# a9e73b192e6d4ce8b11f84c016d0cb22
+#: ../../source/developer-docs/platform_windows.rst:586
+msgid "Using PyDev's build in test runner"
+msgstr ""
+
+# d0e8d99b14644b1bb851f7d1412f223e
+#: ../../source/developer-docs/platform_windows.rst:588
+msgid ""
+"Python has very good integrated support for unit testing. The first thing "
+"you should do after setting up the IDE project is to run the tests. You can "
+"run tests in the following ways:"
+msgstr ""
+
+# 42455442f62145be8a8737bb45b0b793
+#: ../../source/developer-docs/platform_windows.rst:592
+msgid "For the entire inasafe package"
+msgstr ""
+
+# 5b852927af094fd2bfa6a0ce14805ba9
+#: ../../source/developer-docs/platform_windows.rst:593
+msgid ""
+"For individual sub packages (e.g. engine, gui, storage, impact_functions)"
+msgstr ""
+
+# aefc952725eb4ce19686e1cc6bf5ebf4
+#: ../../source/developer-docs/platform_windows.rst:594
+msgid "for an individual test module within a package"
+msgstr ""
+
+# 98725b1c559c45aba549c1dfc99ceb0f
+#: ../../source/developer-docs/platform_windows.rst:595
+msgid "for an class within a test module"
+msgstr ""
+
+# 12cff5e690ed4054821b2c98bba061d6
+#: ../../source/developer-docs/platform_windows.rst:596
+msgid "for an individual method within a test class"
+msgstr ""
+
+# 8ade6f083e054d4599faa5ce185c2b1a
+#: ../../source/developer-docs/platform_windows.rst:598
+msgid ""
+"You can view these individual entities by browsing and expanding nodes in "
+"the project panel in the left of the IDE."
+msgstr ""
+
+# 99960dadda844726968a86c9949eee27
+#: ../../source/developer-docs/platform_windows.rst:601
+msgid ""
+"If you run the test suite for the entire inasafe package, it will mistakenly"
+" treat the sphinx documentation conf.py (docs.source.conf) as a test and "
+"fail for that test. This is 'normal' and can be ignored."
+msgstr ""
+
+# f61575cb7c5d44aaaaedbc968be64d22
+#: ../../source/developer-docs/platform_windows.rst:606
+msgid "Setting PyDev to use the Nose test runner"
+msgstr ""
+
+# 1cd2aeb24e674b83825238d7d6d6cf07
+#: ../../source/developer-docs/platform_windows.rst:608
+msgid ""
+"You can also configure Eclipse to run the tests using nose (which is "
+"recommended). To do this first do:"
+msgstr ""
+
+# 62dfd460cf6845b6bcef87525a8e5903
+#: ../../source/developer-docs/platform_windows.rst:611
+msgid ":menuselection:`Window --> Preferences --> PyDev -- PyUnit`"
+msgstr ""
+
+# d5eff6d8778b4028b271e6775f0b321d
+#: ../../source/developer-docs/platform_windows.rst:613
+msgid ""
+"Now set :guilabel:`TestRunner` to :kbd:`Nosetests` and set the following "
+"options::"
+msgstr ""
+
+# 37548b9b498d4ecebd09d28bd5e81bd0
+#: ../../source/developer-docs/platform_windows.rst:618
+msgid ""
+"As with using Pydev's built in test runner, you can also run any module, "
+"class etc. while using the nose test runner by right clicking on the item in"
+" the PyDev package explorer."
+msgstr ""
+
+# fecd3fd5c92549608e88882cf67065d1
+#: ../../source/developer-docs/platform_windows.rst:622
+msgid ""
+"Actually, we can run the test runner until this step. But, we got a problem,"
+" so you need to install python in your windows machine."
+msgstr ""

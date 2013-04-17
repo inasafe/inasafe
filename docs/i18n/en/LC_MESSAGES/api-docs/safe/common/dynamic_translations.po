@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# f4055f61950243bc974201c01df1e133
+#: ../../source/api-docs/safe/common/dynamic_translations.rst:6
+msgid "Module:  safe.common.dynamic_translations"
+msgstr ""
+
+# 3bff35e4392d481f8479c3669855ee78
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:1
+msgid "Lookup table mapping layer titles to translatable strings"
+msgstr ""
+
+# 57cd85a616394d33af74541a73494e01
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:3
+msgid ""
+"Layer titles are kept in the associated keywords files. However, these files "
+"are not seen by the internationalisation system and can therefore not be "
+"translated."
+msgstr ""
+
+# ecadf315f3d247d5948a4ea5810b652c
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:7
+msgid ""
+"To achieve this for selected titles, we maintain a lookup table of the form"
+msgstr ""
+
+# 933030fc1cd447a6bd6220bce77c0905
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:9
+msgid "{string: translatable_string}"
+msgstr ""
+
+# 4e32600aa43c46fd92cb64bd3165fedf
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:11
+msgid ""
+"where string e.g. comes from the keywords file or attribute names/values in "
+"datasets and translatable_string is the string that will appear as the "
+"translated at runtime."
+msgstr ""
+
+# 1e638c3229c148f888cc25455eed361e
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:15
+msgid "e.g (using a neutral symbol) {'title1': tr('Jakarta 2007 flood')}"
+msgstr ""
+
+# 0d6bd03bb54445e791158dd010836bdf
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:18
+msgid "or (using existing title) {'Schools': tr('Schools')}"
+msgstr ""
+
+# 3ad9c7e37ce94a9f957614356eb9cf67
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:21
+msgid "or (attribute value) {'school': tr('school')}"
+msgstr ""
+
+# cf7e70575c8e4171976d4ce00fc2d78c
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:24
+msgid ""
+"With the underscore function, the specified string will be seen by the "
+"translation system and can appear in the supported languages as with other "
+"strings in SAFE."
+msgstr ""
+
+# 6be0eaf010424bc78f4bf75924dd41f7
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:28
+msgid ""
+"Note, this module does *not* provide translations! Rather it provides "
+"mappings between strings expected at runtime to strings seen by the existing "
+"translation systems."
+msgstr ""
+
+# 170325a9baf741f0a36f30af335eaaaf
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:32
+msgid "To use:"
+msgstr ""
+
+# 922fbc6725564c11aa2fff6ff083cdab
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:34
+msgid ""
+"This module contains words and phrases that need to be translatable but "
+"would not normally be available in code for example, that originate from a "
+"dataset or external source."
+msgstr ""
+
+# 06de9206335b4ff0aa9e700a47a919c6
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:38
+msgid ""
+"Just put your translations here, and it will be available to the tr function "
+"but never import this module or the functions in it!"
+msgstr ""
+
+# 4d982b876b3b4ff9a6d3e8ad54ff2205
+#: ../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations.dynamic_translations:1
+msgid "These listed here so they get translated apriori to loading data."
+msgstr ""
+
+# dae4ce4a03ac47f0b555fb4ab1cd4416
+#: ../../source/api-docs/safe/common/dynamic_translations.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

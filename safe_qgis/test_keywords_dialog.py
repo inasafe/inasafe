@@ -33,17 +33,15 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
-from safe.engine.core import unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       unitTestDataPath)
-from safe_qgis.safe_interface import readKeywordsFromFile
+from safe_qgis.safe_interface import (readKeywordsFromFile,
+                                      unique_filename,
+                                      HAZDATA, TESTDATA)
 from safe_qgis.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.utilities import getDefaults, qgisVersion
 
-
-# For testing and demoing
-from safe.common.testing import HAZDATA, TESTDATA
 
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -226,14 +224,13 @@ class KeywordsDialogTest(unittest.TestCase):
                      'female ratio attribute to the keywords list.')
 
         assert myDialog.getValueForKey(
-            myDefaults['FEM_RATIO_ATTR_KEY']) == \
-               myDialog.tr('Use default'), myMessage
+            myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Use default'), \
+            myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio default value to the keywords list.')
         assert float(myDialog.getValueForKey(
-            myDefaults['FEM_RATIO_KEY'])) == \
-               myDefaults['FEM_RATIO'], myMessage
+            myDefaults['FEM_RATIO_KEY'])) == myDefaults['FEM_RATIO'], myMessage
 
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
@@ -255,8 +252,8 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not add it to the keywords list.')
         assert myDialog.getValueForKey(
-            myDefaults['FEM_RATIO_ATTR_KEY']) ==\
-               myDialog.tr('Don\'t use'), myMessage
+            myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Don\'t use'), \
+            myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not disable dsbFemaleRatioDefault.')
@@ -265,8 +262,8 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not remove the keyword.')
-        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is
-            None), myMessage
+        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is None), \
+            myMessage
 
         #set to TEST_REAL
         myIndex = myFemaleRatioAttrBox.findText('TEST_REAL')
@@ -324,17 +321,17 @@ class KeywordsDialogTest(unittest.TestCase):
         """Test set subcategory list works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
         myList = OrderedDict([('population [density]',
-                                      'population [density]'),
-                                     ('population [count]',
-                                      'population [count]'),
-                                     ('building',
-                                      'building'),
-                                     ('building [osm]',
-                                      'building [osm]'),
-                                     ('building [sigab]',
-                                      'building [sigab]'),
-                                     ('roads',
-                                      'roads')])
+                               'population [density]'),
+                            ('population [count]',
+                             'population [count]'),
+                            ('building',
+                             'building'),
+                            ('building [osm]',
+                             'building [osm]'),
+                            ('building [sigab]',
+                             'building [sigab]'),
+                            ('roads',
+                             'roads')])
         mySelectedItem = 'building'
         myDialog.setSubcategoryList(myList, mySelectedItem)
         myResult = str(myDialog.cboSubcategory.currentText())

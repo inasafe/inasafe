@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-06 10:57+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# c0d11020affe4ae7b5fc2ce2ce219e1c
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:6
+msgid "Categorised Hazard Population Impact Function"
+msgstr ""
+
+# 03efe9b5999e4353887f0daac999681f
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:9
+msgid "Overview"
+msgstr ""
+
+# d57b689b9b07490aa33610e905f203d2
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:11
+msgid "**Unique Identifier**: Categorised Hazard Population Impact Function"
+msgstr ""
+
+# 60435704528c400398ae17c2305504e2
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:13
+msgid "**Rating**: 2"
+msgstr ""
+
+# a9f3c7c0ff004e78a8e509ca63ec98f9
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:15
+msgid "**Title**: Be impacted"
+msgstr ""
+
+# c6572b64172e4eaa98bf19b8c0a2272c
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:17
+msgid "**Author**: AIFDR"
+msgstr ""
+
+# 9244b67d1b6440349573f29407fd230a
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:20
+msgid "Details"
+msgstr ""
+
+# 3e88d1ae2db14a6d85d80edf67c34cdd
+#: ../../source/user-docs/impact_function_docs/CategorisedHazardPopulationImpactFunction.rst:22
+msgid "No documentation found"
+msgstr ""

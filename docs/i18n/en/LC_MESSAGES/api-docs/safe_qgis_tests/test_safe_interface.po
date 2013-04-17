@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 8f5e1da9d653448a98af7058a13da903
+#: ../../source/api-docs/safe_qgis_tests/test_safe_interface.rst:6
+msgid "Module:  safe_qgis.test_safe_interface"
+msgstr ""
+
+# aacd6227c1704ba58dc1028217518418
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **SAFE Interface "
+"test suite.**"
+msgstr ""
+
+# 6424869d3cc04fbc8c959e1d5edc419b
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 32ce4b68cce44098a171b6d45fcbd143
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# b24a23c6ce4e4653ae7f495c598139e0
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface.SafeInterfaceTest:1
+msgid "Test the SAFE API Wrapper"
+msgstr ""
+
+# 41d774bf6563449db9971fde057c1fa8
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface.SafeInterfaceTest.setUp:1
+msgid "Setup test before each unit"
+msgstr ""
+
+# 192f89dac373477784dc11cd3cf90442
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface.SafeInterfaceTest.test_availableFunctions:1
+msgid "Check we can get the available functions from the impact calculator."
+msgstr ""
+
+# 680928b399a34188ad783b9692927182
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface.SafeInterfaceTest.test_getKeywordFromFile:1
+msgid "Get keyword from a filesystem file's .keyword file."
+msgstr ""
+
+# 84900cb263d644909a1eacedf5a2324f
+#: ../../../safe_qgis/test_safe_interface.py:docstring of
+#: safe_qgis.test_safe_interface.SafeInterfaceTest.test_getOptimalExtent:1
+msgid "Optimal extent is calculated correctly"
+msgstr ""
+
+# 43b9102896f8432aa8cb2b15f8987710
+#: ../../source/api-docs/safe_qgis_tests/test_safe_interface.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

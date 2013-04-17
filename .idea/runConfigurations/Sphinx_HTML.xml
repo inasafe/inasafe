@@ -6,7 +6,7 @@
     <option name="SDK_HOME" value="/usr/bin/python2.7" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/docs" />
     <option name="IS_MODULE_SDK" value="false" />
-    <module name="inasafe-realtime" />
+    <module name="inasafe-dev" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="docutils_input_file" value="$PROJECT_DIR$/docs/source" />
     <option name="docutils_output_file" value="$PROJECT_DIR$/docs/build/html" />

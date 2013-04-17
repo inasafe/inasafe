@@ -9,7 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -18,7 +17,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import sys
 import tempfile
 import logging
 
@@ -33,14 +31,17 @@ from qgis.core import (QGis,
                        QgsGeometry)
 
 from safe_qgis.safe_interface import (verify,
-                                      readKeywordsFromFile)
+                                      readKeywordsFromFile,
+                                      temp_dir)
 
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.exceptions import (InvalidParameterError,
-                           NoFeaturesInExtentError,
-                           CallGDALError,
-                           InvalidProjectionError,
-                           InvalidClipGeometryError)
+from safe_qgis.exceptions import (
+    InvalidParameterError,
+    NoFeaturesInExtentError,
+    CallGDALError,
+    InvalidProjectionError,
+    InvalidClipGeometryError)
+from safe_qgis.utilities import which
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -111,7 +112,8 @@ def clipLayer(theLayer,
                                 theHardClipFlag=theHardClipFlag)
     else:
         try:
-            return _clipRasterLayer(theLayer, theExtent, theCellSize,
+            return _clipRasterLayer(
+                theLayer, theExtent, theCellSize,
                 theExtraKeywords=theExtraKeywords)
         except CallGDALError, e:
             raise e
@@ -183,7 +185,8 @@ def _clipVectorLayer(theLayer,
     myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
     myAllowedClipTypes = [QGis.WKBPolygon, QGis.WKBPolygon25D]
     if type(theExtent) is list:
-        myRect = QgsRectangle(theExtent[0], theExtent[1],
+        myRect = QgsRectangle(
+            theExtent[0], theExtent[1],
             theExtent[2], theExtent[3])
         myClipPolygon = QgsGeometry.fromRect(myRect)
     elif (type(theExtent) is QgsGeometry and
@@ -192,8 +195,9 @@ def _clipVectorLayer(theLayer,
         myClipPolygon = theExtent
     else:
         raise InvalidClipGeometryError(
-            tr('Clip geometry must be an extent or a single part'
-            'polygon based geometry.'))
+            tr(
+                'Clip geometry must be an extent or a single part'
+                'polygon based geometry.'))
 
     myProjectedExtent = myXForm.transformBoundingBox(myRect)
 
@@ -211,14 +215,16 @@ def _clipVectorLayer(theLayer,
     myAttributes = myProvider.attributeIndexes()
     myFetchGeometryFlag = True
     myUseIntersectFlag = True
-    myProvider.select(myAttributes,
+    myProvider.select(
+        myAttributes,
         myProjectedExtent,
         myFetchGeometryFlag,
         myUseIntersectFlag)
 
     myFieldList = myProvider.fields()
 
-    myWriter = QgsVectorFileWriter(myFilename,
+    myWriter = QgsVectorFileWriter(
+        myFilename,
         'UTF-8',
         myFieldList,
         theLayer.wkbType(),
@@ -273,8 +279,8 @@ def _clipVectorLayer(theLayer,
         raise NoFeaturesInExtentError(myMessage)
 
     myKeywordIO = KeywordIO()
-    myKeywordIO.copyKeywords(theLayer, myFilename,
-        theExtraKeywords=theExtraKeywords)
+    myKeywordIO.copyKeywords(
+        theLayer, myFilename, theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
 
@@ -397,17 +403,19 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
         raise InvalidParameterError(myMessage)
 
     if theLayer.type() != QgsMapLayer.RasterLayer:
-        myMessage = tr('Expected a raster layer but received a %s.' %
-               str(theLayer.type()))
+        myMessage = tr(
+            'Expected a raster layer but received a %s.' %
+            str(theLayer.type()))
         raise InvalidParameterError(myMessage)
 
     myWorkingLayer = str(theLayer.source())
 
     # Check for existence of keywords file
     myKeywordsPath = myWorkingLayer[:-4] + '.keywords'
-    myMessage = tr('Input file to be clipped "%s" does not have the '
-           'expected keywords file %s' % (myWorkingLayer,
-                                          myKeywordsPath))
+    myMessage = tr(
+        'Input file to be clipped "%s" does not have the '
+        'expected keywords file %s' % (
+            myWorkingLayer, myKeywordsPath))
     verify(os.path.isfile(myKeywordsPath), myMessage)
 
     # Raise exception if layer is projected and refers to density (issue #123)
@@ -440,26 +448,29 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # If no cell size is specified, we need to run gdalwarp without
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
+    myBinaryList = which('gdalwarp')
+    LOGGER.debug('Path for gdalwarp: %s' % myBinaryList)
+    if len(myBinaryList) < 1:
+        raise CallGDALError(
+            tr('gdalwarp could not be found on your computer'))
+    # Use the first matching gdalwarp found
+    myBinary = myBinaryList[0]
     if theCellSize is None:
-        myCommand = ('gdalwarp -q -t_srs EPSG:4326 -r near '
+        myCommand = ('%s -q -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
-                     '"%s" "%s"' % (myClipKml,
+                     '"%s" "%s"' % (myBinary,
+                                    myClipKml,
                                     myWorkingLayer,
                                     myFilename))
     else:
-        myCommand = ('gdalwarp -q -t_srs EPSG:4326 -r near -tr %f %f '
+        myCommand = ('%s -q -t_srs EPSG:4326 -r near -tr %f %f '
                      '-cutline %s -crop_to_cutline -of GTiff '
-                     '"%s" "%s"' % (theCellSize,
+                     '"%s" "%s"' % (myBinary,
+                                    theCellSize,
                                     theCellSize,
                                     myClipKml,
                                     myWorkingLayer,
                                     myFilename))
-    myExecutablePrefix = ''
-    if sys.platform == 'darwin':  # Mac OS X
-        # .. todo:: FIXME - softcode gdal version in this path
-        myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
-                              'Versions/1.9/Programs/')
-    myCommand = myExecutablePrefix + myCommand
 
     LOGGER.debug(myCommand)
     myResult = QProcess().execute(myCommand)
@@ -468,9 +479,10 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # http://qt-project.org/doc/qt-4.8/qprocess.html#execute
     if myResult == -2:  # cannot be started
         myMessageDetail = tr('Process could not be started.')
-        myMessage = tr('<p>Error while executing the following shell command:'
-                     '</p><pre>%s</pre><p>Error message: %s'
-                     % (myCommand, myMessageDetail))
+        myMessage = tr(
+            '<p>Error while executing the following shell command:'
+            '</p><pre>%s</pre><p>Error message: %s'
+            % (myCommand, myMessageDetail))
         raise CallGDALError(myMessage)
     elif myResult == -1:  # process crashed
         myMessageDetail = tr('Process could not be started.')
@@ -511,15 +523,14 @@ def extentToKml(theExtent):
       </Placemark>
     </Folder>
   </Document>
-</kml>""" %
-    (myBottomLeftCorner,
-     myTopLeftCorner,
-     myTopRightCorner,
-     myBottomRightCorner,
-     myBottomLeftCorner))
+</kml>""" % (
+        myBottomLeftCorner,
+        myTopLeftCorner,
+        myTopRightCorner,
+        myBottomRightCorner,
+        myBottomLeftCorner))
 
-    myFilename = tempfile.mkstemp('.kml', 'extent_',
-                                      temp_dir())[1]
+    myFilename = tempfile.mkstemp('.kml', 'extent_', temp_dir())[1]
     myFile = file(myFilename, 'wt')
     myFile.write(myKml)
     myFile.close()
@@ -543,7 +554,7 @@ def extentToGeoArray(theExtent, theSourceCrs):
     """
 
     myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromEpsg(4326)
+    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(
         theSourceCrs,
         myGeoCrs)

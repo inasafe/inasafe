@@ -32,8 +32,11 @@ from qgis.core import (QgsVectorLayer,
                        QgsGeometry,
                        QgsPoint)
 
-from safe_qgis.safe_interface import readSafeLayer
-from safe_qgis.safe_interface import getOptimalExtent
+from safe_qgis.safe_interface import (readSafeLayer,
+                                      getOptimalExtent,
+                                      HAZDATA, TESTDATA, EXPDATA, UNITDATA,
+                                      GetDataError,
+                                      nanallclose)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.clipper import (clipLayer,
                                extentToKml,
@@ -42,15 +45,11 @@ from safe_qgis.clipper import (clipLayer,
 from safe_qgis.utilities import qgisVersion
 
 from safe_qgis.utilities_test import (getQgisTestApp,
-                            setCanvasCrs,
-                            RedirectStdStreams,
-                            DEVNULL,
-                            GEOCRS,
-                            setJakartaGeoExtent)
-
-from safe.common.testing import HAZDATA, TESTDATA, EXPDATA, UNITDATA
-from safe.common.exceptions import GetDataError
-from safe.api import nanallclose
+                                      setCanvasCrs,
+                                      RedirectStdStreams,
+                                      DEVNULL,
+                                      GEOCRS,
+                                      setJakartaGeoExtent)
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -82,8 +81,8 @@ class ClipperTest(unittest.TestCase):
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
 
-        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        VECTOR_PATH)
+        myMessage = 'Did not find layer "%s" in path "%s"' % \
+                    (myName, VECTOR_PATH)
         assert myVectorLayer is not None, myMessage
         assert myVectorLayer.isValid()
         # Create a bounding box
@@ -103,8 +102,8 @@ class ClipperTest(unittest.TestCase):
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
 
-        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        RASTERPATH)
+        myMessage = 'Did not find layer "%s" in path "%s"' % \
+                    (myName, RASTERPATH)
         assert myRasterLayer is not None, myMessage
 
         # Create a bounding box
@@ -123,8 +122,8 @@ class ClipperTest(unittest.TestCase):
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
 
         myMessage = ('Resampled raster has incorrect pixel size.'
-               'Expected: %f, Actual: %f' %
-               (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
+                     'Expected: %f, Actual: %f' %
+                     (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
         assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, myMessage
 
     # See issue #349
@@ -174,16 +173,16 @@ class ClipperTest(unittest.TestCase):
             myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
 
         myMessage = ('QgsVectorLayer reported "valid" for non '
-               'existent path "%s" and name "%s".'
-               % (myPath, myName))
+                     'existent path "%s" and name "%s".'
+                     % (myPath, myName))
         assert not myVectorLayer.isValid(), myMessage
 
         # Create a raster layer
         with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
             myRasterLayer = QgsRasterLayer(myPath, myName)
         myMessage = ('QgsRasterLayer reported "valid" for non '
-               'existent path "%s" and name "%s".'
-               % (myPath, myName))
+                     'existent path "%s" and name "%s".'
+                     % (myPath, myName))
         assert not myRasterLayer.isValid(), myMessage
 
     def test_clipBoth(self):
@@ -193,15 +192,15 @@ class ClipperTest(unittest.TestCase):
         # Create a vector layer
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
-        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        VECTOR_PATH)
+        myMessage = 'Did not find layer "%s" in path "%s"' % \
+                    (myName, VECTOR_PATH)
         assert myVectorLayer.isValid(), myMessage
 
         # Create a raster layer
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
-        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        RASTERPATH)
+        myMessage = 'Did not find layer "%s" in path "%s"' % \
+                    (myName, RASTERPATH)
         assert myRasterLayer.isValid(), myMessage
 
         # Create a bounding box
@@ -336,8 +335,9 @@ class ClipperTest(unittest.TestCase):
                 # Compare extrema
                 myExpectedScaledMax = mySigma * numpy.nanmax(myNativeData)
                 myMessage = ('Resampled raster was not rescaled correctly: '
-                       'max(myScaledData) was %f but expected %f'
-                       % (numpy.nanmax(myScaledData), myExpectedScaledMax))
+                             'max(myScaledData) was %f but expected %f'
+                             % (numpy.nanmax(myScaledData),
+                                myExpectedScaledMax))
 
                 # FIXME (Ole): The rtol used to be 1.0e-8 -
                 #              now it has to be 1.0e-6, otherwise we get
@@ -351,8 +351,9 @@ class ClipperTest(unittest.TestCase):
 
                 myExpectedScaledMin = mySigma * numpy.nanmin(myNativeData)
                 myMessage = ('Resampled raster was not rescaled correctly: '
-                       'min(myScaledData) was %f but expected %f'
-                       % (numpy.nanmin(myScaledData), myExpectedScaledMin))
+                             'min(myScaledData) was %f but expected %f'
+                             % (numpy.nanmin(myScaledData),
+                                myExpectedScaledMin))
                 assert numpy.allclose(myExpectedScaledMin,
                                       numpy.nanmin(myScaledData),
                                       rtol=1.0e-8, atol=1.0e-12), myMessage
@@ -483,27 +484,30 @@ class ClipperTest(unittest.TestCase):
 
     def test_explodeMultiPolygonGeometry(self):
         """Test exploding POLY multipart to single part geometries works"""
-        myGeometry = QgsGeometry.fromWkt('MULTIPOLYGON(((-0.966314 0.445890,'
-           '-0.281133 0.555729,-0.092839 0.218369,-0.908780 0.035305,-0.966314'
-           ' 0.445890)),((-0.906164 0.003923,-0.077148 0.197447,0.043151'
-           ' -0.074533,-0.882628 -0.296824,-0.906164 0.003923)))')
+        myGeometry = QgsGeometry.fromWkt(
+            'MULTIPOLYGON(((-0.966314 0.445890,'
+            '-0.281133 0.555729,-0.092839 0.218369,-0.908780 0.035305,'
+            '-0.966314 0.445890)),((-0.906164 0.003923,-0.077148 0.197447,'
+            '0.043151 -0.074533,-0.882628 -0.296824,-0.906164 0.003923)))')
         myCollection = explodeMultiPartGeometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart polygon geometry'
         assert len(myCollection) == 2, myMessage
 
     def test_explodeMultiLineGeometry(self):
         """Test exploding LINES multipart to single part geometries works"""
-        myGeometry = QgsGeometry.fromWkt('MULTILINESTRING((-0.974159 0.526961,'
-                ' -0.291594 0.644645), (-0.411893 0.728331,'
-                ' -0.160834 0.568804))')
+        myGeometry = QgsGeometry.fromWkt(
+            'MULTILINESTRING((-0.974159 0.526961,'
+            ' -0.291594 0.644645), (-0.411893 0.728331,'
+            ' -0.160834 0.568804))')
         myCollection = explodeMultiPartGeometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart line geometry'
         assert len(myCollection) == 2, myMessage
 
     def test_explodeMultiPointGeometry(self):
         """Test exploding POINT multipart to single part geometries works"""
-        myGeometry = QgsGeometry.fromWkt('MULTIPOINT((-0.966314 0.445890),'
-           '(-0.281133 0.555729))')
+        myGeometry = QgsGeometry.fromWkt(
+            'MULTIPOINT((-0.966314 0.445890),'
+            '(-0.281133 0.555729))')
         myCollection = explodeMultiPartGeometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart point geometry'
         assert len(myCollection) == 2, myMessage
@@ -516,12 +520,11 @@ class ClipperTest(unittest.TestCase):
             QgsPoint(30, 30),
             QgsPoint(40, 40)])
 
-        myClipPolygon = QgsGeometry.fromPolygon([[
-             QgsPoint(20, 20),
-             QgsPoint(20, 30),
-             QgsPoint(30, 30),
-             QgsPoint(30, 20),
-             QgsPoint(20, 20)]])
+        myClipPolygon = QgsGeometry.fromPolygon([[QgsPoint(20, 20),
+                                                  QgsPoint(20, 30),
+                                                  QgsPoint(30, 30),
+                                                  QgsPoint(30, 20),
+                                                  QgsPoint(20, 20)]])
 
         myResult = clipGeometry(myClipPolygon, myGeometry)
 
@@ -529,7 +532,7 @@ class ClipperTest(unittest.TestCase):
             myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
         else:
             myExpectedWkt = ('LINESTRING(20.000000 20.000000, '
-                '30.000000 30.000000)')
+                             '30.000000 30.000000)')
         # There should only be one feature that intersects this clip
         # poly so this assertion should work.
         self.assertEqual(myExpectedWkt, str(myResult.exportToWkt()))

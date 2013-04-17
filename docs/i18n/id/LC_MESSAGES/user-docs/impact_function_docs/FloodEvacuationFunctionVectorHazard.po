@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, InaSAFE project
+# This file is distributed under the same license as the InaSAFE Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: 2013-03-06 10:55+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# c8098b17378d4b8e8fa63949357bc4ba
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:6
+msgid "Flood Evacuation Function Vector Hazard"
+msgstr ""
+
+# 738da4f68fb244ac97fa745d5cd69b0f
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:9
+msgid "Overview"
+msgstr ""
+
+# 39f0c5c523ef4ad7a9b25efe4b37d7a9
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:11
+msgid "**Unique Identifier**: Flood Evacuation Function Vector Hazard"
+msgstr ""
+
+# cc474b2fbbbd42ad987be05e8ed3cccd
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:13
+msgid "**Rating**: 4"
+msgstr ""
+
+# 328e683396e9467087d569a5be07c514
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:15
+msgid "**Title**: Need evacuation"
+msgstr ""
+
+# 6cc1a9a60d404978ab2a5d74f08d5180
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:17
+msgid "**Author**: AIFDR"
+msgstr ""
+
+# 9d17c3bafba54892803e6686326f21c6
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:20
+msgid "Details"
+msgstr ""
+
+# 5821274f592444f6b6d9b6e09d1a98c0
+#: ../../source/user-docs/impact_function_docs/FloodEvacuationFunctionVectorHazard.rst:22
+msgid "No documentation found"
+msgstr ""

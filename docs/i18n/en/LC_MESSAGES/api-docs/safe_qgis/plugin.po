@@ -1,0 +1,306 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 27bbd76e3c2549b4ab4e545f5c89572e
+#: ../../source/api-docs/safe_qgis/plugin.rst:6
+msgid "Module:  safe_qgis.plugin"
+msgstr ""
+
+# 634284b09cc541209bf4b591bb3fe1db
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin:2
+msgid "**QGIS plugin implementation.**"
+msgstr ""
+
+# d5b429eaec5846c78470bc74ec8186e1
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 0465c4ce378047359c9c4b386c25075a
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 75ab0a2022f74a0a81bfbeac58483c00
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin:1
+msgid "The QGIS interface implementation for the Risk in a box plugin."
+msgstr ""
+
+# 1d8bb57af2184e19be685263e36910e4
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin:3
+msgid ""
+"This class acts as the 'glue' between QGIS and our custom logic. It creates "
+"a toolbar and menubar entry and launches the InaSAFE user interface if these "
+"are activated."
+msgstr ""
+
+# ab18cb34b97440f8ac3e62aae0baa989
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.initGui:1
+msgid "Gui initialisation procedure (for QGIS plugin api)."
+msgstr ""
+
+# 729b28eab4de4058877c29688cc62b69
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.initGui:3
+msgid ""
+"This method is called by QGIS and should be used to set up any graphical "
+"user interface elements that should appear in QGIS by default (i.e. before "
+"the user performs any explicit action with the plugin)."
+msgstr ""
+
+# 0ef91a7e61e54533a05885045119bf29
+# b73b7c719f7641578d58595559578849
+# 79b7a5c6850c4ca5af8d381d41dc3d04
+# db0fb6b9f8ec4f878b151c0ec7b0c3d0
+# 9d3d845d22d04559bb9964797623880a
+# c8569beba42a4fcba15e2b3ddc595644
+# c2377c4c655d43df91b4f4c6d3176944
+# 056b645cbd444af58c7f00784d0e45f8
+# 1f8afc05c6904805ba442b32f56e39a4
+# 5c43ce7668a14696aac48c4d2a4801aa
+# 8db63d6f735745d79ab5c7d8e9cc6a91
+# 3239caa26f594c21aad99a727223ec96
+# 578aa00725c54e82b53ea6614b82061e
+# 5460dabd5faa4354ba7af2770bd95b13
+# 52a45db2ed074a249c4fc84cd7cbebf9
+# a5be1ed15f6743f7b811311a35e626a8
+# 1374c5c21cb1413aba1cbdb684c1ad43
+# 16772c879bc740dbaaf13f3e20d1cd3a
+# af57c2fc609a446396dcd2cd40a250e7
+# 7548ad7d132e4cf288e344d85e9620be
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.initGui:9
+#: safe_qgis.plugin.Plugin.initGui:11 safe_qgis.plugin.Plugin.layerChanged:9
+#: safe_qgis.plugin.Plugin.layerChanged:11 safe_qgis.plugin.Plugin.resetDock:9
+#: safe_qgis.plugin.Plugin.resetDock:11 safe_qgis.plugin.Plugin.setupI18n:11
+#: safe_qgis.plugin.Plugin.showHideDockWidget:10
+#: safe_qgis.plugin.Plugin.showHideDockWidget:12
+#: safe_qgis.plugin.Plugin.showImpactFunctionsDoc:9
+#: safe_qgis.plugin.Plugin.showImpactFunctionsDoc:11
+#: safe_qgis.plugin.Plugin.showKeywordsEditor:9
+#: safe_qgis.plugin.Plugin.showKeywordsEditor:11
+#: safe_qgis.plugin.Plugin.showMinimumNeeds:9
+#: safe_qgis.plugin.Plugin.showMinimumNeeds:11
+#: safe_qgis.plugin.Plugin.showOptions:9
+#: safe_qgis.plugin.Plugin.showOptions:11
+#: safe_qgis.plugin.Plugin.toggleActionDock:11
+#: safe_qgis.plugin.Plugin.unload:7 safe_qgis.plugin.Plugin.unload:9
+msgid "None."
+msgstr ""
+
+# 7b1d5f7dc8494f91a303baab9a241515
+# 124a70329e34456c8e3e89f2fbb2d6dc
+# f2a9f4450bab4bce8b3ba6e95dbe380a
+# f183c0eb9d8946e0896456120b51a43d
+# 065aae66d4c64c6d81aa567728e0a145
+# aea9266459e34f52af1d57e12579e496
+# 6d373e1a2d97455eb3063cffb84cabf9
+# f3adfc8c64fd48029c6d36253242b326
+# 5fda0b10e2dd4938be321428d0da3490
+# e0e4aaf2b3494a43802d98298f4f237c
+# d3fc8471e2e142b099edc54e296de5e9
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.initGui:13 safe_qgis.plugin.Plugin.layerChanged:13
+#: safe_qgis.plugin.Plugin.resetDock:13
+#: safe_qgis.plugin.Plugin.showHideDockWidget:14
+#: safe_qgis.plugin.Plugin.showImpactFunctionsDoc:13
+#: safe_qgis.plugin.Plugin.showKeywordsEditor:13
+#: safe_qgis.plugin.Plugin.showMinimumNeeds:13
+#: safe_qgis.plugin.Plugin.showOptions:13
+#: safe_qgis.plugin.Plugin.toggleActionDock:13 safe_qgis.plugin.Plugin.tr:8
+#: safe_qgis.plugin.Plugin.unload:11
+msgid "no exceptions explicitly raised."
+msgstr ""
+
+# 8662df1d19964d17bc0d359b93203d68
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.keyActionF7:1
+msgid "Executed when user press F7"
+msgstr ""
+
+# 3d987c0d4b3d44aba63510e14b409eeb
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.layerChanged:1
+msgid "Enable or disable the keywords editor icon."
+msgstr ""
+
+# 8b131e4baf7f4e7798a56f0ec70bd030
+# b7d8657782e148c6961cbbf91d915ada
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.layerChanged:3
+#: safe_qgis.plugin.Plugin.showKeywordsEditor:3
+msgid ""
+"This slot is called when the user clicks the keyword editor toolbar icon or "
+"menu item associated with this plugin"
+msgstr ""
+
+# d2c490187aad48f4818a1fe2c53c2ce8
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.resetDock:1
+msgid "Reset the dock to its default state."
+msgstr ""
+
+# 93b524b9eac440d3b9ad03f02605c9ff
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.resetDock:3
+msgid ""
+"This slot is called when the user clicks the reset icon in the toolbar or "
+"the reset menu item associated with this plugin"
+msgstr ""
+
+# 84588a7728ea41e49f7488658e926d1b
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.setupI18n:1
+msgid "Setup internationalisation for the plugin."
+msgstr ""
+
+# aa3a6f1b4f224e0a87d0b743aa9a6222
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.setupI18n:3
+msgid ""
+"See if QGIS wants to override the system locale and then see if we can get a "
+"valid translation file for whatever locale is effectively being used."
+msgstr ""
+
+# fcc92088d7404a0db21e1634fac1541d
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.setupI18n:8
+msgid ""
+"thePreferredLocale - optional parameter which if set will override any other "
+"way of determining locale.."
+msgstr ""
+
+# 247e23eda1914db8a9eafb1f8cea385e
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.setupI18n:13
+msgid "TranslationLoadException"
+msgstr ""
+
+# 180defca65484498b3e86f0cb0a0370d
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showHideDockWidget:1
+msgid "Show or hide the dock widget."
+msgstr ""
+
+# 10b52b55503e4c5e85caf6f8f396fbdf
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showHideDockWidget:3
+msgid ""
+"This slot is called when the user clicks the toolbar icon or menu item "
+"associated with this plugin. It will hide or show the dock depending on its "
+"current state."
+msgstr ""
+
+# 0eba60bf0e55472288b159565188395d
+# 5aeb71e34a29483e94537af6dc7b6993
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showImpactFunctionsDoc:1
+#: safe_qgis.plugin.Plugin.showKeywordsEditor:1
+msgid "Show the keywords editor."
+msgstr ""
+
+# c6892c2039c04e1bbd25d8af48d5fe7c
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showImpactFunctionsDoc:3
+msgid ""
+"This slot is called when the user clicks the impact functions toolbar icon "
+"or menu item associated with this plugin"
+msgstr ""
+
+# f8ea72833f0c404b8ac102a5a1e2ec12
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showMinimumNeeds:1
+msgid "Show the minimum needs dialog."
+msgstr ""
+
+# b374062054f642a4b40f3e5e11ae0c12
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showMinimumNeeds:3
+msgid ""
+"This slot is called when the user clicks the minimum needs toolbar icon or "
+"menu item associated with this plugin."
+msgstr ""
+
+# 803a01207f4b42b69c44633b729edc3d
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showOptions:1
+msgid "Show the options dialog."
+msgstr ""
+
+# 0fe55978c49148729dbc090a24355452
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.showOptions:3
+msgid ""
+"This slot is called when the user clicks the options toolbar icon or menu "
+"item associated with this plugin"
+msgstr ""
+
+# 07cad7fab5ad439592dc0b6722f7cb16
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.toggleActionDock:1
+msgid "check or uncheck the toggle inaSAFE toolbar button."
+msgstr ""
+
+# ea15daf37e4141e895b60a923dcd607e
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.toggleActionDock:3
+msgid ""
+"This slot is called when the user hides the inaSAFE panel using its close "
+"button or using view->panels"
+msgstr ""
+
+# ade1eca129254292b25d959ef18953b5
+#: ../../../safe_qgis/plugin.py:docstring of
+#: safe_qgis.plugin.Plugin.toggleActionDock:9
+msgid "checked - if actionDock has to be checked or not"
+msgstr ""
+
+# 8f984f26cad94647bbac7d8cf23dc9ad
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.tr:1
+msgid "We implement this ourself since we do not inherit QObject."
+msgstr ""
+
+# 76c002f33b374a3abbde4860065fdf3b
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.tr:4
+msgid "theString - string for translation."
+msgstr ""
+
+# 901c029543bb45239209b4ff7752e283
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.tr:6
+msgid "Translated version of theString."
+msgstr ""
+
+# a007026c5ccd48cdbae9a8c2ed03d092
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.unload:1
+msgid "Gui breakdown procedure (for QGIS plugin api)."
+msgstr ""
+
+# 151bb808f10f468bb0f9a3fe0062f8d5
+#: ../../../safe_qgis/plugin.py:docstring of safe_qgis.plugin.Plugin.unload:3
+msgid ""
+"This method is called by QGIS and should be used to *remove* any graphical "
+"user interface elements that should appear in QGIS."
+msgstr ""
+
+# 5f90aab6c40547f3ab74280ba355c7f7
+#: ../../source/api-docs/safe_qgis/plugin.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
