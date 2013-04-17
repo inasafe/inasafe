@@ -460,14 +460,23 @@ def platformName():
     """Get a platform name for this host.
 
         e.g OSX10.8
+        Windows7-SP1-AMD64
+        LinuxMint-14-x86_64
     """
     my_platform_system = platform.system()
     if my_platform_system == 'Darwin':
         myName = 'OSX'
         myName += '.'.join(platform.mac_ver()[0].split('.')[0:2])
         return myName
-    if my_platform_system == 'Linux':
+    elif my_platform_system == 'Linux':
         myName = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
+        return myName
+    elif my_platform_system == 'Windows':
+        myName = 'Windows'
+        myWin32Version = platform.win32_ver()
+        myPlatformMachine = platform.machine()
+        myName += myWin32Version[0] + '-' + myWin32Version[2]
+        myName += '-' + myPlatformMachine
         return myName
     else:
         return None

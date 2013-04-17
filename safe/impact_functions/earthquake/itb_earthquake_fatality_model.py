@@ -359,33 +359,33 @@ class ITBFatalityFunction(FunctionProvider):
 
         # This should not be needed as numpynanmin should automatically
         # exlude nans.
-        #nanfree_classes = []
-        #for c in classes:
-        #    if numpy.isnan(c):
-        #        nanfree_classes.append(0)
-        #    else:
-        #        nanfree_classes.append(c)
-        #classes = nanfree_classes
+        # nanfree_classes = []
+        # for c in classes:
+        #     if numpy.isnan(c):
+        #         nanfree_classes.append(0)
+        #     else:
+        #         nanfree_classes.append(c)
+        # classes = nanfree_classes
 
         style_classes = [
             dict(colour='#EEFFEE',
-                 quantity=int(round(classes[0])),
+                 quantity=classes[0],
                  transparency=100,
-                 label=tr('%i people/cell') % int(round(classes[0]))),
+                 label=tr('%s people/cell') % classes[0]),
             dict(colour='#FFFF7F',
-                 quantity=int(round(classes[1])),
+                 quantity=classes[1],
                  transparency=30),
             dict(colour='#E15500',
-                 quantity=int(round(classes[2])),
+                 quantity=classes[2],
                  transparency=30,
-                 label=tr('%i people/cell') % int(round(classes[2]))),
+                 label=tr('%s people/cell') % classes[2]),
             dict(colour='#E4001B',
-                 quantity=int(round(classes[3])),
+                 quantity=classes[3],
                  transparency=30),
             dict(colour='#730000',
-                 quantity=int(round(classes[4])),
+                 quantity=classes[4],
                  transparency=30,
-                 label=tr('%i people/cell') % int(round(classes[4])))]
+                 label=tr('%s people/cell') % classes[4])]
         style_info = dict(target_field=None, style_classes=style_classes)
 
         # Create new layer and return

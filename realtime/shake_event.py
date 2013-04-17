@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from Tix import _dummyComboBox
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -50,24 +49,26 @@ from PyQt4.QtCore import (QCoreApplication,
 from PyQt4.QtXml import QDomDocument
 # pylint: disable=E0611
 # Above for pallabelling
-from qgis.core import (QgsPoint,
-                       QgsField,
-                       QgsFeature,
-                       QgsGeometry,
-                       QgsVectorLayer,
-                       QgsRasterLayer,
-                       QgsRasterDataProvider,
-                       QgsRectangle,
-                       QgsDataSourceURI,
-                       QgsVectorFileWriter,
-                       QgsCoordinateReferenceSystem,
-                       QgsProject,
-                       QgsComposition,
-                       QgsMapLayerRegistry,
-                       QgsMapRenderer,
-                       QgsPalLabeling,
-                       QgsFeatureRequest,
-                       QgsFields)
+from qgis.core import (
+    QgsPoint,
+    QgsField,
+    QgsFeature,
+    QgsGeometry,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsRasterDataProvider,
+    QgsRectangle,
+    QgsDataSourceURI,
+    QgsVectorFileWriter,
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsComposition,
+    QgsMapLayerRegistry,
+    QgsMapRenderer,
+    QgsPalLabeling,
+    QgsProviderRegistry,
+    QgsFeatureRequest,
+    QgsFields)
 # pylint: enable=E0611
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
@@ -86,7 +87,8 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            ShapefileCreationError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
-                           MapComposerError)
+                           MapComposerError,
+                           EnvironmentError)
 # from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
@@ -133,6 +135,8 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
+
+        self.checkEnvironment()
 
         if theDataIsLocalFlag:
             self.eventId = theEventId
@@ -199,6 +203,20 @@ class ShakeEvent(QObject):
         self.locale = theLocale
         self.setupI18n()
         self.parseGridXml()
+
+    def checkEnvironment(self):
+        """A helper class to check that QGIS is correctly initialised.
+
+        Args: None
+
+        Returns: None
+
+        Raises: EnvironmentError if the environment is not correct.
+        """
+        myRegistry = QgsProviderRegistry.instance()
+        myList = myRegistry.pluginList()
+        if len(myList) < 1:
+            raise EnvironmentError('QGIS data provider list is empty!')
 
     def gridFilePath(self):
         """A helper to retrieve the path to the grid.xml file
@@ -1223,6 +1241,7 @@ class ShakeEvent(QObject):
                 myCount += 1
             # Store the box plus city count so we can visualise it later
             myRecord = {'city_count': myCount, 'geometry': myRectangle}
+            LOGGER.debug('Found cities in search box: %s' % myRecord)
             mySearchBoxes.append(myRecord)
             if myCount < myMinimumCityCount:
                 myRectangle.scale(self.zoomFactor)
@@ -1241,16 +1260,16 @@ class ShakeEvent(QObject):
         # Setup field indexes of our input and out datasets
         myCities = []
 
-        myFields = QgsFields()
-        myFields.append(QgsField('id', QVariant.Int))
-        myFields.append(QgsField('name', QVariant.String))
-        myFields.append(QgsField('population', QVariant.Int))
-        myFields.append(QgsField('mmi', QVariant.Double))
-        myFields.append(QgsField('dist_to', QVariant.Double))
-        myFields.append(QgsField('dir_to', QVariant.Double))
-        myFields.append(QgsField('dir_from', QVariant.Double))
-        myFields.append(QgsField('roman', QVariant.String))
-        myFields.append(QgsField('colour', QVariant.String))
+        #myFields = QgsFields()
+        #myFields.append(QgsField('id', QVariant.Int))
+        #myFields.append(QgsField('name', QVariant.String))
+        #myFields.append(QgsField('population', QVariant.Int))
+        #myFields.append(QgsField('mmi', QVariant.Double))
+        #myFields.append(QgsField('dist_to', QVariant.Double))
+        #myFields.append(QgsField('dir_to', QVariant.Double))
+        #myFields.append(QgsField('dir_from', QVariant.Double))
+        #myFields.append(QgsField('roman', QVariant.String))
+        #myFields.append(QgsField('colour', QVariant.String))
 
         # For measuring distance and direction from each city to epicenter
         myEpicenter = QgsPoint(self.longitude, self.latitude)
@@ -1287,8 +1306,7 @@ class ShakeEvent(QObject):
             # Populate the mmi field by raster lookup
             # Get a {int, QVariant} back
             myRasterValues = myRasterLayer.dataProvider().identify(
-                myPoint,
-                QgsRasterDataProvider.IdentifyFormatValue).results()
+                myPoint, QgsRasterDataProvider.IdentifyFormatValue).results()
             myRasterValues = myRasterValues.values()
             if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster
@@ -1387,17 +1405,15 @@ class ShakeEvent(QObject):
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
         myField = QgsField('cities_found', QVariant.Int)
-        myFields = QgsFields()
-        myFields.append(myField)
-        myMemoryProvider.addAttributes(myFields)
+        myMemoryProvider.addAttributes([myField])
         myFeatures = []
         for mySearchBox in self.searchBoxes:
             myNewFeature = QgsFeature()
             myRectangle = mySearchBox['geometry']
+            # noinspection PyArgumentList
             myGeometry = QgsGeometry.fromWkt(myRectangle.asWktPolygon())
             myNewFeature.setGeometry(myGeometry)
-            myNewFeature.setFields(myFields)
-            myNewFeature.setAttribute(0, mySearchBox['city_count'])
+            myNewFeature.setAttributes([mySearchBox['city_count']])
             myFeatures.append(myNewFeature)
 
         myResult = myMemoryProvider.addFeatures(myFeatures)
@@ -1500,6 +1516,7 @@ class ShakeEvent(QObject):
                       'dir_to': myDirectionTo,
                       'dir_from': myDirectionFrom}
             myCities.append(myCity)
+        LOGGER.debug('%s features added to sorted impacted cities list.')
         #LOGGER.exception(myCities)
         mySortedCities = sorted(myCities,
                                 key=lambda d: (
@@ -1658,6 +1675,7 @@ class ShakeEvent(QObject):
                           cell_class='mmi-%s' % myMmi,
                           header=True))
             if myMmi in self.affectedCounts:
+                # noinspection PyTypeChecker
                 myAffectedRow.append(
                     '%i' % round(self.affectedCounts[myMmi] / 1000))
             else:
