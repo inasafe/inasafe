@@ -215,16 +215,16 @@ class FloodEvacuationFunction(FunctionProvider):
         for i in xrange(len(classes)):
             if i == 1:
                 style_classes[i]['label'] = \
-                    tr('Low') + ' [' + '-'.join(interval_classes[i]) + ']'
+                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Low')
             elif i == 4:
                 style_classes[i]['label'] = \
-                    tr('Medium') + ' [' + '-'.join(interval_classes[i]) + ']'
+                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Medium')
             elif i == 7:
                 style_classes[i]['label'] = \
-                    tr('High') + ' [' + '-'.join(interval_classes[i]) + ']'
+                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('High')
             else:
                 style_classes[i]['label'] = \
-                    '[' + '-'.join(interval_classes[i]) + ']'
+                    '[' + ' - '.join(interval_classes[i]) + ']'
 
             # Override associated quantities in colour style
             if i == 0:

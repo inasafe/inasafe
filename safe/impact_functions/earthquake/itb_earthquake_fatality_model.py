@@ -384,7 +384,7 @@ class ITBFatalityFunction(FunctionProvider):
                     quantity=int(round(classes[i])),
                     transparency=transparency,
                     # people/cell will be added
-                    label=tr('-'.join(my_class))
+                    label=tr(' - '.join(my_class))
                 )
             )
             i += 1

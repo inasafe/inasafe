@@ -30,8 +30,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class MapLegend():
     """A class for creating a map legend."""
-    def __init__(self, theLayer, theDpi=300, theLegendNotes=None,
-                 theLegendUnits=None):
+    def __init__(self, theLayer, theDpi=300, theLegendTitle=None,
+                 theLegendNotes=None, theLegendUnits=None):
         """Constructor for the Map Legend class.
 
         Args:
@@ -53,6 +53,11 @@ class MapLegend():
         self.legendFontSize = 8
         self.legendWidth = 900
         self.dpi = theDpi
+        if theLegendTitle is None:
+            self.legendTitle = self.tr('Legend')
+        else:
+            self.legendTitle = theLegendTitle
+        print 'AFUFUFU', self.legendTitle
         self.legendNotes = theLegendNotes
         self.legendUnits = theLegendUnits
 
@@ -291,8 +296,12 @@ class MapLegend():
                 myMaxString = '%i' % theMax
             else:
                 myMaxString = str(theMax)
-
             theLabel += '[' + myMinString + ', ' + myMaxString + ']'
+        LOGGER.debug('Alpha ' + str(theMin) + str(theMax))
+        LOGGER.debug('Alpha ' + str(theMin == theMax))
+        if float(theMin) == float(theMax):
+            LOGGER.debug('Yehaaa')
+            return
         if theCategory is not None:
             theLabel = ' (' + theCategory + ')'
         myPainter.drawText(myLabelX, myOffset + 25, theLabel)
@@ -350,7 +359,7 @@ class MapLegend():
                                  myFontWeight,
                                  myItalicsFlag)
             myPainter.setFont(myFont)
-            myPainter.drawText(10, 25, self.tr('Legend'))
+            myPainter.drawText(10, 25, self.legendTitle)
 
             if self.legendUnits is not None:
                 myFontWeight = QtGui.QFont.StyleNormal

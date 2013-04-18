@@ -611,8 +611,10 @@ class Map():
         mapLegendAttributes = self.getMapLegendAtributes()
         legendNotes = mapLegendAttributes.get('legend_notes', None)
         legendUnits = mapLegendAttributes.get('legend_units', None)
+        legendTitle = mapLegendAttributes.get('legend_title', None)
         LOGGER.debug(mapLegendAttributes)
-        myLegend = MapLegend(self.layer, self.pageDpi, legendNotes, legendUnits)
+        myLegend = MapLegend(self.layer, self.pageDpi, legendTitle,
+                             legendNotes, legendUnits)
         self.legend = myLegend.getLegend()
         myPicture1 = QgsComposerPicture(self.composition)
         myLegendFilePath = unique_filename(
@@ -786,7 +788,9 @@ class Map():
             Any exceptions raised by the InaSAFE library will be propagated.
         """
         LOGGER.debug('InaSAFE Map getMapLegendAtributes called')
-        legendAttributes = ['legend_notes', 'legend_units']
+        legendAttributes = ['legend_notes',
+                            'legend_units',
+                            'legend_title']
         dictLegendAttributes = {}
         for myLegendAttribute in legendAttributes:
             try:
