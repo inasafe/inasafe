@@ -339,9 +339,6 @@ class ITBFatalityFunction(FunctionProvider):
                               'integer in order to avoid representing human '
                               'lives as fractionals.')])
 
-        # impact_summary = Table(table_body).toNewlineFreeString()
-        # map_title = tr('People in need of evacuation')
-
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '
                              'Institute of Teknologi Bandung 2012.'))
@@ -354,9 +351,6 @@ class ITBFatalityFunction(FunctionProvider):
         # Create style info dynamically
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
                                  numpy.nanmax(R.flat[:]), 5)
-        LOGGER.debug('nanmin : ' + str(numpy.nanmin(R.flat[:])))
-        LOGGER.debug('nanmin : ' + str(numpy.nanmax(R.flat[:])))
-        LOGGER.debug('Classes : ' + str(classes))
 
         # int & round Added by Tim in 1.2 - class is rounded to the
         # nearest int because we prefer to not categorise people as being
@@ -379,7 +373,6 @@ class ITBFatalityFunction(FunctionProvider):
         for my_class in interval_classes:
             transparency = 30
             min_value = my_class[0]
-            max_value = my_class[1]
             if min_value == 0:
                 transparency = 100
             colour = colours.pop(0)
@@ -390,14 +383,17 @@ class ITBFatalityFunction(FunctionProvider):
                     quantity=int(round(classes[i])),
                     transparency=transparency,
                     # people/cell will be added
-                    label=tr('%s - %s') % (
-                        min_value,
-                        max_value)
+                    label=tr(' - '.join(my_class))
                 )
             )
             i += 1
 
         style_info = dict(target_field=None, style_classes=style_classes)
+
+        # For printing map purpose
+        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_units = tr('(people per cell)')
+        legend_title = tr('Population density')
 
         # Create new layer and return
         L = Raster(R,
@@ -410,7 +406,10 @@ class ITBFatalityFunction(FunctionProvider):
                              'exposed_per_mmi': number_of_exposed,
                              'displaced_per_mmi': number_of_displaced,
                              'impact_table': impact_table,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'legend_notes': legend_notes,
+                             'legend_units': legend_units,
+                             'legend_title': legend_title},
                    name=tr('Estimated displaced population per cell'),
                    style_info=style_info)
 

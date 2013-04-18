@@ -371,12 +371,43 @@ def format_decimal(interval, my_number):
     If interval is an integer return integer part of my_number
     If my_number is an integer return as is
     """
+    interval = get_significant_decimal(interval)
     if isinstance(interval, Integral) or isinstance(my_number, Integral):
         return format_int(int(my_number))
     decimal_places = len(str(interval).split('.')[1])
     my_number_int = str(my_number).split('.')[0]
     my_number_decimal = str(my_number).split('.')[1][:decimal_places]
+    if len(set(my_number_decimal)) == 1 and my_number_decimal[-1] == '0':
+        return my_number_int
     return my_number_int + '.' + my_number_decimal
+
+
+def get_significant_decimal(my_decimal):
+    """Return a truncated decimal by last three digit after leading zero
+    """
+    if isinstance(my_decimal, Integral):
+        return my_decimal
+    my_int_part = str(my_decimal).split('.')[0]
+    my_decimal_part = str(my_decimal).split('.')[1]
+    first_not_zero = 0
+    for i in xrange(len(my_decimal_part)):
+        if my_decimal_part[i] == '0':
+            continue
+        else:
+            first_not_zero = i
+            break
+    my_truncated_decimal = my_decimal_part[:first_not_zero + 3]
+    # rounding
+    my_letfover_digit = my_decimal_part[:first_not_zero + 3:]
+    my_letfover_number = int(float('0.' + my_letfover_digit))
+    round_up = False
+    if my_letfover_number == 1:
+        round_up = True
+    my_truncated = float(my_int_part + '.' + my_truncated_decimal)
+    if round_up:
+        my_bonus = 1 * 10 ^ (-(first_not_zero + 4))
+        my_truncated += my_bonus
+    return my_truncated
 
 
 def humanize_class(my_classes):
@@ -412,8 +443,6 @@ def humanize_class(my_classes):
         min_value = max_value
         try:
             if humanize_classes[-1][0] == humanize_classes[-1][-1]:
-                print 'Unhuman'
-                print humanize_classes
                 return unhumanize_class(my_classes)
         except IndexError:
             continue

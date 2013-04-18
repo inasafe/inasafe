@@ -81,12 +81,18 @@ class MapLegendTest(unittest.TestCase):
     def test_getVectorLegend(self):
         """Getting a legend for a vector layer works."""
         myLayer, _ = loadLayer('test_shakeimpact.shp')
-        myMapLegend = MapLegend(myLayer)
+        myMapLegend = MapLegend(
+            myLayer,
+            theLegendNotes='Thousand separator represented by \'.\'',
+            theLegendUnits='(people per cell)')
         myImage = myMapLegend.getVectorLegend()
         myPath = unique_filename(prefix='getVectorLegend',
                                  suffix='.png',
                                  dir=temp_dir('test'))
         myImage.save(myPath, 'PNG')
+        print myMapLegend.legendUnits
+        print myMapLegend.legendNotes
+        print myPath
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
