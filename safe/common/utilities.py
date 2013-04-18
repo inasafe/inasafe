@@ -188,9 +188,17 @@ except ImportError:
 
 
 def zip_shp(shp_path, extra_ext=None, remove_file=False):
-    """Zip shape file and its gang (.shx, .dbf, .prj)
-    and extra_file is a list of another ext related to shapefile, if exist
-    The zip file will be put in the same directory
+    """Zip shape file and its gang (.shx, .dbf, .prj).
+
+    Args:
+        * shp_path: str - path to the main shape file.
+        * extra_ext: [str] - list of extra extentions related to shapefile.
+
+    Returns:
+        str: full path to the created shapefile
+
+    Raises:
+        None
     """
 
     # go to the directory
