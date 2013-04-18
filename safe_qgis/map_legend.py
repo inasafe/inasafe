@@ -281,9 +281,7 @@ class MapLegend():
         LOGGER.debug('theLabel' + str(theLabel))
         LOGGER.debug('theMin ' + str(theMin))
         LOGGER.debug('theMax ' + str(theMax))
-        if theLabel != '':
-            theLabel += ' '
-        if theMin is not None and theMax is not None:
+        if theMin is not None and theMax is not None and theLabel == '':
             if float(theMin) - int(theMin) == 0.0:
                 myMinString = '%i' % theMin
             else:

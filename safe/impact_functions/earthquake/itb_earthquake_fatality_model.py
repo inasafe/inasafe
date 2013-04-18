@@ -384,16 +384,17 @@ class ITBFatalityFunction(FunctionProvider):
                     quantity=int(round(classes[i])),
                     transparency=transparency,
                     # people/cell will be added
-                    label=tr('%s - %s') % (
-                        min_value,
-                        max_value)
+                    label=tr('-'.join(my_class))
                 )
             )
             i += 1
 
         style_info = dict(target_field=None, style_classes=style_classes)
+
+        # For printing map purpose
         legend_notes = tr('Thousand separator is represented by \'.\'')
         legend_units = tr('(people per cell)')
+        legend_title = tr('Population density')
 
         # Create new layer and return
         L = Raster(R,
@@ -408,7 +409,8 @@ class ITBFatalityFunction(FunctionProvider):
                              'impact_table': impact_table,
                              'map_title': map_title,
                              'legend_notes': legend_notes,
-                             'legend_units': legend_units},
+                             'legend_units': legend_units,
+                             'legend_title': legend_title},
                    name=tr('Estimated displaced population per cell'),
                    style_info=style_info)
 
