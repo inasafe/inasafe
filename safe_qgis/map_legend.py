@@ -299,7 +299,10 @@ class MapLegend():
             theLabel += '[' + myMinString + ', ' + myMaxString + ']'
         LOGGER.debug('Alpha ' + str(theMin) + str(theMax))
         LOGGER.debug('Alpha ' + str(theMin == theMax))
-        if float(theMin) == float(theMax):
+        if theMin is None or theMax is None:
+            LOGGER.debug('Yehaaa')
+            return
+        if float(str(theMin)) == float(str(theMax)):
             LOGGER.debug('Yehaaa')
             return
         if theCategory is not None:

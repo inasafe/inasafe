@@ -373,7 +373,6 @@ class ITBFatalityFunction(FunctionProvider):
         for my_class in interval_classes:
             transparency = 30
             min_value = my_class[0]
-            max_value = my_class[1]
             if min_value == 0:
                 transparency = 100
             colour = colours.pop(0)
