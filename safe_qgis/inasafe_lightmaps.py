@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
 from PyQt4.QtGui import QPushButton, QWidget
 from third_party.lightmaps import LightMaps, SlippyMap, tdim
 
-
+## taken from http://wiki.openstreetmap.org/wiki/Zoom_levels
 ZOOM_LEVEL_DEGREE = [
     360,
     180,
