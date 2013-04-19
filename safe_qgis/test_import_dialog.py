@@ -93,8 +93,10 @@ class FakeQNetworkAccessManager:
         elif myUrl == 'http://hot-export.geofabrik.de/jobs/1990':
             myReply.content = readAll('test-importdlg-job.html')
         elif myUrl == \
-                'http://hot-export.geofabrik.de/download/' + \
-                '006113/extract.shp.zip':
+                    'http://osm.linfiniti.com/buildings-shp?' + \
+                    'bbox=20.389938354492188,-34.10782492987083' \
+                    ',20.712661743164062,' + \
+                    '-34.008273470938335&obj=building':
             myReply.content = readAll("test-importdlg-extractzip.zip")
 
         return myReply
@@ -112,7 +114,6 @@ def readAll(thePath):
 
 class ImportDialogTest(unittest.TestCase):
     """Test Import Dialog widget
-    FIXME(gigih): add unit test for httpRequest to check redirection
     """
 
     def test_httpRequest(self):
@@ -159,50 +160,11 @@ class ImportDialogTest(unittest.TestCase):
         ## provide Fake QNetworkAccessManager for self.nam
         self.importDlg.nam = FakeQNetworkAccessManager()
 
-        self.payload = {
-            'job[region_id]': '1',  # 1 is indonesia
-            'job[name]': 'InaSAFE job',
-            'job[description]': 'Test',
-
-            'job[lonmin]': '92.7188',
-            'job[latmin]': '-19.7515',
-            'job[lonmax]': '141.0586',
-            'job[latmax]': '14.8329',
-        }
-        self.token = "cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE="
-        self.preset = '3'
-
-    def test_getAuthToken(self):
-        myContent = readAll('test-importdlg-newjob.html')
-        myResult = self.importDlg.getAuthToken(myContent)
-        myMessage = "Auth Token don't match. expected %s but got %s" % \
-                    (self.token, myResult)
-        assert myResult == self.token, myMessage
-
-    def test_createNewJob(self):
-        myToken = self.importDlg.createNewJob(self.payload)
-        myMessage = "Token don't match. Expected %s but got %s." % (
-            self.token, myToken)
-
-        assert myToken == self.token, myMessage
-
-    def test_uploadTag(self):
-        myJobId = self.importDlg.uploadTag(self.payload,
-                                           self.preset, self.token)
-        myMessage = "myJobId don't match. Expected 1990 but got %s" % myJobId
-        assert myJobId == '1990', myMessage
-
-    def test_getDownloadUrl(self):
-        myUrl = self.importDlg.getDownloadUrl('1990')
-        myExpected = \
-            'http://hot-export.geofabrik.de/download/006113/extract.shp.zip'
-        myMessage = "URL don't match. Expected %s but got %s" % (
-            myUrl, myExpected)
-        assert myUrl == myExpected, myMessage
-
     def test_downloadShapeFile(self):
-        myUrl = 'http://hot-export.geofabrik.de/' + \
-                'download/006113/extract.shp.zip'
+        myUrl = 'http://osm.linfiniti.com/buildings-shp?' + \
+                'bbox=20.389938354492188,-34.10782492987083' \
+                ',20.712661743164062,' + \
+                '-34.008273470938335&obj=building'
         myTempFilePath = tempfile.mktemp('shapefiles')
         self.importDlg.downloadShapeFile(myUrl, myTempFilePath)
 
@@ -238,6 +200,10 @@ class ImportDialogTest(unittest.TestCase):
     def test_doImport(self):
         myOutDir = tempfile.mkdtemp()
         self.importDlg.outDir.setText(myOutDir)
+        self.importDlg.minLongitude.setText('20.389938354492188')
+        self.importDlg.minLatitude.setText('-34.10782492987083')
+        self.importDlg.maxLongitude.setText('20.712661743164062')
+        self.importDlg.maxLatitude.setText('-34.008273470938335')
         self.importDlg.doImport()
 
         myResult = self.importDlg.progressDialog.result()
