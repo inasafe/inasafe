@@ -19,9 +19,10 @@ import logging
 #sys.path.append(pardir)
 
 from PyQt4 import QtGui
-from qgis.core import (QgsMapLayerRegistry,
-                       QgsRectangle,
-                       QgsComposerPicture)
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsRectangle,
+    QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
@@ -73,6 +74,7 @@ class MapTest(unittest.TestCase):
             234806,  # as rendered on osx mountain lion 10.8
             438659,  # as rendered on linux mint Nadia 14
             447907,  # as rendered on windows 7 sp1 AMD64
+            438582,  # as rendered on Jenkins post 18 April 2013
         ]
         myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
             myExpectedSizes, mySize)
