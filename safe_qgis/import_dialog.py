@@ -25,8 +25,6 @@ from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
                              QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
-from third_party.bs4 import BeautifulSoup
-
 import time
 import os
 import tempfile
@@ -117,13 +115,16 @@ def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
     return myResult
 
 
-def httpDownload(theManager, theUrl, theOutPath, theHook=None):
+def httpDownload(theManager, theUrl, theOutPath, theProgressDlg=None):
     """ Download file from theUrl.
     Params:
         * theManager - a QNetworkManager instance
         * theUrl - url of file
         * theOutPath - output path
-        * theHook - callback function to check progress of download
+        * theProgressDlg - progress dialog widget
+    Returns:
+        True if success, otherwise return a tuple with format like this
+        (QNetworkReply.NetworkError, error_message)
     Raises:
         * IOError - when cannot create theOutPath
     """
@@ -141,14 +142,34 @@ def httpDownload(theManager, theUrl, theOutPath, theHook=None):
     myReply = theManager.get(myRequest)
     myReply.readyRead.connect(writeData)
 
-    if theHook:
-        myReply.downloadProgress.connect(theHook)
+    if theProgressDlg:
+        # progress bar
+        def progressEvent(theReceived, theTotal):
+
+            QCoreApplication.processEvents()
+
+            theProgressDlg.setLabelText("%s / %s" % (theReceived, theTotal))
+            theProgressDlg.setMaximum(theTotal)
+            theProgressDlg.setValue(theReceived)
+
+        # cancel
+        def cancelAction():
+            myReply.abort()
+
+        myReply.downloadProgress.connect(progressEvent)
+        theProgressDlg.canceled.connect(cancelAction)
 
     # wait until finished
     while not myReply.isFinished():
         QCoreApplication.processEvents()
 
     myFile.close()
+
+    myResult = myReply.error()
+    if myResult == QNetworkReply.NoError:
+        return True
+    else:
+        return (myResult, str(myReply.errorString()))
 
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
@@ -170,7 +191,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.setWindowTitle(self.tr('Import Hot-Export'))
 
         self.iface = theIface
-        self.url = 'http://hot-export.geofabrik.de'
+        self.url = "http://osm.linfiniti.com/buildings-shp"
 
         ## region coordinate: (latitude, longtitude, zoom_level)
         self.regionExtent = {
@@ -184,7 +205,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         # creating progress dialog for download
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
-        self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
+        self.progressDialog.setWindowTitle(self.tr("OSM Shapefile Downloader"))
 
         ## set map parameter based on placeholder self.map widget
         theMap = InasafeLightMaps(self.gbxMap)
@@ -220,20 +241,14 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     # pylint: disable=W0613
 
     def setupOptions(self):
-        """ Fill the options in combo box. """
-        ## FIXME(gigih): dynamicly load the option from Hot-Export website
-
         self.cbxRegion.insertItem(0, 'Indonesia', 1)
         self.cbxRegion.insertItem(1, 'Africa', 2)
         self.cbxRegion.insertItem(2, 'Philippines', 4)
         self.cbxRegion.insertItem(3, 'Central Asia/Middle East', 3)
         self.cbxRegion.insertItem(4, 'Haiti', 0)
 
-        self.cbxPreset.insertItem(0, 'Building/Gedung', 1)
-        self.cbxPreset.insertItem(1, 'Opendri Building Presets', 9)
-        self.cbxPreset.insertItem(2, 'bus_stop', 7)
-        self.cbxPreset.insertItem(3, 'Presets for Access Mapping', 2)
-        self.cbxPreset.insertItem(4, 'RW boundaries for Jakarta', 6)
+        self.cbxPreset.insertItem(0, self.tr('Buildings'), 'building')
+        self.cbxPreset.insertItem(0, self.tr('Highway'), 'highway')
 
     def restoreState(self):
         """ Read last state of GUI from configuration file """
@@ -305,27 +320,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
             self.progressDialog.cancel()
 
-    def progressEvent(self, theReceived, theTotal):
-        """
-        Hook function that called when doing http request.
-        This function will update the value of progress bar and
-        check if user press cancel button.
-
-        Params:
-            * theReceived : int - number of bytes received
-            * theTotal : int - total bytes of download
-        Raises:
-            CanceledImportDialogError - when user press cancel button
-        """
-
-        QCoreApplication.processEvents()
-
-        self.progressDialog.setMaximum(theTotal)
-        self.progressDialog.setValue(theReceived)
-
-        if self.progressDialog.wasCanceled():
-            raise CanceledImportDialogError()
-
     def ensureDirExist(self):
         """
         Ensure directory path entered in dialog exist.
@@ -357,180 +351,38 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def doImport(self):
         """
-        Import shape files from Hot-Export.
+        Import shape files from Linfinti.
         """
 
-        self.progressDialog.show()
-        self.progressDialog.setMaximum(100)
-        self.progressDialog.setValue(0)
+        ## preparing necessary data
+        myMinLng = str(self.minLongitude.text())
+        myMinLat = str(self.minLatitude.text())
+        myMaxLng = str(self.maxLongitude.text())
+        myMaxLat = str(self.maxLatitude.text())
 
-        ## setup necessary data to create new job in Hot-Export
-        myCurrentIndex = self.cbxRegion.currentIndex()
-        myRegionId = self.cbxRegion.itemData(myCurrentIndex).toString()
-        myPayload = {
-            'job[region_id]': str(myRegionId),
-            'job[name]': 'InaSAFE job',
-            'job[description]': 'Created from import feature in InaSAFE',
-            'job[lonmin]': str(self.minLongitude.text()),
-            'job[latmin]': str(self.minLatitude.text()),
-            'job[lonmax]': str(self.maxLongitude.text()),
-            'job[latmax]': str(self.maxLatitude .text()),
-        }
+        myCurrentIndex = self.cbxPreset.currentIndex()
+        myType = str(self.cbxPreset.itemData(myCurrentIndex).toString())
 
-        ## create a new job in Hot-Export
-        self.progressDialog.setLabelText(
-            self.tr("Create A New Job on Hot-Exports..."))
-        myNewJobToken = self.createNewJob(myPayload)
+        myCoordinate = "{myMinLng},{myMinLat},{myMaxLng},{myMaxLat}".format(
+            myMinLng=myMinLng,
+            myMinLat=myMinLat,
+            myMaxLng=myMaxLng,
+            myMaxLat=myMaxLat
+        )
 
-        ## prepare tag
-        myPresetText = self.cbxPreset.currentText()
-        myPreset = str(self.cbxPreset.itemData(
-            self.cbxPreset.currentIndex()).toString())
-        self.progressDialog.setLabelText(
-            self.tr("Set Preset to ... '%1'").arg(myPresetText))
-        myJobId = self.uploadTag(myPayload, myPreset, myNewJobToken)
+        myShapeUrl = "{url}?bbox={myCoordinate}&obj={type}".format(
+            url=self.url,
+            myCoordinate=myCoordinate,
+            type=myType
+        )
 
-        myLabelText = "Waiting For Result Available on Server..." \
-                      + " (http://hot-export.geofabrik.de/jobs/%1)"
-        self.progressDialog.setLabelText(self.tr(myLabelText).arg(myJobId))
-        myShapeUrl = self.getDownloadUrl(myJobId)
+        myFilePath = tempfile.mktemp('.shp.zip')
 
-        ## download shape file from Hot-Export
-        self.progressDialog.setLabelText(
-            self.tr("Download Shape File..."))
-
-        myFilePath = tempfile.mktemp('.shp.zip', 'import_' + str(myJobId))
+        # download and extract it
         self.downloadShapeFile(myShapeUrl, myFilePath)
-
-        ## extract downloaded file to output directory
-        myLabelText = "Extract Shape File... from %1 to %2"
-        myLabelText = self.tr(myLabelText)
-        myLabelText = myLabelText.arg(myFilePath).arg(self.outDir.text())
-        self.progressDialog.setLabelText(myLabelText)
-
         self.extractZip(myFilePath, str(self.outDir.text()))
 
         self.progressDialog.done(QDialog.Accepted)
-
-    def getAuthToken(self, theContent):
-        """ Get authenticity_token value
-
-        Args:
-           * theContent - string containing html page from hot-exports
-        Returns:
-           authenticity_token value
-        Raises:
-           no exceptions explicitly raised
-        """
-
-        ## FIXME(gigih): need fail-proof method to get authenticity_token
-        myToken = theContent.split(
-            'authenticity_token" type="hidden" value="')[1]
-        myToken = myToken.split('"')[0]
-
-        return myToken
-
-    def createNewJob(self, thePayload):
-        """ Fill form to create new hot-exports job.
-        Args:
-           * thePayload - dictionary
-        Returns:
-           authenticity_token value
-        Raises:
-           no exceptions explicitly raised
-        """
-
-        myJobResponse = httpRequest(self.nam, 'GET',
-                                    self.url + '/newjob',
-                                    self.progressEvent)
-        myJobToken = self.getAuthToken(myJobResponse.content)
-
-        thePayload['authenticity_token'] = myJobToken
-
-        myWizardResponse = httpRequest(self.nam, 'POST',
-                                       self.url + '/wizard_area',
-                                       thePayload,
-                                       self.progressEvent)
-        myWizardToken = self.getAuthToken(myWizardResponse.content)
-        return myWizardToken
-
-    def uploadTag(self, thePayload, thePreset, theToken):
-        """
-        Go to page http://hot-export.geofabrik.de and fill the needed data.
-        Currently the preset file is set to "preset mapping from jakarta"
-        in HotExport.
-
-        Params:
-            * thePayload - dictionary containing needed data in form
-            * theToken   - authentication value from previous page
-        Returns:
-            Job Id
-        """
-        thePayload['authenticity_token'] = theToken
-        thePayload['presetfile'] = thePreset
-        thePayload['default_tags'] = 'true'
-        myTagResponse = httpRequest(
-            self.nam, 'POST',
-            self.url + '/tagupload',
-            thePayload,
-            self.progressEvent)
-        myId = myTagResponse.url.split('/')[-1]
-
-        return myId
-
-    def getDownloadUrl(self, theJobId):
-        """
-        Get the url of shape files from Hot-Export
-        Params:
-            * theJobId - the id of job in Hot-Export
-        Raises:
-            CanceledImportDialogError - when user press cancel button
-        Returns:
-            url of shape files
-        """
-
-        myResultUrl = self.url + '/jobs/' + theJobId
-        myIsReady = False
-        myCountDown = 5     # in seconds
-        mySleepTime = 0.05  # in seconds
-
-        while myIsReady is False:
-            ## we need to call QCoreApplication.processEvents() because
-            ## for some reason, the signal not triggered inside this loop.
-            QCoreApplication.processEvents()
-
-            if self.progressDialog.wasCanceled():
-                raise CanceledImportDialogError()
-
-            ## check Hot-Export if shape file is ready.
-            ## we only check Hot-Export each 5 seconds because we don't
-            ## want to accidentally DDOS-ing it.
-            if myCountDown <= 0:
-                myResultResponse = httpRequest(self.nam, 'GET', myResultUrl,
-                                               self.progressEvent)
-                mySoup = BeautifulSoup(myResultResponse.content)
-                myJobTable = mySoup.find('table', {'class': 'jobindex'})
-                myFirstRow = myJobTable.find_all('tr')[1]
-                myState = myFirstRow.find('img', {'class': 'state'})['title']
-
-                ## raise an exception when hot-export have some trouble
-                if myState == 'error':
-                    myErrorMsg = myFirstRow.find_all('td')[1].text
-                    raise ImportDialogError(self.tr(myErrorMsg))
-
-                myLink = myFirstRow.find('a', text='ESRI Shapefile (zipped)')
-
-                if myLink:
-                    myIsReady = True
-                else:
-                    myCountDown = 5
-
-            ## delay
-            time.sleep(mySleepTime)
-            myCountDown -= mySleepTime
-
-        ## return the first URL
-        return self.url + myLink.get('href')
 
     def downloadShapeFile(self, theUrl, theOutput):
         """
@@ -540,7 +392,20 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             * theOutput - path of output file
         """
 
-        httpDownload(self.nam, theUrl, theOutput, self.progressEvent)
+        self.progressDialog.show()
+        self.progressDialog.setMaximum(100)
+        self.progressDialog.setValue(0)
+
+        myLabelText = "Begin downloading shapefile from " \
+                      + "%1 ..."
+        self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
+
+        myResult = httpDownload(self.nam, theUrl, theOutput,
+                                self.progressDialog)
+
+        if myResult is not True:
+            _, myErrorMessage = myResult
+            raise ImportDialogError(myErrorMessage)
 
     def extractZip(self, thePath, theOutDir):
         """
@@ -571,14 +436,15 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         """
 
         myDir = str(self.outDir.text())
+        myPath = os.path.join(myDir, 'buildings.shp')
 
-        myLinePath = os.path.join(myDir, 'planet_osm_line.shp')
-        myPolygonPath = os.path.join(myDir, 'planet_osm_polygon.shp')
-        myPointPath = os.path.join(myDir, 'planet_osm_point.shp')
+        if not os.path.exists(myPath):
+            myMessage = self.tr(
+                "%s don't exist. The server don't have buildings data."
+            )
+            raise ImportDialogError(myMessage)
 
-        self.iface.addVectorLayer(myLinePath, 'line', 'ogr')
-        self.iface.addVectorLayer(myPolygonPath, 'polygon', 'ogr')
-        self.iface.addVectorLayer(myPointPath, 'point', 'ogr')
+        self.iface.addVectorLayer(myPath, 'buildings', 'ogr')
 
 
 if __name__ == '__main__':

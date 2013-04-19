@@ -260,67 +260,67 @@ class LightMaps(QtGui.QWidget):
         p.drawText(self.rect(), QtCore.Qt.AlignBottom | QtCore.Qt.TextWordWrap, "Map data CCBYSA 2010 OpenStreetMap.org contributors")
         p.end()
 
-        if self.zoomed:
-            dim = min((self.width(), self.height()))
-            magnifierSize = min((MAX_MAGNIFIER, dim * 2 / 3))
-            radius = magnifierSize / 2
-            ring = radius - 15
-            box = QtCore.QSize(magnifierSize, magnifierSize)
+        # if self.zoomed:
+        #     dim = min((self.width(), self.height()))
+        #     magnifierSize = min((MAX_MAGNIFIER, dim * 2 / 3))
+        #     radius = magnifierSize / 2
+        #     ring = radius - 15
+        #     box = QtCore.QSize(magnifierSize, magnifierSize)
+        #
+        #     # reupdate our mask
+        #     if self.maskPixmap.size() != box:
+        #         self.maskPixmap = QtGui.QPixmap(box)
+        #         self.maskPixmap.fill(QtCore.Qt.transparent)
+        #
+        #         g = QtGui.QRadialGradient()
+        #         g.setCenter(radius, radius)
+        #         g.setFocalPoint(radius, radius)
+        #         g.setRadius(radius)
+        #         g.setColorAt(1.0, QtGui.QColor(255, 255, 255, 0))
+        #         g.setColorAt(0.5, QtGui.QColor(128, 128, 128, 255))
+        #
+        #         mask = QtGui.QPainter(self.maskPixmap)
+        #         mask.setRenderHint(QtGui.QPainter.Antialiasing)
+        #         mask.setCompositionMode(QtGui.QPainter.CompositionMode_Source)
+        #         mask.setBrush(g)
+        #         mask.setPen(QtCore.Qt.NoPen)
+        #         mask.drawRect(self.maskPixmap.rect())
+        #         mask.setBrush(QtGui.QColor(QtCore.Qt.transparent))
+        #         mask.drawEllipse(g.center(), ring, ring)
+        #         mask.end()
+        #
+        #     center = self.dragPos - QtCore.QPoint(0, radius)
+        #     center = center + QtCore.QPoint(0, radius / 2)
+        #     corner = center - QtCore.QPoint(radius, radius)
+        #
+        #     xy = center * 2 - QtCore.QPoint(radius, radius)
+        #
+        #     # set the dimension to the magnified portion only
+        #     if self.zoomPixmap.size() != box:
+        #         self.zoomPixmap = QtGui.QPixmap(box)
+        #         self.zoomPixmap.fill(QtCore.Qt.lightGray)
+        #     p = QtGui.QPainter(self.zoomPixmap)
+        #     p.translate(-xy)
+        #     self.m_largeMap.render(p, QtCore.QRect(xy, box))
+        #     p.end()
+        #
+        #     clipPath = QtGui.QPainterPath()
+        #     clipPath.addEllipse(QtCore.QPointF(center), ring, ring)
+        #
+        #     p = QtGui.QPainter(self)
+        #     p.setRenderHint(QtGui.QPainter.Antialiasing)
+        #     p.setClipPath(clipPath)
+        #     p.drawPixmap(corner, self.zoomPixmap)
+        #     p.setClipping(False)
+        #     p.drawPixmap(corner, self.maskPixmap)
+        #     p.setPen(QtCore.Qt.gray)
+        #     p.drawPath(clipPath)
 
-            # reupdate our mask
-            if self.maskPixmap.size() != box:
-                self.maskPixmap = QtGui.QPixmap(box)
-                self.maskPixmap.fill(QtCore.Qt.transparent)
-
-                g = QtGui.QRadialGradient()
-                g.setCenter(radius, radius)
-                g.setFocalPoint(radius, radius)
-                g.setRadius(radius)
-                g.setColorAt(1.0, QtGui.QColor(255, 255, 255, 0))
-                g.setColorAt(0.5, QtGui.QColor(128, 128, 128, 255))
-
-                mask = QtGui.QPainter(self.maskPixmap)
-                mask.setRenderHint(QtGui.QPainter.Antialiasing)
-                mask.setCompositionMode(QtGui.QPainter.CompositionMode_Source)
-                mask.setBrush(g)
-                mask.setPen(QtCore.Qt.NoPen)
-                mask.drawRect(self.maskPixmap.rect())
-                mask.setBrush(QtGui.QColor(QtCore.Qt.transparent))
-                mask.drawEllipse(g.center(), ring, ring)
-                mask.end()
-
-            center = self.dragPos - QtCore.QPoint(0, radius)
-            center = center + QtCore.QPoint(0, radius / 2)
-            corner = center - QtCore.QPoint(radius, radius)
-
-            xy = center * 2 - QtCore.QPoint(radius, radius)
-
-            # set the dimension to the magnified portion only
-            if self.zoomPixmap.size() != box:
-                self.zoomPixmap = QtGui.QPixmap(box)
-                self.zoomPixmap.fill(QtCore.Qt.lightGray)
-            p = QtGui.QPainter(self.zoomPixmap)
-            p.translate(-xy)
-            self.m_largeMap.render(p, QtCore.QRect(xy, box))
-            p.end()
-
-            clipPath = QtGui.QPainterPath()
-            clipPath.addEllipse(QtCore.QPointF(center), ring, ring)
-
-            p = QtGui.QPainter(self)
-            p.setRenderHint(QtGui.QPainter.Antialiasing)
-            p.setClipPath(clipPath)
-            p.drawPixmap(corner, self.zoomPixmap)
-            p.setClipping(False)
-            p.drawPixmap(corner, self.maskPixmap)
-            p.setPen(QtCore.Qt.gray)
-            p.drawPath(clipPath)
-
-        if self.invert:
-            p = QtGui.QPainter(self)
-            p.setCompositionMode(QtGui.QPainter.CompositionMode_Difference)
-            p.fillRect(event.rect(), QtCore.Qt.white)
-            p.end()
+        # if self.invert:
+        #     p = QtGui.QPainter(self)
+        #     p.setCompositionMode(QtGui.QPainter.CompositionMode_Difference)
+        #     p.fillRect(event.rect(), QtCore.Qt.white)
+        #     p.end()
 
     def timerEvent(self, event):
         if not self.zoomed:
