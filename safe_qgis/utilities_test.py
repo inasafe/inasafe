@@ -288,10 +288,9 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
                      myPlatform)
     else:
         return
-    print 'You shall not pass'
+    LOGGER.debug('You shall not pass')
     # Otherwise test all control images because we dont know what platform
     # we are on.
-    i = 0
     for myControlImage in myControlImages:
         myFullPath = os.path.join(
             CONTROL_IMAGE_DIR, myControlImage)

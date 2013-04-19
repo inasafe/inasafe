@@ -208,9 +208,8 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
         if theFilename is None:
-            myMapPdfPath = unique_filename(prefix='report',
-                                     suffix='.pdf',
-                                     dir=temp_dir('work'))
+            myMapPdfPath = unique_filename(
+                prefix='report', suffix='.pdf', dir=temp_dir('work'))
         else:
             # We need to cast to python string in case we receive a QString
             myMapPdfPath = str(theFilename)
@@ -235,10 +234,7 @@ class Map():
         """
         myLogo = QgsComposerPicture(self.composition)
         myLogo.setPictureFile(':/plugins/inasafe/bnpb_logo.png')
-        myLogo.setItemPosition(self.pageMargin,
-                                   theTopOffset,
-                                   10,
-                                   10)
+        myLogo.setItemPosition(self.pageMargin, theTopOffset, 10, 10)
         if qgisVersion() >= 10800:  # 1.8 or newer
             myLogo.setFrameEnabled(self.showFramesFlag)
         else:
@@ -349,7 +345,7 @@ class Map():
         myComposerMap.setGridAnnotationPrecision(myPrecision)
         myComposerMap.setShowGridAnnotation(True)
         myComposerMap.setGridAnnotationDirection(
-                                        QgsComposerMap.BoundaryDirection)
+            QgsComposerMap.BoundaryDirection)
         self.composition.addItem(myComposerMap)
         self.drawGraticuleMask(theTopOffset)
         return myComposerMap
@@ -403,11 +399,11 @@ class Map():
         myScaleBarHeight = myScaleBar.boundingRect().height()
         myScaleBarWidth = myScaleBar.boundingRect().width()
         # -1 to avoid overlapping the map border
-        myScaleBar.setItemPosition(self.pageMargin + 1,
-                                   theTopOffset + self.mapHeight -
-                                     (myScaleBarHeight * 2),
-                                   myScaleBarWidth,
-                                   myScaleBarHeight)
+        myScaleBar.setItemPosition(
+            self.pageMargin + 1,
+            theTopOffset + self.mapHeight - (myScaleBarHeight * 2),
+            myScaleBarWidth,
+            myScaleBarHeight)
         myScaleBar.setFrame(self.showFramesFlag)
         # Disabled for now
         #self.composition.addItem(myScaleBar)
@@ -474,7 +470,7 @@ class Map():
             # Segment with in real world (km)
             myGroundSegmentWidth = round(myGroundSegmentWidth / 1000)
             myPrintSegmentWidthMM = ((myGroundSegmentWidth * 1000) /
-                                    myMMToGroundDistance)
+                                     myMMToGroundDistance)
         # Now adjust the scalebar width to account for rounding
         myScaleBarWidthMM = myTickCount * myPrintSegmentWidthMM
 
@@ -487,8 +483,9 @@ class Map():
         myLineWidth = 0.3  # mm
         myInsetDistance = 7  # how much to inset the scalebar into the map by
         myScaleBarX = self.pageMargin + myInsetDistance
-        myScaleBarY = (theTopOffset + self.mapHeight -
-                      myInsetDistance - myScaleBarHeight)  # mm
+        myScaleBarY = (
+            theTopOffset + self.mapHeight - myInsetDistance -
+            myScaleBarHeight)  # mm
 
         # Draw an outer background box - shamelessly hardcoded buffer
         myRect = QgsComposerShape(myScaleBarX - 4,  # left edge
@@ -542,11 +539,12 @@ class Map():
             # Lines are not exposed by the api yet so we
             # bodge drawing lines using rectangles with 1px height or width
             myTickWidth = 0.1  # width or rectangle to be drawn
-            myUpTickLine = QgsComposerShape(myMMOffset,
-                                myScaleBarY + myScaleBarHeight - myTickHeight,
-                                myTickWidth,
-                                myTickHeight,
-                                self.composition)
+            myUpTickLine = QgsComposerShape(
+                myMMOffset,
+                myScaleBarY + myScaleBarHeight - myTickHeight,
+                myTickWidth,
+                myTickHeight,
+                self.composition)
 
             myUpTickLine.setShapeType(QgsComposerShape.Rectangle)
             myUpTickLine.setLineWidth(myLineWidth)
@@ -559,8 +557,9 @@ class Map():
             myLabel.setFont(myFont)
             myLabel.setText(myRealWorldDistance)
             myLabel.adjustSizeToText()
-            myLabel.setItemPosition(myMMOffset - 3,
-                                myScaleBarY - myTickHeight)
+            myLabel.setItemPosition(
+                myMMOffset - 3,
+                myScaleBarY - myTickHeight)
             myLabel.setFrame(self.showFramesFlag)
             self.composition.addItem(myLabel)
 
@@ -581,21 +580,16 @@ class Map():
         myFontSize = 20
         myFontWeight = QtGui.QFont.Bold
         myItalicsFlag = False
-        myFont = QtGui.QFont('verdana',
-                         myFontSize,
-                         myFontWeight,
-                         myItalicsFlag)
+        myFont = QtGui.QFont(
+            'verdana', myFontSize, myFontWeight, myItalicsFlag)
         myLabel = QgsComposerLabel(self.composition)
         myLabel.setFont(myFont)
         myHeading = myTitle
         myLabel.setText(myHeading)
         myLabelWidth = self.pageWidth - (self.pageMargin * 2)
         myLabelHeight = 12
-        myLabel.setItemPosition(self.pageMargin,
-                            theTopOffset,
-                            myLabelWidth,
-                            myLabelHeight,
-                            )
+        myLabel.setItemPosition(
+            self.pageMargin, theTopOffset, myLabelWidth, myLabelHeight)
         myLabel.setFrame(self.showFramesFlag)
         self.composition.addItem(myLabel)
         return myLabelHeight
@@ -614,12 +608,17 @@ class Map():
             None
         """
         LOGGER.debug('InaSAFE Map drawLegend called')
-        myLegend = MapLegend(self.layer, self.pageDpi)
+        mapLegendAttributes = self.getMapLegendAtributes()
+        legendNotes = mapLegendAttributes.get('legend_notes', None)
+        legendUnits = mapLegendAttributes.get('legend_units', None)
+        legendTitle = mapLegendAttributes.get('legend_title', None)
+        LOGGER.debug(mapLegendAttributes)
+        myLegend = MapLegend(self.layer, self.pageDpi, legendTitle,
+                             legendNotes, legendUnits)
         self.legend = myLegend.getLegend()
         myPicture1 = QgsComposerPicture(self.composition)
-        myLegendFilePath = unique_filename(prefix='legend',
-                                       suffix='.png',
-                                       dir='work')
+        myLegendFilePath = unique_filename(
+            prefix='legend', suffix='.png', dir='work')
         self.legend.save(myLegendFilePath, 'PNG')
         myPicture1.setPictureFile(myLegendFilePath)
         myLegendHeight = pointsToMM(self.legend.height(), self.pageDpi)
@@ -696,14 +695,13 @@ class Map():
         myLongVersion = get_version()
         myTokens = myLongVersion.split('.')
         myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
-        myLabelText = self.tr('Date and time of assessment: %1 %2\n'
-                              'Special note: This assessment is a guide - we '
-                              'strongly recommend that you ground truth the '
-                              'results shown here before deploying resources '
-                              'and / or personnel.\n'
-                              'Assessment carried out using InaSAFE release '
-                              '%3 (QGIS plugin version).').arg(
-                              myDate).arg(myTime).arg(myVersion)
+        myLabelText = self.tr(
+            'Date and time of assessment: %1 %2\n'
+            'Special note: This assessment is a guide - we strongly recommend '
+            'that you ground truth the results shown here before deploying '
+            'resources and / or personnel.\n'
+            'Assessment carried out using InaSAFE release %3 (QGIS '
+            'plugin version).').arg(myDate).arg(myTime).arg(myVersion)
         myFontSize = 6
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = True
@@ -778,6 +776,31 @@ class Map():
             return None
         except Exception:
             return None
+
+    def getMapLegendAtributes(self):
+        """Get the map legend attribute from the layer keywords if possible.
+
+        Args:
+            None
+        Returns:
+            None on error, otherwise the attributes (notes and units)
+        Raises:
+            Any exceptions raised by the InaSAFE library will be propagated.
+        """
+        LOGGER.debug('InaSAFE Map getMapLegendAtributes called')
+        legendAttributes = ['legend_notes',
+                            'legend_units',
+                            'legend_title']
+        dictLegendAttributes = {}
+        for myLegendAttribute in legendAttributes:
+            try:
+                dictLegendAttributes[myLegendAttribute] = \
+                    self.keywordIO.readKeywords(self.layer, myLegendAttribute)
+            except KeywordNotFoundError:
+                pass
+            except Exception:
+                pass
+        return dictLegendAttributes
 
     def showComposer(self):
         """Show the composition in a composer view so the user can tweak it

@@ -276,7 +276,7 @@ def _addMinMaxToStyle(theStyle):
         myQuantity = float(myClass['quantity'])
         myClass['min'] = myLastMax
         myClass['max'] = myQuantity
-        if myQuantity == myLastMax:
+        if myQuantity == myLastMax and myQuantity != 0:
             # skip it as it does not represent a class increment
             continue
         myLastMax = numpy.nextafter(myQuantity, sys.float_info.max)

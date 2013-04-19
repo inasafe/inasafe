@@ -389,7 +389,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 + '<li>' + self.tr('Population density data must be provided '
                                    'in WGS84 geographic coordinates')
                 + '</li>'
-                + '<li>' + self.tr('Neither AIFDR nor GFDRR take any '
+                + '<li>' + self.tr('Neither AIFDR, the World Bank, nor GFDRR '
+				   'take any '
                                    'responsibility for the correctness of '
                                    'outputs from InaSAFE or decisions derived '
                                    'as a consequence')

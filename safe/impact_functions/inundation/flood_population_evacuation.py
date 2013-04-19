@@ -1,16 +1,19 @@
 import numpy
-from safe.impact_functions.core import (FunctionProvider,
-                                        get_hazard_layer,
-                                        get_exposure_layer,
-                                        get_question,
-                                        get_function_title)
+from safe.impact_functions.core import (
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layer,
+    get_question,
+    get_function_title)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import (ugettext as tr,
-                                   get_defaults,
-                                   format_int,
-                                   verify,
-                                   round_thousand)
+from safe.common.utilities import (
+    ugettext as tr,
+    get_defaults,
+    format_int,
+    verify,
+    round_thousand,
+    humanize_class)
 from safe.common.tables import Table, TableRow
 from third_party.odict import OrderedDict
 
@@ -149,22 +152,21 @@ class FloodEvacuationFunction(FunctionProvider):
         toilets = int(evacuated / 20)
 
         # Generate impact report for the pdf map
-        table_body = [question,
-                      TableRow([(tr('People in %.1f m of water') %
-                               thresholds[-1]),
-                                '%s*' % format_int(evacuated)],
-                               header=True),
-                      TableRow(tr('* Number is rounded to the nearest 1000'),
-                               header=False),
-                      TableRow(tr('Map shows population density needing '
-                                  'evacuation')),
-                      TableRow([tr('Needs per week'), tr('Total')],
-                               header=True),
-                      [tr('Rice [kg]'), format_int(rice)],
-                      [tr('Drinking Water [l]'), format_int(drinking_water)],
-                      [tr('Clean Water [l]'), format_int(water)],
-                      [tr('Family Kits'), format_int(family_kits)],
-                      [tr('Toilets'), format_int(toilets)]]
+        table_body = [
+            question,
+            TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
+                      '%s*' % format_int(evacuated)],
+                     header=True),
+            TableRow(tr('* Number is rounded to the nearest 1000'),
+                     header=False),
+            TableRow(tr('Map shows population density needing evacuation')),
+            TableRow([tr('Needs per week'), tr('Total')], header=True),
+            [tr('Rice [kg]'), format_int(rice)],
+            [tr('Drinking Water [l]'), format_int(drinking_water)],
+            [tr('Clean Water [l]'), format_int(water)],
+            [tr('Family Kits'), format_int(family_kits)],
+            [tr('Toilets'), format_int(toilets)]]
+
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
@@ -173,20 +175,19 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body.append(TableRow(tr('Do we have enough relief items?')))
         table_body.append(TableRow(tr('If yes, where are they located and how '
                                       'will we distribute them?')))
-        table_body.append(TableRow(tr('If no, where can we obtain additional '
-                                      'relief items from and how will we '
-                                      'transport them to here?')))
+        table_body.append(TableRow(tr(
+            'If no, where can we obtain additional relief items from and how '
+            'will we transport them to here?')))
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %s') % format_int(total),
-                           tr('People need evacuation if flood levels '
-                              'exceed %(eps).1f m') % {'eps': thresholds[-1]},
-                           tr('Minimum needs are defined in BNPB '
-                              'regulation 7/2008'),
-                           tr('All values are rounded up to the nearest '
-                              'integer in order to avoid representing human '
-                              'lives as fractionals.')])
+        table_body.extend([
+            TableRow(tr('Notes'), header=True),
+            tr('Total population: %s') % format_int(total),
+            tr('People need evacuation if flood levels exceed %(eps).1f m') %
+            {'eps': thresholds[-1]},
+            tr('Minimum needs are defined in BNPB regulation 7/2008'),
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractionals.')])
 
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
@@ -206,30 +207,40 @@ class FloodEvacuationFunction(FunctionProvider):
         # as imported
         classes = numpy.linspace(numpy.nanmin(my_impact.flat[:]),
                                  numpy.nanmax(my_impact.flat[:]), 8)
+        interval_classes = humanize_class(classes)
 
         # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
-        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%i people/cell]')\
-            % classes[4]
-        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
+        for i in xrange(len(classes)):
+            if i == 1:
+                style_classes[i]['label'] = \
+                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Low')
+            elif i == 4:
+                style_classes[i]['label'] = \
+                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Medium')
+            elif i == 7:
+                style_classes[i]['label'] = \
+                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('High')
+            else:
+                style_classes[i]['label'] = \
+                    '[' + ' - '.join(interval_classes[i]) + ']'
 
-        # Override associated quantities in colour style
-        for i in range(len(classes)):
+            # Override associated quantities in colour style
             if i == 0:
                 transparency = 100
             else:
                 transparency = 0
-
+            style_classes[i]['transparency'] = transparency
             # int & round Added by Tim in 1.2 - class is rounded to the
             # nearest int because we prefer to not categorise people as being
             # e.g. '0.4 people'. Fixes #542
-            style_classes[i]['quantity'] = int(round(classes[i]))
-            style_classes[i]['transparency'] = transparency
+            style_classes[i]['quantity'] = classes[i]
 
-        # Title
-        style_info['legend_title'] = tr('Population Density')
+        # For printing map purpose
+        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_units = tr('(people per cell)')
+        legend_title = tr('Population density')
 
         # Create raster object and return
         R = Raster(my_impact,
@@ -238,6 +249,9 @@ class FloodEvacuationFunction(FunctionProvider):
                    name=tr('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title},
+                             'map_title': map_title,
+                             'legend_notes': legend_notes,
+                             'legend_units': legend_units,
+                             'legend_title': legend_title},
                    style_info=style_info)
         return R

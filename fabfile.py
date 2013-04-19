@@ -348,16 +348,15 @@ def build_test_package(branch='master'):
 
     To run e.g.::
 
-        fab -H 188.40.123.80:8697 remote build_test_package
+        fab -H 188.40.123.80:8697 build_test_package
 
         or to package up a specific branch (in this case minimum_needs)
 
-        fab -H 88.198.36.154:8697 remote build_test_package:minimum_needs
+        fab -H 88.198.36.154:8697 build_test_package:minimum_needs
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """
     _all()
-    install_latex()
     update_git_checkout(branch)
     initialise_qgis_plugin_repo()
 
@@ -408,11 +407,11 @@ def build_documentation(branch='master'):
 
     To run e.g.::
 
-        fab -H 188.40.123.80:8697 remote build_documentation
+        fab -H 188.40.123.80:8697 build_documentation
 
         or to package up a specific branch (in this case minimum_needs)
 
-        fab -H 88.198.36.154:8697 remote build_documentation:version-1_1
+        fab -H 88.198.36.154:8697 build_documentation:version-1_1
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """

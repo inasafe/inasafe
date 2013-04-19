@@ -257,6 +257,18 @@ class Test_plugin_core(unittest.TestCase):
         assert (my_formated_int == expected_str or
                 my_formated_int == str(my_int)), my_msg
 
+        my_int = 1234
+        lang = os.getenv('LANG')
+        print lang
+        my_formated_int = format_int(my_int)
+        if lang == 'id':
+            expected_str = '1.234'
+        else:
+            expected_str = '1,234'
+        my_msg = 'Format integer %s is not valid' % my_formated_int
+        assert (my_formated_int == expected_str or
+                my_formated_int == str(my_int)), my_msg
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

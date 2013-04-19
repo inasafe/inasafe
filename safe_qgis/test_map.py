@@ -71,7 +71,7 @@ class MapTest(unittest.TestCase):
         myExpectedSizes = [
             352798,  # as rendered on linux ub 12.04 64
             234806,  # as rendered on osx mountain lion 10.8
-            447827,  # as rendered on linux mint Nadia 14
+            438659,  # as rendered on linux mint Nadia 14
             447907,  # as rendered on windows 7 sp1 AMD64
         ]
         myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
@@ -123,6 +123,8 @@ class MapTest(unittest.TestCase):
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
         myTolerance = 8000
+        print myImagePath
+        print myAcceptableImages
         myFlag, myMessage = checkImages(myAcceptableImages,
                                         myImagePath,
                                         myTolerance)
