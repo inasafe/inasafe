@@ -188,7 +188,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.parent = theParent
         self.setupUi(self)
 
-        self.setWindowTitle(self.tr('Import Hot-Export'))
+        self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = theIface
         self.url = "http://osm.linfiniti.com/buildings-shp"
@@ -205,7 +205,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         # creating progress dialog for download
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
-        self.progressDialog.setWindowTitle(self.tr("OSM Shapefile Downloader"))
+        self.progressDialog.setWindowTitle(self.tr("InaSAFE OpenStreetMap Downloader"))
 
         ## set map parameter based on placeholder self.map widget
         theMap = InasafeLightMaps(self.gbxMap)
@@ -396,9 +396,11 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.progressDialog.setMaximum(100)
         self.progressDialog.setValue(0)
 
-        myLabelText = "Begin downloading shapefile from " \
-                      + "%1 ..."
-        self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
+        # myLabelText = "Begin downloading shapefile from " \
+        #               + "%1 ..."
+        # self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
+        myLabelText = self.tr("Begin downloading shapefile")
+        self.progressDialog.setLabelText(myLabelText)
 
         myResult = httpDownload(self.nam, theUrl, theOutput,
                                 self.progressDialog)
