@@ -211,6 +211,7 @@ class Plugin:
         self.iface.addPluginToMenu(
             self.tr('InaSAFE'),
             self.actionKeywordsDialog)
+
         #--------------------------------------
         # Create action for reset icon
         #--------------------------------------
@@ -307,6 +308,26 @@ class Plugin:
         self.iface.addToolBarIcon(self.actionConverter)
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionConverter)
+
+        #--------------------------------------
+        # Create action for import OSM Dialog
+        #--------------------------------------
+        self.actionImportDlg = QAction(
+            QIcon(':/plugins/inasafe/osm-download.png'),
+            self.tr('InaSAFE OpenStreetMap Downloader'),
+            self.iface.mainWindow())
+        self.actionImportDlg.setStatusTip(self.tr(
+            'InaSAFE OpenStreetMap Downloader'))
+        self.actionImportDlg.setWhatsThis(self.tr(
+            'InaSAFE OpenStreetMap Downloader'))
+        QObject.connect(
+            self.actionImportDlg, SIGNAL('triggered()'),
+            self.showImportDlg)
+
+        self.iface.addToolBarIcon(self.actionImportDlg)
+        self.iface.addPluginToMenu(
+            self.tr('InaSAFE'),
+            self.actionImportDlg)
 
         #--------------------------------------
         # create dockwidget and tabify it with the legend
@@ -534,6 +555,13 @@ class Plugin:
 
         myDialog = ConverterDialog(self.iface.mainWindow())
         myDialog.show()
+
+    def showImportDlg(self):
+        from safe_qgis.import_dialog import ImportDialog
+
+        dlg = ImportDialog(self.iface.mainWindow(), self.iface)
+        dlg.setModal(True)
+        dlg.show()
 
     def resetDock(self):
         """Reset the dock to its default state.
