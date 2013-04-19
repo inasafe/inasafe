@@ -92,15 +92,16 @@ def httpDownload(theManager, theUrl, theOutPath, theProgressDlg=None):
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def __init__(self, theParent=None, theIface=None):
-        '''Constructor for the dialog.
+        """Constructor for import dialog.
 
         Args:
            * theParent - Optional widget to use as parent
+           * theIface - an instance of QGisInterface
         Returns:
            not applicable
         Raises:
            no exceptions explicitly raised
-        '''
+        """
         QDialog.__init__(self, theParent)
         self.parent = theParent
         self.setupUi(self)
@@ -158,6 +159,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     # pylint: disable=W0613
 
     def setupOptions(self):
+        """ Set the content of combo box for region and preset """
         self.cbxRegion.insertItem(0, 'Indonesia', 1)
         self.cbxRegion.insertItem(1, 'Africa', 2)
         self.cbxRegion.insertItem(2, 'Philippines', 4)
@@ -229,11 +231,14 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             self.loadShapeFile()
             self.done(QDialog.Accepted)
         except CanceledImportDialogError:
+            # don't show anything because this exception raised
+            # when user canceling the import process directly
             pass
         except Exception as myEx:
-            QMessageBox.warning(self,
-                                self.tr("Hot-Export Import Error"),
-                                str(myEx))
+            QMessageBox.warning(
+                self,
+                self.tr("InaSAFE OpenStreetMap Downloader Error"),
+                str(myEx))
 
             self.progressDialog.cancel()
 
@@ -269,6 +274,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     def doImport(self):
         """
         Import shape files from Linfinti.
+        Raises:
+            * ImportDialogError - when network error occurred
+            * CanceledImportDialogError - when user press cancel button
         """
 
         ## preparing necessary data
@@ -305,8 +313,10 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         """
         Download shape file from theUrl and write to theOutput.
         Params:
-            * theUrl - URL of shape file in Hot-Export
+            * theUrl - URL of shape file
             * theOutput - path of output file
+        Raises:
+            * ImportDialogError - when network error occurred
         """
 
         self.progressDialog.show()
@@ -352,6 +362,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     def loadShapeFile(self):
         """
         Load downloaded shape file to QGIS Main Window.
+
+        Raises:
+            ImportDialogError - when buildings.shp not exist
         """
 
         myDir = str(self.outDir.text())
