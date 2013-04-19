@@ -170,7 +170,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.setWindowTitle(self.tr('Import Hot-Export'))
 
         self.iface = theIface
-        self.url = 'http://hot-export.geofabrik.de'
+        self.url = "http://osm.linfiniti.com/buildings-shp"
 
         ## region coordinate: (latitude, longtitude, zoom_level)
         self.regionExtent = {
@@ -320,6 +320,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         QCoreApplication.processEvents()
 
+        self.progressDialog.setLabelText("%s / %s" % (theReceived, theTotal))
         self.progressDialog.setMaximum(theTotal)
         self.progressDialog.setValue(theReceived)
 
@@ -356,6 +357,35 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             raise CanceledImportDialogError()
 
     def doImport(self):
+        """
+        Import shape files from Linfinti.
+        """
+
+        self.progressDialog.show()
+        self.progressDialog.setMaximum(100)
+        self.progressDialog.setValue(0)
+
+        myMinLng = str(self.minLongitude.text())
+        myMinLat = str(self.minLatitude.text())
+        myMaxLng = str(self.maxLongitude.text())
+        myMaxLat = str(self.maxLatitude.text())
+
+        myShapeUrl = "{url}?bbox={myMinLng},{myMinLat},{myMaxLng},{myMaxLat}&obj={type}".format(
+            url=self.url,
+            myMinLng=myMinLng,
+            myMinLat=myMinLat,
+            myMaxLng=myMaxLng,
+            myMaxLat=myMaxLat,
+            type='building'
+        )
+
+        myFilePath = tempfile.mktemp('.shp.zip')
+
+        self.downloadShapeFile(myShapeUrl, myFilePath)
+        self.extractZip(myFilePath, str(self.outDir.text()))
+        self.progressDialog.done(QDialog.Accepted)
+
+    def doImport2(self):
         """
         Import shape files from Hot-Export.
         """
@@ -571,14 +601,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         """
 
         myDir = str(self.outDir.text())
-
-        myLinePath = os.path.join(myDir, 'planet_osm_line.shp')
-        myPolygonPath = os.path.join(myDir, 'planet_osm_polygon.shp')
-        myPointPath = os.path.join(myDir, 'planet_osm_point.shp')
-
-        self.iface.addVectorLayer(myLinePath, 'line', 'ogr')
-        self.iface.addVectorLayer(myPolygonPath, 'polygon', 'ogr')
-        self.iface.addVectorLayer(myPointPath, 'point', 'ogr')
+        myPath = os.path.join(myDir, 'buildings.shp')
+        self.iface.addVectorLayer(myPath, 'buildings', 'ogr')
 
 
 if __name__ == '__main__':
