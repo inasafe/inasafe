@@ -87,8 +87,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            ShapefileCreationError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
-                           MapComposerError,
-                           EnvironmentError)
+                           MapComposerError)
 # from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
