@@ -123,7 +123,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         # creating progress dialog for download
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
-        self.progressDialog.setWindowTitle(self.tr("InaSAFE OpenStreetMap Downloader"))
+        myTitle = self.tr("InaSAFE OpenStreetMap Downloader")
+        self.progressDialog.setWindowTitle(myTitle)
 
         ## set map parameter based on placeholder self.map widget
         theMap = InasafeLightMaps(self.gbxMap)
