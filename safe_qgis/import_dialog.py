@@ -437,6 +437,13 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         myDir = str(self.outDir.text())
         myPath = os.path.join(myDir, 'buildings.shp')
+
+        if not os.path.exists(myPath):
+            myMessage = self.tr(
+                "%s don't exist. The server don't have buildings data."
+            )
+            raise ImportDialogError(myMessage)
+
         self.iface.addVectorLayer(myPath, 'buildings', 'ogr')
 
 
