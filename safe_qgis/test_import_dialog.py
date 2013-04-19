@@ -25,7 +25,7 @@ import shutil
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
-from safe_qgis.import_dialog import (httpDownload, httpRequest, ImportDialog)
+from safe_qgis.import_dialog import (httpDownload, ImportDialog)
 
 from safe_qgis.utilities_test import (getQgisTestApp, assertHashForFile)
 
@@ -116,27 +116,6 @@ class ImportDialogTest(unittest.TestCase):
     """Test Import Dialog widget
     """
 
-    def test_httpRequest(self):
-        myManager = QNetworkAccessManager(PARENT)
-
-        # we use httpbin service to test HTTP Request
-        myUrl = 'http://httpbin.org/html'
-        myResponse = httpRequest(myManager, 'GET', myUrl)
-
-        myMessage = "Url don't match. Expected {0} but got {1} instead."
-        assert myResponse.url == myUrl, myMessage.format(myUrl, myResponse.url)
-
-        myExpectedContent = readAll('test-importdlg-httprequest.html')
-        assert myResponse.content == myExpectedContent, "Content don't match."
-
-        myUrl = 'http://httpbin.org/post'
-        myData = {'name': 'simple POST test', 'value': 'Hello World'}
-        myResponse = httpRequest(myManager, 'POST', myUrl, myData)
-
-        myPos = myResponse.content.find('"name": "simple POST test"')
-        myMessage = "POST Request failed. The response is %s".format(
-            myResponse.content)
-        assert myPos != -1, myMessage
 
     def test_httpDownload(self):
         myManager = QNetworkAccessManager(PARENT)
