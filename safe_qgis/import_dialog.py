@@ -25,8 +25,6 @@ from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
                              QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
-from third_party.bs4 import BeautifulSoup
-
 import time
 import os
 import tempfile
@@ -207,7 +205,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         # creating progress dialog for download
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
-        self.progressDialog.setWindowTitle(self.tr("Hot-Export Download"))
+        self.progressDialog.setWindowTitle(self.tr("OSM Shapefile Downloader"))
 
         ## set map parameter based on placeholder self.map widget
         theMap = InasafeLightMaps(self.gbxMap)
@@ -251,12 +249,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
         self.cbxPreset.insertItem(0, self.tr('Buildings'), 'building')
         self.cbxPreset.insertItem(0, self.tr('Highway'), 'highway')
-
-        # self.cbxPreset.insertItem(0, 'Building/Gedung', 1)
-        # self.cbxPreset.insertItem(1, 'Opendri Building Presets', 9)
-        # self.cbxPreset.insertItem(2, 'bus_stop', 7)
-        # self.cbxPreset.insertItem(3, 'Presets for Access Mapping', 2)
-        # self.cbxPreset.insertItem(4, 'RW boundaries for Jakarta', 6)
 
     def restoreState(self):
         """ Read last state of GUI from configuration file """
@@ -328,28 +320,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
 
             self.progressDialog.cancel()
 
-    # def progressEvent(self, theReceived, theTotal):
-    #     """
-    #     Hook function that called when doing http request.
-    #     This function will update the value of progress bar and
-    #     check if user press cancel button.
-    #
-    #     Params:
-    #         * theReceived : int - number of bytes received
-    #         * theTotal : int - total bytes of download
-    #     Raises:
-    #         CanceledImportDialogError - when user press cancel button
-    #     """
-    #
-    #     QCoreApplication.processEvents()
-    #
-    #     self.progressDialog.setLabelText("%s / %s" % (theReceived, theTotal))
-    #     self.progressDialog.setMaximum(theTotal)
-    #     self.progressDialog.setValue(theReceived)
-    #
-    #     if self.progressDialog.wasCanceled():
-    #         raise CanceledImportDialogError()
-
     def ensureDirExist(self):
         """
         Ensure directory path entered in dialog exist.
@@ -393,12 +363,16 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myCurrentIndex = self.cbxPreset.currentIndex()
         myType = str(self.cbxPreset.itemData(myCurrentIndex).toString())
 
-        myShapeUrl = "{url}?bbox={myMinLng},{myMinLat},{myMaxLng},{myMaxLat}&obj={type}".format(
-            url=self.url,
+        myCoordinate = "{myMinLng},{myMinLat},{myMaxLng},{myMaxLat}".format(
             myMinLng=myMinLng,
             myMinLat=myMinLat,
             myMaxLng=myMaxLng,
-            myMaxLat=myMaxLat,
+            myMaxLat=myMaxLat
+        )
+
+        myShapeUrl = "{url}?bbox={myCoordinate}&obj={type}".format(
+            url=self.url,
+            myCoordinate=myCoordinate,
             type=myType
         )
 
@@ -426,9 +400,11 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
                       + "%1 ..."
         self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
 
-        myResult = httpDownload(self.nam, theUrl, theOutput, self.progressDialog)
+        myResult = httpDownload(self.nam, theUrl, theOutput,
+                                self.progressDialog)
+
         if myResult is not True:
-            myErrorCode, myErrorMessage = myResult
+            _, myErrorMessage = myResult
             raise ImportDialogError(myErrorMessage)
 
     def extractZip(self, thePath, theOutDir):

@@ -308,7 +308,6 @@ class Plugin:
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionConverter)
 
-
         #--------------------------------------
         # Create action for import OSM Dialog
         #--------------------------------------
@@ -555,7 +554,6 @@ class Plugin:
 
         myDialog = ConverterDialog(self.iface.mainWindow())
         myDialog.show()
-
 
     def showImportDlg(self):
         from safe_qgis.import_dialog import ImportDialog
