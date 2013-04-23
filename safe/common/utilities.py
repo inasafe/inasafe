@@ -382,6 +382,12 @@ def format_decimal(interval, my_number):
     interval = get_significant_decimal(interval)
     if isinstance(interval, Integral) or isinstance(my_number, Integral):
         return format_int(int(my_number))
+    if interval != interval:
+        # nan
+        return str(my_number)
+    if my_number != my_number:
+        # nan
+        return str(my_number)
     decimal_places = len(str(interval).split('.')[1])
     my_number_int = str(my_number).split('.')[0]
     my_number_decimal = str(my_number).split('.')[1][:decimal_places]
@@ -395,6 +401,10 @@ def get_significant_decimal(my_decimal):
     """
     if isinstance(my_decimal, Integral):
         return my_decimal
+    if my_decimal != my_decimal:
+        # nan
+        return my_decimal
+
     my_int_part = str(my_decimal).split('.')[0]
     my_decimal_part = str(my_decimal).split('.')[1]
     first_not_zero = 0
