@@ -1,0 +1,195 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# a09c66472902484d91e4d35d5379dedf
+#: ../../source/api-docs/safe_qgis/exceptions.rst:6
+msgid "Module:  safe_qgis.exceptions"
+msgstr ""
+
+# da83034d456542c593a0ed5ba94be332
+#: ../../../safe_qgis/exceptions.py:docstring of safe_qgis.exceptions:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Exception "
+"Classes.**"
+msgstr ""
+
+# 21dc381c19eb4299b20bfa9253258ae1
+#: ../../../safe_qgis/exceptions.py:docstring of safe_qgis.exceptions:4
+msgid "Custom exception classes for the IS application."
+msgstr ""
+
+# 49e8992c48cb4ddea12496471e78840c
+#: ../../../safe_qgis/exceptions.py:docstring of safe_qgis.exceptions:6
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 98eeb67f1b864e48badf171685e1ba79
+#: ../../../safe_qgis/exceptions.py:docstring of safe_qgis.exceptions:8
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 1b345dbf04ba417dad9e99db2132ca43
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.CallGDALError:1
+msgid ""
+"Raised if failed to call gdal command. Indicate by error message that is not "
+"empty"
+msgstr ""
+
+# c7a470c68c7543aa90b83d94c7da01f1
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.HashNotFoundError:1
+msgid "Custom exception for when a no keyword hash can be found."
+msgstr ""
+
+# 20e5e4173662425fa6f7bc6d05dbd5b7
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InsufficientOverlapError:1
+msgid ""
+"An exception raised if an error occurs during extent calculation because the "
+"bounding boxes do not overlap."
+msgstr ""
+
+# 79acb505b83640228154ae23f9c25f8c
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InsufficientParametersError:1
+msgid "Custom exception for when insufficient parameters have been set."
+msgstr ""
+
+# a9de91b57a104668bf1ff2945348c12c
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidBoundingBoxError:1
+msgid ""
+"An exception raised if an error occurs during extent calculation because one "
+"of the extents is invalid."
+msgstr ""
+
+# 8cad9cda120b4726b18d139dccca05b0
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidClipGeometryError:1
+msgid "Custom exception for when clip geometry is invalid."
+msgstr ""
+
+# 0f5af3357611445a99ea4d44a3af36eb
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidKVPError:1
+msgid ""
+"An exception raised when a key value pair is invalid - for example if the "
+"key of value is None or an empty string."
+msgstr ""
+
+# 5af8da71c8184461bd6da18b7a7d32b7
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidParameterError:1
+msgid "Custom exception for when an invalid parameter is passed to a function."
+msgstr ""
+
+# 997488a9a77648938481f74747d95abd
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidProjectionError:1
+msgid "An exception raised if a layer needs to be reprojected."
+msgstr ""
+
+# 1a888ec4dfff49ab8977f6268a354786
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.KeywordDbError:1
+msgid "Custom exception for when an error is encountered with keyword cach db."
+msgstr ""
+
+# 4fc5bdc83c674c87ae65444fe43a1d2a
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.KeywordNotFoundError:1
+msgid "Custom exception for when a no keyword can be found."
+msgstr ""
+
+# b8133342ad614f0aac9410d5b2242b99
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.LegendLayerError:1
+msgid ""
+"An exception raised when trying to create a legend from a QgsMapLayer that "
+"does not have suitable characteristics to allow a legend to be created from "
+"it."
+msgstr ""
+
+# 90db2c6be1b64611b13f597bb577f6da
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.MemoryLayerCreationError:1
+msgid "Raised if an error occurs creating the cities file"
+msgstr ""
+
+# 10332f0885bc41708213101d3ff9968a
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.MethodUnavailableError:1
+msgid ""
+"Raised if the requested import cannot be performed dur to qgis being to old"
+msgstr ""
+
+# 0d709bc519594fc6949782801262276e
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.NoFeaturesInExtentError:1
+msgid ""
+"An exception that gets thrown when no features are within the extent being "
+"clipped."
+msgstr ""
+
+# 1c10604b75c842a2b9adfe4b44f5f28f
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.NoFunctionsFoundError:1
+msgid ""
+"Custom exception for when a no impact calculation functions can be found."
+msgstr ""
+
+# d264dcbe45334a14abea4b71ed1404a8
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.QgisPathError:1
+msgid "Custom exception for when qgispath.txt could not be read."
+msgstr ""
+
+# 23be8386f48c49bf8f174f4d96fb5e6e
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.StyleError:1
+msgid "An exception relating to reading / generating GIS styles"
+msgstr ""
+
+# 2eba8fabb9184590a11f8c3167f9580f
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.StyleInfoNotFoundError:1
+msgid "Custom exception for when a no styleInfo can be found."
+msgstr ""
+
+# fc8f382cd3864575b0a2751587dc206d
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.TestNotImplementedError:1
+msgid "Custom exception for when a test exists only as a stub."
+msgstr ""
+
+# 255fd0f24d7f496f90e40fed2399c687
+#: ../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.TranslationLoadError:1
+msgid "Custom exception handler for whe translation file fails to load."
+msgstr ""
+
+# b7336622a02540b1ba1dd35184a7516a
+#: ../../source/api-docs/safe_qgis/exceptions.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

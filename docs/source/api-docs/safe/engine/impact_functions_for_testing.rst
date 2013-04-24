@@ -4,6 +4,7 @@ Package::safe.engine.impact_functions_for_testing
 .. toctree::
    :maxdepth: 2
 
+   impact_functions_for_testing/padang_building_impact_model
    impact_functions_for_testing/flood_road_impact
    impact_functions_for_testing/allen_fatality_model
    impact_functions_for_testing/BNPB_earthquake_guidelines
@@ -11,6 +12,7 @@ Package::safe.engine.impact_functions_for_testing
    impact_functions_for_testing/earthquake_impact_on_women
    impact_functions_for_testing/empirical_fatality_model
    impact_functions_for_testing/unspecific_building_impact_model
+   impact_functions_for_testing/categorised_hazard_building_impact
    impact_functions_for_testing/NEXIS_building_impact_model
    impact_functions_for_testing/itb_fatality_model_configurable
    impact_functions_for_testing/general_ashload_impact

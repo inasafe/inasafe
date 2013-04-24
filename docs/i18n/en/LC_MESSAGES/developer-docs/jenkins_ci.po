@@ -1,0 +1,622 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# e611f207c0054657a044ee981e7b9d2a
+#: ../../source/developer-docs/jenkins_ci.rst:7
+msgid "Continuous Integration Testing with Jenkins"
+msgstr ""
+
+# f219cc919bfc4afe90c1cc78f663ef98
+#: ../../source/developer-docs/jenkins_ci.rst:9
+msgid ""
+"This documentation is Copyright Linfiniti Consulting CC. June 2012 and has "
+"been included here to provide provenance, and adapted for the InaSAFE "
+"project."
+msgstr ""
+
+# 805aefcff0df4ae1a4c871c9bdc9a540
+#: ../../source/developer-docs/jenkins_ci.rst:13
+msgid ""
+"`Jenkins <http://jenkins-ci.org/>`_ is an automated build and test server."
+msgstr ""
+
+# 1ed27f4516584de1882da161426e88a9
+#: ../../source/developer-docs/jenkins_ci.rst:15
+msgid ""
+"These notes are a port of notes kept during setup of Jenkins for some django "
+"projects and were written after the fact. As such, they need to be proof "
+"read and validated on a new server instance."
+msgstr ""
+
+# 85b495af072d465ea40790a4ba865a1d
+#: ../../source/developer-docs/jenkins_ci.rst:20
+msgid "Installation procedure - Jenkins server"
+msgstr ""
+
+# 83c16315457c49a9b097aa43d68e4f7a
+#: ../../source/developer-docs/jenkins_ci.rst:22
+msgid ""
+"The install procedure is described at http://pkg.jenkins-ci.org/debian/."
+msgstr ""
+
+# d097f3962bf641d396bd5b4cfe715e1c
+#: ../../source/developer-docs/jenkins_ci.rst:24
+msgid "To start, do this::"
+msgstr ""
+
+# 337fee9f2bbe48e1821590255a9cb5f4
+#: ../../source/developer-docs/jenkins_ci.rst:28
+msgid "Now add this to your :file:`/etc/apt/sources.list`::"
+msgstr ""
+
+# f96c7b97e9be4e1f857f23954a54e152
+#: ../../source/developer-docs/jenkins_ci.rst:32
+msgid "Now do::"
+msgstr ""
+
+# 9587719dbd0e4c7ea6da6f7eaf05b1b3
+#: ../../source/developer-docs/jenkins_ci.rst:39
+msgid "DNS and Reverse Proxy"
+msgstr ""
+
+# 4d47b4312f804735ac52bc1f5f25a052
+#: ../../source/developer-docs/jenkins_ci.rst:41
+msgid "I set up the following subdomain http://jenkins.linfiniti.com"
+msgstr ""
+
+# c61de9d81c2e448487999b85cf7c0232
+#: ../../source/developer-docs/jenkins_ci.rst:43
+msgid ""
+"Now create a virtual host on the server's apache installation to reverse "
+"proxy by creating this file: :file:`/etc/apache2/sites-available/3-jenkins."
+"linfiniti.com` which should contain::"
+msgstr ""
+
+# bd59619dbe514371b55bdfa37f4d90e6
+#: ../../source/developer-docs/jenkins_ci.rst:73
+msgid "Now enable this vhost::"
+msgstr ""
+
+# 239bc8d0ba43463c9ab567bf8175800b
+#: ../../source/developer-docs/jenkins_ci.rst:79
+msgid "Configure the server"
+msgstr ""
+
+# 4d34a5de68e146f99d092c11a7cd4176
+#: ../../source/developer-docs/jenkins_ci.rst:81
+msgid "Go to http://jenkins.linfiniti.com and log in as an admin user."
+msgstr ""
+
+# fb3545f00ade4fa295cce58ccddbcbc9
+#: ../../source/developer-docs/jenkins_ci.rst:84
+msgid "Enable Plugins"
+msgstr ""
+
+# dbf0ddc3447b4a919fcd78614f300dd8
+#: ../../source/developer-docs/jenkins_ci.rst:86
+msgid ""
+":menuselection:`Jenkins --> Manage Jenkins --> Manage Plugins` or go to "
+"http://jenkins.linfiniti.com/pluginManager/."
+msgstr ""
+
+# 1579468f84be4206867c8d043b536266
+#: ../../source/developer-docs/jenkins_ci.rst:89
+msgid "Enable the following plugins:"
+msgstr ""
+
+# 90453114c5894f4d81cb46fdbc122ffc
+#: ../../source/developer-docs/jenkins_ci.rst:91
+msgid "External Monitor Job Type Plugin"
+msgstr ""
+
+# 3778be4e5f6e43fcb83f98e25e1e525f
+#: ../../source/developer-docs/jenkins_ci.rst:92
+msgid "LDAP Plugin"
+msgstr ""
+
+# f8a393fd06684cf6bfa4015f62671f53
+#: ../../source/developer-docs/jenkins_ci.rst:93
+msgid "pam-auth"
+msgstr ""
+
+# 6db356c5d8a44aebb66d9bfd41a5459c
+#: ../../source/developer-docs/jenkins_ci.rst:94
+msgid "javadoc"
+msgstr ""
+
+# d3c8f59b2a2a4464ab56b4c6aa765e2d
+#: ../../source/developer-docs/jenkins_ci.rst:95
+msgid "ant"
+msgstr ""
+
+# 3972130bc2c545619bf2bb7f23ef8cd2
+#: ../../source/developer-docs/jenkins_ci.rst:96
+msgid "Jenkins Subversion Plug-in"
+msgstr ""
+
+# 46d6a26baa7e46469704bac73060958d
+#: ../../source/developer-docs/jenkins_ci.rst:97
+msgid "Jenkins GIT plugin"
+msgstr ""
+
+# 91b92d2395e14e02a2a22c9bf23fbb8e
+#: ../../source/developer-docs/jenkins_ci.rst:98
+msgid "Maven Integration plugin"
+msgstr ""
+
+# d1772ac07b19440d9c6636ec4b33e865
+#: ../../source/developer-docs/jenkins_ci.rst:99
+msgid "Jenkins SLOCCount Plug-in"
+msgstr ""
+
+# 1b61f89fd7aa47a0bb03934bdc1f2c91
+#: ../../source/developer-docs/jenkins_ci.rst:100
+msgid "Jenkins Sounds plugin"
+msgstr ""
+
+# b3b7025e23a44f8ba32b5a5687b28cfe
+#: ../../source/developer-docs/jenkins_ci.rst:101
+msgid "Jenkins Translation Assistance plugin"
+msgstr ""
+
+# c4051fa38c244a478df424f3b9510821
+#: ../../source/developer-docs/jenkins_ci.rst:102
+msgid "ruby-runtime"
+msgstr ""
+
+# a139353115574a21b06786f03056cddd
+#: ../../source/developer-docs/jenkins_ci.rst:103
+msgid "Jenkins CVS Plug-in"
+msgstr ""
+
+# 866db933f587441faa899fa067691c56
+#: ../../source/developer-docs/jenkins_ci.rst:104
+msgid "Coverage/Complexity Scatter Plot PlugIn"
+msgstr ""
+
+# 4cf89c325458445189af43a5885e43bf
+#: ../../source/developer-docs/jenkins_ci.rst:105
+msgid "Status Monitor Plugin"
+msgstr ""
+
+# 4f68bf632d6b49e09d048372b339471d
+#: ../../source/developer-docs/jenkins_ci.rst:106
+msgid "Git Parameter Plug-In"
+msgstr ""
+
+# 350e9db5053c4946a7e69fd7d2de5f10
+#: ../../source/developer-docs/jenkins_ci.rst:107
+msgid "github-api"
+msgstr ""
+
+# 24db2e33e2204aada6b073229c566686
+#: ../../source/developer-docs/jenkins_ci.rst:108
+msgid "GitHub plugin"
+msgstr ""
+
+# 87c5021ac0534fe09d44163c4fe34824
+#: ../../source/developer-docs/jenkins_ci.rst:109
+msgid "Jenkins Violations plugin"
+msgstr ""
+
+# cd7542af4822416bb6350828a43884f3
+#: ../../source/developer-docs/jenkins_ci.rst:110
+msgid "git-notes Plugin"
+msgstr ""
+
+# 6072968ec57448149502925cb34321da
+#: ../../source/developer-docs/jenkins_ci.rst:111
+msgid "Twitter plugin"
+msgstr ""
+
+# ce334b3526814fcd987d1fe19fe0fefc
+#: ../../source/developer-docs/jenkins_ci.rst:112
+msgid "Jenkins Cobertura Plugin"
+msgstr ""
+
+# fbebb06fbda34978b67557aeb2adf749
+#: ../../source/developer-docs/jenkins_ci.rst:113
+msgid "Jenkins Gravatar plugin"
+msgstr ""
+
+# 10d92362cba345939e75dc265a5967da
+#: ../../source/developer-docs/jenkins_ci.rst:114
+msgid "Jenkins SSH Slaves plugin"
+msgstr ""
+
+# 7e6ceba2931e4669846e987bb83f8984
+#: ../../source/developer-docs/jenkins_ci.rst:115
+msgid "xvfb"
+msgstr ""
+
+# bee152ba9a5b43b89ca528c58ddc6e33
+#: ../../source/developer-docs/jenkins_ci.rst:119
+msgid "Lock down access"
+msgstr ""
+
+# 6cabd58e6c784694a2af86c62800c864
+#: ../../source/developer-docs/jenkins_ci.rst:121
+msgid ""
+"We are hosting private repositories on the server so we want to make "
+"everything private. To do that we do: :menuselection:`Jenkins --> Manage "
+"Jenkins --> Configure System` or go to http://jenkins.linfiniti.com/"
+"configure."
+msgstr ""
+
+# 593dd321785a41b3a6817731f0069ddf
+#: ../../source/developer-docs/jenkins_ci.rst:126
+msgid ""
+"Under :guilabel:`Access control - Security Realm`, check :guilabel:"
+"`Jenkins's own user database`."
+msgstr ""
+
+# d7ff4b7a086d4e9c8a757777db3c3d70
+#: ../../source/developer-docs/jenkins_ci.rst:129
+msgid ""
+"Under :guilabel:`Authorization` check :guilabel:`Project-based Matrix "
+"Authorization Strategy`, then add your admin users only here, giving them "
+"all permissions. We will add less priveledged users on a project by project "
+"basis."
+msgstr ""
+
+# 6627ac7d3a6a437fac989347525bd5a3
+#: ../../source/developer-docs/jenkins_ci.rst:136
+msgid "Other Configuration options"
+msgstr ""
+
+# f9ecd55d8f6746f2b63389c57552723a
+#: ../../source/developer-docs/jenkins_ci.rst:138
+msgid ":guilabel:`Jenkins URL` set to :kbd:`http://jenkins.linfiniti.com/`"
+msgstr ""
+
+# 07aa31a231af4f58ad5b2fab3564e9d9
+#: ../../source/developer-docs/jenkins_ci.rst:139
+msgid ""
+":guilabel:`Sender E-mail Address` set to :kbd:`Linfiniti Jenkins "
+"<jenkins@linfiniti.com>`"
+msgstr ""
+
+# af241b039b104860863ce6bc330badcd
+#: ../../source/developer-docs/jenkins_ci.rst:140
+msgid ":guilabel:`GitHub Web Hook` set to :kbd:`Manually manage hook URLs`"
+msgstr ""
+
+# 6b00853545ed413c9ba8c8da666d641d
+#: ../../source/developer-docs/jenkins_ci.rst:144
+msgid "Creating the Jenkins Farminfo Job"
+msgstr ""
+
+# 2e872247b543466c833710d321f1e92b
+#: ../../source/developer-docs/jenkins_ci.rst:146
+msgid "Create a new Job (project):"
+msgstr ""
+
+# 3dc48ddf96db4d7ea53f6d600bf082a5
+#: ../../source/developer-docs/jenkins_ci.rst:148
+msgid ""
+":menuselection:`Jenkins --> New Job` or go to http://jenkins.linfiniti.com/"
+"view/All/newJob."
+msgstr ""
+
+# 0f43f9abee7a4b60ace9f5f5659d80c9
+#: ../../source/developer-docs/jenkins_ci.rst:151
+msgid "Here is a log of the options we set for the Jenkins job:"
+msgstr ""
+
+# 41ea91f30fb5450985b467ab688a440b
+#: ../../source/developer-docs/jenkins_ci.rst:153
+msgid ""
+":guilabel:`Project Name` set to :kbd:`InaSAFE` (don't use spaces for the "
+"project name!)."
+msgstr ""
+
+# 47dcf5b853f74490a1e0cfd48d5d3e93
+#: ../../source/developer-docs/jenkins_ci.rst:155
+msgid ""
+"Check :guilabel:`Enable project-based security` then add an entry for "
+"**Anonymous** with :kbd:`Job: Read` and :kbd:`Job Discover` permissions "
+"only. This will allow anonymous read-only access to the project."
+msgstr ""
+
+# ed59c610b1854aa8907f6363a68e9846
+#: ../../source/developer-docs/jenkins_ci.rst:158
+msgid ":guilabel:`Xvfb` set to ticked."
+msgstr ""
+
+# ad088eaa783f47f5bc8e36db125d4d2e
+#: ../../source/developer-docs/jenkins_ci.rst:159
+msgid ""
+":guilabel:`GitHub project` set to :kbd:`https://github.com/AIFDR/inasafe/`"
+msgstr ""
+
+# 74dbeefa0c2c460bba764fd1e83139e1
+#: ../../source/developer-docs/jenkins_ci.rst:160
+msgid ""
+":guilabel:`Source Code Management` check :guilabel:`Git` and set to :kbd:"
+"`git@github.com:AIFDR/inasafe.git`"
+msgstr ""
+
+# 2a8b9add252a4fbea31676c6018c931a
+#: ../../source/developer-docs/jenkins_ci.rst:162
+msgid ":guilabel:`Branch Specifier (blank for default)` set to :kbd:`master`"
+msgstr ""
+
+# 70f2d71b687d4994beab70565ec57a20
+#: ../../source/developer-docs/jenkins_ci.rst:163
+msgid ":guilabel:`Repository browser` set to :kbd:`auto`"
+msgstr ""
+
+# ca60e0c56e2949c29dcec86750162149
+#: ../../source/developer-docs/jenkins_ci.rst:164
+msgid ""
+":guilabel:`Build Triggers` set to :kbd:`Build when a change is pushed to "
+"GitHub` - this will cause the project to build every time a new commit is "
+"pushed to GitHub. We also need to setup a GitHub hook to do this which is "
+"described further down."
+msgstr ""
+
+# 22a0a7b1c4944b1f826a95e053ffc2ee
+#: ../../source/developer-docs/jenkins_ci.rst:169
+msgid "**Build Actions**"
+msgstr ""
+
+# f2921d4fc1694f45af539849378fa0f4
+#: ../../source/developer-docs/jenkins_ci.rst:171
+msgid ""
+":guilabel:`Build` add an :kbd:`Execute Shell` step and set the script as "
+"follows::"
+msgstr ""
+
+# e1f2ae8b91844165b4d1efe2bf254965
+#: ../../source/developer-docs/jenkins_ci.rst:188
+msgid ""
+"In this server instance we are using a hand built QGIS. The initial 3 export "
+"lines may not be needed if you are using a package build QGIS installation."
+msgstr ""
+
+# e7bcdfc9dc674edcabd03e66f122f1ea
+#: ../../source/developer-docs/jenkins_ci.rst:192
+msgid ""
+":guilabel:`Add build step` set to :kbd:`play a sound` and choose a sound "
+"which will play when the build completes (optional)"
+msgstr ""
+
+# 7c3066734ff346d49606e22c303f5195
+#: ../../source/developer-docs/jenkins_ci.rst:195
+msgid "**Post-build Actions**"
+msgstr ""
+
+# e84f3bdc76b64220900e669f26bad480
+#: ../../source/developer-docs/jenkins_ci.rst:197
+msgid "Add the following actions and settings:"
+msgstr ""
+
+# 1a11338d181f45a99d1ad0d8f644b928
+#: ../../source/developer-docs/jenkins_ci.rst:199
+msgid ""
+":guilabel:`Publish Cobertura Coverage Report` set :guilabel:`Cobertura xml "
+"report pattern` to :kbd:`coverage.xml`. For the rest take the defaults or "
+"tweak them as you like."
+msgstr ""
+
+# c5799b7776c2461bb4d32042d24cc760
+#: ../../source/developer-docs/jenkins_ci.rst:203
+msgid ""
+"to :kbd:`nosetests.xml`. I also disabled :guilabel:`Retain long standard "
+"output/error` (you can enable it temporarily while debugging server side "
+"build issues)."
+msgstr ""
+
+# 91ccfc4725724ee29eabcb7c25f70737
+#: ../../source/developer-docs/jenkins_ci.rst:206
+msgid ""
+":guilabel:`Publish SLOCCount analysis reports` set :guilabel:`SLOCcount "
+"reports` to :kbd:`sloccount.sc`"
+msgstr ""
+
+# 9dfb82e2f41647c0b55ae4996ffd78d6
+#: ../../source/developer-docs/jenkins_ci.rst:209
+msgid ":guilabel:`pep8` to :kbd:`pep8.log`"
+msgstr ""
+
+# 4a0d874f61bc400c9b39d93c59b4bb22
+#: ../../source/developer-docs/jenkins_ci.rst:210
+msgid ":guilabel:`pylint` to :kbd:`pylint.log`"
+msgstr ""
+
+# 55d9baca3b974076a4fe87f09e1969ff
+#: ../../source/developer-docs/jenkins_ci.rst:211
+msgid ""
+":guilabel:`Email notification` set :guilabel:`Recipients` to :kbd:"
+"`tim@linfiniti.com`. Add any additional recipients as needed (space "
+"delimited). Also I set :guilabel:`Send e-mail for every unstable build` "
+"checked and :guilabel:`Send separate e-mails to individuals who broke the "
+"build` checked."
+msgstr ""
+
+# c42d872024ff4a008f846cd8ed1ba000
+#: ../../source/developer-docs/jenkins_ci.rst:217
+msgid ":guilabel:`Jenkins Sounds` set :guilabel:`Failure` to :kbd:`argh(wave)`"
+msgstr ""
+
+# 5d72bf921ee742419ad80a5d73491fd8
+#: ../../source/developer-docs/jenkins_ci.rst:218
+msgid ""
+":guilabel:`Jenkins Sounds` set :guilabel:`Success` to :kbd:`Yahoo.Yodel(wave)"
+"`"
+msgstr ""
+
+# d6d9524236ee4561814da74bbe70fa28
+#: ../../source/developer-docs/jenkins_ci.rst:219
+msgid ""
+":guilabel:`Publish Coverage / Complexity Scatter Plot` check :guilabel:"
+"`Locate the graph at the topmost of Jenkins project page`"
+msgstr ""
+
+# a52c4ac99c0f44f08ba7e703023305a0
+#: ../../source/developer-docs/jenkins_ci.rst:221
+msgid ":guilabel:`Status Monitor` enable (this is optional)"
+msgstr ""
+
+# b712aafcb8e44bc5a96a56a785b523b5
+#: ../../source/developer-docs/jenkins_ci.rst:223
+msgid "Click :guilabel:`Save`"
+msgstr ""
+
+# 47d92c9fc7264ce3aef79d7878194e5b
+#: ../../source/developer-docs/jenkins_ci.rst:226
+msgid "Server Configuration in the shell"
+msgstr ""
+
+# e49ac1480ac24223bf785c38a553e9b2
+#: ../../source/developer-docs/jenkins_ci.rst:228
+msgid "We need to do the following on the server as the jenkins user:"
+msgstr ""
+
+# 5b3476fc95cf4ef287941d41bccae4ee
+#: ../../source/developer-docs/jenkins_ci.rst:231
+msgid "Create an ssh key for Jenkins"
+msgstr ""
+
+# cca478f64c6e4a6fbad072033a2dbffb
+#: ../../source/developer-docs/jenkins_ci.rst:233
+msgid ""
+"This key will be used to enable Jenkins access to private repos on GitHub. "
+"You only need to do this once on the server for each project::"
+msgstr ""
+
+# 23b476b88c384142ad700f1222441555
+#: ../../source/developer-docs/jenkins_ci.rst:260
+msgid "Here's our key::"
+msgstr ""
+
+# 48c392d5f1bc4c51a5d524eb23455f0c
+#: ../../source/developer-docs/jenkins_ci.rst:270
+msgid ""
+"You need to create an ssh host alias so that when doing a git checkout, the "
+"correct keypair is used. Add this to the :file:`~/.ssh/config` of the "
+"jenkins user::"
+msgstr ""
+
+# 1031f3eae96448e39affbb53674b2f8a
+#: ../../source/developer-docs/jenkins_ci.rst:278
+msgid ""
+"Now go to https://github.com/AIFDR/inasafe/admin/keys and add the above key "
+"as a deploy key."
+msgstr ""
+
+# 671bf98e90c941bbafd9a62b2c42e161
+#: ../../source/developer-docs/jenkins_ci.rst:281
+msgid ""
+"Next we add the github key to the Jenkins user's allowed hosts. The easiest "
+"way to do this is just to make a temporary clone of the repo. Again this "
+"only needs to be done once and then Jenkins will work for all github "
+"projects."
+msgstr ""
+
+# 46be795c293d4d77aef7037a45de47d9
+#: ../../source/developer-docs/jenkins_ci.rst:285
+msgid "Back on the server::"
+msgstr ""
+
+# 7bffd72b5ffb4283a33bb996e81ee9db
+#: ../../source/developer-docs/jenkins_ci.rst:294
+msgid "Also you should set the Jenkins git user and email::"
+msgstr ""
+
+# b9f3b053b56e4b04b6836582a35b9575
+#: ../../source/developer-docs/jenkins_ci.rst:299
+msgid "The source tree will be in :file:`~/jobs/InaSAFE/workspace/`."
+msgstr ""
+
+# 8ac80ea240f442b7a35197cebfb1ce8e
+#: ../../source/developer-docs/jenkins_ci.rst:302
+msgid "Project setup"
+msgstr ""
+
+# 00e1997885a642e7a06fce439e59fe0c
+#: ../../source/developer-docs/jenkins_ci.rst:304
+msgid ""
+"Try to do an intial build. It will fail because we have to copy the InaSAFE "
+"test data into the job directory. Use the same procedure as above to add ad "
+"deploy key to the inasafe-data repo and then clone it (as jenkins user)::"
+msgstr ""
+
+# aab1a5261f8b4e61b77bdcd94a1bf925
+#: ../../source/developer-docs/jenkins_ci.rst:312
+msgid "GitHub Hook Setup"
+msgstr ""
+
+# 4a4a315eb7ed4885adffcd0834141b71
+#: ../../source/developer-docs/jenkins_ci.rst:314
+msgid "In GitHub hooks, enable Jenkins (GitHub plugin) and set the url to::"
+msgstr ""
+
+# 906a382f767f4c9ea37ec2516c687e5f
+#: ../../source/developer-docs/jenkins_ci.rst:321
+msgid "Testing on Jenkins server"
+msgstr ""
+
+# eac4f3eeb1b14f17bc8af534a25a8b16
+#: ../../source/developer-docs/jenkins_ci.rst:323
+msgid ""
+"Simply commit something and push it to the server. Turn the speakers on on "
+"your desktop with the Jenkins page (http://jenkins.linfiniti.com) open and "
+"you should hear a cheer or a groan depending on whether the test passes or "
+"fails."
+msgstr ""
+
+# 5ec6edb5854043c8999bd690453f148c
+#: ../../source/developer-docs/jenkins_ci.rst:329
+msgid "Further Reading"
+msgstr ""
+
+# 2ca1d897ee4142f8a9aa1210f63b63d8
+#: ../../source/developer-docs/jenkins_ci.rst:331
+msgid "Here are some useful resources we found while getting things set up."
+msgstr ""
+
+# 7e58358a1cca4431b5a1c29820818969
+#: ../../source/developer-docs/jenkins_ci.rst:333
+msgid "http://www.alexconrad.org/2011/10/jenkins-and-python.html"
+msgstr ""
+
+# 6802b7aa218f409788e236cb0e0bef07
+# 03fd39a769a7402b9409cbe0d383c1ff
+#: ../../source/developer-docs/jenkins_ci.rst:334
+msgid ""
+"http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html"
+msgstr ""
+
+# a11eccd5702b4dacbfd6d4696c4929dc
+#: ../../source/developer-docs/jenkins_ci.rst:335
+msgid "http://blog.jvc26.org/2011/06/13/jenkins-ci-and-django-howto"
+msgstr ""
+
+# 36bf3ca5ffc44d4fb33a35f8f1250878
+#: ../../source/developer-docs/jenkins_ci.rst:336
+msgid ""
+"https://sites.google.com/site/kmmbvnr/home/django-jenkins-tutorial (probably "
+"the most usful article I found)"
+msgstr ""
+
+# 3e65ac12371b4c5e837e73cb2eb0f7a8
+#: ../../source/developer-docs/jenkins_ci.rst:338
+msgid "http://blog.mathieu-leplatre.info/django-et-jenkins-fr.html (in French)"
+msgstr ""

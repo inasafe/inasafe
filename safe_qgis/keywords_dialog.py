@@ -30,7 +30,7 @@ from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 isLayerPolygonal,
+                                 isPolygonLayer,
                                  getLayerAttributeNames,
                                  getDefaults)
 
@@ -71,26 +71,21 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # english to the keywords file. The keys will be written as user data
         # in the combo entries.
         # .. seealso:: http://www.voidspace.org.uk/python/odict.html
-        self.standardExposureList = OrderedDict([('population',
-                                      self.tr('population')),
-                                     ('structure', self.tr('structure')),
-                                     ('road', self.tr('road')),
-                                     ('Not Set', self.tr('Not Set'))])
-        self.standardHazardList = OrderedDict([('earthquake [MMI]',
-                                    self.tr('earthquake [MMI]')),
-                                   ('tsunami [m]', self.tr('tsunami [m]')),
-                                   ('tsunami [wet/dry]',
-                                    self.tr('tsunami [wet/dry]')),
-                                   ('tsunami [feet]',
-                                    self.tr('tsunami [feet]')),
-                                   ('flood [m]', self.tr('flood [m]')),
-                                   ('flood [wet/dry]',
-                                    self.tr('flood [wet/dry]')),
-                                   ('flood [feet]', self.tr('flood [feet]')),
-                                   ('tephra [kg2/m2]',
-                                    self.tr('tephra [kg2/m2]')),
-                                   ('volcano', self.tr('volcano')),
-                                   ('Not Set', self.tr('Not Set'))])
+        self.standardExposureList = OrderedDict(
+            [('population', self.tr('population')),
+             ('structure', self.tr('structure')),
+             ('Not Set', self.tr('Not Set'))])
+        self.standardHazardList = OrderedDict(
+            [('earthquake [MMI]', self.tr('earthquake [MMI]')),
+             ('tsunami [m]', self.tr('tsunami [m]')),
+             ('tsunami [wet/dry]', self.tr('tsunami [wet/dry]')),
+             ('tsunami [feet]', self.tr('tsunami [feet]')),
+             ('flood [m]', self.tr('flood [m]')),
+             ('flood [wet/dry]', self.tr('flood [wet/dry]')),
+             ('flood [feet]', self.tr('flood [feet]')),
+             ('tephra [kg2/m2]', self.tr('tephra [kg2/m2]')),
+             ('volcano', self.tr('volcano')),
+             ('Not Set', self.tr('Not Set'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -113,7 +108,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.radPredefined.setChecked(True)
         self.dsbFemaleRatioDefault.blockSignals(True)
         self.dsbFemaleRatioDefault.setValue(self.defaults[
-                                            'FEM_RATIO'])
+            'FEM_RATIO'])
         self.dsbFemaleRatioDefault.blockSignals(False)
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
@@ -157,9 +152,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if theFlag:
             currentKeyword = self.getValueForKey(
                 self.defaults['AGGR_ATTR_KEY'])
-            fields, attributePosition = getLayerAttributeNames(self.layer,
-                               [QtCore.QVariant.Int, QtCore.QVariant.String],
-                               currentKeyword)
+            fields, attributePosition = getLayerAttributeNames(
+                self.layer,
+                [QtCore.QVariant.Int, QtCore.QVariant.String],
+                currentKeyword)
             theBox.addItems(fields)
             if attributePosition is None:
                 theBox.setCurrentIndex(0)
@@ -177,9 +173,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if theFlag:
             currentKeyword = self.getValueForKey(
                 self.defaults['FEM_RATIO_ATTR_KEY'])
-            fields, attributePosition = getLayerAttributeNames(self.layer,
-                                               [QtCore.QVariant.Double],
-                                               currentKeyword)
+            fields, attributePosition = getLayerAttributeNames(
+                self.layer,
+                [QtCore.QVariant.Double],
+                currentKeyword)
             fields.insert(0, self.tr('Use default'))
             fields.insert(1, self.tr('Don\'t use'))
             theBox.addItems(fields)
@@ -362,7 +359,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'exposure' == myCategory:
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
-        # prevents actions being handled twice
+            # prevents actions being handled twice
 
     def setSubcategoryList(self, theEntries, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
@@ -386,16 +383,17 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # we block signals from the combo while updating it
         self.cboSubcategory.blockSignals(True)
         self.cboSubcategory.clear()
-        if (theSelectedItem is not None and
-            theSelectedItem not in theEntries.values() and
-            theSelectedItem not in theEntries.keys()):
+        theSelectedItemNone = theSelectedItem is not None
+        theSelectedItemInValues = theSelectedItem not in theEntries.values()
+        theSelectedItemInKeys = theSelectedItem not in theEntries.keys()
+        if (theSelectedItemNone and theSelectedItemInValues and
+                theSelectedItemInKeys):
             # Add it to the OrderedList
             theEntries[theSelectedItem] = theSelectedItem
         myIndex = 0
         mySelectedIndex = 0
         for myKey, myValue in theEntries.iteritems():
-            if (myValue == theSelectedItem or
-                myKey == theSelectedItem):
+            if (myValue == theSelectedItem or myKey == theSelectedItem):
                 mySelectedIndex = myIndex
             myIndex += 1
             self.cboSubcategory.addItem(myValue, myKey)
@@ -413,8 +411,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        if (not self.lePredefinedValue.text().isEmpty() and not
-        self.cboKeyword.currentText().isEmpty()):
+        if (not self.lePredefinedValue.text().isEmpty() and
+                not self.cboKeyword.currentText().isEmpty()):
             myCurrentKey = self.tr(self.cboKeyword.currentText())
             myCurrentValue = self.lePredefinedValue.text()
             self.addListEntry(myCurrentKey, myCurrentValue)
@@ -720,7 +718,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.lblLayerName.setText('')
 
-        if not isLayerPolygonal(self.layer):
+        if not isPolygonLayer(self.layer):
             self.radPostprocessing.setEnabled(False)
 
         #adapt gui if we are in postprocessing category
@@ -757,7 +755,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     # prevents actions being handled twice
     @pyqtSignature('QString')
     def on_leTitle_textEdited(self, theText):
-        """Update the keywords list whenver the user changes the title.
+        """Update the keywords list whenever the user changes the title.
         This slot is not called is the title is changed programmatically.
 
         Args:
@@ -808,9 +806,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.keywordIO.writeKeywords(theLayer=self.layer,
                                          theKeywords=myKeywords)
         except InaSAFEError, e:
-            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
-              ((self.tr('An error was encountered when saving the keywords:\n'
-                        '%s' % str(getExceptionWithStacktrace(e))))))
+            QtGui.QMessageBox.warning(
+                self,
+                self.tr('InaSAFE'),
+                ((self.tr(
+                    'An error was encountered when saving the keywords:\n'
+                    '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:
             self.dock.getLayers()
         self.done(QtGui.QDialog.Accepted)

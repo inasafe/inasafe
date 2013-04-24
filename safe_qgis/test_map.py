@@ -19,9 +19,10 @@ import logging
 #sys.path.append(pardir)
 
 from PyQt4 import QtGui
-from qgis.core import (QgsMapLayerRegistry,
-                       QgsRectangle,
-                       QgsComposerPicture)
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsRectangle,
+    QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
@@ -68,10 +69,16 @@ class MapTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
-        myExpectedSize = 352798  # as rendered on linux ub 12.04 64
-        myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
-            myExpectedSize, mySize)
-        assert mySize >= myExpectedSize, myMessage
+        myExpectedSizes = [
+            352798,  # as rendered on linux ub 12.04 64
+            234806,  # as rendered on osx mountain lion 10.8
+            438659,  # as rendered on linux mint Nadia 14
+            447907,  # as rendered on windows 7 sp1 AMD64
+            438647,  # as rendered on Jenkins post 24 April 2013
+        ]
+        myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
+            myExpectedSizes, mySize)
+        self.assertIn(mySize, myExpectedSizes, myMessage)
 
     def test_renderComposition(self):
         """Test making an image of the map only."""
@@ -103,17 +110,23 @@ class MapTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        myAcceptableImages = ['renderComposition.png',
-                              'renderComposition-variantUB12.04.png',
-                              'renderComposition-variantUB12.10.png',
-                              'renderComposition-variantWindosVistaSP2-32.png',
-                              'renderComposition-variantJenkins.png',
-                              'renderComposition-variantUB11.10-64.png',
-                              'renderComposition-variantUB11.04-64.png']
+        myAcceptableImages = [
+            'renderComposition.png',
+            'renderComposition-variantUB12.04.png',
+            'renderComposition-variantUB12.10.png',
+            'renderComposition-variantOSXml.png',
+            'renderComposition-variantWindowsVistaSP2-32.png',
+            'renderComposition-variantJenkins.png',
+            'renderComposition-variantUB11.10-64.png',
+            'renderComposition-variantLinuxMint-14-x86_64.png',
+            'renderComposition-variantWindows7-SP1-AMD64.png',
+            'renderComposition-variantUB11.04-64.png']
         # Beta version and version changes  can introduce a few extra chars
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
         myTolerance = 8000
+        print myImagePath
+        print myAcceptableImages
         myFlag, myMessage = checkImages(myAcceptableImages,
                                         myImagePath,
                                         myTolerance)

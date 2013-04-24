@@ -12,8 +12,6 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from safe.storage.core import read_layer
-from safe.storage.vector import Vector
 import logging
 
 from PyQt4 import QtGui, QtCore
@@ -21,11 +19,11 @@ from PyQt4.QtCore import pyqtSignature
 
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 
-from safe_qgis.safe_interface import get_version
+from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
 from safe_qgis.minimum_needs_base import Ui_MinimumNeedsBase
 from safe_qgis.utilities import (addComboItemInOrder,
-                                 isLayerPolygonal,
-                                 isLayerPoint)
+                                 isPolygonLayer,
+                                 isPointLayer)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -78,11 +76,12 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                 try:
                     displaced = int(population)
                 except ValueError:
-                    QtGui.QMessageBox.information(None,
+                    QtGui.QMessageBox.information(
+                        None,
                         self.tr('Format error'),
                         self.tr('Please change the value of %s in '
-                        'attribute %s to integer format') %
-                     (population, population_name))
+                                'attribute %s to integer format') %
+                        (population, population_name))
                     raise ValueError
 
             # Calculate estimated needs based on BNPB Perka 7/2008
@@ -105,7 +104,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             attribute_dict['Air minum'] = drinking_water
             attribute_dict['Air bersih'] = water
             attribute_dict['Kit keluarga'] = family_kits
-            attribute_dict['Jamba'] = toilets
+            attribute_dict['Jamban'] = toilets
 
             # Record attributes for this feature
             needs_attributes.append(attribute_dict)
@@ -125,7 +124,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             myName = myLayer.name()
             mySource = str(myLayer.id())
             #check if layer is a vector polygon layer
-            if isLayerPolygonal(myLayer) or isLayerPoint(myLayer):
+            if isPolygonLayer(myLayer) or isPointLayer(myLayer):
                 myFoundFlag = True
                 addComboItemInOrder(self.cboPolygonLayers, myName, mySource)
         if myFoundFlag:
@@ -141,8 +140,8 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        myLayerId = self.cboPolygonLayers.itemData(theIndex,
-                        QtCore.Qt.UserRole).toString()
+        myLayerId = self.cboPolygonLayers.itemData(
+            theIndex, QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         myFields = myLayer.dataProvider().fieldNameMap().keys()
         self.cboFields.clear()
@@ -150,23 +149,23 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             addComboItemInOrder(self.cboFields, myField, myField)
 
     def accept(self):
-        """PRocess the layer and field and generate a new layer.
+        """Process the layer and field and generate a new layer.
 
         .. note:: This is called on ok click.
 
         """
         myIndex = self.cboFields.currentIndex()
-        myFieldName = self.cboFields.itemData(myIndex,
-                                               QtCore.Qt.UserRole).toString()
+        myFieldName = self.cboFields.itemData(
+            myIndex, QtCore.Qt.UserRole).toString()
 
         myIndex = self.cboPolygonLayers.currentIndex()
-        myLayerId = self.cboPolygonLayers.itemData(myIndex,
-                                                 QtCore.Qt.UserRole).toString()
+        myLayerId = self.cboPolygonLayers.itemData(
+            myIndex, QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 
         myFileName = str(myLayer.source())
 
-        myInputLayer = read_layer(myFileName)
+        myInputLayer = safe_read_layer(myFileName)
 
         try:
             myOutputLayer = self.minimum_needs(myInputLayer, str(myFieldName))

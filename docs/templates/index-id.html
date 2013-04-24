@@ -1,0 +1,219 @@
+<is></is>{% extends "inasafe-base.html" %}
+{% set title = 'Home' %}
+
+{% block hero %}
+    <h2>Selamat Datang di Proyek InaSAFE!</h2>
+    <p>Indonesian Scenario Assement for Emergencies </p>
+    <div id="myCarousel" class="carousel slide">
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="item centered"><img src="{{ pathto('_static/img/carousel/team.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>'Code sprint' pengembang InaSAFE</h4>
+                </div>
+            </div>
+            <div class="item"><img src="{{ pathto('_static/img/carousel/jakarta.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>Area padat penduduk yang rentan terkena bencana</h4>
+                </div>
+            </div>
+            <div class="active item"><img src="{{ pathto('_static/img/carousel/screenshot.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>Skenario InaSAFE untuk gempa bumi pada bangunan</h4>
+                </div>
+            </div>
+            <div class="item"><img src="{{ pathto('_static/img/carousel/translators.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>Sesi pelatihan pengembang InaSAFE</h4>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+    <script type="text/javascript">$('.carousel').carousel();</script>
+{% endblock %}
+{% block body %}
+        <div class="alert alert-info centered">
+            <a href="../en/index.html">Switch to Bahasa Inglisi!</a>
+        </div>
+        <div class="row" id="blocks-row">
+            <div class="span4">
+                {# We put the admonition inside the span because adding border #}
+                {# to the span will mess up the layout #}
+                <div class="admonition">
+                    <h3>Apa itu InaSAFE?</h3>
+                    <p><img src="{{ pathto('_static/img/logo.png', 1)}}"/>
+                        Tujuan dari InaSAFE adalah untuk membuat perangkat yang mampu
+			menyediakan informasi yang cepat dan relevan untuk memahami
+			resiko yang terkait dengan kejadian seperti letusan gunung berapi,
+			genangan air dari banjir / tsunami, gempa bumi dan lainnya.
+                    </p>
+                    <p>
+                        InaSAFE adalah hasil kolaborasi antara Australia Aid 
+			Agency di Indonesia, BNPB (Indonesia), World Bank / GFDRR
+			Australia-Indonesia Facility for Disaster Reduction, Universitas
+			Gadjah Mada, dan organisasi peserta lainnya.
+                    </p>
+
+                    <p>
+                        Indonesian Scenario Assessment for Emergencies (InaSAFE) adalah
+			sebuah proyek Free and Open Source Software (FOSS), diterbitkan
+			di bawah  <a href="http://www.gnu.org/licenses/gpl-3.0.txt">
+                        GPL V3 license</a>. Sehingga Anda bisa mengunduhnya dengan gratis,
+			membagikannya dan (jika Anda suka) memodifikasinya.
+                    </p>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="admonition">
+                    <h3>Instalasi InaSAFE!</h3>
+                    <p><img alt=""
+                            src="{{ pathto('_static/img/qgis_logo.png', 1)}}"/>
+                        InaSAFE adalah sebuah plugin untuk Quantum GIS (QGIS).
+			QGIS (dan InaSAFE) yang berjalan di OSX, Windows, dan Linux.
+                        Anda dapat mengunduh QGIS secara gratis di 
+			<a href="http://download.qgis.org">download.qgis.org</a>
+                    </p>
+                    <p>Setelah Anda menginstal QGIS, Anda dapat menginstal InaASFE
+			dalam 5 langkah yang mudah!. buka versi terakhir dari
+                        <a href="http://qgis.org">QGIS</a> (1.7 atau lebih baru)
+			dan lakukan:
+                    </p>
+                    <ol>
+                        <li><span class='kbd'>Plugins -> Mendapatkan Plugin Python
+                            </span>.
+                        </li>
+                        <li>Ketik <span class='kbd'>InaSAFE</span> pada kotak
+                            <span class='guilabel'>Saring</span>.
+                        </li>
+                        <li>Pilih kotak kotak di sebelah plugin InaSAFE</li>
+                        <li>Klik tombol <span class='guilabel'>Instal/tingkatkan plugin
+                            </span>.
+                        </li>
+                        <li>Tutup plugin manager dan InaSAFE sudah terinstal dan
+                       	   siap digunakan.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="admonition">
+                    <h3>Help using InaSAFE</h3>
+                    <p>
+                    <img alt=""
+                         src="{{ pathto('_static/img/documentation57.png', 1)}}"/>
+                    Kami membuat dokumentasi untuk InaSAFE secara aktif, termasuk
+		    tutorial, bantuan umum, dan dokumentasi pengembangan:
+                    </p>
+                    <ul>
+                        <li>
+                            <a href="../en/contents.html">
+                                <i class="icon-file icon-black"></i>
+                                InaSAFE online manual in English.
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../id/contents.html">
+                                <i class="icon-file icon-black"></i>
+                                Manual InaSAFE dalam Bahasa Indonesia.
+                            </a>
+                        </li>
+                    </ul>
+                    <p>
+                    <p>Bergabunglang dengan mailing kita dengan mengirim email ke
+                        <a href="mailto:inasafe-users+subscribe@googlegroups.com">
+                            inasafe-users+subscribe@googlegroups.com</a>
+
+                        Silahkan <a href="https://github.com/AIFDR/inasafe/issues"><b>
+                            buat tiket</b></a> jika Anda menemukan masalah.
+                    </p>
+                    <p>
+                        Kami secara rutin mengadakan kursus training. Silahkan hubungi kami
+			jika Anda ingin dibantu dalam mengadakan pelatihan atau untuk melihat apakah
+			ada pelatihan lokal yang dapat Anda hadiri (difokuskan di Indonesia).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info centered">
+            Dinding Video InaSAFE
+        </div>
+
+        <ul class="thumbnails">
+            <li class="span4">
+                <div class="thumbnail">
+                    <div class="centered">
+                        <iframe width="300" height="225"
+                            src="http://www.youtube.com/embed/YGyd3YC1hy4"
+                            frameborder="0"
+                            allowfullscreen></iframe>
+                    </div>
+                    <div class="caption">
+                        <h3>Introduction</h3>
+                        <p>Video di atas menampilkan pengenalan singkat mengenai InaSAFE.
+                            </p>
+                    </div>
+                </div>
+            </li>
+            <li class="span4">
+                <div class="thumbnail">
+                    <div class="centered">
+                        <iframe width="300" height="169"
+                            src="http://www.youtube.com/embed/_-k8xiHV4Fs"
+                            frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="caption">
+                        <h3>AMCDRR</h3>
+                        <p>Dr. Trevor Dhu mendemonstrasikan InaSAFE ke Presiden Indonesia
+			    Susilo Bambang Yudhoyono di Asian Ministerial Conference on
+                            Disaster Risk Reduction ke lima yang diadakan di Yogyakarta,
+                            Indonesia, Oktober 2012.</p>
+                    </div>
+                </div>
+            </li>
+            <li class="span4">
+                <div class="thumbnail">
+                    <div class="centered">
+                        <iframe width="300" height="169"
+                            src="http://www.youtube.com/embed/GaaXFFMWy3Y"
+                            frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="caption">
+                        <h3>Partnerships</h3>
+                        <p>Dr. Trevor Dhu menjelaskan pendekatan kemitraan
+                            untuk penilaian risiko yang diambil oleh AusAID</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="alert alert-info centered">
+            Pendukung dan Partner InaSAFE
+        </div>
+
+        <ul class="thumbnails">
+            <li class="span4">
+                <a href="http://bnpb.go.id" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/bnpb_logo.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
+            <li class="span4">
+                <a href="http://www.ausaid.gov.au" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/ausaid.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
+            <li class="span4">
+                <a href="http://www.worldbank.org/" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/wb_logo.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
+        </ul>
+
+        <script type="text/javascript">$('#blocks-row').equalHeights();</script>
+{% endblock %}

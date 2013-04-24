@@ -1,0 +1,305 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: 2013-03-06 11:01+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# ae7ae0c4a66c4fdf9fdbd362e2517b9f
+#: ../../source/developer-docs/maintaining_documentation.rst:8
+msgid "Maintaining the documentation"
+msgstr ""
+
+# 0a2604772e974fb8a5a4a8f11b1b6e84
+#: ../../source/developer-docs/maintaining_documentation.rst:10
+msgid ""
+"The documentation for |project_name| is written using ReSTructured text "
+"(.rst) and the Sphinx documenation builder. The best way to learn how to "
+"write .rst is to look at the source of existing documentation - the markup "
+"syntax is very simple. There are a number of useful tags that you can use to"
+" make your documentation clear and visually interesting, the more commonly "
+"used in this document are listed below. For a more detailed list, please "
+"visit the `Spinx Inline Markup page "
+"<http://sphinx.pocoo.org/markup/inline.html>`_"
+msgstr ""
+
+# 43d21260fe334b668b1d9eb2abe09aa2
+#: ../../source/developer-docs/maintaining_documentation.rst:18
+msgid ""
+"A complete list of supported .rst markup is also available `here "
+"<http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-"
+"quotes>`_."
+msgstr ""
+
+# c723e1ae1df64e019f20880669047ac2
+#: ../../source/developer-docs/maintaining_documentation.rst:22
+msgid "Common tags"
+msgstr ""
+
+# a2b6ffd092a44a4db6f7d9e9fa2f7962
+#: ../../source/developer-docs/maintaining_documentation.rst:24
+msgid "Here are some common useful tags::"
+msgstr ""
+
+# 89a7a421ffe241aea7c3abf8050d8ebc
+#: ../../source/developer-docs/maintaining_documentation.rst:67
+msgid "Creating API Documentation"
+msgstr ""
+
+# de4767bbf28d43cab2999832ab62f04b
+#: ../../source/developer-docs/maintaining_documentation.rst:69
+msgid ""
+"Each class method and function in the code base must include a docstring "
+"explaining its usage and purpose as per the example listed below (taken from"
+" the riab.py setupI18n method)::"
+msgstr ""
+
+# df7c80b0939c487c84b267a100c63316
+#: ../../source/developer-docs/maintaining_documentation.rst:88
+msgid ""
+"There should be a blank line between each paragraph and before the Args "
+"option."
+msgstr ""
+
+# 0fbf9f36e6474d3b82e8e8f6462e1418
+#: ../../source/developer-docs/maintaining_documentation.rst:90
+msgid ""
+"Where multiple inputs or outputs are used, a ReSTructured text bullet list "
+"should be used to list them."
+msgstr ""
+
+# a44f293839734a8c8be8c7c6a5a30fe7
+#: ../../source/developer-docs/maintaining_documentation.rst:93
+msgid ""
+"You can use any ReSTructured text withing the docstring to deliver rich "
+"markup in the final API documentation outputs."
+msgstr ""
+
+# d09964ca9bd846138ccc16ae77c69611
+#: ../../source/developer-docs/maintaining_documentation.rst:96
+msgid ""
+"In order for a new module's documentation to appear in the API docs, the "
+"following steps are required:"
+msgstr ""
+
+# 26b766207f1d4dcdb59c27353a30c9a0
+#: ../../source/developer-docs/maintaining_documentation.rst:99
+msgid ""
+"Create a new file in :file:`docs/source/api-docs/<package_name>` named after"
+" the module. For example, for the gui/riab.py module we would create "
+":file:`docs/source/api-docs/gui/riab.rst` (note the .rst extension). See "
+"below for an example of its contents"
+msgstr ""
+
+# c6fba523769a45d794fb5fdf2792aa8c
+#: ../../source/developer-docs/maintaining_documentation.rst:103
+msgid ""
+"Add the new file to the API docs master index (:file:`docs/source/api-"
+"docs/index.rst`). The .rst extension is not needed or desired when adding to"
+" the index list."
+msgstr ""
+
+# ebca21501b2e4ac29fce9593afd76d04
+#: ../../source/developer-docs/maintaining_documentation.rst:106
+msgid ""
+"Regenerate the documentation using the :command:`make docs` command from the"
+" top level directory in the source tree."
+msgstr ""
+
+# 0cac6eb521f74d5bb364c1aa0e057a4c
+#: ../../source/developer-docs/maintaining_documentation.rst:108
+msgid ""
+"Add the new .rst file and generated html files to the revision control "
+"system."
+msgstr ""
+
+# 5f193024c10847b68b1bae12d45a2e68
+#: ../../source/developer-docs/maintaining_documentation.rst:110
+msgid ""
+"It is probably most expedient to simply copy and rename one of the existing "
+"API documentation files and replace the python module paths therein."
+msgstr ""
+
+# 07e4305ff06040a4bedf35c27cd205cb
+#: ../../source/developer-docs/maintaining_documentation.rst:113
+msgid "An example of the contents of a module's API .rst if provided below::"
+msgstr ""
+
+# c9a3f1affabf4574be5914e934f8060f
+#: ../../source/developer-docs/maintaining_documentation.rst:121
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
+
+# 848a19af24504e709d12b9d246d2a9ae
+#: ../../source/developer-docs/maintaining_documentation.rst:123
+msgid "A couple of things should be noted here:"
+msgstr ""
+
+# a89d22397a914ec891fd6169163a793c
+#: ../../source/developer-docs/maintaining_documentation.rst:125
+msgid ""
+"Sphinx provides automodule and autoclass directives. We have opted to use "
+"**automodule** for all API documentation because autoclass requires that "
+"each class be enumerated and anonymous functions need to be explicitly "
+"listed."
+msgstr ""
+
+# 39eb5796686a4d7ab78647faad509c2f
+#: ../../source/developer-docs/maintaining_documentation.rst:128
+msgid "Automodule must point to a fully qualified python module path."
+msgstr ""
+
+# b538c8eb28fb4aeea8d89323115c6bbd
+#: ../../source/developer-docs/maintaining_documentation.rst:129
+msgid ""
+"The **members** directive instructs autodocs to enumerate all classes and "
+"functions in that module."
+msgstr ""
+
+# 0bfbbfb91620440599023544878da066
+#: ../../source/developer-docs/maintaining_documentation.rst:133
+msgid ""
+"Once the new document has been added and the documentation generated, you "
+"should see it appear in the API section of the |project_name| documentation."
+msgstr ""
+
+# 19bff705f7e542bf816648da12a0ee37
+#: ../../source/developer-docs/maintaining_documentation.rst:140
+msgid "Documenting new features"
+msgstr ""
+
+# afd38045c4334a6cabda6fae08a9b437
+#: ../../source/developer-docs/maintaining_documentation.rst:142
+msgid ""
+"New features should be well documented and that documentation should be made"
+" available uder the :file:`user-docs` subfolder of the sphinx sources tree."
+msgstr ""
+
+# c33e01171f5845b7a51b9f1ae23688d9
+#: ../../source/developer-docs/maintaining_documentation.rst:145
+msgid ""
+"For example, when the keywords editor dialog feature was introduced, we "
+"created a new sphinx document :file:`docs/sources/user-docs/keywords.rst` "
+"which documents this new feature. Additionally, the help button is set to "
+"launch the help dialog in the context of the new help document e.g.::"
+msgstr ""
+
+# 9f8b017d0eff4b40b401a198ec3e914b
+#: ../../source/developer-docs/maintaining_documentation.rst:156
+msgid ""
+"Where the 'keywords' parameter indicates the user-docs/\\*.rst document that"
+" should be opened when the help button is clicked. The general style and "
+"approach used in existing documentation should inform your documentation "
+"process so that all the documentation is constent."
+msgstr ""
+
+# 0e5815f65b9a4632baae3cc5bcab350f
+#: ../../source/developer-docs/maintaining_documentation.rst:162
+msgid "Publishing the documentation to GitHub Pages"
+msgstr ""
+
+# 7c203b20289345a39357633bba23fcaa
+#: ../../source/developer-docs/maintaining_documentation.rst:164
+msgid ""
+"Initially we have used http://readthedocs.org to host our site (and the "
+"pages you are reading now). However they don't support internationalisation "
+"and there are various other issues with it, so we opted to move our content "
+"into gh-pages. To use this, the site is stored in a special branch."
+msgstr ""
+
+# eb3a1241a26d4fff9cacd5735128e22b
+#: ../../source/developer-docs/maintaining_documentation.rst:170
+msgid "Initial gh-pages setup"
+msgstr ""
+
+# 4bf0919b8b1f4528a637a6d7f2aaf65e
+#: ../../source/developer-docs/maintaining_documentation.rst:172
+msgid "In order to set up the gh-pages branch this is the procedure followed."
+msgstr ""
+
+# 0f5b38f5173b4a5c835eef8fcf218e13
+#: ../../source/developer-docs/maintaining_documentation.rst:174
+msgid ""
+"This is a once-off process you do not need to repeat it, it is here for "
+"reference purposes only."
+msgstr ""
+
+# a275b883ca5340e2ac80988f276e8251
+#: ../../source/developer-docs/maintaining_documentation.rst:177
+msgid ""
+"Enable gh-pages in the gh project `admin page "
+"<https://github.com/AIFDR/inasafe/admin>`_. On your local system do "
+"something like this::"
+msgstr ""
+
+# 7525812e412a4a13bc5254221a6887bd
+#: ../../source/developer-docs/maintaining_documentation.rst:196
+msgid ""
+"Now wait ten minutes or so and the pages should be visble here at "
+"http://aifdr.github.com/inasafe/"
+msgstr ""
+
+# 7094d5308e1344b990f28f3c30bd8ab3
+#: ../../source/developer-docs/maintaining_documentation.rst:199
+msgid ""
+"See also: http://help.github.com/articles/creating-project-pages-manually"
+msgstr ""
+
+# 0002054caa9049579b991da88ac58fdf
+#: ../../source/developer-docs/maintaining_documentation.rst:204
+msgid "Deployment of the site requires the following steps:"
+msgstr ""
+
+# e1a099e5b4db4b0c8c631c3e26243c22
+#: ../../source/developer-docs/maintaining_documentation.rst:206
+msgid "Update the documentation as needed"
+msgstr ""
+
+# 05209830886248e1928188adc9f76367
+#: ../../source/developer-docs/maintaining_documentation.rst:207
+msgid "Commit/push to master"
+msgstr ""
+
+# e3eb3a6c299d490685144c730a92092a
+#: ../../source/developer-docs/maintaining_documentation.rst:208
+msgid "Run scripts/update_website.sh"
+msgstr ""
+
+# 58c36d0c8c624fea9bc6305e17a19aea
+#: ../../source/developer-docs/maintaining_documentation.rst:209
+msgid ""
+"Apidoc are build automatically, this might update/create/remove some files. "
+"If it is the case, the script will ask you if you wish to commit those "
+"changes to master. Normally you should."
+msgstr ""
+
+# f3537f9437304dd8800293b62f1a2dec
+#: ../../source/developer-docs/maintaining_documentation.rst:210
+msgid "Wait approximately 10 minutes"
+msgstr ""
+
+# fae41ed3c0e34bc4890f783a24bfa212
+#: ../../source/developer-docs/maintaining_documentation.rst:212
+msgid ""
+"After this the changes should be visible here "
+"http://aifdr.github.com/inasafe/ and http://inasafe.org."
+msgstr ""
+
+# 261fcac23dbc4d6eae637cf9dcaea814
+#: ../../source/developer-docs/maintaining_documentation.rst:215
+msgid ""
+"Also see http://github.com/AIFDR/inasafe/issues/257 for further details of "
+"how the documentation publishing process works."
+msgstr ""

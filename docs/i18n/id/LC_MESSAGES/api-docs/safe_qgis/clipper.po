@@ -1,0 +1,241 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# b3e2613704544ce0b11489ca4224e3c4
+#: ../../source/api-docs/safe_qgis/clipper.rst:6
+msgid "Module:  safe_qgis.clipper"
+msgstr ""
+
+# 9c2fb4ef13a548478dab928aa10d3904
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper:2
+msgid "**ISClipper implementation.**"
+msgstr ""
+
+# 1af646ee9f9742ce85ceb5a2cf3013bf
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 28a470fa123b473bba6755ca52bc500a
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# b86b70da851b46bfadd0d85072a60d54
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipGeometry:1
+msgid "Clip a geometry (linestring or polygon) using a clip polygon."
+msgstr ""
+
+# a0076f9419764ab9afed84ce872e76b6
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipGeometry:3
+msgid ""
+"To do this we combine the clip polygon with the input geometry which will "
+"add nodes to the input geometry where it intersects the clip polygon. Next "
+"we get the symmetrical difference between the input geometry and the "
+"combined geometry."
+msgstr ""
+
+# 38df650ba2e94675af6ba1b2b3a8ab0c
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.clipGeometry:10
+msgid ""
+"with. Multipart polygons are not supported so the client needs to take care "
+"of that."
+msgstr ""
+
+# c8ae43a1998d4cf49c7e783660111e12
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.clipGeometry:13
+msgid "clipped."
+msgstr ""
+
+# 72d74ddfcd0e4e7f957833e89dab5349
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.clipGeometry:16
+msgid "QgsGeometry - clipped to the region of the clip polygon."
+msgstr ""
+
+# 37f4c9da6afe403480ab88cfea84a804
+# 0fc58b7e560a450d88262163fae826fc
+# b3c9800db3ed404fbdde7e5b1b4cbc77
+# 455c570a2d5743e897de62879d58c294
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.clipGeometry:19 safe_qgis.clipper.clipLayer:33
+#: safe_qgis.clipper.explodeMultiPartGeometry:11
+#: safe_qgis.clipper.extentToGeoArray:13
+msgid "None"
+msgstr ""
+
+# 5af7cf62050a4e8891e3efb317a127f0
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:1
+msgid "Clip a Hazard or Exposure layer to the extents provided."
+msgstr ""
+
+# ca56d6a4238d4cf18d6cbe24a0e797fa
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:3
+msgid "Will delegate to clipVectorLayer or clipRasterLayer as needed."
+msgstr ""
+
+# 5a5f07292e03436d94969779f1c2496c
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:5
+msgid "Args:"
+msgstr ""
+
+# 56c918edeee9451a86c26ef05aa60a0c
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:7
+msgid "theLayer - a valid QGIS vector or raster layer"
+msgstr ""
+
+# 5c9a695a316f411aaebb2fb70d61f243
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:9
+msgid ""
+"extents in the form [xmin, ymin, xmax, ymax]. It is assumed that the "
+"coordinates are in EPSG:4326 although currently no checks are made to "
+"enforce this."
+msgstr ""
+
+# 30bade2d85774166ba3fb091255c3f8d
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:12
+msgid "or: A QgsGeometry of type polygon. **Polygon clipping is"
+msgstr ""
+
+# 95d0e9a598194818ae0a59ae1ec72f72
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:13
+msgid "currently only supported for vector datasets.**"
+msgstr ""
+
+# e6eef46013c64e189361837ad9a621e5
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:15
+msgid ""
+"This argument will be ignored for vector layers and if not provided for a "
+"raster layer, the native raster cell size will be used."
+msgstr ""
+
+# f52da019812f4875b5a7353ed3e8366a
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:18
+msgid "output layer."
+msgstr ""
+
+# a085625ec8ec4c0a9cfe5079223f668c
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:20
+msgid ""
+"should be 'exploded' into singleparts. **This parameter is ignored for "
+"raster layer clipping.**"
+msgstr ""
+
+# e2dea2becf5b4c988530945793427629
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:23
+msgid ""
+"that extend beyond the extents should be clipped such that they are reduced "
+"in size to the part of the geometry that intersects the extent only. Default "
+"is False. **This parameter is ignored for raster layer clipping.**"
+msgstr ""
+
+# 7762d70e68af469a8e68883381ca4c05
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.clipLayer:29
+msgid ""
+"Path to the output clipped layer (placed in the system temp dir). The output "
+"layer will be reprojected to EPSG:4326 if needed."
+msgstr ""
+
+# 2ea84080999b4a86aa6755f7f05161ef
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.explodeMultiPartGeometry:1
+msgid ""
+"Convert a multipart geometry to a list of single parts. This method was "
+"adapted from Carson Farmer's fTools doGeometry implementation in QGIS."
+msgstr ""
+
+# 5c41e83374604ef6b4ce26e71a644e19
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.explodeMultiPartGeometry:5
+msgid "theGeom - A geometry - if it is multipart it will be exploded."
+msgstr ""
+
+# 3051f2130ba843e29ef1de8179f224a4
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.explodeMultiPartGeometry:8
+msgid "A list of single part geometries"
+msgstr ""
+
+# bdbcd9a8d8c840c08428ddf35b703cef
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.extentToGeoArray:1
+msgid "Convert the supplied extent to geographic and return as as array."
+msgstr ""
+
+# aa82049675e0408b932a7dda00cdc5e7
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.extentToGeoArray:4
+msgid ""
+"theExtent: QgsRectangle to be transformed to geocrs. theSourceCrs: "
+"QgsCoordinateReferenceSystem representing the original"
+msgstr ""
+
+# d2c41d3707ee464da5e1c110611ace36
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.extentToGeoArray:6
+msgid "extent's CRS."
+msgstr ""
+
+# 49d1f238cd704c748c6e468284878b8b
+#: ../../../safe_qgis/clipper.py:docstring of
+#: safe_qgis.clipper.extentToGeoArray:10
+msgid "[xmin, ymin, xmix, ymax]"
+msgstr ""
+
+# b030cba0fe4a49678f7084e18034988c
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.extentToKml:1
+msgid ""
+"A helper to get a little kml doc for an extent so that we can use it with "
+"gdal warp for clipping."
+msgstr ""
+
+# f0046766d7034eefae29be3964844755
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.tr:1
+msgid ""
+"We define a tr() alias here since the ClipperTest implementation below is "
+"not a class and does not inherit from QObject."
+msgstr ""
+
+# 774079df0ffa4183be345f7c758fc772
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.tr:4
+msgid "see http://tinyurl.com/pyqt-differences"
+msgstr ""
+
+# 9ee86a40450746b09aafa4d3848e5e00
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.tr:7
+msgid "theText - string to be translated"
+msgstr ""
+
+# 3a7da3efddd64d469285ef1891b2d51a
+#: ../../../safe_qgis/clipper.py:docstring of safe_qgis.clipper.tr:10
+msgid ""
+"Translated version of the given string if available, otherwise the original "
+"string."
+msgstr ""
+
+# 6d5cb924bbe6424fb02b9e35b83e6d56
+#: ../../source/api-docs/safe_qgis/clipper.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

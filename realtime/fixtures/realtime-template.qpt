@@ -1,76 +1,78 @@
 <Composer title="Realtime" visible="1">
- <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="2" snapGridOffsetY="0" snapping="1" numPages="1" paperHeight="297" printAsRaster="1">
-  <ComposerLabel valign="32" labelText="[exposure-table-name]&#xa;" halign="4" margin="1">
+ <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="2" snapGridOffsetY="0" alignmentSnap="1" snapping="1" numPages="1" paperHeight="297" alignmentSnapTolerance="2" printAsRaster="1">
+  <ComposerLabel valign="32" labelText="[exposure-table-name]&#xa;" htmlState="0" halign="4" margin="1">
    <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="197.27" x="4.73016" y="62" rotation="0" height="9.0396" frame="false" outlineWidth="0.3" zValue="20" lastValidViewScaleFactor="6.28188" id="mmi-table-header" positionLock="false">
+   <ComposerItem width="197.27" x="4.73016" transparency="0" y="62" rotation="0" height="9.0396" positionMode="0" frame="false" outlineWidth="0.3" zValue="20" lastValidViewScaleFactor="6.28188" uuid="{5c5a0326-a281-4167-8cb8-79097ae23b57}" id="mmi-table-header" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="[elapsed-time-name] [elapsed-time]" halign="2" margin="1">
+  <ComposerLabel valign="32" labelText="[elapsed-time-name] [elapsed-time]" htmlState="0" halign="2" margin="1">
    <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="96" x="106" y="40" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="19" lastValidViewScaleFactor="6.28188" id="elapsed-time" positionLock="false">
+   <ComposerItem width="96" x="106" transparency="0" y="40" rotation="0" height="8" positionMode="0" frame="false" outlineWidth="0.3" zValue="19" lastValidViewScaleFactor="6.28188" uuid="{f1500001-a19f-4134-ad8a-4ad16d56e50f}" id="elapsed-time" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="[legend-name]" halign="4" margin="1">
+  <ComposerLabel valign="32" labelText="[legend-name]" htmlState="0" halign="4" margin="1">
    <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="86" x="116" y="207" rotation="0" height="8" frame="true" outlineWidth="0.1" zValue="18" lastValidViewScaleFactor="3.31544" id="" positionLock="false">
+   <ComposerItem width="86" x="116" transparency="0" y="207" rotation="0" height="8" positionMode="0" frame="true" outlineWidth="0.1" zValue="18" lastValidViewScaleFactor="2.58054" uuid="{c6ee5be2-3260-4ad2-a834-809fd1a3cb10}" id="" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="[located-label] [distance] [distance-unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-name]" halign="1" margin="1">
+  <ComposerLabel valign="32" labelText="[located-label] [distance] [distance-unit], [bearing-degrees] [bearing-compass] [direction-relation] [place-name]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="198" x="4" y="54" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="17" lastValidViewScaleFactor="6.28188" id="location-description" positionLock="false">
+   <ComposerItem width="198" x="4" transparency="0" y="54" rotation="0" height="8" positionMode="0" frame="false" outlineWidth="0.3" zValue="17" lastValidViewScaleFactor="6.28188" uuid="{b386ea96-6ec0-45f4-8697-b1d0637cd59f}" id="location-description" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="[city-table-name]" halign="4" margin="1">
+  <ComposerLabel valign="32" labelText="[city-table-name]" htmlState="0" halign="4" margin="1">
    <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="86" x="116" y="100" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="16" lastValidViewScaleFactor="3.31544" id="" positionLock="false">
+   <ComposerItem width="86" x="116" transparency="0" y="100" rotation="0" height="8" positionMode="0" frame="false" outlineWidth="0.3" zValue="16" lastValidViewScaleFactor="4.04027" uuid="{9c797c2a-71f6-4a0d-9fd0-ca7546d172cc}" id="" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="[fatalities-name] : [fatalities-range]" halign="4" margin="1">
+  <ComposerLabel valign="32" labelText="[fatalities-name] : [fatalities-range]" htmlState="0" halign="4" margin="1">
    <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
    <FontColor red="255" blue="0" green="0"/>
-   <ComposerItem width="86" x="116" y="196" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="3.27181" id="fatalities" positionLock="false">
+   <ComposerItem width="86" x="116" transparency="0" y="196" rotation="0" height="8" positionMode="0" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="4.04027" uuid="{7b210001-d6dc-4f7b-b170-947513e0c9b9}" id="fatalities" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" halign="1" margin="1">
+  <ComposerLabel valign="32" labelText="[longitude-name] [longitude-value] [latitude-name] [latitude-value] [depth-name] [depth-value] [depth-unit]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="198" x="4" y="48" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.82938" id="position-depth" positionLock="false">
+   <ComposerItem width="198" x="4" transparency="0" y="48" rotation="0" height="8" positionMode="0" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.82938" uuid="{212a0842-0c7a-4ac7-ae77-cbd0ee202adf}" id="position-depth" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="M [mmi]  [formatted-date-time]" halign="1" margin="1">
+  <ComposerLabel valign="32" labelText="M [mmi]  [formatted-date-time]" htmlState="0" halign="1" margin="1">
    <LabelFont description="Ubuntu,10,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="98" x="4" y="40" rotation="0" height="8" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.82938" id="intensity-date" positionLock="false">
+   <ComposerItem width="98" x="4" transparency="0" y="40" rotation="0" height="8" positionMode="0" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.82938" uuid="{0a52da5c-71d6-4e4b-a512-2569400e3ec3}" id="intensity-date" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerMap keepLayerSet="true" overviewFrameMap="0" id="1" previewMode="Cache" drawCanvasItems="true">
    <overviewFrame overviewFrameMap="0">
-    <symbol outputUnit="MM" alpha="1" type="fill" name="">
+    <symbol alpha="1" type="fill" name="">
      <layer pass="0" class="SimpleFill" locked="0">
+      <prop k="border_width_unit" v="MM"/>
       <prop k="color" v="255,0,0,255"/>
       <prop k="color_border" v="255,0,0,255"/>
       <prop k="offset" v="0,0"/>
+      <prop k="offset_unit" v="MM"/>
       <prop k="style" v="no"/>
       <prop k="style_border" v="solid"/>
       <prop k="width_border" v="0.3"/>
@@ -83,121 +85,142 @@
     <Layer>population20120911162940535</Layer>
    </LayerSet>
    <Grid gridStyle="1" crossLength="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1">
-    <symbol outputUnit="MM" alpha="1" type="line" name="">
+    <symbol alpha="1" type="line" name="">
      <layer pass="0" class="SimpleLine" locked="0">
       <prop k="capstyle" v="square"/>
       <prop k="color" v="0,0,0,255"/>
       <prop k="customdash" v="5;2"/>
+      <prop k="customdash_unit" v="MM"/>
       <prop k="joinstyle" v="bevel"/>
       <prop k="offset" v="0"/>
+      <prop k="offset_unit" v="MM"/>
       <prop k="penstyle" v="solid"/>
       <prop k="use_custom_dash" v="0"/>
       <prop k="width" v="0"/>
+      <prop k="width_unit" v="MM"/>
      </layer>
     </symbol>
     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="101.27" x="4.73016" y="207" rotation="0" height="36" frame="true" outlineWidth="0.1" zValue="9" lastValidViewScaleFactor="3.27181" id="overview-map" positionLock="false">
+   <ComposerItem width="101.27" x="4.73016" transparency="0" y="207" rotation="0" height="36" positionMode="0" frame="true" outlineWidth="0.1" zValue="9" lastValidViewScaleFactor="3.38255" uuid="{a0e6744e-2495-4fbb-95b3-3ee52ba8e0c5}" id="overview-map" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerLabel valign="32" labelText="[limitations]" halign="1" margin="2">
+  <ComposerLabel valign="32" labelText="[limitations]" htmlState="0" halign="1" margin="2">
    <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="197.27" x="4.73016" y="248" rotation="0" height="35.4539" frame="true" outlineWidth="0.1" zValue="8" lastValidViewScaleFactor="3.31544" id="disclaimer" positionLock="false">
+   <ComposerItem width="197.27" x="4.73016" transparency="0" y="248" rotation="0" height="35.4539" positionMode="0" frame="true" outlineWidth="0.1" zValue="8" lastValidViewScaleFactor="3.31544" uuid="{ddb39051-96bc-4cb1-9eb9-052bf4f6db36}" id="disclaimer" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerMap keepLayerSet="false" overviewFrameMap="-1" id="0" previewMode="Render" drawCanvasItems="true">
    <overviewFrame overviewFrameMap="-1">
-    <symbol outputUnit="MM" alpha="0.3" type="fill" name="">
+    <symbol alpha="0.3" type="fill" name="">
      <layer pass="0" class="SimpleFill" locked="0">
+      <prop k="border_width_unit" v="MM"/>
       <prop k="color" v="255,0,0,76"/>
       <prop k="color_border" v="0,0,0,76"/>
       <prop k="offset" v="0,0"/>
+      <prop k="offset_unit" v="MM"/>
       <prop k="style" v="solid"/>
       <prop k="style_border" v="no"/>
       <prop k="width_border" v="0.26"/>
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-1.87921" xmin="122.271" ymax="1.59288" xmax="125.699"/>
+   <Extent ymin="-3.12162" xmin="96.3336" ymax="0.996066" xmax="100.399"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="1" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1">
-    <symbol outputUnit="MM" alpha="1" type="line" name="">
+    <symbol alpha="1" type="line" name="">
      <layer pass="0" class="SimpleLine" locked="0">
       <prop k="capstyle" v="square"/>
       <prop k="color" v="172,172,172,255"/>
       <prop k="customdash" v="5;2"/>
+      <prop k="customdash_unit" v="MM"/>
       <prop k="joinstyle" v="bevel"/>
       <prop k="offset" v="0"/>
+      <prop k="offset_unit" v="MM"/>
       <prop k="penstyle" v="solid"/>
       <prop k="use_custom_dash" v="0"/>
       <prop k="width" v="0"/>
+      <prop k="width_unit" v="MM"/>
      </layer>
     </symbol>
     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="98.7302" x="6" y="100" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="3.27181" id="main-map" positionLock="false">
+   <ComposerItem width="98.7302" x="6" transparency="0" y="100" rotation="0" height="100" positionMode="0" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="3.38255" uuid="{7e7d9469-9f21-46d2-aa9e-148098edb85b}" id="main-map" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerLabel valign="32" labelText="[credits]" halign="4" margin="1">
+  <ComposerLabel valign="32" labelText="[credits]" htmlState="0" halign="4" margin="1">
    <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="192.174" x="7.46623" y="283.513" rotation="0" height="13.8378" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.82938" id="credits" positionLock="false">
+   <ComposerItem width="192.174" x="7.46623" transparency="0" y="283.513" rotation="0" height="13.8378" positionMode="0" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.82938" uuid="{c2be41dc-f444-43c1-bac1-fa0431834e2f}" id="credits" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="32" labelText="[map-name]" halign="4" margin="1">
+  <ComposerLabel valign="32" labelText="[map-name]" htmlState="0" halign="4" margin="1">
    <LabelFont description="Ubuntu,28,-1,5,75,0,0,0,0,0"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem width="127.567" x="40" y="12" rotation="0" height="24.1693" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="6.28188" id="main-title" positionLock="false">
+   <ComposerItem width="127.567" x="40" transparency="0" y="12" rotation="0" height="24.1693" positionMode="0" frame="false" outlineWidth="0.3" zValue="5" lastValidViewScaleFactor="6.28188" uuid="{1a677395-c1a6-402f-965a-12fd3acbe27e}" id="main-title" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
-   <ComposerItem width="30" x="172" y="8" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="6.28188" id="right-logo" positionLock="false">
+   <ComposerItem width="30" x="172" transparency="0" y="8" rotation="0" height="30" positionMode="0" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="6.28188" uuid="{f235fd11-e7ff-4833-b7f2-1fd7ca901ecb}" id="right-logo" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
   <ComposerPicture pictureWidth="30" file="./bnpb_logo.png" pictureHeight="30" mapId="-1">
-   <ComposerItem width="30" x="4" y="8" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="6.28188" id="logo-left" positionLock="false">
+   <ComposerItem width="30" x="4" transparency="0" y="8" rotation="0" height="30" positionMode="0" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="6.28188" uuid="{8a373399-7389-4e29-8bdd-9301583f531c}" id="logo-left" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerShape shapeType="1" shapeWidth="86" outlineWidth="0.1" transparentFill="1" shapeHeight="28">
-   <OutlineColor alpha="255" red="0" blue="0" green="0"/>
-   <FillColor alpha="255" red="0" blue="0" green="0"/>
-   <ComposerItem width="86" x="116" y="215" rotation="0" height="28" frame="false" outlineWidth="0" zValue="2" lastValidViewScaleFactor="3.31544" id="" positionLock="false">
-    <FrameColor alpha="0" red="255" blue="255" green="255"/>
+  <ComposerShape shapeType="1">
+   <ComposerItem width="86" x="116" transparency="0" y="215" rotation="0" height="28" positionMode="0" frame="true" outlineWidth="0.1" zValue="2" lastValidViewScaleFactor="2.58054" uuid="{29304f30-660f-4767-b3a1-669f6f255b9b}" id="" background="false" blendMode="0" positionLock="false">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="0" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerShape>
-  <ComposerLegend symbolWidth="4" title="" groupSpace="2" itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0" symbolSpace="0" map="1" layerSpace="5" titleFont="Verdana,12,-1,5,75,0,0,0,0,0" wrapChar=" " layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" columnCount="1" iconLabelSpace="2" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" columnSpace="2" symbolHeight="4" equalColumnWidth="0" splitLayer="0" boxSpace="2">
+  <ComposerLegend symbolWidth="4" title="" boxSpace="2" splitLayer="0" equalColumnWidth="0" map="1" symbolHeight="4" wrapChar=" " fontColor="#000000" columnSpace="2" columnCount="1">
+   <styles>
+    <style name="title" font="Verdana,12,-1,5,75,0,0,0,0,0"/>
+    <style marginTop="2" name="group" font="Verdana,14,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="5" name="subgroup" font="Ubuntu,12,-1,5,75,0,0,0,0,0"/>
+    <style name="symbol" font="Cantarell,11,-1,5,50,0,0,0,0,0"/>
+    <style marginLeft="2" name="symbolLabel" font="Ubuntu,10,-1,5,50,0,0,0,0,0"/>
+   </styles>
    <Model autoUpdate="0">
-    <LayerItem layerId="population20120911162940535" text="" showFeatureCount="0">
+    <LayerItem layerId="population20120911162940535" style="subgroup" text="" showFeatureCount="0">
      <RasterClassificationItem layerId="population20120911162940535" color="#fafafa" text="1000-10000"/>
      <RasterClassificationItem layerId="population20120911162940535" color="#bcbcbc" text="100-1000"/>
      <RasterClassificationItem layerId="population20120911162940535" color="#7f7f7f" text="10-100"/>
      <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1-10"/>
     </LayerItem>
    </Model>
-   <ComposerItem width="26" x="142" y="215" rotation="0" height="22" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.31544" id="legend" positionLock="false">
+   <ComposerItem width="28" x="138" transparency="0" y="207" rotation="0" height="27" positionMode="0" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="4.04027" uuid="{3a205937-45ff-46fb-885e-a1e5a98c23ed}" id="legend" background="false" blendMode="0" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLegend>
+  <ComposerHtml resizeMode="0" url="">
+   <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
+    <ComposerItem width="0" x="151.747" transparency="0" y="179.212" rotation="0" height="0" positionMode="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.02013" uuid="{e8d7573f-3afc-43ee-a2b3-68247f2b2784}" id="" background="false" blendMode="0" positionLock="false">
+     <FrameColor alpha="255" red="0" blue="0" green="0"/>
+     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+    </ComposerItem>
+   </ComposerFrame>
+  </ComposerHtml>
   <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
    <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-    <ComposerItem width="194.91" x="4.73016" y="69.3883" rotation="0" height="28.6117" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="3.27181" id="impacts-table" positionLock="false">
+    <ComposerItem width="194.91" x="4.73016" transparency="0" y="69.3883" rotation="0" height="28.6117" positionMode="0" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="4.04027" uuid="{6057f5c8-eb69-4df4-9a6d-957624dd51ea}" id="impacts-table" background="false" blendMode="0" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
@@ -205,15 +228,7 @@
   </ComposerHtml>
   <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
    <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-    <ComposerItem width="86" x="116" y="117.699" rotation="0" height="68.301" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="3.31544" id="affected-cities" positionLock="false">
-     <FrameColor alpha="255" red="0" blue="0" green="0"/>
-     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-    </ComposerItem>
-   </ComposerFrame>
-  </ComposerHtml>
-  <ComposerHtml resizeMode="0" url="">
-   <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="3.31544" id="" positionLock="false">
+    <ComposerItem width="86" x="116" transparency="0" y="117.699" rotation="0" height="68.301" positionMode="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="2.41275" uuid="{aa4218e7-2f91-4f00-aa72-83bf75a3cd33}" id="affected-cities" background="false" blendMode="0" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>

@@ -1,3 +1,4 @@
+.. _impact_functions:
 
 ================
 Impact Functions
@@ -5,9 +6,8 @@ Impact Functions
 
 This document explains the purpose of impact functions and lists the
 different available impact function and the requirements each has to be
-used effectively.
-
-.. note:: This document is still a work in progress.
+used effectively. See :ref:`writing_impact_functions` for more
+information about writing new impact functions.
 
 
 What is an impact function?
@@ -35,13 +35,13 @@ that can be used. They are listed in a table with a series of pick-lists (combo 
 above which can be used to filter the functions based on different criteria as
 illustrated below.
 
-.. figure:: ../static/impact_function_table_unfiltered.png
+.. figure:: /static/impact_function_table_unfiltered.png
    :align:   center
 
 When applying a filter set, the list of available functions that meet those criteria is
 updated as shown below.
 
-.. figure:: ../static/impact_function_table_filtered.png
+.. figure:: /static/impact_function_table_filtered.png
    :align:   center
 
 The impact function table is simply a browser to help you to familiarise yourself
@@ -62,8 +62,8 @@ Creating impact functions
 If you feel there is an important impact function which is missing, there are two
 avenues you can follow:
 
-* If you have basic python programming skills, you could implement a new post-
-  processor yourself,
+* If you have basic python programming skills, you could implement a new impact function yourself.
+See :ref:`writing_impact_functions` for general guidelines on writing impact functions.
 * You can file a ticket on our `issue tracking system <https://github.com/AIFDR/inasafe/issues>`_,
   and if time and resources allow we will implement it for you.
 

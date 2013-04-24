@@ -162,6 +162,10 @@ def dynamic_translations():
     tr('Mmi range')
     tr('Tolerance')
     tr('Calculate displaced people')
+    tr('Evacuation percentage')
+    tr('Threshold [m]')
+    tr('Thresholds [m]')
+    tr('Distances [km]')
 
     # Post-processing
     tr('Gender')
@@ -169,3 +173,8 @@ def dynamic_translations():
     tr('Aggregation')
     tr('Building type')
     tr('Aggregation Categorical')
+    tr('gender')
+    tr('age')
+    tr('aggregation')
+    tr('building type')
+    tr('aggregation categorical')

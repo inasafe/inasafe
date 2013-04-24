@@ -13,7 +13,8 @@ __copyright__ += 'Disaster Reduction'
 import logging
 
 from safe.common.exceptions import PostProcessorError
-from safe.common.utilities import get_defaults
+from safe.common.utilities import (get_defaults,
+                                   format_int)
 
 from third_party.odict import OrderedDict
 
@@ -149,5 +150,12 @@ class AbstractPostprocessor():
         """
         if metadata is None:
             metadata = dict()
+        LOGGER.debug('name : ' + str(name) + '\nresult : ' + str(result))
+        if result is not None and result != self.NO_DATA_TEXT:
+            try:
+                result = format_int(result)
+            except ValueError as e:
+                LOGGER.debug(e)
+                result = result
         self._results[name] = {'value': result,
-                                 'metadata': metadata}
+                               'metadata': metadata}

@@ -5,22 +5,23 @@ import os
 import sys
 import hashlib
 import logging
+import platform
 
 from PyQt4 import QtGui, QtCore
-from qgis.core import (QgsApplication,
-                      QgsVectorLayer,
-                      QgsRasterLayer,
-                      QgsRectangle,
-                      QgsCoordinateReferenceSystem,
-                      )
+from qgis.core import (
+    QgsApplication,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsRectangle,
+    QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
 # For testing and demoing
-from safe.common.testing import TESTDATA
 from safe_qgis.safe_interface import (readKeywordsFromFile,
                                       temp_dir,
-                                      unique_filename)
+                                      unique_filename,
+                                      TESTDATA, UNITDATA)
 LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
@@ -30,7 +31,8 @@ IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
-CONTROL_IMAGE_DIR = os.path.join(os.path.dirname(__file__),
+CONTROL_IMAGE_DIR = os.path.join(
+    os.path.dirname(__file__),
     'test_data/test_images')
 
 
@@ -42,8 +44,9 @@ def assertHashesForFile(theHashes, theFilename):
                  '\nExpected: %s'
                  '\nPlease check graphics %s visually '
                  'and add to list of expected hashes '
-                 'if it is OK on this platform.'
-                  % (myHash, theHashes, theFilename))
+                 'if it is OK on this platform.' % (myHash,
+                                                    theHashes,
+                                                    theFilename))
     assert myHash in theHashes, myMessage
 
 
@@ -125,8 +128,6 @@ def unitTestDataPath(theSubdir=None):
        * theSubdir: (Optional) Additional subdir to add to the path - typically
          'hazard' or 'exposure'.
     """
-    from safe.common.testing import UNITDATA
-
     myPath = UNITDATA
 
     if theSubdir is not None:
@@ -257,16 +258,50 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
         None
     """
     myMessages = ''
-    for myControlImage in theControlImages:
-        myFullPath = os.path.join(CONTROL_IMAGE_DIR,
-                                      myControlImage)
-        myFlag, myMessage = checkImage(myFullPath,
-                                          theTestImagePath,
-                                          theTolerance)
+    myPlatform = platformName()
+    myControlImages = theControlImages
+    myPlatformMatchFlag = False
+    # if possible, only test images for this platform
+    for myControlImage in myControlImages:
+        if myPlatform is not None and myPlatform in myControlImage:
+            myPlatformMatchFlag = True
+            # Take it out so we dont double test it  in the second loop below
+            myControlImages.remove(myControlImage)
+            LOGGER.debug('Testing if %s matches' % myControlImage)
+            myFullPath = os.path.join(
+                CONTROL_IMAGE_DIR, myControlImage)
+            myFlag, myMessage = checkImage(
+                myFullPath, theTestImagePath, theTolerance)
+            myMessages += myMessage
+            # As soon as one passes we are done!
+            if myFlag:
+                return myFlag, myMessages
+            else:
+                LOGGER.debug('No match for %s' % myControlImage)
+
+    # print myPlatformMatchFlag, 'myPlatformMatchFlag'
+    if not myPlatformMatchFlag:
+        LOGGER.debug('No platform specific control image could be found,\n'
+                     'testing against all control images. Try adding %s in\n '
+                     'the file name if you want it to be detected for this\n'
+                     'platform which will speed up image comparison tests.' %
+                     myPlatform)
+    else:
+        return
+    LOGGER.debug('You shall not pass')
+    # Otherwise test all control images because we dont know what platform
+    # we are on.
+    for myControlImage in myControlImages:
+        myFullPath = os.path.join(
+            CONTROL_IMAGE_DIR, myControlImage)
+        myFlag, myMessage = checkImage(
+            myFullPath, theTestImagePath, theTolerance)
         myMessages += myMessage
         # As soon as one passes we are done!
         if myFlag:
+            print 'match with: ', myControlImage
             break
+        LOGGER.debug('No match for control image %s' % myControlImage)
 
     return myFlag, myMessages
 
@@ -292,6 +327,8 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
 
     try:
         if not os.path.exists(theTestImagePath):
+            LOGGER.debug('checkImage: Test image does not exist:\n%s' %
+                         theTestImagePath)
             raise OSError
         myTestImage = QtGui.QImage(theTestImagePath)
     except OSError:
@@ -300,6 +337,8 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
 
     try:
         if not os.path.exists(theControlImagePath):
+            LOGGER.debug('checkImage: Control image does not exist:\n%s' %
+                         theControlImagePath)
             raise OSError
         myControlImage = QtGui.QImage(theControlImagePath)
     except OSError:
@@ -310,7 +349,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
         return False, myMessage
 
     if (myControlImage.width() != myTestImage.width()
-        or myControlImage.height() != myTestImage.height()):
+            or myControlImage.height() != myTestImage.height()):
         myMessage = ('Control and test images are different sizes.\n'
                      'Control image   : %s (%i x %i)\n'
                      'Test image      : %s (%i x %i)\n'
@@ -323,6 +362,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                       theTestImagePath,
                       myTestImage.width(),
                       myTestImage.height()))
+        LOGGER.debug(myMessage)
         return False, myMessage
 
     myImageWidth = myControlImage.width()
@@ -334,18 +374,18 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
                                      QtGui.QImage.Format_ARGB32_Premultiplied)
     myDifferenceImage.fill(152 + 219 * 256 + 249 * 256 * 256)
 
-    myControlPixel = QtGui.QColor().rgb()
-    myTestPixel = QtGui.QColor().rgb()
     for myY in range(myImageHeight):
         for myX in range(myImageWidth):
             myControlPixel = myControlImage.pixel(myX, myY)
             myTestPixel = myTestImage.pixel(myX, myY)
-            if (myControlPixel != myTestPixel):
-                myMismatchCount = myMismatchCount + 1
+            if myControlPixel != myTestPixel:
+                myMismatchCount += 1
                 myDifferenceImage.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
-    myDifferenceFilePath = unique_filename(prefix='difference',
-                                           suffix='.png',
-                                           dir=temp_dir('test'))
+    myDifferenceFilePath = unique_filename(
+        prefix='difference-%s' % os.path.basename(theControlImagePath),
+        suffix='.png',
+        dir=temp_dir('test'))
+    LOGGER.debug('Saving difference image as: %s' % myDifferenceFilePath)
     myDifferenceImage.save(myDifferenceFilePath, "PNG")
 
     #allow pixel deviation of 1 percent
@@ -394,6 +434,11 @@ class RedirectStdStreams(object):
     """
 
     def __init__(self, stdout=None, stderr=None):
+        """
+
+        :param stdout:
+        :param stderr:
+        """
         self._stdout = stdout or sys.stdout
         self._stderr = stderr or sys.stderr
 
@@ -408,3 +453,29 @@ class RedirectStdStreams(object):
         self._stderr.flush()
         sys.stdout = self.old_stdout
         sys.stderr = self.old_stderr
+
+
+def platformName():
+    """Get a platform name for this host.
+
+        e.g OSX10.8
+        Windows7-SP1-AMD64
+        LinuxMint-14-x86_64
+    """
+    my_platform_system = platform.system()
+    if my_platform_system == 'Darwin':
+        myName = 'OSX'
+        myName += '.'.join(platform.mac_ver()[0].split('.')[0:2])
+        return myName
+    elif my_platform_system == 'Linux':
+        myName = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
+        return myName
+    elif my_platform_system == 'Windows':
+        myName = 'Windows'
+        myWin32Version = platform.win32_ver()
+        myPlatformMachine = platform.machine()
+        myName += myWin32Version[0] + '-' + myWin32Version[2]
+        myName += '-' + myPlatformMachine
+        return myName
+    else:
+        return None

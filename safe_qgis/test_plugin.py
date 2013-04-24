@@ -31,6 +31,7 @@ from qgis.gui import QgsMapCanvas
 from safe_qgis.qgis_interface import QgisInterface
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.plugin import Plugin
+from safe_interface import safeTr
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -49,16 +50,13 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')
         myTranslation = myPlugin.tr(myUntranslatedString)
-        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
-                            myUntranslatedString,
-                            myTranslation,
-                            myExpectedString)
+        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
+                    (myUntranslatedString, myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage
 
     def test_ImpactFunctionI18n(self):
         """Library translations are working."""
         # Import this late so that i18n setup is already in place
-        from safe.common.utilities import ugettext as tr
 
         # Test indonesian too
         myParent = QWidget()
@@ -67,11 +65,9 @@ class PluginTest(unittest.TestCase):
         myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
         myExpectedString = 'Letusan gunung berapi'
-        myTranslation = tr('A volcano eruption')
-        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
-                            'A volcano eruption',
-                            myTranslation,
-                            myExpectedString)
+        myTranslation = safeTr('A volcano eruption')
+        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
+                    ('A volcano eruption', myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage
 
     def Xtest_Afrikaans(self):
@@ -94,10 +90,8 @@ class PluginTest(unittest.TestCase):
         myUntranslatedString = 'Temporarily Closed'
         myExpectedString = 'Tydelik gesluit'  # afrikaans
         myTranslation = tr(myUntranslatedString)
-        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
-                            myUntranslatedString,
-                            myTranslation,
-                            myExpectedString)
+        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % \
+                    (myUntranslatedString, myTranslation, myExpectedString)
         assert myTranslation == myExpectedString, myMessage
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
@@ -106,8 +100,7 @@ class PluginTest(unittest.TestCase):
         # this is the part that produces bad side effects
         for myMod in sys.modules.values():
             try:
-                if ('storage' in str(myMod) or
-                   'impact' in str(myMod)):
+                if ('storage' in str(myMod) or 'impact' in str(myMod)):
                     print 'Reloading:', str(myMod)
                     reload(myMod)
             except NameError:

@@ -24,12 +24,11 @@ import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 from rt_exceptions import (EventUndefinedError,
-                            EventIdError,
-                            NetworkError,
-                            EventValidationError,
-                            InvalidInputZipError,
-                            ExtractionError
-                          )
+                           EventIdError,
+                           NetworkError,
+                           EventValidationError,
+                           InvalidInputZipError,
+                           ExtractionError)
 from ftp_client import FtpClient
 from utils import shakemapZipDir, shakemapExtractDir
 
@@ -98,8 +97,7 @@ class ShakeData:
         # If eventId is still None after all the above, moan....
         if self.eventId is None:
             myMessage = ('No id was passed to the constructor and the '
-                               'latest id could not be retrieved from the'
-                               'server.')
+                         'latest id could not be retrieved from the server.')
             LOGGER.exception('ShakeData initialisation failed')
             raise EventIdError(myMessage)
 
@@ -182,8 +180,7 @@ class ShakeData:
         Raises: None
         """
         myInpFilePath, myOutFilePath = self.cachePaths()
-        if (os.path.exists(myInpFilePath) and
-            os.path.exists(myOutFilePath)):
+        if os.path.exists(myInpFilePath) and os.path.exists(myOutFilePath):
             # TODO: we should actually try to unpack them for deeper validation
             return True
         else:
@@ -246,7 +243,8 @@ class ShakeData:
             except NetworkError, e:
                 myLastError = e
             except:
-                LOGGER.exception('Could not fetch shake event from server %s'
+                LOGGER.exception(
+                    'Could not fetch shake event from server %s'
                     % theEventFile)
                 raise
 
@@ -256,7 +254,7 @@ class ShakeData:
             LOGGER.info('Fetching failed, attempt %s' % myCounter)
 
         LOGGER.exception('Could not fetch shake event from server %s'
-                             % theEventFile)
+                         % theEventFile)
         raise Exception('Could not fetch shake event from server %s'
                         % theEventFile)
 
@@ -331,7 +329,7 @@ class ShakeData:
             myOutFile = self.fetchOutput()
         except (EventUndefinedError, NetworkError):
             raise
-        return (myInpFile, myOutFile)
+        return myInpFile, myOutFile
 
     def extract(self, theForceFlag=False):
         """Extract the zipped resources. The two zips associated with this
@@ -386,19 +384,21 @@ class ShakeData:
 
         if theForceFlag:
             self.removeExtractedFiles()
-        elif (os.path.exists(myFinalGridXmlFile)):
+        elif os.path.exists(myFinalGridXmlFile):
             return myFinalGridXmlFile
 
         myInput, myOutput = self.fetchEvent()
         myInputZip = ZipFile(myInput)
         myOutputZip = ZipFile(myOutput)
 
-        myExpectedGridXmlFile = ('usr/local/smap/data/%s/output/grid.xml' %
-                  self.eventId)
+        myExpectedGridXmlFile = (
+            'usr/local/smap/data/%s/output/grid.xml' %
+            self.eventId)
 
         myList = myOutputZip.namelist()
         if myExpectedGridXmlFile not in myList:
-            raise InvalidInputZipError('The output zip does not contain an '
+            raise InvalidInputZipError(
+                'The output zip does not contain an '
                 '%s file.' % myExpectedGridXmlFile)
 
         myExtractDir = self.extractDir()
@@ -413,7 +413,7 @@ class ShakeData:
         if os.path.isdir(myUserDir):
             shutil.rmtree(myUserDir)
 
-        if (not os.path.exists(myFinalGridXmlFile)):
+        if not os.path.exists(myFinalGridXmlFile):
             raise ExtractionError('Error copying grid.xml')
         return myFinalGridXmlFile
 

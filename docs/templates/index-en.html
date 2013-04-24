@@ -1,0 +1,220 @@
+<is></is>{% extends "inasafe-base.html" %}
+{% set title = 'Home' %}
+
+{% block hero %}
+    <h2>Welcome to the InaSAFE project!</h2>
+    <p>Indonesian Scenario Assement for Emergencies </p>
+    <div id="myCarousel" class="carousel slide">
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="item centered"><img src="{{ pathto('_static/img/carousel/team.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>InaSAFE developer 'code sprint'</h4>
+                </div>
+            </div>
+            <div class="item"><img src="{{ pathto('_static/img/carousel/jakarta.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>Densely populated areas are vulnerable to disasters.</h4>
+                </div>
+            </div>
+            <div class="active item"><img src="{{ pathto('_static/img/carousel/screenshot.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>InaSAFE earthquake on buildings scenario.</h4>
+                </div>
+            </div>
+            <div class="item"><img src="{{ pathto('_static/img/carousel/translators.jpg', 1)}}"/>
+                <div class="carousel-caption">
+                    <h4>InaSAFE developer training session.</h4>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+    <script type="text/javascript">$('.carousel').carousel();</script>
+{% endblock %}
+{% block body %}
+        <div class="alert alert-info centered">
+            <a href="../id/index.html">Switch to Bahasa Indonesia!</a>
+        </div>
+        <div class="row" id="blocks-row">
+            <div class="span4">
+                {# We put the admonition inside the span because adding border #}
+                {# to the span will mess up the layout #}
+                <div class="admonition">
+                    <h3>What is InaSAFE?</h3>
+                    <p><img src="{{ pathto('_static/img/logo.png', 1)}}"/>
+                        The goal of InaSAFE is to create a tool that can provide
+                        rapid and relevant information in order to understand risk
+                        related to events such as volcanic eruptions, inundation
+                        from flood / tsunami, earthquakes and so on.
+                    </p>
+                    <p>
+                        InaSAFE is a collaborative effort between the
+                        Australia Aid Agency in Indonesia, the BNPB
+                        (Indonesia), the World Bank / GFDRR, the Australia-Indonesia
+                        Facility for Disaster Reduction, Universitas Gadja Mada and
+                        other participating organisations.
+                    </p>
+
+                    <p>
+                        Indonesian Scenario Assessment for Emergencies (InaSAFE) is
+                        a Free and Open Source Software (FOSS) project, published
+                        under the <a href="http://www.gnu.org/licenses/gpl-3.0.txt">
+                        GPL V3 license</a>. As such you may freely download,
+                        share and (if you like) modify the software.
+                    </p>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="admonition">
+                    <h3>Install InaSAFE!</h3>
+                    <p><img alt=""
+                            src="{{ pathto('_static/img/qgis_logo.png', 1)}}"/>
+                        InaSAFE is a plugin for Quantum GIS (QGIS). QGIS
+                        (and InaSAFE) and works on OSX, Windows and Linux.
+                        You can download QGIS for free at
+                        <a href="http://download.qgis.org">download.qgis.org</a>
+                    </p>
+                    <p>Once you have QGIS installed, you can install InaSAFE in 5
+                        easy steps! Open a recent version of
+                        <a href="http://qgis.org">QGIS</a> (1.7 or better) and do:
+                    </p>
+                    <ol>
+                        <li><span class='kbd'>Plugins -> Fetch Python Plugins
+                            </span>.
+                        </li>
+                        <li>Type <span class='kbd'>InaSAFE</span> in the
+                            <span class='guilabel'>Filter</span> box.
+                        </li>
+                        <li>Tick the box next to the InaSAFE plugin.</li>
+                        <li>Click the <span class='guilabel'>Install/upgrade plugin
+                            </span> button.
+                        </li>
+                        <li>Close the plugin manager and InaSAFE should be
+                            installed and ready to use.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="admonition">
+                    <h3>Help using InaSAFE</h3>
+                    <p>
+                    <img alt=""
+                         src="{{ pathto('_static/img/documentation57.png', 1)}}"/>
+                    We are actively building up documentation for InaSAFE that
+                    includes tutorials, general help and developer documentation:
+                    </p>
+                    <ul>
+                        <li>
+                            <a href="../en/contents.html">
+                                <i class="icon-file icon-black"></i>
+                                InaSAFE online manual in English.
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../id/contents.html">
+                                <i class="icon-file icon-black"></i>
+                                Manual InaSAFE dalam Bahasa Indonesia.
+                            </a>
+                        </li>
+                    </ul>
+                    <p>
+                    <p>Join our mailing list by sending an email to
+                        <a href="mailto:inasafe-users+subscribe@googlegroups.com">
+                            inasafe-users+subscribe@googlegroups.com</a>
+
+                        Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+                            file a ticket</b></a> if you have discovered an issue.
+                    </p>
+                    <p>
+                        We regularly run training courses. Please contact us if you
+                        would like help running your own courses or to see if there
+                        is a local course that you can attend (mainly Indonesia focused).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info centered">
+            InaSAFE Video Wall
+        </div>
+
+        <ul class="thumbnails">
+            <li class="span4">
+                <div class="thumbnail">
+                    <div class="centered">
+                        <iframe width="300" height="225"
+                            src="http://www.youtube.com/embed/YGyd3YC1hy4"
+                            frameborder="0"
+                            allowfullscreen></iframe>
+                    </div>
+                    <div class="caption">
+                        <h3>Introduction</h3>
+                        <p>The video above provides a short introduction
+                            to InaSAFE.</p>
+                    </div>
+                </div>
+            </li>
+            <li class="span4">
+                <div class="thumbnail">
+                    <div class="centered">
+                        <iframe width="300" height="169"
+                            src="http://www.youtube.com/embed/_-k8xiHV4Fs"
+                            frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="caption">
+                        <h3>AMCDRR</h3>
+                        <p>Dr. Trevor Dhu demonstrating InaSAFE to
+                            Indonesian President Susilo Bambang Yudhoyono
+                            at the 5th Asian Ministerial Conference on
+                            Disaster Risk Reduction held in Yogyakarta,
+                            Indonesia, October 2012.</p>
+                    </div>
+                </div>
+            </li>
+            <li class="span4">
+                <div class="thumbnail">
+                    <div class="centered">
+                        <iframe width="300" height="169"
+                            src="http://www.youtube.com/embed/GaaXFFMWy3Y"
+                            frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="caption">
+                        <h3>Partnerships</h3>
+                        <p>Dr. Trevor Dhu explains the partnership approach to
+                            risk assessment being taken by AusAID.</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="alert alert-info centered">
+            InaSAFE Supporters and Partners
+        </div>
+
+        <ul class="thumbnails">
+            <li class="span4">
+                <a href="http://bnpb.go.id" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/bnpb_logo.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
+            <li class="span4">
+                <a href="http://www.ausaid.gov.au" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/ausaid.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
+            <li class="span4">
+                <a href="http://www.worldbank.org/" class="thumbnail">
+                    <img alt="" src="{{ pathto('_static/img/wb_logo.png', 1)}}"/>
+                </a>
+                <p></p>
+            </li>
+        </ul>
+
+        <script type="text/javascript">$('#blocks-row').equalHeights();</script>
+{% endblock %}

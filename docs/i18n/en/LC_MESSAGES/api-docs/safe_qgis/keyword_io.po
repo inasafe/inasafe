@@ -1,0 +1,491 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 3dd34faad7c44219965947cf14277cb2
+#: ../../source/api-docs/safe_qgis/keyword_io.rst:6
+msgid "Module:  safe_qgis.keyword_io"
+msgstr ""
+
+# 26270c9205af482db9f4f39b00306e41
+#: ../../../safe_qgis/keyword_io.py:docstring of safe_qgis.keyword_io:1
+msgid "**Keyword IO implementation.**"
+msgstr ""
+
+# 85d5113cfb6641419273679d49656248
+#: ../../../safe_qgis/keyword_io.py:docstring of safe_qgis.keyword_io:3
+msgid ""
+"Provides functionality for reading and writing keywords from within QGIS. It "
+"is an abstration for the keywords system used by the underlying library."
+msgstr ""
+
+# c5dee720c5454b3496349f1b1c11abe1
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO:1
+msgid "Class for doing keyword read/write operations."
+msgstr ""
+
+# 2ec9d380d61f4131bee559a32b3f0d75
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO:3
+msgid ""
+"It abstracts away differences between using SAFE to get keywords from a ."
+"keywords file and this plugins implemenation of keyword caching in a local "
+"sqlite db used for supporting keywords for remote datasources."
+msgstr ""
+
+# 9935ccb466874ac688bf6b4a181c865f
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.appendKeywords:1
+msgid "Write keywords for a datasource."
+msgstr ""
+
+# a3cd47c8033f46a2846dce47bd370df5
+# 9a2610867b2d4b3d9f99403651dad887
+# d5714140f0974c0ba388429fc46bf4f9
+# e5df5a81ec6c47abb2803f06022b7f95
+# 3675b8a53cb24e528c3395dcbcdd5a72
+# df850d992a9443639a25cb22211fb6ed
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.appendKeywords:4
+#: safe_qgis.keyword_io.KeywordIO.areKeywordsFileBased:5
+#: safe_qgis.keyword_io.KeywordIO.clearKeywords:4
+#: safe_qgis.keyword_io.KeywordIO.deleteKeyword:8
+#: safe_qgis.keyword_io.KeywordIO.readKeywords:8
+#: safe_qgis.keyword_io.KeywordIO.writeKeywords:8
+msgid "theLayer - A QGIS QgsMapLayer instance."
+msgstr ""
+
+# 4ff50a21188a4e6081b3c89fb1240687
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.appendKeywords:5
+msgid ""
+"theKeywords - a dict containing all the keywords to be added for the layer."
+msgstr ""
+
+# e5aecf2ed51b4ab99725b1d66820d8d9
+# 03b710c8f960435d95ef7e1128a4e5e8
+# 289cdb7fa5414bfb94db031fa6f50956
+# d11b873348db4dbb963f1ce7ad223c48
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.appendKeywords:8
+#: safe_qgis.keyword_io.KeywordIO.clearKeywords:6
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:27
+#: safe_qgis.keyword_io.KeywordIO.writeKeywords:12
+msgid "None."
+msgstr ""
+
+# c6d595d636f94821b13e06f19bea0f88
+# 80d5ad88c9c44438bf52eda2e34ee881
+# 411146c51e90450693ebad7793898607
+# 9c3acca06b3f4dfdb87412c85e82552c
+# 463e1cc217684620a82e92ca8087a0fa
+# 7dce821b5a9f4df8a5be40388907f2f1
+# 7a30b1c15d324a9cbb1825c77111f926
+# 04b0a5fc7b6f4de2bb7762109bcd12c7
+# 228f62eb7393497998048f0a9163d988
+# 1fdea001638f4cd9bdc0861ea5c48ec4
+# 24d01009c5db405e9ba9337d4856ca6e
+# f8b1d2cd25c74ad1a1054d5bc143dd59
+# 84151f84bd534d5781381f32cf7283e9
+# fab6781cee1b45c89632ef8e9d6c3b8f
+# fd68b31a26ad4866983bc99d8ef68422
+# 437fcbef5ffd4f628c20707c6bb526b2
+# 10574bcaf4df425f9f8317e0fbbc30d6
+# 762e069387f04b26bbbff4f4b667c5fc
+# 7fa21b34450342b7ad848a7cbd3e44f8
+# 26340eca31404e148a137479a498c0f1
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.appendKeywords:10
+#: safe_qgis.keyword_io.KeywordIO.areKeywordsFileBased:11
+#: safe_qgis.keyword_io.KeywordIO.clearKeywords:8
+#: safe_qgis.keyword_io.KeywordIO.closeConnection:4
+#: safe_qgis.keyword_io.KeywordIO.closeConnection:6
+#: safe_qgis.keyword_io.KeywordIO.closeConnection:8
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:29
+#: safe_qgis.keyword_io.KeywordIO.defaultKeywordDbPath:5
+#: safe_qgis.keyword_io.KeywordIO.defaultKeywordDbPath:9
+#: safe_qgis.keyword_io.KeywordIO.deleteKeywordsForUri:15
+#: safe_qgis.keyword_io.KeywordIO.deleteKeywordsForUri:18
+#: safe_qgis.keyword_io.KeywordIO.getHashForDatasource:4
+#: safe_qgis.keyword_io.KeywordIO.getHashForDatasource:6
+#: safe_qgis.keyword_io.KeywordIO.getHashForDatasource:8
+#: safe_qgis.keyword_io.KeywordIO.openConnection:10
+#: safe_qgis.keyword_io.KeywordIO.setKeywordDbPath:10
+#: safe_qgis.keyword_io.KeywordIO.setKeywordDbPath:12
+#: safe_qgis.keyword_io.KeywordIO.setupKeywordDbPath:5
+#: safe_qgis.keyword_io.KeywordIO.setupKeywordDbPath:11
+#: safe_qgis.keyword_io.KeywordIO.writeKeywords:14
+msgid "None"
+msgstr ""
+
+# b65189653f1b49449700626fcf4a71c0
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.areKeywordsFileBased:1
+msgid "Find out if keywords should be read/written to file or our keywords db."
+msgstr ""
+
+# 6441b88f8f0f433ba86aa9c4f602ec89
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.areKeywordsFileBased:8
+msgid ""
+"True if keywords are storedin a file next to the dataset, else False if the "
+"dataset is remove e.g. a database."
+msgstr ""
+
+# ad72016f994a45c0893e3395f47c5541
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.clearKeywords:1
+msgid "convenience method to clear a files keywords"
+msgstr ""
+
+# f55a78ea9376461c8f436f9c748c99e4
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.closeConnection:1
+msgid "Given an sqlite3 connection, close it."
+msgstr ""
+
+# 2a22f7a4bb5a4997960c183390c1ee2f
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:1
+msgid ""
+"Helper to copy the keywords file from a source dataset to a destination "
+"dataset."
+msgstr ""
+
+# a1fcea7bfe174df88541f769091b5e32
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:4
+msgid "e.g.::"
+msgstr ""
+
+# 507e73afcecc4a47a082e7ae7f74f18e
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:8
+msgid "Will result in the foo.keywords file being copied to bar.keyword."
+msgstr ""
+
+# 6572528f77ac4c0da90879188cdc85ee
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:10
+msgid ""
+"Optional argument extraKeywords is a dictionary with additional keywords "
+"that will be added to the destination file e.g::"
+msgstr ""
+
+# 69d1a8568b50488cb3f3a417b25129bc
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:17
+msgid "theSourceLayer - A QGIS QgsMapLayer instance."
+msgstr ""
+
+# d2fea5ed5084444abcb157d07cd01005
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:18
+msgid ""
+"theDestinationFile - the output filename that should be used to store the "
+"keywords in. It can be a .shp or a .keywords for exampled since the suffix "
+"will always be replaced with .keywords."
+msgstr ""
+
+# 44475639179d480db4ee44a72541aa58
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.copyKeywords:21
+msgid ""
+"theExtraKeywords - a dict containing all the extra keywords to be written "
+"for the layer. The written keywords will consist of any original keywords "
+"from the source layer's keywords file and and the extra keywords (which will "
+"replace the source layers keywords if the key is identical)."
+msgstr ""
+
+# 97b9327e13124856b117574f50a027a5
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.defaultKeywordDbPath:1
+msgid ""
+"Helper to get the default path for the keywords file (which is <plugin dir>/"
+"keywords.db)"
+msgstr ""
+
+# 0d621178044049c8ac04f87b1237640b
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.defaultKeywordDbPath:7
+msgid "A string representing the path to where the keywords file is to be."
+msgstr ""
+
+# 7e44357a48254c0caa3245359290a06c
+# 401dc3e21bd74a909d6d415fd9c59748
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.deleteKeyword:1
+#: safe_qgis.keyword_io.KeywordIO.readKeywords:1
+msgid ""
+"Read keywords for a datasource and return them as a dictionary. This is a "
+"wrapper method that will 'do the right thing' to fetch keywords for the "
+"given datasource. In particular, if the datasource is remote (e.g. a "
+"database connection) it will fetch the keywords from the keywords store."
+msgstr ""
+
+# 20055c5e8d6e40d2ac120ee1659eefeb
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.deleteKeyword:9
+msgid ""
+"theKeyword - the specified keyword will be deleted from the keywords dict."
+msgstr ""
+
+# a685563f0f7648ba85c3af6fff670cc6
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.deleteKeyword:12
+msgid "True if the keyword was sucessfully delete. False otherwise"
+msgstr ""
+
+# 2aeeec479c0c4d19bf71cd2284249549
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.deleteKeyword:14
+msgid "Propogates exception from the underlying reader delegate."
+msgstr ""
+
+# 86c03c2b99934fa2b7f7b7e253f87854
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.deleteKeywordsForUri:1
+msgid ""
+"Delete keywords for a URI in the keywords database. A hash will be "
+"constructed from the supplied uri and a lookup made in a local SQLITE "
+"database for the keywords. If there is an existing record for the hash, the "
+"entire record will be erased."
+msgstr ""
+
+# 6e884b54cdec4442b3dc66ae9e24c45f
+# 659499db19674743a50a6695aafa7561
+# bbf740dc4a434d8ba67c5ccb36969e78
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.deleteKeywordsForUri:8
+#: safe_qgis.keyword_io.KeywordIO.readKeywordFromUri:10
+#: safe_qgis.keyword_io.KeywordIO.writeKeywordsForUri:9
+msgid "Args:"
+msgstr ""
+
+# 8d75131426b44e74adcfc77264fc64ef
+# cd584f98e3a34e6189f6683e6fb202db
+# a3dd07ec3c4449aa8555aecaef35b5b8
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.deleteKeywordsForUri:10
+#: safe_qgis.keyword_io.KeywordIO.readKeywordFromUri:12
+#: safe_qgis.keyword_io.KeywordIO.writeKeywordsForUri:11
+msgid ""
+"theUri -  a str representing a layer uri as parameter. .e.g. 'dbname='osm' "
+"host=localhost port=5432 user='foo' password='bar' sslmode=disable key='id' "
+"srid=4326"
+msgstr ""
+
+# ddf34e5ad43243a18646ba7260d40d75
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.getCursor:1
+msgid ""
+"Get a cursor for the active connection. The cursor can be used to execute "
+"arbitrary queries against the database. This method also checks that the "
+"keywords table exists in the schema, and if not, it creates it."
+msgstr ""
+
+# cff1ac10f7ad43c785495685a9519f60
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.getCursor:7
+msgid "theConnection - a valid, open sqlite3 database connection."
+msgstr ""
+
+# a8300e6590a94d6c9c9729fdb9dc76d2
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.getCursor:9
+msgid "a valid cursor opened against the connection."
+msgstr ""
+
+# 02a839b3eb4d4c6b827a6bd488fd821e
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.getCursor:11
+msgid "An sqlite.Error will be raised if anything goes wrong"
+msgstr ""
+
+# 09b99da592c840c69c182ad4e07843c9
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.getHashForDatasource:1
+msgid "Given a datasource, return its hash."
+msgstr ""
+
+# 74f3108d6a43418a9e22970aa86f4502
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.openConnection:1
+msgid ""
+"Open an sqlite connection to the keywords database. By default the keywords "
+"database will be used in the plugin dir, unless an explicit path has been "
+"set using setKeywordDbPath, or overridden in QSettings. If the db does not "
+"exist it will be created."
+msgstr ""
+
+# 14280c413701482ca4b17bf7ca2891d0
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.openConnection:8
+msgid "thePath - path to the desired sqlite db to use."
+msgstr ""
+
+# a0b3a00b8a1a4a8baf04bf770ba266f8
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.openConnection:12
+msgid "An sqlite.Error is raised if anything goes wrong"
+msgstr ""
+
+# dd4e8a8f3e2f4b39a52363d27fbd2ef8
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywordFromUri:1
+msgid ""
+"Get metadata from the keywords file associated with a non local layer (e.g. "
+"postgresql connection)."
+msgstr ""
+
+# 5573a7bda1b64280ac34dba1cc22d242
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywordFromUri:4
+msgid ""
+"A hash will be constructed from the supplied uri and a lookup made in a "
+"local SQLITE database for the keywords. If there is an existing record it "
+"will be returned, if not and error will be thrown."
+msgstr ""
+
+# 24ebe3064a2543bb8ea07bc241697075
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywordFromUri:15
+msgid "keyword - optional - the metadata keyword to retrieve e.g. 'title'"
+msgstr ""
+
+# d1d6f189223a4424a945aa3260c64d8e
+# 446053b6c9d240bfad39c77d87f99130
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywordFromUri:18
+#: safe_qgis.keyword_io.KeywordIO.writeKeywordsForUri:18
+msgid ""
+"A string containing the retrieved value for the keyword if the keyword "
+"argument is specified, otherwise the complete keywords dictionary is "
+"returned."
+msgstr ""
+
+# 3313032479b44600b9d473e7b481d460
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywordFromUri:23
+msgid "KeywordNotFoundError if the keyword is not found."
+msgstr ""
+
+# a28e3de646964c2b86167114171c7b1e
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywords:9
+msgid ""
+"theKeyword - optional - will extract only the specified keyword from the "
+"keywords dict."
+msgstr ""
+
+# 8eb4991ab80f47b8b94ba3d1764118be
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywords:12
+msgid ""
+"A dict if theKeyword is omitted, otherwise the value for the given key if it "
+"is present."
+msgstr ""
+
+# 0aa4cf4efadc42c1b819b13b45427c8b
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.readKeywords:15
+msgid "Propogates any exception from the underlying reader delegate."
+msgstr ""
+
+# d5da8ef43a40412d9d20d753814905b7
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.setKeywordDbPath:1
+msgid "Set the path for the keyword database (sqlite)."
+msgstr ""
+
+# ee1a5525031747e6bacb1b9909359203
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.setKeywordDbPath:3
+msgid "The file will be used to search for keywords for non local datasets."
+msgstr ""
+
+# 5d9bd697c8d24fedbc6192bd7cbe2e15
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.setKeywordDbPath:6
+msgid ""
+"thePath - a valid path to a sqlite database. The database does not need to "
+"exist already, but the user should be able to write to the path provided."
+msgstr ""
+
+# 47b1f76d6bfe4e5f99b5aa5e526ae9b5
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.setupKeywordDbPath:1
+msgid ""
+"Helper to set the active path for the keywords. Called at init time, you can "
+"override this path by calling setKeywordDbPath."
+msgstr ""
+
+# a64d5182db4040a4abdaf08d56759aa9
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.setupKeywordDbPath:7
+msgid ""
+"A string representing the path to where the keywords file is to be. If the "
+"user has never specified what this path is, the defaultKeywordDbPath is "
+"returned."
+msgstr ""
+
+# 04852c3370144b8dad83836da959f2e1
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.writeKeywords:1
+msgid ""
+"Write keywords for a datasource. This is a wrapper method that will 'do the "
+"right thing' to store keywords for the given datasource. In particular, if "
+"the datasource is remote (e.g. a database connection) it will write the "
+"keywords from the keywords store."
+msgstr ""
+
+# f489be8bc22348e98f3542ad7995cfa3
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.writeKeywords:9
+msgid ""
+"theKeywords - a dict containing all the keywords to be written for the layer."
+msgstr ""
+
+# cb6964226da549049e476de584e896b9
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.writeKeywordsForUri:1
+msgid ""
+"Write keywords for a URI into the keywords database. All the keywords for "
+"the uri should be written in a single operation. A hash will be constructed "
+"from the supplied uri and a lookup made in a local SQLITE database for the "
+"keywords. If there is an existing record it will be updated, if not, a new "
+"one will be created."
+msgstr ""
+
+# 6e194828ead144df882a7c7d78954941
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.writeKeywordsForUri:14
+msgid "keywords - mandatory - the metadata keyword to retrieve e.g. 'title'"
+msgstr ""
+
+# b468e8ec34194c139b6a38ea0e074dab
+#: ../../../safe_qgis/keyword_io.py:docstring of
+#: safe_qgis.keyword_io.KeywordIO.writeKeywordsForUri:23
+msgid "KeywordNotFoundError if the keyword is not recognised."
+msgstr ""
+
+# 41c32fa234074b288ffb084a30c9a032
+#: ../../source/api-docs/safe_qgis/keyword_io.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

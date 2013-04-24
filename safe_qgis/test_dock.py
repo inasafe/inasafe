@@ -36,9 +36,8 @@ from qgis.core import (QgsRasterLayer,
                        QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
-# TODO: get this via api
-from safe.impact_functions.core import format_int
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA
+from safe_interface import (format_int,
+                            HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       setCanvasCrs,
@@ -64,8 +63,6 @@ from safe_qgis.utilities import (setRasterStyle,
 from safe.engine.impact_functions_for_testing import allen_fatality_model
 from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
-from safe.engine.impact_functions_for_testing import \
-    categorised_hazard_population
 from safe.engine.impact_functions_for_testing import \
     categorised_hazard_building_impact
 #from safe.engine.impact_functions_for_testing import error_raising_functions
@@ -235,7 +232,8 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
     if theAggregationEnabledFlag is not None:
         if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
             myMessage = ('The aggregation combobox should be %s' %
-                ('enabled' if theAggregationEnabledFlag else 'disabled'))
+                        ('enabled' if theAggregationEnabledFlag else
+                         'disabled'))
             return False, myMessage
 
     # Check that layers and impact function are correct
@@ -301,8 +299,8 @@ def loadStandardLayers():
                   join(TESTDATA, 'donut.shp'),
                   join(TESTDATA, 'Merapi_alert.shp'),
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
-    myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-        theDataDirectory=None)
+    myHazardLayerCount, myExposureLayerCount = loadLayers(
+        myFileList, theDataDirectory=None)
     #FIXME (MB) -1 is untill we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
 
@@ -428,13 +426,9 @@ class DockTest(unittest.TestCase):
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
         myLayerList = [DOCK.tr('Entire area'),
-                       DOCK.tr('A flood in Jakarta'),
-                       DOCK.tr('donut'),
-                       DOCK.tr('Essential buildings'),
-                       DOCK.tr('kabupaten jakarta singlepart'),
-                       DOCK.tr('OSM Building Polygons')]
-        currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(DOCK
-        .cboAggregation.count())]
+                       DOCK.tr('kabupaten jakarta singlepart')]
+        currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(
+            DOCK.cboAggregation.count())]
 
         myMessage = ('The aggregation combobox should have:\n %s \nFound: %s'
                      % (myLayerList, currentLayers))
@@ -591,8 +585,8 @@ class DockTest(unittest.TestCase):
                      (myAttribute))
         assert myAttribute is None, myMessage
 
-    #the generated layers are not added to the map registry
     def test_checkPostProcessingLayersVisibility(self):
+        """Generated layers are not added to the map registry."""
         myRunButton = DOCK.pbnRunStop
 
         # with KAB_NAME aggregation attribute defined in .keyword using
@@ -636,6 +630,39 @@ class DockTest(unittest.TestCase):
         # We expect two more since we enabled showing intermedate layers
         assert myBeforeCount + 2 == myAfterCount, myMessage
 
+    def test_postProcessorOutput(self):
+        """Check that the post processor does not add spurious report rows."""
+        myRunButton = DOCK.pbnRunStop
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theOkButtonFlag=True)
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        assert myResult, myMessage
+
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('Spurious 0 filled rows added to post processing report.')
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        for line in myResult.split('\n'):
+            if 'Entire area' in line:
+                myTokens = str(line).split('\t')
+                myTokens = myTokens[1:]
+                mySum = 0
+                for myToken in myTokens:
+                    mySum += float(myToken.replace(',', '.'))
+
+                assert mySum != 0, myMessage
+
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
@@ -676,9 +703,9 @@ class DockTest(unittest.TestCase):
         myExpectedDict = {'Hazard': PADANG2009_title,
                           'Exposure': 'Padang_WGS84',
                           'Impact Function Id':
-                              'Earthquake Guidelines Function',
+                          'Earthquake Guidelines Function',
                           'Impact Function Title':
-                              'Earthquake Guidelines Function',
+                          'Earthquake Guidelines Function',
                           'Run Button Enabled': True}
         myMessage = 'Got:\n %s\nExpected:\n%s\n%s' % (
             myDict, myExpectedDict, combosToString(DOCK))
@@ -735,7 +762,7 @@ class DockTest(unittest.TestCase):
                           'Exposure': 'People',
                           'Impact Function Id': 'Earthquake Fatality Function',
                           'Impact Function Title':
-                              'Earthquake Fatality Function',
+                          'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
             myDict, myExpectedDict, combosToString(DOCK))
@@ -788,9 +815,9 @@ class DockTest(unittest.TestCase):
         myExpectedDict = {'Hazard': PADANG2009_title,
                           'Exposure': 'People',
                           'Impact Function Id':
-                              'Earthquake Fatality Function',
+                          'Earthquake Fatality Function',
                           'Impact Function Title':
-                              'Earthquake Fatality Function',
+                          'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
             myDict, myExpectedDict, combosToString(DOCK))
@@ -1215,8 +1242,8 @@ class DockTest(unittest.TestCase):
         # later if needed.
         myMessage = ('Raster layer was not assigned a ColorRampShader'
                      ' as expected.')
-        assert myQgisImpactLayer.colorShadingAlgorithm() == \
-                QgsRasterLayer.ColorRampShader, myMessage
+        assert myQgisImpactLayer.colorShadingAlgorithm() == QgsRasterLayer.\
+            ColorRampShader, myMessage
 
         # Commenting out because we changed impact function to use floating
         # point quantities. Revisit in QGIS 2.0 where range based transparency
@@ -1319,8 +1346,8 @@ class DockTest(unittest.TestCase):
                            'Flood_Current_Depth_Jakarta_geographic.asc'),
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-            theDataDirectory=None)
+        myHazardLayerCount, myExposureLayerCount = loadLayers(
+            myFileList, theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1348,11 +1375,9 @@ class DockTest(unittest.TestCase):
                           'Hazard': 'A flood in Jakarta like in 2007',
                           'Exposure': 'Population density (5kmx5km)'}
         myMessage = (('Run button was not disabled when exposure set to \n%s'
-                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-                         DOCK.cboExposure.currentText(),
-                         myDict,
-                         myExpectedDict,
-                         combosToString(DOCK)))
+                      '\nUI State: \n%s\nExpected State:\n%s\n%s') %
+                     (DOCK.cboExposure.currentText(), myDict, myExpectedDict,
+                      combosToString(DOCK)))
 
         assert myExpectedDict == myDict, myMessage
 
@@ -1375,8 +1400,8 @@ class DockTest(unittest.TestCase):
                            'Flood_Current_Depth_Jakarta_geographic.asc'),
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-            theDataDirectory=None)
+        myHazardLayerCount, myExposureLayerCount = loadLayers(
+            myFileList, theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1404,11 +1429,9 @@ class DockTest(unittest.TestCase):
                           'Hazard': 'A flood in Jakarta like in 2007',
                           'Exposure': 'Population density (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
-                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-            DOCK.cboExposure.currentText(),
-            myDict,
-            myExpectedDict,
-            combosToString(DOCK))
+                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % \
+                    (DOCK.cboExposure.currentText(), myDict, myExpectedDict,
+                     combosToString(DOCK))
 
         assert myExpectedDict == myDict, myMessage
 
@@ -1435,8 +1458,8 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = [myHazard, myExposure]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-            theDataDirectory=TESTDATA)
+        myHazardLayerCount, myExposureLayerCount = loadLayers(
+            myFileList, theDataDirectory=TESTDATA)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1505,8 +1528,8 @@ class DockTest(unittest.TestCase):
                            'Flood_Current_Depth_Jakarta_geographic.asc'),
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-            theDataDirectory=None)
+        myHazardLayerCount, myExposureLayerCount = loadLayers(
+            myFileList, theDataDirectory=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         DOCK.cboHazard.setCurrentIndex(0)
@@ -1520,10 +1543,9 @@ class DockTest(unittest.TestCase):
         myCurrentFunction = str(DOCK.cboFunction.currentText())
         myMessage = ('Expected selected impact function to remain unchanged '
                      'when choosing a different hazard of the same category:'
-                     ' %s\nExpected: %s\n%s' % (
-            myExpectedFunction,
-            myCurrentFunction,
-            combosToString(DOCK)))
+                     ' %s\nExpected: %s\n%s' % (myExpectedFunction,
+                                                myCurrentFunction,
+                                                combosToString(DOCK)))
 
         assert myExpectedFunction == myCurrentFunction, myMessage
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
@@ -1561,7 +1583,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
-        myMessage = ('The postprocessing report should be:\n%s\nFound:\n%s' %
+        myMessage = ('The aggregation report should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 

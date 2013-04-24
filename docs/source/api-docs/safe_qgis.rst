@@ -6,19 +6,26 @@ Package::safe_qgis
 
    safe_qgis/dock
    safe_qgis/options_dialog
+   safe_qgis/converter_dialog
    safe_qgis/map_legend
    safe_qgis/impact_calculator
    safe_qgis/qgis_interface
    safe_qgis/exceptions
    safe_qgis/dock_base
    safe_qgis/map
+   safe_qgis/minimum_needs_base
    safe_qgis/clipper
    safe_qgis/plugin
    safe_qgis/options_dialog_base
+   safe_qgis/import_dialog_base
+   safe_qgis/minimum_needs
+   safe_qgis/converter_dialog_base
    safe_qgis/impact_functions_doc
    safe_qgis/keywords_dialog_base
+   safe_qgis/inasafe_lightmaps
    safe_qgis/keywords_dialog
    safe_qgis/help
+   safe_qgis/import_dialog
    safe_qgis/utilities
    safe_qgis/impact_functions_doc_base
    safe_qgis/function_options_dialog_base

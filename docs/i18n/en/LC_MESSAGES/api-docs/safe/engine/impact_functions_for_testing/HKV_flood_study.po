@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# b20a2715d101425a8bd31c477b16a25e
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/HKV_flood_study.rst:6
+msgid "Module:  safe.engine.impact_functions_for_testing.HKV_flood_study"
+msgstr ""
+
+# 9a70b0971f924343af33dd6794df5289
+#: ../../../safe/engine/impact_functions_for_testing/HKV_flood_study.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.HKV_flood_study.HKVFloodImpactFunctionTEST:1
+msgid "Risk plugin for flood impact"
+msgstr ""
+
+# fdf6b89007454562aab7e215007a1950
+#: ../../../safe/engine/impact_functions_for_testing/HKV_flood_study.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.HKV_flood_study.HKVFloodImpactFunctionTEST:3
+msgid ""
+":author HKV :rating 1 :param requires category=='hazard' "
+"and                     subcategory=='flood' and                     "
+"layertype=='raster' and                     unit=='m'"
+msgstr ""
+
+# 7d2095f66f304b8ab5c6cc5c236196c0
+#: ../../../safe/engine/impact_functions_for_testing/HKV_flood_study.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.HKV_flood_study.HKVFloodImpactFunctionTEST:7
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster' "
+"and                     datatype=='density'"
+msgstr ""
+
+# bc4fc60e15744c768ed9d6029aefffce
+#: ../../../safe/engine/impact_functions_for_testing/HKV_flood_study.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.HKV_flood_study.HKVFloodImpactFunctionTEST.run:1
+msgid "Risk plugin for earthquake fatalities"
+msgstr ""
+
+# fd958e313afb4f0ba4cc6b7483263466
+#: ../../../safe/engine/impact_functions_for_testing/HKV_flood_study.py:docstring
+#: of
+#: safe.engine.impact_functions_for_testing.HKV_flood_study.HKVFloodImpactFunctionTEST.run:5
+msgid ""
+"H: Raster layer of flood depth P: Raster layer of population data on the "
+"same grid as H"
+msgstr ""
+
+# f27bab1c3647439badafb041099b8862
+#: ../../source/api-docs/safe/engine/impact_functions_for_testing/HKV_flood_study.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

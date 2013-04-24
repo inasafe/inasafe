@@ -53,24 +53,43 @@ class Help(QtGui.QDialog):
 
     def showContextHelp(self):
         """Load the help text into the wvResults widget."""
-        ROOT = os.path.dirname(__file__)
-        myPath = os.path.abspath(os.path.join(ROOT, '..', 'docs', 'build',
-                                            'html', 'user-docs',
-                                            'README.html'))
+        if 'LANG' in os.environ:
+            myLocale = os.environ['LANG']
+        else:
+            myLocale = 'en'
+
+        # Check if a translation of the chosen locale exists, otherwise
+        # revert to en (English).
+        myRootPath = os.path.dirname(__file__)
+        myRootPath = os.path.abspath(os.path.join(myRootPath,
+                                     '..',
+                                     'docs',
+                                     'output',
+                                     'html'))
+
+        if (os.path.exists(
+                os.path.join(myRootPath, myLocale)) and myLocale != 'en'):
+            myRootPath = os.path.join(myRootPath, myLocale)
+        else:
+            myRootPath = os.path.join(myRootPath, 'en')
+
+        myPath = os.path.abspath(os.path.join(myRootPath,
+                                              'user-docs',
+                                              'README.html'))
 
         if self.context is not None:
-            myContextPath = os.path.abspath(os.path.join(ROOT, '..',
-                                            'docs', 'build',
-                                            'html', 'user-docs',
+            myContextPath = os.path.abspath(os.path.join(myRootPath,
+                                            'user-docs',
                                             self.context + '.html'))
             LOGGER.debug(os.path.isfile(myContextPath))
             if os.path.isfile(myContextPath):
                 myPath = myContextPath
 
         if not os.path.isfile(myPath):
-            QtGui.QMessageBox.warning(self.parent, self.tr('InaSAFE'),
-            (self.tr('Documentation could not be found at:\n'
-                      '%1').arg(myPath)))
+            QtGui.QMessageBox.warning(
+                self.parent, self.tr('InaSAFE'),
+                (self.tr('Documentation could not be found at:\n'
+                         '%1').arg(myPath)))
         else:
             myUrl = QtCore.QUrl('file:///' + myPath)
             QtGui.QDesktopServices.openUrl(myUrl)

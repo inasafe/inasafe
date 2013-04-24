@@ -14,10 +14,10 @@ import numpy
 
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
-                                        get_exposure_layer,
-                                        format_int)
+                                        get_exposure_layer)
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import (ugettext as tr,
+                                   format_int)
 from safe.impact_functions.mappings import osm2bnpb
 from safe.impact_functions.mappings import unspecific2bnpb
 from safe.impact_functions.mappings import sigab2bnpb

@@ -1,0 +1,401 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-06 11:31\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 2b87d4f9a1f243d5a5a9a16e19eb69f4
+#: ../../source/api-docs/safe_qgis/map.rst:6
+msgid "Module:  safe_qgis.map"
+msgstr ""
+
+# e7ed9bbabfca4cb2b62e32ddfb175d7b
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map:2
+msgid "**InaSAFE map making module.**"
+msgstr ""
+
+# 4f179bfcd9424b2198f798ea0472b0ea
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# 69da88fc978d407c9a2b1150219e71b2
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 3766720cd9894086ba1296b01fe08837
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map:1
+msgid "A class for creating a map."
+msgstr ""
+
+# 345496ac188243e796fbe1c48c996185
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.composeMap:1
+msgid "Place all elements on the map ready for printing."
+msgstr ""
+
+# 78d01290f59a4abea4a295adcdf17fcf
+# f1ded4a1d9fe4c7eab5b49a26a21ebbb
+# 49d8c33382b64d6d8f3378762ad57c32
+# 3d66b678e6924b8aae702e5ece924e1a
+# 8fd89ca15c894debb8d12e4b90cbe5b1
+# c5b8ddc74ac44521a3d1fbc851fb5bc7
+# 6a91c357fc6a40a9aefe34dd47471dd5
+# d7b17d32c91b413587d885c17941de75
+# 97bfa59e79a2453fbf74ec05dc701ac8
+# d7d98e4cd16b49f59c647a4a4471005e
+# 01a70c731eea469ab5904470739b6fb2
+# 84ed242660f84931b60d91ff88e2d2da
+# 4e67f7492e704d5986a2d625dd1977f6
+# 9ea1d972e3d44e24b4b74f52e430458a
+# 35a137fdaa7748cab1638945897397e0
+# b6aad74dc64947199e0b0399385fc971
+# 42c1a287bdcd4f36a717bd03dee2ebc0
+# 2a24f11fe4244dd69d76f7a69a89698a
+# 62d2cb0638e94942bdd4f222d2a67c35
+# ba3e934feea343f686aef50b2bf9eff8
+# 05c966e3dbb24da9b21f2311624a86a5
+# 403ca487b2684ceabefdc32efca423cd
+# 5bf3d52bc3794b4d9ba8afa254a68d73
+# 809069f8b1f84936a34d877b9f8d7198
+# d1a8f4e29b274e72b0bc7bd76358ef02
+# 28549f7a83a446daaf6986e10000cfb8
+# 030f65953a3544b293ac47968cbb5640
+# af61ce9b3a1c436f8e0cdf3f55364152
+# 0b07cda7591449bfb26aa3f33ec39f9a
+# ec21456d8d7945dbbcce14edb1f5be86
+# 1927292877e44e398b53157dbfeaad01
+# 27604036747844809c4f3a9e16dbf44e
+# bb1aa90ae78341d4a029598ebb3306de
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.composeMap:4
+#: safe_qgis.map.Map.composeMap:7 safe_qgis.map.Map.drawDisclaimer:4
+#: safe_qgis.map.Map.drawDisclaimer:6 safe_qgis.map.Map.drawDisclaimer:8
+#: safe_qgis.map.Map.drawGraticuleMask:7 safe_qgis.map.Map.drawGraticuleMask:9
+#: safe_qgis.map.Map.drawHostAndTime:6 safe_qgis.map.Map.drawHostAndTime:8
+#: safe_qgis.map.Map.drawImage:18 safe_qgis.map.Map.drawImpactTitle:8
+#: safe_qgis.map.Map.drawLegend:9 safe_qgis.map.Map.drawLegend:11
+#: safe_qgis.map.Map.drawLogo:6 safe_qgis.map.Map.drawLogo:8
+#: safe_qgis.map.Map.drawMap:8 safe_qgis.map.Map.drawNativeScaleBar:5
+#: safe_qgis.map.Map.drawNativeScaleBar:7 safe_qgis.map.Map.drawScaleBar:13
+#: safe_qgis.map.Map.drawTitle:8 safe_qgis.map.Map.getMapTitle:4
+#: safe_qgis.map.Map.printToPdf:11 safe_qgis.map.Map.renderComposition:4
+#: safe_qgis.map.Map.renderComposition:14 safe_qgis.map.Map.renderTemplate:9
+#: safe_qgis.map.Map.renderTemplate:11 safe_qgis.map.Map.setImpactLayer:7
+#: safe_qgis.map.Map.setupComposition:4 safe_qgis.map.Map.setupComposition:6
+#: safe_qgis.map.Map.setupComposition:8 safe_qgis.map.Map.showComposer:5
+#: safe_qgis.map.Map.showComposer:7 safe_qgis.map.Map.showComposer:9
+msgid "None"
+msgstr ""
+
+# 2e3d14964bd84dc09207c092a602eff6
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.composeMap:10
+msgid "Any exceptions raised will be propagated."
+msgstr ""
+
+# 234bca44bafc4bbda99187083a3d6ecf
+# de0b7aa24b6d400c9a9e285e719710fe
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawDisclaimer:1
+#: safe_qgis.map.Map.drawHostAndTime:1
+msgid "Add a disclaimer to the composition."
+msgstr ""
+
+# 036b5bb85cfc436fa74ded52ecfb431b
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.drawGraticuleMask:1
+msgid ""
+"A helper function to mask out graticule labels on the right side by over "
+"painting a white rectangle with white border on them."
+msgstr ""
+
+# 0bd87b0892a24c6587223f92fd8e3a2c
+# 9448871813d64cdbba44174e80db129e
+# 288cfa9569ba4ea6bed9bb34e6d21fa2
+# 3e2b0c3e92994991be7602b4a8310da5
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.drawGraticuleMask:5 safe_qgis.map.Map.drawMap:4
+#: safe_qgis.map.Map.drawScaleBar:11 safe_qgis.map.Map.drawTitle:4
+msgid "theTopOffset - vertical offset at which the map should be drawn"
+msgstr ""
+
+# 4d4ed2af864548e6b543b28da4baf3fe
+# 6361c02834eb438d8342b6f3884f125a
+# 540030b1d4b040bf92b5de843e034fef
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawHostAndTime:4
+#: safe_qgis.map.Map.drawImpactTitle:4 safe_qgis.map.Map.drawLegend:7
+msgid "theTopOffset - vertical offset at which to begin drawing"
+msgstr ""
+
+# 5e12f6bf4d694caa926c5f4ce2402945
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:1
+msgid ""
+"Helper to draw an image directly onto the QGraphicsScene. This is an "
+"alternative to using QgsComposerPicture which in some cases leaves artifacts "
+"under windows."
+msgstr ""
+
+# 48f1206c64914b35b8596fefee47f901
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:5
+msgid ""
+"The Pixmap will have a transform applied to it so that it is rendered with "
+"the same resolution as the composition."
+msgstr ""
+
+# 2dc1156e79f748ff8e11935e04082a80
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:8
+msgid "Args:"
+msgstr ""
+
+# f965289533a2454d9be68a527f1da085
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:10
+msgid "theImage: QImage that will be rendered to the layout."
+msgstr ""
+
+# 031cef7a24834f64b084c7ee7e348158
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:11
+msgid "theWidthMM: int - desired width in mm of output on page."
+msgstr ""
+
+# 865c23cf02f748d2a497a590414c019a
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:12
+msgid "theLeftOffset: int - offset from left of page."
+msgstr ""
+
+# cb2361da52174b9cbbc175c6247e0c7b
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:13
+msgid "theTopOffset: int - offset from top of page."
+msgstr ""
+
+# 48d0a8df4b964278b1e05d82b3fbd807
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImage:16
+msgid "QGraphicsSceneItem is returned"
+msgstr ""
+
+# b25d7857b428414eb4b4951d387d18ab
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImpactTitle:1
+msgid "Draw the map subtitle - obtained from the impact layer keywords."
+msgstr ""
+
+# d15e928e551141a5b920816ed96a82ca
+# 52729fb1498b407bb4fb29d895ec114b
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawImpactTitle:6
+#: safe_qgis.map.Map.drawTitle:6
+msgid "float - the height of the label as rendered"
+msgstr ""
+
+# 34e63ead26764a9e9dabf6418119f7e6
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawLegend:1
+msgid "Add a legend to the map using our custom legend renderer."
+msgstr ""
+
+# 098fca478fcc4e68a0f468f76796094a
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawLegend:3
+msgid ""
+"getLegend generates a pixmap in 150dpi so if you set the map to a higher dpi "
+"it will appear undersized."
+msgstr ""
+
+# 56cd6aac67784bfd829b570f2281e8fd
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawLogo:1
+msgid "Add a picture containing the logo to the map top left corner"
+msgstr ""
+
+# d7ee66f3df8e479795f10f4db25cea4c
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawLogo:4
+msgid "theTopOffset - vertical offset at which the logo shoudl be drawn"
+msgstr ""
+
+# ef01309c207b4719919d5defa023dab7
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawMap:1
+msgid "Add a map to the composition and return the compsermap instance."
+msgstr ""
+
+# 07e58ab4ecc84026b4508dc13dc8663c
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawMap:6
+msgid "A QgsComposerMap instance is returned"
+msgstr ""
+
+# 3dda897836f84f4fbc7b3c090159b6e3
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.drawNativeScaleBar:1
+msgid ""
+"Draw a scale bar using QGIS' native drawing - in the case of geographic "
+"maps, scale will be in degrees, not km."
+msgstr ""
+
+# a2a20f18272949a79cb330dadd876246
+# 44042aaae7b946c88e9458dd58d06894
+# c57accc9ca834fcc9aca8a9d7aa4735f
+# 98fd910cf36942af87566ee1a4e2394d
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.drawNativeScaleBar:9 safe_qgis.map.Map.drawScaleBar:15
+#: safe_qgis.map.Map.getMapTitle:8 safe_qgis.map.Map.setImpactLayer:9
+msgid "Any exceptions raised by the InaSAFE library will be propagated."
+msgstr ""
+
+# 975d1a9830a84de29625d23f99ce4ee3
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawScaleBar:1
+msgid "Add a numeric scale to the bottom left of the map"
+msgstr ""
+
+# a4aa879a483349198e9e6e796c12b1a6
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawScaleBar:3
+msgid ""
+"We draw the scale bar manually because QGIS does not yet support rendering a "
+"scalebar for a geographic map in km."
+msgstr ""
+
+# 708a1df3541e4d08a547d1bd918391fb
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawScaleBar:9
+msgid ""
+"theComposerMap - QgsComposerMap instance used as the basis scale "
+"calculations."
+msgstr ""
+
+# 44da1d5f82774123bcdf8d8109810771
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.drawTitle:1
+msgid "Add a title to the composition."
+msgstr ""
+
+# 08e19ab880404920b0c33e46cd714b8f
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.getMapTitle:1
+msgid "Get the map title from the layer keywords if possible."
+msgstr ""
+
+# 3e793278c26f4ab2ade26ea3bc917521
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.getMapTitle:6
+msgid "None on error, otherwise the title"
+msgstr ""
+
+# 1daa1324eac44183b4980743347ae3fc
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.printToPdf:1
+msgid "Generate the printout for our final map."
+msgstr ""
+
+# 3366a6a65c7b47a8a91bb41600af683c
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.printToPdf:5
+msgid "pdf should be saved. If None, a generated file name will be used."
+msgstr ""
+
+# 90cbf75b44974fd58282cf4c56197bda
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.printToPdf:9
+msgid "provided)."
+msgstr ""
+
+# c8538b6bffc041ff8bb026ba155a85a5
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.renderComposition:1
+msgid "Render the map composition to an image and save that to disk."
+msgstr ""
+
+# 8725eab2d89140c4a2827c603be260fe
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.renderComposition:8
+msgid "str: myImagePath - absolute path to png of rendered map"
+msgstr ""
+
+# 4142995d3ee14c82b23e7df6239e9347
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.renderComposition:9
+msgid "QImage: myImage - in memory copy of rendered map"
+msgstr ""
+
+# c1cff3bc11254dea948366ceb57520ec
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.renderComposition:10
+msgid "QRectF: myTargetArea - dimensions of rendered map"
+msgstr ""
+
+# 418d249babbd4236897bfc919fac8774
+#: ../../../safe_qgis/map.py:docstring of
+#: safe_qgis.map.Map.renderComposition:11
+msgid "str: Absolute file system path to the rendered image."
+msgstr ""
+
+# 23e8e9600d4b4d0c986a0c73a3adf1e0
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.renderTemplate:1
+msgid "Load a QgsComposer map from a template and render it"
+msgstr ""
+
+# df579017890a4b11807e27e66a681567
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.renderTemplate:3
+msgid "THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL"
+msgstr ""
+
+# fecd4f41f1d74db2bc06e2fae2d8984b
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.renderTemplate:6
+msgid ""
+"theTemplateFilePath - path to the template that should be loaded. "
+"theOutputFilePath - path for the output pdf"
+msgstr ""
+
+# 28a928e90ded4e64b3b88d35a9fec38f
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.setImpactLayer:1
+msgid ""
+"Mutator for the impact layer that will be used for stats, legend and "
+"reporting."
+msgstr ""
+
+# 2e444897d3cc4dcf8e40fc4286c14df8
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.setImpactLayer:5
+msgid "theLayer - a valid QgsMapLayer"
+msgstr ""
+
+# cde4c758bb9a41319374eeb95d1e7074
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.setupComposition:1
+msgid "Set up the composition ready for drawing elements onto it."
+msgstr ""
+
+# ab3ee342a219400ea759671a92f723a6
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.showComposer:1
+msgid ""
+"Show the composition in a composer view so the user can tweak it if they "
+"want to."
+msgstr ""
+
+# ab405419693e4e35811a2a7befb861f9
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.tr:1
+msgid "We implement this since we do not inherit QObject."
+msgstr ""
+
+# 1ec7b9e91be144e4b82057849bffc7bc
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.tr:4
+msgid "theString - string for translation."
+msgstr ""
+
+# 58db5384680b4f3aad392cff3e8d3e3e
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.tr:6
+msgid "Translated version of theString."
+msgstr ""
+
+# 28a7a817993f472c9aa2effc3755aab2
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.tr:8
+msgid "no exceptions explicitly raised."
+msgstr ""
+
+# 2cd6b3f3a7c9469cab0b3212dae10365
+#: ../../../safe_qgis/map.py:docstring of safe_qgis.map.Map.writeTemplate:1
+msgid ""
+"Write the current composition as a template that can be re-used in QGIS."
+msgstr ""
+
+# eba57c1647764db897aa13b970c67eb7
+#: ../../source/api-docs/safe_qgis/map.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

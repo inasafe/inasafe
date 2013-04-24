@@ -26,11 +26,12 @@ from safe.common.polygon import line_dictionary_to_geometry
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from safe.common.numerics import nanallclose
-from safe.common.utilities import VerificationError, unique_filename
+from safe.common.utilities import (VerificationError,
+                                   unique_filename,
+                                   format_int)
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins, get_plugin
-from safe.impact_functions.core import format_int
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,

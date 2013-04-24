@@ -1,0 +1,95 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 46515e3d155b4ba98cce7af906ff1dd7
+#: ../../source/api-docs/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.rst:6
+msgid ""
+"Module:  safe.impact_functions.inundation."
+"flood_population_evacuation_polygon_hazard"
+msgstr ""
+
+# ed4d880d79b14bb7b9313d6cca6c39b7
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard:1
+msgid "Impact function for flood evacuation"
+msgstr ""
+
+# 0fd9d8d96c14496e9b302f8f5f634a57
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard:3
+msgid ""
+":author AIFDR :rating 4 :param requires category=='hazard' "
+"and                     subcategory in ['flood', 'tsunami'] "
+"and                     layertype=='vector'"
+msgstr ""
+
+# b5a82df0b7e54b51a592b6f43b0a2694
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard:7
+msgid ""
+":param requires category=='exposure' and                     "
+"subcategory=='population' and                     layertype=='raster'"
+msgstr ""
+
+# 79de37ba40094834a454d4af3f9eb84b
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:1
+msgid "Risk plugin for flood population evacuation"
+msgstr ""
+
+# e2f3146ded294d1b8efcc4934bd1a6f4
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:5
+msgid ""
+"my_hazard : Vector polygon layer of flood depth my_exposure : Raster layer "
+"of population data on the same"
+msgstr ""
+
+# 772e1107d39b47c395cb1964a3f0fcc0
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:7
+msgid "grid as my_hazard"
+msgstr ""
+
+# b417c0935c3646c58e6b717270bb797b
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:9
+msgid "Counts number of people exposed to areas identified as flood prone"
+msgstr ""
+
+# 255983a73f2b42fd98ed3cc6e2dbd568
+#: ../../../safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:docstring
+#: of
+#: safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.FloodEvacuationFunctionVectorHazard.run:12
+msgid ""
+"Map of population exposed to flooding Table with number of people evacuated "
+"and supplies required"
+msgstr ""
+
+# 019c6ef9b47f4d2bae57a82bd76c0894
+#: ../../source/api-docs/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

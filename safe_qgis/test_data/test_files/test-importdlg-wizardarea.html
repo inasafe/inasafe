@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HotExports | Tag Upload</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/layout/favicon-504cac551cfee12db58f441e99301217.ico">
+    <link href="/assets/application-1f14ca07a84dfec13f8326fa162ae3c6.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="/assets/application-adb945dc94aef3a9f8815d35a1ba590d.js" type="text/javascript"></script>
+    <meta content="authenticity_token" name="csrf-param" />
+    <meta content="cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE=" name="csrf-token" />
+</head>
+<body>
+<div id="header" style="background-image: url(/assets/layout/red-header-c82760e6760c02af7fc2d1b6d3c50fdb.png);">
+    <div class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/uploads">Configuration</a></li>
+            <li><a href="/jobs">Jobs</a></li>
+            <li><a href="/jobs/new">New Job</a></li>
+        </ul>
+    </div>
+    <div class="logo">
+        <img src="/assets/layout/logo-650056578f17b49a8cf6ea154f5aeb05.png" class="logo">
+        <h1>HOT Exports</h1>
+    </div>
+</div>
+
+
+
+<div id="content">
+
+    <h1>New Export Job - Tag Upload</h1>
+
+    <div class="wizard">
+        <form accept-charset="UTF-8" action="/tagupload" enctype="multipart/form-data" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE=" /></div>
+            <input id="wizard" name="wizard" type="hidden" value="tagupload" />
+            <input id="job_name" name="job[name]" type="hidden" value="InaSAFE job" />
+            <input id="job_description" name="job[description]" type="hidden" value="This job created from import feature in InaSAFE" />
+            <input id="job_lonmin" name="job[lonmin]" type="hidden" value="92.7188" />
+            <input id="job_latmin" name="job[latmin]" type="hidden" value="-19.7515" />
+            <input id="job_lonmax" name="job[lonmax]" type="hidden" value="141.0586" />
+            <input id="job_latmax" name="job[latmax]" type="hidden" value="14.8329" />
+            <input id="job_region_id" name="job[region_id]" type="hidden" value="1" />
+
+
+            <table class="wizard">
+                <tr>
+                    <th>Job Name</th>
+                    <td>InaSAFE job</td>
+                </tr>
+                <tr>
+                    <th>Select Preset File</th>
+                    <td>
+                        <select id="presetfile" name="presetfile"><option value="2">Presets for Access Mapping (the preset is in its early development phase)</option>
+                            <option value="3">Access Social Mapping NTB (preset is in early development phase - testing only)</option>
+                            <option value="9">Opendri Building Presets</option>
+                            <option value="8">shelterbus</option>
+                            <option value="7">bus_stop</option>
+                            <option value="1">Building/Gedung</option>
+                            <option value="0">No Preset File</option></select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Add Default Tags?</th>
+                    <td><input checked="checked" id="default_tags" name="default_tags" type="checkbox" value="true" /></td>
+                </tr>
+            </table>
+
+            <input name="commit" type="submit" value="Save" />
+        </form></div>
+
+
+</div>
+<div id="footer">
+
+    <p>Copyright&copy; 2013 Humanitarian OpenStreetMap Team
+        &middot; Map data from OpenStreetMap, ODbL 1.0 license
+</div>
+
+
+</body>
+</html>

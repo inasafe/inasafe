@@ -1,0 +1,177 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# f282000992b64ac48583e8e51c478a12
+#: ../../source/api-docs/safe/impact_functions/test_plugin_core.rst:6
+msgid "Module:  safe.impact_functions.test_plugin_core"
+msgstr ""
+
+# 624468ed5b8d4e4cb45c44745eb25827
+# a0f340f8dde048f9be3660e3e60dfcad
+# 9bb9c30e88084f6a9714caba1db9d755
+# 448d8c8b8c6a4127ae38ed1f6dae620c
+# 812802ac0d9b43b8a2a2a81d222ccae1
+# d0663f69487940a792a78bea335adf6c
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.BasicFunction:1
+#: safe.impact_functions.test_plugin_core.F1:1
+#: safe.impact_functions.test_plugin_core.F2:1
+#: safe.impact_functions.test_plugin_core.F3:1
+#: safe.impact_functions.test_plugin_core.F4:1
+#: safe.impact_functions.test_plugin_core.SyntaxErrorFunction:1
+msgid "Risk plugin for testing"
+msgstr ""
+
+# ade3c2d8318347d981ca6a0d082dcdb8
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.BasicFunction:3
+msgid ""
+":author Allen :rating 1 :param requires category==\"test_cat1\" :param "
+"requires unit==\"MMI\""
+msgstr ""
+
+# abff653aeee542838e249199d1281185
+# b7702c52549e4b51834c2d7d77d1b0ec
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F1:3
+#: safe.impact_functions.test_plugin_core.F2:3
+msgid ""
+":param requires category=='test_cat1' and                     subcategory."
+"startswith('flood') and                     layertype=='raster' "
+"and                     unit=='m'"
+msgstr ""
+
+# 88daa48878ff41a6b5cb21ee5edaf00d
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F1:5
+msgid ""
+":param requires category=='test_cat2' and                     subcategory."
+"startswith('population') and                     layertype=='raster' "
+"and                     datatype=='population'"
+msgstr ""
+
+# 0f7714aee86144e78f95ae662d3b3823
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F2:5
+msgid ""
+":param requires category=='test_cat2' and                     subcategory."
+"startswith('building')"
+msgstr ""
+
+# 85b981db70384f419ed9e8f072bd03b9
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F3:3
+msgid ""
+":param requires category=='test_cat1' :param requires category=='test_cat2'"
+msgstr ""
+
+# 394e60a948544d5f82c5cb3db3953008
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F4:3
+msgid ""
+":param requires category=='hazard' and                     subcategory in "
+"['flood', 'tsunami']"
+msgstr ""
+
+# 01349329caf3489f98d7ecff53c75245
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F4:5
+msgid ""
+":param requires category=='exposure' and                     subcategory in "
+"['building', 'structure'] and                     layertype=='vector'"
+msgstr ""
+
+# f9d8d7cbfea849b59e450f14189886a3
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.SyntaxErrorFunction:3
+msgid ""
+":author Allen :rating 1 :param requires category==\"test_cat1\" :param "
+"requires unit=\"MMI\"  # Note the error should be =="
+msgstr ""
+
+# d9d9af5f96f943aa97512c030e7188f0
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core:1
+msgid "Tests of Risiko calculations"
+msgstr ""
+
+# 80a3a143a1de496382a2b73063534edf
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_basic_plugin_requirements:1
+msgid "Basic plugin requirements collection"
+msgstr ""
+
+# 1a99e029851a44c8a85f69f458a23179
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_basic_plugin_requirements_met:1
+msgid "Basic plugin requirements met"
+msgstr ""
+
+# 39723e9a2c8d4b148d669e5f80d29c9d
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_basic_requirements_check:1
+msgid "Basic plugin requirements check"
+msgstr ""
+
+# 5dd61dbbb51f4309a0c5397b00499721
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_filtering_of_impact_functions:1
+msgid "Impact functions are filtered correctly"
+msgstr ""
+
+# 0108b797b25f4d628a66becd5562643a
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_format_int:1
+msgid "Test formatting integer"
+msgstr ""
+
+# 72879d3645e24692a4502656bbada3c9
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_get_documentation:1
+msgid "Test get_documentation for a function"
+msgstr ""
+
+# e492ea6d80f0470d88af1c1c1df85b7f
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_get_plugins_as_table:1
+msgid "Test get plugins as table with filtering."
+msgstr ""
+
+# a95db44caf254420b2d38c7328148df7
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_keywords_error:1
+msgid "Handling of reserved python keywords"
+msgstr ""
+
+# e53b9454072b454dbc95e68a51f25e0b
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_parse_requirement:1
+msgid "Test parse requirements of a function to dictionary."
+msgstr ""
+
+# 19864ea58c1545eca9331729307b8129
+#: ../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_pretty_string:1
+msgid "Test return pretty string from list or string."
+msgstr ""
+
+# 46751debd6bf4e4c911189a254ad1b08
+#: ../../source/api-docs/safe/impact_functions/test_plugin_core.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

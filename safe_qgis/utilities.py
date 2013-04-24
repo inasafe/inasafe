@@ -52,7 +52,7 @@ from safe_qgis.exceptions import (StyleError,
 from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 
 sys.path.append(os.path.abspath(
-        os.path.join(os.path.dirname(__file__), '..', 'third_party')))
+    os.path.join(os.path.dirname(__file__), '..', 'third_party')))
 # pylint: disable=F0401
 from raven.handlers.logging import SentryHandler
 from raven import Client
@@ -70,8 +70,8 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary.
 
     For **opaque** a value of **0** can be used. For **fully transparent**, a
-    value of **100** can be used. The function should take care to scale the
-    transparency level to between 0 and 100.
+    value of **100** can be used. The calling function should take care to
+    scale the transparency level to between 0 and 100.
 
     Args:
         * theQgisVectorLayer: QgsMapLayer
@@ -121,7 +121,8 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
         try:
             myMin = float(myClass['min'])
         except TypeError:
-            raise StyleError('Class break lower bound should be a number.'
+            raise StyleError(
+                'Class break lower bound should be a number.'
                 'I got %s' % myClass['min'])
 
         try:
@@ -275,6 +276,9 @@ def _addMinMaxToStyle(theStyle):
         myQuantity = float(myClass['quantity'])
         myClass['min'] = myLastMax
         myClass['max'] = myQuantity
+        if myQuantity == myLastMax and myQuantity != 0:
+            # skip it as it does not represent a class increment
+            continue
         myLastMax = numpy.nextafter(myQuantity, sys.float_info.max)
         myNewStyles.append(myClass)
     return myNewStyles
@@ -315,6 +319,11 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
     LOGGER.debug(theStyle)
     myRangeList = []
     myTransparencyList = []
+    # Always make 0 pixels transparent see issue #542
+    myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
+    myPixel.pixelValue = 0.0
+    myPixel.percentTransparent = 100
+    myTransparencyList.append(myPixel)
     myLastValue = 0
     for myClass in theStyle:
         LOGGER.debug('Evaluating class:\n%s\n' % myClass)
@@ -336,15 +345,14 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
             myTransparencyPercent = int(myClass['transparency'])
         if myTransparencyPercent > 0:
             # Always assign the transparency to the class' specified quantity
-            myPixel = \
-                    QgsRasterTransparency.TransparentSingleValuePixel()
+            myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
             myPixel.pixelValue = myMax
             myPixel.percentTransparent = myTransparencyPercent
             myTransparencyList.append(myPixel)
 
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
-            if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
+            if (myLastValue == int(myLastValue)) and (myMax == int(myMax)):
                 # Ensure that they are integers
                 # (e.g 2.0 must become 2, see issue #126)
                 myLastValue = int(myLastValue)
@@ -354,7 +362,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                 myRange = range(myLastValue, myMax)
                 for myValue in myRange:
                     myPixel = \
-                    QgsRasterTransparency.TransparentSingleValuePixel()
+                        QgsRasterTransparency.TransparentSingleValuePixel()
                     myPixel.pixelValue = myValue
                     myPixel.percentTransparent = myTransparencyPercent
                     myTransparencyList.append(myPixel)
@@ -371,7 +379,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
 
     # Now set the raster transparency
     theQgsRasterLayer.rasterTransparency()\
-    .setTransparentSingleValuePixelList(myTransparencyList)
+        .setTransparentSingleValuePixelList(myTransparencyList)
 
     theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
@@ -548,8 +556,9 @@ def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
             myErrorMessage = ('<b>' + theException.__class__.__name__ +
                               '</b> : ' + myWrappedMessage)
 
-        myTraceback = ('<pre id="traceback" class="prettyprint"'
-              ' style="display: none;">\n' + myTraceback + '</pre>')
+        myTraceback = (
+            '<pre id="traceback" class="prettyprint"'
+            ' style="display: none;">\n' + myTraceback + '</pre>')
 
         # Wrap string in theHtml
         s = '<table class="condensed">'
@@ -558,8 +567,9 @@ def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
                   + tr('Error:') + '</th></tr>\n'
                   '<tr><td>' + theContext + '</td></tr>\n')
         # now the string from the error itself
-        s += ('<tr><th class="problem button-cell">'
-              + tr('Problem:') + '</th></tr>\n'
+        s += (
+            '<tr><th class="problem button-cell">'
+            + tr('Problem:') + '</th></tr>\n'
             '<tr><td>' + myErrorMessage + '</td></tr>\n')
             # now the traceback heading
         s += ('<tr><th class="info button-cell" style="cursor:pointer;"'
@@ -582,8 +592,9 @@ def getWGS84resolution(theLayer):
     If not, work it out based on EPSG:4326 representations of its extent
     """
 
-    msg = tr('Input layer to getWGS84resolution must be a raster layer. '
-           'I got: %s' % str(theLayer.type())[1:-1])
+    msg = tr(
+        'Input layer to getWGS84resolution must be a raster layer. '
+        'I got: %s' % str(theLayer.type())[1:-1])
     if not theLayer.type() == QgsMapLayer.RasterLayer:
         raise RuntimeError(msg)
 
@@ -768,20 +779,6 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
 
     myQGISHandler = QgsLogHandler()
 
-    # TODO: User opt in before we enable email based logging.
-    # Email handler for errors
-    #myEmailServer = 'localhost'
-    #myEmailServerPort = 25
-    #mySenderAddress = 'logs@inasafe.org'
-    #myRecipientAddresses = ['tim@linfiniti.com']
-    #mySubject = 'Error'
-    #myEmailHandler = logging.handlers.SMTPHandler(
-    #    (myEmailServer, myEmailServerPort),
-    #                                      mySenderAddress,
-    #                                      myRecipientAddresses,
-    #                                      mySubject)
-    #myEmailHandler.setLevel(logging.ERROR)
-
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
     # logging messages will be sent to http://sentry.linfiniti.com
@@ -809,13 +806,11 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     #Set formatters
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
-    #myEmailHandler.setFormatter(myFormatter)
     myQGISHandler.setFormatter(myFormatter)
 
     # add the handlers to the logger
     addLoggingHanderOnce(myLogger, myFileHandler)
     addLoggingHanderOnce(myLogger, myConsoleHandler)
-    #addLoggingHanderOnce(myLogger, myEmailHandler)
     addLoggingHanderOnce(myLogger, myQGISHandler)
 
 
@@ -1015,8 +1010,9 @@ def setupPrinter(theFilename,
     myPrinter = QtGui.QPrinter()
     myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
     myPrinter.setOutputFileName(theFilename)
-    myPrinter.setPaperSize(QtCore.QSizeF(thePageWidth, thePageHeight),
-                            QtGui.QPrinter.Millimeter)
+    myPrinter.setPaperSize(
+        QtCore.QSizeF(thePageWidth, thePageHeight),
+        QtGui.QPrinter.Millimeter)
     myPrinter.setFullPage(True)
     myPrinter.setColorMode(QtGui.QPrinter.Color)
     myPrinter.setResolution(theResolution)
@@ -1051,7 +1047,7 @@ def humaniseSeconds(theSeconds):
     if theSeconds < 120:
         return tr('a minute')
     if theSeconds < 3600:
-        return tr('minutes' % myMinutes)
+        return tr('%s minutes' % myMinutes)
     if theSeconds < 7200:
         return tr('over an hour')
     if theSeconds < 86400:
@@ -1127,12 +1123,13 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
 
     if theInaSAFEFlag:
         myReport += '<tr><th>%s</th></tr>' % tr('Software notes')
-        myInaSAFEPhrase = tr('This report was created using InaSAFE '
-                              'version %1. Visit http://inasafe.org to get '
-                              'your free copy of this software!').arg(
-                                get_version())
-        myInaSAFEPhrase += tr('InaSAFE has been jointly developed by'
-                               ' BNPB, AusAid & the World Bank')
+        myInaSAFEPhrase = tr(
+            'This report was created using InaSAFE '
+            'version %1. Visit http://inasafe.org to get '
+            'your free copy of this software!').arg(get_version())
+        myInaSAFEPhrase += tr(
+            'InaSAFE has been jointly developed by'
+            ' BNPB, AusAid & the World Bank')
         myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
 
     myReport += '</table>'
@@ -1170,7 +1167,7 @@ def addComboItemInOrder(theCombo, theItemText, theItemData=None):
     theCombo.insertItem(mySize, theItemText, theItemData)
 
 
-def isLayerPolygonal(theLayer):
+def isPolygonLayer(theLayer):
     """Tell if a QGIS layer is vector and its geometries are polygons.
 
    Args:
@@ -1189,8 +1186,8 @@ def isLayerPolygonal(theLayer):
         return False
 
 
-def isLayerPoint(theLayer):
-    """Tell if a QGIS layer is vector and its geometries are polygons.
+def isPointLayer(theLayer):
+    """Tell if a QGIS layer is vector and its geometries are points.
 
    Args:
        the theLayer
@@ -1206,3 +1203,58 @@ def isLayerPoint(theLayer):
             theLayer.geometryType() == QGis.Point)
     except AttributeError:
         return False
+
+
+def which(name, flags=os.X_OK):
+    """Search PATH for executable files with the given name.
+
+    ..note:: This function was taken verbatim from the twisted framework,
+      licence available here:
+      http://twistedmatrix.com/trac/browser/tags/releases/twisted-8.2.0/LICENSE
+
+    On newer versions of MS-Windows, the PATHEXT environment variable will be
+    set to the list of file extensions for files considered executable. This
+    will normally include things like ".EXE". This fuction will also find files
+    with the given name ending with any of these extensions.
+
+    On MS-Windows the only flag that has any meaning is os.F_OK. Any other
+    flags will be ignored.
+
+    @type name: C{str}
+    @param name: The name for which to search.
+
+    @type flags: C{int}
+    @param flags: Arguments to L{os.access}.
+
+    @rtype: C{list}
+    @param: A list of the full paths to files found, in the
+    order in which they were found.
+    """
+    result = []
+    #pylint: disable=W0141
+    exts = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
+    #pylint: enable=W0141
+    path = os.environ.get('PATH', None)
+    # In c6c9b26 we removed this hard coding for issue #529 but I am
+    # adding it back here in case the user's path does not include the
+    # gdal binary dir on OSX but it is actually there. (TS)
+    if sys.platform == 'darwin':  # Mac OS X
+        myGdalPrefix = ('/Library/Frameworks/GDAL.framework/'
+                        'Versions/1.9/Programs/')
+        path = '%s:%s' % (path, myGdalPrefix)
+
+    LOGGER.debug('Search path: %s' % path)
+
+    if path is None:
+        return []
+
+    for p in path.split(os.pathsep):
+        p = os.path.join(p, name)
+        if os.access(p, flags):
+            result.append(p)
+        for e in exts:
+            pext = p + e
+            if os.access(pext, flags):
+                result.append(pext)
+
+    return result

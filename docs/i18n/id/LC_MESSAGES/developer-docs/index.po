@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: inasafe\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-19 11:09\n"
+"PO-Revision-Date: 2013-03-06 11:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/inasafe/language/id/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# f33dd412826c48938545b884a7287487
+#: ../../source/developer-docs/index.rst:7
+msgid "|project_name| developer documentation"
+msgstr ""
+
+# e2651d21e56f4984ad6eae89e4052415
+#: ../../source/developer-docs/index.rst:9
+msgid "Additional useful links for developers:"
+msgstr ""
+
+# 1966a9d5134f46d6b3a469d01f56af96
+#: ../../source/developer-docs/index.rst:11
+msgid "GitHub site for InaSAFE : https://github.com/AIFDR/inasafe/"
+msgstr ""
+
+# 3808d4ea4cc044e8802f40164ac6caf8
+#: ../../source/developer-docs/index.rst:12
+msgid ""
+"Continuous Integration testbed for InaSAFE : "
+"http://jenkins.linfiniti.com/job/InaSAFE/"
+msgstr ""
+
+# 34d3a9047ea84608ba4d9c4d3edf2309
+#: ../../source/developer-docs/index.rst:13
+msgid "QGIS Plugin Home Page : http://plugins.qgis.org/plugins/inasafe/"
+msgstr ""
+
+# b9628ced7f184c78ba07fe820d92d6e7
+#: ../../source/developer-docs/index.rst:14
+msgid "InaSAFE Ohloh Project Stats : https://www.ohloh.net/p/inasafe"
+msgstr ""
+
+# d123e1cefbc840799dfbc0675c8088f5
+#: ../../source/developer-docs/index.rst:16
+msgid "Developer Documentation Contents:"
+msgstr ""

@@ -23,7 +23,8 @@ GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
 
 # LOCALES = space delimited list of iso codes to generate po files for
-LOCALES = id af
+# Please dont remove en here
+LOCALES = en id af
 
 default: compile
 
@@ -34,15 +35,18 @@ compile:
 	@echo "-----------------"
 	make -C safe_qgis
 
-docs: compile
+docs: compile gen_impact_function_doc gen_rst
 	@echo
 	@echo "-------------------------------"
 	@echo "Compile documentation into html"
 	@echo "-------------------------------"
-	cd docs; make html >/dev/null; cd ..
+	scripts/post_translate.sh >/dev/null
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
+        #update sphinx docs strings
+	@scripts/pre_translate.sh $(LOCALES)
+        #update application strings
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
 
@@ -52,6 +56,7 @@ compile-translation-strings: compile
 	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@#Compile qt messages binary
 	cd safe_qgis; lrelease inasafe.pro; cd ..
+	# For sphinx docs this step is done as part of make docs target
 
 test-translations:
 	@echo
@@ -114,7 +119,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py,function_options_dialog_base.py,minimum_needs_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,import_dialog_base.py . || true
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
 test_suite: compile testdata
@@ -177,7 +182,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh 8565d4017e4f6bad38345f1b10754a9d329f4c97 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh d4dbe71f67476bbc6b45cbfe0487fcccaebe7c09 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -247,6 +252,14 @@ gen_impact_function_doc:
 	@echo "Generate impact functions' documentation"
 	@echo "-----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_impfunc_doc.py
+	@echo $(PYTHONPATH)
+
+gen_rst:
+	@echo
+	@echo "-----------------------------------"
+	@echo "Generate InaSAFE API documentation"
+	@echo "-----------------------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_rst_script.py
 	@echo $(PYTHONPATH)
 
 pylint-count:
@@ -340,7 +353,7 @@ jenkins-pep8:
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude third_party,docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,function_options_dialog_base.py,minimum_needs_base.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203 --exclude third_party,docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,import_dialog_base.py . > pep8.log || :
 
 jenkins-realtime-test:
 

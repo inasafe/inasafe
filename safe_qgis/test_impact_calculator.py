@@ -26,12 +26,11 @@ sys.path.append(pardir)
 import unittest
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.exceptions import (InsufficientParametersError,
-                           KeywordNotFoundError,
-                           StyleInfoNotFoundError)
+                                  KeywordNotFoundError,
+                                  StyleInfoNotFoundError)
 
-from safe_qgis.safe_interface import (readKeywordsFromLayer, getStyleInfo)
-
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
+from safe_qgis.safe_interface import (readKeywordsFromLayer, getStyleInfo,
+                                      HAZDATA, EXPDATA, TESTDATA)
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)
@@ -53,9 +52,8 @@ class ImpactCalculatorTest(unittest.TestCase):
 
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
         self.rasterTsunamiBBPath = os.path.join(TESTDATA, fn)
-        self.rasterExposureBBPath = os.path.join(TESTDATA,
-                                                'tsunami_building_'
-                                                 'exposure.shp')
+        self.rasterExposureBBPath = os.path.join(
+            TESTDATA, 'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
@@ -143,8 +141,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         assert(myKeyword is not ''), myMessage
         # Test we get an exception if keyword is not found
         try:
-            myKeyword = readKeywordsFromLayer(
-                            myImpactLayer, 'boguskeyword')
+            _ = readKeywordsFromLayer(myImpactLayer, 'boguskeyword')
         except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
@@ -154,10 +151,10 @@ class ImpactCalculatorTest(unittest.TestCase):
 
     def test_issue100(self):
         """Test for issue 100: unhashable type dict"""
-        exposure_path = os.path.join(TESTDATA,
-                            'OSM_building_polygons_20110905.shp')
-        hazard_path = os.path.join(HAZDATA,
-                            'Flood_Current_Depth_Jakarta_geographic.asc')
+        exposure_path = os.path.join(
+            TESTDATA, 'OSM_building_polygons_20110905.shp')
+        hazard_path = os.path.join(
+            HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc')
         # Verify relevant metada is ok
         #H = readSafeLayer(hazard_path)
         #E = readSafeLayer(exposure_path)
@@ -187,8 +184,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         myImpactLayer = myRunner.impactLayer()
 
         myMessage = ('Incorrect type returned from '
-               'myRunner.impactlayer(). Expected an impactlayer'
-               'but received a %s' % type(myImpactLayer))
+                     'myRunner.impactlayer(). Expected an impactlayer'
+                     'but received a %s' % type(myImpactLayer))
         assert hasattr(myImpactLayer, 'get_style_info'), myMessage
 
         myStyleInfo = getStyleInfo(myImpactLayer)
@@ -202,8 +199,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         except StyleInfoNotFoundError:
             pass  # This is good
         except Exception, e:
-            myMessage = ('StyleInfo request for bogus file raised incorrect' +
-                   ' exception type: \n %s') % str(e)
+            myMessage = ('StyleInfo request for bogus file raised incorrect'
+                         ' exception type: \n %s') % str(e)
             raise StyleInfoNotFoundError(myMessage)
 
 

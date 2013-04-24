@@ -143,3 +143,13 @@ class CallGDALError(Exception):
     """Raised if failed to call gdal command. Indicate by error message that is
     not empty"""
     pass
+
+
+class ImportDialogError(Exception):
+    """Raised if import process failed."""
+    pass
+
+
+class CanceledImportDialogError(Exception):
+    """Raised if import process canceled"""
+    pass

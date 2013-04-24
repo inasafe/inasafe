@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-08 09:58\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 68a647a19a9c4c80825ec4ce9b2c9e49
+#: ../../source/api-docs/safe_qgis_tests/test_impact_calculator.rst:6
+msgid "Module:  safe_qgis.test_impact_calculator"
+msgstr ""
+
+# 09b25a7e9ce647c3bb37cfb0044d497a
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Impact "
+"calculator test suite.**"
+msgstr ""
+
+# 0e77ed8092c04ce0a059f01b504ac199
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# ed5014ba3edb425f981539c204d52e45
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 166f5e3d955649c9b59c1f9487ebf084
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest:1
+msgid "Test the InaSAFE plugin stub"
+msgstr ""
+
+# 0dff748c324e45a783f99582be0edb65
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.setUp:1
+msgid "Create shared resources that all tests can use"
+msgstr ""
+
+# fd24e95501a8408e9b32e3b82308e772
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.tearDown:1
+msgid "Tear down - destroy the QGIS app"
+msgstr ""
+
+# 2c48d7afb9784924b9349b8612ed1f30
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.test_getKeywordFromImpactLayer:1
+msgid "Check that we can get keywords from a created impact layer."
+msgstr ""
+
+# f07cdbb35def49edab4274bdd91b6603
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.test_getStyleInfo:1
+msgid "Test that we can get styleInfo data from a vector's keyword file"
+msgstr ""
+
+# 306803cd32da4162bc7c2be76240c671
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.test_issue100:1
+msgid "Test for issue 100: unhashable type dict"
+msgstr ""
+
+# 5035a60c87d14b588bf4c141f8d31fe9
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.test_properties:1
+msgid "Test if the properties work as expected."
+msgstr ""
+
+# 1067ab1d169b4b7694a31290ee907b28
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.test_run:1
+msgid "Test that run works as expected in non threading mode"
+msgstr ""
+
+# 36718c4eea104a429e204822913b7495
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.test_startWithNoParameters:1
+msgid "Test that run raises an error properly when no parameters defined."
+msgstr ""
+
+# 351d31c9fdcb4c7294ccda3a7d3322f8
+#: ../../../safe_qgis/test_impact_calculator.py:docstring of
+#: safe_qgis.test_impact_calculator.ImpactCalculatorTest.test_thread:1
+msgid "Test that starting it in a thread works as expected."
+msgstr ""
+
+# 1d1bd6684925410e9970e36b8983ac8d
+#: ../../source/api-docs/safe_qgis_tests/test_impact_calculator.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

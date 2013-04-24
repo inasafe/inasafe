@@ -26,7 +26,7 @@ from PyQt4.QtGui import QLineEdit
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from safe.impact_functions import get_plugins
+from safe_interface import get_plugins
 from third_party.odict import OrderedDict
 
 from safe_qgis.function_options_dialog import FunctionOptionsDialog

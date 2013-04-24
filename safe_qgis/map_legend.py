@@ -30,7 +30,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class MapLegend():
     """A class for creating a map legend."""
-    def __init__(self, theLayer, theDpi=300):
+    def __init__(self, theLayer, theDpi=300, theLegendTitle=None,
+                 theLegendNotes=None, theLegendUnits=None):
         """Constructor for the Map Legend class.
 
         Args:
@@ -52,6 +53,13 @@ class MapLegend():
         self.legendFontSize = 8
         self.legendWidth = 900
         self.dpi = theDpi
+        if theLegendTitle is None:
+            self.legendTitle = self.tr('Legend')
+        else:
+            self.legendTitle = theLegendTitle
+        print 'AFUFUFU', self.legendTitle
+        self.legendNotes = theLegendNotes
+        self.legendUnits = theLegendUnits
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -146,6 +154,7 @@ class MapLegend():
                                 'single symbol, categorised symbol or '
                                 'graduated symbol and then try again.')
             raise LegendLayerError(myMessage)
+        self.addLegendNotes()
         return self.legendImage
 
     def getRasterLegend(self):
@@ -183,6 +192,7 @@ class MapLegend():
             #In master branch, use QgsRasterRenderer::rasterRenderer() to
             # get/set how a raster is displayed.
             pass
+        self.addLegendNotes()
         return self.legendImage
 
     def addSymbolToLegend(self,
@@ -226,7 +236,7 @@ class MapLegend():
                          theMin=None,
                          theMax=None,
                          theCategory=None,
-                         theLabel=None):
+                         theLabel=''):
         """Add a class to the current legend. If the legend is not defined,
         a new one will be created. A legend is just an image file with nicely
         rendered classes in it.
@@ -273,14 +283,54 @@ class MapLegend():
         myExtraVerticalSpace = 8  # hack to get label centered on graphic
         myOffset += myCenterVerticalPadding + myExtraVerticalSpace
         myPainter.setFont(myFont)
-        myLabel = ''
-        if theLabel:
-            myLabel = theLabel
-        if theMin is not None and theMax is not None:
-            myLabel += ' [' + str(theMin) + ', ' + str(theMax) + ']'
+        LOGGER.debug('theLabel' + str(theLabel))
+        LOGGER.debug('theMin ' + str(theMin))
+        LOGGER.debug('theMax ' + str(theMax))
+        if theMin is not None and theMax is not None and theLabel == '':
+            if float(theMin) - int(theMin) == 0.0:
+                myMinString = '%i' % theMin
+            else:
+                myMinString = str(theMin)
+
+            if float(theMax) - int(theMax) == 0.0:
+                myMaxString = '%i' % theMax
+            else:
+                myMaxString = str(theMax)
+            theLabel += '[' + myMinString + ', ' + myMaxString + ']'
+        LOGGER.debug('Alpha ' + str(theMin) + str(theMax))
+        LOGGER.debug('Alpha ' + str(theMin == theMax))
+        if theMin is None or theMax is None:
+            LOGGER.debug('Yehaaa')
+            return
+        if float(str(theMin)) == float(str(theMax)):
+            LOGGER.debug('Yehaaa')
+            return
         if theCategory is not None:
-            myLabel = ' (' + theCategory + ')'
-        myPainter.drawText(myLabelX, myOffset + 25, myLabel)
+            theLabel = ' (' + theCategory + ')'
+        myPainter.drawText(myLabelX, myOffset + 25, theLabel)
+
+    def addLegendNotes(self):
+        """Add legend notes to the legend
+        """
+        LOGGER.debug('InaSAFE Map Legend addLegendNotes called')
+        print 'InaSAFE Map Legend addLegendNotes called'
+        if self.legendNotes is not None:
+            self.extendLegend()
+            myOffset = self.legendImage.height() - 15
+            print myOffset
+            myPainter = QtGui.QPainter(self.legendImage)
+            myFontWeight = QtGui.QFont.StyleNormal
+            myItalicsFlag = True
+            legendNotesFontSize = self.legendFontSize / 2
+            myFont = QtGui.QFont(
+                'verdana',
+                legendNotesFontSize,
+                myFontWeight,
+                myItalicsFlag)
+            myPainter.setFont(myFont)
+            myPainter.drawText(10, myOffset, self.legendNotes)
+        else:
+            LOGGER.debug('No notes')
 
     def extendLegend(self):
         """Grow the legend pixmap enough to accommodate one more legend entry.
@@ -295,7 +345,7 @@ class MapLegend():
         LOGGER.debug('InaSAFE Map Legend extendLegend called')
         if self.legendImage is None:
 
-            self.legendImage = QtGui.QImage(self.legendWidth, 80,
+            self.legendImage = QtGui.QImage(self.legendWidth, 95,
                                             QtGui.QImage.Format_RGB32)
             self.legendImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             self.legendImage.setDotsPerMeterY(dpiToMeters(self.dpi))
@@ -312,13 +362,26 @@ class MapLegend():
                                  myFontWeight,
                                  myItalicsFlag)
             myPainter.setFont(myFont)
-            myPainter.drawText(10, 25, self.tr('Legend'))
+            myPainter.drawText(10, 25, self.legendTitle)
+
+            if self.legendUnits is not None:
+                myFontWeight = QtGui.QFont.StyleNormal
+                myItalicsFlag = True
+                legendUnitsFontSize = self.legendFontSize / 2
+                myFont = QtGui.QFont(
+                    'verdana',
+                    legendUnitsFontSize,
+                    myFontWeight,
+                    myItalicsFlag)
+                myPainter.setFont(myFont)
+                myPainter.drawText(10, 45, self.legendUnits)
+
         else:
             # extend the existing legend down for the next class
-            myImage = QtGui.QImage(self.legendWidth,
-                                     self.legendImage.height() +
-                                          self.legendIncrement,
-                                     QtGui.QImage.Format_RGB32)
+            myImage = QtGui.QImage(
+                self.legendWidth,
+                self.legendImage.height() + self.legendIncrement,
+                QtGui.QImage.Format_RGB32)
             myImage.setDotsPerMeterX(dpiToMeters(self.dpi))
             myImage.setDotsPerMeterY(dpiToMeters(self.dpi))
             # Only works in Qt4.8

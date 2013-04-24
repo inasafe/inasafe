@@ -1,0 +1,210 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, QGIS project
+# This file is distributed under the same license as the QGIS Documentation Project package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: QGIS Documentation Project 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-07 10:27\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 2bb34cde17364905bae9277ebb301c2b
+#: ../../source/api-docs/safe/storage/core.rst:6
+msgid "Module:  safe.storage.core"
+msgstr ""
+
+# 1928019445ad4f68b6d66b6eb143cec7
+#: ../../../safe/storage/core.py:docstring of safe.storage.core:1
+msgid "IO module for reading and writing of files"
+msgstr ""
+
+# 9f3468089952473488d1a8a5e6bc68db
+#: ../../../safe/storage/core.py:docstring of safe.storage.core:3
+msgid ""
+"This module provides functionality to read and write raster and vector "
+"layers from numerical data."
+msgstr ""
+
+# c06cc962e2a6404795e8d2061dd82339
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.bboxlist2string:1
+msgid "Convert bounding box list to comma separated string"
+msgstr ""
+
+# d362f69be22442ba9db05f2b485347cf
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.bboxlist2string:4
+msgid "bbox: List of coordinates of the form [W, S, E, N]"
+msgstr ""
+
+# f6fad76423b44a0e8c51b703140fff88
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.bboxlist2string:7
+msgid "bbox_string: Format 'W,S,E,N' - each will have 6 decimal points"
+msgstr ""
+
+# 7ec71ee044c849dea56ce7a90d92cab9
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.bboxstring2list:1
+msgid "Convert bounding box string to list"
+msgstr ""
+
+# eeca5ec31dc84ca7ac967496d878e7ec
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.bboxstring2list:4
+msgid "bbox_string: String of bounding box coordinates of the form 'W,S,E,N'"
+msgstr ""
+
+# bf1c9f845b574d97adde61fe88548879
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.bboxstring2list:7
+msgid "bbox: List of floating point numbers with format [W, S, E, N]"
+msgstr ""
+
+# 7a37f856b0ce4eeeb1b58fc976a1b312
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.check_bbox_string:1
+msgid "Check that bbox string is valid"
+msgstr ""
+
+# c892f652ac5a4205bae857b8b775f68d
+# 310aeaeec3ff48828adb64df4208d7d6
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.get_bounding_box:1
+#: safe.storage.core.get_bounding_box_string:1
+msgid "Get bounding box for specified raster or vector file"
+msgstr ""
+
+# 8ec9d5f2aa11479bb86ac459f983c5a2
+# 299dad0acef046bda31369668ee40ce9
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.get_bounding_box:4
+#: safe.storage.core.get_bounding_box_string:4
+msgid "filename"
+msgstr ""
+
+# fc1d50fec3ad4afea692e0f9ef5a61ab
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.get_bounding_box:7
+msgid "bounding box as python list of numbers [West, South, East, North]"
+msgstr ""
+
+# 71442d4c50b3413aa9650e9ea73fa11c
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.get_bounding_box_string:7
+msgid "bounding box as python string 'West, South, East, North'"
+msgstr ""
+
+# 619d3335fea7426ca4f0e97e71c79b2b
+#: ../../../safe/storage/core.py:docstring of safe.storage.core.read_layer:1
+msgid "Read spatial layer from file. This can be either raster or vector data."
+msgstr ""
+
+# 714d5043b6b64351ad38e674559d6f02
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_raster_data:1
+msgid "Write array to raster file with specified metadata and one data layer"
+msgstr ""
+
+# 703f587196c446d1af5a7c08da8ada4e
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_raster_data:4
+msgid "data: Numpy array containing grid data"
+msgstr ""
+
+# 408791fffbda450b990d971b930b1911
+# 7da6b88615204ae2981905cda5f5f1d9
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_raster_data:5 safe.storage.core.write_vector_data:7
+msgid "projection: WKT projection information"
+msgstr ""
+
+# 22581e3c451e43b089911ee995bcfbfa
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_raster_data:8
+msgid ""
+"top left y, rotation, n-s pixel resolution). See e.g. http://www.gdal.org/"
+"gdal_tutorial.html"
+msgstr ""
+
+# ea9ec702b72140ff8148ce9a2427cdb1
+# 569754c83dc448dca7455428c13a7566
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_raster_data:10
+#: safe.storage.core.write_vector_data:9
+msgid "filename: Output filename"
+msgstr ""
+
+# 158bb13b3876476c902ba32c365b9e88
+# 3d76b2fe49e24b809e6e3ccb6408d6e5
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_raster_data:11
+#: safe.storage.core.write_vector_data:10
+msgid "keywords: Optional dictionary"
+msgstr ""
+
+# 2c48b3ec54ae4ca99fc5bb2a9f12bcef
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_raster_data:14
+msgid "The only format implemented is GTiff and the extension must be .tif"
+msgstr ""
+
+# a97615a16ea749ee828df1aa8c1cd523
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_vector_data:1
+msgid "Write point data and any associated attributes to vector file"
+msgstr ""
+
+# 0ae7b397fb3b4d1bbf2004d4a550b441
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_vector_data:5
+msgid "M is the number of attributes. A value of None is acceptable."
+msgstr ""
+
+# ac429fbf28d74c6990e050dd2e3cd781
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_vector_data:8
+msgid "geometry: List of points or polygons."
+msgstr ""
+
+# a95392cc5bdd442ca0c5f3ae09f46a25
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_vector_data:13
+msgid ""
+"The only format implemented is GML and SHP so the extension must be either ."
+"gml or .shp"
+msgstr ""
+
+# 79caeafe38ac42e9bb964ca980bcef8a
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_vector_data:16
+msgid ""
+"# FIXME (Ole): When the GML driver is used, #              the spatial "
+"reference is not stored. #              I suspect this is a bug in OGR."
+msgstr ""
+
+# 6ee5080f0fcb4ad99299d60515eeb3d9
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_vector_data:21
+msgid "http://www.gdal.org/ogr/ogr_apitut.html (last example)"
+msgstr ""
+
+# 5e7143df9cc64c7e908be54d29cac8ea
+#: ../../../safe/storage/core.py:docstring of
+#: safe.storage.core.write_vector_data:22
+msgid "http://invisibleroads.com/tutorials/gdal-shapefile-points-save.html"
+msgstr ""
+
+# 8a549e841da14ea7b2ac6e42e5cca2ce
+#: ../../source/api-docs/safe/storage/core.rst:11
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""

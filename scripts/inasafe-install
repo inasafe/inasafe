@@ -25,14 +25,19 @@ sudo apt-get install -q -y qgis python-qgis
 
 echo "Installing Ubuntu packages for development"
 sudo apt-get install -y git rsync pep8 python-nose python-coverage python-numpy\
-     pyqt4-dev-tools python-pip libqt4-dev pyflakes python-nosexcover python-scientific python-pytz python-beautifulsoup fabric
+     pyqt4-dev-tools python-pip libqt4-dev pyflakes python-nosexcover python-scientific\
+     python-pytz python-beautifulsoup fabric
 echo "Installing sphinx from pip because at least 1.1 is needed for i18n support"
 echo "Installing specific pylint version (0.25) for cross host comparison"
 sudo pip install sphinx pylint==0.25.2
+echo "Installing transifex web translation client"
+sudo pip install transifex-client python-transifex
 # For code metrics / line counts
 sudo apt-get install sloccount
 # For gettext translation, translation statistics
 sudo apt-get install gettext
+# For tex2pdf command
+sudo apt-get install texinfo
 
 # Setup environment variable.
 if grep -q InaSAFEQGIS ~/.bash_aliases
@@ -79,7 +84,7 @@ echo "Downloading InaSAFE"
 checkup ${InaSAFEREPO} ${InaSAFEDIR} master
 
 echo "Create symlink $InaSAFEQGIS from QGis plugin area"
-sudo chown $USER ~/.qgis
+chown $USER ~/.qgis
 mkdir ~/.qgis/python
 mkdir ~/.qgis/python/plugins
 pushd ~/.qgis/python/plugins
