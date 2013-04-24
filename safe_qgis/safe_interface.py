@@ -55,11 +55,14 @@ from safe.api import (get_admissible_plugins,
                       format_int,
                       get_unique_values,
                       get_plugins_as_table,
-                      HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA,
                       Vector,
                       nanallclose,
                       DEFAULTS)
-
+try:
+    from safe.api import (
+        HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
+except ImportError:
+    pass
 # pylint: enable=W0611
 
 # InaSAFE GUI specific functionality
