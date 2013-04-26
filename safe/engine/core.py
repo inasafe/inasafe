@@ -41,8 +41,9 @@ def calculate_impact(layers, impact_fcn):
         2. Layers are equipped with metadata such as names and categories
     """
 
-    LOGGER.debug('calculate_impact called with:\nLayers: %s\nFunction:%s' %
-                  (layers, impact_fcn))
+    LOGGER.debug(
+        'calculate_impact called with:\nLayers: %s\nFunction:%s' % (
+            layers, impact_fcn))
     # Input checks
     check_data_integrity(layers)
 

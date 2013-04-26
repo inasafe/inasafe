@@ -58,6 +58,7 @@ from safe.api import (get_admissible_plugins,
                       Vector,
                       nanallclose,
                       DEFAULTS)
+# hack for excluding test-related import in builded package
 try:
     from safe.api import (
         HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)
