@@ -163,8 +163,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 key = name * 1000  # Convert to meters
             else:
                 key = name
-
-            pop = int(categories[key])
+            # prevent key error
+            pop = int(categories.get(key, 0))
 
             if pop > 1000:
                 pop = pop // 1000 * 1000
