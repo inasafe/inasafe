@@ -129,25 +129,34 @@ class MapLegend():
         self.legendImage = None
         myRenderer = self.layer.rendererV2()
         myType = myRenderer.type()
+        LOGGER.debug('myType' + str(myType))
         if myType == "singleSymbol":
+            LOGGER.debug('singleSymbol')
             mySymbol = myRenderer.symbol()
             self.addSymbolToLegend(theLabel=self.layer.name(),
-                                   theSymbol=mySymbol)
+                                   theSymbol=mySymbol,
+                                   theType=myType)
         elif myType == "categorizedSymbol":
+            LOGGER.debug('categorizedSymbol')
             for myCategory in myRenderer.categories():
                 mySymbol = myCategory.symbol()
+                LOGGER.debug('theCategory' + myCategory.value().toString())
                 self.addSymbolToLegend(
                     theCategory=myCategory.value().toString(),
                     theLabel=myCategory.label(),
-                    theSymbol=mySymbol)
+                    theSymbol=mySymbol,
+                    theType=myType)
         elif myType == "graduatedSymbol":
+            LOGGER.debug('graduatedSymbol')
             for myRange in myRenderer.ranges():
                 mySymbol = myRange.symbol()
                 self.addSymbolToLegend(theMin=myRange.lowerValue(),
                                        theMax=myRange.upperValue(),
                                        theLabel=myRange.label(),
-                                       theSymbol=mySymbol)
+                                       theSymbol=mySymbol,
+                                       theType=myType)
         else:
+            LOGGER.debug('else')
             #type unknown
             myMessage = self.tr('Unrecognised renderer type found for the '
                                 'impact layer. Please use one of these: '
@@ -200,7 +209,8 @@ class MapLegend():
                           theMin=None,
                           theMax=None,
                           theCategory=None,
-                          theLabel=None):
+                          theLabel=None,
+                          theType=None):
         """Add a class to the current legend. If the legend is not defined,
         a new one will be created. A legend is just an image file with nicely
         rendered classes in it.
@@ -229,14 +239,16 @@ class MapLegend():
                               theMin=theMin,
                               theMax=theMax,
                               theCategory=theCategory,
-                              theLabel=theLabel)
+                              theLabel=theLabel,
+                              theType=theType)
 
     def addClassToLegend(self,
                          theColour,
                          theMin=None,
                          theMax=None,
                          theCategory=None,
-                         theLabel=''):
+                         theLabel='',
+                         theType=None):
         """Add a class to the current legend. If the legend is not defined,
         a new one will be created. A legend is just an image file with nicely
         rendered classes in it.
@@ -286,27 +298,38 @@ class MapLegend():
         LOGGER.debug('theLabel' + str(theLabel))
         LOGGER.debug('theMin ' + str(theMin))
         LOGGER.debug('theMax ' + str(theMax))
-        if theMin is not None and theMax is not None and theLabel == '':
-            if float(theMin) - int(theMin) == 0.0:
-                myMinString = '%i' % theMin
-            else:
-                myMinString = str(theMin)
 
-            if float(theMax) - int(theMax) == 0.0:
-                myMaxString = '%i' % theMax
-            else:
-                myMaxString = str(theMax)
-            theLabel += '[' + myMinString + ', ' + myMaxString + ']'
-        LOGGER.debug('Alpha ' + str(theMin) + str(theMax))
-        LOGGER.debug('Alpha ' + str(theMin == theMax))
-        if theMin is None or theMax is None:
-            LOGGER.debug('Yehaaa')
+        # branches for each style type
+        if theType == 'singleSymbol':
+            pass
+        elif theType == 'categorizedSymbol':
+            if theCategory is not None:
+                theLabel = theCategory + ' [' + theLabel + ']'
+
+        elif theType == 'graduatedSymbol':
+            # can be a problem if the min and theMax is not found
+            if theMin is None or theMax is None:
+                LOGGER.debug('Problem caused theMin or theMax is not found')
+                return
+
+            # if we have theMin or theMax but theLabel is '',
+            # put the min and the max as label
+            if theMin is not None and theMax is not None and theLabel == '':
+                if float(theMin) - int(theMin) == 0.0:
+                    myMinString = '%i' % theMin
+                else:
+                    myMinString = str(theMin)
+                if float(theMax) - int(theMax) == 0.0:
+                    myMaxString = '%i' % theMax
+                else:
+                    myMaxString = str(theMax)
+                theLabel += '[' + myMinString + ', ' + myMaxString + ']'
+            if float(str(theMin)) == float(str(theMax)):
+                # pass because it's not needed
+                return
+        else:
             return
-        if float(str(theMin)) == float(str(theMax)):
-            LOGGER.debug('Yehaaa')
-            return
-        if theCategory is not None:
-            theLabel = ' (' + theCategory + ')'
+
         myPainter.drawText(myLabelX, myOffset + 25, theLabel)
 
     def addLegendNotes(self):

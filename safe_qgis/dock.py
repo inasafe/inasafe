@@ -54,7 +54,7 @@ from safe_qgis.utilities import (
     getWGS84resolution,
     isPolygonLayer,
     getLayerAttributeNames,
-    setVectorStyle,
+    setVectorGraduatedStyle,
     htmlHeader,
     htmlFooter,
     setRasterStyle,
@@ -62,7 +62,8 @@ from safe_qgis.utilities import (
     getDefaults,
     impactLayerAttribution,
     copyInMemory,
-    addComboItemInOrder)
+    addComboItemInOrder,
+    setVectorCategorizedStyle)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
@@ -1879,7 +1880,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 myStyle = {'target_field': myAttr,
                            'style_classes': myClasses}
-                setVectorStyle(self.postProcessingLayer, myStyle)
+                setVectorGraduatedStyle(self.postProcessingLayer, myStyle)
             else:
                 #make style of layer pretty much invisible
                 myProps = {'style': 'no',
@@ -2436,14 +2437,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
+        myStyleType = myEngineImpactLayer.get_style_type()
 
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
             if not myStyle:
                 # Set default style if possible
                 pass
+            elif myStyleType == 'categorizedSymbol':
+                LOGGER.debug('use categorized')
+                setVectorCategorizedStyle(myQGISImpactLayer, myStyle)
+            elif myStyleType == 'graduatedSymbol':
+                LOGGER.debug('use graduated')
+                setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
             else:
-                setVectorStyle(myQGISImpactLayer, myStyle)
+                LOGGER.debug('use else')
+                setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
         elif myEngineImpactLayer.is_raster:
             if not myStyle:
                 myQGISImpactLayer.setDrawingStyle(

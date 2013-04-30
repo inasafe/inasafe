@@ -12,7 +12,7 @@ sys.path.append(pardir)
 
 from safe_qgis.utilities import (
     getExceptionWithStacktrace,
-    setVectorStyle,
+    setVectorGraduatedStyle,
     setRasterStyle,
     qgisVersion,
     mmToPoints,
@@ -189,7 +189,7 @@ class UtilitiesTest(unittest.TestCase):
              'min': 351, 'label': 'High', 'size': 3}]}
         myMessage = 'Setting style with point sizes should work.'
         try:
-            setVectorStyle(myLayer, myStyleInfo)
+            setVectorGraduatedStyle(myLayer, myStyleInfo)
         except:
             raise Exception(myMessage)
         # Now validate the size values were set as expected
@@ -279,7 +279,7 @@ class UtilitiesTest(unittest.TestCase):
                      'size': 1,
                      'label': u'High'}]}
         try:
-            setVectorStyle(myVectorLayer, myStyle)
+            setVectorGraduatedStyle(myVectorLayer, myStyle)
         except StyleError:
             # Exactly what should have happened
             return

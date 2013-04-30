@@ -149,8 +149,9 @@ class ImpactCalculatorThread(threading.Thread, QObject):
            InsufficientParametersError
            set.
         """
-        if (self._hazardLayer is None or self._exposureLayer is None
-            or self._function is None):
+        if (self._hazardLayer is None) or \
+                (self._exposureLayer is None) or \
+                (self._function is None):
             myMessage = self.tr('Ensure that hazard, exposure and function '
                                 'are all set before trying to run the '
                                 'analysis.')
@@ -158,14 +159,15 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculateSafeImpact(theLayers=myLayers,
-                                        theFunction=self._function)
+                                                    theFunction=self._function)
         except MemoryError, e:
-            myMessage = self.tr('An error occurred because it appears that '
-                    'your system does not have sufficient memory. Upgrading '
-                    'your computer so that it has more memory may help. '
-                    'Alternatively, consider using a smaller geographical '
-                    'area for your analysis, or using rasters with a larger '
-                    'cell size.')
+            myMessage = self.tr(
+                'An error occurred because it appears that '
+                'your system does not have sufficient memory. Upgrading '
+                'your computer so that it has more memory may help. '
+                'Alternatively, consider using a smaller geographical '
+                'area for your analysis, or using rasters with a larger '
+                'cell size.')
             self._exception = e
             self._traceback = traceback.format_tb(sys.exc_info()[2])
             self._result = myMessage
