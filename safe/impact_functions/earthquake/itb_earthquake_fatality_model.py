@@ -346,7 +346,6 @@ class ITBFatalityFunction(FunctionProvider):
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = tr('Earthquake impact to population')
 
         # Create style info dynamically
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
@@ -377,14 +376,16 @@ class ITBFatalityFunction(FunctionProvider):
                 transparency = 100
             colour = colours.pop(0)
 
+            my_quantity = classes[i]
+            # hack for nan
             if classes[i] != classes[i]:
                 # nan represented as 999999, since need to be con
-                classes[i] = 999999
+                my_quantity = 999999
 
             style_classes.append(
                 dict(
                     colour=colour,
-                    quantity=int(round(classes[i])),
+                    quantity=int(round(my_quantity)),
                     transparency=transparency,
                     # people/cell will be added
                     label=tr(' - '.join(my_class))
@@ -395,6 +396,7 @@ class ITBFatalityFunction(FunctionProvider):
         style_info = dict(target_field=None, style_classes=style_classes)
 
         # For printing map purpose
+        map_title = tr('Earthquake impact to population')
         legend_notes = tr('Thousand separator is represented by \'.\'')
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')

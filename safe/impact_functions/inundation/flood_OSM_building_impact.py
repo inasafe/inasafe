@@ -324,15 +324,21 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = tr('Buildings inundated')
 
         # Create style
-        style_classes = [dict(label=tr('Not Flooded'), min=0, max=0,
+        style_classes = [dict(label=tr('Not Inundated'), min=0, max=0,
                               colour='#1EFC7C', transparency=0, size=1),
-                         dict(label=tr('Flooded'), min=1, max=1,
+                         dict(label=tr('Inundated'), min=1, max=1,
                               colour='#F31A1C', transparency=0, size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
+        style_info['style_type'] = 'categorizedSymbol'
+
+        # For printing map purpose
+        map_title = tr('Buildings inundated')
+        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_units = tr('(inundated or not inundated)')
+        legend_title = tr('Structure inundated status')
 
         # Create vector layer and return
         V = Vector(data=attributes,
@@ -341,7 +347,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    name=tr('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
+                             'target_field': self.target_field,
                              'map_title': map_title,
-                             'target_field': self.target_field},
+                             'legend_notes': legend_notes,
+                             'legend_units': legend_units,
+                             'legend_title': legend_title},
                    style_info=style_info)
         return V
