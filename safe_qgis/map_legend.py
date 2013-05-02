@@ -194,7 +194,8 @@ class MapLegend():
                 self.addClassToLegend(myColor,
                                       theMin=myLastValue,
                                       theMax=myValue,
-                                      theLabel=myLabel)
+                                      theLabel=myLabel,
+                                      theType='rasterStyle')
                 myLastValue = myValue
         else:
             #TODO implement QGIS2.0 variant
@@ -306,7 +307,7 @@ class MapLegend():
             if theCategory is not None:
                 theLabel = theCategory + ' [' + theLabel + ']'
 
-        elif theType == 'graduatedSymbol':
+        elif theType == 'graduatedSymbol' or theType == 'rasterStyle':
             # can be a problem if the min and theMax is not found
             if theMin is None or theMax is None:
                 LOGGER.debug('Problem caused theMin or theMax is not found')
@@ -327,6 +328,7 @@ class MapLegend():
             if float(str(theMin)) == float(str(theMax)):
                 # pass because it's not needed
                 return
+
         else:
             return
 

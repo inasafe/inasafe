@@ -2438,9 +2438,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
         myStyleType = myEngineImpactLayer.get_style_type()
-
+        LOGGER.debug('Zanetti : myStyle:' + str(myStyle))
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
+            LOGGER.debug('myEngineImpactLayer.is_vector')
             if not myStyle:
                 # Set default style if possible
                 pass
@@ -2454,6 +2455,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 LOGGER.debug('use else')
                 setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
         elif myEngineImpactLayer.is_raster:
+            LOGGER.debug('myEngineImpactLayer.is_raster')
             if not myStyle:
                 myQGISImpactLayer.setDrawingStyle(
                     QgsRasterLayer.SingleBandPseudoColor)
