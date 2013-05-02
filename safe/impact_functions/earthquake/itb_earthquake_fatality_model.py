@@ -90,48 +90,49 @@ class ITBFatalityFunction(FunctionProvider):
     """
 
     title = tr('Die or be displaced')
-    synopsis = tr('To asses the impact of earthquake on population based on '
-                  'earthquake model developed by ITB')
-    citations = \
-        tr(' * Indonesian Earthquake Building-Damage and Fatality Models and '
-           '   Post Disaster Survey Guidelines Development Bali, 27-28 '
-           '   February 2012, 54pp.\n'
-           ' * Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., '
-           '   Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas '
-           '   of ShakeMaps and population exposure catalog for '
-           '   earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.\n'
-           ' * Jaiswal, K., and Wald, D., 2010. An empirical model for '
-           '   global earthquake fatality estimation, Earthq. Spectra '
-           '   26, 1017-1037.\n')
-    limitation = \
-        tr(' - The model is based on limited number of observed fatality '
-           '   rates during 4 past fatal events. \n'
-           ' - The model clearly over-predicts the fatality rates at '
-           '   intensities higher than VIII.\n'
-           ' - The model only estimates the expected fatality rate '
-           '   for a given intensity level; however the associated '
-           '   uncertainty for the proposed model is not addressed.\n'
-           ' - There are few known mistakes in developing the current '
-           '   model:\n\n'
-           '   * rounding MMI values to the nearest 0.5,\n'
-           '   * Implementing Finite-Fault models of candidate events, and\n'
-           '   * consistency between selected GMPEs with those in use by '
-           '     BMKG.\n')
-    actions = tr('Provide details about the population will be die or '
-                 'displaced')
-    detailed_description = \
-        tr('This model was developed by Institut Tecknologi Bandung (ITB) '
-           'and implemented by Dr Hadi Ghasemi, Geoscience Australia\n'
-           'Algorithm:\n'
-           'In this study, the same functional form as Allen (2009) is '
-           'adopted o express fatality rate as a function of intensity '
-           '(see Eq. 10 in the report). The Matlab built-in function '
-           '(fminsearch) for  Nelder-Mead algorithm was used to estimate '
-           'the model parameters. The objective function (L2G norm) that '
-           'is minimized during the optimisation is the same as the one '
-           'used by Jaiswal et al. (2010).\n'
-           'The coefficients used in the indonesian model are x=0.62275231, '
-           'y=8.03314466, zeta=2.15')
+    synopsis = tr(
+        'To asses the impact of earthquake on population based on earthquake '
+        'model developed by ITB')
+    citations = tr(
+        ' * Indonesian Earthquake Building-Damage and Fatality Models and '
+        '   Post Disaster Survey Guidelines Development Bali, 27-28 '
+        '   February 2012, 54pp.\n'
+        ' * Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., '
+        '   Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas '
+        '   of ShakeMaps and population exposure catalog for '
+        '   earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.\n'
+        ' * Jaiswal, K., and Wald, D., 2010. An empirical model for '
+        '   global earthquake fatality estimation, Earthq. Spectra '
+        '   26, 1017-1037.\n')
+    limitation = tr(
+        ' - The model is based on limited number of observed fatality '
+        '   rates during 4 past fatal events. \n'
+        ' - The model clearly over-predicts the fatality rates at '
+        '   intensities higher than VIII.\n'
+        ' - The model only estimates the expected fatality rate '
+        '   for a given intensity level; however the associated '
+        '   uncertainty for the proposed model is not addressed.\n'
+        ' - There are few known mistakes in developing the current '
+        '   model:\n\n'
+        '   * rounding MMI values to the nearest 0.5,\n'
+        '   * Implementing Finite-Fault models of candidate events, and\n'
+        '   * consistency between selected GMPEs with those in use by '
+        '     BMKG.\n')
+    actions = tr(
+        'Provide details about the population will be die or displaced')
+    detailed_description = tr(
+        'This model was developed by Institut Tecknologi Bandung (ITB) '
+        'and implemented by Dr Hadi Ghasemi, Geoscience Australia\n'
+        'Algorithm:\n'
+        'In this study, the same functional form as Allen (2009) is '
+        'adopted o express fatality rate as a function of intensity '
+        '(see Eq. 10 in the report). The Matlab built-in function '
+        '(fminsearch) for  Nelder-Mead algorithm was used to estimate '
+        'the model parameters. The objective function (L2G norm) that '
+        'is minimized during the optimisation is the same as the one '
+        'used by Jaiswal et al. (2010).\n'
+        'The coefficients used in the indonesian model are x=0.62275231, '
+        'y=8.03314466, zeta=2.15')
     defaults = get_defaults()
     parameters = OrderedDict([
         ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
@@ -344,10 +345,11 @@ class ITBFatalityFunction(FunctionProvider):
                              'Institute of Teknologi Bandung 2012.'))
         table_body.append(tr('Population numbers rounded to nearest 1000.'))
 
+        # Result
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
 
-        # Create style info dynamically
+        # Create style
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
                                  numpy.nanmax(R.flat[:]), 5)
 
@@ -379,7 +381,7 @@ class ITBFatalityFunction(FunctionProvider):
             my_quantity = classes[i]
             # hack for nan
             if classes[i] != classes[i]:
-                # nan represented as 999999, since need to be con
+                # nan represented as 999999, since need to be rounded
                 my_quantity = 999999
 
             style_classes.append(
