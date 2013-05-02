@@ -73,6 +73,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restoreState()
+        # hack prevent showing use thread visible and set it false see #557
+        self.cbxUseThread.setChecked(True)
+        self.cbxUseThread.setVisible(False)
 
     def restoreState(self):
         """
@@ -83,28 +86,30 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         Raises:
         """
         mySettings = QtCore.QSettings()
-        myFlag = mySettings.value(
-                            'inasafe/useThreadingFlag', False).toBool()
+        # myFlag = mySettings.value(
+        #     'inasafe/useThreadingFlag', False).toBool()
+        # hack set use thread to false see #557
+        myFlag = False
         self.cbxUseThread.setChecked(myFlag)
 
         myFlag = mySettings.value(
-                            'inasafe/visibleLayersOnlyFlag', True).toBool()
+            'inasafe/visibleLayersOnlyFlag', True).toBool()
         self.cbxVisibleLayersOnly.setChecked(myFlag)
 
         myFlag = mySettings.value(
-                            'inasafe/setLayerNameFromTitleFlag', True).toBool()
+            'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.cbxSetLayerNameFromTitle.setChecked(myFlag)
 
         myFlag = mySettings.value(
-                            'inasafe/setZoomToImpactFlag', True).toBool()
+            'inasafe/setZoomToImpactFlag', True).toBool()
         self.cbxZoomToImpact.setChecked(myFlag)
         # whether exposure layer should be hidden after model completes
         myFlag = mySettings.value(
-                            'inasafe/setHideExposureFlag', False).toBool()
+            'inasafe/setHideExposureFlag', False).toBool()
         self.cbxHideExposure.setChecked(myFlag)
 
         myFlag = mySettings.value(
-                            'inasafe/clipToViewport', True).toBool()
+            'inasafe/clipToViewport', True).toBool()
         self.cbxClipToViewport.setChecked(myFlag)
 
         myFlag = mySettings.value(
@@ -116,7 +121,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxUseSentry.setChecked(myFlag)
 
         myFlag = mySettings.value(
-                            'inasafe/showPostProcLayers', False).toBool()
+            'inasafe/showPostProcLayers', False).toBool()
         self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
         myRatio = mySettings.value(
@@ -125,8 +130,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.dsbFemaleRatioDefault.setValue(myRatio[0])
 
         myPath = mySettings.value(
-                            'inasafe/keywordCachePath',
-                            self.keywordIO.defaultKeywordDbPath()).toString()
+            'inasafe/keywordCachePath',
+            self.keywordIO.defaultKeywordDbPath()).toString()
         self.leKeywordCachePath.setText(myPath)
 
     def saveState(self):
@@ -139,7 +144,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """
         mySettings = QtCore.QSettings()
         mySettings.setValue('inasafe/useThreadingFlag',
-                            self.cbxUseThread.isChecked())
+                            False)
         mySettings.setValue('inasafe/visibleLayersOnlyFlag',
                             self.cbxVisibleLayersOnly.isChecked())
         mySettings.setValue('inasafe/setLayerNameFromTitleFlag',
@@ -189,8 +194,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         Raises:
             None
         """
-        myFilename = QtGui.QFileDialog.getSaveFileName(self,
-                    self.tr('Set keyword cache file'),
-                    self.keywordIO.defaultKeywordDbPath(),
-                    self.tr('Sqlite DB File (*.db)'))
+        myFilename = QtGui.QFileDialog.getSaveFileName(
+            self,
+            self.tr('Set keyword cache file'),
+            self.keywordIO.defaultKeywordDbPath(),
+            self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(myFilename)
