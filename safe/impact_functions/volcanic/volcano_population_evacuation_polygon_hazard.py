@@ -5,7 +5,7 @@ from safe.impact_functions.core import (FunctionProvider,
                                         get_question,
                                         format_int)
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as tr
+from safe.common.utilities import ugettext as tr, round_thousand
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (assign_hazard_values_to_exposure_data,
                                        make_circular_polygon)
@@ -197,8 +197,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                                header=True),
                       TableRow([tr('People needing evacuation'),
                                 '%s' % format_int(evacuated),
-                                blank_cell],
-                                header=True),
+                                blank_cell], header=True),
                       TableRow([category_header,
                                 tr('Total'), tr('Cumulative')],
                                header=True)]
