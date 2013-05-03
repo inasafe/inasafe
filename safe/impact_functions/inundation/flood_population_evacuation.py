@@ -172,8 +172,6 @@ class FloodEvacuationFunction(FunctionProvider):
             [tr('Family Kits'), format_int(family_kits)],
             [tr('Toilets'), format_int(toilets)]]
 
-        impact_table = Table(table_body).toNewlineFreeString()
-
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
         table_body.append(TableRow(tr('How will we reach stranded people?')))
@@ -206,19 +204,26 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
+        impact_table = impact_summary
 
         # Create style
         # Generate 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
         # as imported
+        # if the first value is 0, need to add one more classes since we will
+        #  add zero when creating interval
+        style_classes = style_info['style_classes']
+        if numpy.nanmin(my_impact.flat[:]) == 0:
+            num_classes = len(style_classes) + 1
+        else:
+            num_classes = len(style_classes)
         classes = numpy.linspace(numpy.nanmin(my_impact.flat[:]),
-                                 numpy.nanmax(my_impact.flat[:]), 8)
+                                 numpy.nanmax(my_impact.flat[:]),
+                                 num_classes)
         interval_classes = humanize_class(classes)
-
         # Work out how many decimals to use
         # Modify labels in existing flood style to show quantities
-        style_classes = style_info['style_classes']
-        for i in xrange(len(classes)):
+        for i in xrange(len(style_classes)):
             if i == 1:
                 style_classes[i]['label'] = \
                     '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Low')

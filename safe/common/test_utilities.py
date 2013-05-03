@@ -117,6 +117,23 @@ class UtilitiesTest(unittest.TestCase):
         my_msg += ' expect: ' + str(my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
+    def test_humanize_class6(self):
+        """Test humanize class 5
+            First class interval < 1
+            Interval > 1
+            """
+        my_array = [0, 6.1, 7.2, 8.3, 9.4, 10.5]
+        my_result_class = humanize_class(my_array)
+        my_expected_class = [('0', '6'),
+                             ('6', '7'),
+                             ('7', '8'),
+                             ('8', '9'),
+                             ('9', '11')]
+        print_class(my_array, my_result_class, my_expected_class)
+        my_msg = 'got: ' + str(my_result_class)
+        my_msg += ' expect: ' + str(my_expected_class)
+        assert my_result_class == my_expected_class, my_msg
+
     def test_get_significant_decimal(self):
         """Test Get Significatn Decimal
         """

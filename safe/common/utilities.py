@@ -358,6 +358,7 @@ def humanize_min_max(min_value, max_value, interval):
 
     """
     current_interval = max_value - min_value
+    print 'interval', interval
     if interval > 1:
         # print 'case 1. Curent interval : ', current_interval
         humanize_min_value = format_int(int(round(min_value)))
@@ -453,12 +454,15 @@ def humanize_class(my_classes):
                                         8  -  9
     """
     min_value = 0
+    if min_value - my_classes[0] == 0:
+        return humanize_class(my_classes[1:])
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
         humanize_classes.append(humanize_min_max(min_value, max_value,
                                                  interval))
         min_value = max_value
+        # print 'humanize_classes', humanize_classes
         try:
             if humanize_classes[-1][0] == humanize_classes[-1][-1]:
                 return unhumanize_class(my_classes)
