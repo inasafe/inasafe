@@ -3,13 +3,41 @@
 Whats new?
 ==========
 
+Changelog for version 1.1.2
+---------------------------
+
+* daa9035 - Prevent key error in volcano impact.
+* 7909536 - Prevent issue #557 in the future (caused by enabling threading).
+* eb41907 - [BACKPORT] prevent key error in population building.
+* 1cfb3ea - Prevent key error in volcano building.
+* 11362b6 - Update Translation.
+* 812e75a - Test for update legend and normalizing legend.
+* 41fd522 - Formating for legend in the map report for itb eq fatality
+            and normalize legend,
+* 2f3deee - Further tweaking for #542 - always set 0 as a transparent pixel so
+            we don't need to add a class break to it and get a spurious [0,
+            0.0] entry in the legend.
+* 563eff5 - update translations.
+* 89697e1 - Change note about rounding number.
+* d0ef568 - Fixes for #542 - Only on flood impact function thus far - provides
+            proof of concept for other fixes to follow for other related impact
+            functions that use population as exposure.
+* d1d0a2c - Update translations for 1.1.1.
+* ea80653 - [BACKPORT] add volcano considered on volcano-building impact
+            functions. #536
+* b9541f0 - [BACKPORT] Little tweak for #537, remove volcano name and update
+            default value.
+* 5cf2daa - [BACKPORT] Updated due to #537 and #536.
+* 5a8d0bb - Update doc about pseudo_inf due to windows issue.
+
+
 Changelog for version 1.1.1
 ---------------------------
 
 * 16cd582 - Fix error with mmi=None, and disable AggregationCategorical options by default.
 * 425ac28 - [BACKPORT] remove unused creating temp file.
 * c1152d3 - Added some extra diagnostics for when write vector fails - see issue #533
-* 133e1c5 - Use 'affected' instead 'FLOODPRONE', but 'FLOODPRONE' still works if no 'affected' 
+* 133e1c5 - Use 'affected' instead 'FLOODPRONE', but 'FLOODPRONE' still works if no 'affected'
 * 699d01e - Fix the regressions in #530
 * a807e57 - Add notes in the result window for rounding number in FloodEvacuationFunction #525.
 * 46724ec - Fix issue #528, limit postprocessing layers.
