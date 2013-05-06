@@ -48,7 +48,7 @@ def description():
 
 def version():
     """Version of the plugin."""
-    return 'Version 1.1.1'
+    return 'Version 1.1.2'
 
 
 def qgisMinimumVersion():
