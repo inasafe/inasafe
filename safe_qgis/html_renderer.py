@@ -124,9 +124,10 @@ class HtmlRenderer():
         """
         LOGGER.info('InaSAFE Map printToPdf called')
         if theFilename is None:
-            myHtmlPdfPath = unique_filename(prefix='table',
-                                           suffix='.pdf',
-                                           dir=temp_dir('work'))
+            myHtmlPdfPath = unique_filename(
+                prefix='table',
+                suffix='.pdf',
+                dir=temp_dir('work'))
         else:
             # We need to cast to python string in case we receive a QString
             myHtmlPdfPath = str(theFilename)
@@ -155,6 +156,7 @@ class HtmlRenderer():
         myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
                                    QtCore.Qt.ScrollBarAlwaysOff)
 
+        # noinspection PyUnresolvedReferences
         self.webView.loadFinished.connect(self.htmlLoadedSlot)
         self.webView.setHtml(myHtml)
         self.htmlLoadedFlag = False
