@@ -222,13 +222,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
         school_closed = 0
         hospital_closed = 0
         # Generate break down by building usage type is available
-        list_type_attribute = ['type',
-                               'amenity',
-                               'building_t',
-                               'office',
-                               'tourism',
-                               'leisure',
-                               'building']
+        list_type_attribute = ['type', 'amenity', 'building_t', 'office',
+                               'tourism', 'leisure', 'building']
         intersect_type = set(attribute_names) & set(list_type_attribute)
         if len(intersect_type) > 0:
             # Make list of building types
