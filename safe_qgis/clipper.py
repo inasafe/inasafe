@@ -60,6 +60,7 @@ def tr(theText):
        the original string.
     """
     myContext = "@default"
+    # noinspection PyCallByClass
     return QCoreApplication.translate(myContext, theText)
 
 
@@ -188,6 +189,7 @@ def _clipVectorLayer(theLayer,
         myRect = QgsRectangle(
             theExtent[0], theExtent[1],
             theExtent[2], theExtent[3])
+        # noinspection PyCallByClass
         myClipPolygon = QgsGeometry.fromRect(myRect)
     elif (type(theExtent) is QgsGeometry and
           theExtent.wkbType in myAllowedClipTypes):

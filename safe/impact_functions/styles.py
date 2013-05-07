@@ -1,18 +1,20 @@
 """Library of styles that can be used by impact functions
 
-E.g.
+E.g.::
 
-from impact_functions.styles import flood_population_style as style_info
-from impact_functions.core import get_function_title
+    from impact_functions.styles import flood_population_style as style_info
+    from impact_functions.core import get_function_title
 
-# Create raster object with this style and return
-R = Raster(I,
-           projection=inundation.get_projection(),
-           geotransform=inundation.get_geotransform(),
-           name='Penduduk yang %s' % (get_function_title(self)),
-           keywords={'impact_summary': impact_summary},
-           style_info=style_info)
-return R
+    # Create raster object with this style and return
+    R = Raster(
+        I,
+        projection=inundation.get_projection(),
+        geotransform=inundation.get_geotransform(),
+        name='Penduduk yang %s' % (get_function_title(self)),
+        keywords={'impact_summary': impact_summary},
+        style_info=style_info)
+
+    return R
 
 """
 
