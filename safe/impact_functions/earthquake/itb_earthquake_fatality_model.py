@@ -350,8 +350,15 @@ class ITBFatalityFunction(FunctionProvider):
         impact_table = impact_summary
 
         # Create style
+        colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
+        # if the first value is 0, need to add one more classes since we will
+        # add zero when creating interval
+        if numpy.nanmin(R.flat[:]) == 0:
+            num_classes = len(colours) + 1
+        else:
+            num_classes = len(colours)
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
-                                 numpy.nanmax(R.flat[:]), 5)
+                                 numpy.nanmax(R.flat[:]), num_classes)
 
         # int & round Added by Tim in 1.2 - class is rounded to the
         # nearest int because we prefer to not categorise people as being
@@ -369,33 +376,26 @@ class ITBFatalityFunction(FunctionProvider):
         # Out[5]: 5753.1049999999996
         interval_classes = humanize_class(classes)
         style_classes = []
-        colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
-        i = 0
-        for my_class in interval_classes:
-            transparency = 30
-            min_value = my_class[0]
-            if min_value == 0:
+        j = 0
+        for i in xrange(len(colours)):
+            style_class = dict()
+            style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
+            style_class['quantity'] = classes[i]
+            # Override associated quantities in colour style
+            if i == 0:
                 transparency = 100
-            colour = colours.pop(0)
+                style_class['min'] = 0
+            else:
+                transparency = 30
+                style_class['min'] = classes[i - 1]
+            style_class['transparency'] = transparency
+            style_class['colour'] = colours[i]
+            style_class['max'] = classes[i]
+            style_classes.append(style_class)
 
-            my_quantity = classes[i]
-            # hack for nan
-            if classes[i] != classes[i]:
-                # nan represented as 999999, since need to be rounded
-                my_quantity = 999999
-
-            style_classes.append(
-                dict(
-                    colour=colour,
-                    quantity=int(round(my_quantity)),
-                    transparency=transparency,
-                    # people/cell will be added
-                    label=tr(' - '.join(my_class))
-                )
-            )
-            i += 1
-
-        style_info = dict(target_field=None, style_classes=style_classes)
+        style_info = dict(target_field=None,
+                          style_classes=style_classes,
+                          style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('Earthquake impact to population')
