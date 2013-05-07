@@ -239,14 +239,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                               'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
 
+        # Create style
         # Define classes for legend for flooded population counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         population_counts = [x['population'] for x in new_attributes]
-        # print 'population_counts', population_counts, min(population_counts),\
-        #     max(population_counts)
         # if the first value is 0, need to add one more classes since we will
-        #  add zero when creating interval
+        # add zero when creating interval
         if min(population_counts) == 0:
             num_classes = len(colours) + 1
         else:
@@ -254,13 +253,12 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         classes = numpy.linspace(min(population_counts),
                                  max(population_counts),
                                  num_classes).tolist()
-        print classes, len(classes)
         interval_classes = humanize_class(classes)
-        print 'interval_classes', interval_classes
+
         # Define style info for output polygons showing population counts
         style_classes = []
         for i in xrange(len(colours)):
-            style_class = {}
+            style_class = dict()
             style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
             style_class['quantity'] = classes[i]
             # Override associated quantities in colour style
@@ -277,7 +275,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Override style info with new classes and name
         style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes)
+                          style_classes=style_classes,
+                          style_type='graduatedSymbol')
 
         # For printing map purpose
         map_title = tr('People affected by flood prone areas')
@@ -285,15 +284,15 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         legend_units = tr('(people per polygon)')
         legend_title = tr('Population Count')
 
-    # Create vector layer and return
+        # Create vector layer and return
         V = Vector(data=new_attributes,
                    projection=my_hazard.get_projection(),
                    geometry=my_hazard.get_geometry(),
                    name=tr('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title,
                              'target_field': self.target_field,
+                             'map_title': map_title,
                              'legend_notes': legend_notes,
                              'legend_units': legend_units,
                              'legend_title': legend_title},
