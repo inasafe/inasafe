@@ -35,17 +35,8 @@ compile:
 	@echo "-----------------"
 	make -C safe_qgis
 
-docs: compile gen_impact_function_doc gen_rst
-	@echo
-	@echo "-------------------------------"
-	@echo "Compile documentation into html"
-	@echo "-------------------------------"
-	scripts/post_translate.sh >/dev/null
-
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
-        #update sphinx docs strings
-	@scripts/pre_translate.sh $(LOCALES)
         #update application strings
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
@@ -56,7 +47,6 @@ compile-translation-strings: compile
 	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@#Compile qt messages binary
 	cd safe_qgis; lrelease inasafe.pro; cd ..
-	# For sphinx docs this step is done as part of make docs target
 
 test-translations:
 	@echo
@@ -99,13 +89,13 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: clean docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+test: clean test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
 
 # Run the test suite followed by style checking includes realtime and requires QGIS 2.0
-qgis2test: clean docs qgis2_test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+qgis2test: clean qgis2_test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
 
 quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
@@ -119,7 +109,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,import_dialog_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,import_dialog_base.py . || true
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
 test_suite: compile testdata
@@ -197,7 +187,7 @@ disabled_tests:
 	@echo "--------------"
 	@echo "Disabled tests"
 	@echo "--------------"
-	@grep -R Xtest * | grep ".py:" | grep -v "docs/build/html" || true
+	@grep -R [X,x]test * | grep ".py:" || true
 
 unwanted_strings:
 	@echo
@@ -332,7 +322,7 @@ jenkins-sloccount:
 	@echo " Lines of code analysis for Jenkins"
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
-	# This line is for machine readble output for use by Jenkins
+	# This line is for machine readable output for use by Jenkins
 	@sloccount --duplicates --wide --details  safe_api.py safe safe_qgis realtime | fgrep -v .svn > sloccount.sc || :
 
 jenkins-pylint:
@@ -353,7 +343,7 @@ jenkins-pep8:
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude third_party,docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,import_dialog_base.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203 --exclude third_party,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,import_dialog_base.py . > pep8.log || :
 
 jenkins-realtime-test:
 
