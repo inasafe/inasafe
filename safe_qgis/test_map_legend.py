@@ -59,6 +59,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getLegend.png',
+                           'getLegend-variantWindows8-64.png',
                            'getLegend-variantWindosVistaSP2-32.png',
                            'getLegend-variantWindowsXPSP3-32.png',
                            'getClassToLegend-variantUB12.04-64.png',
@@ -88,6 +89,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getVectorLegend.png',
+                           'getVectorLegend-variantWindows8-64.png',
                            'getVectorLegend-variantWindosVistaSP2-32.png',
                            'getVectorLegend-variantWindowsXPSP3-32.png',
                            'getVectorLegend-variantUB12.04-64.png',
@@ -116,6 +118,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getRasterLegend.png',
+                           'getRasterLegend-variantWindows8-64.png',
                            'getRasterLegend-variantWindosVistaSP2-32.png',
                            'getRasterLegend-variantWindowsXPSP3-32.png',
                            'getRasterLegend-variantUB12.04-64.png',
@@ -150,6 +153,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['addSymbolToLegend.png',
+                           'addSymbolToLegend-variantWindows8-64.png',
                            'addSymbolToLegend-variantWindosVistaSP2-32.png',
                            'addSymbolToLegend-variantWindowsXPSP3-32.png',
                            'addSymbolToLegend-variantUB12.04-64.png',
@@ -188,6 +192,7 @@ class MapLegendTest(unittest.TestCase):
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
         myControlImages = ['getClassToLegend.png',
+                           'getClassToLegend-variantWindows8-64.png',
                            'getClassToLegend-variantWindosVistaSP2-32.png',
                            'getClassToLegend-variantWindowsXPSP3-32.png',
                            'getClassToLegend-variantUB12.04-64.png',
