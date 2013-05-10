@@ -148,6 +148,7 @@ class HtmlRendererTest(unittest.TestCase):
         assert os.path.exists(myPath), myMessage
 
         myControlImages = ['renderHtmlToImage.png',
+                           'renderHtmlToImage-variantWindos8-64.png',
                            'renderHtmlToImage-variantWindosVistaSP2-32.png',
                            'renderHtmlToImage-variantWindowsXPSP3-32.png',
                            'renderHtmlToImage-variantUB11.04-64.png',
