@@ -6,7 +6,7 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     get_function_title)
-from safe.impact_functions.styles import flood_population_style as style_info
+# from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -207,47 +207,51 @@ class FloodEvacuationFunction(FunctionProvider):
         impact_table = impact_summary
 
         # Create style
-        # Generate 8 equidistant classes across the range of flooded population
-        # 8 is the number of classes in the predefined flood population style
-        # as imported
+        colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
+                   '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         # if the first value is 0, need to add one more classes since we will
         #  add zero when creating interval
-        style_classes = style_info['style_classes']
         if numpy.nanmin(my_impact.flat[:]) == 0:
-            num_classes = len(style_classes) + 1
+            num_classes = len(colours) + 1
         else:
-            num_classes = len(style_classes)
+            num_classes = len(colours)
         classes = numpy.linspace(numpy.nanmin(my_impact.flat[:]),
                                  numpy.nanmax(my_impact.flat[:]),
                                  num_classes)
         interval_classes = humanize_class(classes)
-        # Work out how many decimals to use
-        # Modify labels in existing flood style to show quantities
-        for i in xrange(len(style_classes)):
-            if i == 1:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Low')
-            elif i == 4:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Medium')
-            elif i == 7:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('High')
-            else:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + ']'
 
-            # Override associated quantities in colour style
+        # Modify labels in existing flood style to show quantities
+        style_classes = []
+        for i in xrange(len(colours)):
+            style_class = dict()
+            if i == 1:
+                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Low')
+            elif i == 4:
+                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr(
+                    'Medium')
+            elif i == 7:
+                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr(
+                    'High')
+            else:
+                label = '[' + ' - '.join(interval_classes[i]) + ']'
+            style_class['label'] = label
+            # take the supremum of a range
+            style_class['quantity'] = classes[i + 1]
             if i == 0:
                 transparency = 100
+                # style_class['min'] = 0
             else:
                 transparency = 0
-            style_classes[i]['transparency'] = transparency
-            # int & round Added by Tim in 1.2 - class is rounded to the
-            # nearest int because we prefer to not categorise people as being
-            # e.g. '0.4 people'. Fixes #542
-            style_classes[i]['quantity'] = classes[i]
-        style_info['style_type'] = 'rasterStyle'
+                # style_class['min'] = classes[i - 1]
+            style_class['transparency'] = transparency
+            style_class['colour'] = colours[i]
+            # style_class['max'] = classes[i]
+            style_classes.append(style_class)
+
+        # Override style info with new classes and name
+        style_info = dict(target_field=None,
+                          style_classes=style_classes,
+                          style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('People in need of evacuation')
