@@ -245,11 +245,11 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
                 'Class break lower bound should be a number.'
                 'I got %s' % myClass['min'])
 
-        try:
-            myMax = float(myClass['max'])
-        except TypeError:
-            raise StyleError('Class break upper bound should be a number.'
-                             'I got %s' % myClass['max'])
+        # try:
+        #     myMax = float(myClass['max'])
+        # except TypeError:
+        #     raise StyleError('Class break upper bound should be a number.'
+        #                      'I got %s' % myClass['max'])
 
         myColour = myClass['colour']
         myLabel = myClass['label']

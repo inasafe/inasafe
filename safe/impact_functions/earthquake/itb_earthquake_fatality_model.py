@@ -376,12 +376,12 @@ class ITBFatalityFunction(FunctionProvider):
         # Out[5]: 5753.1049999999996
         interval_classes = humanize_class(classes)
         style_classes = []
-        j = 0
+        print classes, len(classes)
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
             # take the supremum of a range
-            style_class['quantity'] = classes[i + 1]
+            style_class['quantity'] = classes[i]
             # Override associated quantities in colour style
             if i == 0:
                 transparency = 100

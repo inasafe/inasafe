@@ -225,7 +225,8 @@ class FloodEvacuationFunction(FunctionProvider):
         for i in xrange(len(colours)):
             style_class = dict()
             if i == 1:
-                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Low')
+                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr(
+                    'Low')
             elif i == 4:
                 label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr(
                     'Medium')
