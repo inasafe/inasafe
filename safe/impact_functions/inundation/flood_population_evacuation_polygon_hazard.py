@@ -4,7 +4,12 @@ from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
-    ugettext as tr, format_int, round_thousand, get_defaults, humanize_class)
+    ugettext as tr,
+    format_int,
+    round_thousand,
+    get_defaults,
+    humanize_class,
+    create_classes)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -244,15 +249,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         population_counts = [x['population'] for x in new_attributes]
-        # if the first value is 0, need to add one more classes since we will
-        # add zero when creating interval
-        if min(population_counts) == 0:
-            num_classes = len(colours) + 1
-        else:
-            num_classes = len(colours)
-        classes = numpy.linspace(min(population_counts),
-                                 max(population_counts),
-                                 num_classes).tolist()
+        classes = create_classes(population_counts, len(colours))
         interval_classes = humanize_class(classes)
 
         # Define style info for output polygons showing population counts
@@ -260,8 +257,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
-            style_class['quantity'] = classes[i + 1]
-            # Override associated quantities in colour style
             if i == 0:
                 transparency = 100
                 style_class['min'] = 0

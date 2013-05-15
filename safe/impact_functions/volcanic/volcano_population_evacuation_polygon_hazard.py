@@ -1,10 +1,16 @@
 import numpy
-
 from safe.impact_functions.core import (
-    FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layer,
+    get_question)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
-    ugettext as tr, format_int, round_thousand, humanize_class)
+    ugettext as tr,
+    format_int,
+    round_thousand,
+    humanize_class,
+    create_classes)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -63,7 +69,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         """
 
         # Identify hazard and exposure layers
-        H = get_hazard_layer(layers)  # Flood inundation
+        H = get_hazard_layer(layers)  # Volcano KRB
         E = get_exposure_layer(layers)
 
         question = get_question(H.get_name(),
@@ -241,16 +247,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        # if the first value is 0, need to add one more classes since we will
-        # add zero when creating interval
         population_counts = [x[self.target_field] for x in new_attributes]
-        if numpy.nanmin(min(population_counts)) == 0:
-            num_classes = len(colours) + 1
-        else:
-            num_classes = len(colours)
-        classes = numpy.linspace(min(population_counts),
-                                 max(population_counts),
-                                 num_classes).tolist()
+        classes = create_classes(population_counts, len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
@@ -258,9 +256,6 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
-            # take the supremum of a range
-            style_class['quantity'] = classes[i]
-            # Override associated quantities in colour style
             if i == 0:
                 transparency = 100
                 style_class['min'] = 0
