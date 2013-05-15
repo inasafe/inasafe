@@ -187,7 +187,7 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
 
 
 def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
-    """Set caetgorized QGIS vector style based on InaSAFE style dictionary.
+    """Set categorized QGIS vector style based on InaSAFE style dictionary.
 
     For **opaque** a value of **0** can be used. For **fully transparent**, a
     value of **100** can be used. The calling function should take care to
@@ -207,12 +207,12 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
-        [{'transparency': 1, 'max': 1.5, 'colour': '#fecc5c',
-          'min': 0.5, 'label': 'Low damage', 'size' : 1},
-        {'transparency': 55, 'max': 2.5, 'colour': '#fd8d3c',
-         'min': 1.5, 'label': 'Medium damage', 'size' : 1},
-        {'transparency': 80, 'max': 3.5, 'colour': '#f31a1c',
-         'min': 2.5, 'label': 'High damage', 'size' : 1}]}
+        [{'transparency': 1, 'value': 1, 'colour': '#fecc5c',
+          'label': 'Low damage', 'size' : 1},
+        {'transparency': 55, 'max': 2, 'colour': '#fd8d3c',
+         'label': 'Medium damage', 'size' : 1},
+        {'transparency': 80, 'max': 3, 'colour': '#f31a1c',
+         'label': 'High damage', 'size' : 1}]}
 
         .. note:: The transparency and size keys are optional. Size applies
            to points only.
@@ -233,23 +233,15 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
         if 'transparency' in myClass:
             myTransparencyPercent = myClass['transparency']
 
-        if 'min' not in myClass:
-            raise StyleError('Style info should provide a "min" entry')
-        if 'max' not in myClass:
-            raise StyleError('Style info should provide a "max" entry')
+        if 'value' not in myClass:
+            raise StyleError('Style info should provide a "value" entry')
 
         try:
-            myMin = float(myClass['min'])
+            myValue = float(myClass['value'])
         except TypeError:
             raise StyleError(
                 'Class break lower bound should be a number.'
-                'I got %s' % myClass['min'])
-
-        # try:
-        #     myMax = float(myClass['max'])
-        # except TypeError:
-        #     raise StyleError('Class break upper bound should be a number.'
-        #                      'I got %s' % myClass['max'])
+                'I got %s' % myClass['value'])
 
         myColour = myClass['colour']
         myLabel = myClass['label']
@@ -291,7 +283,6 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
         # alpha = 1: opaque
         alpha = 1 - myTransparencyPercent / 100.0
         mySymbol.setAlpha(alpha)
-        myValue = myMin
         myCategory = QgsRendererCategoryV2(myValue, mySymbol, myLabel)
         myCategoryList.append(myCategory)
 
