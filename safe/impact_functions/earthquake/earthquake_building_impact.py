@@ -185,11 +185,11 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         impact_table = impact_summary
 
         # Create style
-        style_classes = [dict(label=class_1, min=t0, max=t0,
+        style_classes = [dict(label=class_1, value=t0,
                               colour='#ffff00', transparency=1),
-                         dict(label=class_2, min=t1, max=t1,
+                         dict(label=class_2, value=t1,
                               colour='#ffaa00', transparency=1),
-                         dict(label=class_3, min=t2, max=t2,
+                         dict(label=class_3, value=t2,
                               colour='#ff0000', transparency=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
