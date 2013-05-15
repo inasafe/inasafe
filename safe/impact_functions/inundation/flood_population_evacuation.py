@@ -6,7 +6,6 @@ from safe.impact_functions.core import (
     get_exposure_layer,
     get_question,
     get_function_title)
-# from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -14,7 +13,8 @@ from safe.common.utilities import (
     format_int,
     verify,
     round_thousand,
-    humanize_class)
+    humanize_class,
+    create_classes)
 from safe.common.tables import Table, TableRow
 
 
@@ -86,8 +86,9 @@ class FloodEvacuationFunction(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Raster layer of flood depth
-              P: Raster layer of population data on the same grid as H
+              my_hazard: Raster layer of flood depth
+              my_exposure: Raster layer of population data on the same grid
+              as my_hazard
 
         Counts number of people exposed to flood levels exceeding
         specified threshold.
@@ -209,18 +210,8 @@ class FloodEvacuationFunction(FunctionProvider):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        # if the first value is 0, need to add one more classes since we will
-        #  add zero when creating interval
-        if numpy.nanmin(my_impact.flat[:]) == 0:
-            num_classes = len(colours) + 1
-        else:
-            num_classes = len(colours)
-        classes = numpy.linspace(numpy.nanmin(my_impact.flat[:]),
-                                 numpy.nanmax(my_impact.flat[:]),
-                                 num_classes)
+        classes = create_classes(my_impact.flat[:], len(colours))
         interval_classes = humanize_class(classes)
-
-        # Modify labels in existing flood style to show quantities
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
@@ -236,20 +227,15 @@ class FloodEvacuationFunction(FunctionProvider):
             else:
                 label = '[' + ' - '.join(interval_classes[i]) + ']'
             style_class['label'] = label
-            # take the supremum of a range
-            style_class['quantity'] = classes[i + 1]
+            style_class['quantity'] = classes[i]
             if i == 0:
                 transparency = 100
-                # style_class['min'] = 0
             else:
                 transparency = 0
-                # style_class['min'] = classes[i - 1]
             style_class['transparency'] = transparency
             style_class['colour'] = colours[i]
-            # style_class['max'] = classes[i]
             style_classes.append(style_class)
 
-        # Override style info with new classes and name
         style_info = dict(target_field=None,
                           style_classes=style_classes,
                           style_type='rasterStyle')

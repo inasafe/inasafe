@@ -20,7 +20,8 @@ import unittest
 from utilities import (
     get_significant_decimal,
     humanize_class,
-    format_decimal)
+    format_decimal,
+    create_classes)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -165,6 +166,23 @@ class UtilitiesTest(unittest.TestCase):
         print my_result
         assert my_result == 'nan', \
             'Format decimal is not valid %s' % my_result
+
+    def test_create_classes(self):
+        """Test create_classes.
+        """
+        my_list = [0, 1, 4, 2, 9, 2, float('nan')]
+        num_classes = 2
+        my_expected = [4.5, 9]
+        my_result = create_classes(my_list, num_classes)
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
+
+        my_list = [1, 4, 2, 9, 2, float('nan')]
+        num_classes = 2
+        my_expected = [1, 9]
+        my_result = create_classes(my_list, num_classes)
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

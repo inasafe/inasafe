@@ -1,17 +1,20 @@
 import numpy
+from third_party.odict import OrderedDict
 import logging
-from safe.impact_functions.core import (FunctionProvider,
-                                        get_hazard_layer,
-                                        get_exposure_layer,
-                                        get_question)
+from safe.impact_functions.core import (
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layer,
+    get_question)
 from safe.storage.raster import Raster
-from safe.common.utilities import (ugettext as tr,
-                                   get_defaults,
-                                   format_int,
-                                   humanize_class)
+from safe.common.utilities import (
+    ugettext as tr,
+    get_defaults,
+    format_int,
+    humanize_class,
+    create_classes)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
-from third_party.odict import OrderedDict
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -173,8 +176,8 @@ class ITBFatalityFunction(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Raster layer of MMI ground shaking
-              P: Raster layer of population density
+              my_hazard: Raster layer of MMI ground shaking
+              my_exposure: Raster layer of population density
 
         """
 
@@ -192,8 +195,8 @@ class ITBFatalityFunction(FunctionProvider):
                                 self)
 
         # Extract data grids
-        H = intensity.get_data()   # Ground Shaking
-        P = population.get_data(scaling=True)  # Population Density
+        my_hazard = intensity.get_data()   # Ground Shaking
+        my_exposure = population.get_data(scaling=True)  # Population Density
 
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
@@ -203,16 +206,16 @@ class ITBFatalityFunction(FunctionProvider):
         number_of_displaced = {}
         number_of_fatalities = {}
 
-        # Calculate fatality rates for observed Intensity values (H
+        # Calculate fatality rates for observed Intensity values (my_hazard
         # based on ITB power model
-        R = numpy.zeros(H.shape)
+        R = numpy.zeros(my_hazard.shape)
         for mmi in mmi_range:
-
             # Identify cells where MMI is in class i and
             # count population affected by this shake level
             I = numpy.where(
-                (H > mmi - self.parameters['step']) * (
-                    H <= mmi + self.parameters['step']), P, 0)
+                (my_hazard > mmi - self.parameters['step']) * (
+                    my_hazard <= mmi + self.parameters['step']),
+                my_exposure, 0)
 
             # Calculate expected number of fatalities per level
             fatality_rate = self.fatality_rate(mmi)
@@ -244,7 +247,7 @@ class ITBFatalityFunction(FunctionProvider):
         R[R < tolerance] = numpy.nan
 
         # Total statistics
-        total = int(round(numpy.nansum(P.flat) / 1000) * 1000)
+        total = int(round(numpy.nansum(my_exposure.flat) / 1000) * 1000)
 
         # Compute number of fatalities
         fatalities = int(round(numpy.nansum(number_of_fatalities.values())
@@ -262,7 +265,6 @@ class ITBFatalityFunction(FunctionProvider):
         table_body = [question]
 
         # Add total fatality estimate
-        #s = str(int(fatalities)).rjust(10)
         s = format_int(fatalities)
         table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
@@ -307,7 +309,6 @@ class ITBFatalityFunction(FunctionProvider):
                       [tr('Clean Water [l]'), format_int(water)],
                       [tr('Family Kits'), format_int(family_kits)],
                       [tr('Toilets'), format_int(toilets)]]
-        impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         if fatalities > 0:
@@ -351,47 +352,19 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
-        # if the first value is 0, need to add one more classes since we will
-        # add zero when creating interval
-        if numpy.nanmin(R.flat[:]) == 0:
-            num_classes = len(colours) + 1
-        else:
-            num_classes = len(colours)
-        classes = numpy.linspace(numpy.nanmin(R.flat[:]),
-                                 numpy.nanmax(R.flat[:]), num_classes)
-
-        # int & round Added by Tim in 1.2 - class is rounded to the
-        # nearest int because we prefer to not categorise people as being
-        # e.g. '0.4 people'. Fixes #542
-        # The classes are equals space except for the first class which start
-        # at 0 and end with nanmin value.
-        # Example :
-        # a = numpy.linspace(0.58, 23013, 5)
-        # array([  5.80000000e-01,   5.75368500e+03,   1.15067900e+04,
-        # 1.72598950e+04,   2.30130000e+04])
-        # would have the first class as [0, 5.80000000e-01]
-        # Subsequent classes would be incremented by the value as calculated
-        # below:
-        # In [5]: a[4] - a[3]
-        # Out[5]: 5753.1049999999996
+        classes = create_classes(R.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
-        print classes, len(classes)
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
-            # take the supremum of a range
             style_class['quantity'] = classes[i]
-            # Override associated quantities in colour style
             if i == 0:
                 transparency = 100
-                style_class['min'] = 0
             else:
                 transparency = 30
-                style_class['min'] = classes[i - 1]
             style_class['transparency'] = transparency
             style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
             style_classes.append(style_class)
 
         style_info = dict(target_field=None,
@@ -404,7 +377,7 @@ class ITBFatalityFunction(FunctionProvider):
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')
 
-        # Create new layer and return
+        # Create raster object and return
         L = Raster(R,
                    projection=population.get_projection(),
                    geotransform=population.get_geotransform(),
@@ -422,5 +395,4 @@ class ITBFatalityFunction(FunctionProvider):
                    name=tr('Estimated displaced population per cell'),
                    style_info=style_info)
 
-        # Maybe return a shape file with contours instead
         return L

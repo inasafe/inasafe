@@ -2,6 +2,7 @@
 """
 import os
 import sys
+import numpy
 import zipfile
 import gettext
 from datetime import date
@@ -358,7 +359,6 @@ def humanize_min_max(min_value, max_value, interval):
 
     """
     current_interval = max_value - min_value
-    print 'interval', interval
     if interval > 1:
         # print 'case 1. Curent interval : ', current_interval
         humanize_min_value = format_int(int(round(min_value)))
@@ -462,7 +462,6 @@ def humanize_class(my_classes):
         humanize_classes.append(humanize_min_max(min_value, max_value,
                                                  interval))
         min_value = max_value
-        # print 'humanize_classes', humanize_classes
         try:
             if humanize_classes[-1][0] == humanize_classes[-1][-1]:
                 return unhumanize_class(my_classes)
@@ -482,3 +481,20 @@ def unhumanize_class(my_classes):
                           format_decimal(interval, max_value)))
         min_value = max_value
     return my_result
+
+
+def create_classes(my_list, num_classes):
+    """Create classes from my_list. Classes will use linspace from numpy.
+    It will extend from min and max of elements in my_list. If min == 0,
+    it won't be included. The number of classes is equal to num_classes.
+    Please see the unit test for this function for more explanation
+    """
+    min_value = numpy.nanmin(my_list)
+    max_value = numpy.nanmax(my_list)
+    print 'min_value, max_value: ', min_value, max_value
+    if min_value == 0:
+        num_classes += 1
+    classes = numpy.linspace(min_value, max_value, num_classes).tolist()
+    if min_value == 0:
+        classes = classes[1:]
+    return classes
