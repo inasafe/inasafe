@@ -377,6 +377,10 @@ class ITBFatalityFunction(FunctionProvider):
                 transparency = 100
             colour = colours.pop(0)
 
+            if classes[i] != classes[i]:
+                # nan represented as 999999, since need to be con
+                classes[i] = 999999
+
             style_classes.append(
                 dict(
                     colour=colour,

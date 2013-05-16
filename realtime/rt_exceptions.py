@@ -102,9 +102,3 @@ class MapComposerError(Exception):
 class CopyError(Exception):
     """Raised if a problem occurs copying a file"""
     pass
-
-
-class EnvironmentError(Exception):
-    """Raised if the users environment is not adequate.
-        e.g. if QGIS did not initialise properly."""
-    pass

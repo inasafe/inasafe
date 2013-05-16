@@ -87,8 +87,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            ShapefileCreationError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
-                           MapComposerError,
-                           EnvironmentError)
+                           MapComposerError)
 # from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
@@ -2234,7 +2233,7 @@ class ShakeEvent(QObject):
             'counts of less than 50 are disregarded.')
         myCredits = self.tr(
             'Supported by the Australia-Indonesia Facility for Disaster '
-            'Reduction, Geoscience Australia and the GFDRR.')
+            'Reduction, Geoscience Australia and the World Bank-GFDRR.')
         #Format the lat lon from decimal degrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
         myCoordinates = myPoint.toDegreesMinutesSeconds(2)

@@ -8,6 +8,7 @@ from datetime import datetime
 from fabric.contrib.files import contains, exists, append, sed
 import fabtools
 from fabtools import require
+from fabgis import fabgis
 # Don't remove even though its unused
 from fabtools.vagrant import vagrant
 
@@ -65,7 +66,7 @@ def _all():
         'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
         'linfiniti': 'inasafe-crisis.linfiniti.com',
         #vagrant instance
-        'precise64': 'experimental.vagrant.localhost',
+        'inasafe': 'experimental.vagrant.localhost',
         'shiva': 'experimental.inasafe.org'}
 
     with hide('output'):
@@ -87,7 +88,6 @@ def _all():
                                          'dev',
                                          'python')
             env.git_url = 'git://github.com/AIFDR/inasafe.git'
-            env.qgis_git_url = 'git://github.com/qgis/Quantum-GIS.git'
             env.repo_alias = 'inasafe-test'
             env.code_path = os.path.join(env.repo_path, env.repo_alias)
 
@@ -204,7 +204,7 @@ def update_git_checkout(branch='master'):
             # Remove any local changes in master
             run('git reset --hard')
             # Delete all local branches
-            run('git branch | grep -v \* | xargs git branch -D')
+            #run('git branch | grep -v \* | xargs git branch -D')
 
     with cd(env.code_path):
         if branch != 'master':
@@ -214,123 +214,6 @@ def update_git_checkout(branch='master'):
         else:
             run('git checkout master')
         run('git pull')
-
-
-def add_ubuntugis_ppa():
-    """Ensure we have ubuntu-gis repos."""
-    sudo('apt-get update')
-    require.deb.ppa('ppa:ubuntugis/ubuntugis-unstable')
-    sudo('sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable')
-    sudo('apt-get update')
-
-
-def install_latex():
-    """Ensure that the target system has a usable latex installation."""
-    _all()
-    sudo('apt-get update')
-    fabtools.require.deb.package('texlive-latex-extra')
-    fabtools.require.deb.package('python-sphinx')
-    fabtools.require.deb.package('dvi2png')
-    fabtools.require.deb.package('texinfo')
-
-
-def clone_qgis(branch='master'):
-    """Clone or update QGIS from git.
-
-    Args:
-        branch: str - a string representing the name of the branch to build
-            from. Defaults to 'master'
-
-    """
-    _all()
-    fabtools.require.deb.package('git')
-    code_base = '/home/%s/dev/cpp' % env.user
-    code_path = '%s/Quantum-GIS' % code_base
-    if not exists(code_path):
-        fastprint('Repo checkout does not exist, creating.')
-        run('mkdir -p %s' % code_base)
-        with cd(code_base):
-            run('git clone %s' % env.qgis_git_url)
-    else:
-        fastprint('Repo checkout does exist, updating.')
-        with cd(code_path):
-            # Get any updates first
-            run('git fetch')
-            # Get rid of any local changes
-            run('git reset --hard')
-            # Get back onto master branch
-            run('git checkout master')
-            # Remove any local changes in master
-            run('git reset --hard')
-            # Delete all local branches
-            run('git branch | grep -v \* | xargs git branch -D')
-
-    with cd(code_path):
-        if branch != 'master':
-            run('git branch --track %s origin/%s' %
-                (branch, branch))
-            run('git checkout %s' % branch)
-        else:
-            run('git checkout master')
-        run('git pull')
-
-
-@task
-def install_qgis1_8():
-    """Install QGIS 1.8 under /usr/local/qgis-1.8."""
-    _all()
-    add_ubuntugis_ppa()
-    sudo('apt-get build-dep qgis')
-    fabtools.require.deb.package('cmake-curses-gui')
-    fabtools.require.deb.package('git')
-    clone_qgis(branch='release-1_8')
-    code_base = '/home/%s/dev/cpp' % env.user
-    code_path = '%s/Quantum-GIS' % code_base
-    build_path = '%s/build-qgis18' % code_path
-    build_prefix = '/usr/local/qgis-1.8'
-    require.directory(build_path)
-    with cd(build_path):
-        fabtools.require.directory(
-            build_prefix,
-            use_sudo=True,
-            owner=env.user)
-        run('cmake .. -DCMAKE_INSTALL_PREFIX=%s' % build_prefix)
-        run('make install')
-
-
-@task
-def install_qgis2():
-    """Install QGIS 2 under /usr/local/qgis-master.
-
-    TODO: create one function from this and the 1.8 function above for DRY.
-
-    """
-    _all()
-    add_ubuntugis_ppa()
-    sudo('apt-get build-dep qgis')
-    fabtools.require.deb.package('cmake-curses-gui')
-    fabtools.require.deb.package('git')
-    clone_qgis(branch='master')
-    code_base = '/home/%s/dev/cpp' % env.user
-    code_path = '%s/Quantum-GIS' % code_base
-    build_path = '%s/build-master' % code_path
-    build_prefix = '/usr/local/qgis-master'
-    require.directory(build_path)
-    with cd(build_path):
-        fabtools.require.directory(
-            build_prefix,
-            use_sudo=True,
-            owner=env.user)
-        run('cmake .. -DCMAKE_INSTALL_PREFIX=%s' % build_prefix)
-
-        run('make install')
-
-
-def setup_realtime():
-    """Set up a working environment for the realtime quake report generator."""
-    _all()
-    install_qgis2()
-    update_git_checkout()
 
 
 ###############################################################################
@@ -417,7 +300,7 @@ def build_documentation(branch='master'):
     """
     _all()
     update_git_checkout(branch)
-    install_latex()
+    fabgis.fabgis.install_latex()
 
     dir_name = os.path.join(env.repo_path, env.repo_alias, 'docs')
     with cd(dir_name):

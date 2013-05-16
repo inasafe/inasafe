@@ -179,7 +179,8 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         cum = 0
         for name in category_names:
-            count = categories[name]
+            # prevent key error
+            count = categories.get(name, 0)
             cum += count
             if is_point_data:
                 name = int(name) / 1000

@@ -24,8 +24,8 @@ from PyQt4.QtCore import QObject
 #Do not import any QGIS or SAFE modules in this module!
 from safe_qgis.impact_calculator_thread import ImpactCalculatorThread
 from safe_qgis.exceptions import InsufficientParametersError
-from safe_qgis.safe_interface import (readSafeLayer,
-                                   getSafeImpactFunctions)
+from safe_qgis.safe_interface import (
+    readSafeLayer, getSafeImpactFunctions)
 
 
 class ImpactCalculator(QObject):

@@ -6,6 +6,8 @@
     <option name="SDK_HOME" value="/usr/bin/python2.7" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="IS_MODULE_SDK" value="false" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
     <module name="inasafe-realtime" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="docutils_input_file" value="docs/source" />

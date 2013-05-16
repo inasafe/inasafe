@@ -17,7 +17,10 @@ __date__ = '17/04/20113'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 import unittest
-from safe.common.utilities import humanize_class
+from utilities import (
+    get_significant_decimal,
+    humanize_class,
+    format_decimal)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -113,6 +116,38 @@ class UtilitiesTest(unittest.TestCase):
         my_msg = 'got: ' + str(my_result_class)
         my_msg += ' expect: ' + str(my_expected_class)
         assert my_result_class == my_expected_class, my_msg
+
+    def test_get_significant_decimal(self):
+        """Test Get Significatn Decimal
+        """
+        my_decimal = 10.1212
+        my_result = get_significant_decimal(my_decimal)
+        assert my_result == 10.121, 'Decimal point not valid %s' % my_result
+        my_decimal = float('nan')
+        my_result = get_significant_decimal(my_decimal)
+        assert my_result != my_result, 'Decimal point not valid %s' % my_result
+        my_decimal = 0.00001212343434
+        my_result = get_significant_decimal(my_decimal)
+        assert my_result != 0.0000121, 'Decimal point not valid %s' % my_result
+
+    def test_format_decimal(self):
+        """Test Format Decimal
+        """
+        interval = 0.9912
+        my_number = 10
+        my_result = format_decimal(interval, my_number)
+        print my_result
+        assert my_result == '10', 'Format decimal is not valid %s' % my_result
+        my_number = 10.0121034435
+        my_result = format_decimal(interval, my_number)
+        print my_result
+        assert my_result == '10.012', \
+            'Format decimal is not valid %s' % my_result
+        my_number = float('nan')
+        my_result = format_decimal(interval, my_number)
+        print my_result
+        assert my_result == 'nan', \
+            'Format decimal is not valid %s' % my_result
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')

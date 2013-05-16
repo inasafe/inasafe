@@ -10,7 +10,7 @@ export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 export INASAFE_WORK_DIR=/home/web/quake
 export INASAFE_POPULATION_PATH=`pwd`/realtime/fixtures/exposure/population.tif
 export INASAFE_LOCALE=id
-#xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py
-python realtime/make_map.py
+xvfb-run -a --server-args="-screen 0, 1024x768x24" python realtime/make_map.py
+#python realtime/make_map.py
 
 

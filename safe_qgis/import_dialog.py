@@ -25,94 +25,11 @@ from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
                              QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
-import time
 import os
 import tempfile
 
 from inasafe_lightmaps import InasafeLightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
-
-
-class Response:
-    """ Class that contains the response of httpRequest function. """
-    pass
-
-
-def httpRequest(theManager, theMethod, theUrl, theData=None, theHook=None):
-    """
-    Request the content of url through HTTP protocol.
-    This function use QNetworkAccessManager for doing the request
-    and deals with its asynchronous nature.
-
-    Params:
-        * theManager - instance of QNetworkAccessManager
-        * theMethod - 'POST' or 'GET', other http method is not supported.
-        * theUrl - url of content
-        * theData : dict - dictionary that contains data for POST request.
-                           ignored in GET request.
-        * theHook - callback function to check progress of download
-    Raises:
-        * ImportDialogError - when network connection error.
-        * NotImplementedError - when theMethod value is not 'POST' or 'GET'.
-    Returns:
-        A Response object.
-    """
-    myUrl = QUrl(theUrl)
-    myRequest = QNetworkRequest(myUrl)
-
-    if callable(theData) and theHook is None:
-        theHook = theData
-        theData = None
-
-    if theMethod == 'GET':
-        myReply = theManager.get(myRequest)
-    elif theMethod == 'POST':
-        # prepare POST data
-        myPostData = QUrl()
-        for myKey, myValue in theData.items():
-            myPostData.addEncodedQueryItem(myKey, str(myValue))
-        myPostData = myPostData.encodedQuery()
-
-        # NOTE(gigih): this content type header don't support
-        #              file upload.
-        myRequest.setHeader(QNetworkRequest.ContentTypeHeader,
-                            "application/x-www-form-urlencoded")
-
-        myReply = theManager.post(myRequest, myPostData)
-    else:
-        raise NotImplementedError('%s not implemented' % theMethod)
-
-    def wait(theReply):
-        """ block the program until requests finished. """
-        if theHook:
-            theReply.downloadProgress.connect(theHook)
-
-        # wait until finished
-        while not theReply.isFinished():
-            QCoreApplication.processEvents()
-            time.sleep(0.1)
-
-        if theReply.error() != QNetworkReply.NoError:
-            raise ImportDialogError(theReply.errorString())
-
-    wait(myReply)
-
-    ## check redirection
-    ## Its only handle one layer of redirection tough
-    myRedirectUrl = myReply.attribute(
-        QNetworkRequest.RedirectionTargetAttribute)
-    myRedirectUrl = myRedirectUrl.toUrl()
-
-    if not myRedirectUrl.isEmpty() and myRedirectUrl != myUrl:
-        myReply = theManager.get(QNetworkRequest(myRedirectUrl))
-        wait(myReply)
-
-    # prepare Response object
-    myResult = Response()
-    myResult.content = str(myReply.readAll())
-    myResult.url = str(myReply.url().toString())
-
-    return myResult
 
 
 def httpDownload(theManager, theUrl, theOutPath, theProgressDlg=None):
@@ -175,20 +92,21 @@ def httpDownload(theManager, theUrl, theOutPath, theProgressDlg=None):
 class ImportDialog(QDialog, Ui_ImportDialogBase):
 
     def __init__(self, theParent=None, theIface=None):
-        '''Constructor for the dialog.
+        """Constructor for import dialog.
 
         Args:
            * theParent - Optional widget to use as parent
+           * theIface - an instance of QGisInterface
         Returns:
            not applicable
         Raises:
            no exceptions explicitly raised
-        '''
+        """
         QDialog.__init__(self, theParent)
         self.parent = theParent
         self.setupUi(self)
 
-        self.setWindowTitle(self.tr('Import Hot-Export'))
+        self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = theIface
         self.url = "http://osm.linfiniti.com/buildings-shp"
@@ -205,7 +123,8 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         # creating progress dialog for download
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
-        self.progressDialog.setWindowTitle(self.tr("OSM Shapefile Downloader"))
+        myTitle = self.tr("InaSAFE OpenStreetMap Downloader")
+        self.progressDialog.setWindowTitle(myTitle)
 
         ## set map parameter based on placeholder self.map widget
         theMap = InasafeLightMaps(self.gbxMap)
@@ -241,6 +160,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     # pylint: disable=W0613
 
     def setupOptions(self):
+        """ Set the content of combo box for region and preset """
         self.cbxRegion.insertItem(0, 'Indonesia', 1)
         self.cbxRegion.insertItem(1, 'Africa', 2)
         self.cbxRegion.insertItem(2, 'Philippines', 4)
@@ -312,11 +232,14 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             self.loadShapeFile()
             self.done(QDialog.Accepted)
         except CanceledImportDialogError:
+            # don't show anything because this exception raised
+            # when user canceling the import process directly
             pass
         except Exception as myEx:
-            QMessageBox.warning(self,
-                                self.tr("Hot-Export Import Error"),
-                                str(myEx))
+            QMessageBox.warning(
+                self,
+                self.tr("InaSAFE OpenStreetMap Downloader Error"),
+                str(myEx))
 
             self.progressDialog.cancel()
 
@@ -352,6 +275,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     def doImport(self):
         """
         Import shape files from Linfinti.
+        Raises:
+            * ImportDialogError - when network error occurred
+            * CanceledImportDialogError - when user press cancel button
         """
 
         ## preparing necessary data
@@ -388,17 +314,21 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         """
         Download shape file from theUrl and write to theOutput.
         Params:
-            * theUrl - URL of shape file in Hot-Export
+            * theUrl - URL of shape file
             * theOutput - path of output file
+        Raises:
+            * ImportDialogError - when network error occurred
         """
 
         self.progressDialog.show()
         self.progressDialog.setMaximum(100)
         self.progressDialog.setValue(0)
 
-        myLabelText = "Begin downloading shapefile from " \
-                      + "%1 ..."
-        self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
+        # myLabelText = "Begin downloading shapefile from " \
+        #               + "%1 ..."
+        # self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
+        myLabelText = self.tr("Begin downloading shapefile")
+        self.progressDialog.setLabelText(myLabelText)
 
         myResult = httpDownload(self.nam, theUrl, theOutput,
                                 self.progressDialog)
@@ -433,6 +363,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
     def loadShapeFile(self):
         """
         Load downloaded shape file to QGIS Main Window.
+
+        Raises:
+            ImportDialogError - when buildings.shp not exist
         """
 
         myDir = str(self.outDir.text())
