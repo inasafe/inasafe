@@ -57,7 +57,6 @@ class MapLegend():
             self.legendTitle = self.tr('Legend')
         else:
             self.legendTitle = theLegendTitle
-        print 'AFUFUFU', self.legendTitle
         self.legendNotes = theLegendNotes
         self.legendUnits = theLegendUnits
 
@@ -190,7 +189,6 @@ class MapLegend():
                 myValue = myItem.value
                 myLabel = myItem.label
                 myColor = myItem.color
-                print 'Value: %s Label %s' % (myValue, myLabel)
                 self.addClassToLegend(myColor,
                                       theMin=myLastValue,
                                       theMax=myValue,
@@ -299,38 +297,36 @@ class MapLegend():
         LOGGER.debug('theLabel' + str(theLabel))
         LOGGER.debug('theMin ' + str(theMin))
         LOGGER.debug('theMax ' + str(theMax))
-
-        # branches for each style type
-        if theType == 'singleSymbol':
+        LOGGER.debug('theCategory ' + str(theCategory))
+        if theLabel is not None and theLabel != '':
             pass
-        elif theType == 'categorizedSymbol':
-            if theCategory is not None:
-                theLabel = theCategory + ' [' + theLabel + ']'
-
-        elif theType == 'graduatedSymbol' or theType == 'rasterStyle':
-            # can be a problem if the min and theMax is not found
-            if theMin is None or theMax is None:
-                LOGGER.debug('Problem caused theMin or theMax is not found')
-                return
-
-            # if we have theMin or theMax but theLabel is '',
-            # put the min and the max as label
-            if theMin is not None and theMax is not None and theLabel == '':
-                if float(theMin) - int(theMin) == 0.0:
-                    myMinString = '%i' % theMin
-                else:
-                    myMinString = str(theMin)
-                if float(theMax) - int(theMax) == 0.0:
-                    myMaxString = '%i' % theMax
-                else:
-                    myMaxString = str(theMax)
-                theLabel += '[' + myMinString + ', ' + myMaxString + ']'
-            if float(str(theMin)) == float(str(theMax)):
-                # pass because it's not needed
-                return
-
         else:
-            return
+        # branches for each style type
+            if theType == 'singleSymbol':
+                LOGGER.debug('singleSymbol is not impelemented yet')
+                pass
+            elif theType == 'categorizedSymbol':
+                if theCategory is not None or theCategory == '':
+                    theLabel = str(theCategory)
+            elif theType == 'graduatedSymbol' or theType == 'rasterStyle':
+                pass
+                # can be a problem if the min and theMax is not found
+                if theMin is None or theMax is None:
+                    LOGGER.debug('Problem caused theMin or theMax is not found')
+                    return
+                else:
+                    if float(theMin) - int(theMin) == 0.0:
+                        myMinString = '%i' % theMin
+                    else:
+                        myMinString = str(theMin)
+                    if float(theMax) - int(theMax) == 0.0:
+                        myMaxString = '%i' % theMax
+                    else:
+                        myMaxString = str(theMax)
+                    theLabel += '[' + myMinString + ', ' + myMaxString + ']'
+                if float(str(theMin)) == float(str(theMax)):
+                    # pass because it's not needed
+                    return
 
         myPainter.drawText(myLabelX, myOffset + 25, theLabel)
 
@@ -342,7 +338,6 @@ class MapLegend():
         if self.legendNotes is not None:
             self.extendLegend()
             myOffset = self.legendImage.height() - 15
-            print myOffset
             myPainter = QtGui.QPainter(self.legendImage)
             myFontWeight = QtGui.QFont.StyleNormal
             myItalicsFlag = True

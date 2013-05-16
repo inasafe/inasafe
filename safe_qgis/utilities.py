@@ -90,11 +90,11 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
         {'target_field': 'DMGLEVEL',
         'style_classes':
         [{'transparency': 1, 'max': 1.5, 'colour': '#fecc5c',
-          'min': 0.5, 'label': 'Low damage', 'size' : 1},
+          'min': 0.5, 'label': '[0.5 - 1.5] Low damage', 'size' : 1},
         {'transparency': 55, 'max': 2.5, 'colour': '#fd8d3c',
-         'min': 1.5, 'label': 'Medium damage', 'size' : 1},
+         'min': 1.5, 'label': '[1.5 - 2.5] Medium damage', 'size' : 1},
         {'transparency': 80, 'max': 3.5, 'colour': '#f31a1c',
-         'min': 2.5, 'label': 'High damage', 'size' : 1}]}
+         'min': 2.5, 'label': '[2.5 - 3.5] High damage', 'size' : 1}]}
 
         .. note:: The transparency and size keys are optional. Size applies
            to points only.
@@ -240,8 +240,7 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
             myValue = float(myClass['value'])
         except TypeError:
             raise StyleError(
-                'Class break lower bound should be a number.'
-                'I got %s' % myClass['value'])
+                'Value should be a number. I got %s' % myClass['value'])
 
         myColour = myClass['colour']
         myLabel = myClass['label']
@@ -474,7 +473,6 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                     myPixel.pixelValue = myValue
                     myPixel.percentTransparent = myTransparencyPercent
                     myTransparencyList.append(myPixel)
-                    #myLabel = myClass['label']
 
     # Apply the shading algorithm and design their ramp
     theQgsRasterLayer.setColorShadingAlgorithm(

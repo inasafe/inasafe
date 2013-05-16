@@ -2438,7 +2438,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
         myStyleType = myEngineImpactLayer.get_style_type()
-        LOGGER.debug('Zanetti : myStyle:' + str(myStyle))
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
             LOGGER.debug('myEngineImpactLayer.is_vector')
@@ -2451,9 +2450,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             elif myStyleType == 'graduatedSymbol':
                 LOGGER.debug('use graduated')
                 setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
-            else:
-                LOGGER.debug('use else')
-                setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
+            # use default style
+            # else:
+            #     LOGGER.debug('use else')
+            #     setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
         elif myEngineImpactLayer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not myStyle:
