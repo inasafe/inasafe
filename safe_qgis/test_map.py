@@ -72,7 +72,7 @@ class MapTest(unittest.TestCase):
         myExpectedSizes = [
             352798,  # as rendered on linux ub 12.04 64
             234806,  # as rendered on osx mountain lion 10.8
-            447872,  # as rendered on linux mint Nadia 14
+            447217,  # as rendered on linux mint Nadia 14
             447907,  # as rendered on windows 7 sp1 AMD64
             438647,  # as rendered on Jenkins post 24 April 2013
         ]
