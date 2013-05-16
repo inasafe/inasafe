@@ -304,15 +304,14 @@ class MapLegend():
         # branches for each style type
             if theType == 'singleSymbol':
                 LOGGER.debug('singleSymbol is not impelemented yet')
-                pass
             elif theType == 'categorizedSymbol':
                 if theCategory is not None or theCategory == '':
                     theLabel = str(theCategory)
             elif theType == 'graduatedSymbol' or theType == 'rasterStyle':
-                pass
                 # can be a problem if the min and theMax is not found
                 if theMin is None or theMax is None:
-                    LOGGER.debug('Problem caused theMin or theMax is not found')
+                    LOGGER.debug('Problem caused theMin or theMax is not '
+                                 'found')
                     return
                 else:
                     if float(theMin) - int(theMin) == 0.0:
