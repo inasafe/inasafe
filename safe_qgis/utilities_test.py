@@ -279,15 +279,14 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
             else:
                 LOGGER.debug('No match for %s' % myControlImage)
 
-    # print myPlatformMatchFlag, 'myPlatformMatchFlag'
     if not myPlatformMatchFlag:
         LOGGER.debug('No platform specific control image could be found,\n'
                      'testing against all control images. Try adding %s in\n '
                      'the file name if you want it to be detected for this\n'
                      'platform which will speed up image comparison tests.' %
                      myPlatform)
-    else:
-        return
+    # else:
+    #     return
     LOGGER.debug('You shall not pass')
     # Otherwise test all control images because we dont know what platform
     # we are on.

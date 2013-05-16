@@ -1,11 +1,11 @@
 import numpy
+from third_party.odict import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
     get_question,
     get_function_title)
-from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -13,9 +13,10 @@ from safe.common.utilities import (
     format_int,
     verify,
     round_thousand,
-    humanize_class)
+    humanize_class,
+    create_classes,
+    create_label)
 from safe.common.tables import Table, TableRow
-from third_party.odict import OrderedDict
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -37,32 +38,37 @@ class FloodEvacuationFunction(FunctionProvider):
     defaults = get_defaults()
 
     # Function documentation
-    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
-                  'in raster format on population.')
-    actions = tr('Provide details about how many people would likely need '
-                 'to be evacuated, where they are located and what resources '
-                 'would be required to support them.')
-    detailed_description = \
-        tr('The population subject to inundation exceeding a threshold '
-           '(default 1m) is calculated and returned as a raster layer.'
-           'In addition the total number and the required needs in terms '
-           'of the BNPB (Perka 7) are reported. The threshold can be '
-           'changed and even contain multiple numbers in which case '
-           'evacuation and needs are calculated using the largest number '
-           'with population breakdowns provided for the smaller numbers. The '
-           'population raster is resampled to the resolution of the '
-           'hazard raster and is rescaled so that the resampled population '
-           'counts reflect estimates of population count per resampled cell. '
-           'The resulting impact layer has the same resolution and reflects '
-           'population count per cell which are affected by inundation.')
-    hazard_input = tr('A hazard raster layer where each cell '
-                      'represents flood depth (in meters).')
-    exposure_input = tr('An exposure raster layer where each '
-                        'cell represent population count.')
-    output = tr('Raster layer contains population affected and the minimum'
-                'needs based on the population affected.')
-    limitation = tr('The default threshold of 1 meter was selected based on '
-                    'consensus, not hard evidence.')
+    synopsis = tr(
+        'To assess the impacts of (flood or tsunami) inundation in raster '
+        'format on population.')
+    actions = tr(
+        'Provide details about how many people would likely need to be '
+        'evacuated, where they are located and what resources would be '
+        'required to support them.')
+    detailed_description = tr(
+        'The population subject to inundation exceeding a threshold '
+        '(default 1m) is calculated and returned as a raster layer. In '
+        'addition the total number and the required needs in terms of the '
+        'BNPB (Perka 7) are reported. The threshold can be changed and even '
+        'contain multiple numbers in which case evacuation and needs are '
+        'calculated using the largest number with population breakdowns '
+        'provided for the smaller numbers. The population raster is resampled '
+        'to the resolution of the hazard raster and is rescaled so that the '
+        'resampled population counts reflect estimates of population count '
+        'per resampled cell. The resulting impact layer has the same '
+        'resolution and reflects population count per cell which are affected '
+        'by inundation.')
+    hazard_input = tr(
+        'A hazard raster layer where each cell represents flood depth '
+        '(in meters).')
+    exposure_input = tr(
+        'An exposure raster layer where each cell represent population count.')
+    output = tr(
+        'Raster layer contains population affected and the minimum needs '
+        'based on the population affected.')
+    limitation = tr(
+        'The default threshold of 1 meter was selected based on consensus, '
+        'not hard evidence.')
 
     # Configurable parameters
     parameters = OrderedDict([
@@ -81,8 +87,9 @@ class FloodEvacuationFunction(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Raster layer of flood depth
-              P: Raster layer of population data on the same grid as H
+              my_hazard: Raster layer of flood depth
+              my_exposure: Raster layer of population data on the same grid
+              as my_hazard
 
         Counts number of people exposed to flood levels exceeding
         specified threshold.
@@ -167,8 +174,6 @@ class FloodEvacuationFunction(FunctionProvider):
             [tr('Family Kits'), format_int(family_kits)],
             [tr('Toilets'), format_int(toilets)]]
 
-        impact_table = Table(table_body).toNewlineFreeString()
-
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
         table_body.append(TableRow(tr('How will we reach stranded people?')))
@@ -199,45 +204,42 @@ class FloodEvacuationFunction(FunctionProvider):
                         'val': format_int(val)})
                 table_body.append(TableRow(s, header=False))
 
+        # Result
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('People in need of evacuation')
+        impact_table = impact_summary
 
-        # Generate 8 equidistant classes across the range of flooded population
-        # 8 is the number of classes in the predefined flood population style
-        # as imported
-        classes = numpy.linspace(numpy.nanmin(my_impact.flat[:]),
-                                 numpy.nanmax(my_impact.flat[:]), 8)
+        # Create style
+        colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
+                   '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+        classes = create_classes(my_impact.flat[:], len(colours))
         interval_classes = humanize_class(classes)
-
-        # Work out how many decimals to use
-        # Modify labels in existing flood style to show quantities
-        style_classes = style_info['style_classes']
-        for i in xrange(len(classes)):
+        style_classes = []
+        for i in xrange(len(colours)):
+            style_class = dict()
             if i == 1:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Low')
+                label = create_label(interval_classes[i], 'Low')
             elif i == 4:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('Medium')
+                label = create_label(interval_classes[i], 'Medium')
             elif i == 7:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + '] ' + tr('High')
+                label = create_label(interval_classes[i], 'High')
             else:
-                style_classes[i]['label'] = \
-                    '[' + ' - '.join(interval_classes[i]) + ']'
-
-            # Override associated quantities in colour style
+                label = create_label(interval_classes[i], 'High')
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
             if i == 0:
                 transparency = 100
             else:
                 transparency = 0
-            style_classes[i]['transparency'] = transparency
-            # int & round Added by Tim in 1.2 - class is rounded to the
-            # nearest int because we prefer to not categorise people as being
-            # e.g. '0.4 people'. Fixes #542
-            style_classes[i]['quantity'] = classes[i]
+            style_class['transparency'] = transparency
+            style_class['colour'] = colours[i]
+            style_classes.append(style_class)
+
+        style_info = dict(target_field=None,
+                          style_classes=style_classes,
+                          style_type='rasterStyle')
 
         # For printing map purpose
+        map_title = tr('People in need of evacuation')
         legend_notes = tr('Thousand separator is represented by \'.\'')
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')

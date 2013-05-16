@@ -28,20 +28,22 @@ import uuid
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
 
-from qgis.core import (QGis,
-                       QgsRasterLayer,
-                       QgsMapLayer,
-                       QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform,
-                       QgsGraduatedSymbolRendererV2,
-                       QgsSymbolV2,
-                       QgsRendererRangeV2,
-                       QgsSymbolLayerV2Registry,
-                       QgsColorRampShader,
-                       QgsRasterTransparency,
-                       QgsVectorLayer,
-                       QgsFeature
-                       )
+from qgis.core import (
+    QGis,
+    QgsRasterLayer,
+    QgsMapLayer,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsGraduatedSymbolRendererV2,
+    QgsSymbolV2,
+    QgsRendererRangeV2,
+    QgsRendererCategoryV2,
+    QgsSymbolLayerV2Registry,
+    QgsColorRampShader,
+    QgsRasterTransparency,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsCategorizedSymbolRendererV2)
 
 from safe_interface import temp_dir
 
@@ -66,8 +68,8 @@ import safe_qgis.resources  # pylint: disable=W0611
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def setVectorStyle(theQgisVectorLayer, theStyle):
-    """Set QGIS vector style based on InaSAFE style dictionary.
+def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
+    """Set graduated QGIS vector style based on InaSAFE style dictionary.
 
     For **opaque** a value of **0** can be used. For **fully transparent**, a
     value of **100** can be used. The calling function should take care to
@@ -88,11 +90,11 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
         {'target_field': 'DMGLEVEL',
         'style_classes':
         [{'transparency': 1, 'max': 1.5, 'colour': '#fecc5c',
-          'min': 0.5, 'label': 'Low damage', 'size' : 1},
+          'min': 0.5, 'label': '[0.5 - 1.5] Low damage', 'size' : 1},
         {'transparency': 55, 'max': 2.5, 'colour': '#fd8d3c',
-         'min': 1.5, 'label': 'Medium damage', 'size' : 1},
+         'min': 1.5, 'label': '[1.5 - 2.5] Medium damage', 'size' : 1},
         {'transparency': 80, 'max': 3.5, 'colour': '#f31a1c',
-         'min': 2.5, 'label': 'High damage', 'size' : 1}]}
+         'min': 2.5, 'label': '[2.5 - 3.5] High damage', 'size' : 1}]}
 
         .. note:: The transparency and size keys are optional. Size applies
            to points only.
@@ -179,6 +181,111 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
 
     myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
     myRenderer.setMode(QgsGraduatedSymbolRendererV2.EqualInterval)
+    myRenderer.setClassAttribute(myTargetField)
+    theQgisVectorLayer.setRendererV2(myRenderer)
+    theQgisVectorLayer.saveDefaultStyle()
+
+
+def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
+    """Set categorized QGIS vector style based on InaSAFE style dictionary.
+
+    For **opaque** a value of **0** can be used. For **fully transparent**, a
+    value of **100** can be used. The calling function should take care to
+    scale the transparency level to between 0 and 100.
+
+    Args:
+        * theQgisVectorLayer: QgsMapLayer
+        * theStyle: dict - Dictionary of the form as in the example below
+
+    Returns:
+        None - Sets and saves style for theQgisVectorLayer
+
+    Raises:
+        None
+
+    Example:
+
+        {'target_field': 'DMGLEVEL',
+        'style_classes':
+        [{'transparency': 1, 'value': 1, 'colour': '#fecc5c',
+          'label': 'Low damage', 'size' : 1},
+        {'transparency': 55, 'max': 2, 'colour': '#fd8d3c',
+         'label': 'Medium damage', 'size' : 1},
+        {'transparency': 80, 'max': 3, 'colour': '#f31a1c',
+         'label': 'High damage', 'size' : 1}]}
+
+        .. note:: The transparency and size keys are optional. Size applies
+           to points only.
+
+    """
+    myTargetField = theStyle['target_field']
+    myClasses = theStyle['style_classes']
+    myGeometryType = theQgisVectorLayer.geometryType()
+
+    myCategoryList = []
+    for myClass in myClasses:
+        # Transparency 100: transparent
+        # Transparency 0: opaque
+        mySize = 2  # mm
+        if 'size' in myClass:
+            mySize = myClass['size']
+        myTransparencyPercent = 0
+        if 'transparency' in myClass:
+            myTransparencyPercent = myClass['transparency']
+
+        if 'value' not in myClass:
+            raise StyleError('Style info should provide a "value" entry')
+
+        try:
+            myValue = float(myClass['value'])
+        except TypeError:
+            raise StyleError(
+                'Value should be a number. I got %s' % myClass['value'])
+
+        myColour = myClass['colour']
+        myLabel = myClass['label']
+        myColour = QtGui.QColor(myColour)
+        mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
+        myColourString = "%s, %s, %s" % (
+            myColour.red(),
+            myColour.green(),
+            myColour.blue())
+        # Work around for the fact that QgsSimpleMarkerSymbolLayerV2
+        # python bindings are missing from the QGIS api.
+        # .. see:: http://hub.qgis.org/issues/4848
+        # We need to create a custom symbol layer as
+        # the border colour of a symbol can not be set otherwise
+        myRegistry = QgsSymbolLayerV2Registry.instance()
+        if myGeometryType == QGis.Point:
+            myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
+            # note that you can get a list of available layer properties
+            # that you can set by doing e.g.
+            # QgsSimpleMarkerSymbolLayerV2.properties()
+            mySymbolLayer = myMetadata.createSymbolLayer({
+                'color_border': myColourString})
+            mySymbolLayer.setSize(mySize)
+            mySymbol.changeSymbolLayer(0, mySymbolLayer)
+        elif myGeometryType == QGis.Polygon:
+            myMetadata = myRegistry.symbolLayerMetadata('SimpleFill')
+            mySymbolLayer = myMetadata.createSymbolLayer({
+                'color_border': myColourString})
+            mySymbol.changeSymbolLayer(0, mySymbolLayer)
+        else:
+            # for lines we do nothing special as the property setting
+            # below should give us what we require.
+            pass
+
+        mySymbol.setColor(myColour)
+        # .. todo:: Check that vectors use alpha as % otherwise scale TS
+        # Convert transparency % to opacity
+        # alpha = 0: transparent
+        # alpha = 1: opaque
+        alpha = 1 - myTransparencyPercent / 100.0
+        mySymbol.setAlpha(alpha)
+        myCategory = QgsRendererCategoryV2(myValue, mySymbol, myLabel)
+        myCategoryList.append(myCategory)
+
+    myRenderer = QgsCategorizedSymbolRendererV2('', myCategoryList)
     myRenderer.setClassAttribute(myTargetField)
     theQgisVectorLayer.setRendererV2(myRenderer)
     theQgisVectorLayer.saveDefaultStyle()
@@ -366,7 +473,6 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                     myPixel.pixelValue = myValue
                     myPixel.percentTransparent = myTransparencyPercent
                     myTransparencyList.append(myPixel)
-                    #myLabel = myClass['label']
 
     # Apply the shading algorithm and design their ramp
     theQgsRasterLayer.setColorShadingAlgorithm(

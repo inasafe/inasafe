@@ -1,16 +1,18 @@
 import numpy
-from safe.impact_functions.core import (FunctionProvider,
-                                        get_hazard_layer,
-                                        get_exposure_layer,
-                                        get_question)
+from third_party.odict import OrderedDict
+from safe.impact_functions.core import (
+    FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
-from safe.common.utilities import (ugettext as tr,
-                                   format_int,
-                                   round_thousand,
-                                   get_defaults)
+from safe.common.utilities import (
+    ugettext as tr,
+    format_int,
+    round_thousand,
+    get_defaults,
+    humanize_class,
+    create_classes,
+    create_label)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from third_party.odict import OrderedDict
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')
@@ -32,25 +34,29 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
     title = tr('Need evacuation')
     # Function documentation
-    synopsis = tr('To assess the impacts of (flood or tsunami) inundation '
-                  'in vector format on population.')
-    actions = tr('Provide details about how many people would likely need '
-                 'to be evacuated, where they are located and what resources '
-                 'would be required to support them.')
+    synopsis = tr(
+        'To assess the impacts of (flood or tsunami) inundation in vector '
+        'format on population.')
+    actions = tr(
+        'Provide details about how many people would likely need to be '
+        'evacuated, where they are located and what resources would be '
+        'required to support them.')
 
-    detailed_description = \
-        tr('The population subject to inundation is determined whether in'
-           'an area which affected or not. You can also set an evacuation'
-           'percentage to calculate how many percent of the total population'
-           'affected to be evacuated. This number will be used to estimate'
-           'needs based on BNPB Perka 7/2008 minimum bantuan.')
+    detailed_description = tr(
+        'The population subject to inundation is determined whether in an '
+        'area which affected or not. You can also set an evacuation '
+        'percentage to calculate how many percent of the total population '
+        'affected to be evacuated. This number will be used to estimate needs'
+        ' based on BNPB Perka 7/2008 minimum bantuan.')
 
-    hazard_input = tr('A hazard vector layer which has attribute affected '
-                      'the value is either 1 or 0')
-    exposure_input = tr('An exposure raster layer where each cell represent '
-                        'population count.')
-    output = tr('Vector layer contains population affected and the minimum'
-                'needs based on evacuation percentage.')
+    hazard_input = tr(
+        'A hazard vector layer which has attribute affected the value is '
+        'either 1 or 0')
+    exposure_input = tr(
+        'An exposure raster layer where each cell represent population count.')
+    output = tr(
+        'Vector layer contains population affected and the minimum needs '
+        'based on evacuation percentage.')
 
     target_field = 'population'
     defaults = get_defaults()
@@ -238,37 +244,41 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                            tr('Minimum needs are defined in BNPB '
                               'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('People affected by flood prone areas')
 
+        # Create style
         # Define classes for legend for flooded population counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         population_counts = [x['population'] for x in new_attributes]
-        cls = [0] + numpy.linspace(1,
-                                   max(population_counts),
-                                   len(colours)).tolist()
+        classes = create_classes(population_counts, len(colours))
+        interval_classes = humanize_class(classes)
 
         # Define style info for output polygons showing population counts
         style_classes = []
-        for i, colour in enumerate(colours):
-            lo = cls[i]
-            hi = cls[i + 1]
-
+        for i in xrange(len(colours)):
+            style_class = dict()
+            style_class['label'] = create_label(interval_classes[i])
             if i == 0:
-                label = tr('0')
                 transparency = 100
+                style_class['min'] = 0
             else:
-                label = tr('%i - %i') % (lo, hi)
                 transparency = 0
-
-            entry = dict(label=label, colour=colour, min=lo, max=hi,
-                         transparency=transparency, size=1)
-            style_classes.append(entry)
+                style_class['min'] = classes[i - 1]
+            style_class['transparency'] = transparency
+            style_class['colour'] = colours[i]
+            style_class['max'] = classes[i]
+            style_classes.append(style_class)
 
         # Override style info with new classes and name
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
-                          legend_title=tr('Population Count'))
+                          style_type='graduatedSymbol')
+
+        # For printing map purpose
+        map_title = tr('People affected by flood prone areas')
+        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_units = tr('(people per polygon)')
+        legend_title = tr('Population Count')
 
         # Create vector layer and return
         V = Vector(data=new_attributes,
@@ -277,7 +287,10 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                    name=tr('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
+                             'target_field': self.target_field,
                              'map_title': map_title,
-                             'target_field': self.target_field},
+                             'legend_notes': legend_notes,
+                             'legend_units': legend_units,
+                             'legend_title': legend_title},
                    style_info=style_info)
         return V
