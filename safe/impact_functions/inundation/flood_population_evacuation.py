@@ -14,7 +14,8 @@ from safe.common.utilities import (
     verify,
     round_thousand,
     humanize_class,
-    create_classes)
+    create_classes,
+    create_label)
 from safe.common.tables import Table, TableRow
 
 
@@ -216,16 +217,13 @@ class FloodEvacuationFunction(FunctionProvider):
         for i in xrange(len(colours)):
             style_class = dict()
             if i == 1:
-                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr(
-                    'Low')
+                label = create_label(interval_classes[i], 'Low')
             elif i == 4:
-                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr(
-                    'Medium')
+                label = create_label(interval_classes[i], 'Medium')
             elif i == 7:
-                label = '[' + ' - '.join(interval_classes[i]) + '] ' + tr(
-                    'High')
+                label = create_label(interval_classes[i], 'High')
             else:
-                label = '[' + ' - '.join(interval_classes[i]) + ']'
+                label = create_label(interval_classes[i], 'High')
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             if i == 0:

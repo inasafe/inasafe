@@ -498,3 +498,14 @@ def create_classes(my_list, num_classes):
     if min_value == 0:
         classes = classes[1:]
     return classes
+
+
+def create_label(my_tuple, extra_label=None):
+    """Return a label based on my_tuple (a,b) and extra label.
+    The output will be something like:
+                [a - b] extra_label
+    """
+    if extra_label is not None:
+        return '[' + ' - '.join(my_tuple) + '] ' + str(extra_label)
+    else:
+        return '[' + ' - '.join(my_tuple) + ']'

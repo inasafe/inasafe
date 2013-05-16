@@ -12,7 +12,8 @@ from safe.common.utilities import (
     get_defaults,
     format_int,
     humanize_class,
-    create_classes)
+    create_classes,
+    create_label)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 
@@ -357,7 +358,7 @@ class ITBFatalityFunction(FunctionProvider):
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
-            style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
+            style_class['label'] = create_label(interval_classes[i])
             style_class['quantity'] = classes[i]
             if i == 0:
                 transparency = 100

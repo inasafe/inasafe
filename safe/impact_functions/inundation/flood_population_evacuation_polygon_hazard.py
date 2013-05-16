@@ -9,7 +9,8 @@ from safe.common.utilities import (
     round_thousand,
     get_defaults,
     humanize_class,
-    create_classes)
+    create_classes,
+    create_label)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -256,7 +257,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
-            style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
+            style_class['label'] = create_label(interval_classes[i])
             if i == 0:
                 transparency = 100
                 style_class['min'] = 0

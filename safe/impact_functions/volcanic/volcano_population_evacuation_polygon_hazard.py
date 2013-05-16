@@ -10,7 +10,8 @@ from safe.common.utilities import (
     format_int,
     round_thousand,
     humanize_class,
-    create_classes)
+    create_classes,
+    create_label)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -255,7 +256,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         print classes, len(classes)
         for i in xrange(len(colours)):
             style_class = dict()
-            style_class['label'] = '[' + ' - '.join(interval_classes[i]) + ']'
+            style_class['label'] = create_label(interval_classes[i])
             if i == 0:
                 transparency = 100
                 style_class['min'] = 0
