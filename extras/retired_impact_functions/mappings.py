@@ -12,7 +12,7 @@ def osm2padang(E):
     (data.kompetisiosm.org) to 9 vulnerability classes identified by
     Geoscience Australia and ITB in the post 2009 Padang earthquake
     survey (http://trove.nla.gov.au/work/38470066).
-    The mapping was developed by Abigail Baca, GFDRR.
+    The mapping was developed by Abigail Baca, World Bank-GFDRR.
 
     Input
         E: Vector object representing the OSM data

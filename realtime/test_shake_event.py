@@ -443,7 +443,7 @@ searchBoxes: None
                           'credits': PyQt4.QtCore.QString(
                               u'Supported by the Australia-Indonesia Facility'
                               u' for Disaster Reduction, '
-                              u'Geoscience Australia and the GFDRR.'),
+                              u'Geoscience Australia and the World Bank-GFDRR.'),
                           'latitude-value': u'0\xb012\'36.00"S',
                           'time': '2:15:35', 'depth-value': '11.0'}
         myResult['elapsed-time'] = u''
