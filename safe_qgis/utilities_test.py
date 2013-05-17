@@ -285,8 +285,8 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
                      'the file name if you want it to be detected for this\n'
                      'platform which will speed up image comparison tests.' %
                      myPlatform)
-    # else:
-    #     return
+    else:
+        return
     LOGGER.debug('You shall not pass')
     # Otherwise test all control images because we dont know what platform
     # we are on.
