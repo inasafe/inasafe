@@ -58,15 +58,7 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getLegend.png',
-                           'getLegend-variantWindowsVistaSP2-32.png',
-                           'getLegend-variantWindowsXPSP3-32.png',
-                           'getLegend-variantOSXml.png',
-                           'getLegend-variantUB12.04-64.png',
-                           'getLegend-variantUB11.04-64.png',
-                           'getLegend-variantLinuxMint-14-x86_64.png',
-                           'getLegend-variantWindows7-SP1-AMD64.png',
-                           'getLegend-variantJenkins.png']
+        myControlImages = ['getLegend-variantLinuxMint-14-x86_64.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
 
         myFlag, myMessage = checkImages(myControlImages,
@@ -97,15 +89,7 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getVectorLegend.png',
-                           'getVectorLegend-variantWindowsVistaSP2-32.png',
-                           'getVectorLegend-variantWindowsXPSP3-32.png',
-                           'getVectorLegend-variantOSXml.png',
-                           'getVectorLegend-variantUB12.04-64.png',
-                           'getVectorLegend-variantUB11.04-64.png',
-                           'getVectorLegend-variantLinuxMint-14-x86_64.png',
-                           'getVectorLegend-variantWindows7-SP1-AMD64.png',
-                           'getVectorLegend-variantJenkins.png']
+        myControlImages = ['getVectorLegend-variantLinuxMint-14-x86_64.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
@@ -126,16 +110,7 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getRasterLegend.png',
-                           'getRasterLegend-variantWindowsVistaSP2-32.png',
-                           'getRasterLegend-variantWindowsXPSP3-32.png',
-                           'getRasterLegend-variantOSXml.png',
-                           'getRasterLegend-variantUB12.04-64.png',
-                           'getRasterLegend-variantUB12.10-64.png',
-                           'getRasterLegend-variantUB11.04-64.png',
-                           'getRasterLegend-variantLinuxMint-14-x86_64.png',
-                           'getRasterLegend-variantWindows7-SP1-AMD64.png',
-                           'getRasterLegend-variantJenkins.png']
+        myControlImages = ['getRasterLegend-variantLinuxMint-14-x86_64.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -165,16 +140,7 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['addSymbolToLegend.png',
-                           'addSymbolToLegend-variantWindowsVistaSP2-32.png',
-                           'addSymbolToLegend-variantWindowsXPSP3-32.png',
-                           'addSymbolToLegend-variantOSXml.png',
-                           'addSymbolToLegend-variantUB12.04-64.png',
-                           'addSymbolToLegend-variantUB12.10-64.png',
-                           'addSymbolToLegend-variantUB11.04-64.png',
-                           'addSymbolToLegend-variantLinuxMint-14-x86_64.png',
-                           'addSymbolToLegend-variantWindows7-SP1-AMD64.png',
-                           'addSymbolToLegend-variantJenkins.png']
+        myControlImages = ['addSymbolToLegend-variantLinuxMint-14-x86_64.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
@@ -207,16 +173,7 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['addClassToLegend.png',
-                           'addClassToLegend-variantWindowsVistaSP2-32.png',
-                           'addClassToLegend-variantWindowsXPSP3-32.png',
-                           'addClassToLegend-variantOSXml.png',
-                           'addClassToLegend-variantUB12.04-64.png',
-                           'addClassToLegend-variantUB12.10-64.png',
-                           'addClassToLegend-variantUB11.04-64.png',
-                           'addClassToLegend-variantLinuxMint-14-x86_64.png',
-                           'addClassToLegend-variantWindows7-SP1-AMD64.png',
-                           'addClassToLegend-variantJenkins.png']
+        myControlImages = ['addClassToLegend-variantLinuxMint-14-x86_64.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(myControlImages,
                                         myPath,
