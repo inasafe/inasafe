@@ -379,20 +379,28 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                           '<tr><td>' + myNotes + '</td></tr>\n')
             my_limitations_msg = (
                 '<ol>'
-                + '<li>' + self.tr('InaSAFE is not a hazard modelling tool.')
+                + '<li>'
+                + self.tr('InaSAFE is not a hazard modelling tool.')
                 + '</li>'
-                + '<li>' + self.tr('Exposure data in the form of roads (or any'
-                                   ' other line feature) is not yet supported.')
+                + '<li>'
+                + self.tr(
+                    'Exposure data in the form of roads (or any other line '
+                    'feature) is not yet supported.')
                 + '</li>'
-                + '<li>' + self.tr('Polygon area analysis (such as land use) '
-                                   'is not yet supported.')
+                + '<li>'
+                + self.tr(
+                    'Polygon area analysis (such as land use) is not yet '
+                    'supported.')
                 + '</li>'
-                + '<li>' + self.tr('Population density data must be provided '
-                                   'in WGS84 geographic coordinates.')
+                + '<li>'
+                + self.tr(
+                    'Population density data must be provided in WGS84 '
+                    'geographic coordinates.')
                 + '</li>'
-                + '<li>' + self.tr(
-                    'Neither AIFDR, the World Bank, nor World Bank-GFDRR take any '
-                    'responsibility for the correctness of outputs from '
+                + '<li>'
+                + self.tr(
+                    'Neither AIFDR, the World Bank, nor World Bank-GFDRR take '
+                    'any responsibility for the correctness of outputs from '
                     'InaSAFE or decisions derived as a consequence.')
                 + '</ol>'
             )
