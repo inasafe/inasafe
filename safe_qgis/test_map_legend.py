@@ -58,10 +58,10 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getLegend-variantLinuxMint-14-x86_64.png']
+
         myTolerance = 0  # to allow for version number changes in disclaimer
 
-        myFlag, myMessage = checkImages(myControlImages,
+        myFlag, myMessage = checkImages('getLegend.png',
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
@@ -89,9 +89,10 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getVectorLegend-variantLinuxMint-14-x86_64.png']
+
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)
+        myFlag, myMessage = checkImages(
+            'getVectorLegend.png', myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -110,9 +111,9 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['getRasterLegend-variantLinuxMint-14-x86_64.png']
+
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages,
+        myFlag, myMessage = checkImages('getRasterLegend',
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
@@ -140,9 +141,9 @@ class MapLegendTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
-        myControlImages = ['addSymbolToLegend-variantLinuxMint-14-x86_64.png']
+
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages,
+        myFlag, myMessage = checkImages('addSymbolToLegend.png',
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
@@ -171,11 +172,11 @@ class MapLegendTest(unittest.TestCase):
         myMapLegend.getLegend().save(myPath, 'PNG')
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
-        # OS platforms cause different output, so myControlImages is a list
-        # of 'known good' renders.
-        myControlImages = ['addClassToLegend-variantLinuxMint-14-x86_64.png']
+        # OS platforms cause different output, so place any other possible
+        # variants in the safe_qgis/test_data/test_images/ dir e.g.
+        # addClassToLegend-variantUbuntu13.04.png
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages,
+        myFlag, myMessage = checkImages('addClassToLegend.png',
                                         myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
