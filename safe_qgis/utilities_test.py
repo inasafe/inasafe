@@ -265,6 +265,7 @@ def checkImages(theControlImage, theTestImagePath, theTolerance=1000):
     myPlatformImage = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s' % (
         myBase, myPlatform, myExt))
     myMessages += 'Checking for platform specific variant...\n'
+    myMessages += theTestImagePath + '\n'
     myMessages += myPlatformImage + '\n'
     # It the platform image exists, we should test only that!
     if os.path.exists(myPlatformImage):

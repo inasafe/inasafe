@@ -70,7 +70,8 @@ class MapTest(unittest.TestCase):
         # size check.
         mySize = os.stat(myPath).st_size
         myExpectedSizes = [
-            438647,  # as rendered on Jenkins post 24 April 2013
+            441541,  # as rendered on ub 13.04 post 17 May 2013
+            0,  # as rendered on Jenkins post 24 April 2013
         ]
         myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
             myExpectedSizes, mySize)
@@ -106,15 +107,11 @@ class MapTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        myAcceptableImages = [
-            'renderComposition-variantLinuxMint-14-x86_64.png']
         # Beta version and version changes  can introduce a few extra chars
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
         myTolerance = 8000
-        print myImagePath
-        print myAcceptableImages
-        myFlag, myMessage = checkImages(myAcceptableImages,
+        myFlag, myMessage = checkImages('renderComposition.png',
                                         myImagePath,
                                         myTolerance)
         assert myFlag, myMessage
@@ -207,9 +204,8 @@ class MapTest(unittest.TestCase):
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
 
-        myControlImages = ['windowsArtifacts.png']
         myTolerance = 0
-        myFlag, myMessage = checkImages(myControlImages,
+        myFlag, myMessage = checkImages('windowsArtifacts.png',
                                         myImagePath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do not '
