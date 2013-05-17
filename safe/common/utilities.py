@@ -502,6 +502,7 @@ def create_classes(my_list, num_classes):
 
 def create_label(my_tuple, extra_label=None):
     """Return a label based on my_tuple (a,b) and extra label.
+    a and b are string.
     The output will be something like:
                 [a - b] extra_label
     """

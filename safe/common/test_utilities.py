@@ -16,12 +16,14 @@ __revision__ = '$Format:%H$'
 __date__ = '17/04/20113'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
+
 import unittest
 from utilities import (
     get_significant_decimal,
     humanize_class,
     format_decimal,
-    create_classes)
+    create_classes,
+    create_label)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -183,6 +185,21 @@ class UtilitiesTest(unittest.TestCase):
         my_result = create_classes(my_list, num_classes)
         assert my_result == my_expected, ' %s is not same with %s' % (
             my_result, my_expected)
+
+    def test_create_label(self):
+        """Test create label.
+        """
+        my_tuple = ('1', '2')
+        my_extra_label = 'Low damage'
+        my_result = create_label(my_tuple)
+        my_expected = '[1 - 2]'
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
+        my_result = create_label(my_tuple, my_extra_label)
+        my_expected = '[1 - 2] Low damage'
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
