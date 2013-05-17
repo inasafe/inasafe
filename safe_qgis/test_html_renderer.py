@@ -147,10 +147,8 @@ class HtmlRendererTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
 
-        myControlImages = [
-            'renderHtmlToImage-variantLinuxMint-14-x86_64.png']
         myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(myControlImages, myPath, myTolerance)
+        myFlag, myMessage = checkImages('renderHtmlToImage', myPath, myTolerance)
         assert myFlag, myMessage
 
 if __name__ == '__main__':
