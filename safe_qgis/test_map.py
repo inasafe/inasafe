@@ -71,6 +71,7 @@ class MapTest(unittest.TestCase):
         mySize = os.stat(myPath).st_size
         myExpectedSizes = [
             438647,  # as rendered on Jenkins post 24 April 2013
+            447217,  # Nadia Linux Mint 14
         ]
         myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
             myExpectedSizes, mySize)
