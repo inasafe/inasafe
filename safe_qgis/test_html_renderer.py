@@ -148,7 +148,8 @@ class HtmlRendererTest(unittest.TestCase):
         assert os.path.exists(myPath), myMessage
 
         myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('renderHtmlToImage', myPath, myTolerance)
+        myFlag, myMessage = checkImages(
+            'renderHtmlToImage', myPath, myTolerance)
         assert myFlag, myMessage
 
 if __name__ == '__main__':
