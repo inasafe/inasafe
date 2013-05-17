@@ -214,7 +214,7 @@ class MapLegendTest(unittest.TestCase):
                            'addClassToLegend-variantUB12.04-64.png',
                            'addClassToLegend-variantUB12.10-64.png',
                            'addClassToLegend-variantUB11.04-64.png',
-                           # 'addClassToLegend-variantLinuxMint-14-x86_64.png',
+                           'addClassToLegend-variantLinuxMint-14-x86_64.png',
                            'addClassToLegend-variantWindows7-SP1-AMD64.png',
                            'addClassToLegend-variantJenkins.png']
         myTolerance = 0  # to allow for version number changes in disclaimer
