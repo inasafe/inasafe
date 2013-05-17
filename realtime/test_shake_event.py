@@ -24,7 +24,11 @@ import unittest
 import logging
 import difflib
 import PyQt4
+# pylint: disable=E0611
+# pylint: disable=W0611
 from qgis.core import QgsFeatureRequest
+# pylint: enable=E0611
+# pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
 from safe_qgis.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir, dataDir
