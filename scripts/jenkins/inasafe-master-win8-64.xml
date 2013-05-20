@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Windows 8 64 bit build of InaSAFE</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.5">
+      <projectUrl>http://github.com/AIFDR/inasafe/</projectUrl>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@1.1.26">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name></name>
+        <refspec></refspec>
+        <url>git://github.com/AIFDR/inasafe.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <disableSubmodules>false</disableSubmodules>
+    <recursiveSubmodules>false</recursiveSubmodules>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <authorOrCommitter>false</authorOrCommitter>
+    <clean>false</clean>
+    <wipeOutWorkspace>false</wipeOutWorkspace>
+    <pruneBranches>false</pruneBranches>
+    <remotePoll>false</remotePoll>
+    <ignoreNotifyCommit>false</ignoreNotifyCommit>
+    <useShallowClone>false</useShallowClone>
+    <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
+    <gitTool>Default</gitTool>
+    <browser class="hudson.plugins.git.browser.GithubWeb">
+      <url>http://github.com/AIFDR/inasafe/</url>
+    </browser>
+    <submoduleCfg class="list"/>
+    <relativeTargetDir></relativeTargetDir>
+    <reference></reference>
+    <excludedRegions></excludedRegions>
+    <excludedUsers></excludedUsers>
+    <gitConfigName></gitConfigName>
+    <gitConfigEmail></gitConfigEmail>
+    <skipTag>false</skipTag>
+    <includedRegions></includedRegions>
+    <scmName></scmName>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector">
+    <hudson.triggers.SCMTrigger>
+      <spec>* * * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>rem &apos;------------------------------------&apos;
+rem &apos;  First update test data            &apos;
+rem &apos;------------------------------------&apos;
+
+set PATH=%PATH%;&quot;C:\Users\inasafe\AppData\Local\GitHub\PortableGit_93e8418133eb85e81a81e5e19c272776524496c6\bin\&quot;
+if not exist &quot;C:\Jenkins\jobs\inasafe-win8-64\inasafe_data&quot; (
+  cd &quot;C:\Jenkins\jobs\inasafe-master-win8-64\&quot;
+  git clone git://github.com/AIFDR/inasafe_data.git
+)
+cd &quot;C:\Jenkins\jobs\inasafe-master-win8-64\inasafe_data&quot;
+git checkout master
+git pull
+
+rem &apos;------------------------------------&apos;
+rem &apos;  Now we run the tests!            &apos;
+rem &apos;------------------------------------&apos;
+
+SET OSGEO4W_ROOT=C:\PROGRA~2\QUANTU~1
+call &quot;%OSGEO4W_ROOT%&quot;\bin\o4w_env.bat
+call &quot;%OSGEO4W_ROOT%&quot;\apps\grass\grass-6.4.2\etc\env.bat
+SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.9
+path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin
+path %PATH%;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
+path %PATH%;&quot;%OSGEO4W_ROOT%\apps\Python27\Scripts\&quot;
+echo &quot;OK&quot;
+set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\qgis\python;
+set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\Python27\Lib\site-packages
+set QGIS_PREFIX_PATH=%OSGEO4W_ROOT%\apps\qgis
+
+set PATH=c:\python27;%PATH%
+
+cd ..
+cd workspace
+
+nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui safe safe_qgis</command>
+    </hudson.tasks.BatchFile>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
