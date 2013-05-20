@@ -52,7 +52,6 @@ class TestInit(unittest.TestCase):
         myCounter = 0
         myLines = myContent.split('\n')
         while myCounter < len(myLines):
-            # pylint: disable=W1401
             if re.search('def\s+([^\(]+)', myLines[myCounter]):
                 myMatch = re.search('def\s+([^\(]+)',
                                     myLines[myCounter]).groups()[0]
@@ -66,7 +65,6 @@ class TestInit(unittest.TestCase):
                                           myLines[myCounter]).groups()[0]))
                         break
                     myCounter += 1
-            # pylint: enable=W1401
             myCounter += 1
         if not len(myMetadata):
             assert False, 'Metadata could not be read'

@@ -77,7 +77,6 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 
 
 def normal_cdf(x, mu=0, sigma=1):
-    # pylint: disable=W1401
     """Cumulative Normal Distribution Function
 
     Args:
@@ -94,7 +93,6 @@ def normal_cdf(x, mu=0, sigma=1):
 
         Source: http://en.wikipedia.org/wiki/Normal_distribution
     """
-    # pylint: enable=W1401
 
     arg = (x - mu) / (sigma * numpy.sqrt(2))
     res = (1 + erf(arg)) / 2
@@ -103,7 +101,6 @@ def normal_cdf(x, mu=0, sigma=1):
 
 
 def lognormal_cdf(x, median=1, sigma=1):
-    # pylint: disable=W1401
     """Cumulative Log Normal Distribution Function
 
     Args:
@@ -120,7 +117,6 @@ def lognormal_cdf(x, median=1, sigma=1):
 
         Source: http://en.wikipedia.org/wiki/Normal_distribution
     """
-    # pylint: enable=W1401
 
     return normal_cdf(numpy.log(x), mu=numpy.log(median), sigma=sigma)
 
