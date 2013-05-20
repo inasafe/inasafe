@@ -1260,13 +1260,6 @@ msgid "Provide details about where critical response areas are"
 msgstr "Menyediakan detil mengenai dimana area respons kritis berada"
 
 msgid ""
-"Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. "
-"Vol 66(2). 2012"
-msgstr ""
-"Hutchings, Field & Parks. Assessment of Flood impacts on buildings. Impact. "
-"Vol 66(2). 2012"
-
-msgid ""
 "This is an area for free form text where adetailed description of the "
 "methodology used is given."
 msgstr ""
