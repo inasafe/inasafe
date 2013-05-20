@@ -150,7 +150,9 @@ class KeywordIO(QObject):
         try:
             self.writeKeywords(theLayer, myKeywords)
         except OperationalError, e:
-            raise KeywordDbError(e)
+            myMessage = self.tr('Keyword database path: ') + self\
+                .keywordDbPath
+            raise KeywordDbError(str(e) + '\n' + myMessage)
 
     def copyKeywords(self, theSourceLayer,
                      theDestinationFile, theExtraKeywords=None):
@@ -187,8 +189,8 @@ class KeywordIO(QObject):
         myKeywords = self.readKeywords(theSourceLayer)
         if theExtraKeywords is None:
             theExtraKeywords = {}
-        myMessage = self.tr('Expected extraKeywords to be a dictionary. Got %s'
-               % str(type(theExtraKeywords))[1:-1])
+        myMessage = self.tr('Expected extraKeywords to be a dictionary. Got '
+                            '%s' % str(type(theExtraKeywords))[1:-1])
         verify(isinstance(theExtraKeywords, dict), myMessage)
         # compute the output keywords file name
         myDestinationBase = os.path.splitext(theDestinationFile)[0]
@@ -199,9 +201,9 @@ class KeywordIO(QObject):
                 myKeywords[key] = theExtraKeywords[key]
             writeKeywordsToFile(myNewDestination, myKeywords)
         except Exception, e:
-            myMessage = self.tr('Failed to copy keywords file from :'
-                           '\n%s\nto\%s: %s' %
-                   (theSourceLayer.source(), myNewDestination, str(e)))
+            myMessage = self.tr(
+                'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
+                theSourceLayer.source(), myNewDestination, str(e)))
             raise Exception(myMessage)
         return
 

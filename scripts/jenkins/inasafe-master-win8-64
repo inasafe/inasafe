@@ -1,0 +1,35 @@
+rem '------------------------------------'
+rem '  First update test data            '
+rem '------------------------------------'
+
+set PATH=%PATH%;"C:\Users\inasafe\AppData\Local\GitHub\PortableGit_93e8418133eb85e81a81e5e19c272776524496c6\bin\"
+if not exist "C:\Jenkins\jobs\inasafe-win8-64\inasafe_data" (
+  cd "C:\Jenkins\jobs\inasafe-master-win8-64\"
+  git clone git://github.com/AIFDR/inasafe_data.git
+)
+cd "C:\Jenkins\jobs\inasafe-master-win8-64\inasafe_data"
+git checkout master
+git pull
+
+rem '------------------------------------'
+rem '  Now we run the tests!            '
+rem '------------------------------------'
+
+SET OSGEO4W_ROOT=C:\PROGRA~2\QUANTU~1
+call "%OSGEO4W_ROOT%"\bin\o4w_env.bat
+call "%OSGEO4W_ROOT%"\apps\grass\grass-6.4.2\etc\env.bat
+SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.9
+path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin
+path %PATH%;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
+path %PATH%;"%OSGEO4W_ROOT%\apps\Python27\Scripts\"
+echo "OK"
+set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\qgis\python;
+set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\Python27\Lib\site-packages
+set QGIS_PREFIX_PATH=%OSGEO4W_ROOT%\apps\qgis
+
+set PATH=c:\python27;%PATH%
+
+cd ..
+cd workspace
+
+nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui safe safe_qgis

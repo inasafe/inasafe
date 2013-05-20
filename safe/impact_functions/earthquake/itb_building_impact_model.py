@@ -169,23 +169,22 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = ('<b>In case of "%s" the estimated impact to '
-                           '"%s" '
-                           'is&#58;</b><br><br><p>' % (Hname, Ename))
-        impact_summary += ('<table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                    '   <tr></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (<10%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (10-33%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (33-66%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (66-100%%)&#58;</td><td>%i</td></tr>'
-                    '</table></font>' % (tr('Buildings'), tr('Total'),
-                                    tr('All'), N,
-                                    tr('No damage'), count0,
-                                    tr('Low damage'), count10,
-                                    tr('Medium damage'), count25,
-                                    tr('High damage'), count50))
+        impact_summary = (
+            '<b>In case of "%s" the estimated impact to "%s" is&#58;</b><br>'
+            '<br><p>' % (Hname, Ename))
+        impact_summary += (
+            '<table border="0" width="320px">'
+            '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+            '   <tr></tr>'
+            '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+            '   <tr><td>%s (<10%%)&#58;</td><td>%i</td></tr>'
+            '   <tr><td>%s (10-33%%)&#58;</td><td>%i</td></tr>'
+            '   <tr><td>%s (33-66%%)&#58;</td><td>%i</td></tr>'
+            '   <tr><td>%s (66-100%%)&#58;</td><td>%i</td></tr>'
+            '</table></font>' % (tr('Buildings'), tr('Total'), tr('All'), N,
+                                 tr('No damage'), count0, tr('Low damage'),
+                                 count10, tr('Medium damage'), count25,
+                                 tr('High damage'), count50))
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + tr('Assumption') + '&#58;</b><br>'
         # This is the proper text:
@@ -194,11 +193,13 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         #  'Australia and Institute of Teknologi Bandung.'))
         #tr('Unreinforced masonry is assumed where no '
         #  'structural information is available.'))
-        impact_summary += tr('Levels of impact are defined by post 2009 '
-                            'Padang earthquake survey conducted by Geoscience '
-                            'Australia and Institute of Teknologi Bandung.')
-        impact_summary += tr('Unreinforced masonry is assumed where no '
-                            'structural information is available.')
+        impact_summary += tr(
+            'Levels of impact are defined by post 2009 Padang earthquake '
+            'survey conducted by Geoscience Australia and Institute of '
+            'Teknologi Bandung.')
+        impact_summary += tr(
+            'Unreinforced masonry is assumed where no structural information '
+            'is available.')
         # Create style
         style_classes = [dict(label=tr('No damage'), min=0, max=10,
                               colour='#00ff00', transparency=0),

@@ -41,21 +41,29 @@ from qgis.core import (
     QgsRectangle,
     QgsPoint,
     QgsField,
-    QGis)
+    QgsVectorFileWriter,
+    QGis,
+    QgsSingleSymbolRendererV2,
+    QgsFillSymbolV2)
+from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (
     getExceptionWithStacktrace,
     getWGS84resolution,
-    setVectorStyle,
+    isPolygonLayer,
+    getLayerAttributeNames,
+    setVectorGraduatedStyle,
     htmlHeader,
     htmlFooter,
     setRasterStyle,
     qgisVersion,
     getDefaults,
     impactLayerAttribution,
-    addComboItemInOrder)
+    copyInMemory,
+    addComboItemInOrder,
+    setVectorCategorizedStyle)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
@@ -68,7 +76,12 @@ from safe_qgis.safe_interface import (
     get_version,
     temp_dir,
     get_free_memory,
-    ReadLayerError)
+    ReadLayerError,
+    points_in_and_outside_polygon,
+    calculate_polygon_centroid,
+    unique_filename,
+    get_postprocessors,
+    get_postprocessor_human_name)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (
@@ -152,6 +165,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
+
+        # Aggregation / post processing related items
+        self.postProcessingOutput = {}
+        self.aggregationPrefix = 'aggr_'
+        self.doZonalAggregation = False
+        self.postProcessingLayer = None
+        self.postProcessingAttributes = {}
+        self.aggregationAttributeTitle = None
+        self.runtimeKeywordsDialog = None
 
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
@@ -353,18 +375,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                           '<tr><td>' + myNotes + '</td></tr>\n')
             my_limitations_msg = (
                 '<ol>'
-                + '<li>' + self.tr('InaSAFE is not a hazard modelling tool.')
+                + '<li>'
+                + self.tr('InaSAFE is not a hazard modelling tool.')
                 + '</li>'
-                + '<li>' + self.tr('Exposure data in the form of roads (or any'
-                                   ' other line feature) is not yet supported.')
+                + '<li>'
+                + self.tr(
+                    'Exposure data in the form of roads (or any other line '
+                    'feature) is not yet supported.')
                 + '</li>'
-                + '<li>' + self.tr('Polygon area analysis (such as land use) '
-                                   'is not yet supported.')
+                + '<li>'
+                + self.tr(
+                    'Polygon area analysis (such as land use) is not yet '
+                    'supported.')
                 + '</li>'
-                + '<li>' + self.tr('Population density data must be provided '
-                                   'in WGS84 geographic coordinates.')
+                + '<li>'
+                + self.tr(
+                    'Population density data must be provided in WGS84 '
+                    'geographic coordinates.')
                 + '</li>'
-                + '<li>' + self.tr(
+                + '<li>'
+                + self.tr(
                     'Neither AIFDR, the World Bank, nor World Bank-GFDRR take '
                     'any responsibility for the correctness of outputs from '
                     'InaSAFE or decisions derived as a consequence.')
@@ -513,7 +543,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
 
-        #more than 1 because 'No aggregation' is always there
+        #more than 1 because No aggregation is always there
         if ((self.cboAggregation.count() > 1) and
                 (selectedHazardLayer is not None) and
                 (selectedExposureLayer is not None)):
@@ -908,6 +938,43 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
+    def getPostProcessingLayer(self):
+
+        """Get the QgsMapLayer currently selected in the post processing combo.
+
+        Obtain QgsMapLayer id from the userrole of the QtCombo for post
+        processing combo return it as a QgsMapLayer.
+
+        Args:
+            None
+
+        Returns:
+            * None if no aggregation is selected or cboAggregation is
+                disabled, otherwise:
+            * QgsMapLayer - a polygon layer.
+
+        Raises:
+            None
+        """
+
+        myNoSelectionValue = 0
+        myIndex = self.cboAggregation.currentIndex()
+        if myIndex <= myNoSelectionValue:
+            return None
+        myLayerId = self.cboAggregation.itemData(
+            myIndex, QtCore.Qt.UserRole).toString()
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer
+
+    def getAggregationFieldNameCount(self):
+        return self.aggregationPrefix + 'count'
+
+    def getAggregationFieldNameMean(self):
+        return self.aggregationPrefix + 'mean'
+
+    def getAggregationFieldNameSum(self):
+        return self.aggregationPrefix + 'sum'
+
     def setupCalculator(self):
         """Initialise ImpactCalculator based on the current state of the ui.
 
@@ -1268,15 +1335,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
-
+        myStyleType = myEngineImpactLayer.get_style_type()
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
+            LOGGER.debug('myEngineImpactLayer.is_vector')
             if not myStyle:
                 # Set default style if possible
                 pass
-            else:
-                setVectorStyle(myQGISImpactLayer, myStyle)
+            elif myStyleType == 'categorizedSymbol':
+                LOGGER.debug('use categorized')
+                setVectorCategorizedStyle(myQGISImpactLayer, myStyle)
+            elif myStyleType == 'graduatedSymbol':
+                LOGGER.debug('use graduated')
+                setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
+            # use default style
+            # else:
+            #     LOGGER.debug('use else')
+            #     setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
         elif myEngineImpactLayer.is_raster:
+            LOGGER.debug('myEngineImpactLayer.is_raster')
             if not myStyle:
                 myQGISImpactLayer.setDrawingStyle(
                     QgsRasterLayer.SingleBandPseudoColor)

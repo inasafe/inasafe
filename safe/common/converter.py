@@ -202,7 +202,6 @@ class ShakeEvent():
         """
         LOGGER.debug('ParseGridXml requested.')
         myPath = self.gridFilePath()
-        print myPath
         try:
             myDocument = minidom.parse(myPath)
             myEventElement = myDocument.getElementsByTagName('event')
@@ -250,7 +249,6 @@ class ShakeEvent():
             myMMIColumn = 4
             self.mmiData = []
             for myLine in myData.split('\n'):
-                # print myLine
                 if not myLine:
                     continue
                 myTokens = myLine.split(' ')

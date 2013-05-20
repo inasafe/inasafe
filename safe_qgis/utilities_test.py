@@ -6,6 +6,7 @@ import sys
 import hashlib
 import logging
 import platform
+import glob
 
 from PyQt4 import QtGui, QtCore
 from qgis.core import (
@@ -237,12 +238,13 @@ def setGeoExtent(theBoundingBox):
     CANVAS.setExtent(myRect)
 
 
-def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
+def checkImages(theControlImage, theTestImagePath, theTolerance=1000):
     """Compare a test image against a collection of known good images.
 
     Args:
-        * theControlImagePath: list of file names. Give only the basename +ext
-            as the test image path (CONTROL_IMAGE_DIR) will be prepended.
+        * theControlImagePath: str file names. Give only the basename +ext
+            as the test image path (CONTROL_IMAGE_DIR) will be prepended. e.g.
+            addClassToLegend.png
         * theTestImagePath: The Image being checked (must have same dimensions
             as the control image). Must be full path to image.
         * theTolerance: How many pixels may be different between the
@@ -259,38 +261,32 @@ def checkImages(theControlImages, theTestImagePath, theTolerance=1000):
     """
     myMessages = ''
     myPlatform = platformName()
-    myControlImages = theControlImages
-    myPlatformMatchFlag = False
-    # if possible, only test images for this platform
-    for myControlImage in myControlImages:
-        if myPlatform is not None and myPlatform in myControlImage:
-            myPlatformMatchFlag = True
-            # Take it out so we dont double test it  in the second loop below
-            myControlImages.remove(myControlImage)
-            LOGGER.debug('Testing if %s matches' % myControlImage)
-            myFullPath = os.path.join(
-                CONTROL_IMAGE_DIR, myControlImage)
-            myFlag, myMessage = checkImage(
-                myFullPath, theTestImagePath, theTolerance)
-            myMessages += myMessage
-            # As soon as one passes we are done!
-            if myFlag:
-                return myFlag, myMessages
-            else:
-                LOGGER.debug('No match for %s' % myControlImage)
+    myBase, myExt = os.path.splitext(theControlImage)
+    myPlatformImage = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s' % (
+        myBase, myPlatform, myExt))
+    myMessages += 'Checking for platform specific variant...\n'
+    myMessages += theTestImagePath + '\n'
+    myMessages += myPlatformImage + '\n'
+    # It the platform image exists, we should test only that!
+    if os.path.exists(myPlatformImage):
+        myFlag, myMessage = checkImage(
+            myPlatformImage, theTestImagePath, theTolerance)
+        myMessages += myMessage + '\n'
+        return myFlag, myMessages
 
-    # print myPlatformMatchFlag, 'myPlatformMatchFlag'
-    if not myPlatformMatchFlag:
-        LOGGER.debug('No platform specific control image could be found,\n'
-                     'testing against all control images. Try adding %s in\n '
-                     'the file name if you want it to be detected for this\n'
-                     'platform which will speed up image comparison tests.' %
-                     myPlatform)
-    else:
-        return
-    LOGGER.debug('You shall not pass')
-    # Otherwise test all control images because we dont know what platform
-    # we are on.
+    myMessages += (
+        '\nNo platform specific control image could be found,\n'
+        'testing against all control images. Try adding %s in\n '
+        'the file name if you want it to be detected for this\n'
+        'platform which will speed up image comparison tests.\n' %
+        myPlatform)
+
+    # Ok there is no specific platform match so go ahead and match to any of
+    # the control image and its variants...
+    myControlImages = glob.glob('%s/%s*%s' % (
+        CONTROL_IMAGE_DIR, myBase, myExt))
+    myFlag = False
+
     for myControlImage in myControlImages:
         myFullPath = os.path.join(
             CONTROL_IMAGE_DIR, myControlImage)

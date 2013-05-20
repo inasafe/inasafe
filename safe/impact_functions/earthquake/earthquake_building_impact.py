@@ -1,13 +1,10 @@
-from safe.impact_functions.core import (FunctionProvider,
-                                        get_hazard_layer,
-                                        get_exposure_layer,
-                                        get_question)
+from third_party.odict import OrderedDict
+from safe.impact_functions.core import (
+    FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
-from safe.common.utilities import (ugettext as tr,
-                                   format_int)
+from safe.common.utilities import (ugettext as tr, format_int)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from third_party.odict import OrderedDict
 
 import logging
 
@@ -186,17 +183,24 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = tr('Buildings affected')
 
         # Create style
-        style_classes = [dict(label=class_1, min=1, max=1,
+        style_classes = [dict(label=class_1, value=t0,
                               colour='#ffff00', transparency=1),
-                         dict(label=class_2, min=2, max=2,
+                         dict(label=class_2, value=t1,
                               colour='#ffaa00', transparency=1),
-                         dict(label=class_3, min=3, max=3,
+                         dict(label=class_3, value=t2,
                               colour='#ff0000', transparency=1)]
         style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes)
+                          style_classes=style_classes,
+                          style_type='categorizedSymbol')
+
+        # For printing map purpose
+        map_title = tr('Building affected by earthquake')
+        legend_notes = tr('The level of the impact is according to the '
+                          'threshold the user input.')
+        legend_units = tr('(mmi)')
+        legend_title = tr('Impact level')
 
         # Create vector layer and return
         V = Vector(data=attributes,
@@ -206,6 +210,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title,
+                             'legend_notes': legend_notes,
+                             'legend_units': legend_units,
+                             'legend_title': legend_title,
                              'target_field': self.target_field,
                              'statistics_type': self.statistics_type,
                              'statistics_classes': self.statistics_classes},

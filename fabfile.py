@@ -136,43 +136,6 @@ def initialise_qgis_plugin_repo():
     sudo('service apache2 reload')
 
 
-def initialise_docs_site():
-    """Initialise an InaSAFE docs sote where we host test pdf."""
-    _all()
-    fabtools.require.deb.package('libapache2-mod-wsgi')
-    code_path = os.path.join(env.repo_path, env.repo_alias)
-    local_path = '%s/scripts/test-build-repo' % code_path
-
-    if not exists(env.inasafe_docs_path):
-        sudo('mkdir -p %s' % env.inasafe_docs_path)
-        sudo('chown %s.%s %s' % (env.user, env.user, env.inasafe_docs_path))
-
-    run('cp %s/plugin* %s' % (local_path, env.plugin_repo_path))
-    run('cp %s/icon* %s' % (code_path, env.plugin_repo_path))
-    run('cp %(local_path)s/inasafe-test.conf.templ '
-        '%(local_path)s/inasafe-test.conf' % {'local_path': local_path})
-
-    sed('%s/inasafe-test.conf' % local_path,
-        'inasafe-test.linfiniti.com',
-        env.repo_site_name)
-
-    with cd('/etc/apache2/sites-available/'):
-        if exists('inasafe-docs.conf'):
-            sudo('a2dissite inasafe-docs.conf')
-            fastprint('Removing old apache2 conf', False)
-            sudo('rm inasafe-docs.conf')
-
-        sudo('ln -s %s/inasafe-docs.conf .' % local_path)
-
-    # Add a hosts entry for local testing - only really useful for localhost
-    hosts = '/etc/hosts'
-    if not contains(hosts, 'inasafe-docs'):
-        append(hosts, '127.0.0.1 %s' % env.repo_site_name, use_sudo=True)
-
-    sudo('a2ensite inasafe-docs.conf')
-    sudo('service apache2 reload')
-
-
 def update_git_checkout(branch='master'):
     """Make sure there is a read only git checkout.
 
@@ -278,42 +241,6 @@ def build_test_package(branch='master'):
 
         fastprint('Add http://%s/plugins.xml to QGIS plugin manager to use.'
                   % env.repo_site_name)
-
-
-@task
-def build_documentation(branch='master'):
-    """Create a pdf and html doc tree and publish them online.
-
-    Args:
-        branch: str - a string representing the name of the branch to build
-            from. Defaults to 'master'.
-
-    To run e.g.::
-
-        fab -H 188.40.123.80:8697 build_documentation
-
-        or to package up a specific branch (in this case minimum_needs)
-
-        fab -H 88.198.36.154:8697 build_documentation:version-1_1
-
-    .. note:: Using the branch option will not work for branches older than 1.1
-    """
-    _all()
-    update_git_checkout(branch)
-    fabgis.fabgis.install_latex()
-
-    dir_name = os.path.join(env.repo_path, env.repo_alias, 'docs')
-    with cd(dir_name):
-        # build the tex file
-        run('make latex')
-
-    dir_name = os.path.join(env.repo_path, env.repo_alias,
-                            'docs', 'build', 'latex')
-    with cd(dir_name):
-        # Now compile it to pdf
-        run('pdflatex -interaction=nonstopmode InaSAFE.tex')
-        # run 2x to ensure indices are generated?
-        run('pdflatex -interaction=nonstopmode InaSAFE.tex')
 
 
 @task

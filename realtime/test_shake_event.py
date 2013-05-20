@@ -24,7 +24,11 @@ import unittest
 import logging
 import difflib
 import PyQt4
+# pylint: disable=E0611
+# pylint: disable=W0611
 from qgis.core import QgsFeatureRequest
+# pylint: enable=E0611
+# pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
 from safe_qgis.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir, dataDir
@@ -442,8 +446,8 @@ searchBoxes: None
                           'direction-relation': PyQt4.QtCore.QString(u'of'),
                           'credits': PyQt4.QtCore.QString(
                               u'Supported by the Australia-Indonesia Facility'
-                              u' for Disaster Reduction, '
-                              u'Geoscience Australia and the World Bank-GFDRR.'),
+                              u' for Disaster Reduction, Geoscience Australia '
+                              u'and the World Bank-GFDRR.'),
                           'latitude-value': u'0\xb012\'36.00"S',
                           'time': '2:15:35', 'depth-value': '11.0'}
         myResult['elapsed-time'] = u''

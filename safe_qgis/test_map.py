@@ -70,11 +70,9 @@ class MapTest(unittest.TestCase):
         # size check.
         mySize = os.stat(myPath).st_size
         myExpectedSizes = [
-            352798,  # as rendered on linux ub 12.04 64
-            234806,  # as rendered on osx mountain lion 10.8
-            438659,  # as rendered on linux mint Nadia 14
-            447907,  # as rendered on windows 7 sp1 AMD64
-            438647,  # as rendered on Jenkins post 24 April 2013
+            441541,  # as rendered on ub 13.04 post 17 May 2013
+            447217,  # Nadia Linux Mint 14
+            0,  # as rendered on Jenkins post 24 April 2013
         ]
         myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
             myExpectedSizes, mySize)
@@ -110,24 +108,11 @@ class MapTest(unittest.TestCase):
         myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
-        myAcceptableImages = [
-            'renderComposition.png',
-            'renderComposition-variantUB12.04.png',
-            'renderComposition-variantUB12.10.png',
-            'renderComposition-variantOSXml.png',
-            'renderComposition-variantWindowsVistaSP2-32.png',
-            'renderComposition-variantJenkins.png',
-            'renderComposition-variantUB11.10-64.png',
-            'renderComposition-variantLinuxMint-14-x86_64.png',
-            'renderComposition-variantWindows7-SP1-AMD64.png',
-            'renderComposition-variantUB11.04-64.png']
         # Beta version and version changes  can introduce a few extra chars
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
         myTolerance = 8000
-        print myImagePath
-        print myAcceptableImages
-        myFlag, myMessage = checkImages(myAcceptableImages,
+        myFlag, myMessage = checkImages('renderComposition.png',
                                         myImagePath,
                                         myTolerance)
         assert myFlag, myMessage
@@ -220,9 +205,8 @@ class MapTest(unittest.TestCase):
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
 
-        myControlImages = ['windowsArtifacts.png']
         myTolerance = 0
-        myFlag, myMessage = checkImages(myControlImages,
+        myFlag, myMessage = checkImages('windowsArtifacts.png',
                                         myImagePath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do not '

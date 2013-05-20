@@ -47,7 +47,9 @@ from PyQt4.QtCore import (QCoreApplication,
                           Qt,
                           QTranslator)
 from PyQt4.QtXml import QDomDocument
+# We should remove the following pylint suppressions when we support only QGIS2
 # pylint: disable=E0611
+# pylint: disable=W0611
 # Above for pallabelling
 from qgis.core import (
     QgsPoint,
@@ -70,6 +72,7 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsFields)
 # pylint: enable=E0611
+# pylint: enable=W0611
 from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
@@ -1476,8 +1479,9 @@ class ShakeEvent(QObject):
         myLayer = self.localCitiesMemoryLayer()
         myFields = myLayer.dataProvider().fields()
         myCities = []
-
+        # pylint: disable=W0612
         myCount = 0
+        # pylint: enable=W0612
         # Now loop through the db adding selected features to mem layer
         myRequest = QgsFeatureRequest()
 

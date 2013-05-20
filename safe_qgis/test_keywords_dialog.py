@@ -179,7 +179,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myExpectedState = False
         myMessage = ('Advanced options did not become visible when'
                      ' the advanced button was clicked\nGot'
-                     '%s\nExpected\%s\n' % (myState, myExpectedState))
+                     '%s\nExpected\n%s\n' % (myState, myExpectedState))
 
         assert myState == myExpectedState, myMessage
 
@@ -187,9 +187,10 @@ class KeywordsDialogTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = True
+
         myMessage = ('Advanced options did not become hidden when'
                      ' the advanced button was clicked again\nGot'
-                     '%s\nExpected\%s\n' % (myState, myExpectedState))
+                     '%s\nExpected\n%s\n' % (myState, myExpectedState))
         assert not myDialog.grpAdvanced.isVisible(), myMessage
 
     def test_on_radHazard_toggled(self):

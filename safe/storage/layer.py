@@ -97,6 +97,13 @@ class Layer:
         else:
             return ''
 
+    def get_style_type(self):
+        """Return style type of a layer. If not found, return None
+        """
+        if self.style_info is None:
+            return None
+        return self.style_info.get('style_type', None)
+
     # Layer properties used to identify their types
     @property
     def is_inasafe_spatial_object(self):

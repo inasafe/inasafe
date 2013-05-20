@@ -16,11 +16,14 @@ __revision__ = '$Format:%H$'
 __date__ = '17/04/20113'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
+
 import unittest
 from utilities import (
     get_significant_decimal,
     humanize_class,
-    format_decimal)
+    format_decimal,
+    create_classes,
+    create_label)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -117,6 +120,23 @@ class UtilitiesTest(unittest.TestCase):
         my_msg += ' expect: ' + str(my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
+    def test_humanize_class6(self):
+        """Test humanize class 5
+            First class interval < 1
+            Interval > 1
+            """
+        my_array = [0, 6.1, 7.2, 8.3, 9.4, 10.5]
+        my_result_class = humanize_class(my_array)
+        my_expected_class = [('0', '6'),
+                             ('6', '7'),
+                             ('7', '8'),
+                             ('8', '9'),
+                             ('9', '11')]
+        print_class(my_array, my_result_class, my_expected_class)
+        my_msg = 'got: ' + str(my_result_class)
+        my_msg += ' expect: ' + str(my_expected_class)
+        assert my_result_class == my_expected_class, my_msg
+
     def test_get_significant_decimal(self):
         """Test Get Significatn Decimal
         """
@@ -148,6 +168,38 @@ class UtilitiesTest(unittest.TestCase):
         print my_result
         assert my_result == 'nan', \
             'Format decimal is not valid %s' % my_result
+
+    def test_create_classes(self):
+        """Test create_classes.
+        """
+        my_list = [0, 1, 4, 2, 9, 2, float('nan')]
+        num_classes = 2
+        my_expected = [4.5, 9]
+        my_result = create_classes(my_list, num_classes)
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
+
+        my_list = [1, 4, 2, 9, 2, float('nan')]
+        num_classes = 2
+        my_expected = [1, 9]
+        my_result = create_classes(my_list, num_classes)
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
+
+    def test_create_label(self):
+        """Test create label.
+        """
+        my_tuple = ('1', '2')
+        my_extra_label = 'Low damage'
+        my_result = create_label(my_tuple)
+        my_expected = '[1 - 2]'
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
+        my_result = create_label(my_tuple, my_extra_label)
+        my_expected = '[1 - 2] Low damage'
+        assert my_result == my_expected, ' %s is not same with %s' % (
+            my_result, my_expected)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
