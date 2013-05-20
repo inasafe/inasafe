@@ -98,7 +98,7 @@ class DockTest(unittest.TestCase):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
-        loadStandardLayers()
+        loadStandardLayers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -347,6 +347,7 @@ class DockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
             theFunction='Be flooded',
@@ -390,6 +391,7 @@ class DockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='Penduduk Jakarta',
             theFunction='HKVtest',
@@ -425,6 +427,7 @@ class DockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='Penduduk Jakarta',
             theFunction='HKVtest',
@@ -451,6 +454,7 @@ class DockTest(unittest.TestCase):
            Raster on raster based function runs as expected with scaling."""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -479,6 +483,7 @@ class DockTest(unittest.TestCase):
            Uses population raster exposure layer"""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta',
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
@@ -504,6 +509,7 @@ class DockTest(unittest.TestCase):
             Uses DKI buildings exposure data."""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='Flood in Jakarta',
             theExposure='Essential buildings',
             theFunction='Be affected',
@@ -531,6 +537,7 @@ class DockTest(unittest.TestCase):
             Uses Penduduk Jakarta as exposure data."""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='Flood in Jakarta',
             theExposure='Penduduk Jakarta',
             theFunction='Be impacted',
@@ -559,6 +566,7 @@ class DockTest(unittest.TestCase):
         like in 2006 hazard data uses OSM Building Polygons exposure data."""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='An earthquake in Yogyakarta like in 2006',
             theExposure='OSM Building Polygons',
             theFunction='Be affected',
@@ -587,6 +595,7 @@ class DockTest(unittest.TestCase):
          hazard data uses OSM Building Polygons exposure data."""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='donut',
             theExposure='OSM Building Polygons',
             theFunction='Be affected',
@@ -613,6 +622,7 @@ class DockTest(unittest.TestCase):
          hazard data uses population density grid."""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='donut',
             theExposure='People',
             theFunction='Need evacuation',
@@ -656,6 +666,7 @@ class DockTest(unittest.TestCase):
         # NOTE: We assume radii in impact function to be 3, 5 and 10 km
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='Merapi Alert',
             theExposure='People',
             theFunction='Need evacuation',
@@ -694,6 +705,7 @@ class DockTest(unittest.TestCase):
         """Test print map, especially on Windows."""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='Flood in Jakarta',
             theExposure='Essential buildings',
             theFunction='Be affected',
@@ -729,6 +741,7 @@ class DockTest(unittest.TestCase):
         print combosToString(DOCK)
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -771,6 +784,7 @@ class DockTest(unittest.TestCase):
         See https://github.com/AIFDR/inasafe/issues/47"""
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='Penduduk Jakarta',
             theFunction='HKVtest',
@@ -801,6 +815,7 @@ class DockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='An earthquake in Yogyakarta like in 2006',
             theExposure='OSM Building Polygons',
             theFunction='Earthquake Guidelines Function',
@@ -997,6 +1012,7 @@ class DockTest(unittest.TestCase):
         _, _ = loadLayers(myFileList, myClearFlag)
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='multipart_polygons_osm_4326',
             theExposure='buildings_osm_4326',
             theFunction='Be flooded',
@@ -1096,6 +1112,7 @@ class DockTest(unittest.TestCase):
             'r').read()
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -1130,6 +1147,7 @@ class DockTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='jakarta_crosskabupaten_polygons',
             theExposure='People',
             theFunction='Need evacuation',
@@ -1193,6 +1211,7 @@ class DockTest(unittest.TestCase):
         setCanvasCrs(GEOCRS, True)
         setJakartaGeoExtent()
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='OSM Building Polygons',
             theFunction='Be flooded',
@@ -1205,6 +1224,7 @@ class DockTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Exception riser',
@@ -1235,6 +1255,7 @@ Click for Diagnostic Information:
         myRunButton = DOCK.pbnRunStop
 
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='None returner',
@@ -1272,6 +1293,7 @@ Click for Diagnostic Information:
         #    theFunction = 'Be damaged depending on building type',
         #    theFunctionId = 'ITB Earthquake Building Damage Function')
         setupScenario(
+            DOCK,
             theHazard='An earthquake in Yogyakarta like in 2006',
             theExposure='Essential Buildings',
             theFunction='Be damaged depending on building type',
@@ -1292,6 +1314,7 @@ Click for Diagnostic Information:
         #    theFunction='Need evacuation',
         #    theFunctionId='Flood Evacuation Function')
         setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
@@ -1309,6 +1332,7 @@ Click for Diagnostic Information:
         setCanvasCrs(GEOCRS, True)
         setJakartaGeoExtent()
         setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
