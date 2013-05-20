@@ -152,7 +152,7 @@ class KeywordIO(QObject):
         except OperationalError, e:
             myMessage = self.tr('Keyword database path: ') + self\
                 .keywordDbPath
-            raise KeywordDbError(e + '\n' + myMessage)
+            raise KeywordDbError(str(e) + '\n' + myMessage)
 
     def copyKeywords(self, theSourceLayer,
                      theDestinationFile, theExtraKeywords=None):
