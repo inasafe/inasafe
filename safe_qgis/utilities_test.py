@@ -7,6 +7,7 @@ import hashlib
 import logging
 import platform
 import glob
+from os.path import join
 
 from PyQt4 import QtGui, QtCore
 from qgis.core import (
@@ -14,15 +15,30 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
-    QgsCoordinateReferenceSystem)
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry)
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
 # For testing and demoing
-from safe_qgis.safe_interface import (readKeywordsFromFile,
-                                      temp_dir,
-                                      unique_filename,
-                                      TESTDATA, UNITDATA)
+from safe_qgis.safe_interface import (
+    readKeywordsFromFile,
+    unique_filename,
+    temp_dir,
+    TESTDATA,
+    UNITDATA)
+
+from safe_interface import HAZDATA, EXPDATA
+
+from safe_qgis.utilities import qgisVersion
+
+
+YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
+PADANG2009_title = 'An earthquake in Padang like in 2009'
+
+TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
+                              'test_data/test_files')
+
 LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
@@ -444,6 +460,7 @@ class RedirectStdStreams(object):
         self.old_stderr.flush()
         sys.stdout, sys.stderr = self._stdout, self._stderr
 
+    # noinspection PyUnusedLocal
     def __exit__(self, exc_type, exc_value, traceback):
         self._stdout.flush()
         self._stderr.flush()
@@ -475,3 +492,277 @@ def platformName():
         return myName
     else:
         return None
+
+
+def getUiState(theDock):
+    """Get state of the 3 combos on the DOCK theDock. This method is purely for
+    testing and not to be confused with the saveState and restoreState methods
+    of inasafedock.
+    """
+
+    myHazard = str(theDock.cboHazard.currentText())
+    myExposure = str(theDock.cboExposure.currentText())
+    myImpactFunctionTitle = str(theDock.cboFunction.currentText())
+    myImpactFunctionId = theDock.getFunctionID()
+    myRunButton = theDock.pbnRunStop.isEnabled()
+
+    return {'Hazard': myHazard,
+            'Exposure': myExposure,
+            'Impact Function Title': myImpactFunctionTitle,
+            'Impact Function Id': myImpactFunctionId,
+            'Run Button Enabled': myRunButton}
+
+
+def formattedList(theList):
+    """Return a string representing a list of layers (in correct order)
+    but formatted with line breaks between each entry."""
+    myListString = ''
+    for myItem in theList:
+        myListString += myItem + '\n'
+    return myListString
+
+
+def canvasList():
+    """Return a string representing the list of canvas layers (in correct
+    order) but formatted with line breaks between each entry."""
+    myListString = ''
+    for myLayer in CANVAS.layers():
+        myListString += str(myLayer.name()) + '\n'
+    return myListString
+
+
+def combosToString(theDock):
+    """Helper to return a string showing the state of all combos (all their
+    entries"""
+
+    myString = 'Hazard Layers\n'
+    myString += '-------------------------\n'
+    myCurrentId = theDock.cboHazard.currentIndex()
+    for myCount in range(0, theDock.cboHazard.count()):
+        myItemText = theDock.cboHazard.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += str(myItemText) + '\n'
+    myString += '\n'
+    myString += 'Exposure Layers\n'
+    myString += '-------------------------\n'
+    myCurrentId = theDock.cboExposure.currentIndex()
+    for myCount in range(0, theDock.cboExposure.count()):
+        myItemText = theDock.cboExposure.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += str(myItemText) + '\n'
+
+    myString += '\n'
+    myString += 'Functions\n'
+    myString += '-------------------------\n'
+    myCurrentId = theDock.cboFunction.currentIndex()
+    for myCount in range(0, theDock.cboFunction.count()):
+        myItemText = theDock.cboFunction.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += '%s (Function ID: %s)\n' % (
+            str(myItemText), theDock.getFunctionID(myCurrentId))
+
+    myString += '\n'
+    myString += 'Aggregation Layers\n'
+    myString += '-------------------------\n'
+    myCurrentId = theDock.cboAggregation.currentIndex()
+    for myCount in range(0, theDock.cboAggregation.count()):
+        myItemText = theDock.cboAggregation.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += str(myItemText) + '\n'
+
+    myString += '\n\n >> means combo item is selected'
+    return myString
+
+
+def setupScenario(
+        theDock,
+        theHazard,
+        theExposure,
+        theFunction,
+        theFunctionId,
+        theOkButtonFlag=True,
+        theAggregation=None,
+        theAggregationEnabledFlag=None):
+    """Helper function to set the gui state to a given scenario.
+
+    Args:
+        * theDock Dock- (Required) dock instance.
+        * theHazard str - (Required) name of the hazard combo entry to set.
+        * theExposure str - (Required) name of exposure combo entry to set.
+        * theFunction - (Required) name of the function combo entry to set.
+        * theFunctionId - (Required) the impact function id that should be used.
+        * theOkButtonFlag - (Optional) Whether the ok button should be enabled
+            after this scenario is set up.
+        * theAggregationLayer - (Optional) which layer should be used for
+            aggregation
+
+    We require both theFunction and theFunctionId because safe allows for
+    multiple functions with the same name but different id's so we need to be
+    sure we have the right one.
+
+    Returns: bool - Indicating if the setup was successful
+            str - A message indicating why it may have failed.
+
+    Raises: None
+    """
+
+    if theHazard is not None:
+        myIndex = theDock.cboHazard.findText(theHazard)
+        myMessage = ('\nHazard Layer Not Found: %s\n Combo State:\n%s' %
+                     (theHazard, combosToString(theDock)))
+        if myIndex == -1:
+            return False, myMessage
+        theDock.cboHazard.setCurrentIndex(myIndex)
+
+    if theExposure is not None:
+        myIndex = theDock.cboExposure.findText(theExposure)
+        myMessage = ('\nExposure Layer Not Found: %s\n Combo State:\n%s' %
+                     (theExposure, combosToString(theDock)))
+        if myIndex == -1:
+            return False, myMessage
+        theDock.cboExposure.setCurrentIndex(myIndex)
+
+    if theFunction is not None:
+        myIndex = theDock.cboFunction.findText(theFunction)
+        myMessage = ('\nImpact Function Not Found: %s\n Combo State:\n%s' %
+                     (theFunction, combosToString(theDock)))
+        if myIndex == -1:
+            return False, myMessage
+        theDock.cboFunction.setCurrentIndex(myIndex)
+
+    if theAggregation is not None:
+        myIndex = theDock.cboAggregation.findText(theAggregation)
+        myMessage = ('Aggregation layer Not Found: %s\n Combo State:\n%s' %
+                     (theAggregation, combosToString(theDock)))
+        if myIndex == -1:
+            return False, myMessage
+        theDock.cboAggregation.setCurrentIndex(myIndex)
+
+    if theAggregationEnabledFlag is not None:
+        if theDock.cboAggregation.isEnabled() != theAggregationEnabledFlag:
+            myMessage = ('The aggregation combobox should be %s' %
+                        ('enabled' if theAggregationEnabledFlag else
+                         'disabled'))
+            return False, myMessage
+
+    # Check that layers and impact function are correct
+    myDict = getUiState(theDock)
+
+    myExpectedDict = {'Run Button Enabled': theOkButtonFlag,
+                      'Impact Function Title': theFunction,
+                      'Impact Function Id': theFunctionId,
+                      'Hazard': theHazard,
+                      'Exposure': theExposure}
+
+    myMessage = 'Expected versus Actual State\n'
+    myMessage += '--------------------------------------------------------\n'
+
+    for myKey in myExpectedDict.keys():
+        myMessage += 'Expected %s: %s\n' % (myKey, myExpectedDict[myKey])
+        myMessage += 'Actual   %s: %s\n' % (myKey, myDict[myKey])
+        myMessage += '----\n'
+    myMessage += '--------------------------------------------------------\n'
+    myMessage += combosToString(theDock)
+
+    if myDict != myExpectedDict:
+        return False, myMessage
+
+    return True, 'Matched ok.'
+
+
+def populatemyDock(theDock):
+    """A helper function to populate the DOCK and set it to a valid state.
+    """
+    loadStandardLayers(theDock)
+    theDock.cboHazard.setCurrentIndex(0)
+    theDock.cboExposure.setCurrentIndex(0)
+    #QTest.mouseClick(myHazardItem, Qt.LeftButton)
+    #QTest.mouseClick(myExposureItem, Qt.LeftButton)
+
+
+def loadStandardLayers(theDock):
+    """Helper function to load standard layers into the dialog."""
+    # NOTE: Adding new layers here may break existing tests since
+    # combos are populated alphabetically. Each test will
+    # provide a detailed diagnostic if you break it so make sure
+    # to consult that and clean up accordingly.
+    #
+    # Update on above. We are refactoring tests so they use find on combos
+    # to set them appropriately, instead of relative in combo position
+    # so you should be able to put datasets in any order below.
+    # If chancing the order does cause tests to fail, please update the tests
+    # to also use find instead of relative position. (Tim)
+    myFileList = [join(TESTDATA, 'Padang_WGS84.shp'),
+                  join(EXPDATA, 'glp10ag.asc'),
+                  join(HAZDATA, 'Shakemap_Padang_2009.asc'),
+                  join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
+                  join(TESTDATA, 'tsunami_building_exposure.shp'),
+                  join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
+                  join(TESTDATA, 'Population_Jakarta_geographic.asc'),
+                  join(HAZDATA, 'eq_yogya_2006.asc'),
+                  join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
+                  join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
+                  join(EXPDATA, 'DKI_buildings.shp'),
+                  join(HAZDATA, 'jakarta_flood_category_123.asc'),
+                  join(TESTDATA, 'roads_Maumere.shp'),
+                  join(TESTDATA, 'donut.shp'),
+                  join(TESTDATA, 'Merapi_alert.shp'),
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
+    myHazardLayerCount, myExposureLayerCount = loadLayers(
+        theDock, myFileList, theDataDirectory=None)
+    #FIXME (MB) -1 is untill we add the aggregation category because of
+    # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
+
+    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
+
+    return myHazardLayerCount, myExposureLayerCount
+
+
+def loadLayers(
+        theDock,
+        theLayerList,
+        theClearFlag=True,
+        theDataDirectory=TESTDATA):
+    """Helper function to load layers as defined in a python list."""
+    # First unload any layers that may already be loaded
+    if theClearFlag:
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+
+    # Now go ahead and load our layers
+    myExposureLayerCount = 0
+    myHazardLayerCount = 0
+
+    # Now create our new layers
+    for myFile in theLayerList:
+
+        myLayer, myType = loadLayer(myFile, theDataDirectory)
+        if myType == 'hazard':
+            myHazardLayerCount += 1
+        elif myType == 'exposure':
+            myExposureLayerCount += 1
+            # Add layer to the registry (that QGis knows about) a slot
+        # in qgis_interface will also ensure it gets added to the canvas
+        if qgisVersion() >= 10800:  # 1.8 or newer
+            # noinspection PyArgumentList
+            QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+        else:
+            # noinspection PyArgumentList
+            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+
+    theDock.getLayers()
+
+    # Add MCL's to the CANVAS
+    return myHazardLayerCount, myExposureLayerCount

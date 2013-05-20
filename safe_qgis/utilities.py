@@ -56,13 +56,16 @@ from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', 'third_party')))
 # pylint: disable=F0401
+# noinspection PyUnresolvedReferences
 from raven.handlers.logging import SentryHandler
+# noinspection PyUnresolvedReferences
 from raven import Client
 # pylint: enable=F0401
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
+# noinspection PyUnresolvedReferences
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -136,6 +139,7 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
         myColour = myClass['colour']
         myLabel = myClass['label']
         myColour = QtGui.QColor(myColour)
+        # noinspection PyArgumentList
         mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
         myColourString = "%s, %s, %s" % (
                          myColour.red(),
@@ -146,6 +150,7 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
         # .. see:: http://hub.qgis.org/issues/4848
         # We need to create a custom symbol layer as
         # the border colour of a symbol can not be set otherwise
+        # noinspection PyArgumentList
         myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
             myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
@@ -245,6 +250,7 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
         myColour = myClass['colour']
         myLabel = myClass['label']
         myColour = QtGui.QColor(myColour)
+        # noinspection PyArgumentList
         mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
         myColourString = "%s, %s, %s" % (
             myColour.red(),
@@ -255,6 +261,7 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
         # .. see:: http://hub.qgis.org/issues/4848
         # We need to create a custom symbol layer as
         # the border colour of a symbol can not be set otherwise
+        # noinspection PyArgumentList
         myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
             myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
@@ -520,6 +527,7 @@ def _setNewRasterStyle(theQgsRasterLayer, theClasses):
     # pylint: disable=E0611
     # pylint: disable=W0621
     # pylint: disable=W0404
+    # noinspection PyUnresolvedReferences
     from qgis.core import (QgsRasterShader,
                            QgsColorRampShader,
                            QgsSingleBandPseudoColorRenderer,

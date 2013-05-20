@@ -20,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import numpy
-import sys
 import logging
 import uuid
 
@@ -41,19 +40,13 @@ from qgis.core import (
     QgsRectangle,
     QgsPoint,
     QgsField,
-    QgsVectorFileWriter,
-    QGis,
-    QgsSingleSymbolRendererV2,
-    QgsFillSymbolV2)
-from qgis.analysis import QgsZonalStatistics
+    QGis,)
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (
     getExceptionWithStacktrace,
     getWGS84resolution,
-    isPolygonLayer,
-    getLayerAttributeNames,
     setVectorGraduatedStyle,
     htmlHeader,
     htmlFooter,
@@ -61,7 +54,6 @@ from safe_qgis.utilities import (
     qgisVersion,
     getDefaults,
     impactLayerAttribution,
-    copyInMemory,
     addComboItemInOrder,
     setVectorCategorizedStyle)
 
@@ -76,12 +68,8 @@ from safe_qgis.safe_interface import (
     get_version,
     temp_dir,
     get_free_memory,
-    ReadLayerError,
-    points_in_and_outside_polygon,
-    calculate_polygon_centroid,
-    unique_filename,
-    get_postprocessors,
-    get_postprocessor_human_name)
+    ReadLayerError)
+
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (
@@ -1034,6 +1022,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myMessage = self.checkMemoryUsage()
         if myMessage is not None:
+            # noinspection PyCallByClass
             myResult = QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 self.tr('You may not have sufficient free system memory to '
@@ -1154,6 +1143,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Attributes that will not be deleted from the postprocessing layer
         # attribute table
+        # noinspection PyDictCreation
         self.postProcessingAttributes = {}
 
         self.postProcessingAttributes[self.defaults['AGGR_ATTR_KEY']] = (

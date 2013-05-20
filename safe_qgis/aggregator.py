@@ -85,6 +85,7 @@ class Aggregator():
         self.postProcessingAttributes = {}
         self.aggregationAttributeTitle = None
         self.runtimeKeywordsDialog = None
+        self.iface = dock.iface
 
     def getPostProcessingLayer(self):
 
