@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 import sys
 import logging
+import uuid
 
 from PyQt4 import QtGui, QtCore
 
@@ -28,12 +29,14 @@ from qgis.core import (
     QgsFeature,
     QgsRectangle,
     QgsField,
+    QgsVectorLayer,
     QgsVectorFileWriter,
     QGis,
     QgsSingleSymbolRendererV2,
-    QgsFillSymbolV2)
+    QgsFillSymbolV2,
+    QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
-
+from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.utilities import (
     getExceptionWithStacktrace,
     isPolygonLayer,
@@ -54,7 +57,8 @@ from safe_qgis.safe_interface import (
     get_postprocessor_human_name)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
-    InvalidParameterError)
+    InvalidParameterError,
+    KeywordDbError)
 
 from third_party.odict import OrderedDict
 
@@ -63,7 +67,7 @@ LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
 
-class Aggregator():
+class Aggregator(QtCore.QObject):
     """The aggregator class facilitates aggregation of impact function results.
     """
     def __init__(self, dock):
@@ -77,7 +81,7 @@ class Aggregator():
            no exceptions explicitly raised
         """
         self.dock = dock
-
+        super(Aggregator, self).__init__()
         # Aggregation / post processing related items
         self.postProcessingOutput = {}
         self.prefix = 'aggr_'
@@ -88,6 +92,7 @@ class Aggregator():
         self.attributeTitle = None
         self.runtimeKeywordsDialog = None
         self.iface = dock.iface
+        self.keywordIO = KeywordIO()
 
     def runStarting(self):
         """Prepare for the fact that an analysis run is starting."""
@@ -98,12 +103,13 @@ class Aggregator():
         self.attributes[self.defaults[
             'AGGR_ATTR_KEY']] = (
                 self.keywordIO.readKeywords(
-                    self.aggregator.layer,
+                    self.layer,
                     self.defaults['AGGR_ATTR_KEY']))
 
         myFemaleRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
-        myFemRatioAttr = self.keywordIO.readKeywords(self.aggregator.layer,
-                                                     myFemaleRatioKey)
+        myFemRatioAttr = self.keywordIO.readKeywords(
+            self.layer,
+            myFemaleRatioKey)
         if ((myFemRatioAttr != self.tr('Don\'t use')) and
                 (myFemRatioAttr != self.tr('Use default'))):
             self.attributes[myFemaleRatioKey] = \
@@ -529,12 +535,12 @@ class Aggregator():
             #first run, self.lastUsedFunction does not exist yet
             pass
 
-                self.zonalMode = True
-        if self.aggregator.layer is None:
+        self.zonalMode = True
+        if self.layer is None:
             # generate on the fly a memory layer to be used in postprocessing
             # this is needed because we always want a vector layer to store
             # information
-            self.doZonalAggregation = False
+            self.zonalMode = False
             myGeoCrs = QgsCoordinateReferenceSystem()
             myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
             crs = myGeoCrs.authid().toLower()
@@ -556,10 +562,10 @@ class Aggregator():
                                                QtCore.QVariant.String)])
             myLayer.commitChanges()
 
-            self.aggregator.layer = myLayer
+            self.layer = myLayer
             try:
                 self.keywordIO.appendKeywords(
-                    self.aggregator.layer,
+                    self.layer,
                     {self.defaults['AGGR_ATTR_KEY']: myAttrName})
             except KeywordDbError, e:
                 raise e
@@ -758,7 +764,7 @@ class Aggregator():
                 arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if (self.showPostProcLayers and self.doZonalAggregation):
+        if (self.showPostProcLayers and self.zonalMode):
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
@@ -880,7 +886,7 @@ class Aggregator():
         myImpactGeoms = mySafeImpactLayer.get_geometry()
         myImpactValues = mySafeImpactLayer.get_data()
 
-        if self.doZonalAggregation:
+        if self.zonalMode:
             myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
 
             if ((mySafeImpactLayer.is_point_data) or
@@ -1266,7 +1272,7 @@ class Aggregator():
 #               'subcategory')
 #            LOGGER.debug('Deleted: ' + str(delete))
             self.keywordIO.appendKeywords(self.layer, myKeywords)
-            if self.doZonalAggregation:
+            if self.zonalMode:
                 #prompt user for a choice
                 myTitle = self.tr(
                     'Waiting for attribute selection...')
