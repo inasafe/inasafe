@@ -38,8 +38,9 @@ from safe_qgis.utilities import (
     getExceptionWithStacktrace,
     isPolygonLayer,
     getLayerAttributeNames,
-    setVectorStyle,
-    copyInMemory)
+    setVectorCategorizedStyle,
+    copyInMemory,
+    getDefaults)
 
 from safe_qgis.safe_interface import (
     safeTr,
@@ -79,13 +80,34 @@ class Aggregator():
 
         # Aggregation / post processing related items
         self.postProcessingOutput = {}
-        self.aggregationPrefix = 'aggr_'
-        self.doZonalAggregation = False
-        self.postProcessingLayer = None
-        self.postProcessingAttributes = {}
-        self.aggregationAttributeTitle = None
+        self.prefix = 'aggr_'
+        self.zonalMode = False
+        self.layer = None
+        self.defaults = None
+        self.attributes = {}
+        self.attributeTitle = None
         self.runtimeKeywordsDialog = None
         self.iface = dock.iface
+
+    def runStarting(self):
+        """Prepare for the fact that an analysis run is starting."""
+        # Attributes that will not be deleted from the postprocessing layer
+        # attribute table
+
+        self.attributes = {}
+        self.attributes[self.defaults[
+            'AGGR_ATTR_KEY']] = (
+                self.keywordIO.readKeywords(
+                    self.aggregator.layer,
+                    self.defaults['AGGR_ATTR_KEY']))
+
+        myFemaleRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
+        myFemRatioAttr = self.keywordIO.readKeywords(self.aggregator.layer,
+                                                     myFemaleRatioKey)
+        if ((myFemRatioAttr != self.tr('Don\'t use')) and
+                (myFemRatioAttr != self.tr('Use default'))):
+            self.attributes[myFemaleRatioKey] = \
+                myFemRatioAttr
 
     def getPostProcessingLayer(self):
 
@@ -116,13 +138,13 @@ class Aggregator():
         return myLayer
 
     def getAggregationFieldNameCount(self):
-        return self.aggregationPrefix + 'count'
+        return self.prefix + 'count'
 
     def getAggregationFieldNameMean(self):
-        return self.aggregationPrefix + 'mean'
+        return self.prefix + 'mean'
 
     def getAggregationFieldNameSum(self):
-        return self.aggregationPrefix + 'sum'
+        return self.prefix + 'sum'
 
     def prepareInputLayerForAggregation(self, theClippedHazardFilename,
                                         theClippedExposureFilename):
@@ -131,7 +153,7 @@ class Aggregator():
 
         #get safe version of postproc layers
         self.mySafePostprocLayer = safe_read_layer(
-            str(self.postProcessingLayer.source()))
+            str(self.layer.source()))
 
         myTitle = self.tr('Preclipping input data...')
         myMessage = self.tr('We are clipping the input layers to avoid '
@@ -192,7 +214,7 @@ class Aggregator():
 
         # FIXME (MB) maybe do raw geos without qgis
         #select all postproc polygons with no attributes
-        postprocProvider = self.postProcessingLayer.dataProvider()
+        postprocProvider = self.layer.dataProvider()
         postprocProvider.select([])
 
         # copy polygons to a memory layer
@@ -481,32 +503,68 @@ class Aggregator():
             return
         self.completed()
 
-    def initializePostProcessor(self):
-        """Initializes and clears self._postProcessingOutput.
+    def initialise(self):
+        """Initializes and clears self.getOutput.
 
         .. note:: Needs to run at the end of postProcess.
 
         Args: None
         Returns: None
         """
-
+        #check and generate keywords for the aggregation layer
+        self.defaults = getDefaults()
         self.postProcessingOutput = {}
         self.aggregationErrorSkipPostprocessing = None
         self.targetField = None
         self.impactLayerAttributes = []
         try:
-            if ((self.postProcessingLayer is not None) and
+            if ((self.layer is not None) and
                     (self.lastUsedFunction != self.getFunctionID())):
                 # Remove category keyword so we force the keyword editor to
-                # popup. See the beginning of _checkPostProcessingAttributes to
+                # popup. See the beginning of checkAttributes to
                 # see how the popup decision is made
                 self.keywordIO.deleteKeyword(
-                    self.postProcessingLayer, 'category')
+                    self.layer, 'category')
         except AttributeError:
             #first run, self.lastUsedFunction does not exist yet
             pass
 
-    def _postProcessingOutput(self, theSingleTableFlag=False):
+                self.zonalMode = True
+        if self.aggregator.layer is None:
+            # generate on the fly a memory layer to be used in postprocessing
+            # this is needed because we always want a vector layer to store
+            # information
+            self.doZonalAggregation = False
+            myGeoCrs = QgsCoordinateReferenceSystem()
+            myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+            crs = myGeoCrs.authid().toLower()
+            myUUID = str(uuid.uuid4())
+            myUri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
+            myName = 'tmpPostprocessingLayer'
+            myLayer = QgsVectorLayer(myUri, myName, 'memory')
+            LOGGER.debug('created' + myLayer.name())
+
+            if not myLayer.isValid():
+                myMessage = self.tr('An exception occurred when creating the '
+                                    'Entire area layer.')
+                raise(Exception(myMessage))
+
+            myProvider = myLayer.dataProvider()
+            myLayer.startEditing()
+            myAttrName = self.tr('Area')
+            myProvider.addAttributes([QgsField(myAttrName,
+                                               QtCore.QVariant.String)])
+            myLayer.commitChanges()
+
+            self.aggregator.layer = myLayer
+            try:
+                self.keywordIO.appendKeywords(
+                    self.aggregator.layer,
+                    {self.defaults['AGGR_ATTR_KEY']: myAttrName})
+            except KeywordDbError, e:
+                raise e
+
+    def getOutput(self, theSingleTableFlag=False):
         """Returns the results of the post processing as a table.
 
         Args:
@@ -599,7 +657,7 @@ class Aggregator():
                        '    </tr>'
                        '    <tr>'
                        '      <th width="25%">'
-                       + str(self.aggregationAttributeTitle).capitalize() +
+                       + str(self.attributeTitle).capitalize() +
                        '      </th>')
             # add th according to the ammount of calculation done by each
             # postprocessor
@@ -653,21 +711,21 @@ class Aggregator():
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             raise ReadLayerError(myMessage)
         myLayerName = str(self.tr('%1 aggregated to %2').arg(
-            myQGISImpactLayer.name()).arg(self.postProcessingLayer.name()))
+            myQGISImpactLayer.name()).arg(self.layer.name()))
 
         #delete unwanted fields
-        myProvider = self.postProcessingLayer.dataProvider()
+        myProvider = self.layer.dataProvider()
         myFields = myProvider.fields()
         myUnneededAttributes = []
         for i in myFields:
             if (myFields[i].name() not in
-                    self.postProcessingAttributes.values()):
+                    self.attributes.values()):
                 myUnneededAttributes.append(i)
         LOGGER.debug('Removing this attributes: ' + str(myUnneededAttributes))
         try:
-            self.postProcessingLayer.startEditing()
+            self.layer.startEditing()
             myProvider.deleteAttributes(myUnneededAttributes)
-            self.postProcessingLayer.commitChanges()
+            self.layer.commitChanges()
         # FIXME (Ole): Disable pylint check for the moment
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
@@ -676,7 +734,7 @@ class Aggregator():
 
         del myUnneededAttributes, myProvider, myFields
         self.keywordIO.appendKeywords(
-            self.postProcessingLayer, {'title': myLayerName})
+            self.layer, {'title': myLayerName})
 
         #find needed statistics type
         try:
@@ -703,7 +761,7 @@ class Aggregator():
         if (self.showPostProcLayers and self.doZonalAggregation):
             if self.statisticsType == 'sum':
                 #style layer if we are summing
-                myProvider = self.postProcessingLayer.dataProvider()
+                myProvider = self.layer.dataProvider()
                 myAttr = self.getAggregationFieldNameSum()
                 myAttrIndex = myProvider.fieldNameIndex(myAttr)
                 myProvider.select([myAttrIndex], QgsRectangle(), False)
@@ -735,7 +793,7 @@ class Aggregator():
 
                 myStyle = {'target_field': myAttr,
                            'style_classes': myClasses}
-                setVectorStyle(self.postProcessingLayer, myStyle)
+                setVectorStyle(self.layer, myStyle)
             else:
                 #make style of layer pretty much invisible
                 myProps = {'style': 'no',
@@ -744,8 +802,8 @@ class Aggregator():
                            }
                 mySymbol = QgsFillSymbolV2.createSimple(myProps)
                 myRenderer = QgsSingleSymbolRendererV2(mySymbol)
-                self.postProcessingLayer.setRendererV2(myRenderer)
-                self.postProcessingLayer.saveDefaultStyle()
+                self.layer.setRendererV2(myRenderer)
+                self.layer.saveDefaultStyle()
 
     def _aggregateResultsVector(self, myQGISImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
@@ -791,16 +849,16 @@ class Aggregator():
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myTotal = 0
 
-        myPostprocessorProvider = self.postProcessingLayer.dataProvider()
-        self.postProcessingLayer.startEditing()
+        myPostprocessorProvider = self.layer.dataProvider()
+        self.layer.startEditing()
 
         if self.statisticsType == 'class_count':
-            #add the class count fields to the postProcessingLayer
+            #add the class count fields to the layer
             myFields = [QgsField('%s_%s' % (f, self.targetField),
                                  QtCore.QVariant.String) for f in
                         self.statisticsClasses]
             myPostprocessorProvider.addAttributes(myFields)
-            self.postProcessingLayer.commitChanges()
+            self.layer.commitChanges()
 
             myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
             myAggrFieldMap = {}
@@ -808,15 +866,15 @@ class Aggregator():
                 myAggrFieldMap[str(k)] = v
 
         elif self.statisticsType == 'sum':
-            #add the total field to the postProcessingLayer
+            #add the total field to the layer
             myAggrField = self.getAggregationFieldNameSum()
             myPostprocessorProvider.addAttributes([QgsField(
                 myAggrField, QtCore.QVariant.Int)])
-            self.postProcessingLayer.commitChanges()
-            myAggrFieldIndex = self.postProcessingLayer.fieldNameIndex(
+            self.layer.commitChanges()
+            myAggrFieldIndex = self.layer.fieldNameIndex(
                 myAggrField)
 
-        self.postProcessingLayer.startEditing()
+        self.layer.startEditing()
 
         mySafeImpactLayer = self.runner.impactLayer()
         myImpactGeoms = mySafeImpactLayer.get_geometry()
@@ -958,7 +1016,7 @@ class Aggregator():
                     arg(myQGISImpactLayer.name())
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.aggregationErrorSkipPostprocessing = myMessage
-                self.postProcessingLayer.commitChanges()
+                self.layer.commitChanges()
                 return
         else:
             if self.statisticsType == 'class_count':
@@ -1011,7 +1069,7 @@ class Aggregator():
             myFID = 0
             myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
 
-        self.postProcessingLayer.commitChanges()
+        self.layer.commitChanges()
         return
 
     def _aggregateResultsRaster(self, theQGISImpactLayer):
@@ -1024,9 +1082,9 @@ class Aggregator():
         Returns: None
         """
         myZonalStatistics = QgsZonalStatistics(
-            self.postProcessingLayer,
+            self.layer,
             theQGISImpactLayer.dataProvider().dataSourceUri(),
-            self.aggregationPrefix)
+            self.prefix)
         myProgressDialog = QtGui.QProgressDialog(
             self.tr('Calculating zonal statistics'),
             self.tr('Abort...'),
@@ -1062,35 +1120,35 @@ class Aggregator():
             myPostProcessors = {}
         LOGGER.debug('Running this postprocessors: ' + str(myPostProcessors))
 
-        myFeatureNameAttribute = self.postProcessingAttributes[
+        myFeatureNameAttribute = self.attributes[
             self.defaults['AGGR_ATTR_KEY']]
         if myFeatureNameAttribute is None:
-            self.aggregationAttributeTitle = self.tr('Aggregation unit')
+            self.attributeTitle = self.tr('Aggregation unit')
         else:
-            self.aggregationAttributeTitle = myFeatureNameAttribute
+            self.attributeTitle = myFeatureNameAttribute
 
-        myNameFieldIndex = self.postProcessingLayer.fieldNameIndex(
+        myNameFieldIndex = self.layer.fieldNameIndex(
             myFeatureNameAttribute)
-        mySumFieldIndex = self.postProcessingLayer.fieldNameIndex(
+        mySumFieldIndex = self.layer.fieldNameIndex(
             self.getAggregationFieldNameSum())
 
         if 'Gender' in myPostProcessors:
             #look if we need to look for a variable female ratio in a layer
             myFemaleRatioIsVariable = False
             try:
-                myFemRatioField = self.postProcessingAttributes[
+                myFemRatioField = self.attributes[
                     self.defaults['FEM_RATIO_ATTR_KEY']]
-                myFemRatioFieldIndex = self.postProcessingLayer.fieldNameIndex(
+                myFemRatioFieldIndex = self.layer.fieldNameIndex(
                     myFemRatioField)
                 myFemaleRatioIsVariable = True
 
             except KeyError:
                 myFemaleRatio = self.keywordIO.readKeywords(
-                    self.postProcessingLayer,
+                    self.layer,
                     self.defaults['FEM_RATIO_KEY'])
 
         #iterate zone features
-        myProvider = self.postProcessingLayer.dataProvider()
+        myProvider = self.layer.dataProvider()
         myAttributes = myProvider.attributeIndexes()
         # start data retreival: fetch no geometry and all attributes for each
         # feature
@@ -1156,7 +1214,7 @@ class Aggregator():
             #increment the index
             myPolygonIndex += 1
 
-    def _checkPostProcessingAttributes(self):
+    def checkAttributes(self):
         """Checks if the postprocessing layer has all attribute keyword.
 
         If not it calls _promptPostprocAttributes to prompt for inputs
@@ -1172,7 +1230,7 @@ class Aggregator():
         """
 
         try:
-            myKeywords = self.keywordIO.readKeywords(self.postProcessingLayer)
+            myKeywords = self.keywordIO.readKeywords(self.layer)
         #discussed with tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             myKeywords = {}
@@ -1191,7 +1249,7 @@ class Aggregator():
             myKeywords['category'] = 'postprocessing'
 
             myAttributes, _ = getLayerAttributeNames(
-                self.postProcessingLayer,
+                self.layer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String])
             if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
                 myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttributes[0]
@@ -1204,10 +1262,10 @@ class Aggregator():
                 myKeywords[self.defaults['FEM_RATIO_KEY']] = \
                     self.defaults['FEM_RATIO']
 
-#            delete = self.keywordIO.deleteKeyword(self.postProcessingLayer,
+#            delete = self.keywordIO.deleteKeyword(self.layer,
 #               'subcategory')
 #            LOGGER.debug('Deleted: ' + str(delete))
-            self.keywordIO.appendKeywords(self.postProcessingLayer, myKeywords)
+            self.keywordIO.appendKeywords(self.layer, myKeywords)
             if self.doZonalAggregation:
                 #prompt user for a choice
                 myTitle = self.tr(
@@ -1218,7 +1276,7 @@ class Aggregator():
                 self.showBusy(myTitle, myMessage, myProgress)
 
                 self.disableBusyCursor()
-                self.runtimeKeywordsDialog.setLayer(self.postProcessingLayer)
+                self.runtimeKeywordsDialog.setLayer(self.layer)
                 #disable gui elements that should not be applicable for this
                 self.runtimeKeywordsDialog.radExposure.setEnabled(False)
                 self.runtimeKeywordsDialog.radHazard.setEnabled(False)

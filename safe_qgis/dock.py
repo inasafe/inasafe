@@ -52,7 +52,6 @@ from safe_qgis.utilities import (
     htmlFooter,
     setRasterStyle,
     qgisVersion,
-    getDefaults,
     impactLayerAttribution,
     addComboItemInOrder,
     setVectorCategorizedStyle)
@@ -72,6 +71,7 @@ from safe_qgis.safe_interface import (
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
+from safe_qgis.aggregator import Aggregator
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     KeywordDbError,
@@ -153,16 +153,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
-
-        # Aggregation / post processing related items
-        self.postProcessingOutput = {}
-        self.aggregationPrefix = 'aggr_'
-        self.doZonalAggregation = False
-        self.postProcessingLayer = None
-        self.postProcessingAttributes = {}
-        self.aggregationAttributeTitle = None
-        self.runtimeKeywordsDialog = None
-
+        # I dont really like this circular dependency, try to refactor... TS
+        self.aggregator = Aggregator(self)
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
         self.activeFunction = None
@@ -980,11 +972,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.optimalClip()
             # in case aggregation layer is larger than the impact layer let's
             # trim it down to  avoid extra calculations
-            self.postProcessingLayer = QgsVectorLayer(
+            self.aggregator.layer = QgsVectorLayer(
                 myAggregationFilename, 'myLayerName', 'ogr')
-            if not self.postProcessingLayer.isValid():
+            if not self.aggregator.layer.isValid():
                 myMessage = self.tr('Error when reading %1').arg(
-                    self.postProcessingLayer.lastError())
+                    self.aggregator.layer.lastError())
                 raise ReadLayerError(myMessage)
 
             if self.doZonalAggregation:
@@ -1041,68 +1033,35 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
-        self.postProcessingLayer = self.getPostProcessingLayer()
+        self.aggregator.layer = self.getPostProcessingLayer()
         try:
             myOriginalKeywords = self.keywordIO.readKeywords(
-                self.postProcessingLayer)
+                self.aggregator.layer)
         except AttributeError:
             myOriginalKeywords = {}
         except InvalidParameterError:
-            #No kw file was found for postProcessingLayer -create an empty one.
+            #No kw file was found for layer -create an empty one.
             myOriginalKeywords = {}
             self.keywordIO.writeKeywords(
-                self.postProcessingLayer, myOriginalKeywords)
+                self.aggregator.layer, myOriginalKeywords)
 
-        #check and generate keywords for the aggregation layer
-        self.defaults = getDefaults()
         LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
-        self.initializePostProcessor()
+        try:
+            self.aggregator.initialise()
+        except (KeywordDbError, Exception), e:
+            myMessage = getExceptionWithStacktrace(e, theHtml=True)
+            self.displayHtml(myMessage)
+            self.hideBusy()
+            return
 
-        self.doZonalAggregation = True
-        if self.postProcessingLayer is None:
-            # generate on the fly a memory layer to be used in postprocessing
-            # this is needed because we always want a vector layer to store
-            # information
-            self.doZonalAggregation = False
-            myGeoCrs = QgsCoordinateReferenceSystem()
-            myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-            crs = myGeoCrs.authid().toLower()
-            myUUID = str(uuid.uuid4())
-            myUri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
-            myName = 'tmpPostprocessingLayer'
-            myLayer = QgsVectorLayer(myUri, myName, 'memory')
-            LOGGER.debug('created' + myLayer.name())
-
-            if not myLayer.isValid():
-                myMessage = self.tr('An exception occurred when creating the '
-                                    'Entire area layer.')
-                self.displayHtml(myMessage)
-                return
-            myProvider = myLayer.dataProvider()
-            myLayer.startEditing()
-            myAttrName = self.tr('Area')
-            myProvider.addAttributes([QgsField(myAttrName,
-                                               QtCore.QVariant.String)])
-            myLayer.commitChanges()
-
-            self.postProcessingLayer = myLayer
-            try:
-                self.keywordIO.appendKeywords(
-                    self.postProcessingLayer,
-                    {self.defaults['AGGR_ATTR_KEY']: myAttrName})
-            except KeywordDbError, e:
-                myMessage = getExceptionWithStacktrace(e, theHtml=True)
-                self.displayHtml(myMessage)
-                self.hideBusy()
-                return
-
-        LOGGER.debug('Do zonal aggregation: ' + str(self.doZonalAggregation))
+        LOGGER.debug('Do zonal aggregation: %s' %
+                     str(self.aggregator.zonalMode))
 
         self.runtimeKeywordsDialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
             self,
-            self.postProcessingLayer)
+            self.aggregator.layer)
 
         QtCore.QObject.connect(self.runtimeKeywordsDialog,
                                QtCore.SIGNAL('accepted()'),
@@ -1115,7 +1074,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown myContinue will be false
         # and the run method is called by the accepted signal
-        myContinue = self._checkPostProcessingAttributes()
+        myContinue = self.aggregator.checkAttributes()
         if myContinue:
             self.run()
 
@@ -1132,7 +1091,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             None
         """
         LOGGER.debug('Setting old dictionary: ' + str(theOldKeywords))
-        self.keywordIO.writeKeywords(self.postProcessingLayer, theOldKeywords)
+        self.keywordIO.writeKeywords(self.aggregator.layer, theOldKeywords)
         self.hideBusy()
         self.setOkButtonStatus()
 
@@ -1140,22 +1099,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Execute analysis when ok button on settings is clicked."""
 
         self.enableBusyCursor()
-
-        # Attributes that will not be deleted from the postprocessing layer
-        # attribute table
-        # noinspection PyDictCreation
-        self.postProcessingAttributes = {}
-
-        self.postProcessingAttributes[self.defaults['AGGR_ATTR_KEY']] = (
-            self.keywordIO.readKeywords(self.postProcessingLayer,
-                                        self.defaults['AGGR_ATTR_KEY']))
-
-        myFemaleRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
-        myFemRatioAttr = self.keywordIO.readKeywords(self.postProcessingLayer,
-                                                     myFemaleRatioKey)
-        if ((myFemRatioAttr != self.tr('Don\'t use')) and
-                (myFemRatioAttr != self.tr('Use default'))):
-            self.postProcessingAttributes[myFemaleRatioKey] = myFemRatioAttr
+        # Let the aggregator know we are about to start a run
+        self.aggregator.runStarting()
 
         # Start the analysis
         try:
@@ -1315,7 +1260,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
-        myKeywords['postprocessing_report'] = self._postProcessingOutput()
+        myKeywords['postprocessing_report'] = self.aggregator.getOutput()
         self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1359,8 +1304,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Add layers to QGIS
         myLayersToAdd = []
-        if self.showPostProcLayers and self.doZonalAggregation:
-            myLayersToAdd.append(self.postProcessingLayer)
+        if self.showPostProcLayers and self.aggregator.zonalMode:
+            myLayersToAdd.append(self.aggregator.layer)
         myLayersToAdd.append(myQGISImpactLayer)
         QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
         # then zoom to it
@@ -1652,9 +1597,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy(myTitle, myMessage, myProgress)
         #If doing entire area, create a fake feature that covers the whole
         #myGeoExtent
-        if not self.doZonalAggregation:
-            self.postProcessingLayer.startEditing()
-            myProvider = self.postProcessingLayer.dataProvider()
+        if not self.aggregator.zonalMode:
+            self.aggregator.layer.startEditing()
+            myProvider = self.aggregator.layer.dataProvider()
             # add a feature the size of the impact layer bounding box
             myFeature = QgsFeature()
             myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
@@ -1663,10 +1608,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myFeature.setAttributeMap({0: QtCore.QVariant(
                 self.tr('Entire area'))})
             myProvider.addFeatures([myFeature])
-            self.postProcessingLayer.commitChanges()
+            self.aggregator.layer.commitChanges()
 
         myClippedAggregationPath = clipLayer(
-            theLayer=self.postProcessingLayer,
+            theLayer=self.aggregator.layer,
             theExtent=myGeoExtent,
             theExplodeFlag=False,
             theHardClipFlag=self.clipHard)
