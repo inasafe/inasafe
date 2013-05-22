@@ -153,8 +153,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
-        # I dont really like this circular dependency, try to refactor... TS
-        self.aggregator = Aggregator(self)
+        self.aggregator = None
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
         self.activeFunction = None

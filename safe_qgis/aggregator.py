@@ -70,11 +70,20 @@ LOGGER = logging.getLogger('InaSAFE')
 class Aggregator(QtCore.QObject):
     """The aggregator class facilitates aggregation of impact function results.
     """
-    def __init__(self, iface):
+    def __init__(
+            self,
+            iface,
+            theExposureLayer,
+            theHazardLayer,
+            theAggregationLayer):
         """Director for aggregation based operations.
         Args:
-           iface: iface - A QGIS iface instance.
-
+            * iface: iface - A QGIS iface instance.
+            * theExposureLayer: QgsMapLayer representing clipped exposure.
+            * theHazardLayer: QgsMapLayer representing clipped hazard.
+            * theAggregationLayer: QgsMapLayer representing clipped
+                aggregation. This will be converted to a memory layer inside
+                this class. see self.layer
         Returns:
            not applicable
         Raises:
@@ -86,17 +95,31 @@ class Aggregator(QtCore.QObject):
         self.postProcessingOutput = {}
         self.prefix = 'aggr_'
         self.zonalMode = False
-        # This is used to hold an in memory copy of the aggregation layer
+        # This is used to hold an *in memory copy* of the aggregation layer
+        # or None if the clip extents should be used.
         self.layer = None
+        # This is a safe version of the aggregation layer
+        self.safeLayer = safe_read_layer(str(self.layer.source()))
+
         self.defaults = None
         self.attributes = {}
         self.attributeTitle = None
         self.runtimeKeywordsDialog = None
         self.iface = iface
         self.keywordIO = KeywordIO()
+
         # These should have already been clipped to analysis extents
-        self.hazardLayer = None
-        self.exposureLayer = None
+        self.hazardLayer = theHazardLayer
+        self.exposureLayer = theExposureLayer
+
+    def countFieldName(self):
+        return self.prefix + 'count'
+
+    def meanFieldName(self):
+        return self.prefix + 'mean'
+
+    def sumFieldName(self):
+        return self.prefix + 'sum'
 
     # noinspection PyDictCreation
     def runStarting(self):
@@ -120,25 +143,12 @@ class Aggregator(QtCore.QObject):
             self.attributes[myFemaleRatioKey] = \
                 myFemRatioAttr
 
-    def countFieldName(self):
-        return self.prefix + 'count'
-
-    def meanFieldName(self):
-        return self.prefix + 'mean'
-
-    def sumFieldName(self):
-        return self.prefix + 'sum'
-
     def prepareInputLayer(self,
                           theClippedHazardFilename,
                           theClippedExposureFilename):
         """Need a doc string here TS"""
         myHazardLayer = self.hazardLayer
         myExposureLayer = self.exposureLayer
-
-        #get safe version of postproc layers
-        self.mySafePostprocLayer = safe_read_layer(
-            str(self.layer.source()))
 
         myTitle = self.tr('Preclipping input data...')
         myMessage = self.tr(
@@ -185,7 +195,7 @@ class Aggregator(QtCore.QObject):
         """
 #        import time
 #        startTime = time.clock()
-        myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
+        myPostprocPolygons = self.safeLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
 #        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
@@ -445,13 +455,16 @@ class Aggregator(QtCore.QObject):
                                       'ogr')
         return myOutFilename
 
-    def postProcess(self, runner):
+    def postProcess(self, theRunner, theLayerName):
         """Run all post processing steps.
 
-        Called on self.runner SIGNAL('done()') starts all postprocessing steps
+        Called on self.theRunner SIGNAL('done()') starts all postprocessing
+        steps.
 
         Args:
-            None
+            * theRunner - an impact_calculator instance.
+            * theLayerName - str. As taken from current text of aggregation
+                combo.
 
         Returns:
             None
@@ -459,20 +472,20 @@ class Aggregator(QtCore.QObject):
 
         if self.runner.impactLayer() is None:
             # Done was emitted, but no impact layer was calculated
-            myResult = runner.result()
+            myResult = theRunner.result()
             myMessage = str(self.tr('No impact layer was calculated. '
                                     'Error message: %1\n').arg(str(myResult)))
-            myException = runner.lastException()
+            myException = theRunner.lastException()
             if myException is not None:
                 myContext = self.tr('An exception occurred when calculating '
                                     'the results. %1').\
-                    arg(runner.result())
+                    arg(theRunner.result())
                 myMessage = getExceptionWithStacktrace(
                     myException, theHtml=True, theContext=myContext)
             raise Exception(myMessage)
 
         try:
-            self.aggregate()
+            self.aggregate(theLayerName)
             if self.aggregationErrorSkipPostprocessing is None:
                 self.run()
             QtGui.qApp.restoreOverrideCursor()
@@ -500,8 +513,7 @@ class Aggregator(QtCore.QObject):
                 # Remove category keyword so we force the keyword editor to
                 # popup. See the beginning of checkAttributes to
                 # see how the popup decision is made
-                self.keywordIO.deleteKeyword(
-                    self.layer, 'category')
+                self.keywordIO.deleteKeyword(self.layer, 'category')
         except AttributeError:
             #first run, self.lastUsedFunction does not exist yet
             pass
@@ -864,7 +876,7 @@ class Aggregator(QtCore.QObject):
         myImpactValues = mySafeImpactLayer.get_data()
 
         if self.zonalMode:
-            myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
+            myPostprocPolygons = self.safeLayer.get_geometry()
 
             if (mySafeImpactLayer.is_point_data or
                     mySafeImpactLayer.is_polygon_data):
