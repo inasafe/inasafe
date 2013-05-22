@@ -70,17 +70,17 @@ LOGGER = logging.getLogger('InaSAFE')
 class Aggregator(QtCore.QObject):
     """The aggregator class facilitates aggregation of impact function results.
     """
-    def __init__(self, dock):
+    def __init__(self, iface):
         """Director for aggregation based operations.
         Args:
-           dock: Dock - A dock instance.
+           iface: iface - A QGIS iface instance.
 
         Returns:
            not applicable
         Raises:
            no exceptions explicitly raised
         """
-        self.dock = dock
+
         super(Aggregator, self).__init__()
         # Aggregation / post processing related items
         self.postProcessingOutput = {}
@@ -91,7 +91,7 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributeTitle = None
         self.runtimeKeywordsDialog = None
-        self.iface = dock.iface
+        self.iface = iface
         self.keywordIO = KeywordIO()
 
     # noinspection PyDictCreation
