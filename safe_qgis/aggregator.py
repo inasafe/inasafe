@@ -94,6 +94,7 @@ class Aggregator(QtCore.QObject):
         self.iface = dock.iface
         self.keywordIO = KeywordIO()
 
+    # noinspection PyDictCreation
     def runStarting(self):
         """Prepare for the fact that an analysis run is starting."""
         # Attributes that will not be deleted from the postprocessing layer
@@ -140,6 +141,7 @@ class Aggregator(QtCore.QObject):
             return None
         myLayerId = self.cboAggregation.itemData(
             myIndex, QtCore.Qt.UserRole).toString()
+        # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
@@ -164,8 +166,9 @@ class Aggregator(QtCore.QObject):
             str(self.layer.source()))
 
         myTitle = self.tr('Preclipping input data...')
-        myMessage = self.tr('We are clipping the input layers to avoid '
-                            'intersections with the aggregation layer')
+        myMessage = self.tr(
+            'We are clipping the input layers to avoid intersections with the '
+            'aggregation layer')
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
 #        import cProfile
@@ -445,6 +448,7 @@ class Aggregator(QtCore.QObject):
         # myInsidePolygons + myIntersectingPolygons + myNextIterPolygons
         # the a polygon intersecting multiple postproc polygons appears
         # multiple times in the array
+        # noinspection PyUnboundLocalVariable
         LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
             myInsidePolygons, myIntersectingPolygons, myOutsidePolygons))
 
@@ -674,7 +678,7 @@ class Aggregator(QtCore.QObject):
                 myHTML += '    </tr>'
 
             #close table
-            myHTML += ('</tbody></table>')
+            myHTML += '</tbody></table>'
 
         return myHTML
 
@@ -719,6 +723,7 @@ class Aggregator(QtCore.QObject):
                     self.attributes.values()):
                 myUnneededAttributes.append(i)
         LOGGER.debug('Removing this attributes: ' + str(myUnneededAttributes))
+        # noinspection PyBroadException
         try:
             self.layer.startEditing()
             myProvider.deleteAttributes(myUnneededAttributes)
@@ -797,6 +802,7 @@ class Aggregator(QtCore.QObject):
                            'color_border': '0,0,0,127',
                            'width_border': '0.0'
                            }
+                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                 mySymbol = QgsFillSymbolV2.createSimple(myProps)
                 myRenderer = QgsSingleSymbolRendererV2(mySymbol)
                 self.layer.setRendererV2(myRenderer)
@@ -817,6 +823,9 @@ class Aggregator(QtCore.QObject):
         # Note: The next line raises a pylint error but I am not disabling the
         # pylint warning because I think we need some redesign here. TS
         global myAttrs
+        myAggrFieldMap = {}
+        myAggrFieldIndex = None
+
         try:
             self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
                                                            'target_field')
@@ -858,7 +867,6 @@ class Aggregator(QtCore.QObject):
             self.layer.commitChanges()
 
             myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
-            myAggrFieldMap = {}
             for k, v in myTmpAggrFieldMap.iteritems():
                 myAggrFieldMap[str(k)] = v
 
@@ -880,8 +888,8 @@ class Aggregator(QtCore.QObject):
         if self.zonalMode:
             myPostprocPolygons = self.mySafePostprocLayer.get_geometry()
 
-            if ((mySafeImpactLayer.is_point_data) or
-                    (mySafeImpactLayer.is_polygon_data)):
+            if (mySafeImpactLayer.is_point_data or
+                    mySafeImpactLayer.is_polygon_data):
                 LOGGER.debug('Doing point in polygon aggregation')
 
                 myRemainingValues = myImpactValues
@@ -1129,9 +1137,12 @@ class Aggregator(QtCore.QObject):
         mySumFieldIndex = self.layer.fieldNameIndex(
             self.sumFieldName())
 
+        myFemaleRatioIsVariable = False
+        myFemRatioFieldIndex = None
+        myFemaleRatio = None
+
         if 'Gender' in myPostProcessors:
             #look if we need to look for a variable female ratio in a layer
-            myFemaleRatioIsVariable = False
             try:
                 myFemRatioField = self.attributes[
                     self.defaults['FEM_RATIO_ATTR_KEY']]
@@ -1226,6 +1237,7 @@ class Aggregator(QtCore.QObject):
             Propagates any error
         """
 
+        # noinspection PyBroadException
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
         #discussed with tim,in this case its ok to be generic
