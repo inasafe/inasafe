@@ -143,17 +143,19 @@ class Aggregator(QtCore.QObject):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
-    def getAggregationFieldNameCount(self):
+    def countFieldName(self):
         return self.prefix + 'count'
 
-    def getAggregationFieldNameMean(self):
+    def meanFieldName(self):
         return self.prefix + 'mean'
 
-    def getAggregationFieldNameSum(self):
+    def sumFieldName(self):
         return self.prefix + 'sum'
 
-    def prepareInputLayerForAggregation(self, theClippedHazardFilename,
-                                        theClippedExposureFilename):
+    def prepareInputLayer(self,
+                          theClippedHazardFilename,
+                          theClippedExposureFilename):
+        """Need a doc string here TS"""
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
 
@@ -170,22 +172,22 @@ class Aggregator(QtCore.QObject):
         if isPolygonLayer(myHazardLayer):
             # http://stackoverflow.com/questions/1031657/
             # profiling-self-and-arguments-in-python
-#            cProfile.runctx('self.preparePolygonLayerForAggr(
+#            cProfile.runctx('self.preparePolygonLayer(
 #               theClippedHazardFilename, myHazardLayer)', globals(), locals())
 #            raise
-            theClippedHazardFilename = self.preparePolygonLayerForAggr(
+            theClippedHazardFilename = self.preparePolygonLayer(
                 theClippedHazardFilename, myHazardLayer)
 
         if isPolygonLayer(myExposureLayer):
             mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
                                                         'subcategory')
             if mySubcategory != 'structure':
-                theClippedExposureFilename = self.preparePolygonLayerForAggr(
+                theClippedExposureFilename = self.preparePolygonLayer(
                     theClippedExposureFilename, myExposureLayer)
 
         return theClippedHazardFilename, theClippedExposureFilename
 
-    def preparePolygonLayerForAggr(self, theLayerFilename, theQgisLayer):
+    def preparePolygonLayer(self, theLayerFilename, theQgisLayer):
         """ A helper function to align the polygons to the postprocLayer
         polygons. If one input polygon is in two or more postprocLayer polygons
         then it is divided so that each part is within only one of the
@@ -463,7 +465,7 @@ class Aggregator(QtCore.QObject):
                                       'ogr')
         return myOutFilename
 
-    def postProcess(self):
+    def postProcess(self, runner):
         """Run all post processing steps.
 
         Called on self.runner SIGNAL('done()') starts all postprocessing steps
@@ -477,36 +479,25 @@ class Aggregator(QtCore.QObject):
 
         if self.runner.impactLayer() is None:
             # Done was emitted, but no impact layer was calculated
-            myResult = self.runner.result()
+            myResult = runner.result()
             myMessage = str(self.tr('No impact layer was calculated. '
                                     'Error message: %1\n').arg(str(myResult)))
-            myException = self.runner.lastException()
+            myException = runner.lastException()
             if myException is not None:
                 myContext = self.tr('An exception occurred when calculating '
                                     'the results. %1').\
-                    arg(self.runner.result())
+                    arg(runner.result())
                 myMessage = getExceptionWithStacktrace(
                     myException, theHtml=True, theContext=myContext)
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            self.displayHtml(myMessage)
-            return
+            raise Exception(myMessage)
 
         try:
-            self._aggregateResults()
+            self.aggregate()
             if self.aggregationErrorSkipPostprocessing is None:
-                self._startPostProcessors()
+                self.run()
             QtGui.qApp.restoreOverrideCursor()
         except Exception, e:  # pylint: disable=W0703
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr(
-                'An exception occurred when post processing the results.')
-            LOGGER.exception(myMessage)
-            myMessage = getExceptionWithStacktrace(e, theHtml=True,
-                                                   theContext=myMessage)
-            self.displayHtml(myMessage)
-            return
+            raise e
         self.completed()
 
     def initialise(self):
@@ -607,9 +598,9 @@ class Aggregator(QtCore.QObject):
             #FIXME, return a parsed HTML
             return str(self.postProcessingOutput)
         else:
-            return self.postProcessingTables()
+            return self.generateTables()
 
-    def postProcessingTables(self):
+    def generateTables(self):
         """Parses the postprocessing output as one table per postprocessor.
 
         Args:
@@ -687,7 +678,7 @@ class Aggregator(QtCore.QObject):
 
         return myHTML
 
-    def _aggregateResults(self):
+    def aggregate(self):
         """Do any requested aggregation post processing.
 
         Performs Aggregation postprocessing step by
@@ -755,20 +746,20 @@ class Aggregator(QtCore.QObject):
 
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
-            self._aggregateResultsVector(myQGISImpactLayer)
+            self.aggregateVectorImpact(myQGISImpactLayer)
         elif myQGISImpactLayer.type() == QgsMapLayer.RasterLayer:
-            self._aggregateResultsRaster(myQGISImpactLayer)
+            self.aggregateRasterImpact(myQGISImpactLayer)
         else:
             myMessage = self.tr('%1 is %2 but it should be either vector or '
                                 'raster').\
                 arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if (self.showPostProcLayers and self.zonalMode):
+        if self.showPostProcLayers and self.zonalMode:
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
-                myAttr = self.getAggregationFieldNameSum()
+                myAttr = self.sumFieldName()
                 myAttrIndex = myProvider.fieldNameIndex(myAttr)
                 myProvider.select([myAttrIndex], QgsRectangle(), False)
                 myFeature = QgsFeature()
@@ -811,7 +802,7 @@ class Aggregator(QtCore.QObject):
                 self.layer.setRendererV2(myRenderer)
                 self.layer.saveDefaultStyle()
 
-    def _aggregateResultsVector(self, myQGISImpactLayer):
+    def aggregateVectorImpact(self, myQGISImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
 
         Args:
@@ -873,7 +864,7 @@ class Aggregator(QtCore.QObject):
 
         elif self.statisticsType == 'sum':
             #add the total field to the layer
-            myAggrField = self.getAggregationFieldNameSum()
+            myAggrField = self.sumFieldName()
             myPostprocessorProvider.addAttributes([QgsField(
                 myAggrField, QtCore.QVariant.Int)])
             self.layer.commitChanges()
@@ -898,9 +889,9 @@ class Aggregator(QtCore.QObject):
                 if mySafeImpactLayer.is_polygon_data:
                     # Using centroids to do polygon in polygon aggregation
                     # this is always ok because
-                    # prepareInputLayerForAggregation() took care of splitting
+                    # prepareInputLayer() took care of splitting
                     # polygons that spawn across multiple postprocessing
-                    # polygons. After prepareInputLayerForAggregation()
+                    # polygons. After prepareInputLayer()
                     # each impact polygon will never be contained by more than
                     # one aggregation polygon
 
@@ -1078,7 +1069,7 @@ class Aggregator(QtCore.QObject):
         self.layer.commitChanges()
         return
 
-    def _aggregateResultsRaster(self, theQGISImpactLayer):
+    def aggregateRasterImpact(self, theQGISImpactLayer):
         """
         Performs Aggregation postprocessing step on raster impact layers by
         calling QgsZonalStatistics
@@ -1105,7 +1096,7 @@ class Aggregator(QtCore.QObject):
 
         return
 
-    def _startPostProcessors(self):
+    def run(self):
         """Run any post processors requested by the impact function.
 
         Args:
@@ -1136,7 +1127,7 @@ class Aggregator(QtCore.QObject):
         myNameFieldIndex = self.layer.fieldNameIndex(
             myFeatureNameAttribute)
         mySumFieldIndex = self.layer.fieldNameIndex(
-            self.getAggregationFieldNameSum())
+            self.sumFieldName())
 
         if 'Gender' in myPostProcessors:
             #look if we need to look for a variable female ratio in a layer

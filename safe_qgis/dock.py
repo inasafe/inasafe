@@ -281,6 +281,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             None
 
         """
+        # noinspection PyBroadException
         try:
             QtCore.QObject.disconnect(
                 QgsMapLayerRegistry.instance(),
@@ -289,6 +290,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except:
             pass
 
+        # noinspection PyBroadException
         try:
             QtCore.QObject.disconnect(
                 QgsMapLayerRegistry.instance(),
@@ -297,6 +299,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except:
             pass
 
+        # noinspection PyBroadException
         try:
             QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(
                 self.layersWillBeRemoved)
@@ -305,6 +308,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except:
             pass
 
+        # noinspection PyBroadException
         try:
             QtCore.QObject.disconnect(
                 self.iface.mapCanvas(),
@@ -738,6 +742,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
+            # noinspection PyBroadException
             try:
                 myCategory = self.keywordIO.readKeywords(myLayer, 'category')
             except:  # pylint: disable=W0702
@@ -946,15 +951,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
-    def getAggregationFieldNameCount(self):
-        return self.aggregationPrefix + 'count'
-
-    def getAggregationFieldNameMean(self):
-        return self.aggregationPrefix + 'mean'
-
-    def getAggregationFieldNameSum(self):
-        return self.aggregationPrefix + 'sum'
-
     def setupCalculator(self):
         """Initialise ImpactCalculator based on the current state of the ui.
 
@@ -977,9 +973,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if not self.aggregator.layer.isValid():
                 myMessage = self.tr('Error when reading %1').arg(
                     self.aggregator.layer.lastError())
+                # noinspection PyExceptionInherit
                 raise ReadLayerError(myMessage)
 
-            if self.doZonalAggregation:
+            if self.aggregator.zonalMode:
                 myHazardFilename, myExposureFilename = \
                     self.prepareInputLayerForAggregation(
                         myHazardFilename, myExposureFilename)
@@ -1014,7 +1011,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myMessage = self.checkMemoryUsage()
         if myMessage is not None:
-            # noinspection PyCallByClass
+            # noinspection PyCallByClass,PyTypeChecker
             myResult = QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 self.tr('You may not have sufficient free system memory to '
@@ -1096,7 +1093,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.setOkButtonStatus()
 
     def run(self):
-        """Execute analysis when ok button on settings is clicked."""
+        """Execute analysis when ok button on dock is clicked."""
 
         self.enableBusyCursor()
         # Let the aggregator know we are about to start a run
@@ -1156,17 +1153,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.postProcess)
+                               self.aggregator.postProcess)
         QtGui.qApp.setOverrideCursor(
             QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
         QtGui.qApp.processEvents()
 
         myTitle = self.tr('Calculating impact...')
-        myMessage = self.tr('This may take a little while - we are '
-                            'computing the areas that will be impacted '
-                            'by the hazard and writing the result to '
-                            'a new layer.')
+        myMessage = self.tr(
+            'This may take a little while - we are computing the areas that '
+            'will be impacted by the hazard and writing the result to a new '
+            'layer.')
         myProgress = 66
 
         try:
@@ -1318,7 +1315,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.restoreState()
 
         #append postprocessing report
-        myReport += self._postProcessingOutput()
+        myReport += self.aggregator.getOutput()
 
         # Return text to display in report panel
         return myReport
@@ -1384,7 +1381,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                       QtCore.SIGNAL('done()'),
-                                      self.postProcess)
+                                      self.aggregator.postProcess)
             self.runner = None
 
         self.grpQuestion.setEnabled(True)
@@ -1425,9 +1422,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
-        # Reproject all extents to EPSG:4326 if needed
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
         # Get the current viewport extent as an array in EPSG:4326
         myViewportGeoExtent = self.viewportGeoArray()
         # Get the Hazard extents as an array in EPSG:4326
@@ -1436,10 +1430,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get the Exposure extents as an array in EPSG:4326
         myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
                                                     myExposureLayer.crs())
+
+        # Reproject all extents to EPSG:4326 if needed
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
         # Now work out the optimal extent between the two layers and
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
-        myGeoExtent = None
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
@@ -1453,24 +1450,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         except InsufficientOverlapError, e:
             # FIXME (MB): This branch is not covered by the tests
-            myMessage = self.tr('<p>There '
-                                'was insufficient overlap between the input '
-                                'layers '
-                                'and / or the layers and the viewable area. '
-                                'Please select '
-                                'two overlapping layers and zoom or pan to '
-                                'them or disable'
-                                ' viewable area clipping in the options dialog'
-                                '. Full details follow:</p>'
-                                '<p>Failed to obtain the optimal extent '
-                                'given:</p>'
-                                '<p>Hazard: %1</p>'
-                                '<p>Exposure: %2</p>'
-                                '<p>Viewable area Geo Extent: %3</p>'
-                                '<p>Hazard Geo Extent: %4</p>'
-                                '<p>Exposure Geo Extent: %5</p>'
-                                '<p>Viewable area clipping enabled: %6</p>'
-                                '<p>Details: %7</p>').\
+            myMessage = self.tr(
+                '<p>There was insufficient overlap between the input layers '
+                'and / or the layers and the viewable area. Please select two '
+                'overlapping layers and zoom or pan to them or disable '
+                'viewable area clipping in the options dialog. Full details '
+                'follow:</p>'
+                '<p>Failed to obtain the optimal extent given:</p>'
+                '<p>Hazard: %1</p>'
+                '<p>Exposure: %2</p>'
+                '<p>Viewable area Geo Extent: %3</p>'
+                '<p>Hazard Geo Extent: %4</p>'
+                '<p>Exposure Geo Extent: %5</p>'
+                '<p>Viewable area clipping enabled: %6</p>'
+                '<p>Details: %7</p>').\
                 arg(myHazardLayer.source()).\
                 arg(myExposureLayer.source()).\
                 arg(QtCore.QString(str(myViewportGeoExtent))).\
@@ -1577,9 +1570,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise e
 
         myTitle = self.tr('Preparing exposure data...')
-        myMessage = self.tr('We are resampling and clipping the exposure'
-                            'layer to match the intersection of the hazard'
-                            'layer and the current view extents.')
+        myMessage = self.tr(
+            'We are resampling and clipping the exposure layer to match the '
+            'intersection of the hazard layer and the current view extents.')
         myProgress = 33
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(
@@ -1590,9 +1583,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theHardClipFlag=self.clipHard)
 
         myTitle = self.tr('Preparing aggregation layer...')
-        myMessage = self.tr('We are clipping the aggregation'
-                            'layer to match the intersection of the hazard'
-                            'and exposure layer extents.')
+        myMessage = self.tr(
+            'We are clipping the aggregation layer to match the intersection '
+            'of the hazard and exposure layer extents.')
         myProgress = 39
         self.showBusy(myTitle, myMessage, myProgress)
         #If doing entire area, create a fake feature that covers the whole
@@ -1602,9 +1595,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProvider = self.aggregator.layer.dataProvider()
             # add a feature the size of the impact layer bounding box
             myFeature = QgsFeature()
-            myFeature.setGeometry(QgsGeometry.fromRect(QgsRectangle(
-                QgsPoint(myGeoExtent[0], myGeoExtent[1]),
-                QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
+            # noinspection PyCallByClass,PyTypeChecker
+            myFeature.setGeometry(QgsGeometry.fromRect(
+                QgsRectangle(
+                    QgsPoint(myGeoExtent[0], myGeoExtent[1]),
+                    QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
             myFeature.setAttributeMap({0: QtCore.QVariant(
                 self.tr('Entire area'))})
             myProvider.addFeatures([myFeature])
@@ -1624,27 +1619,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         ############################################################
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
-
-        # FIXME: Turn paths back into layers temporarily and print res
-        #myExposureLayer = QgsRasterLayer(myClippedExposurePath, 'exp')
-        #myHazardLayer = QgsRasterLayer(myClippedHazardPath, 'haz')
-
-        #myHazardUPP = myHazardLayer.rasterUnitsPerPixel()
-        #myExposureUPP = myExposureLayer.rasterUnitsPerPixel()
-
-        # FIXME (Ole): This causes some strange failures. Revisit!
-        # Check that resolutions are equal up to some precision
-
-        #myMessage = ('Resampled pixels sizes did not match: '
-        #       'Exposure pixel size = %.12f, '
-        #       'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
-        #if not numpy.allclose(myExposureUPP, myHazardUPP,
-        #                      # FIXME (Ole): I would like to make this tighter
-        #                      rtol=1.0e-6, atol=1.0e-3):
-        #    raise RuntimeError(myMessage)
-
-        #print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
-        #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
 
     def viewportGeoArray(self):
         """Obtain the map canvas current extent in EPSG:4326.
@@ -1667,8 +1641,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # get the current viewport extent
         myCanvas = self.iface.mapCanvas()
         myRect = myCanvas.extent()
-
-        myCrs = None
 
         if myCanvas.hasCrsTransformEnabled():
             myCrs = myCanvas.mapRenderer().destinationCrs()
@@ -1893,6 +1865,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myMap = Map(self.iface)
         if self.iface.activeLayer() is None:
+            # noinspection PyCallByClass,PyTypeChecker
             QtGui.QMessageBox.warning(
                 self,
                 self.tr('InaSAFE'),
@@ -1908,6 +1881,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
         myDefaultFileName = myMap.getMapTitle() + '.pdf'
         myDefaultFileName = myDefaultFileName.replace(' ', '_')
+        # noinspection PyCallByClass,PyTypeChecker
         myMapPdfFilePath = QtGui.QFileDialog.getSaveFileName(
             self, self.tr('Write to PDF'),
             os.path.join(temp_dir(), myDefaultFileName),
@@ -1950,9 +1924,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                       myStatus,
                       theProgress=80)
 
+        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
         QtGui.QDesktopServices.openUrl(
             QtCore.QUrl('file:///' + myHtmlPdfPath,
                         QtCore.QUrl.TolerantMode))
+        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
         QtGui.QDesktopServices.openUrl(
             QtCore.QUrl('file:///' + myMapPdfFilePath,
                         QtCore.QUrl.TolerantMode))
