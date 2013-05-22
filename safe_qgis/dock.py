@@ -767,7 +767,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
         self.blockSignals(False)
-        self.getPostProcessingLayer()
+        self.postProcessingLayer()
         return
 
     def getFunctions(self):
@@ -1025,7 +1025,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
-        self.aggregator.layer = self.getPostProcessingLayer()
+        self.aggregator.layer = self.postProcessingLayer()
         try:
             myOriginalKeywords = self.keywordIO.readKeywords(
                 self.aggregator.layer)
@@ -1583,28 +1583,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'of the hazard and exposure layer extents.')
         myProgress = 39
         self.showBusy(myTitle, myMessage, myProgress)
-        #If doing entire area, create a fake feature that covers the whole
-        #myGeoExtent
-        if not self.aggregator.zonalMode:
-            self.aggregator.layer.startEditing()
-            myProvider = self.aggregator.layer.dataProvider()
-            # add a feature the size of the impact layer bounding box
-            myFeature = QgsFeature()
-            # noinspection PyCallByClass,PyTypeChecker
-            myFeature.setGeometry(QgsGeometry.fromRect(
-                QgsRectangle(
-                    QgsPoint(myGeoExtent[0], myGeoExtent[1]),
-                    QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
-            myFeature.setAttributeMap({0: QtCore.QVariant(
-                self.tr('Entire area'))})
-            myProvider.addFeatures([myFeature])
-            self.aggregator.layer.commitChanges()
-
-        myClippedAggregationPath = clipLayer(
-            theLayer=self.aggregator.layer,
-            theExtent=myGeoExtent,
-            theExplodeFlag=False,
-            theHardClipFlag=self.clipHard)
+        self.aggregator.clip(myGeoExtent)
 
         return (myClippedHazardPath, myClippedExposurePath,
                 myClippedAggregationPath)
@@ -1955,3 +1934,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = str(myItemData.toString())
         return myFunctionID
+
+    def postProcessingLayer(self):
+
+        """Get the QgsMapLayer currently selected in the post processing combo.
+
+        Obtain QgsMapLayer id from the userrole of the QtCombo for post
+        processing combo return it as a QgsMapLayer.
+
+        Args:
+            None
+
+        Returns:
+            * None if no aggregation is selected or cboAggregation is
+                disabled, otherwise:
+            * QgsMapLayer - a polygon layer.
+
+        Raises:
+            None
+        """
+
+        myNoSelectionValue = 0
+        myIndex = self.cboAggregation.currentIndex()
+        if myIndex <= myNoSelectionValue:
+            return None
+        myLayerId = self.cboAggregation.itemData(
+            myIndex, QtCore.Qt.UserRole).toString()
+        # noinspection PyArgumentList
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer

@@ -75,21 +75,6 @@ class AggregatorTest(unittest.TestCase):
         DOCK.hideExposureFlag = False
         DOCK.showPostProcLayers = False
 
-    def test_cboAggregationEmptyProject(self):
-        """Aggregation combo changes properly according on no loaded layers"""
-        self.tearDown()
-        myMessage = ('The aggregation combobox should have only the "Entire '
-                     'area" item when the project has no layer. Found:'
-                     ' %s' % (DOCK.cboAggregation.currentText()))
-
-        self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
-            'Entire area'), myMessage)
-
-        myMessage = ('The aggregation combobox should be disabled when the '
-                     'project has no layer.')
-
-        assert not DOCK.cboAggregation.isEnabled(), myMessage
-
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
         myLayerList = [DOCK.tr('Entire area'),

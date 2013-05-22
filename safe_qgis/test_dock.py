@@ -1342,6 +1342,22 @@ Click for Diagnostic Information:
         assert myResult is not None, 'Check memory reported None'
         assert '3mb' in myResult, myMessage
 
+    def test_cboAggregationEmptyProject(self):
+        """Aggregation combo changes properly according on no loaded layers"""
+        self.tearDown()
+        myMessage = ('The aggregation combobox should have only the "Entire '
+                     'area" item when the project has no layer. Found:'
+                     ' %s' % (DOCK.cboAggregation.currentText()))
+
+        self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
+            'Entire area'), myMessage)
+
+        myMessage = ('The aggregation combobox should be disabled when the '
+                     'project has no layer.')
+
+        assert not DOCK.cboAggregation.isEnabled(), myMessage
+
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

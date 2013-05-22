@@ -592,7 +592,7 @@ def setupScenario(
         theExposure,
         theFunction,
         theFunctionId,
-        theOkButtonFlag=True,
+        theOkButppompo,hhghghhgpo,dfdfdfsdstonFlag=True,
         theAggregation=None,
         theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.
@@ -692,7 +692,7 @@ def populatemyDock(theDock):
     #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
 
-def loadStandardLayers(theDock):
+def loadStandardLayers(theDock=None):
     """Helper function to load standard layers into the dialog."""
     # NOTE: Adding new layers here may break existing tests since
     # combos are populated alphabetically. Each test will
@@ -721,7 +721,7 @@ def loadStandardLayers(theDock):
                   join(TESTDATA, 'Merapi_alert.shp'),
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(
-        theDock, myFileList, theDataDirectory=None)
+        myFileList, theDataDirectory=None, theDock=theDock)
     #FIXME (MB) -1 is untill we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
@@ -731,10 +731,10 @@ def loadStandardLayers(theDock):
 
 
 def loadLayers(
-        theDock,
         theLayerList,
         theClearFlag=True,
-        theDataDirectory=TESTDATA):
+        theDataDirectory=TESTDATA,
+        theDock=None):
     """Helper function to load layers as defined in a python list."""
     # First unload any layers that may already be loaded
     if theClearFlag:
@@ -762,7 +762,8 @@ def loadLayers(
             # noinspection PyArgumentList
             QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
-    theDock.getLayers()
+    if theDock is not None:
+        theDock.getLayers()
 
     # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount

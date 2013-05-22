@@ -36,6 +36,7 @@ from qgis.core import (
     QgsFillSymbolV2,
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
+from safe_qgis.clipper import clipLayer
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.utilities import (
     getExceptionWithStacktrace,
@@ -44,7 +45,6 @@ from safe_qgis.utilities import (
     setVectorCategorizedStyle,
     copyInMemory,
     getDefaults)
-
 from safe_qgis.safe_interface import (
     safeTr,
     temp_dir,
@@ -86,6 +86,7 @@ class Aggregator(QtCore.QObject):
         self.postProcessingOutput = {}
         self.prefix = 'aggr_'
         self.zonalMode = False
+        # This is used to hold an in memory copy of the aggregation layer
         self.layer = None
         self.defaults = None
         self.attributes = {}
@@ -93,6 +94,9 @@ class Aggregator(QtCore.QObject):
         self.runtimeKeywordsDialog = None
         self.iface = iface
         self.keywordIO = KeywordIO()
+        # These should have already been clipped to analysis extents
+        self.hazardLayer = None
+        self.exposureLayer = None
 
     # noinspection PyDictCreation
     def runStarting(self):
@@ -116,35 +120,6 @@ class Aggregator(QtCore.QObject):
             self.attributes[myFemaleRatioKey] = \
                 myFemRatioAttr
 
-    def getPostProcessingLayer(self):
-
-        """Get the QgsMapLayer currently selected in the post processing combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for post
-        processing combo return it as a QgsMapLayer.
-
-        Args:
-            None
-
-        Returns:
-            * None if no aggregation is selected or cboAggregation is
-                disabled, otherwise:
-            * QgsMapLayer - a polygon layer.
-
-        Raises:
-            None
-        """
-
-        myNoSelectionValue = 0
-        myIndex = self.cboAggregation.currentIndex()
-        if myIndex <= myNoSelectionValue:
-            return None
-        myLayerId = self.cboAggregation.itemData(
-            myIndex, QtCore.Qt.UserRole).toString()
-        # noinspection PyArgumentList
-        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
-        return myLayer
-
     def countFieldName(self):
         return self.prefix + 'count'
 
@@ -158,8 +133,8 @@ class Aggregator(QtCore.QObject):
                           theClippedHazardFilename,
                           theClippedExposureFilename):
         """Need a doc string here TS"""
-        myHazardLayer = self.getHazardLayer()
-        myExposureLayer = self.getExposureLayer()
+        myHazardLayer = self.hazardLayer
+        myExposureLayer = self.exposureLayer
 
         #get safe version of postproc layers
         self.mySafePostprocLayer = safe_read_layer(
@@ -175,9 +150,10 @@ class Aggregator(QtCore.QObject):
         if isPolygonLayer(myHazardLayer):
             # http://stackoverflow.com/questions/1031657/
             # profiling-self-and-arguments-in-python
-#            cProfile.runctx('self.preparePolygonLayer(
-#               theClippedHazardFilename, myHazardLayer)', globals(), locals())
-#            raise
+            # cProfile.runctx('self.preparePolygonLayer(
+            #    theClippedHazardFilename, myHazardLayer)', globals(),
+            # locals())
+            # raise
             theClippedHazardFilename = self.preparePolygonLayer(
                 theClippedHazardFilename, myHazardLayer)
 
@@ -682,7 +658,7 @@ class Aggregator(QtCore.QObject):
 
         return myHTML
 
-    def aggregate(self):
+    def aggregate(self, theAggregationLayerName):
         """Do any requested aggregation post processing.
 
         Performs Aggregation postprocessing step by
@@ -691,7 +667,9 @@ class Aggregator(QtCore.QObject):
          * stripping all attributes beside the aggregation attribute
          * delegating to the appropriate aggregator for raster and vectors
 
-        Args: None
+        Args:
+            theAggregationLayerName - content of the combo for aggregation in
+             dock. e.g. 'Entire Area', or 'kapubaten jakarta'
 
         Returns: None
 
@@ -703,7 +681,7 @@ class Aggregator(QtCore.QObject):
         myTitle = self.tr('Aggregating results...')
         myMessage = self.tr('This may take a little while - we are '
                             ' aggregating the hazards by %1').\
-            arg(self.cboAggregation.currentText())
+            arg(theAggregationLayerName)
         myProgress = 88
         self.showBusy(myTitle, myMessage, myProgress)
 
@@ -1296,3 +1274,30 @@ class Aggregator(QtCore.QObject):
                 return False
             else:
                 return True
+
+    def clip(self, theGeoExtent):
+
+        #If doing entire area, create a fake feature that covers the whole
+        #theGeoExtent
+        if not self.zonalMode:
+            self.layer.startEditing()
+            myProvider = self.layer.dataProvider()
+            # add a feature the size of the impact layer bounding box
+            myFeature = QgsFeature()
+            # noinspection PyCallByClass,PyTypeChecker
+            myFeature.setGeometry(QgsGeometry.fromRect(
+                QgsRectangle(
+                    QgsPoint(theGeoExtent[0], theGeoExtent[1]),
+                    QgsPoint(theGeoExtent[2], theGeoExtent[3]))))
+            myFeature.setAttributeMap({0: QtCore.QVariant(
+                self.tr('Entire area'))})
+            myProvider.addFeatures([myFeature])
+            self.layer.commitChanges()
+
+        myPath = clipLayer(
+            theLayer=self.layer,
+            theExtent=theGeoExtent,
+            theExplodeFlag=False,
+            theHardClipFlag=False)
+
+        return myPath
