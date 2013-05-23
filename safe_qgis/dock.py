@@ -959,36 +959,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Propagates any error from :func:optimalClip()
         """
-        try:
-            myHazardFilename, myExposureFilename, myAggregationFilename = \
-                self.optimalClip()
-            # in case aggregation layer is larger than the impact layer let's
-            # trim it down to  avoid extra calculations
-            self.aggregator.layer = QgsVectorLayer(
-                myAggregationFilename, 'myLayerName', 'ogr')
-            if not self.aggregator.layer.isValid():
-                myMessage = self.tr('Error when reading %1').arg(
-                    self.aggregator.layer.lastError())
-                # noinspection PyExceptionInherit
-                raise ReadLayerError(myMessage)
 
-            if self.aggregator.clipExtentsMode:
-                myHazardFilename, myExposureFilename = \
-                    self.aggregator.prepareInputLayer(
-                        myHazardFilename, myExposureFilename)
-        except CallGDALError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            raise e
-        except IOError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            raise e
-        except:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            raise
-
+        myHazardFilename, myExposureFilename = self.optimalClip()
+        # See if the inputs need further refinement for aggregations
+        myHazardFilename, myExposureFilename = self.aggregator.deintersect()
         # Identify input layers
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
@@ -1005,6 +979,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        _checkForStateChange()
         try:
             _, myBufferedGeoExtent, myCellSize, _, _, _ = \
                 self.getClipParameters()
@@ -1052,7 +1027,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
         try:
-            self.aggregator.initialise()
+            self.aggregator.stateChanged()
         except (KeywordDbError, Exception), e:
             myMessage = getExceptionWithStacktrace(e, theHtml=True)
             self.displayHtml(myMessage)
@@ -1060,7 +1035,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         LOGGER.debug('Do zonal aggregation: %s' %
-                     str(self.aggregator.clipExtentsMode))
+                     str(self.aggregator.aoiMode))
 
         self.runtimeKeywordsDialog = KeywordsDialog(
             self.iface.mainWindow(),
@@ -1080,7 +1055,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # prompt for them. if a prompt is shown run method is called by the
         # accepted signal of the keywords dialog
         myResult = self.aggregator.checkAttributes()
-        if self.aggregator.clipExtentsMode and not myResult:
+        if self.aggregator.aoiMode and not myResult:
             self.runtimeKeywordsDialog.setLayer(self.layer)
             #disable gui elements that should not be applicable for this
             self.runtimeKeywordsDialog.radExposure.setEnabled(False)
@@ -1108,12 +1083,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hideBusy()
         self.setOkButtonStatus()
 
+    def _checkForStateChange(self):
+        """Clear aggregation layer category keyword on dock state change.
+        """
+        #check and generate keywords for the aggregation layer
+        try:
+            if ((self.getPostProcessingLayer() is not None) and
+                    (self.lastUsedFunction != self.getFunctionID())):
+                # Remove category keyword so we force the keyword editor to
+                # popup. See the beginning of checkAttributes to
+                # see how the popup decision is made
+                self.keywordIO.deleteKeyword(self.layer, 'category')
+        except AttributeError:
+            #first run, self.lastUsedFunction does not exist yet
+            pass
+
     def run(self):
         """Execute analysis when ok button on dock is clicked."""
 
         self.enableBusyCursor()
-        # Let the aggregator know we are about to start a run
-        self.aggregator.runStarting()
 
         # Start the analysis
         try:
@@ -1337,7 +1325,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Add layers to QGIS
         myLayersToAdd = []
-        if self.showPostProcLayers and self.aggregator.clipExtentsMode:
+        if self.showPostProcLayers and self.aggregator.aoiMode:
             myLayersToAdd.append(self.aggregator.layer)
         myLayersToAdd.append(myQGISImpactLayer)
         QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)

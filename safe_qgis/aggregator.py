@@ -79,12 +79,9 @@ class Aggregator(QtCore.QObject):
             theAggregationLayer):
         """Director for aggregation based operations.
         Args:
-            * iface: iface - A QGIS iface instance.
-            * theExposureLayer: QgsMapLayer representing clipped exposure.
-            * theHazardLayer: QgsMapLayer representing clipped hazard.
-            * theAggregationLayer: QgsMapLayer representing clipped
-                aggregation. This will be converted to a memory layer inside
-                this class. see self.layer
+          theAggregationLayer: QgsMapLayer representing clipped
+              aggregation. This will be converted to a memory layer inside
+              this class. see self.layer
         Returns:
            not applicable
         Raises:
@@ -99,8 +96,9 @@ class Aggregator(QtCore.QObject):
         # This is used to hold an *in memory copy* of the aggregation layer
         # or None if the clip extents should be used.
         if theAggregationLayer is None:
-            self.layer = self.extentsToMemoryLayer()
-            self.clipExtentsMode = True
+            self.layer = self._extentsToMemoryLayer()
+            # Area Of Interest (AOI) mode flag
+            self.aoiMode = True
         else:
             myGeoExtent = extentToGeoArray(
                 theExposureLayer.extent(),
@@ -110,7 +108,7 @@ class Aggregator(QtCore.QObject):
                 theExtent=myGeoExtent)
             self.layer = QgsVectorLayer(
                 myClippedLayerPath, 'aggregation', 'ogr')
-            self.clipExtentsMode = False
+            self.aoiMode = False
 
         # This is a safe version of the aggregation layer
         self.safeLayer = safe_read_layer(str(theAggregationLayer.source()))
@@ -121,25 +119,55 @@ class Aggregator(QtCore.QObject):
         self.iface = iface
         self.keywordIO = KeywordIO()
 
+        self.defaults = getDefaults()
+        self.postProcessingOutput = {}
+        self.errorMessage = None
+        self.targetField = None
+        self.impactLayerAttributes = []
+
         # These should have already been clipped to analysis extents
         self.hazardLayer = theHazardLayer
         self.exposureLayer = theExposureLayer
 
-    def countFieldName(self):
+    def deintersect(self, theHazardFilename, theExposureFilename):
+        """Ensure there are no intersecting features with self.layer.
+
+        Buildings are not split up by this method.
+
+        """
+        if not self.aoiMode:
+
+            if isPolygonLayer(self.hazardLayer):
+                myHazardFilename = self._preparePolygonLayer(
+                    theHazardFilename, self.hazardLayer)
+
+            if isPolygonLayer(self.exposureLayer):
+                # Find out the subcategory for this layer
+                mySubcategory = self.keywordIO.readKeywords(
+                    self.exposureLayer, 'subcategory')
+                # We dont want to chop up buildings!
+                if mySubcategory != 'structure':
+                    myExposureFilename = self._preparePolygonLayer(
+                        theExposureFilename, self.exposureLayer)
+
+            return myHazardFilename, myExposureFilename
+
+        else:
+            # We do nothing, just return the original names because the
+            return theHazardFilename, theExposureFilename
+
+    def _countFieldName(self):
         return self.prefix + 'count'
 
-    def meanFieldName(self):
+    def _meanFieldName(self):
         return self.prefix + 'mean'
 
-    def sumFieldName(self):
+    def _sumFieldName(self):
         return self.prefix + 'sum'
 
     # noinspection PyDictCreation
-    def runStarting(self):
-        """Prepare for the fact that an analysis run is starting."""
-        # Attributes that will not be deleted from the postprocessing layer
-        # attribute table
-
+    def _setPersistantAttributes(self):
+        """Mark any attributes that should remain in the self.layer table."""
         self.attributes = {}
         self.attributes[self.defaults[
             'AGGR_ATTR_KEY']] = (
@@ -156,42 +184,10 @@ class Aggregator(QtCore.QObject):
             self.attributes[myFemaleRatioKey] = \
                 myFemRatioAttr
 
-    def prepareInputLayer(
-            self,
-            theClippedHazardFilename,
-            theClippedExposureFilename):
-        """Need a doc string here TS"""
-        myHazardLayer = self.hazardLayer
-        myExposureLayer = self.exposureLayer
+    def _preparePolygonLayer(self, theLayerFilename, theQgisLayer):
+        """Create a new layer with no intersecting features to self.layer.
 
-        myTitle = self.tr('Preclipping input data...')
-        myMessage = self.tr(
-            'We are clipping the input layers to avoid intersections with the '
-            'aggregation layer')
-        myProgress = 44
-        self.showBusy(myTitle, myMessage, myProgress)
-#        import cProfile
-        if isPolygonLayer(myHazardLayer):
-            # http://stackoverflow.com/questions/1031657/
-            # profiling-self-and-arguments-in-python
-            # cProfile.runctx('self.preparePolygonLayer(
-            #    theClippedHazardFilename, myHazardLayer)', globals(),
-            # locals())
-            # raise
-            theClippedHazardFilename = self.preparePolygonLayer(
-                theClippedHazardFilename, myHazardLayer)
-
-        if isPolygonLayer(myExposureLayer):
-            mySubcategory = self.keywordIO.readKeywords(myExposureLayer,
-                                                        'subcategory')
-            if mySubcategory != 'structure':
-                theClippedExposureFilename = self.preparePolygonLayer(
-                    theClippedExposureFilename, myExposureLayer)
-
-        return theClippedHazardFilename, theClippedExposureFilename
-
-    def preparePolygonLayer(self, theLayerFilename, theQgisLayer):
-        """ A helper function to align the polygons to the postprocLayer
+        A helper function to align the polygons to the postprocLayer
         polygons. If one input polygon is in two or more postprocLayer polygons
         then it is divided so that each part is within only one of the
         postprocLayer polygons. this allows to aggregate in postrocessing using
@@ -469,49 +465,11 @@ class Aggregator(QtCore.QObject):
                                       'ogr')
         return myOutFilename
 
-    def postProcess(self, theRunner, theLayerName):
-        """Run all post processing steps.
-
-        Called on self.theRunner SIGNAL('done()') starts all postprocessing
-        steps.
-
-        Args:
-            * theRunner - an impact_calculator instance.
-            * theLayerName - str. As taken from current text of aggregation
-                combo.
-
-        Returns:
-            None
-        """
-
-        if self.runner.impactLayer() is None:
-            # Done was emitted, but no impact layer was calculated
-            myResult = theRunner.result()
-            myMessage = str(self.tr('No impact layer was calculated. '
-                                    'Error message: %1\n').arg(str(myResult)))
-            myException = theRunner.lastException()
-            if myException is not None:
-                myContext = self.tr('An exception occurred when calculating '
-                                    'the results. %1').\
-                    arg(theRunner.result())
-                myMessage = getExceptionWithStacktrace(
-                    myException, theHtml=True, theContext=myContext)
-            raise Exception(myMessage)
-
-        try:
-            self.aggregate(theLayerName)
-            if self.aggregationErrorSkipPostprocessing is None:
-                self.run()
-            QtGui.qApp.restoreOverrideCursor()
-        except Exception, e:  # pylint: disable=W0703
-            raise e
-        self.completed()
-
-    def extentsToMemoryLayer(self):
+    def _extentsToMemoryLayer(self):
         """Memory layer for aggregation by using canvas extents as feature.
 
         We do this because the user elected to use no aggregation layer so we
-         make a 'dummy' one which covers the whole study area extent.
+        make a 'dummy' one which covers the whole study area extent.
 
         This layer is needed when postprocessing because we always want a
         vector layer to store aggregation information in.
@@ -519,7 +477,6 @@ class Aggregator(QtCore.QObject):
         Returns:
             QgsMapLayer - a memory layer representing the extents of the clip.
         """
-        self.clipExtentsMode = False
         myUUID = str(uuid.uuid4())
         myUri = 'Polygon?crs=epsg:4326&index=yes&uuid=%s' % myUUID
         myName = 'tmpPostprocessingLayer'
@@ -527,8 +484,8 @@ class Aggregator(QtCore.QObject):
         LOGGER.debug('created' + myLayer.name())
 
         if not myLayer.isValid():
-            myMessage = self.tr('An exception occurred when creating the '
-                                'Entire area layer.')
+            myMessage = self.tr(
+                'An exception occurred when creating the entire area layer.')
             raise (Exception(myMessage))
 
         myProvider = myLayer.dataProvider()
@@ -538,6 +495,19 @@ class Aggregator(QtCore.QObject):
                                            QtCore.QVariant.String)])
         myLayer.commitChanges()
 
+        myLayer.startEditing()
+        # add a feature the size of the impact layer bounding box
+        myFeature = QgsFeature()
+        # noinspection PyCallByClass,PyTypeChecker
+        myFeature.setGeometry(QgsGeometry.fromRect(
+            QgsRectangle(
+                QgsPoint(theGeoExtent[0], theGeoExtent[1]),
+                QgsPoint(theGeoExtent[2], theGeoExtent[3]))))
+        myFeature.setAttributeMap({0: QtCore.QVariant(
+            self.tr('Entire area'))})
+        myProvider.addFeatures([myFeature])
+        myLayer.commitChanges()
+
         try:
             self.keywordIO.appendKeywords(
                 self.layer,
@@ -545,33 +515,6 @@ class Aggregator(QtCore.QObject):
         except KeywordDbError, e:
             raise e
         return myLayer
-
-    def initialise(self):
-        """Initializes and clears self.getOutput.
-
-        .. note:: Needs to run at the end of postProcess.
-
-        Args: None
-        Returns: None
-        """
-        #check and generate keywords for the aggregation layer
-        self.defaults = getDefaults()
-        self.postProcessingOutput = {}
-        self.aggregationErrorSkipPostprocessing = None
-        self.targetField = None
-        self.impactLayerAttributes = []
-        try:
-            if ((self.layer is not None) and
-                    (self.lastUsedFunction != self.getFunctionID())):
-                # Remove category keyword so we force the keyword editor to
-                # popup. See the beginning of checkAttributes to
-                # see how the popup decision is made
-                self.keywordIO.deleteKeyword(self.layer, 'category')
-        except AttributeError:
-            #first run, self.lastUsedFunction does not exist yet
-            pass
-
-        self.clipExtentsMode = True
 
     def getOutput(self, theSingleTableFlag=False):
         """Returns the results of the post processing as a table.
@@ -584,7 +527,7 @@ class Aggregator(QtCore.QObject):
         """
 
 #        LOGGER.debug(self.postProcessingOutput)
-        if self.aggregationErrorSkipPostprocessing is not None:
+        if self.errorMessage is not None:
             myHTML = (
                 '<table class="table table-striped condensed">'
                 '    <tr>'
@@ -599,7 +542,7 @@ class Aggregator(QtCore.QObject):
                 self.tr(
                     'Due to a problem while processing the results,'
                     ' the detailed postprocessing report is unavailable:'
-                    ' %1').arg(self.aggregationErrorSkipPostprocessing)
+                    ' %1').arg(self.errorMessage)
                 +
                 '       </td>'
                 '    </tr>'
@@ -736,6 +679,7 @@ class Aggregator(QtCore.QObject):
         # noinspection PyBroadException
         try:
             self.layer.startEditing()
+            self._setPersistantAttributes()
             myProvider.deleteAttributes(myUnneededAttributes)
             self.layer.commitChanges()
         # FIXME (Ole): Disable pylint check for the moment
@@ -770,11 +714,11 @@ class Aggregator(QtCore.QObject):
                 arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers and self.clipExtentsMode:
+        if self.showPostProcLayers and self.aoiMode:
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
-                myAttr = self.sumFieldName()
+                myAttr = self._sumFieldName()
                 myAttrIndex = myProvider.fieldNameIndex(myAttr)
                 myProvider.select([myAttrIndex], QgsRectangle(), False)
                 myFeature = QgsFeature()
@@ -845,7 +789,7 @@ class Aggregator(QtCore.QObject):
                                 ' should define this.').\
                 arg(myQGISImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-            self.aggregationErrorSkipPostprocessing = myMessage
+            self.errorMessage = myMessage
             return
         myImpactProvider = myQGISImpactLayer.dataProvider()
         myTargetFieldIndex = myQGISImpactLayer.fieldNameIndex(self.targetField)
@@ -857,7 +801,7 @@ class Aggregator(QtCore.QObject):
                                 'postprocessing to work.').arg(
                                     self.targetField, myQGISImpactLayer.name())
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-            self.aggregationErrorSkipPostprocessing = myMessage
+            self.errorMessage = myMessage
             return
 
         # start data retreival: fetch no geometry and
@@ -882,7 +826,7 @@ class Aggregator(QtCore.QObject):
 
         elif self.statisticsType == 'sum':
             #add the total field to the layer
-            myAggrField = self.sumFieldName()
+            myAggrField = self._sumFieldName()
             myPostprocessorProvider.addAttributes([QgsField(
                 myAggrField, QtCore.QVariant.Int)])
             self.layer.commitChanges()
@@ -895,7 +839,7 @@ class Aggregator(QtCore.QObject):
         myImpactGeoms = mySafeImpactLayer.get_geometry()
         myImpactValues = mySafeImpactLayer.get_data()
 
-        if self.clipExtentsMode:
+        if self.aoiMode:
             myPostprocPolygons = self.safeLayer.get_geometry()
 
             if (mySafeImpactLayer.is_point_data or
@@ -1030,7 +974,7 @@ class Aggregator(QtCore.QObject):
                                     'Called on %1').\
                     arg(myQGISImpactLayer.name())
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-                self.aggregationErrorSkipPostprocessing = myMessage
+                self.errorMessage = myMessage
                 self.layer.commitChanges()
                 return
         else:
@@ -1145,7 +1089,7 @@ class Aggregator(QtCore.QObject):
         myNameFieldIndex = self.layer.fieldNameIndex(
             myFeatureNameAttribute)
         mySumFieldIndex = self.layer.fieldNameIndex(
-            self.sumFieldName())
+            self._sumFieldName())
 
         myFemaleRatioIsVariable = False
         myFemRatioFieldIndex = None
@@ -1284,29 +1228,41 @@ class Aggregator(QtCore.QObject):
             self.keywordIO.appendKeywords(self.layer, myKeywords)
             return False
 
-    def clip(self, theGeoExtent):
+    # TODO - move to its own rid class
+    def postProcess(self, theRunner, theLayerName):
+        """Run all post processing steps.
 
-        #If doing entire area, create a fake feature that covers the whole
-        #theGeoExtent
-        if not self.clipExtentsMode:
-            self.layer.startEditing()
-            myProvider = self.layer.dataProvider()
-            # add a feature the size of the impact layer bounding box
-            myFeature = QgsFeature()
-            # noinspection PyCallByClass,PyTypeChecker
-            myFeature.setGeometry(QgsGeometry.fromRect(
-                QgsRectangle(
-                    QgsPoint(theGeoExtent[0], theGeoExtent[1]),
-                    QgsPoint(theGeoExtent[2], theGeoExtent[3]))))
-            myFeature.setAttributeMap({0: QtCore.QVariant(
-                self.tr('Entire area'))})
-            myProvider.addFeatures([myFeature])
-            self.layer.commitChanges()
+        Called on self.theRunner SIGNAL('done()') starts all postprocessing
+        steps.
 
-        myPath = clipLayer(
-            theLayer=self.layer,
-            theExtent=theGeoExtent,
-            theExplodeFlag=False,
-            theHardClipFlag=False)
+        Args:
+            * theRunner - an impact_calculator instance.
+            * theLayerName - str. As taken from current text of aggregation
+                combo.
 
-        return myPath
+        Returns:
+            None
+        """
+
+        if self.runner.impactLayer() is None:
+            # Done was emitted, but no impact layer was calculated
+            myResult = theRunner.result()
+            myMessage = str(self.tr('No impact layer was calculated. '
+                                    'Error message: %1\n').arg(str(myResult)))
+            myException = theRunner.lastException()
+            if myException is not None:
+                myContext = self.tr('An exception occurred when calculating '
+                                    'the results. %1').\
+                    arg(theRunner.result())
+                myMessage = getExceptionWithStacktrace(
+                    myException, theHtml=True, theContext=myContext)
+            raise Exception(myMessage)
+
+        try:
+            self.aggregate(theLayerName)
+            if self.errorMessage is None:
+                self.run()
+            QtGui.qApp.restoreOverrideCursor()
+        except Exception, e:  # pylint: disable=W0703
+            raise e
+        self.completed()
