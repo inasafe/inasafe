@@ -16,10 +16,14 @@ __date__ = '22/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
+
+from safe_qgis.safe_interface import get_free_memory
+
+LOGGER = logging.getLogger('InaSAFE')
+
 
 def checkMemoryUsage(
-        theHazardLayer,
-        theExposureLayer,
         theBufferedGeoExtent,
         theCellSize):
     """Slot to check if analysis is feasible when extents change.

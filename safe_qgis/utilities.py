@@ -1372,3 +1372,32 @@ def which(name, flags=os.X_OK):
                 result.append(pext)
 
     return result
+
+
+def extentToGeoArray(theExtent, theSourceCrs):
+    """Convert the supplied extent to geographic and return as an array.
+
+    Args:
+        * theExtent: QgsRectangle defining a spatial extent in any CRS
+        * theSourceCrs: QgsCoordinateReferenceSystem for theExtent.
+
+    Returns:
+        list: a list in the form [xmin, ymin, xmax, ymax] where all
+            coordinates provided are in Geographic / EPSG:4326.
+
+    Raises:
+        None
+    """
+
+    myGeoCrs = QgsCoordinateReferenceSystem()
+    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+    myXForm = QgsCoordinateTransform(theSourceCrs, myGeoCrs)
+
+    # Get the clip area in the layer's crs
+    myTransformedExtent = myXForm.transformBoundingBox(theExtent)
+
+    myGeoExtent = [myTransformedExtent.xMinimum(),
+                   myTransformedExtent.yMinimum(),
+                   myTransformedExtent.xMaximum(),
+                   myTransformedExtent.yMaximum()]
+    return myGeoExtent

@@ -54,7 +54,8 @@ from safe_qgis.utilities import (
     qgisVersion,
     impactLayerAttribution,
     addComboItemInOrder,
-    setVectorCategorizedStyle)
+    setVectorCategorizedStyle,
+    extentToGeoArray)
 
 from safe_qgis.memory_checker import checkMemoryUsage
 from safe_qgis.impact_calculator import ImpactCalculator
@@ -67,7 +68,6 @@ from safe_qgis.safe_interface import (
     safeTr,
     get_version,
     temp_dir,
-    get_free_memory,
     ReadLayerError)
 
 from safe_qgis.keyword_io import KeywordIO
@@ -158,6 +158,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
         self.activeFunction = None
+        self.runtimeKeywordsDialog = None
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -971,9 +972,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # noinspection PyExceptionInherit
                 raise ReadLayerError(myMessage)
 
-            if self.aggregator.zonalMode:
+            if self.aggregator.clipExtentsMode:
                 myHazardFilename, myExposureFilename = \
-                    self.prepareInputLayerForAggregation(
+                    self.aggregator.prepareInputLayer(
                         myHazardFilename, myExposureFilename)
         except CallGDALError, e:
             QtGui.qApp.restoreOverrideCursor()
@@ -1004,11 +1005,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-        LOGGER.info('Extents changed!')
-        myHazardLayer = self.getHazardLayer()
-        myExposureLayer = self.getExposureLayer()
-        if not (myHazardLayer and myExposureLayer):
-            return
         try:
             _, myBufferedGeoExtent, myCellSize, _, _, _ = \
                 self.getClipParameters()
@@ -1016,8 +1012,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             return None  # ignore any error
         myMessage = checkMemoryUsage(
-            myHazardLayer,
-            myExposureLayer,
             myBufferedGeoExtent,
             myCellSize)
         if myMessage is not None:
@@ -1039,8 +1033,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.displayHtml(myMessage)
             self.hideBusy()
             return
-
-        self.aggregator.layer = self.postProcessingLayer()
+        # Create an aggregator for this analysis run
+        self.aggregator = Aggregator(
+            self.iface,
+            self.getExposureLayer(),
+            self.getHazardLayer(),
+            self.postProcessingLayer())
         try:
             myOriginalKeywords = self.keywordIO.readKeywords(
                 self.aggregator.layer)
@@ -1062,7 +1060,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         LOGGER.debug('Do zonal aggregation: %s' %
-                     str(self.aggregator.zonalMode))
+                     str(self.aggregator.clipExtentsMode))
 
         self.runtimeKeywordsDialog = KeywordsDialog(
             self.iface.mainWindow(),
@@ -1079,10 +1077,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                partial(self.acceptCancelled,
                                        myOriginalKeywords))
         # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them. if a prompt is shown myContinue will be false
-        # and the run method is called by the accepted signal
-        myContinue = self.aggregator.checkAttributes()
-        if myContinue:
+        # prompt for them. if a prompt is shown run method is called by the
+        # accepted signal of the keywords dialog
+        myResult = self.aggregator.checkAttributes()
+        if self.aggregator.clipExtentsMode and not myResult:
+            self.runtimeKeywordsDialog.setLayer(self.layer)
+            #disable gui elements that should not be applicable for this
+            self.runtimeKeywordsDialog.radExposure.setEnabled(False)
+            self.runtimeKeywordsDialog.radHazard.setEnabled(False)
+            self.runtimeKeywordsDialog.pbnAdvanced.setEnabled(False)
+            self.runtimeKeywordsDialog.setModal(True)
+            self.runtimeKeywordsDialog.show()
+        else:
             self.run()
 
     def acceptCancelled(self, theOldKeywords):
@@ -1331,7 +1337,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Add layers to QGIS
         myLayersToAdd = []
-        if self.showPostProcLayers and self.aggregator.zonalMode:
+        if self.showPostProcLayers and self.aggregator.clipExtentsMode:
             myLayersToAdd.append(self.aggregator.layer)
         myLayersToAdd.append(myQGISImpactLayer)
         QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
@@ -1455,11 +1461,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get the current viewport extent as an array in EPSG:4326
         myViewportGeoExtent = self.viewportGeoArray()
         # Get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
-                                                  myHazardLayer.crs())
+        myHazardGeoExtent = extentToGeoArray(
+            myHazardLayer.extent(),
+            myHazardLayer.crs())
         # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
-                                                    myExposureLayer.crs())
+        myExposureGeoExtent = extentToGeoArray(
+            myExposureLayer.extent(),
+            myExposureLayer.crs())
 
         # Reproject all extents to EPSG:4326 if needed
         myGeoCrs = QgsCoordinateReferenceSystem()
@@ -1611,17 +1619,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theCellSize=myCellSize,
             theExtraKeywords=myExtraExposureKeywords,
             theHardClipFlag=self.clipHard)
-
-        myTitle = self.tr('Preparing aggregation layer...')
-        myMessage = self.tr(
-            'We are clipping the aggregation layer to match the intersection '
-            'of the hazard and exposure layer extents.')
-        myProgress = 39
-        self.showBusy(myTitle, myMessage, myProgress)
-        self.aggregator.clip(myGeoExtent)
-
-        return (myClippedHazardPath, myClippedExposurePath,
-                myClippedAggregationPath)
+        return myClippedHazardPath, myClippedExposurePath
 
         ############################################################
         # logic checked to here..............
@@ -1643,7 +1641,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             None
 
-        .. note:: Delegates to self.extentToGeoArray()
+        .. note:: Delegates to extentToGeoArray()
 
         """
 
@@ -1659,37 +1657,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myCrs = QgsCoordinateReferenceSystem()
             myCrs.createFromEpsg(4326)
 
-        return self.extentToGeoArray(myRect, myCrs)
-
-    def extentToGeoArray(self, theExtent, theSourceCrs):
-        """Convert the supplied extent to geographic and return as an array.
-
-        Args:
-            * theExtent: QgsRectangle defining a spatial extent in any CRS
-            * theSourceCrs: QgsCoordinateReferenceSystem for theExtent.
-
-        Returns:
-            list: a list in the form [xmin, ymin, xmax, ymax] where all
-                coordinates provided are in Geographic / EPSG:4326.
-
-        Raises:
-            None
-        """
-
-        # FIXME (Ole): As there is no reference to self, this function
-        #              should be a general helper outside the class
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-        myXForm = QgsCoordinateTransform(theSourceCrs, myGeoCrs)
-
-        # Get the clip area in the layer's crs
-        myTransformedExtent = myXForm.transformBoundingBox(theExtent)
-
-        myGeoExtent = [myTransformedExtent.xMinimum(),
-                       myTransformedExtent.yMinimum(),
-                       myTransformedExtent.xMaximum(),
-                       myTransformedExtent.yMaximum()]
-        return myGeoExtent
+        return extentToGeoArray(myRect, myCrs)
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""

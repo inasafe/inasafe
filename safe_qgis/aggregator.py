@@ -44,7 +44,8 @@ from safe_qgis.utilities import (
     getLayerAttributeNames,
     setVectorCategorizedStyle,
     copyInMemory,
-    getDefaults)
+    getDefaults,
+    extentToGeoArray)
 from safe_qgis.safe_interface import (
     safeTr,
     temp_dir,
@@ -94,17 +95,29 @@ class Aggregator(QtCore.QObject):
         # Aggregation / post processing related items
         self.postProcessingOutput = {}
         self.prefix = 'aggr_'
-        self.zonalMode = False
+
         # This is used to hold an *in memory copy* of the aggregation layer
         # or None if the clip extents should be used.
-        self.layer = None
+        if theAggregationLayer is None:
+            self.layer = self.extentsToMemoryLayer()
+            self.clipExtentsMode = True
+        else:
+            myGeoExtent = extentToGeoArray(
+                theExposureLayer.extent(),
+                theExposureLayer.crs())
+            myClippedLayerPath = clipLayer(
+                theLayer=theAggregationLayer,
+                theExtent=myGeoExtent)
+            self.layer = QgsVectorLayer(
+                myClippedLayerPath, 'aggregation', 'ogr')
+            self.clipExtentsMode = False
+
         # This is a safe version of the aggregation layer
-        self.safeLayer = safe_read_layer(str(self.layer.source()))
+        self.safeLayer = safe_read_layer(str(theAggregationLayer.source()))
 
         self.defaults = None
         self.attributes = {}
         self.attributeTitle = None
-        self.runtimeKeywordsDialog = None
         self.iface = iface
         self.keywordIO = KeywordIO()
 
@@ -143,9 +156,10 @@ class Aggregator(QtCore.QObject):
             self.attributes[myFemaleRatioKey] = \
                 myFemRatioAttr
 
-    def prepareInputLayer(self,
-                          theClippedHazardFilename,
-                          theClippedExposureFilename):
+    def prepareInputLayer(
+            self,
+            theClippedHazardFilename,
+            theClippedExposureFilename):
         """Need a doc string here TS"""
         myHazardLayer = self.hazardLayer
         myExposureLayer = self.exposureLayer
@@ -493,6 +507,45 @@ class Aggregator(QtCore.QObject):
             raise e
         self.completed()
 
+    def extentsToMemoryLayer(self):
+        """Memory layer for aggregation by using canvas extents as feature.
+
+        We do this because the user elected to use no aggregation layer so we
+         make a 'dummy' one which covers the whole study area extent.
+
+        This layer is needed when postprocessing because we always want a
+        vector layer to store aggregation information in.
+
+        Returns:
+            QgsMapLayer - a memory layer representing the extents of the clip.
+        """
+        self.clipExtentsMode = False
+        myUUID = str(uuid.uuid4())
+        myUri = 'Polygon?crs=epsg:4326&index=yes&uuid=%s' % myUUID
+        myName = 'tmpPostprocessingLayer'
+        myLayer = QgsVectorLayer(myUri, myName, 'memory')
+        LOGGER.debug('created' + myLayer.name())
+
+        if not myLayer.isValid():
+            myMessage = self.tr('An exception occurred when creating the '
+                                'Entire area layer.')
+            raise (Exception(myMessage))
+
+        myProvider = myLayer.dataProvider()
+        myLayer.startEditing()
+        myAttrName = self.tr('Area')
+        myProvider.addAttributes([QgsField(myAttrName,
+                                           QtCore.QVariant.String)])
+        myLayer.commitChanges()
+
+        try:
+            self.keywordIO.appendKeywords(
+                self.layer,
+                {self.defaults['AGGR_ATTR_KEY']: myAttrName})
+        except KeywordDbError, e:
+            raise e
+        return myLayer
+
     def initialise(self):
         """Initializes and clears self.getOutput.
 
@@ -518,40 +571,7 @@ class Aggregator(QtCore.QObject):
             #first run, self.lastUsedFunction does not exist yet
             pass
 
-        self.zonalMode = True
-        if self.layer is None:
-            # generate on the fly a memory layer to be used in postprocessing
-            # this is needed because we always want a vector layer to store
-            # information
-            self.zonalMode = False
-            myGeoCrs = QgsCoordinateReferenceSystem()
-            myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-            crs = myGeoCrs.authid().toLower()
-            myUUID = str(uuid.uuid4())
-            myUri = 'Polygon?crs=%s&index=yes&uuid=%s' % (crs, myUUID)
-            myName = 'tmpPostprocessingLayer'
-            myLayer = QgsVectorLayer(myUri, myName, 'memory')
-            LOGGER.debug('created' + myLayer.name())
-
-            if not myLayer.isValid():
-                myMessage = self.tr('An exception occurred when creating the '
-                                    'Entire area layer.')
-                raise(Exception(myMessage))
-
-            myProvider = myLayer.dataProvider()
-            myLayer.startEditing()
-            myAttrName = self.tr('Area')
-            myProvider.addAttributes([QgsField(myAttrName,
-                                               QtCore.QVariant.String)])
-            myLayer.commitChanges()
-
-            self.layer = myLayer
-            try:
-                self.keywordIO.appendKeywords(
-                    self.layer,
-                    {self.defaults['AGGR_ATTR_KEY']: myAttrName})
-            except KeywordDbError, e:
-                raise e
+        self.clipExtentsMode = True
 
     def getOutput(self, theSingleTableFlag=False):
         """Returns the results of the post processing as a table.
@@ -750,7 +770,7 @@ class Aggregator(QtCore.QObject):
                 arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers and self.zonalMode:
+        if self.showPostProcLayers and self.clipExtentsMode:
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
@@ -875,7 +895,7 @@ class Aggregator(QtCore.QObject):
         myImpactGeoms = mySafeImpactLayer.get_geometry()
         myImpactValues = mySafeImpactLayer.get_data()
 
-        if self.zonalMode:
+        if self.clipExtentsMode:
             myPostprocPolygons = self.safeLayer.get_geometry()
 
             if (mySafeImpactLayer.is_point_data or
@@ -1221,7 +1241,7 @@ class Aggregator(QtCore.QObject):
             None
 
         Returns:
-            None
+            bool
 
         Raises:
             Propagates any error
@@ -1230,7 +1250,7 @@ class Aggregator(QtCore.QObject):
         # noinspection PyBroadException
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        #discussed with tim,in this case its ok to be generic
+        #discussed with Tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             myKeywords = {}
 
@@ -1261,37 +1281,14 @@ class Aggregator(QtCore.QObject):
                 myKeywords[self.defaults['FEM_RATIO_KEY']] = \
                     self.defaults['FEM_RATIO']
 
-#            delete = self.keywordIO.deleteKeyword(self.layer,
-#               'subcategory')
-#            LOGGER.debug('Deleted: ' + str(delete))
             self.keywordIO.appendKeywords(self.layer, myKeywords)
-            if self.zonalMode:
-                #prompt user for a choice
-                myTitle = self.tr(
-                    'Waiting for attribute selection...')
-                myMessage = self.tr('Please select which attribute you want to'
-                                    ' use as ID for the aggregated results')
-                myProgress = 1
-                self.showBusy(myTitle, myMessage, myProgress)
-
-                self.disableBusyCursor()
-                self.runtimeKeywordsDialog.setLayer(self.layer)
-                #disable gui elements that should not be applicable for this
-                self.runtimeKeywordsDialog.radExposure.setEnabled(False)
-                self.runtimeKeywordsDialog.radHazard.setEnabled(False)
-                self.runtimeKeywordsDialog.pbnAdvanced.setEnabled(False)
-                self.runtimeKeywordsDialog.setModal(True)
-                self.runtimeKeywordsDialog.show()
-
-                return False
-            else:
-                return True
+            return False
 
     def clip(self, theGeoExtent):
 
         #If doing entire area, create a fake feature that covers the whole
         #theGeoExtent
-        if not self.zonalMode:
+        if not self.clipExtentsMode:
             self.layer.startEditing()
             myProvider = self.layer.dataProvider()
             # add a feature the size of the impact layer bounding box
