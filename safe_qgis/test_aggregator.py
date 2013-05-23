@@ -74,6 +74,7 @@ class AggregatorTest(unittest.TestCase):
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
         DOCK.showPostProcLayers = False
+        setJakartaGeoExtent()
 
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -172,6 +173,7 @@ class AggregatorTest(unittest.TestCase):
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',

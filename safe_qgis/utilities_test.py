@@ -592,7 +592,7 @@ def setupScenario(
         theExposure,
         theFunction,
         theFunctionId,
-        theOkButppompo,hhghghhgpo,dfdfdfsdstonFlag=True,
+        theOkButtonFlag=True,
         theAggregation=None,
         theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.

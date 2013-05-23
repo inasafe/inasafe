@@ -56,6 +56,7 @@ from safe_qgis.utilities import (
     addComboItemInOrder,
     setVectorCategorizedStyle)
 
+from safe_qgis.memory_checker import checkMemoryUsage
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
     availableFunctions,
@@ -1003,7 +1004,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-        myMessage = self.checkMemoryUsage()
+        LOGGER.info('Extents changed!')
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
+        if not (myHazardLayer and myExposureLayer):
+            return
+        try:
+            _, myBufferedGeoExtent, myCellSize, _, _, _ = \
+                self.getClipParameters()
+        except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
+            LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            return None  # ignore any error
+        myMessage = checkMemoryUsage(
+            myHazardLayer,
+            myExposureLayer,
+            myBufferedGeoExtent,
+            myCellSize)
         if myMessage is not None:
             # noinspection PyCallByClass,PyTypeChecker
             myResult = QtGui.QMessageBox.warning(
@@ -1125,6 +1141,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                     'to WGS84/GeoGraphic.'))
             return
         except MemoryError, e:
+            # This breaks dry as it is repeated elsewhere START
+            myHazardLayer = self.getHazardLayer()
+            myExposureLayer = self.getExposureLayer()
+            if not (myHazardLayer and myExposureLayer):
+                return
+            try:
+                _, myBufferedGeoExtent, myCellSize, _, _, _ = \
+                    self.getClipParameters()
+            except (RuntimeError,
+                    InsufficientOverlapError,
+                    AttributeError) as e:
+                LOGGER.exception('Error calculating extents. %s' % str(
+                    e.message))
+                return None  # ignore any error
+            myMessage = checkMemoryUsage(
+                myHazardLayer,
+                myExposureLayer,
+                myBufferedGeoExtent,
+                myCellSize)
+            # This breaks dry END
             self.spawnError(
                 e,
                 self.tr(
@@ -1133,7 +1169,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'your computer so that it has more memory may help. '
                     'Alternatively, consider using a smaller geographical '
                     'area for your analysis, or using rasters with a larger '
-                    'cell size.') + self.checkMemoryUsage())
+                    'cell size.') + myMessage)
             return
 
         try:

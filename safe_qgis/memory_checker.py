@@ -17,14 +17,20 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-def checkMemoryUsage(theHazardLayer, theExposureLayer, theBufferedGeoExtent,
-                     theCe):
+def checkMemoryUsage(
+        theHazardLayer,
+        theExposureLayer,
+        theBufferedGeoExtent,
+        theCellSize):
     """Slot to check if analysis is feasible when extents change.
 
     For simplicity, we will do all our calcs in geocrs.
 
     Args:
-        None
+        theHazardLayer,
+        theExposureLayer,
+        theBufferedGeoExtent,
+        theCellSize
 
     Returns:
         str: A string containing notes about how much memory is needed
@@ -35,23 +41,11 @@ def checkMemoryUsage(theHazardLayer, theExposureLayer, theBufferedGeoExtent,
         memory usage is likely to be too much for the current system.
 
     """
-    LOGGER.info('Extents changed!')
-    myHazardLayer = self.getHazardLayer()
-    myExposureLayer = self.getExposureLayer()
-    if not (myHazardLayer and myExposureLayer):
-        return
+    myWidth = theBufferedGeoExtent[2] - theBufferedGeoExtent[0]
+    myHeight = theBufferedGeoExtent[3] - theBufferedGeoExtent[1]
     try:
-        _, myBufferedGeoExtent, myCellSize, _, _, _ = \
-            self.getClipParameters()
-    except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
-        LOGGER.exception('Error calculating extents. %s' % str(e.message))
-        return None  # ignore any error
-
-    myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
-    myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
-    try:
-        myWidth = myWidth / myCellSize
-        myHeight = myHeight / myCellSize
+        myWidth = myWidth / theCellSize
+        myHeight = myHeight / theCellSize
     except TypeError:
         # Could have been a vector layer for example
         LOGGER.exception('Error: Computed cellsize was None.')
@@ -61,7 +55,7 @@ def checkMemoryUsage(theHazardLayer, theExposureLayer, theBufferedGeoExtent,
 
     LOGGER.info('Width: %s' % myWidth)
     LOGGER.info('Height: %s' % myHeight)
-    LOGGER.info('Pixel Size: %s' % myCellSize)
+    LOGGER.info('Pixel Size: %s' % theCellSize)
 
     # Compute mem requirement in MB (assuming numpy uses 8bytes by per
     # cell) see this link:
@@ -93,15 +87,13 @@ def checkMemoryUsage(theHazardLayer, theExposureLayer, theBufferedGeoExtent,
         myMessage = self.tr(
             'There may not be enough free memory to run this analysis. You can '
             'attempt to run the analysis anyway, but note that your computer '
-            'may become unresponsive during execution, '
-            'and / or the analysis may fail due to insufficient '
-            'memory. Proceed at your own risk.')
+            'may become unresponsive during execution, and / or the analysis '
+            'may fail due to insufficient memory. Proceed at your own risk.')
         mySuggestion = self.tr(
-            'Try zooming in to a smaller area or using '
-            'a raster layer with a coarser resolution '
-            'to speed up execution and reduce memory '
-            'requirements. You could also try adding '
-            'more RAM to your computer.')
+            'Try zooming in to a smaller area or using a raster layer with a '
+            'coarser resolution to speed up execution and reduce memory '
+            'requirements. You could also try adding more RAM to your '
+            'computer.')
         myHtmlMessage = ('<table class="condensed">'
                          '<tr><th class="warning '
                          'button-cell">%s</th></tr>\n'
