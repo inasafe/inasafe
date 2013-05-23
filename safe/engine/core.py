@@ -54,7 +54,7 @@ def calculate_impact(layers, impact_fcn):
     start_time = datetime.now()
 
     # Pass input layers to plugin
-    F = impact_function.runPostprocessors(layers)
+    F = impact_function.run(layers)
 
     # End time
     end_time = datetime.now()
