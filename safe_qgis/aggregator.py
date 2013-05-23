@@ -89,9 +89,6 @@ class Aggregator(QtCore.QObject):
         """
 
         super(Aggregator, self).__init__()
-        # Aggregation / post processing related items
-        self.postProcessingOutput = {}
-        self.prefix = 'aggr_'
 
         # This is used to hold an *in memory copy* of the aggregation layer
         # or None if the clip extents should be used.
@@ -107,12 +104,15 @@ class Aggregator(QtCore.QObject):
         self.exposureLayer = None
         self.safeLayer = None
 
+        # Aggregation / post processing related items
+        self.postProcessingOutput = {}
+        self.prefix = 'aggr_'
         self.defaults = None
         self.attributes = {}
         self.attributeTitle = None
+
         self.iface = iface
         self.keywordIO = KeywordIO()
-
         self.defaults = getDefaults()
         self.postProcessingOutput = {}
         self.errorMessage = None
@@ -124,8 +124,70 @@ class Aggregator(QtCore.QObject):
         self.checkAttributes()
 
     def validateKeywords(self):
-        """Check the aggregation layer keywords are adequately defined."""
-        pass
+        """Check if the postprocessing layer has all needed attribute keywords.
+
+        This is only applicable in the case where were are not using the AOI
+        (in other words self.aoiMode is False). When self.aoiMode is True
+        then we always use just the defaults and dont allow the user to
+        create custom aggregation field mappings.
+
+        This method is called on instance creation and should always be
+        called if you change any state of the aggregator class.
+
+        On completion of this method the self.isValid flag is set. If this
+        flag is not True, then no aggregation or postprocessing work will be
+        carried out (these methods will raise an InvalidAggregatorError).
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            Errors are propogated
+        """
+        if self.aoiMode:
+            self.isValid = True
+            return
+
+        # Otherwise get the attributes for the aggregation layer.
+        # noinspection PyBroadException
+        try:
+            myKeywords = self.keywordIO.readKeywords(self.layer)
+        #discussed with Tim,in this case its ok to be generic
+        except Exception:  # pylint: disable=W0703
+            myKeywords = {}
+
+        #myKeywords are already complete
+        if ('category' in myKeywords and
+            myKeywords['category'] == 'postprocessing' and
+            self.defaults['AGGR_ATTR_KEY'] in myKeywords and
+            self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
+            (self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr('Use default') or
+             self.defaults['FEM_RATIO_KEY'] in myKeywords)):
+            self.isValid = True
+        #some keywords are needed
+        else:
+            #set the default values by writing to the myKeywords
+            myKeywords['category'] = 'postprocessing'
+
+            myAttributes, _ = getLayerAttributeNames(
+                self.layer,
+                [QtCore.QVariant.Int, QtCore.QVariant.String])
+            if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
+                myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttributes[0]
+
+            if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
+                myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+                    'Use default')
+
+            if self.defaults['FEM_RATIO_KEY'] not in myKeywords:
+                myKeywords[self.defaults['FEM_RATIO_KEY']] = \
+                    self.defaults['FEM_RATIO']
+
+            self.keywordIO.appendKeywords(self.layer, myKeywords)
+            self.isValid = False
 
     def deintersect(self, theHazardLayer, theExposureLayer):
         """Ensure there are no intersecting features with self.layer.
@@ -141,6 +203,9 @@ class Aggregator(QtCore.QObject):
         self._prepareLayer()
         # This is a safe version of the aggregation layer
         self.safeLayer = safe_read_layer(str(theAggregationLayer.source()))
+
+        myHazardFilename = theHazardLayer
+        myExposureFilename = theExposureLayer
 
         if not self.aoiMode:
 
@@ -162,6 +227,431 @@ class Aggregator(QtCore.QObject):
         else:
             # We do nothing, just return the original names because the
             return theHazardFilename, theExposureFilename
+
+    def aggregate(self, theAggregationLayerName):
+        """Do any requested aggregation post processing.
+
+        Performs Aggregation postprocessing step by
+         * creating a copy of the dataset clipped by the impactlayer bounding
+          box
+         * stripping all attributes beside the aggregation attribute
+         * delegating to the appropriate aggregator for raster and vectors
+
+        Args:
+            theAggregationLayerName - content of the combo for aggregation in
+             dock. e.g. 'Entire Area', or 'kapubaten jakarta'
+
+        Returns: None
+
+        Raises:
+            ReadLayerError
+        """
+        myImpactLayer = self.runner.impactLayer()
+
+        myTitle = self.tr('Aggregating results...')
+        myMessage = self.tr('This may take a little while - we are '
+                            ' aggregating the hazards by %1').\
+            arg(theAggregationLayerName)
+        myProgress = 88
+        self.showBusy(myTitle, myMessage, myProgress)
+
+        myQGISImpactLayer = self.readImpactLayer(myImpactLayer)
+        if not myQGISImpactLayer.isValid():
+            myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
+            raise ReadLayerError(myMessage)
+        myLayerName = str(self.tr('%1 aggregated to %2').arg(
+            myQGISImpactLayer.name()).arg(self.layer.name()))
+
+        #delete unwanted fields
+        myProvider = self.layer.dataProvider()
+        myFields = myProvider.fields()
+        myUnneededAttributes = []
+        for i in myFields:
+            if (myFields[i].name() not in
+                    self.attributes.values()):
+                myUnneededAttributes.append(i)
+        LOGGER.debug('Removing this attributes: ' + str(myUnneededAttributes))
+        # noinspection PyBroadException
+        try:
+            self.layer.startEditing()
+            self._setPersistantAttributes()
+            myProvider.deleteAttributes(myUnneededAttributes)
+            self.layer.commitChanges()
+        # FIXME (Ole): Disable pylint check for the moment
+        # Need to work out what exceptions we will catch here, though.
+        except:  # pylint: disable=W0702
+            myMessage = self.tr('Could not remove the unneeded fields')
+            LOGGER.debug(myMessage)
+
+        del myUnneededAttributes, myProvider, myFields
+        self.keywordIO.appendKeywords(
+            self.layer, {'title': myLayerName})
+
+        #find needed statistics type
+        try:
+            self.statisticsType = self.keywordIO.readKeywords(
+                myQGISImpactLayer, 'statistics_type')
+            self.statisticsClasses = self.keywordIO.readKeywords(
+                myQGISImpactLayer, 'statistics_classes')
+
+        except KeywordNotFoundError:
+            #default to summing
+            self.statisticsType = 'sum'
+
+        #call the correct aggregator
+        if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
+            self.aggregateVectorImpact(myQGISImpactLayer)
+        elif myQGISImpactLayer.type() == QgsMapLayer.RasterLayer:
+            self._aggregateRasterImpact(myQGISImpactLayer)
+        else:
+            myMessage = self.tr('%1 is %2 but it should be either vector or '
+                                'raster').\
+                arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
+            raise ReadLayerError(myMessage)
+
+        if self.showPostProcLayers and self.aoiMode:
+            if self.statisticsType == 'sum':
+                #style layer if we are summing
+                myProvider = self.layer.dataProvider()
+                myAttr = self._sumFieldName()
+                myAttrIndex = myProvider.fieldNameIndex(myAttr)
+                myProvider.select([myAttrIndex], QgsRectangle(), False)
+                myFeature = QgsFeature()
+                myHighestVal = 0
+
+                while myProvider.nextFeature(myFeature):
+                    myAttrMap = myFeature.attributeMap()
+                    myVal, ok = myAttrMap[myAttrIndex].toInt()
+                    if ok and myVal > myHighestVal:
+                        myHighestVal = myVal
+
+                myClasses = []
+                myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
+                myStep = int(myHighestVal / len(myColors))
+                myCounter = 0
+                for myColor in myColors:
+                    myMin = myCounter
+                    myCounter += myStep
+                    myMax = myCounter
+
+                    myClasses.append(
+                        {'min': myMin,
+                         'max': myMax,
+                         'colour': myColor,
+                         'transparency': 30,
+                         'label': '%s - %s' % (myMin, myMax)})
+                    myCounter += 1
+
+                myStyle = {'target_field': myAttr,
+                           'style_classes': myClasses}
+                setVectorStyle(self.layer, myStyle)
+            else:
+                #make style of layer pretty much invisible
+                myProps = {'style': 'no',
+                           'color_border': '0,0,0,127',
+                           'width_border': '0.0'
+                           }
+                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+                mySymbol = QgsFillSymbolV2.createSimple(myProps)
+                myRenderer = QgsSingleSymbolRendererV2(mySymbol)
+                self.layer.setRendererV2(myRenderer)
+                self.layer.saveDefaultStyle()
+
+    def aggregateVectorImpact(self, myQGISImpactLayer):
+        """Performs Aggregation postprocessing step on vector impact layers.
+
+        Args:
+            myQGISImpactLayer a valid QgsRasterLayer
+
+        Returns:
+            None
+        """
+        #TODO implement polygon to polygon aggregation (dissolve,
+        # line in polygon, point in polygon)
+
+        # Note: The next line raises a pylint error but I am not disabling the
+        # pylint warning because I think we need some redesign here. TS
+        global myAttrs
+        myAggrFieldMap = {}
+        myAggrFieldIndex = None
+
+        try:
+            self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
+                                                           'target_field')
+        except KeywordNotFoundError:
+            myMessage = self.tr('No "target_field" keyword found in the impact'
+                                ' layer %1 keywords. The impact function'
+                                ' should define this.').\
+                arg(myQGISImpactLayer.name())
+            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+            self.errorMessage = myMessage
+            return
+        myImpactProvider = myQGISImpactLayer.dataProvider()
+        myTargetFieldIndex = myQGISImpactLayer.fieldNameIndex(self.targetField)
+        #if a feature has no field called
+        if myTargetFieldIndex == -1:
+            myMessage = self.tr('No attribute "%1" was found in the attribute '
+                                'table for layer "%2". The impact function '
+                                'must define this attribute for '
+                                'postprocessing to work.').arg(
+                                    self.targetField, myQGISImpactLayer.name())
+            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+            self.errorMessage = myMessage
+            return
+
+        # start data retreival: fetch no geometry and
+        # 1 attr for each feature
+        myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
+        myTotal = 0
+
+        myPostprocessorProvider = self.layer.dataProvider()
+        self.layer.startEditing()
+
+        if self.statisticsType == 'class_count':
+            #add the class count fields to the layer
+            myFields = [QgsField('%s_%s' % (f, self.targetField),
+                                 QtCore.QVariant.String) for f in
+                        self.statisticsClasses]
+            myPostprocessorProvider.addAttributes(myFields)
+            self.layer.commitChanges()
+
+            myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
+            for k, v in myTmpAggrFieldMap.iteritems():
+                myAggrFieldMap[str(k)] = v
+
+        elif self.statisticsType == 'sum':
+            #add the total field to the layer
+            myAggrField = self._sumFieldName()
+            myPostprocessorProvider.addAttributes([QgsField(
+                myAggrField, QtCore.QVariant.Int)])
+            self.layer.commitChanges()
+            myAggrFieldIndex = self.layer.fieldNameIndex(
+                myAggrField)
+
+        self.layer.startEditing()
+
+        mySafeImpactLayer = self.runner.impactLayer()
+        myImpactGeoms = mySafeImpactLayer.get_geometry()
+        myImpactValues = mySafeImpactLayer.get_data()
+
+        if self.aoiMode:
+            myPostprocPolygons = self.safeLayer.get_geometry()
+
+            if (mySafeImpactLayer.is_point_data or
+                    mySafeImpactLayer.is_polygon_data):
+                LOGGER.debug('Doing point in polygon aggregation')
+
+                myRemainingValues = myImpactValues
+
+                if mySafeImpactLayer.is_polygon_data:
+                    # Using centroids to do polygon in polygon aggregation
+                    # this is always ok because
+                    # prepareInputLayer() took care of splitting
+                    # polygons that spawn across multiple postprocessing
+                    # polygons. After prepareInputLayer()
+                    # each impact polygon will never be contained by more than
+                    # one aggregation polygon
+
+                    # Calculate points for each polygon
+                    myCentroids = []
+                    for myPolygon in myImpactGeoms:
+                        if hasattr(myPolygon, 'outer_ring'):
+                            outer_ring = myPolygon.outer_ring
+                        else:
+                            # Assume it is an array
+                            outer_ring = myPolygon
+                        c = calculate_polygon_centroid(outer_ring)
+                        myCentroids.append(c)
+                    myRemainingPoints = myCentroids
+
+                else:
+                    myRemainingPoints = myImpactGeoms
+
+                for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
+                    if hasattr(myPolygon, 'outer_ring'):
+                        outer_ring = myPolygon.outer_ring
+                        inner_rings = myPolygon.inner_rings
+                    else:
+                        # Assume it is an array
+                        outer_ring = myPolygon
+                        inner_rings = None
+
+                    inside, outside = points_in_and_outside_polygon(
+                        myRemainingPoints,
+                        outer_ring,
+                        holes=inner_rings,
+                        closed=True,
+                        check_input=True)
+
+                    #self.impactLayerAttributes is a list of list of dict
+                    #[
+                    #   [{...},{...},{...}],
+                    #   [{...},{...},{...}]
+                    #]
+                    self.impactLayerAttributes.append([])
+                    if self.statisticsType == 'class_count':
+                        myResults = OrderedDict()
+                        for myClass in self.statisticsClasses:
+                            myResults[myClass] = 0
+
+                        for i in inside:
+                            myKey = myRemainingValues[i][self.targetField]
+                            try:
+                                myResults[myKey] += 1
+                            except KeyError:
+                                myError = ('StatisticsClasses %s does not '
+                                           'include the %s class which was '
+                                           'found in the data. This is a '
+                                           'problem in the %s '
+                                           'statistics_classes definition' %
+                                           (self.statisticsClasses,
+                                            myKey,
+                                            self.getFunctionID()))
+                                raise KeyError(myError)
+
+                            self.impactLayerAttributes[myPolygonIndex].append(
+                                myRemainingValues[i])
+                        myAttrs = {}
+                        for k, v in myResults.iteritems():
+                            myKey = '%s_%s' % (k, self.targetField)
+                            #FIXME (MB) remove next line when we get rid of
+                            #shape files as internal format
+                            myKey = myKey[:10]
+                            myAggrFieldIndex = myAggrFieldMap[myKey]
+                            myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
+
+                    elif self.statisticsType == 'sum':
+                        #by default summ attributes
+                        myTotal = 0
+                        for i in inside:
+                            try:
+                                myTotal += myRemainingValues[i][
+                                    self.targetField]
+                            except TypeError:
+                                pass
+
+                            #add all attributes to the impactLayerAttributes
+                            self.impactLayerAttributes[myPolygonIndex].append(
+                                myRemainingValues[i])
+                        myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+
+                    # Add features inside this polygon
+                    myFID = myPolygonIndex
+                    myPostprocessorProvider.changeAttributeValues(
+                        {myFID: myAttrs})
+
+                    # make outside points the input to the next iteration
+                    # this could maybe be done quicklier using directly numpy
+                    # arrays like this:
+                    # myRemainingPoints = myRemainingPoints[outside]
+                    # myRemainingValues =
+                    # [myRemainingValues[i] for i in outside]
+                    myTmpPoints = []
+                    myTmpValues = []
+                    for i in outside:
+                        myTmpPoints.append(myRemainingPoints[i])
+                        myTmpValues.append(myRemainingValues[i])
+                    myRemainingPoints = myTmpPoints
+                    myRemainingValues = myTmpValues
+
+                    # LOGGER.debug('Before: ' + str(len(myRemainingValues)))
+                    # LOGGER.debug('After: ' + str(len(myRemainingValues)))
+                    # LOGGER.debug('Inside: ' + str(len(inside)))
+                    # LOGGER.debug('Outside: ' + str(len(outside)))
+
+            elif mySafeImpactLayer.is_line_data:
+                LOGGER.debug('Doing line in polygon aggregation')
+
+            else:
+                myMessage = self.tr('Aggregation on vector impact layers other'
+                                    'than points or polygons not implemented '
+                                    'yet not implemented yet. '
+                                    'Called on %1').\
+                    arg(myQGISImpactLayer.name())
+                LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
+                self.errorMessage = myMessage
+                self.layer.commitChanges()
+                return
+        else:
+            if self.statisticsType == 'class_count':
+                #loop over all features in impact layer
+                myResults = OrderedDict()
+                for myClass in self.statisticsClasses:
+                    myResults[myClass] = 0
+
+                self.impactLayerAttributes.append([])
+                for myImpactValueList in myImpactValues:
+                    myKey = myImpactValueList[self.targetField]
+                    try:
+                        myResults[myKey] += 1
+                    except KeyError:
+                        myError = ('StatisticsClasses %s does not '
+                                   'include the %s class which was '
+                                   'found in the data. This is a '
+                                   'problem in the %s '
+                                   'statistics_classes definition' %
+                                   (self.statisticsClasses,
+                                    myKey,
+                                    self.getFunctionID()))
+                        raise KeyError(myError)
+
+                    self.impactLayerAttributes[0].append(myImpactValueList)
+
+                myAttrs = {}
+                for k, v in myResults.iteritems():
+                    myKey = '%s_%s' % (k, self.targetField)
+                    #FIXME (MB) remove next line when we get rid of
+                    #shape files as internal format
+                    myKey = myKey[:10]
+                    myAggrFieldIndex = myAggrFieldMap[myKey]
+                    myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
+
+            elif self.statisticsType == 'sum':
+                #loop over all features in impact layer
+                self.impactLayerAttributes.append([])
+                for myImpactValueList in myImpactValues:
+                    if myImpactValueList[self.targetField] == 'None':
+                        myImpactValueList[self.targetField] = None
+                    try:
+                        myTotal += myImpactValueList[self.targetField]
+                    except TypeError:
+                        pass
+                    self.impactLayerAttributes[0].append(myImpactValueList)
+                myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+
+            #apply to all area feature
+            myFID = 0
+            myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
+
+        self.layer.commitChanges()
+        return
+
+    def _aggregateRasterImpact(self, theQGISImpactLayer):
+        """
+        Performs Aggregation postprocessing step on raster impact layers by
+        calling QgsZonalStatistics
+        Args:
+            QgsMapLayer: theQGISImpactLayer a valid QgsVectorLayer
+
+        Returns: None
+        """
+        myZonalStatistics = QgsZonalStatistics(
+            self.layer,
+            theQGISImpactLayer.dataProvider().dataSourceUri(),
+            self.prefix)
+        myProgressDialog = QtGui.QProgressDialog(
+            self.tr('Calculating zonal statistics'),
+            self.tr('Abort...'),
+            0,
+            0)
+        myZonalStatistics.calculateStatistics(myProgressDialog)
+        if myProgressDialog.wasCanceled():
+            QtGui.QMessageBox.error(
+                self, self.tr('ZonalStats: Error'),
+                self.tr('You aborted aggregation, '
+                        'so there are no data for analysis. Exiting...'))
+
+        return
 
     def _prepareLayer(self):
         # This is used to hold an *in memory copy* of the aggregation layer
@@ -658,431 +1148,6 @@ class Aggregator(QtCore.QObject):
 
         return myHTML
 
-    def aggregate(self, theAggregationLayerName):
-        """Do any requested aggregation post processing.
-
-        Performs Aggregation postprocessing step by
-         * creating a copy of the dataset clipped by the impactlayer bounding
-          box
-         * stripping all attributes beside the aggregation attribute
-         * delegating to the appropriate aggregator for raster and vectors
-
-        Args:
-            theAggregationLayerName - content of the combo for aggregation in
-             dock. e.g. 'Entire Area', or 'kapubaten jakarta'
-
-        Returns: None
-
-        Raises:
-            ReadLayerError
-        """
-        myImpactLayer = self.runner.impactLayer()
-
-        myTitle = self.tr('Aggregating results...')
-        myMessage = self.tr('This may take a little while - we are '
-                            ' aggregating the hazards by %1').\
-            arg(theAggregationLayerName)
-        myProgress = 88
-        self.showBusy(myTitle, myMessage, myProgress)
-
-        myQGISImpactLayer = self.readImpactLayer(myImpactLayer)
-        if not myQGISImpactLayer.isValid():
-            myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
-            raise ReadLayerError(myMessage)
-        myLayerName = str(self.tr('%1 aggregated to %2').arg(
-            myQGISImpactLayer.name()).arg(self.layer.name()))
-
-        #delete unwanted fields
-        myProvider = self.layer.dataProvider()
-        myFields = myProvider.fields()
-        myUnneededAttributes = []
-        for i in myFields:
-            if (myFields[i].name() not in
-                    self.attributes.values()):
-                myUnneededAttributes.append(i)
-        LOGGER.debug('Removing this attributes: ' + str(myUnneededAttributes))
-        # noinspection PyBroadException
-        try:
-            self.layer.startEditing()
-            self._setPersistantAttributes()
-            myProvider.deleteAttributes(myUnneededAttributes)
-            self.layer.commitChanges()
-        # FIXME (Ole): Disable pylint check for the moment
-        # Need to work out what exceptions we will catch here, though.
-        except:  # pylint: disable=W0702
-            myMessage = self.tr('Could not remove the unneeded fields')
-            LOGGER.debug(myMessage)
-
-        del myUnneededAttributes, myProvider, myFields
-        self.keywordIO.appendKeywords(
-            self.layer, {'title': myLayerName})
-
-        #find needed statistics type
-        try:
-            self.statisticsType = self.keywordIO.readKeywords(
-                myQGISImpactLayer, 'statistics_type')
-            self.statisticsClasses = self.keywordIO.readKeywords(
-                myQGISImpactLayer, 'statistics_classes')
-
-        except KeywordNotFoundError:
-            #default to summing
-            self.statisticsType = 'sum'
-
-        #call the correct aggregator
-        if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
-            self.aggregateVectorImpact(myQGISImpactLayer)
-        elif myQGISImpactLayer.type() == QgsMapLayer.RasterLayer:
-            self.aggregateRasterImpact(myQGISImpactLayer)
-        else:
-            myMessage = self.tr('%1 is %2 but it should be either vector or '
-                                'raster').\
-                arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
-            raise ReadLayerError(myMessage)
-
-        if self.showPostProcLayers and self.aoiMode:
-            if self.statisticsType == 'sum':
-                #style layer if we are summing
-                myProvider = self.layer.dataProvider()
-                myAttr = self._sumFieldName()
-                myAttrIndex = myProvider.fieldNameIndex(myAttr)
-                myProvider.select([myAttrIndex], QgsRectangle(), False)
-                myFeature = QgsFeature()
-                myHighestVal = 0
-
-                while myProvider.nextFeature(myFeature):
-                    myAttrMap = myFeature.attributeMap()
-                    myVal, ok = myAttrMap[myAttrIndex].toInt()
-                    if ok and myVal > myHighestVal:
-                        myHighestVal = myVal
-
-                myClasses = []
-                myColors = ['#fecc5c', '#fd8d3c', '#f31a1c']
-                myStep = int(myHighestVal / len(myColors))
-                myCounter = 0
-                for myColor in myColors:
-                    myMin = myCounter
-                    myCounter += myStep
-                    myMax = myCounter
-
-                    myClasses.append(
-                        {'min': myMin,
-                         'max': myMax,
-                         'colour': myColor,
-                         'transparency': 30,
-                         'label': '%s - %s' % (myMin, myMax)})
-                    myCounter += 1
-
-                myStyle = {'target_field': myAttr,
-                           'style_classes': myClasses}
-                setVectorStyle(self.layer, myStyle)
-            else:
-                #make style of layer pretty much invisible
-                myProps = {'style': 'no',
-                           'color_border': '0,0,0,127',
-                           'width_border': '0.0'
-                           }
-                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                mySymbol = QgsFillSymbolV2.createSimple(myProps)
-                myRenderer = QgsSingleSymbolRendererV2(mySymbol)
-                self.layer.setRendererV2(myRenderer)
-                self.layer.saveDefaultStyle()
-
-    def aggregateVectorImpact(self, myQGISImpactLayer):
-        """Performs Aggregation postprocessing step on vector impact layers.
-
-        Args:
-            myQGISImpactLayer a valid QgsRasterLayer
-
-        Returns:
-            None
-        """
-        #TODO implement polygon to polygon aggregation (dissolve,
-        # line in polygon, point in polygon)
-
-        # Note: The next line raises a pylint error but I am not disabling the
-        # pylint warning because I think we need some redesign here. TS
-        global myAttrs
-        myAggrFieldMap = {}
-        myAggrFieldIndex = None
-
-        try:
-            self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
-                                                           'target_field')
-        except KeywordNotFoundError:
-            myMessage = self.tr('No "target_field" keyword found in the impact'
-                                ' layer %1 keywords. The impact function'
-                                ' should define this.').\
-                arg(myQGISImpactLayer.name())
-            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-            self.errorMessage = myMessage
-            return
-        myImpactProvider = myQGISImpactLayer.dataProvider()
-        myTargetFieldIndex = myQGISImpactLayer.fieldNameIndex(self.targetField)
-        #if a feature has no field called
-        if myTargetFieldIndex == -1:
-            myMessage = self.tr('No attribute "%1" was found in the attribute '
-                                'table for layer "%2". The impact function '
-                                'must define this attribute for '
-                                'postprocessing to work.').arg(
-                                    self.targetField, myQGISImpactLayer.name())
-            LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-            self.errorMessage = myMessage
-            return
-
-        # start data retreival: fetch no geometry and
-        # 1 attr for each feature
-        myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
-        myTotal = 0
-
-        myPostprocessorProvider = self.layer.dataProvider()
-        self.layer.startEditing()
-
-        if self.statisticsType == 'class_count':
-            #add the class count fields to the layer
-            myFields = [QgsField('%s_%s' % (f, self.targetField),
-                                 QtCore.QVariant.String) for f in
-                        self.statisticsClasses]
-            myPostprocessorProvider.addAttributes(myFields)
-            self.layer.commitChanges()
-
-            myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
-            for k, v in myTmpAggrFieldMap.iteritems():
-                myAggrFieldMap[str(k)] = v
-
-        elif self.statisticsType == 'sum':
-            #add the total field to the layer
-            myAggrField = self._sumFieldName()
-            myPostprocessorProvider.addAttributes([QgsField(
-                myAggrField, QtCore.QVariant.Int)])
-            self.layer.commitChanges()
-            myAggrFieldIndex = self.layer.fieldNameIndex(
-                myAggrField)
-
-        self.layer.startEditing()
-
-        mySafeImpactLayer = self.runner.impactLayer()
-        myImpactGeoms = mySafeImpactLayer.get_geometry()
-        myImpactValues = mySafeImpactLayer.get_data()
-
-        if self.aoiMode:
-            myPostprocPolygons = self.safeLayer.get_geometry()
-
-            if (mySafeImpactLayer.is_point_data or
-                    mySafeImpactLayer.is_polygon_data):
-                LOGGER.debug('Doing point in polygon aggregation')
-
-                myRemainingValues = myImpactValues
-
-                if mySafeImpactLayer.is_polygon_data:
-                    # Using centroids to do polygon in polygon aggregation
-                    # this is always ok because
-                    # prepareInputLayer() took care of splitting
-                    # polygons that spawn across multiple postprocessing
-                    # polygons. After prepareInputLayer()
-                    # each impact polygon will never be contained by more than
-                    # one aggregation polygon
-
-                    # Calculate points for each polygon
-                    myCentroids = []
-                    for myPolygon in myImpactGeoms:
-                        if hasattr(myPolygon, 'outer_ring'):
-                            outer_ring = myPolygon.outer_ring
-                        else:
-                            # Assume it is an array
-                            outer_ring = myPolygon
-                        c = calculate_polygon_centroid(outer_ring)
-                        myCentroids.append(c)
-                    myRemainingPoints = myCentroids
-
-                else:
-                    myRemainingPoints = myImpactGeoms
-
-                for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
-                    if hasattr(myPolygon, 'outer_ring'):
-                        outer_ring = myPolygon.outer_ring
-                        inner_rings = myPolygon.inner_rings
-                    else:
-                        # Assume it is an array
-                        outer_ring = myPolygon
-                        inner_rings = None
-
-                    inside, outside = points_in_and_outside_polygon(
-                        myRemainingPoints,
-                        outer_ring,
-                        holes=inner_rings,
-                        closed=True,
-                        check_input=True)
-
-                    #self.impactLayerAttributes is a list of list of dict
-                    #[
-                    #   [{...},{...},{...}],
-                    #   [{...},{...},{...}]
-                    #]
-                    self.impactLayerAttributes.append([])
-                    if self.statisticsType == 'class_count':
-                        myResults = OrderedDict()
-                        for myClass in self.statisticsClasses:
-                            myResults[myClass] = 0
-
-                        for i in inside:
-                            myKey = myRemainingValues[i][self.targetField]
-                            try:
-                                myResults[myKey] += 1
-                            except KeyError:
-                                myError = ('StatisticsClasses %s does not '
-                                           'include the %s class which was '
-                                           'found in the data. This is a '
-                                           'problem in the %s '
-                                           'statistics_classes definition' %
-                                           (self.statisticsClasses,
-                                            myKey,
-                                            self.getFunctionID()))
-                                raise KeyError(myError)
-
-                            self.impactLayerAttributes[myPolygonIndex].append(
-                                myRemainingValues[i])
-                        myAttrs = {}
-                        for k, v in myResults.iteritems():
-                            myKey = '%s_%s' % (k, self.targetField)
-                            #FIXME (MB) remove next line when we get rid of
-                            #shape files as internal format
-                            myKey = myKey[:10]
-                            myAggrFieldIndex = myAggrFieldMap[myKey]
-                            myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
-
-                    elif self.statisticsType == 'sum':
-                        #by default summ attributes
-                        myTotal = 0
-                        for i in inside:
-                            try:
-                                myTotal += myRemainingValues[i][
-                                    self.targetField]
-                            except TypeError:
-                                pass
-
-                            #add all attributes to the impactLayerAttributes
-                            self.impactLayerAttributes[myPolygonIndex].append(
-                                myRemainingValues[i])
-                        myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
-
-                    # Add features inside this polygon
-                    myFID = myPolygonIndex
-                    myPostprocessorProvider.changeAttributeValues(
-                        {myFID: myAttrs})
-
-                    # make outside points the input to the next iteration
-                    # this could maybe be done quicklier using directly numpy
-                    # arrays like this:
-                    # myRemainingPoints = myRemainingPoints[outside]
-                    # myRemainingValues =
-                    # [myRemainingValues[i] for i in outside]
-                    myTmpPoints = []
-                    myTmpValues = []
-                    for i in outside:
-                        myTmpPoints.append(myRemainingPoints[i])
-                        myTmpValues.append(myRemainingValues[i])
-                    myRemainingPoints = myTmpPoints
-                    myRemainingValues = myTmpValues
-
-#                    LOGGER.debug('Before: ' + str(len(myRemainingValues)))
-#                    LOGGER.debug('After: ' + str(len(myRemainingValues)))
-#                    LOGGER.debug('Inside: ' + str(len(inside)))
-#                    LOGGER.debug('Outside: ' + str(len(outside)))
-
-            elif mySafeImpactLayer.is_line_data:
-                LOGGER.debug('Doing line in polygon aggregation')
-
-            else:
-                myMessage = self.tr('Aggregation on vector impact layers other'
-                                    'than points or polygons not implemented '
-                                    'yet not implemented yet. '
-                                    'Called on %1').\
-                    arg(myQGISImpactLayer.name())
-                LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
-                self.errorMessage = myMessage
-                self.layer.commitChanges()
-                return
-        else:
-            if self.statisticsType == 'class_count':
-                #loop over all features in impact layer
-                myResults = OrderedDict()
-                for myClass in self.statisticsClasses:
-                    myResults[myClass] = 0
-
-                self.impactLayerAttributes.append([])
-                for myImpactValueList in myImpactValues:
-                    myKey = myImpactValueList[self.targetField]
-                    try:
-                        myResults[myKey] += 1
-                    except KeyError:
-                        myError = ('StatisticsClasses %s does not '
-                                   'include the %s class which was '
-                                   'found in the data. This is a '
-                                   'problem in the %s '
-                                   'statistics_classes definition' %
-                                   (self.statisticsClasses,
-                                    myKey,
-                                    self.getFunctionID()))
-                        raise KeyError(myError)
-
-                    self.impactLayerAttributes[0].append(myImpactValueList)
-
-                myAttrs = {}
-                for k, v in myResults.iteritems():
-                    myKey = '%s_%s' % (k, self.targetField)
-                    #FIXME (MB) remove next line when we get rid of
-                    #shape files as internal format
-                    myKey = myKey[:10]
-                    myAggrFieldIndex = myAggrFieldMap[myKey]
-                    myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
-
-            elif self.statisticsType == 'sum':
-                #loop over all features in impact layer
-                self.impactLayerAttributes.append([])
-                for myImpactValueList in myImpactValues:
-                    if myImpactValueList[self.targetField] == 'None':
-                        myImpactValueList[self.targetField] = None
-                    try:
-                        myTotal += myImpactValueList[self.targetField]
-                    except TypeError:
-                        pass
-                    self.impactLayerAttributes[0].append(myImpactValueList)
-                myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
-
-            #apply to all area feature
-            myFID = 0
-            myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
-
-        self.layer.commitChanges()
-        return
-
-    def aggregateRasterImpact(self, theQGISImpactLayer):
-        """
-        Performs Aggregation postprocessing step on raster impact layers by
-        calling QgsZonalStatistics
-        Args:
-            QgsMapLayer: theQGISImpactLayer a valid QgsVectorLayer
-
-        Returns: None
-        """
-        myZonalStatistics = QgsZonalStatistics(
-            self.layer,
-            theQGISImpactLayer.dataProvider().dataSourceUri(),
-            self.prefix)
-        myProgressDialog = QtGui.QProgressDialog(
-            self.tr('Calculating zonal statistics'),
-            self.tr('Abort...'),
-            0,
-            0)
-        myZonalStatistics.calculateStatistics(myProgressDialog)
-        if myProgressDialog.wasCanceled():
-            QtGui.QMessageBox.error(
-                self, self.tr('ZonalStats: Error'),
-                self.tr('You aborted aggregation, '
-                        'so there are no data for analysis. Exiting...'))
-
-        return
-
     def runPostprocessors(self):
         """Run any post processors requested by the impact function.
 
@@ -1200,72 +1265,6 @@ class Aggregator(QtCore.QObject):
                         (myZoneName, myResults))
             #increment the index
             myPolygonIndex += 1
-
-    def checkAttributes(self):
-        """Checks if the postprocessing layer has all attribute keyword.
-
-        This is only applicable in the case where were are not using the AOI
-        (in other words self.aoiMode is False). When self.aoiMode is True
-        then we always use just the defaults and dont allow the user to
-        create custom aggregation field mappings.
-
-        This method is called on instance creation and should always be
-        called if you change any state of the aggregator class.
-
-        On completion of this method the self.isValid flag is set. If this
-        flag is not True, then no aggregation or postprocessing work will be
-        carried out (these methods will raise an InvalidAggregatorError).
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propogated
-        """
-        if self.aoiMode:
-            self.isValid = True
-            return
-
-        # Otherwise get the attributes for the aggregation layer.
-        # noinspection PyBroadException
-        try:
-            myKeywords = self.keywordIO.readKeywords(self.layer)
-        #discussed with Tim,in this case its ok to be generic
-        except Exception:  # pylint: disable=W0703
-            myKeywords = {}
-
-        #myKeywords are already complete
-        if ('category' in myKeywords and
-            myKeywords['category'] == 'postprocessing' and
-            self.defaults['AGGR_ATTR_KEY'] in myKeywords and
-            self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
-            (self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr('Use default') or
-             self.defaults['FEM_RATIO_KEY'] in myKeywords)):
-            self.isValid = True
-        #some keywords are needed
-        else:
-            #set the default values by writing to the myKeywords
-            myKeywords['category'] = 'postprocessing'
-
-            myAttributes, _ = getLayerAttributeNames(
-                self.layer,
-                [QtCore.QVariant.Int, QtCore.QVariant.String])
-            if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
-                myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttributes[0]
-
-            if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
-                myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
-                    'Use default')
-
-            if self.defaults['FEM_RATIO_KEY'] not in myKeywords:
-                myKeywords[self.defaults['FEM_RATIO_KEY']] = \
-                    self.defaults['FEM_RATIO']
-
-            self.keywordIO.appendKeywords(self.layer, myKeywords)
-            self.isValid = False
 
     # TODO - move to its own     class
     def postProcess(self, theRunner, theLayerName):
