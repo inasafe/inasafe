@@ -84,7 +84,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         try:
             myRunner = self.calculator.getRunner()
             # run non threaded
-            myRunner.run()
+            myRunner.runPostprocessors()
             myMessage = myRunner.result()
             myImpactLayer = myRunner.impactLayer()
             myFilename = myImpactLayer.get_filename()
@@ -133,7 +133,7 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_getKeywordFromImpactLayer(self):
         """Check that we can get keywords from a created impact layer."""
         myRunner = self.calculator.getRunner()
-        myRunner.run()
+        myRunner.runPostprocessors()
         myImpactLayer = myRunner.impactLayer()
         myKeyword = readKeywordsFromLayer(myImpactLayer,
                                           'impact_summary')
@@ -164,7 +164,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         try:
             myRunner = self.calculator.getRunner()
             # Run non threaded
-            myRunner.run()
+            myRunner.runPostprocessors()
             myMessage = myRunner.result()
             myImpactLayer = myRunner.impactLayer()
             myFilename = myImpactLayer.get_filename()

@@ -1195,7 +1195,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if self.runInThreadFlag:
                 self.runner.start()  # Run in different thread
             else:
-                self.runner.run()  # Run in same thread
+                self.runner.runPostprocessors()  # Run in same thread
             QtGui.qApp.restoreOverrideCursor()
             # .. todo :: Disconnect done slot/signal
         except Exception, e:  # pylint: disable=W0703

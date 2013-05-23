@@ -59,7 +59,8 @@ from safe_qgis.safe_interface import (
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
-    KeywordDbError)
+    KeywordDbError,
+    InvalidAggregatorError)
 
 from third_party.odict import OrderedDict
 
@@ -71,11 +72,10 @@ LOGGER = logging.getLogger('InaSAFE')
 class Aggregator(QtCore.QObject):
     """The aggregator class facilitates aggregation of impact function results.
     """
+
     def __init__(
             self,
             iface,
-            theExposureLayer,
-            theHazardLayer,
             theAggregationLayer):
         """Director for aggregation based operations.
         Args:
@@ -96,22 +96,16 @@ class Aggregator(QtCore.QObject):
         # This is used to hold an *in memory copy* of the aggregation layer
         # or None if the clip extents should be used.
         if theAggregationLayer is None:
-            self.layer = self._extentsToMemoryLayer()
-            # Area Of Interest (AOI) mode flag
             self.aoiMode = True
+            # Will be set in _prepareLayer just before deintersect call
+            self.layer = None
         else:
-            myGeoExtent = extentToGeoArray(
-                theExposureLayer.extent(),
-                theExposureLayer.crs())
-            myClippedLayerPath = clipLayer(
-                theLayer=theAggregationLayer,
-                theExtent=myGeoExtent)
-            self.layer = QgsVectorLayer(
-                myClippedLayerPath, 'aggregation', 'ogr')
             self.aoiMode = False
+            self.layer = theAggregationLayer
 
-        # This is a safe version of the aggregation layer
-        self.safeLayer = safe_read_layer(str(theAggregationLayer.source()))
+        self.hazardLayer = None
+        self.exposureLayer = None
+        self.safeLayer = None
 
         self.defaults = None
         self.attributes = {}
@@ -125,16 +119,29 @@ class Aggregator(QtCore.QObject):
         self.targetField = None
         self.impactLayerAttributes = []
 
-        # These should have already been clipped to analysis extents
-        self.hazardLayer = theHazardLayer
-        self.exposureLayer = theExposureLayer
+        # If this flag is not True, no aggregation or postprocessing will run
+        self.isValid = False
+        self.checkAttributes()
 
-    def deintersect(self, theHazardFilename, theExposureFilename):
+    def validateKeywords(self):
+        """Check the aggregation layer keywords are adequately defined."""
+        pass
+
+    def deintersect(self, theHazardLayer, theExposureLayer):
         """Ensure there are no intersecting features with self.layer.
 
         Buildings are not split up by this method.
 
         """
+        # These should have already been clipped to analysis extents
+        if not self.isValid:
+            raise
+        self.hazardLayer = theHazardLayer
+        self.exposureLayer = theExposureLayer
+        self._prepareLayer()
+        # This is a safe version of the aggregation layer
+        self.safeLayer = safe_read_layer(str(theAggregationLayer.source()))
+
         if not self.aoiMode:
 
             if isPolygonLayer(self.hazardLayer):
@@ -155,6 +162,24 @@ class Aggregator(QtCore.QObject):
         else:
             # We do nothing, just return the original names because the
             return theHazardFilename, theExposureFilename
+
+    def _prepareLayer(self):
+        # This is used to hold an *in memory copy* of the aggregation layer
+        # or None if the clip extents should be used.
+        if theAggregationLayer is None:
+            self.layer = self._extentsToMemoryLayer()
+            # Area Of Interest (AOI) mode flag
+            self.aoiMode = True
+        else:
+            myGeoExtent = extentToGeoArray(
+                theExposureLayer.extent(),
+                theExposureLayer.crs())
+            myClippedLayerPath = clipLayer(
+                theLayer=theAggregationLayer,
+                theExtent=myGeoExtent)
+            self.layer = QgsVectorLayer(
+                myClippedLayerPath, 'aggregation', 'ogr')
+            self.aoiMode = False
 
     def _countFieldName(self):
         return self.prefix + 'count'
@@ -1058,7 +1083,7 @@ class Aggregator(QtCore.QObject):
 
         return
 
-    def run(self):
+    def runPostprocessors(self):
         """Run any post processors requested by the impact function.
 
         Args:
@@ -1179,18 +1204,32 @@ class Aggregator(QtCore.QObject):
     def checkAttributes(self):
         """Checks if the postprocessing layer has all attribute keyword.
 
-        If not it calls _promptPostprocAttributes to prompt for inputs
+        This is only applicable in the case where were are not using the AOI
+        (in other words self.aoiMode is False). When self.aoiMode is True
+        then we always use just the defaults and dont allow the user to
+        create custom aggregation field mappings.
+
+        This method is called on instance creation and should always be
+        called if you change any state of the aggregator class.
+
+        On completion of this method the self.isValid flag is set. If this
+        flag is not True, then no aggregation or postprocessing work will be
+        carried out (these methods will raise an InvalidAggregatorError).
 
         Args:
             None
 
         Returns:
-            bool
+            None
 
         Raises:
-            Propagates any error
+            Errors are propogated
         """
+        if self.aoiMode:
+            self.isValid = True
+            return
 
+        # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
@@ -1205,7 +1244,7 @@ class Aggregator(QtCore.QObject):
             self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
             (self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr('Use default') or
              self.defaults['FEM_RATIO_KEY'] in myKeywords)):
-            return True
+            self.isValid = True
         #some keywords are needed
         else:
             #set the default values by writing to the myKeywords
@@ -1226,9 +1265,9 @@ class Aggregator(QtCore.QObject):
                     self.defaults['FEM_RATIO']
 
             self.keywordIO.appendKeywords(self.layer, myKeywords)
-            return False
+            self.isValid = False
 
-    # TODO - move to its own rid class
+    # TODO - move to its own     class
     def postProcess(self, theRunner, theLayerName):
         """Run all post processing steps.
 
@@ -1261,7 +1300,7 @@ class Aggregator(QtCore.QObject):
         try:
             self.aggregate(theLayerName)
             if self.errorMessage is None:
-                self.run()
+                self.runPostprocessors()
             QtGui.qApp.restoreOverrideCursor()
         except Exception, e:  # pylint: disable=W0703
             raise e

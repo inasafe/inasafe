@@ -153,3 +153,8 @@ class ImportDialogError(Exception):
 class CanceledImportDialogError(Exception):
     """Raised if import process canceled"""
     pass
+
+
+class InvalidAggregatorError(Exception):
+    """Raised if aggregator state is not valid when trying to run it."""
+    pass
