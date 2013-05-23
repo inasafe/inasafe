@@ -979,7 +979,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-        self._checkForStateChange()
+        try:
+            self._checkForStateChange()
+        except (KeywordDbError, Exception), e:
+            myMessage = getExceptionWithStacktrace(e, theHtml=True)
+            self.displayHtml(myMessage)
+            self.hideBusy()
+            return
         try:
             _, myBufferedGeoExtent, myCellSize, _, _, _ = \
                 self.getClipParameters()
@@ -1024,13 +1030,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.aggregator.layer, myOriginalKeywords)
 
         LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
-        try:
-            self.aggregator.stateChanged()
-        except (KeywordDbError, Exception), e:
-            myMessage = getExceptionWithStacktrace(e, theHtml=True)
-            self.displayHtml(myMessage)
-            self.hideBusy()
-            return
+
 
         LOGGER.debug('Do zonal aggregation: %s' %
                      str(self.aggregator.aoiMode))
