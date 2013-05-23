@@ -121,7 +121,7 @@ class Aggregator(QtCore.QObject):
 
         # If this flag is not True, no aggregation or postprocessing will run
         self.isValid = False
-        self.checkAttributes()
+        self.validateKeywords()
 
     def validateKeywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.

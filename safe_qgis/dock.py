@@ -979,7 +979,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-        _checkForStateChange()
+        self._checkForStateChange()
         try:
             _, myBufferedGeoExtent, myCellSize, _, _, _ = \
                 self.getClipParameters()
@@ -1011,8 +1011,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Create an aggregator for this analysis run
         self.aggregator = Aggregator(
             self.iface,
-            self.getExposureLayer(),
-            self.getHazardLayer(),
             self.postProcessingLayer())
         try:
             myOriginalKeywords = self.keywordIO.readKeywords(
