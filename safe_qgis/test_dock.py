@@ -755,7 +755,7 @@ class DockTest(unittest.TestCase):
         # Run manually so we can get the output layer
         DOCK.setupCalculator()
         myRunner = DOCK.calculator.getRunner()
-        myRunner.runPostprocessors()  # Run in same thread
+        myRunner.run()  # Run in same thread
         myEngineImpactLayer = myRunner.impactLayer()
         myQgisImpactLayer = DOCK.readImpactLayer(myEngineImpactLayer)
         myStyle = myEngineImpactLayer.get_style_info()

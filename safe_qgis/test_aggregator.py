@@ -148,7 +148,7 @@ class AggregatorTest(unittest.TestCase):
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
-            DOCK,
+
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -248,85 +248,3 @@ class AggregatorTest(unittest.TestCase):
         myMessage = ('The aggregation should be None. Found: %s' % myAttribute)
         assert myAttribute is None, myMessage
 
-    def test_checkPostProcessingLayersVisibility(self):
-        """Generated layers are not added to the map registry."""
-        myRunButton = DOCK.pbnRunStop
-
-        # with KAB_NAME aggregation attribute defined in .keyword using
-        # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setupScenario(
-            DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart',
-            theOkButtonFlag=True)
-        assert myResult, myMessage
-        myBeforeCount = len(CANVAS.layers())
-        #LOGGER.info("Canvas list before:\n%s" % canvasList())
-        print [str(l.name()) for l in
-               QgsMapLayerRegistry.instance().mapLayers().values()]
-        LOGGER.info("Registry list before:\n%s" %
-                    len(QgsMapLayerRegistry.instance().mapLayers()))
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myAfterCount = len(CANVAS.layers())
-        LOGGER.info("Registry list after:\n%s" %
-                    len(QgsMapLayerRegistry.instance().mapLayers()))
-        #        print [str(l.name()) for l in QgsMapLayerRegistry.instance(
-        #           ).mapLayers().values()]
-        #LOGGER.info("Canvas list after:\n%s" % canvasList())
-        myMessage = ('Expected %s items in canvas, got %s' %
-                     (myBeforeCount + 1, myAfterCount))
-        assert myBeforeCount + 1 == myAfterCount, myMessage
-
-        # Now run again showing intermediate layers
-
-        DOCK.showPostProcLayers = True
-        myBeforeCount = len(CANVAS.layers())
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myAfterCount = len(CANVAS.layers())
-        LOGGER.info("Canvas list after:\n %s" % canvasList())
-        myMessage = ('Expected %s items in canvas, got %s' %
-                     (myBeforeCount + 2, myAfterCount))
-        # We expect two more since we enabled showing intermedate layers
-        assert myBeforeCount + 2 == myAfterCount, myMessage
-
-    def test_postProcessorOutput(self):
-        """Check that the post processor does not add spurious report rows."""
-        myRunButton = DOCK.pbnRunStop
-
-        # with KAB_NAME aggregation attribute defined in .keyword using
-        # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setupScenario(
-            DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theOkButtonFlag=True)
-
-        # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
-
-        assert myResult, myMessage
-
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myMessage = 'Spurious 0 filled rows added to post processing report.'
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
-        for line in myResult.split('\n'):
-            if 'Entire area' in line:
-                myTokens = str(line).split('\t')
-                myTokens = myTokens[1:]
-                mySum = 0
-                for myToken in myTokens:
-                    mySum += float(myToken.replace(',', '.'))
-
-                assert mySum != 0, myMessage
