@@ -1024,4 +1024,3 @@ class Aggregator(QtCore.QObject):
         except KeywordDbError, e:
             raise e
         return myLayer
-

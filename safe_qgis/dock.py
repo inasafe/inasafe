@@ -768,7 +768,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
         self.blockSignals(False)
-        self.postProcessingLayer()
         return
 
     def getFunctions(self):
@@ -979,7 +978,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Create an aggregator for this analysis run
         self.aggregator = Aggregator(
             self.iface,
-            self.postProcessingLayer())
+            self.getPostProcessingLayer())
         try:
             myOriginalKeywords = self.keywordIO.readKeywords(
                 self.aggregator.layer)
@@ -1889,31 +1888,36 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFunctionID = str(myItemData.toString())
         return myFunctionID
 
-    def postProcessingLayer(self):
+    def postProcess(self):
+        """Run all post processing steps.
 
-        """Get the QgsMapLayer currently selected in the post processing combo.
-
-        Obtain QgsMapLayer id from the userrole of the QtCombo for post
-        processing combo return it as a QgsMapLayer.
+        Called on self.self.runner SIGNAL('done()') starts all postprocessing
+        steps.
 
         Args:
             None
 
         Returns:
-            * None if no aggregation is selected or cboAggregation is
-                disabled, otherwise:
-            * QgsMapLayer - a polygon layer.
-
-        Raises:
             None
         """
 
-        myNoSelectionValue = 0
-        myIndex = self.cboAggregation.currentIndex()
-        if myIndex <= myNoSelectionValue:
-            return None
-        myLayerId = self.cboAggregation.itemData(
-            myIndex, QtCore.Qt.UserRole).toString()
-        # noinspection PyArgumentList
-        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
-        return myLayer
+        if self.runner.impactLayer() is None:
+            # Done was emitted, but no impact layer was calculated
+            myResult = self.runner.result()
+            myMessage = str(self.tr('No impact layer was calculated. '
+                                    'Error message: %1\n').arg(str(myResult)))
+            myException = self.runner.lastException()
+            if myException is not None:
+                myContext = self.tr('An exception occurred when calculating '
+                                    'the results. %1').\
+                    arg(self.runner.result())
+                myMessage = getExceptionWithStacktrace(
+                    myException, theHtml=True, theContext=myContext)
+            raise Exception(myMessage)
+
+        try:
+            self.aggregate()
+            if self.errorMessage is None:
+                self.run()
+        except Exception, e:  # pylint: disable=W0703
+            raise e
