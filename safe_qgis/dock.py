@@ -743,6 +743,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             try:
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:  # pylint: disable=W0702
+                # automatically adding file name to title in keywords
+                # See #575
+                self.keywordIO.appendKeywords(myLayer, {'title': myName})
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
@@ -3192,6 +3195,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myWidth = myBufferedGeoExtent[2] - myBufferedGeoExtent[0]
         myHeight = myBufferedGeoExtent[3] - myBufferedGeoExtent[1]
+        # Basically, remove exception if CellSize is None,
+        if myCellSize is None:
+            return
         try:
             myWidth = myWidth / myCellSize
             myHeight = myHeight / myCellSize
