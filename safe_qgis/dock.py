@@ -1405,7 +1405,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myManager.functionParams = self.functionParams
                 myManager.run()
         except Exception, e:  # pylint: disable=W0703
-            raise e
+            e.args = (e.args[0] + '\npostProcess error occurred',)
+            raise
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""

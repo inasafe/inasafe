@@ -89,7 +89,7 @@ class AggregatorTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-    @expectedFailure
+
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard

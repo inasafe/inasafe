@@ -246,7 +246,7 @@ class PostprocessorManager(QtCore.QObject):
             self.attributeTitle = myFeatureNameAttribute
 
         myNameFieldIndex = self.aggregator.layer.fieldNameIndex(
-            myFeatureNameAttribute)
+            self.attributeTitle)
         mySumFieldIndex = self.aggregator.layer.fieldNameIndex(
             self._sumFieldName())
 
@@ -316,7 +316,8 @@ class PostprocessorManager(QtCore.QObject):
                         myFemaleRatio, mySuccessFlag = myAttributeMap[
                             myFemRatioFieldIndex].toDouble()
                         if not mySuccessFlag:
-                            myFemaleRatio = self.aggregator.defaults['FEM_RATIO']
+                            myFemaleRatio = self.aggregator.defaults[
+                                'FEM_RATIO']
                         LOGGER.debug(mySuccessFlag)
                     myParameters['female_ratio'] = myFemaleRatio
 
