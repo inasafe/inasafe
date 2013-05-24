@@ -1401,3 +1401,44 @@ def extentToGeoArray(theExtent, theSourceCrs):
                    myTransformedExtent.xMaximum(),
                    myTransformedExtent.yMaximum()]
     return myGeoExtent
+
+
+def safeToQGISLayer(theLayer):
+    """Helper function to read and validate layer.
+
+    Args
+        theLayer: Layer object as provided by InaSAFE engine.
+
+    Returns
+        validated QGIS layer or None
+
+    Raises
+        Exception if layer is not valid
+    """
+
+    myMessage = tr(
+        'Input layer must be a InaSAFE spatial object. I got %1'
+    ).arg(str(type(theLayer)))
+    if not hasattr(theLayer, 'is_inasafe_spatial_object'):
+        raise Exception(myMessage)
+    if not theLayer.is_inasafe_spatial_object:
+        raise Exception(myMessage)
+
+    # Get associated filename and symbolic name
+    myFilename = theLayer.get_filename()
+    myName = theLayer.get_name()
+
+    myQGISLayer = None
+    # Read layer
+    if theLayer.is_vector:
+        myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+    elif theLayer.is_raster:
+        myQGISLayer = QgsRasterLayer(myFilename, myName)
+
+    # Verify that new qgis layer is valid
+    if myQGISLayer.isValid():
+        return myQGISLayer
+    else:
+        myMessage = self.tr('Loaded impact layer "%1" is not'
+                            ' valid').arg(myFilename)
+        raise Exception(myMessage)

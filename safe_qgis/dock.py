@@ -833,45 +833,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.restoreFunctionState(myOriginalFunction)
 
-    def readImpactLayer(self, myEngineImpactLayer):
-        """Helper function to read and validate layer.
-
-        Args
-            myEngineImpactLayer: Layer object as provided by InaSAFE engine.
-
-        Returns
-            validated QGIS layer or None
-
-        Raises
-            Exception if layer is not valid
-        """
-
-        myMessage = self.tr('Input layer must be a InaSAFE spatial object. '
-                            'I got %1').arg(str(type(myEngineImpactLayer)))
-        if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
-            raise Exception(myMessage)
-        if not myEngineImpactLayer.is_inasafe_spatial_object:
-            raise Exception(myMessage)
-
-        # Get associated filename and symbolic name
-        myFilename = myEngineImpactLayer.get_filename()
-        myName = myEngineImpactLayer.get_name()
-
-        myQGISLayer = None
-        # Read layer
-        if myEngineImpactLayer.is_vector:
-            myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-        elif myEngineImpactLayer.is_raster:
-            myQGISLayer = QgsRasterLayer(myFilename, myName)
-
-        # Verify that new qgis layer is valid
-        if myQGISLayer.isValid():
-            return myQGISLayer
-        else:
-            myMessage = self.tr('Loaded impact layer "%1" is not'
-                                ' valid').arg(myFilename)
-            raise Exception(myMessage)
-
     def getHazardLayer(self):
         """Get the QgsMapLayer currently selected in the hazard combo.
 
@@ -960,12 +921,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Propagates any error from :func:optimalClip()
         """
 
-        myHazardFilename, myExposureFilename = self.optimalClip()
+        myHazardLayer, myExposureLayer = self.optimalClip()
         # See if the inputs need further refinement for aggregations
-        myHazardFilename, myExposureFilename = self.aggregator.deintersect()
+        myHazardLayer, myExposureLayer = self.aggregator.deintersect(
+            myHazardLayer, myExposureLayer)
         # Identify input layers
-        self.calculator.setHazardLayer(myHazardFilename)
-        self.calculator.setExposureLayer(myExposureFilename)
+        self.calculator.setHazardLayer(myHazardLayer.source())
+        self.calculator.setExposureLayer(myExposureLayer.source())
 
         # Use canonical function name to identify selected function
         myFunctionID = self.getFunctionID()
@@ -1031,7 +993,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
 
-
         LOGGER.debug('Do zonal aggregation: %s' %
                      str(self.aggregator.aoiMode))
 
@@ -1052,7 +1013,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown run method is called by the
         # accepted signal of the keywords dialog
-        myResult = self.aggregator.checkAttributes()
+        myResult = self.aggregator.validateKeywords()
         if self.aggregator.aoiMode and not myResult:
             self.runtimeKeywordsDialog.setLayer(self.layer)
             #disable gui elements that should not be applicable for this
@@ -1175,7 +1136,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.aggregator.postProcess)
+                               self.postProcess)
         QtGui.qApp.setOverrideCursor(
             QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
@@ -1403,12 +1364,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                       QtCore.SIGNAL('done()'),
-                                      self.aggregator.postProcess)
-            self.runner = None
+                                      self.postProcess)
 
         self.grpQuestion.setEnabled(True)
         self.pbnRunStop.setEnabled(True)
         self.repaint()
+
+    def postProcess(self):
+        """Slot which delegates to aggregator.postProcess()."""
+        self.aggregator.runner = self.runner
+        self.aggregator.postProcess()
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""

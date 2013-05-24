@@ -45,7 +45,8 @@ from safe_qgis.utilities import (
     setVectorCategorizedStyle,
     copyInMemory,
     getDefaults,
-    extentToGeoArray)
+    extentToGeoArray,
+    safeToQGISLayer)
 from safe_qgis.safe_interface import (
     safeTr,
     temp_dir,
@@ -112,6 +113,8 @@ class Aggregator(QtCore.QObject):
         self.attributeTitle = None
 
         self.iface = iface
+        # An impact_calculator instance
+        self.runner = None
         self.keywordIO = KeywordIO()
         self.defaults = getDefaults()
         self.postProcessingOutput = {}
@@ -202,7 +205,7 @@ class Aggregator(QtCore.QObject):
         self.exposureLayer = theExposureLayer
         self._prepareLayer()
         # This is a safe version of the aggregation layer
-        self.safeLayer = safe_read_layer(str(theAggregationLayer.source()))
+        self.safeLayer = safe_read_layer(str(self.layer.source()))
 
         myHazardFilename = theHazardLayer
         myExposureFilename = theExposureLayer
@@ -228,7 +231,7 @@ class Aggregator(QtCore.QObject):
             # We do nothing, just return the original names because the
             return theHazardFilename, theExposureFilename
 
-    def aggregate(self, theAggregationLayerName):
+    def aggregate(self):
         """Do any requested aggregation post processing.
 
         Performs Aggregation postprocessing step by
@@ -237,9 +240,7 @@ class Aggregator(QtCore.QObject):
          * stripping all attributes beside the aggregation attribute
          * delegating to the appropriate aggregator for raster and vectors
 
-        Args:
-            theAggregationLayerName - content of the combo for aggregation in
-             dock. e.g. 'Entire Area', or 'kapubaten jakarta'
+        Args: None
 
         Returns: None
 
@@ -248,14 +249,7 @@ class Aggregator(QtCore.QObject):
         """
         myImpactLayer = self.runner.impactLayer()
 
-        myTitle = self.tr('Aggregating results...')
-        myMessage = self.tr('This may take a little while - we are '
-                            ' aggregating the hazards by %1').\
-            arg(theAggregationLayerName)
-        myProgress = 88
-        self.showBusy(myTitle, myMessage, myProgress)
-
-        myQGISImpactLayer = self.readImpactLayer(myImpactLayer)
+        myQGISImpactLayer = safeToQGISLayer(myImpactLayer)
         if not myQGISImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             raise ReadLayerError(myMessage)
@@ -656,19 +650,19 @@ class Aggregator(QtCore.QObject):
     def _prepareLayer(self):
         # This is used to hold an *in memory copy* of the aggregation layer
         # or None if the clip extents should be used.
-        if theAggregationLayer is None:
+        if self.layer is None:
             self.layer = self._extentsToMemoryLayer()
             # Area Of Interest (AOI) mode flag
             self.aoiMode = True
         else:
             myGeoExtent = extentToGeoArray(
-                theExposureLayer.extent(),
-                theExposureLayer.crs())
-            myClippedLayerPath = clipLayer(
-                theLayer=theAggregationLayer,
+                self.exposureLayer.extent(),
+                self.exposureLayer.crs())
+            myClippedLayer = clipLayer(
+                theLayer=self.layer,
                 theExtent=myGeoExtent)
             self.layer = QgsVectorLayer(
-                myClippedLayerPath, 'aggregation', 'ogr')
+                myClippedLayer.source(), 'aggregation', 'ogr')
             self.aoiMode = False
 
     def _countFieldName(self):
@@ -1267,16 +1261,14 @@ class Aggregator(QtCore.QObject):
             myPolygonIndex += 1
 
     # TODO - move to its own     class
-    def postProcess(self, theRunner, theLayerName):
+    def postProcess(self):
         """Run all post processing steps.
 
-        Called on self.theRunner SIGNAL('done()') starts all postprocessing
+        Called on self.self.runner SIGNAL('done()') starts all postprocessing
         steps.
 
         Args:
-            * theRunner - an impact_calculator instance.
-            * theLayerName - str. As taken from current text of aggregation
-                combo.
+            None
 
         Returns:
             None
@@ -1284,23 +1276,21 @@ class Aggregator(QtCore.QObject):
 
         if self.runner.impactLayer() is None:
             # Done was emitted, but no impact layer was calculated
-            myResult = theRunner.result()
+            myResult = self.runner.result()
             myMessage = str(self.tr('No impact layer was calculated. '
                                     'Error message: %1\n').arg(str(myResult)))
-            myException = theRunner.lastException()
+            myException = self.runner.lastException()
             if myException is not None:
                 myContext = self.tr('An exception occurred when calculating '
                                     'the results. %1').\
-                    arg(theRunner.result())
+                    arg(self.runner.result())
                 myMessage = getExceptionWithStacktrace(
                     myException, theHtml=True, theContext=myContext)
             raise Exception(myMessage)
 
         try:
-            self.aggregate(theLayerName)
+            self.aggregate()
             if self.errorMessage is None:
                 self.runPostprocessors()
-            QtGui.qApp.restoreOverrideCursor()
         except Exception, e:  # pylint: disable=W0703
             raise e
-        self.completed()

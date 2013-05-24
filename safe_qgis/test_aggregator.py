@@ -156,7 +156,7 @@ class AggregatorTest(unittest.TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         DOCK.runtimeKeywordsDialog.accept()
-        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
+        myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      myAttribute)
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
@@ -184,7 +184,7 @@ class AggregatorTest(unittest.TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         DOCK.runtimeKeywordsDialog.accept()
-        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
+        myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      myAttribute)
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
@@ -211,7 +211,7 @@ class AggregatorTest(unittest.TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         DOCK.runtimeKeywordsDialog.accept()
-        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
+        myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
                      myAttribute)
         assert myAttribute is None, myMessage
@@ -238,7 +238,7 @@ class AggregatorTest(unittest.TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         DOCK.runtimeKeywordsDialog.accept()
-        myAttribute = DOCK.postProcessingAttributes[myAttrKey]
+        myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' % myAttribute)
         assert myAttribute is None, myMessage
 

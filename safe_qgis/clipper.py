@@ -21,14 +21,17 @@ import tempfile
 import logging
 
 from PyQt4.QtCore import QCoreApplication, QProcess
-from qgis.core import (QGis,
-                       QgsCoordinateTransform,
-                       QgsCoordinateReferenceSystem,
-                       QgsRectangle,
-                       QgsMapLayer,
-                       QgsFeature,
-                       QgsVectorFileWriter,
-                       QgsGeometry)
+from qgis.core import (
+    QGis,
+    QgsCoordinateTransform,
+    QgsCoordinateReferenceSystem,
+    QgsRectangle,
+    QgsMapLayer,
+    QgsFeature,
+    QgsVectorFileWriter,
+    QgsGeometry,
+    QgsVectorLayer,
+    QgsRasterLayer)
 
 from safe_qgis.safe_interface import (verify,
                                       readKeywordsFromFile,
@@ -152,7 +155,7 @@ def _clipVectorLayer(theLayer,
             the extent only. Default is False.
 
     Returns:
-        Path to the output clipped layer (placed in the system temp dir).
+        QgsVectorLayer - output clipped layer (placed in the system temp dir).
 
     Raises:
        None
@@ -283,8 +286,11 @@ def _clipVectorLayer(theLayer,
     myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(
         theLayer, myFilename, theExtraKeywords=theExtraKeywords)
+    myBaseName = os.path.basename(myFilename)
+    myBaseName = os.path.split(myBaseName)[0]
+    myLayer = QgsVectorLayer(myFilename, myBaseName, 'ogr')
 
-    return myFilename  # Filename of created file
+    return myLayer
 
 
 def clipGeometry(theClipPolygon, theGeometry):
@@ -392,7 +398,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
             theCellSize=None), the native raster cell size will be used.
 
     Returns:
-        Path to the output clipped layer (placed in the
+        QgsRasterLayer - the output clipped layer (placed in the
         system temp dir).
 
     Raises:
@@ -497,7 +503,11 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(theLayer, myFilename,
                              theExtraKeywords=theExtraKeywords)
-    return myFilename  # Filename of created file
+    myBaseName = os.path.basename(myFilename)
+    myBaseName = os.path.split(myBaseName)[0]
+    myLayer = QgsRasterLayer(myFilename, myBaseName)
+
+    return myLayer
 
 
 def extentToKml(theExtent):
