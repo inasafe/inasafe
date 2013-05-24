@@ -59,8 +59,9 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Vector polygon layer of volcano impact zones
-              P: Raster layer of population data on the same grid as H
+              my_hazard: Vector polygon layer of volcano impact zones
+              my_exposure: Raster layer of population data on the same grid as
+              my_hazard
 
         Counts number of people exposed to volcano event.
 
@@ -70,34 +71,33 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         """
 
         # Identify hazard and exposure layers
-        H = get_hazard_layer(layers)  # Volcano KRB
-        E = get_exposure_layer(layers)
+        my_hazard = get_hazard_layer(layers)  # Volcano KRB
+        my_exposure = get_exposure_layer(layers)
 
-        question = get_question(H.get_name(),
-                                E.get_name(),
-                                self)
+        question = get_question(
+            my_hazard.get_name(), my_exposure.get_name(), self)
 
         # Input checks
-        if not H.is_vector:
+        if not my_hazard.is_vector:
             msg = ('Input hazard %s  was not a vector layer as expected '
-                   % H.get_name())
+                   % my_hazard.get_name())
             raise Exception(msg)
 
         msg = ('Input hazard must be a polygon or point layer. I got %s with '
-               'layer type %s' % (H.get_name(), H.get_geometry_name()))
-        if not (H.is_polygon_data or H.is_point_data):
+               'layer type %s' % (my_hazard.get_name(),
+                                  my_hazard.get_geometry_name()))
+        if not (my_hazard.is_polygon_data or my_hazard.is_point_data):
             raise Exception(msg)
 
-        if H.is_point_data:
+        if my_hazard.is_point_data:
             # Use concentric circles
             radii = self.parameters['distance [km]']
 
-            centers = H.get_geometry()
-            attributes = H.get_data()
+            centers = my_hazard.get_geometry()
+            attributes = my_hazard.get_data()
             rad_m = [x * 1000 for x in radii]  # Convert to meters
-            H = make_circular_polygon(centers,
-                                      rad_m,
-                                      attributes=attributes)
+            my_hazard = make_circular_polygon(
+                centers, rad_m, attributes=attributes)
 
             category_title = 'Radius'
             category_header = tr('Distance [km]')
@@ -115,12 +115,12 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                               'Kawasan Rawan Bencana I']
 
             name_attribute = 'GUNUNG'  # As in e.g. BNPB hazard map
-            attributes = H.get_data()
+            attributes = my_hazard.get_data()
 
         # Get names of volcanos considered
-        if name_attribute in H.get_attribute_names():
+        if name_attribute in my_hazard.get_attribute_names():
             D = {}
-            for att in H.get_data():
+            for att in my_hazard.get_data():
                 # Run through all polygons and get unique names
                 D[att[name_attribute]] = None
 
@@ -131,18 +131,18 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         else:
             volcano_names = tr('Not specified in data')
 
-        if not category_title in H.get_attribute_names():
+        if not category_title in my_hazard.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
-                   'attribute %s ' % (H.get_name(), category_title))
+                   'attribute %s ' % (my_hazard.get_name(), category_title))
             raise InaSAFEError(msg)
 
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(
-            H, E, attribute_name='population')
+            my_hazard, my_exposure, attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
-        new_attributes = H.get_data()
+        new_attributes = my_hazard.get_data()
 
         categories = {}
         for attr in new_attributes:
@@ -165,7 +165,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             categories[cat] += pop
 
         # Count totals
-        total = int(numpy.sum(E.get_data(nan=0)))
+        total = int(numpy.sum(my_exposure.get_data(nan=0)))
 
         # Don't show digits less than a 1000
         total = round_thousand(total)
@@ -253,7 +253,6 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
-        print classes, len(classes)
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
@@ -281,8 +280,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=new_attributes,
-                   projection=H.get_projection(),
-                   geometry=H.get_geometry(as_geometry_objects=True),
+                   projection=my_hazard.get_projection(),
+                   geometry=my_hazard.get_geometry(as_geometry_objects=True),
                    name=tr('Population affected by volcanic hazard zone'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
