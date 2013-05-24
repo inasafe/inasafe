@@ -95,6 +95,7 @@ class AggregatorTest(unittest.TestCase):
         #raster hazard
         #raster exposure
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -106,6 +107,7 @@ class AggregatorTest(unittest.TestCase):
         #vector hazard
         #raster exposure
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta',
             theExposure='People',
             theFunction='Need evacuation',
@@ -128,6 +130,7 @@ class AggregatorTest(unittest.TestCase):
         #vector hazard
         #vector exposure
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta',
             theExposure='Essential buildings',
             theFunction='Be flooded',
@@ -145,6 +148,7 @@ class AggregatorTest(unittest.TestCase):
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -201,6 +205,7 @@ class AggregatorTest(unittest.TestCase):
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -228,6 +233,7 @@ class AggregatorTest(unittest.TestCase):
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -249,6 +255,7 @@ class AggregatorTest(unittest.TestCase):
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
@@ -296,6 +303,7 @@ class AggregatorTest(unittest.TestCase):
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
