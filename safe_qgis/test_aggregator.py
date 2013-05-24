@@ -148,7 +148,7 @@ class AggregatorTest(unittest.TestCase):
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
-
+            DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',

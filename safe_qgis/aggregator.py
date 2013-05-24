@@ -105,8 +105,6 @@ class Aggregator(QtCore.QObject):
         self.exposureLayer = None
         self.safeLayer = None
 
-        # Aggregation / post processing related items
-        self.postProcessingOutput = {}
         self.prefix = 'aggr_'
         self.defaults = None
         self.attributes = {}
@@ -117,7 +115,6 @@ class Aggregator(QtCore.QObject):
         self.runner = None
         self.keywordIO = KeywordIO()
         self.defaults = getDefaults()
-        self.postProcessingOutput = {}
         self.errorMessage = None
         self.targetField = None
         self.impactLayerAttributes = []
@@ -125,6 +122,7 @@ class Aggregator(QtCore.QObject):
         # If this flag is not True, no aggregation or postprocessing will run
         self.isValid = False
         self.validateKeywords()
+        self.showPostProcLayers = False
 
     def validateKeywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.

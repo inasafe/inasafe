@@ -76,58 +76,29 @@ class PostprocessorManager(QtCore.QObject):
 
     def __init__(
             self,
-            iface,
-            theAggregationLayer):
+            theAggregator):
         """Director for aggregation based operations.
         Args:
           theAggregationLayer: QgsMapLayer representing clipped
               aggregation. This will be converted to a memory layer inside
-              this class. see self.layer
+              this class. see self.aggregator.layer
         Returns:
            not applicable
         Raises:
            no exceptions explicitly raised
         """
 
-        super(Aggregator, self).__init__()
-
-        # This is used to hold an *in memory copy* of the aggregation layer
-        # or None if the clip extents should be used.
-        if theAggregationLayer is None:
-            self.aoiMode = True
-            # Will be set in _prepareLayer just before deintersect call
-            self.layer = None
-        else:
-            self.aoiMode = False
-            self.layer = theAggregationLayer
-
-        self.hazardLayer = None
-        self.exposureLayer = None
-        self.safeLayer = None
+        super(PostprocessorManager, self).__init__()
 
         # Aggregation / post processing related items
         self.postProcessingOutput = {}
-        self.prefix = 'aggr_'
-        self.defaults = None
-        self.attributes = {}
-        self.attributeTitle = None
-
-        self.iface = iface
-        # An impact_calculator instance
-        self.runner = None
         self.keywordIO = KeywordIO()
-        self.defaults = getDefaults()
-        self.postProcessingOutput = {}
         self.errorMessage = None
-        self.targetField = None
-        self.impactLayerAttributes = []
 
-        # If this flag is not True, no aggregation or postprocessing will run
-        self.isValid = False
-        self.validateKeywords()
+        self.aggregator = theAggregator
 
     def _sumFieldName(self):
-        return self.prefix + 'sum'
+        return self.aggregator.prefix + 'sum'
 
     def getOutput(self, theSingleTableFlag=False):
         """Returns the results of the post processing as a table.
@@ -202,7 +173,7 @@ class PostprocessorManager(QtCore.QObject):
                     resList,
                     key=lambda d: (
                         myEndOfList if (d[1][myFirstKey]['value'] ==
-                                        self.defaults['NO_DATA'])
+                                        self.aggregator.defaults['NO_DATA'])
                         else d[1][myFirstKey]['value']),
                     reverse=True)
             except KeyError:
@@ -267,16 +238,16 @@ class PostprocessorManager(QtCore.QObject):
             myPostProcessors = {}
         LOGGER.debug('Running this postprocessors: ' + str(myPostProcessors))
 
-        myFeatureNameAttribute = self.attributes[
-            self.defaults['AGGR_ATTR_KEY']]
+        myFeatureNameAttribute = self.aggregator.attributes[
+            self.aggregator.defaults['AGGR_ATTR_KEY']]
         if myFeatureNameAttribute is None:
             self.attributeTitle = self.tr('Aggregation unit')
         else:
             self.attributeTitle = myFeatureNameAttribute
 
-        myNameFieldIndex = self.layer.fieldNameIndex(
+        myNameFieldIndex = self.aggregator.layer.fieldNameIndex(
             myFeatureNameAttribute)
-        mySumFieldIndex = self.layer.fieldNameIndex(
+        mySumFieldIndex = self.aggregator.layer.fieldNameIndex(
             self._sumFieldName())
 
         myFemaleRatioIsVariable = False
@@ -286,19 +257,19 @@ class PostprocessorManager(QtCore.QObject):
         if 'Gender' in myPostProcessors:
             #look if we need to look for a variable female ratio in a layer
             try:
-                myFemRatioField = self.attributes[
-                    self.defaults['FEM_RATIO_ATTR_KEY']]
-                myFemRatioFieldIndex = self.layer.fieldNameIndex(
+                myFemRatioField = self.aggregator.attributes[
+                    self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
+                myFemRatioFieldIndex = self.aggregator.layer.fieldNameIndex(
                     myFemRatioField)
                 myFemaleRatioIsVariable = True
 
             except KeyError:
                 myFemaleRatio = self.keywordIO.readKeywords(
-                    self.layer,
-                    self.defaults['FEM_RATIO_KEY'])
+                    self.aggregator.layer,
+                    self.aggregator.defaults['FEM_RATIO_KEY'])
 
         #iterate zone features
-        myProvider = self.layer.dataProvider()
+        myProvider = self.aggregator.layer.dataProvider()
         myAttributes = myProvider.attributeIndexes()
         # start data retreival: fetch no geometry and all attributes for each
         # feature
@@ -316,17 +287,17 @@ class PostprocessorManager(QtCore.QObject):
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
             #create dictionary of attributes to pass to postprocessor
-            myGeneralParams = {'target_field': self.targetField}
+            myGeneralParams = {'target_field': self.aggregator.targetField}
 
-            if self.statisticsType == 'class_count':
+            if self.aggregator.statisticsType == 'class_count':
                 myGeneralParams['impact_classes'] = self.statisticsClasses
-            elif self.statisticsType == 'sum':
+            elif self.aggregator.statisticsType == 'sum':
                 myImpactTotal, _ = myAttributeMap[mySumFieldIndex].toDouble()
                 myGeneralParams['impact_total'] = myImpactTotal
 
             try:
                 myGeneralParams['impact_attrs'] = (
-                    self.impactLayerAttributes[myPolygonIndex])
+                    self.aggregator.impactLayerAttributes[myPolygonIndex])
             except IndexError:
                 #rasters and attributeless vectors have no attributes
                 myGeneralParams['impact_attrs'] = None
@@ -345,7 +316,7 @@ class PostprocessorManager(QtCore.QObject):
                         myFemaleRatio, mySuccessFlag = myAttributeMap[
                             myFemRatioFieldIndex].toDouble()
                         if not mySuccessFlag:
-                            myFemaleRatio = self.defaults['FEM_RATIO']
+                            myFemaleRatio = self.aggregator.defaults['FEM_RATIO']
                         LOGGER.debug(mySuccessFlag)
                     myParameters['female_ratio'] = myFemaleRatio
 
@@ -363,4 +334,3 @@ class PostprocessorManager(QtCore.QObject):
                         (myZoneName, myResults))
             #increment the index
             myPolygonIndex += 1
-

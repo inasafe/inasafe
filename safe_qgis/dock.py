@@ -73,6 +73,7 @@ from safe_qgis.safe_interface import (
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.aggregator import Aggregator
+from safe_qgis.postprocessor_manager import PostprocessorManager
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     KeywordDbError,
@@ -979,6 +980,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.aggregator = Aggregator(
             self.iface,
             self.getPostProcessingLayer())
+        self.aggregator.showPostProcLayers = self.showPostProcLayers
         try:
             myOriginalKeywords = self.keywordIO.readKeywords(
                 self.aggregator.layer)
@@ -1370,9 +1372,40 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.repaint()
 
     def postProcess(self):
-        """Slot which delegates to aggregator.postProcess()."""
-        self.aggregator.runner = self.runner
-        self.aggregator.postProcess()
+        """Run all post processing steps.
+
+        Called on self.runner SIGNAL('done()') starts all postprocessing
+        steps.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        if self.runner.impactLayer() is None:
+            # Done was emitted, but no impact layer was calculated
+            myResult = self.runner.result()
+            myMessage = str(self.tr('No impact layer was calculated. '
+                                    'Error message: %1\n').arg(str(myResult)))
+            myException = self.runner.lastException()
+            if myException is not None:
+                myContext = self.tr('An exception occurred when calculating '
+                                    'the results. %1').\
+                    arg(self.runner.result())
+                myMessage = getExceptionWithStacktrace(
+                    myException, theHtml=True, theContext=myContext)
+            raise Exception(myMessage)
+
+        try:
+            self.aggregator.runner = self.runner
+            self.aggregator.aggregate()
+            if self.aggregator.errorMessage is None:
+                myManager = PostprocessorManager(self.aggregator)
+                myManager.functionParams = self.functionParams
+                myManager.run()
+        except Exception, e:  # pylint: disable=W0703
+            raise e
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
@@ -1887,37 +1920,3 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = str(myItemData.toString())
         return myFunctionID
-
-    def postProcess(self):
-        """Run all post processing steps.
-
-        Called on self.self.runner SIGNAL('done()') starts all postprocessing
-        steps.
-
-        Args:
-            None
-
-        Returns:
-            None
-        """
-
-        if self.runner.impactLayer() is None:
-            # Done was emitted, but no impact layer was calculated
-            myResult = self.runner.result()
-            myMessage = str(self.tr('No impact layer was calculated. '
-                                    'Error message: %1\n').arg(str(myResult)))
-            myException = self.runner.lastException()
-            if myException is not None:
-                myContext = self.tr('An exception occurred when calculating '
-                                    'the results. %1').\
-                    arg(self.runner.result())
-                myMessage = getExceptionWithStacktrace(
-                    myException, theHtml=True, theContext=myContext)
-            raise Exception(myMessage)
-
-        try:
-            self.aggregate()
-            if self.errorMessage is None:
-                self.run()
-        except Exception, e:  # pylint: disable=W0703
-            raise e
