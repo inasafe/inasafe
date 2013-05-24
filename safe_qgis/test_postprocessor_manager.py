@@ -159,3 +159,8 @@ class PostprocessorManagerTest(unittest.TestCase):
                     mySum += float(myToken.replace(',', '.'))
 
                 assert mySum != 0, myMessage
+
+if __name__ == '__main__':
+    suite = unittest.makeSuite(PostprocessorManagerTest, 'test')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)

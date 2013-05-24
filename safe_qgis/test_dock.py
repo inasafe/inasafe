@@ -1357,6 +1357,57 @@ Click for Diagnostic Information:
 
         assert not DOCK.cboAggregation.isEnabled(), myMessage
 
+    #FIXME (MB) this is actually wrong, when calling the test directly it works
+    # in nosetest it fails at the second assert
+
+    def test_cboAggregationToggle(self):
+        """Aggregation Combobox toggles on and off as expected."""
+        #raster hazard
+        #raster exposure
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregationEnabledFlag=True)
+        myMessage += ' when the when hazard and exposure layer are raster'
+        assert myResult, myMessage
+
+        #vector hazard
+        #raster exposure
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard='A flood in Jakarta',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is vector and exposure is raster'
+        assert myResult, myMessage
+
+        #raster hazard
+        #vector exposure
+        myResult, myMessage = setupScenario(
+            theHazard='Tsunami Max Inundation',
+            theExposure='Tsunami Building Exposure',
+            theFunction='Be flooded',
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is raster and exposure is vector'
+        assert myResult, myMessage
+
+        #vector hazard
+        #vector exposure
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard='A flood in Jakarta',
+            theExposure='Essential buildings',
+            theFunction='Be flooded',
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard and exposure layer are vector'
+        assert myResult, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
