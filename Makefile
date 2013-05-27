@@ -217,6 +217,7 @@ dependency_test:
 	@grep -R "geonode" $(NONGUI) || true
 	@grep -R "geoserver" $(NONGUI) || true
 	@grep -R "owslib" $(NONGUI) || true
+	@grep -R "third_party" $(NONGUI) || true
 
 list_gpackages:
 	@echo
