@@ -89,11 +89,36 @@ class FunctionOptionsDialog(QtGui.QDialog,
         for myKey, myValue in theParams.items():
             if myKey == 'postprocessors':
                 self.buildPostProcessorForm(myValue)
+            elif myKey == 'minimum needs':
+                self.buildMinimumNeedsForm(myValue)
             else:
                 self.values[myKey] = self.buildWidget(
                     self.configLayout,
                     myKey,
                     myValue)
+
+    def buildMinimumNeedsForm(self, theParams):
+        """Build minimum needs tab
+
+        Args:
+           * theParams - dictionary containing element of form
+        Returns:
+           not applicable
+        """
+        # create minimum needs tab
+        myTab = QWidget()
+        myFormLayout = QFormLayout(myTab)
+        myFormLayout.setLabelAlignment(Qt.AlignLeft)
+        self.tabWidget.addTab(myTab, self.tr('Minimum Needs'))
+        self.tabWidget.tabBar().setVisible(True)
+
+        myValues = OrderedDict()
+        for myLabel, myValue in theParams.items():
+            self.values[myLabel] = self.buildWidget(
+                myFormLayout, myLabel, myValue)
+            myValues[myLabel] = myValue
+
+        self.values['minimum needs'] = myValues
 
     def buildPostProcessorForm(self, theParams):
         """Build Post Processor Tab

@@ -80,7 +80,14 @@ class FloodEvacuationFunction(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})])),
+        ('minimum needs', OrderedDict([
+            ('Rice', 2.8),
+            ('Drinking Water', 17.5),
+            ('Water', 105),
+            ('Family Kits', 0.2),
+            ('Toilets', 0.05),
+        ]))])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -145,18 +152,27 @@ class FloodEvacuationFunction(FunctionProvider):
         total = round_thousand(total)
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+        # Minimum needs
+        minimum_needs = self.parameters['minimum needs']
+        mn_rice = minimum_needs['Rice']
+        mn_drinking_water = minimum_needs['Drinking Water']
+        mn_water = minimum_needs['Water']
+        mn_family_kits = minimum_needs['Family Kits']
+        mn_toilets = minimum_needs['Toilets']
+
+        print minimum_needs
 
         # FIXME: Refactor and share
         # 400g per person per day
-        rice = int(evacuated * 2.8)
+        rice = int(evacuated * mn_rice)
         # 2.5L per person per day
-        drinking_water = int(evacuated * 17.5)
+        drinking_water = int(evacuated * mn_drinking_water)
         # 15L per person per day
-        water = int(evacuated * 105)
+        water = int(evacuated * mn_water)
         # assume 5 people per family (not in perka)
-        family_kits = int(evacuated / 5)
+        family_kits = int(evacuated * mn_family_kits)
         # 20 people per toilet
-        toilets = int(evacuated / 20)
+        toilets = int(evacuated / mn_toilets)
 
         # Generate impact report for the pdf map
         table_body = [
