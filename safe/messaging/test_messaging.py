@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 
-from safe.messaging import Message, Text, EmText, StrongText, Heading, Paragraph
+from safe.messaging import Message, Text, EmphasizedText, ImportantText, Heading, Paragraph
 
 
 class MessagingTest(unittest.TestCase):
@@ -50,7 +50,7 @@ class MessagingTest(unittest.TestCase):
         """Tests Text messages are rendered correctly in plain text/html.
         """
         t1 = Text('FOO')
-        ts = StrongText('STRONG')
+        ts = ImportantText('STRONG')
         t2 = Text(ts)
         t1.add(t2)
         expected_res = 'FOO*STRONG*'
@@ -116,11 +116,11 @@ class MessagingTest(unittest.TestCase):
 
         t1 = Text('this is a text, ')
         t1.add(Text('this is another text '))
-        ts = StrongText('and this is a strong text')
+        ts = ImportantText('and this is a strong text')
         t1.add(ts)
         t1.add(Text(' spaced text'))
         tp = Text('text for paragraph ')
-        em = EmText('this is an emphasized paragraph text')
+        em = EmphasizedText('this is an emphasized paragraph text')
         tp.add(em)
         p2 = Paragraph(tp)
 

@@ -16,8 +16,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from .item.text import Text
-from .item.strong_text import StrongText
-from .item.em_text import EmText
+from .item.important_text import ImportantText
+from .item.emphasized_text import EmphasizedText
 from .item.heading import Heading
 from .item.paragraph import Paragraph
 from .item.success_paragraph import SuccessParagraph

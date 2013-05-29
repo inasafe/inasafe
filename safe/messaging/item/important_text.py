@@ -22,8 +22,8 @@ LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
 
-class EmText(Text):
-    """A class to model emphasized text in the messaging system """
+class ImportantText(Text):
+    """A class to model free text in the messaging system """
 
     def __init__(self, text):
         """Creates a Bold Text object
@@ -51,7 +51,7 @@ class EmText(Text):
         Raises:
             Errors are propagated
         """
-        return '<em>%s</em>' % self.text
+        return '<strong>%s</strong>' % self.text
 
     def to_text(self):
         """Render as plain text
@@ -65,4 +65,4 @@ class EmText(Text):
         Raises:
             Errors are propagated
         """
-        return '_%s_' % self.text
+        return '*%s*' % self.text
