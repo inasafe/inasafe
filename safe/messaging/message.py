@@ -9,18 +9,112 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
-__date__ = '24/05/2013'
+__date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+from item.message_element import MessageElement, InvalidMessageItemError
+from item.text import Text
 
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
 
-class Message():
-    pass
+class Message(MessageElement):
+    """Message object to contain a list of MessageElements"""
+
+    def __init__(self, message=None):
+        """Creates a message object to contain a list of MessageElements
+
+        Strings can be passed and are automatically converted in to
+        item.Text()
+
+        Args:
+            MessageElement message, an element to add to the message queue
+
+        Returns:
+            None
+
+        Raises:
+            Errors are propagated
+        """
+        self.message = []
+
+        if message is not None:
+            self.add(message)
+
+    def add(self, message):
+        """add a MessageElement to the queue
+
+        Strings can be passed and are automatically converted in to
+        item.Text()
+
+        Args:
+            MessageElement message, an element to add to the message queue
+
+        Returns:
+            None
+
+        Raises:
+            Errors are propagated
+        """
+        if isinstance(message, basestring):
+            self.message.append(Text(message))
+        elif isinstance(message, MessageElement):
+            self.message.append(message)
+        elif isinstance(message, Message):
+            self.message.extend(message.message)
+        else:
+            raise InvalidMessageItemError
+
+    def clear(self):
+        """clear MessageElement queue
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            Errors are propagated
+        """
+        self.message = []
+
+    def to_text(self):
+        """Render a MessageElement queue as plain text
+
+        Args:
+            None
+
+        Returns:
+            Str the text representation of the message queue
+
+        Raises:
+            Errors are propagated
+        """
+        message = ''
+        for m in self.message:
+            message += m.to_text() + '\n'
+        return message
+
+    def to_html(self):
+        """Render a MessageElement queue as html
+
+        Args:
+            None
+
+        Returns:
+            Str the html representation of the message queue
+
+        Raises:
+            Errors are propagated
+        """
+        message = ''
+        for m in self.message:
+            message += m.to_html() + '\n'
+        return message

@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **Title Module.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **Paragraph.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -9,18 +9,18 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
-__date__ = '24/05/2013'
+__date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
-
-
-LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
-
-
-class Title():
-    pass
+from .item.text import Text
+from .item.strong_text import StrongText
+from .item.em_text import EmText
+from .item.heading import Heading
+from .item.paragraph import Paragraph
+from .item.success_paragraph import SuccessParagraph
+from .item.item_list import ItemList
+from .item.table import Table
+from message import Message

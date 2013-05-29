@@ -121,7 +121,7 @@ class TableCell (object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.6
     """
 
-    def __init__(self, text="", bgcolor=None, header=False, width=None,
+    def __init__(self, text='', bgcolor=None, header=False, width=None,
             align=None, char=None, charoff=None, valign=None, style='',
             attribs=None, cell_class=None, row_span=None, col_span=None):
         """TableCell constructor"""
