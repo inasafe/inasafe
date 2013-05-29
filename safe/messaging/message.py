@@ -27,7 +27,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class Message(MessageElement):
     """Message object to contain a list of MessageElements"""
 
-    def __init__(self, message=None):
+    def __init__(self, *args):
         """Creates a message object to contain a list of MessageElements
 
         Strings can be passed and are automatically converted in to
@@ -44,8 +44,8 @@ class Message(MessageElement):
         """
         self.message = []
 
-        if message is not None:
-            self.add(message)
+        for m in args:
+            self.add(m)
 
     def add(self, message):
         """add a MessageElement to the queue
