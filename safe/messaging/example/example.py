@@ -168,7 +168,8 @@ class Dock():
         message.add(Message(
             Text('This shows how you can create '),
             ImportantText('content inline when you create a message'),
-            EmphasizedText(' including different styles and so on.')))
+            ' ',
+            EmphasizedText('including different styles and so on.')))
 
         dispatcher.send(
             signal=STATIC_MESSAGE_SIGNAL,
