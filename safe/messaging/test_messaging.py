@@ -118,7 +118,8 @@ class MessagingTest(unittest.TestCase):
         res = l1.to_html()
         self.assertEqual(expected_res, res)
 
-        l1 = UnorderedItemList(Text('FOO'), ImportantText('BAR'), 'dsds')
+        l1 = UnorderedItemList(Text('FOO'), ImportantText('BAR'))
+        l1.add('dsds')
 
         expected_res = (
             ' - FOO\n'
@@ -213,11 +214,20 @@ class MessagingTest(unittest.TestCase):
         em1.append(em2)
         em1.prepend(em0)
         expected_res = ("<h1>PROBLEM</h1>\n"
-                        "FPSPTP\n"
+                        "<ul>\n"
+                        "<li>FP</li>\n"
+                        "<li>SP</li>\n"
+                        "<li>TP</li>\n"
+                        "</ul>\n"
                         "<h1>DETAIL</h1>\n"
-                        "FPTD\n"
+                        "<ul>\n"
+                        "<li>FP</li>\n"
+                        "<li>TD</li>\n"
+                        "</ul>\n"
                         "<h1>SUGGESTION</h1>\n"
-                        "TS\n"
+                        "<ul>\n"
+                        "<li>TS</li>\n"
+                        "</ul>\n"
                         "<h1>TRACEBACK</h1>\n"
                         "['TBTB', None, 'TT']")
         res = em1.to_html()
@@ -230,11 +240,13 @@ class MessagingTest(unittest.TestCase):
         expected_res = (
             "*PROBLEM\n"
             "\n"
-            "FP\n"
-            "SP\n"
+            " - FP\n"
+            " - SP\n"
+            "\n"
             "*DETAIL\n"
             "\n"
-            "SD\n"
+            " - SD\n"
+            "\n"
             "*TRACEBACK\n"
             "\n"
             "[None, 'TBTB']\n")

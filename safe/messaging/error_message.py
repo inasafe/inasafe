@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 from item.message_element import MessageElement, InvalidMessageItemError
-from . import Message, Text, Heading
+from . import Message, Text, Heading, UnorderedItemList
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -83,25 +83,34 @@ class ErrorMessage():
         Raises:
             Errors are propagated
         """
-        m = Message()
-        m.add(Heading('PROBLEM'))
+        message = Message()
+        message.add(Heading('PROBLEM'))
+        list = UnorderedItemList()
         for p in self.problems:
             #p is _always_ not None
-            m.add(p)
+            list.add(p)
+        message.add(list)
+
         if self.details.count(None) < len(self.details):
-            m.add(Heading('DETAIL'))
+            list = UnorderedItemList()
+            message.add(Heading('DETAIL'))
             for d in self.details:
                 if d is not None:
-                    m.add(d)
+                    list.add(d)
+            message.add(list)
+
         if self.suggestions.count(None) < len(self.suggestions):
-            m.add(Heading('SUGGESTION'))
+            list = UnorderedItemList()
+            message.add(Heading('SUGGESTION'))
             for s in self.suggestions:
                 if s is not None:
-                    m.add(s)
+                    list.add(s)
+            message.add(list)
+
         if self.tracebacks.count(None) < len(self.tracebacks):
-            m.add(Heading('TRACEBACK'))
-            m.add(str(self.tracebacks))
-        return m
+            message.add(Heading('TRACEBACK'))
+            message.add(str(self.tracebacks))
+        return message
 
     def append(self, error_message):
         """add a ErrorMessage to the end of the queue
