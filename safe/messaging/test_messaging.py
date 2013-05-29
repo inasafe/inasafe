@@ -18,7 +18,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 
-from safe.messaging import Message, Text, EmphasizedText, ImportantText, Heading, Paragraph
+from safe.messaging import (
+    Message,
+    Text,
+    EmphasizedText,
+    ImportantText,
+    Heading,
+    Paragraph)
 
 
 class MessagingTest(unittest.TestCase):
