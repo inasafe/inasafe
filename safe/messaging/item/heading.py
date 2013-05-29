@@ -15,13 +15,8 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
 from message_element import MessageElement, InvalidMessageItemError
 from text import Text
-
-
-LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
 
 
 class Heading(MessageElement):

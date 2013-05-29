@@ -15,12 +15,6 @@ __date__ = '24/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
-
-
-LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
-
 
 class ItemList():
     pass

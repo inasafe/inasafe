@@ -15,18 +15,14 @@ __date__ = '28/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
 from text import Text
-
-LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
 
 
 class EmphasizedText(Text):
     """A class to model emphasized text in the messaging system """
 
     def __init__(self, text):
-        """Creates a Bold Text object
+        """Creates a Emphasized Text Text object
 
         Args:
             String message, a string to add to the message

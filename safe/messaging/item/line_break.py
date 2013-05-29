@@ -18,22 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from text import Text
 
 
-class ImportantText(Text):
-    """A class to model free text in the messaging system """
-
-    def __init__(self, text):
-        """Creates a Bold Text object
-
-        Args:
-            String message, a string to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
-        """
-        self.text = text
+class LineBreak(Text):
+    """A class to model line breaks in text the messaging system """
 
     def to_html(self):
         """Render as html
@@ -47,7 +33,7 @@ class ImportantText(Text):
         Raises:
             Errors are propagated
         """
-        return '<strong>%s</strong>' % self.text
+        return '<br/>\n'
 
     def to_text(self):
         """Render as plain text
@@ -61,4 +47,4 @@ class ImportantText(Text):
         Raises:
             Errors are propagated
         """
-        return '*%s*' % self.text
+        return '\n'
