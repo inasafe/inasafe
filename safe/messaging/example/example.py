@@ -149,7 +149,7 @@ class Dock():
         text.add(Text('.'))
         paragraph = Paragraph(text)
         message.add(paragraph)
-        paragraph = (
+        paragraph = Paragraph(
             'Sed ut perspiciatis unde omnis iste natus error sit voluptatem '
             'accusantium doloremque laudantium, totam rem aperiam, '
             'eaque ipsa quae ab illo inventore veritatis et quasi architecto '
@@ -165,6 +165,10 @@ class Dock():
             'voluptate velit esse quam nihil molestiae consequatur, vel illum '
             'qui dolorem eum fugiat quo voluptas nulla pariatur?')
         message.add(paragraph)
+        message.add(Message(
+            Text('This shows how you can create '),
+            ImportantText('content inline when you create a message'),
+            EmphasizedText(' including different styles and so on.')))
 
         dispatcher.send(
             signal=STATIC_MESSAGE_SIGNAL,
