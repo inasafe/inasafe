@@ -27,8 +27,8 @@ from safe.messaging import (
     LinkText,
     Heading,
     Paragraph,
-    OrderedItemList,
-    UnorderedItemList)
+    OrderedList,
+    UnorderedList)
 
 
 class MessagingTest(unittest.TestCase):
@@ -100,7 +100,7 @@ class MessagingTest(unittest.TestCase):
     def test_item_list(self):
         """Tests complex messages are rendered correctly in plain text/html
         """
-        l1 = OrderedItemList(Text('FOO'), ImportantText('BAR'), 'dsds')
+        l1 = OrderedList(Text('FOO'), ImportantText('BAR'), 'dsds')
 
         expected_res = (
             ' 0. FOO\n'
@@ -118,7 +118,7 @@ class MessagingTest(unittest.TestCase):
         res = l1.to_html()
         self.assertEqual(expected_res, res)
 
-        l1 = UnorderedItemList(Text('FOO'), ImportantText('BAR'))
+        l1 = UnorderedList(Text('FOO'), ImportantText('BAR'))
         l1.add('dsds')
 
         expected_res = (

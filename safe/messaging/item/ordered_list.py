@@ -15,14 +15,13 @@ __date__ = '24/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from message_element import MessageElement, InvalidMessageItemError
-from text import PlainText
+from abstract_list import AbstractList
 
 
-class AbstractItemList(MessageElement):
+class OrderedList(AbstractList):
     """A class to model free text in the messaging system """
 
-    def __init__(self, ordered, items):
+    def __init__(self, *args):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
@@ -37,33 +36,7 @@ class AbstractItemList(MessageElement):
         Raises:
             Errors are propagated
         """
-        self.ordered = ordered
-        self.items = []
-
-        for item in items:
-            self.add(item)
-
-    def add(self, item):
-        """add a Text MessageElement to the existing Text
-
-        Strings can be passed and are automatically converted in to
-        item.Text()
-
-        Args:
-            Text text, an element to add to the text
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
-        """
-        if isinstance(item, basestring):
-            self.items.append(PlainText(item))
-        elif isinstance(item, MessageElement):
-            self.items.append(item)
-        else:
-            raise InvalidMessageItemError
+        AbstractList.__init__(self, True, args)
 
     def to_html(self):
         """Render a Text MessageElement as html
@@ -77,7 +50,14 @@ class AbstractItemList(MessageElement):
         Raises:
             Errors are propagated
         """
-        raise NotImplementedError('Please don\'t use this class directly')
+        if self.items is None:
+            return
+        else:
+            html = '<ol>\n'
+            for item in self.items:
+                html += '<li>%s</li>\n' % item.to_html()
+            html += '</ol>'
+            return html
 
     def to_text(self):
         """Render a Text MessageElement as plain text
@@ -91,4 +71,11 @@ class AbstractItemList(MessageElement):
         Raises:
             Errors are propagated
         """
-        raise NotImplementedError('Please don\'t use this class directly')
+        if self.items is None:
+            return
+        else:
+            text = ''
+            for i, item in enumerate(self.items):
+                text += ' %s. %s\n' % (i, item.to_text())
+
+            return text

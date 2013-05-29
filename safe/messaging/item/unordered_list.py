@@ -15,10 +15,10 @@ __date__ = '24/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from abstract_item_list import AbstractItemList
+from abstract_list import AbstractList
 
 
-class UnorderedItemList(AbstractItemList):
+class UnorderedList(AbstractList):
     """A class to model free text in the messaging system """
 
     def __init__(self, *args):
@@ -36,7 +36,7 @@ class UnorderedItemList(AbstractItemList):
         Raises:
             Errors are propagated
         """
-        AbstractItemList.__init__(self, True, args)
+        AbstractList.__init__(self, True, args)
 
     def to_html(self):
         """Render a Text MessageElement as html

@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 from item.message_element import MessageElement, InvalidMessageItemError
-from . import Message, Text, Heading, UnorderedItemList
+from . import Message, Text, Heading, UnorderedList
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -85,14 +85,14 @@ class ErrorMessage():
         """
         message = Message()
         message.add(Heading('PROBLEM'))
-        list = UnorderedItemList()
+        list = UnorderedList()
         for p in self.problems:
             #p is _always_ not None
             list.add(p)
         message.add(list)
 
         if self.details.count(None) < len(self.details):
-            list = UnorderedItemList()
+            list = UnorderedList()
             message.add(Heading('DETAIL'))
             for d in self.details:
                 if d is not None:
@@ -100,7 +100,7 @@ class ErrorMessage():
             message.add(list)
 
         if self.suggestions.count(None) < len(self.suggestions):
-            list = UnorderedItemList()
+            list = UnorderedList()
             message.add(Heading('SUGGESTION'))
             for s in self.suggestions:
                 if s is not None:

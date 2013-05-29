@@ -23,7 +23,7 @@ from .item.heading import Heading
 from .item.paragraph import Paragraph
 from .item.success_paragraph import SuccessParagraph
 from .item.table import Table
-from .item.ordered_item_list import OrderedItemList
-from .item.unordered_item_list import UnorderedItemList
+from .item.ordered_list import OrderedList
+from .item.unordered_list import UnorderedList
 from message import Message
 from error_message import ErrorMessage
