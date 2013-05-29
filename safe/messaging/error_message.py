@@ -30,10 +30,10 @@ class ErrorMessage():
     def __init__(self, problem, detail=None, suggestion=None, traceback=None):
         """
         Args:
-            problem
-            details
-            suggestion
-            traceback
+            problem str or MessageElement describing a problem
+            details str or MessageElement with detail of a problem
+            suggestion str or MessageElement with a solution to the problem
+            traceback TraceBack of the problem
 
         Returns:
             None
@@ -53,9 +53,14 @@ class ErrorMessage():
 
     def _to_message_element(self, element):
         """
+        Args:
+            element the element to be checked and if necessary converted
 
-        :param element:
-        :return: :raise:
+        Returns:
+            the correct element
+
+        Raises:
+            Errors are propagated
         """
         if element is None:
             return None
@@ -67,10 +72,16 @@ class ErrorMessage():
             raise InvalidMessageItemError
 
     def _render(self):
-        """
+        """Create a Message version of this ErrorMessage
 
+        Args:
+            none
 
-        :return:
+        Returns:
+            the Message instance of this ErrorMessage
+
+        Raises:
+            Errors are propagated
         """
         m = Message()
         m.add(Heading('PROBLEM'))
@@ -93,11 +104,11 @@ class ErrorMessage():
         return m
 
     def append(self, error_message):
-        """add a MessageElement to the queue
+        """add a ErrorMessage to the end of the queue
 
 
         Args:
-            MessageElement message, an element to add to the message queue
+            ErrorMessage message, an element to add to the message queue
 
         Returns:
             None
@@ -111,12 +122,11 @@ class ErrorMessage():
         self.tracebacks = self.tracebacks + error_message.tracebacks
 
     def prepend(self, error_message):
-        """add a MessageElement to the queue
-
+        """add a ErrorMessage to the beginning of the queue
 
 
         Args:
-            MessageElement message, an element to add to the message queue
+            ErrorMessage message, an element to add to the message queue
 
         Returns:
             None
@@ -130,7 +140,7 @@ class ErrorMessage():
         self.tracebacks = error_message.tracebacks + self.tracebacks
 
     def clear(self):
-        """clear MessageElement queue
+        """clear ErrorMessage queue
 
         Args:
             None
@@ -147,7 +157,7 @@ class ErrorMessage():
         self.tracebacks = []
 
     def to_text(self):
-        """Render a MessageElement queue as plain text
+        """Render a ErrorMessage queue as plain text
 
         Args:
             None
@@ -162,7 +172,7 @@ class ErrorMessage():
         return self._render().to_text()
 
     def to_html(self):
-        """Render a MessageElement queue as html
+        """Render a ErrorMessage queue as html
 
         Args:
             None
