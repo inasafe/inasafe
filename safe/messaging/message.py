@@ -115,6 +115,16 @@ class Message(MessageElement):
             Errors are propagated
         """
         message = ''
+        last_was_text = False
         for m in self.message:
-            message += m.to_html() + '\n'
+            if last_was_text and not isinstance(m, Text):
+                message += '\n'
+
+            message += m.to_html()
+
+            if isinstance(m, Text):
+                last_was_text = True
+            else:
+                message += '\n'
+                last_was_text = False
         return message
