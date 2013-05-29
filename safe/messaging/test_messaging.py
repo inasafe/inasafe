@@ -24,6 +24,7 @@ from safe.messaging import (
     Text,
     EmphasizedText,
     ImportantText,
+    LinkText,
     Heading,
     Paragraph)
 
@@ -123,9 +124,10 @@ class MessagingTest(unittest.TestCase):
 
         t1 = Text('this is a text, ')
         t1.add(Text('this is another text '))
-        ts = ImportantText('and this is a strong text')
+        ts = ImportantText('and this is a strong text ')
         t1.add(ts)
-        t1.add(Text(' spaced text'))
+        tl = LinkText('http://google.ch', 'google link')
+        t1.add(tl)
         tp = Text('text for paragraph ')
         em = EmphasizedText('this is an emphasized paragraph text')
         tp.add(em)
@@ -142,8 +144,8 @@ class MessagingTest(unittest.TestCase):
             '*h1 title\n\n'
             '**h2 subtitle\n\n'
             '\nthe quick brown fox jumps over the lazy dog\n\n'
-            'this is a text, this is another text *and this is a strong text* '
-            'spaced text\n'
+            'this is a text, this is another text *and this is a strong text *'
+            '::google link [http://google.ch]\n'
             '\ntext for paragraph _this is an emphasized paragraph text_\n\n')
 
         res = m.to_text()
@@ -154,7 +156,7 @@ class MessagingTest(unittest.TestCase):
             '<h2>h2 subtitle</h2>\n'
             '<p>the quick brown fox jumps over the lazy dog</p>\n'
             'this is a text, this is another text <strong>and this is a strong '
-            'text</strong> spaced text\n'
+            'text </strong><a href="http://google.ch">google link</a>\n'
             '<p>text for paragraph <em>this is an emphasized paragraph text'
             '</em></p>\n')
         res = m.to_html()
@@ -169,9 +171,14 @@ class MessagingTest(unittest.TestCase):
 
         em1.append(em2)
         em1.prepend(em0)
-        expected_res = (
-            "PROBLEM:\nFP\nSP\nTP\n\nDETAIL:\nFP\nTD\n\nSUGGESTION:\nTS\n\n"
-            "TRACEBACK:\n['TBTB', None, 'TT']")
+        expected_res = ("<h1>PROBLEM</h1>\n"
+                        "FPSPTP\n"
+                        "<h1>DETAIL</h1>\n"
+                        "FPTD\n"
+                        "<h1>SUGGESTION</h1>\n"
+                        "TS\n"
+                        "<h1>TRACEBACK</h1>\n"
+                        "['TBTB', None, 'TT']")
         res = em1.to_html()
         self.assertEqual(expected_res, res)
 
@@ -180,7 +187,16 @@ class MessagingTest(unittest.TestCase):
 
         em1.append(em2)
         expected_res = (
-            "PROBLEM:\nFP\nSP\n\nDETAIL:\nSD\n\nTRACEBACK:\n[None, 'TBTB']")
+            "*PROBLEM\n"
+            "\n"
+            "FP\n"
+            "SP\n"
+            "*DETAIL\n"
+            "\n"
+            "SD\n"
+            "*TRACEBACK\n"
+            "\n"
+            "[None, 'TBTB']\n")
         res = em1.to_text()
         self.assertEqual(expected_res, res)
 
