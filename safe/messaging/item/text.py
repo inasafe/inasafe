@@ -61,7 +61,7 @@ class Text(MessageElement):
             Errors are propagated
         """
         if isinstance(text, basestring):
-            self.text.append(TextBase(text))
+            self.text.append(PlainText(text))
         elif isinstance(text, Text):
             self.text.append(text)
         else:
@@ -108,7 +108,7 @@ class Text(MessageElement):
             return text
 
 
-class TextBase(Text):
+class PlainText(Text):
     """A class to model free text in the messaging system
 
     This is here because having it as a separate file was creating import
