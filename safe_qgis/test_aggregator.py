@@ -21,7 +21,7 @@ import sys
 import os
 import logging
 from unittest import expectedFailure
-
+print sys.path
 
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
@@ -62,6 +62,7 @@ class AggregatorTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
+
         os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
         loadStandardLayers()
@@ -136,6 +137,8 @@ class AggregatorTest(unittest.TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         DOCK.runtimeKeywordsDialog.accept()
+        print myAttrKey
+        print DOCK.aggregator.attributes
         myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      myAttribute)

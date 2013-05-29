@@ -24,3 +24,4 @@ from .item.success_paragraph import SuccessParagraph
 from .item.item_list import ItemList
 from .item.table import Table
 from message import Message
+from error_message import ErrorMessage

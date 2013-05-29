@@ -20,6 +20,7 @@ import os
 
 from safe.messaging import (
     Message,
+    ErrorMessage,
     Text,
     EmphasizedText,
     ImportantText,
@@ -157,6 +158,30 @@ class MessagingTest(unittest.TestCase):
             '<p>text for paragraph <em>this is an emphasized paragraph text'
             '</em></p>\n')
         res = m.to_html()
+        self.assertEqual(expected_res, res)
+
+    def test_error_message(self):
+        """Tests high level error messages are rendered in plain text/html.
+        """
+        em1 = ErrorMessage('SP')
+        em2 = ErrorMessage('TP', 'TD', 'TS', 'TT')
+        em0 = ErrorMessage('FP', 'FP', traceback='TBTB')
+
+        em1.append(em2)
+        em1.prepend(em0)
+        expected_res = (
+            "PROBLEM:\nFP\nSP\nTP\n\nDETAIL:\nFP\nTD\n\nSUGGESTION:\nTS\n\n"
+            "TRACEBACK:\n['TBTB', None, 'TT']")
+        res = em1.to_html()
+        self.assertEqual(expected_res, res)
+
+        em1 = ErrorMessage('FP')
+        em2 = ErrorMessage('SP', detail='SD', traceback='TBTB')
+
+        em1.append(em2)
+        expected_res = (
+            "PROBLEM:\nFP\nSP\n\nDETAIL:\nSD\n\nTRACEBACK:\n[None, 'TBTB']")
+        res = em1.to_text()
         self.assertEqual(expected_res, res)
 
 if __name__ == '__main__':

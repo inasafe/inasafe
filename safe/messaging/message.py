@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 from item.message_element import MessageElement, InvalidMessageItemError
-from item.text import Text
+from . import Text
 
 
 LOGGER = logging.getLogger('InaSAFE')
