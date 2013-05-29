@@ -26,7 +26,9 @@ from safe.messaging import (
     ImportantText,
     LinkText,
     Heading,
-    Paragraph)
+    Paragraph,
+    OrderedItemList,
+    UnorderedItemList)
 
 
 class MessagingTest(unittest.TestCase):
@@ -93,6 +95,45 @@ class MessagingTest(unittest.TestCase):
 
         expected_res = '<p>FOO</p>'
         res = p.to_html()
+        self.assertEqual(expected_res, res)
+
+    def test_item_list(self):
+        """Tests complex messages are rendered correctly in plain text/html
+        """
+        l1 = OrderedItemList(Text('FOO'), ImportantText('BAR'), 'dsds')
+
+        expected_res = (
+            ' 0. FOO\n'
+            ' 1. *BAR*\n'
+            ' 2. dsds\n')
+        res = l1.to_text()
+        self.assertEqual(expected_res, res)
+
+        expected_res = (
+           '<ol>\n'
+           '<li>FOO</li>\n'
+           '<li><strong>BAR</strong></li>\n'
+           '<li>dsds</li>\n'
+           '</ol>')
+        res = l1.to_html()
+        self.assertEqual(expected_res, res)
+
+        l1 = UnorderedItemList(Text('FOO'), ImportantText('BAR'), 'dsds')
+
+        expected_res = (
+            ' - FOO\n'
+            ' - *BAR*\n'
+            ' - dsds\n')
+        res = l1.to_text()
+        self.assertEqual(expected_res, res)
+
+        expected_res = (
+           '<ul>\n'
+           '<li>FOO</li>\n'
+           '<li><strong>BAR</strong></li>\n'
+           '<li>dsds</li>\n'
+           '</ul>')
+        res = l1.to_html()
         self.assertEqual(expected_res, res)
 
     def test_message(self):

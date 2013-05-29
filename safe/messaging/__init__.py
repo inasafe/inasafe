@@ -22,7 +22,8 @@ from .item.link_text import LinkText
 from .item.heading import Heading
 from .item.paragraph import Paragraph
 from .item.success_paragraph import SuccessParagraph
-from .item.item_list import ItemList
 from .item.table import Table
+from .item.ordered_item_list import OrderedItemList
+from .item.unordered_item_list import UnorderedItemList
 from message import Message
 from error_message import ErrorMessage
