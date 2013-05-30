@@ -98,24 +98,24 @@ class MessagingTest(unittest.TestCase):
         res = p.to_html()
         self.assertEqual(expected_res, res)
 
-    def test_item_list(self):
+    def test_list(self):
         """Tests complex messages are rendered correctly in plain text/html
         """
         l1 = NumberedList(Text('FOO'), ImportantText('BAR'), 'dsds')
 
         expected_res = (
-            ' 0. FOO\n'
-            ' 1. *BAR*\n'
-            ' 2. dsds\n')
+            ' 1. FOO\n'
+            ' 2. *BAR*\n'
+            ' 3. dsds\n')
         res = l1.to_text()
         self.assertEqual(expected_res, res)
 
         expected_res = (
-           '<ol>\n'
-           '<li>FOO</li>\n'
-           '<li><strong>BAR</strong></li>\n'
-           '<li>dsds</li>\n'
-           '</ol>')
+            '<ol>\n'
+            '<li>FOO</li>\n'
+            '<li><strong>BAR</strong></li>\n'
+            '<li>dsds</li>\n'
+            '</ol>')
         res = l1.to_html()
         self.assertEqual(expected_res, res)
 
