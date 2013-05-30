@@ -1109,8 +1109,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown run method is called by the
         # accepted signal of the keywords dialog
-        myResult = self.aggregator.validateKeywords()
-        if self.aggregator.aoiMode and not myResult:
+        if not self.aggregator.validateKeywords():
             self.runtimeKeywordsDialog.setLayer(self.layer)
             #disable gui elements that should not be applicable for this
             self.runtimeKeywordsDialog.radExposure.setEnabled(False)

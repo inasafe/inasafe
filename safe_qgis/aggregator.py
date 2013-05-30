@@ -121,7 +121,6 @@ class Aggregator(QtCore.QObject):
 
         # If this flag is not True, no aggregation or postprocessing will run
         self.isValid = False
-        self.validateKeywords()
         self.showPostProcLayers = False
 
     def validateKeywords(self):
@@ -151,6 +150,12 @@ class Aggregator(QtCore.QObject):
         if self.aoiMode:
             self.isValid = True
             return
+
+        myTitle = self.tr('Waiting for attribute selection...')
+        myMessage = self.tr('Please select which attribute you want to use as '
+                            'ID for the aggregated results')
+
+        #TODO (MB) dispatch here
 
         # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
@@ -190,15 +195,19 @@ class Aggregator(QtCore.QObject):
             self.keywordIO.appendKeywords(self.layer, myKeywords)
             self.isValid = False
 
+        return self.isValid
+
     def deintersect(self, theHazardLayer, theExposureLayer):
         """Ensure there are no intersecting features with self.layer.
 
         Buildings are not split up by this method.
 
         """
-        # These should have already been clipped to analysis extents
+
         if not self.isValid:
-            raise
+            raise InvalidAggregatorError
+
+        # These should have already been clipped to analysis extents
         self.hazardLayer = theHazardLayer
         self.exposureLayer = theExposureLayer
         self._prepareLayer()
@@ -245,6 +254,10 @@ class Aggregator(QtCore.QObject):
         Raises:
             ReadLayerError
         """
+
+        if not self.isValid:
+            raise InvalidAggregatorError
+
         myImpactLayer = self.runner.impactLayer()
 
         myQGISImpactLayer = safeToQGISLayer(myImpactLayer)
@@ -292,7 +305,7 @@ class Aggregator(QtCore.QObject):
 
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
-            self.aggregateVectorImpact(myQGISImpactLayer)
+            self._aggregateVectorImpact(myQGISImpactLayer)
         elif myQGISImpactLayer.type() == QgsMapLayer.RasterLayer:
             self._aggregateRasterImpact(myQGISImpactLayer)
         else:
@@ -349,7 +362,7 @@ class Aggregator(QtCore.QObject):
                 self.layer.setRendererV2(myRenderer)
                 self.layer.saveDefaultStyle()
 
-    def aggregateVectorImpact(self, myQGISImpactLayer):
+    def _aggregateVectorImpact(self, myQGISImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
 
         Args:
