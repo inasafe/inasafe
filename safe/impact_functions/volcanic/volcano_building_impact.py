@@ -202,7 +202,6 @@ class VolcanoBuildingImpact(FunctionProvider):
         classes = create_classes(building_counts, len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
-        print classes, len(classes)
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])

@@ -257,3 +257,40 @@ def show_environment():
     fastprint('Git Url: %s\n' % env.git_url)
     fastprint('Repo Alias: %s\n' % env.repo_alias)
     fastprint('-------------------------------------------------\n')
+
+
+@task
+def setup_jenkins_jobs():
+    #fabgis.fabgis.initialise_jenkins_site()
+    xvfb_config = "org.jenkinsci.plugins.xvfb.XvfbBuildWrapper.xml"
+    job_dir = ['InaSAFE-master-QGIS1',
+               'InaSAFE-master-QGIS2',
+               'InaSAFE-release-QGIS1',
+               'InaSAFE-release-QGIS2']
+
+    with cd('/var/lib/jenkins/'):
+        if not exists(xvfb_config):
+            local_dir = os.path.dirname(__file__)
+            local_file = os.path.abspath(os.path.join(
+                local_dir,
+                'scripts',
+                'jenkins_jobs',
+                xvfb_config))
+            put(local_file,
+                "/var/lib/jenkins/", use_sudo=True)
+
+    with cd('/var/lib/jenkins/jobs/'):
+        for job in job_dir:
+            if not exists(job):
+                local_dir = os.path.dirname(__file__)
+                local_job_file = os.path.abspath(os.path.join(
+                    local_dir,
+                    'scripts',
+                    'jenkins_jobs',
+                    '%s.xml') % job)
+                sudo('mkdir /var/lib/jenkins/jobs/%s' % job)
+                put(local_job_file,
+                    "/var/lib/jenkins/jobs/%s/config.xml" % job,
+                    use_sudo=True)
+        sudo('chown -R jenkins:nogroup InaSAFE*')
+    sudo('service jenkins restart')
