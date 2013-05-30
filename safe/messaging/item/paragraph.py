@@ -22,7 +22,7 @@ from text import Text
 class Paragraph(MessageElement):
     """A Paragraph class for text blocks much like the p in html"""
 
-    def __init__(self, text=None):
+    def __init__(self, *args):
         """Creates a Paragraph object
 
         Strings can be passed and are automatically converted in to item.Text()
@@ -36,14 +36,7 @@ class Paragraph(MessageElement):
         Raises:
             Errors are propagated
         """
-        self.text = None
-        if text is not None:
-            if isinstance(text, basestring):
-                self.text = Text(text)
-            elif isinstance(text, Text):
-                self.text = text
-            else:
-                raise InvalidMessageItemError
+        self.text = Text(*args)
 
     def to_html(self):
         """Render a Paragraph MessageElement as html

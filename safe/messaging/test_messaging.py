@@ -53,7 +53,12 @@ class MessagingTest(unittest.TestCase):
         self.assertEqual(expected_res, res)
 
         t1.add(t2)
-        expected_res = 'FOOBAR'
+        expected_res = 'FOO BAR'
+        res = t1.to_html()
+        self.assertEqual(expected_res, res)
+
+        t1 = Text('FOO', ImportantText('BAR'), 'function')
+        expected_res = 'FOO <strong>BAR</strong> function'
         res = t1.to_html()
         self.assertEqual(expected_res, res)
 
@@ -98,6 +103,11 @@ class MessagingTest(unittest.TestCase):
         res = p.to_html()
         self.assertEqual(expected_res, res)
 
+        p1 = Paragraph('FOO', ImportantText('BAR'), 'function')
+        expected_res = '<p>FOO <strong>BAR</strong> function</p>'
+        res = p1.to_html()
+        self.assertEqual(expected_res, res)
+
     def test_list(self):
         """Tests complex messages are rendered correctly in plain text/html
         """
@@ -130,11 +140,11 @@ class MessagingTest(unittest.TestCase):
         self.assertEqual(expected_res, res)
 
         expected_res = (
-           '<ul>\n'
-           '<li>FOO</li>\n'
-           '<li><strong>BAR</strong></li>\n'
-           '<li>dsds</li>\n'
-           '</ul>')
+            '<ul>\n'
+            '<li>FOO</li>\n'
+            '<li><strong>BAR</strong></li>\n'
+            '<li>dsds</li>\n'
+            '</ul>')
         res = l1.to_html()
         self.assertEqual(expected_res, res)
 
