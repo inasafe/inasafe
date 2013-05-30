@@ -70,4 +70,4 @@ class Paragraph(MessageElement):
         if self.text is None:
             return
         else:
-            return '\n%s\n' % self.text
+            return '    %s\n' % self.text

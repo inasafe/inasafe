@@ -19,6 +19,7 @@ from .item.text import Text
 from .item.important_text import ImportantText
 from .item.emphasized_text import EmphasizedText
 from .item.link import Link
+from .item.line_break import LineBreak
 from .item.image import Image
 from .item.heading import Heading
 from .item.paragraph import Paragraph

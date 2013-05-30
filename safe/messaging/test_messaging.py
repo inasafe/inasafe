@@ -29,7 +29,8 @@ from safe.messaging import (
     Paragraph,
     NumberedList,
     BulletedList,
-    Image)
+    Image,
+    LineBreak)
 
 
 class MessagingTest(unittest.TestCase):
@@ -62,6 +63,19 @@ class MessagingTest(unittest.TestCase):
         res = t1.to_html()
         self.assertEqual(expected_res, res)
 
+    def test_line_break(self):
+        """Tests Line Breaks messages are rendered correctly in plain text/html.
+        """
+        t1 = Message('FOO', LineBreak())
+
+        expected_res = 'FOO\n'
+        res = t1.to_text()
+        self.assertEqual(expected_res, res)
+
+        expected_res = 'FOO<br/>\n'
+        res = t1.to_html()
+        self.assertEqual(expected_res, res)
+
     def test_text_complex(self):
         """Tests Text messages are rendered correctly in plain text/html.
         """
@@ -69,7 +83,7 @@ class MessagingTest(unittest.TestCase):
         ts = ImportantText('STRONG')
         t2 = Text(ts)
         t1.add(t2)
-        expected_res = 'FOO*STRONG*'
+        expected_res = 'FOO *STRONG*'
 
         res = t1.to_text()
         self.assertEqual(expected_res, res)
@@ -95,7 +109,7 @@ class MessagingTest(unittest.TestCase):
         """Tests paragraphs are rendered correctly in plain text/html.
         """
         p = Paragraph('FOO')
-        expected_res = '\nFOO\n'
+        expected_res = '    FOO\n'
         res = p.to_text()
         self.assertEqual(expected_res, res)
 
@@ -152,19 +166,18 @@ class MessagingTest(unittest.TestCase):
         """Tests high level messages are rendered correctly in plain text/html.
         """
         m1 = Message('FOO')
-        expected_res = 'FOO\n'
+        expected_res = 'FOO'
         res = m1.to_text()
         self.assertEqual(expected_res, res)
 
-        #TODO (MB) Check this double \n going on here
         m2 = Message(m1)
-        expected_res = 'FOO\n\n'
+        expected_res = 'FOO\n'
         res = m2.to_text()
         self.assertEqual(expected_res, res)
 
         m3 = Message(Message('FOO'))
         m3.add(Message('BAR'))
-        expected_res = 'FOO\n\nBAR\n\n'
+        expected_res = 'FOO\nBAR\n'
         res = m3.to_text()
         self.assertEqual(expected_res, res)
 
@@ -198,10 +211,10 @@ class MessagingTest(unittest.TestCase):
         expected_res = (
             '*h1 title\n\n'
             '**h2 subtitle\n\n'
-            '\nthe quick brown fox jumps over the lazy dog\n\n'
+            '    the quick brown fox jumps over the lazy dog\n\n'
             'this is a text, this is another text *and this is a strong text* '
             '::google link [http://google.ch]\n'
-            '\ntext for paragraph ::Google logo '
+            '    text for paragraph ::Google logo '
             '[http://www.google.ch/images/srpr/logo4w.png] '
             '_this is an emphasized paragraph text_\n\n')
 
@@ -210,7 +223,7 @@ class MessagingTest(unittest.TestCase):
 
         expected_res = (
             '<h1>h1 title</h1>\n'
-            '<h2>h2 subtitle </h2>\n'
+            '<h2>h2 subtitle</h2>\n'
             '<p>the quick brown fox jumps over the lazy dog</p>\n'
             'this is a text, this is another text <strong>and this is a strong '
             'text</strong> <a href="http://google.ch">google link</a>\n'
