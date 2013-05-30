@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from abstract_list import AbstractList
 
 
-class OrderedList(AbstractList):
+class NumberedList(AbstractList):
     """A class to model free text in the messaging system """
 
     def __init__(self, *args):

@@ -23,8 +23,8 @@ from safe.messaging import (
     Heading,
     Paragraph,
     SuccessParagraph,
-    UnorderedList,
-    OrderedList,
+    BulletedList,
+    NumberedList,
     Text,
     ImportantText,
     EmphasizedText)
