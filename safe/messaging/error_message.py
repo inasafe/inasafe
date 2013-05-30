@@ -17,7 +17,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 from item.message_element import MessageElement, InvalidMessageItemError
-from . import Message, Text, Heading, BulletedList
+from . import Message, Text, Heading, BulletedList, NumberedList
+
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -44,12 +45,16 @@ class ErrorMessage():
         self.problems = []
         self.details = []
         self.suggestions = []
-        self.tracebacks = []
+        self.tracebacks = NumberedList()
 
         self.problems.append(self._to_message_element(problem))
         self.details.append(self._to_message_element(detail))
         self.suggestions.append(self._to_message_element(suggestion))
-        self.tracebacks.append(traceback)
+
+        if traceback is not None:
+            tokens = traceback.split(' File')
+            for token in tokens:
+                self.tracebacks.add(Text('File' + token))
 
     def _to_message_element(self, element):
         """
@@ -85,31 +90,30 @@ class ErrorMessage():
         """
         message = Message()
         message.add(Heading('PROBLEM'))
-        list = BulletedList()
+        items = BulletedList()
         for p in self.problems:
             #p is _always_ not None
-            list.add(p)
-        message.add(list)
+            items.add(p)
+        message.add(items)
 
         if self.details.count(None) < len(self.details):
-            list = BulletedList()
+            items = BulletedList()
             message.add(Heading('DETAIL'))
             for d in self.details:
                 if d is not None:
-                    list.add(d)
-            message.add(list)
+                    items.add(d)
+            message.add(items)
 
         if self.suggestions.count(None) < len(self.suggestions):
-            list = BulletedList()
+            items = BulletedList()
             message.add(Heading('SUGGESTION'))
             for s in self.suggestions:
                 if s is not None:
-                    list.add(s)
-            message.add(list)
+                    items.add(s)
+            message.add(items)
 
-        if self.tracebacks.count(None) < len(self.tracebacks):
-            message.add(Heading('TRACEBACK'))
-            message.add(str(self.tracebacks))
+        message.add(Heading('TRACEBACK'))
+        message.add(self.tracebacks)
         return message
 
     def append(self, error_message):
