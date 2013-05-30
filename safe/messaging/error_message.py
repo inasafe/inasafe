@@ -20,7 +20,6 @@ from item.message_element import MessageElement, InvalidMessageItemError
 from . import Message, Text, Heading, BulletedList, NumberedList
 
 
-
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
@@ -91,7 +90,7 @@ class ErrorMessage():
         message = Message()
         message.add(Heading('PROBLEM'))
         items = BulletedList()
-        for p in self.problems:
+        for p in reversed(self.problems):
             #p is _always_ not None
             items.add(p)
         message.add(items)
@@ -99,7 +98,7 @@ class ErrorMessage():
         if self.details.count(None) < len(self.details):
             items = BulletedList()
             message.add(Heading('DETAIL'))
-            for d in self.details:
+            for d in reversed(self.details):
                 if d is not None:
                     items.add(d)
             message.add(items)
@@ -107,7 +106,7 @@ class ErrorMessage():
         if self.suggestions.count(None) < len(self.suggestions):
             items = BulletedList()
             message.add(Heading('SUGGESTION'))
-            for s in self.suggestions:
+            for s in reversed(self.suggestions):
                 if s is not None:
                     items.add(s)
             message.add(items)
@@ -117,7 +116,9 @@ class ErrorMessage():
         return message
 
     def append(self, error_message):
-        """add a ErrorMessage to the end of the queue
+        """add a ErrorMessage to the end of the queue.
+
+        Tracebacks are not appended.
 
 
         Args:
@@ -132,7 +133,6 @@ class ErrorMessage():
         self.problems = self.problems + error_message.problems
         self.details = self.details + error_message.details
         self.suggestions = self.suggestions + error_message.suggestions
-        self.tracebacks = self.tracebacks + error_message.tracebacks
 
     def prepend(self, error_message):
         """add a ErrorMessage to the beginning of the queue
