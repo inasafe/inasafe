@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from text import Text
 
 
-class LinkText(Text):
+class Link(Text):
     """A class to model emphasized text in the messaging system """
 
     def __init__(self, uri, text=None):

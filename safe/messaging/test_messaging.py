@@ -24,7 +24,7 @@ from safe.messaging import (
     Text,
     EmphasizedText,
     ImportantText,
-    LinkText,
+    Link,
     Heading,
     Paragraph,
     NumberedList,
@@ -168,7 +168,7 @@ class MessagingTest(unittest.TestCase):
         t1.add(Text('this is another text '))
         ts = ImportantText('and this is a strong text ')
         t1.add(ts)
-        tl = LinkText('http://google.ch', 'google link')
+        tl = Link('http://google.ch', 'google link')
         t1.add(tl)
         tp = Text('text for paragraph ')
         em = EmphasizedText('this is an emphasized paragraph text')
