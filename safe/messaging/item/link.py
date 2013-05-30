@@ -33,8 +33,6 @@ class Link(Text):
         Raises:
             Errors are propagated
         """
-        if text is None:
-            text = uri
 
         self.uri = uri
         self.text = text
@@ -51,7 +49,11 @@ class Link(Text):
         Raises:
             Errors are propagated
         """
-        return '<a href="%s">%s</a>' % (self.uri, self.text)
+
+        text = self.text
+        if text is None:
+            text = self.uri
+        return '<a href="%s">%s</a>' % (self.uri, text)
 
     def to_text(self):
         """Render as plain text
@@ -65,6 +67,6 @@ class Link(Text):
         Raises:
             Errors are propagated
         """
-        if self.uri == self.text:
+        if self.text is None:
             return '::%s' % self.uri
         return '::%s [%s]' % (self.text, self.uri)
