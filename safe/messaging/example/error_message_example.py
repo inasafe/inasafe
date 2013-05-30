@@ -37,6 +37,7 @@ class SafeError(Exception):
             self.error_message = ErrorMessage(
                 message.message, traceback=traceback.format_exc())
 
+
 def error_creator1():
     """Simple function that will create an error."""
     raise IOError('File could not be read.')
