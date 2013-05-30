@@ -21,7 +21,7 @@ from message_element import MessageElement, InvalidMessageItemError
 class Text(MessageElement):
     """free text in the messaging system with automatically added whitespaces"""
 
-    def __init__(self, text=None):
+    def __init__(self, *args):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
@@ -38,7 +38,7 @@ class Text(MessageElement):
         """
         self.text = []
 
-        if text is not None:
+        for text in args:
             self.add(text)
 
     def add(self, text):
