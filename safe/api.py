@@ -61,6 +61,11 @@ from safe.common.polygon import in_and_outside_polygon
 from safe.common.tables import Table, TableCell, TableRow
 from safe.postprocessors import (get_postprocessors,
                                  get_postprocessor_human_name)
+from safe import messaging
+DYNAMIC_MESSAGE_SIGNAL = 'DynamicMessage'
+STATIC_MESSAGE_SIGNAL = 'StaticMessage'
+ERROR_MESSAGE_SIGNAL = 'ErrorMessage'
+
 # hack for excluding test-related import in builded package
 try:
     from safe.common.testing import (

@@ -69,6 +69,17 @@ from safe_qgis.safe_interface import (
     get_version,
     temp_dir,
     ReadLayerError)
+from safe_interface.messaging import (
+    Message,
+    Text,
+    Heading,
+    BulletedList,
+    NumberedList,
+    ErrorMessage)
+from safe_interface import (
+    DYNAMIC_MESSAGE_SIGNAL,
+    STATIC_MESSAGE_SIGNAL,
+    ERROR_MESSAGE_SIGNAL)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
@@ -96,6 +107,8 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
+
+from third_party.pydispatch import dispatcher
 
 
 #noinspection PyArgumentList
@@ -125,6 +138,28 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
+
+        self.message_queue = MessageViewer()
+        # Set up dispatcher for dynamic messages
+        # Dynamic messages will not clear the message queue so will be appended
+        # to existing user messages
+        dispatcher.connect(
+            self.message_queue.dynamic_message_event,
+            signal=DYNAMIC_MESSAGE_SIGNAL,
+            sender=dispatcher.Any)
+        # Set up dispatcher for static messages
+        # Static messages clear the message queue and so the display is 'reset'
+        dispatcher.connect(
+            self.message_queue.static_message_event,
+            signal=STATIC_MESSAGE_SIGNAL,
+            sender=dispatcher.Any)
+        # Set up dispatcher for error messages
+        # Static messages clear the message queue and so the display is 'reset'
+        dispatcher.connect(
+            self.message_queue.static_message_event,
+            signal=ERROR_MESSAGE_SIGNAL,
+            sender=dispatcher.Any)
+
         myLongVersion = get_version()
         LOGGER.debug('Version: %s' % myLongVersion)
         myTokens = myLongVersion.split('.')
@@ -183,6 +218,66 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Enable on the fly projection by default
         myCanvas.mapRenderer().setProjectionsEnabled(True)
+
+    def showStaticMessage(self, theMessage):
+        """Send a static message to the message viewer.
+
+        Static messages cause any previous content in the MessageViewer to be
+        replaced with new content.
+
+        Args:
+            theMessage: Message - an instance of our rich message class.
+
+        Returns:
+            None
+
+        Raies:
+            None
+        """
+        dispatcher.send(
+            signal=STATIC_MESSAGE_SIGNAL,
+            sender=self,
+            message=theMessage)
+
+    def showStaticMessage(self, theMessage):
+        """Send a dynamic message to the message viewer.
+
+        Dynamic messages are appended to any existing content in the
+        MessageViewer.
+
+        Args:
+            theMessage: Message - an instance of our rich message class.
+
+        Returns:
+            None
+
+        Raies:
+            None
+        """
+        dispatcher.send(
+            signal=DYNAMIC_MESSAGE_SIGNAL,
+            sender=self,
+            message=theMessage)
+
+    def showErrorMessage(self, theErrorMessage):
+        """Send an error message to the message viewer.
+
+        Error messages cause any previous content in the MessageViewer to be
+        replaced with new content.
+
+        Args:
+            theMessage: ErrorMessage - an instance of our rich message class.
+
+        Returns:
+            None
+
+        Raies:
+            None
+        """
+        dispatcher.send(
+            signal=ErrorMessage.,
+            sender=self,
+            message=theMessage)
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
@@ -1642,33 +1737,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myCrs.createFromEpsg(4326)
 
         return extentToGeoArray(myRect, myCrs)
-
-    def htmlHeader(self):
-        """Get a standard html header for wrapping content in."""
-        if self.header is None:
-            self.header = htmlHeader()
-        return self.header
-
-    def htmlFooter(self):
-        """Get a standard html footer for wrapping content in."""
-        if self.footer is None:
-            self.footer = htmlFooter()
-        return self.footer
-
-    def displayHtml(self, theMessage):
-        """Apply header and footer to html snippet and display in wvResults.
-
-        Args:
-            theMessage: An html snippet. Do not include head and body elements.
-
-        Returns:
-            None
-
-        Raises:
-            None
-        """
-        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
-        self.wvResults.setHtml(myHtml)
 
     def layerChanged(self, theLayer):
         """Handler for when the QGIS active layer is changed.
