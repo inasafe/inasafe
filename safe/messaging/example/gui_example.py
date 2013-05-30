@@ -1,6 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **Dispatcher
-exampled.**
+InaSAFE Disaster risk assessment tool by AusAid - **Dispatcher gui example.**
 
 Contact : ole.moller.nielsen@gmail.com
 
