@@ -28,7 +28,8 @@ from safe.messaging import (
     Heading,
     Paragraph,
     NumberedList,
-    BulletedList)
+    BulletedList,
+    Image)
 
 
 class MessagingTest(unittest.TestCase):
@@ -166,12 +167,14 @@ class MessagingTest(unittest.TestCase):
 
         t1 = Text('this is a text, ')
         t1.add(Text('this is another text '))
-        ts = ImportantText('and this is a strong text ')
+        ts = ImportantText('and this is a strong text')
         t1.add(ts)
         tl = Link('http://google.ch', 'google link')
         t1.add(tl)
         tp = Text('text for paragraph ')
         em = EmphasizedText('this is an emphasized paragraph text')
+        im = Image('http://www.google.ch/images/srpr/logo4w.png', 'Google logo')
+        tp.add(im)
         tp.add(em)
         p2 = Paragraph(tp)
 
@@ -186,20 +189,24 @@ class MessagingTest(unittest.TestCase):
             '*h1 title\n\n'
             '**h2 subtitle\n\n'
             '\nthe quick brown fox jumps over the lazy dog\n\n'
-            'this is a text, this is another text *and this is a strong text *'
+            'this is a text, this is another text *and this is a strong text* '
             '::google link [http://google.ch]\n'
-            '\ntext for paragraph _this is an emphasized paragraph text_\n\n')
+            '\ntext for paragraph ::Google logo '
+            '[http://www.google.ch/images/srpr/logo4w.png] '
+            '_this is an emphasized paragraph text_\n\n')
 
         res = m.to_text()
         self.assertEqual(expected_res, res)
 
         expected_res = (
             '<h1>h1 title</h1>\n'
-            '<h2>h2 subtitle</h2>\n'
+            '<h2>h2 subtitle </h2>\n'
             '<p>the quick brown fox jumps over the lazy dog</p>\n'
             'this is a text, this is another text <strong>and this is a strong '
-            'text </strong><a href="http://google.ch">google link</a>\n'
-            '<p>text for paragraph <em>this is an emphasized paragraph text'
+            'text</strong> <a href="http://google.ch">google link</a>\n'
+            '<p>text for paragraph <img src="'
+            'http://www.google.ch/images/srpr/logo4w.png" title="Google logo" '
+            'alt="Google logo"/> <em>this is an emphasized paragraph text'
             '</em></p>\n')
         res = m.to_html()
         self.assertEqual(expected_res, res)

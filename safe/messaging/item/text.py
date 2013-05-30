@@ -19,7 +19,7 @@ from message_element import MessageElement, InvalidMessageItemError
 
 
 class Text(MessageElement):
-    """A class to model free text in the messaging system """
+    """free text in the messaging system with automatically added whitespaces"""
 
     def __init__(self, text=None):
         """Creates a Text object to contain a list of Text objects
@@ -80,8 +80,8 @@ class Text(MessageElement):
         else:
             text = ''
             for t in self.text:
-                text += t.to_html()
-            return text
+                text += t.to_html() + ' '
+            return ' '.join(text.split())
 
     def to_text(self):
         """Render a Text MessageElement as plain text
@@ -100,8 +100,8 @@ class Text(MessageElement):
         else:
             text = ''
             for t in self.text:
-                text += t.to_text()
-            return text
+                text += t.to_text() + ' '
+            return ' '.join(text.split())
 
 
 class PlainText(Text):
