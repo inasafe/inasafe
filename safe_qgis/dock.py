@@ -970,7 +970,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
-    def getPostProcessingLayer(self):
+    def getAggregationLayer(self):
 
         """Get the QgsMapLayer currently selected in the post processing combo.
 
@@ -1026,7 +1026,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Create an aggregator for this analysis run."""
         self.aggregator = Aggregator(
             self.iface,
-            self.getPostProcessingLayer())
+            self.getAggregationLayer())
         self.aggregator.showIntermediateLayers = self.showIntermediateLayers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
         try:
@@ -1148,7 +1148,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #check and generate keywords for the aggregation layer
         try:
-            if ((self.getPostProcessingLayer() is not None) and
+            if ((self.getAggregationLayer() is not None) and
                     (self.lastUsedFunction != self.getFunctionID())):
                 # Remove category keyword so we force the keyword editor to
                 # popup. See the beginning of checkAttributes to
