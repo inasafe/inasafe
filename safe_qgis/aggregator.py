@@ -1047,3 +1047,13 @@ class Aggregator(QtCore.QObject):
         except KeywordDbError, e:
             raise e
         return myLayer
+
+    def _sendMessage(self, theMessage, dynamic=True):
+        theType = STATIC_MESSAGE_SIGNAL
+        if dynamic:
+            theType = DYNAMIC_MESSAGE_SIGNAL
+
+        dispatcher.send(
+            signal=theType,
+            sender=self,
+            message=theMessage)
