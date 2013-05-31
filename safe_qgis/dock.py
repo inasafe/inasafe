@@ -1013,11 +1013,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHazardLayer, myExposureLayer = self.optimalClip()
         # See if the inputs need further refinement for aggregations
-        myHazardLayer, myExposureLayer = self.aggregator.deintersect(
-            myHazardLayer, myExposureLayer)
+        self.aggregator.deintersect(myHazardLayer, myExposureLayer)
         # Identify input layers
-        self.calculator.setHazardLayer(myHazardLayer.source())
-        self.calculator.setExposureLayer(myExposureLayer.source())
+        self.calculator.setHazardLayer(self.aggregator.hazardLayer.source())
+        self.calculator.setExposureLayer(self.aggregator.exposureLayer.source())
 
         # Use canonical function name to identify selected function
         myFunctionID = self.getFunctionID()
@@ -1658,8 +1657,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Args:
             None
         Returns:
-            A two-tuple containing the paths to the clipped hazard and
-            exposure layers.
+            A two-tuple containing the clipped hazard and exposure layers.
 
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
@@ -1683,7 +1681,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 22
         self.showBusy(myTitle, myMessage, myProgress)
         try:
-            myClippedHazardPath = clipLayer(theLayer=myHazardLayer,
+            myClippedHazard = clipLayer(theLayer=myHazardLayer,
                                             theExtent=myBufferedGeoExtent,
                                             theCellSize=myCellSize,
                                             theHardClipFlag=self.clipHard)
@@ -1698,13 +1696,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'intersection of the hazard layer and the current view extents.')
         myProgress = 33
         self.showBusy(myTitle, myMessage, myProgress)
-        myClippedExposurePath = clipLayer(
+        myClippedExposure = clipLayer(
             theLayer=myExposureLayer,
             theExtent=myGeoExtent,
             theCellSize=myCellSize,
             theExtraKeywords=myExtraExposureKeywords,
             theHardClipFlag=self.clipHard)
-        return myClippedHazardPath, myClippedExposurePath
+        return myClippedHazard, myClippedExposure
 
         ############################################################
         # logic checked to here..............

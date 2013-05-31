@@ -224,16 +224,12 @@ class Aggregator(QtCore.QObject):
         self.exposureLayer = theExposureLayer
         self._prepareLayer()
 
-        myHazardFilename = theHazardLayer
-        myExposureFilename = theExposureLayer
-
         if not self.aoiMode:
             # This is a safe version of the aggregation layer
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
             if isPolygonLayer(self.hazardLayer):
-                myHazardFilename = self._preparePolygonLayer(
-                    theHazardFilename, self.hazardLayer)
+                self.hazardLayer = self._preparePolygonLayer(self.hazardLayer)
 
             if isPolygonLayer(self.exposureLayer):
                 # Find out the subcategory for this layer
@@ -241,14 +237,8 @@ class Aggregator(QtCore.QObject):
                     self.exposureLayer, 'subcategory')
                 # We dont want to chop up buildings!
                 if mySubcategory != 'structure':
-                    myExposureFilename = self._preparePolygonLayer(
-                        theExposureFilename, self.exposureLayer)
-
-            return myHazardFilename, myExposureFilename
-
-        else:
-            # We do nothing, just return the original names because the
-            return theHazardFilename, theExposureFilename
+                    self.exposureLayer = self._preparePolygonLayer(
+                        self.exposureLayer)
 
     def aggregate(self):
         """Do any requested aggregation post processing.
@@ -724,7 +714,7 @@ class Aggregator(QtCore.QObject):
             self.attributes[myFemaleRatioKey] = \
                 myFemRatioAttr
 
-    def _preparePolygonLayer(self, theLayerFilename, theQgisLayer):
+    def _preparePolygonLayer(self, theQgisLayer):
         """Create a new layer with no intersecting features to self.layer.
 
         A helper function to align the polygons to the postprocLayer
@@ -736,15 +726,16 @@ class Aggregator(QtCore.QObject):
         The function assumes EPSG:4326 but no checks are enforced
 
         Args:
-            theLayerFilename str of the file to be processed
+            theQgisLayer of the file to be processed
         Returns:
-            str of the processed file
+            QgisLayer of the processed file
 
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
         """
 #        import time
 #        startTime = time.clock()
+        theLayerFilename = theQgisLayer.source()
         myPostprocPolygons = self.safeLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
@@ -999,11 +990,16 @@ class Aggregator(QtCore.QObject):
 
         del mySHPWriter
 #        LOGGER.debug('Created: %s' % self.preprocessedFeatureCount)
+
+        myOutLayer = QgsVectorLayer(myOutFilename, theQgisLayer.title(), 'ogr')
+        if not myOutLayer.isValid():
+            #TODO (MB) use a better exception
+            raise Exception('Invalid qgis Layer')
+
         if self.showIntermediateLayers:
-            self.iface.addVectorLayer(myOutFilename,
-                                      theQgisLayer.title(),
-                                      'ogr')
-        return myOutFilename
+            QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+        return myOutLayer
 
     def _extentsToMemoryLayer(self):
         """Memory layer for aggregation by using canvas extents as feature.

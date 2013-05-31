@@ -101,7 +101,7 @@ def clipLayer(theLayer,
             for raster layer clipping.**
 
     Returns:
-        Path to the output clipped layer (placed in the system temp dir).
+        Clipped layer (placed in the system temp dir).
         The output layer will be reprojected to EPSG:4326 if needed.
 
     Raises:
