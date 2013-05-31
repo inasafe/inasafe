@@ -210,6 +210,8 @@ class Aggregator(QtCore.QObject):
     def deintersect(self, theHazardLayer, theExposureLayer):
         """Ensure there are no intersecting features with self.layer.
 
+        This should only happen after initial checks have been made.
+
         Buildings are not split up by this method.
 
         """
@@ -669,6 +671,7 @@ class Aggregator(QtCore.QObject):
         return
 
     def _prepareLayer(self):
+        """Prepare the aggregation layer to match analysis extents."""
         myMessage = m.Message(
             m.Heading(self.tr('Preparing aggregation layer...')),
             m.Paragraph(self.tr(
