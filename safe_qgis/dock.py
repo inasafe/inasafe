@@ -277,7 +277,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         dispatcher.send(
             signal=ERROR_MESSAGE_SIGNAL,
             sender=self,
-            message=theMessage)
+            message=theErrorMessage)
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
