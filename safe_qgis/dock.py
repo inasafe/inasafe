@@ -1035,7 +1035,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:
             myMessage = getExceptionWithStacktrace(e, theHtml=True)
-            self.displayHtml(myMessage)
+            # TODO - use new error message API! TS
+            self.showErrorMessage(m.Message(str(myMessage)))
             self.hideBusy()
             return
         try:
@@ -1063,7 +1064,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
-            self.displayHtml(myMessage)
+            # TODO - use new error message API! TS
+            self.showErrorMessage(m.Message(str(myMessage)))
             self.hideBusy()
             return
         # Create an aggregator for this analysis run
@@ -1274,10 +1276,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.restoreOverrideCursor()
         self.hideBusy()
         LOGGER.exception(theMessage)
-        myMessage = getExceptionWithStacktrace(theException,
-                                               theHtml=True,
-                                               theContext=theMessage)
-        self.displayHtml(myMessage)
+        myMessage = getExceptionWithStacktrace(
+            theException, theHtml=True, theContext=theMessage)
+        # TODO - use new error message API! TS
+        self.showErrorMessage(m.Message(str(myMessage)))
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -1294,11 +1296,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             # Display message and traceback
             myMessage = getExceptionWithStacktrace(e, theHtml=True)
-            self.displayHtml(myMessage)
+            # TODO - use new error message API! TS
+            self.showErrorMessage(m.Message(str(myMessage)))
         else:
             # On success, display generated report
-
-            self.displayHtml(myReport)
+            self.showStaticMessage(m.Message(str(myReport)))
         self.saveState()
         # Hide hour glass
         self.hideBusy()
@@ -1444,7 +1446,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                   '    </td>'
                   '  </tr>'
                   '</table>')
-        self.displayHtml(myHtml)
+        self.showStaticMessage(m.Message(myHtml))
         self.repaint()
         QtGui.qApp.processEvents()
         self.grpQuestion.setEnabled(False)
@@ -1794,21 +1796,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             except (KeywordNotFoundError, HashNotFoundError,
                     InvalidParameterError), e:
                 myContext = self.tr(
-                    'No keywords have been defined'
-                    ' for this layer yet. If you wish to use it as'
-                    ' an impact or hazard layer in a scenario, please'
-                    ' use the keyword editor. You can open the keyword'
-                    ' editor by clicking on the'
+                    'No keywords have been defined for this layer yet. If you '
+                    'wish to use it as an impact or hazard layer in a '
+                    'scenario, please use the keyword editor. You can open the '
+                    'keyword editor by clicking on the '
                     ' <img src="qrc:/plugins/inasafe/keywords.png" '
-                    ' width="16" height="16"> icon'
-                    ' in the toolbar, or choosing Plugins -> InaSAFE'
-                    ' -> Keyword Editor from the menus.')
-                myReport += getExceptionWithStacktrace(e, theHtml=True,
-                                                       theContext=myContext)
+                    ' width="16" height="16"> icon in the toolbar, or choosing '
+                    'Plugins -> InaSAFE -> Keyword Editor from the menus.')
+                myReport += getExceptionWithStacktrace(
+                    e, theHtml=True, theContext=myContext)
             except Exception, e:
                 myReport += getExceptionWithStacktrace(e, theHtml=True)
             if myReport is not None:
-                self.displayHtml(myReport)
+                self.showStaticMessage(m.Message(str(myReport)))
         else:
             LOGGER.debug('Layer is None')
 
@@ -1931,22 +1931,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (Ole): This branch is not covered by the tests
             myReport = getExceptionWithStacktrace(e, theHtml=True)
             if myReport is not None:
-                self.displayHtml(myReport)
+                self.showStaticMessage(m.Message(myReport))
 
         # Make sure the file paths can wrap nicely:
         myWrappedMapPath = myMapPdfFilePath.replace(os.sep, '<wbr>' + os.sep)
         myWrappedHtmlPath = myHtmlPdfPath.replace(os.sep, '<wbr>' + os.sep)
-        myStatus = self.tr('Your PDF was created....opening using '
-                           'the default PDF viewer on your system. '
-                           'The generated pdfs were saved as:%1'
-                           '%2%1 and %1%3').\
-            arg('<br>').arg(QtCore.QString(
-                            myWrappedMapPath)).\
+        myStatus = self.tr(
+            'Your PDF was created....opening using the default PDF viewer on '
+            'your system. The generated pdfs were saved as:%1%2%1 and %1%3').\
+            arg('<br>').arg(QtCore.QString(myWrappedMapPath)).\
             arg(QtCore.QString(myWrappedHtmlPath))
 
-        self.showBusy(self.tr('Map Creator'),
-                      myStatus,
-                      theProgress=80)
+        self.showDynamicMessage(self.tr('Map Creator'))
+        self.showDynamicMessage(myStatus)
 
         # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
         QtGui.QDesktopServices.openUrl(
