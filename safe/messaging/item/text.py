@@ -56,10 +56,8 @@ class Text(MessageElement):
         Raises:
             Errors are propagated
         """
-        if isinstance(text, basestring):
+        if isinstance(text, basestring) or self._is_qstring(text):
             self.text.append(PlainText(text))
-        elif self._is_qstring(text):
-            self.text.append(str(text))
         elif isinstance(text, Text):
             self.text.append(text)
         else:
@@ -109,8 +107,8 @@ class Text(MessageElement):
 class PlainText(Text):
     """A class to model free text in the messaging system
 
-    This is here because having it as a separate file was creating import
-    problems probably due to a circular reference
+    We broke our 'one class per file' here because having it as a
+    separate file was creating import problems due to a circular references.
     """
 
     def __init__(self, text):
@@ -125,7 +123,10 @@ class PlainText(Text):
         Raises:
             Errors are propagated
         """
-        self.text = text
+        if self._is_qstring(text):
+            self.text = str(text)
+        else:
+            self.text = text
 
     def to_html(self):
         """Render as html

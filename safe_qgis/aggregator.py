@@ -59,6 +59,10 @@ from safe_qgis.safe_interface import (
     get_postprocessors,
     get_postprocessor_human_name,
     messaging as m)
+from safe_interface import (
+    DYNAMIC_MESSAGE_SIGNAL,
+    STATIC_MESSAGE_SIGNAL,
+    ERROR_MESSAGE_SIGNAL)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
