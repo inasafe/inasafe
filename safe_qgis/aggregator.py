@@ -97,7 +97,7 @@ class Aggregator(QtCore.QObject):
            no exceptions explicitly raised
         """
 
-        super(Aggregator, self).__init__()
+        QtCore.QObject.__init__(self)
 
         # This is used to hold an *in memory copy* of the aggregation layer
         # or None if the clip extents should be used.
@@ -223,13 +223,14 @@ class Aggregator(QtCore.QObject):
         self.hazardLayer = theHazardLayer
         self.exposureLayer = theExposureLayer
         self._prepareLayer()
-        # This is a safe version of the aggregation layer
-        self.safeLayer = safe_read_layer(str(self.layer.source()))
 
         myHazardFilename = theHazardLayer
         myExposureFilename = theExposureLayer
 
         if not self.aoiMode:
+            # This is a safe version of the aggregation layer
+            #TODO (MB) OK?
+            self.safeLayer = safe_read_layer(str(self.layer.source()))
 
             if isPolygonLayer(self.hazardLayer):
                 myHazardFilename = self._preparePolygonLayer(
@@ -247,6 +248,7 @@ class Aggregator(QtCore.QObject):
             return myHazardFilename, myExposureFilename
 
         else:
+            self.safeLayer = None
             # We do nothing, just return the original names because the
             return theHazardFilename, theExposureFilename
 
@@ -275,6 +277,7 @@ class Aggregator(QtCore.QObject):
         myQGISImpactLayer = safeToQGISLayer(myImpactLayer)
         if not myQGISImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
+            # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
         myLayerName = str(self.tr('%1 aggregated to %2').arg(
             myQGISImpactLayer.name()).arg(self.layer.name()))
@@ -324,6 +327,7 @@ class Aggregator(QtCore.QObject):
             myMessage = self.tr('%1 is %2 but it should be either vector or '
                                 'raster').\
                 arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
+            # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
         if self.showPostProcLayers and self.aoiMode:
