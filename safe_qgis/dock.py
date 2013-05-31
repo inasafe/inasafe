@@ -1311,6 +1311,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.showStaticMessage(m.Message(str(myReport)))
         self.saveState()
         # Hide hour glass
+        self.disableBusyCursor()
         self.hideBusy()
 
     def _completed(self):
@@ -1385,7 +1386,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Add layers to QGIS
         myLayersToAdd = []
-        if self.showIntermediateLayers and self.aggregator.aoiMode:
+        if self.showIntermediateLayers and not self.aggregator.aoiMode:
             myLayersToAdd.append(self.aggregator.layer)
         myLayersToAdd.append(myQGISImpactLayer)
         QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
@@ -1518,6 +1519,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myManager = PostprocessorManager(self.aggregator)
         myManager.functionParams = self.functionParams
         myManager.run()
+        self.completed()
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
