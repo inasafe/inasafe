@@ -229,7 +229,6 @@ class Aggregator(QtCore.QObject):
 
         if not self.aoiMode:
             # This is a safe version of the aggregation layer
-            #TODO (MB) OK?
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
             if isPolygonLayer(self.hazardLayer):
@@ -248,7 +247,6 @@ class Aggregator(QtCore.QObject):
             return myHazardFilename, myExposureFilename
 
         else:
-            self.safeLayer = None
             # We do nothing, just return the original names because the
             return theHazardFilename, theExposureFilename
 
@@ -330,7 +328,7 @@ class Aggregator(QtCore.QObject):
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers and self.aoiMode:
+        if self.showIntermediateLayers and not self.aoiMode:
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
@@ -455,7 +453,7 @@ class Aggregator(QtCore.QObject):
         myImpactGeoms = mySafeImpactLayer.get_geometry()
         myImpactValues = mySafeImpactLayer.get_data()
 
-        if self.aoiMode:
+        if not self.aoiMode:
             myPostprocPolygons = self.safeLayer.get_geometry()
 
             if (mySafeImpactLayer.is_point_data or
@@ -688,7 +686,6 @@ class Aggregator(QtCore.QObject):
         if self.layer is None:
             self.layer = self._extentsToMemoryLayer()
             # Area Of Interest (AOI) mode flag
-            self.aoiMode = True
         else:
             myGeoExtent = extentToGeoArray(
                 self.exposureLayer.extent(),
@@ -698,7 +695,6 @@ class Aggregator(QtCore.QObject):
                 theExtent=myGeoExtent)
             self.layer = QgsVectorLayer(
                 myClippedLayer.source(), 'aggregation', 'ogr')
-            self.aoiMode = False
 
     def _countFieldName(self):
         return self.prefix + 'count'
@@ -1003,7 +999,7 @@ class Aggregator(QtCore.QObject):
 
         del mySHPWriter
 #        LOGGER.debug('Created: %s' % self.preprocessedFeatureCount)
-        if self.showPostProcLayers:
+        if self.showIntermediateLayers:
             self.iface.addVectorLayer(myOutFilename,
                                       theQgisLayer.title(),
                                       'ogr')
