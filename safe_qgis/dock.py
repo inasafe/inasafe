@@ -1471,11 +1471,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnRunStop.setEnabled(True)
         self.repaint()
 
-    def postProcess(self):
-        myManager = PostprocessorManager(self.aggregator)
-        myManager.functionParams = self.functionParams
-        myManager.run()
-
     def aggregate(self):
         """Run all post processing steps.
 
@@ -1518,6 +1513,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.aggregator.errorMessage
             )
             self._sendMessage(myMessage)
+
+    def postProcess(self):
+        myManager = PostprocessorManager(self.aggregator)
+        myManager.functionParams = self.functionParams
+        myManager.run()
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
