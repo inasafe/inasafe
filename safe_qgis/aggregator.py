@@ -56,7 +56,8 @@ from safe_qgis.safe_interface import (
     calculate_polygon_centroid,
     unique_filename,
     get_postprocessors,
-    get_postprocessor_human_name)
+    get_postprocessor_human_name,
+    messaging as m)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
@@ -64,6 +65,8 @@ from safe_qgis.exceptions import (
     InvalidAggregatorError)
 
 from third_party.odict import OrderedDict
+
+from third_party.pydispatch import dispatcher
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -151,11 +154,14 @@ class Aggregator(QtCore.QObject):
             self.isValid = True
             return
 
-        myTitle = self.tr('Waiting for attribute selection...')
-        myMessage = self.tr('Please select which attribute you want to use as '
-                            'ID for the aggregated results')
-
-        #TODO (MB) dispatch here
+        myMessage = m.Message(
+            m.Heading(self.tr('Waiting for attribute selection...')),
+            m.Paragraph(self.tr('Please select which attribute you want to use'
+                                ' as ID for the aggregated results')))
+        dispatcher.send(
+            signal=STATIC_MESSAGE_SIGNAL,
+            sender=self,
+            message=myMessage)
 
         # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
