@@ -28,6 +28,7 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsFeature,
     QgsRectangle,
+    QgsPoint,
     QgsField,
     QgsVectorLayer,
     QgsVectorFileWriter,
@@ -1009,6 +1010,22 @@ class Aggregator(QtCore.QObject):
         Returns:
             QgsMapLayer - a memory layer representing the extents of the clip.
         """
+
+        # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
+        myCanvas = self.iface.mapCanvas()
+        myRect = myCanvas.extent()
+
+        if myCanvas.hasCrsTransformEnabled():
+            myCrs = myCanvas.mapRenderer().destinationCrs()
+        else:
+            # some code duplication from extentToGeoArray here
+            # in favour of clarity of logic...
+            myCrs = QgsCoordinateReferenceSystem()
+            myCrs.createFromEpsg(4326)
+
+        myGeoExtent = extentToGeoArray(myRect, myCrs)
+        # End of shamelessly duplicated code
+
         myUUID = str(uuid.uuid4())
         myUri = 'Polygon?crs=epsg:4326&index=yes&uuid=%s' % myUUID
         myName = 'tmpPostprocessingLayer'
@@ -1033,8 +1050,8 @@ class Aggregator(QtCore.QObject):
         # noinspection PyCallByClass,PyTypeChecker
         myFeature.setGeometry(QgsGeometry.fromRect(
             QgsRectangle(
-                QgsPoint(theGeoExtent[0], theGeoExtent[1]),
-                QgsPoint(theGeoExtent[2], theGeoExtent[3]))))
+                QgsPoint(myGeoExtent[0], myGeoExtent[1]),
+                QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
         myFeature.setAttributeMap({0: QtCore.QVariant(
             self.tr('Entire area'))})
         myProvider.addFeatures([myFeature])
