@@ -1237,7 +1237,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.postProcess)
+                               self.aggregate)
         QtGui.qApp.setOverrideCursor(
             QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
@@ -1465,16 +1465,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                       QtCore.SIGNAL('done()'),
-                                      self.postProcess)
+                                      self.aggregate)
 
         self.grpQuestion.setEnabled(True)
         self.pbnRunStop.setEnabled(True)
         self.repaint()
 
     def postProcess(self):
+        myManager = PostprocessorManager(self.aggregator)
+        myManager.functionParams = self.functionParams
+        myManager.run()
+
+    def aggregate(self):
         """Run all post processing steps.
 
-        Called on self.runner SIGNAL('done()') starts all postprocessing
+        Called on self.runner SIGNAL('done()') starts aggregation
         steps.
 
         Args:
@@ -1500,13 +1505,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.aggregator.runner = self.runner
             self.aggregator.aggregate()
-            if self.aggregator.errorMessage is None:
-                myManager = PostprocessorManager(self.aggregator)
-                myManager.functionParams = self.functionParams
-                myManager.run()
         except Exception, e:  # pylint: disable=W0703
-            e.args = (e.args[0] + '\npostProcess error occurred',)
+            e.args = (e.args[0] + '\nAggregation error occurred',)
             raise
+
+        #TODO (MB) do we really want this check?
+        if self.aggregator.errorMessage is None:
+                self.postProcess()
+        else:
+            myMessage = m.Message(
+                m.Heading(self.tr('Aggregation error occurred')),
+                self.aggregator.errorMessage
+            )
+            self._sendMessage(myMessage)
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
@@ -1988,3 +1999,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = str(myItemData.toString())
         return myFunctionID
+
+    def _sendMessage(self, theMessage, dynamic=True):
+        theType = STATIC_MESSAGE_SIGNAL
+        if dynamic:
+            theType = DYNAMIC_MESSAGE_SIGNAL
+
+        dispatcher.send(
+            signal=theType,
+            sender=self,
+            message=theMessage)

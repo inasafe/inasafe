@@ -388,10 +388,11 @@ class Aggregator(QtCore.QObject):
             self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
                                                            'target_field')
         except KeywordNotFoundError:
-            myMessage = self.tr('No "target_field" keyword found in the impact'
-                                ' layer %1 keywords. The impact function'
-                                ' should define this.').\
-                arg(myQGISImpactLayer.name())
+            myMessage = m.Paragraph(
+                self.tr(
+                    'No "target_field" keyword found in the impact layer %1 '
+                    'keywords. The impact function should define this.').arg(
+                        myQGISImpactLayer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
             return
@@ -399,11 +400,11 @@ class Aggregator(QtCore.QObject):
         myTargetFieldIndex = myQGISImpactLayer.fieldNameIndex(self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
-            myMessage = self.tr('No attribute "%1" was found in the attribute '
-                                'table for layer "%2". The impact function '
-                                'must define this attribute for '
-                                'postprocessing to work.').arg(
-                                    self.targetField, myQGISImpactLayer.name())
+            myMessage = m.Paragraph(
+                self.tr('No attribute "%1" was found in the attribute table for'
+                        ' layer "%2". The impact function must define this'
+                        ' attribute for postprocessing to work.').arg(
+                            self.targetField, myQGISImpactLayer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
             return
@@ -572,11 +573,11 @@ class Aggregator(QtCore.QObject):
                 LOGGER.debug('Doing line in polygon aggregation')
 
             else:
-                myMessage = self.tr('Aggregation on vector impact layers other'
-                                    'than points or polygons not implemented '
-                                    'yet not implemented yet. '
-                                    'Called on %1').\
-                    arg(myQGISImpactLayer.name())
+                myMessage = m.Paragraph(
+                    self.tr(
+                        'Aggregation on vector impact layers other than points'
+                        ' or polygons not implemented yet not implemented yet.'
+                        ' Called on %1').arg(myQGISImpactLayer.name()))
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.errorMessage = myMessage
                 self.layer.commitChanges()
