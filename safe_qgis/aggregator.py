@@ -1058,7 +1058,7 @@ class Aggregator(QtCore.QObject):
         myLayer.startEditing()
         # add a feature the size of the impact layer bounding box
         myFeature = QgsFeature()
-        # noinspection PyCallByClass,PyTypeChecker
+        # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         myFeature.setGeometry(QgsGeometry.fromRect(
             QgsRectangle(
                 QgsPoint(myGeoExtent[0], myGeoExtent[1]),
