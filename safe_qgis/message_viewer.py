@@ -17,16 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import os
-from safe.messaging import (
-    Message,
-    Heading,
-    Paragraph,
-    SuccessParagraph,
-    BulletedList,
-    NumberedList,
-    Text,
-    ImportantText,
-    EmphasizedText)
+from safe import messaging as m
 from third_party.pydispatch import dispatcher
 
 from PyQt4 import Qt, QtGui, QtWebKit
@@ -35,10 +26,10 @@ DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 
-class WebView(QtWebKit.QWebView):
+class MessageViewer(QtWebKit.QWebView):
     """A simple message queue mockup."""
     def __init__(self):
-        super(WebView, self).__init__()
+        super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
         # Always gets replaced when a new message is passed
         self.static_message = None
@@ -103,6 +94,3 @@ class WebView(QtWebKit.QWebView):
         if self.footer is None:
             self.footer = htmlFooter()
         return self.footer
-
-
-

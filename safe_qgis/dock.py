@@ -40,7 +40,7 @@ from qgis.core import (
     QgsRectangle,
     QgsPoint,
     QgsField,
-    QGis,)
+    QGis)
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
@@ -69,13 +69,8 @@ from safe_qgis.safe_interface import (
     get_version,
     temp_dir,
     ReadLayerError)
-from safe_interface.messaging import (
-    Message,
-    Text,
-    Heading,
-    BulletedList,
-    NumberedList,
-    ErrorMessage)
+
+from safe_interface import messaging as m
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -100,7 +95,7 @@ from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
-
+from safe_qgis.message_viewer import MessageViewer
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -144,19 +139,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages
         dispatcher.connect(
-            self.message_queue.dynamic_message_event,
+            self.wvResults.dynamic_message_event,
             signal=DYNAMIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
         # Set up dispatcher for static messages
         # Static messages clear the message queue and so the display is 'reset'
         dispatcher.connect(
-            self.message_queue.static_message_event,
+            self.wvResults.static_message_event,
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
         # Set up dispatcher for error messages
         # Static messages clear the message queue and so the display is 'reset'
         dispatcher.connect(
-            self.message_queue.static_message_event,
+            self.wvResults.static_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
@@ -239,7 +234,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             sender=self,
             message=theMessage)
 
-    def showStaticMessage(self, theMessage):
+    def showDynamicMessage(self, theMessage):
         """Send a dynamic message to the message viewer.
 
         Dynamic messages are appended to any existing content in the
@@ -641,7 +636,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
         if myMessage is not '':
-            self.displayHtml(myMessage)
+            self.showStaticMessage(m.Message(str(myMessage)))
 
     def setFunctionOptionsStatus(self):
         """Helper function to toggle the tool function button based on context.
