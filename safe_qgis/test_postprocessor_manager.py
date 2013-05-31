@@ -74,7 +74,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
-        DOCK.showPostProcLayers = False
+        DOCK.showIntermediateLayers = False
         setJakartaGeoExtent()
 
     def test_checkPostProcessingLayersVisibility(self):
@@ -113,7 +113,7 @@ class PostprocessorManagerTest(unittest.TestCase):
 
         # Now run again showing intermediate layers
 
-        DOCK.showPostProcLayers = True
+        DOCK.showIntermediateLayers = True
         myBeforeCount = len(CANVAS.layers())
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker

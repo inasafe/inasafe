@@ -125,7 +125,7 @@ class Aggregator(QtCore.QObject):
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
         self.isValid = False
-        self.showPostProcLayers = False
+        self.showIntermediateLayers = False
 
     def validateKeywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.
@@ -1047,13 +1047,3 @@ class Aggregator(QtCore.QObject):
         except KeywordDbError, e:
             raise e
         return myLayer
-
-    def _sendMessage(self, theMessage, dynamic=True):
-        theType = STATIC_MESSAGE_SIGNAL
-        if dynamic:
-            theType = DYNAMIC_MESSAGE_SIGNAL
-
-        dispatcher.send(
-            signal=theType,
-            sender=self,
-            message=theMessage)

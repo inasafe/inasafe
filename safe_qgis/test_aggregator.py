@@ -74,7 +74,7 @@ class AggregatorTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
-        DOCK.showPostProcLayers = False
+        DOCK.showIntermediateLayers = False
         setJakartaGeoExtent()
 
     def test_cboAggregationLoadedProject(self):
