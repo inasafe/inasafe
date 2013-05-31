@@ -44,7 +44,7 @@ class Heading(MessageElement):
         self.level = level
 
         if text is not None:
-            if isinstance(text, basestring):
+            if isinstance(text, basestring) or self._is_qstring(text):
                 self.text = Text(text)
             elif isinstance(text, Text):
                 self.text = text

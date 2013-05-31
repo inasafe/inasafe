@@ -58,7 +58,7 @@ class AbstractList(MessageElement):
         Raises:
             Errors are propagated
         """
-        if isinstance(item, basestring):
+        if isinstance(item, basestring) or self._is_qstring(text):
             self.items.append(PlainText(item))
         elif isinstance(item, MessageElement):
             self.items.append(item)

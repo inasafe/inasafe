@@ -58,6 +58,8 @@ class Text(MessageElement):
         """
         if isinstance(text, basestring):
             self.text.append(PlainText(text))
+        elif self._is_qstring(text):
+            self.text.append(str(text))
         elif isinstance(text, Text):
             self.text.append(text)
         else:

@@ -1059,7 +1059,7 @@ class Aggregator(QtCore.QObject):
 
         try:
             self.keywordIO.appendKeywords(
-                self.layer,
+                myLayer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except KeywordDbError, e:
             raise e

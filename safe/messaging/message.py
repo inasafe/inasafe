@@ -62,7 +62,7 @@ class Message(MessageElement):
         Raises:
             Errors are propagated
         """
-        if isinstance(message, basestring):
+        if isinstance(message, basestring or self._is_qstring(text)):
             self.message.append(Text(message))
         elif isinstance(message, MessageElement):
             self.message.append(message)
