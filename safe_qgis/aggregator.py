@@ -114,7 +114,6 @@ class Aggregator(QtCore.QObject):
         self.safeLayer = None
 
         self.prefix = 'aggr_'
-        self.defaults = None
         self.attributes = {}
         self.attributeTitle = None
 

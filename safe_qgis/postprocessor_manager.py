@@ -264,9 +264,12 @@ class PostprocessorManager(QtCore.QObject):
                 myFemaleRatioIsVariable = True
 
             except KeyError:
-                myFemaleRatio = self.keywordIO.readKeywords(
-                    self.aggregator.layer,
-                    self.aggregator.defaults['FEM_RATIO_KEY'])
+                try:
+                    myFemaleRatio = self.keywordIO.readKeywords(
+                        self.aggregator.layer,
+                        self.aggregator.defaults['FEM_RATIO_KEY'])
+                except KeywordNotFoundError:
+                    myFemaleRatio = self.aggregator.defaults['FEM_RATIO']
 
         #iterate zone features
         myProvider = self.aggregator.layer.dataProvider()

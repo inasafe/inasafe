@@ -555,7 +555,8 @@ class KeywordIO(QObject):
             if theKeyword in myDict:
                 return myDict[theKeyword]
             else:
-                raise KeywordNotFoundError('No hash found for %s' % myHash)
+                raise KeywordNotFoundError('Keyword "%s" not found in %s' % (
+                    theKeyword, myDict))
 
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])
