@@ -68,7 +68,7 @@ class ErrorMessage():
         """
         if element is None:
             return None
-        elif isinstance(element, basestring):
+        elif isinstance(element, basestring) or self._is_qstring(text):
             return Text(element)
         elif isinstance(element, MessageElement):
             return element

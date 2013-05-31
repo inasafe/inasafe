@@ -24,6 +24,15 @@ class MessageElement():
     def __str__(self):
         return self.__unicode__()
 
+    def _is_qstring(self, message):
+        """Check if its a QString without adding any dep to PyQt4."""
+        my_class = str(message.__class__)
+        my_class_name = my_class.replace('<class \'', '').replace('\'>', '')
+        if my_class_name == 'PyQt4.QtCore.QString':
+            return True
+
+        return False
+
     def to_html(self):
         """Render a MessageElement queue as html
 
