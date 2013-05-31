@@ -123,6 +123,7 @@ class Aggregator(QtCore.QObject):
         self.impactLayerAttributes = []
 
         # If this flag is not True, no aggregation or postprocessing will run
+        # this is set as True by validateKeywords()
         self.isValid = False
         self.showPostProcLayers = False
 
@@ -156,12 +157,10 @@ class Aggregator(QtCore.QObject):
 
         myMessage = m.Message(
             m.Heading(self.tr('Waiting for attribute selection...')),
-            m.Paragraph(self.tr('Please select which attribute you want to use'
-                                ' as ID for the aggregated results')))
-        dispatcher.send(
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=self,
-            message=myMessage)
+            m.Paragraph(self.tr(
+                'Please select which attribute you want to use as ID for the '
+                'aggregated results')))
+        self._sendMessage(myMessage)
 
         # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
@@ -665,8 +664,15 @@ class Aggregator(QtCore.QObject):
         return
 
     def _prepareLayer(self):
+        myMessage = m.Message(
+            m.Heading(self.tr('Preparing aggregation layer...')),
+            m.Paragraph(self.tr(
+                'We are clipping the aggregation layer to match the '
+                'intersection of the hazard and exposure layer extents.')))
+        self._sendMessage(myMessage)
+
         # This is used to hold an *in memory copy* of the aggregation layer
-        # or None if the clip extents should be used.
+        # or a in memory layer with the clip extents as a feature.
         if self.layer is None:
             self.layer = self._extentsToMemoryLayer()
             # Area Of Interest (AOI) mode flag
@@ -1041,3 +1047,13 @@ class Aggregator(QtCore.QObject):
         except KeywordDbError, e:
             raise e
         return myLayer
+
+    def _sendMessage(self, theMessage, dynamic=True):
+        theType = STATIC_MESSAGE_SIGNAL
+        if dynamic:
+            theType = DYNAMIC_MESSAGE_SIGNAL
+
+        dispatcher.send(
+            signal=theType,
+            sender=self,
+            message=theMessage)
