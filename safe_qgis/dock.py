@@ -321,7 +321,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # whether to show or not postprocessing generated layers
         myFlag = mySettings.value(
             'inasafe/showPostProcLayers', False).toBool()
-        self.showPostProcLayers = myFlag
+        self.showIntermediateLayers = myFlag
 
         self.getLayers()
 
@@ -1023,6 +1023,40 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFunctionID = self.getFunctionID()
         self.calculator.setFunction(myFunctionID)
 
+    def _prepareAggregator(self):
+        """Create an aggregator for this analysis run."""
+        self.aggregator = Aggregator(
+            self.iface,
+            self.getPostProcessingLayer())
+        self.aggregator.showIntermediateLayers = self.showIntermediateLayers
+        # Buffer aggregation keywords in case user presses cancel on kw dialog
+        try:
+            myOriginalKeywords = self.keywordIO.readKeywords(
+                self.aggregator.layer)
+        except AttributeError:
+            myOriginalKeywords = {}
+        except InvalidParameterError:
+            #No kw file was found for layer -create an empty one.
+            myOriginalKeywords = {}
+            self.keywordIO.writeKeywords(
+                self.aggregator.layer, myOriginalKeywords)
+        LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
+        LOGGER.debug(
+            'Do zonal aggregation: %s' % str(self.aggregator.aoiMode))
+        self.runtimeKeywordsDialog = KeywordsDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self,
+            self.aggregator.layer)
+        QtCore.QObject.connect(
+            self.runtimeKeywordsDialog,
+            QtCore.SIGNAL('accepted()'),
+            self.run)
+        QtCore.QObject.connect(
+            self.runtimeKeywordsDialog,
+            QtCore.SIGNAL('rejected()'),
+            partial(self.acceptCancelled, myOriginalKeywords))
+
     def accept(self):
         """Execute analysis when run button is clicked.
 
@@ -1031,7 +1065,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+
+        self.showBusy()
+        myFlag, myMessage = self.validate()
+        if not myFlag:
+            # TODO - use new error message API! TS
+            self.showErrorMessage(m.Message(str(myMessage)))
+            self.hideBusy()
+            return
+
         try:
+            # See if we are re-running the same type of analysis, if not
+            # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:
             myMessage = getExceptionWithStacktrace(e, theHtml=True)
@@ -1039,15 +1084,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.showErrorMessage(m.Message(str(myMessage)))
             self.hideBusy()
             return
+
+        # Find out what the usable extent and cellsize are
         try:
             _, myBufferedGeoExtent, myCellSize, _, _, _ = \
                 self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            self.hideBusy()
             return None  # ignore any error
-        myMessage = checkMemoryUsage(
-            myBufferedGeoExtent,
-            myCellSize)
+
+        # Ensure there is enough memory
+        myMessage = checkMemoryUsage(myBufferedGeoExtent, myCellSize)
         if myMessage is not None:
             # noinspection PyCallByClass,PyTypeChecker
             myResult = QtGui.QMessageBox.warning(
@@ -1059,64 +1107,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 QtGui.QMessageBox.No, QtGui.QMessageBox.No)
             if myResult == QtGui.QMessageBox.No:
                 # stop work here and return to QGIS
+                self.hideBusy()
                 return
 
-        self.showBusy()
-        myFlag, myMessage = self.validate()
-        if not myFlag:
-            # TODO - use new error message API! TS
-            self.showErrorMessage(m.Message(str(myMessage)))
-            self.hideBusy()
-            return
-        # Create an aggregator for this analysis run
-        self.aggregator = Aggregator(
-            self.iface,
-            self.getPostProcessingLayer())
-        self.aggregator.showPostProcLayers = self.showPostProcLayers
-        try:
-            myOriginalKeywords = self.keywordIO.readKeywords(
-                self.aggregator.layer)
-        except AttributeError:
-            myOriginalKeywords = {}
-        except InvalidParameterError:
-            #No kw file was found for layer -create an empty one.
-            myOriginalKeywords = {}
-            self.keywordIO.writeKeywords(
-                self.aggregator.layer, myOriginalKeywords)
+        self._prepareAggregator()
 
-        LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
-
-        LOGGER.debug('Do zonal aggregation: %s' %
-                     str(self.aggregator.aoiMode))
-
-        self.runtimeKeywordsDialog = KeywordsDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self,
-            self.aggregator.layer)
-
-        QtCore.QObject.connect(self.runtimeKeywordsDialog,
-                               QtCore.SIGNAL('accepted()'),
-                               self.run)
-
-        QtCore.QObject.connect(self.runtimeKeywordsDialog,
-                               QtCore.SIGNAL('rejected()'),
-                               partial(self.acceptCancelled,
-                                       myOriginalKeywords))
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown run method is called by the
         # accepted signal of the keywords dialog
-        myResult = self.aggregator.validateKeywords()
-        if self.aggregator.aoiMode and not myResult:
-            self.runtimeKeywordsDialog.setLayer(self.layer)
+        self.aggregator.validateKeywords()
+        if self.aggregator.aoiMode and self.aggregator.isValid:
+            self.run()
+        else:
+            self.runtimeKeywordsDialog.setLayer(self.aggregator.layer)
             #disable gui elements that should not be applicable for this
             self.runtimeKeywordsDialog.radExposure.setEnabled(False)
             self.runtimeKeywordsDialog.radHazard.setEnabled(False)
             self.runtimeKeywordsDialog.pbnAdvanced.setEnabled(False)
             self.runtimeKeywordsDialog.setModal(True)
             self.runtimeKeywordsDialog.show()
-        else:
-            self.run()
 
     def acceptCancelled(self, theOldKeywords):
         """Deal with user cancelling post processing option dialog.
@@ -1377,7 +1386,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Add layers to QGIS
         myLayersToAdd = []
-        if self.showPostProcLayers and self.aggregator.aoiMode:
+        if self.showIntermediateLayers and self.aggregator.aoiMode:
             myLayersToAdd.append(self.aggregator.layer)
         myLayersToAdd.append(myQGISImpactLayer)
         QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)

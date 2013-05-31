@@ -107,7 +107,7 @@ class DockTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
-        DOCK.showPostProcLayers = False
+        DOCK.showIntermediateLayers = False
 
     def tearDown(self):
         """Fixture run after each test"""

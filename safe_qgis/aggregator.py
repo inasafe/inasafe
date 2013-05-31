@@ -122,7 +122,7 @@ class Aggregator(QtCore.QObject):
         # If this flag is not True, no aggregation or postprocessing will run
         self.isValid = False
         self.validateKeywords()
-        self.showPostProcLayers = False
+        self.showIntermediateLayers = False
 
     def validateKeywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.
@@ -301,7 +301,7 @@ class Aggregator(QtCore.QObject):
                 arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
             raise ReadLayerError(myMessage)
 
-        if self.showPostProcLayers and self.aoiMode:
+        if self.showIntermediateLayers and self.aoiMode:
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
@@ -966,7 +966,7 @@ class Aggregator(QtCore.QObject):
 
         del mySHPWriter
 #        LOGGER.debug('Created: %s' % self.preprocessedFeatureCount)
-        if self.showPostProcLayers:
+        if self.showIntermediateLayers:
             self.iface.addVectorLayer(myOutFilename,
                                       theQgisLayer.title(),
                                       'ogr')
