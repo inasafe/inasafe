@@ -186,6 +186,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
         self.aggregator = None
+        self.postprocessorManager = None
         self.pbnPrint.setEnabled(False)
         # used by configurable function options button
         self.activeFunction = None
@@ -1342,7 +1343,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
-        myKeywords['postprocessing_report'] = self.aggregator.getOutput()
+        myKeywords['postprocessing_report'] = self.postprocessorManager.getOutput()
         self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1400,7 +1401,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.restoreState()
 
         #append postprocessing report
-        myReport += self.aggregator.getOutput()
+        myReport += self.postprocessorManager.getOutput()
 
         # Return text to display in report panel
         return myReport
@@ -1516,9 +1517,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self._sendMessage(myMessage)
 
     def postProcess(self):
-        myManager = PostprocessorManager(self.aggregator)
-        myManager.functionParams = self.functionParams
-        myManager.run()
+        self.postprocessorManager = PostprocessorManager(self.aggregator)
+        self.postprocessorManager.functionParams = self.functionParams
+        self.postprocessorManager.run()
         self.completed()
 
     def enableBusyCursor(self):
@@ -2011,3 +2012,42 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             signal=theType,
             sender=self,
             message=theMessage)
+
+    def readImpactLayer(self, myEngineImpactLayer):
+        """Helper function to read and validate layer.
+
+        Args
+            myEngineImpactLayer: Layer object as provided by InaSAFE engine.
+
+        Returns
+            validated QGIS layer or None
+
+        Raises
+            Exception if layer is not valid
+        """
+
+        myMessage = self.tr('Input layer must be a InaSAFE spatial object. '
+                            'I got %1').arg(str(type(myEngineImpactLayer)))
+        if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
+            raise Exception(myMessage)
+        if not myEngineImpactLayer.is_inasafe_spatial_object:
+            raise Exception(myMessage)
+
+        # Get associated filename and symbolic name
+        myFilename = myEngineImpactLayer.get_filename()
+        myName = myEngineImpactLayer.get_name()
+
+        myQGISLayer = None
+        # Read layer
+        if myEngineImpactLayer.is_vector:
+            myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+        elif myEngineImpactLayer.is_raster:
+            myQGISLayer = QgsRasterLayer(myFilename, myName)
+
+        # Verify that new qgis layer is valid
+        if myQGISLayer.isValid():
+            return myQGISLayer
+        else:
+            myMessage = self.tr('Loaded impact layer "%1" is not'
+                                ' valid').arg(myFilename)
+            raise Exception(myMessage)
