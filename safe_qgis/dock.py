@@ -139,7 +139,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
-        self.message_queue = MessageViewer()
+        self.wvResults = MessageViewer()
         # Set up dispatcher for dynamic messages
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages
@@ -275,9 +275,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             None
         """
         dispatcher.send(
-            signal=ErrorMessage.,
+            signal=ERROR_MESSAGE_SIGNAL,
             sender=self,
-            message=theMessage)
+            message=theErrorMessage)
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
