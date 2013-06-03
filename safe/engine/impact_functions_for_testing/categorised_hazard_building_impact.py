@@ -7,7 +7,7 @@ from safe.common.utilities import (ugettext as tr,
 from safe.storage.vector import Vector
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 
 
 #FIXME: need to normalise all raster data Ole/Kristy

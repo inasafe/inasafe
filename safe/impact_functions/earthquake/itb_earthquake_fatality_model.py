@@ -1,5 +1,5 @@
 import numpy
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 import logging
 from safe.impact_functions.core import (
     FunctionProvider,

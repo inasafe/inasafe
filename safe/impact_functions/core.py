@@ -13,7 +13,7 @@ from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string, remove_double_spaces
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 
 LOGGER = logging.getLogger('InaSAFE')
 

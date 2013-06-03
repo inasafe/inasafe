@@ -11,7 +11,7 @@ from safe.common.utilities import (ugettext as tr,
                                    get_defaults,
                                    round_thousand)
 from safe.common.tables import Table, TableRow
-from third_party.odict import OrderedDict
+from safe.common.utilities import OrderedDict
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):
