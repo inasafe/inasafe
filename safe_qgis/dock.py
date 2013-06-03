@@ -45,7 +45,7 @@ from qgis.core import (
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (
-    getExceptionWithStacktrace,
+    getErrorMessage,
     getWGS84resolution,
     setVectorGraduatedStyle,
     htmlHeader,
@@ -70,7 +70,7 @@ from safe_qgis.safe_interface import (
     temp_dir,
     ReadLayerError)
 
-from safe_interface import messaging as m
+from safe_interface import messaging as m, ErrorMessage
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -1079,7 +1079,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:
-            myMessage = getExceptionWithStacktrace(e, theHtml=True)
+            myMessage = getErrorMessage(e, theHtml=True)
             # TODO - use new error message API! TS
             self.showErrorMessage(m.Message(str(myMessage)))
             self.hideBusy()
@@ -1285,7 +1285,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.restoreOverrideCursor()
         self.hideBusy()
         LOGGER.exception(theMessage)
-        myMessage = getExceptionWithStacktrace(
+        myMessage = getErrorMessage(
             theException, theHtml=True, theContext=theMessage)
         # TODO - use new error message API! TS
         self.showErrorMessage(m.Message(str(myMessage)))
@@ -1304,7 +1304,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (Ole): This branch is not covered by the tests
 
             # Display message and traceback
-            myMessage = getExceptionWithStacktrace(e, theHtml=True)
+            myMessage = getErrorMessage(e, theHtml=True)
             # TODO - use new error message API! TS
             self.showErrorMessage(m.Message(str(myMessage)))
         else:
@@ -1343,7 +1343,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
-        myKeywords['postprocessing_report'] = self.postprocessorManager.getOutput()
+        myKeywords[
+            'postprocessing_report'] = self.postprocessorManager.getOutput()
         self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1496,9 +1497,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myContext = self.tr('An exception occurred when calculating '
                                     'the results. %1').\
                     arg(self.runner.result())
-                myMessage = getExceptionWithStacktrace(
-                    myException, theHtml=True, theContext=myContext)
-            raise Exception(myMessage)
+                myMessage = getErrorMessage(
+                    myException, theContext=myContext)
+            self.showErrorMessage(myMessage)
+            return
 
         try:
             self.aggregator.runner = self.runner
@@ -1696,10 +1698,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 22
         self.showBusy(myTitle, myMessage, myProgress)
         try:
-            myClippedHazard = clipLayer(theLayer=myHazardLayer,
-                                            theExtent=myBufferedGeoExtent,
-                                            theCellSize=myCellSize,
-                                            theHardClipFlag=self.clipHard)
+            myClippedHazard = clipLayer(
+                theLayer=myHazardLayer,
+                theExtent=myBufferedGeoExtent,
+                theCellSize=myCellSize,
+                theHardClipFlag=self.clipHard)
         except CallGDALError, e:
             raise e
         except IOError, e:
@@ -1815,7 +1818,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                      '<td>' + str(myValue) + '</td>'
                                      '</tr>')
                     myReport += '</table>'
-            except (KeywordNotFoundError, HashNotFoundError,
+            except (KeywordNotFoundError,
+                    HashNotFoundError,
                     InvalidParameterError), e:
                 myContext = self.tr(
                     'No keywords have been defined for this layer yet. If you '
@@ -1825,10 +1829,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     ' <img src="qrc:/plugins/inasafe/keywords.png" '
                     ' width="16" height="16"> icon in the toolbar, or choosing '
                     'Plugins -> InaSAFE -> Keyword Editor from the menus.')
-                myReport += getExceptionWithStacktrace(
-                    e, theHtml=True, theContext=myContext)
+                myReport += getErrorMessage(e, theContext=myContext)
             except Exception, e:
-                myReport += getExceptionWithStacktrace(e, theHtml=True)
+                myReport += getErrorMessage(e, theHtml=True)
             if myReport is not None:
                 self.showStaticMessage(m.Message(str(myReport)))
         else:
@@ -1951,7 +1954,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMap.printToPdf(myMapPdfFilePath)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
-            myReport = getExceptionWithStacktrace(e, theHtml=True)
+            myReport = getErrorMessage(e, theHtml=True)
             if myReport is not None:
                 self.showStaticMessage(m.Message(myReport))
 

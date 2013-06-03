@@ -62,7 +62,8 @@ from safe.api import (
     messaging,
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL)
+    ERROR_MESSAGE_SIGNAL,
+    ErrorMessage)
 # hack for excluding test-related import in builded package
 try:
     from safe.api import (

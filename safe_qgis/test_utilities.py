@@ -11,7 +11,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe_qgis.utilities import (
-    getExceptionWithStacktrace,
+    getErrorMessage,
     setVectorGraduatedStyle,
     setRasterStyle,
     qgisVersion,
@@ -59,13 +59,13 @@ class UtilitiesTest(unittest.TestCase):
         except Exception, e:
             # Display message and traceback
 
-            myMessage = getExceptionWithStacktrace(e, theHtml=False)
+            myMessage = getErrorMessage(e, theHtml=False)
             #print myMessage
             assert str(e) in myMessage
             assert 'line' in myMessage
             assert 'File' in myMessage
 
-            myMessage = getExceptionWithStacktrace(e, theHtml=True)
+            myMessage = getErrorMessage(e, theHtml=True)
             assert str(e) in myMessage
             assert '<pre id="traceback"' in myMessage
             assert 'line' in myMessage
@@ -217,7 +217,7 @@ class UtilitiesTest(unittest.TestCase):
         try:
             bbox_intersection('aoeu', 'oaeu', [])
         except BoundingBoxError, e:
-            myMessage = getExceptionWithStacktrace(e, theHtml=False)
+            myMessage = getErrorMessage(e, theHtml=False)
             assert 'BoundingBoxError : Western' in myMessage, myMessage
 
     def test_issue230(self):

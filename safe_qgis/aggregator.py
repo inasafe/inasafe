@@ -40,7 +40,7 @@ from qgis.analysis import QgsZonalStatistics
 from safe_qgis.clipper import clipLayer
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.utilities import (
-    getExceptionWithStacktrace,
+    getErrorMessage,
     isPolygonLayer,
     getLayerAttributeNames,
     setVectorCategorizedStyle,
