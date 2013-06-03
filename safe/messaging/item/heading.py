@@ -49,7 +49,7 @@ class Heading(MessageElement):
             elif isinstance(text, Text):
                 self.text = text
             else:
-                raise InvalidMessageItemError
+                raise InvalidMessageItemError(text, text.__class__)
 
     def to_html(self):
         """Render a Heading MessageElement as html

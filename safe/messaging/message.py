@@ -62,14 +62,14 @@ class Message(MessageElement):
         Raises:
             Errors are propagated
         """
-        if isinstance(message, basestring or self._is_qstring(text)):
+        if isinstance(message, basestring) or self._is_qstring(message):
             self.message.append(Text(message))
         elif isinstance(message, MessageElement):
             self.message.append(message)
         elif isinstance(message, Message):
             self.message.extend(message.message)
         else:
-            raise InvalidMessageItemError
+            raise InvalidMessageItemError(message, message.__class__)
 
     def clear(self):
         """clear MessageElement queue

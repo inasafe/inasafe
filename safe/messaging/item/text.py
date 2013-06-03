@@ -61,7 +61,7 @@ class Text(MessageElement):
         elif isinstance(text, Text):
             self.text.append(text)
         else:
-            raise InvalidMessageItemError
+            raise InvalidMessageItemError(text, text.__class__)
 
     def to_html(self):
         """Render a Text MessageElement as html

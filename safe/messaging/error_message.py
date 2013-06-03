@@ -73,7 +73,7 @@ class ErrorMessage(MessageElement):
         elif isinstance(element, MessageElement):
             return element
         else:
-            raise InvalidMessageItemError
+            raise InvalidMessageItemError(element, element.__class__)
 
     def _render(self):
         """Create a Message version of this ErrorMessage

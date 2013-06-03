@@ -63,7 +63,7 @@ class AbstractList(MessageElement):
         elif isinstance(item, MessageElement):
             self.items.append(item)
         else:
-            raise InvalidMessageItemError
+            raise InvalidMessageItemError(item, item.__class__)
 
     def to_html(self):
         """Render a Text MessageElement as html

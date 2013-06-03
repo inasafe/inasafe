@@ -1435,7 +1435,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if theTitle is None:
             theTitle = self.tr('Analyzing this question...')
         myMessage.add(m.Heading(theTitle, level=3))
-        myMessage.add(theMessage)
+        if theMessage is not None:
+            myMessage.add(theMessage)
         self.showStaticMessage(myMessage)
         self.repaint()
         QtGui.qApp.processEvents()
