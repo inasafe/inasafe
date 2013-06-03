@@ -259,6 +259,13 @@ class Aggregator(QtCore.QObject):
         if not self.isValid:
             raise InvalidAggregatorError
 
+        myMessage = m.Message(
+            m.Heading(self.tr('Aggregating results...')),
+            m.Paragraph(self.tr(
+                'This may take a little while - we are aggregating the impact'
+                ' by %1').arg(self.cboAggregation.currentText())))
+        self._sendMessage(myMessage)
+
         myImpactLayer = self.runner.impactLayer()
 
         myQGISImpactLayer = safeToQGISLayer(myImpactLayer)
@@ -735,7 +742,15 @@ class Aggregator(QtCore.QObject):
         """
 #        import time
 #        startTime = time.clock()
-        theLayerFilename = theQgisLayer.source()
+
+        myMessage = m.Message(
+            m.Heading(self.tr('Preclipping input data...')),
+            m.Paragraph(self.tr(
+                'Modifying %1 to avoid intersections with the aggregation layer'
+            ).arg(theQgisLayer.name())))
+        self._sendMessage(myMessage, False)
+
+        theLayerFilename = str(theQgisLayer.source())
         myPostprocPolygons = self.safeLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())

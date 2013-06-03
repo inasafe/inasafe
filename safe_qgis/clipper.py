@@ -286,8 +286,7 @@ def _clipVectorLayer(theLayer,
     myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(
         theLayer, myFilename, theExtraKeywords=theExtraKeywords)
-    myBaseName = os.path.basename(myFilename)
-    myBaseName = os.path.split(myBaseName)[0]
+    myBaseName = '%s clipped' % theLayer.name()
     myLayer = QgsVectorLayer(myFilename, myBaseName, 'ogr')
 
     return myLayer
@@ -503,8 +502,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(theLayer, myFilename,
                              theExtraKeywords=theExtraKeywords)
-    myBaseName = os.path.basename(myFilename)
-    myBaseName = os.path.split(myBaseName)[0]
+    myBaseName = '%s clipped' % theLayer.name()
     myLayer = QgsRasterLayer(myFilename, myBaseName)
 
     return myLayer
