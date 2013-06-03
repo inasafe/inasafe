@@ -1431,30 +1431,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #self.pbnRunStop.setText('Cancel')
         self.pbnRunStop.setEnabled(False)
+        myMessage = m.Message()
         if theTitle is None:
             theTitle = self.tr('Analyzing this question...')
-        myHtml = ('<table class="condensed">'
-                  '  <tr>'
-                  '    <th class="info button-cell">'
-                  + str(theTitle) +
-                  '    </th>'
-                  '  </tr>'
-                  '  <tr>'
-                  '    <td>'
-                  + str(theMessage) +
-                  '    </td>'
-                  '  </tr>'
-                  '  <tr>'
-                  '    <td>'
-                  '      <div class="progress">'
-                  '          <div class="bar" '
-                  '               style="width: ' + str(theProgress) + '%;">'
-                  '          </div>'
-                  '      </div>'
-                  '    </td>'
-                  '  </tr>'
-                  '</table>')
-        self.showStaticMessage(m.Message(myHtml))
+        myMessage.add(m.Heading(theTitle, level=3))
+        myMessage.add(theMessage)
+        self.showStaticMessage(myMessage)
         self.repaint()
         QtGui.qApp.processEvents()
         self.grpQuestion.setEnabled(False)
@@ -1584,27 +1566,45 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         except InsufficientOverlapError, e:
             # FIXME (MB): This branch is not covered by the tests
-            myMessage = self.tr(
-                '<p>There was insufficient overlap between the input layers '
+            myDescription = self.tr(
+                'There was insufficient overlap between the input layers '
                 'and / or the layers and the viewable area. Please select two '
                 'overlapping layers and zoom or pan to them or disable '
                 'viewable area clipping in the options dialog. Full details '
-                'follow:</p>'
-                '<p>Failed to obtain the optimal extent given:</p>'
-                '<p>Hazard: %1</p>'
-                '<p>Exposure: %2</p>'
-                '<p>Viewable area Geo Extent: %3</p>'
-                '<p>Hazard Geo Extent: %4</p>'
-                '<p>Exposure Geo Extent: %5</p>'
-                '<p>Viewable area clipping enabled: %6</p>'
-                '<p>Details: %7</p>').\
-                arg(myHazardLayer.source()).\
-                arg(myExposureLayer.source()).\
-                arg(QtCore.QString(str(myViewportGeoExtent))).\
-                arg(QtCore.QString(str(myHazardGeoExtent))).\
-                arg(QtCore.QString(str(myExposureGeoExtent))).\
-                arg(QtCore.QString(str(self.clipToViewport))).\
-                arg(str(e))
+                'follow:')
+            myMessage = m.Message(myDescription)
+            myText = m.Paragraph(
+                self.tr('Failed to obtain the optimal extent given:'))
+            myMessage.add(myText)
+            myList = m.BulletedList()
+            # We must use Qt string interpolators for tr to work properly
+            myList.add(
+                self.tr('Hazard: %1').arg(
+                    myHazardLayer.source()))
+
+            myList.add(
+                self.tr('Exposure: %1').arg(
+                    myExposureLayer.source()))
+
+            myList.add(
+                self.tr('Viewable area Geo Extent: %1').arg(
+                    QtCore.QString(str(myViewportGeoExtent))))
+
+            myList.add(
+                self.tr('Hazard Geo Extent: %1').arg(
+                    QtCore.QString(str(myHazardGeoExtent))))
+
+            myList.add(
+                self.tr('Exposure Geo Extent: %1').arg(
+                    QtCore.QString(str(myExposureGeoExtent))))
+
+            myList.add(
+                self.tr('Viewable area clipping enabled: %1').arg(
+                    QtCore.QString(str(self.clipToViewport))))
+            myList.add(
+                self.tr('Details: %1').arg(
+                    str(e)))
+            myMessage.add(myList)
             raise InsufficientOverlapError(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
