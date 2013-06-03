@@ -24,7 +24,7 @@ LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
 
-class ErrorMessage():
+class ErrorMessage(MessageElement):
     """Standard error message"""
 
     def __init__(self, problem, detail=None, suggestion=None, traceback=None):
@@ -68,7 +68,7 @@ class ErrorMessage():
         """
         if element is None:
             return None
-        elif isinstance(element, basestring) or self._is_qstring(text):
+        elif isinstance(element, basestring) or self._is_qstring(element):
             return Text(element)
         elif isinstance(element, MessageElement):
             return element

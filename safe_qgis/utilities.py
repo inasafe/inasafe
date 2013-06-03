@@ -45,13 +45,17 @@ from qgis.core import (
     QgsFeature,
     QgsCategorizedSymbolRendererV2)
 
-from safe_interface import temp_dir
+from safe_interface import temp_dir, ErrorMessage
 
 from safe_qgis.exceptions import (StyleError,
                                   MethodUnavailableError,
                                   MemoryLayerCreationError)
 
-from safe_qgis.safe_interface import DEFAULTS, safeTr, get_version
+from safe_qgis.safe_interface import (
+    DEFAULTS,
+    safeTr,
+    get_version,
+    messaging as m)
 
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', 'third_party')))
@@ -626,72 +630,39 @@ def tr(theText):
     return QCoreApplication.translate('@default', theText)
 
 
-def getExceptionWithStacktrace(theException, theHtml=False, theContext=None):
-    """Convert exception into a string containing a stack trace.
+def getErrorMessage(theException, theContext=None, theSuggestion=None):
+    """Convert exception into an ErrorMessage containing a stack trace.
 
-    .. note: OS File path separators will be replaced with <wbr> which is a
-        'soft wrap' (when theHtml=True)_that will ensure that long paths do not
-        force the web frame to be very wide.
+    .. seealso:: https://github.com/AIFDR/inasafe/issues/577
 
     Args:
         * theException: Exception object.
-        * theHtml: Optional flag if output is to be wrapped as theHtml.
         * theContext: Optional theContext message.
 
     Returns:
-        Exception: with stack trace info suitable for display.
+        ErrorMessage: with stack trace info suitable for display.
     """
 
     myTraceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
 
-    if not theHtml:
-        if str(theException) is None or str(theException) == '':
-            myErrorMessage = (theException.__class__.__name__ + ' : ' +
-                              tr('No details provided'))
-        else:
-            myErrorMessage = (theException.__class__.__name__ + ' : ' +
-                              str(theException))
-        return myErrorMessage + "\n" + myTraceback
+    myProblem = m.Message(m.ImportantText(theException.__class__.__name__))
+
+    if str(theException) is None or str(theException) == '':
+        myProblem.append = m.Text(tr('No details provided'))
     else:
-        if str(theException) is None or str(theException) == '':
-            myErrorMessage = ('<b>' + theException.__class__.__name__ +
-                              '</b> : ' + tr('No details provided'))
-        else:
-            myWrappedMessage = str(theException).replace(os.sep,
-                                                         '<wbr>' + os.sep)
-            # If the message contained some html above has a side effect of
-            # turning </foo> into <<wbr>/foo> and <hr /> into <hr <wbr>/>
-            # so we need to revert that using the next two lines.
-            myWrappedMessage = myWrappedMessage.replace('<<wbr>' + os.sep,
-                                                        '<' + os.sep)
-            myWrappedMessage = myWrappedMessage.replace('<wbr>' + os.sep + '>',
-                                                        os.sep + '>')
+        myProblem.append = m.Text(str(theException))
 
-            myErrorMessage = ('<b>' + theException.__class__.__name__ +
-                              '</b> : ' + myWrappedMessage)
+    mySuggestion = theSuggestion
+    if mySuggestion is None and hasattr(theException, 'suggestion'):
+        mySuggestion = theException.message
 
-        myTraceback = (
-            '<pre id="traceback" class="prettyprint"'
-            ' style="display: none;">\n' + myTraceback + '</pre>')
-
-        # Wrap string in theHtml
-        s = '<table class="condensed">'
-        if theContext is not None and theContext != '':
-            s += ('<tr><th class="warning button-cell">'
-                  + tr('Error:') + '</th></tr>\n'
-                  '<tr><td>' + theContext + '</td></tr>\n')
-        # now the string from the error itself
-        s += (
-            '<tr><th class="problem button-cell">'
-            + tr('Problem:') + '</th></tr>\n'
-            '<tr><td>' + myErrorMessage + '</td></tr>\n')
-            # now the traceback heading
-        s += ('<tr><th class="info button-cell" style="cursor:pointer;"'
-              ' onclick="$(\'#traceback\').toggle();">'
-              + tr('Click for Diagnostic Information:') + '</th></tr>\n'
-              '<tr><td>' + myTraceback + '</td></tr>\n')
-        s += '</table>'
-        return s
+    myErrorMessage = ErrorMessage(
+        myProblem,
+        detail=theContext,
+        suggestion=mySuggestion,
+        traceback=myTraceback
+    )
+    return myErrorMessage
 
 
 def getWGS84resolution(theLayer):
@@ -1181,7 +1152,7 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
             text in the attribution output. Defaults to False.
 
     Returns:
-        str: an html snippet containing attribution information for the impact
+        Text: an snippet containing attribution information for the impact
             layer. If no keywords are present or no appropriate keywords are
             present, None is returned.
 
@@ -1221,33 +1192,29 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     else:
         myExposureSource = tr('an unknown source')
 
-    myReport += ('<table class="table table-striped condensed'
-                 ' bordered-table">')
-    myReport += '<tr><th>%s</th></tr>' % myHazardDetails
-    myReport += '<tr><td>%s%s %s.</td></tr>' % (
+    myReport = Message()
+    myReport.add(m.Heading(myHazardDetails, level=3))
+    myReport.add(m.Paragraph(
         myHazardTitle,
         myJoinWords,
-        myHazardSource)
+        myHazardSource))
 
-    myReport += '<tr><th>%s</th></tr>' % myExposureDetails
-    myReport += '<tr><td>%s%s %s.</td></tr>' % (
+    myReport = Message()
+    myReport.add(m.Heading(myExposureDetails, level=3))
+    myReport.add(m.Paragraph(
         myExposureTitle,
         myJoinWords,
-        myExposureSource)
+        myExposureSource))
 
     if theInaSAFEFlag:
-        myReport += '<tr><th>%s</th></tr>' % tr('Software notes')
+        myReport.add(m.Heading(tr('Software notes'), level=3))
         myInaSAFEPhrase = tr(
-            'This report was created using InaSAFE '
-            'version %1. Visit http://inasafe.org to get '
-            'your free copy of this software!').arg(get_version())
-        myInaSAFEPhrase += tr(
-            'InaSAFE has been jointly developed by'
-            ' BNPB, AusAid & the World Bank')
-        myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
+            'This report was created using InaSAFE version %1. Visit '
+            'http://inasafe.org to get your free copy of this software!'
+            'InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR & the '
+            'World Bank').arg(get_version())
 
-    myReport += '</table>'
-
+        myReport.add(m.Paragraph(m.Text(myInaSAFEPhrase)))
     return myReport
 
 

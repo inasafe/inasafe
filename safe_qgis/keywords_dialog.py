@@ -29,7 +29,7 @@ from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
-from safe_qgis.utilities import (getExceptionWithStacktrace,
+from safe_qgis.utilities import (getErrorMessage,
                                  isPolygonLayer,
                                  getLayerAttributeNames,
                                  getDefaults)
@@ -806,12 +806,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.keywordIO.writeKeywords(theLayer=self.layer,
                                          theKeywords=myKeywords)
         except InaSAFEError, e:
+            myErrorMessage = getErrorMessage(e)
             QtGui.QMessageBox.warning(
                 self,
                 self.tr('InaSAFE'),
                 ((self.tr(
                     'An error was encountered when saving the keywords:\n'
-                    '%s' % str(getExceptionWithStacktrace(e))))))
+                    '%s' % myErrorMessage.to_html()))))
         if self.dock is not None:
             self.dock.getLayers()
         self.done(QtGui.QDialog.Accepted)

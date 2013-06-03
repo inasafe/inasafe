@@ -45,7 +45,7 @@ from qgis.core import (
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (
-    getExceptionWithStacktrace,
+    getErrorMessage,
     getWGS84resolution,
     setVectorGraduatedStyle,
     htmlHeader,
@@ -70,7 +70,7 @@ from safe_qgis.safe_interface import (
     temp_dir,
     ReadLayerError)
 
-from safe_interface import messaging as m
+from safe_interface import messaging as m, ErrorMessage
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -1079,9 +1079,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:
-            myMessage = getExceptionWithStacktrace(e, theHtml=True)
-            # TODO - use new error message API! TS
-            self.showErrorMessage(m.Message(str(myMessage)))
+            myMessage = getErrorMessage(e)
+            self.showErrorMessage(myMessage)
             self.hideBusy()
             return
 
@@ -1285,10 +1284,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.restoreOverrideCursor()
         self.hideBusy()
         LOGGER.exception(theMessage)
-        myMessage = getExceptionWithStacktrace(
-            theException, theHtml=True, theContext=theMessage)
-        # TODO - use new error message API! TS
-        self.showErrorMessage(m.Message(str(myMessage)))
+        myMessage = getErrorMessage(theException, theContext=theMessage)
+        self.showErrorMessage(myMessage)
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -1304,9 +1301,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (Ole): This branch is not covered by the tests
 
             # Display message and traceback
-            myMessage = getExceptionWithStacktrace(e, theHtml=True)
-            # TODO - use new error message API! TS
-            self.showErrorMessage(m.Message(str(myMessage)))
+            myMessage = getErrorMessage(e)
+            self.showErrorMessage(myMessage)
         else:
             # On success, display generated report
             self.showStaticMessage(m.Message(str(myReport)))
@@ -1343,7 +1339,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
-        myKeywords['postprocessing_report'] = self.postprocessorManager.getOutput()
+        myKeywords[
+            'postprocessing_report'] = self.postprocessorManager.getOutput()
         self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1434,30 +1431,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #self.pbnRunStop.setText('Cancel')
         self.pbnRunStop.setEnabled(False)
+        myMessage = m.Message()
         if theTitle is None:
             theTitle = self.tr('Analyzing this question...')
-        myHtml = ('<table class="condensed">'
-                  '  <tr>'
-                  '    <th class="info button-cell">'
-                  + str(theTitle) +
-                  '    </th>'
-                  '  </tr>'
-                  '  <tr>'
-                  '    <td>'
-                  + str(theMessage) +
-                  '    </td>'
-                  '  </tr>'
-                  '  <tr>'
-                  '    <td>'
-                  '      <div class="progress">'
-                  '          <div class="bar" '
-                  '               style="width: ' + str(theProgress) + '%;">'
-                  '          </div>'
-                  '      </div>'
-                  '    </td>'
-                  '  </tr>'
-                  '</table>')
-        self.showStaticMessage(m.Message(myHtml))
+        myMessage.add(m.Heading(theTitle, level=3))
+        myMessage.add(theMessage)
+        self.showStaticMessage(myMessage)
         self.repaint()
         QtGui.qApp.processEvents()
         self.grpQuestion.setEnabled(False)
@@ -1496,9 +1475,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myContext = self.tr('An exception occurred when calculating '
                                     'the results. %1').\
                     arg(self.runner.result())
-                myMessage = getExceptionWithStacktrace(
-                    myException, theHtml=True, theContext=myContext)
-            raise Exception(myMessage)
+                myMessage = getErrorMessage(myException, theContext=myContext)
+            self.showErrorMessage(myMessage)
+            return
 
         try:
             self.aggregator.runner = self.runner
@@ -1587,27 +1566,45 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         except InsufficientOverlapError, e:
             # FIXME (MB): This branch is not covered by the tests
-            myMessage = self.tr(
-                '<p>There was insufficient overlap between the input layers '
+            myDescription = self.tr(
+                'There was insufficient overlap between the input layers '
                 'and / or the layers and the viewable area. Please select two '
                 'overlapping layers and zoom or pan to them or disable '
                 'viewable area clipping in the options dialog. Full details '
-                'follow:</p>'
-                '<p>Failed to obtain the optimal extent given:</p>'
-                '<p>Hazard: %1</p>'
-                '<p>Exposure: %2</p>'
-                '<p>Viewable area Geo Extent: %3</p>'
-                '<p>Hazard Geo Extent: %4</p>'
-                '<p>Exposure Geo Extent: %5</p>'
-                '<p>Viewable area clipping enabled: %6</p>'
-                '<p>Details: %7</p>').\
-                arg(myHazardLayer.source()).\
-                arg(myExposureLayer.source()).\
-                arg(QtCore.QString(str(myViewportGeoExtent))).\
-                arg(QtCore.QString(str(myHazardGeoExtent))).\
-                arg(QtCore.QString(str(myExposureGeoExtent))).\
-                arg(QtCore.QString(str(self.clipToViewport))).\
-                arg(str(e))
+                'follow:')
+            myMessage = m.Message(myDescription)
+            myText = m.Paragraph(
+                self.tr('Failed to obtain the optimal extent given:'))
+            myMessage.add(myText)
+            myList = m.BulletedList()
+            # We must use Qt string interpolators for tr to work properly
+            myList.add(
+                self.tr('Hazard: %1').arg(
+                    myHazardLayer.source()))
+
+            myList.add(
+                self.tr('Exposure: %1').arg(
+                    myExposureLayer.source()))
+
+            myList.add(
+                self.tr('Viewable area Geo Extent: %1').arg(
+                    QtCore.QString(str(myViewportGeoExtent))))
+
+            myList.add(
+                self.tr('Hazard Geo Extent: %1').arg(
+                    QtCore.QString(str(myHazardGeoExtent))))
+
+            myList.add(
+                self.tr('Exposure Geo Extent: %1').arg(
+                    QtCore.QString(str(myExposureGeoExtent))))
+
+            myList.add(
+                self.tr('Viewable area clipping enabled: %1').arg(
+                    QtCore.QString(str(self.clipToViewport))))
+            myList.add(
+                self.tr('Details: %1').arg(
+                    str(e)))
+            myMessage.add(myList)
             raise InsufficientOverlapError(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
@@ -1696,10 +1693,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 22
         self.showBusy(myTitle, myMessage, myProgress)
         try:
-            myClippedHazard = clipLayer(theLayer=myHazardLayer,
-                                            theExtent=myBufferedGeoExtent,
-                                            theCellSize=myCellSize,
-                                            theHardClipFlag=self.clipHard)
+            myClippedHazard = clipLayer(
+                theLayer=myHazardLayer,
+                theExtent=myBufferedGeoExtent,
+                theCellSize=myCellSize,
+                theHardClipFlag=self.clipHard)
         except CallGDALError, e:
             raise e
         except IOError, e:
@@ -1771,66 +1769,53 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised.
         """
-        myReport = ('<table class="table table-striped condensed'
-                    ' bordered-table">')  # will be overridden if needed
+        myReport = m.Message()
         if theLayer is not None:
             try:
                 myKeywords = self.keywordIO.readKeywords(theLayer)
 
                 if 'impact_summary' in myKeywords:
-                    myReport = myKeywords['impact_summary']
+                    myReport.add(m.Text(myKeywords['impact_summary']))
                     if 'postprocessing_report' in myKeywords:
-                        myReport += myKeywords['postprocessing_report']
-                            # append properties of the result layer
-
-                    myReport += impactLayerAttribution(myKeywords)
-
+                        myReport.add(myKeywords['postprocessing_report'])
+                    myReport.add(impactLayerAttribution(myKeywords))
                     self.pbnPrint.setEnabled(True)
-
-                    # TODO: Shouldn't this line be in the start of the else
-                    #     block below? (TS)
-                    myReport += ('<table class="table table-striped condensed'
-                                 ' bordered-table">')
-
                 else:
                     self.pbnPrint.setEnabled(False)
+                    myList = m.BulletedList()
                     for myKeyword in myKeywords:
                         myValue = myKeywords[myKeyword]
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title':
                             myValue = safeTr(myValue)
-
                         # Add this keyword to report
-                        myReport += ('<tr>'
-                                     # FIXME (Ole): Not sure if this will work
-                                     # with translations
-                                     '<th>'
-                                     +
-                                     self.tr(myKeyword.capitalize())
-                                     +
-                                     '</th>'
-                                     '</tr>'
-                                     '<tr>'
-                                     '<td>' + str(myValue) + '</td>'
-                                     '</tr>')
-                    myReport += '</table>'
-            except (KeywordNotFoundError, HashNotFoundError,
+                        myKey = m.ImportantText(
+                            self.tr(myKeyword.capitalize()))
+                        myValue = str(myValue)
+                        myList.add(m.Text(myKey, myValue))
+                    myReport.add(myList)
+
+            except (KeywordNotFoundError,
+                    HashNotFoundError,
                     InvalidParameterError), e:
-                myContext = self.tr(
-                    'No keywords have been defined for this layer yet. If you '
-                    'wish to use it as an impact or hazard layer in a '
-                    'scenario, please use the keyword editor. You can open the '
-                    'keyword editor by clicking on the '
-                    ' <img src="qrc:/plugins/inasafe/keywords.png" '
-                    ' width="16" height="16"> icon in the toolbar, or choosing '
-                    'Plugins -> InaSAFE -> Keyword Editor from the menus.')
-                myReport += getExceptionWithStacktrace(
-                    e, theHtml=True, theContext=myContext)
+                myContext = m.Message(
+                    m.Text(self.tr(
+                        'No keywords have been defined for this layer yet. If '
+                        'you wish to use it as an impact or hazard layer in a '
+                        'scenario, please use the keyword editor. You can open '
+                        'the keyword editor by clicking on the ')),
+                    m.Image('qrc:/plugins/inasafe/keywords.png'),
+                    m.Text(self.tr(
+                        'icon in the toolbar, or choosing Plugins -> InaSAFE '
+                        '-> Keyword Editor from the menus.')))
+                myErrorMessage = getErrorMessage(e, theContext=myContext)
+                self.showErrorMessage(myErrorMessage)
             except Exception, e:
-                myReport += getExceptionWithStacktrace(e, theHtml=True)
+                myMessage = getErrorMessage(e)
+                self.showErrorMessage(myErrorMessage)
             if myReport is not None:
-                self.showStaticMessage(m.Message(str(myReport)))
+                self.showStaticMessage(myReport)
         else:
             LOGGER.debug('Layer is None')
 
@@ -1845,11 +1830,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
         """
-        myStateDict = {'hazard': self.cboHazard.currentText(),
-                       'exposure': self.cboExposure.currentText(),
-                       'function': self.cboFunction.currentText(),
-                       'aggregation': self.cboAggregation.currentText(),
-                       'report': self.wvResults.page().currentFrame().toHtml()}
+        myStateDict = {
+            'hazard': self.cboHazard.currentText(),
+            'exposure': self.cboExposure.currentText(),
+            'function': self.cboFunction.currentText(),
+            'aggregation': self.cboAggregation.currentText(),
+            'report': self.wvResults.page().currentFrame().toHtml()}
         self.state = myStateDict
 
     def restoreState(self):
@@ -1951,9 +1937,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMap.printToPdf(myMapPdfFilePath)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
-            myReport = getExceptionWithStacktrace(e, theHtml=True)
-            if myReport is not None:
-                self.showStaticMessage(m.Message(myReport))
+            myReport = getErrorMessage(e)
+            self.showErrorMessage(myReport)
 
         # Make sure the file paths can wrap nicely:
         myWrappedMapPath = myMapPdfFilePath.replace(os.sep, '<wbr>' + os.sep)

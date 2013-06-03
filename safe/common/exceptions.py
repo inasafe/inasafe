@@ -22,75 +22,76 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 class InaSAFEError(RuntimeError):
     """Base class for all user defined execptions"""
-    pass
+    suggestion = 'An unspecified error occurred.'
 
 
 class ReadLayerError(InaSAFEError):
     """When a layer can't be read"""
-    pass
+    suggestion = (
+        'Check that the file exists and you have permissions to read it')
 
 
 class WriteLayerError(InaSAFEError):
     """When a layer can't be written"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class BoundingBoxError(InaSAFEError):
     """For errors relating to bboxes"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class VerificationError(InaSAFEError):
     """Exception thrown by verify()
     """
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class PolygonInputError(InaSAFEError):
     """For invalid inputs to numeric polygon functions"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class BoundsError(InaSAFEError):
     """For points falling outside interpolation grid"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class GetDataError(InaSAFEError):
     """When layer data cannot be obtained"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class PostProcessorError(Exception):
     """Raised when requested import cannot be performed if QGIS is too old."""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class WindowsError(Exception):
     """For windows specific errors."""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class GridXmlFileNotFoundError(Exception):
     """An exception for when an grid.xml could not be found"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class GridXmlParseError(Exception):
     """An exception for when something went wrong parsing the grid.xml """
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class ContourCreationError(Exception):
     """An exception for when creating contours from shakemaps goes wrong"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class InvalidLayerError(Exception):
     """Raised when a gis layer is invalid"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class ShapefileCreationError(Exception):
     """Raised if an error occurs creating the cities file"""
-    pass
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
