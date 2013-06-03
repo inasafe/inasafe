@@ -53,8 +53,6 @@ def checkMemoryUsage(
     except TypeError:
         # Could have been a vector layer for example
         LOGGER.exception('Error: Computed cellsize was None.')
-        _, myReadyMessage = self.validate()
-        self.displayHtml(myReadyMessage)
         return None
 
     LOGGER.info('Width: %s' % myWidth)
