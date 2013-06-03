@@ -324,6 +324,7 @@ class Aggregator(QtCore.QObject):
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
+        # show a styled aggregation layer
         if self.showIntermediateLayers and not self.aoiMode:
             if self.statisticsType == 'sum':
                 #style layer if we are summing
@@ -420,7 +421,7 @@ class Aggregator(QtCore.QObject):
         myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myTotal = 0
 
-        myPostprocessorProvider = self.layer.dataProvider()
+        myAggregationProvider = self.layer.dataProvider()
         self.layer.startEditing()
 
         if self.statisticsType == 'class_count':
@@ -428,18 +429,19 @@ class Aggregator(QtCore.QObject):
             myFields = [QgsField('%s_%s' % (f, self.targetField),
                                  QtCore.QVariant.String) for f in
                         self.statisticsClasses]
-            myPostprocessorProvider.addAttributes(myFields)
+            myAggregationProvider.addAttributes(myFields)
             self.layer.commitChanges()
 
-            myTmpAggrFieldMap = myPostprocessorProvider.fieldNameMap()
+            myTmpAggrFieldMap = myAggregationProvider.fieldNameMap()
             for k, v in myTmpAggrFieldMap.iteritems():
                 myAggrFieldMap[str(k)] = v
 
         elif self.statisticsType == 'sum':
             #add the total field to the layer
             myAggrField = self._sumFieldName()
-            myPostprocessorProvider.addAttributes([QgsField(
+            myAggregationProvider.addAttributes([QgsField(
                 myAggrField, QtCore.QVariant.Int)])
+
             self.layer.commitChanges()
             myAggrFieldIndex = self.layer.fieldNameIndex(
                 myAggrField)
@@ -553,7 +555,7 @@ class Aggregator(QtCore.QObject):
 
                     # Add features inside this polygon
                     myFID = myPolygonIndex
-                    myPostprocessorProvider.changeAttributeValues(
+                    myAggregationProvider.changeAttributeValues(
                         {myFID: myAttrs})
 
                     # make outside points the input to the next iteration
@@ -637,7 +639,7 @@ class Aggregator(QtCore.QObject):
 
             #apply to all area feature
             myFID = 0
-            myPostprocessorProvider.changeAttributeValues({myFID: myAttrs})
+            myAggregationProvider.changeAttributeValues({myFID: myAttrs})
 
         self.layer.commitChanges()
         return
@@ -681,7 +683,7 @@ class Aggregator(QtCore.QObject):
         # This is used to hold an *in memory copy* of the aggregation layer
         # or a in memory layer with the clip extents as a feature.
         if self.layer is None:
-            self.layer = self._extentsToMemoryLayer()
+            self.layer = self._extentsToLayer()
             # Area Of Interest (AOI) mode flag
         else:
             myGeoExtent = extentToGeoArray(
@@ -767,8 +769,8 @@ class Aggregator(QtCore.QObject):
 
         # FIXME (MB) maybe do raw geos without qgis
         #select all postproc polygons with no attributes
-        postprocProvider = self.layer.dataProvider()
-        postprocProvider.select([])
+        aggregationProvider = self.layer.dataProvider()
+        aggregationProvider.select([])
 
         # copy polygons to a memory layer
         myQgisMemoryLayer = copyInMemory(theQgisLayer)
@@ -798,7 +800,7 @@ class Aggregator(QtCore.QObject):
              myPostprocPolygon) in enumerate(myPostprocPolygons):
             LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
             myPolygonsCount = len(myRemainingPolygons)
-            postprocProvider.featureAtId(myPostprocPolygonIndex,
+            aggregationProvider.featureAtId(myPostprocPolygonIndex,
                                          myQgisPostprocPoly, True, [])
             myQgisPostprocGeom = QgsGeometry(myQgisPostprocPoly.geometry())
 
@@ -1016,7 +1018,7 @@ class Aggregator(QtCore.QObject):
 
         return myOutLayer
 
-    def _extentsToMemoryLayer(self):
+    def _extentsToLayer(self):
         """Memory layer for aggregation by using canvas extents as feature.
 
         We do this because the user elected to use no aggregation layer so we
@@ -1044,10 +1046,22 @@ class Aggregator(QtCore.QObject):
         myGeoExtent = extentToGeoArray(myRect, myCrs)
         # End of shamelessly duplicated code
 
-        myUUID = str(uuid.uuid4())
-        myUri = 'Polygon?crs=epsg:4326&index=yes&uuid=%s' % myUUID
+        myAttrName = self.tr('Area')
+        fields = {0: QgsField(myAttrName, QtCore.QVariant.String)}
+        myTempdir = temp_dir(sub_dir='preprocess')
+        myOutFilename = unique_filename(suffix='.shp',
+                                        dir=myTempdir)
+
+        mySHPWriter = QgsVectorFileWriter(myOutFilename,
+                                          'UTF-8',
+                                          fields,
+                                          QGis.WKBPolygon,
+                                          myCrs)
+        #flush the writer to write to file
+        del mySHPWriter
+
         myName = self.tr('Entire area')
-        myLayer = QgsVectorLayer(myUri, myName, 'memory')
+        myLayer = QgsVectorLayer(myOutFilename, myName, 'ogr')
         LOGGER.debug('created' + myLayer.name())
 
         if not myLayer.isValid():
@@ -1056,11 +1070,6 @@ class Aggregator(QtCore.QObject):
             raise (Exception(myMessage))
 
         myProvider = myLayer.dataProvider()
-        myLayer.startEditing()
-        myAttrName = self.tr('Area')
-        myProvider.addAttributes([QgsField(myAttrName,
-                                           QtCore.QVariant.String)])
-        myLayer.commitChanges()
 
         myLayer.startEditing()
         # add a feature the size of the impact layer bounding box
@@ -1079,8 +1088,13 @@ class Aggregator(QtCore.QObject):
             self.keywordIO.appendKeywords(
                 myLayer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
+        except InvalidParameterError:
+            self.keywordIO.writeKeywords(
+                myLayer,
+                {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except KeywordDbError, e:
             raise e
+
         return myLayer
 
     def _sendMessage(self, theMessage, dynamic=True):
