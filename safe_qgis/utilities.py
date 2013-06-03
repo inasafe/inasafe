@@ -645,7 +645,7 @@ def getErrorMessage(theException, theContext=None, theSuggestion=None):
 
     myTraceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
 
-    myProblem = Message(m.ImportantText(theException.__class__.__name__))
+    myProblem = m.Message(m.ImportantText(theException.__class__.__name__))
 
     if str(theException) is None or str(theException) == '':
         myProblem.append = m.Text(tr('No details provided'))
@@ -1152,7 +1152,7 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
             text in the attribution output. Defaults to False.
 
     Returns:
-        str: an html snippet containing attribution information for the impact
+        Text: an snippet containing attribution information for the impact
             layer. If no keywords are present or no appropriate keywords are
             present, None is returned.
 
@@ -1192,33 +1192,29 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     else:
         myExposureSource = tr('an unknown source')
 
-    myReport += ('<table class="table table-striped condensed'
-                 ' bordered-table">')
-    myReport += '<tr><th>%s</th></tr>' % myHazardDetails
-    myReport += '<tr><td>%s%s %s.</td></tr>' % (
+    myReport = Message()
+    myReport.add(m.Heading(myHazardDetails, level=3))
+    myReport.add(m.Paragraph(
         myHazardTitle,
         myJoinWords,
-        myHazardSource)
+        myHazardSource))
 
-    myReport += '<tr><th>%s</th></tr>' % myExposureDetails
-    myReport += '<tr><td>%s%s %s.</td></tr>' % (
+    myReport = Message()
+    myReport.add(m.Heading(myExposureDetails, level=3))
+    myReport.add(m.Paragraph(
         myExposureTitle,
         myJoinWords,
-        myExposureSource)
+        myExposureSource))
 
     if theInaSAFEFlag:
-        myReport += '<tr><th>%s</th></tr>' % tr('Software notes')
+        myReport.add(m.Heading(tr('Software notes'), level=3))
         myInaSAFEPhrase = tr(
-            'This report was created using InaSAFE '
-            'version %1. Visit http://inasafe.org to get '
-            'your free copy of this software!').arg(get_version())
-        myInaSAFEPhrase += tr(
-            'InaSAFE has been jointly developed by'
-            ' BNPB, AusAid & the World Bank')
-        myReport += '<tr><td>%s</td></tr>' % myInaSAFEPhrase
+            'This report was created using InaSAFE version %1. Visit '
+            'http://inasafe.org to get your free copy of this software!'
+            'InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR & the '
+            'World Bank').arg(get_version())
 
-    myReport += '</table>'
-
+        myReport.add(m.Paragraph(m.Text(myInaSAFEPhrase)))
     return myReport
 
 
