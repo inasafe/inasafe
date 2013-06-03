@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@
        <number>9</number>
       </property>
       <item>
-       <widget class="QWebView" name="wvResults">
+       <widget class="MessageViewer" name="wvResults" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
@@ -50,7 +50,7 @@
           <height>50</height>
          </size>
         </property>
-        <property name="url">
+        <property name="url" stdset="0">
          <url>
           <string>about:blank</string>
          </url>
@@ -346,9 +346,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QWebView</class>
+   <class>MessageViewer</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header>message_viewer</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

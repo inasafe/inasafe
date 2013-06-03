@@ -134,7 +134,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
-        self.wvResults = MessageViewer()
+        #self.wvResults = MessageViewer()
         # Set up dispatcher for dynamic messages
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages
@@ -1383,6 +1383,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myMessage = self.tr('Impact layer %1 was neither a raster or a '
                                 'vector layer').arg(myQGISImpactLayer.source())
+            # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
         # Add layers to QGIS

@@ -72,7 +72,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))])
 
     def run(self, layers):
-        """Flood impact to buildings (e.g. from Open Street Map)
+        """Flood impact to buildings (e.g. from Open Street Map).
         """
 
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]

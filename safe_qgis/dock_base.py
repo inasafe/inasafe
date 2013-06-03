@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Wed Mar 20 16:03:36 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Mon Jun  3 09:51:46 2013
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_DockBase(object):
     def setupUi(self, DockBase):
@@ -29,14 +38,14 @@ class Ui_DockBase(object):
         self.verticalLayout_4 = QtGui.QVBoxLayout()
         self.verticalLayout_4.setContentsMargins(9, -1, -1, -1)
         self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
-        self.wvResults = QtWebKit.QWebView(self.dockWidgetContents)
+        self.wvResults = MessageViewer(self.dockWidgetContents)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.wvResults.sizePolicy().hasHeightForWidth())
         self.wvResults.setSizePolicy(sizePolicy)
         self.wvResults.setMinimumSize(QtCore.QSize(0, 50))
-        self.wvResults.setUrl(QtCore.QUrl(_fromUtf8("about:blank")))
+        self.wvResults.setProperty("url", QtCore.QUrl(_fromUtf8("about:blank")))
         self.wvResults.setObjectName(_fromUtf8("wvResults"))
         self.verticalLayout_4.addWidget(self.wvResults)
         self.horizontalLayout_3 = QtGui.QHBoxLayout()
@@ -161,17 +170,17 @@ class Ui_DockBase(object):
         DockBase.setTabOrder(self.pbnRunStop, self.pbnHelp)
 
     def retranslateUi(self, DockBase):
-        DockBase.setWindowTitle(QtGui.QApplication.translate("DockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpQuestion.setTitle(QtGui.QApplication.translate("DockBase", "Question: In the event of", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolFunctionOptions.setToolTip(QtGui.QApplication.translate("DockBase", "Configure Impact Function Parameter", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolFunctionOptions.setText(QtGui.QApplication.translate("DockBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate results by", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnPrint.setText(QtGui.QApplication.translate("DockBase", "Print...", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnRunStop.setText(QtGui.QApplication.translate("DockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
+        DockBase.setWindowTitle(_translate("DockBase", "InaSAFE", None))
+        self.label_3.setText(_translate("DockBase", "Supported by:", None))
+        self.grpQuestion.setTitle(_translate("DockBase", "Question: In the event of", None))
+        self.label_7.setText(_translate("DockBase", "How many", None))
+        self.label_8.setText(_translate("DockBase", "&Might", None))
+        self.toolFunctionOptions.setToolTip(_translate("DockBase", "Configure Impact Function Parameter", None))
+        self.toolFunctionOptions.setText(_translate("DockBase", "...", None))
+        self.label_2.setText(_translate("DockBase", "Aggregate results by", None))
+        self.pbnHelp.setText(_translate("DockBase", "Help", None))
+        self.pbnPrint.setText(_translate("DockBase", "Print...", None))
+        self.pbnRunStop.setText(_translate("DockBase", "Run", None))
 
-from PyQt4 import QtWebKit
+from message_viewer import MessageViewer
 import resources_rc

@@ -28,7 +28,8 @@ STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 class MessageViewer(QtWebKit.QWebView):
     """A simple message queue mockup."""
-    def __init__(self):
+    def __init__(self, theDock):
+        _ = theDock  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
         # Always gets replaced when a new message is passed
@@ -36,7 +37,7 @@ class MessageViewer(QtWebKit.QWebView):
         # Always get appended until the next static message is called,
         # then cleared
         self.dynamic_messages = []
-        self.show()
+        #self.show()
 
         # Read the header and footer html snippets
         base_dir = os.path.dirname(__file__)
