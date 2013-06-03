@@ -81,7 +81,6 @@ class MessageViewer(QtWebKit.QWebView):
             string += message.to_html()
 
         string += self.footer
-        print string
         self.setHtml(string)
 
     def htmlHeader(self):
