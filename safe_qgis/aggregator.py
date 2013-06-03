@@ -263,7 +263,7 @@ class Aggregator(QtCore.QObject):
             m.Heading(self.tr('Aggregating results...')),
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
-                ' by %1').arg(self.cboAggregation.currentText())))
+                ' by %1').arg(self.layer.name())))
         self._sendMessage(myMessage)
 
         myImpactLayer = self.runner.impactLayer()
@@ -1046,7 +1046,7 @@ class Aggregator(QtCore.QObject):
 
         myUUID = str(uuid.uuid4())
         myUri = 'Polygon?crs=epsg:4326&index=yes&uuid=%s' % myUUID
-        myName = 'tmpPostprocessingLayer'
+        myName = self.tr('Entire area')
         myLayer = QgsVectorLayer(myUri, myName, 'memory')
         LOGGER.debug('created' + myLayer.name())
 
