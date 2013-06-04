@@ -351,8 +351,7 @@ class Aggregator(QtCore.QObject):
                     myMax = myCounter
 
                     myClasses.append(
-                        {'min': myMin,
-                         'max': myMax,
+                        {'value': myMin,
                          'colour': myColor,
                          'transparency': 30,
                          'label': '%s - %s' % (myMin, myMax)})
@@ -360,7 +359,7 @@ class Aggregator(QtCore.QObject):
 
                 myStyle = {'target_field': myAttr,
                            'style_classes': myClasses}
-                setVectorStyle(self.layer, myStyle)
+                setVectorCategorizedStyle(self.layer, myStyle)
             else:
                 #make style of layer pretty much invisible
                 myProps = {'style': 'no',
@@ -1014,7 +1013,7 @@ class Aggregator(QtCore.QObject):
             raise Exception('Invalid qgis Layer')
 
         if self.showIntermediateLayers:
-            QgsMapLayerRegistry.instance().addMapLayer(layer)
+            QgsMapLayerRegistry.instance().addMapLayer(myOutLayer)
 
         return myOutLayer
 
