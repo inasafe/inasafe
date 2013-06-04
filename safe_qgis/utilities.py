@@ -1161,7 +1161,7 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     """
     if theKeywords is None:
         return None
-    myReport = ''
+
     myJoinWords = ' - %s ' % tr('sourced from')
     myHazardDetails = tr('Hazard details')
     myHazardTitleKeyword = 'hazard_title'
@@ -1192,14 +1192,14 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
     else:
         myExposureSource = tr('an unknown source')
 
-    myReport = Message()
+    myReport = m.Message()
     myReport.add(m.Heading(myHazardDetails, level=3))
     myReport.add(m.Paragraph(
         myHazardTitle,
         myJoinWords,
         myHazardSource))
 
-    myReport = Message()
+    myReport = m.Message()
     myReport.add(m.Heading(myExposureDetails, level=3))
     myReport.add(m.Paragraph(
         myExposureTitle,

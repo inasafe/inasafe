@@ -2034,6 +2034,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myQGISLayer.isValid():
             return myQGISLayer
         else:
-            myMessage = self.tr('Loaded impact layer "%1" is not'
-                                ' valid').arg(myFilename)
+            myMessage = self.tr(
+                'Loaded impact layer "%1" is not valid').arg(myFilename)
             raise Exception(myMessage)
