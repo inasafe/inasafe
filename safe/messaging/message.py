@@ -112,7 +112,7 @@ class Message(MessageElement):
                 last_was_text = False
         return message
 
-    def to_html(self):
+    def to_html(self, noNewline=False):
         """Render a MessageElement queue as html
 
         Args:
@@ -137,4 +137,7 @@ class Message(MessageElement):
             else:
                 message += '\n'
                 last_was_text = False
+
+        if noNewline:
+            return message.replace('\n', '')
         return message

@@ -1346,7 +1346,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQGISImpactLayer,
                                                'impact_summary')
-        myReport += impactLayerAttribution(myKeywords)
+        myReport += impactLayerAttribution(myKeywords).to_html(True)
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
