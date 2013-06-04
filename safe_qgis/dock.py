@@ -1042,7 +1042,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.aggregator.layer, myOriginalKeywords)
         LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
         LOGGER.debug(
-            'Do zonal aggregation: %s' % str(self.aggregator.aoiMode))
+            'AOImode: %s' % str(self.aggregator.aoiMode))
         self.runtimeKeywordsDialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
