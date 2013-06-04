@@ -199,6 +199,47 @@ class AggregatorTest(unittest.TestCase):
         myMessage = ('The aggregation should be None. Found: %s' % myAttribute)
         assert myAttribute is None, myMessage
 
+    def test_preprocessing(self):
+        """Preprocessing results are correct.
+
+        TODO - this needs to be fixed post dock refactor.
+
+        """
+
+        # See qgis project in test data: vector_preprocessing_test.qgs
+        #add additional layers
+        myFileList = ['jakarta_crosskabupaten_polygons.shp']
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        myFileList = ['kabupaten_jakarta.shp']
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=BOUNDDATA)
+
+        myRunButton = DOCK.pbnRunStop
+
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard='jakarta_crosskabupaten_polygons',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregation='kabupaten jakarta',
+            theAggregationEnabledFlag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        # Press RUN
+        # noinspection PyTypeChecker,PyCallByClass
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKeywordsDialog.accept()
+
+        myExpectedFeatureCount = 20
+        myMessage = ('The preprocessing should have generated %s features, '
+                     'found %s' % (myExpectedFeatureCount,
+                                   DOCK.preprocessedFeatureCount))
+        self.assertEqual(myExpectedFeatureCount, DOCK.preprocessedFeatureCount,
+                         myMessage)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

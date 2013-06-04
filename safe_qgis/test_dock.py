@@ -59,8 +59,8 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       canvasList)
 
 from safe_qgis.dock import Dock
-from safe_qgis.utilities import (setRasterStyle,
-                                 qgisVersion)
+from safe_qgis.styling import setRasterStyle
+from safe_qgis.utilities import qgisVersion
 
 
 # Retired impact function for characterisation (Ole)
@@ -135,7 +135,7 @@ class DockTest(unittest.TestCase):
         self.assertEquals(myFlag, False, myMessage)
 
         # Now check we DO validate a populated DOCK
-        populatemyDock()
+        populatemyDock(DOCK)
         myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on '
                      'a populated for with selections.')
@@ -152,7 +152,7 @@ class DockTest(unittest.TestCase):
         self.assertEquals(myFlag, False, myMessage)
 
         # Now check OK IS enabled on a populated DOCK
-        populatemyDock()
+        populatemyDock(DOCK)
         myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on a ' +
                      'populated DOCK with selections.')
@@ -1133,43 +1133,6 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation report should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
-
-    def test_preprocessing(self):
-        """preprocessing results are correct."""
-
-        # See qgis project in test data: vector_preprocessing_test.qgs
-        #add additional layers
-        myFileList = ['jakarta_crosskabupaten_polygons.shp']
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
-        myFileList = ['kabupaten_jakarta.shp']
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=BOUNDDATA)
-
-        myRunButton = DOCK.pbnRunStop
-
-        myResult, myMessage = setupScenario(
-            DOCK,
-            theHazard='jakarta_crosskabupaten_polygons',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard',
-            theAggregation='kabupaten jakarta',
-            theAggregationEnabledFlag=True)
-        assert myResult, myMessage
-
-        # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
-        # Press RUN
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKeywordsDialog.accept()
-
-        myExpectedFeatureCount = 20
-        myMessage = ('The preprocessing should have generated %s features, '
-                     'found %s' % (myExpectedFeatureCount,
-                                   DOCK.preprocessedFeatureCount))
-        self.assertEqual(myExpectedFeatureCount, DOCK.preprocessedFeatureCount,
-                         myMessage)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different

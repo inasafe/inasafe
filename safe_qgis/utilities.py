@@ -21,7 +21,6 @@ import os
 import sys
 import traceback
 import logging
-import numpy
 import uuid
 
 from PyQt4 import QtCore, QtGui
@@ -34,13 +33,11 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsVectorLayer,
-    QgsFeature,
-    QgsCategorizedSymbolRendererV2)
+    QgsFeature)
 
-from safe_interface import temp_dir, ErrorMessage
+from safe_interface import ErrorMessage
 
 from safe_qgis.exceptions import (
-    MethodUnavailableError,
     MemoryLayerCreationError)
 
 from safe_qgis.safe_interface import (

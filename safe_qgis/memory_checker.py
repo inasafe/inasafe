@@ -52,14 +52,14 @@ def checkMemoryUsage(
         myHeight = myHeight / theCellSize
     except TypeError:
         # Could have been a vector layer for example
-        LOGGER.exception('Error: Computed cellsize was None.')
+        LOGGER.info('Error: Computed cellsize was None.')
         return None
 
     LOGGER.info('Width: %s' % myWidth)
     LOGGER.info('Height: %s' % myHeight)
     LOGGER.info('Pixel Size: %s' % theCellSize)
 
-    # Compute mem requirement in MB (assuming numpy uses 8bytes by per
+    # Compute mem requirement in MB (assuming numpy uses 8 bytes by per
     # cell) see this link:
     # http://stackoverflow.com/questions/11784329/
     #      python-memory-usage-of-numpy-arrays

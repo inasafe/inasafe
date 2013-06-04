@@ -17,23 +17,16 @@ __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
 import sys
-import traceback
 import logging
 import math
 import numpy
-import uuid
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import QCoreApplication
 
 from qgis.core import (
     QGis,
     QgsRasterLayer,
-    QgsMapLayer,
-    QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform,
     QgsGraduatedSymbolRendererV2,
     QgsSymbolV2,
     QgsRendererRangeV2,
@@ -41,24 +34,11 @@ from qgis.core import (
     QgsSymbolLayerV2Registry,
     QgsColorRampShader,
     QgsRasterTransparency,
-    QgsVectorLayer,
-    QgsFeature,
     QgsCategorizedSymbolRendererV2)
 
-from safe_interface import temp_dir, ErrorMessage
+from safe_qgis.exceptions import StyleError
 
-from safe_qgis.exceptions import (StyleError,
-                                  MethodUnavailableError,
-                                  MemoryLayerCreationError)
-
-from safe_qgis.safe_interface import (
-    DEFAULTS,
-    safeTr,
-    get_version)
-
-from safe_qgis.utilities import getErrorMessage, qgisVersion
-
-from safe_qgis.safe_interface import messaging as m
+from safe_qgis.utilities import qgisVersion
 
 LOGGER = logging.getLogger('InaSAFE')
 
