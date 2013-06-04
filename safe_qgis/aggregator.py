@@ -47,7 +47,7 @@ from safe_qgis.utilities import (
     getDefaults,
     extentToGeoArray,
     safeToQGISLayer)
-from safe_qgis.styling import setVectorCategorizedStyle
+from safe_qgis.styling import setVectorGraduatedStyle
 from safe_qgis.safe_interface import (
     safeTr,
     temp_dir,
@@ -354,7 +354,8 @@ class Aggregator(QtCore.QObject):
                     myMax = myCounter
 
                     myClasses.append(
-                        {'value': myMin,
+                        {'min': myMin,
+                         'max': myMax,
                          'colour': myColor,
                          'transparency': 30,
                          'label': '%s - %s' % (myMin, myMax)})
@@ -362,7 +363,7 @@ class Aggregator(QtCore.QObject):
 
                 myStyle = {'target_field': myAttr,
                            'style_classes': myClasses}
-                setVectorCategorizedStyle(self.layer, myStyle)
+                setVectorGraduatedStyle(self.layer, myStyle)
             else:
                 #make style of layer pretty much invisible
                 myProps = {'style': 'no',
