@@ -94,3 +94,11 @@ class MessageViewer(QtWebKit.QWebView):
         if self.footer is None:
             self.footer = htmlFooter()
         return self.footer
+
+    def pageToText(self):
+        """Return the current page contents as plain text."""
+        self.page().currentFrame().toPlainText()
+
+    def pageToHtml(self):
+        """Return the current page contents as html."""
+        self.page().currentFrame().toHtml()

@@ -169,12 +169,6 @@ class DockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        #QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        #QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
-        #
-        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-
         # Hazard layer
         myIndex = DOCK.cboHazard.findText(PADANG2009_title)
         assert myIndex != -1, 'Padang 2009 scenario hazard layer not found'
@@ -208,7 +202,7 @@ class DockTest(unittest.TestCase):
 
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         # Expected output:
         #Buildings    Total
         #All:    3160
@@ -224,50 +218,25 @@ class DockTest(unittest.TestCase):
         assert format_int(2993) in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_small(self):
-        """Padang 2009 fatalities estimated correctly (small extent)"""
+        """Padang 2009 fatalities estimated correctly (small extent)."""
 
         # Push OK with the left mouse button
-
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 
-        myMessage = 'Run button was not enabled'
-        assert myButton.isEnabled(), myMessage
-
-        # Simulate choosing another combo item and running
-        # the model again
-        myIndex = DOCK.cboHazard.findText(PADANG2009_title)
-        assert myIndex != -1, 'Padang 2009 scenario hazard layer not found'
-        DOCK.cboHazard.setCurrentIndex(myIndex)
-
-        # Exposure layers
-        myIndex = DOCK.cboExposure.findText('People')
-        assert myIndex != -1, 'People'
-        DOCK.cboExposure.setCurrentIndex(myIndex)
-
-        # Choose impact function
-        myIndex = DOCK.cboFunction.findText('Earthquake Fatality Function')
-        myMessage = ('Earthquake Fatality Function not '
-                     'found: ' + combosToString(DOCK))
-        assert myIndex != -1, myMessage
-        DOCK.cboFunction.setCurrentIndex(myIndex)
-
-        myDict = getUiState(DOCK)
-        myExpectedDict = {'Hazard': PADANG2009_title,
-                          'Exposure': 'People',
-                          'Impact Function Id': 'Earthquake Fatality Function',
-                          'Impact Function Title':
-                          'Earthquake Fatality Function',
-                          'Run Button Enabled': True}
-        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-            myDict, myExpectedDict, combosToString(DOCK))
-        assert myDict == myExpectedDict, myMessage
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard=PADANG2009_title,
+            theExposure='People',
+            theFunction='Earthquake Fatality Function',
+            theFunctionId='Flood Evacuation Function Vector Hazard')
+        assert myResult, myMessage
 
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         # Check against expected output
         myMessage = ('Unexpected result returned for Earthquake Fatality '
@@ -323,7 +292,7 @@ class DockTest(unittest.TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         # Check against expected output
         myMessage = ('Unexpected result returned for Earthquake Fatality '
@@ -360,7 +329,7 @@ class DockTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         #print myResult
         # Post clip on steroids refactor
@@ -407,7 +376,7 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         # Check for an error containing InsufficientOverlapError
         myExpectedString = 'InsufficientOverlapError'
@@ -441,7 +410,7 @@ class DockTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         # Check that the number is as what was calculated by
         # Marco Hartman form HKV
@@ -469,7 +438,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
 
@@ -498,7 +467,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people needing evacuation
@@ -524,7 +493,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
@@ -552,7 +521,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of population might be affected
@@ -581,7 +550,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -610,7 +579,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -637,7 +606,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -682,7 +651,7 @@ class DockTest(unittest.TestCase):
 
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -753,6 +722,8 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
 
         # Run manually so we can get the output layer
+        DOCK._prepareAggregator()
+        DOCK.aggregator.validateKeywords()
         DOCK.setupCalculator()
         myRunner = DOCK.calculator.getRunner()
         myRunner.run()  # Run in same thread
@@ -799,7 +770,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
         assert format_int(2366) in myResult, myMessage
@@ -828,7 +799,7 @@ class DockTest(unittest.TestCase):
         # with nosetest, but OK when run normally.
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         # Check that none of these  get a NaN value:
         assert 'Unknown' in myResult
@@ -1027,7 +998,7 @@ class DockTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
         assert format_int(68) in myResult, myMessage
@@ -1117,7 +1088,7 @@ class DockTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart',
+            theAggregationLayer='kabupaten jakarta singlepart',
             theAggregationEnabledFlag=True)
         assert myResult, myMessage
 
@@ -1129,7 +1100,7 @@ class DockTest(unittest.TestCase):
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         DOCK.runtimeKeywordsDialog.accept()
 
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         myMessage = ('The aggregation report should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
@@ -1208,7 +1179,7 @@ Problem:
 Exception : AHAHAH I got you
 Click for Diagnostic Information:
 """
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         myMessage = ('The result message should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
@@ -1240,7 +1211,7 @@ Problem:
 AttributeError : 'NoneType' object has no attribute 'keywords'
 Click for Diagnostic Information:
 """
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.pageToText()
         myMessage = ('The result message should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
@@ -1325,51 +1296,31 @@ Click for Diagnostic Information:
 
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
-        #raster hazard
-        #raster exposure
+
+        # With aggregation layer
         myResult, myMessage = setupScenario(
             DOCK,
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
+            theAggregationLayer='kabupaten jakarta singlepart',
             theAggregationEnabledFlag=True)
-        myMessage += ' when the when hazard and exposure layer are raster'
+        myMessage += ' when an aggregation layer is defined.'
         assert myResult, myMessage
 
-        #vector hazard
-        #raster exposure
+        # With no aggregation layer
+        myLayer = DOCK.getAggregationLayer()
+        myId = myLayer.id()
+        QgsMapLayerRegistry.instance().removeMapLayer(myId)
         myResult, myMessage = setupScenario(
             DOCK,
-            theHazard='A flood in Jakarta',
+            theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theFunctionId='Flood Evacuation Function',
             theAggregationEnabledFlag=False)
-        myMessage += ' when the when hazard is vector and exposure is raster'
-        assert myResult, myMessage
-
-        #raster hazard
-        #vector exposure
-        myResult, myMessage = setupScenario(
-            theHazard='Tsunami Max Inundation',
-            theExposure='Tsunami Building Exposure',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function',
-            theAggregationEnabledFlag=False)
-        myMessage += ' when the when hazard is raster and exposure is vector'
-        assert myResult, myMessage
-
-        #vector hazard
-        #vector exposure
-        myResult, myMessage = setupScenario(
-            DOCK,
-            theHazard='A flood in Jakarta',
-            theExposure='Essential buildings',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function',
-            theAggregationEnabledFlag=False)
-        myMessage += ' when the when hazard and exposure layer are vector'
+        myMessage += ' when no aggregation layer is defined.'
         assert myResult, myMessage
 
 if __name__ == '__main__':

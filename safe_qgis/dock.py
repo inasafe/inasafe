@@ -600,17 +600,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.setOkButtonStatus()
 
     def toggleAggregationCombo(self):
-        """Helper function to toggle the aggregation combo enabled status.
+        """Toggle the aggregation combo enabled status.
 
         Whether the combo is toggled on or off will depend on the current dock
         status.
 
         Args:
-           None.
+           None
+
         Returns:
            None
+
         Raises:
-           no
+           None
         """
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
@@ -1069,7 +1071,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
-            # TODO - use new error message API! TS
             self.showErrorMessage(m.Message(str(myMessage)))
             self.hideBusy()
             return
@@ -1090,6 +1091,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            myMessage = getErrorMessage(e)
+            self.showErrorMessage(myMessage)
             self.hideBusy()
             return None  # ignore any error
 
