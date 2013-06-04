@@ -1812,9 +1812,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         '-> Keyword Editor from the menus.')))
                 myErrorMessage = getErrorMessage(e, theContext=myContext)
                 self.showErrorMessage(myErrorMessage)
+                return
             except Exception, e:
-                myMessage = getErrorMessage(e)
+                myErrorMessage = getErrorMessage(e)
                 self.showErrorMessage(myErrorMessage)
+                return
             if myReport is not None:
                 self.showStaticMessage(myReport)
         else:
@@ -1906,9 +1908,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         'trying to print.'))
             return
 
-        self.showBusy(self.tr('Map Creator'),
-                      self.tr('Preparing map and report'),
-                      theProgress=20)
+        self.showDynamicMessage(
+            m.Message(
+                m.ImportantText(self.tr('Map Creator')),
+                m.Text(self.tr('Preparing map and report'))))
 
         myMap.setImpactLayer(self.iface.activeLayer())
         LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
@@ -1922,10 +1925,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMapPdfFilePath = str(myMapPdfFilePath)
 
         if myMapPdfFilePath is None or myMapPdfFilePath == '':
-            self.showBusy(self.tr('Map Creator'),
-                          self.tr('Printing cancelled!'),
-                          theProgress=100)
-            self.hideBusy()
+            self.showDynamicMessage(
+                m.Message(
+                    m.ImportantText(self.tr('Map Creator')),
+                    m.Text(self.tr('Printing cancelled!'))))
             return
 
         myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
@@ -1944,14 +1947,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Make sure the file paths can wrap nicely:
         myWrappedMapPath = myMapPdfFilePath.replace(os.sep, '<wbr>' + os.sep)
         myWrappedHtmlPath = myHtmlPdfPath.replace(os.sep, '<wbr>' + os.sep)
-        myStatus = self.tr(
-            'Your PDF was created....opening using the default PDF viewer on '
-            'your system. The generated pdfs were saved as:%1%2%1 and %1%3').\
-            arg('<br>').arg(QtCore.QString(myWrappedMapPath)).\
-            arg(QtCore.QString(myWrappedHtmlPath))
-
-        self.showDynamicMessage(self.tr('Map Creator'))
-        self.showDynamicMessage(myStatus)
+        myStatus = m.Message(
+            m.Heading(self.tr('Map Creator'), level=3),
+            m.Paragraph(self.tr(
+                'Your PDF was created....opening using the default PDF viewer '
+                'on your system. The generated pdfs were saved as:')),
+            m.Paragraph(myWrappedMapPath),
+            m.Paragraph(self.tr('and')),
+            m.Paragraph(myWrappedHtmlPath))
 
         # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
         QtGui.QDesktopServices.openUrl(
@@ -1962,12 +1965,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.QUrl('file:///' + myMapPdfFilePath,
                         QtCore.QUrl.TolerantMode))
 
-        self.showBusy(self.tr('Map Creator'),
-                      myStatus,
-                      theProgress=100)
-
+        self.showDynamicMessage(m.Message(m.Text(myStatus)))
         self.hideBusy()
-        #myMap.showComposer()
 
     def getFunctionID(self, theIndex=None):
         """Get the canonical impact function ID for the currently selected
