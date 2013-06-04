@@ -680,7 +680,7 @@ class Aggregator(QtCore.QObject):
     def _prepareLayer(self):
         """Prepare the aggregation layer to match analysis extents."""
         myMessage = m.Message(
-            m.Heading(self.tr('Preparing aggregation layer...')),
+            m.Heading(self.tr('Preparing aggregation layer...'), level=3),
             m.Paragraph(self.tr(
                 'We are clipping the aggregation layer to match the '
                 'intersection of the hazard and exposure layer extents.')))

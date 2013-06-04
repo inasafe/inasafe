@@ -61,8 +61,7 @@ class MessageViewer(QtWebKit.QWebView):
     def error_message_event(self, sender, message):
         """Error message event handler - set message state based on event."""
         _ = sender  # we arent using it
-        self.dynamic_messages = []
-        self.static_message = message
+        self.dynamic_messages.append(message)
         self.show_messages()
 
     def dynamic_message_event(self, sender, message):
@@ -78,10 +77,14 @@ class MessageViewer(QtWebKit.QWebView):
             string += self.static_message.to_html()
 
         for message in self.dynamic_messages:
-            string += message.to_html()
+            html = message.to_html()
+            if html is not None:
+                string += html
 
         string += self.footer
         self.setHtml(string)
+        #self.repaint()
+        #QtGui.qApp.processEvents()
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
