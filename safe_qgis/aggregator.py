@@ -691,8 +691,10 @@ class Aggregator(QtCore.QObject):
             myClippedLayer = clipLayer(
                 theLayer=self.layer,
                 theExtent=myGeoExtent)
+
+            myName = '%s %s' % (self.layer.name(), self.tr('aggregation'))
             self.layer = QgsVectorLayer(
-                myClippedLayer.source(), 'aggregation', 'ogr')
+                myClippedLayer.source(), myName, 'ogr')
 
     def _countFieldName(self):
         return self.prefix + 'count'
@@ -799,8 +801,8 @@ class Aggregator(QtCore.QObject):
              myPostprocPolygon) in enumerate(myPostprocPolygons):
             LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
             myPolygonsCount = len(myRemainingPolygons)
-            aggregationProvider.featureAtId(myPostprocPolygonIndex,
-                                         myQgisPostprocPoly, True, [])
+            aggregationProvider.featureAtId(
+                myPostprocPolygonIndex, myQgisPostprocPoly, True, [])
             myQgisPostprocGeom = QgsGeometry(myQgisPostprocPoly.geometry())
 
             # myPostprocPolygon bounding box values
@@ -1007,7 +1009,8 @@ class Aggregator(QtCore.QObject):
         del mySHPWriter
 #        LOGGER.debug('Created: %s' % self.preprocessedFeatureCount)
 
-        myOutLayer = QgsVectorLayer(myOutFilename, theQgisLayer.title(), 'ogr')
+        myName = '%s %s' % (theQgisLayer.name(), self.tr('preprocessed'))
+        myOutLayer = QgsVectorLayer(myOutFilename, myName, 'ogr')
         if not myOutLayer.isValid():
             #TODO (MB) use a better exception
             raise Exception('Invalid qgis Layer')
