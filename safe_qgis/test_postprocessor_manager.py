@@ -92,38 +92,40 @@ class PostprocessorManagerTest(unittest.TestCase):
             theAggregationLayer='kabupaten jakarta singlepart',
             theOkButtonFlag=True)
         assert myResult, myMessage
-        myBeforeCount = len(CANVAS.layers())
-        #LOGGER.info("Canvas list before:\n%s" % canvasList())
-        print [str(l.name()) for l in
-               QgsMapLayerRegistry.instance().mapLayers().values()]
+
         LOGGER.info("Registry list before:\n%s" %
-                    len(QgsMapLayerRegistry.instance().mapLayers()))
+                    QgsMapLayerRegistry.instance().mapLayers())
+
+        #one layer (the impact) should have been added
+        myExpectedCount = len(CANVAS.layers()) + 1
+
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKeywordsDialog.accept()
+
         myAfterCount = len(CANVAS.layers())
         LOGGER.info("Registry list after:\n%s" %
-                    len(QgsMapLayerRegistry.instance().mapLayers()))
-        #        print [str(l.name()) for l in QgsMapLayerRegistry.instance(
-        #           ).mapLayers().values()]
-        #LOGGER.info("Canvas list after:\n%s" % canvasList())
+                    QgsMapLayerRegistry.instance().mapLayers())
         myMessage = ('Expected %s items in canvas, got %s' %
-                     (myBeforeCount + 1, myAfterCount))
-        assert myBeforeCount + 1 == myAfterCount, myMessage
+                     (myExpectedCount, myAfterCount))
+        assert myExpectedCount == myAfterCount, myMessage
 
         # Now run again showing intermediate layers
-
         DOCK.showIntermediateLayers = True
-        myBeforeCount = len(CANVAS.layers())
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.runtimeKeywordsDialog.accept()
+        #one layer (the impact) should have been added
+        myExpectedCount += 2
         myAfterCount = len(CANVAS.layers())
+
         LOGGER.info("Canvas list after:\n %s" % canvasList())
         myMessage = ('Expected %s items in canvas, got %s' %
-                     (myBeforeCount + 2, myAfterCount))
+                     (myExpectedCount, myAfterCount))
         # We expect two more since we enabled showing intermedate layers
-        assert myBeforeCount + 2 == myAfterCount, myMessage
+        assert myExpectedCount == myAfterCount, myMessage
 
     def test_postProcessorOutput(self):
         """Check that the post processor does not add spurious report rows."""

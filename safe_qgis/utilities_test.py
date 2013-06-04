@@ -708,6 +708,9 @@ def loadStandardLayers(theDock=None):
     # so you should be able to put datasets in any order below.
     # If changing the order does cause tests to fail, please update the tests
     # to also use find instead of relative position. (Tim)
+    #
+    # WARNING: Please keep test_data/test/loadStandardLayers.qgs in sync with
+    # myFileList
     myFileList = [join(TESTDATA, 'Padang_WGS84.shp'),
                   join(EXPDATA, 'glp10ag.asc'),
                   join(HAZDATA, 'Shakemap_Padang_2009.asc'),
