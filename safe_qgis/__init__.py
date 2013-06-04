@@ -5,5 +5,5 @@ import sys
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from utilities import setupLogger
+from custom_logging import setupLogger
 setupLogger()
