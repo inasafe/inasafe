@@ -1016,6 +1016,7 @@ class Aggregator(QtCore.QObject):
             raise Exception('Invalid qgis Layer')
 
         if self.showIntermediateLayers:
+            self.keywordIO.updateKeywords(myOutLayer, {'title': myName})
             QgsMapLayerRegistry.instance().addMapLayer(myOutLayer)
 
         return myOutLayer
