@@ -144,7 +144,7 @@ class KeywordIOTest(unittest.TestCase):
         """Can we append file keywords with the generic readKeywords method."""
         myLayer, _ = makePadangLayerClone()
         myNewKeywords = {'category': 'exposure', 'test': 'TEST'}
-        self.keywordIO.appendKeywords(myLayer, myNewKeywords)
+        self.keywordIO.updateKeywords(myLayer, myNewKeywords)
         myKeywords = self.keywordIO.readKeywords(myLayer)
 
         for myKey, myValue in myNewKeywords.iteritems():

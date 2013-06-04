@@ -130,7 +130,7 @@ class KeywordIO(QObject):
         except:
             raise
 
-    def appendKeywords(self, theLayer, theKeywords):
+    def updateKeywords(self, theLayer, theKeywords):
         """Write keywords for a datasource.
 
         Args:

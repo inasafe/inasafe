@@ -201,7 +201,7 @@ class Aggregator(QtCore.QObject):
                 myKeywords[self.defaults['FEM_RATIO_KEY']] = \
                     self.defaults['FEM_RATIO']
 
-            self.keywordIO.appendKeywords(self.layer, myKeywords)
+            self.keywordIO.updateKeywords(self.layer, myKeywords)
             self.isValid = False
 
         return self.isValid
@@ -298,7 +298,7 @@ class Aggregator(QtCore.QObject):
             LOGGER.debug(myMessage)
 
         del myUnneededAttributes, myProvider, myFields
-        self.keywordIO.appendKeywords(
+        self.keywordIO.updateKeywords(
             self.layer, {'title': myLayerName})
 
         #find needed statistics type
@@ -1087,7 +1087,7 @@ class Aggregator(QtCore.QObject):
         myLayer.commitChanges()
 
         try:
-            self.keywordIO.appendKeywords(
+            self.keywordIO.updateKeywords(
                 myLayer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except InvalidParameterError:
