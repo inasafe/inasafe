@@ -753,6 +753,8 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
 
         # Run manually so we can get the output layer
+        DOCK._prepareAggregator()
+        DOCK.aggregator.validateKeywords()
         DOCK.setupCalculator()
         myRunner = DOCK.calculator.getRunner()
         myRunner.run()  # Run in same thread

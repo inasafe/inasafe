@@ -1069,7 +1069,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
-            # TODO - use new error message API! TS
             self.showErrorMessage(m.Message(str(myMessage)))
             self.hideBusy()
             return
@@ -1090,6 +1089,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            myMessage = getErrorMessage(e)
+            self.showErrorMessage(myMessage)
             self.hideBusy()
             return None  # ignore any error
 
