@@ -43,11 +43,11 @@ from safe_qgis.utilities import (
     getErrorMessage,
     isPolygonLayer,
     getLayerAttributeNames,
-    setVectorCategorizedStyle,
     copyInMemory,
     getDefaults,
     extentToGeoArray,
     safeToQGISLayer)
+from safe_qgis.styling import setVectorCategorizedStyle
 from safe_qgis.safe_interface import (
     safeTr,
     temp_dir,

@@ -41,11 +41,11 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.utilities import (
     isPolygonLayer,
     getLayerAttributeNames,
-    setVectorCategorizedStyle,
     copyInMemory,
     getDefaults,
     extentToGeoArray,
     safeToQGISLayer)
+from safe_qgis.styling import setVectorCategorizedStyle
 from safe_qgis.safe_interface import (
     safeTr,
     temp_dir,
