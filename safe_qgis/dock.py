@@ -263,6 +263,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             signal=ERROR_MESSAGE_SIGNAL,
             sender=self,
             message=theErrorMessage)
+        self.hideBusy()
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
@@ -1067,7 +1068,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFlag, myMessage = self.validate()
         if not myFlag:
             self.showErrorMessage(m.Message(str(myMessage)))
-            self.hideBusy()
             return
 
         try:
@@ -1077,7 +1077,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except (KeywordDbError, Exception), e:
             myMessage = getErrorMessage(e)
             self.showErrorMessage(myMessage)
-            self.hideBusy()
             return
 
         # Find out what the usable extent and cellsize are
@@ -1088,7 +1087,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             myMessage = getErrorMessage(e)
             self.showErrorMessage(myMessage)
-            self.hideBusy()
             return None  # ignore any error
 
         # Ensure there is enough memory
@@ -1165,32 +1163,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.setupCalculator()
         except CallGDALError, e:
-            self.spawnError(e, self.tr('An error occurred when calling a GDAL '
-                                       'command'))
+            self.spawnError(e, self.tr(
+                'An error occurred when calling a GDAL command'))
             return
         except IOError, e:
-            self.spawnError(e, self.tr('An error occurred when writing clip '
-                                       'file'))
+            self.spawnError(e, self.tr(
+                'An error occurred when writing clip file'))
             return
         except InsufficientOverlapError, e:
-            self.spawnError(e, self.tr('An exception occurred when setting up '
-                                       'the impact calculator.'))
+            self.spawnError(e, self.tr(
+                'An exception occurred when setting up the impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
-            self.spawnError(e,
-                            self.tr('An error occurred because there are '
-                                    'no features visible in the current view. '
-                                    'Try zooming out or panning until some '
-                                    'features become visible.'))
+            self.spawnError(e, self.tr(
+                'An error occurred because there are no features visible in '
+                'the current view. Try zooming out or panning until some '
+                'features become visible.'))
             return
         except InvalidProjectionError, e:
-            self.spawnError(e,
-                            self.tr('An error occurred because you are '
-                                    'using a layer containing density data '
-                                    '(e.g. population density) which will not '
-                                    'scale accurately if we re-project it from'
-                                    ' its native coordinate reference system '
-                                    'to WGS84/GeoGraphic.'))
+            self.spawnError(e, self.tr(
+                'An error occurred because you are using a layer containing '
+                'density data (e.g. population density) which will not '
+                'scale accurately if we re-project it from its native '
+                'coordinate reference system to WGS84/GeoGraphic.'))
             return
         except MemoryError, e:
             # This breaks dry as it is repeated elsewhere START
@@ -1304,8 +1299,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # On success, display generated report
             self.showStaticMessage(m.Message(str(myReport)))
         self.saveState()
-        # Hide hour glass
-        self.disableBusyCursor()
         self.hideBusy()
 
     def _completed(self):
@@ -1437,15 +1430,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner.impactLayer() is None:
             # Done was emitted, but no impact layer was calculated
             myResult = self.runner.result()
-            myMessage = str(self.tr('No impact layer was calculated. '
-                                    'Error message: %1\n').arg(str(myResult)))
+            myMessage = str(self.tr(
+                'No impact layer was calculated. Error message: %1\n'
+            ).arg(str(myResult)))
             myException = self.runner.lastException()
             if myException is not None:
-                myContext = self.tr('An exception occurred when calculating '
-                                    'the results. %1').\
-                    arg(self.runner.result())
+                myContext = self.tr(
+                    'An exception occurred when calculating the results. %1'
+                ).arg(self.runner.result())
                 myMessage = getErrorMessage(myException, theContext=myContext)
             self.showErrorMessage(myMessage)
+            self.hideBusy()
             return
 
         try:
