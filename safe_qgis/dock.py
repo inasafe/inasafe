@@ -91,7 +91,7 @@ from safe_qgis.keywords_dialog import KeywordsDialog
 
 
 LOGGER = logging.getLogger('InaSAFE')
-from pydev import pydevd
+# from pydev import pydevd
 
 from third_party.pydispatch import dispatcher
 
@@ -196,8 +196,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
-        pydevd.settrace(
-            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        # pydevd.settrace(
+        #     'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
         myCanvas = self.iface.mapCanvas()
 
