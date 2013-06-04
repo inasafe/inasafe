@@ -16,6 +16,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+
+from safe.common.utilities import ugettext as tr
+
 from item.message_element import MessageElement, InvalidMessageItemError
 from . import Message, Text, Heading, BulletedList, NumberedList
 
@@ -53,7 +56,9 @@ class ErrorMessage(MessageElement):
         if traceback is not None:
             tokens = traceback.split(' File')
             for token in tokens:
-                self.tracebacks.add(Text('File' + token))
+                token = token.strip()
+                if len(token) > 0:
+                    self.tracebacks.add(Text('In file ' + token))
 
     def _to_message_element(self, element):
         """
@@ -88,7 +93,7 @@ class ErrorMessage(MessageElement):
             Errors are propagated
         """
         message = Message()
-        message.add(Heading('PROBLEM'))
+        message.add(Heading(tr('Problem')))
         items = BulletedList()
         for p in reversed(self.problems):
             #p is _always_ not None
@@ -97,7 +102,7 @@ class ErrorMessage(MessageElement):
 
         if self.details.count(None) < len(self.details):
             items = BulletedList()
-            message.add(Heading('DETAIL'))
+            message.add(Heading(tr('Detail')))
             for d in reversed(self.details):
                 if d is not None:
                     items.add(d)
@@ -105,13 +110,13 @@ class ErrorMessage(MessageElement):
 
         if self.suggestions.count(None) < len(self.suggestions):
             items = BulletedList()
-            message.add(Heading('SUGGESTION'))
+            message.add(Heading(tr('Suggestion')))
             for s in reversed(self.suggestions):
                 if s is not None:
                     items.add(s)
             message.add(items)
 
-        message.add(Heading('TRACEBACK'))
+        message.add(Heading(tr('Traceback')))
         message.add(self.tracebacks)
         return message
 

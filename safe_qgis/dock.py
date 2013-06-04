@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
@@ -21,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import logging
-import uuid
 
 from functools import partial
 
@@ -32,14 +30,8 @@ from qgis.core import (
     QgsMapLayer,
     QgsVectorLayer,
     QgsRasterLayer,
-    QgsGeometry,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform,
-    QgsFeature,
-    QgsRectangle,
-    QgsPoint,
-    QgsField,
     QGis)
 
 from safe_qgis.dock_base import Ui_DockBase
@@ -47,8 +39,6 @@ from safe_qgis.help import Help
 from safe_qgis.utilities import (
     getErrorMessage,
     getWGS84resolution,
-    htmlHeader,
-    htmlFooter,
     qgisVersion,
     impactLayerAttribution,
     addComboItemInOrder,
@@ -70,7 +60,7 @@ from safe_qgis.safe_interface import (
     temp_dir,
     ReadLayerError)
 
-from safe_interface import messaging as m, ErrorMessage
+from safe_interface import messaging as m
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -95,13 +85,13 @@ from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
-from safe_qgis.message_viewer import MessageViewer
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import safe_qgis.resources  # pylint: disable=W0611
+
 
 LOGGER = logging.getLogger('InaSAFE')
-#from pydev import pydevd
+from pydev import pydevd
 
 from third_party.pydispatch import dispatcher
 
@@ -205,10 +195,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                self.accept)
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
-        #pydevd.settrace('localhost',
-        #            port=53100,
-        #            stdoutToServer=True,
-        #            stderrToServer=True)
+
+        pydevd.settrace(
+            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
         myCanvas = self.iface.mapCanvas()
 
@@ -1068,7 +1057,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             threading mode is enabled especially)
         """
 
-        self.showBusy()
+        myTitle = self.tr('Processing has started')
+        myDetails = self.tr(
+            'Please wait - processing may take a while depending on your '
+            'hardware configuration and the analysis extents and data.')
+        myMessage = m.Message(m.Heading(myTitle), myDetails)
+        self.showStaticMessage(myMessage)
+
         myFlag, myMessage = self.validate()
         if not myFlag:
             self.showErrorMessage(m.Message(str(myMessage)))
@@ -1247,14 +1242,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.processEvents()
 
         myTitle = self.tr('Calculating impact...')
-        myMessage = self.tr(
+        myDetail = self.tr(
             'This may take a little while - we are computing the areas that '
             'will be impacted by the hazard and writing the result to a new '
             'layer.')
-        myProgress = 66
-
+        myMessage = m.Message(m.Heading(myTitle), myDetail)
+        self.showDynamicMessage(myMessage)
         try:
-            self.showBusy(myTitle, myMessage, myProgress)
             if self.runInThreadFlag:
                 self.runner.start()  # Run in different thread
             else:
@@ -1328,10 +1322,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         myTitle = self.tr('Loading results...')
-        myMessage = self.tr('The impact assessment is complete - loading '
-                            'the results into QGIS now...')
-        myProgress = 99
-        self.showBusy(myTitle, myMessage, myProgress)
+        myDetail = self.tr(
+            'The impact assessment is complete - loading the results into '
+            'QGIS now...')
+        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
+        self.showDynamicMessage(myMessage)
 
         #myMessage = self.runner.result()
 
@@ -1411,39 +1406,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Load the help text into the wvResults widget"""
         if self.helpDialog:
             del self.helpDialog
-        self.helpDialog = Help(theParent=self.iface.mainWindow(),
-                               theContext='dock')
-
-    def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
-        """A helper function to indicate the plugin is processing.
-
-        Args:
-            * theTitle - an optional title for the status update. Should be
-              plain text only
-            * theMessage - an optional message to pass to the busy indicator.
-              Can be an html snippet.
-            * theProgress - a number between 0 and 100 indicating % complete
-
-        Returns:
-            None
-
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
-
-        ..note:: Uses bootstrap css for progress bar.
-        """
-        #self.pbnRunStop.setText('Cancel')
-        self.pbnRunStop.setEnabled(False)
-        myMessage = m.Message()
-        if theTitle is None:
-            theTitle = self.tr('Analyzing this question...')
-        myMessage.add(m.Heading(theTitle, level=3))
-        if theMessage is not None:
-            myMessage.add(theMessage)
-        self.showStaticMessage(myMessage)
-        self.repaint()
-        QtGui.qApp.processEvents()
-        self.grpQuestion.setEnabled(False)
+        self.helpDialog = Help(
+            theParent=self.iface.mainWindow(), theContext='dock')
 
     def hideBusy(self):
         """A helper function to indicate processing is done."""
@@ -1456,6 +1420,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(True)
         self.pbnRunStop.setEnabled(True)
         self.repaint()
+        self.disableBusyCursor()
 
     def aggregate(self):
         """Run all post processing steps.
@@ -1511,7 +1476,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
     def disableBusyCursor(self):
-        """Disable the hourglass cursor"""
+        """Disable the hourglass cursor."""
         QtGui.qApp.restoreOverrideCursor()
 
     def getClipParameters(self):
@@ -1691,11 +1656,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
         myTitle = self.tr('Preparing hazard data...')
-        myMessage = self.tr('We are resampling and clipping the hazard'
-                            'layer to match the intersection of the exposure'
-                            'layer and the current view extents.')
-        myProgress = 22
-        self.showBusy(myTitle, myMessage, myProgress)
+        myDetail = self.tr(
+            'We are resampling and clipping the hazard layer to match the '
+            'intersection of the exposure layer and the current view extents.')
+        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
+        self.showDynamicMessage(myMessage)
         try:
             myClippedHazard = clipLayer(
                 theLayer=myHazardLayer,
@@ -1708,11 +1673,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise e
 
         myTitle = self.tr('Preparing exposure data...')
-        myMessage = self.tr(
+        myDetail = self.tr(
             'We are resampling and clipping the exposure layer to match the '
             'intersection of the hazard layer and the current view extents.')
-        myProgress = 33
-        self.showBusy(myTitle, myMessage, myProgress)
+        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
+        self.showDynamicMessage(myMessage)
+
         myClippedExposure = clipLayer(
             theLayer=myExposureLayer,
             theExtent=myGeoExtent,
