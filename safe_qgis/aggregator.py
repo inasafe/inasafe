@@ -279,7 +279,11 @@ class Aggregator(QtCore.QObject):
         #delete unwanted fields
         myProvider = self.layer.dataProvider()
         myFields = myProvider.fields()
+
+        #mark important attributes as needed
+        self._setPersistantAttributes()
         myUnneededAttributes = []
+
         for i in myFields:
             if (myFields[i].name() not in
                     self.attributes.values()):
@@ -288,7 +292,6 @@ class Aggregator(QtCore.QObject):
         # noinspection PyBroadException
         try:
             self.layer.startEditing()
-            self._setPersistantAttributes()
             myProvider.deleteAttributes(myUnneededAttributes)
             self.layer.commitChanges()
         # FIXME (Ole): Disable pylint check for the moment
