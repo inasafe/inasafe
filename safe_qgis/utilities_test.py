@@ -593,7 +593,7 @@ def setupScenario(
         theFunction,
         theFunctionId,
         theOkButtonFlag=True,
-        theAggregation=None,
+        theAggregationLayer=None,
         theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.
 
@@ -607,17 +607,21 @@ def setupScenario(
             after this scenario is set up.
         * theAggregationLayer - (Optional) which layer should be used for
             aggregation
+        * theAggregationEnabledFlag - (Optional) whether it is expected that
+            aggregation should be enabled when the scenario is loaded.
 
     We require both theFunction and theFunctionId because safe allows for
     multiple functions with the same name but different id's so we need to be
     sure we have the right one.
+
+    .. note:: Layers are not actually loaded - the calling function is
+        responsible for that.
 
     Returns: bool - Indicating if the setup was successful
             str - A message indicating why it may have failed.
 
     Raises: None
     """
-
     if theHazard is not None:
         myIndex = theDock.cboHazard.findText(theHazard)
         myMessage = ('\nHazard Layer Not Found: %s\n Combo State:\n%s' %
@@ -642,19 +646,19 @@ def setupScenario(
             return False, myMessage
         theDock.cboFunction.setCurrentIndex(myIndex)
 
-    if theAggregation is not None:
-        myIndex = theDock.cboAggregation.findText(theAggregation)
+    if theAggregationLayer is not None:
+        myIndex = theDock.cboAggregation.findText(theAggregationLayer)
         myMessage = ('Aggregation layer Not Found: %s\n Combo State:\n%s' %
-                     (theAggregation, combosToString(theDock)))
+                     (theAggregationLayer, combosToString(theDock)))
         if myIndex == -1:
             return False, myMessage
         theDock.cboAggregation.setCurrentIndex(myIndex)
 
     if theAggregationEnabledFlag is not None:
         if theDock.cboAggregation.isEnabled() != theAggregationEnabledFlag:
-            myMessage = ('The aggregation combobox should be %s' %
-                        ('enabled' if theAggregationEnabledFlag else
-                         'disabled'))
+            myMessage = (
+                'The aggregation combobox should be %s' %
+                ('enabled' if theAggregationEnabledFlag else 'disabled'))
             return False, myMessage
 
     # Check that layers and impact function are correct
@@ -702,7 +706,7 @@ def loadStandardLayers(theDock=None):
     # Update on above. We are refactoring tests so they use find on combos
     # to set them appropriately, instead of relative in combo position
     # so you should be able to put datasets in any order below.
-    # If chancing the order does cause tests to fail, please update the tests
+    # If changing the order does cause tests to fail, please update the tests
     # to also use find instead of relative position. (Tim)
     myFileList = [join(TESTDATA, 'Padang_WGS84.shp'),
                   join(EXPDATA, 'glp10ag.asc'),

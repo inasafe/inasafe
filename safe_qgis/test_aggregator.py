@@ -102,7 +102,7 @@ class AggregatorTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart',
+            theAggregationLayer='kabupaten jakarta singlepart',
             theAggregationEnabledFlag=True)
         assert myResult, myMessage
         # Press RUN
@@ -131,7 +131,7 @@ class AggregatorTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 1 good attr')
+            theAggregationLayer='kabupaten jakarta singlepart 1 good attr')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -161,7 +161,7 @@ class AggregatorTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 0 good attr')
+            theAggregationLayer='kabupaten jakarta singlepart 0 good attr')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -189,7 +189,7 @@ class AggregatorTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart with None keyword')
+            theAggregationLayer='kabupaten jakarta singlepart with None keyword')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -221,7 +221,7 @@ class AggregatorTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard',
-            theAggregation='kabupaten jakarta',
+            theAggregationLayer='kabupaten jakarta',
             theAggregationEnabledFlag=True)
         assert myResult, myMessage
 

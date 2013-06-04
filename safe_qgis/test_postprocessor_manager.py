@@ -89,7 +89,7 @@ class PostprocessorManagerTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart',
+            theAggregationLayer='kabupaten jakarta singlepart',
             theOkButtonFlag=True)
         assert myResult, myMessage
         myBeforeCount = len(CANVAS.layers())

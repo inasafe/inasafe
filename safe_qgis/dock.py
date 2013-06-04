@@ -600,17 +600,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.setOkButtonStatus()
 
     def toggleAggregationCombo(self):
-        """Helper function to toggle the aggregation combo enabled status.
+        """Toggle the aggregation combo enabled status.
 
         Whether the combo is toggled on or off will depend on the current dock
         status.
 
         Args:
-           None.
+           None
+
         Returns:
            None
+
         Raises:
-           no
+           None
         """
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
