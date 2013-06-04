@@ -41,7 +41,7 @@ except ImportError:
     # Note these strings cant be translated.
     QMessageBox.warning(None, 'InaSAFE',
                         'Please restart QGIS to use this plugin.')
-import utilities
+import custom_logging
 
 
 class Plugin:
@@ -74,7 +74,7 @@ class Plugin:
         self.translator = None
         self.setupI18n()
         #print self.tr('InaSAFE')
-        utilities.setupLogger()
+        custom_logging.setupLogger()
 
     #noinspection PyArgumentList
     def setupI18n(self, thePreferredLocale=None):

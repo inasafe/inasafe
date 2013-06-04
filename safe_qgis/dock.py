@@ -47,16 +47,16 @@ from safe_qgis.help import Help
 from safe_qgis.utilities import (
     getErrorMessage,
     getWGS84resolution,
-    setVectorGraduatedStyle,
     htmlHeader,
     htmlFooter,
-    setRasterStyle,
     qgisVersion,
     impactLayerAttribution,
     addComboItemInOrder,
-    setVectorCategorizedStyle,
     extentToGeoArray)
-
+from safe_qgis.styling import (
+    setRasterStyle,
+    setVectorGraduatedStyle,
+    setVectorCategorizedStyle)
 from safe_qgis.memory_checker import checkMemoryUsage
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (

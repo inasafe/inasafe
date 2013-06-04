@@ -206,13 +206,16 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
         'style_classes':
         [{'transparency': 1, 'value': 1, 'colour': '#fecc5c',
           'label': 'Low damage', 'size' : 1},
-        {'transparency': 55, 'max': 2, 'colour': '#fd8d3c',
+        {'transparency': 55, 'value': 2, 'colour': '#fd8d3c',
          'label': 'Medium damage', 'size' : 1},
-        {'transparency': 80, 'max': 3, 'colour': '#f31a1c',
+        {'transparency': 80, 'value': 3, 'colour': '#f31a1c',
          'label': 'High damage', 'size' : 1}]}
 
         .. note:: The transparency and size keys are optional. Size applies
            to points only.
+
+        .. todo:: We should change 'value' in style classes to something more
+            meaningful e.g. descriminant value
 
     """
     myTargetField = theStyle['target_field']
