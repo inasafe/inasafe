@@ -24,7 +24,7 @@ class ITBFatalityFunction(FunctionProvider):
     """Indonesian Earthquake Fatality Model
 
     This model was developed by Institut Tecknologi Bandung (ITB) and
-    implemented by Dr Hadi Ghasemi, Geoscience Australia
+    implemented by Dr. Hadi Ghasemi, Geoscience Australia
 
 
     Reference:
