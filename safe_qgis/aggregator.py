@@ -99,16 +99,6 @@ class Aggregator(QtCore.QObject):
 
         QtCore.QObject.__init__(self)
 
-        # This is used to hold an *in memory copy* of the aggregation layer
-        # or None if the clip extents should be used.
-        if theAggregationLayer is None:
-            self.aoiMode = True
-            # Will be set in _prepareLayer just before deintersect call
-            self.layer = None
-        else:
-            self.aoiMode = False
-            self.layer = theAggregationLayer
-
         self.hazardLayer = None
         self.exposureLayer = None
         self.safeLayer = None
@@ -125,11 +115,22 @@ class Aggregator(QtCore.QObject):
         self.errorMessage = None
         self.targetField = None
         self.impactLayerAttributes = []
+        self.aoiMode = True
 
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
         self.isValid = False
         self.showIntermediateLayers = False
+
+        # This is used to hold an *in memory copy* of the aggregation layer
+        # or None if the clip extents should be used.
+        if theAggregationLayer is None:
+            self.aoiMode = True
+            # Will be completed in _prepareLayer just before deintersect call
+            self.layer = self._createPolygonLayer()
+        else:
+            self.aoiMode = False
+            self.layer = theAggregationLayer
 
     def validateKeywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.
@@ -155,16 +156,6 @@ class Aggregator(QtCore.QObject):
         Raises:
             Errors are propogated
         """
-        if self.aoiMode:
-            self.isValid = True
-            return
-
-        myMessage = m.Message(
-            m.Heading(self.tr('Waiting for attribute selection...')),
-            m.Paragraph(self.tr(
-                'Please select which attribute you want to use as ID for the '
-                'aggregated results')))
-        self._sendMessage(myMessage)
 
         # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
@@ -174,37 +165,49 @@ class Aggregator(QtCore.QObject):
         except Exception:  # pylint: disable=W0703
             myKeywords = {}
 
-        #myKeywords are already complete
-        if ('category' in myKeywords and
-            myKeywords['category'] == 'postprocessing' and
-            self.defaults['AGGR_ATTR_KEY'] in myKeywords and
-            self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
-            (self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr('Use default') or
-             self.defaults['FEM_RATIO_KEY'] in myKeywords)):
-            self.isValid = True
-        #some keywords are needed
-        else:
-            #set the default values by writing to the myKeywords
-            myKeywords['category'] = 'postprocessing'
-
-            myAttributes, _ = getLayerAttributeNames(
-                self.layer,
-                [QtCore.QVariant.Int, QtCore.QVariant.String])
-            if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
-                myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttributes[0]
-
-            if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
-                myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
-                    'Use default')
-
-            if self.defaults['FEM_RATIO_KEY'] not in myKeywords:
-                myKeywords[self.defaults['FEM_RATIO_KEY']] = \
-                    self.defaults['FEM_RATIO']
-
+        if self.aoiMode:
+            myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+                'Use default')
             self.keywordIO.updateKeywords(self.layer, myKeywords)
-            self.isValid = False
+            self.isValid = True
+            return
+        else:
+            myMessage = m.Message(
+                m.Heading(self.tr('Waiting for attribute selection...')),
+                m.Paragraph(self.tr(
+                    'Please select which attribute you want to use as ID for '
+                    'the aggregated results')))
+            self._sendMessage(myMessage)
 
-        return self.isValid
+            #myKeywords are already complete
+            if ('category' in myKeywords and
+                myKeywords['category'] == 'postprocessing' and
+                self.defaults['AGGR_ATTR_KEY'] in myKeywords and
+                self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
+                (self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr('Use default') or
+                 self.defaults['FEM_RATIO_KEY'] in myKeywords)):
+                self.isValid = True
+            #some keywords are needed
+            else:
+                #set the default values by writing to the myKeywords
+                myKeywords['category'] = 'postprocessing'
+
+                myAttributes, _ = getLayerAttributeNames(
+                    self.layer,
+                    [QtCore.QVariant.Int, QtCore.QVariant.String])
+                if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
+                    myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttributes[0]
+
+                if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
+                    myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+                        'Use default')
+
+                if self.defaults['FEM_RATIO_KEY'] not in myKeywords:
+                    myKeywords[self.defaults['FEM_RATIO_KEY']] = \
+                        self.defaults['FEM_RATIO']
+
+                self.keywordIO.updateKeywords(self.layer, myKeywords)
+                self.isValid = False
 
     def deintersect(self, theHazardLayer, theExposureLayer):
         """Ensure there are no intersecting features with self.layer.
@@ -685,7 +688,7 @@ class Aggregator(QtCore.QObject):
 
         # This is used to hold an *in memory copy* of the aggregation layer
         # or a in memory layer with the clip extents as a feature.
-        if self.layer is None:
+        if self.aoiMode:
             self.layer = self._extentsToLayer()
             # Area Of Interest (AOI) mode flag
         else:
@@ -1025,6 +1028,31 @@ class Aggregator(QtCore.QObject):
 
         return myOutLayer
 
+    def _createPolygonLayer(self, crs=None, fields=None):
+        """Creates an empty shape file layer"""
+
+        if crs is None:
+            crs = QgsCoordinateReferenceSystem()
+            crs.createFromEpsg(4326)
+
+        if fields is None:
+            fields = {}
+
+        myTempdir = temp_dir(sub_dir='preprocess')
+        myOutFilename = unique_filename(suffix='.shp',
+                                        dir=myTempdir)
+        mySHPWriter = QgsVectorFileWriter(myOutFilename,
+                                          'UTF-8',
+                                          fields,
+                                          QGis.WKBPolygon,
+                                          crs)
+        #flush the writer to write to file
+        del mySHPWriter
+        myName = self.tr('Entire area')
+        myLayer = QgsVectorLayer(myOutFilename, myName, 'ogr')
+        LOGGER.debug('created' + myLayer.name())
+        return myLayer
+
     def _extentsToLayer(self):
         """Memory layer for aggregation by using canvas extents as feature.
 
@@ -1039,46 +1067,23 @@ class Aggregator(QtCore.QObject):
         """
 
         # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
-        myCanvas = self.iface.mapCanvas()
-        myRect = myCanvas.extent()
 
-        if myCanvas.hasCrsTransformEnabled():
-            myCrs = myCanvas.mapRenderer().destinationCrs()
-        else:
-            # some code duplication from extentToGeoArray here
-            # in favour of clarity of logic...
-            myCrs = QgsCoordinateReferenceSystem()
-            myCrs.createFromEpsg(4326)
-
+        myRect = self.iface.mapCanvas().extent()
+        myCrs = QgsCoordinateReferenceSystem()
+        myCrs.createFromEpsg(4326)
         myGeoExtent = extentToGeoArray(myRect, myCrs)
-        # End of shamelessly duplicated code
 
-        myAttrName = self.tr('Area')
-        fields = {0: QgsField(myAttrName, QtCore.QVariant.String)}
-        myTempdir = temp_dir(sub_dir='preprocess')
-        myOutFilename = unique_filename(suffix='.shp',
-                                        dir=myTempdir)
-
-        mySHPWriter = QgsVectorFileWriter(myOutFilename,
-                                          'UTF-8',
-                                          fields,
-                                          QGis.WKBPolygon,
-                                          myCrs)
-        #flush the writer to write to file
-        del mySHPWriter
-
-        myName = self.tr('Entire area')
-        myLayer = QgsVectorLayer(myOutFilename, myName, 'ogr')
-        LOGGER.debug('created' + myLayer.name())
-
-        if not myLayer.isValid():
+        if not self.layer.isValid():
             myMessage = self.tr(
                 'An exception occurred when creating the entire area layer.')
             raise (Exception(myMessage))
 
-        myProvider = myLayer.dataProvider()
+        myProvider = self.layer.dataProvider()
 
-        myLayer.startEditing()
+        myAttrName = self.tr('Area')
+        myProvider.addAttributes([QgsField(myAttrName, QtCore.QVariant.String)])
+
+        self.layer.startEditing()
         # add a feature the size of the impact layer bounding box
         myFeature = QgsFeature()
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
@@ -1089,20 +1094,19 @@ class Aggregator(QtCore.QObject):
         myFeature.setAttributeMap({0: QtCore.QVariant(
             self.tr('Entire area'))})
         myProvider.addFeatures([myFeature])
-        myLayer.commitChanges()
+        self.layer.commitChanges()
 
         try:
             self.keywordIO.updateKeywords(
-                myLayer,
+                self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except InvalidParameterError:
             self.keywordIO.writeKeywords(
-                myLayer,
+                self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except KeywordDbError, e:
             raise e
-
-        return myLayer
+        return self.layer
 
     def _sendMessage(self, theMessage, dynamic=True):
         theType = STATIC_MESSAGE_SIGNAL
