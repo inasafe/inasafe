@@ -11,10 +11,10 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe_qgis.styling import (
-    getErrorMessage,
     setVectorGraduatedStyle,
     setRasterStyle,
     _addMinMaxToStyle)
+from safe_qgis.utilities import getErrorMessage
 from safe_qgis.utilities_test import (
     unitTestDataPath,
     loadLayer,
