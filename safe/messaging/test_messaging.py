@@ -30,7 +30,10 @@ from safe.messaging import (
     NumberedList,
     BulletedList,
     Image,
-    LineBreak)
+    LineBreak,
+    Table,
+    Row,
+    Cell)
 
 
 class MessagingTest(unittest.TestCase):
@@ -282,6 +285,35 @@ class MessagingTest(unittest.TestCase):
             "[None, 'TBTB']\n")
         res = em1.to_text()
         self.assertEqual(expected_res, res)
+
+    def test_table_html(self):
+        """Tests cells are rendered correctly in html.
+        """
+        c1 = Cell('FOO')
+        expected_res = '<td>FOO</td>'
+        res = c1.to_html()
+        self.assertEqual(expected_res, res)
+
+        c2 = Cell('FOO', ImportantText('BAR'), 'function')
+        expected_res = '<td>FOO <strong>BAR</strong> function</td>'
+        res = c2.to_html()
+        self.assertEqual(expected_res, res)
+
+        r1 = Row(c1, c2, '3a')
+        expected_res = (
+            '<tr><td>FOO</td><td>FOO <strong>BAR</strong> function</td><td>3a'
+            '</td></tr>')
+        res = r1.to_html()
+        self.assertEqual(expected_res, res)
+
+        t1 = Table(r1, Row('1', '2', '3'), ['a', 'b', 'c'])
+        expected_res = (
+            '<table><tr><td>FOO</td><td>FOO <strong>BAR</strong> function</td>'
+            '<td>3a</td></tr><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>a'
+            '</td><td>b</td><td>c</td></tr></table>')
+        res = t1.to_html()
+        self.assertEqual(expected_res, res)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(MessagingTest, 'test')

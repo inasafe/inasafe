@@ -16,17 +16,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from message_element import MessageElement, InvalidMessageItemError
-from row import Row
+from cell import Cell
 
 
-class Table(MessageElement):
-    """A class to model tables in the messaging system """
+class Row(MessageElement):
+    """A class to model table rows in the messaging system """
 
     def __init__(self, *args):
-        """Creates a table object
+        """Creates a row object
 
         Args:
-            args can be list or Row
+            args can be list or Cell
 
         Returns:
             None
@@ -34,18 +34,18 @@ class Table(MessageElement):
         Raises:
             Errors are propagated
         """
-        self.rows = []
+        self.cells = []
 
         for arg in args:
             self.add(arg)
 
     def add(self, item):
-        """add a row
+        """add a Cell to the row
 
-        list can be passed and are automatically converted to Rows
+        list can be passed and are automatically converted to Cell
 
         Args:
-            item an element to add to the rows can be list or Row object
+            item an element to add to the Cells can be list or Cell object
 
         Returns:
             None
@@ -53,42 +53,51 @@ class Table(MessageElement):
         Raises:
             Errors are propagated
         """
-        if isinstance(item, list):
-            self.rows.append(Row(item))
-        elif isinstance(item, Row):
-            self.rows.append(item)
+
+        if isinstance(item, basestring) or self._is_qstring(item):
+            self.cells.append(Cell(item))
+        elif isinstance(item, Cell):
+            self.cells.append(item)
+        elif isinstance(item, list):
+            for i in item:
+                self.cells.append(Cell(i))
         else:
             raise InvalidMessageItemError(item, item.__class__)
 
     def to_html(self):
-        """Render a Table MessageElement as html
+        """Render a Text MessageElement as html
 
         Args:
             None
 
         Returns:
-            Str the html representation of the Table MessageElement
+            Str the html representation of the Text MessageElement
 
         Raises:
             Errors are propagated
         """
-        table = '<table>'
-        for row in self.rows:
-            table += row.to_html()
-        table += '</table>'
+        row = '<tr>'
+        for cell in self.cells:
+            row += cell.to_html()
+        row += '</tr>'
 
-        return table
+        return row
 
     def to_text(self):
-        """Render a Table MessageElement as plain text
+        """Render a Text MessageElement as plain text
 
         Args:
             None
 
         Returns:
-            Str the plain text representation of the Table MessageElement
+            Str the plain text representation of the Text MessageElement
 
         Raises:
             Errors are propagated
         """
-        raise NotImplementedError('Please don\'t use this class directly')
+        row = '---\n'
+        for cell in self.cells:
+            row += cell
+        row += '</tr>'
+
+        return row

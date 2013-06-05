@@ -27,5 +27,8 @@ from .item.success_paragraph import SuccessParagraph
 from .item.table import Table
 from .item.numbered_list import NumberedList
 from .item.bulleted_list import BulletedList
+from .item.cell import Cell
+from .item.row import Row
+from .item.table import Table
 from message import Message
 from error_message import ErrorMessage
