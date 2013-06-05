@@ -55,7 +55,8 @@ from safe_qgis.safe_interface import (
     calculate_polygon_centroid,
     unique_filename,
     get_postprocessors,
-    get_postprocessor_human_name)
+    get_postprocessor_human_name,
+    messaging as m)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
@@ -99,7 +100,7 @@ class PostprocessorManager(QtCore.QObject):
     def _sumFieldName(self):
         return self.aggregator.prefix + 'sum'
 
-    def getOutput(self, theSingleTableFlag=False):
+    def getOutput(self):
         """Returns the results of the post processing as a table.
 
         Args:
@@ -109,34 +110,17 @@ class PostprocessorManager(QtCore.QObject):
         Returns: str - a string containing the html in the requested format.
         """
 
-#        LOGGER.debug(self.postProcessingOutput)
+        # LOGGER.debug(self.postProcessingOutput)
         if self.errorMessage is not None:
-            myHTML = (
-                '<table class="table table-striped condensed">'
-                '    <tr>'
-                '       <td>'
-                '         <strong>'
-                + self.tr('Postprocessing report skipped') +
-                '         </strong>'
-                '       </td>'
-                '    </tr>'
-                '    <tr>'
-                '       <td>' +
-                self.tr(
+            myMessage = m.Message(
+                m.Heading(self.tr('Postprocessing report skipped')),
+                m.Paragraph(self.tr(
                     'Due to a problem while processing the results,'
                     ' the detailed postprocessing report is unavailable:'
-                    ' %1').arg(self.errorMessage)
-                +
-                '       </td>'
-                '    </tr>'
-                '</table>')
-            return myHTML
+                    ' %1').arg(self.errorMessage)))
+            return myMessage
 
-        if theSingleTableFlag:
-            #FIXME, return a parsed HTML
-            return str(self.postProcessingOutput)
-        else:
-            return self.generateTables()
+        return self.generateTables()
 
     def generateTables(self):
         """Parses the postprocessing output as one table per postprocessor.
@@ -148,7 +132,8 @@ class PostprocessorManager(QtCore.QObject):
             str - a string containing the html
         """
 
-        myHTML = ''
+        myMessage = m.Message()
+
         for proc, resList in self.postProcessingOutput.iteritems():
             #sorting using the first indicator of a postprocessor
             try:
@@ -178,43 +163,35 @@ class PostprocessorManager(QtCore.QObject):
             except KeyError:
                 LOGGER.debug('Skipping sorting as the postprocessor did not '
                              'have a "Total" field')
-            myHTML += ('<table class="table table-striped condensed">'
-                       '  <tbody>'
-                       '    <tr>'
-                       '       <td colspan="100%">'
-                       '         <strong>'
-                       +
-                       self.tr('Detailed %1 report').arg(
-                           safeTr(get_postprocessor_human_name(proc)).lower())
-                       +
-                       '         </strong>'
-                       '       </td>'
-                       '    </tr>'
-                       '    <tr>'
-                       '      <th width="25%">'
-                       + str(self.attributeTitle).capitalize() +
-                       '      </th>')
+
+            #init table
+            myTable = m.Table()
+            # myTitle = self.tr('Detailed %1 report').arg(safeTr(
+            #     get_postprocessor_human_name(proc)).lower())
+            # myTable.addRow(myTitle)
+            #
+            # tr colspan="100%"
+            # th width="25%" str(self.attributeTitle).capitalize()
+
             # add th according to the ammount of calculation done by each
             # postprocessor
+
+            myHeaderRow = m.Row()
             for calculationName in resList[0][1]:
-                myHTML += ('      <th>'
-                           + self.tr(calculationName) +
-                           '      </th>')
-                #close header row
-            myHTML += '    </tr>'
+                myHeaderRow.add(self.tr(calculationName))
+            myTable.add(myHeaderRow)
+
             for zoneName, calc in resList:
-                myHTML += '    <tr><td>' + zoneName + '</td> '
-                for calculationName, calculationData in calc.iteritems():
-                    myHTML += ('      <td>'
-                               + str(calculationData['value']) +
-                               '      </td>')
-                    #close header row
-                myHTML += '    </tr>'
+                myRow = m.Row(zoneName)
 
-            #close table
-            myHTML += '</tbody></table>'
+                for _, calculationData in calc.iteritems():
+                    myRow.add(calculationData['value'])
+                myTable.add(myRow)
 
-        return myHTML
+            #add table to message
+            myMessage.add(myTable)
+
+        return myMessage
 
     def run(self):
         """Run any post processors requested by the impact function.
