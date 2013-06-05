@@ -1327,7 +1327,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
         myKeywords[
-            'postprocessing_report'] = self.postprocessorManager.getOutput()
+            'postprocessing_report'] = self.postprocessorManager.getOutput().to_html(True)
         self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1386,7 +1386,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.restoreState()
 
         #append postprocessing report
-        myReport += self.postprocessorManager.getOutput()
+        myReport += self.postprocessorManager.getOutput().to_html()
 
         # Return text to display in report panel
         return myReport
