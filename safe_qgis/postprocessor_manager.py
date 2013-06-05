@@ -176,6 +176,7 @@ class PostprocessorManager(QtCore.QObject):
             # postprocessor
 
             myHeaderRow = m.Row()
+            myHeaderRow.add(str(self.attributeTitle).capitalize())
             for calculationName in resList[0][1]:
                 myHeaderRow.add(self.tr(calculationName))
             myTable.add(myHeaderRow)

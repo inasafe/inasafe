@@ -314,7 +314,7 @@ class MessagingTest(unittest.TestCase):
             '</tr>\n</tbody>\n</table>\n')
         res = t1.to_html()
         self.assertEqual(expected_res, res)
-        
+
         t1.caption = 'Test Caption'
         expected_res = (
             '<table>\n<caption>Test Caption</caption>\n<tbody>\n<tr>\n'
