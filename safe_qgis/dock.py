@@ -91,7 +91,7 @@ from safe_qgis.keywords_dialog import KeywordsDialog
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 
 LOGGER = logging.getLogger('InaSAFE')
-from pydev import pydevd
+# from pydev import pydevd
 
 
 #noinspection PyArgumentList
@@ -194,8 +194,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
-        pydevd.settrace(
-            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        # pydevd.settrace(
+        #     'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
         myCanvas = self.iface.mapCanvas()
 
