@@ -71,6 +71,7 @@ class FloodEvacuationFunction(FunctionProvider):
         'not hard evidence.')
 
     # Configurable parameters
+    # TODO: Share the mimimum needs and make another default value
     parameters = OrderedDict([
         ('thresholds [m]', [1.0]),
         ('postprocessors', OrderedDict([
@@ -80,7 +81,14 @@ class FloodEvacuationFunction(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})])),
+        ('minimum needs', OrderedDict([
+            ('Rice', 2.8),
+            ('Drinking Water', 17.5),
+            ('Water', 105),
+            ('Family Kits', 0.2),
+            ('Toilets', 0.05)]))
+    ])
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -144,19 +152,21 @@ class FloodEvacuationFunction(FunctionProvider):
         # Don't show digits less than a 1000
         total = round_thousand(total)
 
-        # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+        # Calculate estimated minimum needs
+        # The default value of each logistic is based on BNPB Perka 7/2008
+        # minimum bantuan
+        minimum_needs = self.parameters['minimum needs']
+        mn_rice = minimum_needs['Rice']
+        mn_drinking_water = minimum_needs['Drinking Water']
+        mn_water = minimum_needs['Water']
+        mn_family_kits = minimum_needs['Family Kits']
+        mn_toilets = minimum_needs['Toilets']
 
-        # FIXME: Refactor and share
-        # 400g per person per day
-        rice = int(evacuated * 2.8)
-        # 2.5L per person per day
-        drinking_water = int(evacuated * 17.5)
-        # 15L per person per day
-        water = int(evacuated * 105)
-        # assume 5 people per family (not in perka)
-        family_kits = int(evacuated / 5)
-        # 20 people per toilet
-        toilets = int(evacuated / 20)
+        rice = int(evacuated * mn_rice)
+        drinking_water = int(evacuated * mn_drinking_water)
+        water = int(evacuated * mn_water)
+        family_kits = int(evacuated * mn_family_kits)
+        toilets = int(evacuated / mn_toilets)
 
         # Generate impact report for the pdf map
         table_body = [
