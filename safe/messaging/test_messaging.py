@@ -290,27 +290,28 @@ class MessagingTest(unittest.TestCase):
         """Tests cells are rendered correctly in html.
         """
         c1 = Cell('FOO')
-        expected_res = '<td>FOO</td>'
+        expected_res = '<td>FOO</td>\n'
         res = c1.to_html()
         self.assertEqual(expected_res, res)
 
         c2 = Cell('FOO', ImportantText('BAR'), 'function')
-        expected_res = '<td>FOO <strong>BAR</strong> function</td>'
+        expected_res = '<td>FOO <strong>BAR</strong> function</td>\n'
         res = c2.to_html()
         self.assertEqual(expected_res, res)
 
         r1 = Row(c1, c2, '3a')
         expected_res = (
-            '<tr><td>FOO</td><td>FOO <strong>BAR</strong> function</td><td>3a'
-            '</td></tr>')
+            '<tr>\n<td>FOO</td>\n<td>FOO <strong>BAR</strong> function</td>\n'
+            '<td>3a</td>\n</tr>\n')
         res = r1.to_html()
         self.assertEqual(expected_res, res)
 
         t1 = Table(r1, Row('1', '2', '3'), ['a', 'b', 'c'])
         expected_res = (
-            '<table><tr><td>FOO</td><td>FOO <strong>BAR</strong> function</td>'
-            '<td>3a</td></tr><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>a'
-            '</td><td>b</td><td>c</td></tr></table>')
+            '<table>\n<tbody>\n<tr>\n<td>FOO</td>\n<td>FOO <strong>BAR</strong>'
+            ' function</td>\n<td>3a</td>\n</tr>\n<tr>\n<td>1</td>\n<td>2</td>\n'
+            '<td>3</td>\n</tr>\n<tr>\n<td>a</td>\n<td>b</td>\n<td>c</td>\n'
+            '</tr>\n</tbody>\n</table>\n')
         res = t1.to_html()
         self.assertEqual(expected_res, res)
 

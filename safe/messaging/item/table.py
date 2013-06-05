@@ -72,10 +72,10 @@ class Table(MessageElement):
         Raises:
             Errors are propagated
         """
-        table = '<table>'
+        table = '<table>\n<tbody>\n'
         for row in self.rows:
             table += row.to_html()
-        table += '</table>'
+        table += '</tbody>\n</table>\n'
 
         return table
 

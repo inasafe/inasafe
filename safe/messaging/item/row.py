@@ -76,10 +76,10 @@ class Row(MessageElement):
         Raises:
             Errors are propagated
         """
-        row = '<tr>'
+        row = '<tr>\n'
         for cell in self.cells:
             row += cell.to_html()
-        row += '</tr>'
+        row += '</tr>\n'
 
         return row
 
@@ -98,6 +98,6 @@ class Row(MessageElement):
         row = '---\n'
         for cell in self.cells:
             row += cell
-        row += '</tr>'
+        row += '---'
 
         return row
