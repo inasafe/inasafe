@@ -34,6 +34,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QGis)
 
+from third_party.pydispatch import dispatcher
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (
@@ -89,11 +90,8 @@ from safe_qgis.keywords_dialog import KeywordsDialog
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 
-
 LOGGER = logging.getLogger('InaSAFE')
-# from pydev import pydevd
-
-from third_party.pydispatch import dispatcher
+from pydev import pydevd
 
 
 #noinspection PyArgumentList
@@ -141,7 +139,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Set up dispatcher for error messages
         # Static messages clear the message queue and so the display is 'reset'
         dispatcher.connect(
-            self.wvResults.static_message_event,
+            self.wvResults.error_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
@@ -183,21 +181,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.runtimeKeywordsDialog = None
 
         myButton = self.pbnHelp
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.showHelp)
+        QtCore.QObject.connect(
+            myButton, QtCore.SIGNAL('clicked()'), self.showHelp)
 
         myButton = self.pbnPrint
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.printMap)
+        QtCore.QObject.connect(
+            myButton, QtCore.SIGNAL('clicked()'), self.printMap)
         #self.showHelp()
         myButton = self.pbnRunStop
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.accept)
+        QtCore.QObject.connect(
+            myButton, QtCore.SIGNAL('clicked()'), self.accept)
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
-        # pydevd.settrace(
-        #     'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        pydevd.settrace(
+            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
         myCanvas = self.iface.mapCanvas()
 
@@ -1058,7 +1056,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             threading mode is enabled especially)
         """
 
-        myTitle = self.tr('Processing has started')
+        myTitle = self.tr('Processing started')
         myDetails = self.tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
@@ -1228,11 +1226,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'An exception occurred when setting up the model runner.'))
             return
 
-        QtCore.QObject.connect(self.runner,
-                               QtCore.SIGNAL('done()'),
-                               self.aggregate)
-        QtGui.qApp.setOverrideCursor(
-            QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QtCore.QObject.connect(
+            self.runner, QtCore.SIGNAL('done()'), self.aggregate)
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
         QtGui.qApp.processEvents()
 
@@ -1241,7 +1237,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'This may take a little while - we are computing the areas that '
             'will be impacted by the hazard and writing the result to a new '
             'layer.')
-        myMessage = m.Message(m.Heading(myTitle), myDetail)
+        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
         self.showDynamicMessage(myMessage)
         try:
             if self.runInThreadFlag:
@@ -1297,7 +1293,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.showErrorMessage(myMessage)
         else:
             # On success, display generated report
-            self.showStaticMessage(m.Message(str(myReport)))
+            self.showDynamicMessage(m.Message(str(myReport)))
         self.saveState()
         self.hideBusy()
 
@@ -1440,7 +1436,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 ).arg(self.runner.result())
                 myMessage = getErrorMessage(myException, theContext=myContext)
             self.showErrorMessage(myMessage)
-            self.hideBusy()
             return
 
         try:
@@ -1782,7 +1777,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.showErrorMessage(myErrorMessage)
                 return
             if myReport is not None:
-                self.showStaticMessage(myReport)
+                self.showDynamicMessage(myReport)
         else:
             LOGGER.debug('Layer is None')
 

@@ -758,7 +758,7 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'Modifying %1 to avoid intersections with the aggregation layer'
             ).arg(theQgisLayer.name())))
-        self._sendMessage(myMessage, False)
+        self._sendMessage(myMessage)
 
         theLayerFilename = str(theQgisLayer.source())
         myPostprocPolygons = self.safeLayer.get_geometry()
