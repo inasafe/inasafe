@@ -38,11 +38,11 @@ class VolcanoBuildingImpact(FunctionProvider):
         'each hazard zones.')
     hazard_input = tr(
         'A hazard vector layer can be polygon or point. If polygon, it must '
-        'have "KRB" attribute and the valuefor it are "Kawasan Rawan Bencana '
-        'I", "Kawasan Rawan Bencana II", or "Kawasan Rawan Bencana III." If '
-        'you want to see the name of the volcano in the result, you need to '
-        'add "NAME" attribute for point data or "GUNUNG" attribute for '
-        'polygon data.')
+        'have "KRB" attribute and the values for it are "Kawasan Rawan '
+        'Bencana I", "Kawasan Rawan Bencana II", or "Kawasan Rawan Bencana '
+        'III." If you want to see the name of the volcano in the result, '
+        'you need to add "NAME" attribute for point data or "GUNUNG" '
+        'attribute for polygon data.')
     exposure_input = tr(
         'Vector polygon layer extracted from OSM where each polygon '
         'represents the footprint of a building.')
