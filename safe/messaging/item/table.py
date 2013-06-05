@@ -34,6 +34,7 @@ class Table(MessageElement):
         Raises:
             Errors are propagated
         """
+        self.caption = None
         self.rows = []
 
         for arg in args:
@@ -72,7 +73,10 @@ class Table(MessageElement):
         Raises:
             Errors are propagated
         """
-        table = '<table>\n<tbody>\n'
+        table = '<table>\n'
+        if self.caption is not None:
+            table += '<caption>%s</caption>\n' % self.caption
+        table += '<tbody>\n'
         for row in self.rows:
             table += row.to_html()
         table += '</tbody>\n</table>\n'

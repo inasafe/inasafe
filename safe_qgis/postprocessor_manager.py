@@ -166,9 +166,8 @@ class PostprocessorManager(QtCore.QObject):
 
             #init table
             myTable = m.Table()
-            # myTitle = self.tr('Detailed %1 report').arg(safeTr(
-            #     get_postprocessor_human_name(proc)).lower())
-            # myTable.addRow(myTitle)
+            myTable.caption = self.tr('Detailed %1 report').arg(safeTr(
+                get_postprocessor_human_name(proc)).lower())
             #
             # tr colspan="100%"
             # th width="25%" str(self.attributeTitle).capitalize()

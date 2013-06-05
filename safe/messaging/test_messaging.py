@@ -314,6 +314,16 @@ class MessagingTest(unittest.TestCase):
             '</tr>\n</tbody>\n</table>\n')
         res = t1.to_html()
         self.assertEqual(expected_res, res)
+        
+        t1.caption = 'Test Caption'
+        expected_res = (
+            '<table>\n<caption>Test Caption</caption>\n<tbody>\n<tr>\n'
+            '<td>FOO</td>\n<td>FOO <strong>BAR</strong> function</td>\n'
+            '<td>3a</td>\n</tr>\n<tr>\n<td>1</td>\n<td>2</td>\n<td>3</td>\n'
+            '</tr>\n<tr>\n<td>a</td>\n<td>b</td>\n<td>c</td>\n</tr>\n</tbody>\n'
+            '</table>\n')
+        res = t1.to_html()
+        self.assertEqual(expected_res, res)
 
 
 if __name__ == '__main__':
