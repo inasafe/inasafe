@@ -93,7 +93,7 @@ class ErrorMessage(MessageElement):
             Errors are propagated
         """
         message = Message()
-        message.add(Heading(tr('Problem')))
+        message.add(Heading(tr('Problem'), level=3))
         items = BulletedList()
         for p in reversed(self.problems):
             #p is _always_ not None
@@ -102,7 +102,7 @@ class ErrorMessage(MessageElement):
 
         if self.details.count(None) < len(self.details):
             items = BulletedList()
-            message.add(Heading(tr('Detail')))
+            message.add(Heading(tr('Detail'), level=3))
             for d in reversed(self.details):
                 if d is not None:
                     items.add(d)
@@ -110,13 +110,13 @@ class ErrorMessage(MessageElement):
 
         if self.suggestions.count(None) < len(self.suggestions):
             items = BulletedList()
-            message.add(Heading(tr('Suggestion')))
+            message.add(Heading(tr('Suggestion'), level=3))
             for s in reversed(self.suggestions):
                 if s is not None:
                     items.add(s)
             message.add(items)
 
-        message.add(Heading(tr('Traceback')))
+        message.add(Heading(tr('Traceback'), level=3))
         message.add(self.tracebacks)
         return message
 
