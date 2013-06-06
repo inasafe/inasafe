@@ -87,11 +87,12 @@ from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-# Don't remove this even if it is flagged as unused by your ide
-# it is needed for qrc:/ url resolution. See Qt Resources docs.
-
 LOGGER = logging.getLogger('InaSAFE')
+<<<<<<< HEAD
 # from pydev import pydevd
+=======
+#from pydev import pydevd
+>>>>>>> Added class and id properties to message item
 
 
 #noinspection PyArgumentList
@@ -194,8 +195,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
+<<<<<<< HEAD
         # pydevd.settrace(
         #     'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+=======
+        #pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+>>>>>>> Added class and id properties to message item
 
         myCanvas = self.iface.mapCanvas()
 

@@ -21,7 +21,7 @@ from abstract_list import AbstractList
 class NumberedList(AbstractList):
     """A class to model free text in the messaging system """
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
@@ -36,7 +36,9 @@ class NumberedList(AbstractList):
         Raises:
             Errors are propagated
         """
-        AbstractList.__init__(self, True, args)
+        if len(args) is 0:
+            args = tuple([],)
+        super(NumberedList, self).__init__(*args, **kwargs)
 
     def to_html(self):
         """Render a Text MessageElement as html

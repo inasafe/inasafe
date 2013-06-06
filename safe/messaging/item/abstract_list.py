@@ -22,7 +22,7 @@ from text import PlainText
 class AbstractList(MessageElement):
     """A class to model free text in the messaging system """
 
-    def __init__(self, ordered, items):
+    def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
@@ -36,11 +36,18 @@ class AbstractList(MessageElement):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
-        self.ordered = ordered
+        super(AbstractList, self).__init__(**kwargs)
+
         self.items = []
 
-        for item in items:
+        for item in args:
             self.add(item)
 
     def add(self, item):

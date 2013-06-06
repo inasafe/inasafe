@@ -16,7 +16,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-class MessageElement():
+class MessageElement(object):
+
+    def __init__(self, id=None, style_class=None):
+        """
+        Constructor for a message element
+        :param id: Optional id - will be ignored in text renderer.
+        :param style_class: Optional class = will be ignored in text renderer.
+        :return: None
+        """
+        self.id = id
+        self.style_class = style_class
 
     def __unicode__(self):
         return self.to_text()

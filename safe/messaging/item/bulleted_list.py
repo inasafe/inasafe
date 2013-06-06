@@ -21,7 +21,7 @@ from abstract_list import AbstractList
 class BulletedList(AbstractList):
     """A class to model free text in the messaging system """
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
@@ -35,8 +35,14 @@ class BulletedList(AbstractList):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
-        AbstractList.__init__(self, True, args)
+        super(BulletedList, self).__init__(*args, **kwargs)
 
     def to_html(self):
         """Render a Text MessageElement as html
