@@ -165,7 +165,7 @@ class PostprocessorManager(QtCore.QObject):
                              'have a "Total" field')
 
             #init table
-            myTable = m.Table()
+            myTable = m.Table(style_class='table table-condensed table-striped')
             myTable.caption = self.tr('Detailed %1 report').arg(safeTr(
                 get_postprocessor_human_name(proc)).lower())
             #

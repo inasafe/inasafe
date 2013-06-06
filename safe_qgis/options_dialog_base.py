@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Thu Jun  6 12:20:41 2013
+# Created: Thu Jun  6 13:02:07 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -240,6 +240,6 @@ class Ui_OptionsDialogBase(object):
         self.label_6.setText(QtGui.QApplication.translate("OptionsDialogBase", "Female ratio default value", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxClipHard.setText(QtGui.QApplication.translate("OptionsDialogBase", "When clipping, also clip features (e.g. will clip polygon smaller)", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxUseSentry.setText(QtGui.QApplication.translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxDevMode.setText(QtGui.QApplication.translate("OptionsDialogBase", "Enable developer mode", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxDevMode.setText(QtGui.QApplication.translate("OptionsDialogBase", "Enable developer mode (needs restart)", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
