@@ -54,7 +54,7 @@ class EmphasizedText(Text):
         Raises:
             Errors are propagated
         """
-        return '<em>%s</em>' % self.text
+        return '<em%s>%s</em>' % (self.html_attributes(), self.text)
 
     def to_text(self):
         """Render as plain text

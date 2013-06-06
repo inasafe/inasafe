@@ -56,10 +56,11 @@ class BulletedList(AbstractList):
         Raises:
             Errors are propagated
         """
+
         if self.items is None:
             return
         else:
-            html = '<ul>\n'
+            html = '<ul%s>\n' % self.html_attributes()
             for item in self.items:
                 html += '<li>%s</li>\n' % item.to_html()
             html += '</ul>'

@@ -35,9 +35,13 @@ class NumberedList(AbstractList):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
-        if len(args) is 0:
-            args = tuple([],)
         super(NumberedList, self).__init__(*args, **kwargs)
 
     def to_html(self):
@@ -55,7 +59,7 @@ class NumberedList(AbstractList):
         if self.items is None:
             return
         else:
-            html = '<ol>\n'
+            html = '<ol%s>\n' % self.html_attributes()
             for item in self.items:
                 html += '<li>%s</li>\n' % item.to_html()
             html += '</ol>'

@@ -21,7 +21,7 @@ from text import Text
 class Image(Text):
     """A class to model emphasized text in the messaging system """
 
-    def __init__(self, uri, text=None):
+    def __init__(self, uri, text=None, **kwargs):
         """Creates a Emphasized Text Text object
 
         Args:
@@ -32,8 +32,14 @@ class Image(Text):
 
         Raises:
             Errors are propagated
-        """
 
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
+        """
+        super(Image, self).__init__(**kwargs)
         self.uri = uri
         self.text = text
 
@@ -49,10 +55,11 @@ class Image(Text):
         Raises:
             Errors are propagated
         """
-        return '<img src="%s" title="%s" alt="%s"/>' % (
+        return '<img src="%s" title="%s" alt="%s"%s/>' % (
             self.uri,
             self.text,
-            self.text)
+            self.text,
+            self.html_attributes())
 
     def to_text(self):
         """Render as plain text

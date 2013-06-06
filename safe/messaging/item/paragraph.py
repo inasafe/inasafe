@@ -22,7 +22,7 @@ from text import Text
 class Paragraph(MessageElement):
     """A Paragraph class for text blocks much like the p in html"""
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """Creates a Paragraph object
 
         Strings can be passed and are automatically converted in to item.Text()
@@ -35,7 +35,14 @@ class Paragraph(MessageElement):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(Paragraph, self).__init__(**kwargs)
         self.text = Text(*args)
 
     def to_html(self):
@@ -53,7 +60,8 @@ class Paragraph(MessageElement):
         if self.text is None:
             return
         else:
-            return '<p>%s</p>' % self.text.to_html()
+            return '<p%s>%s</p>' % (
+                self.html_attributes(), self.text.to_html())
 
     def to_text(self):
         """Render a Paragraph MessageElement as plain text

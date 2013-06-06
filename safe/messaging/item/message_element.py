@@ -99,6 +99,16 @@ class MessageElement(object):
         """
         raise NotImplementedError('Please Implement this method')
 
+    def html_attributes(self):
+        """Get extra html attributes such as id and class."""
+        extra_attributes = ''
+        if self.id is not None:
+            extra_attributes = ' id="%s"' % self.id
+        if self.style_class is not None:
+            extra_attributes = '%s class="%s"' % (
+                extra_attributes, self.style_class)
+        return extra_attributes
+
 
 class InvalidMessageItemError(Exception):
     """Custom exception for when the passed MessageElement is invalid."""

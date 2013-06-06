@@ -21,7 +21,7 @@ from text import Text
 class ImportantText(Text):
     """A class to model free text in the messaging system """
 
-    def __init__(self, text):
+    def __init__(self, text, **kwargs):
         """Creates a Bold Text object
 
         Args:
@@ -32,7 +32,14 @@ class ImportantText(Text):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(ImportantText, self).__init__(**kwargs)
         self.text = text
 
     def to_html(self):
@@ -47,7 +54,7 @@ class ImportantText(Text):
         Raises:
             Errors are propagated
         """
-        return '<strong>%s</strong>' % self.text
+        return '<strong%s>%s</strong>' % (self.html_attributes(), self.text)
 
     def to_text(self):
         """Render as plain text
