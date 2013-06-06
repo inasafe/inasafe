@@ -21,7 +21,7 @@ from text import Text
 class Link(Text):
     """A class to model emphasized text in the messaging system """
 
-    def __init__(self, uri, text=None):
+    def __init__(self, uri, text=None, **kwargs):
         """Creates a Emphasized Text Text object
 
         Args:
@@ -32,8 +32,14 @@ class Link(Text):
 
         Raises:
             Errors are propagated
-        """
 
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
+        """
+        super(Link, self).__init__(**kwargs)
         self.uri = uri
         self.text = text
 

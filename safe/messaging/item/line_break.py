@@ -21,7 +21,7 @@ from text import Text
 class LineBreak(Text):
     """A class to model line breaks in text the messaging system """
 
-    def to_html(self):
+    def to_html(self, **kwargs):
         """Render as html
 
         Args:
@@ -32,7 +32,14 @@ class LineBreak(Text):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(LineBreak, self).__init__(**kwargs)
         return '<br/>\n'
 
     def to_text(self):

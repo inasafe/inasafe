@@ -21,7 +21,7 @@ from text import Text
 class PreformattedText(Text):
     """A representation for a preformatted text item. """
 
-    def __init__(self, text):
+    def __init__(self, text, **kwargs):
         """Constructor.
 
         Args:
@@ -32,7 +32,14 @@ class PreformattedText(Text):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(PreformattedText, self).__init__(**kwargs)
 
         self.text = text
 

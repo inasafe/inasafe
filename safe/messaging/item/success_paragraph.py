@@ -21,6 +21,30 @@ from paragraph import Paragraph
 class SuccessParagraph(Paragraph):
     """A Success Paragraph class for text blocks much like the p in html."""
 
+    def __init__(self, text=None, **kwargs):
+        """Creates an important paragraph object.
+
+        Args:
+            String text, a string to add to the message
+
+        Returns:
+            None
+
+        Raises:
+            Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
+        """
+        if 'style_class' in kwargs:
+            my_class = '%s alert alert-success' % kwargs['style_class']
+            kwargs['style_class'] = my_class
+        super(SuccessParagraph, self).__init__(**kwargs)
+        self.text = text
+
     def to_html(self):
         """Render a Paragraph MessageElement as html
 
@@ -36,7 +60,7 @@ class SuccessParagraph(Paragraph):
         if self.text is None:
             return
         else:
-            return '<p class="alert alert-success">%s</p>' % self.text.to_html()
+            return '<p>%s</p>' % self.text.to_html()
 
     def to_text(self):
         """Render a Paragraph MessageElement as plain text

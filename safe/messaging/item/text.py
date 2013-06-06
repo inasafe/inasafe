@@ -21,7 +21,7 @@ from message_element import MessageElement, InvalidMessageItemError
 class Text(MessageElement):
     """free text in the messaging system with automatically added whitespaces"""
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
@@ -35,7 +35,14 @@ class Text(MessageElement):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(Text, self).__init__(**kwargs)
         self.text = []
 
         for text in args:
