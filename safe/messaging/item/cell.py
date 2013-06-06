@@ -57,7 +57,7 @@ class Cell(MessageElement):
             Errors are propagated
         """
         return '<td%s>%s</td>\n' % (
-             self.html_attributes(), self.text.to_html())
+            self.html_attributes(), self.text.to_html())
 
     def to_text(self):
         """Render a Cell MessageElement as plain text

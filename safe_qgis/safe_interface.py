@@ -64,6 +64,7 @@ from safe.api import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
     PROGRESS_UPDATE_STYLE,
+    INFO_STYLE,
     ErrorMessage)
 # hack for excluding test-related import in builded package
 try:

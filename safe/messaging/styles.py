@@ -26,3 +26,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 PROGRESS_UPDATE_STYLE = {
     'icon': 'icon-cog icon-white', 'style_class': 'label label-success'}
+
+INFO_STYLE = {
+    'icon': 'icon-info-sign icon-white', 'style_class': 'label label-info'}

@@ -83,7 +83,7 @@ class Row(MessageElement):
         Raises:
             Errors are propagated
         """
-        row = '<tr>\n'
+        row = '<tr%s>\n' % self.html_attributes()
         for cell in self.cells:
             row += cell.to_html()
         row += '</tr>\n'

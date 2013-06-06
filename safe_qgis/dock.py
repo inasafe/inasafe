@@ -66,7 +66,8 @@ from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
-    PROGRESS_UPDATE_STYLE)
+    PROGRESS_UPDATE_STYLE,
+    INFO_STYLE)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
@@ -398,6 +399,52 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             pass
     # pylint: enable=W0702
 
+    def gettingStartedMessage(self):
+        """Generate a message for initial application state.
+
+        Returns:
+            Message - a message instance with information for the user on how
+                to get started.
+        """
+        myMessage = m.Message()
+        myMessage.add(m.ImportantText('Getting started', **INFO_STYLE))
+        myNotes = m.Paragraph(
+            self.tr(
+                'To use this tool you need to add some layers to your '
+                'QGIS project. Ensure that at least one'),
+            m.EmphasizedText(self.tr('hazard')),
+            self.tr('layer (e.g. earthquake MMI) and one '),
+            m.EmphasizedText(self.tr('exposure')),
+            self.tr(
+                'layer (e.g. dwellings) are available. When you are '
+                'ready, click the '),
+            m.EmphasizedText(self.tr('run')),
+            self.tr('button below.'))
+        myMessage.add(myNotes)
+        myMessage.add(m.ImportantText('Limitations', **INFO_STYLE))
+        myList = m.NumberedList()
+        myList.add(
+            self.tr('InaSAFE is not a hazard modelling tool.'))
+        myList.add(
+            self.tr(
+                'Exposure data in the form of roads (or any other line '
+                'feature) is not yet supported.'))
+        myList.add(
+            self.tr(
+                'Polygon area analysis (such as land use) is not yet '
+                'supported.'))
+        myList.add(
+            self.tr(
+                'Population density data must be provided in WGS84 '
+                'geographic coordinates.'))
+        myList.add(
+            self.tr(
+                'Neither AIFDR, the World Bank, nor World Bank-GFDRR take '
+                'any responsibility for the correctness of outputs from '
+                'InaSAFE or decisions derived as a consequence.'))
+        myMessage.add(myList)
+        return myMessage
+
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
         determine if it is appropriate for the OK button to be enabled
@@ -427,49 +474,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = '<table class="condensed">'
-            myNotes = self.tr(
-                'To use this tool you need to add some layers to your '
-                'QGIS project. Ensure that at least one <em>hazard</em> layer '
-                '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
-                'dwellings) are available. When you are ready, click the <em>'
-                'run</em> button below.')
-            myMessage += ('<tr><th class="info button-cell">'
-                          + self.tr('Getting started:') + '</th></tr>\n'
-                          '<tr><td>' + myNotes + '</td></tr>\n')
-            my_limitations_msg = (
-                '<ol>'
-                + '<li>'
-                + self.tr('InaSAFE is not a hazard modelling tool.')
-                + '</li>'
-                + '<li>'
-                + self.tr(
-                    'Exposure data in the form of roads (or any other line '
-                    'feature) is not yet supported.')
-                + '</li>'
-                + '<li>'
-                + self.tr(
-                    'Polygon area analysis (such as land use) is not yet '
-                    'supported.')
-                + '</li>'
-                + '<li>'
-                + self.tr(
-                    'Population density data must be provided in WGS84 '
-                    'geographic coordinates.')
-                + '</li>'
-                + '<li>'
-                + self.tr(
-                    'Neither AIFDR, the World Bank, nor World Bank-GFDRR take '
-                    'any responsibility for the correctness of outputs from '
-                    'InaSAFE or decisions derived as a consequence.')
-                + '</ol>'
-            )
-            my_limitations = ('<tr><th class="info button-cell">'
-                              + self.tr('Limitations:')
-                              + '</th></tr>\n<tr><td>'
-                              + my_limitations_msg
-                              + '</td></tr>\n')
-            myMessage += my_limitations + '</table>'
+            myMessage = self.gettingStartedMessage()
             return False, myMessage
 
         if self.cboFunction.currentIndex() == -1:
