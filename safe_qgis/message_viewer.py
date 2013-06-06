@@ -20,7 +20,7 @@ import os
 from safe import messaging as m
 from third_party.pydispatch import dispatcher
 
-from PyQt4 import Qt, QtGui, QtWebKit
+from PyQt4 import Qt, QtCore, QtGui, QtWebKit
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
@@ -32,6 +32,10 @@ class MessageViewer(QtWebKit.QWebView):
         _ = theDock  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
+
+        self.settings().globalSettings().setAttribute(
+            QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
+
         # Always gets replaced when a new message is passed
         self.static_message = None
         # Always get appended until the next static message is called,
@@ -100,8 +104,8 @@ class MessageViewer(QtWebKit.QWebView):
 
     def pageToText(self):
         """Return the current page contents as plain text."""
-        self.page().currentFrame().toPlainText()
+        return self.page().currentFrame().toPlainText()
 
     def pageToHtml(self):
         """Return the current page contents as html."""
-        self.page().currentFrame().toHtml()
+        return self.page().currentFrame().toHtml()
