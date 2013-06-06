@@ -55,7 +55,7 @@ class NumberedList(AbstractList):
         if self.items is None:
             return
         else:
-            html = '<ol>\n'
+            html = '<ol%s>\n' % self.html_attributes()
             for item in self.items:
                 html += '<li>%s</li>\n' % item.to_html()
             html += '</ol>'

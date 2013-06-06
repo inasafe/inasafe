@@ -128,7 +128,12 @@ class MessagingTest(unittest.TestCase):
     def test_list(self):
         """Tests complex messages are rendered correctly in plain text/html
         """
-        l1 = NumberedList(Text('FOO'), ImportantText('BAR'), 'dsds')
+        l1 = NumberedList(
+            Text('FOO'),
+            ImportantText('BAR'),
+            'dsds',
+            id='error-message',
+            style_class='error-class')
 
         expected_res = (
             ' 1. FOO\n'
@@ -138,7 +143,7 @@ class MessagingTest(unittest.TestCase):
         self.assertEqual(expected_res, res)
 
         expected_res = (
-            '<ol>\n'
+            '<ol id="error-message" class="error-class">\n'
             '<li>FOO</li>\n'
             '<li><strong>BAR</strong></li>\n'
             '<li>dsds</li>\n'
