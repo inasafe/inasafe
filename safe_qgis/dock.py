@@ -310,6 +310,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/showPostProcLayers', False).toBool()
         self.showIntermediateLayers = myFlag
 
+        # whether to show or not dev only options
+        myFlag = mySettings.value(
+            'inasafe/devMode', False).toBool()
+        self.devMode = myFlag
+
         self.getLayers()
 
     def connectLayerListener(self):

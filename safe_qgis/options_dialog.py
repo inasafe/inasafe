@@ -134,6 +134,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keywordIO.defaultKeywordDbPath()).toString()
         self.leKeywordCachePath.setText(myPath)
 
+        myFlag = mySettings.value(
+            'inasafe/devMode', False).toBool()
+        self.cbxDevMode.setChecked(myFlag)
+
     def saveState(self):
         """
         Args: Store the options into the user's stored session info
@@ -165,6 +169,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.dsbFemaleRatioDefault.value())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
+        mySettings.setValue('inasafe/devMode',
+                            self.cbxDevMode.isChecked())
 
     def showHelp(self):
         """Load the help text for the options safe_qgis"""

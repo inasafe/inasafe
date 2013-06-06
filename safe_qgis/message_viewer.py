@@ -28,13 +28,18 @@ STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 class MessageViewer(QtWebKit.QWebView):
     """A simple message queue mockup."""
-    def __init__(self, theDock):
-        _ = theDock  # needed for promoted Qt widget in designer
+    def __init__(self, theParent):
+        _ = theParent  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
 
-        self.settings().globalSettings().setAttribute(
-            QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
+        # whether to show or not dev only options
+        self.devMode = QtCore.QSettings().value(
+            'inasafe/devMode', False).toBool()
+
+        if self.devMode:
+            self.settings().globalSettings().setAttribute(
+                QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
 
         # Always gets replaced when a new message is passed
         self.static_message = None
