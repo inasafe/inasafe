@@ -138,8 +138,7 @@ class ErrorMessage(MessageElement):
         self.problems = self.problems + error_message.problems
         self.details = self.details + error_message.details
         self.suggestions = self.suggestions + error_message.suggestions
-        for item in error_message.tracebacks.items:
-            self.tracebacks.items.append(item)
+        self.tracebacks.items.extend(error_message.tracebacks.items)
 
     def prepend(self, error_message):
         """add a ErrorMessage to the beginning of the queue
@@ -159,8 +158,7 @@ class ErrorMessage(MessageElement):
         self.suggestions = error_message.suggestions + self.suggestions
 
         new_tracebacks = error_message.tracebacks
-        for item in self.tracebacks.items:
-            new_tracebacks.items.append(item)
+        new_tracebacks.items.extend(self.tracebacks.items)
         self.tracebacks = new_tracebacks
 
     def clear(self):

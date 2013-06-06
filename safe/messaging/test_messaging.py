@@ -246,23 +246,12 @@ class MessagingTest(unittest.TestCase):
 
         em1.append(em2)
         em1.prepend(em0)
-        expected_res = ("<h1>PROBLEM</h1>\n"
-                        "<ul>\n"
-                        "<li>FP</li>\n"
-                        "<li>SP</li>\n"
-                        "<li>TP</li>\n"
-                        "</ul>\n"
-                        "<h1>DETAIL</h1>\n"
-                        "<ul>\n"
-                        "<li>FP</li>\n"
-                        "<li>TD</li>\n"
-                        "</ul>\n"
-                        "<h1>SUGGESTION</h1>\n"
-                        "<ul>\n"
-                        "<li>TS</li>\n"
-                        "</ul>\n"
-                        "<h1>TRACEBACK</h1>\n"
-                        "['TBTB', None, 'TT']")
+        expected_res = (
+            u'<h3>Problem</h3>\n<ul>\n<li>TP</li>\n<li>SP</li>\n<li>FP</li>\n'
+            u'</ul'
+            u'>\n<h3>Detail</h3>\n<ul>\n<li>TD</li>\n<li>FP</li>\n</ul>\n<h3'
+            u'>Suggestion</h3>\n<ul>\n<li>TS</li>\n</ul>\n<h3>Traceback</h3'
+            u'>\n<ol>\n<li>In file TBTB</li>\n<li>In file TT</li>\n</ol>\n')
         res = em1.to_html()
         self.assertEqual(expected_res, res)
 
@@ -271,16 +260,16 @@ class MessagingTest(unittest.TestCase):
 
         em1.append(em2)
         expected_res = (
-            "*PROBLEM\n"
+            "***Problem\n"
             "\n"
             " - FP\n"
             " - SP\n"
             "\n"
-            "*DETAIL\n"
+            "***Detail\n"
             "\n"
             " - SD\n"
             "\n"
-            "*TRACEBACK\n"
+            "***Traceback\n"
             "\n"
             "[None, 'TBTB']\n")
         res = em1.to_text()
