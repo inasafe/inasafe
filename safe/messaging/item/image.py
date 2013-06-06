@@ -55,10 +55,11 @@ class Image(Text):
         Raises:
             Errors are propagated
         """
-        return '<img src="%s" title="%s" alt="%s"/>' % (
+        return '<img src="%s" title="%s" alt="%s"%s/>' % (
             self.uri,
             self.text,
-            self.text)
+            self.text,
+            self.html_attributes())
 
     def to_text(self):
         """Render as plain text

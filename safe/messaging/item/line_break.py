@@ -40,7 +40,7 @@ class LineBreak(Text):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(LineBreak, self).__init__(**kwargs)
-        return '<br/>\n'
+        return '<br%s/>\n' % self.html_attributes()
 
     def to_text(self):
         """Render as plain text

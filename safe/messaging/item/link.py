@@ -59,7 +59,8 @@ class Link(Text):
         text = self.text
         if text is None:
             text = self.uri
-        return '<a href="%s">%s</a>' % (self.uri, text)
+        return '<a href="%s"%s>%s</a>' % (
+            self.uri, self.html_attributes(), text)
 
     def to_text(self):
         """Render as plain text

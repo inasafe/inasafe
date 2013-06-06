@@ -80,7 +80,7 @@ class Table(MessageElement):
         Raises:
             Errors are propagated
         """
-        table = '<table>\n'
+        table = '<table%s>\n' % self.html_attributes()
         if self.caption is not None:
             table += '<caption>%s</caption>\n' % self.caption
         table += '<tbody>\n'

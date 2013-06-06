@@ -60,7 +60,8 @@ class Paragraph(MessageElement):
         if self.text is None:
             return
         else:
-            return '<p>%s</p>' % self.text.to_html()
+            return '<p%s>%s</p>' % (
+                self.html_attributes(), self.text.to_html())
 
     def to_text(self):
         """Render a Paragraph MessageElement as plain text

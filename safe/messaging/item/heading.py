@@ -77,7 +77,8 @@ class Heading(MessageElement):
         level = self.level
         if level > 6:
             level = 6
-        return '<h%s>%s</h%s>' % (level, self.text.to_html(), level)
+        return '<h%s%s>%s</h%s>' % (
+            level, self.html_attributes(), self.text.to_html(), level)
 
     def to_text(self):
         """Render a Heading MessageElement as plain text

@@ -54,7 +54,7 @@ class ImportantText(Text):
         Raises:
             Errors are propagated
         """
-        return '<strong>%s</strong>' % self.text
+        return '<strong%s>%s</strong>' % (self.html_attributes(), self.text)
 
     def to_text(self):
         """Render as plain text
