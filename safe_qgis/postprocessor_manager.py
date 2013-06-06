@@ -100,29 +100,38 @@ class PostprocessorManager(QtCore.QObject):
     def _sumFieldName(self):
         return self.aggregator.prefix + 'sum'
 
-    def getOutput(self):
-        """Returns the results of the post processing as a table.
+    def _isNoData(self, data):
+        """Check if the value field of the postprocessor is NO_DATA.
+
+        this is used for sorting, it returns -1 if the value is NO_DATA, so that
+        no data items can be put at the end of a list
 
         Args:
-            theSingleTableFlag - bool indicating if result should be rendered
-                as a single table. Default False.
+            list - data
 
-        Returns: str - a string containing the html in the requested format.
+        Returns:
+            returns -1 if the value is NO_DATA else the value
         """
+        #black magic to get the value of each postprocessor field
+        #get the first postprocessor just to discover the data structure
+        myFirsPostprocessor = self.postProcessingOutput.itervalues().next()
+        #get the key position of the value field
+        myValueKey = myFirsPostprocessor[0][1].keyAt(0)
 
-        # LOGGER.debug(self.postProcessingOutput)
-        if self.errorMessage is not None:
-            myMessage = m.Message(
-                m.Heading(self.tr('Postprocessing report skipped')),
-                m.Paragraph(self.tr(
-                    'Due to a problem while processing the results,'
-                    ' the detailed postprocessing report is unavailable:'
-                    ' %1').arg(self.errorMessage)))
-            return myMessage
+        #get the value
+        # data[1] is the orderedDict
+        # data[1][myFirstKey] is the 1st indicator in the orderedDict
+        if data[1][myValueKey]['value'] == self.aggregator.defaults['NO_DATA']:
+            myPosition = -1
+        else:
+            myPosition = data[1][myValueKey]['value']
+            #FIXME MB this is to dehumanize the strings and have ints
+            myPosition = myPosition.replace(',', '')
+            myPosition = int(float(myPosition))
 
-        return self.generateTables()
+        return myPosition
 
-    def generateTables(self):
+    def _generateTables(self):
         """Parses the postprocessing output as one table per postprocessor.
 
         Args:
@@ -131,14 +140,9 @@ class PostprocessorManager(QtCore.QObject):
         Returns:
             str - a string containing the html
         """
-
         myMessage = m.Message()
 
         for proc, resList in self.postProcessingOutput.iteritems():
-            #sorting using the first indicator of a postprocessor
-            try:
-                myFirstKey = resList[0][1].keyAt(0)
-            # [1]['Total']['value']
             # resList is for example:
             # [
             #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
@@ -148,18 +152,13 @@ class PostprocessorManager(QtCore.QObject):
             #         'description': 'Females hygiene packs for weekly use'}})
             #    ]))
             #]
-                myEndOfList = -1
-                # return -1 if the postprocessor returns NO_DATA to put at
-                # the end of the list
-                # d[1] is the orderedDict
-                # d[1][myFirstKey] is the 1st indicator in the orderedDict
-                resList = sorted(
+            try:
+                #sorting using the first indicator of a postprocessor
+                sortedResList = sorted(
                     resList,
-                    key=lambda d: (
-                        myEndOfList if (d[1][myFirstKey]['value'] ==
-                                        self.aggregator.defaults['NO_DATA'])
-                        else d[1][myFirstKey]['value']),
+                    key=self._isNoData,
                     reverse=True)
+
             except KeyError:
                 LOGGER.debug('Skipping sorting as the postprocessor did not '
                              'have a "Total" field')
@@ -168,20 +167,14 @@ class PostprocessorManager(QtCore.QObject):
             myTable = m.Table(style_class='table table-condensed table-striped')
             myTable.caption = self.tr('Detailed %1 report').arg(safeTr(
                 get_postprocessor_human_name(proc)).lower())
-            #
-            # tr colspan="100%"
-            # th width="25%" str(self.attributeTitle).capitalize()
-
-            # add th according to the ammount of calculation done by each
-            # postprocessor
 
             myHeaderRow = m.Row()
             myHeaderRow.add(str(self.attributeTitle).capitalize())
-            for calculationName in resList[0][1]:
+            for calculationName in sortedResList[0][1]:
                 myHeaderRow.add(self.tr(calculationName))
             myTable.add(myHeaderRow)
 
-            for zoneName, calc in resList:
+            for zoneName, calc in sortedResList:
                 myRow = m.Row(zoneName)
 
                 for _, calculationData in calc.iteritems():
@@ -314,3 +307,25 @@ class PostprocessorManager(QtCore.QObject):
                         (myZoneName, myResults))
             #increment the index
             myPolygonIndex += 1
+
+    def getOutput(self):
+        """Returns the results of the post processing as a table.
+
+        Args:
+            theSingleTableFlag - bool indicating if result should be rendered
+                as a single table. Default False.
+
+        Returns: str - a string containing the html in the requested format.
+        """
+
+        # LOGGER.debug(self.postProcessingOutput)
+        if self.errorMessage is not None:
+            myMessage = m.Message(
+                m.Heading(self.tr('Postprocessing report skipped')),
+                m.Paragraph(self.tr(
+                    'Due to a problem while processing the results,'
+                    ' the detailed postprocessing report is unavailable:'
+                    ' %1').arg(self.errorMessage)))
+            return myMessage
+
+        return self._generateTables()

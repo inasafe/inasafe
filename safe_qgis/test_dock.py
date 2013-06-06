@@ -1098,7 +1098,7 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.pageToText()
-        myMessage = ('The aggregation report should be:\n%s\nFound:\n%s' %
+        myMessage = ('The aggregation report should be:\n%s\n\nFound:\n\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 

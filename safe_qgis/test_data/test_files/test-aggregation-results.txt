@@ -1,12 +1,13 @@
 In the event of a flood in jakarta like in 2007 how many people might need evacuation
-People needing evacuation	977000
+People in 1.0 m of water	977,000*
+* Number is rounded to the nearest 1000
 Map shows population density needing evacuation
 Needs per week	Total
-Rice [kg]	2735600
-Drinking Water [l]	17097500
-Clean Water [l]	65459000
-Family Kits	195400
-Toilets	48850
+Rice [kg]	2,735,600
+Drinking Water [l]	17,097,500
+Clean Water [l]	102,585,000
+Family Kits	195,400
+Toilets	48,850
 Action Checklist:
 How will warnings be disseminated?
 How will we reach stranded people?
@@ -14,27 +15,28 @@ Do we have enough relief items?
 If yes, where are they located and how will we distribute them?
 If no, where can we obtain additional relief items from and how will we transport them to here?
 Notes
-Total population: 10484000
+Total population: 10,484,000
 People need evacuation if flood levels exceed 1.0 m
 Minimum needs are defined in BNPB regulation 7/2008
-Detailed breakdown
-People in 0.3 m to 0.5 m of water: 327000
-People in 0.5 m to 1.0 m of water: 679000
-Detailed Gender report
-KAB_NAME	Total	Female population	Weekly hygiene packs	Additional weekly rice kg for pregnant and lactating women
-JAKARTA BARAT	278349	139175	110463	12969
-JAKARTA PUSAT	66829	33415	26521	3114
-JAKARTA SELATAN	33221	16611	13184	1548
+All values are rounded up to the nearest integer in order to avoid representing human lives as fractionals.
+Exposure details
+People - sourced from Center for International Earth Science Information Network (CIESIN)
+
+Detailed gender report
+Kab_name	Total	Female population	Weekly hygiene packs	Additional weekly rice kg for pregnant and lactating women
+JAKARTA UTARA	344,655	175,774	139,512	16,379
+JAKARTA BARAT	278,349	141,958	112,672	13,228
+JAKARTA TIMUR	251,489	128,259	101,800	11,952
+JAKARTA PUSAT	66,829	34,083	27,052	3,176
+JAKARTA SELATAN	33,221	16,943	13,447	1,579
 JAKARTA TIMUR	0	0	0	0
 JAKARTA TIMUR	0	0	0	0
-JAKARTA TIMUR	251489	125745	99803	11717
-JAKARTA UTARA	344655	172328	136776	16058
-Detailed Age report
-KAB_NAME	Total	Youth count	Adult count	Elderly count
-JAKARTA BARAT	278349	73206	183432	21990
-JAKARTA PUSAT	66829	17576	44040	5279
-JAKARTA SELATAN	33221	8737	21893	2624
+Detailed age report
+Kab_name	Total	Youth count	Adult count	Elderly count
+JAKARTA UTARA	344,655	90,644	227,128	26,883
+JAKARTA BARAT	278,349	73,206	183,432	21,711
+JAKARTA TIMUR	251,489	66,142	165,731	19,616
+JAKARTA PUSAT	66,829	17,576	44,040	5,213
+JAKARTA SELATAN	33,221	8,737	21,893	2,591
 JAKARTA TIMUR	0	0	0	0
 JAKARTA TIMUR	0	0	0	0
-JAKARTA TIMUR	251489	66142	165731	19868
-JAKARTA UTARA	344655	90644	227128	27228
