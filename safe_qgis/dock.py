@@ -88,11 +88,8 @@ from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 LOGGER = logging.getLogger('InaSAFE')
-<<<<<<< HEAD
+
 # from pydev import pydevd
-=======
-#from pydev import pydevd
->>>>>>> Added class and id properties to message item
 
 
 #noinspection PyArgumentList
@@ -195,13 +192,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
-<<<<<<< HEAD
         # pydevd.settrace(
         #     'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
-=======
-        #pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
->>>>>>> Added class and id properties to message item
 
         myCanvas = self.iface.mapCanvas()
 
@@ -1332,13 +1324,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
         #write postprocessing report to keyword
-        myKeywords[
-            'postprocessing_report'] = self.postprocessorManager.getOutput().to_html(True)
+        myOutput = self.postprocessorManager.getOutput().to_html(noNewline=True)
+        myKeywords['postprocessing_report'] = myOutput
+
         self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
-        myReport = self.keywordIO.readKeywords(myQGISImpactLayer,
-                                               'impact_summary')
+        myReport = self.keywordIO.readKeywords(
+            myQGISImpactLayer, 'impact_summary')
         myReport += impactLayerAttribution(myKeywords).to_html(True)
 
         # Get requested style for impact layer of either kind
