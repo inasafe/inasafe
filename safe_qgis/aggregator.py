@@ -685,6 +685,7 @@ class Aggregator(QtCore.QObject):
     def _prepareLayer(self):
         """Prepare the aggregation layer to match analysis extents."""
         myMessage = m.Message(
+            m.LineBreak(),
             m.ImportantText(
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),

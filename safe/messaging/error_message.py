@@ -20,11 +20,30 @@ import logging
 from safe.common.utilities import ugettext as tr
 
 from item.message_element import MessageElement, InvalidMessageItemError
-from . import Message, Text, Heading, BulletedList, NumberedList, Paragraph
+from . import (
+    Message,
+    Text,
+    Heading,
+    BulletedList,
+    NumberedList,
+    Paragraph,
+    ImportantText)
 
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
+
+PROBLEM_STYLE = {
+    'icon': 'icon-cog icon-white', 'style_class': 'label label-success'}
+
+DETAILS_STYLE = {
+    'icon': 'icon-cog icon-white', 'style_class': 'label label-success'}
+
+SUGGESTION_STYLE = {
+    'icon': 'icon-cog icon-white', 'style_class': 'label label-success'}
+
+TRACEBACK_STYLE = {
+    'icon': 'icon-cog icon-white', 'style_class': 'label label-success'}
 
 
 class ErrorMessage(MessageElement):
@@ -93,8 +112,8 @@ class ErrorMessage(MessageElement):
             Errors are propagated
         """
         message = Message()
-        message.add(Paragraph())
-        message.add(Heading(
+        message.add(LineBreak())
+        message.add(Important(
             tr('Problem'),
             level=3,
             style_class='btn btn-danger',

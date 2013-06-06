@@ -1065,9 +1065,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
         myMessage = m.Message(
-            m.ImportantText(
-                myTitle, **PROGRESS_UPDATE_STYLE),
-            myDetails)
+            m.LineBreak(),
+            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(myDetails))
         self.showStaticMessage(myMessage)
 
         myFlag, myMessage = self.validate()
@@ -1239,13 +1239,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.repaint()
         QtGui.qApp.processEvents()
 
-        myTitle = self.tr('Calculating impact...')
+        myTitle = self.tr('Calculating impact')
         myDetail = self.tr(
             'This may take a little while - we are computing the areas that '
             'will be impacted by the hazard and writing the result to a new '
             'layer.')
         myMessage = m.Message(
-            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE), myDetail)
+            m.LineBreak(),
+            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
         try:
             if self.runInThreadFlag:
@@ -1658,8 +1660,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myDetail = self.tr(
             'We are resampling and clipping the hazard layer to match the '
             'intersection of the exposure layer and the current view extents.')
-        myMessage = m.Paragraph(
-            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE), myDetail)
+        myMessage = m.Message(
+            m.LineBreak(),
+            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
         try:
             myClippedHazard = clipLayer(
@@ -1676,8 +1680,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myDetail = self.tr(
             'We are resampling and clipping the exposure layer to match the '
             'intersection of the hazard layer and the current view extents.')
-        myMessage = m.Paragraph(
-            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE), myDetail)
+        myMessage = m.Message(
+            m.LineBreak(),
+            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
 
         myClippedExposure = clipLayer(
