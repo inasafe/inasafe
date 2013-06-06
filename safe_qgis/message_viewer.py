@@ -60,6 +60,31 @@ class MessageViewer(QtWebKit.QWebView):
         footer_file.close()
         self.header = header.replace('PATH', base_dir)
 
+    def contextMenuEvent(self, event):
+        """Slot automatically called by Qt on right click on the WebView."""
+
+        context_menu = QtGui.QMenu(self)
+
+        #add select all
+        action = self.page().action(QtWebKit.QWebPage.SelectAll)
+        action.setEnabled(not self.pageToHtml().isEmpty())
+        context_menu.addAction(action)
+
+        #add copy
+        action = self.page().action(QtWebKit.QWebPage.Copy)
+        action.setEnabled(not self.selectedHtml().isEmpty())
+        context_menu.addAction(action)
+
+        #add view source if in dev mode
+        if self.devMode:
+            action = self.page().action(QtWebKit.QWebPage.InspectElement)
+            action.setEnabled(True)
+            context_menu.addAction(action)
+
+        #show the menu
+        context_menu.setVisible(True)
+        context_menu.exec_(event.globalPos())
+
     def static_message_event(self, sender, message):
         """Static message event handler - set message state based on event."""
         _ = sender  # we arent using it
