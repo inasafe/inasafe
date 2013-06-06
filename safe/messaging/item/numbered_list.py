@@ -35,6 +35,12 @@ class NumberedList(AbstractList):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
         if len(args) is 0:
             args = tuple([],)

@@ -125,6 +125,23 @@ class MessagingTest(unittest.TestCase):
         res = p1.to_html()
         self.assertEqual(expected_res, res)
 
+    @unittest.expectedFailure
+    def test_error_on_invalid_keywords(self):
+        """Test that an error occurs if unknown keywords are passed.
+
+        The inheritance implementation should allow valid keywords defined in
+         the base class or any of its childred, and fail if any unhandled
+         keywords are provided.
+
+        """
+        l1 = NumberedList(
+            Text('FOO'),
+            ImportantText('BAR'),
+            'dsds',
+            id='error-message',
+            style_class='error-class',
+            invalid_param=None)
+
     def test_list(self):
         """Tests complex messages are rendered correctly in plain text/html
         """
