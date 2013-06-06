@@ -20,11 +20,35 @@ import logging
 from safe.common.utilities import ugettext as tr
 
 from item.message_element import MessageElement, InvalidMessageItemError
-from . import Message, Text, Heading, BulletedList, NumberedList, Paragraph
+from . import (
+    Message,
+    Text,
+    Heading,
+    BulletedList,
+    NumberedList,
+    Paragraph,
+    ImportantText,
+    LineBreak)
 
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
+
+PROBLEM_STYLE = {
+    'icon': 'icon-remove-sign icon-white',
+    'style_class': 'label label-important'}
+
+DETAILS_STYLE = {
+    'icon': 'icon-list icon-white',
+    'style_class': 'label label-warning'}
+
+SUGGESTION_STYLE = {
+    'icon': 'icon-comment icon-white',
+    'style_class': 'label label-info'}
+
+TRACEBACK_STYLE = {
+    'icon': 'icon-info-sign icon-white',
+    'style_class': 'label label-inverse'}
 
 
 class ErrorMessage(MessageElement):
@@ -93,47 +117,62 @@ class ErrorMessage(MessageElement):
             Errors are propagated
         """
         message = Message()
-        message.add(Paragraph())
-        message.add(Heading(
-            tr('Problem'),
-            level=3,
-            style_class='btn btn-danger',
-            icon='icon-exclamation-sign'))
+        message.add(LineBreak())
+        message.add(ImportantText(tr('Problem'), **PROBLEM_STYLE))
+        message.add(Paragraph(tr(
+            'The following problem(s) were encountered whilst running the '
+            'analysis.')))
         items = BulletedList()
         for p in reversed(self.problems):
             #p is _always_ not None
             items.add(p)
         message.add(items)
 
-        if self.details.count(None) < len(self.details):
-            items = BulletedList(style_class='well')
-            message.add(Heading(
-                tr('Detail'),
-                level=3,
-                style_class='btn btn-warning',
-                icon='icon-warning-sign'))
+        if len(self.details) > 0:
+            items = BulletedList()
+            message.add(ImportantText(tr('Detail'), **DETAILS_STYLE))
+            message.add(Paragraph(tr(
+                'These additional details were reported when the problem '
+                'occurred.')))
             for d in reversed(self.details):
                 if d is not None:
                     items.add(d)
             message.add(items)
 
-        if self.suggestions.count(None) < len(self.suggestions):
-            items = BulletedList(style_class='well')
-            message.add(Heading(
-                tr('Suggestion'),
-                level=3,
-                style_class='btn btn-success',
-                icon='icon-exclamation-sign'))
+        message.add(ImportantText(tr('Suggestion'), **SUGGESTION_STYLE))
+        message.add(Paragraph(tr(
+            'You can try the following to resolve the issue:')))
+        if len(self.suggestions) < 1:
+            # Standard generic suggestions:
+            suggestions = BulletedList()
+            suggestions.add(
+                'Check that you have the latest version of InaSAFE installed '
+                '- you may have encountered a bug that is fixed in a '
+                'subsequent release.')
+            suggestions.add(
+                'Check the InaSAFE documentation to see if you are trying to '
+                'do something unsupported.')
+            suggestions.add(
+                'Report the problem using the issue tracker at '
+                'https://github.com/AIFDR/inasafe/issues. Reporting an issue '
+                'requires that you first create a free account at '
+                'http://github.com. When you report the issue, '
+                'please copy and paste the complete contents of this panel '
+                'into the issue to ensure the best possible chance of getting '
+                'your issue resolved.')
+            suggestions.add(
+                'Try contacting one of the InaSAFE development team by '
+                'sending an email to info@inasafe.org. Please ensure that you '
+                'copy and paste the complete contents of this panel into the '
+                'email.')
+        else:
+            items = BulletedList()
             for s in reversed(self.suggestions):
                 if s is not None:
                     items.add(s)
             message.add(items)
 
-        message.add(Heading(
-            tr('Traceback'),
-            level=3,
-            style_class='btn btn-info',
-            icon='icon-exclamation-sign'))
+        message.add(ImportantText(tr('Traceback'), **TRACEBACK_STYLE))
         message.add(self.tracebacks)
         return message
 
