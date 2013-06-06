@@ -62,6 +62,7 @@ from safe.common.tables import Table, TableCell, TableRow
 from safe.postprocessors import (get_postprocessors,
                                  get_postprocessor_human_name)
 from safe import messaging
+from safe.messaging.styles import PROGRESS_UPDATE_STYLE
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,

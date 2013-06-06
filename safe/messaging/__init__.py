@@ -32,3 +32,4 @@ from .item.row import Row
 from .item.table import Table
 from message import Message
 from error_message import ErrorMessage
+from styles import PROGRESS_UPDATE_STYLE

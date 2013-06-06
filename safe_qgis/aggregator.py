@@ -58,7 +58,8 @@ from safe_qgis.safe_interface import (
     unique_filename,
     get_postprocessors,
     get_postprocessor_human_name,
-    messaging as m)
+    messaging as m,
+    PROGRESS_UPDATE_STYLE)
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -180,12 +181,16 @@ class Aggregator(QtCore.QObject):
             self._sendMessage(myMessage)
 
             #myKeywords are already complete
+            category = myKeywords['category']
+            aggregationAttribute = self.defaults['AGGR_ATTR_KEY']
+            femaleRatio = self.defaults['FEM_RATIO_ATTR_KEY']
+            femaleRatioKey = self.defaults['FEM_RATIO_KEY']
             if ('category' in myKeywords and
-                myKeywords['category'] == 'postprocessing' and
-                self.defaults['AGGR_ATTR_KEY'] in myKeywords and
-                self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
-                (self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr('Use default') or
-                 self.defaults['FEM_RATIO_KEY'] in myKeywords)):
+                category == 'postprocessing' and
+                aggregationAttribute in myKeywords and
+                femaleRatio in myKeywords and
+                (femaleRatio != self.tr('Use default') or
+                 femaleRatioKey in myKeywords)):
                 self.isValid = True
             #some keywords are needed
             else:
@@ -680,7 +685,9 @@ class Aggregator(QtCore.QObject):
     def _prepareLayer(self):
         """Prepare the aggregation layer to match analysis extents."""
         myMessage = m.Message(
-            m.Heading(self.tr('Preparing aggregation layer...'), level=3),
+            m.ImportantText(
+                self.tr('Preparing aggregation layer'),
+                **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'We are clipping the aggregation layer to match the '
                 'intersection of the hazard and exposure layer extents.')))

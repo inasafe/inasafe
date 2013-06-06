@@ -18,15 +18,25 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 class MessageElement(object):
 
-    def __init__(self, id=None, style_class=None):
+    def __init__(self, id=None, style_class=None, icon=None):
         """
         Constructor for a message element
         :param id: Optional id - will be ignored in text renderer.
         :param style_class: Optional class = will be ignored in text renderer.
+        :param icon: Option bootstrap glyph icon class used for html renderer
         :return: None
+
+        For glyphicons see http://twitter.github.io/bootstrap/base-css
+        .html#icons
+
+        e.g. icon='icon-search' when used will cause self.html_icon to return
+         <i class="icon-search"></i>
+
+
         """
         self.id = id
         self.style_class = style_class
+        self.icon = icon
 
     def __unicode__(self):
         return self.to_text()
@@ -108,6 +118,21 @@ class MessageElement(object):
             extra_attributes = '%s class="%s"' % (
                 extra_attributes, self.style_class)
         return extra_attributes
+
+    def html_icon(self):
+        """Get bootstrap style glyphicon.
+
+        For glyphicons see http://twitter.github.io/bootstrap/base-css
+        .html#icons
+
+        e.g. icon='icon-search' when used will cause self.html_icon to return
+         <i class="icon-search"></i>
+
+        """
+        icon = ''
+        if self.icon is not None:
+            icon = '<i class="%s"></i> ' % self.icon
+        return icon
 
 
 class InvalidMessageItemError(Exception):

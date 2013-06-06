@@ -20,7 +20,7 @@ import logging
 from safe.common.utilities import ugettext as tr
 
 from item.message_element import MessageElement, InvalidMessageItemError
-from . import Message, Text, Heading, BulletedList, NumberedList
+from . import Message, Text, Heading, BulletedList, NumberedList, Paragraph
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -47,7 +47,7 @@ class ErrorMessage(MessageElement):
         self.problems = []
         self.details = []
         self.suggestions = []
-        self.tracebacks = NumberedList()
+        self.tracebacks = NumberedList(style_class='well')
 
         self.problems.append(self._to_message_element(problem))
         self.details.append(self._to_message_element(detail))
@@ -93,7 +93,12 @@ class ErrorMessage(MessageElement):
             Errors are propagated
         """
         message = Message()
-        message.add(Heading(tr('Problem'), level=3))
+        message.add(Paragraph())
+        message.add(Heading(
+            tr('Problem'),
+            level=3,
+            style_class='btn btn-danger',
+            icon='icon-exclamation-sign'))
         items = BulletedList()
         for p in reversed(self.problems):
             #p is _always_ not None
@@ -101,22 +106,34 @@ class ErrorMessage(MessageElement):
         message.add(items)
 
         if self.details.count(None) < len(self.details):
-            items = BulletedList()
-            message.add(Heading(tr('Detail'), level=3))
+            items = BulletedList(style_class='well')
+            message.add(Heading(
+                tr('Detail'),
+                level=3,
+                style_class='btn btn-warning',
+                icon='icon-warning-sign'))
             for d in reversed(self.details):
                 if d is not None:
                     items.add(d)
             message.add(items)
 
         if self.suggestions.count(None) < len(self.suggestions):
-            items = BulletedList()
-            message.add(Heading(tr('Suggestion'), level=3))
+            items = BulletedList(style_class='well')
+            message.add(Heading(
+                tr('Suggestion'),
+                level=3,
+                style_class='btn btn-success',
+                icon='icon-exclamation-sign'))
             for s in reversed(self.suggestions):
                 if s is not None:
                     items.add(s)
             message.add(items)
 
-        message.add(Heading(tr('Traceback'), level=3))
+        message.add(Heading(
+            tr('Traceback'),
+            level=3,
+            style_class='btn btn-info',
+            icon='icon-exclamation-sign'))
         message.add(self.tracebacks)
         return message
 
