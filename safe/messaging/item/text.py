@@ -118,7 +118,7 @@ class PlainText(Text):
     separate file was creating import problems due to a circular references.
     """
 
-    def __init__(self, text):
+    def __init__(self, text, **kwargs):
         """Creates a strong Text object
 
         Args:
@@ -129,7 +129,14 @@ class PlainText(Text):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(PlainText, self).__init__(**kwargs)
         if self._is_qstring(text):
             self.text = str(text)
         else:
@@ -147,7 +154,13 @@ class PlainText(Text):
         Raises:
             Errors are propagated
         """
-        return self.to_text()
+        icon = self.html_icon()
+        attributes = self.html_attributes()
+        if icon is not '' and attributes is not '':
+            return '<span%s>%s%s</span>' % {
+                attributes, icon, self.to_text()}
+        else:
+            return self.to_text()
 
     def to_text(self):
         """Render as plain text

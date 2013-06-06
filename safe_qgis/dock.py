@@ -65,7 +65,8 @@ from safe_interface import messaging as m
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL)
+    ERROR_MESSAGE_SIGNAL,
+    PROGRESS_UPDATE_STYLE)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
@@ -1058,7 +1059,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myDetails = self.tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
-        myMessage = m.Message(m.Heading(myTitle), myDetails)
+        myMessage = m.Message(
+            m.ImportantText(
+                myTitle, **PROGRESS_UPDATE_STYLE),
+            myDetails)
         self.showStaticMessage(myMessage)
 
         myFlag, myMessage = self.validate()
@@ -1235,7 +1239,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'This may take a little while - we are computing the areas that '
             'will be impacted by the hazard and writing the result to a new '
             'layer.')
-        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
+        myMessage = m.Message(
+            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE), myDetail)
         self.showDynamicMessage(myMessage)
         try:
             if self.runInThreadFlag:
@@ -1644,11 +1649,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
-        myTitle = self.tr('Preparing hazard data...')
+        myTitle = self.tr('Preparing hazard data')
         myDetail = self.tr(
             'We are resampling and clipping the hazard layer to match the '
             'intersection of the exposure layer and the current view extents.')
-        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
+        myMessage = m.Paragraph(
+            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE), myDetail)
         self.showDynamicMessage(myMessage)
         try:
             myClippedHazard = clipLayer(
@@ -1661,11 +1667,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IOError, e:
             raise e
 
-        myTitle = self.tr('Preparing exposure data...')
+        myTitle = self.tr('Preparing exposure data')
         myDetail = self.tr(
             'We are resampling and clipping the exposure layer to match the '
             'intersection of the hazard layer and the current view extents.')
-        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
+        myMessage = m.Paragraph(
+            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE), myDetail)
         self.showDynamicMessage(myMessage)
 
         myClippedExposure = clipLayer(
