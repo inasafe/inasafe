@@ -174,7 +174,9 @@ class Aggregator(QtCore.QObject):
             return
         else:
             myMessage = m.Message(
-                m.Heading(self.tr('Waiting for attribute selection...')),
+                m.LineBreak(),
+                m.ImportantText(
+                    self.tr('Select attribute'), PROGRESS_UPDATE_STYLE),
                 m.Paragraph(self.tr(
                     'Please select which attribute you want to use as ID for '
                     'the aggregated results')))
