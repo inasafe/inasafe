@@ -240,38 +240,41 @@ class MessagingTest(unittest.TestCase):
     def test_error_message(self):
         """Tests high level error messages are rendered in plain text/html.
         """
-        em1 = ErrorMessage('SP')
-        em2 = ErrorMessage('TP', 'TD', 'TS', 'TT')
-        em0 = ErrorMessage('FP', 'FP', traceback='TBTB')
+        em0 = ErrorMessage('E0p', 'E0d', traceback='E0t')
+        em1 = ErrorMessage('E1p')
+        em2 = ErrorMessage('E2p', 'E2d', 'E2s', 'E2t')
 
         em1.append(em2)
         em1.prepend(em0)
         expected_res = (
-            u'<h3>Problem</h3>\n<ul>\n<li>TP</li>\n<li>SP</li>\n<li>FP</li>\n'
-            u'</ul'
-            u'>\n<h3>Detail</h3>\n<ul>\n<li>TD</li>\n<li>FP</li>\n</ul>\n<h3'
-            u'>Suggestion</h3>\n<ul>\n<li>TS</li>\n</ul>\n<h3>Traceback</h3'
-            u'>\n<ol>\n<li>In file TBTB</li>\n<li>In file TT</li>\n</ol>\n')
+            '<h3>Problem</h3>\n<ul>\n<li>E2p</li>\n<li>E1p</li>\n<li>E0p</li>\n'
+            '</ul>\n'
+            '<h3>Detail</h3>\n<ul>\n<li>E2d</li>\n<li>E0d</li>\n</ul>\n'
+            '<h3>Suggestion</h3>\n<ul>\n<li>E2s</li>\n</ul>\n'
+            '<h3>Traceback</h3>\n<ol>\n<li>In file E0t</li>\n'
+            '<li>In file E2t</li>\n</ol>\n')
+
         res = em1.to_html()
         self.assertEqual(expected_res, res)
 
-        em1 = ErrorMessage('FP')
-        em2 = ErrorMessage('SP', detail='SD', traceback='TBTB')
-
-        em1.append(em2)
         expected_res = (
-            "***Problem\n"
-            "\n"
-            " - FP\n"
-            " - SP\n"
-            "\n"
-            "***Detail\n"
-            "\n"
-            " - SD\n"
-            "\n"
-            "***Traceback\n"
-            "\n"
-            "[None, 'TBTB']\n")
+            '***Problem\n'
+            '\n'
+            ' - E2p\n'
+            ' - E1p\n'
+            ' - E0p\n'
+            '\n'
+            '***Detail\n'
+            '\n'
+            ' - E2d\n'
+            ' - E0d\n'
+            '\n'
+            '***Suggestion\n'
+            '\n'
+            ' - E2s\n'
+            '\n'
+            '***Traceback\n'
+            '\n 1. In file E0t\n 2. In file E2t\n\n')
         res = em1.to_text()
         self.assertEqual(expected_res, res)
 
