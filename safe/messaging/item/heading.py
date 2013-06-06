@@ -22,7 +22,7 @@ from text import Text
 class Heading(MessageElement):
     """A Heading class for titles and subtitles much like the h1-h6 in html"""
 
-    def __init__(self, text=None, level=1):
+    def __init__(self, text=None, level=1, **kwargs):
         """Creates a Heading object
 
         Strings can be passed and are automatically converted in to
@@ -37,7 +37,15 @@ class Heading(MessageElement):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(Heading, self).__init__(**kwargs)
+
         self.text = None
         if level < 1:
             level = 1

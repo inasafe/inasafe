@@ -22,7 +22,7 @@ from text import Text
 class Cell(MessageElement):
     """A class to model table cells in the messaging system """
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """Creates a cell object
 
         Args:
@@ -33,7 +33,14 @@ class Cell(MessageElement):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(Cell, self).__init__(**kwargs)
 
         self.text = Text(*args)
 

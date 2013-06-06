@@ -42,8 +42,6 @@ class NumberedList(AbstractList):
         http://stackoverflow.com/questions/13124961/
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
-        if len(args) is 0:
-            args = tuple([],)
         super(NumberedList, self).__init__(*args, **kwargs)
 
     def to_html(self):
