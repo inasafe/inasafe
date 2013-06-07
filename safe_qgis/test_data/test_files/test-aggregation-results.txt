@@ -19,9 +19,6 @@ Total population: 10,484,000
 People need evacuation if flood levels exceed 1.0 m
 Minimum needs are defined in BNPB regulation 7/2008
 All values are rounded up to the nearest integer in order to avoid representing human lives as fractionals.
-Exposure details
-People - sourced from Center for International Earth Science Information Network (CIESIN)
-
 Detailed gender report
 Kab_name	Total	Female population	Weekly hygiene packs	Additional weekly rice kg for pregnant and lactating women
 JAKARTA UTARA	344,655	175,774	139,512	16,379
@@ -40,3 +37,5 @@ JAKARTA PUSAT	66,829	17,576	44,040	5,213
 JAKARTA SELATAN	33,221	8,737	21,893	2,591
 JAKARTA TIMUR	0	0	0	0
 JAKARTA TIMUR	0	0	0	0
+Exposure details
+People - sourced from Center for International Earth Science Information Network (CIESIN)
