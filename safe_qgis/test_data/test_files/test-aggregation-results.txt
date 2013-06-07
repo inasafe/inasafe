@@ -37,5 +37,10 @@ JAKARTA PUSAT	66,829	17,576	44,040	5,213
 JAKARTA SELATAN	33,221	8,737	21,893	2,591
 JAKARTA TIMUR	0	0	0	0
 JAKARTA TIMUR	0	0	0	0
-Exposure details
+ Hazard details
+
+A flood in Jakarta like in 2007 - sourced from HKV
+
+ Exposure details
+
 People - sourced from Center for International Earth Science Information Network (CIESIN)

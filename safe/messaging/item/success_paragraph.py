@@ -15,13 +15,13 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from paragraph import Paragraph
+from paragraph import Paragraph, Text
 
 
 class SuccessParagraph(Paragraph):
     """A Success Paragraph class for text blocks much like the p in html."""
 
-    def __init__(self, text=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Creates an important paragraph object.
 
         Args:
@@ -43,7 +43,7 @@ class SuccessParagraph(Paragraph):
             my_class = '%s alert alert-success' % kwargs['style_class']
             kwargs['style_class'] = my_class
         super(SuccessParagraph, self).__init__(**kwargs)
-        self.text = text
+        self.text = Text(*args)
 
     def to_html(self):
         """Render a Paragraph MessageElement as html
@@ -77,4 +77,4 @@ class SuccessParagraph(Paragraph):
         if self.text is None:
             return
         else:
-            return "\nSUCCESS: %s\n" % self.text
+            return "    SUCCESS: %s\n" % self.text
