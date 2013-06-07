@@ -125,6 +125,23 @@ class MessagingTest(unittest.TestCase):
         res = p1.to_html()
         self.assertEqual(expected_res, res)
 
+    def test_success_paragraph(self):
+        """Tests paragraphs are rendered correctly in plain text/html.
+        """
+        p = SuccessParagraph('FOO')
+        expected_res = '    FOO\n'
+        res = p.to_text()
+        self.assertEqual(expected_res, res)
+
+        expected_res = '<p>FOO</p>'
+        res = p.to_html()
+        self.assertEqual(expected_res, res)
+
+        p1 = Paragraph('FOO', ImportantText('BAR'), 'function')
+        expected_res = '<p>FOO <strong>BAR</strong> function</p>'
+        res = p1.to_html()
+        self.assertEqual(expected_res, res)
+
     @unittest.expectedFailure
     def test_error_on_invalid_keywords(self):
         """Test that an error occurs if unknown keywords are passed.

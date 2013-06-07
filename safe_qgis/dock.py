@@ -463,7 +463,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'You can now proceed to run your model by clicking the'),
             m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
             self.tr('button.'))
-        myMessage = m.Message(myTitle, myNotes)
+        myMessage = m.Message(LOGO_ELEMENT, myTitle, myNotes)
         return myMessage
 
     def notReadyMessage(self):
@@ -1089,6 +1089,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
         myMessage = m.Message(
+            LOGO_ELEMENT,
             m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetails))
         self.showStaticMessage(myMessage)
@@ -1780,6 +1781,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myReport.add(impactLayerAttribution(myKeywords))
                     self.pbnPrint.setEnabled(True)
                 else:
+                    myReport.add(LOGO_ELEMENT)
+                    myReport.add(m.Heading(self.tr(
+                        'Layer keywords:'), **INFO_STYLE))
+                    myReport.add(m.Text(self.tr(
+                        'The following keywords are defined for the active '
+                        'layer:')))
                     self.pbnPrint.setEnabled(False)
                     myList = m.BulletedList()
                     for myKeyword in myKeywords:

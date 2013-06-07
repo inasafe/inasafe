@@ -64,6 +64,19 @@ th.button-cell{
   padding-left: 4px;
 }
 
+.suggestion {
+  color: #fff;
+  background-color: #0a6228;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0a6228), to(#0a3f1b));
+  background-image: -webkit-linear-gradient(top, #0a6228, #0a3f1b);
+  background-image: -o-linear-gradient(top, #0a6228, #0a3f1b);
+  background-image: linear-gradient(top, #0a6228, #0a3f1b);
+  background-repeat: repeat-x;
+  border-color: #10a142 #0a6228 #0a3f1b;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  padding-left: 4px;
+}
+
 .inverse {
   color: #fff;
   background-color: #000;

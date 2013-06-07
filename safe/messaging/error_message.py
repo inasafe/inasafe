@@ -49,7 +49,7 @@ DETAILS_STYLE = {
 SUGGESTION_STYLE = {
     'level': 5,
     'icon': 'icon-comment icon-white',
-    'style_class': 'info'}
+    'style_class': 'suggestion'}
 
 TRACEBACK_STYLE = {
     'level': 5,
