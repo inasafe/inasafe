@@ -5,8 +5,5 @@
     <orderEntry type="jdk" jdkName="Python with QGIS 1.8 libs" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
-  <component name="PackageRequirementsSettings">
-    <option name="requirementsPath" value="" />
-  </component>
 </module>
 
