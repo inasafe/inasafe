@@ -178,8 +178,8 @@ class Aggregator(QtCore.QObject):
         else:
             myMessage = m.Message(
                 m.LineBreak(),
-                m.ImportantText(
-                    self.tr('Select attribute'), PROGRESS_UPDATE_STYLE),
+                m.Heading(
+                    self.tr('Select attribute'), **PROGRESS_UPDATE_STYLE),
                 m.Paragraph(self.tr(
                     'Please select which attribute you want to use as ID for '
                     'the aggregated results')))
@@ -691,7 +691,7 @@ class Aggregator(QtCore.QObject):
         """Prepare the aggregation layer to match analysis extents."""
         myMessage = m.Message(
             m.LineBreak(),
-            m.ImportantText(
+            m.Heading(
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(

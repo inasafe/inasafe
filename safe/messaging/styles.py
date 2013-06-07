@@ -24,17 +24,25 @@ __date__ = '06/06/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# These all apply to heading elements
+
 PROGRESS_UPDATE_STYLE = {
+    'level': 5,
     'icon': 'icon-cog icon-white',
-    'style_class': 'label label-success wide'}
+    'style_class': 'info'}
 
 INFO_STYLE = {
+    'level': 5,
     'icon': 'icon-info-sign icon-white',
-    'style_class': 'label label-info wide'}
+    'style_class': 'info'}
 
 WARNING_STYLE = {
+    'level': 5,
     'icon': 'icon-warning-sign icon-white',
-    'style_class': 'label label-warning wide'}
+    'style_class': 'warning'}
+
+# This is typically a text element or its derivatives
 
 KEYWORD_STYLE = {
     'style_class': 'label label-info'}
+

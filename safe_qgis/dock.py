@@ -411,7 +411,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 to get started.
         """
         myMessage = m.Message()
-        myMessage.add(m.ImportantText('Getting started', **INFO_STYLE))
+        myMessage.add(m.Heading('Getting started', **INFO_STYLE))
         myNotes = m.Paragraph(
             self.tr(
                 'To use this tool you need to add some layers to your '
@@ -425,7 +425,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
             self.tr('button below.'))
         myMessage.add(myNotes)
-        myMessage.add(m.ImportantText('Limitations', **WARNING_STYLE))
+        myMessage.add(m.Heading('Limitations', **WARNING_STYLE))
         myList = m.NumberedList()
         myList.add(
             self.tr('InaSAFE is not a hazard modelling tool.'))
@@ -456,7 +456,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         # What does this todo mean? TS
         # TODO refactor impact_functions so it is accessible and user here
-        myTitle = m.ImportantText(
+        myTitle = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         myNotes = m.Paragraph(self.tr(
             'You can now proceed to run your model by clicking the'),
@@ -478,17 +478,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #myExposureFilename = self.getExposureLayer().source()
         myExposureKeywords = QtCore.QString(
             str(self.keywordIO.readKeywords(self.getExposureLayer())))
-        myHeading = m.ImportantText(
+        myHeading = m.Heading(
             self.tr('No valid functions:'), **WARNING_STYLE)
         myNotes = m.Paragraph(self.tr(
             'No functions are available for the inputs you have specified. '
             'Try selecting a different combination of inputs. Please '
             'consult the user manual for details on what constitute '
             'valid inputs for a given risk function.'))
-        myHazardHeading = m.ImportantText(
+        myHazardHeading = m.Heading(
             self.tr('Hazard keywords:'), **INFO_STYLE)
         myHazardKeywords = m.Paragraph(myHazardKeywords)
-        myExposureHeading = m.ImportantText(
+        myExposureHeading = m.Heading(
             self.tr('Exposure keywords:'), **INFO_STYLE)
         myExposureKeywords = m.Paragraph(myExposureKeywords)
         myMessage = m.Message(
@@ -1089,7 +1089,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'hardware configuration and the analysis extents and data.')
         myMessage = m.Message(
             m.LineBreak(),
-            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetails))
         self.showStaticMessage(myMessage)
 
@@ -1269,7 +1269,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'layer.')
         myMessage = m.Message(
             m.LineBreak(),
-            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
         try:
@@ -1685,7 +1685,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'intersection of the exposure layer and the current view extents.')
         myMessage = m.Message(
             m.LineBreak(),
-            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
         try:
@@ -1705,7 +1705,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'intersection of the hazard layer and the current view extents.')
         myMessage = m.Message(
             m.LineBreak(),
-            m.ImportantText(myTitle, **PROGRESS_UPDATE_STYLE),
+            m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
 
@@ -1909,7 +1909,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.showDynamicMessage(
             m.Message(
-                m.ImportantText(self.tr('Map Creator')),
+                m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
 
         myMap.setImpactLayer(self.iface.activeLayer())
@@ -1926,7 +1926,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMapPdfFilePath is None or myMapPdfFilePath == '':
             self.showDynamicMessage(
                 m.Message(
-                    m.ImportantText(self.tr('Map Creator')),
+                    m.Heading(self.tr('Map Creator'), **ERROR_MESSAGE_SIGNAL),
                     m.Text(self.tr('Printing cancelled!'))))
             return
 
