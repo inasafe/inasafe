@@ -77,7 +77,7 @@ class ErrorMessage(MessageElement):
         self.problems = []
         self.details = []
         self.suggestions = []
-        self.tracebacks = NumberedList(style_class='well')
+        self.tracebacks = NumberedList()
 
         if problem is not None:
             self.problems.append(self._to_message_element(problem))

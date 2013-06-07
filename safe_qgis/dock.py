@@ -95,7 +95,7 @@ KEYWORD_STYLE = styles.KEYWORD_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd
+#from pydev import pydevd
 
 
 #noinspection PyArgumentList
@@ -198,8 +198,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
-        # pydevd.settrace(
-        #     'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        #pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
         myCanvas = self.iface.mapCanvas()
 
