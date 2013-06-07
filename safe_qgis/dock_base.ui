@@ -34,7 +34,7 @@
     <item row="2" column="0">
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <property name="leftMargin">
-       <number>9</number>
+       <number>3</number>
       </property>
       <item>
        <widget class="MessageViewer" name="wvResults" native="true">
