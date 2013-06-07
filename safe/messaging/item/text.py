@@ -15,6 +15,7 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 from message_element import MessageElement, InvalidMessageItemError
 
 
@@ -156,9 +157,11 @@ class PlainText(Text):
         """
         icon = self.html_icon()
         attributes = self.html_attributes()
+        # Deal with long file names that prevent wrapping
+        wrappable_text = self.to_text().replace(os.sep, '<wbr>' + os.sep)
         if icon is not '' and attributes is not '':
             return '<span%s>%s%s</span>' % {
-                attributes, icon, self.to_text()}
+                attributes, icon, wrappable_text}
         else:
             return self.to_text()
 

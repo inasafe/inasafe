@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Fri Jun  7 09:18:55 2013
+# Created: Fri Jun  7 13:21:24 2013
 #      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
@@ -36,7 +36,7 @@ class Ui_DockBase(object):
         self.gridLayout.setContentsMargins(3, 0, 3, 3)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.verticalLayout_4 = QtGui.QVBoxLayout()
-        self.verticalLayout_4.setContentsMargins(9, -1, -1, -1)
+        self.verticalLayout_4.setContentsMargins(3, -1, -1, -1)
         self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
         self.wvResults = MessageViewer(self.dockWidgetContents)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.MinimumExpanding)

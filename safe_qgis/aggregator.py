@@ -177,7 +177,6 @@ class Aggregator(QtCore.QObject):
             return
         else:
             myMessage = m.Message(
-                m.LineBreak(),
                 m.Heading(
                     self.tr('Select attribute'), **PROGRESS_UPDATE_STYLE),
                 m.Paragraph(self.tr(
@@ -690,7 +689,6 @@ class Aggregator(QtCore.QObject):
     def _prepareLayer(self):
         """Prepare the aggregation layer to match analysis extents."""
         myMessage = m.Message(
-            m.LineBreak(),
             m.Heading(
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),

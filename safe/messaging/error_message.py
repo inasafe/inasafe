@@ -34,21 +34,27 @@ from . import (
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
+# We defined these styles locally because we use different icons
+
 PROBLEM_STYLE = {
+    'level': 5,
     'icon': 'icon-remove-sign icon-white',
-    'style_class': 'label label-important'}
+    'style_class': 'warning'}
 
 DETAILS_STYLE = {
+    'level': 5,
     'icon': 'icon-list icon-white',
-    'style_class': 'label label-warning'}
+    'style_class': 'problem'}
 
 SUGGESTION_STYLE = {
+    'level': 5,
     'icon': 'icon-comment icon-white',
-    'style_class': 'label label-info'}
+    'style_class': 'info'}
 
 TRACEBACK_STYLE = {
+    'level': 5,
     'icon': 'icon-info-sign icon-white',
-    'style_class': 'label label-inverse'}
+    'style_class': 'inverse'}
 
 
 class ErrorMessage(MessageElement):
@@ -71,11 +77,14 @@ class ErrorMessage(MessageElement):
         self.problems = []
         self.details = []
         self.suggestions = []
-        self.tracebacks = NumberedList(style_class='well')
+        self.tracebacks = NumberedList()
 
-        self.problems.append(self._to_message_element(problem))
-        self.details.append(self._to_message_element(detail))
-        self.suggestions.append(self._to_message_element(suggestion))
+        if problem is not None:
+            self.problems.append(self._to_message_element(problem))
+        if detail is not None:
+            self.details.append(self._to_message_element(detail))
+        if suggestion is not None:
+            self.suggestions.append(self._to_message_element(suggestion))
 
         if traceback is not None:
             tokens = traceback.split(' File')
@@ -118,7 +127,7 @@ class ErrorMessage(MessageElement):
         """
         message = Message()
         message.add(LineBreak())
-        message.add(ImportantText(tr('Problem'), **PROBLEM_STYLE))
+        message.add(Heading(tr('Problem'), **PROBLEM_STYLE))
         message.add(Paragraph(tr(
             'The following problem(s) were encountered whilst running the '
             'analysis.')))
@@ -130,16 +139,16 @@ class ErrorMessage(MessageElement):
 
         if len(self.details) > 0:
             items = BulletedList()
-            message.add(ImportantText(tr('Detail'), **DETAILS_STYLE))
+            message.add(Heading(tr('Detail'), **DETAILS_STYLE))
             message.add(Paragraph(tr(
                 'These additional details were reported when the problem '
                 'occurred.')))
-            for d in reversed(self.details):
+            for d in self.details:
                 if d is not None:
                     items.add(d)
             message.add(items)
 
-        message.add(ImportantText(tr('Suggestion'), **SUGGESTION_STYLE))
+        message.add(Heading(tr('Suggestion'), **SUGGESTION_STYLE))
         message.add(Paragraph(tr(
             'You can try the following to resolve the issue:')))
         if len(self.suggestions) < 1:
@@ -165,6 +174,7 @@ class ErrorMessage(MessageElement):
                 'sending an email to info@inasafe.org. Please ensure that you '
                 'copy and paste the complete contents of this panel into the '
                 'email.')
+            message.add(suggestions)
         else:
             items = BulletedList()
             for s in reversed(self.suggestions):
@@ -172,7 +182,7 @@ class ErrorMessage(MessageElement):
                     items.add(s)
             message.add(items)
 
-        message.add(ImportantText(tr('Traceback'), **TRACEBACK_STYLE))
+        message.add(Heading(tr('Traceback'), **TRACEBACK_STYLE))
         message.add(self.tracebacks)
         return message
 

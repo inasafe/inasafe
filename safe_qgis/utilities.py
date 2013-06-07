@@ -85,7 +85,7 @@ def getErrorMessage(theException, theContext=None, theSuggestion=None):
 
     myTraceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
 
-    myProblem = m.Message(m.ImportantText(theException.__class__.__name__))
+    myProblem = m.Message(m.Text(theException.__class__.__name__))
 
     if str(theException) is None or str(theException) == '':
         myProblem.append = m.Text(tr('No details provided'))
@@ -102,6 +102,11 @@ def getErrorMessage(theException, theContext=None, theSuggestion=None):
         suggestion=mySuggestion,
         traceback=myTraceback
     )
+
+    myArgs = theException.args
+    for myArg in myArgs:
+        myErrorMessage.details.append(myArg)
+
     return myErrorMessage
 
 
