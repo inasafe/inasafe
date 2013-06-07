@@ -1088,7 +1088,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
         myMessage = m.Message(
-            m.LineBreak(),
             m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetails))
         self.showStaticMessage(myMessage)
@@ -1268,7 +1267,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'will be impacted by the hazard and writing the result to a new '
             'layer.')
         myMessage = m.Message(
-            m.LineBreak(),
             m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
@@ -1684,7 +1682,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'We are resampling and clipping the hazard layer to match the '
             'intersection of the exposure layer and the current view extents.')
         myMessage = m.Message(
-            m.LineBreak(),
             m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
@@ -1704,7 +1701,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'We are resampling and clipping the exposure layer to match the '
             'intersection of the hazard layer and the current view extents.')
         myMessage = m.Message(
-            m.LineBreak(),
             m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(myDetail))
         self.showDynamicMessage(myMessage)
@@ -1947,7 +1943,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myWrappedMapPath = myMapPdfFilePath.replace(os.sep, '<wbr>' + os.sep)
         myWrappedHtmlPath = myHtmlPdfPath.replace(os.sep, '<wbr>' + os.sep)
         myStatus = m.Message(
-            m.Heading(self.tr('Map Creator'), level=3),
+            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
             m.Paragraph(self.tr(
                 'Your PDF was created....opening using the default PDF viewer '
                 'on your system. The generated pdfs were saved as:')),

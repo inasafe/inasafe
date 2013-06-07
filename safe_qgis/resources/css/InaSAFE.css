@@ -61,6 +61,18 @@ th.button-cell{
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
+.inverse {
+  color: #fff;
+  background-color: #000;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#2f2f2f), to(#000000));
+  background-image: -webkit-linear-gradient(top, #2f2f2f, #000000);
+  background-image: -o-linear-gradient(top, #2f2f2f, #000000);
+  background-image: linear-gradient(top, #2f2f2f, #000000);
+  background-repeat: repeat-x;
+  border-color: rgba(0, 14, 40, 0.66) #2f2f2f #000000;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
 .wide {
   width:100%;
   margin-right: 10px;
