@@ -37,6 +37,10 @@ from qgis.core import (
     QgsFillSymbolV2,
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
+
+from third_party.odict import OrderedDict
+from third_party.pydispatch import dispatcher
+
 from safe_qgis.clipper import clipLayer
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.utilities import (
@@ -58,8 +62,7 @@ from safe_qgis.safe_interface import (
     unique_filename,
     get_postprocessors,
     get_postprocessor_human_name,
-    messaging as m,
-    PROGRESS_UPDATE_STYLE)
+    messaging as m)
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -70,10 +73,10 @@ from safe_qgis.exceptions import (
     KeywordDbError,
     InvalidAggregatorError)
 
-from third_party.odict import OrderedDict
-
-from third_party.pydispatch import dispatcher
-
+from safe_interface import styles
+PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
+INFO_STYLE = styles.INFO_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd

@@ -65,9 +65,7 @@ from safe_interface import messaging as m
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL,
-    PROGRESS_UPDATE_STYLE,
-    INFO_STYLE)
+    ERROR_MESSAGE_SIGNAL)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
@@ -88,6 +86,12 @@ from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
+
+from safe_interface import styles
+PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
+INFO_STYLE = styles.INFO_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
+KEYWORD_STYLE = styles.KEYWORD_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -412,16 +416,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr(
                 'To use this tool you need to add some layers to your '
                 'QGIS project. Ensure that at least one'),
-            m.EmphasizedText(self.tr('hazard')),
+            m.EmphasizedText(self.tr('hazard'), **KEYWORD_STYLE),
             self.tr('layer (e.g. earthquake MMI) and one '),
-            m.EmphasizedText(self.tr('exposure')),
+            m.EmphasizedText(self.tr('exposure'), **KEYWORD_STYLE),
             self.tr(
                 'layer (e.g. dwellings) are available. When you are '
                 'ready, click the '),
-            m.EmphasizedText(self.tr('run')),
+            m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
             self.tr('button below.'))
         myMessage.add(myNotes)
-        myMessage.add(m.ImportantText('Limitations', **INFO_STYLE))
+        myMessage.add(m.ImportantText('Limitations', **WARNING_STYLE))
         myList = m.NumberedList()
         myList.add(
             self.tr('InaSAFE is not a hazard modelling tool.'))
@@ -443,6 +447,57 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'any responsibility for the correctness of outputs from '
                 'InaSAFE or decisions derived as a consequence.'))
         myMessage.add(myList)
+        return myMessage
+
+    def readyMessage(self):
+        """Helper to create a message indicating inasafe is ready.
+
+        :returns Message: A localised message indicating we are ready to run.
+        """
+        # What does this todo mean? TS
+        # TODO refactor impact_functions so it is accessible and user here
+        myTitle = m.ImportantText(
+            self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
+        myNotes = m.Paragraph(self.tr(
+            'You can now proceed to run your model by clicking the'),
+            m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
+            self.tr('button.'))
+        myMessage = m.Message(myTitle, myNotes)
+        return myMessage
+
+    def notReadyMessage(self):
+        """Help to create a message indicating inasafe is NOT ready.
+
+        :returns Message: A localised message indicating we are not ready.
+        """
+        # What does this todo mean? TS
+        # TODO refactor impact_functions so it is accessible and user here
+        #myHazardFilename = self.getHazardLayer().source()
+        myHazardKeywords = QtCore.QString(str(
+            self.keywordIO.readKeywords(self.getHazardLayer())))
+        #myExposureFilename = self.getExposureLayer().source()
+        myExposureKeywords = QtCore.QString(
+            str(self.keywordIO.readKeywords(self.getExposureLayer())))
+        myHeading = m.ImportantText(
+            self.tr('No valid functions:'), **WARNING_STYLE)
+        myNotes = m.Paragraph(self.tr(
+            'No functions are available for the inputs you have specified. '
+            'Try selecting a different combination of inputs. Please '
+            'consult the user manual for details on what constitute '
+            'valid inputs for a given risk function.'))
+        myHazardHeading = m.ImportantText(
+            self.tr('Hazard keywords:'), **INFO_STYLE)
+        myHazardKeywords = m.Paragraph(myHazardKeywords)
+        myExposureHeading = m.ImportantText(
+            self.tr('Exposure keywords:'), **INFO_STYLE)
+        myExposureKeywords = m.Paragraph(myExposureKeywords)
+        myMessage = m.Message(
+            myHeading,
+            myNotes,
+            myExposureHeading,
+            myExposureKeywords,
+            myHazardHeading,
+            myHazardKeywords)
         return myMessage
 
     def validate(self):
@@ -478,47 +533,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return False, myMessage
 
         if self.cboFunction.currentIndex() == -1:
-            #myHazardFilename = self.getHazardLayer().source()
-            myHazardKeywords = QtCore.QString(str(
-                self.keywordIO.readKeywords(self.getHazardLayer())))
-            #myExposureFilename = self.getExposureLayer().source()
-            myExposureKeywords = QtCore.QString(
-                str(self.keywordIO.readKeywords(self.getExposureLayer())))
-            # TODO refactor impact_functions so it is accessible and user here
-            myMessage = '<table class="condensed">'
-            myNotes = self.tr(
-                'No functions are available for the inputs '
-                'you have specified. '
-                'Try selecting a different combination of inputs. '
-                'Please consult the user manual <FIXME: add link> '
-                'for details on what constitute valid inputs for '
-                'a given risk function.')
-            myMessage += (
-                '<tr><th class="warning button-cell">'
-                + self.tr('No valid functions:') + '</th></tr>\n'
-                '<tr><td>' + myNotes + '</td></tr>\n')
-            myMessage += (
-                '<tr><th class="info button-cell">'
-                + self.tr('Hazard keywords:') + '</th></tr>\n'
-                '<tr><td>' + myHazardKeywords + '</td></tr>\n')
-            myMessage += (
-                '<tr><th class="info button-cell">'
-                + self.tr('Exposure keywords:') + '</th></tr>\n'
-                '<tr><td>' + myExposureKeywords + '</td></tr>\n')
-            myMessage += '</table>'
+            myMessage = self.notReadyMessage()
             return False, myMessage
         else:
-            # What does this todo mean? TS
-            # TODO refactor impact_functions so it is accessible and user here
-            myMessage = '<table class="condensed">'
-            myNotes = self.tr(
-                'You can now proceed to run your model by'
-                ' clicking the <em>Run</em> button.')
-            myMessage += (
-                '<tr><th class="info button-cell">'
-                + self.tr('Ready') + '</th></tr>\n'
-                '<tr><td>' + myNotes + '</td></tr>\n')
-            myMessage += '</table>'
+            myMessage = self.readyMessage()
             return True, myMessage
 
     def on_cboHazard_currentIndexChanged(self, theIndex):
@@ -636,7 +654,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
         if myMessage is not '':
-            self.showStaticMessage(m.Message(str(myMessage)))
+            self.showStaticMessage(myMessage)
 
     def setFunctionOptionsStatus(self):
         """Helper function to toggle the tool function button based on context.
@@ -1077,7 +1095,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myFlag, myMessage = self.validate()
         if not myFlag:
-            self.showErrorMessage(m.Message(str(myMessage)))
+            self.showErrorMessage(myMessage)
             return
 
         try:
@@ -1981,7 +1999,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             message=theMessage)
 
     def readImpactLayer(self, myEngineImpactLayer):
-        """Helper function to read and validate layer.
+        """Helper function to read and validate safe style spatial layer.
 
         Args
             myEngineImpactLayer: Layer object as provided by InaSAFE engine.

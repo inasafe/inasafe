@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'converter_dialog_base.ui'
 #
-# Created: Tue Apr 23 14:17:56 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Fri Jun  7 09:18:55 2013
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_ConverterDialogBase(object):
     def setupUi(self, ConverterDialogBase):
@@ -103,14 +112,14 @@ class Ui_ConverterDialogBase(object):
         QtCore.QMetaObject.connectSlotsByName(ConverterDialogBase)
 
     def retranslateUi(self, ConverterDialogBase):
-        ConverterDialogBase.setWindowTitle(QtGui.QApplication.translate("ConverterDialogBase", "InaSAFE - Converter", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblSubtitle.setText(QtGui.QApplication.translate("ConverterDialogBase", "Convert raw shakemap grid file (.xml) to a raster file (.tif).", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblInput.setText(QtGui.QApplication.translate("ConverterDialogBase", "Input : grid.xml file", None, QtGui.QApplication.UnicodeUTF8))
-        self.tBtnOpenInput.setText(QtGui.QApplication.translate("ConverterDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblOutput.setText(QtGui.QApplication.translate("ConverterDialogBase", "Output : Raster file", None, QtGui.QApplication.UnicodeUTF8))
-        self.cBDefaultOutputLocation.setText(QtGui.QApplication.translate("ConverterDialogBase", "Same directory as input file", None, QtGui.QApplication.UnicodeUTF8))
-        self.tBtnOpenOutput.setText(QtGui.QApplication.translate("ConverterDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAlgotrithm.setText(QtGui.QApplication.translate("ConverterDialogBase", "Algorithm", None, QtGui.QApplication.UnicodeUTF8))
-        self.cBLoadLayer.setText(QtGui.QApplication.translate("ConverterDialogBase", "Add output layer to QGIS project", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblWarning.setText(QtGui.QApplication.translate("ConverterDialogBase", "Output filename must end with .tif format", None, QtGui.QApplication.UnicodeUTF8))
+        ConverterDialogBase.setWindowTitle(_translate("ConverterDialogBase", "InaSAFE - Converter", None))
+        self.lblSubtitle.setText(_translate("ConverterDialogBase", "Convert raw shakemap grid file (.xml) to a raster file (.tif).", None))
+        self.lblInput.setText(_translate("ConverterDialogBase", "Input : grid.xml file", None))
+        self.tBtnOpenInput.setText(_translate("ConverterDialogBase", "...", None))
+        self.lblOutput.setText(_translate("ConverterDialogBase", "Output : Raster file", None))
+        self.cBDefaultOutputLocation.setText(_translate("ConverterDialogBase", "Same directory as input file", None))
+        self.tBtnOpenOutput.setText(_translate("ConverterDialogBase", "...", None))
+        self.lblAlgotrithm.setText(_translate("ConverterDialogBase", "Algorithm", None))
+        self.cBLoadLayer.setText(_translate("ConverterDialogBase", "Add output layer to QGIS project", None))
+        self.lblWarning.setText(_translate("ConverterDialogBase", "Output filename must end with .tif format", None))
 

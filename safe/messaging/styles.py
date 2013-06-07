@@ -25,7 +25,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = {
-    'icon': 'icon-cog icon-white', 'style_class': 'label label-success'}
+    'icon': 'icon-cog icon-white',
+    'style_class': 'label label-success wide'}
 
 INFO_STYLE = {
-    'icon': 'icon-info-sign icon-white', 'style_class': 'label label-info'}
+    'icon': 'icon-info-sign icon-white',
+    'style_class': 'label label-info wide'}
+
+WARNING_STYLE = {
+    'icon': 'icon-warning-sign icon-white',
+    'style_class': 'label label-warning wide'}
+
+KEYWORD_STYLE = {
+    'style_class': 'label label-info'}

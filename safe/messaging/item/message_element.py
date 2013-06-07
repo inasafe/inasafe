@@ -18,12 +18,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 class MessageElement(object):
 
-    def __init__(self, id=None, style_class=None, icon=None):
+    def __init__(self, id=None, style_class=None, icon=None, attributes=None):
         """
         Constructor for a message element
         :param id: Optional id - will be ignored in text renderer.
         :param style_class: Optional class = will be ignored in text renderer.
-        :param icon: Option bootstrap glyph icon class used for html renderer
+        :param icon: Optional bootstrap glyph icon class used for html renderer
+        :param attributes: Optional html attributes you can add to an element.
         :return: None
 
         For glyphicons see http://twitter.github.io/bootstrap/base-css
@@ -32,11 +33,16 @@ class MessageElement(object):
         e.g. icon='icon-search' when used will cause self.html_icon to return
          <i class="icon-search"></i>
 
+        You can use the attributes flag  to pass any arbitrary html
+        attributes to the generated html. e.g.
+
+        Text('foo', attributes='width: "100%"')
 
         """
         self.id = id
         self.style_class = style_class
         self.icon = icon
+        self.attributes = attributes
 
     def __unicode__(self):
         return self.to_text()
@@ -117,6 +123,8 @@ class MessageElement(object):
         if self.style_class is not None:
             extra_attributes = '%s class="%s"' % (
                 extra_attributes, self.style_class)
+        if self.attributes is not None:
+            extra_attributes = '%s ' % extra_attributes
         return extra_attributes
 
     def html_icon(self):

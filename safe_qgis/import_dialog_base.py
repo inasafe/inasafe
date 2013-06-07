@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'import_dialog_base.ui'
 #
-# Created: Mon Feb 25 16:26:42 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Fri Jun  7 09:18:55 2013
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_ImportDialogBase(object):
     def setupUi(self, ImportDialogBase):
@@ -115,16 +124,16 @@ class Ui_ImportDialogBase(object):
         QtCore.QMetaObject.connectSlotsByName(ImportDialogBase)
 
     def retranslateUi(self, ImportDialogBase):
-        ImportDialogBase.setWindowTitle(QtGui.QApplication.translate("ImportDialogBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
-        self.gbxMap.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Map", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Bounding box", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("ImportDialogBase", "Minimum Longitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("ImportDialogBase", "Minimum latitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("ImportDialogBase", "Maximum longitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("ImportDialogBase", "Maximum latitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.gbxOptions.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.regionLabel.setText(QtGui.QApplication.translate("ImportDialogBase", "Region", None, QtGui.QApplication.UnicodeUTF8))
-        self.presetLabel.setText(QtGui.QApplication.translate("ImportDialogBase", "Preset", None, QtGui.QApplication.UnicodeUTF8))
-        self.outputDirectoryLabel.setText(QtGui.QApplication.translate("ImportDialogBase", "Output Directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.pBtnDir.setText(QtGui.QApplication.translate("ImportDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        ImportDialogBase.setWindowTitle(_translate("ImportDialogBase", "Dialog", None))
+        self.gbxMap.setTitle(_translate("ImportDialogBase", "Map", None))
+        self.groupBox.setTitle(_translate("ImportDialogBase", "Bounding box", None))
+        self.label.setText(_translate("ImportDialogBase", "Minimum Longitude", None))
+        self.label_2.setText(_translate("ImportDialogBase", "Minimum latitude", None))
+        self.label_3.setText(_translate("ImportDialogBase", "Maximum longitude", None))
+        self.label_4.setText(_translate("ImportDialogBase", "Maximum latitude", None))
+        self.gbxOptions.setTitle(_translate("ImportDialogBase", "Options", None))
+        self.regionLabel.setText(_translate("ImportDialogBase", "Region", None))
+        self.presetLabel.setText(_translate("ImportDialogBase", "Preset", None))
+        self.outputDirectoryLabel.setText(_translate("ImportDialogBase", "Output Directory", None))
+        self.pBtnDir.setText(_translate("ImportDialogBase", "...", None))
 

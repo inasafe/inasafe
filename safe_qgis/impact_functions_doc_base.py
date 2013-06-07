@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'impact_functions_doc_base.ui'
 #
-# Created: Wed Mar 20 16:03:36 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Fri Jun  7 09:18:55 2013
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_ImpactFunctionsDocBase(object):
     def setupUi(self, ImpactFunctionsDocBase):
@@ -153,14 +162,14 @@ class Ui_ImpactFunctionsDocBase(object):
         QtCore.QMetaObject.connectSlotsByName(ImpactFunctionsDocBase)
 
     def retranslateUi(self, ImpactFunctionsDocBase):
-        ImpactFunctionsDocBase.setWindowTitle(QtGui.QApplication.translate("ImpactFunctionsDocBase", "InaSAFE Impact Functions", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_title.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_id.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "ID", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_subcategory.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_category.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_layertype.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Layer Type", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_unit.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Unit", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_datatype.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Data Type", None, QtGui.QApplication.UnicodeUTF8))
+        ImpactFunctionsDocBase.setWindowTitle(_translate("ImpactFunctionsDocBase", "InaSAFE Impact Functions", None))
+        self.label_title.setText(_translate("ImpactFunctionsDocBase", "Title", None))
+        self.label_id.setText(_translate("ImpactFunctionsDocBase", "ID", None))
+        self.label_subcategory.setText(_translate("ImpactFunctionsDocBase", "Subcategory", None))
+        self.label_category.setText(_translate("ImpactFunctionsDocBase", "Category", None))
+        self.label_layertype.setText(_translate("ImpactFunctionsDocBase", "Layer Type", None))
+        self.label_unit.setText(_translate("ImpactFunctionsDocBase", "Unit", None))
+        self.label_datatype.setText(_translate("ImpactFunctionsDocBase", "Data Type", None))
 
 from PyQt4 import QtWebKit
 import resources_rc
