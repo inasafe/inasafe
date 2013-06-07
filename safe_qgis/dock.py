@@ -831,7 +831,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
-                self.keywordIO.appendKeywords(myLayer, {'title': myName})
+                self.keywordIO.updateKeywords(myLayer, {'title': myName})
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
