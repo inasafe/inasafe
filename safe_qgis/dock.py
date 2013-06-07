@@ -1775,6 +1775,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myKeywords = self.keywordIO.readKeywords(theLayer)
 
                 if 'impact_summary' in myKeywords:
+                    myReport.add(LOGO_ELEMENT)
+                    myReport.add(m.Heading(self.tr(
+                        'Analysis Results'), **INFO_STYLE))
                     myReport.add(m.Text(myKeywords['impact_summary']))
                     if 'postprocessing_report' in myKeywords:
                         myReport.add(myKeywords['postprocessing_report'])

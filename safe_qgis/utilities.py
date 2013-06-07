@@ -46,6 +46,8 @@ from safe_qgis.safe_interface import (
     get_version,
     messaging as m)
 
+from safe_interface import styles
+INFO_STYLE = styles.INFO_STYLE
 
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
@@ -484,21 +486,20 @@ def impactLayerAttribution(theKeywords, theInaSAFEFlag=False):
         myExposureSource = tr('an unknown source')
 
     myReport = m.Message()
-    myReport.add(m.Heading(myHazardDetails, level=3))
+    myReport.add(m.Heading(myHazardDetails, **INFO_STYLE))
     myReport.add(m.Paragraph(
         myHazardTitle,
         myJoinWords,
         myHazardSource))
 
-    myReport = m.Message()
-    myReport.add(m.Heading(myExposureDetails, level=3))
+    myReport.add(m.Heading(myExposureDetails, **INFO_STYLE))
     myReport.add(m.Paragraph(
         myExposureTitle,
         myJoinWords,
         myExposureSource))
 
     if theInaSAFEFlag:
-        myReport.add(m.Heading(tr('Software notes'), level=3))
+        myReport.add(m.Heading(tr('Software notes'), **INFO_STYLE))
         myInaSAFEPhrase = tr(
             'This report was created using InaSAFE version %1. Visit '
             'http://inasafe.org to get your free copy of this software!'
