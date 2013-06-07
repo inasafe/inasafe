@@ -829,6 +829,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             try:
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:  # pylint: disable=W0702
+                # automatically adding file name to title in keywords
+                # See #575
+                self.keywordIO.updateKeywords(myLayer, {'title': myName})
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
@@ -1775,6 +1778,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myKeywords = self.keywordIO.readKeywords(theLayer)
 
                 if 'impact_summary' in myKeywords:
+                    myReport.add(LOGO_ELEMENT)
+                    myReport.add(m.Heading(self.tr(
+                        'Analysis Results'), **INFO_STYLE))
                     myReport.add(m.Text(myKeywords['impact_summary']))
                     if 'postprocessing_report' in myKeywords:
                         myReport.add(myKeywords['postprocessing_report'])

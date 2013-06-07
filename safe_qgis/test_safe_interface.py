@@ -231,7 +231,8 @@ class SafeInterfaceTest(unittest.TestCase):
         myKeywords = readKeywordsFromFile(self.vectorPath)
         myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'itb',
-                              'subcategory': 'structure'}
+                              'subcategory': 'structure',
+                              'title': 'Padang WGS84'}
         myMessage = 'Expected:\n%s\nGot:\n%s\n' % (myExpectedKeywords,
                                                    myKeywords)
         assert myKeywords == myExpectedKeywords, myMessage

@@ -51,7 +51,7 @@ th.button-cell{
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
 }
-.info {
+.info, caption {
   color: #fff;
   background-color: #0074cc;
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0055cc));
@@ -66,13 +66,13 @@ th.button-cell{
 
 .suggestion {
   color: #fff;
-  background-color: #0a6228;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0a6228), to(#0a3f1b));
-  background-image: -webkit-linear-gradient(top, #0a6228, #0a3f1b);
-  background-image: -o-linear-gradient(top, #0a6228, #0a3f1b);
-  background-image: linear-gradient(top, #0a6228, #0a3f1b);
+  background-color: #10a142;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#10a142), to(#0a6228));
+  background-image: -webkit-linear-gradient(top, #10a142, #0a6228);
+  background-image: -o-linear-gradient(top, #10a142, #0a6228);
+  background-image: linear-gradient(top, #10a142, #0a6228);
   background-repeat: repeat-x;
-  border-color: #10a142 #0a6228 #0a3f1b;
+  border-color: #10a142 #0a6228 #0a6228;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
 }
@@ -88,9 +88,4 @@ th.button-cell{
   border-color: rgba(0, 14, 40, 0.66) #2f2f2f #000000;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
-}
-
-.centered {
-    margin-left: auto;
-    margin-right: auto;
 }

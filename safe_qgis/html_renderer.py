@@ -228,7 +228,7 @@ class HtmlRenderer():
             if myAggregationTable is not None:
                 myHtml += myAggregationTable
             if myAttributionTable is not None:
-                myHtml += myAttributionTable
+                myHtml += myAttributionTable.to_html()
             myHtml += '<h2>%s</h2>' % self.tr('Detailed Table')
             myHtml += myFullTable
         else:
@@ -237,7 +237,7 @@ class HtmlRenderer():
             if myFullTable is not None:
                 myHtml += myFullTable
             if myAttributionTable is not None:
-                myHtml += myAttributionTable
+                myHtml += myAttributionTable.to_html()
 
         # myNewFilePath should be the same as myFilePath
         myNewFilePath = self.printToPdf(myHtml, myFilePath)
