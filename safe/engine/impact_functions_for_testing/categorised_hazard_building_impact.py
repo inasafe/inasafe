@@ -28,24 +28,24 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     target_field = 'ICLASS'
     # Function documentation
     title = tr('Be affected')
-    synopsis = tr('To assess the impacts of categorized hazard in raster'
+    synopsis = tr('To assess the impacts of categorized hazard in raster '
                   'format on structure/building raster layer.')
     actions = tr('Provide details about how many building would likely need '
-                 'to be affected for each cateogory.')
+                 'to be affected for each category.')
     hazard_input = tr('A hazard raster layer where each cell represents '
-                      'the categori of the hazard. There should be 3 '
-                      'categories: 1, 2, dan 3.')
+                      'the category of the hazard. There should be 3 '
+                      'categories: 1, 2, and 3.')
     exposure_input = \
         tr('Vector polygon layer which can be extracted from OSM '
            'where each polygon represents the footprint of a building.')
     output = tr('Map of structure exposed to high category and a table with '
                 'number of structure in each category')
     detailed_description = \
-        tr('The function will calculated how many building will be affected'
-           'per each category for all categories in hazard layer. Currently'
-           'there should be 3 categories in the hazard layer. After that'
-           'it will show the result and the total of building will be affected'
-           'for the hazard given.')
+        tr('This function will calculate how many buildings will be affected '
+           'per each category for all categories in the hazard layer. '
+           'Currently there should be 3 categories in the hazard layer. After '
+           'that it will show the result and the total of buildings that '
+           'will be affected for the hazard given.')
     limitation = tr('The number of categories is three.')
     statistics_type = 'class_count'
     statistics_classes = ['None', 1, 2, 3]

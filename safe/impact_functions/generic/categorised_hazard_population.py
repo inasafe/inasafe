@@ -29,23 +29,23 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     """
     # Function documentation
     title = tr('Be impacted')
-    synopsis = tr('To assess the impacts of categorized hazard in raster'
+    synopsis = tr('To assess the impacts of categorized hazards in raster '
                   'format on population raster layer.')
     actions = tr('Provide details about how many people would likely need '
-                 'to be impacted for each cateogory.')
+                 'to be impacted for each category.')
     hazard_input = tr('A hazard raster layer where each cell represents '
-                      'the categori of the hazard. There should be 3 '
-                      'categories: 1, 2, dan 3.')
+                      'the category of the hazard. There should be 3 '
+                      'categories: 1, 2, and 3.')
     exposure_input = tr('An exposure raster layer where each cell represent '
                         'population count.')
     output = tr('Map of population exposed to high category and a table with '
                 'number of people in each category')
     detailed_description = \
-        tr('The function will calculated how many people will be impacted'
-           'per each category for all categories in hazard layer. Currently'
-           'there should be 3 categories in the hazard layer. After that'
-           'it will show the result and the total of people will be impacted'
-           'for the hazard given.')
+        tr('This function will calculate how many people will be impacted '
+           'per each category for all categories in the hazard layer. '
+           'Currently there should be 3 categories in the hazard layer. After '
+           'that it will show the result and the total amount of people that '
+           'will be impacted for the hazard given.')
     limitation = tr('The number of categories is three.')
 
     # Configurable parameters
