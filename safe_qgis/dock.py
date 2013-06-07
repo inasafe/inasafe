@@ -92,7 +92,7 @@ PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
-
+LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/logo.svg')
 LOGGER = logging.getLogger('InaSAFE')
 
 #from pydev import pydevd
@@ -411,6 +411,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 to get started.
         """
         myMessage = m.Message()
+        myMessage.add(LOGO_ELEMENT)
         myMessage.add(m.Heading('Getting started', **INFO_STYLE))
         myNotes = m.Paragraph(
             self.tr(

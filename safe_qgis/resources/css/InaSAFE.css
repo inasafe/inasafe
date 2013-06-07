@@ -77,7 +77,7 @@ th.button-cell{
   padding-left: 4px;
 }
 
-.wide {
-  width:100%;
-  margin-right: 10px;
+.centered {
+    margin-left: auto;
+    margin-right: auto;
 }

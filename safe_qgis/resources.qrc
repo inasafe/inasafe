@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/plugins/inasafe">
+        <file alias="logo.svg">resources/img/icons/logo.svg</file>
         <file alias="icon.svg">resources/img/icons/icon.svg</file>
         <file alias="show-impact-functions.svg">resources/img/icons/show-impact-functions.svg</file>
         <file alias="show-keyword-editor.svg">resources/img/icons/show-keyword-editor.svg</file>
