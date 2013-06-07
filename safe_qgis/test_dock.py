@@ -1071,7 +1071,7 @@ class DockTest(unittest.TestCase):
         myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
         assert myFunction == myExpectation, myMessage
 
-    def test_fullAggregationResults(self):
+    def test_fullRunResults(self):
         """Aggregation results are correct."""
         myRunButton = DOCK.pbnRunStop
         myExpectedResult = open(

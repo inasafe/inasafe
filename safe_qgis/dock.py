@@ -1316,7 +1316,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Try to run completion code
         try:
-            myReport = self._completed()
+            myEngineImpactLayer = self.runner.impactLayer()
+
+            # Load impact layer into QGIS
+            myQGISImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+
+            myReport = self._completed(myQGISImpactLayer, myEngineImpactLayer)
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
@@ -1329,12 +1334,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.showDynamicMessage(m.Message(str(myReport)))
         self.saveState()
         self.hideBusy()
+        self.layerChanged(myQGISImpactLayer)
 
-    def _completed(self):
+    def _completed(self, theQGISImpactLayer, theEngineImpactLayer):
         """Helper function for slot activated when the process is done.
 
         Args
-            None
+            theQGISImpactLayer - readImpactLayer()
+            theEngineImpactLayer - a result of runner.impactLayer()
         Returns
             Report to render on canvas
         Raises
@@ -1352,55 +1359,50 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         #myMessage = self.runner.result()
 
-        myEngineImpactLayer = self.runner.impactLayer()
-
-        # Load impact layer into QGIS
-        myQGISImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-
-        myKeywords = self.keywordIO.readKeywords(myQGISImpactLayer)
+        myKeywords = self.keywordIO.readKeywords(theQGISImpactLayer)
         #write postprocessing report to keyword
         myOutput = self.postprocessorManager.getOutput()
         myKeywords['postprocessing_report'] = myOutput.to_html(noNewline=True)
 
-        self.keywordIO.writeKeywords(myQGISImpactLayer, myKeywords)
+        self.keywordIO.writeKeywords(theQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(
-            myQGISImpactLayer, 'impact_summary')
+            theQGISImpactLayer, 'impact_summary')
         myReport += impactLayerAttribution(myKeywords).to_html(True)
 
         # Get requested style for impact layer of either kind
-        myStyle = myEngineImpactLayer.get_style_info()
-        myStyleType = myEngineImpactLayer.get_style_type()
+        myStyle = theEngineImpactLayer.get_style_info()
+        myStyleType = theEngineImpactLayer.get_style_type()
         # Determine styling for QGIS layer
-        if myEngineImpactLayer.is_vector:
+        if theEngineImpactLayer.is_vector:
             LOGGER.debug('myEngineImpactLayer.is_vector')
             if not myStyle:
                 # Set default style if possible
                 pass
             elif myStyleType == 'categorizedSymbol':
                 LOGGER.debug('use categorized')
-                setVectorCategorizedStyle(myQGISImpactLayer, myStyle)
+                setVectorCategorizedStyle(theQGISImpactLayer, myStyle)
             elif myStyleType == 'graduatedSymbol':
                 LOGGER.debug('use graduated')
-                setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
+                setVectorGraduatedStyle(theQGISImpactLayer, myStyle)
             # use default style
             # else:
             #     LOGGER.debug('use else')
             #     setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
-        elif myEngineImpactLayer.is_raster:
+        elif theEngineImpactLayer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not myStyle:
-                myQGISImpactLayer.setDrawingStyle(
+                theQGISImpactLayer.setDrawingStyle(
                     QgsRasterLayer.SingleBandPseudoColor)
-                myQGISImpactLayer.setColorShadingAlgorithm(
+                theQGISImpactLayer.setColorShadingAlgorithm(
                     QgsRasterLayer.PseudoColorShader)
             else:
-                setRasterStyle(myQGISImpactLayer, myStyle)
+                setRasterStyle(theQGISImpactLayer, myStyle)
 
         else:
             myMessage = self.tr('Impact layer %1 was neither a raster or a '
-                                'vector layer').arg(myQGISImpactLayer.source())
+                                'vector layer').arg(theQGISImpactLayer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
@@ -1408,7 +1410,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayersToAdd = []
         if self.showIntermediateLayers:
             myLayersToAdd.append(self.aggregator.layer)
-        myLayersToAdd.append(myQGISImpactLayer)
+        myLayersToAdd.append(theQGISImpactLayer)
         QgsMapLayerRegistry.instance().addMapLayers(myLayersToAdd)
         # then zoom to it
         if self.zoomToImpactFlag:
@@ -1817,7 +1819,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.showErrorMessage(myErrorMessage)
                 return
             if myReport is not None:
-                self.showDynamicMessage(myReport)
+                self.showStaticMessage(myReport)
         else:
             LOGGER.debug('Layer is None')
 
