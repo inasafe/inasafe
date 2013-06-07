@@ -58,15 +58,17 @@ class UtilitiesTest(unittest.TestCase):
 
             myMessage = getErrorMessage(e)
             #print myMessage
-            assert str(e) in myMessage
-            assert 'line' in myMessage
-            assert 'File' in myMessage
+            myMessage = myMessage.to_text()
+            self.assertIn(str(e), myMessage)
+            self.assertIn('line', myMessage)
+            self.assertIn('file', myMessage)
 
             myMessage = getErrorMessage(e)
+            myMessage = myMessage.to_html()
             assert str(e) in myMessage
-            assert '<pre id="traceback"' in myMessage
-            assert 'line' in myMessage
-            assert 'File' in myMessage
+            self.assertIn('</i> Traceback</h5>', myMessage)
+            self.assertIn('line', myMessage)
+            self.assertIn('file', myMessage)
         # pylint: enable=W0703
 
     def test_getQgisVersion(self):
@@ -170,9 +172,9 @@ class UtilitiesTest(unittest.TestCase):
                       'hazard_source': 'Sample Hazard Source',
                       'exposure_title': 'Sample Exposure Title',
                       'exposure_source': 'Sample Exposure Source'}
-        myHtml = impactLayerAttribution(myKeywords)
-        print myHtml
-        self.assertEqual(len(myHtml), 288)
+        myAttribution = impactLayerAttribution(myKeywords)
+        print myAttribution
+        self.assertEqual(len(myAttribution.to_text()), 170)
 
     @expectedFailure
     def test_localisedAttribution(self):
