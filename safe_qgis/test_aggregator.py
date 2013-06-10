@@ -34,7 +34,7 @@ from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
 from qgis.core import QgsMapLayerRegistry
-from safe_interface import TESTDATA
+from safe_interface import (TESTDATA, BOUNDDATA)
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       setCanvasCrs,
@@ -236,8 +236,9 @@ class AggregatorTest(unittest.TestCase):
         myExpectedFeatureCount = 20
         myMessage = ('The preprocessing should have generated %s features, '
                      'found %s' % (myExpectedFeatureCount,
-                                   DOCK.preprocessedFeatureCount))
-        self.assertEqual(myExpectedFeatureCount, DOCK.preprocessedFeatureCount,
+                                   DOCK.aggregator.preprocessedFeatureCount))
+        self.assertEqual(myExpectedFeatureCount,
+                         DOCK.aggregator.preprocessedFeatureCount,
                          myMessage)
 
 if __name__ == '__main__':
