@@ -20,8 +20,6 @@ import unittest
 import sys
 import os
 import logging
-from unittest import expectedFailure
-print sys.path
 
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
@@ -33,7 +31,6 @@ sys.path.append(pardir)
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
-from qgis.core import QgsMapLayerRegistry
 from safe_interface import (TESTDATA, BOUNDDATA)
 
 from safe_qgis.utilities_test import (getQgisTestApp,
@@ -47,8 +44,7 @@ from safe_qgis.utilities import getDefaults
 from safe_qgis.utilities_test import (
     loadStandardLayers,
     setupScenario,
-    loadLayers,
-    canvasList)
+    loadLayers)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = Dock(IFACE)
@@ -189,7 +185,8 @@ class AggregatorTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart with None keyword')
+            theAggregationLayer=
+            'kabupaten jakarta singlepart with None keyword')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker

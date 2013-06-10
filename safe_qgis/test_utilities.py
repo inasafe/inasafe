@@ -21,16 +21,12 @@ from safe_qgis.utilities import (
     impactLayerAttribution,
     dpiToMeters,
     which)
-from safe_qgis.utilities_test import (
-    unitTestDataPath,
-    loadLayer,
-    getQgisTestApp)
-from safe_qgis.exceptions import StyleError
+from safe_qgis.utilities_test import getQgisTestApp
 from safe_qgis.test_keywords_dialog import (makePolygonLayer,
                                             makePadangLayer,
                                             makePointLayer)
 from safe_qgis.utilities import getDefaults
-from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
+from safe_qgis.safe_interface import bbox_intersection
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 

@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 from safe import messaging as m
+from safe_qgis.utilities import htmlHeader, htmlFooter
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 

@@ -1125,10 +1125,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             myList = m.BulletedList()
 
-            print myPostProcessors
             for myName, myPostProcessor in myPostProcessors.iteritems():
-                print myName
-                print myPostProcessor
                 myList.add('%s: %s' % (
                     get_postprocessor_human_name(myName),
                     myPostProcessor.description()))

@@ -20,7 +20,6 @@ import unittest
 import sys
 import os
 import logging
-from unittest import expectedFailure
 
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
@@ -37,7 +36,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
 from safe_interface import (format_int,
-                            HAZDATA, TESTDATA, UNITDATA, BOUNDDATA)
+                            HAZDATA, TESTDATA, UNITDATA)
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       setCanvasCrs,

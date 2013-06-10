@@ -21,7 +21,6 @@ from safe.messaging import (
     ErrorMessage,
     ImportantText,
     Paragraph)
-from third_party.pydispatch import dispatcher
 
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
