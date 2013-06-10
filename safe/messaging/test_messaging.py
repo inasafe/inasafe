@@ -242,6 +242,8 @@ class MessagingTest(unittest.TestCase):
         im = Image('http://www.google.ch/images/srpr/logo4w.png', 'Google logo')
         tp.add(im)
         tp.add(em)
+        im = Image('http://www.google.ch/images/srpr/NoText.png')
+        tp.add(im)
         p2 = Paragraph(tp)
 
         m = Message()
@@ -259,7 +261,8 @@ class MessagingTest(unittest.TestCase):
             '::google link [http://google.ch]\n'
             '    text for paragraph ::Google logo '
             '[http://www.google.ch/images/srpr/logo4w.png] '
-            '_this is an emphasized paragraph text_\n\n')
+            '_this is an emphasized paragraph text_'
+            ' ::http://www.google.ch/images/srpr/NoText.png\n\n')
 
         res = m.to_text()
         self.assertEqual(expected_res, res)
@@ -273,7 +276,9 @@ class MessagingTest(unittest.TestCase):
             '<p>text for paragraph <img src="'
             'http://www.google.ch/images/srpr/logo4w.png" title="Google logo" '
             'alt="Google logo"/> <em>this is an emphasized paragraph text'
-            '</em></p>\n')
+            '</em> <img src="http://www.google.ch/images/srpr/NoText.png" '
+            'title="" '
+            'alt=""/></p>\n')
         res = m.to_html()
         self.assertEqual(expected_res, res)
 
