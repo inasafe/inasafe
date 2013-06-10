@@ -126,7 +126,6 @@ class ErrorMessage(MessageElement):
             Errors are propagated
         """
         message = Message()
-        message.add(LineBreak())
         message.add(Heading(tr('Problem'), **PROBLEM_STYLE))
         message.add(Paragraph(tr(
             'The following problem(s) were encountered whilst running the '

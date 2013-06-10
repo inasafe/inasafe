@@ -41,7 +41,10 @@ class Image(Text):
         """
         super(Image, self).__init__(**kwargs)
         self.uri = uri
-        self.text = text
+        if text is None:
+            self.text = ''
+        else:
+            self.text = text
 
     def to_html(self):
         """Render as html
@@ -73,6 +76,6 @@ class Image(Text):
         Raises:
             Errors are propagated
         """
-        if self.uri == self.text:
+        if self.text == '':
             return '::%s' % self.uri
         return '::%s [%s]' % (self.text, self.uri)
