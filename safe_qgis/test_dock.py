@@ -1076,8 +1076,8 @@ class DockTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
         myExpectedResult = open(
             TEST_FILES_DIR +
-            '/test-aggregation-results.txt',
-            'r').read()
+            '/test-full-run-results.txt',
+            'r').read().strip()
 
         myResult, myMessage = setupScenario(
             DOCK,

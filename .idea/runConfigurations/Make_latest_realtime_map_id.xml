@@ -3,13 +3,13 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
-      <env name="PYTHONUNBUFFERED" value="1" />
       <env name="" value="" />
       <env name="QGIS_DEBUG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
       <env name="QGISDEBUG" value="0" />
       <env name="QGIS_PREFIX_PATH" value="/usr/local/qgis-master" />
       <env name="QGIS_LOG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
       <env name="PYTHONPATH" value="/usr/local/qgis-master/share/qgis/python" />
+      <env name="PYTHONUNBUFFERED" value="1" />
       <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
     </envs>
     <option name="SDK_HOME" value="" />
