@@ -59,7 +59,9 @@ from safe_qgis.safe_interface import (
     safeTr,
     get_version,
     temp_dir,
-    ReadLayerError)
+    ReadLayerError,
+    get_postprocessors,
+    get_postprocessor_human_name)
 
 from safe_interface import messaging as m
 from safe_interface import (
@@ -1092,10 +1094,51 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myDetails = self.tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
+        #TODO style theese
+        myText = m.Text(
+            self.tr('This analysis will calculate the impact of'),
+            m.EmphasizedText(self.getHazardLayer().name()),
+            self.tr('on'),
+            m.EmphasizedText(self.getExposureLayer().name()),
+        )
+
+        if self.getAggregationLayer() is not None:
+            myText.add(m.Text(
+                self.tr('and list the results'),
+                m.ImportantText(self.tr('aggregated by')),
+                m.EmphasizedText(self.getAggregationLayer().name()))
+            )
+        myText.add('.')
+
         myMessage = m.Message(
             LOGO_ELEMENT,
             m.Heading(myTitle, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(myDetails))
+            m.Paragraph(myDetails),
+            m.Paragraph(myText))
+
+        try:
+            #add which postprocessors will run when appropriated
+            myRequestedPostProcessors = self.functionParams['postprocessors']
+            myPostProcessors = get_postprocessors(myRequestedPostProcessors)
+            myMessage.add(m.Paragraph(self.tr(
+                'The following postprocessors will be used:')))
+
+            myList = m.BulletedList()
+
+            print myPostProcessors
+            for myName, myPostProcessor in myPostProcessors.iteritems():
+                print myName
+                print myPostProcessor
+                myList.add('%s: %s' % (
+                    get_postprocessor_human_name(myName),
+                    myPostProcessor.description()))
+            myMessage.add(myList)
+
+        except (TypeError, KeyError):
+            # TypeError is for when functionParams is none
+            # KeyError is for when ['postprocessors'] is unavailable
+            pass
+
         self.showStaticMessage(myMessage)
 
         myFlag, myMessage = self.validate()

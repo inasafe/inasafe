@@ -14,7 +14,8 @@ import logging
 
 from safe.common.exceptions import PostProcessorError
 from safe.common.utilities import (get_defaults,
-                                   format_int)
+                                   format_int,
+                                   ugettext as tr)
 
 from third_party.odict import OrderedDict
 
@@ -48,6 +49,20 @@ class AbstractPostprocessor():
         AbstractPostprocessor.__init__(self)
         """
         self._results = None
+
+    def description(self):
+        """Describe briefly what the post processor does.
+
+        Args:
+            None
+
+        Returns:
+            Str the translated description
+
+        Raises:
+            Errors are propagated
+        """
+        raise NotImplementedError('Please don\'t use this class directly')
 
     def setup(self, params):
         """Abstract method to be called from the concrete implementation

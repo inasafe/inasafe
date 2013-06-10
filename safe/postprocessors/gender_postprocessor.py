@@ -10,8 +10,7 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from safe.postprocessors.abstract_postprocessor import (
-                                                    AbstractPostprocessor)
+from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
 from safe.common.utilities import ugettext as tr
 
@@ -28,6 +27,20 @@ class GenderPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.__init__(self)
         self.impact_total = None
         self.female_ratio = None
+
+    def description(self):
+        """Describe briefly what the post processor does.
+
+        Args:
+            None
+
+        Returns:
+            Str the translated description
+
+        Raises:
+            Errors are propagated
+        """
+        return tr('Calculates gender related statistics.')
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being
@@ -185,7 +198,7 @@ class GenderPostprocessor(AbstractPostprocessor):
             None
         """
         myName = tr('Additional weekly rice kg for pregnant and lactating'
-                         ' women')
+                    ' women')
         myMeta = {'description': 'Additional rice kg per week for pregnant and'
                                  ' lactating women'}
 

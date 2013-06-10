@@ -67,7 +67,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         #add select all
         action = self.page().action(QtWebKit.QWebPage.SelectAll)
-        action.setEnabled(not self.pageToHtml().isEmpty())
+        action.setEnabled(not self.pageToText() == '')
         context_menu.addAction(action)
 
         #add copy
