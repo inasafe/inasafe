@@ -278,7 +278,7 @@ def checkImages(theControlImage, theTestImagePath, theTolerance=1000):
     myMessages = ''
     myPlatform = platformName()
     myBase, myExt = os.path.splitext(theControlImage)
-    myPlatformImage = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s' % (
+    myPlatformImage = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s.png' % (
         myBase, myPlatform, myExt))
     myMessages += 'Checking for platform specific variant...\n'
     myMessages += theTestImagePath + '\n'

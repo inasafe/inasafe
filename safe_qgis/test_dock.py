@@ -230,7 +230,7 @@ class DockTest(unittest.TestCase):
             theHazard=PADANG2009_title,
             theExposure='People',
             theFunction='Earthquake Fatality Function',
-            theFunctionId='Flood Evacuation Function Vector Hazard')
+            theFunctionId='Earthquake Fatality Function')
         assert myResult, myMessage
 
         # noinspection PyCallByClass,PyTypeChecker
@@ -495,6 +495,7 @@ class DockTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.pageToText()
 
+        print myResult
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
         assert format_int(535) in myResult, myMessage
