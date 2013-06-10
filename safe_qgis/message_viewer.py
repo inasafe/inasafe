@@ -156,6 +156,6 @@ class MessageViewer(QtWebKit.QWebView):
         myMessage = self._toMessage()
         return myMessage.to_html()
 
-	def _printPageToText(self):
+    def _printPageToText(self):
         """Print to console the current page contents as plain text."""
         print self.pageToText()
