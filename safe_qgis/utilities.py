@@ -698,6 +698,5 @@ def safeToQGISLayer(theLayer):
     if myQGISLayer.isValid():
         return myQGISLayer
     else:
-        myMessage = self.tr('Loaded impact layer "%1" is not'
-                            ' valid').arg(myFilename)
+        myMessage = tr('Loaded impact layer "%1" is not valid').arg(myFilename)
         raise Exception(myMessage)

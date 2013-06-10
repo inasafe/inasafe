@@ -31,8 +31,6 @@ def checkMemoryUsage(
     For simplicity, we will do all our calcs in geocrs.
 
     Args:
-        theHazardLayer,
-        theExposureLayer,
         theBufferedGeoExtent,
         theCellSize
 

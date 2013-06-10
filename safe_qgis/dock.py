@@ -1276,8 +1276,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     e.message))
                 return None  # ignore any error
             myMessage = checkMemoryUsage(
-                myHazardLayer,
-                myExposureLayer,
                 myBufferedGeoExtent,
                 myCellSize)
             # This breaks dry END
