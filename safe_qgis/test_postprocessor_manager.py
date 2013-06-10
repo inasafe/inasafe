@@ -21,7 +21,6 @@ import unittest
 import sys
 import os
 import logging
-from unittest import expectedFailure
 
 
 from os.path import join
@@ -35,7 +34,6 @@ from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
 from qgis.core import QgsMapLayerRegistry
-from safe_interface import TESTDATA
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       setCanvasCrs,
@@ -43,12 +41,10 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       GEOCRS)
 
 from safe_qgis.dock import Dock
-from safe_qgis.utilities import getDefaults
 
 from safe_qgis.utilities_test import (
     loadStandardLayers,
     setupScenario,
-    loadLayers,
     canvasList)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

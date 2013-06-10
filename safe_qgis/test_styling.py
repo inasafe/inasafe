@@ -2,9 +2,6 @@ import unittest
 import sys
 import os
 
-from unittest import expectedFailure
-from PyQt4.QtCore import QVariant
-
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -20,10 +17,6 @@ from safe_qgis.utilities_test import (
     loadLayer,
     getQgisTestApp)
 from safe_qgis.exceptions import StyleError
-from safe_qgis.test_keywords_dialog import (makePolygonLayer,
-                                            makePadangLayer,
-                                            makePointLayer)
-from safe_qgis.utilities import getDefaults
 from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -296,8 +289,7 @@ class StylingTest(unittest.TestCase):
         self.assertListEqual(myExpectedClasses, myActualClasses)
 
 
-
 if __name__ == '__main__':
-    suite = unittest.makeSuite(UtilitiesTest, 'test')
+    suite = unittest.makeSuite(StylingTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

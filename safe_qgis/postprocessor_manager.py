@@ -15,56 +15,21 @@ __date__ = '19/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import numpy
-import sys
 import logging
-import uuid
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtCore
 
 from qgis.core import (
-    QgsMapLayer,
-    QgsGeometry,
-    QgsMapLayerRegistry,
     QgsFeature,
-    QgsRectangle,
-    QgsField,
-    QgsVectorLayer,
-    QgsVectorFileWriter,
-    QGis,
-    QgsSingleSymbolRendererV2,
-    QgsFillSymbolV2,
-    QgsCoordinateReferenceSystem)
-from qgis.analysis import QgsZonalStatistics
-from safe_qgis.clipper import clipLayer
+    QgsRectangle)
+
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.utilities import (
-    isPolygonLayer,
-    getLayerAttributeNames,
-    copyInMemory,
-    getDefaults,
-    extentToGeoArray,
-    safeToQGISLayer)
-from safe_qgis.styling import setVectorCategorizedStyle
 from safe_qgis.safe_interface import (
     safeTr,
-    temp_dir,
-    safe_read_layer,
-    ReadLayerError,
-    points_in_and_outside_polygon,
-    calculate_polygon_centroid,
-    unique_filename,
     get_postprocessors,
     get_postprocessor_human_name,
     messaging as m)
-from safe_qgis.exceptions import (
-    KeywordNotFoundError,
-    InvalidParameterError,
-    KeywordDbError,
-    InvalidAggregatorError)
-
-from third_party.odict import OrderedDict
-
+from safe_qgis.exceptions import KeywordNotFoundError
 
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
