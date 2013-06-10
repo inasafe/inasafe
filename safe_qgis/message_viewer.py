@@ -81,6 +81,12 @@ class MessageViewer(QtWebKit.QWebView):
             action.setEnabled(True)
             context_menu.addAction(action)
 
+            #add view to_text if in dev mode
+            context_menu.addAction(
+                self.tr('log pageToText'),
+                self,
+                QtCore.SLOT(self.printPageToText()))
+
         #show the menu
         context_menu.setVisible(True)
         context_menu.exec_(event.globalPos())
@@ -139,3 +145,7 @@ class MessageViewer(QtWebKit.QWebView):
     def pageToHtml(self):
         """Return the current page contents as html."""
         return self.page().currentFrame().toHtml()
+
+    def printPageToText(self):
+        """Print to console the current page contents as plain text."""
+        print self.pageToText()
