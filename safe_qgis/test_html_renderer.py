@@ -124,6 +124,7 @@ class HtmlRendererTest(unittest.TestCase):
         # size check.
         mySize = os.stat(myPath).st_size
         myExpectedSizes = [20936,  # as rendered on linux ub 12.04 64
+                           21523,  # as rendered on linux ub 12.10 64
                            20605,  # as rendered on linux ub 13.04 64
                            ]
         self.assertIn(mySize, myExpectedSizes)
