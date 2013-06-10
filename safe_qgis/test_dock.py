@@ -802,7 +802,7 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.pageToText()
 
         # Check that none of these  get a NaN value:
-        assert 'Unknown' in myResult
+        self.assertIn('Unknown', myResult)
 
         myMessage = ('Some buildings returned by Earthquake guidelines '
                      'function '
