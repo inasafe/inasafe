@@ -80,7 +80,8 @@ from safe_qgis.exceptions import (
     HashNotFoundError,
     CallGDALError,
     NoFeaturesInExtentError,
-    InvalidProjectionError)
+    InvalidProjectionError,
+    AggregatioError)
 
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
@@ -1488,11 +1489,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.aggregator.errorMessage is None:
                 self.postProcess()
         else:
-            myMessage = m.Message(
-                m.Heading(self.tr('Aggregation error occurred')),
-                self.aggregator.errorMessage
-            )
-            self._sendMessage(myMessage)
+            myContext = self.aggregator.errorMessage
+            myException = AggregatioError(self.tr(
+                'Aggregation error occurred.'))
+            myMessage = getErrorMessage(myException, theContext=myContext)
+            self.showErrorMessage(myMessage)
 
     def postProcess(self):
         self.postprocessorManager = PostprocessorManager(self.aggregator)

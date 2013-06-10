@@ -158,3 +158,8 @@ class CanceledImportDialogError(Exception):
 class InvalidAggregatorError(Exception):
     """Raised if aggregator state is not valid when trying to run it."""
     pass
+
+
+class AggregatioError(Exception):
+    """Raised if aggregator state is not valid when trying to run it."""
+    pass

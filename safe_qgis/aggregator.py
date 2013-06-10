@@ -272,7 +272,7 @@ class Aggregator(QtCore.QObject):
             raise InvalidAggregatorError
 
         myMessage = m.Message(
-            m.Heading(self.tr('Aggregating results...')),
+            m.Heading(self.tr('Aggregating results'), **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
                 ' by %1').arg(self.layer.name())))
