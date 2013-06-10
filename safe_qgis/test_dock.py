@@ -1077,7 +1077,7 @@ class DockTest(unittest.TestCase):
         myExpectedResult = open(
             TEST_FILES_DIR +
             '/test-full-run-results.txt',
-            'r').read().strip()
+            'r').read()
 
         myResult, myMessage = setupScenario(
             DOCK,
