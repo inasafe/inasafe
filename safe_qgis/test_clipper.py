@@ -92,7 +92,7 @@ class ClipperTest(unittest.TestCase):
         myResult = clipLayer(myVectorLayer, myRect)
 
         # Check the output is valid
-        assert(os.path.exists(myResult))
+        assert(os.path.exists(myResult.source()))
 
     def test_clipRaster(self):
         """Raster layers can be clipped
@@ -113,12 +113,12 @@ class ClipperTest(unittest.TestCase):
         myResult = clipLayer(myRasterLayer, myRect)
 
         # Check the output is valid
-        assert os.path.exists(myResult)
+        assert os.path.exists(myResult.source())
 
         # Clip and give a desired resolution for the output
         mySize = 0.05
         myResult = clipLayer(myRasterLayer, myRect, mySize)
-        myNewRasterLayer = QgsRasterLayer(myResult, myName)
+        myNewRasterLayer = QgsRasterLayer(myResult.source(), myName)
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
 
         myMessage = ('Resampled raster has incorrect pixel size.'
@@ -230,15 +230,15 @@ class ClipperTest(unittest.TestCase):
         myResult = clipLayer(myVectorLayer, myGeoExtent)
 
         # Check the output is valid
-        assert os.path.exists(myResult)
-        readSafeLayer(myResult)
+        assert os.path.exists(myResult.source())
+        readSafeLayer(myResult.source())
 
         # Clip the raster to the bbox
         myResult = clipLayer(myRasterLayer, myGeoExtent)
 
         # Check the output is valid
-        assert os.path.exists(myResult)
-        readSafeLayer(myResult)
+        assert os.path.exists(myResult.source())
+        readSafeLayer(myResult.source())
 
         # -------------------------------
         # Check the extra keywords option
@@ -248,8 +248,8 @@ class ClipperTest(unittest.TestCase):
                              theExtraKeywords={'kermit': 'piggy'})
 
         # Check the output is valid
-        assert os.path.exists(myResult)
-        L = readSafeLayer(myResult)
+        assert os.path.exists(myResult.source())
+        L = readSafeLayer(myResult.source())
         kwds = L.get_keywords()
         myMessage = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
         assert kwds['kermit'] == 'piggy'
@@ -259,11 +259,12 @@ class ClipperTest(unittest.TestCase):
                              theExtraKeywords={'zoot': 'animal'})
 
         # Check the output is valid
-        assert os.path.exists(myResult)
-        L = readSafeLayer(myResult)
+        assert os.path.exists(myResult.source())
+        L = readSafeLayer(myResult.source())
         kwds = L.get_keywords()
 
-        myMessage = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
+        myMessage = 'Extra keyword was not found in %s: %s' % (
+            myResult.source(), kwds)
         assert kwds['zoot'] == 'animal', myMessage
 
     def testRasterScaling(self):
@@ -325,7 +326,7 @@ class ClipperTest(unittest.TestCase):
                                      myResolution,
                                      theExtraKeywords=myExtraKeywords)
 
-                mySafeLayer = readSafeLayer(myResult)
+                mySafeLayer = readSafeLayer(myResult.source())
                 myNativeData = mySafeLayer.get_data(scaling=False)
                 myScaledData = mySafeLayer.get_data(scaling=True)
 
@@ -480,7 +481,7 @@ class ClipperTest(unittest.TestCase):
         myClipRect = [106.52, -6.38, 107.14, -6.07]
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myClipRect)
-        assert(os.path.exists(myResult))
+        assert(os.path.exists(myResult.source()))
 
     def test_explodeMultiPolygonGeometry(self):
         """Test exploding POLY multipart to single part geometries works"""
@@ -595,7 +596,7 @@ class ClipperTest(unittest.TestCase):
         myResult = clipLayer(myVectorLayer, myClipRect, theHardClipFlag=True)
 
         # Check the output is valid
-        assert(os.path.exists(myResult))
+        assert(os.path.exists(myResult.source()))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ClipperTest, 'test')
