@@ -15,7 +15,7 @@ __date__ = '04/06/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from message_element import MessageElement, InvalidMessageItemError
+from message_element import MessageElement
 from text import Text
 
 

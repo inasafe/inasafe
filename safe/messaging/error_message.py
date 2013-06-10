@@ -26,9 +26,7 @@ from . import (
     Heading,
     BulletedList,
     NumberedList,
-    Paragraph,
-    ImportantText,
-    LineBreak)
+    Paragraph)
 
 
 LOGGER = logging.getLogger('InaSAFE')

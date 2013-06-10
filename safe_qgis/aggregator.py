@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 import sys
 import logging
-import uuid
 
 from PyQt4 import QtGui, QtCore
 
@@ -44,7 +43,6 @@ from third_party.pydispatch import dispatcher
 from safe_qgis.clipper import clipLayer
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.utilities import (
-    getErrorMessage,
     isPolygonLayer,
     getLayerAttributeNames,
     copyInMemory,
@@ -53,20 +51,16 @@ from safe_qgis.utilities import (
     safeToQGISLayer)
 from safe_qgis.styling import setVectorGraduatedStyle
 from safe_qgis.safe_interface import (
-    safeTr,
     temp_dir,
     safe_read_layer,
     ReadLayerError,
     points_in_and_outside_polygon,
     calculate_polygon_centroid,
     unique_filename,
-    get_postprocessors,
-    get_postprocessor_human_name,
     messaging as m)
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL)
+    STATIC_MESSAGE_SIGNAL)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,

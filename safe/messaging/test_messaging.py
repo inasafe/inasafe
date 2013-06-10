@@ -152,7 +152,7 @@ class MessagingTest(unittest.TestCase):
          keywords are provided.
 
         """
-        l1 = NumberedList(
+        NumberedList(
             Text('FOO'),
             ImportantText('BAR'),
             'dsds',

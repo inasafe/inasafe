@@ -22,14 +22,12 @@ from safe.messaging import (
     Heading,
     Paragraph,
     SuccessParagraph,
-    BulletedList,
-    NumberedList,
     Text,
     ImportantText,
     EmphasizedText)
 from third_party.pydispatch import dispatcher
 
-from PyQt4 import Qt, QtGui, QtWebKit
+from PyQt4 import Qt, QtWebKit
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
@@ -180,6 +178,7 @@ class Dock():
         impact_function2 = ImpactFunction2()
         # Run some tasks that will spawn dynamic messages
         for i in range(1, 10):
+            _ = i
             impact_function1.run()
             impact_function2.run()
 

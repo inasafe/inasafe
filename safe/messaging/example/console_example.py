@@ -16,15 +16,10 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import sys
-import os
 from safe.messaging import (
     Message,
-    Heading,
     Paragraph,
     SuccessParagraph,
-    BulletedList,
-    NumberedList,
     Text,
     ImportantText,
     EmphasizedText)
@@ -119,6 +114,7 @@ class App():
         impact_function1 = ImpactFunction1()
         # Run some tasks that will spawn dynamic messages
         for i in range(1, 10):
+            _ = i
             impact_function1.run()
 
 if __name__ == '__main__':

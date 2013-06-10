@@ -19,16 +19,13 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 import sys
-import traceback
 import logging
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore
 
-from safe_interface import temp_dir, ErrorMessage
+from safe_interface import temp_dir
 
-from safe_qgis.exceptions import (StyleError,
-                                  MethodUnavailableError,
-                                  MemoryLayerCreationError)
+from safe_qgis.exceptions import MethodUnavailableError
 
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', 'third_party')))
