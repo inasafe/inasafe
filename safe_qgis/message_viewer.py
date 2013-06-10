@@ -85,7 +85,7 @@ class MessageViewer(QtWebKit.QWebView):
             context_menu.addAction(
                 self.tr('log pageToText'),
                 self,
-                QtCore.SLOT(self.printPageToText()))
+                QtCore.SLOT(self._printPageToText()))
 
         #show the menu
         context_menu.setVisible(True)
@@ -138,14 +138,24 @@ class MessageViewer(QtWebKit.QWebView):
             self.footer = htmlFooter()
         return self.footer
 
+    def _toMessage(self):
+        """Collate all message elements to a single message."""
+        myMessage = m.Message()
+        myMessage.add(self.static_message)
+        for myDynamic in self.dynamic_messages:
+            myMessage.add(myDynamic)
+        return myMessage
+
     def pageToText(self):
         """Return the current page contents as plain text."""
-        return self.page().currentFrame().toPlainText()
+        myMessage = self._toMessage()
+        return myMessage.to_text()
 
     def pageToHtml(self):
         """Return the current page contents as html."""
-        return self.page().currentFrame().toHtml()
+        myMessage = self._toMessage()
+        return myMessage.to_html()
 
-    def printPageToText(self):
+	def _printPageToText(self):
         """Print to console the current page contents as plain text."""
         print self.pageToText()
