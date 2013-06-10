@@ -316,16 +316,8 @@ class Aggregator(QtCore.QObject):
         self.keywordIO.updateKeywords(
             self.layer, {'title': myLayerName})
 
-        #find needed statistics type
-        try:
-            self.statisticsType = self.keywordIO.readKeywords(
-                myQGISImpactLayer, 'statistics_type')
-            self.statisticsClasses = self.keywordIO.readKeywords(
-                myQGISImpactLayer, 'statistics_classes')
-
-        except KeywordNotFoundError:
-            #default to summing
-            self.statisticsType = 'sum'
+        self.statisticsType, self.statisticsClasses = (
+            self.keywordIO.getStatisticsDetails(myQGISImpactLayer))
 
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:

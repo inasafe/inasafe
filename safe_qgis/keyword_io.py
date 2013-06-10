@@ -564,3 +564,19 @@ class KeywordIO(QObject):
             raise
         finally:
             self.closeConnection()
+
+    def getStatisticsDetails(self, theQGISImpactLayer):
+        #find needed statistics type
+        try:
+            myStatisticsType = self.readKeywords(
+                theQGISImpactLayer, 'statistics_type')
+            myStatisticsClasses = self.readKeywords(
+                theQGISImpactLayer, 'statistics_classes')
+
+        except KeywordNotFoundError:
+            #default to summing
+            myStatisticsType = 'sum'
+            myStatisticsClasses = {}
+
+        return myStatisticsType, myStatisticsClasses
+
