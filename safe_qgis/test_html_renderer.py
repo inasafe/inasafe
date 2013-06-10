@@ -123,10 +123,10 @@ class HtmlRendererTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
-        myExpectedSize = 20936  # as rendered on linux ub 12.04 64
-        myMessage = ('Expected rendered table pdf to be at least %s, got %s'
-                     % (myExpectedSize, mySize))
-        assert mySize >= myExpectedSize, myMessage
+        myExpectedSizes = [20936,  # as rendered on linux ub 12.04 64
+                           20605,  # as rendered on linux ub 13.04 64
+                           ]
+        self.assertIn(mySize, myExpectedSizes)
 
     def test_renderHtmlToImage(self):
         """Test that we can render html to a pixmap."""
