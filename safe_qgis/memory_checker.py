@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 
-from safe_qgis.safe_interface import get_free_memory
+from safe_qgis.safe_interface import get_free_memory, tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -84,12 +84,12 @@ def checkMemoryUsage(
                         myWarningLimit))
     myMessage = None
     if myWarningLimit <= myUsageIndicator:
-        myMessage = self.tr(
+        myMessage = tr(
             'There may not be enough free memory to run this analysis. You can '
             'attempt to run the analysis anyway, but note that your computer '
             'may become unresponsive during execution, and / or the analysis '
             'may fail due to insufficient memory. Proceed at your own risk.')
-        mySuggestion = self.tr(
+        mySuggestion = tr(
             'Try zooming in to a smaller area or using a raster layer with a '
             'coarser resolution to speed up execution and reduce memory '
             'requirements. You could also try adding more RAM to your '
@@ -102,9 +102,9 @@ def checkMemoryUsage(
                          'button-cell">%s</th></tr>\n'
                          '<tr><td>%s</td></tr>\n</table>' %
                          (
-                             self.tr('Memory usage:'),
+                             tr('Memory usage:'),
                              myMessage,
-                             self.tr('Suggestion'),
+                             tr('Suggestion'),
                              mySuggestion))
         _, myReadyMessage = self.validate()
         myReadyMessage += myHtmlMessage
