@@ -166,39 +166,14 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
-        myMessage = 'Run button was not enabled'
-        assert myButton.isEnabled(), myMessage
 
-        # Hazard layer
-        myIndex = DOCK.cboHazard.findText(PADANG2009_title)
-        assert myIndex != -1, 'Padang 2009 scenario hazard layer not found'
-        DOCK.cboHazard.setCurrentIndex(myIndex)
-
-        # Exposure layer
-        myIndex = DOCK.cboExposure.findText('Padang WGS84')
-        myMessage = ('Could not find layer Padang WGS84:\n'
-                     '%s' % (combosToString(DOCK)))
-        assert myIndex != -1, myMessage
-        DOCK.cboExposure.setCurrentIndex(myIndex)
-
-        # Impact function
-        myIndex = DOCK.cboFunction.findText('Earthquake Guidelines Function')
-        myMessage = ('Earthquake Guidelines function not '
-                     'found: ' + combosToString(DOCK))
-        assert myIndex != -1, myMessage
-        DOCK.cboFunction.setCurrentIndex(myIndex)
-
-        myDict = getUiState(DOCK)
-        myExpectedDict = {'Hazard': PADANG2009_title,
-                          'Exposure': 'Padang WGS84',
-                          'Impact Function Id':
-                          'Earthquake Guidelines Function',
-                          'Impact Function Title':
-                          'Earthquake Guidelines Function',
-                          'Run Button Enabled': True}
-        myMessage = 'Got:\n %s\nExpected:\n%s\n%s' % (
-            myDict, myExpectedDict, combosToString(DOCK))
-        assert myDict == myExpectedDict, myMessage
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard=PADANG2009_title,
+            theExposure='Padang WGS84',
+            theFunction='Earthquake Guidelines Function',
+            theFunctionId='Earthquake Guidelines Function')
+        assert myResult, myMessage
 
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
