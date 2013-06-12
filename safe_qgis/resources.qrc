@@ -8,7 +8,8 @@
         <file alias="configure-inasafe.svg">resources/img/icons/configure-inasafe.svg</file>
         <file alias="show-keyword-editor.svg">resources/img/icons/show-keyword-editor.svg</file>
         <file alias="show-minimum-needs.svg">resources/img/icons/show-minimum-needs.svg</file>
-	<file alias="osm-download.png">resources/img/icons/show-osm-download.svg</file>
+        <file alias="save-as-scenario.svg">resources/img/icons/save-as-scenario.svg</file>
+	    <file alias="show-osm-download.png">resources/img/icons/show-osm-download.svg</file>
         <!-- logos -->
         <file alias="bnpb_logo.png">resources/img/logos/bnpb_logo.png</file>
         <file alias="bnpb_logo_64.png">resources/img/logos/bnpb_logo_64.png</file>
