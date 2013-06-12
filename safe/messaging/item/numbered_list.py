@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **ItemList module.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **Numbered List**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -85,6 +85,6 @@ class NumberedList(AbstractList):
         else:
             text = ''
             for i, item in enumerate(self.items):
-                text += ' %s. %s\n' % (i+1, item.to_text())
+                text += ' %s. %s\n' % (i + 1, item.to_text())
 
             return text

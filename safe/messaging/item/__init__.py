@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **Paragraph.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **Items**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -14,4 +14,3 @@ __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-

@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **ItemList module.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **Abstract List**
 
 Contact : ole.moller.nielsen@gmail.com
 

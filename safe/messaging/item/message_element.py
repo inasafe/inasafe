@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **.**
+InaSAFE Disaster risk assessment tool by AusAid - **Message Element.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -14,6 +14,7 @@ __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
 
 class MessageElement(object):
 
@@ -145,5 +146,3 @@ class MessageElement(object):
         if self.icon is not None:
             icon = '<i class="%s"></i> ' % self.icon
         return icon
-
-

@@ -24,7 +24,7 @@ from exceptions import InvalidMessageItemError
 
 
 class Text(MessageElement):
-    """free text in the messaging system with automatically added whitespaces"""
+    """free text in the messaging with automatically added whitespaces"""
 
     def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
