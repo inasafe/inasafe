@@ -20,10 +20,7 @@ import logging
 
 from safe_qgis.safe_interface import get_free_memory
 from safe_interface import messaging as m
-from safe_interface import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL)
+from safe_interface import DYNAMIC_MESSAGE_SIGNAL
 from safe_interface import styles
 from PyQt4.QtCore import QCoreApplication, QString
 from third_party.pydispatch import dispatcher
@@ -150,15 +147,15 @@ def checkMemoryUsage(theBufferedGeoExtent, theCellSize):
 
     if myWarningLimit <= myUsageIndicator:
         myWarningHeading = m.Heading(
-            self.tr('Potential memory issue'), **WARNING_STYLE)
-        myWarningMessage = self.tr(
-            'There may not be enough free memory to run this analysis. You can '
-            'attempt to run the analysis anyway, but note that your computer '
+            tr('Potential memory issue'), **WARNING_STYLE)
+        myWarningMessage = tr(
+            'There may not be enough free memory to run this analysis. You can'
+            ' attempt to run the analysis anyway, but note that your computer '
             'may become unresponsive during execution, and / or the analysis '
             'may fail due to insufficient memory. Proceed at your own risk.')
         mySuggestionHeading = m.Heading(
-            self.tr('Suggestion'), **INFO_STYLE)
-        mySuggestion = self.tr(
+            tr('Suggestion'), **INFO_STYLE)
+        mySuggestion = tr(
             'Try zooming in to a smaller area or using a raster layer with a '
             'coarser resolution to speed up execution and reduce memory '
             'requirements. You could also try adding more RAM to your '
