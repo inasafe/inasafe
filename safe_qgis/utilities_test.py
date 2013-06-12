@@ -602,7 +602,7 @@ def setupScenario(
         * theHazard str - (Required) name of the hazard combo entry to set.
         * theExposure str - (Required) name of exposure combo entry to set.
         * theFunction - (Required) name of the function combo entry to set.
-        * theFunctionId - (Required) the impact function id that should be used.
+        * theFunctionId - (Required) impact function id that should be used.
         * theOkButtonFlag - (Optional) Whether the ok button should be enabled
             after this scenario is set up.
         * theAggregationLayer - (Optional) which layer should be used for

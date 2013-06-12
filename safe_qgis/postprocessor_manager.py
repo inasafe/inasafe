@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **Aggregator.**
+InaSAFE Disaster risk assessment tool by AusAid - **Postprocessor Manager**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -68,8 +68,8 @@ class PostprocessorManager(QtCore.QObject):
     def _isNoData(self, data):
         """Check if the value field of the postprocessor is NO_DATA.
 
-        this is used for sorting, it returns -1 if the value is NO_DATA, so that
-        no data items can be put at the end of a list
+        this is used for sorting, it returns -1 if the value is NO_DATA, so
+        that no data items can be put at the end of a list
 
         Args:
             list - data
@@ -129,7 +129,8 @@ class PostprocessorManager(QtCore.QObject):
                              'have a "Total" field')
 
             #init table
-            myTable = m.Table(style_class='table table-condensed table-striped')
+            myTable = m.Table(
+                style_class='table table-condensed table-striped')
             myTable.caption = self.tr('Detailed %1 report').arg(safeTr(
                 get_postprocessor_human_name(proc)).lower())
 

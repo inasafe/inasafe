@@ -199,7 +199,8 @@ class Aggregator(QtCore.QObject):
                     self.layer,
                     [QtCore.QVariant.Int, QtCore.QVariant.String])
                 if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
-                    myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttributes[0]
+                    myKeywords[self.defaults['AGGR_ATTR_KEY']] = \
+                        myAttributes[0]
 
                 if self.defaults['FEM_RATIO_ATTR_KEY'] not in myKeywords:
                     myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
@@ -406,8 +407,8 @@ class Aggregator(QtCore.QObject):
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = m.Paragraph(
-                self.tr('No attribute "%1" was found in the attribute table for'
-                        ' layer "%2". The impact function must define this'
+                self.tr('No attribute "%1" was found in the attribute table '
+                        'for layer "%2". The impact function must define this'
                         ' attribute for postprocessing to work.').arg(
                             self.targetField, myQGISImpactLayer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
@@ -750,7 +751,8 @@ class Aggregator(QtCore.QObject):
         myMessage = m.Message(
             m.Heading(self.tr('Preclipping input data...')),
             m.Paragraph(self.tr(
-                'Modifying %1 to avoid intersections with the aggregation layer'
+                'Modifying %1 to avoid intersections with the aggregation '
+                'layer'
             ).arg(theQgisLayer.name())))
         self._sendMessage(myMessage)
 
@@ -1075,7 +1077,8 @@ class Aggregator(QtCore.QObject):
         myProvider = self.layer.dataProvider()
 
         myAttrName = self.tr('Area')
-        myProvider.addAttributes([QgsField(myAttrName, QtCore.QVariant.String)])
+        myProvider.addAttributes(
+            [QgsField(myAttrName, QtCore.QVariant.String)])
 
         self.layer.startEditing()
         # add a feature the size of the impact layer bounding box

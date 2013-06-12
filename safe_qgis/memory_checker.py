@@ -85,8 +85,8 @@ def checkMemoryUsage(
     myMessage = None
     if myWarningLimit <= myUsageIndicator:
         myMessage = tr(
-            'There may not be enough free memory to run this analysis. You can '
-            'attempt to run the analysis anyway, but note that your computer '
+            'There may not be enough free memory to run this analysis. You can'
+            ' attempt to run the analysis anyway, but note that your computer '
             'may become unresponsive during execution, and / or the analysis '
             'may fail due to insufficient memory. Proceed at your own risk.')
         mySuggestion = tr(

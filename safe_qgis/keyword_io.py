@@ -579,4 +579,3 @@ class KeywordIO(QObject):
             myStatisticsClasses = {}
 
         return myStatisticsType, myStatisticsClasses
-
