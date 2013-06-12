@@ -25,7 +25,8 @@ from qgis.core import QgsMapLayer
 
 from safe_qgis.exceptions import (HashNotFoundError,
                                   KeywordNotFoundError,
-                                  KeywordDbError)
+                                  KeywordDbError,
+                                  InvalidParameterError)
 from safe_qgis.safe_interface import (verify,
                                       readKeywordsFromFile,
                                       writeKeywordsToFile)
@@ -143,7 +144,7 @@ class KeywordIO(QObject):
         """
         try:
             myKeywords = self.readKeywords(theLayer)
-        except (HashNotFoundError, OperationalError):
+        except (HashNotFoundError, OperationalError, InvalidParameterError):
             myKeywords = {}
         myKeywords.update(theKeywords)
         try:
