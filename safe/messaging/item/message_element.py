@@ -145,9 +145,5 @@ class MessageElement(object):
         if self.icon is not None:
             icon = '<i class="%s"></i> ' % self.icon
         return icon
-#pylint: enable=W0223
 
 
-class InvalidMessageItemError(Exception):
-    """Custom exception for when the passed MessageElement is invalid."""
-    pass

@@ -15,7 +15,8 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from message_element import MessageElement, InvalidMessageItemError
+from message_element import MessageElement
+from exceptions import InvalidMessageItemError
 from text import Text
 
 #FIXME (MB) remove when all to_* methods are implemented

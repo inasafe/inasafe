@@ -16,7 +16,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
-from item.message_element import MessageElement, InvalidMessageItemError
+from item.message_element import MessageElement
+from item.exceptions import InvalidMessageItemError
 from . import Text
 
 

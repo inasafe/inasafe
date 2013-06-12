@@ -19,7 +19,9 @@ import logging
 
 from safe.common.utilities import ugettext as tr
 
-from item.message_element import MessageElement, InvalidMessageItemError
+from item.message_element import MessageElement
+from item.exceptions import InvalidMessageItemError
+
 from . import (
     Message,
     Text,

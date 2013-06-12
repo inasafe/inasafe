@@ -9,13 +9,15 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '24/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from message_element import MessageElement, InvalidMessageItemError
+from message_element import MessageElement
+from exceptions import InvalidMessageItemError
 from text import PlainText
 
 
