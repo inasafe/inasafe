@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 from datetime import datetime
-from safe_qgis.utilities import setupLogger as setupLoggerSQ
+from safe_qgis.custom_logging import setupLogger as setupLoggerSQ
 
 
 def baseDataDir():
