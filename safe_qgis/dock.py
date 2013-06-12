@@ -59,7 +59,9 @@ from safe_qgis.safe_interface import (
     safeTr,
     get_version,
     temp_dir,
-    ReadLayerError)
+    ReadLayerError,
+    get_postprocessors,
+    get_postprocessor_human_name)
 
 from safe_interface import messaging as m
 from safe_interface import (
