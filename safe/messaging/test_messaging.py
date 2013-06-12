@@ -156,7 +156,7 @@ class MessagingTest(unittest.TestCase):
             Text('FOO'),
             ImportantText('BAR'),
             'dsds',
-            id='error-message',
+            element_id='error-message',
             style_class='error-class',
             invalid_param=None)
 
@@ -167,7 +167,7 @@ class MessagingTest(unittest.TestCase):
             Text('FOO'),
             ImportantText('BAR'),
             'dsds',
-            id='error-message',
+            element_id='error-message',
             style_class='error-class')
 
         expected_res = (
