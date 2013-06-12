@@ -17,6 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from paragraph import Paragraph, Text
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class SuccessParagraph(Paragraph):
     """A Success Paragraph class for text blocks much like the p in html."""

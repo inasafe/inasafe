@@ -23,6 +23,9 @@ from . import Text
 LOGGER = logging.getLogger('InaSAFE')
 #from pydev import pydevd
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class Message(MessageElement):
     """Message object to contain a list of MessageElements"""

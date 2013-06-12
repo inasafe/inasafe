@@ -17,6 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from text import Text
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class PreformattedText(Text):
     """A representation for a preformatted text item. """

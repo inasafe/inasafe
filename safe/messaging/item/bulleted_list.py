@@ -17,6 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from abstract_list import AbstractList
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class BulletedList(AbstractList):
     """A class to model free text in the messaging system """

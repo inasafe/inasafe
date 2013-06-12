@@ -54,6 +54,9 @@ TRACEBACK_STYLE = {
     'icon': 'icon-info-sign icon-white',
     'style_class': 'inverse'}
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class ErrorMessage(MessageElement):
     """Standard error message"""

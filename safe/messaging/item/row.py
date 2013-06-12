@@ -18,6 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from message_element import MessageElement, InvalidMessageItemError
 from cell import Cell
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class Row(MessageElement):
     """A class to model table rows in the messaging system """

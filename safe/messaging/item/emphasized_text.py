@@ -17,6 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from text import Text
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class EmphasizedText(Text):
     """A class to model emphasized text in the messaging system """

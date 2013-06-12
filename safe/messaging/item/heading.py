@@ -18,6 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from message_element import MessageElement, InvalidMessageItemError
 from text import Text
 
+#FIXME (MB) remove when all to_* methods are implemented
+#pylint: disable=W0223
+
 
 class Heading(MessageElement):
     """A Heading class for titles and subtitles much like the h1-h6 in html"""

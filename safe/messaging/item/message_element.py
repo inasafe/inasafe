@@ -15,7 +15,6 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 class MessageElement(object):
 
     def __init__(
@@ -146,6 +145,7 @@ class MessageElement(object):
         if self.icon is not None:
             icon = '<i class="%s"></i> ' % self.icon
         return icon
+#pylint: enable=W0223
 
 
 class InvalidMessageItemError(Exception):
