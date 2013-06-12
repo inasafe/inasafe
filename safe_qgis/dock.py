@@ -1147,7 +1147,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # See if we are re-running the same type of analysis, if not
             # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
-        except (KeywordDbError, Exception), e:
+        except (KeywordDbError, Exception), e:   # pylint: disable=W0703
             myMessage = getErrorMessage(e)
             self.showErrorMessage(myMessage)
             return
@@ -1525,7 +1525,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         #TODO (MB) do we really want this check?
         if self.aggregator.errorMessage is None:
-                self.postProcess()
+            self.postProcess()
         else:
             myContext = self.aggregator.errorMessage
             myException = AggregatioError(self.tr(

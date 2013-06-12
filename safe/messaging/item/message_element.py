@@ -18,10 +18,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 class MessageElement(object):
 
-    def __init__(self, id=None, style_class=None, icon=None, attributes=None):
+    def __init__(
+            self,
+            element_id=None,
+            style_class=None,
+            icon=None,
+            attributes=None):
         """
         Constructor for a message element
-        :param id: Optional id - will be ignored in text renderer.
+        :param element_id: Optional id - will be ignored in text renderer.
         :param style_class: Optional class = will be ignored in text renderer.
         :param icon: Optional bootstrap glyph icon class used for html renderer
         :param attributes: Optional html attributes you can add to an element.
@@ -39,7 +44,7 @@ class MessageElement(object):
         Text('foo', attributes='width: "100%"')
 
         """
-        self.id = id
+        self.id = element_id
         self.style_class = style_class
         self.icon = icon
         self.attributes = attributes

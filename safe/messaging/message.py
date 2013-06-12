@@ -112,7 +112,7 @@ class Message(MessageElement):
                 last_was_text = False
         return message
 
-    def to_html(self, noNewline=False):
+    def to_html(self, noNewline=False):  # pylint: disable=W0221
         """Render a MessageElement queue as html
 
         Args:
