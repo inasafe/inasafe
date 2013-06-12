@@ -68,7 +68,7 @@ class MessagingTest(unittest.TestCase):
         self.assertEqual(expected_res, res)
 
     def test_line_break(self):
-        """Tests Line Breaks messages are rendered correctly in plain text/html.
+        """Tests Line Break messages are rendered correctly in plain text/html.
         """
         t1 = Message('FOO', LineBreak())
 
@@ -239,7 +239,9 @@ class MessagingTest(unittest.TestCase):
         t1.add(tl)
         tp = Text('text for paragraph ')
         em = EmphasizedText('this is an emphasized paragraph text')
-        im = Image('http://www.google.ch/images/srpr/logo4w.png', 'Google logo')
+        im = Image(
+            'http://www.google.ch/images/srpr/logo4w.png',
+            'Google logo')
         tp.add(im)
         tp.add(em)
         im = Image('http://www.google.ch/images/srpr/NoText.png')
@@ -271,8 +273,8 @@ class MessagingTest(unittest.TestCase):
             '<h1>h1 title</h1>\n'
             '<h2>h2 subtitle</h2>\n'
             '<p>the quick brown fox jumps over the lazy dog</p>\n'
-            'this is a text, this is another text <strong>and this is a strong '
-            'text</strong> <a href="http://google.ch">google link</a>\n'
+            'this is a text, this is another text <strong>and this is a strong'
+            ' text</strong> <a href="http://google.ch">google link</a>\n'
             '<p>text for paragraph <img src="'
             'http://www.google.ch/images/srpr/logo4w.png" title="Google logo" '
             'alt="Google logo"/> <em>this is an emphasized paragraph text'
@@ -293,13 +295,14 @@ class MessagingTest(unittest.TestCase):
         em1.prepend(em0)
         expected_res = (
             '<h5 class="warning"><i class="icon-remove-sign icon-white"></i>'
-            ' Problem</h5>\n<p>The following problem(s) were encountered whilst'
-            ' running the analysis.</p>\n<ul>\n<li>E2p</li>\n<li>E1p</li>\n<li>'
-            'E0p</li>\n</ul>\n<h5 class="problem"><i class="icon-list '
-            'icon-white"></i> Detail</h5>\n<p>These additional details were '
-            'reported when the problem occurred.</p>\n<ul>\n<li>E0d</li>\n<li>'
-            'E2d</li>\n</ul>\n<h5 class="suggestion"><i class="icon-comment'
-            ' icon-white"></i> Suggestion</h5>\n<p>You can try the following to'
+            ' Problem</h5>\n<p>The following problem(s) were encountered '
+            'whilst running the analysis.</p>\n<ul>\n<li>E2p</li>\n<li>E1p'
+            '</li>\n<li>E0p</li>\n</ul>\n<h5 class="problem">'
+            '<i class="icon-list icon-white"></i> Detail</h5>\n<p>'
+            'These additional details were reported when the problem occurred.'
+            '</p>\n<ul>\n<li>E0d</li>\n<li>E2d</li>\n</ul>\n'
+            '<h5 class="suggestion"><i class="icon-comment icon-white"></i>'
+            ' Suggestion</h5>\n<p>You can try the following to'
             ' resolve the issue:</p>\n<ul>\n<li>E2s</li>\n</ul>\n'
             '<h5 class="inverse"><i class="icon-info-sign icon-white"></i>'
             ' Traceback</h5>\n<ol>\n<li>In file E0t</li>\n<li>In file E2t</li>'
@@ -340,8 +343,9 @@ class MessagingTest(unittest.TestCase):
 
         t1 = Table(r1, Row('1', '2', '3'), ['a', 'b', 'c'])
         expected_res = (
-            '<table>\n<tbody>\n<tr>\n<td>FOO</td>\n<td>FOO <strong>BAR</strong>'
-            ' function</td>\n<td>3a</td>\n</tr>\n<tr>\n<td>1</td>\n<td>2</td>\n'
+            '<table>\n<tbody>\n<tr>\n<td>FOO</td>\n<td>FOO '
+            '<strong>BAR</strong> function</td>\n<td>3a</td>\n</tr>\n<tr>\n'
+            '<td>1</td>\n<td>2</td>\n'
             '<td>3</td>\n</tr>\n<tr>\n<td>a</td>\n<td>b</td>\n<td>c</td>\n'
             '</tr>\n</tbody>\n</table>\n')
         res = t1.to_html()
@@ -352,8 +356,8 @@ class MessagingTest(unittest.TestCase):
             '<table>\n<caption>Test Caption</caption>\n<tbody>\n<tr>\n'
             '<td>FOO</td>\n<td>FOO <strong>BAR</strong> function</td>\n'
             '<td>3a</td>\n</tr>\n<tr>\n<td>1</td>\n<td>2</td>\n<td>3</td>\n'
-            '</tr>\n<tr>\n<td>a</td>\n<td>b</td>\n<td>c</td>\n</tr>\n</tbody>\n'
-            '</table>\n')
+            '</tr>\n<tr>\n<td>a</td>\n<td>b</td>\n<td>c</td>\n</tr>\n'
+            '</tbody>\n</table>\n')
         res = t1.to_html()
         self.assertEqual(expected_res, res)
 

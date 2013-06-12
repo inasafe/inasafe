@@ -45,4 +45,3 @@ WARNING_STYLE = {
 
 KEYWORD_STYLE = {
     'style_class': 'label label-info'}
-

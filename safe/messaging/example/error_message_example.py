@@ -103,4 +103,3 @@ if __name__ == '__main__':
         #tb = traceback.format_exc()
         #print tb
         print e.error_message.to_text()
-
