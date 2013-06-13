@@ -65,7 +65,7 @@ class PostprocessorManager(QtCore.QObject):
     def _sumFieldName(self):
         return self.aggregator.prefix + 'sum'
 
-    def _isNoData(self, data):
+    def _sortNoData(self, data):
         """Check if the value field of the postprocessor is NO_DATA.
 
         this is used for sorting, it returns -1 if the value is NO_DATA, so
@@ -121,7 +121,7 @@ class PostprocessorManager(QtCore.QObject):
                 #sorting using the first indicator of a postprocessor
                 sortedResList = sorted(
                     resList,
-                    key=self._isNoData,
+                    key=self._sortNoData,
                     reverse=True)
 
             except KeyError:
@@ -129,6 +129,7 @@ class PostprocessorManager(QtCore.QObject):
                              'have a "Total" field')
 
             #init table
+            hasNoDataValues = False
             myTable = m.Table(
                 style_class='table table-condensed table-striped')
             myTable.caption = self.tr('Detailed %1 report').arg(safeTr(
@@ -144,11 +145,20 @@ class PostprocessorManager(QtCore.QObject):
                 myRow = m.Row(zoneName)
 
                 for _, calculationData in calc.iteritems():
-                    myRow.add(calculationData['value'])
+                    myValue = calculationData['value']
+                    if myValue == self.aggregator.defaults['NO_DATA']:
+                        hasNoDataValues = True
+                        myValue += ' *'
+                    myRow.add(myValue)
                 myTable.add(myRow)
 
             #add table to message
             myMessage.add(myTable)
+            if hasNoDataValues:
+                myMessage.add(m.EmphasizedText(self.tr(
+                    '* "%1" values mean that there where some problems while '
+                    'calculating them. This did not affect the other '
+                    'values.').arg(self.aggregator.defaults['NO_DATA'])))
 
         return myMessage
 
