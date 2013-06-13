@@ -327,7 +327,7 @@ class Aggregator(QtCore.QObject):
             raise ReadLayerError(myMessage)
 
         # show a styled aggregation layer
-        if self.showIntermediateLayers and not self.aoiMode:
+        if self.showIntermediateLayers:
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
@@ -697,6 +697,9 @@ class Aggregator(QtCore.QObject):
             myName = '%s %s' % (self.layer.name(), self.tr('aggregation'))
             self.layer = QgsVectorLayer(
                 myClippedLayer.source(), myName, 'ogr')
+            if self.showIntermediateLayers:
+                self.keywordIO.updateKeywords(self.layer, {'title': myName})
+                QgsMapLayerRegistry.instance().addMapLayer(self.layer)
 
     def _countFieldName(self):
         return self.prefix + 'count'
