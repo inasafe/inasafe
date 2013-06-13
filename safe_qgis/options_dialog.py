@@ -121,7 +121,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxUseSentry.setChecked(myFlag)
 
         myFlag = mySettings.value(
-            'inasafe/showPostProcLayers', False).toBool()
+            'inasafe/showIntermediateLayers', False).toBool()
         self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
         myRatio = mySettings.value(
@@ -163,7 +163,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxClipHard.isChecked())
         mySettings.setValue('inasafe/useSentry',
                             self.cbxUseSentry.isChecked())
-        mySettings.setValue('inasafe/showPostProcLayers',
+        mySettings.setValue('inasafe/showIntermediateLayers',
                             self.cbxShowPostprocessingLayers.isChecked())
         mySettings.setValue('inasafe/defaultFemaleRatio',
                             self.dsbFemaleRatioDefault.value())

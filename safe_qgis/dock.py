@@ -178,6 +178,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hideExposureFlag = True
         self.hazardLayers = None  # array of all hazard layers
         self.exposureLayers = None  # array of all exposure layers
+        self._updateSettings()  # fix old names in settings
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
         self.aggregator = None
@@ -316,7 +317,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to show or not postprocessing generated layers
         myFlag = mySettings.value(
-            'inasafe/showPostProcLayers', False).toBool()
+            'inasafe/showIntermediateLayers', False).toBool()
         self.showIntermediateLayers = myFlag
 
         # whether to show or not dev only options
@@ -325,6 +326,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.devMode = myFlag
 
         self.getLayers()
+
+    def _updateSettings(self):
+        """Update setting to new settings names
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+
+        mySettings = QtCore.QSettings()
+        myOldFlag = mySettings.value(
+            'inasafe/showPostProcLayers', False).toBool()
+        mySettings.remove('inasafe/showPostProcLayers')
+
+        if not mySettings.contains('inasafe/showIntermediateLayers'):
+            mySettings.setValue('inasafe/showIntermediateLayers', myOldFlag)
 
     def connectLayerListener(self):
         """Establish a signal/slot to listen for changes in the layers loaded
