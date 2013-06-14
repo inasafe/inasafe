@@ -391,6 +391,12 @@ class Plugin:
         self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionImpactFunctionsDoc)
         self.iface.removeToolBarIcon(self.actionImpactFunctionsDoc)
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
+                                    self.actionConverter)
+        self.iface.removeToolBarIcon(self.actionConverter)
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
+                                    self.actionImportDlg)
+        self.iface.removeToolBarIcon(self.actionImportDlg)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
