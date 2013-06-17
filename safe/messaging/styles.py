@@ -41,7 +41,27 @@ WARNING_STYLE = {
     'icon': 'icon-warning-sign icon-white',
     'style_class': 'warning'}
 
-# This is typically a text element or its derivatives
+SUGGESTION_STYLE = {
+    'level': 5,
+    'icon': 'icon-comment icon-white',
+    'style_class': 'suggestion'}
 
+PROBLEM_STYLE = {
+    'level': 5,
+    'icon': 'icon-remove-sign icon-white',
+    'style_class': 'warning'}
+
+DETAILS_STYLE = {
+    'level': 5,
+    'icon': 'icon-list icon-white',
+    'style_class': 'problem'}
+
+
+TRACEBACK_STYLE = {
+    'level': 5,
+    'icon': 'icon-info-sign icon-white',
+    'style_class': 'inverse'}
+
+# This is typically a text element or its derivatives
 KEYWORD_STYLE = {
     'style_class': 'label label-info'}

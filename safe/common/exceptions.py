@@ -95,3 +95,8 @@ class InvalidLayerError(Exception):
 class ShapefileCreationError(Exception):
     """Raised if an error occurs creating the cities file"""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
+
+
+class ZeroImpactException(Exception):
+    """Raised if an impact function return zero impact"""
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'

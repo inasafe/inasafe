@@ -15,7 +15,7 @@ from safe.common.utilities import (
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
 class VolcanoPolygonHazardPopulation(FunctionProvider):
@@ -243,12 +243,24 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                            % format_int(total),
                            tr('People need evacuation if they are within the '
                               'volcanic hazard zones.')])
+
+        population_counts = [x[self.target_field] for x in new_attributes]
         impact_summary = Table(table_body).toNewlineFreeString()
+
+        # check for zero impact
+        if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
+                population_counts):
+            table_body = [
+                question,
+                TableRow([tr('People needing evacuation'),
+                          '%s' % format_int(evacuated),
+                          blank_cell], header=True)]
+            my_message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(my_message)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        population_counts = [x[self.target_field] for x in new_attributes]
         classes = create_classes(population_counts, len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts

@@ -15,7 +15,7 @@ from safe.common.utilities import (
     create_classes,
     create_label)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -350,6 +350,15 @@ class ITBFatalityFunction(FunctionProvider):
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
+
+        # check for zero impact
+        if numpy.nanmax(R) == 0 == numpy.nanmin(R):
+            table_body = [
+                question,
+                TableRow([tr('Fatalities'), '%s' % format_int(fatalities)],
+                         header=True)]
+            my_message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(my_message)
 
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']

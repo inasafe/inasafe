@@ -63,7 +63,8 @@ from safe.api import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
-    ErrorMessage)
+    ErrorMessage,
+    ZeroImpactException)
 from safe.api import styles
 # hack for excluding test-related import in builded package
 try:
