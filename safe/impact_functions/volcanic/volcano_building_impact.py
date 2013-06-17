@@ -193,7 +193,6 @@ class VolcanoBuildingImpact(FunctionProvider):
                            tr('Only buildings available in OpenStreetMap '
                               'are considered.')])
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('Buildings affected by volcanic hazard zone')
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

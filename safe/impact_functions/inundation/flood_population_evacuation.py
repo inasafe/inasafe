@@ -224,6 +224,7 @@ class FloodEvacuationFunction(FunctionProvider):
         classes = create_classes(my_impact.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
+
         for i in xrange(len(colours)):
             style_class = dict()
             if i == 1:
@@ -233,7 +234,7 @@ class FloodEvacuationFunction(FunctionProvider):
             elif i == 7:
                 label = create_label(interval_classes[i], 'High')
             else:
-                label = create_label(interval_classes[i], 'High')
+                label = create_label(interval_classes[i])
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             if i == 0:
