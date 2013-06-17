@@ -322,7 +322,7 @@ class DockTest(unittest.TestCase):
         assert format_int(17) in myResult, myMessage
         assert format_int(7) in myResult, myMessage
 
-    def test_InsufficientOverlapIssue372(self):
+    def test_insufficientOverlapIssue372(self):
         """Test Insufficient overlap errors are caught as per issue #372.
         ..note:: See https://github.com/AIFDR/inasafe/issues/372
         """
@@ -807,7 +807,7 @@ class DockTest(unittest.TestCase):
                          myExposureLayerCount), myMessage
         # pylint: disable=W0106
 
-    def test_Issue71(self):
+    def test_issue71(self):
         """Test issue #71 in github - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
@@ -865,7 +865,7 @@ class DockTest(unittest.TestCase):
                      DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
 
-    def test_Issue95(self):
+    def test_issue95(self):
         """Test issue #95 in github -check crs of impact layer."""
         # See https://github.com/AIFDR/inasafe/issues/95
         # Push OK with the left mouse button
@@ -922,7 +922,7 @@ class DockTest(unittest.TestCase):
                      DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
 
-    def test_issue_160(self):
+    def test_issue160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
 
