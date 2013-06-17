@@ -946,8 +946,9 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        print myResult
         assert 'IndexError' not in myResult, myMessage
+        assert 'It appears that no People are affected by A flood in ' \
+               'Jakarta like in 2007. You may want to consider:' in myResult
 
     def test_state(self):
         """Check if the save/restore state methods work. See also
