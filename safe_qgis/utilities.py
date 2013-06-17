@@ -566,7 +566,7 @@ def isPointLayer(theLayer):
        the theLayer
 
     Returns:
-        bool - true if the theLayer contains polygons
+        bool - true if the theLayer is a point layer.
 
     Raises:
        None
@@ -574,6 +574,24 @@ def isPointLayer(theLayer):
     try:
         return (theLayer.type() == QgsMapLayer.VectorLayer) and (
             theLayer.geometryType() == QGis.Point)
+    except AttributeError:
+        return False
+
+
+def isRasterLayer(theLayer):
+    """Check if a QGIS layer is raster.
+
+   Args:
+       theLayer
+
+    Returns:
+        bool - true if the theLayer is a raster
+
+    Raises:
+       None
+    """
+    try:
+        return theLayer.type() == QgsMapLayer.RasterLayer
     except AttributeError:
         return False
 

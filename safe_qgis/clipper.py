@@ -271,16 +271,14 @@ def _clipVectorLayer(theLayer,
     del myWriter  # Flush to disk
 
     if myCount < 1:
-        myMessage = tr('No features fall within the clip extents. '
-                       'Try panning / zooming to an area containing data '
-                       'and then try to run your analysis again.'
-                       'If hazard and exposure data doesn\'t overlap '
-                       'at all, it is not possible to do an analysis.'
-                       'Another possibility is that the layers do overlap '
-                       'but because they may have different spatial '
-                       'references, they appear to be disjoint. '
-                       'If this is the case, try to turn on reproject '
-                       'on-the-fly in QGIS.')
+        myMessage = tr(
+            'No features fall within the clip extents. Try panning / zooming '
+            'to an area containing data and then try to run your analysis '
+            'again. If hazard and exposure data doesn\'t overlap at all, it '
+            'is not possible to do an analysis. Another possibility is that '
+            'the layers do overlap but because they may have different '
+            'spatial references, they appear to be disjointed. If this is the '
+            'case, try to turn on reproject on-the-fly in QGIS.')
         raise NoFeaturesInExtentError(myMessage)
 
     myKeywordIO = KeywordIO()
