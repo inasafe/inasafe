@@ -54,6 +54,29 @@ class FunctionProvider:
     target_field = 'DAMAGE'
     symbol_field = 'USE_MAJOR'
 
+    def _weekly_needs_of_evacuated_population(self, population):
+        """Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+
+        Input
+            population - The number of affected population
+
+        Output:
+            python dict containing weekly needs
+
+        Assumptions:
+        400g per person per day
+        2.5L per person per day
+        15L per person per day
+        assume 5 people per family (not in perka)
+        20 people per toilet
+        """
+        weekly_needs = {'rice': int(population * 2.8),
+                        'drinking_water': int(population * 17.5),
+                        'water': int(population * 105),
+                        'family_kits': int(population / 5),
+                        'toilets': int(population / 20)}
+        return weekly_needs
+
 
 def get_function_title(func):
     """Get title for impact function
