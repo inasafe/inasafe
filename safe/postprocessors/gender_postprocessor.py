@@ -123,7 +123,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Female population')
+        myName = tr('Female population (affected)')
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:

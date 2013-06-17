@@ -153,36 +153,28 @@ class FloodEvacuationFunction(FunctionProvider):
         total = round_thousand(total)
 
         # Calculate estimated minimum needs
-        # The default value of each logistic is based on BNPB Perka 7/2008
-        # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
-        mn_rice = minimum_needs['Rice']
-        mn_drinking_water = minimum_needs['Drinking Water']
-        mn_water = minimum_needs['Water']
-        mn_family_kits = minimum_needs['Family Kits']
-        mn_toilets = minimum_needs['Toilets']
-
-        rice = int(evacuated * mn_rice)
-        drinking_water = int(evacuated * mn_drinking_water)
-        water = int(evacuated * mn_water)
-        family_kits = int(evacuated * mn_family_kits)
-        toilets = int(evacuated / mn_toilets)
+        tot_needs = self._weekly_needs_of_evacuated_population(evacuated,
+                                                               minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s*' % format_int(evacuated)],
+                      '%s%s' % (format_int(evacuated), (
+                          '*' if evacuated >= 1000 else ''))],
                      header=True),
             TableRow(tr('* Number is rounded to the nearest 1000'),
                      header=False),
             TableRow(tr('Map shows population density needing evacuation')),
+            TableRow(tr('Table below shows the weekly minium needs for all '
+                        'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(rice)],
-            [tr('Drinking Water [l]'), format_int(drinking_water)],
-            [tr('Clean Water [l]'), format_int(water)],
-            [tr('Family Kits'), format_int(family_kits)],
-            [tr('Toilets'), format_int(toilets)]]
+            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Drinking Water [l]'), format_int(tot_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
+            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
+            [tr('Toilets'), format_int(tot_needs['toilets'])]]
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
