@@ -96,6 +96,7 @@ PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
+SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -1522,6 +1523,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myReport.add(m.Heading(self.tr(
                     'Analysis Results'), **INFO_STYLE))
                 myReport.add(m.Text(myException.message))
+                myReport.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
+                myReport.add(m.Text(self.tr(
+                    'It appears that no %1 are affected by %2. You may want '
+                    'to consider:').arg(
+                        self.cboExposure.currentText()).arg(
+                            self.cboHazard.currentText()
+                        )))
+                myList = m.BulletedList()
+                myList.add(self.tr(
+                    'Check that you are not zoomed in too much and thus '
+                    'excluding %1 from your analysis area.').arg(
+                        self.cboExposure.currentText()))
+                myList.add(self.tr(
+                    'Check that the exposure is not no-data or zero for the '
+                    'entire area of your analysis.'))
+                myList.add(self.tr(
+                    'Check that your impact function thresholds do not '
+                    'exclude all features unintentionally.'))
+                myReport.add(myList)
                 self.showStaticMessage(myReport)
                 self.hideBusy()
                 return

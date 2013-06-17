@@ -29,6 +29,8 @@ from . import (
     BulletedList,
     NumberedList,
     Paragraph)
+from .styles import (
+    SUGGESTION_STYLE, DETAILS_STYLE, TRACEBACK_STYLE, PROBLEM_STYLE)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -36,25 +38,6 @@ LOGGER = logging.getLogger('InaSAFE')
 
 # We defined these styles locally because we use different icons
 
-PROBLEM_STYLE = {
-    'level': 5,
-    'icon': 'icon-remove-sign icon-white',
-    'style_class': 'warning'}
-
-DETAILS_STYLE = {
-    'level': 5,
-    'icon': 'icon-list icon-white',
-    'style_class': 'problem'}
-
-SUGGESTION_STYLE = {
-    'level': 5,
-    'icon': 'icon-comment icon-white',
-    'style_class': 'suggestion'}
-
-TRACEBACK_STYLE = {
-    'level': 5,
-    'icon': 'icon-info-sign icon-white',
-    'style_class': 'inverse'}
 
 #FIXME (MB) remove when all to_* methods are implemented
 #pylint: disable=W0223
