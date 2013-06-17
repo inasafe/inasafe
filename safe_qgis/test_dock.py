@@ -38,24 +38,26 @@ from qgis.core import (QgsRasterLayer,
 from safe_interface import (format_int,
                             HAZDATA, TESTDATA, UNITDATA)
 
-from safe_qgis.utilities_test import (getQgisTestApp,
-                                      setCanvasCrs,
-                                      setPadangGeoExtent,
-                                      setBatemansBayGeoExtent,
-                                      setJakartaGeoExtent,
-                                      setYogyaGeoExtent,
-                                      setJakartaGoogleExtent,
-                                      setGeoExtent,
-                                      GEOCRS,
-                                      GOOGLECRS,
-                                      loadLayer,
-                                      loadStandardLayers,
-                                      populatemyDock,
-                                      combosToString,
-                                      getUiState,
-                                      setupScenario,
-                                      loadLayers,
-                                      canvasList)
+from safe_qgis.utilities_test import (
+    getQgisTestApp,
+    setCanvasCrs,
+    setPadangGeoExtent,
+    setBatemansBayGeoExtent,
+    setJakartaGeoExtent,
+    setYogyaGeoExtent,
+    setJakartaGoogleExtent,
+    setSmallExtentJakarta,
+    setGeoExtent,
+    GEOCRS,
+    GOOGLECRS,
+    loadLayer,
+    loadStandardLayers,
+    populatemyDock,
+    combosToString,
+    getUiState,
+    setupScenario,
+    loadLayers,
+    canvasList)
 
 from safe_qgis.dock import Dock
 from safe_qgis.styling import setRasterStyle
@@ -977,6 +979,32 @@ class DockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         assert format_int(68) in myResult, myMessage
+
+    def test_issue581(self):
+        """Test issue #581 in github - Humanize can produce IndexError : list
+        index out of range
+        """
+        # See https://github.com/AIFDR/inasafe/issues/581
+
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setSmallExtentJakarta()
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        myMessage = 'Result not as expected: %s' % myResult
+        print myResult
+        assert 'IndexError' not in myResult, myMessage
 
     def test_state(self):
         """Check if the save/restore state methods work. See also

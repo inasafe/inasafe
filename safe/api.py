@@ -48,7 +48,8 @@ from safe.common.exceptions import (InaSAFEError,
                                     BoundingBoxError,
                                     ReadLayerError,
                                     InaSAFEError,
-                                    GetDataError)
+                                    GetDataError,
+                                    ZeroImpactException)
 from safe.common.utilities import (VerificationError,
                                    temp_dir,
                                    unique_filename,

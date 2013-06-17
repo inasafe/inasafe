@@ -61,7 +61,8 @@ from safe_qgis.safe_interface import (
     temp_dir,
     ReadLayerError,
     get_postprocessors,
-    get_postprocessor_human_name)
+    get_postprocessor_human_name,
+    ZeroImpactException)
 
 from safe_interface import messaging as m
 from safe_interface import (
@@ -1325,6 +1326,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.runner.run()  # Run in same thread
             QtGui.qApp.restoreOverrideCursor()
             # .. todo :: Disconnect done slot/signal
+
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
@@ -1506,6 +1508,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns:
             None
         """
+        LOGGER.debug('Do aggregation')
         if self.runner.impactLayer() is None:
             # Done was emitted, but no impact layer was calculated
             myResult = self.runner.result()
@@ -1513,6 +1516,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'No impact layer was calculated. Error message: %1\n'
             ).arg(str(myResult)))
             myException = self.runner.lastException()
+            if isinstance(myException, ZeroImpactException):
+                myReport = m.Message()
+                myReport.add(LOGO_ELEMENT)
+                myReport.add(m.Heading(self.tr(
+                    'Analysis Results'), **INFO_STYLE))
+                myReport.add(m.Text(myException.message))
+                self.showStaticMessage(myReport)
+                self.hideBusy()
+                return
             if myException is not None:
                 myContext = self.tr(
                     'An exception occurred when calculating the results. %1'
@@ -1539,6 +1551,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.showErrorMessage(myMessage)
 
     def postProcess(self):
+        LOGGER.debug('Do postprocessing')
         self.postprocessorManager = PostprocessorManager(self.aggregator)
         self.postprocessorManager.functionParams = self.functionParams
         self.postprocessorManager.run()

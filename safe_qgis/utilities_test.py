@@ -248,6 +248,12 @@ def setYogyaGeoExtent():
     CANVAS.setExtent(myRect)
 
 
+def setSmallExtentJakarta():
+    """Zoom to an area occupied by both Jakarta layers in Geo"""
+    myRect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
+    CANVAS.setExtent(myRect)
+
+
 def setGeoExtent(theBoundingBox):
     """Zoom to an area specified given bounding box (list)"""
     myRect = QgsRectangle(*theBoundingBox)
