@@ -17,6 +17,7 @@ from safe.common.utilities import (
     create_classes,
     create_label)
 from safe.common.tables import Table, TableRow
+from safe.common.exceptions import ZeroImpactException
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -207,6 +208,16 @@ class FloodEvacuationFunction(FunctionProvider):
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
+
+        # check for zero impact
+        if numpy.nanmax(my_impact) == 0 == numpy.nanmin(my_impact):
+            table_body = [
+                question,
+                TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
+                          '%s' % format_int(evacuated)],
+                         header=True)]
+            my_message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(my_message)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
