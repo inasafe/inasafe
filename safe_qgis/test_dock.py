@@ -867,63 +867,6 @@ class DockTest(unittest.TestCase):
                      DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
 
-    def test_issue95(self):
-        """Test issue #95 in github -check crs of impact layer."""
-        # See https://github.com/AIFDR/inasafe/issues/95
-        # Push OK with the left mouse button
-        self.tearDown()
-        myButton = DOCK.pbnRunStop
-        # First part of scenario should have enabled run
-        myFileList = [join(HAZDATA,
-                           'Flood_Current_Depth_Jakarta_geographic.asc'),
-                      join(TESTDATA,
-                           'Population_Jakarta_geographic.asc')]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(
-            myFileList, theDataDirectory=None)
-
-        myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
-                     % myHazardLayerCount)
-        assert myHazardLayerCount == 1, myMessage
-
-        myMessage = ('Incorrect number of Exposure layers: expected 1 got %s'
-                     % myExposureLayerCount)
-        assert myExposureLayerCount == 1, myMessage
-        myMessage = 'Run button was not enabled'
-        assert myButton.isEnabled(), myMessage
-
-        # Second part of scenario - run disables when adding invalid layer
-        # and select it - run should be disabled
-        myFileList = ['issue71.tif']  # This layer has incorrect keywords
-        myClearFlag = False
-        _, _ = loadLayers(myFileList, myClearFlag)
-        # set exposure to : Population density (5kmx5km)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-        myDict = getUiState(DOCK)
-        myExpectedDict = {'Run Button Enabled': False,
-                          'Impact Function Id': '',
-                          'Impact Function Title': '',
-                          'Hazard': 'A flood in Jakarta like in 2007',
-                          'Exposure': 'Population density (5kmx5km)'}
-        myMessage = ('Run button was not disabled when exposure set to \n%s'
-                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % \
-                    (DOCK.cboExposure.currentText(), myDict, myExpectedDict,
-                     combosToString(DOCK))
-
-        assert myExpectedDict == myDict, myMessage
-
-        # Now select again a valid layer and the run button
-        # should be enabled
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-        myMessage = ('Run button was not enabled when exposure set to \n%s' %
-                     DOCK.cboExposure.currentText())
-        assert myButton.isEnabled(), myMessage
-
     def test_issue160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
