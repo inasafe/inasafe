@@ -120,169 +120,165 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
         myCount += 1
-
         myFeatureBox = myGeometry.boundingBox()
-        myIntersectedBox = myFeatureBox.intersect(myRasterBox)
+
         print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
         print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
         print 'Intersected Box: %s' % myIntersectedBox.asWktCoordinates()
-        if myIntersectedBox.isEmpty():
+
+        myOffsetX, myOffsetY, myCellsX, myCellsY = cellInfoForBBox(
+            myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
+
+        # If the poly does not intersect the raster just continue
+        if None in [myOffsetX, myOffsetY, myCellsX, myCellsY]:
             continue
 
+        # avoid access to cells outside of the raster (may occur because of
+        # rounding)
+        if (myOffsetX + myCellsX) > myColumns:
+            myOffsetX = myColumns - myOffsetX
+
+        if (myOffsetY + myCellsY) > myRows:
+            myCellsY = myRows - myOffsetY
+
+    mySum, myCount = statisticsFromMiddlePointTest(
+        myBand,
+        myGeometry,
+        myOffsetX,
+        myOffsetY,
+        myCellsX,
+        myCellsY,
+        myCellSizeX,
+        myCellSizeY,
+        myRasterBox)
+
+    if myCount <= 1:
+        # The cell resolution is probably larger than the polygon area.
+        # We switch to precise pixel - polygon intersection in this case
+        mySum, myCount = statisticsFromPreciseIntersection(
+            myBand,
+            myGeometry,
+            myOffsetX,
+            myOffsetY,
+            myCellsX,
+            myCellsY,
+            myCellSizeX,
+            myCellSizeY,
+            myRasterBox)
+
+    if (myCount == 0):
+      myMean = 0
+    else:
+      myMean = mySum / myCount
+
+    myFid = None  # Close
+
+
+def cellInfoForBBox(
+        theRasterBBox,
+        theFeatureBBox,
+        theCellSizeX,
+        theCellSizeY,):
+    """Calculate cell offset and distances for the intersecting bbox."""
+
+    #get intersecting bbox
+    myIntersectedBox = theFeatureBBox.intersect(theRasterBBox)
+    if myIntersectedBox.isEmpty():
+        return None, None, None, None
+
+    #get offset in pixels in x- and y- direction
+    myOffsetX = intersectBox.xMinimum() - rasterBBox.xMinimum()
+    myOffsetX = myOffsetX / theCellSizeX
+    myOffsetX = int(myOffsetX)
+    myOffsetY = rasterBBox.yMaximum() - intersectBox.yMaximum()
+    myOffsetY = myOffsetY / theCellSizeY
+    myOffsetY = int(myOffsetY)
+
+    myMaxColumn = intersectBox.xMaximum() - rasterBBox.xMinimum()
+    myMaxColumn = myMaxColumn / cellSizeX
+    myMaxColumn = int(myMaxColumn) + 1
+
+    myMaxRow = rasterBBox.yMaximum() - intersectBox.yMinimum()
+    myMaxRow = myMaxRow / cellSizeY
+    myMaxRow = int(myMaxRow) + 1
+
+    myCellsX = myMaxColumn - myOffsetX
+    myCellsY = myMaxRow - myOffsetY
+
+    return myOffsetX, myOffsetY, myCellsX, myCellsY
+
+
+def statisticsFromMiddlePointTest(
+        theBand,
+        theGeometry,
+        thePixelOffsetX,
+        thePixelOffsetY,
+        nCellsX,
+        nCellsY,
+        cellSizeX,
+        cellSizeY,
+        rasterBBox):
+
+    # float* scanLine = ( float * ) CPLMalloc( sizeof( float ) * nCellsX );
+    scanline = self.band.ReadAsArray()
+    cellCenterY = rasterBBox.yMaximum() - thePixelOffsetY * cellSizeY - cellSizeY / 2
+    myCount = 0
+    mySum = 0
+
+    polyGeos = theGeometry.asGeos()
+    if not polyGeos:
+        return
+
+    polyGeosPrepared = GEOSPrepare(theGeometry.asGeos())
+
+    if not polyGeosPrepared:
+        return
+
+    for i in range(0, nCellsY):
+        if (GDALRasterIO(
+                theBand,
+                GF_Read,
+                thePixelOffsetX,
+                thePixelOffsetY + i,
+                nCellsX,
+                1,
+                scanLine,
+                nCellsX,
+                1,
+                GDT_Float32,
+                0,
+                0) != CPLE_None):
+
+            cellCenterX = (
+                rasterBBox.xMinimum() +
+                thePixelOffsetX * cellSizeX +
+                cellSizeX / 2)
+
+    for i in range(0, nCellsX):
+        GEOSGeom_destroy(currentCellCenter)
+        cellCenterCoords = GEOSCoordSeq_create(1, 2)
+        GEOSCoordSeq_setX(cellCenterCoords, 0, cellCenterX)
+        currentCellCenter = GEOSGeom_createPoint(cellCenterCoords)
+
+        if GEOSPreparedContains(polyGeosPrepared, currentCellCenter):
+            if scanLine[j] != mInputNodataValue:  # don't consider nodata
+                # values
+                mySum += scanLine[j]
+                myCount += 1
+        cellCenterX += cellSizeX
+        cellCenterY -= cellSizeY
+
+    CPLFree(scanLine)
+    GEOSPreparedGeom_destroy(polyGeosPrepared)
 
 """
 
-    QgsRectangle featureRect = featureGeometry->boundingBox().intersect( &rasterBBox );
-    if ( featureRect.isEmpty() )
-    {
-      ++featureCounter;
-      continue;
-    }
-
-    int offsetX, offsetY, nCellsX, nCellsY;
-    if ( cellInfoForBBox( rasterBBox, featureRect, cellsizeX, cellsizeY, offsetX, offsetY, nCellsX, nCellsY ) != 0 )
-    {
-      ++featureCounter;
-      continue;
-    }
-
-    //avoid access to cells outside of the raster (may occur because of rounding)
-    if (( offsetX + nCellsX ) > nCellsXGDAL )
-    {
-      nCellsX = nCellsXGDAL - offsetX;
-    }
-    if (( offsetY + nCellsY ) > nCellsYGDAL )
-    {
-      nCellsY = nCellsYGDAL - offsetY;
-    }
-
-    statisticsFromMiddlePointTest( rasterBand, featureGeometry, offsetX, offsetY, nCellsX, nCellsY, cellsizeX, cellsizeY,
-                                   rasterBBox, sum, count );
-
-    if ( count <= 1 )
-    {
-      //the cell resolution is probably larger than the polygon area. We switch to precise pixel - polygon intersection in this case
-      statisticsFromPreciseIntersection( rasterBand, featureGeometry, offsetX, offsetY, nCellsX, nCellsY, cellsizeX, cellsizeY,
-                                         rasterBBox, sum, count );
-    }
 
 
-    if ( count == 0 )
-    {
-      mean = 0;
-    }
-    else
-    {
-      mean = sum / count;
-    }
 
-    //write the statistics value to the vector data provider
-    QgsChangedAttributesMap changeMap;
-    QgsAttributeMap changeAttributeMap;
-    changeAttributeMap.insert( countIndex, QVariant( count ) );
-    changeAttributeMap.insert( sumIndex, QVariant( sum ) );
-    changeAttributeMap.insert( meanIndex, QVariant( mean ) );
-    changeMap.insert( f.id(), changeAttributeMap );
-    vectorProvider->changeAttributeValues( changeMap );
 
-    ++featureCounter;
-  }
 
-  if ( p )
-  {
-    p->setValue( featureCount );
-  }
 
-  GDALClose( inputDataset );
-
-  if ( p && p->wasCanceled() )
-  {
-    return 9;
-  }
-
-  return 0;
-}
-
-int QgsZonalStatistics::cellInfoForBBox( const QgsRectangle& rasterBBox, const QgsRectangle& featureBBox, double cellSizeX, double cellSizeY,
-    int& offsetX, int& offsetY, int& nCellsX, int& nCellsY ) const
-{
-  //get intersecting bbox
-  QgsRectangle intersectBox = rasterBBox.intersect( &featureBBox );
-  if ( intersectBox.isEmpty() )
-  {
-    nCellsX = 0; nCellsY = 0; offsetX = 0; offsetY = 0;
-    return 0;
-  }
-
-  //get offset in pixels in x- and y- direction
-  offsetX = ( int )(( intersectBox.xMinimum() - rasterBBox.xMinimum() ) / cellSizeX );
-  offsetY = ( int )(( rasterBBox.yMaximum() - intersectBox.yMaximum() ) / cellSizeY );
-
-  int maxColumn = ( int )(( intersectBox.xMaximum() - rasterBBox.xMinimum() ) / cellSizeX ) + 1;
-  int maxRow = ( int )(( rasterBBox.yMaximum() - intersectBox.yMinimum() ) / cellSizeY ) + 1;
-
-  nCellsX = maxColumn - offsetX;
-  nCellsY = maxRow - offsetY;
-
-  return 0;
-}
-
-void QgsZonalStatistics::statisticsFromMiddlePointTest( void* band, QgsGeometry* poly, int pixelOffsetX,
-    int pixelOffsetY, int nCellsX, int nCellsY, double cellSizeX, double cellSizeY, const QgsRectangle& rasterBBox, double& sum, double& count )
-{
-  double cellCenterX, cellCenterY;
-
-  float* scanLine = ( float * ) CPLMalloc( sizeof( float ) * nCellsX );
-  cellCenterY = rasterBBox.yMaximum() - pixelOffsetY * cellSizeY - cellSizeY / 2;
-  count = 0;
-  sum = 0;
-
-  GEOSGeometry* polyGeos = poly->asGeos();
-  if ( !polyGeos )
-  {
-    return;
-  }
-
-  const GEOSPreparedGeometry* polyGeosPrepared = GEOSPrepare( poly->asGeos() );
-  if ( !polyGeosPrepared )
-  {
-    return;
-  }
-
-  GEOSCoordSequence* cellCenterCoords = 0;
-  GEOSGeometry* currentCellCenter = 0;
-
-  for ( int i = 0; i < nCellsY; ++i )
-  {
-    if ( GDALRasterIO( band, GF_Read, pixelOffsetX, pixelOffsetY + i, nCellsX, 1, scanLine, nCellsX, 1, GDT_Float32, 0, 0 )
-         != CPLE_None )
-    {
-      continue;
-    }
-    cellCenterX = rasterBBox.xMinimum() + pixelOffsetX * cellSizeX + cellSizeX / 2;
-    for ( int j = 0; j < nCellsX; ++j )
-    {
-      GEOSGeom_destroy( currentCellCenter );
-      cellCenterCoords = GEOSCoordSeq_create( 1, 2 );
-      GEOSCoordSeq_setX( cellCenterCoords, 0, cellCenterX );
-      GEOSCoordSeq_setY( cellCenterCoords, 0, cellCenterY );
-      currentCellCenter = GEOSGeom_createPoint( cellCenterCoords );
-
-      if ( GEOSPreparedContains( polyGeosPrepared, currentCellCenter ) )
-      {
-        if ( scanLine[j] != mInputNodataValue ) //don't consider nodata values
-        {
-          sum += scanLine[j];
-          ++count;
-        }
-      }
-      cellCenterX += cellSizeX;
-    }
-    cellCenterY -= cellSizeY;
-  }
-  CPLFree( scanLine );
-  GEOSPreparedGeom_destroy( polyGeosPrepared );
-}
 
 void QgsZonalStatistics::statisticsFromPreciseIntersection( void* band, QgsGeometry* poly, int pixelOffsetX,
     int pixelOffsetY, int nCellsX, int nCellsY, double cellSizeX, double cellSizeY, const QgsRectangle& rasterBBox, double& sum, double& count )
