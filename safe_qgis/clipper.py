@@ -258,6 +258,7 @@ def _clipVectorLayer(theLayer,
     # Retrieve every feature with its geometry and attributes
     myFeature = QgsFeature()
     myCount = 0
+    myHasMultipart = False
 
     if theExplodeAttribute is not None:
         theExplodeAttributeIndex = myProvider.fieldNameIndex(
@@ -287,6 +288,7 @@ def _clipVectorLayer(theLayer,
             # There are multiple parts and we want to show it in the
             # theExplodeAttribute
             if myPartIndex > 0 and theExplodeAttribute is not None:
+                myHasMultipart = True
                 myPartAttr = QVariant(
                     '%s #%s' % (myAttrs[theExplodeAttributeIndex].toString(),
                                 myPartIndex))
@@ -308,6 +310,9 @@ def _clipVectorLayer(theLayer,
         raise NoFeaturesInExtentError(myMessage)
 
     myKeywordIO = KeywordIO()
+    if theExtraKeywords is None:
+        theExtraKeywords = {}
+    theExtraKeywords['HAD_MULTIPART_POLY'] = myHasMultipart
     myKeywordIO.copyKeywords(
         theLayer, myFilename, theExtraKeywords=theExtraKeywords)
     myBaseName = '%s clipped' % theLayer.name()
