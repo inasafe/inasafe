@@ -31,7 +31,15 @@ sys.path.append(pardir)
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
-from safe_interface import (TESTDATA, BOUNDDATA)
+
+from qgis.core import QgsVectorLayer
+
+from safe_interface import (
+    TESTDATA,
+    BOUNDDATA,
+    Raster,
+    Vector,
+    safe_read_layer)
 
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       setCanvasCrs,
@@ -239,21 +247,32 @@ class AggregatorTest(unittest.TestCase):
                          DOCK.aggregator.preprocessedFeatureCount,
                          myMessage)
 
-    def test_aggregate_raster_impact(self):
-        myImpactLayer = QgsVectorLayer(
-            TESTDATA+'/aggregation_test_impact.tif',
-            'test raster impact',
-            'ogr')
+    def _aggregate(self, myImpactLayer):
         myAggregationLayer = QgsVectorLayer(
-            TESTDATA+'/kabupaten_jakarta_singlepart.shp',
+            TESTDATA + '/kabupaten_jakarta_singlepart.shp',
             'test aggregation',
             'ogr')
         myAggregator = Aggregator(None, myAggregationLayer)
         # setting up
         myAggregator.isValid = True
         myAggregator.layer = myAggregationLayer
+        myAggregator.safeLayer = safe_read_layer(
+            str(myAggregator.layer.source()))
         myAggregator.aoiMode = False
         myAggregator.aggregate(myImpactLayer)
+
+    def test_aggregate_raster_impact(self):
+        myImpactLayer = Raster(
+            data=TESTDATA+'/aggregation_test_impact.tif',
+            name='test raster impact')
+        self._aggregate(myImpactLayer)
+
+    def test_aggregate_vector_impact(self):
+        myImpactLayer = Vector(
+            data=TESTDATA+'/aggregation_test_impact.shp',
+            name='test raster impact')
+
+        self._aggregate(myImpactLayer)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest, 'test')

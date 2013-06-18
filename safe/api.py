@@ -22,6 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # pylint: disable=W0611
 from safe.storage.vector import Vector
+from safe.storage.raster import Raster
 from safe.defaults import DEFAULTS
 from safe.storage.utilities import (bbox_intersection,
                                     buffered_bounding_box,
