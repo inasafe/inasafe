@@ -97,6 +97,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     # Get first band.
     myBand = myFid.GetRasterBand(1)
     myNoData = myBand.GetNoDataValue()
+    print 'No data %s' % myNoData
     myCellSizeX = myGeoTransform[1]
     if myCellSizeX < 0:
         myCellSizeX = -myCellSizeX
@@ -120,6 +121,10 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     myFeature = QgsFeature()
     myCount = 0
     while myProvider.nextFeature(myFeature):
+        # Next line is to resolve a wierd issue on OSX where
+        # geometry comes back as none all the time when testing
+        # Simply accessing the attribute map seems to fix it
+        # 9 times out of 10
         print myFeature.attributeMap()
         myGeometry = myFeature.geometry()
         myCount += 1
@@ -154,6 +159,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
             myCellSizeY,
             myRasterBox,
             myNoData)
+        print mySum, myCount
 
         if myCount <= 1:
             # The cell resolution is probably larger than the polygon area.
@@ -270,6 +276,7 @@ def statisticsFromMiddlePointTest(
         # Move down one row
         myCellCenterX -= theCellSizeY
 
+    return mySum, myCount
 
 """
 
