@@ -18,10 +18,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+import struct
+
 from osgeo import gdal
 
 from PyQt4.QtCore import QCoreApplication
-from qgis.core import QGis, QgsRectangle, QgsFeature
+from qgis.core import QGis, QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
@@ -118,13 +120,13 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     myFeature = QgsFeature()
     myCount = 0
     while myProvider.nextFeature(myFeature):
+        print myFeature.attributeMap()
         myGeometry = myFeature.geometry()
         myCount += 1
         myFeatureBox = myGeometry.boundingBox()
 
         print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
         print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
-        print 'Intersected Box: %s' % myIntersectedBox.asWktCoordinates()
 
         myOffsetX, myOffsetY, myCellsX, myCellsY = cellInfoForBBox(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
@@ -141,21 +143,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         if (myOffsetY + myCellsY) > myRows:
             myCellsY = myRows - myOffsetY
 
-    mySum, myCount = statisticsFromMiddlePointTest(
-        myBand,
-        myGeometry,
-        myOffsetX,
-        myOffsetY,
-        myCellsX,
-        myCellsY,
-        myCellSizeX,
-        myCellSizeY,
-        myRasterBox)
-
-    if myCount <= 1:
-        # The cell resolution is probably larger than the polygon area.
-        # We switch to precise pixel - polygon intersection in this case
-        mySum, myCount = statisticsFromPreciseIntersection(
+        mySum, myCount = statisticsFromMiddlePointTest(
             myBand,
             myGeometry,
             myOffsetX,
@@ -164,42 +152,59 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
             myCellsY,
             myCellSizeX,
             myCellSizeY,
-            myRasterBox)
+            myRasterBox,
+            myNoData)
 
-    if (myCount == 0):
-      myMean = 0
-    else:
-      myMean = mySum / myCount
+        if myCount <= 1:
+            # The cell resolution is probably larger than the polygon area.
+            # We switch to precise pixel - polygon intersection in this case
+            mySum, myCount = statisticsFromPreciseIntersection(
+                myBand,
+                myGeometry,
+                myOffsetX,
+                myOffsetY,
+                myCellsX,
+                myCellsY,
+                myCellSizeX,
+                myCellSizeY,
+                myRasterBox,
+                myNoData)
+
+        if myCount == 0:
+            myMean = 0
+        else:
+            myMean = mySum / myCount
 
     myFid = None  # Close
 
 
 def cellInfoForBBox(
-        theRasterBBox,
-        theFeatureBBox,
+        theRasterBox,
+        theFeatureBox,
         theCellSizeX,
         theCellSizeY,):
     """Calculate cell offset and distances for the intersecting bbox."""
 
     #get intersecting bbox
-    myIntersectedBox = theFeatureBBox.intersect(theRasterBBox)
+    myIntersectedBox = theFeatureBox.intersect(theRasterBox)
+    print 'Intersected Box: %s' % myIntersectedBox.asWktCoordinates()
     if myIntersectedBox.isEmpty():
         return None, None, None, None
 
     #get offset in pixels in x- and y- direction
-    myOffsetX = intersectBox.xMinimum() - rasterBBox.xMinimum()
+    myOffsetX = myIntersectedBox.xMinimum() - theRasterBox.xMinimum()
     myOffsetX = myOffsetX / theCellSizeX
     myOffsetX = int(myOffsetX)
-    myOffsetY = rasterBBox.yMaximum() - intersectBox.yMaximum()
+    myOffsetY = theRasterBox.yMaximum() - myIntersectedBox.yMaximum()
     myOffsetY = myOffsetY / theCellSizeY
     myOffsetY = int(myOffsetY)
 
-    myMaxColumn = intersectBox.xMaximum() - rasterBBox.xMinimum()
-    myMaxColumn = myMaxColumn / cellSizeX
+    myMaxColumn = myIntersectedBox.xMaximum() - theRasterBox.xMinimum()
+    myMaxColumn = myMaxColumn / theCellSizeX
     myMaxColumn = int(myMaxColumn) + 1
 
-    myMaxRow = rasterBBox.yMaximum() - intersectBox.yMinimum()
-    myMaxRow = myMaxRow / cellSizeY
+    myMaxRow = theRasterBox.yMaximum() - myIntersectedBox.yMinimum()
+    myMaxRow = myMaxRow / theCellSizeY
     myMaxRow = int(myMaxRow) + 1
 
     myCellsX = myMaxColumn - myOffsetX
@@ -213,63 +218,58 @@ def statisticsFromMiddlePointTest(
         theGeometry,
         thePixelOffsetX,
         thePixelOffsetY,
-        nCellsX,
-        nCellsY,
-        cellSizeX,
-        cellSizeY,
-        rasterBBox):
+        theCellsX,
+        theCellsY,
+        theCellSizeX,
+        theCellSizeY,
+        theRasterBox,
+        theNoData):
 
-    # float* scanLine = ( float * ) CPLMalloc( sizeof( float ) * nCellsX );
-    scanline = self.band.ReadAsArray()
-    cellCenterY = rasterBBox.yMaximum() - thePixelOffsetY * cellSizeY - cellSizeY / 2
+    myCellCenterX = (
+        theRasterBox.yMaximum() - thePixelOffsetY * theCellSizeY -
+        theCellSizeY / 2)
     myCount = 0
     mySum = 0
+    myBufferXSize = theCellsX
+    myBufferYSize = 1  # read in a single row at a time
+    myCellsToReadX = theCellsX
+    myCellsToReadY = 1  # read in a single row at a time
 
-    polyGeos = theGeometry.asGeos()
-    if not polyGeos:
-        return
+    for i in range(0, theCellsY):
+        myScanline = theBand.ReadRaster(
+            thePixelOffsetX,
+            thePixelOffsetY + i,
+            myCellsToReadX,
+            myCellsToReadY,
+            myBufferXSize,
+            myBufferYSize,
+            gdal.GDT_Float32)
+        # Note that the returned scanline is of type string, and contains
+        # xsize*4 bytes of raw binary floating point data. This can be
+        # converted to Python values using the struct module from the standard
+        # library:
+        myValues = struct.unpack('f' * myCellsToReadX, myScanline)
+        print myValues
+        if myValues is None:
+            continue
 
-    polyGeosPrepared = GEOSPrepare(theGeometry.asGeos())
+        myCellCenterY = (
+            theRasterBox.xMinimum() +
+            thePixelOffsetX * theCellSizeX +
+            theCellSizeX / 2)
 
-    if not polyGeosPrepared:
-        return
+        for j in range(0, theCellsX):
 
-    for i in range(0, nCellsY):
-        if (GDALRasterIO(
-                theBand,
-                GF_Read,
-                thePixelOffsetX,
-                thePixelOffsetY + i,
-                nCellsX,
-                1,
-                scanLine,
-                nCellsX,
-                1,
-                GDT_Float32,
-                0,
-                0) != CPLE_None):
+            myPoint = QgsPoint(myCellCenterY, myCellCenterX)
+            if theGeometry.contains(myPoint):
+                if myValues[j] != theNoData:
+                    mySum += myValues[j]
+                    myCount += 1
 
-            cellCenterX = (
-                rasterBBox.xMinimum() +
-                thePixelOffsetX * cellSizeX +
-                cellSizeX / 2)
+            myCellCenterY += theCellSizeX
+        # Move down one row
+        myCellCenterX -= theCellSizeY
 
-    for i in range(0, nCellsX):
-        GEOSGeom_destroy(currentCellCenter)
-        cellCenterCoords = GEOSCoordSeq_create(1, 2)
-        GEOSCoordSeq_setX(cellCenterCoords, 0, cellCenterX)
-        currentCellCenter = GEOSGeom_createPoint(cellCenterCoords)
-
-        if GEOSPreparedContains(polyGeosPrepared, currentCellCenter):
-            if scanLine[j] != mInputNodataValue:  # don't consider nodata
-                # values
-                mySum += scanLine[j]
-                myCount += 1
-        cellCenterX += cellSizeX
-        cellCenterY -= cellSizeY
-
-    CPLFree(scanLine)
-    GEOSPreparedGeom_destroy(polyGeosPrepared)
 
 """
 
