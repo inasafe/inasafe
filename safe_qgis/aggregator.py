@@ -106,8 +106,6 @@ class Aggregator(QtCore.QObject):
         self.attributeTitle = None
 
         self.iface = iface
-        # An impact_calculator instance
-        self.runner = None
         self.keywordIO = KeywordIO()
         self.defaults = getDefaults()
         self.errorMessage = None
@@ -246,7 +244,7 @@ class Aggregator(QtCore.QObject):
                     self.exposureLayer = self._preparePolygonLayer(
                         self.exposureLayer)
 
-    def aggregate(self):
+    def aggregate(self, theSafeImpactLayer):
         """Do any requested aggregation post processing.
 
         Performs Aggregation postprocessing step by
@@ -273,9 +271,7 @@ class Aggregator(QtCore.QObject):
                 ' by %1').arg(self.layer.name())))
         self._sendMessage(myMessage)
 
-        myImpactLayer = self.runner.impactLayer()
-
-        myQGISImpactLayer = safeToQGISLayer(myImpactLayer)
+        myQGISImpactLayer = safeToQGISLayer(theSafeImpactLayer)
         if not myQGISImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             # noinspection PyExceptionInherit
@@ -316,7 +312,7 @@ class Aggregator(QtCore.QObject):
 
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
-            self._aggregateVectorImpact(myQGISImpactLayer)
+            self._aggregateVectorImpact(myQGISImpactLayer, theSafeImpactLayer)
         elif myQGISImpactLayer.type() == QgsMapLayer.RasterLayer:
             self._aggregateRasterImpact(myQGISImpactLayer)
         else:
@@ -375,7 +371,7 @@ class Aggregator(QtCore.QObject):
                 self.layer.setRendererV2(myRenderer)
                 self.layer.saveDefaultStyle()
 
-    def _aggregateVectorImpact(self, myQGISImpactLayer):
+    def _aggregateVectorImpact(self, theQGISImpactLayer, theSafeImpactLayer):
         """Performs Aggregation postprocessing step on vector impact layers.
 
         Args:
@@ -390,26 +386,26 @@ class Aggregator(QtCore.QObject):
         myAggrFieldIndex = None
 
         try:
-            self.targetField = self.keywordIO.readKeywords(myQGISImpactLayer,
+            self.targetField = self.keywordIO.readKeywords(theQGISImpactLayer,
                                                            'target_field')
         except KeywordNotFoundError:
             myMessage = m.Paragraph(
                 self.tr(
                     'No "target_field" keyword found in the impact layer %1 '
                     'keywords. The impact function should define this.').arg(
-                        myQGISImpactLayer.name()))
+                        theQGISImpactLayer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
             return
-        myImpactProvider = myQGISImpactLayer.dataProvider()
-        myTargetFieldIndex = myQGISImpactLayer.fieldNameIndex(self.targetField)
+        myImpactProvider = theQGISImpactLayer.dataProvider()
+        myTargetFieldIndex = theQGISImpactLayer.fieldNameIndex(self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = m.Paragraph(
                 self.tr('No attribute "%1" was found in the attribute table '
                         'for layer "%2". The impact function must define this'
                         ' attribute for postprocessing to work.').arg(
-                            self.targetField, myQGISImpactLayer.name()))
+                            self.targetField, theQGISImpactLayer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
             return
@@ -446,20 +442,19 @@ class Aggregator(QtCore.QObject):
 
         self.layer.startEditing()
 
-        mySafeImpactLayer = self.runner.impactLayer()
-        myImpactGeoms = mySafeImpactLayer.get_geometry()
-        myImpactValues = mySafeImpactLayer.get_data()
+        myImpactGeoms = theSafeImpactLayer.get_geometry()
+        myImpactValues = theSafeImpactLayer.get_data()
 
         if not self.aoiMode:
             myAggregtionUnits = self.safeLayer.get_geometry()
 
-            if (mySafeImpactLayer.is_point_data or
-                    mySafeImpactLayer.is_polygon_data):
+            if (theSafeImpactLayer.is_point_data or
+                    theSafeImpactLayer.is_polygon_data):
                 LOGGER.debug('Doing point in polygon aggregation')
 
                 myRemainingValues = myImpactValues
 
-                if mySafeImpactLayer.is_polygon_data:
+                if theSafeImpactLayer.is_polygon_data:
                     # Using centroids to do polygon in polygon aggregation
                     # this is always ok because
                     # deintersect() took care of splitting
@@ -577,7 +572,7 @@ class Aggregator(QtCore.QObject):
                     # LOGGER.debug('Inside: ' + str(len(inside)))
                     # LOGGER.debug('Outside: ' + str(len(outside)))
 
-            elif mySafeImpactLayer.is_line_data:
+            elif theSafeImpactLayer.is_line_data:
                 LOGGER.debug('Doing line in polygon aggregation')
 
             else:
@@ -585,7 +580,7 @@ class Aggregator(QtCore.QObject):
                     self.tr(
                         'Aggregation on vector impact layers other than points'
                         ' or polygons not implemented yet not implemented yet.'
-                        ' Called on %1').arg(myQGISImpactLayer.name()))
+                        ' Called on %1').arg(theQGISImpactLayer.name()))
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.errorMessage = myMessage
                 self.layer.commitChanges()

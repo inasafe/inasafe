@@ -1554,8 +1554,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         try:
-            self.aggregator.runner = self.runner
-            self.aggregator.aggregate()
+            self.aggregator.aggregate(self.runner.impactLayer())
         except Exception, e:  # pylint: disable=W0703
             e.args = (e.args[0] + '\nAggregation error occurred',)
             raise
