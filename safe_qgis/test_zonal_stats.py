@@ -38,6 +38,11 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 class ZonalStatsTest(unittest.TestCase):
     """Tests for zonal related functions.
+
+        # Note there is a wierd issue on OSX where
+        # geometry comes back as none all the time when testing
+        # running the test again will randomly succeed in fetching geometries
+        # properly.
     """
     def setUp(self):
         os.environ['LANG'] = 'en'
@@ -54,4 +59,29 @@ class ZonalStatsTest(unittest.TestCase):
         myResult = calculateZonalStats(
             theRasterLayer=myRasterLayer,
             thePolygonLayer=myVectorLayer)
-        assert myResult
+        myExpectedResult = {
+            0L: {'count': 4, 'sum': 2, 'mean': 0.5},  # BR polygon
+            1L: {'count': 0, 'sum': 0, 'mean': 0},
+            2L: {'count': 0, 'sum': 0, 'mean': 0},
+            3L: {'count': 0, 'sum': 0, 'mean': 0},
+            4L: {'count': 0, 'sum': 0, 'mean': 0}}
+        self.maxDiff = None
+        self.assertDictEqual(myExpectedResult, myResult)
+
+    def test_zonal_with_exact_cell_boundaries(self):
+        """Test that zonal stats returns the expected output."""
+        myRasterLayer, _ = loadLayer(os.path.join(
+            UNITDATA, 'other', 'tenbytenraster.asc'))
+        myVectorLayer, _ = loadLayer(os.path.join(
+            UNITDATA, 'other', 'ten_by_ten_raster_as_polys.shp'))
+        myResult = calculateZonalStats(
+            theRasterLayer=myRasterLayer,
+            thePolygonLayer=myVectorLayer)
+        myExpectedResult = {
+            0L: {'count': 4, 'sum': 2, 'mean': 0.5},  # BR polygon
+            1L: {'count': 0, 'sum': 0, 'mean': 0},
+            2L: {'count': 0, 'sum': 0, 'mean': 0},
+            3L: {'count': 0, 'sum': 0, 'mean': 0},
+            4L: {'count': 0, 'sum': 0, 'mean': 0}}
+        self.maxDiff = None
+        self.assertDictEqual(myExpectedResult, myResult)

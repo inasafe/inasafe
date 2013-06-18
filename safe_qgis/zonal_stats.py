@@ -88,6 +88,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a raster layer in order to compute statistics.'
         ))
+    myResults = {}
     myRasterSource = theRasterLayer.source()
     myFid = gdal.Open(str(myRasterSource), gdal.GA_ReadOnly)
     myGeoTransform = myFid.GetGeoTransform()
@@ -97,6 +98,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     # Get first band.
     myBand = myFid.GetRasterBand(1)
     myNoData = myBand.GetNoDataValue()
+    print 'No data %s' % myNoData
     myCellSizeX = myGeoTransform[1]
     if myCellSizeX < 0:
         myCellSizeX = -myCellSizeX
@@ -120,7 +122,6 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     myFeature = QgsFeature()
     myCount = 0
     while myProvider.nextFeature(myFeature):
-        print myFeature.attributeMap()
         myGeometry = myFeature.geometry()
         myCount += 1
         myFeatureBox = myGeometry.boundingBox()
@@ -154,6 +155,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
             myCellSizeY,
             myRasterBox,
             myNoData)
+        print mySum, myCount
 
         if myCount <= 1:
             # The cell resolution is probably larger than the polygon area.
@@ -169,13 +171,20 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
                 myCellSizeY,
                 myRasterBox,
                 myNoData)
+            print mySum, myCount
 
         if myCount == 0:
             myMean = 0
         else:
             myMean = mySum / myCount
 
+        myResults[myFeature.id()] = {
+            'sum': mySum,
+            'count': myCount,
+            'mean': myMean}
+
     myFid = None  # Close
+    return myResults
 
 
 def cellInfoForBBox(
@@ -210,6 +219,9 @@ def cellInfoForBBox(
     myCellsX = myMaxColumn - myOffsetX
     myCellsY = myMaxRow - myOffsetY
 
+    print ('Reading Pixel box: W: %s H: %s Offset Left: %s Offset Top: %s' % (
+        myCellsX, myCellsY, myOffsetX, myOffsetY
+    ))
     return myOffsetX, myOffsetY, myCellsX, myCellsY
 
 
@@ -249,7 +261,7 @@ def statisticsFromMiddlePointTest(
         # converted to Python values using the struct module from the standard
         # library:
         myValues = struct.unpack('f' * myCellsToReadX, myScanline)
-        print myValues
+        #print myValues
         if myValues is None:
             continue
 
@@ -270,57 +282,76 @@ def statisticsFromMiddlePointTest(
         # Move down one row
         myCellCenterX -= theCellSizeY
 
-
-"""
-
+    return mySum, myCount
 
 
+def statisticsFromPreciseIntersection(
+        theBand,
+        theGeometry,
+        thePixelOffsetX,
+        thePixelOffsetY,
+        theCellsX,
+        theCellsY,
+        theCellSizeX,
+        theCellSizeY,
+        theRasterBox,
+        theNoData):
+    mySum = 0
+    myCount = 0
+    myCurrentY = (
+        theRasterBox.yMaximum() - thePixelOffsetY *
+        theCellSizeY - theCellSizeY / 2)
 
+    myHalfCellSizeX = theCellSizeX / 2.0
+    myHalfCellsSizeY = theCellSizeY / 2.0
+    myPixelArea = theCellSizeX * theCellSizeY
+    myCellsToReadX = theCellsX
+    myCellsToReadY = 1  # read in a single row at a time
+    myBufferXSize = 1
+    myBufferYSize = 1
 
+    for row in range(0, theCellsY):
+        myCurrentX = (
+            theRasterBox.xMinimum() + theCellSizeX / 2.0 +
+            thePixelOffsetX * theCellSizeX)
+        for col in range(0, theCellsX):
+            # Read a single pixel
+            myScanline = theBand.ReadRaster(
+                thePixelOffsetX + col,
+                thePixelOffsetY + row,
+                myCellsToReadX,
+                myCellsToReadY,
+                myBufferXSize,
+                myBufferYSize,
+                gdal.GDT_Float32)
+            # Note that the returned scanline is of type string, and contains
+            # xsize*4 bytes of raw binary floating point data. This can be
+            # converted to Python values using the struct module from the
+            # standard library:
+            print myScanline
+            if myScanline != '':
+                myValue = struct.unpack('f', myScanline)
+                continue
 
-
-
-void QgsZonalStatistics::statisticsFromPreciseIntersection( void* band, QgsGeometry* poly, int pixelOffsetX,
-    int pixelOffsetY, int nCellsX, int nCellsY, double cellSizeX, double cellSizeY, const QgsRectangle& rasterBBox, double& sum, double& count )
-{
-  sum = 0;
-  count = 0;
-  double currentY = rasterBBox.yMaximum() - pixelOffsetY * cellSizeY - cellSizeY / 2;
-  float* pixelData = ( float * ) CPLMalloc( sizeof( float ) );
-  QgsGeometry* pixelRectGeometry = 0;
-
-  double hCellSizeX = cellSizeX / 2.0;
-  double hCellSizeY = cellSizeY / 2.0;
-  double pixelArea = cellSizeX * cellSizeY;
-  double weight = 0;
-
-  for ( int row = 0; row < nCellsY; ++row )
-  {
-    double currentX = rasterBBox.xMinimum() + cellSizeX / 2.0 + pixelOffsetX * cellSizeX;
-    for ( int col = 0; col < nCellsX; ++col )
-    {
-      GDALRasterIO( band, GF_Read, pixelOffsetX + col, pixelOffsetY + row, nCellsX, 1, pixelData, 1, 1, GDT_Float32, 0, 0 );
-      pixelRectGeometry = QgsGeometry::fromRect( QgsRectangle( currentX - hCellSizeX, currentY - hCellSizeY, currentX + hCellSizeX, currentY + hCellSizeY ) );
-      if ( pixelRectGeometry )
-      {
-        //intersection
-        QgsGeometry *intersectGeometry = pixelRectGeometry->intersection( poly );
-        if ( intersectGeometry )
-        {
-          double intersectionArea = intersectGeometry->area();
-          if ( intersectionArea >= 0.0 )
-          {
-            weight = intersectionArea / pixelArea;
-            count += weight;
-            sum += *pixelData * weight;
-          }
-          delete intersectGeometry;
-        }
-      }
-      currentX += cellSizeX;
-    }
-    currentY -= cellSizeY;
-  }
-  CPLFree( pixelData );
-}
-"""
+            if myValue == theNoData:
+                continue
+            # noinspection PyCallByClass,PyTypeChecker
+            myPixelGeometry = QgsGeometry.fromRect(
+                QgsRectangle(
+                    myCurrentX - myHalfCellSizeX,
+                    myCurrentY - myHalfCellsSizeY,
+                    myCurrentX + myHalfCellSizeX,
+                    myCurrentY + myHalfCellsSizeY))
+            if myPixelGeometry:
+                #intersection
+                myIntersectionGeometry = myPixelGeometry.intersection(
+                    theGeometry)
+                if myIntersectionGeometry:
+                    intersectionArea = myIntersectionGeometry.area()
+                    if intersectionArea >= 0.0:
+                        myWeight = intersectionArea / myPixelArea
+                        myCount += myWeight
+                        mySum += myValue * myWeight
+            myCurrentX += theCellSizeY
+        myCurrentY -= theCellsY
+    return mySum, myCount
