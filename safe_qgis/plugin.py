@@ -329,6 +329,37 @@ class Plugin:
             self.tr('InaSAFE'),
             self.actionImportDlg)
 
+        #----------------------------------
+        # Create action for batch runner
+        #-----------------------------------
+        self.actionScriptDialog = QAction(
+            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
+            self.tr('InaSAFE GUI Scripting'),
+            self.iface.mainWindow())
+
+        myMessage = self.tr('InaSAFE GUI Batch Tools')
+        self.actionScriptDialog.setStatusTip(myMessage)
+        self.actionScriptDialog.setWhatsThis(myMessage)
+        self.actionScriptDialog.triggered.connect(self.showScriptDialog)
+
+        self.iface.addToolBarIcon(self.actionScriptDialog)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+                                   self.actionScriptDialog)
+
+        ## FIXME: need to change the image file....
+        self.actionSaveScenario = QAction(
+            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
+            self.tr('Save current scenario'),
+            self.iface.mainWindow())
+
+        myMessage = self.tr('Save current scenario to text file')
+        self.actionSaveScenario.setStatusTip(myMessage)
+        self.actionSaveScenario.setWhatsThis(myMessage)
+        self.actionSaveScenario.triggered.connect(self.saveScenario)
+
+        self.iface.addToolBarIcon(self.actionSaveScenario)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+                                   self.actionSaveScenario)
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
@@ -604,3 +635,23 @@ class Plugin:
     def keyActionF7(self):
         '''Executed when user press F7'''
         self.showConverter()
+
+    def showScriptDialog(self):
+        """Show Script Dialog"""
+        from safe_qgis.script_dialog import ScriptDialog
+
+        myDialog = self.iface.mainWindow().findChild(ScriptDialog)
+        if myDialog is None:
+            myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
+
+        myDialog.show()
+
+    def saveScenario(self):
+        """Save current scenario to text file"""
+        from safe_qgis.script_dialog import ScriptDialog
+
+        myDialog = self.iface.mainWindow().findChild(ScriptDialog)
+        if myDialog is None:
+            myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
+
+        myDialog.saveCurrentScenario()
