@@ -290,27 +290,30 @@ def statisticsFromPreciseIntersection(
         theCellSizeY,
         theRasterBox,
         theNoData):
-    sum = 0
-    count = 0
-    currentY = rasterBBox.yMaximum() - pixelOffsetY * cellSizeY - cellSizeY / 2
-    pixelRectGeometry = 0
+    mySum = 0
+    myCount = 0
+    myCurrentY = (
+        theRasterBox.yMaximum() - thePixelOffsetY *
+        theCellSizeY - theCellSizeY / 2)
 
-    hCellSizeX = cellSizeX / 2.0
-    hCellSizeY = cellSizeY / 2.0
-    pixelArea = cellSizeX * cellSizeY
-    weight = 0
+    myHalfCellSizeX = theCellSizeX / 2.0
+    myHalfCellsSizeY = theCellSizeY / 2.0
+    myPixelArea = theCellSizeX * theCellSizeY
+    myCellsToReadX = theCellsX
+    myCellsToReadY = 1  # read in a single row at a time
+    myBufferXSize = 1
+    myBufferYSize = 1
+    myWeight = 0
 
-    for row in range(0, nCellsY):
-        currentX = (
-            rasterBBox.xMinimum() + cellSizeX / 2.0 +
-            pixelOffsetX * cellSizeX)
-        for col in range(0, nCellsX):
-            GDALRasterIO(
-                band, GF_Read, pixelOffsetX + col, pixelOffsetY + row,
-                nCellsX, 1, pixelData, 1, 1, GDT_Float32, 0, 0)
+    for row in range(0, theCellsY):
+        myCurrentX = (
+            theRasterBox.xMinimum() + theCellSizeX / 2.0 +
+            thePixelOffsetX * theCellSizeX)
+        for col in range(0, theCellsX):
+            # Read a single pixel
             myScanline = theBand.ReadRaster(
-                thePixelOffsetX,
-                thePixelOffsetY + i,
+                thePixelOffsetX + col,
+                thePixelOffsetY + row,
                 myCellsToReadX,
                 myCellsToReadY,
                 myBufferXSize,
@@ -320,22 +323,28 @@ def statisticsFromPreciseIntersection(
             # xsize*4 bytes of raw binary floating point data. This can be
             # converted to Python values using the struct module from the
             # standard library:
-            myValue = struct.unpack('f' * myCellsToReadX, myScanline)[0]
+            if myScanline != '':
+                myValue = struct.unpack('f', myScanline)
+                continue
+
+            if myValue == theNoData:
+                continue
             # noinspection PyCallByClass,PyTypeChecker
-            pixelRectGeometry = QgsGeometry.fromRect(
+            myPixelGeometry = QgsGeometry.fromRect(
                 QgsRectangle(
-                    currentX - hCellSizeX,
-                    currentY - hCellSizeY,
-                    currentX + hCellSizeX,
-                    currentY + hCellSizeY))
-            if pixelRectGeometry:
+                    myCurrentX - myHalfCellSizeX,
+                    myCurrentY - myHalfCellsSizeY,
+                    myCurrentX + myHalfCellSizeX,
+                    myCurrentY + myHalfCellsSizeY))
+            if myPixelGeometry:
                 #intersection
-                intersectGeometry = pixelRectGeometry.intersection(poly)
-                if intersectGeometry:
-                    intersectionArea = intersectGeometry.area()
+                myIntersectionGeometry = myPixelGeometry.intersection(poly)
+                if myIntersectionGeometry:
+                    intersectionArea = myIntersectionGeometry.area()
                     if intersectionArea >= 0.0:
-                        weight = intersectionArea / pixelArea
-                        count += weight
-                        sum += myValue * weight
-            currentX += cellSizeX
-        currentY -= cellSizeY
+                        myWeight = intersectionArea / myPixelArea
+                        myCount += myWeight
+                        mySum += myValue * myWeight
+            myCurrentX += theCellSizeY
+        myCurrentY -= theCellsY
+    return mySum, myCount
