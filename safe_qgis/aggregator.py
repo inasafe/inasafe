@@ -453,10 +453,6 @@ class Aggregator(QtCore.QObject):
         if not self.aoiMode:
             myAggregtionUnits = self.safeLayer.get_geometry()
 
-            print len(myAggregtionUnits)
-            print self.layer.source()
-            print myAggregtionUnits
-
             if (mySafeImpactLayer.is_point_data or
                     mySafeImpactLayer.is_polygon_data):
                 LOGGER.debug('Doing point in polygon aggregation')
