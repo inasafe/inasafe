@@ -39,6 +39,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       GEOCRS)
 
 from safe_qgis.dock import Dock
+from safe_qgis.aggregator import Aggregator
 from safe_qgis.utilities import getDefaults
 
 from safe_qgis.utilities_test import (
@@ -237,6 +238,22 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(myExpectedFeatureCount,
                          DOCK.aggregator.preprocessedFeatureCount,
                          myMessage)
+
+    def test_aggregate_raster_impact(self):
+        myImpactLayer = QgsVectorLayer(
+            TESTDATA+'/aggregation_test_impact.tif',
+            'test raster impact',
+            'ogr')
+        myAggregationLayer = QgsVectorLayer(
+            TESTDATA+'/kabupaten_jakarta_singlepart.shp',
+            'test aggregation',
+            'ogr')
+        myAggregator = Aggregator(None, myAggregationLayer)
+        # setting up
+        myAggregator.isValid = True
+        myAggregator.layer = myAggregationLayer
+        myAggregator.aoiMode = False
+        myAggregator.aggregate(myImpactLayer)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest, 'test')
