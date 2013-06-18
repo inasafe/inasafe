@@ -1737,12 +1737,12 @@ class ShakeEvent(QObject):
             theForceFlag=theForceFlag,
             theAlgorithm=theAlgorithm)
 
-        myClippedHazardPath, myClippedExposurePath = self.clipLayers(
+        myClippedHazard, myClippedExposure = self.clipLayers(
             theShakeRasterPath=myHazardPath,
             thePopulationRasterPath=myExposurePath)
 
-        myClippedHazardLayer = safe_read_layer(myClippedHazardPath)
-        myClippedExposureLayer = safe_read_layer(myClippedExposurePath)
+        myClippedHazardLayer = safe_read_layer(myClippedHazard.source())
+        myClippedExposureLayer = safe_read_layer(myClippedExposure.source())
         myLayers = [myClippedHazardLayer, myClippedExposureLayer]
 
         myFunctionId = 'I T B Fatality Function'
@@ -1851,18 +1851,18 @@ class ShakeEvent(QObject):
 
         # The extents should already be correct but the cell size may need
         # resampling, so we pass the hazard layer to the clipper
-        myClippedHazardPath = clipLayer(
+        myClippedHazard = clipLayer(
             theLayer=myHazardLayer,
             theExtent=myHazardGeoExtent,
             theCellSize=myCellSize)
 
-        myClippedExposurePath = clipLayer(
+        myClippedExposure = clipLayer(
             theLayer=myExposureLayer,
             theExtent=myHazardGeoExtent,
             theCellSize=myCellSize,
             theExtraKeywords=extraExposureKeywords)
 
-        return myClippedHazardPath, myClippedExposurePath
+        return myClippedHazard, myClippedExposure
 
     def _getPopulationPath(self):
         """Helper to determine population raster spath.
