@@ -278,56 +278,64 @@ def statisticsFromMiddlePointTest(
 
     return mySum, myCount
 
-"""
 
+def statisticsFromPreciseIntersection(
+        theBand,
+        theGeometry,
+        thePixelOffsetX,
+        thePixelOffsetY,
+        theCellsX,
+        theCellsY,
+        theCellSizeX,
+        theCellSizeY,
+        theRasterBox,
+        theNoData):
+    sum = 0
+    count = 0
+    currentY = rasterBBox.yMaximum() - pixelOffsetY * cellSizeY - cellSizeY / 2
+    pixelRectGeometry = 0
 
+    hCellSizeX = cellSizeX / 2.0
+    hCellSizeY = cellSizeY / 2.0
+    pixelArea = cellSizeX * cellSizeY
+    weight = 0
 
-
-
-
-
-
-void QgsZonalStatistics::statisticsFromPreciseIntersection( void* band, QgsGeometry* poly, int pixelOffsetX,
-    int pixelOffsetY, int nCellsX, int nCellsY, double cellSizeX, double cellSizeY, const QgsRectangle& rasterBBox, double& sum, double& count )
-{
-  sum = 0;
-  count = 0;
-  double currentY = rasterBBox.yMaximum() - pixelOffsetY * cellSizeY - cellSizeY / 2;
-  float* pixelData = ( float * ) CPLMalloc( sizeof( float ) );
-  QgsGeometry* pixelRectGeometry = 0;
-
-  double hCellSizeX = cellSizeX / 2.0;
-  double hCellSizeY = cellSizeY / 2.0;
-  double pixelArea = cellSizeX * cellSizeY;
-  double weight = 0;
-
-  for ( int row = 0; row < nCellsY; ++row )
-  {
-    double currentX = rasterBBox.xMinimum() + cellSizeX / 2.0 + pixelOffsetX * cellSizeX;
-    for ( int col = 0; col < nCellsX; ++col )
-    {
-      GDALRasterIO( band, GF_Read, pixelOffsetX + col, pixelOffsetY + row, nCellsX, 1, pixelData, 1, 1, GDT_Float32, 0, 0 );
-      pixelRectGeometry = QgsGeometry::fromRect( QgsRectangle( currentX - hCellSizeX, currentY - hCellSizeY, currentX + hCellSizeX, currentY + hCellSizeY ) );
-      if ( pixelRectGeometry )
-      {
-        //intersection
-        QgsGeometry *intersectGeometry = pixelRectGeometry->intersection( poly );
-        if ( intersectGeometry )
-        {
-          double intersectionArea = intersectGeometry->area();
-          if ( intersectionArea >= 0.0 )
-          {
-            weight = intersectionArea / pixelArea;
-            count += weight;
-            sum += *pixelData * weight;
-          }
-          delete intersectGeometry;
-        }
-      }
-      currentX += cellSizeX;
-    }
-    currentY -= cellSizeY;
-  }
-  CPLFree( pixelData );
-}
-"""
+    for row in range(0, nCellsY):
+        currentX = (
+            rasterBBox.xMinimum() + cellSizeX / 2.0 +
+            pixelOffsetX * cellSizeX)
+        for col in range(0, nCellsX):
+            GDALRasterIO(
+                band, GF_Read, pixelOffsetX + col, pixelOffsetY + row,
+                nCellsX, 1, pixelData, 1, 1, GDT_Float32, 0, 0)
+            myScanline = theBand.ReadRaster(
+                thePixelOffsetX,
+                thePixelOffsetY + i,
+                myCellsToReadX,
+                myCellsToReadY,
+                myBufferXSize,
+                myBufferYSize,
+                gdal.GDT_Float32)
+            # Note that the returned scanline is of type string, and contains
+            # xsize*4 bytes of raw binary floating point data. This can be
+            # converted to Python values using the struct module from the
+            # standard library:
+            myValue = struct.unpack('f' * myCellsToReadX, myScanline)[0]
+            # noinspection PyCallByClass,PyTypeChecker
+            pixelRectGeometry = QgsGeometry.fromRect(
+                QgsRectangle(
+                    currentX - hCellSizeX,
+                    currentY - hCellSizeY,
+                    currentX + hCellSizeX,
+                    currentY + hCellSizeY))
+            if pixelRectGeometry:
+                #intersection
+                intersectGeometry = pixelRectGeometry.intersection(poly)
+                if intersectGeometry:
+                    intersectionArea = intersectGeometry.area()
+                    if intersectionArea >= 0.0:
+                        weight = intersectionArea / pixelArea
+                        count += weight
+                        sum += myValue * weight
+            currentX += cellSizeX
+        currentY -= cellSizeY
