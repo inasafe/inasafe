@@ -384,8 +384,7 @@ class Aggregator(QtCore.QObject):
         Returns:
             None
         """
-        #TODO implement polygon to polygon aggregation (dissolve,
-        # line in polygon, point in polygon)
+        #TODO (MB) implement line aggregation
 
         myAggrFieldMap = {}
         myAggrFieldIndex = None
@@ -452,7 +451,11 @@ class Aggregator(QtCore.QObject):
         myImpactValues = mySafeImpactLayer.get_data()
 
         if not self.aoiMode:
-            myPostprocPolygons = self.safeLayer.get_geometry()
+            myAggregtionUnits = self.safeLayer.get_geometry()
+
+            print len(myAggregtionUnits)
+            print self.layer.source()
+            print myAggregtionUnits
 
             if (mySafeImpactLayer.is_point_data or
                     mySafeImpactLayer.is_polygon_data):
@@ -463,9 +466,9 @@ class Aggregator(QtCore.QObject):
                 if mySafeImpactLayer.is_polygon_data:
                     # Using centroids to do polygon in polygon aggregation
                     # this is always ok because
-                    # prepareInputLayer() took care of splitting
+                    # deintersect() took care of splitting
                     # polygons that spawn across multiple postprocessing
-                    # polygons. After prepareInputLayer()
+                    # polygons. After deintersect()
                     # each impact polygon will never be contained by more than
                     # one aggregation polygon
 
@@ -482,9 +485,11 @@ class Aggregator(QtCore.QObject):
                     myRemainingPoints = myCentroids
 
                 else:
+                    #this are already points data
                     myRemainingPoints = myImpactGeoms
 
-                for myPolygonIndex, myPolygon in enumerate(myPostprocPolygons):
+                #iterate over the aggregation units
+                for myPolygonIndex, myPolygon in enumerate(myAggregtionUnits):
                     if hasattr(myPolygon, 'outer_ring'):
                         outer_ring = myPolygon.outer_ring
                         inner_rings = myPolygon.inner_rings
@@ -687,16 +692,24 @@ class Aggregator(QtCore.QObject):
             self.layer = self._extentsToLayer()
             # Area Of Interest (AOI) mode flag
         else:
+            # we use only the exposure extent, because both exposure and hazard
+            # have the same extent at this point.
             myGeoExtent = extentToGeoArray(
                 self.exposureLayer.extent(),
                 self.exposureLayer.crs())
+
+            myAggrAttribute = self.keywordIO.readKeywords(
+                self.layer, self.defaults['AGGR_ATTR_KEY'])
+
             myClippedLayer = clipLayer(
                 theLayer=self.layer,
-                theExtent=myGeoExtent)
+                theExtent=myGeoExtent,
+                theExplodeFlag=True,
+                theExplodeAttribute=myAggrAttribute)
 
             myName = '%s %s' % (self.layer.name(), self.tr('aggregation'))
-            self.layer = QgsVectorLayer(
-                myClippedLayer.source(), myName, 'ogr')
+            self.layer = myClippedLayer
+            self.layer.setLayerName(myName)
             if self.showIntermediateLayers:
                 self.keywordIO.updateKeywords(self.layer, {'title': myName})
                 QgsMapLayerRegistry.instance().addMapLayer(self.layer)

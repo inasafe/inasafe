@@ -20,7 +20,7 @@ import os
 import tempfile
 import logging
 
-from PyQt4.QtCore import QCoreApplication, QProcess
+from PyQt4.QtCore import QCoreApplication, QProcess, QVariant
 from qgis.core import (
     QGis,
     QgsCoordinateTransform,
@@ -72,7 +72,8 @@ def clipLayer(theLayer,
               theCellSize=None,
               theExtraKeywords=None,
               theExplodeFlag=True,
-              theHardClipFlag=False):
+              theHardClipFlag=False,
+              theExplodeAttribute=None):
     """Clip a Hazard or Exposure layer to the extents provided.
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
@@ -99,6 +100,9 @@ def clipLayer(theLayer,
             are reduced in size to the part of the geometry that intersects
             the extent only. Default is False. **This parameter is ignored
             for raster layer clipping.**
+        * theExplodeAttribute - a str specifying to which attribute #1, #2 and
+            so on will be added in case of theExplodeFlag being true.
+            The attribute is modified only if there are at least 2 parts
 
     Returns:
         Clipped layer (placed in the system temp dir).
@@ -113,7 +117,8 @@ def clipLayer(theLayer,
                                 theExtent,
                                 theExtraKeywords=theExtraKeywords,
                                 theExplodeFlag=theExplodeFlag,
-                                theHardClipFlag=theHardClipFlag)
+                                theHardClipFlag=theHardClipFlag,
+                                theExplodeAttribute=theExplodeAttribute)
     else:
         try:
             return _clipRasterLayer(
@@ -129,7 +134,8 @@ def _clipVectorLayer(theLayer,
                      theExtent,
                      theExtraKeywords=None,
                      theExplodeFlag=True,
-                     theHardClipFlag=False):
+                     theHardClipFlag=False,
+                     theExplodeAttribute=None):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     vector layer or an exception will be thrown.
@@ -153,6 +159,10 @@ def _clipVectorLayer(theLayer,
             that extend beyond the extents should be clipped such that they
             are reduced in size to the part of the geometry that intersects
             the extent only. Default is False.
+        * theExplodeAttribute - a str specifying to which attribute #1, #2 and
+            so on will be added in case of theExplodeFlag being true.
+            The attribute is modified only if there are at least 2 parts
+
 
     Returns:
         QgsVectorLayer - output clipped layer (placed in the system temp dir).
@@ -248,8 +258,15 @@ def _clipVectorLayer(theLayer,
     # Retrieve every feature with its geometry and attributes
     myFeature = QgsFeature()
     myCount = 0
+
+    if theExplodeAttribute is not None:
+        theExplodeAttributeIndex = myProvider.fieldNameIndex(
+            theExplodeAttribute)
+
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
+        if theExplodeAttribute is not None:
+            myAttrs = myFeature.attributeMap()
         # Loop through the parts adding them to the output file
         # we write out single part features unless theExplodeFlag is False
         if theExplodeFlag:
@@ -257,7 +274,7 @@ def _clipVectorLayer(theLayer,
         else:
             myGeometryList = [myGeometry]
 
-        for myPart in myGeometryList:
+        for myPartIndex, myPart in enumerate(myGeometryList):
             myPart.transform(myXForm)
             if theHardClipFlag:
                 # Remove any dangling bits so only intersecting area is
@@ -265,7 +282,16 @@ def _clipVectorLayer(theLayer,
                 myPart = clipGeometry(myClipPolygon, myPart)
             if myPart is None:
                 continue
+
             myFeature.setGeometry(myPart)
+            # There are multiple parts and we want to show it in the
+            # theExplodeAttribute
+            if myPartIndex > 0 and theExplodeAttribute is not None:
+                myPartAttr = QVariant(
+                    '%s #%s' % (myAttrs[theExplodeAttributeIndex].toString(),
+                                myPartIndex))
+                myFeature.changeAttribute(theExplodeAttributeIndex, myPartAttr)
+
             myWriter.addFeature(myFeature)
         myCount += 1
     del myWriter  # Flush to disk
