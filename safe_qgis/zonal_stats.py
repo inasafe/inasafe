@@ -88,6 +88,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a raster layer in order to compute statistics.'
         ))
+    myResults = {}
     myRasterSource = theRasterLayer.source()
     myFid = gdal.Open(str(myRasterSource), gdal.GA_ReadOnly)
     myGeoTransform = myFid.GetGeoTransform()
@@ -121,11 +122,6 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     myFeature = QgsFeature()
     myCount = 0
     while myProvider.nextFeature(myFeature):
-        # Next line is to resolve a wierd issue on OSX where
-        # geometry comes back as none all the time when testing
-        # Simply accessing the attribute map seems to fix it
-        # 9 times out of 10
-        print myFeature.attributeMap()
         myGeometry = myFeature.geometry()
         myCount += 1
         myFeatureBox = myGeometry.boundingBox()
@@ -175,13 +171,20 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
                 myCellSizeY,
                 myRasterBox,
                 myNoData)
+            print mySum, myCount
 
         if myCount == 0:
             myMean = 0
         else:
             myMean = mySum / myCount
 
+        myResults[myFeature.id()] = {
+            'sum': mySum,
+            'count': myCount,
+            'mean': myMean}
+
     myFid = None  # Close
+    return myResults
 
 
 def cellInfoForBBox(
@@ -216,6 +219,9 @@ def cellInfoForBBox(
     myCellsX = myMaxColumn - myOffsetX
     myCellsY = myMaxRow - myOffsetY
 
+    print ('Reading Pixel box: W: %s H: %s Offset Left: %s Offset Top: %s' % (
+        myCellsX, myCellsY, myOffsetX, myOffsetY
+    ))
     return myOffsetX, myOffsetY, myCellsX, myCellsY
 
 
@@ -255,7 +261,7 @@ def statisticsFromMiddlePointTest(
         # converted to Python values using the struct module from the standard
         # library:
         myValues = struct.unpack('f' * myCellsToReadX, myScanline)
-        print myValues
+        #print myValues
         if myValues is None:
             continue
 
@@ -303,7 +309,6 @@ def statisticsFromPreciseIntersection(
     myCellsToReadY = 1  # read in a single row at a time
     myBufferXSize = 1
     myBufferYSize = 1
-    myWeight = 0
 
     for row in range(0, theCellsY):
         myCurrentX = (
@@ -323,6 +328,7 @@ def statisticsFromPreciseIntersection(
             # xsize*4 bytes of raw binary floating point data. This can be
             # converted to Python values using the struct module from the
             # standard library:
+            print myScanline
             if myScanline != '':
                 myValue = struct.unpack('f', myScanline)
                 continue
@@ -338,7 +344,8 @@ def statisticsFromPreciseIntersection(
                     myCurrentY + myHalfCellsSizeY))
             if myPixelGeometry:
                 #intersection
-                myIntersectionGeometry = myPixelGeometry.intersection(poly)
+                myIntersectionGeometry = myPixelGeometry.intersection(
+                    theGeometry)
                 if myIntersectionGeometry:
                     intersectionArea = myIntersectionGeometry.area()
                     if intersectionArea >= 0.0:
