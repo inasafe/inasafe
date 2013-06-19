@@ -86,7 +86,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         # connect signal to slot
         self.leOutputDir.textChanged.connect(self.saveState)
-
         self.leSourceDir.textChanged.connect(self.saveState)
         self.leSourceDir.textChanged.connect(self.populateTable)
         self.leSourceDir.textChanged.connect(self.updateDefaultOutputDir)
@@ -103,9 +102,15 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             'inasafe/lastSourceDir', defaultSourceDir)
         self.leSourceDir.setText(myLastSourcePath.toString())
 
-        # restore path for layer data & pdf output
-        myPath = mySettings.value('inasafe/baseDataDir', QString(''))
-        self.leOutputDir.setText(myPath.toString())
+        # restore path pdf output
+        myLastOutputDir = mySettings.value(
+            'inasafe/lastOutputDir', defaultSourceDir)
+        self.leOutputDir.setText(myLastOutputDir.toString())
+
+        # restore default output dir combo box
+        myUseDefaultOutputDir = mySettings.value(
+            'inasafe/useDefaultOutputDir', True)
+        self.cbDefaultOutputDir.setChecked(myUseDefaultOutputDir.toBool())
 
     def saveState(self):
         """Save current state of GUI to configuration file"""
@@ -113,8 +118,9 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         mySettings = QSettings()
 
         mySettings.setValue('inasafe/lastSourceDir', self.leSourceDir.text())
-        mySettings.setValue('inasafe/baseDataDir', self.leOutputDir.text())
-        mySettings.setValue('inasafe/outputDir', self.leOutputDir.text())
+        mySettings.setValue('inasafe/lastOutputDir', self.leOutputDir.text())
+        mySettings.setValue('inasafe/useDefaultOutputDir',
+                            self.cbDefaultOutputDir.isChecked())
 
     def showDirectoryDialog(self, theLineEdit, theTitle):
         """ Show a directory selection dialog.
@@ -472,7 +478,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         """
         if self.cbDefaultOutputDir.isChecked():
             self.leOutputDir.setText(self.leSourceDir.text())
-
 
     @pyqtSignature('')
     def on_btnRunSelected_clicked(self):

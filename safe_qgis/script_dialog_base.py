@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'script_dialog_base.ui'
 #
-# Created: Wed Jun 19 14:38:54 2013
+# Created: Wed Jun 19 15:12:29 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -155,6 +155,6 @@ class Ui_ScriptDialogBase(object):
         self.label.setText(QtGui.QApplication.translate("ScriptDialogBase", "Run selected script ", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("ScriptDialogBase", "times", None, QtGui.QApplication.UnicodeUTF8))
         self.outputPDFDirLabel.setText(QtGui.QApplication.translate("ScriptDialogBase", "Output PDF direcotry", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbDefaultOutputDir.setText(QtGui.QApplication.translate("ScriptDialogBase", "Use Default", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbDefaultOutputDir.setText(QtGui.QApplication.translate("ScriptDialogBase", "Use scenario directory", None, QtGui.QApplication.UnicodeUTF8))
         self.tbOutputDir.setText(QtGui.QApplication.translate("ScriptDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
 

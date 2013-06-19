@@ -200,7 +200,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Use Default</string>
+           <string>Use scenario directory</string>
           </property>
           <property name="checked">
            <bool>true</bool>
