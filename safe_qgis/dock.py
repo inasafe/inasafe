@@ -2207,4 +2207,3 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 self.tr('Failed to save scenario to ' + myFileName))
-            # raise IOError('myFileName: ' + myFileName)

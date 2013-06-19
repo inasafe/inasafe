@@ -25,7 +25,7 @@ from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import (pyqtSignature, QSettings, QVariant, QString, Qt)
+from PyQt4.QtCore import (pyqtSignature, QSettings, QVariant, Qt)
 from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem, QMessageBox)
 
 from qgis.core import QgsRectangle
@@ -38,7 +38,6 @@ from safe_qgis.exceptions import QgisPathError
 from safe_qgis.safe_interface import temp_dir
 
 from safe_qgis import macro
-from safe_qgis.utilities import safeTr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -60,8 +59,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
            no exceptions explicitly raised
         """
         QDialog.__init__(self, theParent)
-        self.outputDir = None
-        self.sourceDir = None
         self.iface = theIface
 
         self.setupUi(self)
@@ -78,11 +75,11 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         self.adjustSize()
 
         self.restoreState()
+
+        # preventing error if the user delete the directory
         if not os.path.exists(self.leSourceDir.text()):
-            self.sourceDir = defaultSourceDir
-        else:
-            self.sourceDir = self.leSourceDir.text()
-        self.populateTable(self.sourceDir)
+            self.leSourceDir.setText(defaultSourceDir)
+        self.populateTable(self.leSourceDir.text())
 
         # connect signal to slot
         self.leOutputDir.textChanged.connect(self.saveState)
@@ -134,10 +131,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myPath = theLineEdit.text()
         # noinspection PyCallByClass,PyTypeChecker
         myNewPath = QFileDialog.getExistingDirectory(
-            self,
-            theTitle,
-            myPath,
-            QFileDialog.ShowDirsOnly)
+            self, theTitle, myPath, QFileDialog.ShowDirsOnly)
         if myNewPath is not None and os.path.exists(myNewPath):
             theLineEdit.setText(myNewPath)
 
@@ -175,7 +169,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 for myKey, myValue in readScenarios(myAbsPath).iteritems():
                     appendRow(self.tblScript, myKey, myValue)
 
-    def runScriptTask(self, theFilename):
+    def runScriptTask(self, theFilename, theCount=1):
         """ Run a python script in QGIS to exercise InaSAFE functionality.
 
         This functionality was originally intended for verifying that the key
@@ -221,7 +215,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         Returns:
             True if success, otherwise return False.
         """
-        myRoot = str(self.leOutputDir.text())
+        outputDirectory = str(self.leOutputDir.text())
 
         myPaths = []
         if 'hazard' in theItem:
@@ -234,15 +228,16 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         # always run in new project
         self.iface.newProject()
 
-        myMessage = 'Loading layers: \nRoot: %s\n%s' % (myRoot, myPaths)
+        myMessage = 'Loading layers: \nRoot: %s\n%s' % (outputDirectory,
+                                                        myPaths)
         LOGGER.info(myMessage)
 
         try:
-            macro.addLayers(myRoot, myPaths)
+            macro.addLayers(outputDirectory, myPaths)
         except QgisPathError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
-                myRoot, myPaths))
+                outputDirectory, myPaths))
             return False
 
         # See if we have a preferred impact function
@@ -290,6 +285,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
     @pyqtSignature('')
     def on_pbnRunAll_clicked(self):
+        """Run all scenario wehn pbRunAll is clicked.
+        """
         myReport = []
         myFailCount = 0
         myPassCount = 0
@@ -307,8 +304,9 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 else:
                     myReport.append('F: %s\n' % str(myItem))
                     myFailCount += 1
-            except:
-                LOGGER.exception('Batch execution failed')
+            except Exception, e:
+                LOGGER.exception('Batch execution failed. The exception: ' +
+                                 str(e))
                 myReport.append('F: %s\n' % str(myItem))
                 myFailCount += 1
 
@@ -331,6 +329,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myReportFile.close()
         LOGGER.info('Log written to %s' % myPath)
         myUrl = QtCore.QUrl('file:///' + myPath)
+        # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
         QtGui.QDesktopServices.openUrl(myUrl)
 
     def runTask(self, theItem, theStatusItem, theCount=1):
@@ -352,11 +351,12 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 self.runScriptTask(myFilename, theCount)
                 # set status to 'OK'
                 theStatusItem.setText(self.tr('OK'))
-            except Exception as ex:
+            except Exception as e:
                 # set status to 'fail'
                 theStatusItem.setText(self.tr('Fail'))
 
-                LOGGER.exception('Running macro failed')
+                LOGGER.exception('Running macro failed. The exception: ' +
+                                 str(e))
                 myResult = False
         elif isinstance(myValue, dict):
             myPath = str(self.leOutputDir.text())
@@ -400,7 +400,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myMapPath = os.path.join(theBasePath, myFileName)
         myTablePath = os.path.splitext(myMapPath)[0] + '_table.pdf'
 
-        return (myMapPath, myTablePath)
+        return myMapPath, myTablePath
 
     def checkExistingPDFReport(self, theBasePath, theTitles):
         """ Check the existence of pdf report in theBasePath.
