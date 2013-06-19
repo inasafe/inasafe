@@ -46,11 +46,11 @@ def runScenario():
 
     myDock = getDock()
 
-    def completed():
-        LOGGER.debug("scenario done")
-        myDock.analysisDone.disconnect(completed)
-
-    myDock.analysisDone.connect(completed)
+    # def completed():
+    #     LOGGER.debug("scenario done")
+    #     myDock.analysisDone.disconnect(completed)
+    #
+    # myDock.analysisDone.connect(completed)
     # Start the analysis
     myDock.pbnRunStop.click()
 
@@ -154,8 +154,8 @@ def setAggregation(theAggregationLayer):
     myDock = getDock()
 
     for myCount in range(0, myDock.cboAggregation.count()):
-        myLayerId = myDock.cboAggregation.itemData(myCount,
-                                                 QtCore.Qt.UserRole).toString()
+        myLayerId = myDock.cboAggregation.itemData(
+            myCount, QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 
         if myLayer.source() == theAggregationLayer:
