@@ -128,6 +128,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             * theTitle - title of dialog
         """
         myPath = theLineEdit.text()
+        # noinspection PyCallByClass,PyTypeChecker
         myNewPath = QFileDialog.getExistingDirectory(
             self,
             theTitle,
@@ -466,76 +467,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myHtmlRenderer.printImpactTable(myKeywords, myTablePath)
 
         LOGGER.debug("report done %s %s" % (myMapPath, myTablePath))
-
-    def saveCurrentScenario(self):
-        """Save current scenario
-        """
-        warningTitle = self.tr('InaSAFE Save Scenario Warning')
-        # get data layer
-        myDock = macro.getDock()
-
-        # get absolute path of exposure & hazard layer
-        myExposureLayer = myDock.getExposureLayer()
-        myHazardLayer = myDock.getHazardLayer()
-
-        # Checking f exposure and hazard layer is not None
-        if myExposureLayer is None:
-            warningMessage = self.tr(
-                'Exposure layer is not found, can not save scenario. Please '
-                'add exposure layer to do so.')
-            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
-            return
-        if myHazardLayer is None:
-            warningMessage = self.tr(
-                'Hazard layer is not found, can not save scenario. Please add '
-                'hazard layer to do so.')
-            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
-            return
-
-        myExposurePath = myExposureLayer.publicSource()
-        myHazardPath = myHazardLayer.publicSource()
-        myRootPath = os.path.commonprefix([myExposurePath, myHazardPath])
-
-        myTitle = myDock.keywordIO.readKeywords(myHazardLayer, 'title')
-        myTitle = safeTr(myTitle)
-
-        myFunctionId = myDock.getFunctionID(myDock.cboFunction.currentIndex())
-
-        # Checking if function id is not None
-        if myFunctionId == '' or myFunctionId is None:
-            warningMessage = self.tr(
-                'The impact function is empty, can not save scenario')
-            QtGui.QMessageBox.question(self, warningTitle, warningMessage)
-            return
-
-        # simplify the path
-        myExposurePath = myExposurePath.split(myRootPath)[1]
-        myHazardPath = myHazardPath.split(myRootPath)[1]
-
-        myTitleDialog = self.tr('Save Scenario')
-        myFileName = QFileDialog.getSaveFileName(
-            self, myTitleDialog,
-            os.path.join(self.lastSaveDir, 'scn_' + myTitle + '.txt'),
-            "Text files (*.txt)"
-        )
-
-        # write to file
-        myParser = ConfigParser()
-        myParser.add_section(myTitle)
-        myParser.set(myTitle, 'path', myRootPath)
-        myParser.set(myTitle, 'exposure', myExposurePath)
-        myParser.set(myTitle, 'hazard', myHazardPath)
-        myParser.set(myTitle, 'function', myFunctionId)
-
-        try:
-            myParser.write(open(myFileName, 'w'))
-        except IOError:
-            # QtGui.QMessageBox.warning(
-            #     self, self.tr('InaSAFE'),
-            #     self.tr('Failed to save scenario to ' + myFileName))
-            # raise IOError('myFileName: ' + myFileName)
-            LOGGER.debug('IOError. myFileName: ' + myFileName)
-            pass
 
     @pyqtSignature('')
     def on_btnRunSelected_clicked(self):
