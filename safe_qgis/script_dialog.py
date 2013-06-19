@@ -42,6 +42,9 @@ from safe_qgis.utilities import safeTr
 
 LOGGER = logging.getLogger('InaSAFE')
 
+myRoot = os.path.dirname(__file__)
+defaultSourceDir = os.path.abspath(os.path.join(myRoot, '..', 'script_runner'))
+
 
 class ScriptDialog(QDialog, Ui_ScriptDialogBase):
     """Script Dialog for InaSAFE."""
@@ -57,20 +60,18 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
            no exceptions explicitly raised
         """
         QDialog.__init__(self, theParent)
-        self.setupUi(self)
-
+        self.outputDir = None
+        self.sourceDir = None
         self.iface = theIface
-        myRoot = os.path.dirname(__file__)
-        self.defaultSourceDir = os.path.abspath(
-            os.path.join(myRoot, '..', 'script_runner'))
-        self.lastSaveDir = self.defaultSourceDir
+
+        self.setupUi(self)
 
         myHeaderView = self.tblScript.horizontalHeader()
         myHeaderView.setResizeMode(0, QtGui.QHeaderView.Stretch)
         myHeaderView.setResizeMode(1, QtGui.QHeaderView.Interactive)
 
         self.tblScript.setColumnWidth(0, 200)
-        self.tblScript.setColumnWidth(1, 50)
+        self.tblScript.setColumnWidth(1, 75)
 
         self.gboOptions.setVisible(False)
 
@@ -78,22 +79,18 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         self.restoreState()
         if not os.path.exists(self.leSourceDir.text()):
-            sourceDir = '/home/sunnii/Documents/inasafe/inasafe-dev/' \
-                        'safe_qgis/test_data/test_dummy'
+            self.sourceDir = defaultSourceDir
         else:
-            sourceDir = self.leSourceDir.text()
-        self.populateTable(sourceDir)
+            self.sourceDir = self.leSourceDir.text()
+        self.populateTable(self.sourceDir)
 
         # connect signal to slot
-        self.leBaseDataDir.textChanged.connect(self.saveState)
+        self.leOutputDir.textChanged.connect(self.saveState)
 
         self.leSourceDir.textChanged.connect(self.saveState)
         self.leSourceDir.textChanged.connect(self.populateTable)
+        self.leSourceDir.textChanged.connect(self.updateDefaultOutputDir)
 
-        #self.tblScript.roActivated.connect(lambda:
-        # self.btnRunSelected.setEnabled(True))
-        #self.tblScript.horizontalHeader().
-        # sectionClicked.connect(lambda: self.btnRunSelected.setEnabled(True))
         self.btnRunSelected.setEnabled(True)
 
     def restoreState(self):
@@ -102,13 +99,13 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         mySettings = QSettings()
 
         # restore last source path
-        myLastSourcePath = mySettings.value('inasafe/lastSourceDir',
-                                            self.defaultSourceDir)
+        myLastSourcePath = mySettings.value(
+            'inasafe/lastSourceDir', defaultSourceDir)
         self.leSourceDir.setText(myLastSourcePath.toString())
 
         # restore path for layer data & pdf output
         myPath = mySettings.value('inasafe/baseDataDir', QString(''))
-        self.leBaseDataDir.setText(myPath.toString())
+        self.leOutputDir.setText(myPath.toString())
 
     def saveState(self):
         """Save current state of GUI to configuration file"""
@@ -116,7 +113,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         mySettings = QSettings()
 
         mySettings.setValue('inasafe/lastSourceDir', self.leSourceDir.text())
-        mySettings.setValue('inasafe/baseDataDir', self.leBaseDataDir.text())
+        mySettings.setValue('inasafe/baseDataDir', self.leOutputDir.text())
+        mySettings.setValue('inasafe/outputDir', self.leOutputDir.text())
 
     def showDirectoryDialog(self, theLineEdit, theTitle):
         """ Show a directory selection dialog.
@@ -134,7 +132,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             theTitle,
             myPath,
             QFileDialog.ShowDirsOnly)
-        theLineEdit.setText(myNewPath)
+        if myNewPath is not None and os.path.exists(myNewPath):
+            theLineEdit.setText(myNewPath)
 
     def populateTable(self, theBasePath):
         """ Populate table with files from theBasePath directory.
@@ -216,7 +215,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         Returns:
             True if success, otherwise return False.
         """
-        myRoot = str(self.leBaseDataDir.text())
+        myRoot = str(self.leOutputDir.text())
 
         myPaths = []
         if 'hazard' in theItem:
@@ -354,7 +353,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 LOGGER.exception('Running macro failed')
                 myResult = False
         elif isinstance(myValue, dict):
-            myPath = str(self.leBaseDataDir.text())
+            myPath = str(self.leOutputDir.text())
             myTitle = str(theItem.text())
 
             # check existing pdf report
@@ -391,7 +390,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         """
 
         myFileName = theTitle.replace(' ', '_')
-        myFileName = myFileName + '.pdf'
+        myFileName += '.pdf'
         myMapPath = os.path.join(theBasePath, myFileName)
         myTablePath = os.path.splitext(myMapPath)[0] + '_table.pdf'
 
@@ -424,7 +423,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myMessage = myMessage.arg(theBasePath)
 
         myDetail = 'Existing PDF Report: \n'
-        myDetail = myDetail + '\n'.join(myPaths)
+        myDetail += '\n'.join(myPaths)
 
         myMsgBox = QMessageBox(self)
         myMsgBox.setIcon(QMessageBox.Question)
@@ -468,6 +467,13 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         LOGGER.debug("report done %s %s" % (myMapPath, myTablePath))
 
+    def updateDefaultOutputDir(self):
+        """Update output dir if set to default
+        """
+        if self.cbDefaultOutputDir.isChecked():
+            self.leOutputDir.setText(self.leSourceDir.text())
+
+
     @pyqtSignature('')
     def on_btnRunSelected_clicked(self):
         """Run the selected item. """
@@ -490,13 +496,20 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         self.gboOptions.setVisible(theFlag)
         self.adjustSize()
 
+    @pyqtSignature('bool')
+    def on_cbDefaultOutputDir_toggled(self, theFlag):
+        """Autoconnect slot activated when cbDefaultOutputDir is checked"""
+        if theFlag:
+            self.leOutputDir.setText(self.leSourceDir.text())
+        self.tbOutputDir.setEnabled(not theFlag)
+
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tbBaseDataDir_clicked(self):
         """Autoconnect slot activated when the select cache file tool button is
         clicked.
         """
         myTitle = self.tr('Set the base directory for data packages')
-        self.showDirectoryDialog(self.leBaseDataDir, myTitle)
+        self.showDirectoryDialog(self.leOutputDir, myTitle)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tbSourceDir_clicked(self):
@@ -504,6 +517,13 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         myTitle = self.tr('Set the source directory for script and scenario')
         self.showDirectoryDialog(self.leSourceDir, myTitle)
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_tbOutputDir_clicked(self):
+        """ Autoconnect slot activated when tbSourceDir is clicked """
+
+        myTitle = self.tr('Set the output directory for pdf files')
+        self.showDirectoryDialog(self.leOutputDir, myTitle)
 
 
 def readScenarios(theFileName):
@@ -589,7 +609,6 @@ def appendRow(theTable, theLabel, theData):
 
     theTable.setItem(myRow, 0, myItem)
     theTable.setItem(myRow, 1, QTableWidgetItem(''))
-
 
 if __name__ == '__main__':
     # from PyQt4.QtGui import QApplication
