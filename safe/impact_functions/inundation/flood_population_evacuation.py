@@ -160,8 +160,8 @@ class FloodEvacuationFunction(FunctionProvider):
         # The default value of each logistic is based on BNPB Perka 7/2008
         # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
-        tot_needs = self._weekly_needs_of_evacuated_population(evacuated,
-                                                               minimum_needs)
+        tot_needs = self.evacuated_population_weekly_needs(evacuated,
+                                                           minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [

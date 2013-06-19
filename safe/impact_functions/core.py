@@ -54,21 +54,21 @@ class FunctionProvider:
     target_field = 'DAMAGE'
     symbol_field = 'USE_MAJOR'
 
-    def _weekly_needs_of_evacuated_population(self, population,
-                                              minimum_needs=None):
+    def evacuated_population_weekly_needs(self, population,
+                                          minimum_needs=False):
         """Calculate estimated needs default based on BNPB Perka 7/2008
         minimum bantuan
 
         Input
-            population - The number of affected population
+            population - The number of evecuated population
 
         Output:
             python dict containing weekly needs
 
         Assumptions:
-        400g per person per day
-        2.5L per person per day
-        15L per person per day
+        400g rice per person per day
+        2.5L drinking water per person per day
+        15L clean water per person per day
         assume 5 people per family (not in perka)
         20 people per toilet
         """

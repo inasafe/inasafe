@@ -269,6 +269,29 @@ class Test_plugin_core(unittest.TestCase):
         assert (my_formated_int == expected_str or
                 my_formated_int == str(my_int)), my_msg
 
+    def test_default_weekly_needs(self):
+        """default calculated needs are as expected
+        """
+        if_core = FunctionProvider()
+        # 20 Happens to be the smallest number at which intiger rounding
+        # won't make a difference to the result
+        result = if_core.evacuated_population_weekly_needs(20)
+        assert (result['rice'] == 56 and result['drinking_water'] == 350
+                and result['water'] == 2100 and result['family_kits'] == 4
+                and result['toilets'] == 1)
+
+    def test_arbitrary_weekly_needs(self):
+        """custom need ratios calculated are as expected
+        """
+        if_core = FunctionProvider()
+        minimum_needs = {'Rice': 4, 'Drinking Water': 3,
+                         'Water': 2, 'Family Kits': 1, 'Toilets': 5}
+        result = if_core.evacuated_population_weekly_needs(10, minimum_needs)
+        assert (result['rice'] == 40 and result['drinking_water'] == 30
+                and result['water'] == 20 and result['family_kits'] == 10
+                and result['toilets'] == 2)
+
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
