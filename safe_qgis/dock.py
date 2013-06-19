@@ -26,7 +26,7 @@ from functools import partial
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QFileDialog
-from PyQt4.QtCore import pyqtSlot
+from PyQt4.QtCore import pyqtSlot, QSettings
 
 from qgis.core import (
     QgsMapLayer,
@@ -191,7 +191,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # used by configurable function options button
         self.activeFunction = None
         self.runtimeKeywordsDialog = None
-        self.lastSaveDir = ''
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(
@@ -2177,18 +2176,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHazardPath = myHazardPath.split(myRootPath)[1]
 
         myTitleDialog = self.tr('Save Scenario')
-        if not os.path.exists(self.lastSaveDir):
-            LOGGER.info('lastSaveDir Exist')
-            self.lastSaveDir = '.'
+        # get last dir from setting
+        mySettings = QSettings()
+        lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
+        lastSaveDir = str(lastSaveDir.toString())
         # noinspection PyCallByClass,PyTypeChecker
         myFileName = str(QFileDialog.getSaveFileName(
             self, myTitleDialog,
-            os.path.join(self.lastSaveDir, myTitle + '.txt'),
+            os.path.join(lastSaveDir, myTitle + '.txt'),
             "Text files (*.txt)"))
-
-        # Set previous directory
-        if os.path.exists(myFileName):
-            self.lastSaveDir = os.path.dirname(myFileName)
 
         # write to file
         myParser = ConfigParser()
@@ -2200,9 +2196,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             myParser.write(open(myFileName, 'at'))
+            # Save directory settings
+            lastSaveDir = os.path.dirname(myFileName)
+            mySettings.setValue('inasafe/lastSourceDir', lastSaveDir)
         except IOError:
-            # QtGui.QMessageBox.warning(
-            #     self, self.tr('InaSAFE'),
-            #     self.tr('Failed to save scenario to ' + myFileName))
-            # raise IOError('myFileName: ' + myFileName)
-            LOGGER.debug('IOError. myFileName: ' + myFileName)
+            # noinspection PyTypeChecker,PyCallByClass
+            QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE'),
+                self.tr('Failed to save scenario to ' + myFileName))
+            raise IOError('myFileName: ' + myFileName)
