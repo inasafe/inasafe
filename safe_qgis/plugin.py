@@ -640,18 +640,10 @@ class Plugin:
         """Show Script Dialog"""
         from safe_qgis.script_dialog import ScriptDialog
 
-        myDialog = self.iface.mainWindow().findChild(ScriptDialog)
-        if myDialog is None:
-            myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
-
+        myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
+        myDialog.setModal(True)
         myDialog.show()
 
     def saveScenario(self):
         """Save current scenario to text file"""
-        from safe_qgis.script_dialog import ScriptDialog
-
-        myDialog = self.iface.mainWindow().findChild(ScriptDialog)
-        if myDialog is None:
-            myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
-
-        myDialog.saveCurrentScenario()
+        self.dockWidget.saveCurrentScenario()

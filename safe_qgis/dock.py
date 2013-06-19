@@ -20,10 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import logging
+from ConfigParser import ConfigParser
 
 from functools import partial
 
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtGui import QFileDialog
 from PyQt4.QtCore import pyqtSlot
 
 from qgis.core import (
@@ -189,6 +191,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # used by configurable function options button
         self.activeFunction = None
         self.runtimeKeywordsDialog = None
+        self.lastSaveDir = ''
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(
@@ -2125,3 +2128,81 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr(
                 'Loaded impact layer "%1" is not valid').arg(myFilename)
             raise Exception(myMessage)
+
+    def saveCurrentScenario(self):
+        """Save current scenario
+        """
+        LOGGER.info('saveCurrentScenario')
+        warningTitle = self.tr('InaSAFE Save Scenario Warning')
+        # get data layer
+        # get absolute path of exposure & hazard layer
+        myExposureLayer = self.getExposureLayer()
+        myHazardLayer = self.getHazardLayer()
+
+        # Checking f exposure and hazard layer is not None
+        if myExposureLayer is None:
+            warningMessage = self.tr(
+                'Exposure layer is not found, can not save scenario. Please '
+                'add exposure layer to do so.')
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
+            return
+        if myHazardLayer is None:
+            warningMessage = self.tr(
+                'Hazard layer is not found, can not save scenario. Please add '
+                'hazard layer to do so.')
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
+            return
+
+        myExposurePath = myExposureLayer.publicSource()
+        myHazardPath = myHazardLayer.publicSource()
+        myRootPath = os.path.commonprefix([myExposurePath, myHazardPath])
+
+        myTitle = self.keywordIO.readKeywords(myHazardLayer, 'title')
+        myTitle = safeTr(myTitle)
+
+        myFunctionId = self.getFunctionID(self.cboFunction.currentIndex())
+
+        # Checking if function id is not None
+        if myFunctionId == '' or myFunctionId is None:
+            warningMessage = self.tr(
+                'The impact function is empty, can not save scenario')
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.question(self, warningTitle, warningMessage)
+            return
+
+        # simplify the path
+        myExposurePath = myExposurePath.split(myRootPath)[1]
+        myHazardPath = myHazardPath.split(myRootPath)[1]
+
+        myTitleDialog = self.tr('Save Scenario')
+        if not os.path.exists(self.lastSaveDir):
+            LOGGER.info('lastSaveDir Exist')
+            self.lastSaveDir = '.'
+        # noinspection PyCallByClass,PyTypeChecker
+        myFileName = str(QFileDialog.getSaveFileName(
+            self, myTitleDialog,
+            os.path.join(self.lastSaveDir, myTitle + '.txt'),
+            "Text files (*.txt)"))
+
+        # Set previous directory
+        if os.path.exists(myFileName):
+            self.lastSaveDir = os.path.dirname(myFileName)
+
+        # write to file
+        myParser = ConfigParser()
+        myParser.add_section(myTitle)
+        myParser.set(myTitle, 'path', myRootPath)
+        myParser.set(myTitle, 'exposure', myExposurePath)
+        myParser.set(myTitle, 'hazard', myHazardPath)
+        myParser.set(myTitle, 'function', myFunctionId)
+
+        try:
+            myParser.write(open(myFileName, 'w'))
+        except IOError:
+            # QtGui.QMessageBox.warning(
+            #     self, self.tr('InaSAFE'),
+            #     self.tr('Failed to save scenario to ' + myFileName))
+            # raise IOError('myFileName: ' + myFileName)
+            LOGGER.debug('IOError. myFileName: ' + myFileName)
