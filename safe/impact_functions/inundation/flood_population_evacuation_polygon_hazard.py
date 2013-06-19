@@ -203,8 +203,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        tot_needs = self._weekly_needs_of_evacuated_population(evacuated,
-                                                               minimum_needs)
+        tot_needs = self.evacuated_population_weekly_needs(evacuated,
+                                                           minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [question,

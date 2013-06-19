@@ -193,7 +193,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evac
         evacuated = cum
 
-        tot_needs = self._weekly_needs_of_evacuated_population(evacuated)
+        tot_needs = self.evacuated_population_weekly_needs(evacuated)
 
         # Generate impact report for the pdf map
         blank_cell = ''
