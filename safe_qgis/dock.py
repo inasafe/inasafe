@@ -2199,7 +2199,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myParser.set(myTitle, 'function', myFunctionId)
 
         try:
-            myParser.write(open(myFileName, 'w'))
+            myParser.write(open(myFileName, 'at'))
         except IOError:
             # QtGui.QMessageBox.warning(
             #     self, self.tr('InaSAFE'),
