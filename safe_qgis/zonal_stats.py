@@ -245,7 +245,21 @@ def statisticsFromMiddlePointTest(
         theCellSizeY,
         theRasterBox,
         theNoData):
+    """Stats where centroid of each cell must intersect the polygon.
 
+    Args:
+        * theBand GDALRasterBand - a valid band from a raster layer.
+        * theGeometry QgsGeometry - a valid polygon geometry.
+        * thePixelOffsetX int - left offset for raster window.
+        * thePixelOffsetY int - offset from bottom for raster window.
+        * theCellsX int - width of the raster window.
+        * theCellsY int - height of the raster window.
+        * theCellSizeX -
+        * theCellSizeY,
+        * theRasterBox,
+        * theNoData
+
+    """
     myCellCenterX = (
         theRasterBox.yMaximum() - thePixelOffsetY * theCellSizeY -
         theCellSizeY / 2)
@@ -280,7 +294,6 @@ def statisticsFromMiddlePointTest(
             theCellSizeX / 2)
 
         for j in range(0, theCellsX):
-
             myPoint = QgsPoint(myCellCenterY, myCellCenterX)
             if theGeometry.contains(myPoint):
                 if myValues[j] != theNoData:
