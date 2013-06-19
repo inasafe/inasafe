@@ -2194,6 +2194,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myParser.set(myTitle, 'hazard', myHazardPath)
         myParser.set(myTitle, 'function', myFunctionId)
 
+        if myFileName is None or myFileName == '':
+            return
+
         try:
             myParser.write(open(myFileName, 'at'))
             # Save directory settings
@@ -2204,4 +2207,4 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 self.tr('Failed to save scenario to ' + myFileName))
-            raise IOError('myFileName: ' + myFileName)
+            # raise IOError('myFileName: ' + myFileName)
