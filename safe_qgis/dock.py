@@ -20,11 +20,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import logging
+from ConfigParser import ConfigParser
 
 from functools import partial
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSlot
+from PyQt4.QtGui import QFileDialog
+from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 
 from qgis.core import (
     QgsMapLayer,
@@ -97,15 +99,17 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
-LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/logo.svg', 'InaSAFE Logo')
+LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
+
+    analysisDone = pyqtSignal(bool)
 
     def __init__(self, iface):
         """Constructor for the dialog.
@@ -127,7 +131,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised
         """
-
+        #pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
@@ -1171,8 +1176,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:   # pylint: disable=W0703
-            myMessage = getErrorMessage(e)
-            self.showErrorMessage(myMessage)
+            self.analysisError(e, myMessage)
             return
 
         # Find out what the usable extent and cellsize are
@@ -1181,8 +1185,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            myMessage = getErrorMessage(e)
-            self.showErrorMessage(myMessage)
+            self.analysisError(e, myMessage)
             return None  # ignore any error
 
         # Ensure there is enough memory
@@ -1259,33 +1262,33 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.setupCalculator()
         except CallGDALError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred when calling a GDAL command'))
             return
         except IOError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred when writing clip file'))
             return
         except InsufficientOverlapError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An exception occurred when setting up the impact calculator.')
             )
             return
         except NoFeaturesInExtentError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred because there are no features visible in '
                 'the current view. Try zooming out or panning until some '
                 'features become visible.'))
             return
         except InvalidProjectionError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred because you are using a layer containing '
                 'density data (e.g. population density) which will not '
                 'scale accurately if we re-project it from its native '
                 'coordinate reference system to WGS84/GeoGraphic.'))
             return
         except MemoryError, e:
-            self.spawnError(
+            self.analysisError(
                 e,
                 self.tr(
                     'An error occurred because it appears that your '
@@ -1299,7 +1302,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.runner = self.calculator.getRunner()
         except (InsufficientParametersError, ReadLayerError), e:
-            self.spawnError(
+            self.analysisError(
                 e,
                 self.tr(
                     'An exception occurred when setting up the model runner.'))
@@ -1331,11 +1334,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
-            self.spawnError(
+            self.analysisError(
                 e,
                 self.tr('An exception occurred when starting the model.'))
 
-    def spawnError(self, theException, theMessage):
+    def analysisError(self, theException, theMessage):
         """A helper to spawn an error and halt processing.
 
         An exception will be logged, busy status removed and a message
@@ -1356,6 +1359,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         LOGGER.exception(theMessage)
         myMessage = getErrorMessage(theException, theContext=theMessage)
         self.showErrorMessage(myMessage)
+        self.analysisDone.emit(False)
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -1374,16 +1378,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
-
-            # Display message and traceback
-            myMessage = getErrorMessage(e)
-            self.showErrorMessage(myMessage)
+            self.analysisError(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
             self.showDynamicMessage(m.Message(str(myReport)))
         self.saveState()
         self.hideBusy()
         self.layerChanged(myQGISImpactLayer)
+        self.analysisDone.emit(True)
 
     def _completed(self, theQGISImpactLayer, theEngineImpactLayer):
         """Helper function for slot activated when the process is done.
@@ -1491,7 +1493,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.QObject.disconnect(self.runner,
                                       QtCore.SIGNAL('done()'),
                                       self.aggregate)
-
         self.grpQuestion.setEnabled(True)
         self.pbnRunStop.setEnabled(True)
         self.repaint()
@@ -1551,6 +1552,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 ).arg(self.runner.result())
                 myMessage = getErrorMessage(myException, theContext=myContext)
             self.showErrorMessage(myMessage)
+            self.analysisDone.emit(False)
             return
 
         try:
@@ -1566,8 +1568,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myContext = self.aggregator.errorMessage
             myException = AggregatioError(self.tr(
                 'Aggregation error occurred.'))
-            myMessage = getErrorMessage(myException, theContext=myContext)
-            self.showErrorMessage(myMessage)
+            self.analysisError(myException, myContext)
 
     def postProcess(self):
         LOGGER.debug('Do postprocessing')
@@ -1575,6 +1576,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocessorManager.functionParams = self.functionParams
         self.postprocessorManager.run()
         self.completed()
+        self.analysisDone.emit(True)
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
@@ -2124,3 +2126,93 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr(
                 'Loaded impact layer "%1" is not valid').arg(myFilename)
             raise Exception(myMessage)
+
+    def saveCurrentScenario(self):
+        """Save current scenario
+        """
+        LOGGER.info('saveCurrentScenario')
+        warningTitle = self.tr('InaSAFE Save Scenario Warning')
+        # get data layer
+        # get absolute path of exposure & hazard layer, or the contents
+        myExposureLayer = self.getExposureLayer()
+        myHazardLayer = self.getHazardLayer()
+        myAggregationLayer = self.getAggregationLayer()
+        myFunctionId = self.getFunctionID(self.cboFunction.currentIndex())
+        myMapCanvas = self.iface.mapCanvas()
+        myExtent = myMapCanvas.extent()
+        myExtentStr = str(myExtent.toString())
+        myExtentStr = myExtentStr.replace(',', ', ')
+        myExtentStr = myExtentStr.replace(' : ', ', ')
+
+        # Checking f exposure and hazard layer is not None
+        if myExposureLayer is None:
+            warningMessage = self.tr(
+                'Exposure layer is not found, can not save scenario. Please '
+                'add exposure layer to do so.')
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
+            return
+        if myHazardLayer is None:
+            warningMessage = self.tr(
+                'Hazard layer is not found, can not save scenario. Please add '
+                'hazard layer to do so.')
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
+            return
+
+        # Checking if function id is not None
+        if myFunctionId == '' or myFunctionId is None:
+            warningMessage = self.tr(
+                'The impact function is empty, can not save scenario')
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.question(self, warningTitle, warningMessage)
+            return
+
+        myExposurePath = str(myExposureLayer.publicSource())
+        myHazardPath = str(myHazardLayer.publicSource())
+
+
+        myTitle = self.keywordIO.readKeywords(myHazardLayer, 'title')
+        myTitle = safeTr(myTitle)
+
+        myTitleDialog = self.tr('Save Scenario')
+        # get last dir from setting
+        mySettings = QSettings()
+        lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
+        lastSaveDir = str(lastSaveDir.toString())
+        # noinspection PyCallByClass,PyTypeChecker
+        myFileName = str(QFileDialog.getSaveFileName(
+            self, myTitleDialog,
+            os.path.join(lastSaveDir, myTitle + '.txt'),
+            "Text files (*.txt)"))
+
+        myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
+        myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
+
+        # write to file
+        myParser = ConfigParser()
+        myParser.add_section(myTitle)
+        myParser.set(myTitle, 'exposure', myRelExposurePath)
+        myParser.set(myTitle, 'hazard', myRelHazardPath)
+        myParser.set(myTitle, 'function', myFunctionId)
+        myParser.set(myTitle, 'extent', myExtentStr)
+
+        if myAggregationLayer is not None:
+            myAggregationPath = str(myAggregationLayer.publicSource())
+            myRelAggregationPath = os.path.relpath(myAggregationPath,
+                                                   myFileName)
+            myParser.set(myTitle, 'aggregation', myRelAggregationPath)
+
+        if myFileName is None or myFileName == '':
+            return
+
+        try:
+            myParser.write(open(myFileName, 'at'))
+            # Save directory settings
+            lastSaveDir = os.path.dirname(myFileName)
+            mySettings.setValue('inasafe/lastSourceDir', lastSaveDir)
+        except IOError:
+            # noinspection PyTypeChecker,PyCallByClass
+            QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE'),
+                self.tr('Failed to save scenario to ' + myFileName))

@@ -53,7 +53,7 @@ INFO_STYLE = styles.INFO_STYLE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 # noinspection PyUnresolvedReferences
-import safe_qgis.resources  # pylint: disable=W0611
+import safe_qgis.resources_rc  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -718,3 +718,11 @@ def safeToQGISLayer(theLayer):
     else:
         myMessage = tr('Loaded impact layer "%1" is not valid').arg(myFilename)
         raise Exception(myMessage)
+
+
+def getAbsolutePath(thePath, relativePath):
+    """Helper function to get absolute path from a relativePath. The
+    relativePath is relative to thePath
+    """
+    theLongPath = os.path.join(thePath, relativePath)
+    return os.path.normpath(theLongPath)

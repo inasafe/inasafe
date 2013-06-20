@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/plugins/inasafe">
-        <file alias="logo.svg">resources/img/icons/logo.svg</file>
         <file alias="icon.svg">resources/img/icons/icon.svg</file>
         <file alias="show-impact-functions.svg">resources/img/icons/show-impact-functions.svg</file>
         <file alias="show-keyword-editor.svg">resources/img/icons/show-keyword-editor.svg</file>
@@ -8,9 +7,12 @@
         <file alias="configure-inasafe.svg">resources/img/icons/configure-inasafe.svg</file>
         <file alias="show-keyword-editor.svg">resources/img/icons/show-keyword-editor.svg</file>
         <file alias="show-minimum-needs.svg">resources/img/icons/show-minimum-needs.svg</file>
+        <file alias="show-batch-runner.svg">resources/img/icons/show-batch-runner.svg</file>
+        <file alias="show-osm-download.svg">resources/img/icons/show-osm-download.svg</file>
         <file alias="save-as-scenario.svg">resources/img/icons/save-as-scenario.svg</file>
-	    <file alias="show-osm-download.png">resources/img/icons/show-osm-download.svg</file>
+        <file alias="show-converter-tool.svg">resources/img/icons/show-converter-tool.svg</file>
         <!-- logos -->
+        <file alias="inasafe-logo.svg">resources/img/logos/inasafe-logo.svg</file>
         <file alias="bnpb_logo.png">resources/img/logos/bnpb_logo.png</file>
         <file alias="bnpb_logo_64.png">resources/img/logos/bnpb_logo_64.png</file>
         <file alias="bnpb_logo_32.png">resources/img/logos/bnpb_logo_32.png</file>

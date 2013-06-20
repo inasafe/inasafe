@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'minimum_needs_base.ui'
 #
-# Created: Fri Jun  7 09:18:55 2013
-#      by: PyQt4 UI code generator 4.10
+# Created: Thu Jun 20 12:08:47 2013
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,16 +12,7 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+    _fromUtf8 = lambda s: s
 
 class Ui_MinimumNeedsBase(object):
     def setupUi(self, MinimumNeedsBase):
@@ -60,8 +51,8 @@ class Ui_MinimumNeedsBase(object):
         QtCore.QMetaObject.connectSlotsByName(MinimumNeedsBase)
 
     def retranslateUi(self, MinimumNeedsBase):
-        MinimumNeedsBase.setWindowTitle(_translate("MinimumNeedsBase", "Dialog", None))
-        self.label_2.setText(_translate("MinimumNeedsBase", "Select a layer that is already loaded in QGIS and that contains a field named \'pengungsi\'.", None))
-        self.label.setText(_translate("MinimumNeedsBase", "Affected People Layer", None))
-        self.label_3.setText(_translate("MinimumNeedsBase", "Affected people field", None))
+        MinimumNeedsBase.setWindowTitle(QtGui.QApplication.translate("MinimumNeedsBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("MinimumNeedsBase", "Select a layer that is already loaded in QGIS and that contains a field named \'pengungsi\'.", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("MinimumNeedsBase", "Affected People Layer", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("MinimumNeedsBase", "Affected people field", None, QtGui.QApplication.UnicodeUTF8))
 

@@ -25,11 +25,6 @@ from osgeo import gdal
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import QGis, QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
 
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
 from safe_qgis.utilities import getErrorMessage, isRasterLayer, isPolygonLayer
 from safe_qgis.exceptions import InvalidParameterError
 
@@ -79,7 +74,6 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         layers are in the same CRS - we assume they are.
 
     """
-    print os.path
     if not isPolygonLayer(thePolygonLayer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a polygon layer in order to compute '
@@ -98,7 +92,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     # Get first band.
     myBand = myFid.GetRasterBand(1)
     myNoData = myBand.GetNoDataValue()
-    print 'No data %s' % myNoData
+    #print 'No data %s' % myNoData
     myCellSizeX = myGeoTransform[1]
     if myCellSizeX < 0:
         myCellSizeX = -myCellSizeX
@@ -126,8 +120,8 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         myCount += 1
         myFeatureBox = myGeometry.boundingBox()
 
-        print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
-        print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
+        #print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
+        #print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
 
         myOffsetX, myOffsetY, myCellsX, myCellsY = cellInfoForBBox(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
@@ -155,7 +149,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
             myCellSizeY,
             myRasterBox,
             myNoData)
-        print mySum, myCount
+        #print 'Sum: %s count: %s' % (mySum, myCount)
 
         if myCount <= 1:
             # The cell resolution is probably larger than the polygon area.
@@ -171,7 +165,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
                 myCellSizeY,
                 myRasterBox,
                 myNoData)
-            print mySum, myCount
+            #print mySum, myCount
 
         if myCount == 0:
             myMean = 0
@@ -196,7 +190,7 @@ def cellInfoForBBox(
 
     #get intersecting bbox
     myIntersectedBox = theFeatureBox.intersect(theRasterBox)
-    print 'Intersected Box: %s' % myIntersectedBox.asWktCoordinates()
+    #print 'Intersected Box: %s' % myIntersectedBox.asWktCoordinates()
     if myIntersectedBox.isEmpty():
         return None, None, None, None
 
@@ -208,20 +202,30 @@ def cellInfoForBBox(
     myOffsetY = myOffsetY / theCellSizeY
     myOffsetY = int(myOffsetY)
 
+    ##### Checked to here....offsets calculate correctly ##########
+
     myMaxColumn = myIntersectedBox.xMaximum() - theRasterBox.xMinimum()
     myMaxColumn = myMaxColumn / theCellSizeX
-    myMaxColumn = int(myMaxColumn) + 1
+    # Round up to the next cell if the bbox is not on an exact pixel boundary
+    if myMaxColumn > int(myMaxColumn):
+        myMaxColumn = int(myMaxColumn) + 1
+    else:
+        myMaxColumn = int(myMaxColumn)
 
     myMaxRow = theRasterBox.yMaximum() - myIntersectedBox.yMinimum()
     myMaxRow = myMaxRow / theCellSizeY
-    myMaxRow = int(myMaxRow) + 1
+    # Round up to the next cell if the bbox is not on an exact pixel boundary
+    if myMaxRow > int(myMaxRow):
+        myMaxRow = int(myMaxRow) + 1
+    else:
+        myMaxRow = int(myMaxRow)
 
     myCellsX = myMaxColumn - myOffsetX
     myCellsY = myMaxRow - myOffsetY
 
-    print ('Reading Pixel box: W: %s H: %s Offset Left: %s Offset Top: %s' % (
-        myCellsX, myCellsY, myOffsetX, myOffsetY
-    ))
+    #print ('Pixel box: W: %s H: %s Offset Left: %s Offset Bottom: %s' % (
+    #    myCellsX, myCellsY, myOffsetX, myOffsetY
+    #))
     return myOffsetX, myOffsetY, myCellsX, myCellsY
 
 
@@ -236,7 +240,21 @@ def statisticsFromMiddlePointTest(
         theCellSizeY,
         theRasterBox,
         theNoData):
+    """Stats where centroid of each cell must intersect the polygon.
 
+    Args:
+        * theBand GDALRasterBand - a valid band from a raster layer.
+        * theGeometry QgsGeometry - a valid polygon geometry.
+        * thePixelOffsetX int - left offset for raster window.
+        * thePixelOffsetY int - offset from bottom for raster window.
+        * theCellsX int - width of the raster window.
+        * theCellsY int - height of the raster window.
+        * theCellSizeX -
+        * theCellSizeY,
+        * theRasterBox,
+        * theNoData
+
+    """
     myCellCenterX = (
         theRasterBox.yMaximum() - thePixelOffsetY * theCellSizeY -
         theCellSizeY / 2)
@@ -271,7 +289,6 @@ def statisticsFromMiddlePointTest(
             theCellSizeX / 2)
 
         for j in range(0, theCellsX):
-
             myPoint = QgsPoint(myCellCenterY, myCellCenterX)
             if theGeometry.contains(myPoint):
                 if myValues[j] != theNoData:
@@ -296,8 +313,6 @@ def statisticsFromPreciseIntersection(
         theCellSizeY,
         theRasterBox,
         theNoData):
-    mySum = 0
-    myCount = 0
     myCurrentY = (
         theRasterBox.yMaximum() - thePixelOffsetY *
         theCellSizeY - theCellSizeY / 2)
@@ -309,6 +324,8 @@ def statisticsFromPreciseIntersection(
     myCellsToReadY = 1  # read in a single row at a time
     myBufferXSize = 1
     myBufferYSize = 1
+    myCount = 0
+    mySum = 0.0
 
     for row in range(0, theCellsY):
         myCurrentX = (
@@ -328,13 +345,17 @@ def statisticsFromPreciseIntersection(
             # xsize*4 bytes of raw binary floating point data. This can be
             # converted to Python values using the struct module from the
             # standard library:
-            print myScanline
+            #print myScanline
             if myScanline != '':
-                myValue = struct.unpack('f', myScanline)
+                myValues = struct.unpack('f', myScanline)  # tuple returned
+                myValue = myValues[0]
+            else:
                 continue
 
             if myValue == theNoData:
+                #print 'myValue is nodata (%s)' % theNoData
                 continue
+            #print 'Value of cell in precise intersection: %s' % myValue
             # noinspection PyCallByClass,PyTypeChecker
             myPixelGeometry = QgsGeometry.fromRect(
                 QgsRectangle(
@@ -343,15 +364,18 @@ def statisticsFromPreciseIntersection(
                     myCurrentX + myHalfCellSizeX,
                     myCurrentY + myHalfCellsSizeY))
             if myPixelGeometry:
-                #intersection
                 myIntersectionGeometry = myPixelGeometry.intersection(
                     theGeometry)
                 if myIntersectionGeometry:
-                    intersectionArea = myIntersectionGeometry.area()
-                    if intersectionArea >= 0.0:
-                        myWeight = intersectionArea / myPixelArea
+                    myIntersectionArea = myIntersectionGeometry.area()
+                    #print 'Intersection Area: %s' % myIntersectionArea
+                    if myIntersectionArea >= 0.0:
+                        myWeight = myIntersectionArea / myPixelArea
+                        #print 'Weight: %s' % myWeight
                         myCount += myWeight
+                        #print 'myCount: %s' % myCount
                         mySum += myValue * myWeight
+                        #print 'myValue: %s' % myValue
             myCurrentX += theCellSizeY
         myCurrentY -= theCellsY
     return mySum, myCount

@@ -41,7 +41,7 @@ from safe_qgis.utilities import (setupPrinter,
                                  qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import safe_qgis.resources     # pylint: disable=W0611
+import safe_qgis.resources_rc  # pylint: disable=W0611
 LOGGER = logging.getLogger('InaSAFE')
 
 

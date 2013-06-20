@@ -19,12 +19,14 @@ import unittest
 import sys
 import os
 
+from qgis.core import QgsRectangle
+
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from safe_qgis.zonal_stats import calculateZonalStats
+from safe_qgis.zonal_stats import calculateZonalStats, cellInfoForBBox
 from safe_qgis.utilities import getErrorMessage
 from safe_qgis.utilities_test import (
     unitTestDataPath,
@@ -60,11 +62,11 @@ class ZonalStatsTest(unittest.TestCase):
             theRasterLayer=myRasterLayer,
             thePolygonLayer=myVectorLayer)
         myExpectedResult = {
-            0L: {'count': 4, 'sum': 2, 'mean': 0.5},  # BR polygon
-            1L: {'count': 0, 'sum': 0, 'mean': 0},
-            2L: {'count': 0, 'sum': 0, 'mean': 0},
-            3L: {'count': 0, 'sum': 0, 'mean': 0},
-            4L: {'count': 0, 'sum': 0, 'mean': 0}}
+            0L: {'count': 4, 'sum': 34.0, 'mean': 8.5},  # BR polygon
+            1L: {'count': 9, 'sum': 36.0, 'mean': 4.0},  # center polygon
+            2L: {'count': 4, 'sum': 2.0, 'mean': 0.5},  # TL polygon
+            3L: {'count': 4, 'sum': 2.0, 'mean': 0.5},  # BL Polygon
+            4L: {'count': 4, 'sum': 34.0, 'mean': 8.5}}  # TR polygon
         self.maxDiff = None
         self.assertDictEqual(myExpectedResult, myResult)
 
@@ -72,16 +74,48 @@ class ZonalStatsTest(unittest.TestCase):
         """Test that zonal stats returns the expected output."""
         myRasterLayer, _ = loadLayer(os.path.join(
             UNITDATA, 'other', 'tenbytenraster.asc'))
+        # Note this is a matrix of 11x11 polys - one per cell
+        # and one poly extending beyond to the right of each row
+        # and one poly extending beyond the bottom of each col
         myVectorLayer, _ = loadLayer(os.path.join(
             UNITDATA, 'other', 'ten_by_ten_raster_as_polys.shp'))
         myResult = calculateZonalStats(
             theRasterLayer=myRasterLayer,
             thePolygonLayer=myVectorLayer)
         myExpectedResult = {
-            0L: {'count': 4, 'sum': 2, 'mean': 0.5},  # BR polygon
-            1L: {'count': 0, 'sum': 0, 'mean': 0},
-            2L: {'count': 0, 'sum': 0, 'mean': 0},
-            3L: {'count': 0, 'sum': 0, 'mean': 0},
-            4L: {'count': 0, 'sum': 0, 'mean': 0}}
+            0L: {'count': 1.0, 'sum': 0.0, 'mean': 0.0},  # TL polygon
+            9L: {'count': 1.0, 'sum': 9.0, 'mean': 9.0},  # TR polygon
+            25L: {'count': 1.0, 'sum': 3.0, 'mean': 3.0},  # Central polygon
+            88L: {'count': 1.0, 'sum': 0.0, 'mean': 0.0},  # BL polygon
+            108L: {'count': 1.0, 'sum': 9.0, 'mean': 9.0}}  # BR polygon
+        # We will just check TL, TR, Middle, BL and BR cells
+        myResult = {
+            0L: myResult[0L],
+            9L: myResult[9L],
+            25L: myResult[25L],
+            88L: myResult[88L],
+            108L: myResult[108L]}
         self.maxDiff = None
         self.assertDictEqual(myExpectedResult, myResult)
+
+    def test_cellInfoForBBox(self):
+        """Test that cell info for bbox returns expected values."""
+        myRasterBox = QgsRectangle(1535375.0, 5083255.0, 1535475.0, 5083355.0)
+        myFeatureBox = QgsRectangle(1535455.0, 5083345.0, 1535465.0, 5083355.0)
+        myCellSizeX = 10
+        myCellSizeY = 10
+        myOffsetX = 8
+        myOffsetY = 0
+        myCellsX = myCellsY = 1
+        myExpectedResult = myOffsetX, myOffsetY, myCellsX, myCellsY
+        myResult = cellInfoForBBox(
+            myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
+        self.assertTupleEqual(myExpectedResult, myResult)
+
+        # Now try with a poly bbox slightly larger than 1 px (1535470)
+        myCellsX = 2
+        myExpectedResult = myOffsetX, myOffsetY, myCellsX, myCellsY
+        myFeatureBox = QgsRectangle(1535455.0, 5083345.0, 1535470.0, 5083355.0)
+        myResult = cellInfoForBBox(
+            myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
+        self.assertTupleEqual(myExpectedResult, myResult)

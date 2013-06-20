@@ -26,18 +26,6 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import DEFAULTS
 
-# Don't remove this even if it is flagged as unused by your ide
-# it is needed for qrc:/ url resolution. See Qt Resources docs.
-import safe_qgis.resources  # pylint: disable=W0611
-
-#see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
-
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""

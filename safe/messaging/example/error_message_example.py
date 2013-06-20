@@ -48,8 +48,8 @@ def error_creator2():
     """Simple function that will extend an error and its traceback."""
     try:
         error_creator1()
-    except IOError, e:
-        e.args = (e.args[0] + '\nCreator 2 error',)  # Tuple dont remove last ,
+    except IOError, e1:
+        e1.args = (e1.args[0] + '\nCreator 2 error',)  # Tuple dont remove ,
         raise
 
 
@@ -57,18 +57,17 @@ def error_creator3():
     """Raise a safe style error."""
     try:
         error_creator2()
-    except IOError, e:
-        #e.args = (e.args[0] + '\nCreator 3 error',)  # Tuple dont remove
-        # last ,
-        raise SafeError(e)
+    except IOError, e2:
+        #e2.args = (e2.args[0] + '\nCreator 3 error',)  # Tuple dont remove ,
+        raise SafeError(e2)
 
 
 def error_creator4():
     """Raise a safe style error."""
     try:
         error_creator3()
-    except SafeError, e:
-        e.error_message.problems.append('Creator 4 error')
+    except SafeError, e3:
+        e3.error_message.problems.append('Creator 4 error')
         raise
 
 
@@ -76,14 +75,14 @@ def error_creator5():
     """Raise a safe style error and append a full message."""
     try:
         error_creator4()
-    except SafeError, e:
+    except SafeError, e4:
         message = ErrorMessage(
             'Creator 5 problem',
             detail=Message(
                 Paragraph('Could not', ImportantText('call'), 'function.'),
                 Paragraph('Try reinstalling your computer with windows.')),
             suggestion=Message(ImportantText('Important note')))
-        e.error_message.append(message)
+        e4.error_message.append(message)
         raise
 
 if __name__ == '__main__':

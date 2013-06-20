@@ -160,13 +160,17 @@ class PostprocessorManager(QtCore.QObject):
                     'calculating them. This did not affect the other '
                     'values.').arg(self.aggregator.defaults['NO_DATA'])))
 
-        if (self.keywordIO.readKeywords(
-                self.aggregator.layer, 'HAD_MULTIPART_POLY')):
-            myMessage.add(m.EmphasizedText(self.tr(
-                'The aggregation layer had multipart polygons, this have '
-                'been exploded and are now marked with a #. This has no '
-                'influence on the calculation, just keep in mind that you need'
-                ' to take account for all parts of an aggregation unit.')))
+        try:
+            if (self.keywordIO.readKeywords(
+                    self.aggregator.layer, 'HAD_MULTIPART_POLY')):
+                myMessage.add(m.EmphasizedText(self.tr(
+                    'The aggregation layer had multipart polygons, these have '
+                    'been exploded and are now marked with a #. This has no '
+                    'influence on the calculation, just keep in mind that the'
+                    'attributes shown may represent the original multipart '
+                    'polygon and not the individual exploded polygon parts. ')))
+        except:
+            pass
 
         return myMessage
 
