@@ -381,7 +381,12 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
                 myImpactLayer = self.iface.activeLayer()
-                self.createPDFReport(myTitle, myPath, myImpactLayer)
+                try:
+                    self.createPDFReport(myTitle, myPath, myImpactLayer)
+                except:
+                    LOGGER.exception('Unable to render map: "%s"' % myValue)
+                    theStatusItem.setText(self.tr('Fail'))
+                    myResult = False
         else:
             LOGGER.exception('data type not supported: "%s"' % myValue)
             myResult = False

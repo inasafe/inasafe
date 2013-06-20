@@ -102,10 +102,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# This will do nothing if there is no pydevd directory in the top of the
-# InaSAFE plugin directory.
-from .utilities import enableRemoteDebugging
-enableRemoteDebugging()
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -134,7 +131,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised
         """
-
+        pydevd.settrace(
+            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
@@ -1178,8 +1176,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:   # pylint: disable=W0703
-            myMessage = getErrorMessage(e)
-            self.showErrorMessage(myMessage)
+            self.analysisError(e, myMessage)
             return
 
         # Find out what the usable extent and cellsize are
@@ -1188,8 +1185,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            myMessage = getErrorMessage(e)
-            self.showErrorMessage(myMessage)
+            self.analysisError(e, myMessage)
             return None  # ignore any error
 
         # Ensure there is enough memory
@@ -1266,33 +1262,33 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.setupCalculator()
         except CallGDALError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred when calling a GDAL command'))
             return
         except IOError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred when writing clip file'))
             return
         except InsufficientOverlapError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An exception occurred when setting up the impact calculator.')
             )
             return
         except NoFeaturesInExtentError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred because there are no features visible in '
                 'the current view. Try zooming out or panning until some '
                 'features become visible.'))
             return
         except InvalidProjectionError, e:
-            self.spawnError(e, self.tr(
+            self.analysisError(e, self.tr(
                 'An error occurred because you are using a layer containing '
                 'density data (e.g. population density) which will not '
                 'scale accurately if we re-project it from its native '
                 'coordinate reference system to WGS84/GeoGraphic.'))
             return
         except MemoryError, e:
-            self.spawnError(
+            self.analysisError(
                 e,
                 self.tr(
                     'An error occurred because it appears that your '
@@ -1306,7 +1302,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.runner = self.calculator.getRunner()
         except (InsufficientParametersError, ReadLayerError), e:
-            self.spawnError(
+            self.analysisError(
                 e,
                 self.tr(
                     'An exception occurred when setting up the model runner.'))
@@ -1338,11 +1334,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
-            self.spawnError(
+            self.analysisError(
                 e,
                 self.tr('An exception occurred when starting the model.'))
 
-    def spawnError(self, theException, theMessage):
+    def analysisError(self, theException, theMessage):
         """A helper to spawn an error and halt processing.
 
         An exception will be logged, busy status removed and a message
@@ -1382,10 +1378,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
-
-            # Display message and traceback
-            myMessage = getErrorMessage(e)
-            self.showErrorMessage(myMessage)
+            self.analysisError(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
             self.showDynamicMessage(m.Message(str(myReport)))
@@ -1559,6 +1552,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 ).arg(self.runner.result())
                 myMessage = getErrorMessage(myException, theContext=myContext)
             self.showErrorMessage(myMessage)
+            self.analysisDone.emit(False)
             return
 
         try:
@@ -1575,8 +1569,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myContext = self.aggregator.errorMessage
             myException = AggregatioError(self.tr(
                 'Aggregation error occurred.'))
-            myMessage = getErrorMessage(myException, theContext=myContext)
-            self.showErrorMessage(myMessage)
+            self.analysisError(myException, myContext)
 
     def postProcess(self):
         LOGGER.debug('Do postprocessing')

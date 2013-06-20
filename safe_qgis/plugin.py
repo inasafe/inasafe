@@ -187,6 +187,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         self.toolbar = self.iface.addToolBar('InaSAFE')
+        self.toolbar.setObjectName('InaSAFEToolBar')
         # Import dock here as it needs to be imported AFTER i18n is set up
         from safe_qgis.dock import Dock
         self.dockWidget = None

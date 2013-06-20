@@ -53,7 +53,7 @@ def runScenario():
 
     myDock.analysisDone.connect(completed)
     # Start the analysis
-    myDock.pbnRunStop.click()
+    myDock.accept()
 
 
 def extractPath(theScenarioFilePath, thePath):
