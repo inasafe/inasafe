@@ -26,7 +26,7 @@ from functools import partial
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QFileDialog
-from PyQt4.QtCore import pyqtSlot, QSettings
+from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 
 from qgis.core import (
     QgsMapLayer,
@@ -108,6 +108,8 @@ LOGGER = logging.getLogger('InaSAFE')
 #noinspection PyArgumentList
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
+
+    analysisDone = pyqtSignal(bool)
 
     def __init__(self, iface):
         """Constructor for the dialog.
@@ -1493,7 +1495,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.QObject.disconnect(self.runner,
                                       QtCore.SIGNAL('done()'),
                                       self.aggregate)
-
         self.grpQuestion.setEnabled(True)
         self.pbnRunStop.setEnabled(True)
         self.repaint()
@@ -1578,6 +1579,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocessorManager.functionParams = self.functionParams
         self.postprocessorManager.run()
         self.completed()
+        self.analysisDone.emit(True)
 
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
