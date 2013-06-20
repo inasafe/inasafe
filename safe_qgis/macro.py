@@ -21,11 +21,12 @@ import os
 import logging
 import PyQt4.QtCore as QtCore
 
-from safe_qgis.exceptions import QgisPathError
-from safe_qgis.dock import Dock
 from qgis.core import QgsMapLayerRegistry
 from qgis.utils import iface
 
+from safe_qgis.exceptions import QgisPathError
+from safe_qgis.dock import Dock
+from safe_qgis.utilities import getAbsolutePath
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -45,25 +46,18 @@ def runScenario():
     """
 
     myDock = getDock()
-
-    # def completed():
-    #     LOGGER.debug("scenario done")
-    #     myDock.analysisDone.disconnect(completed)
-    #
-    # myDock.analysisDone.connect(completed)
-    # Start the analysis
     myDock.pbnRunStop.click()
 
 
-def extractPath(theDirectory, thePath):
-    """Get a path and basename given a directory and path."""
+def extractPath(theScenarioFilePath, thePath):
+    """Get a path and basename given a scenarioFilePath and path."""
     myFilename = os.path.split(thePath)[-1]  # In case path was absolute
     myBaseName, myExt = os.path.splitext(myFilename)
-    myPath = os.path.join(theDirectory, thePath)
+    myPath = getAbsolutePath(theScenarioFilePath, thePath)
     return myPath, myBaseName
 
 
-def addLayers(theDirectory, thePaths):
+def addLayers(theScenarioFilePath, thePaths):
     """ Add vector or raster layer to current project
      Args:
         * theDirectory: str - (Required) base directory to find path.
@@ -80,9 +74,9 @@ def addLayers(theDirectory, thePaths):
 
     myPaths = []
     if isinstance(thePaths, str):
-        myPaths.append(extractPath(theDirectory, thePaths))
+        myPaths.append(extractPath(theScenarioFilePath, thePaths))
     elif isinstance(thePaths, list):
-        myPaths = [extractPath(theDirectory, x) for x in thePaths]
+        myPaths = [extractPath(theScenarioFilePath, x) for x in thePaths]
     else:
         myMessage = "thePaths must be string or list not %s" % type(thePaths)
         raise TypeError(myMessage)

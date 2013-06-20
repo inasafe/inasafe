@@ -2134,9 +2134,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         LOGGER.info('saveCurrentScenario')
         warningTitle = self.tr('InaSAFE Save Scenario Warning')
         # get data layer
-        # get absolute path of exposure & hazard layer
+        # get absolute path of exposure & hazard layer, or the contents
         myExposureLayer = self.getExposureLayer()
         myHazardLayer = self.getHazardLayer()
+        myFunctionId = self.getFunctionID(self.cboFunction.currentIndex())
 
         # Checking f exposure and hazard layer is not None
         if myExposureLayer is None:
@@ -2154,15 +2155,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
             return
 
-        myExposurePath = myExposureLayer.publicSource()
-        myHazardPath = myHazardLayer.publicSource()
-        myRootPath = os.path.commonprefix([myExposurePath, myHazardPath])
-
-        myTitle = self.keywordIO.readKeywords(myHazardLayer, 'title')
-        myTitle = safeTr(myTitle)
-
-        myFunctionId = self.getFunctionID(self.cboFunction.currentIndex())
-
         # Checking if function id is not None
         if myFunctionId == '' or myFunctionId is None:
             warningMessage = self.tr(
@@ -2171,9 +2163,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtGui.QMessageBox.question(self, warningTitle, warningMessage)
             return
 
-        # simplify the path
-        myExposurePath = myExposurePath.split(myRootPath)[1]
-        myHazardPath = myHazardPath.split(myRootPath)[1]
+        myExposurePath = str(myExposureLayer.publicSource())
+        myHazardPath = str(myHazardLayer.publicSource())
+
+        myTitle = self.keywordIO.readKeywords(myHazardLayer, 'title')
+        myTitle = safeTr(myTitle)
 
         myTitleDialog = self.tr('Save Scenario')
         # get last dir from setting
@@ -2186,12 +2180,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             os.path.join(lastSaveDir, myTitle + '.txt'),
             "Text files (*.txt)"))
 
+        myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
+        myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
+
         # write to file
         myParser = ConfigParser()
         myParser.add_section(myTitle)
-        myParser.set(myTitle, 'path', myRootPath)
-        myParser.set(myTitle, 'exposure', myExposurePath)
-        myParser.set(myTitle, 'hazard', myHazardPath)
+        myParser.set(myTitle, 'exposure', myRelExposurePath)
+        myParser.set(myTitle, 'hazard', myRelHazardPath)
         myParser.set(myTitle, 'function', myFunctionId)
 
         if myFileName is None or myFileName == '':

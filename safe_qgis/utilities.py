@@ -718,3 +718,11 @@ def safeToQGISLayer(theLayer):
     else:
         myMessage = tr('Loaded impact layer "%1" is not valid').arg(myFilename)
         raise Exception(myMessage)
+
+
+def getAbsolutePath(thePath, relativePath):
+    """Helper function to get absolute path from a relativePath. The
+    relativePath is relative to thePath
+    """
+    theLongPath = os.path.join(thePath, relativePath)
+    return os.path.normpath(theLongPath)

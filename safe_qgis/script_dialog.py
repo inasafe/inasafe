@@ -36,6 +36,7 @@ from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import QgisPathError
 from safe_qgis.safe_interface import temp_dir
+from safe_qgis.utilities import getAbsolutePath
 
 from safe_qgis import macro
 
@@ -216,6 +217,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             True if success, otherwise return False.
         """
         outputDirectory = str(self.leOutputDir.text())
+        scenarioDirectory = str(self.leSourceDir.text())
+        dummyScenarioFilePath = os.path.join(scenarioDirectory, 'dummy.txt')
 
         myPaths = []
         if 'hazard' in theItem:
@@ -227,17 +230,17 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         # always run in new project
         self.iface.newProject()
-
-        myMessage = 'Loading layers: \nRoot: %s\n%s' % (outputDirectory,
-                                                        myPaths)
-        LOGGER.info(myMessage)
+        #
+        # myMessage = 'Loading layers: \nRoot: %s\n%s' % (scenarioDirectory,
+        #                                                 myPaths)
+        # LOGGER.info(myMessage)
 
         try:
-            macro.addLayers(outputDirectory, myPaths)
+            macro.addLayers(dummyScenarioFilePath, myPaths)
         except QgisPathError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
-                outputDirectory, myPaths))
+                dummyScenarioFilePath, myPaths))
             return False
 
         # See if we have a preferred impact function
