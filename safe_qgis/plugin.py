@@ -23,25 +23,30 @@ __copyright__ += 'Disaster Reduction'
 import os
 
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import (QObject,
-                          QLocale,
-                          QTranslator,
-                          SIGNAL,
-                          QCoreApplication,
-                          Qt,
-                          QSettings,
-                          QVariant)
+from PyQt4.QtCore import (
+    QObject,
+    QLocale,
+    QTranslator,
+    SIGNAL,
+    QCoreApplication,
+    Qt,
+    QSettings,
+    QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
     from safe_qgis.exceptions import TranslationLoadError
+    import custom_logging
 except ImportError:
-    # Note these strings cant be translated.
+    # Note we use translate directly but the string may still not translate
+    # at this early stage since the i18n setup routines have not been called
+    # yet.
+    myWarning = QCoreApplication.translate(
+        'Plugin', 'Please restart QGIS to use this plugin.')
     QMessageBox.warning(
-        None, 'InaSAFE', 'Please restart QGIS to use this plugin.')
-import custom_logging
+        None, 'InaSAFE', myWarning)
 
 
 class Plugin:
@@ -454,7 +459,6 @@ class Plugin:
         self.iface.mainWindow().removeToolBar(self.toolbar)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
-        self.toolbar.destroy()
         QObject.disconnect(
             self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),

@@ -26,14 +26,6 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import DEFAULTS
 
-#see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
-
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""
