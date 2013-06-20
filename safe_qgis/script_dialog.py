@@ -223,16 +223,13 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         dummyScenarioFilePath = os.path.join(scenarioDirectory, 'dummy.txt')
 
         myPaths = []
-        absAggregationPath = ''
         if 'hazard' in theItem:
             myPaths.append(theItem['hazard'])
         if 'exposure' in theItem:
             myPaths.append(theItem['exposure'])
         if 'aggregation' in theItem:
             myPaths.append(theItem['aggregation'])
-            # dirty code, I know
-            absAggregationPath = macro.extractPath(dummyScenarioFilePath,
-                                                   theItem['aggregation'])[0]
+
         # always run in new project
         self.iface.newProject()
         #
@@ -256,6 +253,9 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 return False
 
         if 'aggregation' in theItem:
+            # dirty code, I know
+            absAggregationPath = macro.extractPath(dummyScenarioFilePath,
+                                                   theItem['aggregation'])[0]
             myResult = macro.setAggregationLayer(absAggregationPath)
             if not myResult:
                 return False
@@ -291,10 +291,18 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         return myResult
 
+    def setAllScenarioEmptyStatus(self):
+        for myRow in range(self.tblScript.rowCount()):
+            myStatusItem = self.tblScript.item(myRow, 1)
+            myStatusItem.setText(self.tr(''))
+
     @pyqtSignature('')
     def on_pbnRunAll_clicked(self):
         """Run all scenario wehn pbRunAll is clicked.
         """
+        self.setAllScenarioEmptyStatus()
+
+        self.enableBusyCursor()
         myReport = []
         myFailCount = 0
         myPassCount = 0
@@ -302,23 +310,25 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         for myRow in range(self.tblScript.rowCount()):
             myItem = self.tblScript.item(myRow, 0)
             myStatusItem = self.tblScript.item(myRow, 1)
+            myNameItem = myItem.text()
 
             try:
                 myResult = self.runTask(myItem, myStatusItem)
                 if myResult:
                     # P for passed
-                    myReport.append('P: %s\n' % str(myItem))
+                    myReport.append('P: %s\n' % str(myNameItem))
                     myPassCount += 1
                 else:
-                    myReport.append('F: %s\n' % str(myItem))
+                    myReport.append('F: %s\n' % str(myNameItem))
                     myFailCount += 1
             except Exception, e:
                 LOGGER.exception('Batch execution failed. The exception: ' +
                                  str(e))
-                myReport.append('F: %s\n' % str(myItem))
+                myReport.append('F: %s\n' % str(myNameItem))
                 myFailCount += 1
 
         self.showBatchReport(myReport, myPassCount, myFailCount)
+        self.disableBusyCursor()
 
     def showBatchReport(self, myReport, myPassCount, myFailCount):
         """Display a report status of Batch Runner"""
@@ -343,6 +353,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
     def runTask(self, theItem, theStatusItem, theCount=1):
         """Run a single task """
 
+        self.enableBusyCursor()
         # set status to 'running'
         theStatusItem.setText(self.tr('Running'))
 
@@ -375,7 +386,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             if not myResult:
                 theStatusItem.setText(self.tr('Analysis Fail'))
             else:
-
                 # NOTE(gigih):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
@@ -389,9 +399,10 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                     theStatusItem.setText(self.tr('Report Failed'))
                     myResult = False
         else:
-            LOGGER.exception('data type not supported: "%s"' % myValue)
+            LOGGER.exception('Data type not supported: "%s"' % myValue)
             myResult = False
 
+        self.disableBusyCursor()
         return myResult
 
     def reportPath(self, theDirectory, theTitle):
@@ -411,14 +422,14 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         return myMapPath, myTablePath
 
-    def createPDFReport(self, theTitle, theBasePath, theImpactLayer):
+    def createPDFReport(self, theTitle, theOutputDirectory, theImpactLayer):
         """Create PDF report from impact layer.
         Create map & table report PDF based from theImpactLayer data.
 
         Params:
             * theTitle : the report title.
                          Output filename is based from this variable.
-            * theBasePath : output directory
+            * theOutputDirectory : output directory
             * theImpactLayer : impact layer instance.
 
         See also:
@@ -431,7 +442,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myMap.setImpactLayer(theImpactLayer)
 
         LOGGER.debug('Create Report: %s' % theTitle)
-        myMapPath, myTablePath = self.reportPath(theBasePath, theTitle)
+        myMapPath, myTablePath = self.reportPath(theOutputDirectory, theTitle)
 
         # create map pdf
         myMap.printToPdf(myMapPath)
@@ -449,15 +460,25 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         if self.cbDefaultOutputDir.isChecked():
             self.leOutputDir.setText(self.leSourceDir.text())
 
+    def enableBusyCursor(self):
+        """Set the hourglass enabled."""
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
+    def disableBusyCursor(self):
+        """Disable the hourglass cursor."""
+        QtGui.qApp.restoreOverrideCursor()
+
     @pyqtSignature('')
     def on_btnRunSelected_clicked(self):
         """Run the selected item. """
+        self.enableBusyCursor()
         myCurrentRow = self.tblScript.currentRow()
         myItem = self.tblScript.item(myCurrentRow, 0)
         myStatusItem = self.tblScript.item(myCurrentRow, 1)
         myCount = self.sboCount.value()
 
         self.runTask(myItem, myStatusItem, myCount)
+        self.disableBusyCursor()
 
     @pyqtSignature('bool')
     def on_pbnAdvanced_toggled(self, theFlag):
