@@ -20,6 +20,7 @@ __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import sys
 import os
 
 # Import the PyQt and QGIS libraries
@@ -464,6 +465,15 @@ class Plugin:
             self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
             self.layerChanged)
+
+        # Lets also clean up all the path additions that were made
+        myPackagePath = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), os.path.pardir))
+        LOGGER.debug('Path to remove: %s' % myPackagePath)
+        # We use a list comprehension to ensure duplicate entries are removed
+        LOGGER.debug(sys.path)
+        sys.path = [y for y in sys.path if myPackagePath not in y]
+        LOGGER.debug(sys.path)
 
     def toggleActionDock(self, checked):
         """check or uncheck the toggle inaSAFE toolbar button.

@@ -25,11 +25,6 @@ from osgeo import gdal
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import QGis, QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
 
-# Add parent directory to path to make test aware of other modules
-# We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
 from safe_qgis.utilities import getErrorMessage, isRasterLayer, isPolygonLayer
 from safe_qgis.exceptions import InvalidParameterError
 

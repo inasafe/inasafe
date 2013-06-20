@@ -131,8 +131,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised
         """
-        pydevd.settrace(
-            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        #pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 

@@ -20,15 +20,19 @@ __copyright__ += 'Disaster Reduction'
 import os
 import sys
 import logging
+from datetime import date
+import getpass
+from tempfile import mkstemp
 
 from PyQt4 import QtCore
 
-from safe_interface import temp_dir
-
 from safe_qgis.exceptions import MethodUnavailableError
 
-sys.path.append(os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', 'third_party')))
+myDir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', 'third_party'))
+if myDir not in sys.path:
+    sys.path.append(myDir)
+
 # pylint: disable=F0401
 # noinspection PyUnresolvedReferences
 from raven.handlers.logging import SentryHandler
@@ -188,3 +192,60 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     addLoggingHanderOnce(myLogger, myFileHandler)
     addLoggingHanderOnce(myLogger, myConsoleHandler)
     addLoggingHanderOnce(myLogger, myQGISHandler)
+
+
+def temp_dir(sub_dir='work'):
+    """Obtain the temporary working directory for the operating system.
+
+    #####################################################################
+       Shamelessly copied from safe/common/utilities.py to avoid import
+       issues. Tim 20 June 2013
+    #####################################################################
+
+    An inasafe subdirectory will automatically be created under this and
+    if specified, a user subdirectory under that.
+
+    .. note:: You can use this together with unique_filename to create
+       a file in a temporary directory under the inasafe workspace. e.g.
+
+       tmpdir = temp_dir('testing')
+       tmpfile = unique_filename(dir=tmpdir)
+       print tmpfile
+       /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C
+
+    If you specify INASAFE_WORK_DIR as an environment var, it will be
+    used in preference to the system temp directory.
+
+    Args:
+        sub_dir str - optional argument which will cause an additional
+                subirectory to be created e.g. /tmp/inasafe/foo/
+
+    Returns:
+        Path to the output clipped layer (placed in the system temp dir).
+
+    Raises:
+       Any errors from the underlying system calls.
+    """
+    user = getpass.getuser().replace(' ', '_')
+    current_date = date.today()
+    date_string = current_date.isoformat()
+    if 'INASAFE_WORK_DIR' in os.environ:
+        new_directory = os.environ['INASAFE_WORK_DIR']
+    else:
+        # Following 4 lines are a workaround for tempfile.tempdir()
+        # unreliabilty
+        handle, filename = mkstemp()
+        os.close(handle)
+        new_directory = os.path.dirname(filename)
+        os.remove(filename)
+
+    path = os.path.join(new_directory, 'inasafe', date_string, user, sub_dir)
+
+    if not os.path.exists(path):
+        # Ensure that the dir is world writable
+        # Umask sets the new mask and returns the old
+        old_mask = os.umask(0000)
+        os.makedirs(path, 0777)
+        # Reinstate the old mask for tmp
+        os.umask(old_mask)
+    return path
