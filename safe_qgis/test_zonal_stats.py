@@ -63,10 +63,10 @@ class ZonalStatsTest(unittest.TestCase):
             thePolygonLayer=myVectorLayer)
         myExpectedResult = {
             0L: {'count': 4, 'sum': 34.0, 'mean': 8.5},  # BR polygon
-            1L: {'count': 9, 'sum': 36.0, 'mean': 4.0},
-            2L: {'count': 4, 'sum': 2.0, 'mean': 0.5},
-            3L: {'count': 4, 'sum': 2.0, 'mean': 0.5},
-            4L: {'count': 4, 'sum': 34.0, 'mean': 8.5}}
+            1L: {'count': 9, 'sum': 36.0, 'mean': 4.0},  # center polygon
+            2L: {'count': 4, 'sum': 2.0, 'mean': 0.5},  # TL polygon
+            3L: {'count': 4, 'sum': 2.0, 'mean': 0.5},  # BL Polygon
+            4L: {'count': 4, 'sum': 34.0, 'mean': 8.5}}  # TR polygon
         self.maxDiff = None
         self.assertDictEqual(myExpectedResult, myResult)
 

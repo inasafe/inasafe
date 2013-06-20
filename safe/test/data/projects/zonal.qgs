@@ -4,10 +4,10 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>1535342.500000</xmin>
-            <ymin>5083216.000000</ymin>
-            <xmax>1535521.000000</xmax>
-            <ymax>5083370.700000</ymax>
+            <xmin>1535337.084722</xmin>
+            <ymin>5083226.111111</ymin>
+            <xmax>1535522.370833</xmax>
+            <ymax>5083380.811111</ymax>
         </extent>
         <projections>0</projections>
         <destinationsrs>
@@ -29,9 +29,9 @@
                 <legendlayerfile isInOverview="0" layerid="zonal_polygons20130617140355894" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Ten_by_ten_raster_as_polys" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="Ten_by_ten_raster_as_polys" showFeatureCount="0">
             <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="ten_by_ten_raster_as_polys20130618141231158" visible="1"/>
+                <legendlayerfile isInOverview="0" layerid="ten_by_ten_raster_as_polys20130618141231158" visible="0"/>
             </filegroup>
         </legendlayer>
         <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Tenbytenraster" showFeatureCount="0">

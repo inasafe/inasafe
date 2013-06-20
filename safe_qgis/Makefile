@@ -1,5 +1,4 @@
 #/***************************************************************************
-# IS
 #
 # InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
@@ -17,57 +16,42 @@
 # *                                                                         *
 # ***************************************************************************/
 
-# Makefile for a PyQGIS plugin
+##################### EDITABLE AREA starts ##################################
+# List of ui files and rc files here that should be compiled to py files.
+#############################################################################
 
-# Note by Tim. I think we can get rid of py_files, and extras
-PLUGINNAME = inasafe
+UI_FILES = converter_dialog_base.ui \
+	impact_functions_doc_base.ui \
+	minimum_needs_base.ui \
+	dock_base.ui \
+	import_dialog_base.ui \
+	options_dialog_base.ui \
+	function_options_dialog_base.ui \
+	keywords_dialog_base.ui	\
+	script_dialog_base.ui
 
-PY_FILES = __init__.py \
-	clipper.py \
-	dock.py \
-	exceptions.py\
-	help.py \
-	html_renderer.py \
-	impact_calculator.py \
-	impact_calculator_thread.py \
-	impact_functions_doc.py \
-	keyword_io.py \
-	keywords_dialog.py \
-	map_legend.py \
-	map.py \
-	minimum_needs.py \
-	options_dialog.py \
-	plugin.py \
-	qgis_interface.py \
-	safe_interface.py \
-	safe_qgis/import_dialog.py \
-	utilities.py
+RESOURCE_FILES = resources.qrc
 
-EXTRAS = icon.png
+###################### EDITABLE AREA ENDS ###################################
 
-UI_FILES = dock_base.py \
-					 options_dialog_base.py \
-					 keywords_dialog_base.py \
-					 impact_functions_doc_base.py \
-					 minimum_needs_base.py \
-					 options_dialog_base.py \
-                                         converter_dialog_base.py \
-                                         import_dialog_base.py
+COMPILED_UI = $(UI_FILES:%.ui=%.py)
 
-RESOURCE_FILES = resources.py
+COMPILED_RESOURCES = $(RESOURCE_FILES:%.qrc=%_rc.py)
 
-default: compile
+default : ui resources
 
-compile: $(UI_FILES) $(RESOURCE_FILES)
+clean:
+	rm $(COMPILED_UI)
+	rm $(COMPILED_RESOURCES)
 
-%.py : %.qrc
-	pyrcc4 -o $@  $<
-	@#this is ugly but the resource referenced by the ui
-	@#looks for a file generated with a different name
-	cp resources.py resources_rc.py
+ui: $(COMPILED_UI)
 
-clean: compile
-	rm $(UI_FILES)
+resources: $(COMPILED_RESOURCES)
+
+# Conversion rules
+
+%_rc.py : %.qrc
+	pyrcc4 -o $@ $<
 
 %.py : %.ui
 	pyuic4 -o $@ $<

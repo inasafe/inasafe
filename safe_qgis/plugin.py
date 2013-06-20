@@ -39,8 +39,8 @@ try:
     from safe_qgis.exceptions import TranslationLoadError
 except ImportError:
     # Note these strings cant be translated.
-    QMessageBox.warning(None, 'InaSAFE',
-                        'Please restart QGIS to use this plugin.')
+    QMessageBox.warning(
+        None, 'InaSAFE', 'Please restart QGIS to use this plugin.')
 import custom_logging
 
 
@@ -72,6 +72,8 @@ class Plugin:
         # Save reference to the QGIS interface
         self.iface = iface
         self.translator = None
+        self.toolbar = None
+        self.actions = []  # list of all QActions we create for InaSAFE
         self.setupI18n()
         #print self.tr('InaSAFE')
         custom_logging.setupLogger()
@@ -136,7 +138,9 @@ class Plugin:
             os.path.exists(myTranslationPath)))
 
     def tr(self, theString):
-        """We implement this ourself since we do not inherit QObject.
+        """Get the translation for a string.
+
+        We implement this ourself since we do not inherit QObject.
 
         Args:
            theString - string for translation.
@@ -146,6 +150,20 @@ class Plugin:
            no exceptions explicitly raised.
         """
         return QCoreApplication.translate('Plugin', theString)
+
+    def addToolBarIcon(self, theAction):
+        """Add a toolbar icon to the InaSAFE toolbar.
+
+        Args:
+            theAction QAction - the action that should be added to the toolbar.
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
+        self.toolbar.addAction(theAction)
 
     #noinspection PyCallByClass
     def initGui(self):
@@ -163,6 +181,7 @@ class Plugin:
         Raises:
            no exceptions explicitly raised.
         """
+        self.toolbar = self.iface.addToolBar('InaSAFE')
         # Import dock here as it needs to be imported AFTER i18n is set up
         from safe_qgis.dock import Dock
         self.dockWidget = None
@@ -184,11 +203,13 @@ class Plugin:
             self.actionDock, SIGNAL('triggered()'),
             self.showHideDockWidget)
         # add to plugin toolbar
-        self.iface.addToolBarIcon(self.actionDock)
+        self.addToolBarIcon(self.actionDock)
         # add to plugin menu
         self.iface.addPluginToMenu(
             self.tr('InaSAFE'),
             self.actionDock)
+
+        self.actions.append(self.actionDock)
 
         #--------------------------------------
         # Create action for keywords editor
@@ -207,10 +228,12 @@ class Plugin:
             self.actionKeywordsDialog, SIGNAL('triggered()'),
             self.showKeywordsEditor)
 
-        self.iface.addToolBarIcon(self.actionKeywordsDialog)
+        self.addToolBarIcon(self.actionKeywordsDialog)
         self.iface.addPluginToMenu(
             self.tr('InaSAFE'),
             self.actionKeywordsDialog)
+
+        self.actions.append(self.actionKeywordsDialog)
 
         #--------------------------------------
         # Create action for reset icon
@@ -226,10 +249,12 @@ class Plugin:
             self.actionResetDock, SIGNAL('triggered()'),
             self.resetDock)
 
-        self.iface.addToolBarIcon(self.actionResetDock)
+        self.addToolBarIcon(self.actionResetDock)
         self.iface.addPluginToMenu(
             self.tr('InaSAFE'),
             self.actionResetDock)
+
+        self.actions.append(self.actionResetDock)
 
         #--------------------------------------
         # Create action for options dialog
@@ -245,10 +270,12 @@ class Plugin:
             self.actionOptions, SIGNAL('triggered()'),
             self.showOptions)
 
-        self.iface.addToolBarIcon(self.actionOptions)
+        self.addToolBarIcon(self.actionOptions)
         self.iface.addPluginToMenu(
             self.tr('InaSAFE'),
             self.actionOptions)
+
+        self.actions.append(self.actionOptions)
 
         #--------------------------------------
         # Create action for impact functions doc dialog
@@ -265,7 +292,7 @@ class Plugin:
             self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
             self.showImpactFunctionsDoc)
 
-        self.iface.addToolBarIcon(self.actionImpactFunctionsDoc)
+        self.addToolBarIcon(self.actionImpactFunctionsDoc)
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionImpactFunctionsDoc)
 
@@ -274,6 +301,8 @@ class Plugin:
         self.iface.registerMainWindowAction(self.keyAction, "F7")
         QObject.connect(self.keyAction, SIGNAL("triggered()"),
                         self.keyActionF7)
+
+        self.actions.append(self.actionImpactFunctionsDoc)
 
         #---------------------------------------
         # Create action for minimum needs dialog
@@ -288,15 +317,17 @@ class Plugin:
         QObject.connect(self.actionMinimumNeeds, SIGNAL('triggered()'),
                         self.showMinimumNeeds)
 
-        self.iface.addToolBarIcon(self.actionMinimumNeeds)
+        self.addToolBarIcon(self.actionMinimumNeeds)
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionMinimumNeeds)
+
+        self.actions.append(self.actionMinimumNeeds)
 
         #---------------------------------------
         # Create action for converter dialog
         #---------------------------------------
         self.actionConverter = QAction(
-            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
+            QIcon(':/plugins/inasafe/show-converter-tool.svg'),
             self.tr('InaSAFE Converter'), self.iface.mainWindow())
         self.actionConverter.setStatusTip(self.tr(
             'Open InaSAFE Converter'))
@@ -305,15 +336,56 @@ class Plugin:
         QObject.connect(self.actionConverter, SIGNAL('triggered()'),
                         self.showConverter)
 
-        self.iface.addToolBarIcon(self.actionConverter)
+        self.addToolBarIcon(self.actionConverter)
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionConverter)
+
+        self.actions.append(self.actionConverter)
+
+        #---------------------------------------
+        # Create action for batch runner dialog
+        #---------------------------------------
+        self.actionBatchRunner = QAction(
+            QIcon(':/plugins/inasafe/show-batch-runner.svg'),
+            self.tr('InaSAFE Batch Runner'), self.iface.mainWindow())
+        self.actionBatchRunner.setStatusTip(self.tr(
+            'Open InaSAFE Batch Runner'))
+        self.actionBatchRunner.setWhatsThis(self.tr(
+            'Open InaSAFE Batch Runner'))
+        QObject.connect(
+            self.actionBatchRunner,
+            SIGNAL('triggered()'),
+            self.showScriptDialog)
+
+        self.addToolBarIcon(self.actionBatchRunner)
+        self.iface.addPluginToMenu(
+            self.tr('InaSAFE'), self.actionBatchRunner)
+
+        self.actions.append(self.actionBatchRunner)
+
+        #---------------------------------------
+        # Create action for batch runner dialog
+        #---------------------------------------
+        self.actionSaveScenario = QAction(
+            QIcon(':/plugins/inasafe/save-as-scenario.svg'),
+            self.tr('Save current scenario'), self.iface.mainWindow())
+
+        myMessage = self.tr('Save current scenario to text file')
+        self.actionSaveScenario.setStatusTip(myMessage)
+        self.actionSaveScenario.setWhatsThis(myMessage)
+        self.actionSaveScenario.triggered.connect(self.saveScenario)
+
+        self.addToolBarIcon(self.actionSaveScenario)
+        self.iface.addPluginToMenu(
+            self.tr('InaSAFE'), self.actionSaveScenario)
+
+        self.actions.append(self.actionSaveScenario)
 
         #--------------------------------------
         # Create action for import OSM Dialog
         #--------------------------------------
         self.actionImportDlg = QAction(
-            QIcon(':/plugins/inasafe/osm-download.png'),
+            QIcon(':/plugins/inasafe/show-osm-download.svg'),
             self.tr('InaSAFE OpenStreetMap Downloader'),
             self.iface.mainWindow())
         self.actionImportDlg.setStatusTip(self.tr(
@@ -324,42 +396,13 @@ class Plugin:
             self.actionImportDlg, SIGNAL('triggered()'),
             self.showImportDlg)
 
-        self.iface.addToolBarIcon(self.actionImportDlg)
+        self.addToolBarIcon(self.actionImportDlg)
         self.iface.addPluginToMenu(
             self.tr('InaSAFE'),
             self.actionImportDlg)
 
-        #----------------------------------
-        # Create action for batch runner
-        #-----------------------------------
-        self.actionScriptDialog = QAction(
-            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
-            self.tr('InaSAFE GUI Scripting'),
-            self.iface.mainWindow())
+        self.actions.append(self.actionImportDlg)
 
-        myMessage = self.tr('InaSAFE GUI Batch Tools')
-        self.actionScriptDialog.setStatusTip(myMessage)
-        self.actionScriptDialog.setWhatsThis(myMessage)
-        self.actionScriptDialog.triggered.connect(self.showScriptDialog)
-
-        self.iface.addToolBarIcon(self.actionScriptDialog)
-        self.iface.addPluginToMenu(self.tr('InaSAFE'),
-                                   self.actionScriptDialog)
-
-        ## FIXME: need to change the image file....
-        self.actionSaveScenario = QAction(
-            QIcon(':/plugins/inasafe/show-minimum-needs.svg'),
-            self.tr('Save current scenario'),
-            self.iface.mainWindow())
-
-        myMessage = self.tr('Save current scenario to text file')
-        self.actionSaveScenario.setStatusTip(myMessage)
-        self.actionSaveScenario.setWhatsThis(myMessage)
-        self.actionSaveScenario.triggered.connect(self.saveScenario)
-
-        self.iface.addToolBarIcon(self.actionSaveScenario)
-        self.iface.addPluginToMenu(self.tr('InaSAFE'),
-                                   self.actionSaveScenario)
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
@@ -404,27 +447,14 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(self.tr('InaSAFE'),
-                                    self.actionDock)
-        self.iface.removeToolBarIcon(self.actionDock)
-        self.iface.removePluginMenu(self.tr('InaSAFE'),
-                                    self.actionKeywordsDialog)
-        self.iface.removeToolBarIcon(self.actionKeywordsDialog)
-        self.iface.removePluginMenu(self.tr('InaSAFE'),
-                                    self.actionResetDock)
-        self.iface.removeToolBarIcon(self.actionResetDock)
-        self.iface.removePluginMenu(self.tr('InaSAFE'),
-                                    self.actionOptions)
-        self.iface.removeToolBarIcon(self.actionOptions)
-        self.iface.removePluginMenu(self.tr('InaSAFE'),
-                                    self.actionMinimumNeeds)
-        self.iface.removeToolBarIcon(self.actionMinimumNeeds)
-        self.iface.removePluginMenu(self.tr('InaSAFE'),
-                                    self.actionImpactFunctionsDoc)
-        self.iface.removeToolBarIcon(self.actionImpactFunctionsDoc)
+        for myAction in self.actions:
+            self.iface.removePluginMenu(self.tr('InaSAFE'), myAction)
+            self.iface.removeToolBarIcon(myAction)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
+        self.iface.mainWindow().removeToolBar(self.toolbar)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
+        self.toolbar.destroy()
         QObject.disconnect(
             self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
@@ -594,6 +624,18 @@ class Plugin:
         dlg.setModal(True)
         dlg.show()
 
+    def showScriptDialog(self):
+        """Show Script Dialog"""
+        from safe_qgis.script_dialog import ScriptDialog
+
+        myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
+        myDialog.setModal(True)
+        myDialog.show()
+
+    def saveScenario(self):
+        """Save current scenario to text file"""
+        self.dockWidget.saveCurrentScenario()
+
     def resetDock(self):
         """Reset the dock to its default state.
 
@@ -635,15 +677,3 @@ class Plugin:
     def keyActionF7(self):
         '''Executed when user press F7'''
         self.showConverter()
-
-    def showScriptDialog(self):
-        """Show Script Dialog"""
-        from safe_qgis.script_dialog import ScriptDialog
-
-        myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
-        myDialog.setModal(True)
-        myDialog.show()
-
-    def saveScenario(self):
-        """Save current scenario to text file"""
-        self.dockWidget.saveCurrentScenario()
