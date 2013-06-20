@@ -2137,7 +2137,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # get absolute path of exposure & hazard layer, or the contents
         myExposureLayer = self.getExposureLayer()
         myHazardLayer = self.getHazardLayer()
+        myAggregationLayer = self.getAggregationLayer()
         myFunctionId = self.getFunctionID(self.cboFunction.currentIndex())
+        myMapCanvas = self.iface.mapCanvas()
+        myExtent = myMapCanvas.extent()
+        myExtentStr = str(myExtent.toString())
+        myExtentStr = myExtentStr.replace(',', ', ')
+        myExtentStr = myExtentStr.replace(' : ', ', ')
 
         # Checking f exposure and hazard layer is not None
         if myExposureLayer is None:
@@ -2166,6 +2172,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myExposurePath = str(myExposureLayer.publicSource())
         myHazardPath = str(myHazardLayer.publicSource())
 
+
         myTitle = self.keywordIO.readKeywords(myHazardLayer, 'title')
         myTitle = safeTr(myTitle)
 
@@ -2189,6 +2196,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myParser.set(myTitle, 'exposure', myRelExposurePath)
         myParser.set(myTitle, 'hazard', myRelHazardPath)
         myParser.set(myTitle, 'function', myFunctionId)
+        myParser.set(myTitle, 'extent', myExtentStr)
+
+        if myAggregationLayer is not None:
+            myAggregationPath = str(myAggregationLayer.publicSource())
+            myRelAggregationPath = os.path.relpath(myAggregationPath,
+                                                   myFileName)
+            myParser.set(myTitle, 'aggregation', myRelAggregationPath)
 
         if myFileName is None or myFileName == '':
             return

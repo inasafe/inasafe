@@ -29,6 +29,7 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import getAbsolutePath
 
 LOGGER = logging.getLogger('InaSAFE')
+STATUS_FLAG = False
 
 
 def getDock():
@@ -38,22 +39,34 @@ def getDock():
     return iface.mainWindow().findChild(Dock)
 
 
+def getMapCanvas():
+    """Return map canvas object
+    """
+    return iface.mapCanvas()
+
+
 def runScenario():
     """Simulate pressing run button in InaSAFE dock widget.
 
     Returns:
         None
     """
-
+    global STATUS_FLAG
+    STATUS_FLAG = False
     myDock = getDock()
 
-    def completed():
+    def completed(theFlag):
+        """Listen for completion and set myFlag according to exit value."""
+        global STATUS_FLAG
+        STATUS_FLAG = theFlag
         LOGGER.debug("scenario done")
         myDock.analysisDone.disconnect(completed)
 
     myDock.analysisDone.connect(completed)
     # Start the analysis
     myDock.accept()
+    print 'Status: %s' % STATUS_FLAG
+    return STATUS_FLAG
 
 
 def extractPath(theScenarioFilePath, thePath):
@@ -131,7 +144,7 @@ def setFunctionId(theFunctionId):
     return False
 
 
-def setAggregation(theAggregationLayer):
+def setAggregationLayer(theAggregationLayer):
     """Set the aggregation combo to use the layer with the given name.
 
     Args:
@@ -159,7 +172,18 @@ def setAggregation(theAggregationLayer):
             myCount, QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 
+        if myLayer is None:
+            continue
+
         if myLayer.source() == theAggregationLayer:
             myDock.cboAggregation.setCurrentIndex(myCount)
             return True
     return False
+
+
+# def setExtent(minx, miny, maxx, maxy):
+#     """Set extent of the dock
+#     """
+#     myRect = QgsRectangle(minx, miny, maxx, maxy)
+#     myMapCanvas = getMapCanvas()
+#     myMapCanvas.setExtent(myRect)

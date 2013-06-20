@@ -69,7 +69,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myHeaderView.setResizeMode(1, QtGui.QHeaderView.Interactive)
 
         self.tblScript.setColumnWidth(0, 200)
-        self.tblScript.setColumnWidth(1, 75)
+        self.tblScript.setColumnWidth(1, 125)
 
         self.gboOptions.setVisible(False)
 
@@ -136,7 +136,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         if myNewPath is not None and os.path.exists(myNewPath):
             theLineEdit.setText(myNewPath)
 
-    def populateTable(self, theBasePath):
+    def populateTable(self, theScenarioDirectory):
         """ Populate table with files from theBasePath directory.
 
         Args:
@@ -149,14 +149,14 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             None
         """
 
-        LOGGER.info("populateTable from %s" % theBasePath)
+        LOGGER.info("populateTable from %s" % theScenarioDirectory)
 
         self.tblScript.clearContents()
 
         # NOTE(gigih): need this line to remove existing rows
         self.tblScript.setRowCount(0)
 
-        myPath = str(theBasePath)
+        myPath = str(theScenarioDirectory)
 
         # only support .py and .txt files
         for myFile in os.listdir(myPath):
@@ -192,6 +192,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         """
 
         # import script module
+        LOGGER.info('Run script task' + theFilename)
         myModule, _ = os.path.splitext(theFilename)
         if myModule in sys.modules:
             myScript = reload(sys.modules[myModule])
@@ -216,18 +217,22 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         Returns:
             True if success, otherwise return False.
         """
+        LOGGER.info('Run simple task' + str(theItem))
         outputDirectory = str(self.leOutputDir.text())
         scenarioDirectory = str(self.leSourceDir.text())
         dummyScenarioFilePath = os.path.join(scenarioDirectory, 'dummy.txt')
 
         myPaths = []
+        absAggregationPath = ''
         if 'hazard' in theItem:
             myPaths.append(theItem['hazard'])
         if 'exposure' in theItem:
             myPaths.append(theItem['exposure'])
         if 'aggregation' in theItem:
             myPaths.append(theItem['aggregation'])
-
+            # dirty code, I know
+            absAggregationPath = macro.extractPath(dummyScenarioFilePath,
+                                                   theItem['aggregation'])[0]
         # always run in new project
         self.iface.newProject()
         #
@@ -251,7 +256,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 return False
 
         if 'aggregation' in theItem:
-            myResult = macro.setAggregationLayer(theItem['aggregation'])
+            myResult = macro.setAggregationLayer(absAggregationPath)
             if not myResult:
                 return False
 
@@ -282,9 +287,9 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
             self.iface.mapCanvas().setExtent(myExtent)
 
-        macro.runScenario()
+        myResult = macro.runScenario()
 
-        return True
+        return myResult
 
     @pyqtSignature('')
     def on_pbnRunAll_clicked(self):
@@ -353,10 +358,10 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             try:
                 self.runScriptTask(myFilename, theCount)
                 # set status to 'OK'
-                theStatusItem.setText(self.tr('OK'))
+                theStatusItem.setText(self.tr('Script OK'))
             except Exception as e:
                 # set status to 'fail'
-                theStatusItem.setText(self.tr('Fail'))
+                theStatusItem.setText(self.tr('Script Fail'))
 
                 LOGGER.exception('Running macro failed. The exception: ' +
                                  str(e))
@@ -365,16 +370,10 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             myPath = str(self.leOutputDir.text())
             myTitle = str(theItem.text())
 
-            # check existing pdf report
-            myResult = self.checkExistingPDFReport(myPath, [myTitle])
-            if myResult is False:
-                return False
-
             # Its a dict containing files for a scenario
             myResult = self.runSimpleTask(myValue)
             if not myResult:
-                theStatusItem.setText(self.tr('Fail'))
-                myResult = False
+                theStatusItem.setText(self.tr('Analysis Fail'))
             else:
 
                 # NOTE(gigih):
@@ -382,10 +381,12 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 # become the active layer. <--- WRONG
                 myImpactLayer = self.iface.activeLayer()
                 try:
+                    theStatusItem.setText(self.tr('Analysis Ok'))
                     self.createPDFReport(myTitle, myPath, myImpactLayer)
+                    theStatusItem.setText(self.tr('Report Ok'))
                 except:
                     LOGGER.exception('Unable to render map: "%s"' % myValue)
-                    theStatusItem.setText(self.tr('Fail'))
+                    theStatusItem.setText(self.tr('Report Failed'))
                     myResult = False
         else:
             LOGGER.exception('data type not supported: "%s"' % myValue)
@@ -393,10 +394,10 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         return myResult
 
-    def getPDFReportPath(self, theBasePath, theTitle):
-        """Get PDF report filename based on theBasePath and theTitle.
+    def reportPath(self, theDirectory, theTitle):
+        """Get PDF report filename based on theDirectory and theTitle.
         Params:
-            * theBasePath - base path of pdf report file
+            * theDirectory - the directory of pdf report file
             * theTitle - title of report
         Returns:
             a tuple contains the pdf report filename like this
@@ -405,49 +406,10 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         myFileName = theTitle.replace(' ', '_')
         myFileName += '.pdf'
-        myMapPath = os.path.join(theBasePath, myFileName)
+        myMapPath = os.path.join(theDirectory, myFileName)
         myTablePath = os.path.splitext(myMapPath)[0] + '_table.pdf'
 
         return myMapPath, myTablePath
-
-    def checkExistingPDFReport(self, theBasePath, theTitles):
-        """ Check the existence of pdf report in theBasePath.
-
-        Params:
-            * theBasePath - base path of pdf report file
-            * theTitle - list of report titles
-        Returns:
-            True if theBasePath contains no reports or User
-            agree to overwrite the report, otherwise return False.
-        """
-
-        myPaths = []
-        for theTitle in theTitles:
-            myPDFPaths = self.getPDFReportPath(theBasePath, theTitle)
-            myPDFPaths = [x for x in myPDFPaths if os.path.exists(x)]
-            myPaths.extend(myPDFPaths)
-
-        # if reports are not founds, just return True
-        if len(myPaths) == 0:
-            return True
-
-        # setup message box widget
-        myMessage = self.tr(
-            "PDF Report already exist in %1. Rewrite the files?")
-        myMessage = myMessage.arg(theBasePath)
-
-        myDetail = 'Existing PDF Report: \n'
-        myDetail += '\n'.join(myPaths)
-
-        myMsgBox = QMessageBox(self)
-        myMsgBox.setIcon(QMessageBox.Question)
-        myMsgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        myMsgBox.setText(myMessage)
-        myMsgBox.setDetailedText(myDetail)
-
-        # return the result
-        myResult = myMsgBox.exec_()
-        return myResult == QMessageBox.Yes
 
     def createPDFReport(self, theTitle, theBasePath, theImpactLayer):
         """Create PDF report from impact layer.
@@ -469,7 +431,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myMap.setImpactLayer(theImpactLayer)
 
         LOGGER.debug('Create Report: %s' % theTitle)
-        myMapPath, myTablePath = self.getPDFReportPath(theBasePath, theTitle)
+        myMapPath, myTablePath = self.reportPath(theBasePath, theTitle)
 
         # create map pdf
         myMap.printToPdf(myMapPath)
