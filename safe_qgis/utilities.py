@@ -72,6 +72,31 @@ def tr(theText):
     return QCoreApplication.translate('@default', theText)
 
 
+def enableRemoteDebugging():
+    """See if we can import pydev - see development docs for details.
+
+    You need to extract pydevd from the egg::
+
+        cd inasafe-dev
+        mkdir pydevd
+        #copy pycharm-debug.egg to tis dir from top level pycharm app dir
+        unzip pycharm-debug.egg
+
+    Returns:
+        bool - True if import succeeded.
+    """
+
+    try:
+        from pydevd.pydevd import *  # pylint: disable=F0401
+        print 'Remote debugging is enabled.'
+        settrace(
+            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        return True
+    except ImportError:
+        print 'Remote debugging is disabled'
+        return False
+
+
 def getErrorMessage(theException, theContext=None, theSuggestion=None):
     """Convert exception into an ErrorMessage containing a stack trace.
 

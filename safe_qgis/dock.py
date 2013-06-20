@@ -102,7 +102,10 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd
+# This will do nothing if there is no pydevd directory in the top of the
+# InaSAFE plugin directory.
+from .utilities import enableRemoteDebugging
+enableRemoteDebugging()
 
 
 #noinspection PyArgumentList
