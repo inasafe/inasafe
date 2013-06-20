@@ -1360,6 +1360,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         LOGGER.exception(theMessage)
         myMessage = getErrorMessage(theException, theContext=theMessage)
         self.showErrorMessage(myMessage)
+        self.analysisDone.emit(False)
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -1388,6 +1389,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.saveState()
         self.hideBusy()
         self.layerChanged(myQGISImpactLayer)
+        self.analysisDone.emit(True)
 
     def _completed(self, theQGISImpactLayer, theEngineImpactLayer):
         """Helper function for slot activated when the process is done.

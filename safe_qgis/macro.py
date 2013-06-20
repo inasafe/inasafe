@@ -35,7 +35,7 @@ def getDock():
     """ Get InaSAFE Dock widget instance.
     Returns: Dock - instance of InaSAFE Dock in QGIS main window.
     """
-    return iface.mainWindow().findChild(Dock, 'InaSAFEDockToggle')
+    return iface.mainWindow().findChild(Dock)
 
 
 def runScenario():
