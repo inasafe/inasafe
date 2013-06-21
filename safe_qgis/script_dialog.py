@@ -73,7 +73,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         self.gboOptions.setVisible(False)
 
-        self.adjustSize()
+        # self.adjustSize()
 
         self.restoreState()
 
@@ -490,7 +490,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             self.pbnAdvanced.setText(self.tr('Show advanced options'))
 
         self.gboOptions.setVisible(theFlag)
-        self.adjustSize()
+        # self.adjustSize()
 
     @pyqtSignature('bool')
     def on_cbDefaultOutputDir_toggled(self, theFlag):
