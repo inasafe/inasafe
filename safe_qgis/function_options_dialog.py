@@ -20,14 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import ast
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (
-    QGroupBox, QLineEdit, QDialog,
-    QLabel, QCheckBox, QFormLayout, QWidget)
-from function_options_dialog_base import (Ui_FunctionOptionsDialogBase)
-
-from safe_interface import (safeTr,
-                            get_postprocessor_human_name)
+from PyQt4.QtGui import (QGroupBox, QLineEdit, QDialog, QLabel, QCheckBox,
+                         QFormLayout, QWidget)
 from third_party.odict import OrderedDict
+
+from function_options_dialog_base import Ui_FunctionOptionsDialogBase
+from safe_interface import safeTr, get_postprocessor_human_name
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -89,11 +87,40 @@ class FunctionOptionsDialog(QtGui.QDialog,
         for myKey, myValue in theParams.items():
             if myKey == 'postprocessors':
                 self.buildPostProcessorForm(myValue)
+            elif myKey == 'minimum needs':
+                self.buildMinimumNeedsForm(myValue)
             else:
                 self.values[myKey] = self.buildWidget(
                     self.configLayout,
                     myKey,
                     myValue)
+
+    def buildMinimumNeedsForm(self, theParams):
+        """Build minimum needs tab
+
+        Args:
+           * theParams - dictionary containing element of form
+        Returns:
+           not applicable
+        """
+        # create minimum needs tab
+        myTab = QWidget()
+        myFormLayout = QFormLayout(myTab)
+        myFormLayout.setLabelAlignment(Qt.AlignLeft)
+        self.tabWidget.addTab(myTab, self.tr('Minimum Needs'))
+        self.tabWidget.tabBar().setVisible(True)
+
+        myWidget = QWidget()
+        myLayout = QFormLayout(myWidget)
+        myWidget.setLayout(myLayout)
+
+        myValues = OrderedDict()
+        for myLabel, myValue in theParams.items():
+            myValues[myLabel] = self.buildWidget(
+                myLayout, myLabel, myValue)
+
+        myFormLayout.addRow(myWidget, None)
+        self.values['minimum needs'] = myValues
 
     def buildPostProcessorForm(self, theParams):
         """Build Post Processor Tab

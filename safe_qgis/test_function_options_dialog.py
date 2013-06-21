@@ -82,6 +82,33 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         myChildren = myDialog.tabWidget.findChildren(QLineEdit)
         assert len(myChildren) == 4
 
+    def test_buildFormMinimumNeeds(self):
+        """Test that we can build a form by passing it a function and params.
+        """
+        myFunctionId = 'Flood Evacuation Function Vector Hazard'
+        myFunctionList = get_plugins(myFunctionId)
+        assert len(myFunctionList) == 1
+        assert myFunctionList[0].keys()[0] == myFunctionId
+
+        myDialog = FunctionOptionsDialog(None)
+        myParameters = {
+            'thresholds': [1.0],
+            'postprocessors': {
+                'Gender': {'on': True},
+                'Age': {
+                    'on': True,
+                    'params': {
+                        'youth_ratio': 0.263,
+                        'elder_ratio': 0.078,
+                        'adult_ratio': 0.659}}}}
+
+        myDialog.buildForm(myParameters)
+
+        assert myDialog.tabWidget.count() == 2
+
+        myChildren = myDialog.tabWidget.findChildren(QLineEdit)
+        assert len(myChildren) == 4
+
     def test_buildWidget(self):
         myDialog = FunctionOptionsDialog(None)
         myValue = myDialog.buildWidget(myDialog.configLayout, 'foo', [2.3])

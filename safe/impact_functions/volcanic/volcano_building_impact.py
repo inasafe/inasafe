@@ -192,13 +192,14 @@ class VolcanoBuildingImpact(FunctionProvider):
                               'area') % format_int(total),
                            tr('Only buildings available in OpenStreetMap '
                               'are considered.')])
+        
         impact_summary = Table(table_body).toNewlineFreeString()
         building_counts = [x[self.target_field] for x in new_attributes]
 
         if max(building_counts) == 0 == min(building_counts):
             table_body = [
                 question,
-                TableRow([tr('Number of building affected'),
+                TableRow([tr('Number of buildings affected'),
                           '%s' % format_int(cum), blank_cell],
                          header=True)]
             my_message = Table(table_body).toNewlineFreeString()
@@ -230,7 +231,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                           style_type='graduatedSymbol')
 
         # For printing map purpose
-        map_title = tr('Building affected by volcanic hazard zone')
+        map_title = tr('Buildings affected by volcanic hazard zone')
         legend_notes = tr('Thousand separator is represented by \'.\'')
         legend_units = tr('(building)')
         legend_title = tr('Building count')
