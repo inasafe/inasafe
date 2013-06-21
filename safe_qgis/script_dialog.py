@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'bungcip@gmail.com & tim@linfiniti.com'
+__author__ = 'bungcip@gmail.com & tim@linfiniti.com & imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import logging
+from datetime import datetime
 
 from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError
@@ -73,13 +74,14 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         self.gboOptions.setVisible(False)
 
-        # self.adjustSize()
-
         self.restoreState()
 
         # preventing error if the user delete the directory
         if not os.path.exists(self.leSourceDir.text()):
-            self.leSourceDir.setText(defaultSourceDir)
+            if os.path.exists(defaultSourceDir):
+                self.leSourceDir.setText(defaultSourceDir)
+            else:
+                self.leSourceDir.setText('.')
         self.populateTable(self.leSourceDir.text())
 
         # connect signal to slot
@@ -209,7 +211,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         else:
             myFunction()
 
-    def runSimpleTask(self, theItem):
+    def runSimpleTask(self, theItem, theCount=1):
         """Run a simple scenario.
 
         Params:
@@ -218,8 +220,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             True if success, otherwise return False.
         """
         LOGGER.info('Run simple task' + str(theItem))
-        outputDirectory = str(self.leOutputDir.text())
         scenarioDirectory = str(self.leSourceDir.text())
+        # dummy file
         dummyScenarioFilePath = os.path.join(scenarioDirectory, 'dummy.txt')
 
         myPaths = []
@@ -232,10 +234,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         # always run in new project
         self.iface.newProject()
-        #
-        # myMessage = 'Loading layers: \nRoot: %s\n%s' % (scenarioDirectory,
-        #                                                 myPaths)
-        # LOGGER.info(myMessage)
 
         try:
             macro.addLayers(dummyScenarioFilePath, myPaths)
@@ -253,7 +251,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 return False
 
         if 'aggregation' in theItem:
-            # dirty code, I know
             absAggregationPath = macro.extractPath(dummyScenarioFilePath,
                                                    theItem['aggregation'])[0]
             myResult = macro.setAggregationLayer(absAggregationPath)
@@ -266,8 +263,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             myCoordinate = theItem['extent'].replace(' ', '').split(',')
             myCount = len(myCoordinate)
             if myCount != 4:
-                myMessage = 'extent need exactly 4 value but ' \
-                            'got %s instead' % myCount
+                myMessage = 'Extent need exactly 4 value but got %s ' \
+                            'instead' % myCount
                 LOGGER.error(myMessage)
                 return False
 
@@ -307,13 +304,15 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myFailCount = 0
         myPassCount = 0
 
+        myIndex = 0
         for myRow in range(self.tblScript.rowCount()):
             myItem = self.tblScript.item(myRow, 0)
             myStatusItem = self.tblScript.item(myRow, 1)
             myNameItem = myItem.text()
 
             try:
-                myResult = self.runTask(myItem, myStatusItem)
+                myIndex += 1
+                myResult = self.runTask(myItem, myStatusItem, theIndex=myIndex)
                 if myResult:
                     # P for passed
                     myReport.append('P: %s\n' % str(myNameItem))
@@ -327,30 +326,65 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 myReport.append('F: %s\n' % str(myNameItem))
                 myFailCount += 1
 
-        self.showBatchReport(myReport, myPassCount, myFailCount)
+        batchReportFilePath = self.writeBatchReport(
+            myReport, myPassCount, myFailCount)
+        self.showBatchReport(batchReportFilePath)
         self.disableBusyCursor()
 
-    def showBatchReport(self, myReport, myPassCount, myFailCount):
-        """Display a report status of Batch Runner"""
+    def writeBatchReport(self, myReport, myPassCount, myFailCount):
+        """Write a report status of Batch Runner
+        For convenience, the name will use current time
+        """
+        lineSeparator = '-----------------------------\n'
+        currentTime = datetime.now().strftime('%Y%m%d%H%M%S')
+        batchFileName = 'batch-report-' + currentTime + '.txt'
+        myOutputDir = self.leOutputDir.text()
+        myPath = os.path.join(str(myOutputDir), batchFileName)
 
-        myPath = os.path.join(temp_dir(), 'batch-report.txt')
         myReportFile = file(myPath, 'wt')
         myReportFile.write(' InaSAFE Batch Report File\n')
-        myReportFile.write('-----------------------------\n')
+        myReportFile.write(lineSeparator)
         for myLine in myReport:
             myReportFile.write(myLine)
-        myReportFile.write('-----------------------------\n')
+        myReportFile.write(lineSeparator)
         myReportFile.write('Total passed: %s\n' % myPassCount)
         myReportFile.write('Total failed: %s\n' % myFailCount)
         myReportFile.write('Total tasks: %s\n' % len(myReport))
-        myReportFile.write('-----------------------------\n')
+        myReportFile.write(lineSeparator)
         myReportFile.close()
+
         LOGGER.info('Log written to %s' % myPath)
-        myUrl = QtCore.QUrl('file:///' + myPath)
+        return myPath
+
+    def showBatchReport(self, batchReportFilePath):
+        """Show batch report file in batchReportFileName
+        """
+        myUrl = QtCore.QUrl('file:///' + batchReportFilePath)
         # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
         QtGui.QDesktopServices.openUrl(myUrl)
 
-    def runTask(self, theItem, theStatusItem, theCount=1):
+    def runTaskMany(self, theItem, theStatusItem, numRun):
+        """Run a task numRun times
+        """
+        myReport = []
+        myFailCount = 0
+        myPassCount = 0
+
+        for i in xrange(numRun):
+            myCount = i + 1
+            myResult = self.runTask(theItem, theStatusItem, theCount=myCount)
+            if myResult:
+                myPassCount += 1
+                myReport.append('Run number %s: Passed.' % myCount)
+            else:
+                myFailCount += 1
+                myReport.append('Run number %s: Failed.' % myCount)
+
+        batchReportFilePath = self.writeBatchReport(
+            myReport, myPassCount, myFailCount)
+        self.showBatchReport(batchReportFilePath)
+
+    def runTask(self, theItem, theStatusItem, theCount=0, theIndex=''):
         """Run a single task """
 
         self.enableBusyCursor()
@@ -382,7 +416,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             myTitle = str(theItem.text())
 
             # Its a dict containing files for a scenario
-            myResult = self.runSimpleTask(myValue)
+            myResult = self.runSimpleTask(myValue, theCount)
             if not myResult:
                 theStatusItem.setText(self.tr('Analysis Fail'))
             else:
@@ -392,7 +426,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 myImpactLayer = self.iface.activeLayer()
                 try:
                     theStatusItem.setText(self.tr('Analysis Ok'))
-                    self.createPDFReport(myTitle, myPath, myImpactLayer)
+                    self.createPDFReport(
+                        myTitle, myPath, myImpactLayer, theCount, theIndex)
                     theStatusItem.setText(self.tr('Report Ok'))
                 except:
                     LOGGER.exception('Unable to render map: "%s"' % myValue)
@@ -405,24 +440,30 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         self.disableBusyCursor()
         return myResult
 
-    def reportPath(self, theDirectory, theTitle):
-        """Get PDF report filename based on theDirectory and theTitle.
+    def reportPath(self, theDirectory, theTitle, theCount=0, theIndex=''):
+        """Get PDF report filename based on theDirectory and theTitle and the
+         index if given
         Params:
             * theDirectory - the directory of pdf report file
             * theTitle - title of report
+            * theIndex = the index for the begining of the file name
         Returns:
             a tuple contains the pdf report filename like this
             ('/home/foo/data/title.pdf', '/home/foo/data/title_table.pdf')
         """
-
+        if theIndex != '':
+            theIndex = str(theIndex) + '_'
         myFileName = theTitle.replace(' ', '_')
+        if theCount != 0:
+            myFileName += '_' + str(theCount)
         myFileName += '.pdf'
-        myMapPath = os.path.join(theDirectory, myFileName)
+        myMapPath = os.path.join(theDirectory, theIndex + myFileName)
         myTablePath = os.path.splitext(myMapPath)[0] + '_table.pdf'
 
         return myMapPath, myTablePath
 
-    def createPDFReport(self, theTitle, theOutputDirectory, theImpactLayer):
+    def createPDFReport(self, theTitle, theOutputDirectory, theImpactLayer,
+                        theCount=0, theIndex=''):
         """Create PDF report from impact layer.
         Create map & table report PDF based from theImpactLayer data.
 
@@ -442,7 +483,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myMap.setImpactLayer(theImpactLayer)
 
         LOGGER.debug('Create Report: %s' % theTitle)
-        myMapPath, myTablePath = self.reportPath(theOutputDirectory, theTitle)
+        myMapPath, myTablePath = self.reportPath(
+            theOutputDirectory, theTitle, theCount, theIndex)
 
         # create map pdf
         myMap.printToPdf(myMapPath)
@@ -452,7 +494,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myKeywords = myMap.keywordIO.readKeywords(theImpactLayer)
         myHtmlRenderer.printImpactTable(myKeywords, myTablePath)
 
-        LOGGER.debug("report done %s %s" % (myMapPath, myTablePath))
+        LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 
     def updateDefaultOutputDir(self):
         """Update output dir if set to default
@@ -470,14 +512,17 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
     @pyqtSignature('')
     def on_btnRunSelected_clicked(self):
-        """Run the selected item. """
+        """Run the selected scenario. """
         self.enableBusyCursor()
         myCurrentRow = self.tblScript.currentRow()
         myItem = self.tblScript.item(myCurrentRow, 0)
         myStatusItem = self.tblScript.item(myCurrentRow, 1)
         myCount = self.sboCount.value()
-
-        self.runTask(myItem, myStatusItem, myCount)
+        print type(myCount)
+        if str(myCount) == '1':
+            self.runTask(myItem, myStatusItem)
+        else:
+            self.runTask(myItem, myStatusItem, myCount)
         self.disableBusyCursor()
 
     @pyqtSignature('bool')
@@ -490,7 +535,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             self.pbnAdvanced.setText(self.tr('Show advanced options'))
 
         self.gboOptions.setVisible(theFlag)
-        # self.adjustSize()
 
     @pyqtSignature('bool')
     def on_cbDefaultOutputDir_toggled(self, theFlag):
@@ -498,14 +542,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         if theFlag:
             self.leOutputDir.setText(self.leSourceDir.text())
         self.tbOutputDir.setEnabled(not theFlag)
-
-    @pyqtSignature('')  # prevents actions being handled twice
-    def on_tbBaseDataDir_clicked(self):
-        """Autoconnect slot activated when the select cache file tool button is
-        clicked.
-        """
-        myTitle = self.tr('Set the base directory for data packages')
-        self.showDirectoryDialog(self.leOutputDir, myTitle)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tbSourceDir_clicked(self):
@@ -516,9 +552,9 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tbOutputDir_clicked(self):
-        """ Autoconnect slot activated when tbSourceDir is clicked """
+        """ Autoconnect slot activated when tbOutputDiris clicked """
 
-        myTitle = self.tr('Set the output directory for pdf files')
+        myTitle = self.tr('Set the output directory for pdf report files')
         self.showDirectoryDialog(self.leOutputDir, myTitle)
 
 
@@ -543,6 +579,10 @@ def readScenarios(theFileName):
         function: function_id
         aggregation: /path/to/aggregation_layer.tif
         extent: minx, miny, maxx, maxy
+
+    Notes:
+        path for hazard, exposure, and agregation are relative to scenario
+        file path
     """
 
     # Input checks
@@ -605,20 +645,3 @@ def appendRow(theTable, theLabel, theData):
 
     theTable.setItem(myRow, 0, myItem)
     theTable.setItem(myRow, 1, QTableWidgetItem(''))
-
-if __name__ == '__main__':
-    # from PyQt4.QtGui import QApplication
-    # from PyQt4.QtCore import QCoreApplication
-    # import sys
-    #
-    # QCoreApplication.setOrganizationDomain('aifdr')
-    # QCoreApplication.setApplicationName('inasafe')
-    #
-    # app = QApplication(sys.argv)
-    # a = ScriptDialog()
-    # #a.show()
-    #
-    # a.saveCurrentScenario()
-    #
-    # app.exec_()
-    pass
