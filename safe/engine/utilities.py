@@ -1,4 +1,4 @@
-"""Miscellaneous utility functions for Risk-in-a-Box (riab_core)
+"""Miscellaneous utility functions for InaSAFE
 """
 
 # Mandatory keywords that must be present in layers

@@ -57,6 +57,7 @@ from safe.api import (
     get_unique_values,
     get_plugins_as_table,
     Vector,
+    Raster,
     nanallclose,
     DEFAULTS,
     messaging,

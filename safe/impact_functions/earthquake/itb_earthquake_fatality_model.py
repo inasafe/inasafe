@@ -23,8 +23,8 @@ LOGGER = logging.getLogger('InaSAFE')
 class ITBFatalityFunction(FunctionProvider):
     """Indonesian Earthquake Fatality Model
 
-    This model was developed by Institut Tecknologi Bandung (ITB) and
-    implemented by Dr. Hadi Ghasemi, Geoscience Australia
+    This model was developed by Institut Teknologi Bandung (ITB) and
+    implemented by Dr. Hadi Ghasemi, Geoscience Australia.
 
 
     Reference:
@@ -125,8 +125,8 @@ class ITBFatalityFunction(FunctionProvider):
     actions = tr(
         'Provide details about the population will be die or displaced')
     detailed_description = tr(
-        'This model was developed by Institut Tecknologi Bandung (ITB) '
-        'and implemented by Dr Hadi Ghasemi, Geoscience Australia\n'
+        'This model was developed by Institut Teknologi Bandung (ITB) '
+        'and implemented by Dr. Hadi Ghasemi, Geoscience Australia\n'
         'Algorithm:\n'
         'In this study, the same functional form as Allen (2009) is '
         'adopted o express fatality rate as a function of intensity '
