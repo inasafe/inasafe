@@ -65,14 +65,13 @@ def runScenario():
     myDock.analysisDone.connect(completed)
     # Start the analysis
     myDock.accept()
-    print 'Status: %s' % STATUS_FLAG
     return STATUS_FLAG
 
 
 def extractPath(theScenarioFilePath, thePath):
     """Get a path and basename given a scenarioFilePath and path."""
     myFilename = os.path.split(thePath)[-1]  # In case path was absolute
-    myBaseName, myExt = os.path.splitext(myFilename)
+    myBaseName, _ = os.path.splitext(myFilename)
     myPath = getAbsolutePath(theScenarioFilePath, thePath)
     return myPath, myBaseName
 
@@ -80,7 +79,7 @@ def extractPath(theScenarioFilePath, thePath):
 def addLayers(theScenarioFilePath, thePaths):
     """ Add vector or raster layer to current project
      Args:
-        * theDirectory: str - (Required) base directory to find path.
+        * theScenarioFilePath: str - (Required) base directory to find path.
         * thePaths: str or list - (Required) path of layer file.
 
     Returns:
@@ -96,7 +95,7 @@ def addLayers(theScenarioFilePath, thePaths):
     if isinstance(thePaths, str):
         myPaths.append(extractPath(theScenarioFilePath, thePaths))
     elif isinstance(thePaths, list):
-        myPaths = [extractPath(theScenarioFilePath, x) for x in thePaths]
+        myPaths = [extractPath(theScenarioFilePath, path) for path in thePaths]
     else:
         myMessage = "thePaths must be string or list not %s" % type(thePaths)
         raise TypeError(myMessage)
@@ -170,6 +169,7 @@ def setAggregationLayer(theAggregationLayer):
     for myCount in range(0, myDock.cboAggregation.count()):
         myLayerId = myDock.cboAggregation.itemData(
             myCount, QtCore.Qt.UserRole).toString()
+        # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 
         if myLayer is None:
@@ -179,11 +179,3 @@ def setAggregationLayer(theAggregationLayer):
             myDock.cboAggregation.setCurrentIndex(myCount)
             return True
     return False
-
-
-# def setExtent(minx, miny, maxx, maxy):
-#     """Set extent of the dock
-#     """
-#     myRect = QgsRectangle(minx, miny, maxx, maxy)
-#     myMapCanvas = getMapCanvas()
-#     myMapCanvas.setExtent(myRect)

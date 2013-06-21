@@ -23,7 +23,7 @@ import logging
 from datetime import datetime
 
 from StringIO import StringIO
-from ConfigParser import ConfigParser, MissingSectionHeaderError
+from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import (pyqtSignature, QSettings, QVariant, Qt)
@@ -36,8 +36,6 @@ from script_dialog_base import Ui_ScriptDialogBase
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import QgisPathError
-from safe_qgis.safe_interface import temp_dir
-from safe_qgis.utilities import getAbsolutePath
 
 from safe_qgis import macro
 
@@ -152,7 +150,8 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         """
 
         LOGGER.info("populateTable from %s" % theScenarioDirectory)
-
+        parsedFiles = []
+        unparsedFiles = []
         self.tblScript.clearContents()
 
         # NOTE(gigih): need this line to remove existing rows
@@ -169,10 +168,16 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 appendRow(self.tblScript, myFile, myAbsPath)
             elif myExt == '.txt':
                 # insert scenarios from file into table widget
-                for myKey, myValue in readScenarios(myAbsPath).iteritems():
-                    appendRow(self.tblScript, myKey, myValue)
+                try:
+                    for myKey, myValue in readScenarios(myAbsPath).iteritems():
+                        appendRow(self.tblScript, myKey, myValue)
+                    parsedFiles.append(myFile)
+                except ParsingError:
+                    unparsedFiles.append(myFile)
 
-    def runScriptTask(self, theFilename, theCount=1):
+        self.showPopulateScenarioMessage(parsedFiles, unparsedFiles)
+
+    def runScriptTask(self, theFilename):
         """ Run a python script in QGIS to exercise InaSAFE functionality.
 
         This functionality was originally intended for verifying that the key
@@ -211,7 +216,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         else:
             myFunction()
 
-    def runSimpleTask(self, theItem, theCount=1):
+    def runSimpleTask(self, theItem):
         """Run a simple scenario.
 
         Params:
@@ -342,7 +347,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myPath = os.path.join(str(myOutputDir), batchFileName)
 
         myReportFile = file(myPath, 'wt')
-        myReportFile.write(' InaSAFE Batch Report File\n')
+        myReportFile.write('InaSAFE Batch Report File\n')
         myReportFile.write(lineSeparator)
         for myLine in myReport:
             myReportFile.write(myLine)
@@ -363,22 +368,22 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
         QtGui.QDesktopServices.openUrl(myUrl)
 
-    def runTaskMany(self, theItem, theStatusItem, numRun):
+    def runTaskMany(self, theItem, theStatusItem, numRepeat):
         """Run a task numRun times
         """
         myReport = []
         myFailCount = 0
         myPassCount = 0
 
-        for i in xrange(numRun):
+        for i in xrange(numRepeat):
             myCount = i + 1
             myResult = self.runTask(theItem, theStatusItem, theCount=myCount)
             if myResult:
                 myPassCount += 1
-                myReport.append('Run number %s: Passed.' % myCount)
+                myReport.append('Run number %s: Passed.\n' % myCount)
             else:
                 myFailCount += 1
-                myReport.append('Run number %s: Failed.' % myCount)
+                myReport.append('Run number %s: Failed.\n' % myCount)
 
         batchReportFilePath = self.writeBatchReport(
             myReport, myPassCount, myFailCount)
@@ -496,6 +501,24 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 
+    def showPopulateScenarioMessage(self, parsedFiles, unparsedFiles):
+        """A method to show a message box that shows list of succesfully
+        parsed files and unsucsefully parsed files
+        """
+        parsedMessage = self.tr('The file(s) below are parsed succesfully:\n')
+        unparsedMessage = self.tr('The file(s) below are not parsed '
+                                  'succesfully:\n')
+        parsedContents = '\n'.join(parsedFiles)
+        unparsedContents = '\n'.join(unparsedFiles)
+        if parsedContents == '':
+            parsedContents = 'No succesfull parsed files\n'
+        if unparsedContents == '':
+            unparsedContents = 'No failure in parsing files\n'
+        fullMessages = (parsedMessage + parsedContents + '\n\n' +
+                        unparsedMessage + unparsedContents)
+        # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
+        QMessageBox.information(self, 'Parsed Files Result', fullMessages)
+
     def updateDefaultOutputDir(self):
         """Update output dir if set to default
         """
@@ -517,12 +540,12 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myCurrentRow = self.tblScript.currentRow()
         myItem = self.tblScript.item(myCurrentRow, 0)
         myStatusItem = self.tblScript.item(myCurrentRow, 1)
-        myCount = self.sboCount.value()
-        print type(myCount)
-        if str(myCount) == '1':
+        numRepeat = self.sboCount.value()
+        print type(numRepeat)
+        if numRepeat == 1:
             self.runTask(myItem, myStatusItem)
         else:
-            self.runTask(myItem, myStatusItem, myCount)
+            self.runTaskMany(myItem, myStatusItem, numRepeat)
         self.disableBusyCursor()
 
     @pyqtSignature('bool')
