@@ -119,6 +119,15 @@ def get_plugin(name):
     return impact_function
 
 
+def unload_plugins():
+    """Unload all loaded plugins.
+
+    .. note:: Added in InaSAFE 1.2.
+    """
+    for p in FunctionProvider.plugins:
+        del p
+
+
 # FIXME (Ole): Deprecate this function (see issue #392)
 def pretty_function_name(func):
     """Return a human readable name for the function
