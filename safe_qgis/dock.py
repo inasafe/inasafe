@@ -442,7 +442,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myMessage = m.Message()
         myMessage.add(LOGO_ELEMENT)
-        myMessage.add(m.Heading('Getting started', **INFO_STYLE))
+        myMessage.add(m.Heading('Getting started -', **INFO_STYLE))
         myNotes = m.Paragraph(
             self.tr(
                 'To use this tool you need to add some layers to your '

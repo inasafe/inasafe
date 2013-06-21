@@ -429,7 +429,31 @@ class Plugin:
         # Unload all inasafe functions too
         from safe.impact_functions import core
         core.unload_plugins()
-        
+
+        # next lets force remove any inasafe related modules
+        myModules = []
+        for myModule in sys.modules:
+            if 'inasafe' in myModule:
+                # Check if it is really one of our modules i.e. exists in the
+                #  plugin directory
+                myTokens = myModule.split('.')
+                myPath = ''
+                for myToken in myTokens:
+                    myPath += os.path.sep + myToken
+                myParent = os.path.abspath(os.path.join(
+                    __file__, os.path.pardir, os.path.pardir))
+                myFullPath = os.path.join(myParent, myPath + '.py')
+                if os.path.exists(os.path.abspath(myFullPath)):
+                    LOGGER.debug('Removing: %s' % myModule)
+                    myModules.append(myModule)
+
+        for myModule in myModules:
+            del(sys.modules[myModule])
+
+        for myModule in sys.modules:
+            if 'inasafe' in myModule:
+                print myModule
+
         # Lets also clean up all the path additions that were made
         myPackagePath = os.path.abspath(os.path.join(
             os.path.dirname(__file__), os.path.pardir))
