@@ -263,13 +263,13 @@ class AggregatorTest(unittest.TestCase):
 
     def test_aggregate_raster_impact(self):
         myImpactLayer = Raster(
-            data=TESTDATA+'/aggregation_test_impact.tif',
+            data=TESTDATA + '/aggregation_test_impact.tif',
             name='test raster impact')
         self._aggregate(myImpactLayer)
 
     def test_aggregate_vector_impact(self):
         myImpactLayer = Vector(
-            data=TESTDATA+'/aggregation_test_impact.shp',
+            data=TESTDATA + '/aggregation_test_impact.shp',
             name='test raster impact')
 
         self._aggregate(myImpactLayer)
