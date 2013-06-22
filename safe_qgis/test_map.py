@@ -72,7 +72,7 @@ class MapTest(unittest.TestCase):
         myExpectedSizes = [
             441541,  # as rendered on ub 13.04 post 17 May 2013
             447217,  # Nadia Linux Mint 14
-            0,  # as rendered on Jenkins post 24 April 2013
+            447051,  # as rendered on Jenkins post 24 April 2013
             447138,  # Windows 7 SP1 AMD64
         ]
         myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
