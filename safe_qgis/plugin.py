@@ -400,6 +400,43 @@ class Plugin:
 
         # pylint: disable=W0201
 
+    def clearModules(self):
+        """Unload inasafe functions and try to return QIGS to before InaSAFE.
+        """
+        from safe.impact_functions import core
+
+        core.unload_plugins()
+        # next lets force remove any inasafe related modules
+        myModules = []
+        for myModule in sys.modules:
+            if 'inasafe' in myModule:
+                # Check if it is really one of our modules i.e. exists in the
+                #  plugin directory
+                myTokens = myModule.split('.')
+                myPath = ''
+                for myToken in myTokens:
+                    myPath += os.path.sep + myToken
+                myParent = os.path.abspath(os.path.join(
+                    __file__, os.path.pardir, os.path.pardir))
+                myFullPath = os.path.join(myParent, myPath + '.py')
+                if os.path.exists(os.path.abspath(myFullPath)):
+                    LOGGER.debug('Removing: %s' % myModule)
+                    myModules.append(myModule)
+        for myModule in myModules:
+            del (sys.modules[myModule])
+        for myModule in sys.modules:
+            if 'inasafe' in myModule:
+                print myModule
+
+        # Lets also clean up all the path additions that were made
+        myPackagePath = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), os.path.pardir))
+        LOGGER.debug('Path to remove: %s' % myPackagePath)
+        # We use a list comprehension to ensure duplicate entries are removed
+        LOGGER.debug(sys.path)
+        sys.path = [y for y in sys.path if myPackagePath not in y]
+        LOGGER.debug(sys.path)
+
     def unload(self):
         """Gui breakdown procedure (for QGIS plugin api).
 
@@ -426,42 +463,7 @@ class Plugin:
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
             self.layerChanged)
 
-        # Unload all inasafe functions too
-        from safe.impact_functions import core
-        core.unload_plugins()
-
-        # next lets force remove any inasafe related modules
-        myModules = []
-        for myModule in sys.modules:
-            if 'inasafe' in myModule:
-                # Check if it is really one of our modules i.e. exists in the
-                #  plugin directory
-                myTokens = myModule.split('.')
-                myPath = ''
-                for myToken in myTokens:
-                    myPath += os.path.sep + myToken
-                myParent = os.path.abspath(os.path.join(
-                    __file__, os.path.pardir, os.path.pardir))
-                myFullPath = os.path.join(myParent, myPath + '.py')
-                if os.path.exists(os.path.abspath(myFullPath)):
-                    LOGGER.debug('Removing: %s' % myModule)
-                    myModules.append(myModule)
-
-        for myModule in myModules:
-            del(sys.modules[myModule])
-
-        for myModule in sys.modules:
-            if 'inasafe' in myModule:
-                print myModule
-
-        # Lets also clean up all the path additions that were made
-        myPackagePath = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), os.path.pardir))
-        LOGGER.debug('Path to remove: %s' % myPackagePath)
-        # We use a list comprehension to ensure duplicate entries are removed
-        LOGGER.debug(sys.path)
-        sys.path = [y for y in sys.path if myPackagePath not in y]
-        LOGGER.debug(sys.path)
+        self.clearModules()
 
     def toggleActionDock(self, checked):
         """check or uncheck the toggle inaSAFE toolbar button.
