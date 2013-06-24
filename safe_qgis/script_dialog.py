@@ -27,7 +27,7 @@ from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import (pyqtSignature, QSettings, QVariant, Qt)
-from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem, QMessageBox)
+from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem)
 
 from qgis.core import QgsRectangle
 
@@ -434,7 +434,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                     self.createPDFReport(
                         myTitle, myPath, myImpactLayer, theCount, theIndex)
                     theStatusItem.setText(self.tr('Report Ok'))
-                except:
+                except Exception:
                     LOGGER.exception('Unable to render map: "%s"' % myValue)
                     theStatusItem.setText(self.tr('Report Failed'))
                     myResult = False
