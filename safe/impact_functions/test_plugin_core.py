@@ -116,7 +116,7 @@ class SyntaxErrorFunction(FunctionProvider):
 
 
 class Test_plugin_core(unittest.TestCase):
-    """Tests of Risiko calculations
+    """Tests of InaSAFE calculations
     """
 
     def test_basic_plugin_requirements(self):
