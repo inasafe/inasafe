@@ -669,6 +669,8 @@ class Aggregator(QtCore.QObject):
 
         print 'Start new aggr'
         # new way
+        # myZonalStatistics = {0L: {'count': 50539, 'sum': 12015061.876953125, 'mean': 237.73841739949594}, 1L: {'count': 19492, 'sum': 2945658.1220703125, 'mean': 151.12138939412642}, 2L: {'count': 57372, 'sum': 1643522.3984985352, 'mean': 28.6467684323108}, 3L: {'count': 0.00013265823369700314, 'sum': 0.24983273179242008, 'mean': 1883.2810058593748}, 4L: {'count': 1.8158245316933218e-05, 'sum': 0.034197078505115275, 'mean': 1883.281005859375}, 5L: {'count': 73941, 'sum': 10945062.435424805, 'mean': 148.024268476553}, 6L: {'count': 54998, 'sum': 11330910.488220215, 'mean': 206.02404611477172}}
+
         myZonalStatistics = calculateZonalStats(theQGISImpactLayer, self.layer)
 
         print 'done new aggr'
@@ -681,19 +683,20 @@ class Aggregator(QtCore.QObject):
 
         # add fields for stats to aggregation layer
         # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
+        #             QgsField(self._minFieldName(), QtCore.QVariant.Double),
+        #             QgsField(self._maxFieldName(), QtCore.QVariant.Double)]
         myFields = [QgsField(self._sumFieldName(), QtCore.QVariant.Double),
                     QgsField(self._countFieldName(), QtCore.QVariant.Double),
-                    QgsField(self._meanFieldName(), QtCore.QVariant.Double),
-                    QgsField(self._minFieldName(), QtCore.QVariant.Double),
-                    QgsField(self._maxFieldName(), QtCore.QVariant.Double)]
+                    QgsField(self._meanFieldName(), QtCore.QVariant.Double)
+                    ]
         myProvider.addAttributes(myFields)
         self.layer.commitChanges()
 
         sumIndex = myProvider.fieldNameIndex(self._sumFieldName())
         countIndex = myProvider.fieldNameIndex(self._countFieldName())
         meanIndex = myProvider.fieldNameIndex(self._meanFieldName())
-        minIndex = myProvider.fieldNameIndex(self._minFieldName())
-        maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
+        # minIndex = myProvider.fieldNameIndex(self._minFieldName())
+        # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
 
         self.layer.startEditing()
         allPolygonAttrs = myProvider.attributeIndexes()
@@ -705,11 +708,12 @@ class Aggregator(QtCore.QObject):
             print myFid
             print myZonalStatistics
             myStats = myZonalStatistics[myFid]
+            #          minIndex: QtCore.QVariant(myStats['min']),
+            #          maxIndex: QtCore.QVariant(myStats['max'])}
             attrs = {sumIndex: QtCore.QVariant(myStats['sum']),
                      countIndex: QtCore.QVariant(myStats['count']),
-                     meanIndex: QtCore.QVariant(myStats['mean']),
-                     minIndex: QtCore.QVariant(myStats['min']),
-                     maxIndex: QtCore.QVariant(myStats['max'])}
+                     meanIndex: QtCore.QVariant(myStats['mean'])
+                     }
             myProvider.changeAttributeValues({myFid: attrs})
         self.layer.commitChanges()
 
@@ -757,19 +761,19 @@ class Aggregator(QtCore.QObject):
                 QgsMapLayerRegistry.instance().addMapLayer(self.layer)
 
     def _countFieldName(self):
-        return self.prefix + 'count'
+        return (self.prefix + 'count')[:10]
 
     def _meanFieldName(self):
-        return self.prefix + 'mean'
+        return (self.prefix + 'mean')[:10]
 
     def _minFieldName(self):
-        return self.prefix + 'min'
+        return (self.prefix + 'min')[:10]
 
     def _maxFieldName(self):
-        return self.prefix + 'max'
+        return (self.prefix + 'max')[:10]
 
     def _sumFieldName(self):
-        return self.prefix + 'sum'
+        return (self.prefix + 'sum')[:10]
 
     # noinspection PyDictCreation
     def _setPersistantAttributes(self):
