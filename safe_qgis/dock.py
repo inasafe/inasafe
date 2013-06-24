@@ -2131,7 +2131,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'Loaded impact layer "%1" is not valid').arg(myFilename)
             raise Exception(myMessage)
 
-    def saveCurrentScenario(self):
+    def saveCurrentScenario(self, theScenarioFilePath=None):
         """Save current scenario
         """
         LOGGER.info('saveCurrentScenario')
@@ -2183,11 +2183,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         mySettings = QSettings()
         lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
         lastSaveDir = str(lastSaveDir.toString())
-        # noinspection PyCallByClass,PyTypeChecker
-        myFileName = str(QFileDialog.getSaveFileName(
-            self, myTitleDialog,
-            os.path.join(lastSaveDir, myTitle + '.txt'),
-            "Text files (*.txt)"))
+        if (theScenarioFilePath is None):
+            # noinspection PyCallByClass,PyTypeChecker
+            myFileName = str(QFileDialog.getSaveFileName(
+                self, myTitleDialog,
+                os.path.join(lastSaveDir, myTitle + '.txt'),
+                "Text files (*.txt)"))
+        else:
+            myFileName = theScenarioFilePath
 
         myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
         myRelHazardPath = os.path.relpath(myHazardPath, myFileName)

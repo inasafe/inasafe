@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from PyQt4.QtGui import QFileDialog
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
@@ -20,7 +21,7 @@ import unittest
 import sys
 import os
 import logging
-
+from safe_qgis.safe_interface import temp_dir, unique_filename
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -1263,6 +1264,45 @@ Click for Diagnostic Information:
             theAggregationEnabledFlag=False)
         myMessage += ' when no aggregation layer is defined.'
         assert myResult, myMessage
+
+    def test_saveCurrentScenario(self):
+        """Test saving Current scenario
+        """
+        myResult, myMessage = setupScenario(
+            DOCK,
+            theHazard='Flood in Jakarta',
+            theExposure='Penduduk Jakarta',
+            theFunction='Be impacted',
+            theFunctionId='Categorised Hazard Population Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # create unique file
+        myScenarioFile = unique_filename(
+            prefix='scenarioTest', suffix='.txt', dir=temp_dir('test'))
+        DOCK.saveCurrentScenario(theScenarioFilePath=myScenarioFile)
+        with open(myScenarioFile, 'rt') as f:
+            data = f.readlines()
+        myTitle = data[0][:-1]
+        myExposure = data[1][:-1]
+        myHazard = data[2][:-1]
+        myFunction = data[3][:-1]
+        myExtent = data[4][:-1]
+        assert os.path.exists(myScenarioFile), \
+            'File %s does not exist' % myScenarioFile
+        assert myTitle == '[Flood in Jakarta]', 'Title is not the same'
+        assert myExposure.startswith('exposure =') and myExposure.endswith(
+            'Population_Jakarta_geographic.asc'), 'Exposure is not the same'
+        assert myHazard.startswith('hazard =') and myHazard.endswith(
+            'jakarta_flood_category_123.asc'), 'Hazard is not the same'
+        assert myFunction == 'function = Categorised Hazard Population ' \
+                             'Impact Function', 'Impact function is not same'
+        assert myExtent == 'extent = 106.3133333333333326, ' \
+                           '-6.3799999999999999, 107.3466666666666640, ' \
+                           '-6.0700000000000003', 'Extent is not same'
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
