@@ -41,10 +41,11 @@ from safe_interface import (
     Vector,
     safe_read_layer)
 
-from safe_qgis.utilities_test import (getQgisTestApp,
-                                      setCanvasCrs,
-                                      setJakartaGeoExtent,
-                                      GEOCRS)
+from safe_qgis.utilities_test import (
+    getQgisTestApp,
+    setCanvasCrs,
+    setJakartaGeoExtent,
+    GEOCRS)
 
 from safe_qgis.dock import Dock
 from safe_qgis.aggregator import Aggregator
