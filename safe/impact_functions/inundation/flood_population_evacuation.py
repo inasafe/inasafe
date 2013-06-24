@@ -167,7 +167,7 @@ class FloodEvacuationFunction(FunctionProvider):
         drinking_water = int(evacuated * mn_drinking_water)
         water = int(evacuated * mn_water)
         family_kits = int(evacuated * mn_family_kits)
-        toilets = int(evacuated / mn_toilets)
+        toilets = int(evacuated * mn_toilets)
 
         # Generate impact report for the pdf map
         table_body = [
