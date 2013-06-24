@@ -27,12 +27,9 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from safe_qgis.zonal_stats import calculateZonalStats, cellInfoForBBox
-from safe_qgis.utilities import getErrorMessage
 from safe_qgis.utilities_test import (
-    unitTestDataPath,
     loadLayer,
     getQgisTestApp)
-from safe_qgis.exceptions import StyleError
 from safe_qgis.safe_interface import UNITDATA
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

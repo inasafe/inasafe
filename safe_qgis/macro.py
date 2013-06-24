@@ -51,6 +51,7 @@ def runScenario():
     Returns:
         None
     """
+    # pylint: disable=W0603
     global STATUS_FLAG
     STATUS_FLAG = False
     myDock = getDock()
@@ -65,7 +66,8 @@ def runScenario():
     myDock.analysisDone.connect(completed)
     # Start the analysis
     myDock.accept()
-    return STATUS_FLAG
+    return
+    # pylint: enable=W0603
 
 
 def extractPath(theScenarioFilePath, thePath):
