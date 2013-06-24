@@ -53,6 +53,7 @@ from safe_qgis.styling import (
 from safe_qgis.memory_checker import checkMemoryUsage
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
+    load_plugins,
     availableFunctions,
     get_function_title,
     getOptimalExtent,
@@ -93,7 +94,7 @@ from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.function_options_dialog import FunctionOptionsDialog
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe_interface import styles
+from safe_interface import styles, get_plugins
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
@@ -135,6 +136,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
+
+        # Ensure that all impact functions are loaded
+        load_plugins()
 
         #self.wvResults = MessageViewer()
         # Set up dispatcher for dynamic messages

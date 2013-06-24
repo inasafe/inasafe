@@ -38,7 +38,7 @@ class PluginMount(type):
 
 
 class FunctionProvider:
-    """Mount point for plugins which refer to actions that can be performed.
+    """Mount point for impact_functions.
 
     Plugins implementing this reference should provide the following method:
 
@@ -484,7 +484,7 @@ def aggregate(data=None, boundaries=None,
 
 
 # FIXME (Ole): Maybe filter by name too, rename to get_impact_functions
-#              and remove some of the other functions.
+# and remove some of the other functions.
 def get_admissible_plugins(keywords=None):  # , name=None):
     """Get plugins that match specified keywords
 

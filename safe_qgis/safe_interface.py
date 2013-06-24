@@ -29,6 +29,7 @@ import logging
 # SAFE functionality - passed on to QGIS modules
 # pylint: disable=W0611
 from safe.api import (
+    load_plugins,
     get_admissible_plugins,
     get_function_title,
     get_plugins as safe_get_plugins,
