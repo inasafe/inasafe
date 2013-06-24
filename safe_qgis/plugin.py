@@ -623,9 +623,9 @@ class Plugin:
         myDialog.show()
 
     def showImportDlg(self):
-        from safe_qgis.import_dialog import ImportDialog
+        from safe_qgis.osm_downloader import OsmDownloader
 
-        dlg = ImportDialog(self.iface.mainWindow(), self.iface)
+        dlg = OsmDownloader(self.iface.mainWindow(), self.iface)
         dlg.setModal(True)
         dlg.show()
 

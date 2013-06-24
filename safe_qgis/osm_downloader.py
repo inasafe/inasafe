@@ -10,89 +10,28 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'bungcip@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import os
 import tempfile
 
-from PyQt4.QtCore import (QCoreApplication, QUrl, QFile,
-                          QSettings, pyqtSignature)
-from PyQt4.QtGui import (QDialog, QProgressDialog,
-                         QMessageBox, QFileDialog)
-from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
-                             QNetworkReply)
-from import_dialog_base import Ui_ImportDialogBase
+from PyQt4.QtCore import QSettings, pyqtSignature
+from PyQt4.QtGui import (QDialog, QProgressDialog, QMessageBox, QFileDialog)
+from PyQt4.QtNetwork import QNetworkAccessManager
+from osm_downloader_base import Ui_OsmDownloaderBase
 
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
 from safe_interface import messaging as m
+from utilities import downloadWebUrl
 from safe_interface import styles
 INFO_STYLE = styles.INFO_STYLE
 
 
-def httpDownload(theManager, theUrl, theOutPath, theProgressDlg=None):
-    """ Download file from theUrl.
-    Params:
-        * theManager - a QNetworkManager instance
-        * theUrl - url of file
-        * theOutPath - output path
-        * theProgressDlg - progress dialog widget
-    Returns:
-        True if success, otherwise return a tuple with format like this
-        (QNetworkReply.NetworkError, error_message)
-    Raises:
-        * IOError - when cannot create theOutPath
-    """
-
-    # prepare output path
-    myFile = QFile(theOutPath)
-    if not myFile.open(QFile.WriteOnly):
-        raise IOError(myFile.errorString())
-
-    # slot to write data to file
-    def writeData():
-        myFile.write(myReply.readAll())
-
-    myRequest = QNetworkRequest(QUrl(theUrl))
-    myReply = theManager.get(myRequest)
-    myReply.readyRead.connect(writeData)
-
-    if theProgressDlg:
-        # progress bar
-        def progressEvent(theReceived, theTotal):
-
-            QCoreApplication.processEvents()
-
-            theProgressDlg.setLabelText("%s / %s" % (theReceived, theTotal))
-            theProgressDlg.setMaximum(theTotal)
-            theProgressDlg.setValue(theReceived)
-
-        # cancel
-        def cancelAction():
-            myReply.abort()
-
-        myReply.downloadProgress.connect(progressEvent)
-        theProgressDlg.canceled.connect(cancelAction)
-
-    # wait until finished
-    while not myReply.isFinished():
-        QCoreApplication.processEvents()
-
-    myFile.close()
-
-    myResult = myReply.error()
-    if myResult == QNetworkReply.NoError:
-        return True
-    else:
-        return myResult, str(myReply.errorString())
-
-
-class ImportDialog(QDialog, Ui_ImportDialogBase):
+class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
     def __init__(self, theParent=None, theIface=None):
         """Constructor for import dialog.
@@ -307,7 +246,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myLabelText = self.tr("Downloading shapefile")
         self.progressDialog.setLabelText(myLabelText)
 
-        myResult = httpDownload(self.nam, theUrl, theOutput,
+        myResult = downloadWebUrl(self.nam, theUrl, theOutput,
                                 self.progressDialog)
 
         if myResult is not True:

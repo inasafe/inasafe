@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'import_dialog_base.ui'
+# Form implementation generated from reading ui file 'osm_downloader_base.ui'
 #
-# Created: Mon Jun 24 12:04:58 2013
+# Created: Mon Jun 24 17:16:01 2013
 #      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,13 +14,13 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_ImportDialogBase(object):
-    def setupUi(self, ImportDialogBase):
-        ImportDialogBase.setObjectName(_fromUtf8("ImportDialogBase"))
-        ImportDialogBase.resize(506, 500)
-        self.gridLayout_2 = QtGui.QGridLayout(ImportDialogBase)
+class Ui_OsmDownloaderBase(object):
+    def setupUi(self, OsmDownloaderBase):
+        OsmDownloaderBase.setObjectName(_fromUtf8("OsmDownloaderBase"))
+        OsmDownloaderBase.resize(506, 500)
+        self.gridLayout_2 = QtGui.QGridLayout(OsmDownloaderBase)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.groupBox = QtGui.QGroupBox(ImportDialogBase)
+        self.groupBox = QtGui.QGroupBox(OsmDownloaderBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -55,42 +55,42 @@ class Ui_ImportDialogBase(object):
         self.maxLatitude.setObjectName(_fromUtf8("maxLatitude"))
         self.gridLayout.addWidget(self.maxLatitude, 3, 1, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox, 3, 0, 1, 1)
-        self.outputDirectoryLabel = QtGui.QLabel(ImportDialogBase)
+        self.outputDirectoryLabel = QtGui.QLabel(OsmDownloaderBase)
         self.outputDirectoryLabel.setObjectName(_fromUtf8("outputDirectoryLabel"))
         self.gridLayout_2.addWidget(self.outputDirectoryLabel, 1, 0, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.outDir = QtGui.QLineEdit(ImportDialogBase)
+        self.outDir = QtGui.QLineEdit(OsmDownloaderBase)
         self.outDir.setText(_fromUtf8(""))
         self.outDir.setObjectName(_fromUtf8("outDir"))
         self.horizontalLayout.addWidget(self.outDir)
-        self.pBtnDir = QtGui.QToolButton(ImportDialogBase)
+        self.pBtnDir = QtGui.QToolButton(OsmDownloaderBase)
         self.pBtnDir.setObjectName(_fromUtf8("pBtnDir"))
         self.horizontalLayout.addWidget(self.pBtnDir)
         self.gridLayout_2.addLayout(self.horizontalLayout, 2, 0, 1, 1)
-        self.buttonBox = QtGui.QDialogButtonBox(ImportDialogBase)
+        self.buttonBox = QtGui.QDialogButtonBox(OsmDownloaderBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.gridLayout_2.addWidget(self.buttonBox, 4, 0, 1, 1)
-        self.webView = QtWebKit.QWebView(ImportDialogBase)
+        self.webView = QtWebKit.QWebView(OsmDownloaderBase)
         self.webView.setUrl(QtCore.QUrl(_fromUtf8("about:blank")))
         self.webView.setObjectName(_fromUtf8("webView"))
         self.gridLayout_2.addWidget(self.webView, 0, 0, 1, 1)
 
-        self.retranslateUi(ImportDialogBase)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ImportDialogBase.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ImportDialogBase.reject)
-        QtCore.QMetaObject.connectSlotsByName(ImportDialogBase)
+        self.retranslateUi(OsmDownloaderBase)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), OsmDownloaderBase.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), OsmDownloaderBase.reject)
+        QtCore.QMetaObject.connectSlotsByName(OsmDownloaderBase)
 
-    def retranslateUi(self, ImportDialogBase):
-        ImportDialogBase.setWindowTitle(QtGui.QApplication.translate("ImportDialogBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox.setTitle(QtGui.QApplication.translate("ImportDialogBase", "Bounding box", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("ImportDialogBase", "Minimum latitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("ImportDialogBase", "Minimum longitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("ImportDialogBase", "Maximum longitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("ImportDialogBase", "Maximum latitude", None, QtGui.QApplication.UnicodeUTF8))
-        self.outputDirectoryLabel.setText(QtGui.QApplication.translate("ImportDialogBase", "Output directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.pBtnDir.setText(QtGui.QApplication.translate("ImportDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, OsmDownloaderBase):
+        OsmDownloaderBase.setWindowTitle(QtGui.QApplication.translate("OsmDownloaderBase", "OSM Downloader", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox.setTitle(QtGui.QApplication.translate("OsmDownloaderBase", "Bounding box", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Minimum latitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Minimum longitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Maximum longitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_4.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Maximum latitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.outputDirectoryLabel.setText(QtGui.QApplication.translate("OsmDownloaderBase", "Output directory", None, QtGui.QApplication.UnicodeUTF8))
+        self.pBtnDir.setText(QtGui.QApplication.translate("OsmDownloaderBase", "...", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
