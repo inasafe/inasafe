@@ -32,7 +32,7 @@ from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
 
-from qgis.core import QgsVectorLayer
+from qgis.core import QgsVectorLayer, QgsFeature
 
 from safe_interface import (
     TESTDATA,
@@ -248,7 +248,7 @@ class AggregatorTest(unittest.TestCase):
                          DOCK.aggregator.preprocessedFeatureCount,
                          myMessage)
 
-    def _aggregate(self, myImpactLayer):
+    def _aggregate(self, myImpactLayer, myExpectedResults):
         myAggregationLayer = QgsVectorLayer(
             TESTDATA + '/kabupaten_jakarta_singlepart.shp',
             'test aggregation',
@@ -262,18 +262,102 @@ class AggregatorTest(unittest.TestCase):
         myAggregator.aoiMode = False
         myAggregator.aggregate(myImpactLayer)
 
+        myProvider = myAggregator.layer.dataProvider()
+        myProvider.select(myProvider.attributeIndexes())
+        myFeature = QgsFeature()
+        myResults = []
+
+        while myProvider.nextFeature(myFeature):
+            myFeatureResults = {}
+            myAtMap = myFeature.attributeMap()
+            for (k, attr) in myAtMap.iteritems():
+                myFeatureResults[k] = attr.toString()
+            myResults.append(myFeatureResults)
+        assert myResults == myExpectedResults
+
     def test_aggregate_raster_impact(self):
+        # created from loadStandardLayers.qgs with:
+        # - a flood in Jakarta like in 2007
+        # - Penduduk Jakarta
+        # - need evacuation
+        # - kabupaten_jakarta_singlepart.shp
         myImpactLayer = Raster(
-            data=TESTDATA + '/aggregation_test_impact.tif',
+            data=TESTDATA + '/aggregation_test_impact_raster.tif',
             name='test raster impact')
-        self._aggregate(myImpactLayer)
+
+        myExpectedResults = [
+            {0: 'JAKARTA BARAT',
+             1: '50540',
+             2: '12015061.8769531',
+             3: '237.733713433976',
+             4: '50539',
+             5: '12015061.8769531',
+             6: '237.738417399496'},
+            {0: 'JAKARTA PUSAT',
+             1: '19492',
+             2: '2943702.11401367',
+             3: '151.021040119725',
+             4: '19492',
+             5: '2945658.12207031',
+             6: '151.121389394126'},
+            {0: 'JAKARTA SELATAN',
+             1: '57367',
+             2: '1645498.26947021',
+             3: '28.6837078716024',
+             4: '57372',
+             5: '1643522.39849854',
+             6: '28.6467684323108'},
+            {0: 'JAKARTA TIMUR',
+             1: '0.000132658233697',
+             2: '0.24983273179242',
+             3: '1883.28100585937',
+             4: '0.000132658233697',
+             5: '0.24983273179242',
+             6: '1883.28100585937'},
+            {0: 'JAKARTA TIMUR',
+             1: '1.8158245317e-05',
+             2: '0.034197078505115',
+             3: '1883.28100585938',
+             4: '1.8158245317e-05',
+             5: '0.034197078505115',
+             6: '1883.28100585938'},
+            {0: 'JAKARTA TIMUR',
+             1: '73946',
+             2: '10943934.3182373',
+             3: '147.999003573382',
+             4: '73941',
+             5: '10945062.4354248',
+             6: '148.024268476553'},
+            {0: 'JAKARTA UTARA',
+             1: '55004',
+             2: '11332095.7334595',
+             3: '206.023120745027',
+             4: '54998',
+             5: '11330910.4882202',
+             6: '206.024046114772'}]
+
+        self._aggregate(myImpactLayer, myExpectedResults)
 
     def test_aggregate_vector_impact(self):
+         # created from loadStandardLayers.qgs with:
+        # - a flood in Jakarta like in 2007
+        # - Essential buildings
+        # - be flodded
+        # - kabupaten_jakarta_singlepart.shp
         myImpactLayer = Vector(
-            data=TESTDATA + '/aggregation_test_impact.shp',
+            data=TESTDATA + '/aggregation_test_impact_vector.shp',
             name='test raster impact')
 
-        self._aggregate(myImpactLayer)
+        myExpectedResults = [
+            {0: 'JAKARTA BARAT', 1: '87'},
+            {0: 'JAKARTA PUSAT', 1: '117'},
+            {0: 'JAKARTA SELATAN', 1: '22'},
+            {0: 'JAKARTA TIMUR', 1: '0'},
+            {0: 'JAKARTA TIMUR', 1: '0'},
+            {0: 'JAKARTA TIMUR', 1: '198'},
+            {0: 'JAKARTA UTARA', 1: '286'}
+        ]
+        self._aggregate(myImpactLayer, myExpectedResults)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest, 'test')

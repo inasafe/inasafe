@@ -685,8 +685,8 @@ class Aggregator(QtCore.QObject):
         # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
         #             QgsField(self._minFieldName(), QtCore.QVariant.Double),
         #             QgsField(self._maxFieldName(), QtCore.QVariant.Double)]
-        myFields = [QgsField(self._sumFieldName(), QtCore.QVariant.Double),
-                    QgsField(self._countFieldName(), QtCore.QVariant.Double),
+        myFields = [QgsField(self._countFieldName(), QtCore.QVariant.Double),
+                    QgsField(self._sumFieldName(), QtCore.QVariant.Double),
                     QgsField(self._meanFieldName(), QtCore.QVariant.Double)
                     ]
         myProvider.addAttributes(myFields)
@@ -705,8 +705,6 @@ class Aggregator(QtCore.QObject):
 
         while myProvider.nextFeature(myFeature):
             myFid = myFeature.id()
-            print myFid
-            print myZonalStatistics
             myStats = myZonalStatistics[myFid]
             #          minIndex: QtCore.QVariant(myStats['min']),
             #          maxIndex: QtCore.QVariant(myStats['max'])}
