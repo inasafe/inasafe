@@ -175,7 +175,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 except ParsingError:
                     unparsedFiles.append(myFile)
 
-        self.showPopulateScenarioMessage(parsedFiles, unparsedFiles)
+        LOGGER.info(self.getPopulateScenarioLog(parsedFiles, unparsedFiles))
 
     def runScriptTask(self, theFilename):
         """ Run a python script in QGIS to exercise InaSAFE functionality.
@@ -330,6 +330,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                                  str(e))
                 myReport.append('F: %s\n' % str(myNameItem))
                 myFailCount += 1
+                self.disableBusyCursor()
 
         batchReportFilePath = self.writeBatchReport(
             myReport, myPassCount, myFailCount)
@@ -406,7 +407,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             myFilename = myValue
             # run script
             try:
-                self.runScriptTask(myFilename, theCount)
+                self.runScriptTask(myFilename)
                 # set status to 'OK'
                 theStatusItem.setText(self.tr('Script OK'))
             except Exception as e:
@@ -421,7 +422,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             myTitle = str(theItem.text())
 
             # Its a dict containing files for a scenario
-            myResult = self.runSimpleTask(myValue, theCount)
+            myResult = self.runSimpleTask(myValue)
             if not myResult:
                 theStatusItem.setText(self.tr('Analysis Fail'))
             else:
@@ -501,7 +502,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 
-    def showPopulateScenarioMessage(self, parsedFiles, unparsedFiles):
+    def getPopulateScenarioLog(self, parsedFiles, unparsedFiles):
         """A method to show a message box that shows list of succesfully
         parsed files and unsucsefully parsed files
         """
@@ -516,8 +517,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
             unparsedContents = 'No failure in parsing files\n'
         fullMessages = (parsedMessage + parsedContents + '\n\n' +
                         unparsedMessage + unparsedContents)
-        # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
-        QMessageBox.information(self, 'Parsed Files Result', fullMessages)
+        return fullMessages
 
     def updateDefaultOutputDir(self):
         """Update output dir if set to default

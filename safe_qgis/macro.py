@@ -66,7 +66,7 @@ def runScenario():
     myDock.analysisDone.connect(completed)
     # Start the analysis
     myDock.accept()
-    return
+    return STATUS_FLAG
     # pylint: enable=W0603
 
 
