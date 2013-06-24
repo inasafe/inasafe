@@ -1047,7 +1047,7 @@ class DockTest(unittest.TestCase):
         myResult = DOCK.wvResults.pageToText()
         myMessage = ('The aggregation report should be:\n%s\n\nFound:\n\n%s' %
                      (myExpectedResult, myResult))
-        self.assertEqual(myExpectedResult, myResult, myMessage)
+        self.assertEqual(myResult, myExpectedResult, myMessage)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
