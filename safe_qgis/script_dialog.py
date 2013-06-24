@@ -36,13 +36,13 @@ from script_dialog_base import Ui_ScriptDialogBase
 from safe_qgis.map import Map
 from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import QgisPathError
+from safe_qgis.safe_interface import temp_dir
 
 from safe_qgis import macro
 
 LOGGER = logging.getLogger('InaSAFE')
 
-myRoot = os.path.dirname(__file__)
-defaultSourceDir = os.path.abspath(os.path.join(myRoot, '..', 'script_runner'))
+defaultSourceDir = temp_dir()
 
 
 class ScriptDialog(QDialog, Ui_ScriptDialogBase):
@@ -76,10 +76,9 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
         # preventing error if the user delete the directory
         if not os.path.exists(self.leSourceDir.text()):
-            if os.path.exists(defaultSourceDir):
-                self.leSourceDir.setText(defaultSourceDir)
-            else:
-                self.leSourceDir.setText('.')
+            self.leSourceDir.setText(defaultSourceDir)
+        if not os.path.exists(self.leOutputDir.text()):
+            self.leOutputDir.setText(defaultSourceDir)
         self.populateTable(self.leSourceDir.text())
 
         # connect signal to slot
