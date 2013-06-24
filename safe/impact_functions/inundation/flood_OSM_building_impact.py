@@ -160,6 +160,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
             # Count affected buildings by usage type if available
             if 'type' in attribute_names:
                 usage = attributes[i]['type']
+            elif 'TYPE' in attribute_names:
+                usage = attributes[i]['TYPE']
             else:
                 usage = None
             if 'amenity' in attribute_names and (usage is None or usage == 0):
@@ -222,8 +224,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
         school_closed = 0
         hospital_closed = 0
         # Generate break down by building usage type is available
-        list_type_attribute = ['type', 'amenity', 'building_t', 'office',
-                               'tourism', 'leisure', 'building']
+        list_type_attribute = [
+            'TYPE', 'type', 'amenity', 'building_t', 'office',
+            'tourism', 'leisure', 'building']
         intersect_type = set(attribute_names) & set(list_type_attribute)
         if len(intersect_type) > 0:
             # Make list of building types
