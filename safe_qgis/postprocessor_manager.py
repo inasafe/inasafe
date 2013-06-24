@@ -166,9 +166,9 @@ class PostprocessorManager(QtCore.QObject):
                 myMessage.add(m.EmphasizedText(self.tr(
                     'The aggregation layer had multipart polygons, these have '
                     'been exploded and are now marked with a #. This has no '
-                    'influence on the calculation, just keep in mind that the'
+                    'influence on the calculation, just keep in mind that the '
                     'attributes shown may represent the original multipart '
-                    'polygon and not the individual exploded polygon parts. ')))
+                    'polygon and not the individual exploded polygon parts.')))
         except:
             pass
 

@@ -398,7 +398,8 @@ class Aggregator(QtCore.QObject):
             self.errorMessage = myMessage
             return
         myImpactProvider = theQGISImpactLayer.dataProvider()
-        myTargetFieldIndex = theQGISImpactLayer.fieldNameIndex(self.targetField)
+        myTargetFieldIndex = theQGISImpactLayer.fieldNameIndex(
+            self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = m.Paragraph(

@@ -195,8 +195,8 @@ class AggregatorTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregationLayer=
-            'kabupaten jakarta singlepart with None keyword')
+            theAggregationLayer='kabupaten jakarta singlepart with None '
+                                'keyword')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -250,7 +250,7 @@ class AggregatorTest(unittest.TestCase):
 
     def _aggregate(self, myImpactLayer):
         myAggregationLayer = QgsVectorLayer(
-            TESTDATA + '/kabupaten_jakarta_singlepart.shp',
+            os.path.join(TESTDATA, 'kabupaten_jakarta_singlepart.shp'),
             'test aggregation',
             'ogr')
         myAggregator = Aggregator(None, myAggregationLayer)
@@ -264,13 +264,13 @@ class AggregatorTest(unittest.TestCase):
 
     def test_aggregate_raster_impact(self):
         myImpactLayer = Raster(
-            data=TESTDATA+'/aggregation_test_impact.tif',
+            data=os.path.join(TESTDATA, 'aggregation_test_impact.tif'),
             name='test raster impact')
         self._aggregate(myImpactLayer)
 
     def test_aggregate_vector_impact(self):
         myImpactLayer = Vector(
-            data=TESTDATA+'/aggregation_test_impact.shp',
+            data=os.path.join(TESTDATA, 'aggregation_test_impact.shp'),
             name='test raster impact')
 
         self._aggregate(myImpactLayer)
