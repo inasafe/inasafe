@@ -168,8 +168,8 @@ class PostprocessorManager(QtCore.QObject):
                     'been exploded and are now marked with a #. This has no '
                     'influence on the calculation, just keep in mind that the'
                     'attributes shown may represent the original multipart '
-                    'polygon and not the individual exploded polygon parts. ')))
-        except:
+                    'polygon and not the individual exploded polygon parts.')))
+        except Exception:  # pylint: disable=W0703
             pass
 
         return myMessage

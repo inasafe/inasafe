@@ -37,6 +37,8 @@ from qgis.core import (
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
 
+from safe_qgis.zonal_stats import calculateZonalStats
+
 from third_party.odict import OrderedDict
 from third_party.pydispatch import dispatcher
 
@@ -398,7 +400,8 @@ class Aggregator(QtCore.QObject):
             self.errorMessage = myMessage
             return
         myImpactProvider = theQGISImpactLayer.dataProvider()
-        myTargetFieldIndex = theQGISImpactLayer.fieldNameIndex(self.targetField)
+        myTargetFieldIndex = theQGISImpactLayer.fieldNameIndex(
+            self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = m.Paragraph(
@@ -664,6 +667,50 @@ class Aggregator(QtCore.QObject):
                 self.tr('You aborted aggregation, '
                         'so there are no data for analysis. Exiting...'))
 
+        # new way
+        myZonalStatistics = calculateZonalStats(theQGISImpactLayer, self.layer)
+
+        # FIXME (MB) remove this once fully implemented
+        oldPrefix = self.prefix
+
+        self.prefix = 'newAggr'
+        myProvider = self.layer.dataProvider()
+        self.layer.startEditing()
+
+        # add fields for stats to aggregation layer
+        # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
+        myFields = [QgsField(self._sumFieldName, QtCore.QVariant.Double),
+                    QgsField(self._countFieldName, QtCore.QVariant.Double),
+                    QgsField(self._meanFieldName, QtCore.QVariant.Double),
+                    QgsField(self._minFieldName, QtCore.QVariant.Double),
+                    QgsField(self._maxFieldName, QtCore.QVariant.Double)]
+        myProvider.addAttributes(myFields)
+        self.layer.commitChanges()
+
+        sumIndex = myProvider.fieldNameIndex(self._sumFieldName)
+        countIndex = myProvider.fieldNameIndex(self._countFieldName)
+        meanIndex = myProvider.fieldNameIndex(self._meanFieldName)
+        minIndex = myProvider.fieldNameIndex(self._minFieldName)
+        maxIndex = myProvider.fieldNameIndex(self._maxFieldName)
+
+        self.layer.startEditing()
+        allPolygonAttrs = myProvider.attributeIndexes()
+        myProvider.select(allPolygonAttrs)
+        myFeature = QgsFeature()
+
+        while myProvider.nextFeature(myFeature):
+            myFid = myFeature.id()
+            myStats = myZonalStatistics[myFid]
+            attrs = {sumIndex: QtCore.QVariant(myStats['sum']),
+                     countIndex: QtCore.QVariant(myStats['count']),
+                     meanIndex: QtCore.QVariant(myStats['mean']),
+                     minIndex: QtCore.QVariant(myStats['min']),
+                     maxIndex: QtCore.QVariant(myStats['max'])}
+            myProvider.changeAttributeValues({myFid: attrs})
+        self.layer.commitChanges()
+
+        # FIXME (MB) remove this once fully implemented
+        self.prefix = oldPrefix
         return
 
     def _prepareLayer(self):
@@ -710,6 +757,12 @@ class Aggregator(QtCore.QObject):
 
     def _meanFieldName(self):
         return self.prefix + 'mean'
+
+    def _minFieldName(self):
+        return self.prefix + 'min'
+
+    def _maxFieldName(self):
+        return self.prefix + 'max'
 
     def _sumFieldName(self):
         return self.prefix + 'sum'
