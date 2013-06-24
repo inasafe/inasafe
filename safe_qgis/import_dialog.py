@@ -17,6 +17,10 @@ __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
+import os
+import tempfile
+
 from PyQt4.QtCore import (QCoreApplication, QUrl, QFile,
                           QSettings, pyqtSignature)
 from PyQt4.QtGui import (QDialog, QProgressDialog,
@@ -25,11 +29,10 @@ from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkRequest,
                              QNetworkReply)
 from import_dialog_base import Ui_ImportDialogBase
 
-import os
-import tempfile
-
-from inasafe_lightmaps import InasafeLightMaps
 from safe_qgis.exceptions import (CanceledImportDialogError, ImportDialogError)
+from safe_interface import messaging as m
+from safe_interface import styles
+INFO_STYLE = styles.INFO_STYLE
 
 
 def httpDownload(theManager, theUrl, theOutPath, theProgressDlg=None):
@@ -86,7 +89,7 @@ def httpDownload(theManager, theUrl, theOutPath, theProgressDlg=None):
     if myResult == QNetworkReply.NoError:
         return True
     else:
-        return (myResult, str(myReply.errorString()))
+        return myResult, str(myReply.errorString())
 
 
 class ImportDialog(QDialog, Ui_ImportDialogBase):
@@ -111,115 +114,93 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         self.iface = theIface
         self.url = "http://osm.linfiniti.com/buildings-shp"
 
-        ## region coordinate: (latitude, longtitude, zoom_level)
-        self.regionExtent = {
-            '0': [18.87685, -71.493, 6],     # haiti
-            '1': [-2.5436300, 116.8887, 3],  # indonesia
-            '2': [1.22449, 15.40999, 2],     # africa
-            '3': [34.05, 56.55, 3],          # middle east
-            '4': [12.98855, 121.7166, 4],    # philipine
-        }
-
         # creating progress dialog for download
         self.progressDialog = QProgressDialog(self)
         self.progressDialog.setAutoClose(False)
         myTitle = self.tr("InaSAFE OpenStreetMap Downloader")
         self.progressDialog.setWindowTitle(myTitle)
 
-        ## set map parameter based on placeholder self.map widget
-        theMap = InasafeLightMaps(self.gbxMap)
-        theMap.setGeometry(self.map.geometry())
-        theMap.setSizePolicy(self.map.sizePolicy())
-        self.map = theMap
+        self.showInfo()
 
         self.nam = QNetworkAccessManager(self)
-
-        self.setupOptions()
-
         self.restoreState()
+        self.updateExtent()
 
-        self.cbxRegion.currentIndexChanged.connect(self.regionChanged)
-        self.map.m_normalMap.updated.connect(self.updateExtent)
+    def showInfo(self):
+        # Read the header and footer html snippets
+        base_dir = os.path.dirname(__file__)
+        header_path = os.path.join(base_dir, 'resources', 'header.html')
+        footer_path = os.path.join(base_dir, 'resources', 'footer.html')
+        header_file = file(header_path, 'rt')
+        footer_file = file(footer_path, 'rt')
+        header = header_file.read()
+        footer = footer_file.read()
+        header_file.close()
+        footer_file.close()
+        header = header.replace('PATH', base_dir)
 
-    def regionChanged(self, theIndex):
-        """ Slot that called when region combo box changed.
-        Params:
-            theIndex - index of combo box
-        """
-        myRegionIndex = str(self.cbxRegion.itemData(theIndex).toString())
-        myCenter = self.regionExtent[myRegionIndex]
-        self.map.setCenter(myCenter[0], myCenter[1], myCenter[2])
+        string = header
 
-    # pylint: disable=W0613
-    def resizeEvent(self, theEvent):
-        """ Function that called when resize event occurred.
-        Params:
-            theEvent - QEvent instance. Not used.
-        """
-        self.map.resize(self.gbxMap.width() - 30, self.gbxMap.height() - 30)
-    # pylint: disable=W0613
+        heading = m.Heading(self.tr('OSM Downloader'), **INFO_STYLE)
+        body = self.tr(
+            'This tool will fetch building (\'structure\') data from the '
+            'OpenStreetMap project for you. The downloaded data will have '
+            'InaSAFE keywords defined and a default QGIS style applied. To '
+            'use this tool effectively:'
+        )
+        tips = m.BulletedList()
+        tips.add(self.tr(
+            'Use QGIS to zoom in to the area for which you want building data '
+            'to be retrieved.'))
+        tips.add(self.tr(
+            'Check the output directory is correct. Note that the saved '
+            'dataset will be called buildings.shp (and its associated files).'
+        ))
+        tips.add(self.tr(
+            'If a dataset already exists in the output directory it will be '
+            'overwritten.'
+        ))
+        tips.add(self.tr(
+            'This tool requires a working internet connection and fetching '
+            'buildings will consume your bandwidth.'))
+        tips.add(m.Link(
+            'http://www.openstreetmap.org/copyright',
+            text=self.tr(
+                'Downloaded data is copyright OpenStreetMap contributors'
+                ' (click for more info).')
+        ))
+        message = m.Message()
+        message.add(heading)
+        message.add(body)
+        message.add(tips)
+        string += message.to_html()
+        string += footer
 
-    def setupOptions(self):
-        """ Set the content of combo box for region and preset """
-        self.cbxRegion.insertItem(0, 'Indonesia', 1)
-        self.cbxRegion.insertItem(1, 'Africa', 2)
-        self.cbxRegion.insertItem(2, 'Philippines', 4)
-        self.cbxRegion.insertItem(3, 'Central Asia/Middle East', 3)
-        self.cbxRegion.insertItem(4, 'Haiti', 0)
-
-        self.cbxPreset.insertItem(0, self.tr('Buildings'), 'building')
-        self.cbxPreset.insertItem(0, self.tr('Highway'), 'highway')
+        self.webView.setHtml(string)
 
     def restoreState(self):
-        """ Read last state of GUI from configuration file """
+        """ Read last state of GUI from configuration file."""
         mySetting = QSettings()
-
-        myRegion = mySetting.value('region').toInt()
-        if myRegion[1] is True:
-            self.cbxRegion.setCurrentIndex(myRegion[0])
-
-        myPreset = mySetting.value('preset').toInt()
-        if myPreset[1] is True:
-            self.cbxPreset.setCurrentIndex(myPreset[0])
-
         self.outDir.setText(mySetting.value('directory').toString())
-
-        myZoomLevel = mySetting.value('zoom_level').toInt()
-        myLatitude = mySetting.value('latitude').toDouble()
-        myLongitude = mySetting.value('longitude').toDouble()
-
-        if myZoomLevel[1] is True:
-            self.map.setCenter(myLatitude[0], myLongitude[0], myZoomLevel[0])
-        else:
-            # just set to indonesia extent
-            myCenter = self.regionExtent['1']
-            self.map.setCenter(myCenter[0], myCenter[1], myCenter[2])
 
     def saveState(self):
         """ Store current state of GUI to configuration file """
         mySetting = QSettings()
-        mySetting.setValue('region', self.cbxRegion.currentIndex())
-        mySetting.setValue('preset', self.cbxPreset.currentIndex())
         mySetting.setValue('directory', self.outDir.text())
 
-        mySetting.setValue('zoom_level', self.map.getZoomLevel())
-        myCenter = self.map.getCenter()
-        mySetting.setValue('latitude', myCenter[0])
-        mySetting.setValue('longitude', myCenter[1])
-
     def updateExtent(self):
-        """ Update extent value in GUI based from value in map widget"""
-        myExtent = self.map.getExtent()
-        self.minLongitude.setText(str(myExtent[1]))
-        self.minLatitude.setText(str(myExtent[0]))
-        self.maxLongitude.setText(str(myExtent[3]))
-        self.maxLatitude.setText(str(myExtent[2]))
+        """ Update extent value in GUI based from value in map."""
+        myExtent = self.iface.mapCanvas().extent()
+        self.minLongitude.setText(str(myExtent.xMinimum()))
+        self.minLatitude.setText(str(myExtent.yMinimum()))
+        self.maxLongitude.setText(str(myExtent.xMaximum()))
+        self.maxLatitude.setText(str(myExtent.yMaximum()))
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pBtnDir_clicked(self):
         """ Show a dialog to choose directory """
         self.outDir.setText(QFileDialog.getExistingDirectory(
-            self, self.tr("Select Directory")))
+            self, self.tr("Select download directory")))
 
     def accept(self):
         """ Do import process """
@@ -238,7 +219,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         except Exception as myEx:
             QMessageBox.warning(
                 self,
-                self.tr("InaSAFE OpenStreetMap Downloader Error"),
+                self.tr("InaSAFE OpenStreetMap downloader error"),
                 str(myEx))
 
             self.progressDialog.cancel()
@@ -286,9 +267,6 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         myMaxLng = str(self.maxLongitude.text())
         myMaxLat = str(self.maxLatitude.text())
 
-        myCurrentIndex = self.cbxPreset.currentIndex()
-        myType = str(self.cbxPreset.itemData(myCurrentIndex).toString())
-
         myCoordinate = "{myMinLng},{myMinLat},{myMaxLng},{myMaxLat}".format(
             myMinLng=myMinLng,
             myMinLat=myMinLat,
@@ -296,10 +274,9 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             myMaxLat=myMaxLat
         )
 
-        myShapeUrl = "{url}?bbox={myCoordinate}&obj={type}".format(
+        myShapeUrl = "{url}?bbox={myCoordinate}".format(
             url=self.url,
-            myCoordinate=myCoordinate,
-            type=myType
+            myCoordinate=myCoordinate
         )
 
         myFilePath = tempfile.mktemp('.shp.zip')
@@ -327,7 +304,7 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
         # myLabelText = "Begin downloading shapefile from " \
         #               + "%1 ..."
         # self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
-        myLabelText = self.tr("Begin downloading shapefile")
+        myLabelText = self.tr("Downloading shapefile")
         self.progressDialog.setLabelText(myLabelText)
 
         myResult = httpDownload(self.nam, theUrl, theOutput,
@@ -378,15 +355,3 @@ class ImportDialog(QDialog, Ui_ImportDialogBase):
             raise ImportDialogError(myMessage)
 
         self.iface.addVectorLayer(myPath, 'buildings', 'ogr')
-
-
-if __name__ == '__main__':
-    import sys
-    from PyQt4.QtGui import (QApplication)
-
-    app = QApplication(sys.argv)
-
-    a = ImportDialog()
-    a.show()
-    app.exec_()
-    #a.doImport()
