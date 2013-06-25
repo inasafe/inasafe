@@ -101,6 +101,11 @@ class QgisInterface(QObject):
         """
         pass
 
+    def newProject(self):
+        """Create new project
+        """
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+
     # ---------------- API Mock for QgsInterface follows -------------------
 
     def zoomFull(self):

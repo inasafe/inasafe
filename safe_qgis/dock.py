@@ -2058,7 +2058,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.QUrl('file:///' + myMapPdfFilePath,
                         QtCore.QUrl.TolerantMode))
 
-        self.showDynamicMessage(m.Message(m.Text(myStatus)))
+        self.showDynamicMessage(myStatus)
         self.hideBusy()
 
     def getFunctionID(self, theIndex=None):

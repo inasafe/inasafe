@@ -48,7 +48,7 @@ defaultSourceDir = temp_dir()
 class ScriptDialog(QDialog, Ui_ScriptDialogBase):
     """Script Dialog for InaSAFE."""
 
-    def __init__(self, theParent=None, theIface=None):
+    def __init__(self, theParent=None, theIface=None, theDock=None):
         """Constructor for the dialog.
 
         Args:
@@ -60,6 +60,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         """
         QDialog.__init__(self, theParent)
         self.iface = theIface
+        self.dock = theDock
 
         self.setupUi(self)
 
@@ -250,14 +251,14 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         # See if we have a preferred impact function
         if 'function' in theItem:
             myFunctionId = theItem['function']
-            myResult = macro.setFunctionId(myFunctionId)
+            myResult = macro.setFunctionId(myFunctionId, theDock=self.dock)
             if not myResult:
                 return False
 
         if 'aggregation' in theItem:
-            absAggregationPath = macro.extractPath(dummyScenarioFilePath,
-                                                   theItem['aggregation'])[0]
-            myResult = macro.setAggregationLayer(absAggregationPath)
+            absAggregationPath = macro.extractPath(
+                dummyScenarioFilePath, theItem['aggregation'])[0]
+            myResult = macro.setAggregationLayer(absAggregationPath, self.dock)
             if not myResult:
                 return False
 
@@ -288,7 +289,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
             self.iface.mapCanvas().setExtent(myExtent)
 
-        myResult = macro.runScenario()
+        myResult = macro.runScenario(self.dock)
 
         return myResult
 
@@ -336,6 +337,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 myReport, myPassCount, myFailCount)
             self.showBatchReport(batchReportFilePath)
         except IOError:
+            # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QtGui.QMessageBox.question(self, 'Error',
                                        'Failed to write report file.')
         self.disableBusyCursor()
@@ -436,10 +438,14 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
                 myImpactLayer = self.iface.activeLayer()
+                myImpactLayer = self.dock.runner.impactLayer()
+                # Load impact layer into QGIS
+                myQGISImpactLayer = self.dock.readImpactLayer(myImpactLayer)
+
                 try:
                     theStatusItem.setText(self.tr('Analysis Ok'))
                     self.createPDFReport(
-                        myTitle, myPath, myImpactLayer, theCount, theIndex)
+                        myTitle, myPath, myQGISImpactLayer, theCount, theIndex)
                     theStatusItem.setText(self.tr('Report Ok'))
                 except Exception:
                     LOGGER.exception('Unable to render map: "%s"' % myValue)
@@ -505,7 +511,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myHtmlRenderer = HtmlRenderer(myMap.pageDpi)
         myKeywords = myMap.keywordIO.readKeywords(theImpactLayer)
         myHtmlRenderer.printImpactTable(myKeywords, myTablePath)
-
         LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 
     def getPopulateScenarioLog(self, parsedFiles, unparsedFiles):

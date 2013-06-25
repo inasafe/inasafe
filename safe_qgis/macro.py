@@ -21,7 +21,7 @@ import os
 import logging
 import PyQt4.QtCore as QtCore
 
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
 from qgis.utils import iface
 
 from safe_qgis.exceptions import QgisPathError
@@ -32,20 +32,13 @@ LOGGER = logging.getLogger('InaSAFE')
 STATUS_FLAG = False
 
 
-def getDock():
-    """ Get InaSAFE Dock widget instance.
-    Returns: Dock - instance of InaSAFE Dock in QGIS main window.
-    """
-    return iface.mainWindow().findChild(Dock)
-
-
 def getMapCanvas():
     """Return map canvas object
     """
     return iface.mapCanvas()
 
 
-def runScenario():
+def runScenario(theDock=None):
     """Simulate pressing run button in InaSAFE dock widget.
 
     Returns:
@@ -54,18 +47,17 @@ def runScenario():
     # pylint: disable=W0603
     global STATUS_FLAG
     STATUS_FLAG = False
-    myDock = getDock()
 
     def completed(theFlag):
         """Listen for completion and set myFlag according to exit value."""
         global STATUS_FLAG
         STATUS_FLAG = theFlag
         LOGGER.debug("scenario done")
-        myDock.analysisDone.disconnect(completed)
+        theDock.analysisDone.disconnect(completed)
 
-    myDock.analysisDone.connect(completed)
+    theDock.analysisDone.connect(completed)
     # Start the analysis
-    myDock.accept()
+    theDock.accept()
     return STATUS_FLAG
     # pylint: enable=W0603
 
@@ -110,15 +102,17 @@ def addLayers(theScenarioFilePath, thePaths):
 
         if myExt in ['.asc', '.tif']:
             LOGGER.debug("add raster layer %s" % myPath)
-            iface.addRasterLayer(myPath, myBaseName)
+            myLayer = QgsRasterLayer(myPath, myBaseName)
+            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
         elif myExt in ['.shp']:
             LOGGER.debug("add vector layer %s" % myPath)
-            iface.addVectorLayer(myPath, myBaseName, 'ogr')
+            myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
         else:
             raise Exception('File %s had illegal extension' % myPath)
 
 
-def setFunctionId(theFunctionId):
+def setFunctionId(theFunctionId, theDock=None):
     """Set the function combo to use the function with the given id.
 
     Args:
@@ -136,16 +130,15 @@ def setFunctionId(theFunctionId):
     if theFunctionId is None or theFunctionId == '':
         return False
 
-    myDock = getDock()
-    for myCount in range(0, myDock.cboFunction.count()):
-        myFunctionId = myDock.getFunctionID(myCount)
+    for myCount in range(0, theDock.cboFunction.count()):
+        myFunctionId = theDock.getFunctionID(myCount)
         if myFunctionId == theFunctionId:
-            myDock.cboFunction.setCurrentIndex(myCount)
+            theDock.cboFunction.setCurrentIndex(myCount)
             return True
     return False
 
 
-def setAggregationLayer(theAggregationLayer):
+def setAggregationLayer(theAggregationLayer, theDock=None):
     """Set the aggregation combo to use the layer with the given name.
 
     Args:
@@ -166,10 +159,8 @@ def setAggregationLayer(theAggregationLayer):
     if theAggregationLayer is None or theAggregationLayer == '':
         return False
 
-    myDock = getDock()
-
-    for myCount in range(0, myDock.cboAggregation.count()):
-        myLayerId = myDock.cboAggregation.itemData(
+    for myCount in range(0, theDock.cboAggregation.count()):
+        myLayerId = theDock.cboAggregation.itemData(
             myCount, QtCore.Qt.UserRole).toString()
         # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
@@ -178,6 +169,6 @@ def setAggregationLayer(theAggregationLayer):
             continue
 
         if myLayer.source() == theAggregationLayer:
-            myDock.cboAggregation.setCurrentIndex(myCount)
+            theDock.cboAggregation.setCurrentIndex(myCount)
             return True
     return False
