@@ -24,7 +24,7 @@ UI_FILES = converter_dialog_base.ui \
 	impact_functions_doc_base.ui \
 	minimum_needs_base.ui \
 	dock_base.ui \
-	import_dialog_base.ui \
+	osm_downloader_base.ui \
 	options_dialog_base.ui \
 	function_options_dialog_base.ui \
 	keywords_dialog_base.ui	\

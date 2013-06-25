@@ -119,6 +119,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         myGeometry = myFeature.geometry()
         myCount += 1
         myFeatureBox = myGeometry.boundingBox()
+        print 'NEW AGGR: %s' % myFeature.id()
 
         #print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
         #print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()

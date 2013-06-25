@@ -169,7 +169,7 @@ class PostprocessorManager(QtCore.QObject):
                     'influence on the calculation, just keep in mind that the '
                     'attributes shown may represent the original multipart '
                     'polygon and not the individual exploded polygon parts.')))
-        except:
+        except Exception:  # pylint: disable=W0703
             pass
 
         return myMessage

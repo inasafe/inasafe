@@ -109,7 +109,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,script_dialog_base.py,import_dialog_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude pydev,third_party,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,script_dialog_base.py,osm_downloader_base.py . || true
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
 test_suite: compile testdata
@@ -172,7 +172,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh 5c04fa54b322aa715917cb23acf80c17a4ce1440 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh a873031c70737c75b8db7e720bb39ea35ce07994 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -343,7 +343,7 @@ jenkins-pep8:
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude third_party,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,import_dialog_base.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203 --exclude third_party,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,function_options_dialog_base.py,minimum_needs_base.py,converter_dialog_base.py,osm_downloader_base.py . > pep8.log || :
 
 jenkins-realtime-test:
 

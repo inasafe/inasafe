@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_qgis.utilities import downloadWebUrl
+
 __author__ = 'bungcip@gmail.com'
 __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
@@ -25,7 +27,7 @@ import shutil
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
-from safe_qgis.import_dialog import (httpDownload, ImportDialog)
+from safe_qgis.osm_downloader import ( OsmDownloader)
 
 from safe_qgis.utilities_test import (getQgisTestApp, assertHashForFile)
 
@@ -94,11 +96,10 @@ class FakeQNetworkAccessManager:
             myReply._url = 'http://hot-export.geofabrik.de/jobs/1990'
         elif myUrl == 'http://hot-export.geofabrik.de/jobs/1990':
             myReply.content = readAll('test-importdlg-job.html')
-        elif myUrl == \
-                    'http://osm.linfiniti.com/buildings-shp?' + \
-                    'bbox=20.389938354492188,-34.10782492987083' \
-                    ',20.712661743164062,' + \
-                    '-34.008273470938335&obj=building':
+        elif myUrl == ('http://osm.linfiniti.com/buildings-shp?'
+                       'bbox=20.389938354492188,-34.10782492987083'
+                       ',20.712661743164062,'
+                       '-34.008273470938335&obj=building'):
             myReply.content = readAll("test-importdlg-extractzip.zip")
 
         return myReply
@@ -130,12 +131,12 @@ class ImportDialogTest(unittest.TestCase):
         myUrl = 'http://google.com'
         myTempFilePath = tempfile.mktemp()
 
-        httpDownload(myManager, myUrl, myTempFilePath)
+        downloadWebUrl(myManager, myUrl, myTempFilePath)
 
         assertHashForFile(myHash, myTempFilePath)
 
     def setUp(self):
-        self.importDlg = ImportDialog(PARENT, IFACE)
+        self.importDlg = OsmDownloader(PARENT, IFACE)
 
         ## provide Fake QNetworkAccessManager for self.nam
         self.importDlg.nam = FakeQNetworkAccessManager()
@@ -184,7 +185,6 @@ class ImportDialogTest(unittest.TestCase):
         self.importDlg.minLatitude.setText('-34.10782492987083')
         self.importDlg.maxLongitude.setText('20.712661743164062')
         self.importDlg.maxLatitude.setText('-34.008273470938335')
-        self.importDlg.cbxPreset.setCurrentIndex(1)  # buildings
         self.importDlg.doImport()
 
         myResult = self.importDlg.progressDialog.result()

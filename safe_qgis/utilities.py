@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
@@ -24,7 +25,7 @@ import logging
 import uuid
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtCore import QCoreApplication, QFile, QUrl
 
 from qgis.core import (
     QGis,
@@ -726,3 +727,60 @@ def getAbsolutePath(thePath, relativePath):
     """
     theLongPath = os.path.join(thePath, relativePath)
     return os.path.normpath(theLongPath)
+
+
+def downloadWebUrl(theManager, theUrl, theOutPath, theProgressDlg=None):
+    """ Download file from theUrl.
+    Params:
+        * theManager - a QNetworkManager instance
+        * theUrl - url of file
+        * theOutPath - output path
+        * theProgressDlg - progress dialog widget
+    Returns:
+        True if success, otherwise return a tuple with format like this
+        (QNetworkReply.NetworkError, error_message)
+    Raises:
+        * IOError - when cannot create theOutPath
+    """
+
+    # prepare output path
+    myFile = QFile(theOutPath)
+    if not myFile.open(QFile.WriteOnly):
+        raise IOError(myFile.errorString())
+
+    # slot to write data to file
+    def writeData():
+        myFile.write(myReply.readAll())
+
+    myRequest = QNetworkRequest(QUrl(theUrl))
+    myReply = theManager.get(myRequest)
+    myReply.readyRead.connect(writeData)
+
+    if theProgressDlg:
+        # progress bar
+        def progressEvent(theReceived, theTotal):
+
+            QCoreApplication.processEvents()
+
+            theProgressDlg.setLabelText("%s / %s" % (theReceived, theTotal))
+            theProgressDlg.setMaximum(theTotal)
+            theProgressDlg.setValue(theReceived)
+
+        # cancel
+        def cancelAction():
+            myReply.abort()
+
+        myReply.downloadProgress.connect(progressEvent)
+        theProgressDlg.canceled.connect(cancelAction)
+
+    # wait until finished
+    while not myReply.isFinished():
+        QCoreApplication.processEvents()
+
+    myFile.close()
+
+    myResult = myReply.error()
+    if myResult == QNetworkReply.NoError:
+        return True
+    else:
+        return myResult, str(myReply.errorString())
