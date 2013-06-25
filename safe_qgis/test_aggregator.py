@@ -49,7 +49,9 @@ from safe_qgis.utilities_test import (
 
 from safe_qgis.dock import Dock
 from safe_qgis.aggregator import Aggregator
-from safe_qgis.utilities import getDefaults
+from safe_qgis.clipper import clipLayer
+from safe_qgis.keyword_io import KeywordIO
+from safe_qgis.utilities import getDefaults, extentToGeoArray, getDefaults
 
 from safe_qgis.utilities_test import (
     loadStandardLayers,
@@ -69,6 +71,8 @@ class AggregatorTest(unittest.TestCase):
     def setUp(self):
         """Fixture run before all tests"""
 
+        self.maxDiff = None  # show full diff for assert errors
+
         os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
         loadStandardLayers()
@@ -82,6 +86,9 @@ class AggregatorTest(unittest.TestCase):
         DOCK.hideExposureFlag = False
         DOCK.showIntermediateLayers = False
         setJakartaGeoExtent()
+
+        self.keywordIO = KeywordIO()
+        self.defaults = getDefaults()
 
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -248,11 +255,24 @@ class AggregatorTest(unittest.TestCase):
                          DOCK.aggregator.preprocessedFeatureCount,
                          myMessage)
 
-    def _aggregate(self, myImpactLayer, myExpectedResults):
+    def _aggregateTest(self, myImpactLayer, myExpectedResults):
         myAggregationLayer = QgsVectorLayer(
-            TESTDATA + '/kabupaten_jakarta_singlepart.shp',
+            BOUNDDATA + '/kabupaten_jakarta.shp',
             'test aggregation',
             'ogr')
+        # create a copy of aggregation layer
+        myGeoExtent = extentToGeoArray(
+            myAggregationLayer.extent(),
+            myAggregationLayer.crs())
+
+        myAggrAttribute = self.keywordIO.readKeywords(
+            myAggregationLayer, self.defaults['AGGR_ATTR_KEY'])
+        myAggregationLayer = clipLayer(
+            theLayer=myAggregationLayer,
+            theExtent=myGeoExtent,
+            theExplodeFlag=True,
+            theExplodeAttribute=myAggrAttribute)
+
         myAggregator = Aggregator(None, myAggregationLayer)
         # setting up
         myAggregator.isValid = True
@@ -273,7 +293,8 @@ class AggregatorTest(unittest.TestCase):
             for (k, attr) in myAtMap.iteritems():
                 myFeatureResults[k] = attr.toString()
             myResults.append(myFeatureResults)
-        assert myResults == myExpectedResults
+
+        self.assertEqual(myResults, myExpectedResults)
 
     def test_aggregate_raster_impact(self):
         # created from loadStandardLayers.qgs with:
@@ -336,7 +357,7 @@ class AggregatorTest(unittest.TestCase):
              5: '11330910.4882202',
              6: '206.024046114772'}]
 
-        self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregateTest(myImpactLayer, myExpectedResults)
 
     def test_aggregate_vector_impact(self):
          # created from loadStandardLayers.qgs with:
@@ -346,18 +367,31 @@ class AggregatorTest(unittest.TestCase):
         # - kabupaten_jakarta_singlepart.shp
         myImpactLayer = Vector(
             data=TESTDATA + '/aggregation_test_impact_vector.shp',
-            name='test raster impact')
+            name='test vector impact')
 
         myExpectedResults = [
             {0: 'JAKARTA BARAT', 1: '87'},
             {0: 'JAKARTA PUSAT', 1: '117'},
             {0: 'JAKARTA SELATAN', 1: '22'},
-            {0: 'JAKARTA TIMUR', 1: '0'},
-            {0: 'JAKARTA TIMUR', 1: '0'},
-            {0: 'JAKARTA TIMUR', 1: '198'},
-            {0: 'JAKARTA UTARA', 1: '286'}
+            {0: 'JAKARTA UTARA', 1: '286'},
+            {0: 'JAKARTA TIMUR', 1: '198'}
         ]
-        self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregateTest(myImpactLayer, myExpectedResults)
+
+        myImpactLayer = Vector(
+            data=TESTDATA + '/aggregation_test_impact_vector_small.shp',
+            name='test vector impact')
+
+        myExpectedResults = [
+            {0: 'JAKARTA BARAT', 1: '87'},
+            {0: 'JAKARTA PUSAT', 1: '117'},
+            {0: 'JAKARTA SELATAN', 1: '22'},
+            {0: 'JAKARTA UTARA', 1: '286'},
+            {0: 'JAKARTA TIMUR', 1: '198'}
+        ]
+
+        # TODO (MB) enable this
+        # self._aggregateTest(myImpactLayer, myExpectedResults)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest, 'test')
