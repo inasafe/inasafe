@@ -27,7 +27,7 @@ from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import (pyqtSignature, QSettings, QVariant, Qt)
-from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem)
+from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem, QMessageBox)
 
 from qgis.core import QgsRectangle
 
@@ -331,9 +331,13 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
                 myFailCount += 1
                 self.disableBusyCursor()
 
-        batchReportFilePath = self.writeBatchReport(
-            myReport, myPassCount, myFailCount)
-        self.showBatchReport(batchReportFilePath)
+        try:
+            batchReportFilePath = self.writeBatchReport(
+                myReport, myPassCount, myFailCount)
+            self.showBatchReport(batchReportFilePath)
+        except IOError:
+            QtGui.QMessageBox.question(self, 'Error',
+                                       'Failed to write report file.')
         self.disableBusyCursor()
 
     def writeBatchReport(self, myReport, myPassCount, myFailCount):
@@ -346,20 +350,23 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myOutputDir = self.leOutputDir.text()
         myPath = os.path.join(str(myOutputDir), batchFileName)
 
-        myReportFile = file(myPath, 'wt')
-        myReportFile.write('InaSAFE Batch Report File\n')
-        myReportFile.write(lineSeparator)
-        for myLine in myReport:
-            myReportFile.write(myLine)
-        myReportFile.write(lineSeparator)
-        myReportFile.write('Total passed: %s\n' % myPassCount)
-        myReportFile.write('Total failed: %s\n' % myFailCount)
-        myReportFile.write('Total tasks: %s\n' % len(myReport))
-        myReportFile.write(lineSeparator)
-        myReportFile.close()
+        try:
+            myReportFile = file(myPath, 'wt')
+            myReportFile.write('InaSAFE Batch Report File\n')
+            myReportFile.write(lineSeparator)
+            for myLine in myReport:
+                myReportFile.write(myLine)
+            myReportFile.write(lineSeparator)
+            myReportFile.write('Total passed: %s\n' % myPassCount)
+            myReportFile.write('Total failed: %s\n' % myFailCount)
+            myReportFile.write('Total tasks: %s\n' % len(myReport))
+            myReportFile.write(lineSeparator)
+            myReportFile.close()
 
-        LOGGER.info('Log written to %s' % myPath)
-        return myPath
+            LOGGER.info('Log written to %s' % myPath)
+            return myPath
+        except IOError:
+            raise IOError
 
     def showBatchReport(self, batchReportFilePath):
         """Show batch report file in batchReportFileName
@@ -540,7 +547,6 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         myItem = self.tblScript.item(myCurrentRow, 0)
         myStatusItem = self.tblScript.item(myCurrentRow, 1)
         numRepeat = self.sboCount.value()
-        print type(numRepeat)
         if numRepeat == 1:
             self.runTask(myItem, myStatusItem)
         else:

@@ -39,6 +39,10 @@ PADANG2009_title = 'An earthquake in Padang like in 2009'
 TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
                               'test_data/test_files')
 
+SCENARIO_DIR = os.path.join(os.path.dirname(__file__),
+                            'test_data/test_scenario')
+
+
 LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
