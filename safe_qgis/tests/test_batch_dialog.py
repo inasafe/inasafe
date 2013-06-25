@@ -21,7 +21,7 @@ import unittest
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
-from script_dialog import ScriptDialog
+from batch_dialog import BatchDialog
 from safe_qgis.tests.utilities_test import getQgisTestApp, SCENARIO_DIR
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.dock import Dock
@@ -32,14 +32,14 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = Dock(IFACE)
 
 
-class ScriptDialogTest(unittest.TestCase):
+class BatchDialogTest(unittest.TestCase):
     """Test for the script/batch runner dialog
     """
 
-    def test_loadScriptDialog(self):
+    def test_loadBatchDialog(self):
         """Definitely, this is a test. Test for BatchDialog behaviour
         """
-        myDialog = ScriptDialog(PARENT, IFACE, DOCK)
+        myDialog = BatchDialog(PARENT, IFACE, DOCK)
         myDialog.cbDefaultOutputDir.setChecked(True)
         myDialog.leSourceDir.setText(SCENARIO_DIR)
         numberRow = myDialog.tblScript.rowCount()
@@ -56,7 +56,7 @@ class ScriptDialogTest(unittest.TestCase):
     def test_runSingleScenario(self):
         """Test run single scenario
         """
-        myDialog = ScriptDialog(PARENT, IFACE, DOCK)
+        myDialog = BatchDialog(PARENT, IFACE, DOCK)
         myDialog.cbDefaultOutputDir.setChecked(False)
         myDialog.leSourceDir.setText(SCENARIO_DIR)
         myOutputDir = temp_dir()
@@ -71,7 +71,7 @@ class ScriptDialogTest(unittest.TestCase):
     def test_runAllScenario(self):
         """Test run single scenario
         """
-        myDialog = ScriptDialog(PARENT, IFACE, DOCK)
+        myDialog = BatchDialog(PARENT, IFACE, DOCK)
         myDialog.cbDefaultOutputDir.setChecked(False)
         myDialog.leSourceDir.setText(SCENARIO_DIR)
         myOutputDir = temp_dir()
@@ -85,6 +85,6 @@ class ScriptDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ScriptDialogTest, 'test')
+    suite = unittest.makeSuite(BatchDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

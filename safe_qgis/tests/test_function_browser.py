@@ -23,7 +23,7 @@ from PyQt4.QtTest import QTest
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QDialogButtonBox
 
-from impact_functions_doc import ImpactFunctionsDoc
+from safe_qgis.tools.function_browser import FunctionBrowser
 from safe_qgis.tests.utilities_test import getQgisTestApp
 
 
@@ -76,7 +76,7 @@ def verifyColumn(table, col, strFilter, mode):
     assert retval, msg
 
 
-class ImpactFunctionsDocTest(unittest.TestCase):
+class FunctionBrowserTest(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -86,13 +86,13 @@ class ImpactFunctionsDocTest(unittest.TestCase):
 
     def testInitShowTable(self):
         """Test for showing table in the first."""
-        myDialog = ImpactFunctionsDoc(PARENT)
+        myDialog = FunctionBrowser(PARENT)
         myStr = myDialog.if_table.toNewlineFreeString()
         assert len(myStr) > 1000, "Please check."
 
     def testFilterTable(self):
         """Test for filter the content of the table."""
-        myDialog = ImpactFunctionsDoc(PARENT)
+        myDialog = FunctionBrowser(PARENT)
         list_category = myDialog.combo_box_content['category']
         for i in xrange(1, len(list_category)):
             myDialog.comboBox_category.setCurrentIndex(i)
@@ -110,7 +110,7 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         #prevent unreachable code errors in pylint
         #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
-        myDialog = ImpactFunctionsDoc(PARENT)
+        myDialog = FunctionBrowser(PARENT)
         expectedTable = myDialog.if_table.toNewlineFreeString()
         myDialog.comboBox_category.setCurrentIndex(1)
         myDialog.comboBox_subcategory.setCurrentIndex(1)
@@ -131,7 +131,7 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         # ... and this is how you skip it using nosetests
         #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins if docs dir not present.")
-        myDialog = ImpactFunctionsDoc(PARENT)
+        myDialog = FunctionBrowser(PARENT)
         myButton = myDialog.buttonBox.button(QDialogButtonBox.Help)
         QTest.mouseClick(myButton, Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
@@ -139,6 +139,6 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         #pylint: enable=W0101
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(ImpactFunctionsDocTest, 'test')
+    suite = unittest.makeSuite(FunctionBrowserTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
