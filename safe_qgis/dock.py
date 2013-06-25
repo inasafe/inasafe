@@ -18,16 +18,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import numpy
 import logging
 from ConfigParser import ConfigParser
-
 from functools import partial
 
+import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QFileDialog
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
-
 from qgis.core import (
     QgsMapLayer,
     QgsVectorLayer,
@@ -37,21 +35,21 @@ from qgis.core import (
     QGis)
 
 from third_party.pydispatch import dispatcher
-from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.help import Help
-from safe_qgis.utilities import (
+from safe_qgis.utilities.utilities import (
     getErrorMessage,
     getWGS84resolution,
     qgisVersion,
     impactLayerAttribution,
     addComboItemInOrder,
     extentToGeoArray)
-from safe_qgis.styling import (
+from safe_qgis.utilities.styling import (
     setRasterStyle,
     setVectorGraduatedStyle,
     setVectorCategorizedStyle)
-from safe_qgis.memory_checker import checkMemoryUsage
-from safe_qgis.impact_calculator import ImpactCalculator
+from safe_qgis.utilities.memory_checker import checkMemoryUsage
+from safe_qgis.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
     load_plugins,
     availableFunctions,
@@ -66,17 +64,16 @@ from safe_qgis.safe_interface import (
     get_postprocessors,
     get_postprocessor_human_name,
     ZeroImpactException)
-
 from safe_interface import messaging as m
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
-
-from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.clipper import clipLayer
-from safe_qgis.aggregator import Aggregator
-from safe_qgis.postprocessor_manager import PostprocessorManager
+from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.impact_statistics.aggregator import Aggregator
+from safe_qgis.impact_statistics.postprocessor_manager import (
+    PostprocessorManager)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     KeywordDbError,
@@ -88,13 +85,13 @@ from safe_qgis.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     AggregatioError)
-
-from safe_qgis.map import Map
-from safe_qgis.html_renderer import HtmlRenderer
-from safe_qgis.function_options_dialog import FunctionOptionsDialog
-from safe_qgis.keywords_dialog import KeywordsDialog
-
+from safe_qgis.report.map import Map
+from safe_qgis.report.html_renderer import HtmlRenderer
+from safe_qgis.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
+from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_interface import styles
+
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE

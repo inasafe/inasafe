@@ -17,20 +17,22 @@ __date__ = '2/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import ogr
 import os
 import shutil
 import unittest
 import logging
 import difflib
+
+import ogr
 import PyQt4
+
 # pylint: disable=E0611
 # pylint: disable=W0611
 from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
-from safe_qgis.utilities_test import getQgisTestApp
+from safe_qgis.tests.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir, dataDir
 from shake_event import ShakeEvent
 # The logger is intialised in utils.py by init

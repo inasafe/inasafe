@@ -16,22 +16,25 @@
 # *                                                                         *
 # ***************************************************************************/
 
+##################### EDITABLE AREA starts ##################################
+# List of ui files and rc files here that should be compiled to py files.
+#############################################################################
 
-default: compile
+RESOURCE_FILES = resources.qrc
 
-compile:
-	@echo
-	@echo "------------------------------"
-	@echo "Compile ui and resources forms"
-	@echo "------------------------------"
-	make -C ui
-	make -C resources
+###################### EDITABLE AREA ENDS ###################################
 
+COMPILED_RESOURCES = $(RESOURCE_FILES:%.qrc=%_rc.py)
+
+default : resources
 
 clean:
-	@echo
-	@echo "------------------------------"
-	@echo "Clean ui and resources forms"
-	@echo "------------------------------"
-	make clean -C ui
-	make clean -C resources
+	rm $(COMPILED_RESOURCES)
+
+resources: $(COMPILED_RESOURCES)
+
+# Conversion rules
+
+%_rc.py : %.qrc
+	pyrcc4 -o $@ $<
+

@@ -522,7 +522,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.minimum_needs import MinimumNeeds
+        from safe_qgis.tools.minimum_needs import MinimumNeeds
 
         myDialog = MinimumNeeds(self.iface.mainWindow())
         myDialog.show()
@@ -543,7 +543,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.options_dialog import OptionsDialog
+        from safe_qgis.tools.options_dialog import OptionsDialog
 
         myDialog = OptionsDialog(
             self.iface.mainWindow(),
@@ -569,7 +569,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.keywords_dialog import KeywordsDialog
+        from safe_qgis.tools.keywords_dialog import KeywordsDialog
 
         if self.iface.activeLayer() is None:
             return
@@ -596,7 +596,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.impact_functions_doc import ImpactFunctionsDoc
+        from safe_qgis.tools.impact_functions_doc import ImpactFunctionsDoc
 
         myDialog = ImpactFunctionsDoc(self.iface.mainWindow())
         myDialog.show()
@@ -617,13 +617,13 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.shakemap_importer import ConverterDialog
+        from safe_qgis.tools.shakemap_importer import ShakemapImporter
 
-        myDialog = ConverterDialog(self.iface.mainWindow())
+        myDialog = ShakemapImporter(self.iface.mainWindow())
         myDialog.show()
 
     def showImportDlg(self):
-        from safe_qgis.osm_downloader import OsmDownloader
+        from safe_qgis.tools.osm_downloader import OsmDownloader
 
         dlg = OsmDownloader(self.iface.mainWindow(), self.iface)
         dlg.setModal(True)
@@ -631,7 +631,7 @@ class Plugin:
 
     def showScriptDialog(self):
         """Show Script Dialog"""
-        from safe_qgis.script_dialog import ScriptDialog
+        from safe_qgis.batch.script_dialog import ScriptDialog
 
         myDialog = ScriptDialog(
             self.iface.mainWindow(), self.iface, self.dockWidget)

@@ -16,22 +16,32 @@
 # *                                                                         *
 # ***************************************************************************/
 
+##################### EDITABLE AREA starts ##################################
+# List of ui files and rc files here that should be compiled to py files.
+#############################################################################
 
-default: compile
+UI_FILES = impact_functions_doc_base.ui \
+	minimum_needs_base.ui \
+	dock_base.ui \
+	osm_downloader_base.ui \
+	options_dialog_base.ui \
+	function_options_dialog_base.ui \
+	keywords_dialog_base.ui	\
+	script_dialog_base.ui \
+	shakemap_importer_base.ui
 
-compile:
-	@echo
-	@echo "------------------------------"
-	@echo "Compile ui and resources forms"
-	@echo "------------------------------"
-	make -C ui
-	make -C resources
+###################### EDITABLE AREA ENDS ###################################
 
+COMPILED_UI = $(UI_FILES:%.ui=%.py)
+
+default : ui
 
 clean:
-	@echo
-	@echo "------------------------------"
-	@echo "Clean ui and resources forms"
-	@echo "------------------------------"
-	make clean -C ui
-	make clean -C resources
+	rm $(COMPILED_UI)
+
+ui: $(COMPILED_UI)
+
+# Conversion rules
+
+%.py : %.ui
+	pyuic4 -o $@ $<
