@@ -19,6 +19,7 @@ import unittest
 import sys
 import os
 import struct
+import logging
 
 from osgeo import gdal
 
@@ -27,6 +28,8 @@ from qgis.core import QGis, QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
 
 from safe_qgis.utilities import getErrorMessage, isRasterLayer, isPolygonLayer
 from safe_qgis.exceptions import InvalidParameterError
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def tr(theText):
@@ -82,6 +85,9 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a raster layer in order to compute statistics.'
         ))
+    LOGGER.debug('Calculating zonal stats for:')
+    LOGGER.debug('Raster: %s' % theRasterLayer.source())
+    LOGGER.debug('Vector: %s' % thePolygonLayer.source())
     myResults = {}
     myRasterSource = theRasterLayer.source()
     myFid = gdal.Open(str(myRasterSource), gdal.GA_ReadOnly)
@@ -224,9 +230,10 @@ def cellInfoForBBox(
     myCellsX = myMaxColumn - myOffsetX
     myCellsY = myMaxRow - myOffsetY
 
-    #print ('Pixel box: W: %s H: %s Offset Left: %s Offset Bottom: %s' % (
-    #    myCellsX, myCellsY, myOffsetX, myOffsetY
-    #))
+    LOGGER.debug(
+        'Pixel box: W: %s H: %s Offset Left: %s Offset Bottom: %s' % (
+            myCellsX, myCellsY, myOffsetX, myOffsetY
+        ))
     return myOffsetX, myOffsetY, myCellsX, myCellsY
 
 
