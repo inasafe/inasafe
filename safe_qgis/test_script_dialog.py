@@ -19,13 +19,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 from script_dialog import ScriptDialog
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtGui import QTableWidget
+from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from safe_qgis.utilities_test import getQgisTestApp, SCENARIO_DIR
-from safe_qgis.safe_interface import UNITDATA, temp_dir
+from safe_qgis.safe_interface import temp_dir
 from safe_qgis.dock import Dock
-import time
 
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

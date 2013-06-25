@@ -27,7 +27,7 @@ from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import (pyqtSignature, QSettings, QVariant, Qt)
-from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem, QMessageBox)
+from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem)
 
 from qgis.core import QgsRectangle
 

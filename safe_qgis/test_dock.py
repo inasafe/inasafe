@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from PyQt4.QtGui import QFileDialog
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
