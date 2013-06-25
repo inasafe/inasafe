@@ -1562,7 +1562,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.aggregator.aggregate(self.runner.impactLayer())
         except Exception, e:  # pylint: disable=W0703
-            e.args = (e.args[0] + '\nAggregation error occurred',)
+            e.args = (str(e.args[0]) + '\nAggregation error occurred',)
             raise
 
         #TODO (MB) do we really want this check?
