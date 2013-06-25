@@ -24,14 +24,17 @@ import os
 from PyQt4.QtCore import (QFileInfo, pyqtSignature, SIGNAL, QObject)
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 
-from converter_dialog_base import Ui_ConverterDialogBase
+from shakemap_importer_base import Ui_ShakemapImporterBase
 from qgis.core import (QgsRasterLayer, QgsMapLayerRegistry)
 from safe_qgis.safe_interface import get_version, convert_mmi_data
+from safe_interface import messaging as m
+from safe_interface import styles
 
+INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ConverterDialog(QDialog, Ui_ConverterDialogBase):
+class ConverterDialog(QDialog, Ui_ShakemapImporterBase):
     """Converter Dialog for InaSAFE
     """
     def __init__(self, theParent=None):
@@ -53,13 +56,12 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
             get_version()))
         # I'm too lazy to put a text :)
         # self.leInputPath.setText('/home/sunnii/Downloads/grid.xml')
-        self.list_algorithm = ['Nearest', 'Invdist']
-        self.test_mode = False
-        self.populate_algorithm()
+
         self.warning_text = set()
         self.on_leInputPath_textChanged()
         self.on_leOutputPath_textChanged()
         self.update_warning()
+
         # Event register
         QObject.connect(self.cBDefaultOutputLocation,
                         SIGNAL('toggled(bool)'),
@@ -71,10 +73,43 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
                         SIGNAL('textChanged(QString)'),
                         self.on_leOutputPath_textChanged)
 
-    def populate_algorithm(self):
-        """Populate algorithm for converting grid.xml
+        self.showInfo()
+
+    def showInfo(self):
+        """Read the header and footer html snippets.
         """
-        self.cboAlgorithm.addItems(self.list_algorithm)
+        header, footer = self.getHeaderAndFooter()
+        string = header
+
+        heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
+        body = self.tr(
+            'This tool will convert an earthquake \'shakemap\' that is in '
+            'grid xml format to a GeoTIFF file. The imported file can be used'
+            'in InaSAFE as an input for inpact functions that require and '
+            'earthquake layer.  To use this tool effectively:'
+        )
+        tips = m.BulletedList()
+        tips.add(self.tr(
+            'Select a grid.xml for the input layer.'))
+        tips.add(self.tr(
+            'Choose where to write the output layer to.'
+        ))
+        tips.add(self.tr(
+            'Choose the interpolation algorithm that should be used when '
+            'converting the xml grid to a raster. If unsure keep the default.'
+        ))
+        tips.add(self.tr(
+            'If you want to obtain shake data you can get it for free from '
+            'the USGS shakemap site: '
+            'http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013'))
+        message = m.Message()
+        message.add(heading)
+        message.add(body)
+        message.add(tips)
+        string += message.to_html()
+        string += footer
+
+        self.webView.setHtml(string)
 
     def on_leOutputPath_textChanged(self):
         """Action when output file name is changed
@@ -93,11 +128,6 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
         input_path = str(self.leInputPath.text())
         # input_not_exist_msg = str(self.tr('input file is not existed'))
         input_not_grid_msg = str(self.tr('input file is not .xml'))
-        # NOTE(Sunni): I think it take big resource and make a delay
-        # if not os.path.exists(input_path):
-        #     self.warning_text.add(input_not_exist_msg)
-        # elif input_not_exist_msg in self.warning_text:
-        #     self.warning_text.remove(input_not_exist_msg)
 
         if not input_path.endswith('.xml'):
             self.warning_text.add(input_not_grid_msg)
@@ -108,24 +138,43 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
             self.get_output_from_input()
         self.update_warning()
 
-    # def update_output_location(self):
-    #     """Update output location if cBDefaultOutputLocation
-    #     is toggled.
-    #     """
-    #     if self.cBDefaultOutputLocation.isChecked():
-    #         self.get_output_from_input()
+    def getHeaderAndFooter(self):
+        """Read the header and footer html snippets.
+        :return: tuple - header and footer
+        """
+        base_dir = os.path.dirname(__file__)
+        header_path = os.path.join(base_dir, 'resources', 'header.html')
+        footer_path = os.path.join(base_dir, 'resources', 'footer.html')
+        header_file = file(header_path, 'rt')
+        footer_file = file(footer_path, 'rt')
+        header = header_file.read()
+        footer = footer_file.read()
+        header_file.close()
+        footer_file.close()
+        header = header.replace('PATH', base_dir)
+        return footer, header
 
     def update_warning(self):
         """Update warning message and enable/disable Ok button
         """
-        if len(self.warning_text) > 0:
-            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
-            pretty_msg = 'Warning : ' + ', '.join(self.warning_text)
-            self.lblWarning.setText(pretty_msg)
-            self.lblWarning.setVisible(True)
-        else:
+        if len(self.warning_text) == 0:
             self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(True)
-            self.lblWarning.setVisible(False)
+            return
+
+        footer, header = self.getHeaderAndFooter()
+        string = header
+        heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
+        tips = m.BulletedList()
+        self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
+        message = m.Message()
+        message.add(heading)
+        for warning in self.warning_text:
+            tips.add(warning)
+
+        message.add(tips)
+        string += message.to_html()
+        string += footer
+        self.webView.setHtml(string)
 
     def get_output_from_input(self):
         """Basically, it just get from input file location and
@@ -156,24 +205,27 @@ class ConverterDialog(QDialog, Ui_ConverterDialogBase):
                 self.parent, self.tr('InaSAFE'),
                 (self.tr('Input file is not exist')))
             return
-        my_algorithm = str(self.cboAlgorithm.currentText()).lower()
+        if self.radNearest.isChecked():
+            my_algorithm = 'nearest'
+        else:
+            my_algorithm = 'invdist'
+
         fileName = convert_mmi_data(input_path, output_path,
                                     the_algorithm=my_algorithm,
                                     algorithm_name=False)
         if self.cBLoadLayer.isChecked():
             fileInfo = QFileInfo(fileName)
             baseName = fileInfo.baseName()
-            my_raster_layer = QgsRasterLayer(fileName, baseName)
-            if not my_raster_layer.isValid():
+            layer = QgsRasterLayer(fileName, baseName)
+            layer.setGrayBandName(layer.bandName(1))
+            layer.setDrawingStyle(QgsRasterLayer.SingleBandPseudoColor)
+            layer.setColorShadingAlgorithm(QgsRasterLayer.PseudoColorShader)
+            layer.saveDefaultStyle()
+            if not layer.isValid():
                 LOGGER.debug("Failed to load")
             else:
-                QgsMapLayerRegistry.instance().addMapLayer(my_raster_layer)
+                QgsMapLayerRegistry.instance().addMapLayer(layer)
         self.done(self.Accepted)
-        if not self.test_mode:
-            QMessageBox.warning(
-                self.parent, self.tr('InaSAFE'),
-                (self.tr('Success to convert %1 to %2').
-                 arg(input_path).arg(output_path)))
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenInput_clicked(self):

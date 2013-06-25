@@ -21,7 +21,7 @@ from PyQt4.QtGui import QDialogButtonBox
 from PyQt4.QtCore import Qt
 import unittest
 import os
-from converter_dialog import ConverterDialog
+from shakemap_importer import ConverterDialog
 
 from safe_interface import TESTDATA, unique_filename, temp_dir
 from safe_qgis.utilities_test import getQgisTestApp

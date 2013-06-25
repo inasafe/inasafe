@@ -617,7 +617,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.converter_dialog import ConverterDialog
+        from safe_qgis.shakemap_importer import ConverterDialog
 
         myDialog = ConverterDialog(self.iface.mainWindow())
         myDialog.show()
