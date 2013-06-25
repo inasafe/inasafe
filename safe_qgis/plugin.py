@@ -596,9 +596,9 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.impact_functions_doc import ImpactFunctionsDoc
+        from safe_qgis.tools.function_browser import FunctionBrowser
 
-        myDialog = ImpactFunctionsDoc(self.iface.mainWindow())
+        myDialog = FunctionBrowser(self.iface.mainWindow())
         myDialog.show()
 
     def showConverter(self):
@@ -631,9 +631,9 @@ class Plugin:
 
     def showScriptDialog(self):
         """Show Script Dialog"""
-        from safe_qgis.batch.script_dialog import ScriptDialog
+        from safe_qgis.batch.batch_dialog import BatchDialog
 
-        myDialog = ScriptDialog(
+        myDialog = BatchDialog(
             self.iface.mainWindow(), self.iface, self.dockWidget)
         myDialog.setModal(True)
         myDialog.show()

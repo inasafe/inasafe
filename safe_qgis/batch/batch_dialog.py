@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe_qgis.batch import macro
+from safe_qgis.batch import scenario_runner
 
 __author__ = 'bungcip@gmail.com & tim@linfiniti.com & imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
@@ -32,7 +32,7 @@ from PyQt4.QtGui import (QDialog, QFileDialog, QTableWidgetItem)
 
 from qgis.core import QgsRectangle
 
-from safe_qgis.ui.script_dialog_base import Ui_ScriptDialogBase
+from safe_qgis.ui.batch_dialog_base import Ui_BatchDialogBase
 
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
@@ -44,7 +44,7 @@ LOGGER = logging.getLogger('InaSAFE')
 defaultSourceDir = temp_dir()
 
 
-class ScriptDialog(QDialog, Ui_ScriptDialogBase):
+class BatchDialog(QDialog, Ui_BatchDialogBase):
     """Script Dialog for InaSAFE."""
 
     def __init__(self, theParent=None, theIface=None, theDock=None):
@@ -240,7 +240,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         self.iface.newProject()
 
         try:
-            macro.addLayers(dummyScenarioFilePath, myPaths)
+            scenario_runner.addLayers(dummyScenarioFilePath, myPaths)
         except QgisPathError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
@@ -250,14 +250,14 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
         # See if we have a preferred impact function
         if 'function' in theItem:
             myFunctionId = theItem['function']
-            myResult = macro.setFunctionId(myFunctionId, theDock=self.dock)
+            myResult = scenario_runner.setFunctionId(myFunctionId, theDock=self.dock)
             if not myResult:
                 return False
 
         if 'aggregation' in theItem:
-            absAggregationPath = macro.extractPath(
+            absAggregationPath = scenario_runner.extractPath(
                 dummyScenarioFilePath, theItem['aggregation'])[0]
-            myResult = macro.setAggregationLayer(absAggregationPath, self.dock)
+            myResult = scenario_runner.setAggregationLayer(absAggregationPath, self.dock)
             if not myResult:
                 return False
 
@@ -288,7 +288,7 @@ class ScriptDialog(QDialog, Ui_ScriptDialogBase):
 
             self.iface.mapCanvas().setExtent(myExtent)
 
-        myResult = macro.runScenario(self.dock)
+        myResult = scenario_runner.runScenario(self.dock)
 
         return myResult
 

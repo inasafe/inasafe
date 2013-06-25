@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ScriptDialogBase</class>
- <widget class="QDialog" name="ScriptDialogBase">
+ <class>BatchDialogBase</class>
+ <widget class="QDialog" name="BatchDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,7 +23,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Scenario Directory</string>
+      <string>Scenario directory</string>
      </property>
     </widget>
    </item>
@@ -83,7 +83,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Result Table</string>
+      <string>Result table</string>
      </property>
     </widget>
    </item>
@@ -127,7 +127,7 @@
       </font>
      </property>
      <property name="title">
-      <string>Advanced Options</string>
+      <string>Advanced options</string>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -242,8 +242,6 @@
   <zorder>gboOptions</zorder>
   <zorder>scenarioDirLabel</zorder>
   <zorder>resultTableLabel</zorder>
-  <zorder>tbOutputDir</zorder>
-  <zorder>leOutputDir</zorder>
   <zorder></zorder>
  </widget>
  <resources/>

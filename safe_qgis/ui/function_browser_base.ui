@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ImpactFunctionsDocBase</class>
- <widget class="QDialog" name="ImpactFunctionsDocBase">
+ <class>FunctionBrowserBase</class>
+ <widget class="QDialog" name="FunctionBrowserBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +14,7 @@
    <string>InaSAFE Impact Functions</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -228,13 +228,13 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections>
   <connection>
    <sender>myButtonBox</sender>
    <signal>rejected()</signal>
-   <receiver>ImpactFunctionsDocBase</receiver>
+   <receiver>FunctionBrowserBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

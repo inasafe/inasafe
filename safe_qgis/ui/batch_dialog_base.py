@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'script_dialog_base.ui'
+# Form implementation generated from reading ui file 'batch_dialog_base.ui'
 #
-# Created: Tue Jun 25 16:14:44 2013
+# Created: Tue Jun 25 23:00:19 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,20 +14,20 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_ScriptDialogBase(object):
-    def setupUi(self, ScriptDialogBase):
-        ScriptDialogBase.setObjectName(_fromUtf8("ScriptDialogBase"))
-        ScriptDialogBase.resize(517, 579)
-        self.gridLayout_2 = QtGui.QGridLayout(ScriptDialogBase)
+class Ui_BatchDialogBase(object):
+    def setupUi(self, BatchDialogBase):
+        BatchDialogBase.setObjectName(_fromUtf8("BatchDialogBase"))
+        BatchDialogBase.resize(517, 579)
+        self.gridLayout_2 = QtGui.QGridLayout(BatchDialogBase)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.scenarioDirLabel = QtGui.QLabel(ScriptDialogBase)
+        self.scenarioDirLabel = QtGui.QLabel(BatchDialogBase)
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
         self.scenarioDirLabel.setFont(font)
         self.scenarioDirLabel.setObjectName(_fromUtf8("scenarioDirLabel"))
         self.gridLayout_2.addWidget(self.scenarioDirLabel, 0, 0, 1, 1)
-        self.tblScript = QtGui.QTableWidget(ScriptDialogBase)
+        self.tblScript = QtGui.QTableWidget(BatchDialogBase)
         self.tblScript.setAlternatingRowColors(False)
         self.tblScript.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.tblScript.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
@@ -43,15 +43,15 @@ class Ui_ScriptDialogBase(object):
         self.gridLayout_2.addWidget(self.tblScript, 3, 0, 1, 1)
         self.horizontalLayout_4 = QtGui.QHBoxLayout()
         self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
-        self.leSourceDir = QtGui.QLineEdit(ScriptDialogBase)
+        self.leSourceDir = QtGui.QLineEdit(BatchDialogBase)
         self.leSourceDir.setEnabled(False)
         self.leSourceDir.setObjectName(_fromUtf8("leSourceDir"))
         self.horizontalLayout_4.addWidget(self.leSourceDir)
-        self.tbSourceDir = QtGui.QToolButton(ScriptDialogBase)
+        self.tbSourceDir = QtGui.QToolButton(BatchDialogBase)
         self.tbSourceDir.setObjectName(_fromUtf8("tbSourceDir"))
         self.horizontalLayout_4.addWidget(self.tbSourceDir)
         self.gridLayout_2.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
-        self.resultTableLabel = QtGui.QLabel(ScriptDialogBase)
+        self.resultTableLabel = QtGui.QLabel(BatchDialogBase)
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
@@ -60,19 +60,19 @@ class Ui_ScriptDialogBase(object):
         self.gridLayout_2.addWidget(self.resultTableLabel, 2, 0, 1, 1)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.btnRunSelected = QtGui.QPushButton(ScriptDialogBase)
+        self.btnRunSelected = QtGui.QPushButton(BatchDialogBase)
         self.btnRunSelected.setObjectName(_fromUtf8("btnRunSelected"))
         self.horizontalLayout.addWidget(self.btnRunSelected)
-        self.pbnRunAll = QtGui.QPushButton(ScriptDialogBase)
+        self.pbnRunAll = QtGui.QPushButton(BatchDialogBase)
         self.pbnRunAll.setObjectName(_fromUtf8("pbnRunAll"))
         self.horizontalLayout.addWidget(self.pbnRunAll)
         self.gridLayout_2.addLayout(self.horizontalLayout, 4, 0, 1, 1)
-        self.pbnAdvanced = QtGui.QPushButton(ScriptDialogBase)
+        self.pbnAdvanced = QtGui.QPushButton(BatchDialogBase)
         self.pbnAdvanced.setCheckable(True)
         self.pbnAdvanced.setChecked(False)
         self.pbnAdvanced.setObjectName(_fromUtf8("pbnAdvanced"))
         self.gridLayout_2.addWidget(self.pbnAdvanced, 5, 0, 1, 1)
-        self.gboOptions = QtGui.QGroupBox(ScriptDialogBase)
+        self.gboOptions = QtGui.QGroupBox(BatchDialogBase)
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
@@ -136,25 +136,25 @@ class Ui_ScriptDialogBase(object):
         self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(self.gboOptions, 6, 0, 1, 1)
 
-        self.retranslateUi(ScriptDialogBase)
-        QtCore.QMetaObject.connectSlotsByName(ScriptDialogBase)
+        self.retranslateUi(BatchDialogBase)
+        QtCore.QMetaObject.connectSlotsByName(BatchDialogBase)
 
-    def retranslateUi(self, ScriptDialogBase):
-        ScriptDialogBase.setWindowTitle(QtGui.QApplication.translate("ScriptDialogBase", "InaSAFE Batch Runner", None, QtGui.QApplication.UnicodeUTF8))
-        self.scenarioDirLabel.setText(QtGui.QApplication.translate("ScriptDialogBase", "Scenario Directory", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, BatchDialogBase):
+        BatchDialogBase.setWindowTitle(QtGui.QApplication.translate("BatchDialogBase", "InaSAFE Batch Runner", None, QtGui.QApplication.UnicodeUTF8))
+        self.scenarioDirLabel.setText(QtGui.QApplication.translate("BatchDialogBase", "Scenario directory", None, QtGui.QApplication.UnicodeUTF8))
         item = self.tblScript.horizontalHeaderItem(0)
-        item.setText(QtGui.QApplication.translate("ScriptDialogBase", "Task", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(QtGui.QApplication.translate("BatchDialogBase", "Task", None, QtGui.QApplication.UnicodeUTF8))
         item = self.tblScript.horizontalHeaderItem(1)
-        item.setText(QtGui.QApplication.translate("ScriptDialogBase", "Status", None, QtGui.QApplication.UnicodeUTF8))
-        self.tbSourceDir.setText(QtGui.QApplication.translate("ScriptDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.resultTableLabel.setText(QtGui.QApplication.translate("ScriptDialogBase", "Result Table", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnRunSelected.setText(QtGui.QApplication.translate("ScriptDialogBase", "Run Selected", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnRunAll.setText(QtGui.QApplication.translate("ScriptDialogBase", "Run All", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnAdvanced.setText(QtGui.QApplication.translate("ScriptDialogBase", "Show advanced options", None, QtGui.QApplication.UnicodeUTF8))
-        self.gboOptions.setTitle(QtGui.QApplication.translate("ScriptDialogBase", "Advanced Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("ScriptDialogBase", "Run selected script ", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("ScriptDialogBase", "times", None, QtGui.QApplication.UnicodeUTF8))
-        self.outputPDFDirLabel.setText(QtGui.QApplication.translate("ScriptDialogBase", "Output PDF direcotry", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbDefaultOutputDir.setText(QtGui.QApplication.translate("ScriptDialogBase", "Use scenario directory", None, QtGui.QApplication.UnicodeUTF8))
-        self.tbOutputDir.setText(QtGui.QApplication.translate("ScriptDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(QtGui.QApplication.translate("BatchDialogBase", "Status", None, QtGui.QApplication.UnicodeUTF8))
+        self.tbSourceDir.setText(QtGui.QApplication.translate("BatchDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.resultTableLabel.setText(QtGui.QApplication.translate("BatchDialogBase", "Result table", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnRunSelected.setText(QtGui.QApplication.translate("BatchDialogBase", "Run Selected", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnRunAll.setText(QtGui.QApplication.translate("BatchDialogBase", "Run All", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnAdvanced.setText(QtGui.QApplication.translate("BatchDialogBase", "Show advanced options", None, QtGui.QApplication.UnicodeUTF8))
+        self.gboOptions.setTitle(QtGui.QApplication.translate("BatchDialogBase", "Advanced options", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("BatchDialogBase", "Run selected script ", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("BatchDialogBase", "times", None, QtGui.QApplication.UnicodeUTF8))
+        self.outputPDFDirLabel.setText(QtGui.QApplication.translate("BatchDialogBase", "Output PDF direcotry", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbDefaultOutputDir.setText(QtGui.QApplication.translate("BatchDialogBase", "Use scenario directory", None, QtGui.QApplication.UnicodeUTF8))
+        self.tbOutputDir.setText(QtGui.QApplication.translate("BatchDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
 

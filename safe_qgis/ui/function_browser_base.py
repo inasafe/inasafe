@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'impact_functions_doc_base.ui'
+# Form implementation generated from reading ui file 'function_browser_base.ui'
 #
-# Created: Tue Jun 25 16:14:43 2013
+# Created: Tue Jun 25 22:54:04 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,16 +14,16 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_ImpactFunctionsDocBase(object):
-    def setupUi(self, ImpactFunctionsDocBase):
-        ImpactFunctionsDocBase.setObjectName(_fromUtf8("ImpactFunctionsDocBase"))
-        ImpactFunctionsDocBase.resize(821, 733)
+class Ui_FunctionBrowserBase(object):
+    def setupUi(self, FunctionBrowserBase):
+        FunctionBrowserBase.setObjectName(_fromUtf8("FunctionBrowserBase"))
+        FunctionBrowserBase.resize(821, 733)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        ImpactFunctionsDocBase.setWindowIcon(icon)
-        self.gridLayout = QtGui.QGridLayout(ImpactFunctionsDocBase)
+        FunctionBrowserBase.setWindowIcon(icon)
+        self.gridLayout = QtGui.QGridLayout(FunctionBrowserBase)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.myButtonBox = QtGui.QDialogButtonBox(ImpactFunctionsDocBase)
+        self.myButtonBox = QtGui.QDialogButtonBox(FunctionBrowserBase)
         self.myButtonBox.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.myButtonBox.setAutoFillBackground(False)
         self.myButtonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -34,7 +34,7 @@ class Ui_ImpactFunctionsDocBase(object):
         self.gridLayoutMain = QtGui.QGridLayout()
         self.gridLayoutMain.setHorizontalSpacing(0)
         self.gridLayoutMain.setObjectName(_fromUtf8("gridLayoutMain"))
-        self.label_title = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_title = QtGui.QLabel(FunctionBrowserBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -46,7 +46,7 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_title.setFont(font)
         self.label_title.setObjectName(_fromUtf8("label_title"))
         self.gridLayoutMain.addWidget(self.label_title, 1, 0, 1, 1)
-        self.label_id = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_id = QtGui.QLabel(FunctionBrowserBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -58,7 +58,7 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_id.setFont(font)
         self.label_id.setObjectName(_fromUtf8("label_id"))
         self.gridLayoutMain.addWidget(self.label_id, 1, 1, 1, 1)
-        self.label_subcategory = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_subcategory = QtGui.QLabel(FunctionBrowserBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -70,7 +70,7 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_subcategory.setFont(font)
         self.label_subcategory.setObjectName(_fromUtf8("label_subcategory"))
         self.gridLayoutMain.addWidget(self.label_subcategory, 1, 3, 1, 1)
-        self.label_category = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_category = QtGui.QLabel(FunctionBrowserBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -82,7 +82,7 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_category.setFont(font)
         self.label_category.setObjectName(_fromUtf8("label_category"))
         self.gridLayoutMain.addWidget(self.label_category, 1, 2, 1, 1)
-        self.label_layertype = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_layertype = QtGui.QLabel(FunctionBrowserBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -94,19 +94,19 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_layertype.setFont(font)
         self.label_layertype.setObjectName(_fromUtf8("label_layertype"))
         self.gridLayoutMain.addWidget(self.label_layertype, 1, 4, 1, 1)
-        self.comboBox_id = QtGui.QComboBox(ImpactFunctionsDocBase)
+        self.comboBox_id = QtGui.QComboBox(FunctionBrowserBase)
         self.comboBox_id.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToMinimumContentsLength)
         self.comboBox_id.setObjectName(_fromUtf8("comboBox_id"))
         self.gridLayoutMain.addWidget(self.comboBox_id, 3, 1, 1, 1)
-        self.comboBox_title = QtGui.QComboBox(ImpactFunctionsDocBase)
+        self.comboBox_title = QtGui.QComboBox(FunctionBrowserBase)
         self.comboBox_title.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToMinimumContentsLength)
         self.comboBox_title.setMinimumContentsLength(0)
         self.comboBox_title.setObjectName(_fromUtf8("comboBox_title"))
         self.gridLayoutMain.addWidget(self.comboBox_title, 3, 0, 1, 1)
-        self.comboBox_category = QtGui.QComboBox(ImpactFunctionsDocBase)
+        self.comboBox_category = QtGui.QComboBox(FunctionBrowserBase)
         self.comboBox_category.setObjectName(_fromUtf8("comboBox_category"))
         self.gridLayoutMain.addWidget(self.comboBox_category, 3, 2, 1, 1)
-        self.label_unit = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_unit = QtGui.QLabel(FunctionBrowserBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -118,7 +118,7 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_unit.setFont(font)
         self.label_unit.setObjectName(_fromUtf8("label_unit"))
         self.gridLayoutMain.addWidget(self.label_unit, 1, 6, 1, 1)
-        self.label_datatype = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_datatype = QtGui.QLabel(FunctionBrowserBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -130,37 +130,37 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_datatype.setFont(font)
         self.label_datatype.setObjectName(_fromUtf8("label_datatype"))
         self.gridLayoutMain.addWidget(self.label_datatype, 1, 5, 1, 1)
-        self.comboBox_subcategory = QtGui.QComboBox(ImpactFunctionsDocBase)
+        self.comboBox_subcategory = QtGui.QComboBox(FunctionBrowserBase)
         self.comboBox_subcategory.setObjectName(_fromUtf8("comboBox_subcategory"))
         self.gridLayoutMain.addWidget(self.comboBox_subcategory, 3, 3, 1, 1)
-        self.comboBox_layertype = QtGui.QComboBox(ImpactFunctionsDocBase)
+        self.comboBox_layertype = QtGui.QComboBox(FunctionBrowserBase)
         self.comboBox_layertype.setObjectName(_fromUtf8("comboBox_layertype"))
         self.gridLayoutMain.addWidget(self.comboBox_layertype, 3, 4, 1, 1)
-        self.comboBox_datatype = QtGui.QComboBox(ImpactFunctionsDocBase)
+        self.comboBox_datatype = QtGui.QComboBox(FunctionBrowserBase)
         self.comboBox_datatype.setObjectName(_fromUtf8("comboBox_datatype"))
         self.gridLayoutMain.addWidget(self.comboBox_datatype, 3, 5, 1, 1)
-        self.comboBox_unit = QtGui.QComboBox(ImpactFunctionsDocBase)
+        self.comboBox_unit = QtGui.QComboBox(FunctionBrowserBase)
         self.comboBox_unit.setObjectName(_fromUtf8("comboBox_unit"))
         self.gridLayoutMain.addWidget(self.comboBox_unit, 3, 6, 1, 1)
-        self.webView = QtWebKit.QWebView(ImpactFunctionsDocBase)
+        self.webView = QtWebKit.QWebView(FunctionBrowserBase)
         self.webView.setUrl(QtCore.QUrl(_fromUtf8("about:blank")))
         self.webView.setObjectName(_fromUtf8("webView"))
         self.gridLayoutMain.addWidget(self.webView, 4, 0, 1, 7)
         self.gridLayout.addLayout(self.gridLayoutMain, 0, 1, 1, 1)
 
-        self.retranslateUi(ImpactFunctionsDocBase)
-        QtCore.QObject.connect(self.myButtonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ImpactFunctionsDocBase.reject)
-        QtCore.QMetaObject.connectSlotsByName(ImpactFunctionsDocBase)
+        self.retranslateUi(FunctionBrowserBase)
+        QtCore.QObject.connect(self.myButtonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), FunctionBrowserBase.reject)
+        QtCore.QMetaObject.connectSlotsByName(FunctionBrowserBase)
 
-    def retranslateUi(self, ImpactFunctionsDocBase):
-        ImpactFunctionsDocBase.setWindowTitle(QtGui.QApplication.translate("ImpactFunctionsDocBase", "InaSAFE Impact Functions", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_title.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_id.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "ID", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_subcategory.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_category.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_layertype.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Layer Type", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_unit.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Unit", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_datatype.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Data Type", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, FunctionBrowserBase):
+        FunctionBrowserBase.setWindowTitle(QtGui.QApplication.translate("FunctionBrowserBase", "InaSAFE Impact Functions", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_title.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_id.setText(QtGui.QApplication.translate("FunctionBrowserBase", "ID", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_subcategory.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_category.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_layertype.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Layer Type", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_unit.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Unit", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_datatype.setText(QtGui.QApplication.translate("FunctionBrowserBase", "Data Type", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
 import resources_rc

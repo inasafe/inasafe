@@ -37,7 +37,7 @@ class ScriptDialogTest(unittest.TestCase):
     """
 
     def test_loadScriptDialog(self):
-        """Definitely, this is a test. Test for ScriptDialog behaviour
+        """Definitely, this is a test. Test for BatchDialog behaviour
         """
         myDialog = ScriptDialog(PARENT, IFACE, DOCK)
         myDialog.cbDefaultOutputDir.setChecked(True)

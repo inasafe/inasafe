@@ -20,14 +20,14 @@
 # List of ui files and rc files here that should be compiled to py files.
 #############################################################################
 
-UI_FILES = impact_functions_doc_base.ui \
+UI_FILES = function_browser_base.ui \
 	minimum_needs_base.ui \
 	dock_base.ui \
 	osm_downloader_base.ui \
 	options_dialog_base.ui \
 	function_options_dialog_base.ui \
 	keywords_dialog_base.ui	\
-	script_dialog_base.ui \
+	batch_dialog_base.ui \
 	shakemap_importer_base.ui
 
 ###################### EDITABLE AREA ENDS ###################################
