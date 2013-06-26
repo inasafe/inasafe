@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Wed Jun 26 10:25:29 2013
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Wed Jun 26 13:57:36 2013
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_KeywordsDialogBase(object):
     def setupUi(self, KeywordsDialogBase):
         KeywordsDialogBase.setObjectName(_fromUtf8("KeywordsDialogBase"))
-        KeywordsDialogBase.resize(515, 667)
+        KeywordsDialogBase.resize(515, 697)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

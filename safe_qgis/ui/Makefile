@@ -38,6 +38,7 @@ default : ui
 
 clean:
 	rm $(COMPILED_UI)
+	rm *.pyc
 
 ui: $(COMPILED_UI)
 

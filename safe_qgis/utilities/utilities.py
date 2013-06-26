@@ -49,7 +49,7 @@ INFO_STYLE = styles.INFO_STYLE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 # noinspection PyUnresolvedReferences
-from safe_qgis.resources import resources_rc  # pylint: disable=W0611
+from safe_qgis.ui import resources_rc  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
