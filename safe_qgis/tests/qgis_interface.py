@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **QGIS plugin implementation.**
@@ -38,15 +39,19 @@ class QgisInterface(QObject):
     """
 
     def __init__(self, canvas):
-        """Constructor"""
+        """Constructor
+        :param canvas:
+        """
         QObject.__init__(self)
         self.canvas = canvas
-        # Set up slots so we can mimick the behaviour of QGIS when layers
+        # Set up slots so we can mimic the behaviour of QGIS when layers
         # are added.
         LOGGER.debug('Initialising canvas...')
+        # noinspection PyArgumentList
         QObject.connect(QgsMapLayerRegistry.instance(),
                         SIGNAL('layersAdded(QList<QgsMapLayer *>)'),
                         self.addLayers)
+        # noinspection PyArgumentList
         QObject.connect(QgsMapLayerRegistry.instance(),
                         SIGNAL('layerWasAdded(QgsMapLayer *)'),
                         self.addLayer)
@@ -55,17 +60,9 @@ class QgisInterface(QObject):
     def addLayers(self, theLayers):
         """Handle layers being added to the registry so they show up in canvas.
 
+        :param theLayers: list<QgsMapLayer> list of map layers that were added
         .. note: The QgsInterface api does not include this method, it is added
                  here as a helper to facilitate testing.
-
-        Args:
-            theLayers: list<QgsMapLayer> list of map layers that were added
-
-        Returns:
-            None
-
-        Raises:
-            None
         """
         #LOGGER.debug('addLayers called on qgis_interface')
         #LOGGER.debug('Number of layers being added: %s' % len(theLayers))
@@ -84,26 +81,19 @@ class QgisInterface(QObject):
     def addLayer(self, theLayer):
         """Handle a layer being added to the registry so it shows up in canvas.
 
+        :param theLayer: list<QgsMapLayer> list of map layers that were added
         .. note: The QgsInterface api does not include this method, it is added
                  here as a helper to facilitate testing.
 
         .. note: The addLayer method was deprecated in QGIS 1.8 so you should
                  not need this method much.
-
-        Args:
-            theLayers: list<QgsMapLayer> list of map layers that were added
-
-        Returns:
-            None
-
-        Raises:
-            None
         """
         pass
 
     def newProject(self):
         """Create new project
         """
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
     # ---------------- API Mock for QgsInterface follows -------------------
@@ -125,29 +115,43 @@ class QgisInterface(QObject):
         pass
 
     def addVectorLayer(self, vectorLayerPath, baseName, providerKey):
-        """Add a vector layer"""
+        """Add a vector layer
+        :param baseName:
+        :param providerKey:
+        :param vectorLayerPath:
+        """
         pass
 
     def addRasterLayer(self, rasterLayerPath, baseName):
-        """Add a raster layer given a raster layer file name"""
+        """Add a raster layer given a raster layer file name
+        :param rasterLayerPath:
+        :param baseName:
+        """
         pass
 
     def activeLayer(self):
         """Get pointer to the active layer (layer selected in the legend)"""
+        # noinspection PyArgumentList
         myLayers = QgsMapLayerRegistry.instance().mapLayers()
         for myItem in myLayers:
             return myLayers[myItem]
 
     def addToolBarIcon(self, qAction):
-        """Add an icon to the plugins toolbar"""
+        """Add an icon to the plugins toolbar
+        :param qAction:
+        """
         pass
 
     def removeToolBarIcon(self, qAction):
-        """Remove an action (icon) from the plugin toolbar"""
+        """Remove an action (icon) from the plugin toolbar
+        :param qAction:
+        """
         pass
 
     def addToolBar(self, name):
-        """Add toolbar with specified name"""
+        """Add toolbar with specified name
+        :param name:
+        """
         pass
 
     def mapCanvas(self):
@@ -162,5 +166,8 @@ class QgisInterface(QObject):
         pass
 
     def addDockWidget(self, area, dockwidget):
-        """ Add a dock widget to the main window """
+        """ Add a dock widget to the main window
+        :param dockwidget:
+        :param area:
+        """
         pass

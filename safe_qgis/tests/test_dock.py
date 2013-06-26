@@ -54,7 +54,7 @@ from safe_qgis.tests.utilities_test import (
     GOOGLECRS,
     loadLayer,
     loadStandardLayers,
-    populatemyDock,
+    populateDock,
     combosToString,
     getUiState,
     setupScenario,
@@ -138,7 +138,7 @@ class DockTest(unittest.TestCase):
         self.assertEquals(myFlag, False, myMessage)
 
         # Now check we DO validate a populated DOCK
-        populatemyDock(DOCK)
+        populateDock(DOCK)
         myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on '
                      'a populated for with selections.')
@@ -155,7 +155,7 @@ class DockTest(unittest.TestCase):
         self.assertEquals(myFlag, False, myMessage)
 
         # Now check OK IS enabled on a populated DOCK
-        populatemyDock(DOCK)
+        populateDock(DOCK)
         myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on a ' +
                      'populated DOCK with selections.')

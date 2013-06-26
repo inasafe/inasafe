@@ -1,3 +1,5 @@
+"""Impact function for ITB earth quake fatality model
+"""
 import numpy
 from third_party.odict import OrderedDict
 import logging
@@ -160,8 +162,7 @@ class ITBFatalityFunction(FunctionProvider):
     def fatality_rate(self, mmi):
         """
         ITB method to compute fatality rate
-        :param x: model coefficient.
-        :param y: model coefficient.
+        :param mmi:
         """
         # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
         # a fatality rate of 0 - Tim
@@ -176,9 +177,9 @@ class ITBFatalityFunction(FunctionProvider):
         """Indonesian Earthquake Fatality Model
 
         Input
-          layers: List of layers expected to contain
-              my_hazard: Raster layer of MMI ground shaking
-              my_exposure: Raster layer of population density
+        :param layers: List of layers expected to contain,
+                my_hazard: Raster layer of MMI ground shaking
+                my_exposure: Raster layer of population density
 
         """
 

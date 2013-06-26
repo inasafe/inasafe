@@ -1,3 +1,4 @@
+# coding=utf-8
 """Helper module for gui test suite
 """
 
@@ -28,9 +29,9 @@ from safe_qgis.safe_interface import (
     TESTDATA,
     UNITDATA)
 
-from safe_interface import HAZDATA, EXPDATA
+from safe_qgis.safe_interface import HAZDATA, EXPDATA
 
-from safe_qgis.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgisVersion
 
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
@@ -58,7 +59,10 @@ CONTROL_IMAGE_DIR = os.path.join(
 
 
 def assertHashesForFile(theHashes, theFilename):
-    """Assert that a files has matches one of a list of expected hashes"""
+    """Assert that a files has matches one of a list of expected hashes
+    :param theFilename: the filename
+    :param theHashes: the hash of the file
+    """
     myHash = hashForFile(theFilename)
     myMessage = ('Unexpected hash'
                  '\nGot: %s'
@@ -72,7 +76,10 @@ def assertHashesForFile(theHashes, theFilename):
 
 
 def assertHashForFile(theHash, theFilename):
-    """Assert that a files has matches its expected hash"""
+    """Assert that a files has matches its expected hash
+    :param theFilename:
+    :param theHash:
+    """
     myHash = hashForFile(theFilename)
     myMessage = ('Unexpected hash'
                  '\nGot: %s'
@@ -81,7 +88,9 @@ def assertHashForFile(theHash, theFilename):
 
 
 def hashForFile(theFilename):
-    """Return an md5 checksum for a file"""
+    """Return an md5 checksum for a file
+    :param theFilename:
+    """
     myPath = theFilename
     myData = file(myPath, 'rb').read()
     myHash = hashlib.md5()
@@ -91,7 +100,7 @@ def hashForFile(theFilename):
 
 
 def getQgisTestApp():
-    """ Start one QGis application to test agaist
+    """ Start one QGis application to test against
 
     Input
         NIL
@@ -141,6 +150,8 @@ def getQgisTestApp():
 def unitTestDataPath(theSubdir=None):
     """Return the absolute path to the InaSAFE unit test data dir.
 
+    :type theSubdir: str
+    :param theSubdir:
     .. note:: This is not the same thing as the SVN inasafe_data dir. Rather
        this is a new dataset where the test datasets are all tiny for fast
        testing and the datasets live in the same repo as the code.
@@ -160,10 +171,9 @@ def unitTestDataPath(theSubdir=None):
 def loadLayer(theLayerFile, theDirectory=TESTDATA):
     """Helper to load and return a single QGIS layer
 
-    Args:
-        theLayerFile: Pathname to raster or vector file
-        DIR: Optional parameter stating the parent dir. If None,
-             pathname is assumed to be absolute
+    :param theDirectory:Optional parameter stating the parent dir. If None,
+             path name is assumed to be absolute
+    :param theLayerFile: Path name to raster or vector file
 
     Returns: QgsMapLayer, str (for layer type)
 
@@ -203,11 +213,9 @@ def loadLayer(theLayerFile, theDirectory=TESTDATA):
 def setCanvasCrs(theEpsgId, theOtfpFlag=False):
     """Helper to set the crs for the CANVAS before a test is run.
 
-    Args:
-
-        * theEpsgId  - Valid EPSG identifier (int)
-        * theOtfpFlag - whether on the fly projections should be enabled
+    :param theOtfpFlag: whether on the fly projections should be enabled
                         on the CANVAS. Default to False.
+    :param theEpsgId: Valid EPSG identifier (int)
     """
         # Enable on-the-fly reprojection
     CANVAS.mapRenderer().setProjectionsEnabled(theOtfpFlag)
@@ -259,7 +267,9 @@ def setSmallExtentJakarta():
 
 
 def setGeoExtent(theBoundingBox):
-    """Zoom to an area specified given bounding box (list)"""
+    """Zoom to an area specified given bounding box (list)
+    :param theBoundingBox:
+    """
     myRect = QgsRectangle(*theBoundingBox)
     CANVAS.setExtent(myRect)
 
@@ -267,23 +277,16 @@ def setGeoExtent(theBoundingBox):
 def checkImages(theControlImage, theTestImagePath, theTolerance=1000):
     """Compare a test image against a collection of known good images.
 
-    Args:
-        * theControlImagePath: str file names. Give only the basename +ext
+    :param theTolerance: How many pixels may be different between the
+            two images.
+    :param theTestImagePath: The Image being checked (must have same dimensions
+            as the control image). Must be full path to image.
+    :param theControlImage: str file names. Give only the basename +ext
             as the test image path (CONTROL_IMAGE_DIR) will be prepended. e.g.
             addClassToLegend.png
-        * theTestImagePath: The Image being checked (must have same dimensions
-            as the control image). Must be full path to image.
-        * theTolerance: How many pixels may be different between the
-            two images.
-
-    Returns:
-        (bool, str, str) where:
-        * bool is success or failure indicator
-        * str is the file path of the resulting difference image
-        * str is a message providing analysis comparison notes
-
-    Raises:
-        None
+    :returns (success or failure indicator, the file path of the resulting
+    difference image, message providing analysis comparison notes
+    :rtype (bool, str, str)
     """
     myMessages = ''
     myPlatform = platformName()
@@ -331,20 +334,15 @@ def checkImages(theControlImage, theTestImagePath, theTolerance=1000):
 def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
     """Compare a test image against a known good image.
 
-    Args:
-        * theControlImagePath: The image representing expected output
-        * theTestImagePath: The Image being checked (must have same dimensions
-            as the control image).
-        * theTolerance: How many pixels may be different between the
+    :param theTolerance: How many pixels may be different between the
             two images.
+    :param theTestImagePath: The Image being checked (must have same dimensions
+            as the control image).
+    :param theControlImagePath: The image representing expected output
 
-    Returns:
-        (bool, str, str) where:
-        * bool is success or failure indicator
-        * str is a message providing analysis comparison notes
-
-    Raises:
-        None
+    :returns (success or failure indicator, a message providing analysis
+    comparison notes
+    :rtype (bool, str)
     """
 
     try:
@@ -354,7 +352,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
             raise OSError
         myTestImage = QtGui.QImage(theTestImagePath)
     except OSError:
-        myMessage = 'Test image:\n%s\ncould not be loaded' % theTestImagePath
+        myMessage = 'Test image:\n{0:s}\ncould not be loaded'.format(theTestImagePath)
         return False, myMessage
 
     try:
@@ -364,10 +362,7 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
             raise OSError
         myControlImage = QtGui.QImage(theControlImagePath)
     except OSError:
-        myMessage = ('Control image:\n%s\ncould not be loaded.\n'
-                     'Test image is:\n%s\n' % (
-                         theControlImagePath,
-                         theTestImagePath))
+        myMessage = 'Control image:\n{0:s}\ncould not be loaded.\n'
         return False, myMessage
 
     if (myControlImage.width() != myTestImage.width()
@@ -508,6 +503,7 @@ def getUiState(theDock):
     """Get state of the 3 combos on the DOCK theDock. This method is purely for
     testing and not to be confused with the saveState and restoreState methods
     of inasafedock.
+    :param theDock
     """
 
     myHazard = str(theDock.cboHazard.currentText())
@@ -525,7 +521,9 @@ def getUiState(theDock):
 
 def formattedList(theList):
     """Return a string representing a list of layers (in correct order)
-    but formatted with line breaks between each entry."""
+    but formatted with line breaks between each entry.
+    :param theList:
+    """
     myListString = ''
     for myItem in theList:
         myListString += myItem + '\n'
@@ -543,7 +541,9 @@ def canvasList():
 
 def combosToString(theDock):
     """Helper to return a string showing the state of all combos (all their
-    entries"""
+    entries
+    :param theDock:
+    """
 
     myString = 'Hazard Layers\n'
     myString += '-------------------------\n'
@@ -607,17 +607,16 @@ def setupScenario(
         theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.
 
-    Args:
-        * theDock Dock- (Required) dock instance.
-        * theHazard str - (Required) name of the hazard combo entry to set.
-        * theExposure str - (Required) name of exposure combo entry to set.
-        * theFunction - (Required) name of the function combo entry to set.
-        * theFunctionId - (Required) impact function id that should be used.
-        * theOkButtonFlag - (Optional) Whether the ok button should be enabled
+    :param theDock: (Required) dock instance.
+    :param theHazard: (Required) name of the hazard combo entry to set.
+    :param theExposure: (Required) name of exposure combo entry to set.
+    :param theFunction: (Required) name of the function combo entry to set.
+    :param theFunctionId: (Required) impact function id that should be used.
+    :param theOkButtonFlag: (Optional) Whether the ok button should be enabled
             after this scenario is set up.
-        * theAggregationLayer - (Optional) which layer should be used for
+    :param theAggregationLayer: (Optional) which layer should be used for
             aggregation
-        * theAggregationEnabledFlag - (Optional) whether it is expected that
+    :param theAggregationEnabledFlag: (Optional) whether it is expected that
             aggregation should be enabled when the scenario is loaded.
 
     We require both theFunction and theFunctionId because safe allows for
@@ -627,10 +626,9 @@ def setupScenario(
     .. note:: Layers are not actually loaded - the calling function is
         responsible for that.
 
-    Returns: bool - Indicating if the setup was successful
-            str - A message indicating why it may have failed.
-
-    Raises: None
+    :returns (Indicating if the setup was successful, A message indicating
+    why it may have failed.)
+    :rtype (bool, str)
     """
     if theHazard is not None:
         myIndex = theDock.cboHazard.findText(theHazard)
@@ -696,8 +694,9 @@ def setupScenario(
     return True, 'Matched ok.'
 
 
-def populatemyDock(theDock):
+def populateDock(theDock):
     """A helper function to populate the DOCK and set it to a valid state.
+    :param theDock:
     """
     loadStandardLayers(theDock)
     theDock.cboHazard.setCurrentIndex(0)
@@ -707,7 +706,9 @@ def populatemyDock(theDock):
 
 
 def loadStandardLayers(theDock=None):
-    """Helper function to load standard layers into the dialog."""
+    """Helper function to load standard layers into the dialog.
+    :param theDock:
+    """
     # NOTE: Adding new layers here may break existing tests since
     # combos are populated alphabetically. Each test will
     # provide a detailed diagnostic if you break it so make sure
@@ -739,7 +740,7 @@ def loadStandardLayers(theDock=None):
                   join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(
         myFileList, theDataDirectory=None, theDock=theDock)
-    #FIXME (MB) -1 is untill we add the aggregation category because of
+    #FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
@@ -747,12 +748,14 @@ def loadStandardLayers(theDock=None):
     return myHazardLayerCount, myExposureLayerCount
 
 
-def loadLayers(
-        theLayerList,
-        theClearFlag=True,
-        theDataDirectory=TESTDATA,
-        theDock=None):
-    """Helper function to load layers as defined in a python list."""
+def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA,
+               theDock=None):
+    """Helper function to load layers as defined in a python list.
+    :param theDock:
+    :param theDataDirectory:
+    :param theClearFlag:
+    :param theLayerList:
+    """
     # First unload any layers that may already be loaded
     if theClearFlag:
         # noinspection PyArgumentList

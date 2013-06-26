@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Test for Batch Runner Dialog.**
@@ -21,7 +22,7 @@ import unittest
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
-from batch_dialog import BatchDialog
+from safe_qgis.batch.batch_dialog import BatchDialog
 from safe_qgis.tests.utilities_test import getQgisTestApp, SCENARIO_DIR
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.dock import Dock
@@ -64,6 +65,7 @@ class BatchDialogTest(unittest.TestCase):
         myDialog.sboCount.setValue(1)
         myDialog.tblScript.selectRow(1)
         myButton = myDialog.btnRunSelected
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myStatus = myDialog.tblScript.item(1, 1).text()
         assert myStatus == 'Report Ok'
@@ -77,6 +79,7 @@ class BatchDialogTest(unittest.TestCase):
         myOutputDir = temp_dir()
         myDialog.leOutputDir.setText(myOutputDir)
         myButton = myDialog.pbnRunAll
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myStatus0 = myDialog.tblScript.item(0, 1).text()
         myStatus1 = myDialog.tblScript.item(1, 1).text()
@@ -85,6 +88,6 @@ class BatchDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(BatchDialogTest, 'test')
+    suite = unittest.makeSuite(BatchDialogTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
