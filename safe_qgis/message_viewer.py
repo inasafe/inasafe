@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid - **Dispatcher gui example.**
 
@@ -14,8 +15,7 @@ __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-import os
+import logging
 from safe import messaging as m
 from safe_qgis.utilities.utilities import htmlHeader, htmlFooter
 
@@ -23,10 +23,12 @@ from PyQt4 import QtCore, QtGui, QtWebKit
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class MessageViewer(QtWebKit.QWebView):
     """A simple message queue mockup."""
+    # noinspection PyOldStyleClasses
     def __init__(self, theParent):
         _ = theParent  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
@@ -54,7 +56,10 @@ class MessageViewer(QtWebKit.QWebView):
         #self.header = header.replace('PATH', base_dir)
 
     def contextMenuEvent(self, event):
-        """Slot automatically called by Qt on right click on the WebView."""
+        """Slot automatically called by Qt on right click on the WebView.
+
+        :param event: the event that caused the context menu to be called.
+        """
 
         context_menu = QtGui.QMenu(self)
 
@@ -85,51 +90,75 @@ class MessageViewer(QtWebKit.QWebView):
         context_menu.exec_(event.globalPos())
 
     def static_message_event(self, sender, message):
-        """Static message event handler - set message state based on event."""
+        """Static message event handler - set message state based on event.
+
+        Static message events will clear the message buffer before displaying
+        themselves.
+
+        :param sender: Unused - the object that sent the message.
+        :param message: A message to show in the viewer.
+        :type message: Message
+        """
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
         self.show_messages()
 
     def error_message_event(self, sender, message):
-        """Error message event handler - set message state based on event."""
+        """Error message event handler - set message state based on event.
+
+        Error messages are treated as dynamic messages - they don't clear the
+        message buffer.
+
+        :param sender: Unused - the object that sent the message.
+        :param message: A message to show in the viewer.
+        :type message: Message
+        """
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
         self.show_messages()
 
     def dynamic_message_event(self, sender, message):
-        """Dynamic event handler - set message state based on event."""
+        """Dynamic event handler - set message state based on event.
+
+        Dynamic messages don't clear the message buffer.
+
+        :param sender: Unused - the object that sent the message.
+        :param message: A message to show in the viewer.
+        :type message: Message
+        """
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
         self.show_messages()
 
     def show_messages(self):
         """Show all messages."""
+        self.setUrl(QtCore.QUrl(''))
         string = self.header
         if self.static_message is not None:
             string += self.static_message.to_html()
 
+        # Keep track of the last ID we had so we can scroll to it
+        last_id = 0
         for message in self.dynamic_messages:
-            html = message.to_html()
+            if message.element_id is None:
+                last_id += 1
+                message.element_id = str(last_id)
+
+            html = message.to_html(in_div_flag=True)
             if html is not None:
                 string += html
 
         string += self.footer
         self.setHtml(string)
-        #self.repaint()
-        #QtGui.qApp.processEvents()
 
-    def htmlHeader(self):
-        """Get a standard html header for wrapping content in."""
-        if self.header is None:
-            self.header = htmlHeader()
-        return self.header
-
-    def htmlFooter(self):
-        """Get a standard html footer for wrapping content in."""
-        if self.footer is None:
-            self.footer = htmlFooter()
-        return self.footer
+        # scroll-to logic would work something like this
+        # see resources/js/inasafe.js and also
+        # http://stackoverflow.com/a/4801719
+        if last_id > 0:
+            js = '$(\'#%s\').goTo();' % str(last_id)
+            #LOGGER.debug(js)
+            self.page().mainFrame().evaluateJavaScript(js)
 
     def _toMessage(self):
         """Collate all message elements to a single message."""

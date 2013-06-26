@@ -36,8 +36,10 @@ from qgis.core import (
     QgsVectorLayer,
     QgsFeature)
 
-from safe_qgis.safe_interface import ErrorMessage
+from safe_qgis.exceptions import MemoryLayerCreationError
+
 from safe_qgis.safe_interface import (
+    ErrorMessage,
     DEFAULTS,
     safeTr,
     get_version,

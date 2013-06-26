@@ -102,7 +102,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -132,15 +132,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised
         """
-        #pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
         # Ensure that all impact functions are loaded
         load_plugins()
 
-        #self.wvResults = MessageViewer()
         # Set up dispatcher for dynamic messages
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages
@@ -384,8 +382,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def gettingStartedMessage(self):
         """Generate a message for initial application state.
 
-        :returns: Message - a message instance with information for the user on
-            how to get started.
+        :returns: Information for the user on how to get started.
+        :rtype: Message
         """
         myMessage = m.Message()
         myMessage.add(LOGO_ELEMENT)
@@ -986,7 +984,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myDetails = self.tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
-        #TODO style theese
+        #TODO style these.
         myText = m.Text(
             self.tr('This analysis will calculate the impact of'),
             m.EmphasizedText(self.getHazardLayer().name()),
@@ -1998,8 +1996,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myFileName = theScenarioFilePath
 
-        myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
-        myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
+        try:
+            myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
+        except ValueError:
+            myRelExposurePath = myExposurePath
+        try:
+            myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
+        except ValueError:
+            myRelHazardPath = myHazardPath
 
         # write to file
         myParser = ConfigParser()
