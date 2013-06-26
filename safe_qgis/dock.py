@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
 
@@ -105,6 +106,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 #noinspection PyArgumentList
+# noinspection PyUnresolvedReferences
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
 
@@ -144,20 +146,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # to existing user messages
         dispatcher.connect(
             self.wvResults.dynamic_message_event,
-            signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
+            signal=DYNAMIC_MESSAGE_SIGNAL)
         # Set up dispatcher for static messages
         # Static messages clear the message queue and so the display is 'reset'
         dispatcher.connect(
             self.wvResults.static_message_event,
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
+            signal=STATIC_MESSAGE_SIGNAL)
         # Set up dispatcher for error messages
         # Static messages clear the message queue and so the display is 'reset'
         dispatcher.connect(
             self.wvResults.error_message_event,
-            signal=ERROR_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
+            signal=ERROR_MESSAGE_SIGNAL)
 
         myLongVersion = get_version()
         LOGGER.debug('Version: %s' % myLongVersion)
@@ -1217,9 +1216,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysisDone.emit(False)
 
     def completed(self):
-        """Slot activated when the process is done."""
-        #save the ID of the function that just runned
-
+        """Slot activated when the process is done.
+        """
+        #save the ID of the function that just ran
         self.lastUsedFunction = self.getFunctionID()
 
         # Try to run completion code
@@ -1228,7 +1227,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             # Load impact layer into QGIS
             myQGISImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-
+            self.layerChanged(myQGISImpactLayer)
             myReport = self._completed(myQGISImpactLayer, myEngineImpactLayer)
         except Exception, e:  # pylint: disable=W0703
 
@@ -1239,14 +1238,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.showDynamicMessage(m.Message(str(myReport)))
         self.saveState()
         self.hideBusy()
-        self.layerChanged(myQGISImpactLayer)
         self.analysisDone.emit(True)
 
     def _completed(self, theQGISImpactLayer, theEngineImpactLayer):
         """Helper function for slot activated when the process is done.
 
         :param theQGISImpactLayer: A QGIS layer representing the impact.
-        :type theQGISImpactLayer: QgsMapLayer
+        :type theQGISImpactLayer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
 
         :param theEngineImpactLayer: A safe_layer representing the impact.
         :type theEngineImpactLayer: ReadLayer
@@ -1408,6 +1406,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.aggregator.aggregate(self.runner.impactLayer())
         except Exception, e:  # pylint: disable=W0703
+            # noinspection PyPropertyAccess
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
             raise
 
@@ -1658,7 +1657,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         show the report..
 
         :param theLayer: QgsMapLayer instance that is now active
-        :type theLayer: QgsMapLayer
+        :type theLayer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 
         """
         myReport = m.Message()
@@ -1868,15 +1867,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def getFunctionID(self, theIndex=None):
         """Get the canonical impact function ID for the currently selected
            function (or the specified combo entry if theIndex is supplied.
-        Args:
-            theIndex int - Optional index position in the combo that you
-                want the function id for. Defaults to None. If not set / None
-                the currently selected combo item's function id will be
-                returned.
-        Returns:
-            myFunctionID str - String that identifies the function
-        Raises:
-           None
+
+        :param theIndex: Optional index position in the combo that you
+            want the function id for. Defaults to None. If not set / None
+            the currently selected combo item's function id will be
+            returned.
+        :type theIndex: int
+
+        :returns: Id of the currently selected function.
+        :rtype: str
         """
         if theIndex is None:
             myIndex = self.cboFunction.currentIndex()
@@ -1899,14 +1898,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def readImpactLayer(self, myEngineImpactLayer):
         """Helper function to read and validate safe style spatial layer.
 
-        Args
-            myEngineImpactLayer: Layer object as provided by InaSAFE engine.
+        :param myEngineImpactLayer: Layer object as provided by InaSAFE engine.
+        :type myEngineImpactLayer: safe_layer
 
-        Returns
-            validated QGIS layer or None
-
-        Raises
-            Exception if layer is not valid
+        :returns: Valid QGIS layer or None
+        :rtype: None or QgsRasterLayer or QgsVectorLayer
         """
 
         myMessage = self.tr('Input layer must be a InaSAFE spatial object. '
@@ -1936,7 +1932,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise Exception(myMessage)
 
     def saveCurrentScenario(self, theScenarioFilePath=None):
-        """Save current scenario
+        """Save current scenario to a text file.
+
+        You can use the saved scenario with the batch runner.
+
+        :param theScenarioFilePath: A path to the scenario file.
+        :type theScenarioFilePath: str
+
         """
         LOGGER.info('saveCurrentScenario')
         warningTitle = self.tr('InaSAFE Save Scenario Warning')
@@ -1987,7 +1989,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         mySettings = QSettings()
         lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
         lastSaveDir = str(lastSaveDir.toString())
-        if (theScenarioFilePath is None):
+        if theScenarioFilePath is None:
             # noinspection PyCallByClass,PyTypeChecker
             myFileName = str(QFileDialog.getSaveFileName(
                 self, myTitleDialog,
