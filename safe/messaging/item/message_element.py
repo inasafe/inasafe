@@ -44,7 +44,7 @@ class MessageElement(object):
         Text('foo', attributes='width: "100%"')
 
         """
-        self.id = element_id
+        self.element_id = element_id
         self.style_class = style_class
         self.icon = icon
         self.attributes = attributes
@@ -123,8 +123,8 @@ class MessageElement(object):
     def html_attributes(self):
         """Get extra html attributes such as id and class."""
         extra_attributes = ''
-        if self.id is not None:
-            extra_attributes = ' id="%s"' % self.id
+        if self.element_id is not None:
+            extra_attributes = ' id="%s"' % self.element_id
         if self.style_class is not None:
             extra_attributes = '%s class="%s"' % (
                 extra_attributes, self.style_class)

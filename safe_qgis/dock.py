@@ -102,7 +102,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -132,15 +132,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised
         """
-        #pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
         # Ensure that all impact functions are loaded
         load_plugins()
 
-        #self.wvResults = MessageViewer()
         # Set up dispatcher for dynamic messages
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages

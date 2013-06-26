@@ -15,7 +15,7 @@ __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
+import logging
 from safe import messaging as m
 from safe_qgis.utilities.utilities import htmlHeader, htmlFooter
 
@@ -23,6 +23,7 @@ from PyQt4 import QtCore, QtGui, QtWebKit
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class MessageViewer(QtWebKit.QWebView):
@@ -132,17 +133,32 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
+        self.setUrl(QtCore.QUrl(''))
         string = self.header
         if self.static_message is not None:
             string += self.static_message.to_html()
 
+        # Keep track of the last ID we had so we can scroll to it
+        last_id = 0
         for message in self.dynamic_messages:
-            html = message.to_html()
+            if message.element_id is None:
+                last_id += 1
+                message.element_id = str(last_id)
+
+            html = message.to_html(in_div_flag=True)
             if html is not None:
                 string += html
 
         string += self.footer
         self.setHtml(string)
+
+        # scroll-to logic would work something like this
+        # see resources/js/inasafe.js and also
+        # http://stackoverflow.com/a/4801719
+        if last_id > 0:
+            js = '$(\'#%s\').goTo();' % str(last_id)
+            #LOGGER.debug(js)
+            self.page().mainFrame().evaluateJavaScript(js)
 
     def _toMessage(self):
         """Collate all message elements to a single message."""

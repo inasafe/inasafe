@@ -31,7 +31,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class Message(MessageElement):
     """Message object to contain a list of MessageElements"""
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """Creates a message object to contain a list of MessageElements
 
         Strings can be passed and are automatically converted in to
@@ -45,7 +45,14 @@ class Message(MessageElement):
 
         Raises:
             Errors are propagated
+
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(Message, self).__init__(**kwargs)
         self.message = []
 
         for m in args:
@@ -116,19 +123,25 @@ class Message(MessageElement):
                 last_was_text = False
         return message
 
-    def to_html(self, noNewline=False):  # pylint: disable=W0221
+    def to_html(
+            self, noNewline=False, in_div_flag=False):  # pylint: disable=W0221
         """Render a MessageElement queue as html
 
         Args:
             None
 
         Returns:
-            Str the html representation of the message queue
+            str the html representation of the message queue
 
         Raises:
             Errors are propagated
         """
-        message = ''
+
+        if in_div_flag:
+            message = '<div %s>' % self.html_attributes()
+        else:
+            message = ''
+
         last_was_text = False
         for m in self.message:
             if last_was_text and not isinstance(m, Text):
@@ -141,6 +154,9 @@ class Message(MessageElement):
             else:
                 message += '\n'
                 last_was_text = False
+
+        if in_div_flag:
+            message += '</div>'
 
         if noNewline:
             return message.replace('\n', '')
