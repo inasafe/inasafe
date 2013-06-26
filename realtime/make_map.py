@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Functionality related to shake data files.**
@@ -33,7 +34,10 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def processEvent(theEventId=None, theLocale='en'):
-    """Launcher that actually runs the event processing."""
+    """Launcher that actually runs the event processing.
+    :param theEventId:
+    :param theLocale:
+    """
     myPopulationPath = os.path.join(
         dataDir(),
         'exposure',
