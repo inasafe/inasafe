@@ -1998,8 +1998,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myFileName = theScenarioFilePath
 
-        myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
-        myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
+        try:
+            myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
+        except ValueError:
+            myRelExposurePath = myExposurePath
+        try:
+            myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
+        except ValueError:
+            myRelHazardPath = myHazardPath
 
         # write to file
         myParser = ConfigParser()
