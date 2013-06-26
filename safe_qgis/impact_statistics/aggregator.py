@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import logging
+import time
 
 import numpy
 from PyQt4 import QtGui, QtCore
@@ -657,14 +658,17 @@ class Aggregator(QtCore.QObject):
             self.tr('Abort...'),
             0,
             0)
+        startTime = time.clock()
         myZonalStatistics.calculateStatistics(myProgressDialog)
         if myProgressDialog.wasCanceled():
             QtGui.QMessageBox.error(
                 self, self.tr('ZonalStats: Error'),
                 self.tr('You aborted aggregation, '
                         'so there are no data for analysis. Exiting...'))
+        cppDuration = time.clock() - startTime
+        print 'CPP duration: %ss' % (cppDuration)
 
-        print 'Start new aggr'
+        startTime = time.clock()
         # new way
         # myZonalStatistics = {
         # 0L: {'count': 50539,
@@ -694,9 +698,12 @@ class Aggregator(QtCore.QObject):
         #   'sum': 11330910.488220215,
         #   'mean': 206.02404611477172}}
 
-        myZonalStatistics = calculateZonalStats(theQGISImpactLayer, self.layer)
 
-        print 'done new aggr'
+        myZonalStatistics = calculateZonalStats(theQGISImpactLayer, self.layer)
+        pyDuration = time.clock() - startTime
+        print 'CPP duration: %ss' % (pyDuration)
+
+        print 'py to CPP: %s%%' % (pyDuration/cppDuration*100)
         # FIXME (MB) remove this once fully implemented
         oldPrefix = self.prefix
 
