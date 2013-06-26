@@ -115,8 +115,6 @@ class MessageViewer(QtWebKit.QWebView):
 
         string += self.footer
         self.setHtml(string)
-        #self.repaint()
-        #QtGui.qApp.processEvents()
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
