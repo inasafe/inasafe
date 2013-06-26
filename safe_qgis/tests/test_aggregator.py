@@ -49,11 +49,12 @@ from safe_qgis.tests.utilities_test import (
 
 from safe_qgis.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
-from safe_qgis.clipper import clipLayer
-from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.utilities import getDefaults, extentToGeoArray, getDefaults
+from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.utilities import (
+    getDefaults, extentToGeoArray, getDefaults)
 
-from safe_qgis.test.utilities_test import (
+from safe_qgis.tests.utilities_test import (
     loadStandardLayers,
     setupScenario,
     loadLayers)
