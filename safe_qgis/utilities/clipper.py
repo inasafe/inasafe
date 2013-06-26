@@ -102,7 +102,8 @@ def clipLayer(theLayer,
             for raster layer clipping.**
         * theExplodeAttribute - a str specifying to which attribute #1, #2 and
             so on will be added in case of theExplodeFlag being true.
-            The attribute is modified only if there are at least 2 parts
+            The attribute is modified only if there are at least 2 parts **This
+             parameter is ignored for raster layer clipping.**
 
     Returns:
         Clipped layer (placed in the system temp dir).
