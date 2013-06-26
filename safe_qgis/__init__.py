@@ -1,3 +1,4 @@
+"""Package safe_qgis."""
 import os
 import sys
 # Import the PyQt and QGIS libraries
@@ -13,7 +14,7 @@ try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
-    from .custom_logging import setupLogger
+    from safe_qgis.utilities.custom_logging import setupLogger
     setupLogger()
 except ImportError:
     # Note we use translate directly but the string may still not translate

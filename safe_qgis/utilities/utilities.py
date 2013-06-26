@@ -779,3 +779,30 @@ def downloadWebUrl(theManager, theUrl, theOutPath, theProgressDlg=None):
         return True
     else:
         return myResult, str(myReply.errorString())
+
+
+def viewportGeoArray(theMapCanvas):
+    """Obtain the map canvas current extent in EPSG:4326.
+
+    :param theMapCanvas: A map canvas instance.
+    :type theMapCanvas: QgsMapCanvas
+
+    :returns: A list in the form [xmin, ymin, xmax, ymax] where all
+        coordinates provided are in Geographic / EPSG:4326.
+    :rtype: list
+
+    .. note:: Delegates to extentToGeoArray()
+    """
+
+    # get the current viewport extent
+    myRect = theMapCanvas.extent()
+
+    if theMapCanvas.hasCrsTransformEnabled():
+        myCrs = theMapCanvas.mapRenderer().destinationCrs()
+    else:
+        # some code duplication from extentToGeoArray here
+        # in favour of clarity of logic...
+        myCrs = QgsCoordinateReferenceSystem()
+        myCrs.createFromEpsg(4326)
+
+    return extentToGeoArray(myRect, myCrs)
