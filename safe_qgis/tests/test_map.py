@@ -25,11 +25,13 @@ from qgis.core import (
     QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.tests.utilities_test import (getQgisTestApp,
-                                      loadLayer,
-                                      setJakartaGeoExtent,
-                                      checkImages)
-from safe_qgis.utilities import setupPrinter, dpiToMeters, qgisVersion
+from safe_qgis.tests.utilities_test import (
+    getQgisTestApp,
+    loadLayer,
+    setJakartaGeoExtent,
+    checkImages)
+from safe_qgis.utilities.utilities import (
+    setupPrinter, dpiToMeters, qgisVersion)
 from safe_qgis.report.map import Map
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

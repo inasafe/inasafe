@@ -352,7 +352,8 @@ def checkImage(theControlImagePath, theTestImagePath, theTolerance=1000):
             raise OSError
         myTestImage = QtGui.QImage(theTestImagePath)
     except OSError:
-        myMessage = 'Test image:\n{0:s}\ncould not be loaded'.format(theTestImagePath)
+        myMessage = 'Test image:\n{0:s}\ncould not be loaded'.format(
+            theTestImagePath)
         return False, myMessage
 
     try:

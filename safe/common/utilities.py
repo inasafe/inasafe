@@ -171,7 +171,11 @@ def unique_filename(**kwargs):
     return filename
 
 try:
-    from safe_qgis.utilities import getDefaults as get_qgis_defaults
+    # hmmm this is not so nice - would be nicer to find a way to make
+    # to make safe unaware of safe_qgis - perhaps this is a good case
+    # for monkey patching safe.common.utilities with a replacement
+    # get_defaults when safe_qgis initialises....Tim (June 2013)
+    from safe_qgis.utilities.utilities import getDefaults as get_qgis_defaults
 
     def get_defaults(default=None):
         return get_qgis_defaults(theDefault=default)

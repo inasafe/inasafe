@@ -28,7 +28,7 @@ from safe_qgis.utilities.styling import (
     setVectorGraduatedStyle,
     setRasterStyle,
     _addMinMaxToStyle)
-from safe_qgis.utilities import getErrorMessage
+from safe_qgis.utilities.utilities import getErrorMessage
 from safe_qgis.tests.utilities_test import (
     unitTestDataPath,
     loadLayer,

@@ -23,7 +23,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
 from safe_qgis.tests.utilities_test import getQgisTestApp
-from safe_interface import EXPDATA
+from safe_qgis.safe_interface import EXPDATA
 
 QGISAPP = getQgisTestApp()
 
