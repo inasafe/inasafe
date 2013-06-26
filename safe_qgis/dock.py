@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
 
@@ -18,16 +19,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import numpy
 import logging
 from ConfigParser import ConfigParser
-
 from functools import partial
 
+import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QFileDialog
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
-
 from qgis.core import (
     QgsMapLayer,
     QgsVectorLayer,
@@ -37,21 +36,22 @@ from qgis.core import (
     QGis)
 
 from third_party.pydispatch import dispatcher
-from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.help import Help
-from safe_qgis.utilities import (
+from safe_qgis.utilities.utilities import (
     getErrorMessage,
     getWGS84resolution,
     qgisVersion,
     impactLayerAttribution,
     addComboItemInOrder,
-    extentToGeoArray)
-from safe_qgis.styling import (
+    extentToGeoArray,
+    viewportGeoArray)
+from safe_qgis.utilities.styling import (
     setRasterStyle,
     setVectorGraduatedStyle,
     setVectorCategorizedStyle)
-from safe_qgis.memory_checker import checkMemoryUsage
-from safe_qgis.impact_calculator import ImpactCalculator
+from safe_qgis.utilities.memory_checker import checkMemoryUsage
+from safe_qgis.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
     load_plugins,
     availableFunctions,
@@ -66,17 +66,16 @@ from safe_qgis.safe_interface import (
     get_postprocessors,
     get_postprocessor_human_name,
     ZeroImpactException)
-
 from safe_interface import messaging as m
 from safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
-
-from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.clipper import clipLayer
-from safe_qgis.aggregator import Aggregator
-from safe_qgis.postprocessor_manager import PostprocessorManager
+from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.impact_statistics.aggregator import Aggregator
+from safe_qgis.impact_statistics.postprocessor_manager import (
+    PostprocessorManager)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     KeywordDbError,
@@ -88,13 +87,13 @@ from safe_qgis.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     AggregatioError)
+from safe_qgis.report.map import Map
+from safe_qgis.report.html_renderer import HtmlRenderer
+from safe_qgis.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
+from safe_qgis.tools.keywords_dialog import KeywordsDialog
+from safe_interface import styles
 
-from safe_qgis.map import Map
-from safe_qgis.html_renderer import HtmlRenderer
-from safe_qgis.function_options_dialog import FunctionOptionsDialog
-from safe_qgis.keywords_dialog import KeywordsDialog
-
-from safe_interface import styles, get_plugins
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
@@ -107,6 +106,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 #noinspection PyArgumentList
+# noinspection PyUnresolvedReferences
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the inaSAFE plugin."""
 
@@ -146,20 +146,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # to existing user messages
         dispatcher.connect(
             self.wvResults.dynamic_message_event,
-            signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
+            signal=DYNAMIC_MESSAGE_SIGNAL)
         # Set up dispatcher for static messages
         # Static messages clear the message queue and so the display is 'reset'
         dispatcher.connect(
             self.wvResults.static_message_event,
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
+            signal=STATIC_MESSAGE_SIGNAL)
         # Set up dispatcher for error messages
         # Static messages clear the message queue and so the display is 'reset'
         dispatcher.connect(
             self.wvResults.error_message_event,
-            signal=ERROR_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
+            signal=ERROR_MESSAGE_SIGNAL)
 
         myLongVersion = get_version()
         LOGGER.debug('Version: %s' % myLongVersion)
@@ -227,14 +224,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Static messages cause any previous content in the MessageViewer to be
         replaced with new content.
 
-        Args:
-            theMessage: Message - an instance of our rich message class.
+        :param theMessage: Message - an instance of our rich message class.
 
-        Returns:
-            None
-
-        Raies:
-            None
         """
         dispatcher.send(
             signal=STATIC_MESSAGE_SIGNAL,
@@ -247,14 +238,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Dynamic messages are appended to any existing content in the
         MessageViewer.
 
-        Args:
-            theMessage: Message - an instance of our rich message class.
+        :param theMessage: An instance of our rich message class.
+        :type theMessage: Message
 
-        Returns:
-            None
-
-        Raies:
-            None
         """
         dispatcher.send(
             signal=DYNAMIC_MESSAGE_SIGNAL,
@@ -267,14 +253,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Error messages cause any previous content in the MessageViewer to be
         replaced with new content.
 
-        Args:
-            theMessage: ErrorMessage - an instance of our rich message class.
-
-        Returns:
-            None
-
-        Raies:
-            None
+        :param theErrorMessage: An instance of our rich error message class.
+        :type theErrorMessage: ErrorMessage
         """
         dispatcher.send(
             signal=ERROR_MESSAGE_SIGNAL,
@@ -283,15 +263,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.hideBusy()
 
     def readSettings(self):
-        """Set the dock state from QSettings. Do this on init and after
-        changing options in the options dialog.
+        """Set the dock state from QSettings.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        Do this on init and after changing options in the options dialog.
         """
 
         mySettings = QtCore.QSettings()
@@ -339,15 +313,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.getLayers()
 
     def _updateSettings(self):
-        """Update setting to new settings names
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
-        """
+        """Update setting to new settings names."""
 
         mySettings = QtCore.QSettings()
         myOldFlag = mySettings.value(
@@ -358,20 +324,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             mySettings.setValue('inasafe/showIntermediateLayers', myOldFlag)
 
     def connectLayerListener(self):
-        """Establish a signal/slot to listen for changes in the layers loaded
-        in QGIS.
+        """Establish a signal/slot to listen for layers loaded in QGIS.
 
         ..seealso:: disconnectLayerListener
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            None
-
         """
         if qgisVersion() >= 10800:  # 1.8 or newer
             QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
@@ -385,20 +340,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     # pylint: disable=W0702
     def disconnectLayerListener(self):
-        """Destroy the signal/slot to listen for changes in the layers loaded
-        in QGIS.
+        """Destroy the signal/slot to listen for layers loaded in QGIS.
 
         ..seealso:: connectLayerListener
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            None
-
         """
         # noinspection PyBroadException
         try:
@@ -440,9 +384,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def gettingStartedMessage(self):
         """Generate a message for initial application state.
 
-        Returns:
-            Message - a message instance with information for the user on how
-                to get started.
+        :returns: Message - a message instance with information for the user on
+            how to get started.
         """
         myMessage = m.Message()
         myMessage.add(LOGO_ELEMENT)
@@ -536,30 +479,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return myMessage
 
     def validate(self):
-        """Helper method to evaluate the current state of the dialog and
-        determine if it is appropriate for the OK button to be enabled
-        or not.
+        """Helper method to evaluate the current state of the dialog.
+
+        This function will determine if it is appropriate for the OK button to
+        be enabled or not.
 
         .. note:: The enabled state of the OK button on the dialog will
            NOT be updated (set True or False) depending on the outcome of
            the UI readiness tests performed - **only** True or False
            will be returned by the function.
 
-        Args:
-           None.
-        Returns:
-           A two-tuple consisting of:
+        :returns: A two-tuple where the first element is a Boolean reflecting
+         the results of the validation tests and the second is a message
+         indicating any reason why the validation may have failed.
+        :rtype: (Boolean, Message)
 
-           * Boolean reflecting the results of the validation tests.
-           * A message indicating any reason why the validation may
-             have failed.
+        Example::
 
-           Example::
-
-               flag,myMessage = self.validate()
-
-        Raises:
-           no exceptions explicitly raised
+            flag,myMessage = self.validate()
         """
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
@@ -579,17 +516,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         This is here so that we can see if the ok button should be enabled.
 
+        :param theIndex: The index number of the selected hazard layer.
+
         .. note:: Don't use the @pyqtSlot() decorator for autoslots!
-
-        Args:
-            None.
-
-        Returns:
-            None.
-
-        Raises:
-            No exceptions explicitly raised.
-
         """
         # Add any other logic you might like here...
         del theIndex
@@ -602,17 +531,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         This is here so that we can see if the ok button should be enabled.
 
+        :param theIndex: The index number of the selected exposure layer.
+
         .. note:: Don't use the @pyqtSlot() decorator for autoslots!
-
-        Args:
-           None.
-
-        Returns:
-           None.
-
-        Raises:
-           No exceptions explicitly raised.
-
         """
         # Add any other logic you might like here...
         del theIndex
@@ -626,14 +547,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         This is here so that we can see if the ok button should be enabled.
 
-        Args:
-           None.
-
-        Returns:
-           None.
-
-        Raises:
-           no exceptions explicitly raised."""
+        :param theIndex: The index number of the selected function.
+        """
         # Add any other logic you might like here...
         if not theIndex.isNull or not theIndex == '':
             myFunctionID = self.getFunctionID()
@@ -644,8 +559,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if hasattr(self.activeFunction, 'parameters'):
                 self.functionParams = self.activeFunction.parameters
             self.setFunctionOptionsStatus()
-        else:
-            del theIndex
+
         self.toggleAggregationCombo()
         self.setOkButtonStatus()
 
@@ -654,15 +568,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Whether the combo is toggled on or off will depend on the current dock
         status.
-
-        Args:
-           None
-
-        Returns:
-           None
-
-        Raises:
-           None
         """
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
@@ -678,13 +583,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status based on form validity.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised."""
+        """
         myButton = self.pbnRunStop
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
@@ -696,13 +595,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         If there are function parameters to configure then enable it, otherwise
         disable it.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised."""
+        """
         # Check if functionParams intialized
         if self.functionParams is None:
             self.toolFunctionOptions.setEnabled(False)
@@ -711,16 +604,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     @pyqtSlot()
     def on_toolFunctionOptions_clicked(self):
-        """Automatic slot executed when toolFunctionOptions is clicked.
-
-        Args:
-           None.
-
-        Returns:
-           None.
-
-        Raises:
-           no exceptions explicitly raised."""
+        """Automatic slot executed when toolFunctionOptions is clicked."""
         myDialog = FunctionOptionsDialog(self)
         myDialog.setDialogInfo(self.getFunctionID())
         myDialog.buildForm(self.functionParams)
@@ -735,16 +619,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Activated when the layerset has been changed (e.g. one or more layer
         visibilities changed). If self.showOnlyVisibleLayersFlag is set to
         False this method will simply return, doing nothing.
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
-
         """
         if self.showOnlyVisibleLayersFlag:
             self.getLayers()
@@ -752,6 +626,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     @pyqtSlot()
     def layersWillBeRemoved(self):
         """QGIS 1.8+ slot to notify us when a group of layers are removed.
+
         This is optimal since if many layers are removed this slot gets called
         only once. This slot simply delegates to getLayers and is only
         implemented here to make the connections between the different signals
@@ -773,6 +648,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         connections between the different signals and slots clearer and
         better documented.
 
+        :param theLayers: This paramters is ignored but required for the slot
+         signature.
+
         .. note:: Requires QGIS 1.8 and better api.
 
         """
@@ -781,12 +659,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     @pyqtSlot()
     def layerWillBeRemoved(self):
-        """Slot for the old (pre QGIS 1.8 api) to notify us when
-        a layer is removed. This is suboptimal since if many layers are
-        removed this slot gets called multiple times. This slot simply
-        delegates to getLayers and is only implemented here to make the
-        connections between the different signals and slots clearer and
-        better documented."""
+        """Slot for the old (pre QGIS 1.8 api) notifying a layer was removed.
+
+        This is suboptimal since if many layers are removed this slot gets
+        called multiple times. This slot simply delegates to getLayers and is
+        only implemented here to make the connections between the different
+        signals and slots clearer and better documented."""
+
         self.getLayers()
 
     @pyqtSlot()
@@ -919,13 +798,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def getFunctions(self):
         """Obtain a list of impact functions from the impact calculator.
-
-        Args:
-           None.
-        Returns:
-           None
-        Raises:
-           no
         """
         # remember what the current function is
         myOriginalFunction = self.cboFunction.currentText()
@@ -985,14 +857,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Obtain QgsMapLayer id from the userrole of the QtCombo for hazard
         and return it as a QgsMapLayer.
 
-        Args:
-            None
+        :returns: The currently selected map layer in the hazard combo.
+        :rtype: QgsMapLayer
 
-        Returns:
-            QgsMapLayer - currently selected map layer in the hazard combo.
-
-        Raises:
-            None
         """
         myIndex = self.cboHazard.currentIndex()
         if myIndex < 0:
@@ -1033,16 +900,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Obtain QgsMapLayer id from the userrole of the QtCombo for post
         processing combo return it as a QgsMapLayer.
 
-        Args:
-            None
-
-        Returns:
-            * None if no aggregation is selected or cboAggregation is
-                disabled, otherwise:
-            * QgsMapLayer - a polygon layer.
-
-        Raises:
-            None
+        :returns: None if no aggregation is selected or cboAggregation is
+                disabled, otherwise a polygon layer.
+        :rtype: QgsMapLayer or None
         """
 
         myNoSelectionValue = 0
@@ -1228,14 +1088,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def acceptCancelled(self, theOldKeywords):
         """Deal with user cancelling post processing option dialog.
 
-        Args:
-            theOldKeywords: dict - keywords dictionary to reinstate.
-
-        Returns:
-            None
-
-        Raises:
-            None
+        :param theOldKeywords: A keywords dictionary that should be reinstated.
+        :type theOldKeywords: dict
         """
         LOGGER.debug('Setting old dictionary: ' + str(theOldKeywords))
         self.keywordIO.writeKeywords(self.aggregator.layer, theOldKeywords)
@@ -1348,15 +1202,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         An exception will be logged, busy status removed and a message
         displayed.
 
-        Args:
-            * theException: Exception - an exception that was raised.
-            * theMessage: str - a string to display.
+        :param theMessage: an ErrorMessage to display
+        :type theMessage: ErrorMessage
 
-        Raises:
-            None
-
-        Exception:
-            None
+        :param theException: An exception that was raised
+        :type theException: Exception
         """
         QtGui.qApp.restoreOverrideCursor()
         self.hideBusy()
@@ -1366,9 +1216,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysisDone.emit(False)
 
     def completed(self):
-        """Slot activated when the process is done."""
-        #save the ID of the function that just runned
-
+        """Slot activated when the process is done.
+        """
+        #save the ID of the function that just ran
         self.lastUsedFunction = self.getFunctionID()
 
         # Try to run completion code
@@ -1377,7 +1227,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             # Load impact layer into QGIS
             myQGISImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-
+            self.layerChanged(myQGISImpactLayer)
             myReport = self._completed(myQGISImpactLayer, myEngineImpactLayer)
         except Exception, e:  # pylint: disable=W0703
 
@@ -1388,21 +1238,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.showDynamicMessage(m.Message(str(myReport)))
         self.saveState()
         self.hideBusy()
-        self.layerChanged(myQGISImpactLayer)
         self.analysisDone.emit(True)
 
     def _completed(self, theQGISImpactLayer, theEngineImpactLayer):
         """Helper function for slot activated when the process is done.
 
-        Args
-            theQGISImpactLayer - readImpactLayer()
-            theEngineImpactLayer - a result of runner.impactLayer()
-        Returns
-            Report to render on canvas
-        Raises
-            Exceptions on a range of error conditions
+        :param theQGISImpactLayer: A QGIS layer representing the impact.
+        :type theQGISImpactLayer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
 
-        Provides report out from impact_function to canvas
+        :param theEngineImpactLayer: A safe_layer representing the impact.
+        :type theEngineImpactLayer: ReadLayer
+
+        :returns: Provides a report for writing to the dock.
+        :rtype: str
         """
 
         myTitle = self.tr('Loading results...')
@@ -1412,13 +1260,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
         self.showDynamicMessage(myMessage)
 
-        #myMessage = self.runner.result()
-
         myKeywords = self.keywordIO.readKeywords(theQGISImpactLayer)
+
         #write postprocessing report to keyword
         myOutput = self.postprocessorManager.getOutput()
         myKeywords['postprocessing_report'] = myOutput.to_html(noNewline=True)
-
         self.keywordIO.writeKeywords(theQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1429,6 +1275,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get requested style for impact layer of either kind
         myStyle = theEngineImpactLayer.get_style_info()
         myStyleType = theEngineImpactLayer.get_style_type()
+
         # Determine styling for QGIS layer
         if theEngineImpactLayer.is_vector:
             LOGGER.debug('myEngineImpactLayer.is_vector')
@@ -1441,10 +1288,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             elif myStyleType == 'graduatedSymbol':
                 LOGGER.debug('use graduated')
                 setVectorGraduatedStyle(theQGISImpactLayer, myStyle)
-            # use default style
-            # else:
-            #     LOGGER.debug('use else')
-            #     setVectorGraduatedStyle(myQGISImpactLayer, myStyle)
+
         elif theEngineImpactLayer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not myStyle:
@@ -1562,7 +1406,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.aggregator.aggregate(self.runner.impactLayer())
         except Exception, e:  # pylint: disable=W0703
-            e.args = (e.args[0] + '\nAggregation error occurred',)
+            # noinspection PyPropertyAccess
+            e.args = (str(e.args[0]) + '\nAggregation error occurred',)
             raise
 
         #TODO (MB) do we really want this check?
@@ -1575,6 +1420,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysisError(myException, myContext)
 
     def postProcess(self):
+        """Carry out any postprocessing required for this impact layer.
+        """
         LOGGER.debug('Do postprocessing')
         self.postprocessorManager = PostprocessorManager(self.aggregator)
         self.postprocessorManager.functionParams = self.functionParams
@@ -1593,10 +1440,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def getClipParameters(self):
         """Calculate the best extents to use for the assessment.
 
-        Args:
-            None
-
-        Returns:
+        :returns: A tuple consiting of:
             * myExtraExposureKeywords: dict - any additional keywords that
                 should be written to the exposure layer. For example if
                 rescaling is required for a raster, the original resolution
@@ -1610,14 +1454,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             * myGeoExtent: list - [xmin, ymin, xmax, ymax] - the unbuffered
                 intersection of the two input layers extents and the viewport.
             * myHazardLayer: QgsMapLayer - layer representing hazard.
-
-        Raises:
-            InsufficientOverlapError
+        :rtype: dict, QgsRectangle, float,
+                QgsMapLayer, QgsRectangle, QgsMapLayer
+        :raises: InsufficientOverlapError
         """
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
         # Get the current viewport extent as an array in EPSG:4326
-        myViewportGeoExtent = self.viewportGeoArray()
+        myViewportGeoExtent = viewportGeoArray(self.iface.mapCanvas())
         # Get the Hazard extents as an array in EPSG:4326
         myHazardGeoExtent = extentToGeoArray(
             myHazardLayer.extent(),
@@ -1732,8 +1576,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if myHazardLayer.geometryType() == QGis.Point:
                 myGeoExtent = myExposureGeoExtent
 
-        return myExtraExposureKeywords, myBufferedGeoExtent, myCellSize, \
-            myExposureLayer, myGeoExtent, myHazardLayer
+        return (
+            myExtraExposureKeywords,
+            myBufferedGeoExtent,
+            myCellSize,
+            myExposureLayer,
+            myGeoExtent,
+            myHazardLayer)
 
     def optimalClip(self):
         """ A helper function to perform an optimal clip of the input data.
@@ -1802,57 +1651,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theHardClipFlag=self.clipHard)
         return myClippedHazard, myClippedExposure
 
-        ############################################################
-        # logic checked to here..............
-        ############################################################
-        # .. todo:: Cleanup temporary working files, careful not to delete
-        #            User's own data'
-
-    def viewportGeoArray(self):
-        """Obtain the map canvas current extent in EPSG:4326.
-
-        Args:
-            * theExtent: QgsRectangle defining a spatial extent in any CRS
-            * theSourceCrs: QgsCoordinateReferenceSystem for theExtent.
-
-        Returns:
-            list: a list in the form [xmin, ymin, xmax, ymax] where all
-                coordinates provided are in Geographic / EPSG:4326.
-
-        Raises:
-            None
-
-        .. note:: Delegates to extentToGeoArray()
-
-        """
-
-        # get the current viewport extent
-        myCanvas = self.iface.mapCanvas()
-        myRect = myCanvas.extent()
-
-        if myCanvas.hasCrsTransformEnabled():
-            myCrs = myCanvas.mapRenderer().destinationCrs()
-        else:
-            # some code duplication from extentToGeoArray here
-            # in favour of clarity of logic...
-            myCrs = QgsCoordinateReferenceSystem()
-            myCrs.createFromEpsg(4326)
-
-        return extentToGeoArray(myRect, myCrs)
-
     def layerChanged(self, theLayer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,
         show the report..
 
-        .. see also:: :func:`IS.layerChanged`.
+        :param theLayer: QgsMapLayer instance that is now active
+        :type theLayer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 
-        Args:
-           theLayer - the QgsMapLayer instance that is now active..
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
         """
         myReport = m.Message()
         if theLayer is not None:
@@ -1967,12 +1773,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def restoreFunctionState(self, theOriginalFunction):
         """Restore the function combo to a known state.
 
-        Args:
-            theOriginalFunction - name of function that should be selected
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :param theOriginalFunction: Name of function that should be selected.
+        :type theOriginalFunction: str
+
         """
         # Restore previous state of combo
         for myCount in range(0, self.cboFunction.count()):
@@ -2058,21 +1861,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QtCore.QUrl('file:///' + myMapPdfFilePath,
                         QtCore.QUrl.TolerantMode))
 
-        self.showDynamicMessage(m.Message(m.Text(myStatus)))
+        self.showDynamicMessage(myStatus)
         self.hideBusy()
 
     def getFunctionID(self, theIndex=None):
         """Get the canonical impact function ID for the currently selected
            function (or the specified combo entry if theIndex is supplied.
-        Args:
-            theIndex int - Optional index position in the combo that you
-                want the function id for. Defaults to None. If not set / None
-                the currently selected combo item's function id will be
-                returned.
-        Returns:
-            myFunctionID str - String that identifies the function
-        Raises:
-           None
+
+        :param theIndex: Optional index position in the combo that you
+            want the function id for. Defaults to None. If not set / None
+            the currently selected combo item's function id will be
+            returned.
+        :type theIndex: int
+
+        :returns: Id of the currently selected function.
+        :rtype: str
         """
         if theIndex is None:
             myIndex = self.cboFunction.currentIndex()
@@ -2095,14 +1898,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def readImpactLayer(self, myEngineImpactLayer):
         """Helper function to read and validate safe style spatial layer.
 
-        Args
-            myEngineImpactLayer: Layer object as provided by InaSAFE engine.
+        :param myEngineImpactLayer: Layer object as provided by InaSAFE engine.
+        :type myEngineImpactLayer: safe_layer
 
-        Returns
-            validated QGIS layer or None
-
-        Raises
-            Exception if layer is not valid
+        :returns: Valid QGIS layer or None
+        :rtype: None or QgsRasterLayer or QgsVectorLayer
         """
 
         myMessage = self.tr('Input layer must be a InaSAFE spatial object. '
@@ -2131,8 +1931,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'Loaded impact layer "%1" is not valid').arg(myFilename)
             raise Exception(myMessage)
 
-    def saveCurrentScenario(self):
-        """Save current scenario
+    def saveCurrentScenario(self, theScenarioFilePath=None):
+        """Save current scenario to a text file.
+
+        You can use the saved scenario with the batch runner.
+
+        :param theScenarioFilePath: A path to the scenario file.
+        :type theScenarioFilePath: str
+
         """
         LOGGER.info('saveCurrentScenario')
         warningTitle = self.tr('InaSAFE Save Scenario Warning')
@@ -2183,11 +1989,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         mySettings = QSettings()
         lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
         lastSaveDir = str(lastSaveDir.toString())
-        # noinspection PyCallByClass,PyTypeChecker
-        myFileName = str(QFileDialog.getSaveFileName(
-            self, myTitleDialog,
-            os.path.join(lastSaveDir, myTitle + '.txt'),
-            "Text files (*.txt)"))
+        if theScenarioFilePath is None:
+            # noinspection PyCallByClass,PyTypeChecker
+            myFileName = str(QFileDialog.getSaveFileName(
+                self, myTitleDialog,
+                os.path.join(lastSaveDir, myTitle + '.txt'),
+                "Text files (*.txt)"))
+        else:
+            myFileName = theScenarioFilePath
 
         myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
         myRelHazardPath = os.path.relpath(myHazardPath, myFileName)

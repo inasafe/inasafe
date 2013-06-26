@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import logging
+from safe_qgis.utilities import custom_logging
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -39,7 +40,6 @@ try:
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
     from safe_qgis.exceptions import TranslationLoadError
-    import custom_logging
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
@@ -522,7 +522,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.minimum_needs import MinimumNeeds
+        from safe_qgis.tools.minimum_needs import MinimumNeeds
 
         myDialog = MinimumNeeds(self.iface.mainWindow())
         myDialog.show()
@@ -543,7 +543,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.options_dialog import OptionsDialog
+        from safe_qgis.tools.options_dialog import OptionsDialog
 
         myDialog = OptionsDialog(
             self.iface.mainWindow(),
@@ -569,7 +569,7 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.keywords_dialog import KeywordsDialog
+        from safe_qgis.tools.keywords_dialog import KeywordsDialog
 
         if self.iface.activeLayer() is None:
             return
@@ -596,9 +596,9 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.impact_functions_doc import ImpactFunctionsDoc
+        from safe_qgis.tools.function_browser import FunctionBrowser
 
-        myDialog = ImpactFunctionsDoc(self.iface.mainWindow())
+        myDialog = FunctionBrowser(self.iface.mainWindow())
         myDialog.show()
 
     def showConverter(self):
@@ -617,13 +617,13 @@ class Plugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.converter_dialog import ConverterDialog
+        from safe_qgis.tools.shakemap_importer import ShakemapImporter
 
-        myDialog = ConverterDialog(self.iface.mainWindow())
+        myDialog = ShakemapImporter(self.iface.mainWindow())
         myDialog.show()
 
     def showImportDlg(self):
-        from safe_qgis.osm_downloader import OsmDownloader
+        from safe_qgis.tools.osm_downloader import OsmDownloader
 
         dlg = OsmDownloader(self.iface.mainWindow(), self.iface)
         dlg.setModal(True)
@@ -631,9 +631,10 @@ class Plugin:
 
     def showScriptDialog(self):
         """Show Script Dialog"""
-        from safe_qgis.script_dialog import ScriptDialog
+        from safe_qgis.batch.batch_dialog import BatchDialog
 
-        myDialog = ScriptDialog(self.iface.mainWindow(), self.iface)
+        myDialog = BatchDialog(
+            self.iface.mainWindow(), self.iface, self.dockWidget)
         myDialog.setModal(True)
         myDialog.show()
 

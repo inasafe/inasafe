@@ -192,7 +192,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                               'area') % format_int(total),
                            tr('Only buildings available in OpenStreetMap '
                               'are considered.')])
-        
+
         impact_summary = Table(table_body).toNewlineFreeString()
         building_counts = [x[self.target_field] for x in new_attributes]
 

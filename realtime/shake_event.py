@@ -25,15 +25,16 @@ from xml.dom import minidom
 import math
 from subprocess import call, CalledProcessError
 import logging
-import numpy
 from datetime import datetime
-import pytz  # sudo apt-get install python-tz
 
+import numpy
+import pytz  # sudo apt-get install python-tz
 import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
 from sftp_shake_data import SftpShakeData
+
 
 # TODO I think QCoreApplication is needed for tr() check hefore removing
 from PyQt4.QtCore import (QCoreApplication,
@@ -73,15 +74,15 @@ from qgis.core import (
     QgsFields)
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe_qgis.utilities_test import getQgisTestApp
+from safe_qgis.tests.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
-from safe_qgis.utilities import getWGS84resolution
-from safe_qgis.clipper import extentToGeoArray, clipLayer
+from safe_qgis.utilities.utilities import getWGS84resolution
+from safe_qgis.utilities.clipper import extentToGeoArray, clipLayer
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,

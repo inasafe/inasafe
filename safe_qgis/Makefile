@@ -16,42 +16,22 @@
 # *                                                                         *
 # ***************************************************************************/
 
-##################### EDITABLE AREA starts ##################################
-# List of ui files and rc files here that should be compiled to py files.
-#############################################################################
 
-UI_FILES = converter_dialog_base.ui \
-	impact_functions_doc_base.ui \
-	minimum_needs_base.ui \
-	dock_base.ui \
-	osm_downloader_base.ui \
-	options_dialog_base.ui \
-	function_options_dialog_base.ui \
-	keywords_dialog_base.ui	\
-	script_dialog_base.ui
+default: compile
 
-RESOURCE_FILES = resources.qrc
+compile:
+	@echo
+	@echo "------------------------------"
+	@echo "Compile ui and resources forms"
+	@echo "------------------------------"
+	make -C ui
+	make -C resources
 
-###################### EDITABLE AREA ENDS ###################################
-
-COMPILED_UI = $(UI_FILES:%.ui=%.py)
-
-COMPILED_RESOURCES = $(RESOURCE_FILES:%.qrc=%_rc.py)
-
-default : ui resources
 
 clean:
-	rm $(COMPILED_UI)
-	rm $(COMPILED_RESOURCES)
-
-ui: $(COMPILED_UI)
-
-resources: $(COMPILED_RESOURCES)
-
-# Conversion rules
-
-%_rc.py : %.qrc
-	pyrcc4 -o $@ $<
-
-%.py : %.ui
-	pyuic4 -o $@ $<
+	@echo
+	@echo "------------------------------"
+	@echo "Clean ui and resources forms"
+	@echo "------------------------------"
+	make clean -C ui
+	make clean -C resources

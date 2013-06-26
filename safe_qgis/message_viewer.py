@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 from safe import messaging as m
-from safe_qgis.utilities import htmlHeader, htmlFooter
+from safe_qgis.utilities.utilities import htmlHeader, htmlFooter
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -48,16 +48,10 @@ class MessageViewer(QtWebKit.QWebView):
         #self.show()
 
         # Read the header and footer html snippets
-        base_dir = os.path.dirname(__file__)
-        header_path = os.path.join(base_dir, 'resources', 'header.html')
-        footer_path = os.path.join(base_dir, 'resources', 'footer.html')
-        header_file = file(header_path, 'rt')
-        footer_file = file(footer_path, 'rt')
-        header = header_file.read()
-        self.footer = footer_file.read()
-        header_file.close()
-        footer_file.close()
-        self.header = header.replace('PATH', base_dir)
+        self.header = htmlHeader()
+        self.footer = htmlFooter()
+        #base_dir = os.path.dirname(__file__)
+        #self.header = header.replace('PATH', base_dir)
 
     def contextMenuEvent(self, event):
         """Slot automatically called by Qt on right click on the WebView."""
