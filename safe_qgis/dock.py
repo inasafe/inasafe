@@ -384,8 +384,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def gettingStartedMessage(self):
         """Generate a message for initial application state.
 
-        :returns: Message - a message instance with information for the user on
-            how to get started.
+        :returns: Information for the user on how to get started.
+        :rtype: Message
         """
         myMessage = m.Message()
         myMessage.add(LOGO_ELEMENT)
@@ -986,7 +986,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myDetails = self.tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
-        #TODO style theese
+        #TODO style these.
         myText = m.Text(
             self.tr('This analysis will calculate the impact of'),
             m.EmphasizedText(self.getHazardLayer().name()),

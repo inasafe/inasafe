@@ -15,19 +15,16 @@ __author__ = 'tim@linfiniti.com'
 __date__ = '17/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import unittest
-import sys
-import os
+
 import struct
 import logging
 
 from osgeo import gdal
 
 from PyQt4.QtCore import QCoreApplication
-from qgis.core import QGis, QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
+from qgis.core import QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
 
 from safe_qgis.utilities.utilities import (
-    getErrorMessage,
     isRasterLayer,
     isPolygonLayer)
 from safe_qgis.exceptions import InvalidParameterError
@@ -97,7 +94,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     myGeoTransform = myFid.GetGeoTransform()
     myColumns = myFid.RasterXSize
     myRows = myFid.RasterYSize
-    myBandCount = myFid.RasterCount
+    #myBandCount = myFid.RasterCount
     # Get first band.
     myBand = myFid.GetRasterBand(1)
     myNoData = myBand.GetNoDataValue()

@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid - **Dispatcher gui example.**
 
@@ -15,7 +16,6 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 from safe import messaging as m
 from safe_qgis.utilities.utilities import htmlHeader, htmlFooter
 
@@ -27,6 +27,7 @@ STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 class MessageViewer(QtWebKit.QWebView):
     """A simple message queue mockup."""
+    # noinspection PyOldStyleClasses
     def __init__(self, theParent):
         _ = theParent  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
@@ -54,7 +55,10 @@ class MessageViewer(QtWebKit.QWebView):
         #self.header = header.replace('PATH', base_dir)
 
     def contextMenuEvent(self, event):
-        """Slot automatically called by Qt on right click on the WebView."""
+        """Slot automatically called by Qt on right click on the WebView.
+
+        :param event: the event that caused the context menu to be called.
+        """
 
         context_menu = QtGui.QMenu(self)
 
@@ -85,20 +89,43 @@ class MessageViewer(QtWebKit.QWebView):
         context_menu.exec_(event.globalPos())
 
     def static_message_event(self, sender, message):
-        """Static message event handler - set message state based on event."""
+        """Static message event handler - set message state based on event.
+
+        Static message events will clear the message buffer before displaying
+        themselves.
+
+        :param sender: Unused - the object that sent the message.
+        :param message: A message to show in the viewer.
+        :type message: Message
+        """
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
         self.show_messages()
 
     def error_message_event(self, sender, message):
-        """Error message event handler - set message state based on event."""
+        """Error message event handler - set message state based on event.
+
+        Error messages are treated as dynamic messages - they don't clear the
+        message buffer.
+
+        :param sender: Unused - the object that sent the message.
+        :param message: A message to show in the viewer.
+        :type message: Message
+        """
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
         self.show_messages()
 
     def dynamic_message_event(self, sender, message):
-        """Dynamic event handler - set message state based on event."""
+        """Dynamic event handler - set message state based on event.
+
+        Dynamic messages don't clear the message buffer.
+
+        :param sender: Unused - the object that sent the message.
+        :param message: A message to show in the viewer.
+        :type message: Message
+        """
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
         self.show_messages()
@@ -116,20 +143,6 @@ class MessageViewer(QtWebKit.QWebView):
 
         string += self.footer
         self.setHtml(string)
-        #self.repaint()
-        #QtGui.qApp.processEvents()
-
-    def htmlHeader(self):
-        """Get a standard html header for wrapping content in."""
-        if self.header is None:
-            self.header = htmlHeader()
-        return self.header
-
-    def htmlFooter(self):
-        """Get a standard html footer for wrapping content in."""
-        if self.footer is None:
-            self.footer = htmlFooter()
-        return self.footer
 
     def _toMessage(self):
         """Collate all message elements to a single message."""

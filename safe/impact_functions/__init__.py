@@ -7,8 +7,6 @@ import os
 
 def load_plugins():
     """Iterate through each plugin dir loading all plugins."""
-    # TODO: why global? (Tim)
-    global dirname, f
     dirname = os.path.dirname(__file__)
     # Import all the subdirectories
     for f in os.listdir(dirname):
