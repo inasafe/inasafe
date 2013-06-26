@@ -29,7 +29,8 @@ sys.path.append(pardir)
 from safe_interface import get_plugins
 from third_party.odict import OrderedDict
 
-from safe_qgis.impact_statistics.function_options_dialog import FunctionOptionsDialog
+from safe_qgis.impact_statistics.function_options_dialog import (
+    FunctionOptionsDialog)
 from safe_qgis.tests.utilities_test import getQgisTestApp
 # pylint: disable=W0611
 # pylint: enable=W0611

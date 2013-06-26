@@ -250,14 +250,16 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         # See if we have a preferred impact function
         if 'function' in theItem:
             myFunctionId = theItem['function']
-            myResult = scenario_runner.setFunctionId(myFunctionId, theDock=self.dock)
+            myResult = scenario_runner.setFunctionId(
+                myFunctionId, theDock=self.dock)
             if not myResult:
                 return False
 
         if 'aggregation' in theItem:
             absAggregationPath = scenario_runner.extractPath(
                 dummyScenarioFilePath, theItem['aggregation'])[0]
-            myResult = scenario_runner.setAggregationLayer(absAggregationPath, self.dock)
+            myResult = scenario_runner.setAggregationLayer(
+                absAggregationPath, self.dock)
             if not myResult:
                 return False
 
