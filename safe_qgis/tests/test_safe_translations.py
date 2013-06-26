@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 import re
-from safe_interface import safeTr, get_function_title, get_plugins
+from safe_qgis.safe_interface import safeTr, get_function_title, get_plugins
 
 
 class SafeTranslationsTest(unittest.TestCase):

@@ -23,17 +23,17 @@ from PyQt4.QtTest import QTest
 from PyQt4.QtGui import QDialogButtonBox
 from PyQt4.QtCore import Qt
 
-from shakemap_importer import ConverterDialog
-from safe_interface import TESTDATA, unique_filename, temp_dir
+from safe_qgis.tools.shakemap_importer import ShakemapImporter
+from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
 from safe_qgis.tests.utilities_test import getQgisTestApp
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class ConverterDialogTest(unittest.TestCase):
+class ShakemapImporterTest(unittest.TestCase):
     def test_initDialog(self):
         """Test for showing table in the first."""
-        myDialog = ConverterDialog(PARENT)
+        myDialog = ShakemapImporter(PARENT)
         assert myDialog is not None, 'Dialog is failed to created'
         # testing populate algorithm
         expected_algorithms = ['Nearest', 'Invdist']
@@ -48,7 +48,7 @@ class ConverterDialogTest(unittest.TestCase):
     def test_behaviour(self):
         """Test behaviour of elements in the dialog
         """
-        myDialog = ConverterDialog(PARENT)
+        myDialog = ShakemapImporter(PARENT)
         myDialog.cBDefaultOutputLocation.setEnabled(True)
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
         myDialog.leInputPath.setText(my_grid_path)
@@ -62,7 +62,7 @@ class ConverterDialogTest(unittest.TestCase):
     def Xtest_Converting(self):
         """Test converting a file
         """
-        myDialog = ConverterDialog(PARENT)
+        myDialog = ShakemapImporter(PARENT)
         myDialog.test_mode = True
         myDialog.cBDefaultOutputLocation.setEnabled(False)
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
@@ -78,6 +78,6 @@ class ConverterDialogTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(ConverterDialogTest, 'test')
+    suite = unittest.makeSuite(ShakemapImporterTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

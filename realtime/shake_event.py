@@ -81,7 +81,7 @@ from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
-from safe_qgis.utilities import getWGS84resolution
+from safe_qgis.utilities.utilities import getWGS84resolution
 from safe_qgis.utilities.clipper import extentToGeoArray, clipLayer
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,

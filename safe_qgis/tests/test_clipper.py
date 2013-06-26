@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from unittest import expectedFailure
+
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '20/01/2011'
@@ -20,9 +20,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+from unittest import expectedFailure
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
 sys.path.append(pardir)
 
 import numpy
@@ -38,18 +39,20 @@ from safe_qgis.safe_interface import (readSafeLayer,
                                       GetDataError,
                                       nanallclose)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
-from safe_qgis.utilities.clipper import (clipLayer,
-                               extentToKml,
-                               explodeMultiPartGeometry,
-                               clipGeometry)
-from safe_qgis.utilities import qgisVersion
+from safe_qgis.utilities.clipper import (
+    clipLayer,
+    extentToKml,
+    explodeMultiPartGeometry,
+    clipGeometry)
+from safe_qgis.utilities.utilities import qgisVersion
 
-from safe_qgis.tests.utilities_test import (getQgisTestApp,
-                                      setCanvasCrs,
-                                      RedirectStdStreams,
-                                      DEVNULL,
-                                      GEOCRS,
-                                      setJakartaGeoExtent)
+from safe_qgis.tests.utilities_test import (
+    getQgisTestApp,
+    setCanvasCrs,
+    RedirectStdStreams,
+    DEVNULL,
+    GEOCRS,
+    setJakartaGeoExtent)
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')

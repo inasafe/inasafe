@@ -10,7 +10,7 @@ from PyQt4.QtCore import QVariant
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(pardir)
 
-from safe_qgis.utilities import (
+from safe_qgis.utilities.utilities import (
     getErrorMessage,
     qgisVersion,
     mmToPoints,
@@ -20,12 +20,13 @@ from safe_qgis.utilities import (
     getLayerAttributeNames,
     impactLayerAttribution,
     dpiToMeters,
-    which)
+    which,
+    getDefaults)
 from safe_qgis.tests.utilities_test import getQgisTestApp
-from safe_qgis.tests.test_keywords_dialog import (makePolygonLayer,
-                                            makePadangLayer,
-                                            makePointLayer)
-from safe_qgis.utilities import getDefaults
+from safe_qgis.tests.test_keywords_dialog import (
+    makePolygonLayer,
+    makePadangLayer,
+    makePointLayer)
 from safe_qgis.safe_interface import bbox_intersection
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
