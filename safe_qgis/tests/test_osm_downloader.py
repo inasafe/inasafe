@@ -157,8 +157,9 @@ class ImportDialogTest(unittest.TestCase):
         os.remove(myTempFilePath)
 
     def test_extractZip(self):
-        myInput = os.path.join(TEST_DATA_DIR,
-                               '../test_data/test_files/test-importdlg-extractzip.zip')
+        myInput = os.path.join(
+            TEST_DATA_DIR,
+            '../test_data/test_files/test-importdlg-extractzip.zip')
         myOutDir = tempfile.mkdtemp()
 
         self.importDlg.extractZip(myInput, myOutDir)
@@ -196,8 +197,9 @@ class ImportDialogTest(unittest.TestCase):
     def test_loadShapeFile(self):
         """ test loading shape file to QGIS Main Window """
 
-        myInput = os.path.join(TEST_DATA_DIR,
-                               '../test_data/test_files/test-importdlg-extractzip.zip')
+        myInput = os.path.join(
+            TEST_DATA_DIR,
+            '../test_data/test_files/test-importdlg-extractzip.zip')
         myOutDir = tempfile.mkdtemp()
 
         self.importDlg.extractZip(myInput, myOutDir)

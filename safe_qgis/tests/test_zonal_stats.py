@@ -26,7 +26,8 @@ from qgis.core import QgsRectangle
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.append(pardir)
 
-from safe_qgis.impact_statistics.zonal_stats import calculateZonalStats, cellInfoForBBox
+from safe_qgis.impact_statistics.zonal_stats import (
+    calculateZonalStats, cellInfoForBBox)
 from safe_qgis.tests.utilities_test import (
     loadLayer,
     getQgisTestApp)
