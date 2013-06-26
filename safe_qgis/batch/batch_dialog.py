@@ -331,6 +331,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QtGui.QMessageBox.question(self, 'Error',
                                        'Failed to write report file.')
+            self.disableBusyCursor()
         self.disableBusyCursor()
 
     def writeBatchReport(self, myReport, myPassCount, myFailCount):
