@@ -150,7 +150,7 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        self.setUrl(QtCore.QUrl(''))
+        # self.setUrl(QtCore.QUrl(''))
         string = htmlHeader()
         if self.static_message is not None:
             string += self.static_message.to_html()
