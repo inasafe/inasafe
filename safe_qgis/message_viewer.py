@@ -49,9 +49,6 @@ class MessageViewer(QtWebKit.QWebView):
         self.dynamic_messages = []
         #self.show()
 
-        # Read the header and footer html snippets
-        self.header = htmlHeader()
-        self.footer = htmlFooter()
         #base_dir = os.path.dirname(__file__)
         #self.header = header.replace('PATH', base_dir)
 
@@ -134,7 +131,7 @@ class MessageViewer(QtWebKit.QWebView):
     def show_messages(self):
         """Show all messages."""
         self.setUrl(QtCore.QUrl(''))
-        string = self.header
+        string = htmlHeader()
         if self.static_message is not None:
             string += self.static_message.to_html()
 
@@ -149,8 +146,7 @@ class MessageViewer(QtWebKit.QWebView):
             if html is not None:
                 string += html
 
-        string += self.footer
-        self.setHtml(string)
+        string += htmlFooter()
 
         # scroll-to logic would work something like this
         # see resources/js/inasafe.js and also
