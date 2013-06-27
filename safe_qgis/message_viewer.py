@@ -147,6 +147,7 @@ class MessageViewer(QtWebKit.QWebView):
                 string += html
 
         string += htmlFooter()
+        self.setHtml(string)
 
         # scroll-to logic would work something like this
         # see resources/js/inasafe.js and also
