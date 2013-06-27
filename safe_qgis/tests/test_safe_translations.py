@@ -90,7 +90,7 @@ class SafeTranslationsTest(unittest.TestCase):
         myParentPath = os.path.join(__file__, os.path.pardir, os.path.pardir)
         myDirPath = os.path.abspath(myParentPath)
         myFilePath = os.path.join(myDirPath,
-                                  '../../safe',
+                                  '../safe',
                                   'common',
                                   'dynamic_translations.py')
         myFile = file(myFilePath, 'rt')
