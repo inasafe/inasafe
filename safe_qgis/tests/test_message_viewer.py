@@ -24,7 +24,6 @@ from third_party.pydispatch import dispatcher
 from safe_qgis.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
-    ErrorMessage,
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
