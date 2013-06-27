@@ -18,6 +18,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
+import os
 from utilities import (
     get_significant_decimal,
     humanize_class,
@@ -153,6 +154,7 @@ class UtilitiesTest(unittest.TestCase):
     def test_format_decimal(self):
         """Test Format Decimal
         """
+        os.environ['LANG'] = 'en'
         interval = 0.9912
         my_number = 10
         my_result = format_decimal(interval, my_number)
@@ -167,6 +169,12 @@ class UtilitiesTest(unittest.TestCase):
         my_result = format_decimal(interval, my_number)
         print my_result
         assert my_result == 'nan', \
+            'Format decimal is not valid %s' % my_result
+
+        my_number = float('10000.09')
+        my_result = format_decimal(interval, my_number)
+        print my_result
+        assert my_result == '10,000.09', \
             'Format decimal is not valid %s' % my_result
 
     def test_create_classes(self):

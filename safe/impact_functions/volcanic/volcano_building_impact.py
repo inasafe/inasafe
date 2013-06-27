@@ -7,7 +7,8 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    get_decimal_separator)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -132,6 +133,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         if not category_title in my_hazard.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (my_hazard.get_name(), category_title))
+            # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
         # Run interpolation function for polygon2raster
@@ -232,7 +234,8 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # For printing map purpose
         map_title = tr('Buildings affected by volcanic hazard zone')
-        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_notes = tr('Thousand separator is represented by %s' %
+                          get_decimal_separator())
         legend_units = tr('(building)')
         legend_title = tr('Building count')
 
