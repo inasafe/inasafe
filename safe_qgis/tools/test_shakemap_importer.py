@@ -35,15 +35,15 @@ class ShakemapImporterTest(unittest.TestCase):
         """Test for showing table in the first."""
         myDialog = ShakemapImporter(PARENT)
         assert myDialog is not None, 'Dialog is failed to created'
-        # testing populate algorithm
-        expected_algorithms = ['Nearest', 'Invdist']
-        assert myDialog.cboAlgorithm.count() == len(expected_algorithms), \
-            'Number of algorithm is not same'
-        for i in list(xrange(len(expected_algorithms))):
-            assert expected_algorithms[i] == str(
-                myDialog.cboAlgorithm.itemText(i)), \
-                ('Algorithm is not same, expect %s got %s') % \
-                (expected_algorithms[i], myDialog.cboAlgorithm.itemText(i))
+        # testing populate algorithm, removed since changed to radio button
+        # expected_algorithms = ['Nearest', 'Invdist']
+        # assert myDialog.cboAlgorithm.count() == len(expected_algorithms), \
+        #     'Number of algorithm is not same'
+        # for i in list(xrange(len(expected_algorithms))):
+        #     assert expected_algorithms[i] == str(
+        #         myDialog.cboAlgorithm.itemText(i)), \
+        #         ('Algorithm is not same, expect %s got %s') % \
+        #         (expected_algorithms[i], myDialog.cboAlgorithm.itemText(i))
 
     def test_behaviour(self):
         """Test behaviour of elements in the dialog
