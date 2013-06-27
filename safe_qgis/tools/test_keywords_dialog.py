@@ -22,7 +22,7 @@ import os
 import shutil
 from nose import SkipTest
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
 sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
@@ -33,7 +33,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     getQgisTestApp, unitTestDataPath)
 from safe_qgis.safe_interface import (
     readKeywordsFromFile,

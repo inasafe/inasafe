@@ -27,13 +27,13 @@ from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
 from safe_qgis.tools.osm_downloader import OsmDownloader
 from safe_qgis.utilities.utilities import downloadWebUrl
-from safe_qgis.tests.utilities_test import getQgisTestApp, assertHashForFile
+from safe_qgis.utilities.utilities_test import getQgisTestApp, assertHashForFile
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__),
-                             'test_data/test_files')
+                             '../tests/test_data/test_files')
 
 
 class FakeQNetworkReply(QObject):

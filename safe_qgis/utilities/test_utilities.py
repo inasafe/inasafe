@@ -7,7 +7,7 @@ from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
 sys.path.append(pardir)
 
 from safe_qgis.utilities.utilities import (
@@ -22,8 +22,8 @@ from safe_qgis.utilities.utilities import (
     dpiToMeters,
     which,
     getDefaults)
-from safe_qgis.tests.utilities_test import getQgisTestApp
-from safe_qgis.tests.test_keywords_dialog import (
+from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.tools.test_keywords_dialog import (
     makePolygonLayer,
     makePadangLayer,
     makePointLayer)

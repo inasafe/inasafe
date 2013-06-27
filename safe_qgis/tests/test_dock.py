@@ -41,7 +41,7 @@ from qgis.core import (
 from safe_qgis.safe_interface import (
     format_int, HAZDATA, TESTDATA, UNITDATA)
 
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     getQgisTestApp,
     setCanvasCrs,
     setPadangGeoExtent,

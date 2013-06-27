@@ -22,7 +22,7 @@ from qgis.core import (
     QgsProviderRegistry,
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
-from safe_qgis.tests.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_test import getQgisTestApp
 from safe_qgis.safe_interface import EXPDATA
 
 QGISAPP = getQgisTestApp()

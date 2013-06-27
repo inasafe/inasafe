@@ -26,9 +26,10 @@ from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
                        QgsMapLayerRegistry)
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.tests.utilities_test import (getQgisTestApp,
-                                      checkImages,
-                                      loadLayer)
+from safe_qgis.utilities.utilities_test import (
+    getQgisTestApp,
+    checkImages,
+    loadLayer)
 from safe_qgis.report.map import MapLegend
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -50,9 +51,10 @@ class MapLegendTest(unittest.TestCase):
         myMapLegend = MapLegend(myLayer)
         assert myMapLegend.layer is not None
         myLegend = myMapLegend.getLegend()
-        myPath = unique_filename(prefix='getLegend',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
+        myPath = unique_filename(
+            prefix='getLegend',
+            suffix='.png',
+            dir=temp_dir('test'))
         myLegend.save(myPath, 'PNG')
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
@@ -61,9 +63,10 @@ class MapLegendTest(unittest.TestCase):
 
         myTolerance = 0  # to allow for version number changes in disclaimer
 
-        myFlag, myMessage = checkImages('getLegend.png',
-                                        myPath,
-                                        myTolerance)
+        myFlag, myMessage = checkImages(
+            'getLegend',
+            myPath,
+            myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -78,9 +81,10 @@ class MapLegendTest(unittest.TestCase):
             theLegendNotes='Thousand separator represented by \'.\'',
             theLegendUnits='(people per cell)')
         myImage = myMapLegend.getVectorLegend()
-        myPath = unique_filename(prefix='getVectorLegend',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
+        myPath = unique_filename(
+            prefix='getVectorLegend',
+            suffix='.png',
+            dir=temp_dir('test'))
         myImage.save(myPath, 'PNG')
         print myMapLegend.legendUnits
         print myMapLegend.legendNotes
@@ -92,7 +96,9 @@ class MapLegendTest(unittest.TestCase):
 
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(
-            'getVectorLegend.png', myPath, myTolerance)
+            'getVectorLegend',
+            myPath,
+            myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -103,9 +109,10 @@ class MapLegendTest(unittest.TestCase):
         myLayer, _ = loadLayer('test_floodimpact.tif')
         myMapLegend = MapLegend(myLayer)
         myImage = myMapLegend.getRasterLegend()
-        myPath = unique_filename(prefix='getRasterLegend',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
+        myPath = unique_filename(
+            prefix='getRasterLegend',
+            suffix='.png',
+            dir=temp_dir('test'))
         myImage.save(myPath, 'PNG')
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
@@ -113,12 +120,13 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('getRasterLegend',
-                                        myPath,
-                                        myTolerance)
-        myMessage += ('\nWe want these images to match, if they do already '
-                      'copy the test image generated to create a new control '
-                      'image.')
+        myFlag, myMessage = checkImages(
+            'getRasterLegend',
+            myPath,
+            myTolerance)
+        myMessage += (
+            '\nWe want these images to match, if they do already copy the test '
+            'image generated to create a new control image.')
         assert myFlag, myMessage
 
     def test_addSymbolToLegend(self):
@@ -127,15 +135,16 @@ class MapLegendTest(unittest.TestCase):
         myMapLegend = MapLegend(myLayer)
         mySymbol = QgsSymbol()
         mySymbol.setColor(QtGui.QColor(12, 34, 56))
-        myMapLegend.addSymbolToLegend(mySymbol,
-                                      theMin=0,
-                                      # expect 2.0303 in legend
-                                      theMax=2.02030,
-                                      theCategory=None,
-                                      theLabel='Foo')
-        myPath = unique_filename(prefix='addSymbolToLegend',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
+        myMapLegend.addSymbolToLegend(
+            mySymbol,
+            theMin=0,
+            # expect 2.0303 in legend
+            theMax=2.02030,
+            theLabel='Foo')
+        myPath = unique_filename(
+            prefix='addSymbolToLegend',
+            suffix='.png',
+            dir=temp_dir('test'))
         myMapLegend.getLegend().save(myPath, 'PNG')
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
@@ -143,9 +152,10 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('addSymbolToLegend.png',
-                                        myPath,
-                                        myTolerance)
+        myFlag, myMessage = checkImages(
+            'addSymbolToLegend',
+            myPath,
+            myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -156,19 +166,16 @@ class MapLegendTest(unittest.TestCase):
         myLayer, _ = loadLayer('test_shakeimpact.shp')
         myMapLegend = MapLegend(myLayer)
         myColour = QtGui.QColor(12, 34, 126)
-        myMapLegend.addClassToLegend(myColour,
-                                     theMin=None,
-                                     theMax=None,
-                                     theCategory=None,
-                                     theLabel='bar')
-        myMapLegend.addClassToLegend(myColour,
-                                     theMin=None,
-                                     theMax=None,
-                                     theCategory=None,
-                                     theLabel='foo')
-        myPath = unique_filename(prefix='addClassToLegend',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
+        myMapLegend.addClassToLegend(
+            myColour,
+            theLabel='bar')
+        myMapLegend.addClassToLegend(
+            myColour,
+            theLabel='foo')
+        myPath = unique_filename(
+            prefix='addClassToLegend',
+            suffix='.png',
+            dir=temp_dir('test'))
         myMapLegend.getLegend().save(myPath, 'PNG')
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
@@ -176,15 +183,16 @@ class MapLegendTest(unittest.TestCase):
         # variants in the safe_qgis/test_data/test_images/ dir e.g.
         # addClassToLegend-variantUbuntu13.04.png
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('addClassToLegend.png',
-                                        myPath,
-                                        myTolerance)
-        myMessage += ('\nWe want these images to match, if they do already '
-                      'copy the test image generated to create a new control '
-                      'image.')
+        myFlag, myMessage = checkImages(
+            'addClassToLegend',
+            myPath,
+            myTolerance)
+        myMessage += (
+            '\nWe want these images to match, if they do already copy the test '
+            'image generated to create a new control image.')
         assert myFlag, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(MapLegendTest, 'test')
+    suite = unittest.makeSuite(MapLegendTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

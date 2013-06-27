@@ -12,10 +12,10 @@ sys.path.append(pardir)
 from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
 # For testing and demoing
-from safe_qgis.tests.utilities_test import (getQgisTestApp, loadLayer)
+from safe_qgis.utilities.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
-from safe_qgis.tests.test_keywords_dialog import makePadangLayerClone
+from safe_qgis.tools.test_keywords_dialog import makePadangLayerClone
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

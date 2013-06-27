@@ -38,10 +38,10 @@ YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
-                              'test_data/test_files')
+                              '../tests/test_data/test_files')
 
 SCENARIO_DIR = os.path.join(os.path.dirname(__file__),
-                            'test_data/test_scenario')
+                            '../tests/test_data/test_scenario')
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -55,7 +55,7 @@ GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 CONTROL_IMAGE_DIR = os.path.join(
     os.path.dirname(__file__),
-    'test_data/test_images')
+    '../tests/test_data/test_images')
 
 
 def assertHashesForFile(theHashes, theFilename):
