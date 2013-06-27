@@ -166,8 +166,6 @@ class DockTest(unittest.TestCase):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
-
-        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 
@@ -516,7 +514,6 @@ class DockTest(unittest.TestCase):
         setGeoExtent([101, -12, 119, -4])
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
         DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
@@ -728,8 +725,6 @@ class DockTest(unittest.TestCase):
         setJakartaGoogleExtent()
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
@@ -924,7 +919,6 @@ class DockTest(unittest.TestCase):
         setCanvasCrs(GEOCRS, True)
         setSmallExtentJakarta()
         # Press RUN
-        myButton = DOCK.pbnRunStop
         DOCK.accept()
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
@@ -1081,7 +1075,6 @@ class DockTest(unittest.TestCase):
 
     def Xtest_runnerExceptions(self):
         """Test runner exceptions"""
-        myRunButton = DOCK.pbnRunStop
 
         myResult, myMessage = setupScenario(
             DOCK,
@@ -1112,8 +1105,6 @@ Click for Diagnostic Information:
 
     def Xtest_runnerIsNone(self):
         """Test for none runner exceptions"""
-        myRunButton = DOCK.pbnRunStop
-
         myResult, myMessage = setupScenario(
             DOCK,
             theHazard='A flood in Jakarta like in 2007',
@@ -1280,6 +1271,6 @@ Click for Diagnostic Information:
                            '-6.0700000000000003', 'Extent is not same'
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(DockTest, 'test')
+    suite = unittest.makeSuite(DockTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
