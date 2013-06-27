@@ -76,16 +76,35 @@ class MessageViewerTest(unittest.TestCase):
         text = self.message_viewer.pageToText()
         self.assertEqual(text, 'Hi\n')
 
-    def test_error_message(self):
-        """Test we can send error messages to the message viewer."""
+    def fake_error(self):
+        """Make a fake error (helper for other tests)
+        :returns: Contents of the message viewer as string and with newlines
+            stripped off.
+        :rtype : str
+        """
         e = Exception()
         context = 'Something went wrong'
         message = getErrorMessage(e, theContext=context)
         self.message_viewer.error_message_event(None, message)
         text = self.message_viewer.pageToText().replace('\n', '')
+        return text
+
+    def test_error_message(self):
+        """Test we can send error messages to the message viewer."""
+        text = self.fake_error()
         myExpectedResult = open(
             TEST_FILES_DIR +
             '/test-error-message.txt',
+            'r').read().replace('\n', '')
+        self.assertEqual(text, myExpectedResult)
+
+    def test_static_and_error(self):
+        """Test error message works when there is a static message in place."""
+        self.message_viewer.static_message_event(None, m.Message('Hi'))
+        text = self.fake_error()
+        myExpectedResult = open(
+            TEST_FILES_DIR +
+            '/test-static-error-message.txt',
             'r').read().replace('\n', '')
         self.assertEqual(text, myExpectedResult)
 
