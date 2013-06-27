@@ -138,7 +138,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Ensure that all impact functions are loaded
         load_plugins()
-
+        self.pbnShowQuestion.setVisible(False)
         # Set up dispatcher for dynamic messages
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages
@@ -1114,6 +1114,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             #first run, self.lastUsedFunction does not exist yet
             pass
 
+    def showBusy(self):
+        """Hide the question group box and enable the busy cursor."""
+        self.grpQuestion.setEnabled(False)
+        self.grpQuestion.setVisible(False)
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        self.repaint()
+        QtGui.qApp.processEvents()
+
     def run(self):
         """Execute analysis when ok button on dock is clicked."""
 
@@ -1171,9 +1179,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtCore.QObject.connect(
             self.runner, QtCore.SIGNAL('done()'), self.aggregate)
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-        self.repaint()
-        QtGui.qApp.processEvents()
+
+        self.showBusy()
 
         myTitle = self.tr('Calculating impact')
         myDetail = self.tr(
@@ -1342,10 +1349,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            QtCore.QObject.disconnect(self.runner,
-                                      QtCore.SIGNAL('done()'),
-                                      self.aggregate)
+            QtCore.QObject.disconnect(
+                self.runner,
+                QtCore.SIGNAL('done()'),
+                self.aggregate)
+        self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
+        self.grpQuestion.setVisible(False)
         self.pbnRunStop.setEnabled(True)
         self.repaint()
         self.disableBusyCursor()
@@ -1659,6 +1669,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Show the keywords for an impact layer.
 
         .. note:: The print button will be enabled if this method is called.
+            Also, the question group box will be hidden and the 'show
+            question' button will be shown.
 
         :param myKeywords: A keywords dictionary.
         :type myKeywords: dict
@@ -1677,6 +1689,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport.add(impactLayerAttribution(myKeywords))
         self.pbnPrint.setEnabled(True)
         self.showStaticMessage(myReport)
+        # also hide the question and show the show question button
+        self.pbnShowQuestion.setVisible(True)
+        self.grpQuestion.setEnabled(True)
+        self.grpQuestion.setVisible(False)
 
     def showGenericKeywords(self, myKeywords):
         """Show the keywords defined for the active layer.
