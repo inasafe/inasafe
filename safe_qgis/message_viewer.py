@@ -139,7 +139,6 @@ class MessageViewer(QtWebKit.QWebView):
     def scrollToDiv(self):
         """Scroll to the last added div.
 
-        Scroll-to logic would work something like this
         see resources/js/inasafe.js and also
         http://stackoverflow.com/a/4801719
         """
@@ -150,7 +149,6 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        # self.setUrl(QtCore.QUrl(''))
         string = htmlHeader()
         if self.static_message is not None:
             string += self.static_message.to_html()
@@ -173,7 +171,8 @@ class MessageViewer(QtWebKit.QWebView):
     def _toMessage(self):
         """Collate all message elements to a single message."""
         myMessage = m.Message()
-        myMessage.add(self.static_message)
+        if self.static_message is not None:
+            myMessage.add(self.static_message)
         for myDynamic in self.dynamic_messages:
             myMessage.add(myDynamic)
         return myMessage

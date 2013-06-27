@@ -64,7 +64,7 @@ from safe_qgis.tests.utilities_test import (
 
 from safe_qgis.dock import Dock
 from safe_qgis.utilities.styling import setRasterStyle
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgisVersion, readImpactLayer
 
 
 # Retired impact function for characterisation (Ole)
@@ -708,7 +708,7 @@ class DockTest(unittest.TestCase):
         myRunner = DOCK.calculator.getRunner()
         myRunner.run()  # Run in same thread
         myEngineImpactLayer = myRunner.impactLayer()
-        myQgisImpactLayer = DOCK.readImpactLayer(myEngineImpactLayer)
+        myQgisImpactLayer = readImpactLayer(myEngineImpactLayer)
         myStyle = myEngineImpactLayer.get_style_info()
         #print myStyle
         setRasterStyle(myQgisImpactLayer, myStyle)
