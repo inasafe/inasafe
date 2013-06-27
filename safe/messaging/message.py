@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Message Modele.**
 
@@ -64,14 +65,9 @@ class Message(MessageElement):
         Strings can be passed and are automatically converted in to
         item.Text()
 
-        Args:
-            MessageElement message, an element to add to the message queue
+        :param message: An element to add to the message queue.
+        :type message: Message, MessageElement, str
 
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
         """
         if isinstance(message, basestring) or self._is_qstring(message):
             self.message.append(Text(message))
@@ -97,16 +93,10 @@ class Message(MessageElement):
         self.message = []
 
     def to_text(self):
-        """Render a MessageElement queue as plain text
+        """Render a MessageElement queue as plain text.
 
-        Args:
-            None
-
-        Returns:
-            Str the text representation of the message queue
-
-        Raises:
-            Errors are propagated
+        :returns: Plain text representation of the message.
+        :rtype: str
         """
         message = ''
         last_was_text = False
@@ -124,17 +114,21 @@ class Message(MessageElement):
         return message
 
     def to_html(
-            self, noNewline=False, in_div_flag=False):  # pylint: disable=W0221
-        """Render a MessageElement queue as html
+            self,
+            suppress_newlines=False,
+            in_div_flag=False):  # pylint: disable=W0221
+        """Render a MessageElement as html.
 
-        Args:
-            None
+        :param suppress_newlines: Whether to suppress any newlines in the
+            output. If this option is enabled, the entire html output will be
+            rendered on a single line.
+        :type suppress_newlines: Boolean
+        :param in_div_flag: Whether the message should be placed into a div
+            element.
+        :type in_div_flag: Boolean
 
-        Returns:
-            str the html representation of the message queue
-
-        Raises:
-            Errors are propagated
+        :returns: HTML representation of the message.
+        :rtype: str
         """
 
         if in_div_flag:
@@ -158,6 +152,6 @@ class Message(MessageElement):
         if in_div_flag:
             message += '</div>'
 
-        if noNewline:
+        if suppress_newlines:
             return message.replace('\n', '')
         return message

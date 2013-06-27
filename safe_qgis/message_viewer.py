@@ -33,6 +33,9 @@ class MessageViewer(QtWebKit.QWebView):
         _ = theParent  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
+        # We use this var to keep track of the last allocated div id
+        # in cases where we are assigning divs ids so we can scroll to them
+        self.last_id = 0
 
         # whether to show or not dev only options
         self.devMode = QtCore.QSettings().value(
@@ -107,13 +110,11 @@ class MessageViewer(QtWebKit.QWebView):
         Error messages are treated as dynamic messages - they don't clear the
         message buffer.
 
-        :param sender: Unused - the object that sent the message.
+        :param sender: The object that sent the message.
         :param message: A message to show in the viewer.
         :type message: Message
         """
-        _ = sender  # we arent using it
-        self.dynamic_messages.append(message)
-        self.show_messages()
+        self.dynamic_message_event(sender, message)
 
     def dynamic_message_event(self, sender, message):
         """Dynamic event handler - set message state based on event.
@@ -126,7 +127,26 @@ class MessageViewer(QtWebKit.QWebView):
         """
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
-        self.show_messages()
+        self.last_id += 1
+        message.element_id = str(self.last_id)
+        # TODO probably we should do some escaping of quotes etc in message
+        html = message.to_html(in_div_flag=True)
+        html = html.replace('\'', '\\\'')
+        js = 'document.body.innerHTML += %s' % html
+        self.page().mainFrame().evaluateJavaScript(js)
+        self.scrollToDiv()
+
+    def scrollToDiv(self):
+        """Scroll to the last added div.
+
+        Scroll-to logic would work something like this
+        see resources/js/inasafe.js and also
+        http://stackoverflow.com/a/4801719
+        """
+        if self.last_id > 0:
+            js = '$(\'#%s\').goTo();' % str(self.last_id)
+            #LOGGER.debug(js)
+            self.page().mainFrame().evaluateJavaScript(js)
 
     def show_messages(self):
         """Show all messages."""
@@ -136,11 +156,11 @@ class MessageViewer(QtWebKit.QWebView):
             string += self.static_message.to_html()
 
         # Keep track of the last ID we had so we can scroll to it
-        last_id = 0
+        self.last_id = 0
         for message in self.dynamic_messages:
             if message.element_id is None:
-                last_id += 1
-                message.element_id = str(last_id)
+                self.last_id += 1
+                message.element_id = str(self.last_id)
 
             html = message.to_html(in_div_flag=True)
             if html is not None:
@@ -148,14 +168,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         string += htmlFooter()
         self.setHtml(string)
-
-        # scroll-to logic would work something like this
-        # see resources/js/inasafe.js and also
-        # http://stackoverflow.com/a/4801719
-        if last_id > 0:
-            js = '$(\'#%s\').goTo();' % str(last_id)
-            #LOGGER.debug(js)
-            self.page().mainFrame().evaluateJavaScript(js)
+        self.scrollToDiv()
 
     def _toMessage(self):
         """Collate all message elements to a single message."""

@@ -46,20 +46,31 @@ LOGGER = logging.getLogger('InaSAFE')
 class ErrorMessage(MessageElement):
     """Standard error message"""
 
-    def __init__(self, problem, detail=None, suggestion=None, traceback=None):
+    def __init__(
+            self,
+            problem,
+            detail=None,
+            suggestion=None,
+            traceback=None,
+            **kwargs):
         """
-        Args:
-            problem str or MessageElement describing a problem
-            details str or MessageElement with detail of a problem
-            suggestion str or MessageElement with a solution to the problem
-            traceback TraceBack of the problem
 
-        Returns:
-            None
+        :param problem: Description of the problem.
+        :type problem: str or MessageElement
+        :param detail: Detail of the problem.
+        :type detail: str or MessageElement
+        :param suggestion: Suggested solution to the problem.
+        :type suggestion: str or MessageElement
+        :param traceback: A traceback from where the problem occurred.
+        :type traceback: str or MessageElement
 
-        Raises:
-            Errors are propagated
+        We pass the kwargs on to the base class so an exception is raised
+        if invalid keywords were passed. See:
+
+        http://stackoverflow.com/questions/13124961/
+        how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        super(ErrorMessage, self).__init__(**kwargs)
         self.problems = []
         self.details = []
         self.suggestions = []
@@ -99,6 +110,35 @@ class ErrorMessage(MessageElement):
         else:
             raise InvalidMessageItemError(element, element.__class__)
 
+    def standard_suggestions(self):
+        """Standard generic suggestions.
+
+        :return: List of standard suggestions for users who encounter errors.
+        :rtype: BulletedList
+        """
+        suggestions = BulletedList()
+        suggestions.add(
+            'Check that you have the latest version of InaSAFE installed '
+            '- you may have encountered a bug that is fixed in a '
+            'subsequent release.')
+        suggestions.add(
+            'Check the InaSAFE documentation to see if you are trying to '
+            'do something unsupported.')
+        suggestions.add(
+            'Report the problem using the issue tracker at '
+            'https://github.com/AIFDR/inasafe/issues. Reporting an issue '
+            'requires that you first create a free account at '
+            'http://github.com. When you report the issue, '
+            'please copy and paste the complete contents of this panel '
+            'into the issue to ensure the best possible chance of getting '
+            'your issue resolved.')
+        suggestions.add(
+            'Try contacting one of the InaSAFE development team by '
+            'sending an email to info@inasafe.org. Please ensure that you '
+            'copy and paste the complete contents of this panel into the '
+            'email.')
+        return suggestions
+
     def _render(self):
         """Create a Message version of this ErrorMessage
 
@@ -137,28 +177,7 @@ class ErrorMessage(MessageElement):
         message.add(Paragraph(tr(
             'You can try the following to resolve the issue:')))
         if len(self.suggestions) < 1:
-            # Standard generic suggestions:
-            suggestions = BulletedList()
-            suggestions.add(
-                'Check that you have the latest version of InaSAFE installed '
-                '- you may have encountered a bug that is fixed in a '
-                'subsequent release.')
-            suggestions.add(
-                'Check the InaSAFE documentation to see if you are trying to '
-                'do something unsupported.')
-            suggestions.add(
-                'Report the problem using the issue tracker at '
-                'https://github.com/AIFDR/inasafe/issues. Reporting an issue '
-                'requires that you first create a free account at '
-                'http://github.com. When you report the issue, '
-                'please copy and paste the complete contents of this panel '
-                'into the issue to ensure the best possible chance of getting '
-                'your issue resolved.')
-            suggestions.add(
-                'Try contacting one of the InaSAFE development team by '
-                'sending an email to info@inasafe.org. Please ensure that you '
-                'copy and paste the complete contents of this panel into the '
-                'email.')
+            suggestions = self.standard_suggestions()
             message.add(suggestions)
         else:
             items = BulletedList()
@@ -172,19 +191,13 @@ class ErrorMessage(MessageElement):
         return message
 
     def append(self, error_message):
-        """add a ErrorMessage to the end of the queue.
+        """Add an ErrorMessage to the end of the queue.
 
         Tracebacks are not appended.
 
+        :param error_message: An element to add to the message.
+        :type error_message: ErrorMessage
 
-        Args:
-            ErrorMessage message, an element to add to the message queue
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
         """
         self.problems = self.problems + error_message.problems
         self.details = self.details + error_message.details
@@ -192,17 +205,12 @@ class ErrorMessage(MessageElement):
         self.tracebacks.items.extend(error_message.tracebacks.items)
 
     def prepend(self, error_message):
-        """add a ErrorMessage to the beginning of the queue
+        """Add an ErrorMessage to the beginning of the queue.
 
+        Tracebacks are not prepended.
 
-        Args:
-            ErrorMessage message, an element to add to the message queue
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        :param error_message: An element to add to the message.
+        :type error_message: ErrorMessage
         """
         self.problems = error_message.problems + self.problems
         self.details = error_message.details + self.details
@@ -213,16 +221,7 @@ class ErrorMessage(MessageElement):
         self.tracebacks = new_tracebacks
 
     def clear(self):
-        """clear ErrorMessage queue
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        """Clear ErrorMessage.
         """
         self.problems = []
         self.details = []
@@ -230,31 +229,24 @@ class ErrorMessage(MessageElement):
         self.tracebacks = []
 
     def to_text(self):
-        """Render a ErrorMessage queue as plain text
+        """Render an ErrorMessage as plain text.
 
-        Args:
-            None
+        :returns: Plain text representation of the error message.
+        :rtype: str
 
-        Returns:
-            Str the text representation of the message queue
-
-        Raises:
-            Errors are propagated
         """
 
         return self._render().to_text()
 
-    def to_html(self):
-        """Render a ErrorMessage queue as html
+    def to_html(self, in_div_flag=False):
+        """Render a ErrorMessage queue as html.
 
-        Args:
-            None
+        :param in_div_flag: Whether the message should be placed into a div
+            element.
+        :type in_div_flag: Boolean
 
-        Returns:
-            Str the html representation of the message queue
-
-        Raises:
-            Errors are propagated
+        :returns: Html representation of the error message.
+        :rtype: str
         """
 
-        return self._render().to_html()
+        return self._render().to_html(in_div_flag=in_div_flag)

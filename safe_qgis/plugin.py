@@ -381,13 +381,6 @@ class Plugin:
             self.iface.mainWindow().tabifyDockWidget(
                 myLegendTab, self.dockWidget)
             self.dockWidget.raise_()
-        #
-        # Hook up a slot for when the current layer is changed
-        #
-        QObject.connect(
-            self.iface,
-            SIGNAL("currentLayerChanged(QgsMapLayer*)"),
-            self.layerChanged)
 
         #
         # Hook up a slot for when the dock is hidden using its close button
