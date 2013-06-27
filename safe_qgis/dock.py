@@ -29,7 +29,6 @@ from PyQt4.QtGui import QFileDialog
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
 from qgis.core import (
     QgsMapLayer,
-    QgsVectorLayer,
     QgsRasterLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
@@ -45,7 +44,8 @@ from safe_qgis.utilities.utilities import (
     impactLayerAttribution,
     addComboItemInOrder,
     extentToGeoArray,
-    viewportGeoArray)
+    viewportGeoArray,
+    readImpactLayer)
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     setVectorGraduatedStyle,
@@ -102,7 +102,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -118,21 +118,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         This dialog will allow the user to select layers and scenario details
         and subsequently run their model.
 
+        :param iface: A QGisAppInterface instance we use to access QGIS via.
+        :type iface: QgsAppInterface
+
         .. note:: We use the multiple inheritance approach from Qt4 so that
             for elements are directly accessible in the form context and we can
             use autoconnect to set up slots. See article below:
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
-
-
-        Args:
-           iface: QgsAppInterface - a Quantum GIS QGisAppInterface instance.
-
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
         """
-        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+        # Enable remote debugging - should normally be commented out.
+        pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
@@ -207,9 +203,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myButton, QtCore.SIGNAL('clicked()'), self.accept)
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
-
-        #pydevd.settrace(
-        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
 
         myCanvas = self.iface.mapCanvas()
 
@@ -1053,7 +1046,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             self.analysisError(e, myMessage)
-            return None  # ignore any error
+            return  # ignore any error
 
         # Ensure there is enough memory
         myResult = checkMemoryUsage(myBufferedGeoExtent, myCellSize)
@@ -1236,7 +1229,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myEngineImpactLayer = self.runner.impactLayer()
 
             # Load impact layer into QGIS
-            myQGISImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+            myQGISImpactLayer = readImpactLayer(myEngineImpactLayer)
             self.layerChanged(myQGISImpactLayer)
             myReport = self._completed(myQGISImpactLayer, myEngineImpactLayer)
         except Exception, e:  # pylint: disable=W0703
@@ -1849,15 +1842,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 break
 
     def printMap(self):
-        """Slot to print map when print map button pressed.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
-        """
+        """Slot to print map when print map button pressed."""
         myMap = Map(self.iface)
         if self.iface.activeLayer() is None:
             # noinspection PyCallByClass,PyTypeChecker
@@ -1948,52 +1933,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = str(myItemData.toString())
         return myFunctionID
-
-    def _sendMessage(self, theMessage, dynamic=True):
-        theType = STATIC_MESSAGE_SIGNAL
-        if dynamic:
-            theType = DYNAMIC_MESSAGE_SIGNAL
-
-        dispatcher.send(
-            signal=theType,
-            sender=self,
-            message=theMessage)
-
-    def readImpactLayer(self, myEngineImpactLayer):
-        """Helper function to read and validate safe style spatial layer.
-
-        :param myEngineImpactLayer: Layer object as provided by InaSAFE engine.
-        :type myEngineImpactLayer: safe_layer
-
-        :returns: Valid QGIS layer or None
-        :rtype: None or QgsRasterLayer or QgsVectorLayer
-        """
-
-        myMessage = self.tr('Input layer must be a InaSAFE spatial object. '
-                            'I got %1').arg(str(type(myEngineImpactLayer)))
-        if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
-            raise Exception(myMessage)
-        if not myEngineImpactLayer.is_inasafe_spatial_object:
-            raise Exception(myMessage)
-
-        # Get associated filename and symbolic name
-        myFilename = myEngineImpactLayer.get_filename()
-        myName = myEngineImpactLayer.get_name()
-
-        myQGISLayer = None
-        # Read layer
-        if myEngineImpactLayer.is_vector:
-            myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-        elif myEngineImpactLayer.is_raster:
-            myQGISLayer = QgsRasterLayer(myFilename, myName)
-
-        # Verify that new qgis layer is valid
-        if myQGISLayer.isValid():
-            return myQGISLayer
-        else:
-            myMessage = self.tr(
-                'Loaded impact layer "%1" is not valid').arg(myFilename)
-            raise Exception(myMessage)
 
     def saveCurrentScenario(self, theScenarioFilePath=None):
         """Save current scenario to a text file.
