@@ -49,10 +49,11 @@ class QGISTest(unittest.TestCase):
         see https://github.com/AIFDR/inasafe/issues/349
         """
         myCrs = QgsCoordinateReferenceSystem()
-        myProj4 = ('GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
-                   'SPHEROID["WGS_1984",6378137.0,298.257223563]],'
-                   'PRIMEM["Greenwich",0.0],UNIT["Degree",'
-                   '0.0174532925199433]]')
+        myProj4 = (
+            'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
+            'SPHEROID["WGS_1984",6378137.0,298.257223563]],'
+            'PRIMEM["Greenwich",0.0],UNIT["Degree",'
+            '0.0174532925199433]]')
         myCrs.createFromWkt(myProj4)
         myAuthId = myCrs.authid()
         myExpectedAuthId = 'EPSG:4326'
