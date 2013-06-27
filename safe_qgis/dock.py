@@ -102,7 +102,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-from pydev import pydevd  # pylint: disable=F0401
+#from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -332,9 +332,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QgsMapLayerRegistry.instance().layersAdded.connect(
                 self.layersAdded)
         # All versions of QGIS
-        QtCore.QObject.connect(self.iface.mapCanvas(),
-                               QtCore.SIGNAL('layersChanged()'),
-                               self.getLayers)
+        QtCore.QObject.connect(
+            self.iface.mapCanvas(),
+            QtCore.SIGNAL('layersChanged()'),
+            self.getLayers)
+        QtCore.QObject.connect(
+            self.iface,
+            QtCore.SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+            self.layerChanged)
 
     # pylint: disable=W0702
     def disconnectLayerListener(self):
@@ -377,6 +382,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.getLayers)
         except:
             pass
+
+        QtCore.QObject.disconnect(
+            self.iface,
+            QtCore.SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+            self.layerChanged)
     # pylint: enable=W0702
 
     def gettingStartedMessage(self):
@@ -1028,11 +1038,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.showStaticMessage(myMessage)
 
-        myFlag, myMessage = self.validate()
-        if not myFlag:
-            self.showErrorMessage(myMessage)
-            return
-
         try:
             # See if we are re-running the same type of analysis, if not
             # we should prompt the user for new keywords for agg layer.
@@ -1201,7 +1206,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         displayed.
 
         :param theMessage: an ErrorMessage to display
-        :type theMessage: ErrorMessage
+        :type theMessage: ErrorMessage, Message
 
         :param theException: An exception that was raised
         :type theException: Exception
@@ -1262,7 +1267,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         #write postprocessing report to keyword
         myOutput = self.postprocessorManager.getOutput()
-        myKeywords['postprocessing_report'] = myOutput.to_html(noNewline=True)
+        myKeywords['postprocessing_report'] = myOutput.to_html(
+            suppress_newlines=True)
         self.keywordIO.writeKeywords(theQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
@@ -1428,11 +1434,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.analysisDone.emit(True)
 
     def enableBusyCursor(self):
-        """Set the hourglass enabled."""
+        """Set the hourglass enabled and stop listening for layer changes."""
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
     def disableBusyCursor(self):
-        """Disable the hourglass cursor."""
+        """Disable the hourglass cursor and listen for layer changes."""
         QtGui.qApp.restoreOverrideCursor()
 
     def getClipParameters(self):
@@ -1649,75 +1655,119 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             theHardClipFlag=self.clipHard)
         return myClippedHazard, myClippedExposure
 
+    def showImpactKeywords(self, myKeywords):
+        """Show the keywords for an impact layer.
+
+        .. note:: The print button will be enabled if this method is called.
+
+        :param myKeywords: A keywords dictionary.
+        :type myKeywords: dict
+        """
+        LOGGER.debug('Showing Impact Keywords')
+        if 'impact_summary' not in myKeywords:
+            return
+
+        myReport = m.Message()
+        myReport.add(LOGO_ELEMENT)
+        myReport.add(m.Heading(self.tr(
+            'Analysis Results'), **INFO_STYLE))
+        myReport.add(m.Text(myKeywords['impact_summary']))
+        if 'postprocessing_report' in myKeywords:
+            myReport.add(myKeywords['postprocessing_report'])
+        myReport.add(impactLayerAttribution(myKeywords))
+        self.pbnPrint.setEnabled(True)
+        self.showStaticMessage(myReport)
+
+    def showGenericKeywords(self, myKeywords):
+        """Show the keywords defined for the active layer.
+
+        .. note:: The print button will be disabled if this method is called.
+
+        :param myKeywords: A keywords dictionary.
+        :type myKeywords: dict
+        """
+        LOGGER.debug('Showing Generic Keywords')
+        myReport = m.Message()
+        myReport.add(LOGO_ELEMENT)
+        myReport.add(m.Heading(self.tr(
+            'Layer keywords:'), **INFO_STYLE))
+        myReport.add(m.Text(self.tr(
+            'The following keywords are defined for the active layer:')))
+        self.pbnPrint.setEnabled(False)
+        myList = m.BulletedList()
+        for myKeyword in myKeywords:
+            myValue = myKeywords[myKeyword]
+
+            # Translate titles explicitly if possible
+            if myKeyword == 'title':
+                myValue = safeTr(myValue)
+                # Add this keyword to report
+            myKey = m.ImportantText(
+                self.tr(myKeyword.capitalize()))
+            myValue = str(myValue)
+            myList.add(m.Text(myKey, myValue))
+
+        myReport.add(myList)
+        self.pbnPrint.setEnabled(False)
+        self.showStaticMessage(myReport)
+
+    def showNoKeywordsMessage(self):
+        """Show a message indicating that no keywords are defined.
+
+        .. note:: The print button will be disabled if this method is called.
+        """
+        LOGGER.debug('Showing No Keywords Message')
+        myReport = m.Message()
+        myReport.add(LOGO_ELEMENT)
+        myReport.add(m.Heading(self.tr(
+            'Layer keywords missing:'), **WARNING_STYLE))
+        myContext = m.Message(
+            m.Text(self.tr(
+                'No keywords have been defined for this layer yet. If '
+                'you wish to use it as an impact or hazard layer in a '
+                'scenario, please use the keyword editor. You can open'
+                ' the keyword editor by clicking on the ')),
+            m.Image('qrc:/plugins/inasafe/show-keyword-editor.svg'),
+            m.Text(self.tr(
+                'icon in the toolbar, or choosing Plugins -> InaSAFE '
+                '-> Keyword Editor from the menus.')))
+        myReport.add(myContext)
+        self.pbnPrint.setEnabled(False)
+        self.showStaticMessage(myReport)
+
     def layerChanged(self, theLayer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,
-        show the report..
+        show the report.
 
         :param theLayer: QgsMapLayer instance that is now active
         :type theLayer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 
         """
-        myReport = m.Message()
-        if theLayer is not None:
-            try:
-                myKeywords = self.keywordIO.readKeywords(theLayer)
-
-                if 'impact_summary' in myKeywords:
-                    myReport.add(LOGO_ELEMENT)
-                    myReport.add(m.Heading(self.tr(
-                        'Analysis Results'), **INFO_STYLE))
-                    myReport.add(m.Text(myKeywords['impact_summary']))
-                    if 'postprocessing_report' in myKeywords:
-                        myReport.add(myKeywords['postprocessing_report'])
-                    myReport.add(impactLayerAttribution(myKeywords))
-                    self.pbnPrint.setEnabled(True)
-                else:
-                    myReport.add(LOGO_ELEMENT)
-                    myReport.add(m.Heading(self.tr(
-                        'Layer keywords:'), **INFO_STYLE))
-                    myReport.add(m.Text(self.tr(
-                        'The following keywords are defined for the active '
-                        'layer:')))
-                    self.pbnPrint.setEnabled(False)
-                    myList = m.BulletedList()
-                    for myKeyword in myKeywords:
-                        myValue = myKeywords[myKeyword]
-
-                        # Translate titles explicitly if possible
-                        if myKeyword == 'title':
-                            myValue = safeTr(myValue)
-                        # Add this keyword to report
-                        myKey = m.ImportantText(
-                            self.tr(myKeyword.capitalize()))
-                        myValue = str(myValue)
-                        myList.add(m.Text(myKey, myValue))
-                    myReport.add(myList)
-
-            except (KeywordNotFoundError,
-                    HashNotFoundError,
-                    InvalidParameterError), e:
-                myContext = m.Message(
-                    m.Text(self.tr(
-                        'No keywords have been defined for this layer yet. If '
-                        'you wish to use it as an impact or hazard layer in a '
-                        'scenario, please use the keyword editor. You can open'
-                        ' the keyword editor by clicking on the ')),
-                    m.Image('qrc:/plugins/inasafe/keywords.png'),
-                    m.Text(self.tr(
-                        'icon in the toolbar, or choosing Plugins -> InaSAFE '
-                        '-> Keyword Editor from the menus.')))
-                myErrorMessage = getErrorMessage(e, theContext=myContext)
-                self.showErrorMessage(myErrorMessage)
-                return
-            except Exception, e:
-                myErrorMessage = getErrorMessage(e)
-                self.showErrorMessage(myErrorMessage)
-                return
-            if myReport is not None:
-                self.showStaticMessage(myReport)
-        else:
+        if theLayer is None:
             LOGGER.debug('Layer is None')
+            return
+
+        try:
+            myKeywords = self.keywordIO.readKeywords(theLayer)
+
+            if 'impact_summary' in myKeywords:
+                self.showImpactKeywords(myKeywords)
+            else:
+                self.showGenericKeywords(myKeywords)
+
+        except (KeywordNotFoundError,
+                HashNotFoundError,
+                InvalidParameterError), e:
+            self.showNoKeywordsMessage()
+            # Append the error message.
+            myErrorMessage = getErrorMessage(e)
+            self.showErrorMessage(myErrorMessage)
+            return
+        except Exception, e:
+            myErrorMessage = getErrorMessage(e)
+            self.showErrorMessage(myErrorMessage)
+            return
 
     def saveState(self):
         """Save the current state of the ui to an internal class member

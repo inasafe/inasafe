@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Script runner dialog.**
@@ -82,9 +83,13 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.populateTable(self.leSourceDir.text())
 
         # connect signal to slot
+        # noinspection PyUnresolvedReferences
         self.leOutputDir.textChanged.connect(self.saveState)
+        # noinspection PyUnresolvedReferences
         self.leSourceDir.textChanged.connect(self.saveState)
+        # noinspection PyUnresolvedReferences
         self.leSourceDir.textChanged.connect(self.populateTable)
+        # noinspection PyUnresolvedReferences
         self.leSourceDir.textChanged.connect(self.updateDefaultOutputDir)
 
         self.btnRunSelected.setEnabled(True)
@@ -124,9 +129,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         This function will show the dialog then set theLineEdit widget
         text with output from the dialog.
 
-        Params:
-            * theLineEdit - QLineEdit widget instance
-            * theTitle - title of dialog
+        :param theLineEdit: QLineEdit widget instance
+        :param theTitle: title of dialog
         """
         myPath = theLineEdit.text()
         # noinspection PyCallByClass,PyTypeChecker
@@ -138,14 +142,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
     def populateTable(self, theScenarioDirectory):
         """ Populate table with files from theBasePath directory.
 
-        Args:
-            theBasePath : QString - path where .txt & .py reside
-
-        Returns:
-            None
-
-        Raises:
-            None
+        :param theScenarioDirectory: QString - path where .txt & .py reside
         """
 
         LOGGER.info("populateTable from %s" % theScenarioDirectory)
@@ -186,15 +183,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         activities in QGIS, for example automatically running an impact
         assessment in response to an event.
 
-        Args:
-           * theFilename: str - the script filename.
-           * theCount: int - the number of times the script must be run.
-
-        Returns:
-           not applicable
-
-        Raises:
-           no exceptions explicitly raised
+        :param theFilename: str - the script filename.
         """
 
         # import script module
@@ -218,10 +207,9 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
     def runSimpleTask(self, theItem):
         """Run a simple scenario.
 
-        Params:
-            theItem - a dictionary contains the scenario configuration
-        Returns:
-            True if success, otherwise return False.
+        :param theItem: a dictionary contains the scenario configuration
+        :returns True if success, otherwise return False.
+
         """
         LOGGER.info('Run simple task' + str(theItem))
         scenarioDirectory = str(self.leSourceDir.text())
@@ -295,13 +283,15 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         return myResult
 
     def setAllScenarioEmptyStatus(self):
+        """Set all scenarios' status to empty in the table
+        """
         for myRow in range(self.tblScript.rowCount()):
             myStatusItem = self.tblScript.item(myRow, 1)
             myStatusItem.setText(self.tr(''))
 
     @pyqtSignature('')
     def on_pbnRunAll_clicked(self):
-        """Run all scenario wehn pbRunAll is clicked.
+        """Run all scenario when pbRunAll is clicked.
         """
         self.setAllScenarioEmptyStatus()
 
@@ -341,11 +331,15 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QtGui.QMessageBox.question(self, 'Error',
                                        'Failed to write report file.')
+            self.disableBusyCursor()
         self.disableBusyCursor()
 
     def writeBatchReport(self, myReport, myPassCount, myFailCount):
         """Write a report status of Batch Runner
         For convenience, the name will use current time
+        :param myReport: the report. a list of each scenario
+        :param myPassCount: number of pass scenario
+        :param myFailCount: number of failed scenario
         """
         lineSeparator = '-----------------------------\n'
         currentTime = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -373,6 +367,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
     def showBatchReport(self, batchReportFilePath):
         """Show batch report file in batchReportFileName
+        :param batchReportFilePath: string to the file of batch report
         """
         myUrl = QtCore.QUrl('file:///' + batchReportFilePath)
         # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
@@ -380,6 +375,9 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
     def runTaskMany(self, theItem, theStatusItem, numRepeat):
         """Run a task numRun times
+        :param theItem:
+        :param theStatusItem:
+        :param numRepeat: integer represent how many time a scenario run
         """
         myReport = []
         myFailCount = 0
@@ -400,13 +398,20 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.showBatchReport(batchReportFilePath)
 
     def runTask(self, theItem, theStatusItem, theCount=0, theIndex=''):
-        """Run a single task """
+        """Run a single task
+        :param theItem:
+        :param theStatusItem:
+        :param theCount: integer represent count number of scenario has been
+        run
+        :param theIndex: integer for representing an index when run all
+        scenarios
+        """
 
         self.enableBusyCursor()
         # set status to 'running'
         theStatusItem.setText(self.tr('Running'))
 
-        # .. seealso:: :func:`appendRow` to understand the next 2 lines
+        # .. see also:: :func:`appendRow` to understand the next 2 lines
         myVariant = theItem.data(QtCore.Qt.UserRole)
         myValue = myVariant.toPyObject()[0]
 
@@ -438,7 +443,6 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 # NOTE(gigih):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
-                myImpactLayer = self.iface.activeLayer()
                 myImpactLayer = self.dock.runner.impactLayer()
                 # Load impact layer into QGIS
                 myQGISImpactLayer = self.dock.readImpactLayer(myImpactLayer)
@@ -462,13 +466,13 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
     def reportPath(self, theDirectory, theTitle, theCount=0, theIndex=''):
         """Get PDF report filename based on theDirectory and theTitle and the
          index if given
-        Params:
-            * theDirectory - the directory of pdf report file
-            * theTitle - title of report
-            * theIndex = the index for the begining of the file name
-        Returns:
-            a tuple contains the pdf report filename like this
-            ('/home/foo/data/title.pdf', '/home/foo/data/title_table.pdf')
+        :param theDirectory: the directory of pdf report file
+        :param theTitle: title of report
+        :param theCount: the number of as scenario has been run
+        :param theIndex: the index for the beginning of the file name
+
+        :returns a tuple contains the pdf report filename like this
+        ('/home/foo/data/title.pdf', '/home/foo/data/title_table.pdf')
         """
         if theIndex != '':
             theIndex = str(theIndex) + '_'
@@ -486,11 +490,11 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         """Create PDF report from impact layer.
         Create map & table report PDF based from theImpactLayer data.
 
-        Params:
-            * theTitle : the report title.
-                         Output filename is based from this variable.
-            * theOutputDirectory : output directory
-            * theImpactLayer : impact layer instance.
+        :param theTitle: the report title.
+        :param theOutputDirectory: output directory
+        :param theImpactLayer: impact layer instance.
+        :param theCount: the number of as scenario has been run
+        :param theIndex: the index for the beginning of the file name
 
         See also:
             Dock.printMap()
@@ -515,16 +519,18 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 
     def getPopulateScenarioLog(self, parsedFiles, unparsedFiles):
-        """A method to show a message box that shows list of succesfully
-        parsed files and unsucsefully parsed files
+        """A method to show a message box that shows list of successfully
+        parsed files and unsuccessfully parsed files
+        :param parsedFiles:
+        :param unparsedFiles:
         """
-        parsedMessage = self.tr('The file(s) below are parsed succesfully:\n')
+        parsedMessage = self.tr('The file(s) below are parsed successfully:\n')
         unparsedMessage = self.tr('The file(s) below are not parsed '
-                                  'succesfully:\n')
+                                  'successfully:\n')
         parsedContents = '\n'.join(parsedFiles)
         unparsedContents = '\n'.join(unparsedFiles)
         if parsedContents == '':
-            parsedContents = 'No succesfull parsed files\n'
+            parsedContents = 'No successful parsed files\n'
         if unparsedContents == '':
             unparsedContents = 'No failure in parsing files\n'
         fullMessages = (parsedMessage + parsedContents + '\n\n' +
@@ -561,7 +567,9 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
     @pyqtSignature('bool')
     def on_pbnAdvanced_toggled(self, theFlag):
-        """Autoconnect slot activated when advanced button is clicked"""
+        """Autoconnect slot activated when advanced button is clicked
+        :param theFlag:
+        """
 
         if theFlag:
             self.pbnAdvanced.setText(self.tr('Hide advanced options'))
@@ -572,7 +580,9 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
     @pyqtSignature('bool')
     def on_cbDefaultOutputDir_toggled(self, theFlag):
-        """Autoconnect slot activated when cbDefaultOutputDir is checked"""
+        """Autoconnect slot activated when cbDefaultOutputDir is checked
+        :param theFlag:
+        """
         if theFlag:
             self.leOutputDir.setText(self.leSourceDir.text())
         self.tbOutputDir.setEnabled(not theFlag)
@@ -595,15 +605,11 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 def readScenarios(theFileName):
     """Read keywords dictionary from file
 
-    Args:
-        theFilename: Name of file holding scenarios .
+    :param theFileName: Name of file holding scenarios .
 
-    Returns:
-        Dictionary of with structure like this
+    :return Dictionary of with structure like this
         {{ 'foo' : { 'a': 'b', 'c': 'd'},
             { 'bar' : { 'd': 'e', 'f': 'g'}}
-
-    Raises: None
 
     A scenarios file may look like this:
 
@@ -615,7 +621,7 @@ def readScenarios(theFileName):
         extent: minx, miny, maxx, maxy
 
     Notes:
-        path for hazard, exposure, and agregation are relative to scenario
+        path for hazard, exposure, and aggregation are relative to scenario
         file path
     """
 
@@ -654,14 +660,9 @@ def readScenarios(theFileName):
 
 def appendRow(theTable, theLabel, theData):
     """ Append new row to table widget.
-     Args:
-        * theTable - a QTable instance
-        * theLabel - label for the row.
-        * theData  - custom data associated with theLabel value.
-     Returns:
-        None
-     Raises:
-        None
+    :param theTable: a QTable instance
+    :param theLabel: label for the row
+    :param theData: custom data associated with theLabel value.
     """
     myRow = theTable.rowCount()
     theTable.insertRow(theTable.rowCount())

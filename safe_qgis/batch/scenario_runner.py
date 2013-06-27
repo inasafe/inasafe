@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **Helper module for gui script functions.**
@@ -40,15 +41,16 @@ def getMapCanvas():
 def runScenario(theDock=None):
     """Simulate pressing run button in InaSAFE dock widget.
 
-    Returns:
-        None
+    :param theDock: Dock instance
     """
     # pylint: disable=W0603
     global STATUS_FLAG
     STATUS_FLAG = False
 
     def completed(theFlag):
-        """Listen for completion and set myFlag according to exit value."""
+        """Listen for completion and set myFlag according to exit value.
+        :param theFlag:
+        """
         global STATUS_FLAG
         STATUS_FLAG = theFlag
         LOGGER.debug("scenario done")
@@ -62,7 +64,10 @@ def runScenario(theDock=None):
 
 
 def extractPath(theScenarioFilePath, thePath):
-    """Get a path and basename given a scenarioFilePath and path."""
+    """Get a path and basename given a scenarioFilePath and path.
+    :param theScenarioFilePath:
+    :param thePath:
+    """
     myFilename = os.path.split(thePath)[-1]  # In case path was absolute
     myBaseName, _ = os.path.splitext(myFilename)
     myPath = getAbsolutePath(theScenarioFilePath, thePath)
@@ -71,12 +76,8 @@ def extractPath(theScenarioFilePath, thePath):
 
 def addLayers(theScenarioFilePath, thePaths):
     """ Add vector or raster layer to current project
-     Args:
-        * theScenarioFilePath: str - (Required) base directory to find path.
-        * thePaths: str or list - (Required) path of layer file.
-
-    Returns:
-        None.
+    :param theScenarioFilePath: str - (Required) base directory to find path.
+    :param thePaths: str or list - (Required) path of layer file.
 
     Raises:
         * Exception - occurs when thePaths have illegal extension
@@ -102,10 +103,12 @@ def addLayers(theScenarioFilePath, thePaths):
         if myExt in ['.asc', '.tif']:
             LOGGER.debug("add raster layer %s" % myPath)
             myLayer = QgsRasterLayer(myPath, myBaseName)
+            # noinspection PyArgumentList
             QgsMapLayerRegistry.instance().addMapLayer(myLayer)
         elif myExt in ['.shp']:
             LOGGER.debug("add vector layer %s" % myPath)
             myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+            # noinspection PyArgumentList
             QgsMapLayerRegistry.instance().addMapLayer(myLayer)
         else:
             raise Exception('File %s had illegal extension' % myPath)
@@ -114,17 +117,13 @@ def addLayers(theScenarioFilePath, thePaths):
 def setFunctionId(theFunctionId, theDock=None):
     """Set the function combo to use the function with the given id.
 
-    Args:
-        theFunctionId: str - a string representing the unique identifier for
+    :param theFunctionId: str - a string representing the unique identifier for
             the desired function.
+    :param theDock: a dock instance
 
-    Returns:
-        bool: True on success, False in the case that the function is not
+    :returns bool: True on success, False in the case that the function is not
             present in the function selector (based on the context of loaded
             hazard and exposure layers.
-
-    Exception:
-        None
     """
     if theFunctionId is None or theFunctionId == '':
         return False
@@ -140,16 +139,12 @@ def setFunctionId(theFunctionId, theDock=None):
 def setAggregationLayer(theAggregationLayer, theDock=None):
     """Set the aggregation combo to use the layer with the given name.
 
-    Args:
-        theAggregationLayer: str - a string representing the source name of
+    :param theAggregationLayer: str - a string representing the source name of
         the desired aggregation layer.
+    :param theDock: a dock instance
 
-    Returns:
-        bool: True on success, False in the case that the aggregation layer
+    :returns bool: True on success, False in the case that the aggregation layer
         is not in the aggregation selector.
-
-    Exception:
-        None
 
     .. note:: Probably wont work for sublayers and anything else other than
         file based layers (e.g. shp).
