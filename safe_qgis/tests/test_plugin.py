@@ -31,7 +31,7 @@ from qgis.gui import QgsMapCanvas
 from safe_qgis.tests.qgis_interface import QgisInterface
 from safe_qgis.tests.utilities_test import getQgisTestApp
 from safe_qgis.plugin import Plugin
-from safe_interface import safeTr
+from safe_qgis.safe_interface import safeTr
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 

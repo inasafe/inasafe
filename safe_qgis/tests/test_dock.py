@@ -33,12 +33,13 @@ sys.path.append(pardir)
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
-from qgis.core import (QgsRasterLayer,
-                       QgsVectorLayer,
-                       QgsMapLayerRegistry,
-                       QgsRectangle)
-from safe_interface import (format_int,
-                            HAZDATA, TESTDATA, UNITDATA)
+from qgis.core import (
+    QgsRasterLayer,
+    QgsVectorLayer,
+    QgsMapLayerRegistry,
+    QgsRectangle)
+from safe_qgis.safe_interface import (
+    format_int, HAZDATA, TESTDATA, UNITDATA)
 
 from safe_qgis.tests.utilities_test import (
     getQgisTestApp,
@@ -63,7 +64,7 @@ from safe_qgis.tests.utilities_test import (
 
 from safe_qgis.dock import Dock
 from safe_qgis.utilities.styling import setRasterStyle
-from safe_qgis.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgisVersion
 
 
 # Retired impact function for characterisation (Ole)

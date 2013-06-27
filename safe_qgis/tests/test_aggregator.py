@@ -34,7 +34,7 @@ from PyQt4.QtTest import QTest
 
 from qgis.core import QgsVectorLayer, QgsFeature
 
-from safe_interface import (
+from safe_qgis.safe_interface import (
     TESTDATA,
     BOUNDDATA,
     Raster,
@@ -49,7 +49,10 @@ from safe_qgis.tests.utilities_test import (
 
 from safe_qgis.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
-from safe_qgis.utilities import getDefaults
+from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.utilities.utilities import (
+    getDefaults, extentToGeoArray, getDefaults)
 
 from safe_qgis.tests.utilities_test import (
     loadStandardLayers,
@@ -69,6 +72,8 @@ class AggregatorTest(unittest.TestCase):
     def setUp(self):
         """Fixture run before all tests"""
 
+        self.maxDiff = None  # show full diff for assert errors
+
         os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
         loadStandardLayers()
@@ -82,6 +87,9 @@ class AggregatorTest(unittest.TestCase):
         DOCK.hideExposureFlag = False
         DOCK.showIntermediateLayers = False
         setJakartaGeoExtent()
+
+        self.keywordIO = KeywordIO()
+        self.defaults = getDefaults()
 
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -250,9 +258,22 @@ class AggregatorTest(unittest.TestCase):
 
     def _aggregate(self, myImpactLayer, myExpectedResults):
         myAggregationLayer = QgsVectorLayer(
-            os.path.join(TESTDATA, 'kabupaten_jakarta_singlepart.shp'),
+            os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
             'test aggregation',
             'ogr')
+        # create a copy of aggregation layer
+        myGeoExtent = extentToGeoArray(
+            myAggregationLayer.extent(),
+            myAggregationLayer.crs())
+
+        myAggrAttribute = self.keywordIO.readKeywords(
+            myAggregationLayer, self.defaults['AGGR_ATTR_KEY'])
+        myAggregationLayer = clipLayer(
+            theLayer=myAggregationLayer,
+            theExtent=myGeoExtent,
+            theExplodeFlag=True,
+            theExplodeAttribute=myAggrAttribute)
+
         myAggregator = Aggregator(None, myAggregationLayer)
         # setting up
         myAggregator.isValid = True
@@ -273,7 +294,8 @@ class AggregatorTest(unittest.TestCase):
             for (k, attr) in myAtMap.iteritems():
                 myFeatureResults[k] = attr.toString()
             myResults.append(myFeatureResults)
-        assert myResults == myExpectedResults
+
+        self.assertEqual(myResults, myExpectedResults)
 
     def test_aggregate_raster_impact(self):
         # created from loadStandardLayers.qgs with:
@@ -282,7 +304,7 @@ class AggregatorTest(unittest.TestCase):
         # - need evacuation
         # - kabupaten_jakarta_singlepart.shp
         myImpactLayer = Raster(
-            data=os.path.join(TESTDATA, 'aggregation_test_impact.tif'),
+            data=os.path.join(TESTDATA, 'aggregation_test_impact_raster.tif'),
             name='test raster impact')
 
         myExpectedResults = [
@@ -307,34 +329,20 @@ class AggregatorTest(unittest.TestCase):
              4: '57372',
              5: '1643522.39849854',
              6: '28.6467684323108'},
-            {0: 'JAKARTA TIMUR',
-             1: '0.000132658233697',
-             2: '0.24983273179242',
-             3: '1883.28100585937',
-             4: '0.000132658233697',
-             5: '0.24983273179242',
-             6: '1883.28100585937'},
-            {0: 'JAKARTA TIMUR',
-             1: '1.8158245317e-05',
-             2: '0.034197078505115',
-             3: '1883.28100585938',
-             4: '1.8158245317e-05',
-             5: '0.034197078505115',
-             6: '1883.28100585938'},
-            {0: 'JAKARTA TIMUR',
-             1: '73946',
-             2: '10943934.3182373',
-             3: '147.999003573382',
-             4: '73941',
-             5: '10945062.4354248',
-             6: '148.024268476553'},
             {0: 'JAKARTA UTARA',
              1: '55004',
              2: '11332095.7334595',
              3: '206.023120745027',
              4: '54998',
              5: '11330910.4882202',
-             6: '206.024046114772'}]
+             6: '206.024046114772'},
+            {0: 'JAKARTA TIMUR',
+             1: '73949',
+             2: '10943934.3182373',
+             3: '147.992999475819',
+             4: '73944',
+             5: '10945062.4354248',
+             6: '148.018262947971'}]
 
         self._aggregate(myImpactLayer, myExpectedResults)
 
@@ -345,19 +353,32 @@ class AggregatorTest(unittest.TestCase):
         # - be flodded
         # - kabupaten_jakarta_singlepart.shp
         myImpactLayer = Vector(
-            data=os.path.join(TESTDATA, 'aggregation_test_impact.shp'),
-            name='test raster impact')
+            data=os.path.join(TESTDATA, 'aggregation_test_impact_vector.shp'),
+            name='test vector impact')
 
         myExpectedResults = [
             {0: 'JAKARTA BARAT', 1: '87'},
             {0: 'JAKARTA PUSAT', 1: '117'},
             {0: 'JAKARTA SELATAN', 1: '22'},
-            {0: 'JAKARTA TIMUR', 1: '0'},
-            {0: 'JAKARTA TIMUR', 1: '0'},
-            {0: 'JAKARTA TIMUR', 1: '198'},
-            {0: 'JAKARTA UTARA', 1: '286'}
+            {0: 'JAKARTA UTARA', 1: '286'},
+            {0: 'JAKARTA TIMUR', 1: '198'}
         ]
         self._aggregate(myImpactLayer, myExpectedResults)
+
+        myImpactLayer = Vector(
+            data=TESTDATA + '/aggregation_test_impact_vector_small.shp',
+            name='test vector impact')
+
+        myExpectedResults = [
+            {0: 'JAKARTA BARAT', 1: '87'},
+            {0: 'JAKARTA PUSAT', 1: '117'},
+            {0: 'JAKARTA SELATAN', 1: '22'},
+            {0: 'JAKARTA UTARA', 1: '286'},
+            {0: 'JAKARTA TIMUR', 1: '198'}
+        ]
+
+        # TODO (MB) enable this
+        # self._aggregate(myImpactLayer, myExpectedResults)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest, 'test')

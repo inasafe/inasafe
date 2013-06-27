@@ -27,6 +27,7 @@
         <file alias="img/glyphicons-halflings.png">img/bootstrap-glyphs/glyphicons-halflings.png</file>
         <file alias="img/glyphicons-halflings-white.png">img/bootstrap-glyphs/glyphicons-halflings-white.png</file>
         <file alias="js/jquery-1.7.1.min.js">js/jquery-1.7.1.min.js</file>
+        <file alias="js/inasafe.js">js/inasafe.js</file>
         <file alias="header.html">header.html</file>
         <file alias="footer.html">footer.html</file>
 	<!-- composer templates -->
