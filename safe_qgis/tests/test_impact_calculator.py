@@ -57,7 +57,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
         self.calculator.setExposureLayer(self.vectorPath)
-        self.calculator.setFunction('Earthquake Guidelines Function')
+        self.calculator.setFunction('Earthquake Building Impact Function')
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
@@ -76,7 +76,7 @@ class ImpactCalculatorTest(unittest.TestCase):
 
         myMessage = 'Function property incorrect.'
         assert (self.calculator.function() ==
-                'Earthquake Guidelines Function'), myMessage
+                'Earthquake Building Impact Function'), myMessage
 
     def test_run(self):
         """Test that run works as expected in non threading mode"""
