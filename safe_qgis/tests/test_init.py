@@ -44,7 +44,7 @@ class TestInit(unittest.TestCase):
 
         myFilePath = os.path.abspath(
             os.path.join(os.path.dirname(__file__), os.pardir,
-                         '../../__init__.py'))
+                         '../__init__.py'))
         LOGGER.info(myFilePath)
         myFile = file(myFilePath, 'rt')
         myContent = myFile.read()
