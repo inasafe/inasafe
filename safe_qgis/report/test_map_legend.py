@@ -40,6 +40,7 @@ class MapLegendTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
     def setUp(self):
         """Setup fixture run before each tests"""
+        # noinspection PyArgumentList
         myRegistry = QgsMapLayerRegistry.instance()
         for myLayer in myRegistry.mapLayers():
             myRegistry.removeMapLayer(myLayer)
@@ -63,10 +64,7 @@ class MapLegendTest(unittest.TestCase):
 
         myTolerance = 0  # to allow for version number changes in disclaimer
 
-        myFlag, myMessage = checkImages(
-            'getLegend',
-            myPath,
-            myTolerance)
+        myFlag, myMessage = checkImages('getLegend', myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -74,11 +72,14 @@ class MapLegendTest(unittest.TestCase):
         LOGGER.debug('test_getLegend done')
 
     def test_getVectorLegend(self):
-        """Getting a legend for a vector layer works."""
+        """Getting a legend for a vector layer works.
+        @note This test is not related do thousand separator since we insert
+        our own legend notes and our own layer.
+        """
         myLayer, _ = loadLayer('test_shakeimpact.shp')
         myMapLegend = MapLegend(
             myLayer,
-            theLegendNotes='Thousand separator represented by \'.\'',
+            theLegendNotes='Thousand separator represented by \',\'',
             theLegendUnits='(people per cell)')
         myImage = myMapLegend.getVectorLegend()
         myPath = unique_filename(
@@ -86,19 +87,13 @@ class MapLegendTest(unittest.TestCase):
             suffix='.png',
             dir=temp_dir('test'))
         myImage.save(myPath, 'PNG')
-        print myMapLegend.legendUnits
-        print myMapLegend.legendNotes
-        print myPath
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(
-            'getVectorLegend',
-            myPath,
-            myTolerance)
+        myFlag, myMessage = checkImages('getVectorLegend', myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -120,10 +115,7 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(
-            'getRasterLegend',
-            myPath,
-            myTolerance)
+        myFlag, myMessage = checkImages('getRasterLegend', myPath, myTolerance)
         myMessage += (
             '\nWe want these images to match, if they do already copy the test '
             'image generated to create a new control image.')
@@ -152,10 +144,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(
-            'addSymbolToLegend',
-            myPath,
-            myTolerance)
+        myFlag, myMessage = checkImages('addSymbolToLegend', myPath,
+                                        myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -183,10 +173,8 @@ class MapLegendTest(unittest.TestCase):
         # variants in the safe_qgis/test_data/test_images/ dir e.g.
         # addClassToLegend-variantUbuntu13.04.png
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(
-            'addClassToLegend',
-            myPath,
-            myTolerance)
+        myFlag, myMessage = checkImages('addClassToLegend', myPath,
+                                        myTolerance)
         myMessage += (
             '\nWe want these images to match, if they do already copy the test '
             'image generated to create a new control image.')

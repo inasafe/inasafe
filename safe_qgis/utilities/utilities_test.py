@@ -284,9 +284,9 @@ def checkImages(theControlImage, theTestImagePath, theTolerance=1000):
     :param theControlImage: str file names. Give only the basename +ext
             as the test image path (CONTROL_IMAGE_DIR) will be prepended. e.g.
             addClassToLegend.png
-    :returns (success or failure indicator, the file path of the resulting
-    difference image, message providing analysis comparison notes
-    :rtype (bool, str, str)
+    :returns (success or failure indicator, message providing analysis
+    comparison notes)
+    :rtype (bool, str)
     """
     myMessages = ''
     myPlatform = platformName()
