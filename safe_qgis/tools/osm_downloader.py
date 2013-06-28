@@ -224,6 +224,8 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         # download and extract it
         self.downloadShapeFile(myShapeUrl, myFilePath)
+        print myFilePath
+        print str(self.outDir.text())
         self.extractZip(myFilePath, str(self.outDir.text()))
 
         self.progressDialog.done(QDialog.Accepted)
