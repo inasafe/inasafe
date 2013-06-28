@@ -551,8 +551,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myKeywords = myDialog.getKeywords()
         #check that a default title is given (see
         #https://github.com/AIFDR/inasafe/issues/111)
-        myExpectedKeywords = {'category': 'exposure',
-                              'title': 'Keywordless Layer'}
+        myExpectedKeywords = {'title': 'Keywordless Layer'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
