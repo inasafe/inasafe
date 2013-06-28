@@ -412,6 +412,15 @@ def get_decimal_separator():
     else:
         return '.'
 
+def get_thousand_separator():
+    """Return decimal separator according to the locale
+    """
+    lang = os.getenv('LANG')
+    if lang == 'id':
+        return '.'
+    else:
+        return ','
+
 
 def get_significant_decimal(my_decimal):
     """Return a truncated decimal by last three digit after leading zero

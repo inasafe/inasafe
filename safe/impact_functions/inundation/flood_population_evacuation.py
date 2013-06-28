@@ -16,7 +16,7 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_decimal_separator)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
 
@@ -266,7 +266,7 @@ class FloodEvacuationFunction(FunctionProvider):
         # For printing map purpose
         map_title = tr('People in need of evacuation')
         legend_notes = tr('Thousand separator is represented by %s' %
-                          get_decimal_separator())
+                          get_thousand_separator())
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')
 
