@@ -294,19 +294,18 @@ class MessagingTest(unittest.TestCase):
         em1.append(em2)
         em1.prepend(em0)
         expected_res = (
-            '<h5 class="warning"><i class="icon-remove-sign icon-white"></i>'
-            ' Problem</h5>\n<p>The following problem(s) were encountered '
-            'whilst running the analysis.</p>\n<ul>\n<li>E2p</li>\n<li>E1p'
-            '</li>\n<li>E0p</li>\n</ul>\n<h5 class="problem">'
-            '<i class="icon-list icon-white"></i> Detail</h5>\n<p>'
-            'These additional details were reported when the problem occurred.'
-            '</p>\n<ul>\n<li>E0d</li>\n<li>E2d</li>\n</ul>\n'
-            '<h5 class="suggestion"><i class="icon-comment icon-white"></i>'
-            ' Suggestion</h5>\n<p>You can try the following to'
-            ' resolve the issue:</p>\n<ul>\n<li>E2s</li>\n</ul>\n'
-            '<h5 class="inverse"><i class="icon-info-sign icon-white"></i>'
-            ' Traceback</h5>\n<ol>\n<li>In file E0t</li>\n<li>In file E2t</li>'
-            '\n</ol>\n')
+            '<h5 class="warning"><i class="icon-remove-sign icon-white"></i> '
+            'Problem</h5>\n<p>The following problem(s) were encountered '
+            'whilst running the analysis.</p>\n<ul>\n<li>E2p</li>\n<li>'
+            'E1p</li>\n<li>E0p</li>\n</ul>\n<h5 class="suggestion"><i '
+            'class="icon-comment icon-white"></i> Suggestion</h5>\n<p>You can '
+            'try the following to resolve the issue:</p>\n<ul>\n<li>E2s</li>'
+            '\n</ul>\n<h5 class="problem"><i class="icon-list icon-white">'
+            '</i> Details</h5>\n<p>These additional details were reported '
+            'when the problem occurred.</p>\n<ul>\n<li>E0d</li>\n<li>E2d'
+            '</li>\n</ul>\n<h5 class="inverse" ><i class="icon-info-sign '
+            'icon-white"></i> Diagnostics (click for details)</h5>\n<ol>'
+            '\n<li>In file E0t</li>\n<li>In file E2t</li>\n</ol>\n')
 
         res = em1.to_html()
         self.assertEqual(expected_res, res)
@@ -314,10 +313,11 @@ class MessagingTest(unittest.TestCase):
         expected_res = (
             '*****Problem\n\n    The following problem(s) were encountered '
             'whilst running the analysis.\n\n - E2p\n - E1p\n - E0p\n\n'
-            '*****Detail\n\n    These additional details were reported when '
-            'the problem occurred.\n\n - E0d\n - E2d\n\n*****Suggestion\n\n'
-            '    You can try the following to resolve the issue:\n\n - E2s\n\n'
-            '*****Traceback\n\n 1. In file E0t\n 2. In file E2t\n\n')
+            '*****Suggestion\n\n    You can try the following to resolve the '
+            'issue:\n\n - E2s\n\n*****Details\n\n    These additional details '
+            'were reported when the problem occurred.\n\n - E0d\n - E2d\n\n'
+            '*****Diagnostics (click for details)\n\n 1. In file E0t\n 2. '
+            'In file E2t\n\n')
         res = em1.to_text()
         self.assertEqual(expected_res, res)
 

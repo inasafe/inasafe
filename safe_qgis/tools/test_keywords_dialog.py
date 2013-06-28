@@ -20,9 +20,10 @@ import unittest
 import sys
 import os
 import shutil
+# noinspection PyPackageRequirements
 from nose import SkipTest
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
 sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
@@ -33,7 +34,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     getQgisTestApp, unitTestDataPath)
 from safe_qgis.safe_interface import (
     readKeywordsFromFile,
@@ -56,8 +57,10 @@ def makePadangLayer():
     # myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
     if qgisVersion() >= 10800:  # 1.8 or newer
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
@@ -79,8 +82,10 @@ def makePadangLayerClone():
     myTitle = readKeywordsFromFile(myPath, 'title')
     myLayer = QgsRasterLayer(myPath, myTitle)
     if qgisVersion() >= 10800:  # 1.8 or newer
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer, myFileName
 
@@ -95,8 +100,10 @@ def makePolygonLayer():
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
     if qgisVersion() >= 10800:  # 1.8 or newer
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
@@ -110,6 +117,7 @@ def makePointLayer():
     except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+    # noinspection PyArgumentList
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
@@ -123,7 +131,7 @@ def removeTempFile(myFileName='temp_Shakemap_Padang_2009'):
         os.remove(os.path.join(HAZDATA, myFileName + ext))
 
 
-def makeKeywordlessLayer():
+def makeKeywordLessLayer():
     """Helper function that returns a single predefined keywordless layer"""
     myFile = 'keywordless_layer.tif'
     myBasePath = unitTestDataPath('hazard')
@@ -131,15 +139,19 @@ def makeKeywordlessLayer():
     myTitle = 'Keywordless Layer'
     myLayer = QgsRasterLayer(myPath, myTitle)
     if qgisVersion() >= 10800:  # 1.8 or newer
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
 
 def clearLayers():
     """Clear all the loaded layers"""
+    # noinspection PyArgumentList
     for myLayer in QgsMapLayerRegistry.instance().mapLayers():
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
 
@@ -155,15 +167,18 @@ class KeywordsDialogTest(unittest.TestCase):
         clearLayers()
 
     # This is how you skip a test when using unittest ...
-    @unittest.skip('Skipping as this test hangs Jenkins if docs arent found.')
+    @unittest.skip('Skipping as this test hangs Jenkins if docs are not '
+                   'found.')
     def test_showHelp(self):
         """Test that help button works"""
         # ... and this is how you skip it using nosetests
         #prevent unreachable code errors in pylint
         #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
+        # noinspection PyUnreachableCode
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
@@ -175,6 +190,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
         myButton.setChecked(False)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = False
@@ -185,6 +201,7 @@ class KeywordsDialogTest(unittest.TestCase):
         assert myState == myExpectedState, myMessage
 
         # Now hide advanced again and test...
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = True
@@ -199,6 +216,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(False)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the hazard radio did not add a category '
                      'to the keywords list.')
@@ -211,6 +229,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'category to the keywords list.')
@@ -241,6 +260,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myFemaleRatioAttrBox = myDialog.cboFemaleRatioAttribute
 
@@ -269,7 +289,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         #set to TEST_REAL
         myIndex = myFemaleRatioAttrBox.findText('TEST_REAL')
-        myMessage = ('TEST_REAL not found')
+        myMessage = 'TEST_REAL not found'
         assert (myIndex != -1), myMessage
         myFemaleRatioAttrBox.setCurrentIndex(myIndex)
 
@@ -295,6 +315,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radExposure
         myButton.setChecked(False)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the exposure radio did not add a category '
                      'to the keywords list.')
@@ -306,8 +327,10 @@ class KeywordsDialogTest(unittest.TestCase):
         myButton = myDialog.radHazard
         myButton.setChecked(True)
         myButton = myDialog.radExposure
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myCombo = myDialog.cboSubcategory
+        # noinspection PyArgumentList
         QTest.mouseClick(myCombo, QtCore.Qt.LeftButton)
         QTest.keyClick(myCombo, QtCore.Qt.Key_Up)
         QTest.keyClick(myCombo, QtCore.Qt.Key_Enter)
@@ -360,7 +383,7 @@ class KeywordsDialogTest(unittest.TestCase):
         assert myResult == myExpectedResult, myMessage
 
     def test_on_pbnAddToList2_clicked(self):
-        """Test adding an item to the list using user defened form works"""
+        """Test adding an item to the list using user defined form works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.radUserDefined.setChecked(True)
@@ -522,14 +545,13 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_checkStateWhenKeywordsAbsent(self):
         """Test load state from keywords works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
-        myLayer = makeKeywordlessLayer()
+        myLayer = makeKeywordLessLayer()
         myDialog.layer = myLayer
         myDialog.loadStateFromKeywords()
         myKeywords = myDialog.getKeywords()
         #check that a default title is given (see
         #https://github.com/AIFDR/inasafe/issues/111)
-        myExpectedKeywords = {'category': 'exposure',
-                              'title': 'Keywordless Layer'}
+        myExpectedKeywords = {'title': 'Keywordless Layer'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
@@ -544,6 +566,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.leKey.setText('foo')
         myDialog.leValue.setText('bar')
         okButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
+        # noinspection PyArgumentList
         QTest.mouseClick(okButton, QtCore.Qt.LeftButton)
 
         # delete temp file

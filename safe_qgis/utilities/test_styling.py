@@ -21,7 +21,7 @@ import os
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
 sys.path.append(pardir)
 
 from safe_qgis.utilities.styling import (
@@ -29,7 +29,7 @@ from safe_qgis.utilities.styling import (
     setRasterStyle,
     _addMinMaxToStyle)
 from safe_qgis.utilities.utilities import getErrorMessage
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     unitTestDataPath,
     loadLayer,
     getQgisTestApp)

@@ -41,7 +41,7 @@ from qgis.core import (
 from safe_qgis.safe_interface import (
     format_int, HAZDATA, TESTDATA, UNITDATA)
 
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     getQgisTestApp,
     setCanvasCrs,
     setPadangGeoExtent,
@@ -64,7 +64,7 @@ from safe_qgis.tests.utilities_test import (
 
 from safe_qgis.dock import Dock
 from safe_qgis.utilities.styling import setRasterStyle
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgisVersion, readImpactLayer
 
 
 # Retired impact function for characterisation (Ole)
@@ -166,8 +166,6 @@ class DockTest(unittest.TestCase):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
-
-        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 
@@ -179,8 +177,7 @@ class DockTest(unittest.TestCase):
             theFunctionId='Earthquake Guidelines Function')
         assert myResult, myMessage
 
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
         # Expected output:
         #Buildings    Total
@@ -212,8 +209,7 @@ class DockTest(unittest.TestCase):
             theFunctionId='Earthquake Fatality Function')
         assert myResult, myMessage
 
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
 
         myResult = DOCK.wvResults.pageToText()
 
@@ -268,8 +264,7 @@ class DockTest(unittest.TestCase):
             myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
 
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
 
         myResult = DOCK.wvResults.pageToText()
 
@@ -306,8 +301,7 @@ class DockTest(unittest.TestCase):
         setBatemansBayGeoExtent()
 
         # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         #print myResult
@@ -387,8 +381,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
 
         # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         # Check that the number is as what was calculated by
@@ -443,9 +436,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -469,9 +460,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         print myResult
@@ -498,9 +487,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -527,9 +514,7 @@ class DockTest(unittest.TestCase):
         setGeoExtent([101, -12, 119, -4])
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
@@ -556,9 +541,7 @@ class DockTest(unittest.TestCase):
         setGeoExtent([110.01, -7.81, 110.78, -7.50])
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
@@ -583,9 +566,7 @@ class DockTest(unittest.TestCase):
         setGeoExtent([110.01, -7.81, 110.78, -7.50])
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
@@ -627,10 +608,7 @@ class DockTest(unittest.TestCase):
         setGeoExtent([110.01, -7.81, 110.78, -7.50])
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
         LOGGER.debug(myResult)
 
@@ -708,7 +686,7 @@ class DockTest(unittest.TestCase):
         myRunner = DOCK.calculator.getRunner()
         myRunner.run()  # Run in same thread
         myEngineImpactLayer = myRunner.impactLayer()
-        myQgisImpactLayer = DOCK.readImpactLayer(myEngineImpactLayer)
+        myQgisImpactLayer = readImpactLayer(myEngineImpactLayer)
         myStyle = myEngineImpactLayer.get_style_info()
         #print myStyle
         setRasterStyle(myQgisImpactLayer, myStyle)
@@ -747,9 +725,7 @@ class DockTest(unittest.TestCase):
         setJakartaGoogleExtent()
 
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -778,7 +754,7 @@ class DockTest(unittest.TestCase):
         # The QTest.mouseClick call some times never returns when run
         # with nosetest, but OK when run normally.
         # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         # Check that none of these  get a NaN value:
@@ -885,8 +861,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = [myHazard, myExposure]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(
-            myFileList, theDataDirectory=TESTDATA)
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -920,7 +895,7 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -944,8 +919,7 @@ class DockTest(unittest.TestCase):
         setCanvasCrs(GEOCRS, True)
         setSmallExtentJakarta()
         # Press RUN
-        myButton = DOCK.pbnRunStop
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -1023,7 +997,6 @@ class DockTest(unittest.TestCase):
 
     def test_fullRunResults(self):
         """Aggregation results are correct."""
-        myRunButton = DOCK.pbnRunStop
         myExpectedResult = open(
             TEST_FILES_DIR +
             '/test-full-run-results.txt',
@@ -1044,7 +1017,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.pageToText()
@@ -1102,7 +1075,6 @@ class DockTest(unittest.TestCase):
 
     def Xtest_runnerExceptions(self):
         """Test runner exceptions"""
-        myRunButton = DOCK.pbnRunStop
 
         myResult, myMessage = setupScenario(
             DOCK,
@@ -1118,7 +1090,7 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         #        DOCK.runtimeKeywordsDialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
@@ -1133,8 +1105,6 @@ Click for Diagnostic Information:
 
     def Xtest_runnerIsNone(self):
         """Test for none runner exceptions"""
-        myRunButton = DOCK.pbnRunStop
-
         myResult, myMessage = setupScenario(
             DOCK,
             theHazard='A flood in Jakarta like in 2007',
@@ -1150,7 +1120,7 @@ Click for Diagnostic Information:
 
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         #        DOCK.runtimeKeywordsDialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
@@ -1189,11 +1159,6 @@ Click for Diagnostic Information:
         """
         setCanvasCrs(GEOCRS, True)
         setJakartaGeoExtent()
-        #myResult, myMessage = setupScenario(
-        #    theHazard='A flood in Jakarta like in 2007',
-        #    theExposure='Penduduk Jakarta',
-        #    theFunction='Need evacuation',
-        #    theFunctionId='Flood Evacuation Function')
         setupScenario(
             DOCK,
             theHazard='A flood in Jakarta like in 2007',
@@ -1202,8 +1167,7 @@ Click for Diagnostic Information:
             theFunctionId='Flood Evacuation Function')
         myToolButton = DOCK.toolFunctionOptions
         myFlag = myToolButton.isEnabled()
-        assert myFlag, ('Expected configuration options '
-                        'button to be enabled')
+        assert myFlag, 'Expected configuration options button to be enabled'
 
     # I disabled the test for now as checkMemory now returns None unless
     # there is a problem. TS
@@ -1307,6 +1271,6 @@ Click for Diagnostic Information:
                            '-6.0700000000000003', 'Extent is not same'
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(DockTest, 'test')
+    suite = unittest.makeSuite(DockTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

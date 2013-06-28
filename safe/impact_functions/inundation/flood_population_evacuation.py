@@ -15,7 +15,8 @@ from safe.common.utilities import (
     round_thousand,
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
 
@@ -131,6 +132,8 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Calculate impact to intermediate thresholds
         counts = []
+        # merely initialize
+        my_impact = None
         for i, lo in enumerate(thresholds):
             if i == len(thresholds) - 1:
                 # The last threshold
@@ -262,7 +265,8 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # For printing map purpose
         map_title = tr('People in need of evacuation')
-        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_notes = tr('Thousand separator is represented by %s' %
+                          get_thousand_separator())
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')
 

@@ -20,7 +20,7 @@ import unittest
 import logging
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.tests.utilities_test import (getQgisTestApp,
+from safe_qgis.utilities.utilities_test import (getQgisTestApp,
                                       loadLayer,
                                       checkImages)
 from safe_qgis.report.html_renderer import HtmlRenderer
@@ -127,6 +127,7 @@ class HtmlRendererTest(unittest.TestCase):
                            21523,  # as rendered on linux ub 12.10 64
                            20605,  # as rendered on linux ub 13.04 64
                            21527,  # as rendered on Jenkins post 22 June 2013
+                           377191,  # as rendered on OSX
                            ]
         self.assertIn(mySize, myExpectedSizes)
 
@@ -137,9 +138,10 @@ class HtmlRendererTest(unittest.TestCase):
         LOGGER.debug(myHtml)
         myPageDpi = 300
         myRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='testHtmlToImage',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
+        myPath = unique_filename(
+            prefix='testHtmlToImage',
+            suffix='.png',
+            dir=temp_dir('test'))
         LOGGER.debug(myPath)
         myWidth = 250
         myPixmap = myRenderer.renderHtmlToImage(myHtml, myWidth)
@@ -152,7 +154,7 @@ class HtmlRendererTest(unittest.TestCase):
         myTolerance = 1000  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages(
             'renderHtmlToImage', myPath, myTolerance)
-        assert myFlag, myMessage
+        assert myFlag, myMessage + '\n' + myPath
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(HtmlRendererTest, 'test')

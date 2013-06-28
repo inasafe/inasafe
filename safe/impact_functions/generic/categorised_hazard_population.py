@@ -136,9 +136,10 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in high hazard areas')
 
-        # Generare 8 equidistant classes across the range of flooded population
+        # Generate 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
         # as imported
+        # noinspection PyTypeChecker
         classes = numpy.linspace(numpy.nanmin(M.flat[:]),
                                  numpy.nanmax(M.flat[:]), 8)
 

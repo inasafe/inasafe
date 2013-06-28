@@ -74,7 +74,7 @@ from qgis.core import (
     QgsFields)
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe_qgis.tests.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins

@@ -39,6 +39,10 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
         LOGGER.debug('Running earthquake building impact')
 
+        # merely initialize
+        building_value = 0
+        contents_value = 0
+
         # Thresholds for mmi breakdown
         t0 = self.parameters['low_threshold']
         t1 = self.parameters['medium_threshold']

@@ -60,7 +60,8 @@ DETAILS_STYLE = {
 TRACEBACK_STYLE = {
     'level': 5,
     'icon': 'icon-info-sign icon-white',
-    'style_class': 'inverse'}
+    'style_class': 'inverse',
+    'attributes': 'onclick="hideTracebacks();"'}
 
 # This is typically a text element or its derivatives
 KEYWORD_STYLE = {

@@ -808,3 +808,40 @@ def viewportGeoArray(theMapCanvas):
         myCrs.createFromEpsg(4326)
 
     return extentToGeoArray(myRect, myCrs)
+
+
+def readImpactLayer(myEngineImpactLayer):
+    """Helper function to read and validate a safe native spatial layer.
+
+    :param myEngineImpactLayer: Layer object as provided by InaSAFE engine.
+    :type myEngineImpactLayer: safe_layer
+
+    :returns: Valid QGIS layer or None
+    :rtype: None or QgsRasterLayer or QgsVectorLayer
+    """
+
+    myMessage = tr('Input layer must be a InaSAFE spatial object. '
+                   'I got %1').arg(str(type(myEngineImpactLayer)))
+    if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
+        raise Exception(myMessage)
+    if not myEngineImpactLayer.is_inasafe_spatial_object:
+        raise Exception(myMessage)
+
+    # Get associated filename and symbolic name
+    myFilename = myEngineImpactLayer.get_filename()
+    myName = myEngineImpactLayer.get_name()
+
+    myQGISLayer = None
+    # Read layer
+    if myEngineImpactLayer.is_vector:
+        myQGISLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+    elif myEngineImpactLayer.is_raster:
+        myQGISLayer = QgsRasterLayer(myFilename, myName)
+
+    # Verify that new qgis layer is valid
+    if myQGISLayer.isValid():
+        return myQGISLayer
+    else:
+        myMessage = tr(
+            'Loaded impact layer "%1" is not valid').arg(myFilename)
+        raise Exception(myMessage)

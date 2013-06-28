@@ -99,6 +99,7 @@ class MessageViewer(QtWebKit.QWebView):
         :param message: A message to show in the viewer.
         :type message: Message
         """
+        LOGGER.debug('Static message event')
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
@@ -114,6 +115,7 @@ class MessageViewer(QtWebKit.QWebView):
         :param message: A message to show in the viewer.
         :type message: Message
         """
+        LOGGER.debug('Error message event')
         self.dynamic_message_event(sender, message)
 
     def dynamic_message_event(self, sender, message):
@@ -125,21 +127,29 @@ class MessageViewer(QtWebKit.QWebView):
         :param message: A message to show in the viewer.
         :type message: Message
         """
+        LOGGER.debug('Dynamic message event')
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
-        self.last_id += 1
-        message.element_id = str(self.last_id)
-        # TODO probably we should do some escaping of quotes etc in message
-        html = message.to_html(in_div_flag=True)
-        html = html.replace('\'', '\\\'')
-        js = 'document.body.innerHTML += %s' % html
-        self.page().mainFrame().evaluateJavaScript(js)
-        self.scrollToDiv()
+        # Old way (works but causes full page refresh)
+        self.show_messages()
+        return
+
+        # New way add html snippet to end of page, not currently working
+        # self.last_id += 1
+        # message.element_id = str(self.last_id)
+        # # TODO probably we should do some escaping of quotes etc in message
+        # html = message.to_html(in_div_flag=True)
+        # html = html.replace('\'', '\\\'')
+        # # We could run into side effect still if messages contain single quotes
+        # LOGGER.debug('HTML: %s' % html)
+        # js = 'document.body.innerHTML += \'%s\'' % html
+        # LOGGER.debug('JAVASCRIPT: %s' % js)
+        # self.page().mainFrame().evaluateJavaScript(js)
+        # self.scrollToDiv()
 
     def scrollToDiv(self):
         """Scroll to the last added div.
 
-        Scroll-to logic would work something like this
         see resources/js/inasafe.js and also
         http://stackoverflow.com/a/4801719
         """
@@ -150,7 +160,6 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        # self.setUrl(QtCore.QUrl(''))
         string = htmlHeader()
         if self.static_message is not None:
             string += self.static_message.to_html()
@@ -173,7 +182,8 @@ class MessageViewer(QtWebKit.QWebView):
     def _toMessage(self):
         """Collate all message elements to a single message."""
         myMessage = m.Message()
-        myMessage.add(self.static_message)
+        if self.static_message is not None:
+            myMessage.add(self.static_message)
         for myDynamic in self.dynamic_messages:
             myMessage.add(myDynamic)
         return myMessage

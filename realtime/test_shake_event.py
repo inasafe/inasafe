@@ -32,7 +32,7 @@ from qgis.core import QgsFeatureRequest
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
-from safe_qgis.tests.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir, dataDir
 from shake_event import ShakeEvent
 # The logger is intialised in utils.py by init

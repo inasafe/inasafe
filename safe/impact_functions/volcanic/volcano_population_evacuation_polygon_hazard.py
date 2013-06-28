@@ -11,7 +11,8 @@ from safe.common.utilities import (
     round_thousand,
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -286,7 +287,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         # For printing map purpose
         map_title = tr('People affected by volcanic hazard zone')
-        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_notes = tr('Thousand separator is represented by  %s' %
+                          get_thousand_separator())
         legend_units = tr('(people)')
         legend_title = tr('Population count')
 

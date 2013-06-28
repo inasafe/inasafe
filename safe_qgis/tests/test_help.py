@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 # Needed though not used below
-from safe_qgis.tests.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_test import getQgisTestApp
 from safe_qgis.help import Help
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

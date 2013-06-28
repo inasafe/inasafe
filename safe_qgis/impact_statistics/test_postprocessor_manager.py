@@ -35,14 +35,14 @@ from PyQt4.QtTest import QTest
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe_qgis.tests.utilities_test import (getQgisTestApp,
+from safe_qgis.utilities.utilities_test import (getQgisTestApp,
                                       setCanvasCrs,
                                       setJakartaGeoExtent,
                                       GEOCRS)
 
 from safe_qgis.dock import Dock
 
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     loadStandardLayers,
     setupScenario,
     canvasList)

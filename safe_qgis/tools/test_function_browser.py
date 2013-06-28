@@ -24,7 +24,7 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe_qgis.tools.function_browser import FunctionBrowser
-from safe_qgis.tests.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_test import getQgisTestApp
 
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

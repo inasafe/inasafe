@@ -23,7 +23,7 @@ import os
 from unittest import expectedFailure
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..//'))
 sys.path.append(pardir)
 
 import numpy
@@ -46,7 +46,7 @@ from safe_qgis.utilities.clipper import (
     clipGeometry)
 from safe_qgis.utilities.utilities import qgisVersion
 
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     getQgisTestApp,
     setCanvasCrs,
     RedirectStdStreams,

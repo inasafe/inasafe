@@ -162,17 +162,6 @@ class ErrorMessage(MessageElement):
             items.add(p)
         message.add(items)
 
-        if len(self.details) > 0:
-            items = BulletedList()
-            message.add(Heading(tr('Detail'), **DETAILS_STYLE))
-            message.add(Paragraph(tr(
-                'These additional details were reported when the problem '
-                'occurred.')))
-            for d in self.details:
-                if d is not None:
-                    items.add(d)
-            message.add(items)
-
         message.add(Heading(tr('Suggestion'), **SUGGESTION_STYLE))
         message.add(Paragraph(tr(
             'You can try the following to resolve the issue:')))
@@ -186,7 +175,20 @@ class ErrorMessage(MessageElement):
                     items.add(s)
             message.add(items)
 
-        message.add(Heading(tr('Traceback'), **TRACEBACK_STYLE))
+        if len(self.details) > 0:
+            items = BulletedList()
+            message.add(Heading(
+                tr('Details'), **DETAILS_STYLE))
+            message.add(Paragraph(tr(
+                'These additional details were reported when the problem '
+                'occurred.')))
+            for d in self.details:
+                if d is not None:
+                    items.add(d)
+            message.add(items)
+
+        message.add(Heading(tr(
+            'Diagnostics (click for details)'), **TRACEBACK_STYLE))
         message.add(self.tracebacks)
         return message
 

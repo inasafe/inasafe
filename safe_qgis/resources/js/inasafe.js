@@ -1,4 +1,3 @@
-
 // from http://stackoverflow.com/a/4801719
 (function($) {
     $.fn.goTo = function() {
@@ -8,3 +7,7 @@
         return this; // for chaining...
     }
 })(jQuery);
+
+function hideTracebacks() {
+  $('.traceback-detail').toggle();
+}

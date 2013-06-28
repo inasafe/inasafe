@@ -25,7 +25,7 @@ from qgis.core import (
     QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.tests.utilities_test import (
+from safe_qgis.utilities.utilities_test import (
     getQgisTestApp,
     loadLayer,
     setJakartaGeoExtent,
@@ -76,9 +76,10 @@ class MapTest(unittest.TestCase):
             447217,  # Nadia Linux Mint 14
             447051,  # as rendered on Jenkins post 24 April 2013
             447138,  # Windows 7 SP1 AMD64
+            233989,  # OSX 10.8
         ]
-        myMessage = 'Expected rendered map pdf to be in %s, got %s' % (
-            myExpectedSizes, mySize)
+        myMessage = '%s\nExpected rendered map pdf to be in %s, got %s' % (
+            myPath, myExpectedSizes, mySize)
         self.assertIn(mySize, myExpectedSizes, myMessage)
 
     def test_renderComposition(self):
@@ -115,9 +116,10 @@ class MapTest(unittest.TestCase):
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
         myTolerance = 8000
-        myFlag, myMessage = checkImages('renderComposition.png',
-                                        myImagePath,
-                                        myTolerance)
+        myFlag, myMessage = checkImages(
+            'renderComposition',
+            myImagePath,
+            myTolerance)
         assert myFlag, myMessage
 
     def test_getMapTitle(self):
@@ -155,9 +157,10 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
-        myPath = unique_filename(prefix='outTemplate',
-                                 suffix='.pdf',
-                                 dir=temp_dir('test'))
+        myPath = unique_filename(
+            prefix='outTemplate',
+            suffix='.pdf',
+            dir=temp_dir('test'))
         LOGGER.debug(myPath)
         myMap.renderTemplate(myInPath, myPath)
         assert os.path.exists(myPath)
@@ -167,9 +170,10 @@ class MapTest(unittest.TestCase):
         """Test that windows rendering does not make artifacts"""
         # sometimes spurious lines are drawn on the layout
         LOGGER.info('Testing windowsDrawingArtifacts')
-        myPath = unique_filename(prefix='artifacts',
-                                 suffix='.pdf',
-                                 dir=temp_dir('test'))
+        myPath = unique_filename(
+            prefix='artifacts',
+            suffix='.pdf',
+            dir=temp_dir('test'))
         myMap = Map(IFACE)
         setupPrinter(myPath)
         myMap.setupComposition()
@@ -209,9 +213,10 @@ class MapTest(unittest.TestCase):
         # we know the issue is fixed
 
         myTolerance = 0
-        myFlag, myMessage = checkImages('windowsArtifacts.png',
-                                        myImagePath,
-                                        myTolerance)
+        myFlag, myMessage = checkImages(
+            'windowsArtifacts',
+            myImagePath,
+            myTolerance)
         myMessage += ('\nWe want these images to match, if they do not '
                       'there may be rendering artifacts in windows.\n')
         assert myFlag, myMessage
