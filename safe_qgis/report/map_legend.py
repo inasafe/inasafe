@@ -69,6 +69,7 @@ class MapLegend():
         Raises:
            no exceptions explicitly raised.
         """
+        # noinspection PyCallByClass,PyTypeChecker
         return QtCore.QCoreApplication.translate('MapLegend', theString)
 
     def getLegend(self):
@@ -332,7 +333,6 @@ class MapLegend():
         """Add legend notes to the legend
         """
         LOGGER.debug('InaSAFE Map Legend addLegendNotes called')
-        print 'InaSAFE Map Legend addLegendNotes called'
         if self.legendNotes is not None:
             self.extendLegend()
             myOffset = self.legendImage.height() - 15

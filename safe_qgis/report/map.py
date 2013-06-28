@@ -87,6 +87,7 @@ class Map():
         Raises:
            no exceptions explicitly raised.
         """
+        # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         return QtCore.QCoreApplication.translate('Map', theString)
 
     def setImpactLayer(self, theLayer):
@@ -663,6 +664,7 @@ class Map():
         myTransform = QtGui.QTransform()
         myTransform.scale(myScaleFactor, myScaleFactor)
         myTransform.rotate(0.5)
+        # noinspection PyArgumentList
         myItem = self.composition.addPixmap(QtGui.QPixmap.fromImage(theImage))
         myItem.setTransform(myTransform)
         myItem.setOffset(theLeftOffset / myScaleFactor,

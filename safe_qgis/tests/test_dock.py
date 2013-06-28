@@ -463,7 +463,6 @@ class DockTest(unittest.TestCase):
         DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
-        print myResult
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
         assert format_int(535) in myResult, myMessage

@@ -54,7 +54,7 @@ from safe_qgis.utilities.utilities_test import (
     GEOCRS,
     setJakartaGeoExtent)
 
-# Setup pathnames for test data sets
+# Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
 VECTOR_PATH3 = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
@@ -142,7 +142,7 @@ class ClipperTest(unittest.TestCase):
 
         # Clip the raster to the bbox
         try:
-            myResult = clipLayer(myRasterLayer, mySmallRect)
+            _ = clipLayer(myRasterLayer, mySmallRect)
         except CallGDALError:
             pass
         except Exception, e:
@@ -254,7 +254,7 @@ class ClipperTest(unittest.TestCase):
         assert os.path.exists(myResult.source())
         L = readSafeLayer(myResult.source())
         kwds = L.get_keywords()
-        myMessage = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
+        # myMessage = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
         assert kwds['kermit'] == 'piggy'
 
         # Clip the raster to the bbox

@@ -43,6 +43,7 @@ class MapTest(unittest.TestCase):
 
     def setUp(self):
         """Setup fixture run before each tests"""
+        # noinspection PyArgumentList
         myRegistry = QgsMapLayerRegistry.instance()
         myRegistry.removeAllMapLayers()
 
@@ -201,6 +202,7 @@ class MapTest(unittest.TestCase):
                                       10)  # height
             myMap.composition.addItem(myPicture)
             # Same drawing drawn directly as a pixmap
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             myPixmapItem = myMap.composition.addPixmap(
                 QtGui.QPixmap.fromImage(myImage))
             myPixmapItem.setOffset(i, i + 20)

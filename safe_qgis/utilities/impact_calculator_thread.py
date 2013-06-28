@@ -185,4 +185,5 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         # pylint: enable=W0703
 
         #  Let any listening slots know we are done
+        # noinspection PyUnresolvedReferences
         self.done.emit()
