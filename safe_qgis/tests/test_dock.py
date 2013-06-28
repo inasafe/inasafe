@@ -658,7 +658,7 @@ class DockTest(unittest.TestCase):
         except Exception, e:
             raise Exception('Exception is not expected, %s' % e)
 
-    def test_ResultStyling(self):
+    def test_resultStyling(self):
         """Test that ouputs from a model are correctly styled (colours and
         opacity. """
 
@@ -707,7 +707,7 @@ class DockTest(unittest.TestCase):
         #print "Transparency list:" + str(myTransparencyList)
         #assert (len(myTransparencyList) > 0)
 
-    def test_Issue47(self):
+    def test_issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
         proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""

@@ -137,6 +137,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pBtnDir_clicked(self):
         """ Show a dialog to choose directory """
+        # noinspection PyCallByClass,PyTypeChecker
         self.outDir.setText(QFileDialog.getExistingDirectory(
             self, self.tr("Select download directory")))
 
@@ -155,6 +156,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             # when user canceling the import process directly
             pass
         except Exception as myEx:
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 self,
                 self.tr("InaSAFE OpenStreetMap downloader error"),
@@ -182,6 +184,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         myQuestion = self.tr(
             "Directory %1 not exist. Are you want to create it?"
         ).arg(myDir)
+        # noinspection PyCallByClass,PyTypeChecker
         myAnswer = QMessageBox.question(
             self, myTitle,
             myQuestion, QMessageBox.Yes | QMessageBox.No)
@@ -246,7 +249,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.progressDialog.setLabelText(myLabelText)
 
         myResult = downloadWebUrl(self.nam, theUrl, theOutput,
-                                self.progressDialog)
+                                  self.progressDialog)
 
         if myResult is not True:
             _, myErrorMessage = myResult

@@ -757,6 +757,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.resizeDialog()
 
     def resizeDialog(self):
+        # noinspection PyArgumentList
         QtCore.QCoreApplication.processEvents()
         LOGGER.debug('adjust ing dialog size')
         self.adjustSize()
@@ -816,9 +817,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                          theKeywords=myKeywords)
         except InaSAFEError, e:
             myErrorMessage = getErrorMessage(e)
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
-                self,
-                self.tr('InaSAFE'),
+                self, self.tr('InaSAFE'),
                 ((self.tr(
                     'An error was encountered when saving the keywords:\n'
                     '%s' % myErrorMessage.to_html()))))
