@@ -63,6 +63,11 @@ TRACEBACK_STYLE = {
     'style_class': 'inverse',
     'attributes': 'onclick="hideTracebacks();"'}
 
+TRACEBACK_ITEMS_STYLE = {
+    'style_class': 'traceback-detail',
+    'style_class': 'hidden'
+}
+
 # This is typically a text element or its derivatives
 KEYWORD_STYLE = {
     'style_class': 'label label-info'}

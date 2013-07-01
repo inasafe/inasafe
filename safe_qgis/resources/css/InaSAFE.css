@@ -89,3 +89,7 @@ th.button-cell{
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
 }
+
+.hidden {
+    visibility: hidden;
+}

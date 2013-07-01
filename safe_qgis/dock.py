@@ -1036,7 +1036,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:   # pylint: disable=W0703
-            self.analysisError(e, myMessage)
+            myContext = self.tr(
+                'A problem was encountered when trying to read keywords.'
+            )
+            self.analysisError(e, myContext)
             return
 
         # Find out what the usable extent and cellsize are
@@ -1045,7 +1048,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            self.analysisError(e, myMessage)
+            myContext = self.tr(
+                'A problem was encountered when trying to determine the '
+                'analysis extents.'
+            )
+            self.analysisError(e, myContext)
             return  # ignore any error
 
         # Ensure there is enough memory
