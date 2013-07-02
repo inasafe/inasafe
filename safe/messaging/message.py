@@ -113,6 +113,8 @@ class Message(MessageElement):
                 last_was_text = False
         return message
 
+    # Argument count differs from overriden method
+    # pylint: disable=W0221
     def to_html(
             self,
             suppress_newlines=False,
@@ -123,8 +125,8 @@ class Message(MessageElement):
             output. If this option is enabled, the entire html output will be
             rendered on a single line.
         :type suppress_newlines: Boolean
-        :param in_div_flag: Whether the message should be placed into a div
-            element.
+        :param in_div_flag: Whether the message should be placed into an outer
+            div element.
         :type in_div_flag: Boolean
 
         :returns: HTML representation of the message.
@@ -155,3 +157,4 @@ class Message(MessageElement):
         if suppress_newlines:
             return message.replace('\n', '')
         return message
+    # pylint: enable=W0221

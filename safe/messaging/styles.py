@@ -64,8 +64,7 @@ TRACEBACK_STYLE = {
     'attributes': 'onclick="hideTracebacks();"'}
 
 TRACEBACK_ITEMS_STYLE = {
-    'style_class': 'traceback-detail',
-    'style_class': 'hidden'
+    'style_class': 'traceback-detail hidden',
 }
 
 # This is typically a text element or its derivatives

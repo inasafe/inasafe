@@ -197,7 +197,6 @@ class DockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly (small extent)."""
 
         # Push OK with the left mouse button
-        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 

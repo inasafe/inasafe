@@ -244,6 +244,8 @@ class ErrorMessage(MessageElement):
 
         return self._render().to_text()
 
+    # Argument count differs from overriden method
+    # pylint: disable=W0221
     def to_html(self, in_div_flag=False):
         """Render a ErrorMessage queue as html.
 
@@ -256,3 +258,4 @@ class ErrorMessage(MessageElement):
         """
 
         return self._render().to_html(in_div_flag=in_div_flag)
+    # pylint: enable=W0221

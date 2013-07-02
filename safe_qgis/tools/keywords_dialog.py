@@ -140,9 +140,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
 
     def togglePostprocessingWidgets(self):
-        """
-
-
+        """Hide or show the post processing widgets depending on context.
         """
         LOGGER.debug('togglePostprocessingWidgets')
         isPostprocessingOn = self.radPostprocessing.isChecked()

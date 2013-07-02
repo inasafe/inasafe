@@ -140,7 +140,8 @@ class MessageViewer(QtWebKit.QWebView):
         # # TODO probably we should do some escaping of quotes etc in message
         # html = message.to_html(in_div_flag=True)
         # html = html.replace('\'', '\\\'')
-        # # We could run into side effect still if messages contain single quotes
+        # # We could run into side effect still if messages contain single
+        # # quotes
         # LOGGER.debug('HTML: %s' % html)
         # js = 'document.body.innerHTML += \'%s\'' % html
         # LOGGER.debug('JAVASCRIPT: %s' % js)
