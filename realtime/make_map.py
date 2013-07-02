@@ -35,7 +35,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 def processEvent(theEventId=None, theLocale='en'):
     """Launcher that actually runs the event processing.
-    :param theEventId:
+    :param theEventId: The event id to process. If None the latest event will
+       be downloaded and processed.
     :param theLocale:
     """
     myPopulationPath = os.path.join(

@@ -1495,7 +1495,7 @@ class ShakeEvent(QObject):
             myCount += 1
             # calculate the distance and direction from this point
             # to and from the epicenter
-            myId = myFeature.id()
+            myId = myFeature.id
             # We should be able to do this:
             # myPlaceName = str(myFeature['name'].toString())
             # But its not working so we do this:

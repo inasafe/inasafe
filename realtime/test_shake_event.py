@@ -355,8 +355,9 @@ searchBoxes: None
              'roman': 'II', 'dist_to': 2.5372657775878906, 'mmi-int': 2.0,
              'name': 'Tomohon', 'mmi': 1.690000057220459, 'id': 58,
              'population': 27624}]
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
-        self.assertDictEqual(myExpectedResult, myTable)
+        
+        for myCount, myItem in enumerate(myTable):
+            self.assertDictEqual(myExpectedResult[myCount], myItem)
 
     def testImpactedCitiesTable(self):
         """Test getting impacted cities table."""
