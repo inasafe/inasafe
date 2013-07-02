@@ -306,7 +306,7 @@ class SftpShakeData:
         # move the file we care about to the top of the extract dir
         shutil.copyfile(os.path.join(
             self.extractDir(), myExpectedGridXmlFile), myFinalGridXmlFile)
-        if (not os.path.exists(myFinalGridXmlFile)):
+        if not os.path.exists(myFinalGridXmlFile):
             raise CopyError('Error copying grid.xml')
         return myFinalGridXmlFile
 

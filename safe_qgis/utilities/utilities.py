@@ -130,7 +130,10 @@ def getWGS84resolution(theLayer):
 
     if theLayer.crs().authid() == 'EPSG:4326':
         # If it is already in EPSG:4326, simply use the native resolution
-        myCellSize = theLayer.rasterUnitsPerPixel()
+        if qgisVersion() > 10800:
+            myCellSize = theLayer.rasterUnitsPerPixelX()
+        else:
+            myCellSize = theLayer.rasterUnitsPerPixel()
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
@@ -197,7 +200,7 @@ def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
        of the theCurrentKeyword in the attribute names list
 
     Args:
-       * theAllowedTypes: list(Qvariant) - a list of QVariants types that are
+       * theAllowedTypes: list(QVariant) - a list of QVariants types that are
             acceptable for the attribute.
             e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String]
        * theCurrentKeyword - the currently stored keyword for the attribute

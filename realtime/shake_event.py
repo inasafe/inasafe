@@ -37,16 +37,17 @@ from sftp_shake_data import SftpShakeData
 
 
 # TODO I think QCoreApplication is needed for tr() check hefore removing
-from PyQt4.QtCore import (QCoreApplication,
-                          QObject,
-                          QVariant,
-                          QFileInfo,
-                          QString,
-                          QStringList,
-                          QUrl,
-                          QSize,
-                          Qt,
-                          QTranslator)
+from PyQt4.QtCore import (
+    QCoreApplication,
+    QObject,
+    QVariant,
+    QFileInfo,
+    QString,
+    QStringList,
+    QUrl,
+    QSize,
+    Qt,
+    QTranslator)
 from PyQt4.QtXml import QDomDocument
 # We should remove the following pylint suppressions when we support only QGIS2
 # pylint: disable=E0611
@@ -58,6 +59,7 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsVectorLayer,
+    QgsRaster,
     QgsRasterLayer,
     QgsRasterDataProvider,
     QgsRectangle,
@@ -1309,7 +1311,7 @@ class ShakeEvent(QObject):
             # Populate the mmi field by raster lookup
             # Get a {int, QVariant} back
             myRasterValues = myRasterLayer.dataProvider().identify(
-                myPoint, QgsRasterDataProvider.IdentifyFormatValue).results()
+                myPoint, QgsRaster.IdentifyFormatValue).results()
             myRasterValues = myRasterValues.values()
             if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster
@@ -1742,8 +1744,10 @@ class ShakeEvent(QObject):
             theShakeRasterPath=myHazardPath,
             thePopulationRasterPath=myExposurePath)
 
-        myClippedHazardLayer = safe_read_layer(myClippedHazard.source())
-        myClippedExposureLayer = safe_read_layer(myClippedExposure.source())
+        myClippedHazardLayer = safe_read_layer(
+            str(myClippedHazard.source()))
+        myClippedExposureLayer = safe_read_layer(
+            str(myClippedExposure.source()))
         myLayers = [myClippedHazardLayer, myClippedExposureLayer]
 
         myFunctionId = 'I T B Fatality Function'

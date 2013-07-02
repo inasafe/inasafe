@@ -33,7 +33,6 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis)
-
 from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.help import Help
