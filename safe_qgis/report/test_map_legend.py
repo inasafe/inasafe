@@ -117,8 +117,8 @@ class MapLegendTest(unittest.TestCase):
         myTolerance = 0  # to allow for version number changes in disclaimer
         myFlag, myMessage = checkImages('getRasterLegend', myPath, myTolerance)
         myMessage += (
-            '\nWe want these images to match, if they do already copy the test '
-            'image generated to create a new control image.')
+            '\nWe want these images to match, if they do already copy the test'
+            ' image generated to create a new control image.')
         assert myFlag, myMessage
 
     def test_addSymbolToLegend(self):
@@ -176,8 +176,8 @@ class MapLegendTest(unittest.TestCase):
         myFlag, myMessage = checkImages('addClassToLegend', myPath,
                                         myTolerance)
         myMessage += (
-            '\nWe want these images to match, if they do already copy the test '
-            'image generated to create a new control image.')
+            '\nWe want these images to match, if they do already copy the test'
+            ' image generated to create a new control image.')
         assert myFlag, myMessage
 
 if __name__ == '__main__':

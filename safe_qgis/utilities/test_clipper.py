@@ -254,7 +254,8 @@ class ClipperTest(unittest.TestCase):
         assert os.path.exists(myResult.source())
         L = readSafeLayer(myResult.source())
         kwds = L.get_keywords()
-        # myMessage = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
+        # myMessage = 'Extra keyword wasn\'t found in %s: %s' % (myResult,
+        # kwds)
         assert kwds['kermit'] == 'piggy'
 
         # Clip the raster to the bbox

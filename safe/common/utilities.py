@@ -403,6 +403,7 @@ def format_decimal(interval, my_number):
     return (format_int(int(my_number_int)) + get_decimal_separator() +
             my_number_decimal)
 
+
 def get_decimal_separator():
     """Return decimal separator according to the locale
     """
@@ -411,6 +412,7 @@ def get_decimal_separator():
         return ','
     else:
         return '.'
+
 
 def get_thousand_separator():
     """Return decimal separator according to the locale

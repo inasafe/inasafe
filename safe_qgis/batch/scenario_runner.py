@@ -143,10 +143,10 @@ def setAggregationLayer(theAggregationLayer, theDock=None):
         the desired aggregation layer.
     :param theDock: a dock instance
 
-    :returns bool: True on success, False in the case that the aggregation layer
-        is not in the aggregation selector.
+    :returns bool: True on success, False in the case that the aggregation
+        layer is not in the aggregation selector.
 
-    .. note:: Probably wont work for sublayers and anything else other than
+    .. note:: Probably won't work for sublayers and anything else other than
         file based layers (e.g. shp).
 
     """
