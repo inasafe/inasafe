@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'function_options_dialog_base.ui'
 #
-# Created: Wed Jun 26 13:57:36 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Tue Jul  2 08:41:17 2013
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_FunctionOptionsDialogBase(object):
     def setupUi(self, FunctionOptionsDialogBase):
@@ -63,6 +72,6 @@ class Ui_FunctionOptionsDialogBase(object):
         QtCore.QMetaObject.connectSlotsByName(FunctionOptionsDialogBase)
 
     def retranslateUi(self, FunctionOptionsDialogBase):
-        FunctionOptionsDialogBase.setWindowTitle(QtGui.QApplication.translate("FunctionOptionsDialogBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("FunctionOptionsDialogBase", "Options", None, QtGui.QApplication.UnicodeUTF8))
+        FunctionOptionsDialogBase.setWindowTitle(_translate("FunctionOptionsDialogBase", "Dialog", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("FunctionOptionsDialogBase", "Options", None))
 
