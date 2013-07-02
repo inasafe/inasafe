@@ -38,13 +38,16 @@ class MEMORYSTATUSEX(ctypes.Structure):
 
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions
-    Input
-        statement: expression
-        message: error message in case statement evaluates as False
 
-    Output
+    Input:
+      statement: expression
+
+      message: error message in case statement evaluates as False
+
+    Output:
         None
-    Raises
+
+    Raises:
         VerificationError in case statement evaluates to False
     """
 
@@ -127,7 +130,7 @@ def unique_filename(**kwargs):
     If dir is specified, the tempfile will be created in the path specified
     otherwise the file will be created in a directory following this scheme:
 
-    :file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
+    :file:'/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
 
     See http://docs.python.org/library/tempfile.html for details.
 
@@ -458,27 +461,28 @@ def get_significant_decimal(my_decimal):
 
 def humanize_class(my_classes):
     """Return humanize interval of an array
-    For example:
-    Original Array :                    Result:
-    1.1  -  5754.1                      0  -  1
-    5754.1  -  11507.1                  1  -  5,754
-                                        5,754  -  11,507
+    For example::
 
-    Original Array :                    Result:
-    0.1  -  0.5                         0  -  0.1
-    0.5  -  0.9                         0.1  -  0.5
-                                        0.5  -  0.9
+        Original Array:                     Result:
+        1.1  -  5754.1                      0  -  1
+        5754.1  -  11507.1                  1  -  5,754
+                                            5,754  -  11,507
 
-    Original Array :                    Result:
-    7.1  -  7.5                         0  -  7.1
-    7.5  -  7.9                         7.1  -  7.5
-                                        7.5  -  7.9
+        Original Array:                     Result:
+        0.1  -  0.5                         0  -  0.1
+        0.5  -  0.9                         0.1  -  0.5
+                                            0.5  -  0.9
 
-    Original Array :                    Result:
-    6.1  -  7.2                         0  -  6
-    7.2  -  8.3                         6  -  7
-    8.3  -  9.4                         7  -  8
-                                        8  -  9
+        Original Array:                     Result:
+        7.1  -  7.5                         0  -  7.1
+        7.5  -  7.9                         7.1  -  7.5
+                                            7.5  -  7.9
+
+        Original Array:                     Result:
+        6.1  -  7.2                         0  -  6
+        7.2  -  8.3                         6  -  7
+        8.3  -  9.4                         7  -  8
+                                            8  -  9
     """
     min_value = 0
     if min_value - my_classes[0] == 0:
@@ -533,6 +537,7 @@ def create_classes(my_list, num_classes):
 def create_label(my_tuple, extra_label=None):
     """Return a label based on my_tuple (a,b) and extra label.
     a and b are string.
+
     The output will be something like:
                 [a - b] extra_label
     """

@@ -23,13 +23,18 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
     :author AIFDR
     :rating 4
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
-                    layertype=='vector'
 
-    :param requires category=='exposure' and \
-                    subcategory=='population' and \
-                    layertype=='raster'
+    :param requires::
+
+      category=='hazard' and
+      subcategory in ['flood', 'tsunami'] and
+      layertype=='vector'
+
+    :param requires::
+
+      category=='exposure' and
+      subcategory=='population' and
+      layertype=='raster'
     """
 
     title = tr('Need evacuation')
@@ -84,16 +89,19 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     def run(self, layers):
         """Risk plugin for flood population evacuation
 
-        Input
+        Input:
           layers: List of layers expected to contain
+
               my_hazard : Vector polygon layer of flood depth
+
               my_exposure : Raster layer of population data on the same
-                            grid as my_hazard
+                grid as my_hazard
 
         Counts number of people exposed to areas identified as flood prone
 
         Return
           Map of population exposed to flooding
+
           Table with number of people evacuated and supplies required
         """
         # Identify hazard and exposure layers

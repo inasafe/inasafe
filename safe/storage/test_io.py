@@ -261,10 +261,11 @@ class Test_IO(unittest.TestCase):
         This test verifies that such polygons can be read as 2d - i.e.
         with the third dimension removed.
 
-        ogrinfo reports this for 25d polygons:
-        INFO: Open of `../inasafe_data/test/25dpolygon.shp'
-        using driver `ESRI Shapefile' successful.
-        1: 25dpolygon (3D Polygon)
+        ogrinfo reports this for 25d polygons::
+
+          INFO: Open of `../inasafe_data/test/25dpolygon.shp'
+          using driver `ESRI Shapefile' successful.
+          1: 25dpolygon (3D Polygon)
 
         """
 

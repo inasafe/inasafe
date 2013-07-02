@@ -50,7 +50,8 @@ class AbstractPostprocessor():
         self._results = None
 
     def description(self):
-        """Describe briefly what the post processor does.
+        """
+        Describe briefly what the post processor does.
 
         Args:
             None
@@ -64,8 +65,9 @@ class AbstractPostprocessor():
         raise NotImplementedError('Please don\'t use this class directly')
 
     def setup(self, params):
-        """Abstract method to be called from the concrete implementation
-         with AbstractPostprocessor.setup(self, None) it takes care of results
+        """
+        Abstract method to be called from the concrete implementation
+        with AbstractPostprocessor.setup(self, None) it takes care of results
         being initialized
 
         Args:
@@ -81,8 +83,9 @@ class AbstractPostprocessor():
         self._results = OrderedDict()
 
     def process(self):
-        """Abstract method to be called from the concrete implementation
-         with AbstractPostprocessor.process(self) it takes care of results
+        """
+        Abstract method to be called from the concrete implementation
+        with AbstractPostprocessor.process(self) it takes care of results
         being initialized
 
         Args:
@@ -96,8 +99,9 @@ class AbstractPostprocessor():
             self._raise_error('setup needs to be called before process')
 
     def clear(self):
-        """Abstract method to be called from the concrete implementation
-         with AbstractPostprocessor.process(self) it takes care of results
+        """
+        Abstract method to be called from the concrete implementation
+        with AbstractPostprocessor.process(self) it takes care of results
         being cleared
 
         Args:

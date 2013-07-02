@@ -27,79 +27,104 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
                                           mode='linear'):
     """Assign hazard values to exposure data
 
-    This is the high level wrapper around interpolation functions for different
-    combinations of data types.
+        This is the high level wrapper around interpolation functions for
+        different combinations of data types.
 
     Args:
-       * hazard: Layer representing the hazard levels
-       * exposure: Layer representing the exposure data
-       * layer_name: Optional name of returned layer.
-             If None (default) the name of the exposure layer is used for
-             the returned layer.
-       * attribute_name:
-             If hazard layer is of type raster, this will be the name for new
-             attribute in the result containing the hazard level.
-             If None (default) the name of hazard layer is used.
+           * hazard: Layer representing the hazard levels
+           * exposure: Layer representing the exposure data
+           * layer_name: Optional name of returned layer.
+                 If None (default) the name of the exposure layer is used for
+                 the returned layer.
+           * attribute_name:
+                 If hazard layer is of type raster, this will be the name for
+                 new attribute in the result containing the hazard level.
 
-             If hazard layer is polygon and exposure layer raster, this will be
-             the name of the new attribute containing the raster value at each
-             point.
+                 If None (default) the name of hazard layer is used.
 
-             If hazard and exposure layers are both of type vector,
-             this attribute is ignored.
+                 If hazard layer is polygon and exposure layer raster,
+                 this will be the name of the new attribute containing the
+                 raster value at each point.
 
-             If hazard and exposure layers are both of type raster,
-             this attribute is ignored.
-        * mode:
-             Interpolation mode for raster to point interpolation only.
-             Permissible values are 'linear' (default) which will employ
-             bilinear interpolation and 'constant' which will employ a
-             piecewise constant interpolation. This parameter is passed
-             all the way down to the underlying interpolation function
-             interpolate2d (module common/interpolation2d.py)
+                 If hazard and exposure layers are both of type vector,
+                 this attribute is ignored.
+
+                 If hazard and exposure layers are both of type raster,
+                 this attribute is ignored.
+
+            * mode:
+                 Interpolation mode for raster to point interpolation only.
+                 Permissible values are 'linear' (default) which will employ
+                 billinear interpolation and 'constant' which will employ a
+                 piecewise constant interpolation. This parameter is passed
+                 all the way down to the underlying interpolation function
+                 interpolate2d (module common/interpolation2d.py)
 
     Returns:
-        Layer representing the exposure data with hazard levels assigned.
+            Layer representing the exposure data with hazard levels assigned.
 
     Raises:
-        Underlying exceptions are propagated
+            Underlying exceptions are propagated
 
     Note:
+            Admissible combinations of input layer types are
 
-        Admissible combinations of input layer types are
 
-               Exposure |  Raster     Polygon    Line     Point
-        Hazard          |
-        -------------------------------------------------------
-        Polygon         |  Y          Y          Y        Y
-        Raster          |  Y          Y          Y        Y
+
+    Note:
+            Admissible combinations of input layer types are
+
+       +----------------+----------+-----------+--------+---------+
+       | Exposure       |  Raster  |  Polygon  |  Line  |  Point  |
+       | Hazard         |          |           |        |         |
+       +================+==========+===========+========+=========+
+       | Polygon        |  Y       |   Y       |   Y    |    Y    |
+       +----------------+----------+-----------+--------+---------+
+       | Raster         |  Y       |   Y       |   Y    |    Y    |
+       +----------------+----------+-----------+--------+---------+
+
 
         with the following methodologies used:
 
-        Polygon-Point:   Clip points to polygon and assign polygon attributes
+          Polygon-Point: Clip points to polygon and assign polygon attributes
             to them.
-        Polygon-Line:    * Not Implemented *
-        Polygon-Polygon: * Not Implemented *
-        Polygon-Raster:  Convert raster to points, clip to polygon,
-            assign values and return point data
-        Raster-Point:    Bilinear (or constant) interpolation as currently
-            implemented
-        Raster-Line:     * Not Implemented *
-        Raster-Polygon:  Calculate centroids and use Raster - Point algorithm
-        Raster-Raster:   Exposure raster is returned as is
 
+          Polygon-Line: * Not Implemented *
+
+          Polygon-Polygon: * Not Implemented *
+
+          Polygon-Raster: Convert raster to points, clip to polygon,
+            assign values and return point data
+
+          Raster-Point: Bilinear (or constant) interpolation as currently
+            implemented
+
+          Raster-Line: * Not Implemented *
+
+          Raster-Polygon:  Calculate centroids and use Raster - Point algorithm
+
+          Raster-Raster:   Exposure raster is returned as is
 
         The data type of the resulting layer depends on the combination of
         input types as follows:
 
-        Polygon-Point:   Point data
-        Polygon-Line:    N/A
-        Polygon-Polygon: N/A
-        Polygon-Raster:  Point data
-        Raster-Point:    Point data
-        Raster-Line:     N/A
-        Raster-Polygon:  Polygon data
-        Raster-Raster:   Raster data
+          Polygon-Point: Point data
+
+          Polygon-Line: N/A
+
+          Polygon-Polygon: N/A
+
+          Polygon-Raster: Point data
+
+          Raster-Point: Point data
+
+          Raster-Line: N/A
+
+          Raster-Polygon: Polygon data
+
+          Raster-Raster: Raster data
+
+
     """
 
     # Make sure attribute name can be stored in a shapefile
@@ -597,11 +622,14 @@ def make_circular_polygon(centers, radii, attributes=None):
 
     Args:
         centers: list of (longitude, latitude)
+
         radii: desired approximate radii in meters (must be
-               monotonically ascending).
+        monotonically ascending).
+
         Can be either one number or list of numbers
         attributes (optional): Attributes for each center
-    Returns
+
+    Returns:
         Vector polygon layer representing circle in WGS84
     """
 

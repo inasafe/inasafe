@@ -1453,7 +1453,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def getClipParameters(self):
         """Calculate the best extents to use for the assessment.
 
-        :returns: A tuple consiting of:
+        :returns: A tuple consisting of:
+
             * myExtraExposureKeywords: dict - any additional keywords that
                 should be written to the exposure layer. For example if
                 rescaling is required for a raster, the original resolution
