@@ -94,9 +94,10 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
+from realtime.utils import setupLogger
 # from shake_data import ShakeData
 
-# The logger is intialised in utils.py by init
+setupLogger()
 LOGGER = logging.getLogger('InaSAFE')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -1287,7 +1288,7 @@ class ShakeEvent(QObject):
                 #LOGGER.debug('Writing feature to mem layer')
             # calculate the distance and direction from this point
             # to and from the epicenter
-            myId = str(myFeature.id)
+            myId = str(myFeature.id())
 
             # Make sure the fcode contains PPL (populated place)
             myCode = str(myFeature['fcode'].toString())
@@ -1495,7 +1496,7 @@ class ShakeEvent(QObject):
             myCount += 1
             # calculate the distance and direction from this point
             # to and from the epicenter
-            myId = myFeature.id
+            myId = myFeature.id()
             # We should be able to do this:
             # myPlaceName = str(myFeature['name'].toString())
             # But its not working so we do this:
