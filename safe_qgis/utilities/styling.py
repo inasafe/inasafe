@@ -1,6 +1,6 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-  **IS Utilitles implementation.**
+  **IS Utilities implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -49,17 +49,12 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
     value of **100** can be used. The calling function should take care to
     scale the transparency level to between 0 and 100.
 
-    Args:
-        * theQgisVectorLayer: QgsMapLayer
-        * theStyle: dict - Dictionary of the form as in the example below
+    :param theQgisVectorLayer: QgsMapLayer
+    :param theStyle: Dictionary of the form as in the example below
 
-    Returns:
-        None - Sets and saves style for theQgisVectorLayer
+    :returns: None - Sets and saves style for theQgisVectorLayer
 
-    Raises:
-        None
-
-    Example:
+    Example::
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
@@ -70,9 +65,8 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
         {'transparency': 80, 'max': 3.5, 'colour': '#f31a1c',
          'min': 2.5, 'label': '[2.5 - 3.5] High damage', 'size' : 1}]}
 
-        .. note:: The transparency and size keys are optional. Size applies
-           to points only.
-
+    .. note:: The transparency and size keys are optional. Size applies
+       to points only.
     """
     myTargetField = theStyle['target_field']
     myClasses = theStyle['style_classes']
@@ -169,17 +163,12 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
     value of **100** can be used. The calling function should take care to
     scale the transparency level to between 0 and 100.
 
-    Args:
-        * theQgisVectorLayer: QgsMapLayer
-        * theStyle: dict - Dictionary of the form as in the example below
+    :param theQgisVectorLayer: QgsMapLayer
+    :param theStyle: Dictionary of the form as in the example below
 
-    Returns:
-        None - Sets and saves style for theQgisVectorLayer
+    :returns: None - Sets and saves style for theQgisVectorLayer
 
-    Raises:
-        None
-
-    Example:
+    Example::
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
@@ -190,12 +179,11 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
         {'transparency': 80, 'value': 3, 'colour': '#f31a1c',
          'label': 'High damage', 'size' : 1}]}
 
-        .. note:: The transparency and size keys are optional. Size applies
-           to points only.
+    .. note:: The transparency and size keys are optional. Size applies
+        to points only.
 
-        .. todo:: We should change 'value' in style classes to something more
-            meaningful e.g. descriminant value
-
+    .. note:: We should change 'value' in style classes to something more
+        meaningful e.g. discriminant value
     """
     myTargetField = theStyle['target_field']
     myClasses = theStyle['style_classes']

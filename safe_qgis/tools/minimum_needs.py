@@ -31,19 +31,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
-    """Dialog implementation class for the InaSAFE keywords editor."""
+    """Dialog implementation class for the InaSAFE keywords editor.
+    """
 
     def __init__(self, parent):
         """Constructor for the dialog.
 
-        Args:
-           * parent - parent widget of this dialog.
-           * iface - a Quantum GIS QGisAppInterface instance.
-
-        Returns:
-           not applicable.
-        Raises:
-           no exceptions explicitly raised.
+        :param parent: parent widget of this dialog.
+        :param iface: a Quantum GIS QGisAppInterface instance.
         """
 
         QtGui.QDialog.__init__(self, parent)
@@ -93,14 +88,11 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
     def minimum_needs(self, input_layer, population_name):
         """
-            Args
-                input_layer: InaSAFE layer object assumed to contain
-                             population counts
-                population_name: Attribute name that holds population count
-            Returns
-                InaSAFE layer with attributes for minimum needs as per Perka 7
+            :param input_layer: InaSAFE layer object assumed to contain
+                population counts
+            :param population_name: Attribute name that holds population count
 
-
+            :returns: Layer with attributes for minimum needs as per Perka 7
         """
 
         needs_attributes = []
@@ -157,7 +149,8 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         return output_layer
 
     def polygonLayersToCombo(self):
-        """Populate the combo with all polygon layers loaded in QGIS."""
+        """Populate the combo with all polygon layers loaded in QGIS.
+        """
 
         # noinspection PyArgumentList
         myRegistry = QgsMapLayerRegistry.instance()
@@ -177,12 +170,9 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
     def on_cboPolygonLayers_currentIndexChanged(self, theIndex=None):
         """Automatic slot executed when the layer is changed to update fields.
 
-        Args:
-           theIndex: int - passed by the signal that triggers this slot.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised."""
+        :param theIndex: Passed by the signal that triggers this slot.
+        :type theIndex: int
+        """
         myLayerId = self.cboPolygonLayers.itemData(
             theIndex, QtCore.Qt.UserRole).toString()
         # noinspection PyArgumentList

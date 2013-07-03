@@ -219,13 +219,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenInput_clicked(self):
         """Autoconnect slot activated when the open input tool button is
-        clicked,
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getOpenFileName(
@@ -236,13 +230,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenOutput_clicked(self):
         """Autoconnect slot activated when the open output tool button is
-        clicked,
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getSaveFileName(

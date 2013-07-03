@@ -208,9 +208,9 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
     def runSimpleTask(self, theItem):
         """Run a simple scenario.
 
-        :param theItem: a dictionary contains the scenario configuration
-        :returns True if success, otherwise return False.
-
+        :param theItem: A dictionary contains the scenario configuration
+        :returns: True if success, otherwise return False.
+        :rtype: bool
         """
         LOGGER.info('Run simple task' + str(theItem))
         scenarioDirectory = str(self.leSourceDir.text())
@@ -467,7 +467,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
     def reportPath(self, theDirectory, theTitle, theCount=0, theIndex=''):
         """Get PDF report filename based on theDirectory and theTitle and the
-         index if given
+        index if given
+
         :param theDirectory: the directory of pdf report file
         :param theTitle: title of report
         :param theCount: the number of as scenario has been run

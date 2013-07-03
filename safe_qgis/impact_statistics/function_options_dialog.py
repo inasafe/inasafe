@@ -38,20 +38,16 @@ except AttributeError:
 # Maybe also change filename and Base name accordingly.
 class FunctionOptionsDialog(QtGui.QDialog,
                             Ui_FunctionOptionsDialogBase):
-    """ConfigurableImpactFunctions Dialog for InaSAFE."""
+    """ConfigurableImpactFunctions Dialog for InaSAFE.
+    """
 
     def __init__(self, theParent=None):
         """Constructor for the dialog.
 
-                This dialog will show the user the form for editing
-                impact functions parameters if any.
+        This dialog will show the user the form for editing impact functions
+        parameters if any.
 
-        Args:
-           * theParent - Optional widget to use as parent
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
+        :param theParent: Optional widget to use as parent
         """
         QtGui.QDialog.__init__(self, theParent)
         self.setupUi(self)
@@ -62,15 +58,14 @@ class FunctionOptionsDialog(QtGui.QDialog,
         self.values = OrderedDict()
 
     def bind(self, theObject, theProperty, theType):
-        """Create a function that return the QWidget property
-        of object and convert the value to type.
+        """Create a function that return the QWidget property of object and
+        convert the value to type.
 
-        Args:
-           * theObject - QWidget instance
-           * theProperty - the name of property inside QWidget instance
-           * theType - a function to convert the property value
-        Returns:
-           a function that return the property value of theObject
+        :param theObject: QWidget instance
+        :param theProperty: The name of property inside QWidget instance
+        :param theType: A function to convert the property value
+
+        :returns: The property value of theObject
         """
         return lambda: theType(theObject.property(theProperty).toPyObject())
 
@@ -79,10 +74,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         .. note:: see http://tinyurl.com/pyqt-differences
 
-        Args:
-           * params - parameters to be edited
-        Returns:
-           not applicable
+        :param theParams: Parameters to be edited
         """
 
         for myKey, myValue in theParams.items():
@@ -99,10 +91,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
     def buildMinimumNeedsForm(self, theParams):
         """Build minimum needs tab
 
-        Args:
-           * theParams - dictionary containing element of form
-        Returns:
-           not applicable
+        :param theParams: A Dictionary containing element of form
         """
         # create minimum needs tab
         myTab = QWidget()
@@ -126,10 +115,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
     def buildPostProcessorForm(self, theParams):
         """Build Post Processor Tab
 
-        Args:
-           * theParams - dictionary containing element of form
-        Returns:
-           not applicable
+        :param  theParams: A Dictionary containing element of form
         """
 
         # create postprocessors tab
@@ -240,13 +226,12 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
     def parseInput(self, theInput):
         """Parse the input value of widget.
-        Args:
-            * theInput: dictionary that holds all value of element
 
-        Returns:
-            a dictionary that can be consumed for impact functions.
+        :param theInput: Dictionary that holds all values of element
 
-        Raises:
+        :returns: Dictionary that can be consumed for impact functions.
+
+        :raises:
             * ValueError - occurs when some input cannot be converted
                            to suitable type.
         """

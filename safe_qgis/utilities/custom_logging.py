@@ -96,16 +96,14 @@ def addLoggingHanderOnce(theLogger, theHandler):
 def setupLogger(theLogFile=None, theSentryUrl=None):
     """Run once when the module is loaded and enable logging
 
-    Args:
-        * theLogFile: str - optional full path to a file to write logs to.
-        * theSentryUrl: str - optional url to sentry api for remote logging.
-            Defaults to http://c64a83978732474ea751d432ab943a6b
-                :d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5
-            which is the sentry project for InaSAFE desktop.
+    :param theLogFile: Optional full path to a file to write logs to.
+    :type theLogFile: str
 
-    Returns: None
-
-    Raises: None
+    :param theSentryUrl: Optional url to sentry api for remote
+        logging. Defaults to http://c64a83978732474ea751d432ab943a6b:
+        d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5 which is the
+        sentry project for InaSAFE desktop.
+    :type theSentryUrl: str
 
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
@@ -116,14 +114,14 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
        utilities.setupLogger()
 
     You would typically only need to do the above once ever as the
-    safe modle is initialised early and will set up the logger
+    safe model is initialised early and will set up the logger
     globally so it is available to all packages / subpackages as
     shown below.
 
     In a module that wants to do logging then use this example as
     a guide to get the initialised logger instance::
 
-       # The LOGGER is intialised in utilities.py by init
+       # The LOGGER is initialised in utilities.py by init
        import logging
        LOGGER = logging.getLogger('InaSAFE')
 
@@ -197,34 +195,27 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
 def temp_dir(sub_dir='work'):
     """Obtain the temporary working directory for the operating system.
 
-    #####################################################################
-       Shamelessly copied from safe/common/utilities.py to avoid import
-       issues. Tim 20 June 2013
-    #####################################################################
-
     An inasafe subdirectory will automatically be created under this and
     if specified, a user subdirectory under that.
 
     .. note:: You can use this together with unique_filename to create
-       a file in a temporary directory under the inasafe workspace. e.g.
+       a file in a temporary directory under the inasafe workspace. e.g.::
 
-       tmpdir = temp_dir('testing')
-       tmpfile = unique_filename(dir=tmpdir)
-       print tmpfile
-       /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C
+           tmpdir = temp_dir('testing')
+           tmpfile = unique_filename(dir=tmpdir)
+           print tmpfile
+           /tmp/inasafe/23-08-2012/timlinux/testing/tmpMRpF_C
 
     If you specify INASAFE_WORK_DIR as an environment var, it will be
     used in preference to the system temp directory.
 
-    Args:
-        sub_dir str - optional argument which will cause an additional
-                subirectory to be created e.g. /tmp/inasafe/foo/
+    :param sub_dir: Optional argument which will cause an additional
+        subdirectory to be created e.g. \/tmp\/inasafe\/foo\/
+    :type sub_dir: str
 
-    Returns:
-        Path to the output clipped layer (placed in the system temp dir).
+    :returns: Path to the output clipped layer (placed in the system temp dir).
 
-    Raises:
-       Any errors from the underlying system calls.
+    :raises: Any errors from the underlying system calls.
     """
     user = getpass.getuser().replace(' ', '_')
     current_date = date.today()

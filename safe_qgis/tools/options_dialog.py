@@ -28,21 +28,16 @@ from safe_qgis.safe_interface import DEFAULTS
 
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
-    """Options dialog for the InaSAFE plugin."""
+    """Options dialog for the InaSAFE plugin.
+    """
 
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
 
-        Args:
-           * parent - parent widget of this dialog
-           * iface - a Quantum GIS QGisAppInterface instance.
-           * theDock - Optional dock widget instance that we can notify of
-             changes to the keywords.
-
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
+        :param parent: Parent widget of this dialog
+        :param iface: A Quantum GIS QGisAppInterface instance.
+        :param theDock: Optional dock widget instance that we can notify of
+            changes to the keywords.
         """
 
         QtGui.QDialog.__init__(self, parent)
@@ -66,12 +61,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxUseThread.setVisible(False)
 
     def restoreState(self):
-        """
-        Args: Reinstate the options based on the user's stored session info
-            None
-        Returns:
-            None
-        Raises:
+        """Reinstate the options based on the user's stored session info.
         """
         mySettings = QtCore.QSettings()
         # myFlag = mySettings.value(
@@ -127,12 +117,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxDevMode.setChecked(myFlag)
 
     def saveState(self):
-        """
-        Args: Store the options into the user's stored session info
-            None
-        Returns:
-            None
-        Raises:
+        """Store the options into the user's stored session info.
         """
         mySettings = QtCore.QSettings()
         mySettings.setValue('inasafe/useThreadingFlag',
@@ -161,17 +146,13 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxDevMode.isChecked())
 
     def showHelp(self):
-        """Load the help text for the options safe_qgis"""
+        """Load the help text for the options safe_qgis
+        """
         if not self.helpDialog:
             self.helpDialog = Help(self.iface.mainWindow(), 'options')
 
     def accept(self):
-        """Method invoked when ok button is clicked
-        Args:
-            None
-        Returns:
-            None
-        Raises:
+        """Method invoked when OK button is clicked.
         """
         self.saveState()
         self.dock.readSettings()
@@ -179,14 +160,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolKeywordCachePath_clicked(self):
-        """Autoconnect slot activated when the select cache file tool button is
-        clicked,
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        """Auto-connect slot activated when the selected cache file tool button
+        is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QtGui.QFileDialog.getSaveFileName(

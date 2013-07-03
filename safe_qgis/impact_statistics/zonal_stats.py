@@ -35,12 +35,14 @@ LOGGER = logging.getLogger('InaSAFE')
 def tr(theText):
     """We define a tr() alias here since the utilities implementation below
     is not a class and does not inherit from QObject.
+
     .. note:: see http://tinyurl.com/pyqt-differences
-    Args:
-       theText - string to be translated
-    Returns:
-       Translated version of the given string if available, otherwise
-       the original string.
+
+    :param theText: String to be translated
+    :type theText: str
+
+    :returns: Translated version of the given string if available,
+        otherwise the original string.
     """
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     return QCoreApplication.translate('zonalstats', theText)

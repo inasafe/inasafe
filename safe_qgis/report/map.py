@@ -105,13 +105,6 @@ class Map():
 
     def setupComposition(self):
         """Set up the composition ready for drawing elements onto it.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         LOGGER.debug('InaSAFE Map setupComposition called')
         myCanvas = self.iface.mapCanvas()
@@ -125,14 +118,7 @@ class Map():
     def composeMap(self):
         """Place all elements on the map ready for printing.
 
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            Any exceptions raised will be propagated.
+        :raises: Any exceptions raised will be propagated.
         """
         self.setupComposition()
         # Keep track of our vertical positioning as we work our way down
@@ -157,18 +143,12 @@ class Map():
     def renderComposition(self):
         """Render the map composition to an image and save that to disk.
 
-        Args:
-            None
-
-        Returns:
+        :returns:
             tuple:
                 * str: myImagePath - absolute path to png of rendered map
                 * QImage: myImage - in memory copy of rendered map
                 * QRectF: myTargetArea - dimensions of rendered map
-            str: Absolute file system path to the rendered image.
-
-        Raises:
-            None
+        :rtype: str: Absolute file system path to the rendered image.
         """
         LOGGER.debug('InaSAFE Map renderComposition called')
         # NOTE: we ignore self.composition.printAsRaster() and always rasterise
