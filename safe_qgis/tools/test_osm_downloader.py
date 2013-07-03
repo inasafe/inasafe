@@ -27,7 +27,9 @@ from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
 from safe_qgis.tools.osm_downloader import OsmDownloader
 from safe_qgis.utilities.utilities import downloadWebUrl
-from safe_qgis.utilities.utilities_test import getQgisTestApp, assertHashForFile
+from safe_qgis.utilities.utilities_test import (
+    getQgisTestApp,
+    assertHashForFile)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
@@ -37,7 +39,6 @@ TEST_DATA_DIR = os.path.join(os.path.dirname(__file__),
 
 
 class FakeQNetworkReply(QObject):
-
     readyRead = pyqtSignal()
     downloadProgress = pyqtSignal('qint64', 'qint64')
 
@@ -50,7 +51,9 @@ class FakeQNetworkReply(QObject):
     def isFinished(self):
         """ simulate download progress """
         self.progress += 1
+        # noinspection PyUnresolvedReferences
         self.readyRead.emit()
+        # noinspection PyUnresolvedReferences
         self.downloadProgress.emit(self.progress, 4)
         return self.progress >= 4
 
@@ -68,13 +71,14 @@ class FakeQNetworkReply(QObject):
     # pylint: disable=W0613
     def attribute(self, theAttribute):
         return QVariant()
-    # pylint: enable=W0613
+        # pylint: enable=W0613
 
 
 class FakeQNetworkAccessManager:
     # pylint: disable=W0613
     def post(self, theRequest, theData=None):
         return self.request(theRequest)
+
     # pylint: enable=W0613
 
     def get(self, theRequest):
@@ -155,11 +159,8 @@ class ImportDialogTest(unittest.TestCase):
         os.remove(myTempFilePath)
 
     def test_extractZip(self):
-        myInput = os.path.join(
-            TEST_DATA_DIR,
-            '../test_data/test_files/test-importdlg-extractzip.zip')
         myOutDir = tempfile.mkdtemp()
-
+        myInput = os.path.join(TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
         self.importDlg.extractZip(myInput, myOutDir)
 
         myMessage = "file {0} not exist"
@@ -189,15 +190,14 @@ class ImportDialogTest(unittest.TestCase):
         self.importDlg.doImport()
 
         myResult = self.importDlg.progressDialog.result()
-        myMessage = "result dont match. current result is %s " % myResult
+        myMessage = "result do not match. current result is %s " % myResult
         assert myResult == QDialog.Accepted, myMessage
 
     def test_loadShapeFile(self):
         """ test loading shape file to QGIS Main Window """
 
         myInput = os.path.join(
-            TEST_DATA_DIR,
-            '../test_data/test_files/test-importdlg-extractzip.zip')
+            TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
         myOutDir = tempfile.mkdtemp()
 
         self.importDlg.extractZip(myInput, myOutDir)

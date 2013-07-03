@@ -117,6 +117,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                 try:
                     displaced = int(population)
                 except ValueError:
+                    # noinspection PyTypeChecker,PyArgumentList
                     QtGui.QMessageBox.information(
                         None,
                         self.tr('Format error'),
@@ -126,7 +127,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                     raise ValueError
 
             # Calculate estimated needs based on BNPB Perka 7/2008
-            # minimum bantuan
+            # minimum needs
 
             # 400g per person per day
             rice = int(displaced * 2.8)
@@ -158,6 +159,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
     def polygonLayersToCombo(self):
         """Populate the combo with all polygon layers loaded in QGIS."""
 
+        # noinspection PyArgumentList
         myRegistry = QgsMapLayerRegistry.instance()
         myLayers = myRegistry.mapLayers().values()
         myFoundFlag = False
@@ -183,6 +185,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
            no exceptions explicitly raised."""
         myLayerId = self.cboPolygonLayers.itemData(
             theIndex, QtCore.Qt.UserRole).toString()
+        # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         myFields = myLayer.dataProvider().fieldNameMap().keys()
         self.cboFields.clear()
@@ -202,6 +205,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         myIndex = self.cboPolygonLayers.currentIndex()
         myLayerId = self.cboPolygonLayers.itemData(
             myIndex, QtCore.Qt.UserRole).toString()
+        # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 
         myFileName = str(myLayer.source())
@@ -218,5 +222,6 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         myOutputLayer.write_to_file(myNewFile)
 
         myNewLayer = QgsVectorLayer(myNewFile, 'Minimum Needs', 'ogr')
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myNewLayer])
         self.done(QtGui.QDialog.Accepted)

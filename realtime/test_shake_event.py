@@ -355,20 +355,24 @@ searchBoxes: None
              'roman': 'II', 'dist_to': 2.5372657775878906, 'mmi-int': 2.0,
              'name': 'Tomohon', 'mmi': 1.690000057220459, 'id': 58,
              'population': 27624}]
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
-        assert myTable == myExpectedResult, myMessage
+        
+        for myCount, myItem in enumerate(myTable):
+            self.assertDictEqual(myExpectedResult[myCount], myItem)
 
     def testImpactedCitiesTable(self):
         """Test getting impacted cities table."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myTable, myPath = myShakeEvent.impactedCitiesTable()
-        myExpectedResult = 906
+        myExpectedStrings = [
+            '<td>Tondano</td><td>33</td><td>I</td>',
+            '<td>Luwuk</td><td>47</td><td>I</td>',
+            '<td>Bitung</td><td>137</td><td>I</td>',
+            '<td>Manado</td><td>451</td><td>I</td>',
+            '<td>Gorontalo</td><td>144</td><td>II</td>']
         myTable = myTable.toNewlineFreeString()
-        myResult = len(myTable)
-        myMessage = ('Got:\n%s\nExpected:\n%s\nFor rendered table:\n%s' %
-                    (myResult, myExpectedResult, myTable))
-        assert myResult == myExpectedResult, myMessage
+        for myString in myExpectedStrings:
+            self.assertIn(myTable, myString)
 
         myExpectedPath = (
             '/tmp/inasafe/realtime/shakemaps-extracted/'

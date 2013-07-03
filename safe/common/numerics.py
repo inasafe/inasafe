@@ -77,7 +77,7 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 
 
 def normal_cdf(x, mu=0, sigma=1):
-    """Cumulative Normal Distribution Function
+    r"""Cumulative Normal Distribution Function
 
     Args:
         * x: scalar or array of real numbers
@@ -101,7 +101,7 @@ def normal_cdf(x, mu=0, sigma=1):
 
 
 def lognormal_cdf(x, median=1, sigma=1):
-    """Cumulative Log Normal Distribution Function
+    r"""Cumulative Log Normal Distribution Function
 
     Args:
         * x: scalar or array of real numbers

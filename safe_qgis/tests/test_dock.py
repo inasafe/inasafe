@@ -197,7 +197,6 @@ class DockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly (small extent)."""
 
         # Push OK with the left mouse button
-        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 
@@ -463,7 +462,6 @@ class DockTest(unittest.TestCase):
         DOCK.accept()
         myResult = DOCK.wvResults.pageToText()
 
-        print myResult
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
         assert format_int(535) in myResult, myMessage
@@ -658,7 +656,7 @@ class DockTest(unittest.TestCase):
         except Exception, e:
             raise Exception('Exception is not expected, %s' % e)
 
-    def test_ResultStyling(self):
+    def test_resultStyling(self):
         """Test that ouputs from a model are correctly styled (colours and
         opacity. """
 
@@ -707,7 +705,7 @@ class DockTest(unittest.TestCase):
         #print "Transparency list:" + str(myTransparencyList)
         #assert (len(myTransparencyList) > 0)
 
-    def test_Issue47(self):
+    def test_issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
         proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""

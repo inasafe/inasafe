@@ -397,7 +397,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myResult = myDialog.getValueForKey('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
-        print 'Dict', myDialog.getKeywords()
+        # print 'Dict', myDialog.getKeywords()
         assert myResult == myExpectedResult, myMessage
 
     def test_on_pbnRemove_clicked(self):

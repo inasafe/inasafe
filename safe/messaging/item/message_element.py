@@ -129,7 +129,7 @@ class MessageElement(object):
             extra_attributes = '%s class="%s"' % (
                 extra_attributes, self.style_class)
         if self.attributes is not None:
-            extra_attributes = '%s ' % extra_attributes
+            extra_attributes = '%s %s' % (extra_attributes, self.attributes)
         return extra_attributes
 
     def html_icon(self):

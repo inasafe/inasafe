@@ -238,7 +238,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
         subcategory: building
         title: flood_osm_4326
 
-    Wheras a simple keywords file would look like this
+    Whereas a simple keywords file would look like this
 
         datatype: flood
         category: hazard
@@ -341,12 +341,12 @@ def check_geotransform(geotransform):
 
     Args
         * geotransform: GDAL geotransform (6-tuple).
-        (top left x, w-e pixel resolution, rotation,
-        top left y, rotation, n-s pixel resolution).
-        See e.g. http://www.gdal.org/gdal_tutorial.html
+          (top left x, w-e pixel resolution, rotation,
+          top left y, rotation, n-s pixel resolution).
+          See e.g. http://www.gdal.org/gdal_tutorial.html
 
     Note
-       This assumes that the spatial reference uses geographic coordinaties,
+       This assumes that the spatial reference uses geographic coordinates,
        so will not work for projected coordinate systems.
     """
 
@@ -582,7 +582,7 @@ def buffered_bounding_box(bbox, resolution):
     """Grow bounding box with one unit of resolution in each direction
 
     Note:
-        This will ensure there is enough pixels to robustly provide
+        This will ensure there are enough pixels to robustly provide
         interpolated values without having to painstakingly deal with
         all corner cases such as 1 x 1, 1 x 2 and 2 x 1 arrays.
 
@@ -603,6 +603,8 @@ def buffered_bounding_box(bbox, resolution):
         Case in point: Interpolation point O would fall outside this domain
                        even though there are enough grid points to support it
 
+    ::
+
         --------------
         |            |
         |   *     *  | *    *
@@ -610,6 +612,7 @@ def buffered_bounding_box(bbox, resolution):
         |            |
         |   *     *  | *    *
         --------------
+
     """
 
     bbox = copy.copy(list(bbox))
@@ -888,9 +891,11 @@ def calculate_polygon_area(polygon, signed=False):
         * polygon: Numeric array of points (longitude, latitude). It is assumed
                    to be closed, i.e. first and last points are identical
         * signed: Optional flag deciding whether returned area retains its
-                    sign:
+                  sign:
+
                   If points are ordered counter clockwise, the signed area
                   will be positive.
+
                   If points are ordered clockwise, it will be negative
                   Default is False which means that the area is always
                   positive.

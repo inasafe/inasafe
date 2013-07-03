@@ -203,8 +203,8 @@ def getBufferedExtent(theGeoExtent, theCellSize):
         Adjusted bounding box
 
     Raises:
-
         Any exceptions are propogated
+
     Note: See docstring for underlying function buffered_bounding_box
           for more details.
     """

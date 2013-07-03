@@ -85,8 +85,8 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
         body = self.tr(
             'This tool will convert an earthquake \'shakemap\' that is in '
-            'grid xml format to a GeoTIFF file. The imported file can be used'
-            'in InaSAFE as an input for inpact functions that require and '
+            'grid xml format to a GeoTIFF file. The imported file can be used '
+            'in InaSAFE as an input for impact functions that require and '
             'earthquake layer.  To use this tool effectively:'
         )
         tips = m.BulletedList()
@@ -183,10 +183,12 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         input_path = str(self.leInputPath.text())
         output_path = str(self.leOutputPath.text())
         if not output_path.endswith('.tif'):
+            # noinspection PyArgumentList
             QMessageBox.warning(
                 self.parent, self.tr('InaSAFE'),
                 (self.tr('Output file name must be tif file')))
         if not os.path.exists(input_path):
+            # noinspection PyArgumentList
             QMessageBox.warning(
                 self.parent, self.tr('InaSAFE'),
                 (self.tr('Input file is not exist')))
@@ -210,6 +212,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             if not layer.isValid():
                 LOGGER.debug("Failed to load")
             else:
+                # noinspection PyArgumentList
                 QgsMapLayerRegistry.instance().addMapLayer(layer)
         self.done(self.Accepted)
 
@@ -224,6 +227,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         Raises:
             None
         """
+        # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getOpenFileName(
             self, self.tr('Input file'), 'grid.xml',
             self.tr('Raw grid file(*.xml)'))
@@ -240,7 +244,8 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         Raises:
             None
         """
+        # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getSaveFileName(
-            self, self.tr('Ouput file'), 'ismailsunni.tif',
+            self, self.tr('Output file'), 'grid.tif',
             self.tr('Raster file(*.tif)'))
         self.leOutputPath.setText(myFilename)

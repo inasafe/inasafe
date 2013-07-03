@@ -44,7 +44,7 @@ class TestInit(unittest.TestCase):
 
         myFilePath = os.path.abspath(
             os.path.join(os.path.dirname(__file__), os.pardir,
-                         '../../__init__.py'))
+                         '../__init__.py'))
         LOGGER.info(myFilePath)
         myFile = file(myFilePath, 'rt')
         myContent = myFile.read()
@@ -53,16 +53,16 @@ class TestInit(unittest.TestCase):
         myCounter = 0
         myLines = myContent.split('\n')
         while myCounter < len(myLines):
-            if re.search('def\s+([^\(]+)', myLines[myCounter]):
-                myMatch = re.search('def\s+([^\(]+)',
+            if re.search(r'def\s+([^\(]+)', myLines[myCounter]):
+                myMatch = re.search(r'def\s+([^\(]+)',
                                     myLines[myCounter]).groups()[0]
                 myCounter += 1
                 while myCounter < len(myLines) and myLines[myCounter] != '':
-                    if re.search('return\s+["\']?([^"\']+)["\']?',
+                    if re.search(r'return\s+["\']?([^"\']+)["\']?',
                                  myLines[myCounter]):
                         myMetadata.append(
                             (myMatch,
-                                re.search('return\s+["\']?([^"\']+)["\']?',
+                                re.search(r'return\s+["\']?([^"\']+)["\']?',
                                           myLines[myCounter]).groups()[0]))
                         break
                     myCounter += 1

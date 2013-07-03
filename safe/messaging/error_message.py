@@ -30,7 +30,11 @@ from . import (
     NumberedList,
     Paragraph)
 from .styles import (
-    SUGGESTION_STYLE, DETAILS_STYLE, TRACEBACK_STYLE, PROBLEM_STYLE)
+    SUGGESTION_STYLE,
+    DETAILS_STYLE,
+    TRACEBACK_STYLE,
+    TRACEBACK_ITEMS_STYLE,
+    PROBLEM_STYLE)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -74,7 +78,7 @@ class ErrorMessage(MessageElement):
         self.problems = []
         self.details = []
         self.suggestions = []
-        self.tracebacks = NumberedList()
+        self.tracebacks = NumberedList(**TRACEBACK_ITEMS_STYLE)
 
         if problem is not None:
             self.problems.append(self._to_message_element(problem))
@@ -240,6 +244,8 @@ class ErrorMessage(MessageElement):
 
         return self._render().to_text()
 
+    # Argument count differs from overriden method
+    # pylint: disable=W0221
     def to_html(self, in_div_flag=False):
         """Render a ErrorMessage queue as html.
 
@@ -252,3 +258,4 @@ class ErrorMessage(MessageElement):
         """
 
         return self._render().to_html(in_div_flag=in_div_flag)
+    # pylint: enable=W0221

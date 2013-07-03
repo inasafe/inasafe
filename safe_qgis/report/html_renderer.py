@@ -60,6 +60,7 @@ class HtmlRenderer():
         Raises:
            no exceptions explicitly raised.
         """
+        # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         return QtCore.QCoreApplication.translate('HtmlRenderer', theString)
 
     def renderHtmlToImage(self, theHtml, theWidthMM):
@@ -125,9 +126,8 @@ class HtmlRenderer():
         """
         LOGGER.info('InaSAFE Map printToPdf called')
         if theFilename is None:
-            myHtmlPdfPath = unique_filename(prefix='table',
-                                           suffix='.pdf',
-                                           dir=temp_dir('work'))
+            myHtmlPdfPath = unique_filename(
+                prefix='table', suffix='.pdf', dir=temp_dir('work'))
         else:
             # We need to cast to python string in case we receive a QString
             myHtmlPdfPath = str(theFilename)
@@ -156,6 +156,7 @@ class HtmlRenderer():
         myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
                                    QtCore.Qt.ScrollBarAlwaysOff)
 
+        # noinspection PyUnresolvedReferences
         self.webView.loadFinished.connect(self.htmlLoadedSlot)
         self.webView.setHtml(myHtml)
         self.htmlLoadedFlag = False
@@ -166,6 +167,7 @@ class HtmlRenderer():
             # Block until the event loop is done printing the page
             myCounter += 1
             time.sleep(mySleepPeriod)
+            # noinspection PyArgumentList
             QtCore.QCoreApplication.processEvents()
 
         if not self.htmlLoadedFlag:

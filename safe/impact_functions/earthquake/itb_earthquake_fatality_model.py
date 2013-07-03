@@ -177,11 +177,13 @@ class ITBFatalityFunction(FunctionProvider):
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
 
-        Input
-        :param layers: List of layers expected to contain,
-                my_hazard: Raster layer of MMI ground shaking
-                my_exposure: Raster layer of population density
+        Input:
 
+        :param layers: List of layers expected to contain,
+
+                my_hazard: Raster layer of MMI ground shaking
+
+                my_exposure: Raster layer of population density
         """
 
         displacement_rate = self.parameters['displacement_rate']

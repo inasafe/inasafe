@@ -116,6 +116,7 @@ class FunctionBrowserTest(unittest.TestCase):
         myDialog.comboBox_subcategory.setCurrentIndex(1)
         resetButton = myDialog.myButtonBox.button(QDialogButtonBox.Reset)
         realTableFilter = myDialog.if_table.toNewlineFreeString()
+        # noinspection PyArgumentList
         QTest.mouseClick(resetButton, Qt.LeftButton)
         realTableReset = myDialog.if_table.toNewlineFreeString()
         msgFilter = 'It should be different table because it is filtered.'
@@ -133,6 +134,7 @@ class FunctionBrowserTest(unittest.TestCase):
         raise SkipTest("This test hangs Jenkins if docs dir not present.")
         myDialog = FunctionBrowser(PARENT)
         myButton = myDialog.buttonBox.button(QDialogButtonBox.Help)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage

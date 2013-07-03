@@ -1,6 +1,6 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-  **IS Utilitles implementation.**
+  **IS Utilities implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -48,7 +48,7 @@ from safe_qgis.safe_interface import styles
 INFO_STYLE = styles.INFO_STYLE
 
 #do not remove this even if it is marked as unused by your IDE
-#resources are used by htmlfooter and header the comment will mark it unused
+#resources are used by html footer and header the comment will mark it unused
 #for pylint
 # noinspection PyUnresolvedReferences
 from safe_qgis.ui import resources_rc  # pylint: disable=W0611
@@ -73,7 +73,7 @@ def tr(theText):
 def getErrorMessage(theException, theContext=None, theSuggestion=None):
     """Convert exception into an ErrorMessage containing a stack trace.
 
-    .. seealso:: https://github.com/AIFDR/inasafe/issues/577
+    .. see also:: https://github.com/AIFDR/inasafe/issues/577
 
     Args:
         * theException: Exception object.
@@ -130,7 +130,10 @@ def getWGS84resolution(theLayer):
 
     if theLayer.crs().authid() == 'EPSG:4326':
         # If it is already in EPSG:4326, simply use the native resolution
-        myCellSize = theLayer.rasterUnitsPerPixel()
+        if qgisVersion() > 10800:
+            myCellSize = theLayer.rasterUnitsPerPixelX()
+        else:
+            myCellSize = theLayer.rasterUnitsPerPixel()
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
@@ -142,7 +145,7 @@ def getWGS84resolution(theLayer):
         myExtent = theLayer.extent()
         myProjectedExtent = myXForm.transformBoundingBox(myExtent)
 
-        # Estimate cellsize
+        # Estimate cell size
         myColumns = theLayer.width()
         myGeoWidth = abs(myProjectedExtent.xMaximum() -
                          myProjectedExtent.xMinimum())
@@ -185,6 +188,7 @@ def qgisVersion():
     try:
         myVersion = unicode(QGis.QGIS_VERSION_INT)
     except AttributeError:
+        # noinspection PyUnresolvedReferences
         myVersion = unicode(QGis.qgisVersion)[0]
     myVersion = int(myVersion)
     return myVersion
@@ -196,7 +200,7 @@ def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
        of the theCurrentKeyword in the attribute names list
 
     Args:
-       * theAllowedTypes: list(Qvariant) - a list of QVariants types that are
+       * theAllowedTypes: list(QVariant) - a list of QVariants types that are
             acceptable for the attribute.
             e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String]
        * theCurrentKeyword - the currently stored keyword for the attribute
@@ -757,6 +761,7 @@ def downloadWebUrl(theManager, theUrl, theOutPath, theProgressDlg=None):
         # progress bar
         def progressEvent(theReceived, theTotal):
 
+            # noinspection PyArgumentList
             QCoreApplication.processEvents()
 
             theProgressDlg.setLabelText("%s / %s" % (theReceived, theTotal))
@@ -772,6 +777,7 @@ def downloadWebUrl(theManager, theUrl, theOutPath, theProgressDlg=None):
 
     # wait until finished
     while not myReply.isFinished():
+        # noinspection PyArgumentList
         QCoreApplication.processEvents()
 
     myFile.close()

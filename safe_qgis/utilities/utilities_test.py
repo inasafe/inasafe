@@ -171,9 +171,9 @@ def unitTestDataPath(theSubdir=None):
 def loadLayer(theLayerFile, theDirectory=TESTDATA):
     """Helper to load and return a single QGIS layer
 
-    :param theDirectory:Optional parameter stating the parent dir. If None,
-             path name is assumed to be absolute
-    :param theLayerFile: Path name to raster or vector file
+    :param theDirectory: Optional parent dir. If None, path name is assumed
+        to be absolute.
+    :param theLayerFile: Path name to raster or vector file.
 
     Returns: QgsMapLayer, str (for layer type)
 

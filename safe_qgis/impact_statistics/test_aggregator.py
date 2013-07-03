@@ -52,7 +52,7 @@ from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.clipper import clipLayer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    getDefaults, extentToGeoArray )
+    getDefaults, extentToGeoArray)
 
 from safe_qgis.utilities.utilities_test import (
     loadStandardLayers,

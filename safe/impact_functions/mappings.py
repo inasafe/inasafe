@@ -21,13 +21,12 @@ def osm2padang(E):
     survey (http://trove.nla.gov.au/work/38470066).
     The mapping was developed by Abigail Baca, World Bank-GFDRR.
 
-    Input
-        E: Vector object representing the OSM data
+    Input E:
+      Vector object representing the OSM data
 
     Output:
-        Vector object like E, but with one new attribute ('VCLASS')
-        representing the vulnerability class used in the Padang dataset
-
+      Vector object like E, but with one new attribute ('VCLASS')
+      representing the vulnerability class used in the Padang dataset
 
     Algorithm
 
@@ -138,12 +137,12 @@ def osm2padang(E):
 def sigab2padang(E):
     """Map SIGAB attributes to Padang vulnerability classes
 
-    Input
-        E: Vector object representing the SIGAB data
+    Input E:
+      Vector object representing the SIGAB data
 
     Output:
-        Vector object like E, but with one new attribute ('VCLASS')
-        representing the vulnerability class used in the Padang dataset
+      Vector object like E, but with one new attribute ('VCLASS')
+      representing the vulnerability class used in the Padang dataset
 
     """
 
@@ -205,22 +204,23 @@ def sigab2padang(E):
 
 
 def osm2bnpb(E, target_attribute='VCLASS'):
-    """Map OSM attributes to BNPB vulnerability classes
+    """
+    Map OSM attributes to BNPB vulnerability classes
 
     This maps attributes collected in the OpenStreetMap exposure data
     (data.kompetisiosm.org) to 2 vulnerability classes identified by
     BNPB in Kajian Risiko Gempabumi VERS 1.0, 2011. They are
     URM: Unreinforced Masonry and RM: Reinforced Masonry
 
-    Input
-        E: Vector object representing the OSM data
-        target_attribute: Optional name of the attribute containing
-                          the mapped vulnerability class. Default
-                          value is 'VCLASS'
+    Input E:
+      Vector object representing the OSM data
+
+      target_attribute: Optional name of the attribute containing
+      the mapped vulnerability class. Default value is 'VCLASS'
 
     Output:
-        Vector object like E, but with one new attribute (e.g. 'VCLASS')
-        representing the vulnerability class used in the guidelines
+      Vector object like E, but with one new attribute (e.g. 'VCLASS')
+      representing the vulnerability class used in the guidelines
     """
 
     # Input check
@@ -295,20 +295,21 @@ def osm2bnpb(E, target_attribute='VCLASS'):
 
 
 def unspecific2bnpb(E, target_attribute='VCLASS'):
-    """Map Unspecific point data to BNPB vulnerability classes
+    """
+    Map Unspecific point data to BNPB vulnerability classes
 
     This makes no assumptions about attributes and maps everything to
     URM: Unreinforced Masonry
 
-    Input
-        E: Vector object representing the OSM data
-        target_attribute: Optional name of the attribute containing
-                          the mapped vulnerability class. Default
-                          value is 'VCLASS'
+    Input E:
+      Vector object representing the OSM data
+
+      target_attribute: Optional name of the attribute containing
+      the mapped vulnerability class. Default value is 'VCLASS'
 
     Output:
-        Vector object like E, but with one new attribute (e.g. 'VCLASS')
-        representing the vulnerability class used in the guidelines
+      Vector object like E, but with one new attribute (e.g. 'VCLASS')
+      representing the vulnerability class used in the guidelines
     """
 
     # Start mapping
@@ -331,15 +332,15 @@ def unspecific2bnpb(E, target_attribute='VCLASS'):
 def sigab2bnpb(E, target_attribute='VCLASS'):
     """Map SIGAB point data to BNPB vulnerability classes
 
-    Input
-        E: Vector object representing the OSM data
-        target_attribute: Optional name of the attribute containing
-                          the mapped vulnerability class. Default
-                          value is 'VCLASS'
+    Input E:
+      Vector object representing the OSM data
+
+    target_attribute: Optional name of the attribute containing
+      the mapped vulnerability class. Default value is 'VCLASS'
 
     Output:
-        Vector object like E, but with one new attribute (e.g. 'VCLASS')
-        representing the vulnerability class used in the guidelines
+      Vector object like E, but with one new attribute (e.g. 'VCLASS')
+      representing the vulnerability class used in the guidelines
     """
 
     # Input check

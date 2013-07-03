@@ -188,6 +188,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         Raises:
             None
         """
+        # noinspection PyCallByClass,PyTypeChecker
         myFilename = QtGui.QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),

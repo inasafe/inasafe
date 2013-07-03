@@ -33,7 +33,6 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis)
-
 from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.help import Help
@@ -1036,7 +1035,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # we should prompt the user for new keywords for agg layer.
             self._checkForStateChange()
         except (KeywordDbError, Exception), e:   # pylint: disable=W0703
-            self.analysisError(e, myMessage)
+            myContext = self.tr(
+                'A problem was encountered when trying to read keywords.'
+            )
+            self.analysisError(e, myContext)
             return
 
         # Find out what the usable extent and cellsize are
@@ -1045,7 +1047,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.getClipParameters()
         except (RuntimeError, InsufficientOverlapError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            self.analysisError(e, myMessage)
+            myContext = self.tr(
+                'A problem was encountered when trying to determine the '
+                'analysis extents.'
+            )
+            self.analysisError(e, myContext)
             return  # ignore any error
 
         # Ensure there is enough memory
@@ -1447,7 +1453,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def getClipParameters(self):
         """Calculate the best extents to use for the assessment.
 
-        :returns: A tuple consiting of:
+        :returns: A tuple consisting of:
+
             * myExtraExposureKeywords: dict - any additional keywords that
                 should be written to the exposure layer. For example if
                 rescaling is required for a raster, the original resolution

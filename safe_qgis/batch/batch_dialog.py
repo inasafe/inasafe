@@ -317,7 +317,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 else:
                     myReport.append('F: %s\n' % str(myNameItem))
                     myFailCount += 1
-            except Exception, e:
+            except Exception, e:  # pylint: disable=W0703
                 LOGGER.exception('Batch execution failed. The exception: ' +
                                  str(e))
                 myReport.append('F: %s\n' % str(myNameItem))
@@ -425,7 +425,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 self.runScriptTask(myFilename)
                 # set status to 'OK'
                 theStatusItem.setText(self.tr('Script OK'))
-            except Exception as e:
+            except Exception as e:  # pylint: disable=W0703
                 # set status to 'fail'
                 theStatusItem.setText(self.tr('Script Fail'))
 
@@ -448,12 +448,13 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 # Load impact layer into QGIS
                 myQGISImpactLayer = readImpactLayer(myImpactLayer)
 
+                # noinspection PyBroadException
                 try:
                     theStatusItem.setText(self.tr('Analysis Ok'))
                     self.createPDFReport(
                         myTitle, myPath, myQGISImpactLayer, theCount, theIndex)
                     theStatusItem.setText(self.tr('Report Ok'))
-                except Exception:
+                except Exception:  # pylint: disable=W0703
                     LOGGER.exception('Unable to render map: "%s"' % myValue)
                     theStatusItem.setText(self.tr('Report Failed'))
                     myResult = False

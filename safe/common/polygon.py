@@ -2,16 +2,15 @@
 
 .. tip::
    The main public functions are:
-    separate_points_by_polygon: Fundamental clipper
-    intersection: Determine intersections of lines
+     separate_points_by_polygon: Fundamental clipper
+     intersection: Determine intersections of lines
 
    Some more specific or helper functions include:
-    inside_polygon
-    is_inside_polygon
-    outside_polygon
-    is_outside_polygon
-    point_on_line
-
+     inside_polygon
+     is_inside_polygon
+     outside_polygon
+     is_outside_polygon
+     point_on_line
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
@@ -194,7 +193,7 @@ def _separate_points_by_polygon(points, polygon,
        regarded as belonging to the polygon (closed = True)
        or not (closed = False). Close can also be None.
        rtol, atol: Tolerances for when a point is considered to coincide with
-                   a line. Default 0.0.
+       a line. Default 0.0.
 
     Output:
        indices: array of same length as points with indices of points falling
@@ -287,7 +286,7 @@ def _separate_points_by_polygon_python(points, polygon,
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
        rtol, atol: Tolerances for when a point is considered to coincide with
-                   a line. Default 0.0.
+       a line. Default 0.0.
 
     Output:
        indices: array of same length as points with indices of points falling
@@ -379,10 +378,12 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8,
         points: Coordinates of either
                 * one point given by sequence [x, y]
                 * multiple points given by list of points or Nx2 array
-        line: Endpoint coordinates [[x0, y0], [x1, y1]] or
-              the equivalent 2x2 numeric array with each row corresponding
-              to a point.
+
+        line: Endpoint coordinates [[x0, y0], [x1, y1]] or the equivalent 2x2
+        numeric array with each row corresponding to a point.
+
         rtol: Relative error for how close a point must be to be accepted
+
         atol: Absolute error for how close a point must be to be accepted
 
     Output
@@ -471,17 +472,21 @@ def in_and_outside_polygon(points, polygon,
                            check_input=True):
     """Separate a list of points into two sets inside and outside a polygon
 
-    Input
-        points: (tuple, list or array) of coordinates
-        polygon: list or Nx2 array of polygon vertices
-        closed: Set to True if points on boundary are considered
-                to be 'inside' polygon
-        holes: list of polygons representing holes. Points inside either of
-               these are considered outside polygon
+    Input:
+      points: (tuple, list or array) of coordinates
 
-    Output
-        inside: Indices of points inside the polygon
-        outside: Indices of points outside the polygon
+      polygon: list or Nx2 array of polygon vertices
+
+      closed: Set to True if points on boundary are considered
+      to be 'inside' polygon
+
+      holes: list of polygons representing holes. Points inside either of
+      these are considered outside polygon
+
+    Output:
+      inside: Indices of points inside the polygon
+
+      outside: Indices of points outside the polygon
 
     See separate_points_by_polygon for more documentation
     """
@@ -596,19 +601,22 @@ def clip_lines_by_polygon(lines, polygon,
                           check_input=True):
     """Clip multiple lines by polygon
 
-    Input
+    Input:
        lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
               where pi and qi are point coordinates (x, y).
+
        polygon: list or Nx2 array of polygon vertices
+
        closed: (optional) determine whether points on boundary should be
-               regarded as belonging to the polygon (closed = True)
-               or not (closed = False) - False is not recommended here
-               This parameter can also be None in which case it is undefined
-               whether a line on the boundary will fall inside or outside.
-               This will make the algorithm about 20% faster.
+       regarded as belonging to the polygon (closed = True)
+       or not (closed = False). False is not recommended here.
+       This parameter can also be None in which case it is undefined
+       whether a line on the boundary will fall inside or outside.
+       This will make the algorithm about 20% faster.
+
        check_input: Allows faster execution if set to False
 
-    Output
+    Output:
        inside_lines: Dictionary of lines that are inside polygon
        outside_lines: Dictionary of lines that are outside polygon
 
@@ -731,18 +739,22 @@ def clip_line_by_polygon(line, polygon,
                          check_input=True):
     """Clip line segments by polygon
 
-    Input
+    Input:
        line: Sequence of line nodes: [[x0, y0], [x1, y1], ...] or
-             the equivalent Nx2 numpy array
+        the equivalent Nx2 numpy array
+
        polygon: list or Nx2 array of polygon vertices
+
        closed: (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
-       or not (closed = False) - False is not recommended here
+       or not (closed = False).False is not recommended here
+
        polygon_bbox: Provide bounding box around polygon if known.
-           This is a small optimisation
+       This is a small optimisation.
+
        check_input: Allows faster execution if set to False
 
-    Outputs
+    Outputs:
        inside_lines: Clipped lines that are inside polygon
        outside_lines: Clipped lines that are outside polygon
 
@@ -1091,10 +1103,13 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 
     Input:
        polygon - list of vertices of polygon
+
        number_of_points - (optional) number of points
+
        seed - seed for random number generator (default=None)
+
        exclude - list of polygons (inside main polygon) from where points
-                 should be excluded
+       should be excluded
 
     Output:
        points - list of points inside polygon
@@ -1162,28 +1177,29 @@ def intersection(line0, line1):
                        None is returned for backwards compatibility
 
 
-    Notes
+    Notes:
 
-    A vectorised input line can be constructed either as list:
-    line1 = [[[0, 24, 0, 15],    # x2
-              [12, 0, 24, 0]],   # y2
-             [[24, 0, 0, 5],     # x3
-              [0, 12, 12, 15]]]  # y3
+    A vectorised input line can be constructed either as list::
 
-    or as an array
+        line1 = [[[0, 24, 0, 15],    # x2
+                  [12, 0, 24, 0]],   # y2
+                 [[24, 0, 0, 5],     # x3
+                  [0, 12, 12, 15]]]  # y3
 
-    line1 = numpy.zeros(16).reshape(2, 2, 4)  # Four segments
-    line1[0, 0, :] = [0, 24, 0, 15]   # x2
-    line1[0, 1, :] = [12, 0, 24, 0]   # y2
-    line1[1, 0, :] = [24, 0, 0, 5]    # x3
-    line1[1, 1, :] = [0, 12, 12, 15]  # y3
+    or as an array::
+
+        line1 = numpy.zeros(16).reshape(2, 2, 4)  # Four segments
+        line1[0, 0, :] = [0, 24, 0, 15]   # x2
+        line1[0, 1, :] = [12, 0, 24, 0]   # y2
+        line1[1, 0, :] = [24, 0, 0, 5]    # x3
+        line1[1, 1, :] = [0, 12, 12, 15]  # y3
 
 
-    To select array of intersections from result, use the following idiom:
+    To select array of intersections from result, use the following idiom::
 
-    value = intersection(line0, line1)
-    mask = -numpy.isnan(value[:, 0])
-    v = value[mask]
+        value = intersection(line0, line1)
+        mask = -numpy.isnan(value[:, 0])
+        v = value[mask]
     """
 
     line0 = ensure_numeric(line0, numpy.float)
@@ -1397,12 +1413,12 @@ def polygon2segments(polygon):
 
     Returns:
         A collection of line segments (x0, y0) -> (x1, y1) vectorised
-        following the format
-               line[0, 0, :] = x0
-               line[0, 1, :] = y0
-               line[1, 0, :] = x1
-               line[1, 1, :] = y1
+        following the format::
 
+           line[0, 0, :] = x0
+           line[0, 1, :] = y0
+           line[1, 0, :] = x1
+           line[1, 1, :] = y1
     """
 
     try:

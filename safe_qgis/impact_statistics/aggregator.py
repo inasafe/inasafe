@@ -698,12 +698,11 @@ class Aggregator(QtCore.QObject):
         #   'sum': 11330910.488220215,
         #   'mean': 206.02404611477172}}
 
-
         myZonalStatistics = calculateZonalStats(theQGISImpactLayer, self.layer)
         pyDuration = time.clock() - startTime
         print 'CPP duration: %ss' % (pyDuration)
 
-        print 'py to CPP: %s%%' % (pyDuration/cppDuration*100)
+        print 'py to CPP: %s%%' % (pyDuration / cppDuration * 100)
         # FIXME (MB) remove this once fully implemented
         oldPrefix = self.prefix
 

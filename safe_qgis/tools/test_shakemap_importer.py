@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'ismailsunni@yahoo.co.id'
+__author__ = 'imajimatika@gmail.com'
 __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -73,6 +73,7 @@ class ShakemapImporterTest(unittest.TestCase):
         myDialog.leInputPath.setText(my_grid_path)
         myDialog.leOutputPath.setText(my_output_raster)
         myButton = myDialog.buttonBox.button(QDialogButtonBox.Ok)
+        # noinspection PyArgumentList
         QTest.mouseClick(myButton, Qt.LeftButton)
         assert os.path.exists(my_output_raster), 'Raster is not created'
 
