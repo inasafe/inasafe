@@ -19,7 +19,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
 from qgis.gui import QgsMapCanvas
-from safe_qgis.tests.qgis_interface import QgisInterface
+from safe_qgis.test.qgis_interface import QgisInterface
 
 # For testing and demoing
 from safe_qgis.safe_interface import (
@@ -38,10 +38,10 @@ YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
-                              '../tests/test_data/test_files')
+                              '../test/test_data/test_files')
 
 SCENARIO_DIR = os.path.join(os.path.dirname(__file__),
-                            '../tests/test_data/test_scenario')
+                            '../test/test_data/test_scenario')
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -55,7 +55,7 @@ GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 CONTROL_IMAGE_DIR = os.path.join(
     os.path.dirname(__file__),
-    '../tests/test_data/test_images')
+    '../test/test_data/test_images')
 
 
 def assertHashesForFile(theHashes, theFilename):
