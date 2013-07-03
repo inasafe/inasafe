@@ -210,8 +210,9 @@ searchBoxes: None
             # fetch map of attributes
             myAttributes = myCitiesLayer.dataProvider().attributeIndexes()
             for myKey in myAttributes:
-                myStrings.append("%d: %s\n" % (myKey,
-                                               myFeature[myKey].toString()))
+                if myKey > 0:
+                    myStrings.append("%d: %s\n" % (
+                        myKey, myFeature[myKey].toString()))
             myStrings.append('------------------\n')
         LOGGER.debug('Mem table:\n %s' % myStrings)
         myFilePath = unique_filename(prefix='testLocalCities',
@@ -226,7 +227,7 @@ searchBoxes: None
         myExpectedString = myFile.readlines()
         myFile.close()
 
-        myDiff = difflib.unified_diff(myStrings, myExpectedString)
+        myDiff = difflib.unified_diff(myExpectedString, myStrings)
         myDiffList = list(myDiff)
         myDiffString = ''
         for _, myLine in enumerate(myDiffList):
@@ -370,9 +371,9 @@ searchBoxes: None
             '<td>Bitung</td><td>137</td><td>I</td>',
             '<td>Manado</td><td>451</td><td>I</td>',
             '<td>Gorontalo</td><td>144</td><td>II</td>']
-        myTable = myTable.toNewlineFreeString()
+        myTable = myTable.toNewlineFreeString().replace('   ', '')
         for myString in myExpectedStrings:
-            self.assertIn(myTable, myString)
+            self.assertIn(myString, myTable)
 
         self.maxDiff = None
         myExpectedPath = (
