@@ -51,15 +51,19 @@ def tr(theText):
 def calculateZonalStats(theRasterLayer, thePolygonLayer):
     """Calculate zonal statics given two layers.
 
-    Args:
-        * theRasterLayer: A QGIS raster layer.
-        * theVectorLayer: A QGIS vector layer containing polygons.
+    :param theRasterLayer: A QGIS raster layer.
+    :type theRasterLayer: QgsRasterLayer
 
-    Returns:
-        dict: A data structure containing sum, mean, min, max,
+    :param thePolygonLayer: A QGIS vector layer containing polygons.
+    :type thePolygonLayer: QgsVectorLayer
+
+    :returns: A data structure containing sum, mean, min, max,
         count of raster values for each polygonal area.
+    :rtype: (dict, count)
 
-    Raises:
+    :raises: InvalidParameterError
+
+    Note:
         * InvalidParameterError if incorrect inputs are received.
         * Any other exceptions are propogated.
 
@@ -195,7 +199,22 @@ def cellInfoForBBox(
         theFeatureBox,
         theCellSizeX,
         theCellSizeY,):
-    """Calculate cell offset and distances for the intersecting bbox."""
+    """Calculate cell offset and distances for the intersecting bbox.
+
+    :param theCellSizeX: Size in the x direction of a single cell.
+    :type theCellSizeX: float
+
+    :param theCellSizeY: Size in the y direciton of a single cell.
+    :type theCellSizeY: float
+
+    :param theRasterBox: Box defining the extents of the raster.
+    :type theRasterBox: QgsRectangle
+
+
+    :returns: Offsets in the x and y directions, and number of cells in the x
+        and y directions.
+    :rtype: (int, int, int, int)
+    """
 
     #get intersecting bbox
     myIntersectedBox = theFeatureBox.intersect(theRasterBox)
@@ -205,16 +224,16 @@ def cellInfoForBBox(
 
     #get offset in pixels in x- and y- direction
     myOffsetX = myIntersectedBox.xMinimum() - theRasterBox.xMinimum()
-    myOffsetX = myOffsetX / theCellSizeX
+    myOffsetX /= theCellSizeX
     myOffsetX = int(myOffsetX)
     myOffsetY = theRasterBox.yMaximum() - myIntersectedBox.yMaximum()
-    myOffsetY = myOffsetY / theCellSizeY
+    myOffsetY /= theCellSizeY
     myOffsetY = int(myOffsetY)
 
     ##### Checked to here....offsets calculate correctly ##########
 
     myMaxColumn = myIntersectedBox.xMaximum() - theRasterBox.xMinimum()
-    myMaxColumn = myMaxColumn / theCellSizeX
+    myMaxColumn /= theCellSizeX
     # Round up to the next cell if the bbox is not on an exact pixel boundary
     if myMaxColumn > int(myMaxColumn):
         myMaxColumn = int(myMaxColumn) + 1
@@ -222,7 +241,7 @@ def cellInfoForBBox(
         myMaxColumn = int(myMaxColumn)
 
     myMaxRow = theRasterBox.yMaximum() - myIntersectedBox.yMinimum()
-    myMaxRow = myMaxRow / theCellSizeY
+    myMaxRow /= theCellSizeY
     # Round up to the next cell if the bbox is not on an exact pixel boundary
     if myMaxRow > int(myMaxRow):
         myMaxRow = int(myMaxRow) + 1
@@ -252,18 +271,39 @@ def statisticsFromMiddlePointTest(
         theNoData):
     """Stats where centroid of each cell must intersect the polygon.
 
-    Args:
-        * theBand GDALRasterBand - a valid band from a raster layer.
-        * theGeometry QgsGeometry - a valid polygon geometry.
-        * thePixelOffsetX int - left offset for raster window.
-        * thePixelOffsetY int - offset from bottom for raster window.
-        * theCellsX int - width of the raster window.
-        * theCellsY int - height of the raster window.
-        * theCellSizeX -
-        * theCellSizeY,
-        * theRasterBox,
-        * theNoData
+    :param theBand: A valid band from a raster layer.
+    :type theBand: GDALRasterBand
 
+    :param theGeometry: A valid polygon geometry.
+    :type theGeometry: QgsGeometry
+
+    :param thePixelOffsetX: Left offset for raster window.
+    :type thePixelOffsetX: int
+
+    :param thePixelOffsetY: Offset from bottom for raster window.
+    :type thePixelOffsetY: int
+
+    :param theCellsX: Width of the raster window.
+    :type theCellsX: int
+
+    :param theCellsY: Height of the raster window.
+    :type theCellsY: int
+
+    :param theCellSizeX: Size in the x direction of a single cell.
+    :type theCellSizeX: float
+
+    :param theCellSizeY: Size in the y direciton of a single cell.
+    :type theCellSizeY: float
+
+    :param theRasterBox: Box defining the extents of the raster.
+    :type theRasterBox: QgsRectangle
+
+    :param theNoData: Value for nodata in the raster.
+    :type theNoData: int, float
+
+    :returns: Sum, Count - sum of the values of all pixels and the count of
+        pixels that intersect with the geometry.
+    :rtype: (float, int)
     """
     myCellCenterX = (
         theRasterBox.yMaximum() - thePixelOffsetY * theCellSizeY -
@@ -323,6 +363,43 @@ def statisticsFromPreciseIntersection(
         theCellSizeY,
         theRasterBox,
         theNoData):
+    """Weighted pixel sum for polygon based on only intersecting parts.
+
+    :param theBand: A valid band from a raster layer.
+    :type theBand: GDALRasterBand
+
+    :param theGeometry: A valid polygon geometry.
+    :type theGeometry: QgsGeometry
+
+    :param thePixelOffsetX: Left offset for raster window.
+    :type thePixelOffsetX: int
+
+    :param thePixelOffsetY: Offset from bottom for raster window.
+    :type thePixelOffsetY: int
+
+    :param theCellsX: Width of the raster window.
+    :type theCellsX: int
+
+    :param theCellsY: Height of the raster window.
+    :type theCellsY: int
+
+    :param theCellSizeX: Size in the x direction of a single cell.
+    :type theCellSizeX: float
+
+    :param theCellSizeY: Size in the y direciton of a single cell.
+    :type theCellSizeY: float
+
+    :param theRasterBox: Box defining the extents of the raster.
+    :type theRasterBox: QgsRectangle
+
+    :param theNoData: Value for nodata in the raster.
+    :type theNoData: int, float
+
+    :returns: Sum, Count - sum of the values of all pixels and the count of
+        pixels that intersect with the geometry.
+    :rtype: (float, int)
+    """
+
     myCurrentY = (
         theRasterBox.yMaximum() - thePixelOffsetY *
         theCellSizeY - theCellSizeY / 2)
