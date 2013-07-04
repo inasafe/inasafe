@@ -18,12 +18,15 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
+import os
 from utilities import (
     get_significant_decimal,
     humanize_class,
     format_decimal,
     create_classes,
-    create_label)
+    create_label,
+    get_thousand_separator,
+    get_decimal_separator)
 
 
 def print_class(my_array, my_result_class, my_expected):
@@ -138,7 +141,7 @@ class UtilitiesTest(unittest.TestCase):
         assert my_result_class == my_expected_class, my_msg
 
     def test_get_significant_decimal(self):
-        """Test Get Significatn Decimal
+        """Test Get Significant Decimal
         """
         my_decimal = 10.1212
         my_result = get_significant_decimal(my_decimal)
@@ -153,6 +156,7 @@ class UtilitiesTest(unittest.TestCase):
     def test_format_decimal(self):
         """Test Format Decimal
         """
+        os.environ['LANG'] = 'en'
         interval = 0.9912
         my_number = 10
         my_result = format_decimal(interval, my_number)
@@ -168,6 +172,22 @@ class UtilitiesTest(unittest.TestCase):
         print my_result
         assert my_result == 'nan', \
             'Format decimal is not valid %s' % my_result
+
+        my_number = float('10000.09')
+        my_result = format_decimal(interval, my_number)
+        print my_result
+        assert my_result == '10,000.09', \
+            'Format decimal is not valid %s' % my_result
+
+    def test_separator(self):
+        """Test decimal and thousand separator
+        """
+        os.environ['LANG'] = 'en'
+        assert ',' == get_thousand_separator()
+        assert '.' == get_decimal_separator()
+        os.environ['LANG'] = 'id'
+        assert '.' == get_thousand_separator()
+        assert ',' == get_decimal_separator()
 
     def test_create_classes(self):
         """Test create_classes.

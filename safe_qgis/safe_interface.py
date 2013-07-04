@@ -28,36 +28,46 @@ import logging
 
 # SAFE functionality - passed on to QGIS modules
 # pylint: disable=W0611
-from safe.api import (get_admissible_plugins,
-                      get_function_title,
-                      get_plugins as safe_get_plugins,
-                      read_keywords, bbox_intersection,
-                      write_keywords as safe_write_keywords,
-                      read_layer as safe_read_layer,
-                      buffered_bounding_box,
-                      verify as verify_util,
-                      VerificationError,
-                      InaSAFEError,
-                      temp_dir,
-                      unique_filename,
-                      safe_tr as safeTr,
-                      get_free_memory,
-                      calculate_impact as safe_calculate_impact,
-                      BoundingBoxError,
-                      GetDataError,
-                      ReadLayerError,
-                      get_plugins, get_version,
-                      in_and_outside_polygon as points_in_and_outside_polygon,
-                      calculate_polygon_centroid,
-                      get_postprocessors,
-                      get_postprocessor_human_name,
-                      convert_mmi_data,
-                      format_int,
-                      get_unique_values,
-                      get_plugins_as_table,
-                      Vector,
-                      nanallclose,
-                      DEFAULTS)
+from safe.api import (
+    load_plugins,
+    get_admissible_plugins,
+    get_function_title,
+    get_plugins as safe_get_plugins,
+    read_keywords, bbox_intersection,
+    write_keywords as safe_write_keywords,
+    read_layer as safe_read_layer,
+    buffered_bounding_box,
+    verify as verify_util,
+    VerificationError,
+    InaSAFEError,
+    temp_dir,
+    unique_filename,
+    safe_tr as safeTr,
+    get_free_memory,
+    calculate_impact as safe_calculate_impact,
+    BoundingBoxError,
+    GetDataError,
+    ReadLayerError,
+    get_plugins, get_version,
+    in_and_outside_polygon as points_in_and_outside_polygon,
+    calculate_polygon_centroid,
+    get_postprocessors,
+    get_postprocessor_human_name,
+    convert_mmi_data,
+    format_int,
+    get_unique_values,
+    get_plugins_as_table,
+    Vector,
+    Raster,
+    nanallclose,
+    DEFAULTS,
+    messaging,
+    DYNAMIC_MESSAGE_SIGNAL,
+    STATIC_MESSAGE_SIGNAL,
+    ERROR_MESSAGE_SIGNAL,
+    ErrorMessage,
+    ZeroImpactException)
+from safe.api import styles
 # hack for excluding test-related import in builded package
 try:
     from safe.api import (
@@ -193,8 +203,8 @@ def getBufferedExtent(theGeoExtent, theCellSize):
         Adjusted bounding box
 
     Raises:
-
         Any exceptions are propogated
+
     Note: See docstring for underlying function buffered_bounding_box
           for more details.
     """

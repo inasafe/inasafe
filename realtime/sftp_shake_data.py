@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Ftp Client for Retrieving ftp data.**
@@ -28,7 +29,7 @@ from sftp_client import SFtpClient
 from utils import is_event_id
 import logging
 LOGGER = logging.getLogger('InaSAFE')
-from utils import shakemapCacheDir, shakemapExtractDir, mkDir, is_event_id
+from utils import shakemapCacheDir, shakemapExtractDir, mkDir
 
 
 defaultHost = '118.97.83.243'
@@ -89,8 +90,8 @@ class SftpShakeData:
         self.password = thePassword
         self.workdir = theWorkingDir
         self.forceFlag = theForceFlag
-        self.sftpclient = SFtpClient(self.host, self.username,
-                                        self.password, self.workdir)
+        self.sftpclient = SFtpClient(
+            self.host, self.username, self.password, self.workdir)
 
         if self.eventId is None:
             try:
@@ -115,8 +116,8 @@ class SftpShakeData:
     def reconnectSFTP(self):
         """Reconnect to the server
         """
-        self.sftpclient = SFtpClient(self.host, self.username,
-            self.password, self.workdir)
+        self.sftpclient = SFtpClient(
+            self.host, self.username, self.password, self.workdir)
 
     def validateEvent(self):
         """Check that the event associated with this instance exists either
@@ -163,8 +164,8 @@ class SftpShakeData:
         """
 
         myXMLFileName = self.fileName()
-        myXMLFilePath = os.path.join(shakemapCacheDir(), self.eventId,
-                            myXMLFileName)
+        myXMLFilePath = os.path.join(
+            shakemapCacheDir(), self.eventId, myXMLFileName)
         return myXMLFilePath
 
     def fileName(self):
@@ -191,8 +192,8 @@ class SftpShakeData:
 
         Raises: NetworkError
         """
-        myRemoteXMLPath = os.path.join(self.sftpclient.workdir_path,
-                        self.eventId)
+        myRemoteXMLPath = os.path.join(
+            self.sftpclient.workdir_path, self.eventId)
         return self.sftpclient.is_path_exist(myRemoteXMLPath)
 
     def get_list_event_ids(self):
@@ -219,16 +220,13 @@ class SftpShakeData:
     def fetchFile(self, theRetries=3):
         """Private helper to fetch a file from the sftp site.
 
+        :param theRetries: int - number of reattempts that should be made in
+                in case of network error etc.
           e.g. for event 20110413170148 this file would be fetched::
                 20110413170148 directory
 
         .. note:: If a cached copy of the file exits, the path to the cache
            copy will simply be returned without invoking any network requests.
-
-        Args:
-            * theEventFile: str - filename on server e.g.20110413170148.inp.zip
-            * theRetries: int - number of reattempts that should be made in
-                in case of network error etc.
 
         Returns:
             str: A string for the dataset path on the local storage system.
@@ -251,8 +249,8 @@ class SftpShakeData:
             try:
                 mkDir(myLocalPath)
                 mkDir(os.path.join(myLocalPath, 'output'))
-                self.sftpclient.download_path(myXMLRemotePath,
-                    myLocalParentPath)
+                self.sftpclient.download_path(
+                    myXMLRemotePath, myLocalParentPath)
             except NetworkError, e:
                 myLastError = e
             except:
@@ -266,7 +264,7 @@ class SftpShakeData:
 
             LOGGER.info('Fetching failed, attempt %s' % my_counter)
         LOGGER.exception('Could not fetch shake event from server %s'
-                             % remote_path)
+                         % remote_path)
         raise Exception('Could not fetch shake event from server %s'
                         % remote_path)
 
@@ -279,13 +277,14 @@ class SftpShakeData:
             the unzipped shake event dir. e.g.
             :file:`/tmp/inasafe/realtime/shakemaps-extracted/20120726022003`
 
-        Raises: Any exceptions will be propogated
+        Raises: Any exceptions will be propagated
         """
         return os.path.join(shakemapExtractDir(), self.eventId)
 
     def extract(self, theForceFlag=False):
         """Checking the grid.xml file in the machine, if found use it.
         Else, download from the server
+        :param theForceFlag:
         """
         myFinalGridXmlFile = os.path.join(self.extractDir(), 'grid.xml')
         if not os.path.exists(self.extractDir()):
@@ -300,13 +299,14 @@ class SftpShakeData:
         # move grid.xml to the correct directory
         myExpectedGridXmlFile = os.path.join(myLocalPath, 'output', 'grid.xml')
         if not os.path.exists(myExpectedGridXmlFile):
-            raise FileNotFoundError('The output does not contain an '
-                                       '%s file.' % myExpectedGridXmlFile)
+            raise FileNotFoundError(
+                'The output does not contain an ''%s file.' %
+                myExpectedGridXmlFile)
 
         # move the file we care about to the top of the extract dir
-        shutil.copyfile(os.path.join(self.extractDir(), myExpectedGridXmlFile),
-            myFinalGridXmlFile)
-        if (not os.path.exists(myFinalGridXmlFile)):
+        shutil.copyfile(os.path.join(
+            self.extractDir(), myExpectedGridXmlFile), myFinalGridXmlFile)
+        if not os.path.exists(myFinalGridXmlFile):
             raise CopyError('Error copying grid.xml')
         return myFinalGridXmlFile
 

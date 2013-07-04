@@ -44,21 +44,25 @@ def get_postprocessors(requested_postprocessors):
 
     Args:
         * requested_postprocessors: dictionary of requested
-            postprocessors such as
-            {
-            'Gender': {'on': True},
-            'Age': {'on': True,
-                    'params': {
-                        'youth_ratio': defaults['YOUTH_RATIO'],
-                        'adult_ratio': defaults['ADULT_RATIO'],
-                        'elder_ratio': defaults['ELDER_RATIO']
+            postprocessors such as::
+
+                {
+                'Gender': {'on': True},
+                'Age': {'on': True,
+                        'params': {
+                            'youth_ratio': defaults['YOUTH_RATIO'],
+                            'adult_ratio': defaults['ADULT_RATIO'],
+                            'elder_ratio': defaults['ELDER_RATIO']
+                            }
                         }
-                    }
-            }
+                }
+
             with 'PostprocessorName': {'on': True} being the minimum needed to
             activate a postprocessor.
+
             If asked for unimplemented postprocessors, the factory will just
             skip it returning the valid ones
+
     Returns:
         dict of postprocessors instances e.g.
             {'Gender':GenderPostprocessors instance}

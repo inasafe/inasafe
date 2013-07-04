@@ -25,27 +25,29 @@ from xml.dom import minidom
 import math
 from subprocess import call, CalledProcessError
 import logging
-import numpy
 from datetime import datetime
-import pytz  # sudo apt-get install python-tz
 
+import numpy
+import pytz  # sudo apt-get install python-tz
 import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
 from sftp_shake_data import SftpShakeData
 
+
 # TODO I think QCoreApplication is needed for tr() check hefore removing
-from PyQt4.QtCore import (QCoreApplication,
-                          QObject,
-                          QVariant,
-                          QFileInfo,
-                          QString,
-                          QStringList,
-                          QUrl,
-                          QSize,
-                          Qt,
-                          QTranslator)
+from PyQt4.QtCore import (
+    QCoreApplication,
+    QObject,
+    QVariant,
+    QFileInfo,
+    QString,
+    QStringList,
+    QUrl,
+    QSize,
+    Qt,
+    QTranslator)
 from PyQt4.QtXml import QDomDocument
 # We should remove the following pylint suppressions when we support only QGIS2
 # pylint: disable=E0611
@@ -57,6 +59,7 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsVectorLayer,
+    QgsRaster,
     QgsRasterLayer,
     QgsRasterDataProvider,
     QgsRectangle,
@@ -73,15 +76,15 @@ from qgis.core import (
     QgsFields)
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe_qgis.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_test import getQgisTestApp
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
-from safe_qgis.utilities import getWGS84resolution
-from safe_qgis.clipper import extentToGeoArray, clipLayer
+from safe_qgis.utilities.utilities import getWGS84resolution
+from safe_qgis.utilities.clipper import extentToGeoArray, clipLayer
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
@@ -91,9 +94,10 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
+from realtime.utils import setupLogger
 # from shake_data import ShakeData
 
-# The logger is intialised in utils.py by init
+setupLogger()
 LOGGER = logging.getLogger('InaSAFE')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -1284,7 +1288,7 @@ class ShakeEvent(QObject):
                 #LOGGER.debug('Writing feature to mem layer')
             # calculate the distance and direction from this point
             # to and from the epicenter
-            myId = str(myFeature.id)
+            myId = str(myFeature.id())
 
             # Make sure the fcode contains PPL (populated place)
             myCode = str(myFeature['fcode'].toString())
@@ -1308,7 +1312,7 @@ class ShakeEvent(QObject):
             # Populate the mmi field by raster lookup
             # Get a {int, QVariant} back
             myRasterValues = myRasterLayer.dataProvider().identify(
-                myPoint, QgsRasterDataProvider.IdentifyFormatValue).results()
+                myPoint, QgsRaster.IdentifyFormatValue).results()
             myRasterValues = myRasterValues.values()
             if not myRasterValues or len(myRasterValues) < 1:
                 # position not found on raster
@@ -1737,12 +1741,14 @@ class ShakeEvent(QObject):
             theForceFlag=theForceFlag,
             theAlgorithm=theAlgorithm)
 
-        myClippedHazardPath, myClippedExposurePath = self.clipLayers(
+        myClippedHazard, myClippedExposure = self.clipLayers(
             theShakeRasterPath=myHazardPath,
             thePopulationRasterPath=myExposurePath)
 
-        myClippedHazardLayer = safe_read_layer(myClippedHazardPath)
-        myClippedExposureLayer = safe_read_layer(myClippedExposurePath)
+        myClippedHazardLayer = safe_read_layer(
+            str(myClippedHazard.source()))
+        myClippedExposureLayer = safe_read_layer(
+            str(myClippedExposure.source()))
         myLayers = [myClippedHazardLayer, myClippedExposureLayer]
 
         myFunctionId = 'I T B Fatality Function'
@@ -1851,18 +1857,18 @@ class ShakeEvent(QObject):
 
         # The extents should already be correct but the cell size may need
         # resampling, so we pass the hazard layer to the clipper
-        myClippedHazardPath = clipLayer(
+        myClippedHazard = clipLayer(
             theLayer=myHazardLayer,
             theExtent=myHazardGeoExtent,
             theCellSize=myCellSize)
 
-        myClippedExposurePath = clipLayer(
+        myClippedExposure = clipLayer(
             theLayer=myExposureLayer,
             theExtent=myHazardGeoExtent,
             theCellSize=myCellSize,
             theExtraKeywords=extraExposureKeywords)
 
-        return myClippedHazardPath, myClippedExposurePath
+        return myClippedHazard, myClippedExposure
 
     def _getPopulationPath(self):
         """Helper to determine population raster spath.

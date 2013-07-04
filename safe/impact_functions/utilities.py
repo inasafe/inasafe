@@ -82,12 +82,17 @@ def keywords_to_str(keywords):
 
 
 def pretty_string(myArg):
-    """ A helper function that return a pretty string according to the args
+    """A helper function that return a pretty string according to the args
+
     Args:
-        * myArs = string or list
+
+      * myArs = string or list
+
     Returns:
-        * if myArgs is string return myArgs
-            if myArgs is list return each element as string separated by ','
+
+      * if myArgs is string return myArgs
+
+        if myArgs is list return each element as string separated by ','
     """
     if type(myArg) == type(str()):
         return myArg

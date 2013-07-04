@@ -10,15 +10,14 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from safe.postprocessors.abstract_postprocessor import (
-    AbstractPostprocessor)
+from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
 from safe.common.utilities import ugettext as tr
 
 
 class AggregationCategoricalPostprocessor(AbstractPostprocessor):
     """
-    Postprocessor that calculates age related statistics.
+    Postprocessor that calculates categorical statistics.
     see the _calculate_* methods to see indicator specific documentation
 
     see :mod:`safe.defaults` for default values information
@@ -26,13 +25,27 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
 
     def __init__(self):
         """
-        Constructor for AgePostprocessor postprocessor class,
+        Constructor for postprocessor class,
         It takes care of defining self.impact_classes
         """
         AbstractPostprocessor.__init__(self)
         self.impact_classes = None
         self.impact_attrs = None
         self.target_field = None
+
+    def description(self):
+        """Describe briefly what the post processor does.
+
+        Args:
+            None
+
+        Returns:
+            Str the translated description
+
+        Raises:
+            Errors are propagated
+        """
+        return tr('Calculates generic categorical statistics.')
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being

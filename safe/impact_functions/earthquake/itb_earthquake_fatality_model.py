@@ -1,3 +1,5 @@
+"""Impact function for ITB earth quake fatality model
+"""
 import numpy
 from third_party.odict import OrderedDict
 import logging
@@ -13,9 +15,10 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -23,8 +26,8 @@ LOGGER = logging.getLogger('InaSAFE')
 class ITBFatalityFunction(FunctionProvider):
     """Indonesian Earthquake Fatality Model
 
-    This model was developed by Institut Tecknologi Bandung (ITB) and
-    implemented by Dr. Hadi Ghasemi, Geoscience Australia
+    This model was developed by Institut Teknologi Bandung (ITB) and
+    implemented by Dr. Hadi Ghasemi, Geoscience Australia.
 
 
     Reference:
@@ -125,8 +128,8 @@ class ITBFatalityFunction(FunctionProvider):
     actions = tr(
         'Provide details about the population will be die or displaced')
     detailed_description = tr(
-        'This model was developed by Institut Tecknologi Bandung (ITB) '
-        'and implemented by Dr Hadi Ghasemi, Geoscience Australia\n'
+        'This model was developed by Institut Teknologi Bandung (ITB) '
+        'and implemented by Dr. Hadi Ghasemi, Geoscience Australia\n'
         'Algorithm:\n'
         'In this study, the same functional form as Allen (2009) is '
         'adopted o express fatality rate as a function of intensity '
@@ -160,8 +163,7 @@ class ITBFatalityFunction(FunctionProvider):
     def fatality_rate(self, mmi):
         """
         ITB method to compute fatality rate
-        :param x: model coefficient.
-        :param y: model coefficient.
+        :param mmi:
         """
         # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
         # a fatality rate of 0 - Tim
@@ -175,11 +177,13 @@ class ITBFatalityFunction(FunctionProvider):
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
 
-        Input
-          layers: List of layers expected to contain
-              my_hazard: Raster layer of MMI ground shaking
-              my_exposure: Raster layer of population density
+        Input:
 
+        :param layers: List of layers expected to contain,
+
+                my_hazard: Raster layer of MMI ground shaking
+
+                my_exposure: Raster layer of population density
         """
 
         displacement_rate = self.parameters['displacement_rate']
@@ -228,6 +232,7 @@ class ITBFatalityFunction(FunctionProvider):
                 D = displacement_rate[mmi] * I
             except KeyError, e:
                 msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
+                # noinspection PyExceptionInherit
                 raise InaSAFEError(msg)
 
             # Adjust displaced people to disregard fatalities.
@@ -241,6 +246,7 @@ class ITBFatalityFunction(FunctionProvider):
             # This is what is used in the real time system exposure table
             number_of_exposed[mmi] = numpy.nansum(I.flat)
             number_of_displaced[mmi] = numpy.nansum(D.flat)
+            # noinspection PyUnresolvedReferences
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
         # Set resulting layer to NaN when less than a threshold. This is to
@@ -272,7 +278,6 @@ class ITBFatalityFunction(FunctionProvider):
 
         if self.parameters['calculate_displaced_people']:
             # Add total estimate of people displaced
-            #s = str(int(displaced)).rjust(10)
             s = format_int(displaced)
             table_body.append(TableRow([tr('Number of people displaced'), s],
                                        header=True))
@@ -280,7 +285,6 @@ class ITBFatalityFunction(FunctionProvider):
             displaced = 0
 
         # Add estimate of total population in area
-        #s = str(int(total)).rjust(10)
         s = format_int(int(total))
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
@@ -294,10 +298,9 @@ class ITBFatalityFunction(FunctionProvider):
         toilets = int(displaced / 20)
 
         # Generate impact report for the pdf map
-        table_body = [question,
-                      TableRow([tr('Fatalities'),
-                                '%s' % format_int(fatalities)],
-                               header=True),
+        table_body = [question, TableRow([tr('Fatalities'),
+                                          '%s' % format_int(fatalities)],
+                                         header=True),
                       TableRow([tr('People displaced'),
                                 '%s' % format_int(displaced)],
                                header=True),
@@ -309,9 +312,9 @@ class ITBFatalityFunction(FunctionProvider):
                       [tr('Drinking Water [l]'), format_int(drinking_water)],
                       [tr('Clean Water [l]'), format_int(water)],
                       [tr('Family Kits'), format_int(family_kits)],
-                      [tr('Toilets'), format_int(toilets)]]
+                      [tr('Toilets'), format_int(toilets)],
+                      TableRow(tr('Action Checklist:'), header=True)]
 
-        table_body.append(TableRow(tr('Action Checklist:'), header=True))
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
                                  'units available for %s people?') %
@@ -351,6 +354,15 @@ class ITBFatalityFunction(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
 
+        # check for zero impact
+        if numpy.nanmax(R) == 0 == numpy.nanmin(R):
+            table_body = [
+                question,
+                TableRow([tr('Fatalities'), '%s' % format_int(fatalities)],
+                         header=True)]
+            my_message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(my_message)
+
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
         classes = create_classes(R.flat[:], len(colours))
@@ -374,7 +386,8 @@ class ITBFatalityFunction(FunctionProvider):
 
         # For printing map purpose
         map_title = tr('Earthquake impact to population')
-        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_notes = tr('Thousand separator is represented by %s' %
+                          get_thousand_separator())
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')
 

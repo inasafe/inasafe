@@ -102,16 +102,17 @@ CAPTION_BOTTOM_CLASS = ' class="caption-bottom"'
 
 class TableCell (object):
     """
-    a TableCell object is used to create a cell in a HTML table. (td or th)
+    A TableCell object is used to create a cell in a HTML table. (td or th)
 
     Attributes:
+
     - text: text in the cell (may contain HTML tags). May be any object which
-        can be converted to a string using str().
+      can be converted to a string using str().
     - header: bool, false for a normal data cell (td), true for a header cell
       (th)
     - bgcolor: str, background color
     - width: str, width
-    - align: str, horizontal alignement (left, center, right, justify or char)
+    - align: str, horizontal alignment (left, center, right, justify or char)
     - char: str, alignment character, decimal point if not specified
     - charoff: str, see HTML specs
     - valign: str, vertical alignment (top|middle|bottom|baseline)
@@ -121,7 +122,7 @@ class TableCell (object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.6
     """
 
-    def __init__(self, text="", bgcolor=None, header=False, width=None,
+    def __init__(self, text='', bgcolor=None, header=False, width=None,
             align=None, char=None, charoff=None, valign=None, style='',
             attribs=None, cell_class=None, row_span=None, col_span=None):
         """TableCell constructor"""
@@ -185,11 +186,12 @@ class TableCell (object):
 
 class TableRow (object):
     """
-    a TableRow object is used to create a row in a HTML table. (tr tag)
+    A TableRow object is used to create a row in a HTML table. (tr tag)
 
     Attributes:
+
     - cells: list, tuple or any iterable, containing one string or TableCell
-         object for each cell
+      object for each cell
     - header: bool, true for a header row (th),
       false for a normal data row (td)
     - bgcolor: str, background color
@@ -268,11 +270,12 @@ class TableRow (object):
 
 class Table(object):
     """
-    a Table object is used to create a HTML table. (table tag)
+    A Table object is used to create a HTML table. (table tag)
 
     Attributes:
+
     - rows: list, tuple or any iterable, containing one iterable or TableRow
-        object for each row
+      object for each row
     - header_row: list, tuple or any iterable, containing the
       header row (optional)
     - class: str, CSS class to use. Defaults to DEFAULT_TABLE_CLASS
@@ -419,14 +422,17 @@ class Table(object):
 
     def column(self, col, header=False):
         """Return a list contains all element in col-th column
-            Args:
-                * col = number columnn
-                * header = if False, doesn't include the header
-            Returns:
-                * list of string represent each element
-            Note:
-                If there is not column number col in a row, it will be
-                represent as empty string ''
+
+        Args:
+            * col = number columnn
+            * header = if False, doesn't include the header
+
+        Returns:
+            * list of string represent each element
+
+        Note:
+            If there is not column number col in a row, it will be
+            represent as empty string ''
         """
         retval = []
         for myRow in self.rows:

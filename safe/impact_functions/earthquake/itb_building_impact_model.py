@@ -1,7 +1,7 @@
 """Impact function based on ITB vulnerability model
 
-   This model was developed by Institut Tecknologi Bandung (ITB) and
-   implemented by Dr Hyeuk Ryu, Geoscience Australia
+   This model was developed by Institut Teknologi Bandung (ITB) and
+   implemented by Dr. Hyeuk Ryu, Geoscience Australia.
 
    Reference:
 
@@ -10,7 +10,7 @@
    Bali, 27-28 February 2012, 54pp.
 
    Methodology:
-   The ITB vulnerabilty model was heuristically developed (i.e. based on
+   The ITB vulnerability model was heuristically developed (i.e. based on
    expert opinion) through the Bali workshop. The model is defined with
    two parameters (median, and lognormal standard deviation) of cumulative
    lognormal distribution. The building type classification used in the

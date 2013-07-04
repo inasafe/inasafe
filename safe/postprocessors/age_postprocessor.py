@@ -11,8 +11,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
-from safe.postprocessors.abstract_postprocessor import (
-    AbstractPostprocessor)
+from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
 from safe.common.utilities import (get_defaults,
                                    ugettext as tr)
@@ -33,6 +32,20 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.__init__(self)
         self.impact_total = None
+
+    def description(self):
+        """Describe briefly what the post processor does.
+
+        Args:
+            None
+
+        Returns:
+            Str the translated description
+
+        Raises:
+            Errors are propagated
+        """
+        return tr('Calculates age related statistics.')
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being

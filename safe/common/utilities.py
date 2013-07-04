@@ -38,17 +38,21 @@ class MEMORYSTATUSEX(ctypes.Structure):
 
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions
-    Input
-        statement: expression
-        message: error message in case statement evaluates as False
 
-    Output
+    Input:
+      statement: expression
+
+      message: error message in case statement evaluates as False
+
+    Output:
         None
-    Raises
+
+    Raises:
         VerificationError in case statement evaluates to False
     """
 
     if bool(statement) is False:
+        # noinspection PyExceptionInherit
         raise VerificationError(message)
 
 
@@ -85,7 +89,7 @@ def temp_dir(sub_dir='work'):
 
     Args:
         sub_dir str - optional argument which will cause an additional
-                subirectory to be created e.g. /tmp/inasafe/foo/
+                subdirectory to be created e.g. /tmp/inasafe/foo/
 
     Returns:
         Path to the output clipped layer (placed in the system temp dir).
@@ -126,7 +130,7 @@ def unique_filename(**kwargs):
     If dir is specified, the tempfile will be created in the path specified
     otherwise the file will be created in a directory following this scheme:
 
-    :file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
+    :file:'/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
 
     See http://docs.python.org/library/tempfile.html for details.
 
@@ -155,14 +159,14 @@ def unique_filename(**kwargs):
         # Ensure that the dir mask won't conflict with the mode
         # Umask sets the new mask and returns the old
         umask = os.umask(0000)
-        # Ensure that the dir is world writable by explictly setting mode
+        # Ensure that the dir is world writable by explicitly setting mode
         os.makedirs(kwargs['dir'], 0777)
         # Reinstate the old mask for tmp dir
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename
     handle, filename = mkstemp(**kwargs)
 
-    # Need to close it using the filehandle first for windows!
+    # Need to close it using the file handle first for windows!
     os.close(handle)
     try:
         os.remove(filename)
@@ -171,7 +175,12 @@ def unique_filename(**kwargs):
     return filename
 
 try:
-    from safe_qgis.utilities import getDefaults as get_qgis_defaults
+    # hmmm this is not so nice - would be nicer to find a way to make
+    # to make safe unaware of safe_qgis - perhaps this is a good case
+    # for monkey patching safe.common.utilities with a replacement
+    # get_defaults when safe_qgis initialises....Tim (June 2013)
+    # noinspection PyUnresolvedReferences
+    from safe_qgis.utilities.utilities import getDefaults as get_qgis_defaults
 
     def get_defaults(default=None):
         return get_qgis_defaults(theDefault=default)
@@ -193,7 +202,7 @@ def zip_shp(shp_path, extra_ext=None, remove_file=False):
 
     Args:
         * shp_path: str - path to the main shape file.
-        * extra_ext: [str] - list of extra extentions related to shapefile.
+        * extra_ext: [str] - list of extra extensions related to shapefile.
 
     Returns:
         str: full path to the created shapefile
@@ -360,19 +369,19 @@ def humanize_min_max(min_value, max_value, interval):
     """
     current_interval = max_value - min_value
     if interval > 1:
-        # print 'case 1. Curent interval : ', current_interval
+        # print 'case 1. Current interval : ', current_interval
         humanize_min_value = format_int(int(round(min_value)))
         humanize_max_value = format_int(int(round(max_value)))
 
     else:
-        # print 'case 2. Curent interval : ', current_interval
+        # print 'case 2. Current interval : ', current_interval
         humanize_min_value = format_decimal(current_interval, min_value)
         humanize_max_value = format_decimal(current_interval, max_value)
     return humanize_min_value, humanize_max_value
 
 
 def format_decimal(interval, my_number):
-    """Return formated decimal according to interval decimal place
+    """Return formatted decimal according to interval decimal place
     For example:
     interval = 0.33 (two decimal places)
     my_float = 1.1215454
@@ -394,7 +403,28 @@ def format_decimal(interval, my_number):
     my_number_decimal = str(my_number).split('.')[1][:decimal_places]
     if len(set(my_number_decimal)) == 1 and my_number_decimal[-1] == '0':
         return my_number_int
-    return my_number_int + '.' + my_number_decimal
+    return (format_int(int(my_number_int)) + get_decimal_separator() +
+            my_number_decimal)
+
+
+def get_decimal_separator():
+    """Return decimal separator according to the locale
+    """
+    lang = os.getenv('LANG')
+    if lang == 'id':
+        return ','
+    else:
+        return '.'
+
+
+def get_thousand_separator():
+    """Return decimal separator according to the locale
+    """
+    lang = os.getenv('LANG')
+    if lang == 'id':
+        return '.'
+    else:
+        return ','
 
 
 def get_significant_decimal(my_decimal):
@@ -417,10 +447,10 @@ def get_significant_decimal(my_decimal):
             break
     my_truncated_decimal = my_decimal_part[:first_not_zero + 3]
     # rounding
-    my_letfover_digit = my_decimal_part[:first_not_zero + 3:]
-    my_letfover_number = int(float('0.' + my_letfover_digit))
+    my_leftover_number = my_decimal_part[:first_not_zero + 3:]
+    my_leftover_number = int(float('0.' + my_leftover_number))
     round_up = False
-    if my_letfover_number == 1:
+    if my_leftover_number == 1:
         round_up = True
     my_truncated = float(my_int_part + '.' + my_truncated_decimal)
     if round_up:
@@ -431,27 +461,28 @@ def get_significant_decimal(my_decimal):
 
 def humanize_class(my_classes):
     """Return humanize interval of an array
-    For example:
-    Original Array :                    Result:
-    1.1  -  5754.1                      0  -  1
-    5754.1  -  11507.1                  1  -  5,754
-                                        5,754  -  11,507
+    For example::
 
-    Original Array :                    Result:
-    0.1  -  0.5                         0  -  0.1
-    0.5  -  0.9                         0.1  -  0.5
-                                        0.5  -  0.9
+        Original Array:                     Result:
+        1.1  -  5754.1                      0  -  1
+        5754.1  -  11507.1                  1  -  5,754
+                                            5,754  -  11,507
 
-    Original Array :                    Result:
-    7.1  -  7.5                         0  -  7.1
-    7.5  -  7.9                         7.1  -  7.5
-                                        7.5  -  7.9
+        Original Array:                     Result:
+        0.1  -  0.5                         0  -  0.1
+        0.5  -  0.9                         0.1  -  0.5
+                                            0.5  -  0.9
 
-    Original Array :                    Result:
-    6.1  -  7.2                         0  -  6
-    7.2  -  8.3                         6  -  7
-    8.3  -  9.4                         7  -  8
-                                        8  -  9
+        Original Array:                     Result:
+        7.1  -  7.5                         0  -  7.1
+        7.5  -  7.9                         7.1  -  7.5
+                                            7.5  -  7.9
+
+        Original Array:                     Result:
+        6.1  -  7.2                         0  -  6
+        7.2  -  8.3                         6  -  7
+        8.3  -  9.4                         7  -  8
+                                            8  -  9
     """
     min_value = 0
     if min_value - my_classes[0] == 0:
@@ -471,7 +502,8 @@ def humanize_class(my_classes):
 
 
 def unhumanize_class(my_classes):
-    """Return class as interval without formating
+    """Return class as interval without formatting
+    @param my_classes:
     """
     my_result = []
     interval = my_classes[-1] - my_classes[-2]
@@ -494,6 +526,8 @@ def create_classes(my_list, num_classes):
     print 'min_value, max_value: ', min_value, max_value
     if min_value == 0:
         num_classes += 1
+        # noinspection PyTypeChecker,PyUnresolvedReferences
+    # noinspection PyUnresolvedReferences,PyTypeChecker
     classes = numpy.linspace(min_value, max_value, num_classes).tolist()
     if min_value == 0:
         classes = classes[1:]
@@ -503,6 +537,7 @@ def create_classes(my_list, num_classes):
 def create_label(my_tuple, extra_label=None):
     """Return a label based on my_tuple (a,b) and extra label.
     a and b are string.
+
     The output will be something like:
                 [a - b] extra_label
     """

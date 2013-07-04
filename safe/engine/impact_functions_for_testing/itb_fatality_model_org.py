@@ -16,8 +16,8 @@ import numpy
 class ITBFatalityFunctionOrg(FunctionProvider):
     """Indonesian Earthquake Fatality Model
 
-    This model was developed by Institut Tecknologi Bandung (ITB) and
-    implemented by Dr Hadi Ghasemi, Geoscience Australia
+    This model was developed by Institut Teknologi Bandung (ITB) and
+    implemented by Dr. Hadi Ghasemi, Geoscience Australia.
 
 
     Reference:

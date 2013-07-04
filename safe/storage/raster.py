@@ -29,28 +29,26 @@ class Raster(Layer):
 
     Args:
         * data: Can be either
-              * a filename of a raster file format known to GDAL
-              * an MxN array of raster data
-              * None (FIXME (Ole): Don't think we need this option)
+            * a filename of a raster file format known to GDAL
+            * an MxN array of raster data
+            * None (FIXME (Ole): Don't think we need this option)
         * projection: Geospatial reference in WKT format.
-                      Only used if data is provide as a numeric array,
-                      if None, WGS84 geographic is assumed
+            Only used if data is provide as a numeric array,
+            if None, WGS84 geographic is assumed
         * geotransform: GDAL geotransform (6-tuple).
-                        (top left x, w-e pixel resolution, rotation,
-                         top left y, rotation, n-s pixel resolution).
-                        See e.g. http://www.gdal.org/gdal_tutorial.html
-                        Only used if data is provide as a numeric array,
+            (top left x, w-e pixel resolution, rotation,
+            top left y, rotation, n-s pixel resolution).
+            See e.g. http://www.gdal.org/gdal_tutorial.html
+            Only used if data is provide as a numeric array,
         * name: Optional name for layer. If None, basename is used.
         * keywords: Optional dictionary with keywords that describe the
-                    layer. When the layer is stored, these keywords will
-                    be written into an associated file with extension
-                    .keywords.
-
-                    Keywords can for example be used to display text
-                    about the layer in a web application.
+            layer. When the layer is stored, these keywords will
+            be written into an associated file with extension .keywords.
+            Keywords can for example be used to display text
+            about the layer in a web application.
         * style_info: Dictionary with information about how this layer
-                      should be styled. See impact_functions/styles.py
-                      for examples.
+            should be styled. See impact_functions/styles.py
+            for examples.
 
     Returns:
         * InaSAFE raster layer instance
@@ -62,7 +60,6 @@ class Raster(Layer):
     Note:
         If data is a filename, all other arguments are ignored
         as they will be inferred from the file.
-
     """
 
     def __init__(self, data=None, projection=None, geotransform=None,
@@ -289,25 +286,33 @@ class Raster(Layer):
 
         Args:
             * nan: Optional flag controlling handling of missing values.
+
                    If nan is True (default), nodata values will be replaced
                    with numpy.nan
+
                    If keyword nan has a numeric value, nodata values will
                    be replaced by that value. E.g. to set missing values to 0,
                    do get_data(nan=0.0)
+
             * scaling: Optional flag controlling if data is to be scaled
                        if it has been resampled. Admissible values are
+
                        False: data is retrieved without modification.
+
                        True: Data is rescaled based on the squared ratio
                              between its current and native resolution. This
                              is typically required if raster data represents a
                              density such as population per km^2
+
                        None: The behaviour will depend on the keyword
                              "population" associated with the layer. If
                              it is "density", scaling will be applied
                              otherwise not. This is the default.
+
                        scalar value: If scaling takes a numerical scalar value,
                                      that will be use to scale the data
-        * copy (optional): If present and True return copy
+
+            * copy (optional): If present and True return copy
 
         Note:
             Scaling does not currently work with projected layers.
@@ -408,11 +413,13 @@ class Raster(Layer):
         """Return geotransform for this raster layer
 
         Returns:
-        * geotransform: 6 digit vector
-                        (top left x, w-e pixel resolution, rotation,
-                         top left y, rotation, n-s pixel resolution).
 
-                         See e.g. http://www.gdal.org/gdal_tutorial.html
+        * geotransform: 6 digit vector
+            (top left x, w-e pixel resolution, rotation,
+            top left y, rotation, n-s pixel resolution).
+
+            See e.g. http://www.gdal.org/gdal_tutorial.html
+
         * copy (optional): If present and True return copy
         """
 
@@ -467,11 +474,12 @@ class Raster(Layer):
 
     def get_extrema(self):
         """Get min and max from raster
+
         Note:
-            If raster has a nominated no_data value, this is ignored.
+          If raster has a nominated no_data value, this is ignored.
 
         Returns:
-            min, max
+          min, max
         """
 
         A = self.get_data(nan=True)

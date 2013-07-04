@@ -15,8 +15,10 @@ from safe.common.utilities import (
     round_thousand,
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
+from safe.common.exceptions import ZeroImpactException
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -130,6 +132,8 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Calculate impact to intermediate thresholds
         counts = []
+        # merely initialize
+        my_impact = None
         for i, lo in enumerate(thresholds):
             if i == len(thresholds) - 1:
                 # The last threshold
@@ -154,6 +158,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
+
         tot_needs = self.evacuated_population_weekly_needs(evacuated,
                                                            minimum_needs)
 
@@ -210,12 +215,23 @@ class FloodEvacuationFunction(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
 
+        # check for zero impact
+        if numpy.nanmax(my_impact) == 0 == numpy.nanmin(my_impact):
+            table_body = [
+                question,
+                TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
+                          '%s' % format_int(evacuated)],
+                         header=True)]
+            my_message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(my_message)
+
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         classes = create_classes(my_impact.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
+
         for i in xrange(len(colours)):
             style_class = dict()
             if i == 1:
@@ -225,7 +241,7 @@ class FloodEvacuationFunction(FunctionProvider):
             elif i == 7:
                 label = create_label(interval_classes[i], 'High')
             else:
-                label = create_label(interval_classes[i], 'High')
+                label = create_label(interval_classes[i])
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             if i == 0:
@@ -242,7 +258,8 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # For printing map purpose
         map_title = tr('People in need of evacuation')
-        legend_notes = tr('Thousand separator is represented by \'.\'')
+        legend_notes = tr('Thousand separator is represented by %s' %
+                          get_thousand_separator())
         legend_units = tr('(people per cell)')
         legend_title = tr('Population density')
 

@@ -38,7 +38,7 @@ class PluginMount(type):
 
 
 class FunctionProvider:
-    """Mount point for plugins which refer to actions that can be performed.
+    """Mount point for impact_functions.
 
     Plugins implementing this reference should provide the following method:
 
@@ -153,6 +153,15 @@ def get_plugin(name):
     return impact_function
 
 
+def unload_plugins():
+    """Unload all loaded plugins.
+
+    .. note:: Added in InaSAFE 1.2.
+    """
+    for p in FunctionProvider.plugins:
+        del p
+
+
 # FIXME (Ole): Deprecate this function (see issue #392)
 def pretty_function_name(func):
     """Return a human readable name for the function
@@ -176,18 +185,25 @@ def requirements_collect(func):
     """Collect the requirements from the plugin function doc
 
     The requirements need to be specified using
-      :param requires <valid python expression>
+
+    :param requires::
+
+    <valid python expression>
+
     The layer keywords are put into the local name space
     each requires should be on a new line
-    a '\' at the end of a line will be a continuation
+    a '\\' at the end of a line will be a continuation
 
     returns a (possibly empty) list of Python expressions
 
     Example of valid requirements expression
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
-                    layertype=='raster' and \
-                    unit=='m'
+
+    :param requires::
+
+      category=='hazard' and
+      subcategory in ['flood', 'tsunami'] and
+      layertype=='raster' and
+      unit=='m'
     """
 
     requires_lines = []
@@ -425,9 +441,11 @@ def aggregate_point_data(data=None, boundaries=None,
 
     Note
         Aggregated values depend on aggregation function:
+
         'sum': Sum of values for attribute_name
+
         'count': Dictionary with counts of occurences of each value
-                 of attribute_name
+        of attribute_name
 
     """
 
@@ -480,14 +498,17 @@ def aggregate(data=None, boundaries=None,
               aggregation_function='count'):
     """Clip data to boundaries and aggregate their values for each.
 
-    Input
+    Input:
         data: Point or Raster dataset
+
         boundaries: Polygon dataset
+
         attribute_name: Name of attribute to aggrate over.
-                        This is only applicable for vector data
+         This is only applicable for vector data
+
         aggregation_function: Function to apply ('count' or 'sum')
 
-    Output
+    Output:
         Dictionary of {boundary_name: aggregated value}
     """
 
@@ -509,21 +530,23 @@ def aggregate(data=None, boundaries=None,
 
 
 # FIXME (Ole): Maybe filter by name too, rename to get_impact_functions
-#              and remove some of the other functions.
+# and remove some of the other functions.
 def get_admissible_plugins(keywords=None):  # , name=None):
     """Get plugins that match specified keywords
 
-    Input
+    Input:
         keywords: Either dictionary or list of dictionaries containing
                   layer keywords of the form
                   {'category': 'hazard', 'subcategory': 'flood', ...}
 
                   If None or empty all plugins are returned
-#        name: Optional impact function name (or part of function name)
-#              used to further filter the result.
-#              If None all names are considered to match
 
-    Output
+        name: Optional impact function name (or part of function name)
+         used to further filter the result.
+
+        If None all names are considered to match
+
+    Output:
         Dictionary of impact functions ({name: class})
     """
 

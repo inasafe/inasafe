@@ -152,7 +152,8 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
                    projection=E.get_projection(),
                    geometry=coordinates,
                    name='Estimated damage level',
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': impact_summary,
+                             'target_field': self.target_field},
                    style_info=style_info)
 
         return V

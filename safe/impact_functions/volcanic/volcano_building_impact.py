@@ -7,11 +7,12 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
 class VolcanoBuildingImpact(FunctionProvider):
@@ -132,6 +133,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         if not category_title in my_hazard.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (my_hazard.get_name(), category_title))
+            # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
         # Run interpolation function for polygon2raster
@@ -192,13 +194,22 @@ class VolcanoBuildingImpact(FunctionProvider):
                               'area') % format_int(total),
                            tr('Only buildings available in OpenStreetMap '
                               'are considered.')])
+
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('Buildings affected by volcanic hazard zone')
+        building_counts = [x[self.target_field] for x in new_attributes]
+
+        if max(building_counts) == 0 == min(building_counts):
+            table_body = [
+                question,
+                TableRow([tr('Number of buildings affected'),
+                          '%s' % format_int(cum), blank_cell],
+                         header=True)]
+            my_message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(my_message)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        building_counts = [x[self.target_field] for x in new_attributes]
         classes = create_classes(building_counts, len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
@@ -222,8 +233,9 @@ class VolcanoBuildingImpact(FunctionProvider):
                           style_type='graduatedSymbol')
 
         # For printing map purpose
-        map_title = tr('Building affected by volcanic hazard zone')
-        legend_notes = tr('Thousand separator is represented by \'.\'')
+        map_title = tr('Buildings affected by volcanic hazard zone')
+        legend_notes = tr('Thousand separator is represented by %s' %
+                          get_thousand_separator())
         legend_units = tr('(building)')
         legend_title = tr('Building count')
 

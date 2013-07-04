@@ -1,5 +1,4 @@
 #/***************************************************************************
-# IS
 #
 # InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
@@ -17,57 +16,22 @@
 # *                                                                         *
 # ***************************************************************************/
 
-# Makefile for a PyQGIS plugin
-
-# Note by Tim. I think we can get rid of py_files, and extras
-PLUGINNAME = inasafe
-
-PY_FILES = __init__.py \
-	clipper.py \
-	dock.py \
-	exceptions.py\
-	help.py \
-	html_renderer.py \
-	impact_calculator.py \
-	impact_calculator_thread.py \
-	impact_functions_doc.py \
-	keyword_io.py \
-	keywords_dialog.py \
-	map_legend.py \
-	map.py \
-	minimum_needs.py \
-	options_dialog.py \
-	plugin.py \
-	qgis_interface.py \
-	safe_interface.py \
-	safe_qgis/import_dialog.py \
-	utilities.py
-
-EXTRAS = icon.png
-
-UI_FILES = dock_base.py \
-					 options_dialog_base.py \
-					 keywords_dialog_base.py \
-					 impact_functions_doc_base.py \
-					 minimum_needs_base.py \
-					 options_dialog_base.py \
-                                         converter_dialog_base.py \
-                                         import_dialog_base.py
-
-RESOURCE_FILES = resources.py
 
 default: compile
 
-compile: $(UI_FILES) $(RESOURCE_FILES)
+compile:
+	@echo
+	@echo "------------------------------"
+	@echo "Compile ui and resources forms"
+	@echo "------------------------------"
+	make -C ui
+	make -C resources
 
-%.py : %.qrc
-	pyrcc4 -o $@  $<
-	@#this is ugly but the resource referenced by the ui
-	@#looks for a file generated with a different name
-	cp resources.py resources_rc.py
 
-clean: compile
-	rm $(UI_FILES)
-
-%.py : %.ui
-	pyuic4 -o $@ $<
+clean:
+	@echo
+	@echo "------------------------------"
+	@echo "Clean ui and resources forms"
+	@echo "------------------------------"
+	make clean -C ui
+	make clean -C resources

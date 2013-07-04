@@ -11,15 +11,14 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
-from safe.postprocessors.abstract_postprocessor import (
-    AbstractPostprocessor)
+from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
 from safe.common.utilities import ugettext as tr
 
 
 class BuildingTypePostprocessor(AbstractPostprocessor):
     """
-    Postprocessor that calculates age related statistics.
+    Postprocessor that calculates building types related statistics.
     see the _calculate_* methods to see indicator specific documentation
 
     see :mod:`safe.defaults` for default values information
@@ -27,7 +26,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
 
     def __init__(self):
         """
-        Constructor for AgePostprocessor postprocessor class,
+        Constructor for postprocessor class,
         It takes care of defining self.impact_total
         """
         AbstractPostprocessor.__init__(self)
@@ -39,6 +38,20 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.types = {'Hospitals': ['medical', 'clinic', 'hospital'],
                       'Places of worship': ['place_of_worship'],
                       'Schools': ['school']}
+
+    def description(self):
+        """Describe briefly what the post processor does.
+
+        Args:
+            None
+
+        Returns:
+            Str the translated description
+
+        Raises:
+            Errors are propagated
+        """
+        return tr('Calculates building types related statistics.')
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being
@@ -93,8 +106,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
 
         if (self.impact_total is None or
-            self.impact_attrs is None or
-            self.target_field is None):
+                self.impact_attrs is None or
+                self.target_field is None):
             self._log_message('%s not all params have been correctly '
                               'initialized, setup needs to be called before '
                               'process. Skipping this postprocessor'
