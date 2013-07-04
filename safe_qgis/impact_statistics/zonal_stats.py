@@ -33,8 +33,9 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def tr(theText):
-    """We define a tr() alias here since the utilities implementation below
-    is not a class and does not inherit from QObject.
+    """We define a tr() alias here since the utilities implementation.
+
+     The code below is not a class and does not inherit from QObject.
 
     .. note:: see http://tinyurl.com/pyqt-differences
 
