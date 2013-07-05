@@ -28,7 +28,7 @@ from third_party.odict import OrderedDict
 from safe_qgis.safe_interface import InaSAFEError, get_version
 from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.help import Help
+from safe_qgis.utilities.help import Help
 from safe_qgis.utilities.utilities import (
     getErrorMessage,
     isPolygonLayer,

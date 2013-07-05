@@ -20,9 +20,8 @@ import unittest
 import logging
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.utilities.utilities_test import (getQgisTestApp,
-                                      loadLayer,
-                                      checkImages)
+from safe_qgis.utilities.utilities_for_testing import (
+    getQgisTestApp, loadLayer, checkImages)
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.utilities.keyword_io import KeywordIO
 
@@ -33,6 +32,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class HtmlRendererTest(unittest.TestCase):
     """Test the InaSAFE Html Renderer"""
     def setUp(self):
+        """Runs before each test."""
         pass
 
     def sampleHtml(self, theLineCount=100):

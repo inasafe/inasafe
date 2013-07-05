@@ -23,9 +23,10 @@ from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
 from safe_qgis.batch.batch_dialog import BatchDialog
-from safe_qgis.utilities.utilities_test import getQgisTestApp, SCENARIO_DIR
+from safe_qgis.utilities.utilities_for_testing import (
+    getQgisTestApp, SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir
-from safe_qgis.dock import Dock
+from safe_qgis.widgets.dock import Dock
 
 
 # Get QGis app handle

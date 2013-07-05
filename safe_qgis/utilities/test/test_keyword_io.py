@@ -6,13 +6,13 @@ import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
+from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 # For testing and demoing
-from safe_qgis.utilities.utilities_test import (getQgisTestApp, loadLayer)
+from safe_qgis.utilities.utilities_for_testing import getQgisTestApp, loadLayer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
 from safe_qgis.tools.test_keywords_dialog import makePadangLayerClone
@@ -168,7 +168,7 @@ class KeywordIOTest(unittest.TestCase):
         """Can we read sqlite keywords with the generic readKeywords method
         """
         myLocalPath = os.path.join(os.path.dirname(__file__),
-                                   '../../', 'jk.sqlite')
+                                   '../../..///', 'jk.sqlite')
         myPath = os.path.join(TESTDATA, 'test_keywords.db')
         self.keywordIO.setKeywordDbPath(myPath)
         # We need to make a local copy of the dataset so

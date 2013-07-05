@@ -22,12 +22,15 @@ from safe_qgis.safe_interface import safeTr, get_function_title, get_plugins
 
 
 class SafeTranslationsTest(unittest.TestCase):
+    """Test translations work."""
 
     def setUp(self):
+        """Runs before each test."""
         if 'LANG' in os.environ.iterkeys():
             os.environ.__delitem__('LANG')
 
     def tearDown(self):
+        """Runs after each test."""
         if 'LANG' in os.environ.iterkeys():
             os.environ.__delitem__('LANG')
 

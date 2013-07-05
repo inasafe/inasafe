@@ -23,7 +23,7 @@ import logging
 from PyQt4.QtGui import QLineEdit
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from safe_qgis.safe_interface import get_plugins
@@ -31,7 +31,7 @@ from third_party.odict import OrderedDict
 
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import getQgisTestApp
 # pylint: disable=W0611
 # pylint: enable=W0611
 

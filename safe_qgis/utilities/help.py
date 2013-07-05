@@ -62,7 +62,7 @@ class Help(QtGui.QDialog):
         # revert to en (English).
         myRootPath = os.path.dirname(__file__)
         myRootPath = os.path.abspath(os.path.join(myRootPath,
-                                     '..',
+                                                  '../../',
                                      'docs',
                                      'output',
                                      'html'))
@@ -71,7 +71,7 @@ class Help(QtGui.QDialog):
                 os.path.join(myRootPath, myLocale)) and myLocale != 'en'):
             myRootPath = os.path.join(myRootPath, myLocale)
         else:
-            myRootPath = os.path.join(myRootPath, 'en')
+            myRootPath = os.path.join(myRootPath, '../../docs/output/html/en')
 
         myPath = os.path.abspath(os.path.join(myRootPath,
                                               'user-docs',

@@ -343,7 +343,7 @@
   <customwidget>
    <class>MessageViewer</class>
    <extends>QWidget</extends>
-   <header>..message_viewer</header>
+   <header>..widgets.message_viewer</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

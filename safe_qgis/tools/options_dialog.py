@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
-from safe_qgis.help import Help
+from safe_qgis.utilities.help import Help
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import DEFAULTS

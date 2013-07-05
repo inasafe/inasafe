@@ -23,10 +23,9 @@ import logging
 #sys.path.append(pardir)
 
 from PyQt4 import QtGui
-from qgis.core import (QgsSymbol,
-                       QgsMapLayerRegistry)
+from qgis.core import QgsSymbol, QgsMapLayerRegistry
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.utilities.utilities_test import (
+from safe_qgis.utilities.utilities_for_testing import (
     getQgisTestApp,
     checkImages,
     loadLayer)
