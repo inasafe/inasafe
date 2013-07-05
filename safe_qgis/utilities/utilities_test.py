@@ -41,7 +41,7 @@ TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
                               '../test/test_data/test_files')
 
 SCENARIO_DIR = os.path.join(os.path.dirname(__file__),
-                            '../test/test_data/test_scenario')
+                            '../test/test_data/test_scenarios')
 
 
 LOGGER = logging.getLogger('InaSAFE')
