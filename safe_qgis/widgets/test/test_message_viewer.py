@@ -21,7 +21,7 @@ import sys
 import unittest
 from PyQt4 import Qt
 from third_party.pydispatch import dispatcher
-from safe_qgis.message_viewer import MessageViewer
+from safe_qgis.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -30,7 +30,7 @@ from safe_qgis.safe_interface import (
 from safe_qgis.utilities.utilities import getErrorMessage
 
 TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__), 'test_data/test_files')
+    os.path.dirname(__file__), '../../test/test_data/test_files')
 
 
 class MessageViewerTest(unittest.TestCase):

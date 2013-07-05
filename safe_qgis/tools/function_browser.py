@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import (QtGui, QtCore, QtWebKit,)
 from safe_qgis.ui.function_browser_base import Ui_FunctionBrowserBase
-from safe_qgis.help import Help
+from safe_qgis.utilities.help import Help
 from safe_qgis.safe_interface import (
     get_version,
     get_unique_values,

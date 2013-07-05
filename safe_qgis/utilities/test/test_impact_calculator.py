@@ -20,17 +20,18 @@ import sys
 import os
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 import unittest
 from safe_qgis.utilities.impact_calculator import ImpactCalculator
-from safe_qgis.exceptions import (InsufficientParametersError,
-                                  KeywordNotFoundError,
-                                  StyleInfoNotFoundError)
+from safe_qgis.exceptions import (
+    InsufficientParametersError,
+    KeywordNotFoundError,
+    StyleInfoNotFoundError)
 
-from safe_qgis.safe_interface import (readKeywordsFromLayer, getStyleInfo,
-                                      HAZDATA, EXPDATA, TESTDATA)
+from safe_qgis.safe_interface import (
+    readKeywordsFromLayer, getStyleInfo, HAZDATA, EXPDATA, TESTDATA)
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)

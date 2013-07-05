@@ -25,7 +25,7 @@ from qgis.core import (
     QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.utilities.utilities_test import (
+from safe_qgis.utilities.utilities_for_testing import (
     getQgisTestApp,
     loadLayer,
     setJakartaGeoExtent,

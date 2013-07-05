@@ -23,21 +23,23 @@ import os
 from unittest import expectedFailure
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..//'))
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../../..///'))
 sys.path.append(pardir)
 
 import numpy
 
-from qgis.core import (QgsVectorLayer,
-                       QgsRasterLayer,
-                       QgsGeometry,
-                       QgsPoint)
+from qgis.core import (
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsGeometry,
+    QgsPoint)
 
-from safe_qgis.safe_interface import (readSafeLayer,
-                                      getOptimalExtent,
-                                      HAZDATA, TESTDATA, EXPDATA, UNITDATA,
-                                      GetDataError,
-                                      nanallclose)
+from safe_qgis.safe_interface import (
+    readSafeLayer,
+    getOptimalExtent,
+    HAZDATA, TESTDATA, EXPDATA, UNITDATA,
+    nanallclose)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.utilities.clipper import (
     clipLayer,
@@ -46,7 +48,7 @@ from safe_qgis.utilities.clipper import (
     clipGeometry)
 from safe_qgis.utilities.utilities import qgisVersion
 
-from safe_qgis.utilities.utilities_test import (
+from safe_qgis.utilities.utilities_for_testing import (
     getQgisTestApp,
     setCanvasCrs,
     RedirectStdStreams,
@@ -71,13 +73,15 @@ class ClipperTest(unittest.TestCase):
     """Test the InaSAFE clipper"""
 
     def setUp(self):
+        """Runs before each test."""
         pass
 
     def tearDown(self):
+        """Runs after each test."""
         pass
 
     def test_clipVector(self):
-        """Vector layers can be clipped
+        """Vector layers can be clipped.
         """
 
         # Create a vector layer

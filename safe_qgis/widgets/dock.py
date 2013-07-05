@@ -35,7 +35,7 @@ from qgis.core import (
     QGis)
 from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
-from safe_qgis.help import Help
+from safe_qgis.utilities.help import Help
 from safe_qgis.utilities.utilities import (
     getErrorMessage,
     getWGS84resolution,
@@ -65,8 +65,8 @@ from safe_qgis.safe_interface import (
     get_postprocessors,
     get_postprocessor_human_name,
     ZeroImpactException)
-from safe_interface import messaging as m
-from safe_interface import (
+from safe_qgis.safe_interface import messaging as m
+from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
@@ -91,7 +91,7 @@ from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
-from safe_interface import styles
+from safe_qgis.safe_interface import styles
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE

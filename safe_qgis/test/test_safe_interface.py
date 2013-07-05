@@ -19,14 +19,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import unittest
-from safe_qgis.safe_interface import (getOptimalExtent,
-                                      availableFunctions,
-                                      readKeywordsFromFile,
-                                      readSafeLayer,
-                                      TESTDATA, HAZDATA, EXPDATA,
-                                      BoundingBoxError)
-from safe_qgis.exceptions import (KeywordNotFoundError,
-                                  InsufficientOverlapError)
+from safe_qgis.safe_interface import (
+    getOptimalExtent,
+    availableFunctions,
+    readKeywordsFromFile,
+    readSafeLayer,
+    TESTDATA, HAZDATA, EXPDATA,
+    BoundingBoxError)
+from safe_qgis.exceptions import (
+    KeywordNotFoundError,
+    InsufficientOverlapError)
 
 
 class SafeInterfaceTest(unittest.TestCase):

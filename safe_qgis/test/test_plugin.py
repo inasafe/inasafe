@@ -29,7 +29,7 @@ from PyQt4.QtGui import QWidget
 
 from qgis.gui import QgsMapCanvas
 from safe_qgis.test.qgis_interface import QgisInterface
-from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import getQgisTestApp
 from safe_qgis.plugin import Plugin
 from safe_qgis.safe_interface import safeTr
 

@@ -40,9 +40,9 @@ from safe_qgis.utilities.utilities_test import (getQgisTestApp,
                                       setJakartaGeoExtent,
                                       GEOCRS)
 
-from safe_qgis.dock import Dock
+from safe_qgis.widgets.dock import Dock
 
-from safe_qgis.utilities.utilities_test import (
+from safe_qgis.utilities.utilities_for_testing import (
     loadStandardLayers,
     setupScenario,
     canvasList)
