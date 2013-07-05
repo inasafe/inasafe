@@ -60,7 +60,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
 
     :returns: A data structure containing sum, mean, min, max,
         count of raster values for each polygonal area.
-    :rtype: (dict, count)
+    :rtype: dict
 
     :raises: InvalidParameterError
 
