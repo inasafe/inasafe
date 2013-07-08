@@ -678,9 +678,9 @@ class DockTest(unittest.TestCase):
         setJakartaGeoExtent()
 
         # Run manually so we can get the output layer
-        DOCK._prepareAggregator()
+        DOCK.prepare_aggregator()
         DOCK.aggregator.validateKeywords()
-        DOCK.setupCalculator()
+        DOCK.setup_calculator()
         myRunner = DOCK.calculator.getRunner()
         myRunner.run()  # Run in same thread
         myEngineImpactLayer = myRunner.impactLayer()
@@ -933,7 +933,7 @@ class DockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         # noinspection PyTypeChecker,PyCallByClass
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-        DOCK.saveState()
+        DOCK.save_state()
         myExpectedDict = getUiState(DOCK)
         #myState = DOCK.state
         # Now reset and restore and check that it gets the old state
@@ -943,7 +943,7 @@ class DockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         # noinspection PyTypeChecker,PyCallByClass
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-        DOCK.restoreState()
+        DOCK.restore_state()
         myResultDict = getUiState(DOCK)
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
             myResultDict, myExpectedDict, combosToString(DOCK))
@@ -1034,8 +1034,8 @@ class DockTest(unittest.TestCase):
                      ' %s\nExpected: undefined' % myType)
 
         assert myType == 'undefined', myMessage
-        DOCK.layerChanged(myLayer)
-        DOCK.saveState()
+        DOCK.layer_changed(myLayer)
+        DOCK.save_state()
         myHtml = DOCK.state['report']
         myExpectedString = '4229'
         myMessage = "%s\nDoes not contain:\n%s" % (
@@ -1068,7 +1068,7 @@ class DockTest(unittest.TestCase):
             theExposure='OSM Building Polygons',
             theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function')
-        DOCK.getFunctions()
+        DOCK.get_functions()
         assert myResult, myMessage
 
     def Xtest_runnerExceptions(self):
@@ -1216,7 +1216,7 @@ Click for Diagnostic Information:
         assert myResult, myMessage
 
         # With no aggregation layer
-        myLayer = DOCK.getAggregationLayer()
+        myLayer = DOCK.get_aggregation_layer()
         myId = myLayer.id()
         QgsMapLayerRegistry.instance().removeMapLayer(myId)
         myResult, myMessage = setupScenario(
@@ -1247,7 +1247,7 @@ Click for Diagnostic Information:
         # create unique file
         myScenarioFile = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=temp_dir('test'))
-        DOCK.saveCurrentScenario(theScenarioFilePath=myScenarioFile)
+        DOCK.save_current_scenario(theScenarioFilePath=myScenarioFile)
         with open(myScenarioFile, 'rt') as f:
             data = f.readlines()
         myTitle = data[0][:-1]

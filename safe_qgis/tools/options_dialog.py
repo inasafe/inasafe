@@ -155,7 +155,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """Method invoked when OK button is clicked.
         """
         self.saveState()
-        self.dock.readSettings()
+        self.dock.read_settings()
         self.close()
 
     @pyqtSignature('')  # prevents actions being handled twice
