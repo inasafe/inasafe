@@ -517,7 +517,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         # create table report pdf
         myHtmlRenderer = HtmlRenderer(myMap.pageDpi)
-        myKeywords = myMap.keywordIO.readKeywords(theImpactLayer)
+        myKeywords = myMap.keywordIO.read_keywords(theImpactLayer)
         myHtmlRenderer.printImpactTable(myKeywords, myTablePath)
         LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 

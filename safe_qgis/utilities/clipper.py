@@ -320,8 +320,8 @@ def _clipVectorLayer(theLayer,
     if theExtraKeywords is None:
         theExtraKeywords = {}
     theExtraKeywords['HAD_MULTIPART_POLY'] = myHasMultipart
-    myKeywordIO.copyKeywords(
-        theLayer, myFilename, theExtraKeywords=theExtraKeywords)
+    myKeywordIO.copy_keywords(
+        theLayer, myFilename, extra_keywords=theExtraKeywords)
     myBaseName = '%s clipped' % theLayer.name()
     myLayer = QgsVectorLayer(myFilename, myBaseName, 'ogr')
 
@@ -536,8 +536,8 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     # .. todo:: Check the result of the shell call is ok
     myKeywordIO = KeywordIO()
-    myKeywordIO.copyKeywords(theLayer, myFilename,
-                             theExtraKeywords=theExtraKeywords)
+    myKeywordIO.copy_keywords(theLayer, myFilename,
+                             extra_keywords=theExtraKeywords)
     myBaseName = '%s clipped' % theLayer.name()
     myLayer = QgsRasterLayer(myFilename, myBaseName)
 

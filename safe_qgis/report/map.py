@@ -668,7 +668,7 @@ class Map():
         #time_stamp: 2012-10-13_23:10:31
         #myUser = self.keywordIO.readKeywords(self.layer, 'user')
         #myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
-        myDateTime = self.keywordIO.readKeywords(self.layer, 'time_stamp')
+        myDateTime = self.keywordIO.read_keywords(self.layer, 'time_stamp')
         myTokens = myDateTime.split('_')
         myDate = myTokens[0]
         myTime = myTokens[1]
@@ -753,7 +753,7 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map getMapTitle called')
         try:
-            myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
+            myTitle = self.keywordIO.read_keywords(self.layer, 'map_title')
             return myTitle
         except KeywordNotFoundError:
             return None
@@ -778,7 +778,7 @@ class Map():
         for myLegendAttribute in legendAttributes:
             try:
                 dictLegendAttributes[myLegendAttribute] = \
-                    self.keywordIO.readKeywords(self.layer, myLegendAttribute)
+                    self.keywordIO.read_keywords(self.layer, myLegendAttribute)
             except KeywordNotFoundError:
                 pass
             except Exception:

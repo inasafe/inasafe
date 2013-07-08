@@ -49,7 +49,7 @@ from safe_qgis.utilities.utilities import (
     getDefaults,
     extentToGeoArray,
     safeToQGISLayer)
-from safe_qgis.utilities.styling import setVectorGraduatedStyle
+from safe_qgis.utilities.styling import set_vector_graduated_style
 from safe_qgis.safe_interface import (
     temp_dir,
     safe_read_layer,
@@ -156,7 +156,7 @@ class Aggregator(QtCore.QObject):
         # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
         try:
-            myKeywords = self.keywordIO.readKeywords(self.layer)
+            myKeywords = self.keywordIO.read_keywords(self.layer)
         #discussed with Tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             myKeywords = {}
@@ -164,7 +164,7 @@ class Aggregator(QtCore.QObject):
         if self.aoiMode:
             myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
                 'Use default')
-            self.keywordIO.updateKeywords(self.layer, myKeywords)
+            self.keywordIO.update_keywords(self.layer, myKeywords)
             self.isValid = True
             return
         else:
@@ -208,7 +208,7 @@ class Aggregator(QtCore.QObject):
                     myKeywords[self.defaults['FEM_RATIO_KEY']] = \
                         self.defaults['FEM_RATIO']
 
-                self.keywordIO.updateKeywords(self.layer, myKeywords)
+                self.keywordIO.update_keywords(self.layer, myKeywords)
                 self.isValid = False
 
     def deintersect(self, theHazardLayer, theExposureLayer):
@@ -237,7 +237,7 @@ class Aggregator(QtCore.QObject):
 
             if isPolygonLayer(self.exposureLayer):
                 # Find out the subcategory for this layer
-                mySubcategory = self.keywordIO.readKeywords(
+                mySubcategory = self.keywordIO.read_keywords(
                     self.exposureLayer, 'subcategory')
                 # We dont want to chop up buildings!
                 if mySubcategory != 'structure':
@@ -300,7 +300,7 @@ class Aggregator(QtCore.QObject):
             LOGGER.debug(myMessage)
 
         del myUnneededAttributes, myProvider, myFields
-        self.keywordIO.updateKeywords(
+        self.keywordIO.update_keywords(
             self.layer, {'title': myLayerName})
 
         self.statisticsType, self.statisticsClasses = (
@@ -354,7 +354,7 @@ class Aggregator(QtCore.QObject):
 
                 myStyle = {'target_field': myAttr,
                            'style_classes': myClasses}
-                setVectorGraduatedStyle(self.layer, myStyle)
+                set_vector_graduated_style(self.layer, myStyle)
             else:
                 #make style of layer pretty much invisible
                 myProps = {'style': 'no',
@@ -382,7 +382,7 @@ class Aggregator(QtCore.QObject):
         myAggrFieldIndex = None
 
         try:
-            self.targetField = self.keywordIO.readKeywords(theQGISImpactLayer,
+            self.targetField = self.keywordIO.read_keywords(theQGISImpactLayer,
                                                            'target_field')
         except KeywordNotFoundError:
             myMessage = m.Paragraph(
@@ -772,7 +772,7 @@ class Aggregator(QtCore.QObject):
                 self.exposureLayer.extent(),
                 self.exposureLayer.crs())
 
-            myAggrAttribute = self.keywordIO.readKeywords(
+            myAggrAttribute = self.keywordIO.read_keywords(
                 self.layer, self.defaults['AGGR_ATTR_KEY'])
 
             myClippedLayer = clipLayer(
@@ -785,7 +785,7 @@ class Aggregator(QtCore.QObject):
             self.layer = myClippedLayer
             self.layer.setLayerName(myName)
             if self.showIntermediateLayers:
-                self.keywordIO.updateKeywords(self.layer, {'title': myName})
+                self.keywordIO.update_keywords(self.layer, {'title': myName})
                 QgsMapLayerRegistry.instance().addMapLayer(self.layer)
 
     def _countFieldName(self):
@@ -809,12 +809,12 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributes[self.defaults[
             'AGGR_ATTR_KEY']] = (
-                self.keywordIO.readKeywords(
+                self.keywordIO.read_keywords(
                     self.layer,
                     self.defaults['AGGR_ATTR_KEY']))
 
         myFemaleRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
-        myFemRatioAttr = self.keywordIO.readKeywords(
+        myFemRatioAttr = self.keywordIO.read_keywords(
             self.layer,
             myFemaleRatioKey)
         if ((myFemRatioAttr != self.tr('Don\'t use')) and
@@ -886,7 +886,7 @@ class Aggregator(QtCore.QObject):
         myOutFilename = unique_filename(suffix='.shp',
                                         dir=myTempdir)
 
-        self.keywordIO.copyKeywords(theQgisLayer, myOutFilename)
+        self.keywordIO.copy_keywords(theQgisLayer, myOutFilename)
         mySHPWriter = QgsVectorFileWriter(myOutFilename,
                                           'UTF-8',
                                           fields,
@@ -1115,7 +1115,7 @@ class Aggregator(QtCore.QObject):
             raise Exception('Invalid qgis Layer')
 
         if self.showIntermediateLayers:
-            self.keywordIO.updateKeywords(myOutLayer, {'title': myName})
+            self.keywordIO.update_keywords(myOutLayer, {'title': myName})
             QgsMapLayerRegistry.instance().addMapLayer(myOutLayer)
 
         return myOutLayer
@@ -1190,11 +1190,11 @@ class Aggregator(QtCore.QObject):
         self.layer.commitChanges()
 
         try:
-            self.keywordIO.updateKeywords(
+            self.keywordIO.update_keywords(
                 self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except InvalidParameterError:
-            self.keywordIO.writeKeywords(
+            self.keywordIO.write_keywords(
                 self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except KeywordDbError, e:

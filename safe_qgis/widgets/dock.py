@@ -37,7 +37,7 @@ from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
 from safe_qgis.utilities.help import Help
 from safe_qgis.utilities.utilities import (
-    getErrorMessage,
+    get_error_message,
     getWGS84resolution,
     qgisVersion,
     impactLayerAttribution,
@@ -47,9 +47,9 @@ from safe_qgis.utilities.utilities import (
     readImpactLayer)
 from safe_qgis.utilities.styling import (
     setRasterStyle,
-    setVectorGraduatedStyle,
-    setVectorCategorizedStyle)
-from safe_qgis.utilities.memory_checker import checkMemoryUsage
+    set_vector_graduated_style,
+    set_vector_categorized_style)
+from safe_qgis.utilities.memory_checker import check_memory_usage
 from safe_qgis.utilities.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (
     load_plugins,
@@ -325,9 +325,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         ..seealso:: disconnectLayerListener
         """
         if qgisVersion() >= 10800:  # 1.8 or newer
-            QgsMapLayerRegistry.instance().layers_will_be_removed.connect(
+            QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
                 self.layers_will_be_removed)
-            QgsMapLayerRegistry.instance().layers_added.connect(
+            QgsMapLayerRegistry.instance().layersAdded.connect(
                 self.layers_added)
         # All versions of QGIS
         QtCore.QObject.connect(
@@ -458,10 +458,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # TODO refactor impact_functions so it is accessible and user here
         #myHazardFilename = self.getHazardLayer().source()
         myHazardKeywords = QtCore.QString(str(
-            self.keywordIO.readKeywords(self.get_hazard_layer())))
+            self.keywordIO.read_keywords(self.get_hazard_layer())))
         #myExposureFilename = self.getExposureLayer().source()
         myExposureKeywords = QtCore.QString(
-            str(self.keywordIO.readKeywords(self.get_exposure_layer())))
+            str(self.keywordIO.read_keywords(self.get_exposure_layer())))
         myHeading = m.Heading(
             self.tr('No valid functions:'), **WARNING_STYLE)
         myNotes = m.Paragraph(self.tr(
@@ -746,11 +746,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             # noinspection PyBroadException
             try:
-                myTitle = self.keywordIO.readKeywords(myLayer, 'title')
+                myTitle = self.keywordIO.read_keywords(myLayer, 'title')
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
-                self.keywordIO.updateKeywords(myLayer, {'title': myName})
+                self.keywordIO.update_keywords(myLayer, {'title': myName})
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
@@ -772,7 +772,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # the layer will be ignored.
             # noinspection PyBroadException
             try:
-                myCategory = self.keywordIO.readKeywords(myLayer, 'category')
+                myCategory = self.keywordIO.read_keywords(myLayer, 'category')
             except:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
@@ -816,14 +816,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myExposureLayer = self.get_exposure_layer()
         if myExposureLayer is None:
             return
-        myHazardKeywords = self.keywordIO.readKeywords(myHazardLayer)
+        myHazardKeywords = self.keywordIO.read_keywords(myHazardLayer)
         # We need to add the layer type to the returned keywords
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
             myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
             myHazardKeywords['layertype'] = 'raster'
 
-        myExposureKeywords = self.keywordIO.readKeywords(myExposureLayer)
+        myExposureKeywords = self.keywordIO.read_keywords(myExposureLayer)
         # We need to add the layer type to the returned keywords
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
             myExposureKeywords['layertype'] = 'vector'
@@ -953,14 +953,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.aggregator.showIntermediateLayers = self.showIntermediateLayers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
         try:
-            myOriginalKeywords = self.keywordIO.readKeywords(
+            myOriginalKeywords = self.keywordIO.read_keywords(
                 self.aggregator.layer)
         except AttributeError:
             myOriginalKeywords = {}
         except InvalidParameterError:
             #No kw file was found for layer - create an empty one.
             myOriginalKeywords = {}
-            self.keywordIO.writeKeywords(
+            self.keywordIO.write_keywords(
                 self.aggregator.layer, myOriginalKeywords)
         LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
         LOGGER.debug(
@@ -1061,7 +1061,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return  # ignore any error
 
         # Ensure there is enough memory
-        myResult = checkMemoryUsage(myBufferedGeoExtent, myCellSize)
+        myResult = check_memory_usage(myBufferedGeoExtent, myCellSize)
         if not myResult:
             # noinspection PyCallByClass,PyTypeChecker
             myResult = QtGui.QMessageBox.warning(
@@ -1100,7 +1100,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :type theOldKeywords: dict
         """
         LOGGER.debug('Setting old dictionary: ' + str(theOldKeywords))
-        self.keywordIO.writeKeywords(self.aggregator.layer, theOldKeywords)
+        self.keywordIO.write_keywords(self.aggregator.layer, theOldKeywords)
         self.hide_busy()
         self.set_ok_button_status()
 
@@ -1114,7 +1114,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # Remove category keyword so we force the keyword editor to
                 # popup. See the beginning of checkAttributes to
                 # see how the popup decision is made
-                self.keywordIO.deleteKeyword(self.layer, 'category')
+                self.keywordIO.delete_keywords(self.layer, 'category')
         except AttributeError:
             #first run, self.lastUsedFunction does not exist yet
             pass
@@ -1226,7 +1226,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.restoreOverrideCursor()
         self.hide_busy()
         LOGGER.exception(theMessage)
-        myMessage = getErrorMessage(theException, theContext=theMessage)
+        myMessage = get_error_message(theException, theContext=theMessage)
         self.show_error_message(myMessage)
         self.analysisDone.emit(False)
 
@@ -1275,16 +1275,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
         self.show_dynamic_message(myMessage)
 
-        myKeywords = self.keywordIO.readKeywords(theQGISImpactLayer)
+        myKeywords = self.keywordIO.read_keywords(theQGISImpactLayer)
 
         #write postprocessing report to keyword
         myOutput = self.postprocessorManager.getOutput()
         myKeywords['postprocessing_report'] = myOutput.to_html(
             suppress_newlines=True)
-        self.keywordIO.writeKeywords(theQGISImpactLayer, myKeywords)
+        self.keywordIO.write_keywords(theQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
-        myReport = self.keywordIO.readKeywords(
+        myReport = self.keywordIO.read_keywords(
             theQGISImpactLayer, 'impact_summary')
         myReport += impactLayerAttribution(myKeywords).to_html(True)
 
@@ -1300,10 +1300,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 pass
             elif myStyleType == 'categorizedSymbol':
                 LOGGER.debug('use categorized')
-                setVectorCategorizedStyle(theQGISImpactLayer, myStyle)
+                set_vector_categorized_style(theQGISImpactLayer, myStyle)
             elif myStyleType == 'graduatedSymbol':
                 LOGGER.debug('use graduated')
-                setVectorGraduatedStyle(theQGISImpactLayer, myStyle)
+                set_vector_graduated_style(theQGISImpactLayer, myStyle)
 
         elif theEngineImpactLayer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
@@ -1410,7 +1410,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myContext = self.tr(
                     'An exception occurred when calculating the results. %1'
                 ).arg(self.runner.result())
-                myMessage = getErrorMessage(myException, theContext=myContext)
+                myMessage = get_error_message(myException, theContext=myContext)
             self.show_error_message(myMessage)
             self.analysisDone.emit(False)
             return
@@ -1764,7 +1764,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         try:
-            myKeywords = self.keywordIO.readKeywords(theLayer)
+            myKeywords = self.keywordIO.read_keywords(theLayer)
 
             if 'impact_summary' in myKeywords:
                 self.show_impact_keywords(myKeywords)
@@ -1776,11 +1776,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 InvalidParameterError), e:
             self.show_no_keywords_message()
             # Append the error message.
-            myErrorMessage = getErrorMessage(e)
+            myErrorMessage = get_error_message(e)
             self.show_error_message(myErrorMessage)
             return
         except Exception, e:
-            myErrorMessage = getErrorMessage(e)
+            myErrorMessage = get_error_message(e)
             self.show_error_message(myErrorMessage)
             return
 
@@ -1871,7 +1871,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
-        myKeywords = self.keywordIO.readKeywords(self.iface.activeLayer())
+        myKeywords = self.keywordIO.read_keywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.printImpactTable(
             myKeywords, theFilename=myTableFilename)
 
@@ -1879,7 +1879,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMap.printToPdf(myMapPdfFilePath)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
-            myReport = getErrorMessage(e)
+            myReport = get_error_message(e)
             self.show_error_message(myReport)
 
         # Make sure the file paths can wrap nicely:
@@ -1977,7 +1977,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myExposurePath = str(myExposureLayer.publicSource())
         myHazardPath = str(myHazardLayer.publicSource())
 
-        myTitle = self.keywordIO.readKeywords(myHazardLayer, 'title')
+        myTitle = self.keywordIO.read_keywords(myHazardLayer, 'title')
         myTitle = safeTr(myTitle)
 
         myTitleDialog = self.tr('Save Scenario')

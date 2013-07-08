@@ -24,13 +24,13 @@ from PyQt4.QtTest import QTest
 
 from safe_qgis.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
-    getQgisTestApp, SCENARIO_DIR)
+    get_qgis_app, SCENARIO_DIR)
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.widgets.dock import Dock
 
 
 # Get QGis app handle
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 

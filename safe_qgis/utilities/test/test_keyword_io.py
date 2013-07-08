@@ -12,13 +12,13 @@ sys.path.append(pardir)
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 # For testing and demoing
-from safe_qgis.utilities.utilities_for_testing import getQgisTestApp, loadLayer
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app, load_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
 from safe_qgis.tools.test_keywords_dialog import makePadangLayerClone
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Don't change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
@@ -38,10 +38,10 @@ class KeywordIOTest(unittest.TestCase):
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                           'spatialite')
         myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
-        self.fileRasterLayer, myType = loadLayer(myHazardPath,
-                                                 theDirectory=None)
+        self.fileRasterLayer, myType = load_layer(myHazardPath,
+                                                 directory=None)
         del myType
-        self.fileVectorLayer, myType = loadLayer('Padang_WGS84.shp')
+        self.fileVectorLayer, myType = load_layer('Padang_WGS84.shp')
         del myType
         self.expectedSqliteKeywords = {'category': 'exposure',
                                        'datatype': 'OSM',
@@ -84,7 +84,7 @@ class KeywordIOTest(unittest.TestCase):
                               'subcategory': 'building'}
         # SQL insert test
         # On first write schema is empty and there is no matching hash
-        self.keywordIO.setKeywordDbPath(myFilename)
+        self.keywordIO.set_keyword_db_path(myFilename)
         self.keywordIO.writeKeywordsForUri(PG_URI, myExpectedKeywords)
         # SQL Update test
         # On second write schema is populated and we update matching hash
@@ -124,7 +124,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_readRasterFileKeywords(self):
         """Can we read raster file keywords using generic readKeywords method
         """
-        myKeywords = self.keywordIO.readKeywords(self.fileRasterLayer)
+        myKeywords = self.keywordIO.read_keywords(self.fileRasterLayer)
         myExpectedKeywords = self.expectedRasterKeywords
         mySource = self.fileRasterLayer.source()
         myMessage = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
@@ -134,7 +134,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_readVectorFileKeywords(self):
         """Can we read vector file keywords with the generic readKeywords
         method """
-        myKeywords = self.keywordIO.readKeywords(self.fileVectorLayer)
+        myKeywords = self.keywordIO.read_keywords(self.fileVectorLayer)
         myExpectedKeywords = self.expectedVectorKeywords
         mySource = self.fileVectorLayer.source()
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
@@ -145,8 +145,8 @@ class KeywordIOTest(unittest.TestCase):
         """Can we append file keywords with the generic readKeywords method."""
         myLayer, _ = makePadangLayerClone()
         myNewKeywords = {'category': 'exposure', 'test': 'TEST'}
-        self.keywordIO.updateKeywords(myLayer, myNewKeywords)
-        myKeywords = self.keywordIO.readKeywords(myLayer)
+        self.keywordIO.update_keywords(myLayer, myNewKeywords)
+        myKeywords = self.keywordIO.read_keywords(myLayer)
 
         for myKey, myValue in myNewKeywords.iteritems():
             myMessage = ('Layer keywords misses appended key: %s\n'
@@ -170,7 +170,7 @@ class KeywordIOTest(unittest.TestCase):
         myLocalPath = os.path.join(os.path.dirname(__file__),
                                    '../../..///', 'jk.sqlite')
         myPath = os.path.join(TESTDATA, 'test_keywords.db')
-        self.keywordIO.setKeywordDbPath(myPath)
+        self.keywordIO.set_keyword_db_path(myPath)
         # We need to make a local copy of the dataset so
         # that we can use a local path that will hash properly on the
         # database to return us the correct / valid keywords record.
@@ -187,7 +187,7 @@ class KeywordIOTest(unittest.TestCase):
         myMessage = 'Got source: %s\n\nExpected %s\n' % (
                     mySqliteLayer.source, myExpectedSource)
         assert mySqliteLayer.source() == myExpectedSource, myMessage
-        myKeywords = self.keywordIO.readKeywords(mySqliteLayer)
+        myKeywords = self.keywordIO.read_keywords(mySqliteLayer)
         myExpectedKeywords = self.expectedSqliteKeywords
         assert myKeywords == myExpectedKeywords, myMessage
         mySource = self.sqliteLayer.source()

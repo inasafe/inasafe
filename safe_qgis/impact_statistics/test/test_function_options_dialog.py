@@ -31,11 +31,11 @@ from third_party.odict import OrderedDict
 
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe_qgis.utilities.utilities_for_testing import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 # pylint: disable=W0611
 # pylint: enable=W0611
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

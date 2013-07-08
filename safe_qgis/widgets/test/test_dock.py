@@ -42,25 +42,25 @@ from safe_qgis.safe_interface import (
     format_int, HAZDATA, TESTDATA, UNITDATA)
 
 from safe_qgis.utilities.utilities_for_testing import (
-    getQgisTestApp,
-    setCanvasCrs,
-    setPadangGeoExtent,
-    setBatemansBayGeoExtent,
-    setJakartaGeoExtent,
-    setYogyaGeoExtent,
-    setJakartaGoogleExtent,
-    setSmallExtentJakarta,
-    setGeoExtent,
+    get_qgis_app,
+    set_canvas_crs,
+    set_padang_extent,
+    set_batemans_bay_extent,
+    set_jakarta_extent,
+    set_yogya_extent,
+    set_jakarta_google_extent,
+    set_small_jakarta_extent,
+    set_geo_extent,
     GEOCRS,
     GOOGLECRS,
-    loadLayer,
-    loadStandardLayers,
-    populateDock,
-    combosToString,
-    getUiState,
-    setupScenario,
-    loadLayers,
-    canvasList)
+    load_layer,
+    load_standard_layers,
+    populate_dock,
+    combos_to_string,
+    get_ui_state,
+    setup_scenario,
+    load_layers,
+    canvas_list)
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.styling import setRasterStyle
@@ -84,7 +84,7 @@ from safe.engine.impact_functions_for_testing import \
 
 LOGGER = logging.getLogger('InaSAFE')
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
@@ -102,7 +102,7 @@ class DockTest(unittest.TestCase):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
-        loadStandardLayers(DOCK)
+        load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -139,7 +139,7 @@ class DockTest(unittest.TestCase):
         self.assertEquals(myFlag, False, myMessage)
 
         # Now check we DO validate a populated DOCK
-        populateDock(DOCK)
+        populate_dock(DOCK)
         myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on '
                      'a populated for with selections.')
@@ -156,7 +156,7 @@ class DockTest(unittest.TestCase):
         self.assertEquals(myFlag, False, myMessage)
 
         # Now check OK IS enabled on a populated DOCK
-        populateDock(DOCK)
+        populate_dock(DOCK)
         myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on a ' +
                      'populated DOCK with selections.')
@@ -166,19 +166,19 @@ class DockTest(unittest.TestCase):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
-        setCanvasCrs(GEOCRS, True)
-        setPadangGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_padang_extent()
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard=PADANG2009_title,
-            theExposure='Padang WGS84',
-            theFunction='Earthquake Guidelines Function',
-            theFunctionId='Earthquake Guidelines Function')
+            hazard=PADANG2009_title,
+            exposure='Padang WGS84',
+            function='Earthquake Guidelines Function',
+            function_id='Earthquake Guidelines Function')
         assert myResult, myMessage
 
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         # Expected output:
         #Buildings    Total
         #All:    3160
@@ -197,20 +197,20 @@ class DockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly (small extent)."""
 
         # Push OK with the left mouse button
-        setCanvasCrs(GEOCRS, True)
-        setPadangGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_padang_extent()
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard=PADANG2009_title,
-            theExposure='People',
-            theFunction='Earthquake Fatality Function',
-            theFunctionId='Earthquake Fatality Function')
+            hazard=PADANG2009_title,
+            exposure='People',
+            function='Earthquake Fatality Function',
+            function_id='Earthquake Fatality Function')
         assert myResult, myMessage
 
         DOCK.accept()
 
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         # Check against expected output
         myMessage = ('Unexpected result returned for Earthquake Fatality '
@@ -229,8 +229,8 @@ class DockTest(unittest.TestCase):
         # Push OK with the left mouse button
 
         myButton = DOCK.pbnRunStop
-        setCanvasCrs(GEOCRS, True)
-        setGeoExtent([96, -5, 105, 2])  # This covers all of the 2009 shaking
+        set_canvas_crs(GEOCRS, True)
+        set_geo_extent([96, -5, 105, 2])  # This covers all of the 2009 shaking
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
@@ -247,11 +247,11 @@ class DockTest(unittest.TestCase):
         # Choose impact function
         myIndex = DOCK.cboFunction.findText('Earthquake Fatality Function')
         myMessage = ('Earthquake Fatality Function not '
-                     'found: ' + combosToString(DOCK))
+                     'found: ' + combos_to_string(DOCK))
         assert myIndex != -1, myMessage
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
-        myDict = getUiState(DOCK)
+        myDict = get_ui_state(DOCK)
         myExpectedDict = {'Hazard': PADANG2009_title,
                           'Exposure': 'People',
                           'Impact Function Id':
@@ -260,12 +260,12 @@ class DockTest(unittest.TestCase):
                           'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-            myDict, myExpectedDict, combosToString(DOCK))
+            myDict, myExpectedDict, combos_to_string(DOCK))
         assert myDict == myExpectedDict, myMessage
 
         DOCK.accept()
 
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         # Check against expected output
         myMessage = ('Unexpected result returned for Earthquake Fatality '
@@ -288,20 +288,20 @@ class DockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='Tsunami Max Inundation',
-            theExposure='Tsunami Building Exposure',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function')
+            hazard='Tsunami Max Inundation',
+            exposure='Tsunami Building Exposure',
+            function='Be flooded',
+            function_id='Flood Building Impact Function')
         assert myResult, myMessage
 
-        setCanvasCrs(GEOCRS, True)
-        setBatemansBayGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_batemans_bay_extent()
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         #print myResult
         # Post clip on steroids refactor
@@ -331,16 +331,16 @@ class DockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='Penduduk Jakarta',
-            theFunction='HKVtest',
-            theFunctionId='HKVtest')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='Penduduk Jakarta',
+            function='HKVtest',
+            function_id='HKVtest')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
+        set_canvas_crs(GEOCRS, True)
         # Zoom to an area where there is no overlap with layers
         myRect = QgsRectangle(106.635434302702, -6.101567666986,
                               106.635434302817, -6.101567666888)
@@ -348,7 +348,7 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         # Check for an error containing InsufficientOverlapError
         myExpectedString = 'InsufficientOverlapError'
@@ -367,21 +367,21 @@ class DockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='Penduduk Jakarta',
-            theFunction='HKVtest',
-            theFunctionId='HKVtest')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='Penduduk Jakarta',
+            function='HKVtest',
+            function_id='HKVtest')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         # Check that the number is as what was calculated by
         # Marco Hartman form HKV
@@ -393,23 +393,23 @@ class DockTest(unittest.TestCase):
         """Flood function runs in GUI with 5x5km population data
            Raster on raster based function runs as expected with scaling."""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Press RUN
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
 
@@ -422,21 +422,21 @@ class DockTest(unittest.TestCase):
         """Flood function runs in GUI with Jakarta polygon flood hazard data.
            Uses population raster exposure layer"""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta',
-            theExposure='Penduduk Jakarta',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard')
+            hazard='A flood in Jakarta',
+            exposure='Penduduk Jakarta',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function Vector Hazard')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people needing evacuation
@@ -446,21 +446,21 @@ class DockTest(unittest.TestCase):
         """Flood function runs in GUI with Flood in Jakarta hazard data
             Uses DKI buildings exposure data."""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='Flood in Jakarta',
-            theExposure='Essential buildings',
-            theFunction='Be affected',
-            theFunctionId='Categorised Hazard Building Impact Function')
+            hazard='Flood in Jakarta',
+            exposure='Essential buildings',
+            function='Be affected',
+            function_id='Categorised Hazard Building Impact Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of building might be affected
@@ -472,21 +472,21 @@ class DockTest(unittest.TestCase):
         """Flood function runs in GUI with Flood in Jakarta hazard data
             Uses Penduduk Jakarta as exposure data."""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='Flood in Jakarta',
-            theExposure='Penduduk Jakarta',
-            theFunction='Be impacted',
-            theFunctionId='Categorised Hazard Population Impact Function')
+            hazard='Flood in Jakarta',
+            exposure='Penduduk Jakarta',
+            function='Be impacted',
+            function_id='Categorised Hazard Population Impact Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of population might be affected
@@ -499,21 +499,21 @@ class DockTest(unittest.TestCase):
         """Earthquake function runs in GUI with An earthquake in Yogyakarta
         like in 2006 hazard data uses OSM Building Polygons exposure data."""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='An earthquake in Yogyakarta like in 2006',
-            theExposure='OSM Building Polygons',
-            theFunction='Be affected',
-            theFunctionId='Earthquake Building Impact Function')
+            hazard='An earthquake in Yogyakarta like in 2006',
+            exposure='OSM Building Polygons',
+            function='Be affected',
+            function_id='Earthquake Building Impact Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setGeoExtent([101, -12, 119, -4])
+        set_canvas_crs(GEOCRS, True)
+        set_geo_extent([101, -12, 119, -4])
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -526,21 +526,21 @@ class DockTest(unittest.TestCase):
         """Volcano function runs in GUI with An donut (merapi hazard map)
          hazard data uses OSM Building Polygons exposure data."""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='donut',
-            theExposure='OSM Building Polygons',
-            theFunction='Be affected',
-            theFunctionId='Volcano Building Impact')
+            hazard='donut',
+            exposure='OSM Building Polygons',
+            function='Be affected',
+            function_id='Volcano Building Impact')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+        set_canvas_crs(GEOCRS, True)
+        set_geo_extent([110.01, -7.81, 110.78, -7.50])
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -551,21 +551,21 @@ class DockTest(unittest.TestCase):
         """Volcano function runs in GUI with a donut (merapi hazard map)
          hazard data uses population density grid."""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='donut',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Volcano Polygon Hazard Population')
+            hazard='donut',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Volcano Polygon Hazard Population')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+        set_canvas_crs(GEOCRS, True)
+        set_geo_extent([110.01, -7.81, 110.78, -7.50])
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -593,21 +593,21 @@ class DockTest(unittest.TestCase):
 
         # NOTE: We assume radii in impact function to be 3, 5 and 10 km
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='Merapi Alert',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Volcano Polygon Hazard Population')
+            hazard='Merapi Alert',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Volcano Polygon Hazard Population')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setGeoExtent([110.01, -7.81, 110.78, -7.50])
+        set_canvas_crs(GEOCRS, True)
+        set_geo_extent([110.01, -7.81, 110.78, -7.50])
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         LOGGER.debug(myResult)
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -629,17 +629,17 @@ class DockTest(unittest.TestCase):
     def Xtest_printMap(self):
         """Test print map, especially on Windows."""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='Flood in Jakarta',
-            theExposure='Essential buildings',
-            theFunction='Be affected',
-            theFunctionId='Categorised Hazard Building Impact Function')
+            hazard='Flood in Jakarta',
+            exposure='Essential buildings',
+            function='Be affected',
+            function_id='Categorised Hazard Building Impact Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Press RUN
         myButton = DOCK.pbnRunStop
@@ -663,19 +663,19 @@ class DockTest(unittest.TestCase):
         # Push OK with the left mouse button
 
         print '--------------------'
-        print combosToString(DOCK)
+        print combos_to_string(DOCK)
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Run manually so we can get the output layer
         DOCK.prepare_aggregator()
@@ -710,21 +710,21 @@ class DockTest(unittest.TestCase):
         proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='Penduduk Jakarta',
-            theFunction='HKVtest',
-            theFunctionId='HKVtest')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='Penduduk Jakarta',
+            function='HKVtest',
+            function_id='HKVtest')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GOOGLECRS, True)
-        setJakartaGoogleExtent()
+        set_canvas_crs(GOOGLECRS, True)
+        set_jakarta_google_extent()
 
         # Press RUN
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
         assert format_int(2366) in myResult, myMessage
@@ -733,18 +733,18 @@ class DockTest(unittest.TestCase):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
         myButton = DOCK.pbnRunStop
-        setCanvasCrs(GEOCRS, True)
-        setYogyaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_yogya_extent()
 
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='An earthquake in Yogyakarta like in 2006',
-            theExposure='OSM Building Polygons',
-            theFunction='Earthquake Guidelines Function',
-            theFunctionId='Earthquake Guidelines Function')
+            hazard='An earthquake in Yogyakarta like in 2006',
+            exposure='OSM Building Polygons',
+            function='Earthquake Guidelines Function',
+            function_id='Earthquake Guidelines Function')
         assert myResult, myMessage
 
         # This is the where nosetest sometims hangs when running the
@@ -753,7 +753,7 @@ class DockTest(unittest.TestCase):
         # with nosetest, but OK when run normally.
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         # Check that none of these  get a NaN value:
         self.assertIn('Unknown', myResult)
@@ -774,7 +774,7 @@ class DockTest(unittest.TestCase):
         """Layers can be loaded and list widget was updated appropriately
         """
 
-        myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
+        myHazardLayerCount, myExposureLayerCount = load_standard_layers()
         myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
                     % (myHazardLayerCount, DOCK.cboHazard.count())
         # pylint: disable=W0106
@@ -798,8 +798,8 @@ class DockTest(unittest.TestCase):
                            'Flood_Current_Depth_Jakarta_geographic.asc'),
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(
-            myFileList, theDataDirectory=None)
+        myHazardLayerCount, myExposureLayerCount = load_layers(
+            myFileList, data_directory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -815,13 +815,13 @@ class DockTest(unittest.TestCase):
         # and select it - run should be disabled
         myFileList = ['issue71.tif']  # This layer has incorrect keywords
         myClearFlag = False
-        _, _ = loadLayers(myFileList, myClearFlag)
+        _, _ = load_layers(myFileList, myClearFlag)
         # set exposure to : Population Density Estimate (5kmx5km)
         # noinspection PyCallByClass,PyTypeChecker
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         # noinspection PyCallByClass,PyTypeChecker
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-        myDict = getUiState(DOCK)
+        myDict = get_ui_state(DOCK)
         myExpectedDict = {'Run Button Enabled': False,
                           'Impact Function Id': '',
                           'Impact Function Title': '',
@@ -830,7 +830,7 @@ class DockTest(unittest.TestCase):
         myMessage = (('Run button was not disabled when exposure set to \n%s'
                       '\nUI State: \n%s\nExpected State:\n%s\n%s') %
                      (DOCK.cboExposure.currentText(), myDict, myExpectedDict,
-                      combosToString(DOCK)))
+                      combos_to_string(DOCK)))
 
         assert myExpectedDict == myDict, myMessage
 
@@ -859,7 +859,7 @@ class DockTest(unittest.TestCase):
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = [myHazard, myExposure]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+        myHazardLayerCount, myExposureLayerCount = load_layers(myFileList)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -876,25 +876,25 @@ class DockTest(unittest.TestCase):
         # and select it - run should be disabled
         myFileList = ['issue71.tif']  # This layer has incorrect keywords
         myClearFlag = False
-        _, _ = loadLayers(myFileList, myClearFlag)
+        _, _ = load_layers(myFileList, myClearFlag)
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='multipart_polygons_osm_4326',
-            theExposure='buildings_osm_4326',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function')
+            hazard='multipart_polygons_osm_4326',
+            exposure='buildings_osm_4326',
+            function='Be flooded',
+            function_id='Flood Building Impact Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
+        set_canvas_crs(GEOCRS, True)
         IFACE.mapCanvas().setExtent(
             QgsRectangle(106.788, -6.193, 106.853, -6.167))
 
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
         DOCK.accept()
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
         assert format_int(68) in myResult, myMessage
@@ -905,17 +905,17 @@ class DockTest(unittest.TestCase):
         """
         # See https://github.com/AIFDR/inasafe/issues/581
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setSmallExtentJakarta()
+        set_canvas_crs(GEOCRS, True)
+        set_small_jakarta_extent()
         # Press RUN
         DOCK.accept()
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
@@ -934,7 +934,7 @@ class DockTest(unittest.TestCase):
         # noinspection PyTypeChecker,PyCallByClass
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         DOCK.save_state()
-        myExpectedDict = getUiState(DOCK)
+        myExpectedDict = get_ui_state(DOCK)
         #myState = DOCK.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
@@ -944,9 +944,9 @@ class DockTest(unittest.TestCase):
         # noinspection PyTypeChecker,PyCallByClass
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         DOCK.restore_state()
-        myResultDict = getUiState(DOCK)
+        myResultDict = get_ui_state(DOCK)
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-            myResultDict, myExpectedDict, combosToString(DOCK))
+            myResultDict, myExpectedDict, combos_to_string(DOCK))
         assert myExpectedDict == myResultDict, myMessage
 
         # Corner case test when two layers can have the
@@ -959,8 +959,8 @@ class DockTest(unittest.TestCase):
                            'Flood_Current_Depth_Jakarta_geographic.asc'),
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
-        myHazardLayerCount, myExposureLayerCount = loadLayers(
-            myFileList, theDataDirectory=None)
+        myHazardLayerCount, myExposureLayerCount = load_layers(
+            myFileList, data_directory=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         DOCK.cboHazard.setCurrentIndex(0)
@@ -980,7 +980,7 @@ class DockTest(unittest.TestCase):
                      'when choosing a different hazard of the same category:'
                      ' %s\nExpected: %s\n%s' % (myExpectedFunction,
                                                 myCurrentFunction,
-                                                combosToString(DOCK)))
+                                                combos_to_string(DOCK)))
 
         assert myExpectedFunction == myCurrentFunction, myMessage
         # noinspection PyTypeChecker,PyCallByClass
@@ -1000,25 +1000,25 @@ class DockTest(unittest.TestCase):
             '/test-full-run-results.txt',
             'r').read()
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart',
-            theAggregationEnabledFlag=True)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_enabled_flag=True)
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
 
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         myMessage = ('The aggregation report should be:\n%s\n\nFound:\n\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myResult, myExpectedResult, myMessage)
@@ -1029,7 +1029,7 @@ class DockTest(unittest.TestCase):
         See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        myLayer, myType = loadLayer('issue58.tif')
+        myLayer, myType = load_layer('issue58.tif')
         myMessage = ('Unexpected category for issue58.tif.\nGot:'
                      ' %s\nExpected: undefined' % myType)
 
@@ -1045,13 +1045,13 @@ class DockTest(unittest.TestCase):
 
     def test_newLayersShowInCanvas(self):
         """Check that when we add a layer we can see it in the canvas list."""
-        LOGGER.info("Canvas list before:\n%s" % canvasList())
+        LOGGER.info("Canvas list before:\n%s" % canvas_list())
         myBeforeCount = len(CANVAS.layers())
         myPath = join(TESTDATA, 'polygon_0.shp')
         myLayer = QgsVectorLayer(myPath, 'foo', 'ogr')
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
         myAfterCount = len(CANVAS.layers())
-        LOGGER.info("Canvas list after:\n%s" % canvasList())
+        LOGGER.info("Canvas list after:\n%s" % canvas_list())
         myMessage = ('Layer was not added to canvas (%s before, %s after)' %
                      (myBeforeCount, myAfterCount))
         assert myBeforeCount == myAfterCount - 1, myMessage
@@ -1060,32 +1060,32 @@ class DockTest(unittest.TestCase):
     def test_issue317(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
-        myResult, myMessage = setupScenario(
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='OSM Building Polygons',
-            theFunction='Be flooded',
-            theFunctionId='Flood Building Impact Function')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='OSM Building Polygons',
+            function='Be flooded',
+            function_id='Flood Building Impact Function')
         DOCK.get_functions()
         assert myResult, myMessage
 
     def Xtest_runnerExceptions(self):
         """Test runner exceptions"""
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Exception riser',
-            theFunctionId='Exception Raising Impact Function',
-            theAggregationEnabledFlag=True)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Exception riser',
+            function_id='Exception Raising Impact Function',
+            aggregation_enabled_flag=True)
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -1096,25 +1096,25 @@ Problem:
 Exception : AHAHAH I got you
 Click for Diagnostic Information:
 """
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         myMessage = ('The result message should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
 
     def Xtest_runnerIsNone(self):
         """Test for none runner exceptions"""
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='None returner',
-            theFunctionId='None Returning Impact Function',
-            theAggregationEnabledFlag=True)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='None returner',
+            function_id='None Returning Impact Function',
+            aggregation_enabled_flag=True)
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -1126,7 +1126,7 @@ Problem:
 AttributeError : 'NoneType' object has no attribute 'keywords'
 Click for Diagnostic Information:
 """
-        myResult = DOCK.wvResults.pageToText()
+        myResult = DOCK.wvResults.page_to_text()
         myMessage = ('The result message should be:\n%s\nFound:\n%s' %
                      (myExpectedResult, myResult))
         self.assertEqual(myExpectedResult, myResult, myMessage)
@@ -1134,19 +1134,19 @@ Click for Diagnostic Information:
     def test_hasParametersButtonDisabled(self):
         """Function configuration button is disabled
         when layers not compatible."""
-        setCanvasCrs(GEOCRS, True)
+        set_canvas_crs(GEOCRS, True)
         #add additional layers
         #myResult, myMessage = setupScenario(
         #    heHazard='An earthquake in Yogyakarta like in 2006',
         #    theExposure = 'Essential Buildings',
         #    theFunction = 'Be damaged depending on building type',
         #    theFunctionId = 'ITB Earthquake Building Damage Function')
-        setupScenario(
+        setup_scenario(
             DOCK,
-            theHazard='An earthquake in Yogyakarta like in 2006',
-            theExposure='Essential Buildings',
-            theFunction='Be damaged depending on building type',
-            theFunctionId='ITB Earthquake Building Damage Function')
+            hazard='An earthquake in Yogyakarta like in 2006',
+            exposure='Essential Buildings',
+            function='Be damaged depending on building type',
+            function_id='ITB Earthquake Building Damage Function')
         myToolButton = DOCK.toolFunctionOptions
         myFlag = myToolButton.isEnabled()
         assert not myFlag, ('Expected configuration options '
@@ -1155,14 +1155,14 @@ Click for Diagnostic Information:
     def test_hasParametersButtonEnabled(self):
         """Function configuration button is enabled when layers are compatible.
         """
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
-        setupScenario(
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
+        setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='Penduduk Jakarta',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='Penduduk Jakarta',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function')
         myToolButton = DOCK.toolFunctionOptions
         myFlag = myToolButton.isEnabled()
         assert myFlag, 'Expected configuration options button to be enabled'
@@ -1172,14 +1172,14 @@ Click for Diagnostic Information:
     def Xtest_extentsChanged(self):
         """Memory requirements are calculated correctly when extents change.
         """
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
-        setupScenario(
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
+        setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='Penduduk Jakarta',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='Penduduk Jakarta',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function')
         myResult = DOCK.checkMemoryUsage()
         myMessage = 'Expected "3mb" to apear in : %s' % myResult
         assert myResult is not None, 'Check memory reported None'
@@ -1204,14 +1204,14 @@ Click for Diagnostic Information:
         """Aggregation Combobox toggles on and off as expected."""
 
         # With aggregation layer
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart',
-            theAggregationEnabledFlag=True)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_enabled_flag=True)
         myMessage += ' when an aggregation layer is defined.'
         assert myResult, myMessage
 
@@ -1219,30 +1219,30 @@ Click for Diagnostic Information:
         myLayer = DOCK.get_aggregation_layer()
         myId = myLayer.id()
         QgsMapLayerRegistry.instance().removeMapLayer(myId)
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationEnabledFlag=False)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_enabled_flag=False)
         myMessage += ' when no aggregation layer is defined.'
         assert myResult, myMessage
 
     def test_saveCurrentScenario(self):
         """Test saving Current scenario
         """
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='Flood in Jakarta',
-            theExposure='Penduduk Jakarta',
-            theFunction='Be impacted',
-            theFunctionId='Categorised Hazard Population Impact Function')
+            hazard='Flood in Jakarta',
+            exposure='Penduduk Jakarta',
+            function='Be impacted',
+            function_id='Categorised Hazard Population Impact Function')
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         # create unique file
         myScenarioFile = unique_filename(

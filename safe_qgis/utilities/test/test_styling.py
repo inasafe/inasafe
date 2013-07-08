@@ -25,18 +25,18 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from safe_qgis.utilities.styling import (
-    setVectorGraduatedStyle,
+    set_vector_graduated_style,
     setRasterStyle,
-    _addMinMaxToStyle)
-from safe_qgis.utilities.utilities import getErrorMessage
+    add_extrema_to_style)
+from safe_qgis.utilities.utilities import get_error_message
 from safe_qgis.utilities.utilities_for_testing import (
-    unitTestDataPath,
-    loadLayer,
-    getQgisTestApp)
+    test_data_path,
+    load_layer,
+    get_qgis_app)
 from safe_qgis.exceptions import StyleError
 from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class StylingTest(unittest.TestCase):
@@ -54,7 +54,7 @@ class StylingTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        myLayer, _ = loadLayer('issue126.tif')
+        myLayer, _ = load_layer('issue126.tif')
 
         # Note the float quantity values below
         myStyleInfo = {'style_classes': [
@@ -120,7 +120,7 @@ class StylingTest(unittest.TestCase):
         """Test that transparency of minimum value works when set to 100%
         """
         # This dataset has all cells with value 1.3
-        myLayer, _ = loadLayer('issue126.tif')
+        myLayer, _ = load_layer('issue126.tif')
 
         # Note the float quantity values below
         myStyleInfo = {'style_classes': [
@@ -159,7 +159,7 @@ class StylingTest(unittest.TestCase):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
-        myLayer, myType = loadLayer('kecamatan_jakarta_osm_centroids.shp')
+        myLayer, myType = load_layer('kecamatan_jakarta_osm_centroids.shp')
         del myType
         # Note the float quantity values below
         myStyleInfo = {'target_field': 'KEPADATAN', 'style_classes': [
@@ -171,7 +171,7 @@ class StylingTest(unittest.TestCase):
              'min': 351, 'label': 'High', 'size': 3}]}
         myMessage = 'Setting style with point sizes should work.'
         try:
-            setVectorGraduatedStyle(myLayer, myStyleInfo)
+            set_vector_graduated_style(myLayer, myStyleInfo)
         except:
             raise Exception(myMessage)
         # Now validate the size values were set as expected
@@ -199,7 +199,7 @@ class StylingTest(unittest.TestCase):
         try:
             bbox_intersection('aoeu', 'oaeu', [])
         except BoundingBoxError, e:
-            myMessage = getErrorMessage(e)
+            myMessage = get_error_message(e)
             myString = 'BoundingBoxError'
             assert myString in myMessage.to_text(), myMessage
             myString = 'Western boundary'
@@ -209,8 +209,8 @@ class StylingTest(unittest.TestCase):
         """Verify that we give informative errors when style is not correct
            .. seealso:: https://github.com/AIFDR/inasafe/issues/230
         """
-        myPath = unitTestDataPath('impact')
-        myVectorLayer, myType = loadLayer('polygons_for_styling.shp', myPath)
+        myPath = test_data_path('impact')
+        myVectorLayer, myType = load_layer('polygons_for_styling.shp', myPath)
         del myType
         myStyle = {'legend_title': u'Population Count',
                    'target_field': 'population',
@@ -264,7 +264,7 @@ class StylingTest(unittest.TestCase):
                      'size': 1,
                      'label': u'High'}]}
         try:
-            setVectorGraduatedStyle(myVectorLayer, myStyle)
+            set_vector_graduated_style(myVectorLayer, myStyle)
         except StyleError:
             # Exactly what should have happened
             return
@@ -300,7 +300,7 @@ class StylingTest(unittest.TestCase):
             {'max': 300.0, 'colour': '#7A0000', 'min': 200.00000000000003,
              'transparency': 22, 'quantity': 300}]
 
-        myActualClasses = _addMinMaxToStyle(myClasses)
+        myActualClasses = add_extrema_to_style(myClasses)
         print myActualClasses
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
