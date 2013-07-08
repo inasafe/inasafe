@@ -72,17 +72,23 @@ def tr(theText):
     return QCoreApplication.translate('@default', theText)
 
 
-def getErrorMessage(theException, theContext=None, theSuggestion=None):
+def get_error_message(theException, theContext=None, theSuggestion=None):
     """Convert exception into an ErrorMessage containing a stack trace.
+
+
+    :param theException: Exception object.
+    :type theException: Exception
+
+    :param theContext: Optional theContext message.
+    :type theContext: str
+
+    :param theSuggestion: Optional suggestion.
+    :type theSuggestion: str
 
     .. see also:: https://github.com/AIFDR/inasafe/issues/577
 
-    Args:
-        * theException: Exception object.
-        * theContext: Optional theContext message.
-
-    Returns:
-        ErrorMessage: with stack trace info suitable for display.
+    :returns: An error message with stack trace info suitable for display.
+    :rtype: ErrorMessage
     """
 
     myTraceback = ''.join(traceback.format_tb(sys.exc_info()[2]))

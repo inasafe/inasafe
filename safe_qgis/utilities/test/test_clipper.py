@@ -49,12 +49,12 @@ from safe_qgis.utilities.clipper import (
 from safe_qgis.utilities.utilities import qgisVersion
 
 from safe_qgis.utilities.utilities_for_testing import (
-    getQgisTestApp,
-    setCanvasCrs,
-    RedirectStdStreams,
+    get_qgis_app,
+    set_canvas_crs,
+    RedirectStreams,
     DEVNULL,
     GEOCRS,
-    setJakartaGeoExtent)
+    set_jakarta_extent)
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -66,7 +66,7 @@ RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
 
 # Handle to common QGis test app
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ClipperTest(unittest.TestCase):
@@ -176,7 +176,7 @@ class ClipperTest(unittest.TestCase):
         myName = 'stnhaoeu_78oeukqjkrcgA'
         myPath = 'OEk_tnshoeu_439_kstnhoe'
 
-        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+        with RedirectStreams(stdout=DEVNULL, stderr=DEVNULL):
             myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
 
         myMessage = ('QgsVectorLayer reported "valid" for non '
@@ -185,7 +185,7 @@ class ClipperTest(unittest.TestCase):
         assert not myVectorLayer.isValid(), myMessage
 
         # Create a raster layer
-        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+        with RedirectStreams(stdout=DEVNULL, stderr=DEVNULL):
             myRasterLayer = QgsRasterLayer(myPath, myName)
         myMessage = ('QgsRasterLayer reported "valid" for non '
                      'existent path "%s" and name "%s".'
@@ -484,8 +484,8 @@ class ClipperTest(unittest.TestCase):
         myMessage = 'Failed to load osm buildings'
         assert myVectorLayer is not None, myMessage
         assert myVectorLayer.isValid()
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
         myClipRect = [106.52, -6.38, 107.14, -6.07]
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myClipRect)
@@ -596,8 +596,8 @@ class ClipperTest(unittest.TestCase):
         myMessage = 'Failed to load osm buildings'
         assert myVectorLayer is not None, myMessage
         assert myVectorLayer.isValid()
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
         myClipRect = [106.8218, -6.1842, 106.8232, -6.1830]
 
         # Clip the vector to the bbox

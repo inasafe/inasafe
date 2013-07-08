@@ -30,7 +30,7 @@ from safe_qgis.ui.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.help import Help
 from safe_qgis.utilities.utilities import (
-    getErrorMessage,
+    get_error_message,
     isPolygonLayer,
     getLayerAttributeNames,
     getDefaults)
@@ -683,7 +683,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         try:
             # Now read the layer with sub layer if needed
-            myKeywords = self.keywordIO.readKeywords(self.layer)
+            myKeywords = self.keywordIO.read_keywords(self.layer)
         except (InvalidParameterError, HashNotFoundError):
             pass
 
@@ -810,10 +810,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.applyPendingChanges()
         myKeywords = self.getKeywords()
         try:
-            self.keywordIO.writeKeywords(theLayer=self.layer,
-                                         theKeywords=myKeywords)
+            self.keywordIO.write_keywords(layer=self.layer,
+                                         keywords=myKeywords)
         except InaSAFEError, e:
-            myErrorMessage = getErrorMessage(e)
+            myErrorMessage = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),

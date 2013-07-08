@@ -161,7 +161,7 @@ class PostprocessorManager(QtCore.QObject):
                     'values.').arg(self.aggregator.defaults['NO_DATA'])))
 
         try:
-            if (self.keywordIO.readKeywords(
+            if (self.keywordIO.read_keywords(
                     self.aggregator.layer, 'HAD_MULTIPART_POLY')):
                 myMessage.add(m.EmphasizedText(self.tr(
                     'The aggregation layer had multipart polygons, these have '
@@ -222,7 +222,7 @@ class PostprocessorManager(QtCore.QObject):
 
             except KeyError:
                 try:
-                    myFemaleRatio = self.keywordIO.readKeywords(
+                    myFemaleRatio = self.keywordIO.read_keywords(
                         self.aggregator.layer,
                         self.aggregator.defaults['FEM_RATIO_KEY'])
                 except KeywordNotFoundError:

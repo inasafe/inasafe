@@ -26,12 +26,12 @@ from PyQt4 import QtGui
 from qgis.core import QgsSymbol, QgsMapLayerRegistry
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import (
-    getQgisTestApp,
-    checkImages,
-    loadLayer)
+    get_qgis_app,
+    check_images,
+    load_layer)
 from safe_qgis.report.map import MapLegend
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -47,7 +47,7 @@ class MapLegendTest(unittest.TestCase):
     def test_getLegend(self):
         """Getting a legend for a generic layer works."""
         LOGGER.debug('test_getLegend called')
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
         myMapLegend = MapLegend(myLayer)
         assert myMapLegend.layer is not None
         myLegend = myMapLegend.getLegend()
@@ -63,7 +63,7 @@ class MapLegendTest(unittest.TestCase):
 
         myTolerance = 0  # to allow for version number changes in disclaimer
 
-        myFlag, myMessage = checkImages('getLegend', myPath, myTolerance)
+        myFlag, myMessage = check_images('getLegend', myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -75,7 +75,7 @@ class MapLegendTest(unittest.TestCase):
         @note This test is not related do thousand separator since we insert
         our own legend notes and our own layer.
         """
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
         myMapLegend = MapLegend(
             myLayer,
             theLegendNotes='Thousand separator represented by \',\'',
@@ -92,7 +92,7 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('getVectorLegend', myPath, myTolerance)
+        myFlag, myMessage = check_images('getVectorLegend', myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -100,7 +100,7 @@ class MapLegendTest(unittest.TestCase):
 
     def test_getRasterLegend(self):
         """Getting a legend for a raster layer works."""
-        myLayer, _ = loadLayer('test_floodimpact.tif')
+        myLayer, _ = load_layer('test_floodimpact.tif')
         myMapLegend = MapLegend(myLayer)
         myImage = myMapLegend.getRasterLegend()
         myPath = unique_filename(
@@ -114,7 +114,7 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('getRasterLegend', myPath, myTolerance)
+        myFlag, myMessage = check_images('getRasterLegend', myPath, myTolerance)
         myMessage += (
             '\nWe want these images to match, if they do already copy the test'
             ' image generated to create a new control image.')
@@ -122,7 +122,7 @@ class MapLegendTest(unittest.TestCase):
 
     def test_addSymbolToLegend(self):
         """Test we can add a symbol to the legend."""
-        myLayer, _ = loadLayer('test_floodimpact.tif')
+        myLayer, _ = load_layer('test_floodimpact.tif')
         myMapLegend = MapLegend(myLayer)
         mySymbol = QgsSymbol()
         mySymbol.setColor(QtGui.QColor(12, 34, 56))
@@ -143,7 +143,7 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('addSymbolToLegend', myPath,
+        myFlag, myMessage = check_images('addSymbolToLegend', myPath,
                                         myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
@@ -152,7 +152,7 @@ class MapLegendTest(unittest.TestCase):
 
     def test_addClassToLegend(self):
         """Test we can add a class to the map legend."""
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
         myMapLegend = MapLegend(myLayer)
         myColour = QtGui.QColor(12, 34, 126)
         myMapLegend.addClassToLegend(
@@ -172,7 +172,7 @@ class MapLegendTest(unittest.TestCase):
         # variants in the safe_qgis/test_data/test_images/ dir e.g.
         # addClassToLegend-variantUbuntu13.04.png
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages('addClassToLegend', myPath,
+        myFlag, myMessage = check_images('addClassToLegend', myPath,
                                         myTolerance)
         myMessage += (
             '\nWe want these images to match, if they do already copy the test'

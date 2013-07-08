@@ -93,7 +93,7 @@ class MapLegend():
                                 'has no layer set.')
             raise LegendLayerError(myMessage)
         try:
-            self.keywordIO.readKeywords(self.layer, 'impact_summary')
+            self.keywordIO.read_keywords(self.layer, 'impact_summary')
         except KeywordNotFoundError, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '

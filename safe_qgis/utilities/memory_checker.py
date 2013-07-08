@@ -34,43 +34,45 @@ KEYWORD_STYLE = styles.KEYWORD_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def tr(theString):
+def tr(string):
     """We implement this ourself since we do not inherit QObject.
 
-    Args:
-       theString - string for translation.
-    Returns:
-       Translated version of theString.
-    Raises:
-       no exceptions explicitly raised.
+
+    :param string: The string for translation.
+    :type string: str
+
+    :returns: Translated version of string.
+    :rtype: QString
     """
-    return QCoreApplication.translate('MemoryChecker', theString)
+    return QCoreApplication.translate('MemoryChecker', string)
 
 
-def sendMessage(theMessage):
+def send_message(message):
     """Send a message using the dispatcher.
 
-    :param theMessage: A Message object
-    :returns:
+    :param message: A Message object to be sent to a message viewer.
+    :type message: Message
     """
     dispatcher.send(
         signal=DYNAMIC_MESSAGE_SIGNAL,
         sender=None,
-        message=theMessage)
+        message=message)
 
 
-def checkMemoryUsage(theBufferedGeoExtent, theCellSize):
-    """Slot to check if analysis is feasible when extents change.
-    For simplicity, we will do all our calcs in geocrs.
+def check_memory_usage(buffered_geo_extent, cell_size):
+    """Helper to check if analysis is feasible when extents change.
 
-    :param theBufferedGeoExtent:
-    :type theBufferedGeoExtent:
+    For simplicity, we will do all our calculations in geocrs.
 
-    :param theCellSize:
-    :type theCellSize:
+    :param buffered_geo_extent: An extent in the for [xmin, ymin, xmax, ymax]
+    :type buffered_geo_extent: list
+
+    :param cell_size: The size of a cell (assumes in the X direction).
+    :type cell_size: float
 
     :returns: True if it appears we have enough memory (or we can't compute
         it), False if it appears we do not have enough.
+    :rtype: bool
 
     :raises: A Message containing notes about how much memory is needed
         for a single raster and if this is likely to result in an error.
@@ -81,18 +83,18 @@ def checkMemoryUsage(theBufferedGeoExtent, theCellSize):
         tr('Checking available memory'), **PROGRESS_UPDATE_STYLE)
     myMessage.add(myCheckHeading)
 
-    myWidth = theBufferedGeoExtent[2] - theBufferedGeoExtent[0]
-    myHeight = theBufferedGeoExtent[3] - theBufferedGeoExtent[1]
+    myWidth = buffered_geo_extent[2] - buffered_geo_extent[0]
+    myHeight = buffered_geo_extent[3] - buffered_geo_extent[1]
     try:
-        myWidth = myWidth / theCellSize
-        myHeight = myHeight / theCellSize
+        myWidth = myWidth / cell_size
+        myHeight = myHeight / cell_size
     except TypeError:
         # Could have been a vector layer for example
         myReason = tr(
             'Computed cellsize was None. Memory check currently only works '
             'for raster input layers.')
         myMessage.add(myReason)
-        sendMessage(myMessage)
+        send_message(myMessage)
         return True  # assume enough mem since we have no vector check logic
 
     myList = m.BulletedList()
@@ -103,7 +105,7 @@ def checkMemoryUsage(theBufferedGeoExtent, theCellSize):
         m.ImportantText(tr('Height: ')), str(myHeight))
     myList.add(myBullet)
     myBullet = m.Paragraph(
-        m.ImportantText(tr('Cell Size: ')), str(theCellSize))
+        m.ImportantText(tr('Cell Size: ')), str(cell_size))
     myList.add(myBullet)
     myMessage.add(myList)
 
@@ -122,7 +124,7 @@ def checkMemoryUsage(theBufferedGeoExtent, theCellSize):
         myErrorMessage = tr('Could not determine free memory')
         myMessage.add(myErrorHeading)
         myMessage.add(myErrorMessage)
-        sendMessage(myMessage)
+        send_message(myMessage)
         LOGGER.exception(myMessage)
         return True  # still let the user try to run their analysis
 
@@ -161,10 +163,10 @@ def checkMemoryUsage(theBufferedGeoExtent, theCellSize):
         myMessage.add(myWarningMessage)
         myMessage.add(mySuggestionHeading)
         myMessage.add(mySuggestion)
-        sendMessage(myMessage)
+        send_message(myMessage)
         LOGGER.info(myMessage.to_text())
         return False
 
-    sendMessage(myMessage)
+    send_message(myMessage)
     LOGGER.info(myMessage.to_text())
     return True

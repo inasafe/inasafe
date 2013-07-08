@@ -11,7 +11,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from safe_qgis.utilities.utilities import (
-    getErrorMessage,
+    get_error_message,
     qgisVersion,
     mmToPoints,
     pointsToMM,
@@ -22,14 +22,14 @@ from safe_qgis.utilities.utilities import (
     dpiToMeters,
     which,
     getDefaults)
-from safe_qgis.utilities.utilities_for_testing import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.tools.test_keywords_dialog import (
     makePolygonLayer,
     makePadangLayer,
     makePointLayer)
 from safe_qgis.safe_interface import bbox_intersection
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class UtilitiesTest(unittest.TestCase):
@@ -53,14 +53,14 @@ class UtilitiesTest(unittest.TestCase):
         except Exception, e:
             # Display message and traceback
 
-            myMessage = getErrorMessage(e)
+            myMessage = get_error_message(e)
             #print myMessage
             myMessage = myMessage.to_text()
             self.assertIn(str(e), myMessage)
             self.assertIn('line', myMessage)
             self.assertIn('file', myMessage)
 
-            myMessage = getErrorMessage(e)
+            myMessage = get_error_message(e)
             myMessage = myMessage.to_html()
             assert str(e) in myMessage
             self.assertIn('</i> Traceback</h5>', myMessage)

@@ -26,15 +26,15 @@ from qgis.core import (
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import (
-    getQgisTestApp,
-    loadLayer,
-    setJakartaGeoExtent,
-    checkImages)
+    get_qgis_app,
+    load_layer,
+    set_jakarta_extent,
+    check_images)
 from safe_qgis.utilities.utilities import (
     setupPrinter, dpiToMeters, qgisVersion)
 from safe_qgis.report.map import Map
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -51,7 +51,7 @@ class MapTest(unittest.TestCase):
         """Test making a pdf of the map - this is the most typical use of map.
         """
         LOGGER.info('Testing printToPdf')
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
         myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
@@ -87,7 +87,7 @@ class MapTest(unittest.TestCase):
     def test_renderComposition(self):
         """Test making an image of the map only."""
         LOGGER.info('Testing renderComposition')
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
 
@@ -118,7 +118,7 @@ class MapTest(unittest.TestCase):
         # into the metadata section so we set a reasonable tolerance to cope
         # with this.
         myTolerance = 8000
-        myFlag, myMessage = checkImages(
+        myFlag, myMessage = check_images(
             'renderComposition',
             myImagePath,
             myTolerance)
@@ -126,7 +126,7 @@ class MapTest(unittest.TestCase):
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
-        myLayer, _ = loadLayer('test_floodimpact.tif')
+        myLayer, _ = load_layer('test_floodimpact.tif')
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myTitle = myMap.getMapTitle()
@@ -139,7 +139,7 @@ class MapTest(unittest.TestCase):
         # TODO running OSM Buildngs with Pendudk Jakarta
         # wasthrowing an error when requesting map title
         # that this test wasnt replicating well
-        myLayer, _ = loadLayer('population_padang_1.asc')
+        myLayer, _ = load_layer('population_padang_1.asc')
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myTitle = myMap.getMapTitle()
@@ -152,12 +152,12 @@ class MapTest(unittest.TestCase):
         """Test that load template works"""
         #Use the template from our resources bundle
         myInPath = ':/plugins/inasafe/basic.qpt'
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
 
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
         myMap = Map(IFACE)
-        setJakartaGeoExtent()
+        set_jakarta_extent()
         myMap.setImpactLayer(myLayer)
         myPath = unique_filename(
             prefix='outTemplate',
@@ -216,7 +216,7 @@ class MapTest(unittest.TestCase):
         # we know the issue is fixed
 
         myTolerance = 0
-        myFlag, myMessage = checkImages(
+        myFlag, myMessage = check_images(
             'windowsArtifacts',
             myImagePath,
             myTolerance)
