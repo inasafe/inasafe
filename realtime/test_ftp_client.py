@@ -25,8 +25,8 @@ from ftp_client import FtpClient
 class FtpClientTest(unittest.TestCase):
     """Test the ftp client used to fetch shake listings"""
     # TODO update tests so url host is not hard coded
-    _expectedMatches = ('20110413170148.inp.zip',
-                             '20110413170148.out.zip')
+    _expectedMatches = (
+        '20110413170148.inp.zip', '20110413170148.out.zip')
 
     def testGetDirectoryListing(self):
         """Check if we can get a nice directory listing"""
@@ -34,8 +34,9 @@ class FtpClientTest(unittest.TestCase):
         myListing = myClient.getListing()
         #Make it a single string
         myListing = '\n'.join(myListing)
-        myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, self._expectedMatches))
+        myMessage = (
+            'Expected this list:\n%s\nTo contain these items:\n%s' %
+            (myListing, self._expectedMatches))
         for myExpectedFile in self._expectedMatches:
             assert re.search(myExpectedFile, myListing), myMessage
 
@@ -45,8 +46,9 @@ class FtpClientTest(unittest.TestCase):
         myListing = myClient.getListing()
         #Make it a single string
         myListing = '\n'.join(myListing)
-        myMessage = ('Expected outcome:\n%s\nActual outcome:\n%s' %
-                      (myListing, self._expectedMatches))
+        myMessage = (
+            'Expected outcome:\n%s\nActual outcome:\n%s' %
+            (myListing, self._expectedMatches))
         for myExpectedFile in self._expectedMatches:
             assert re.search(myExpectedFile, myListing), myMessage
 

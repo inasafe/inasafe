@@ -25,7 +25,7 @@ import PyQt4.QtCore as QtCore
 from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
 from qgis.utils import iface
 
-from safe_qgis.exceptions import QgisPathError
+from safe_qgis.exceptions import FileNotFoundError
 from safe_qgis.utilities.utilities import getAbsolutePath
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -74,31 +74,37 @@ def extractPath(theScenarioFilePath, thePath):
     return myPath, myBaseName
 
 
-def addLayers(theScenarioFilePath, thePaths):
-    """ Add vector or raster layer to current project
-    :param theScenarioFilePath: str - (Required) base directory to find path.
-    :param thePaths: str or list - (Required) path of layer file.
+def addLayers(scenario_dir, paths):
+    """Add the layers described in a scenario file to QGIS.
 
-    Raises:
-        * Exception - occurs when thePaths have illegal extension
-        * TypeError - occurs when thePaths is not string or list
-        * QgisPathError - occurs when file not found
+    :param scenario_dir: Base directory to find path.
+    :type scenario_dir: str
+
+    :param paths: Path of scenario file (or a list of paths).
+    :type paths: str, list
+
+    :raises: Exception, TypeError, FileNotFoundError
+
+    Note:
+        * Exception - occurs when paths have illegal extension
+        * TypeError - occurs when paths is not string or list
+        * FileNotFoundError - occurs when file not found
     """
 
     myPaths = []
-    if isinstance(thePaths, str):
-        myPaths.append(extractPath(theScenarioFilePath, thePaths))
-    elif isinstance(thePaths, list):
-        myPaths = [extractPath(theScenarioFilePath, path) for path in thePaths]
+    if isinstance(paths, str):
+        myPaths.append(extractPath(scenario_dir, paths))
+    elif isinstance(paths, list):
+        myPaths = [extractPath(scenario_dir, path) for path in paths]
     else:
-        myMessage = "thePaths must be string or list not %s" % type(thePaths)
+        myMessage = "Paths must be string or list not %s" % type(paths)
         raise TypeError(myMessage)
 
     for myPath, myBaseName in myPaths:
         myExt = os.path.splitext(myPath)[-1]
 
         if not os.path.exists(myPath):
-            raise QgisPathError('File not found: %s' % myPath)
+            raise FileNotFoundError('File not found: %s' % myPath)
 
         if myExt in ['.asc', '.tif']:
             LOGGER.debug("add raster layer %s" % myPath)

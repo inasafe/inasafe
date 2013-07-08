@@ -1,5 +1,5 @@
 [dummy test]
-exposure = path/to/exposure.shp
+exposure = ../path/to/exposure.shp
 hazard = ../path/to/hazard.shp
 function = Dummy Impact Function
 extent = 106.8059973447061566, -6.1926727450000003, 106.8350938552938487, -6.1671558549999999

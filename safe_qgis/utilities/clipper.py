@@ -78,41 +78,47 @@ def clipLayer(theLayer,
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
 
-    Args:
+    :param theLayer: A valid QGIS vector or raster layer
+    :type theLayer:
 
-        * theLayer - a valid QGIS vector or raster layer
-        * theExtent either: an array representing the exposure layer
-           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-           that the coordinates are in EPSG:4326 although currently
-           no checks are made to enforce this.
-                    or: A QgsGeometry of type polygon. **Polygon clipping is
-           currently only supported for vector datasets.**
-        * theCellSize - cell size which the layer should be resampled to.
-            This argument will be ignored for vector layers and if not provided
-            for a raster layer, the native raster cell size will be used.
-        * theExtraKeywords - Optional keywords dictionary to be added to
-                          output layer.
-        * theExplodeFlag - a bool specifying whether multipart features
-            should be 'exploded' into singleparts. **This parameter is ignored
-            for raster layer clipping.**
-        * theHardClipFlag - a bool specifying whether line and polygon features
-            that extend beyond the extents should be clipped such that they
-            are reduced in size to the part of the geometry that intersects
-            the extent only. Default is False. **This parameter is ignored
-            for raster layer clipping.**
-        * theExplodeAttribute - a str specifying to which attribute #1, #2 and
-            so on will be added in case of theExplodeFlag being true.
-            The attribute is modified only if there are at least 2 parts **This
-             parameter is ignored for raster layer clipping.**
+    :param theExtent: Either an array representing the exposure layer extents
+        in the form [xmin, ymin, xmax, ymax]. It is assumed that the coordinates
+        are in EPSG:4326 although currently no checks are made to enforce this.
+        or: A QgsGeometry of type polygon. **Polygon clipping is currently
+        only supported for vector datasets.**
+    :type theExtent:
 
-    Returns:
-        Clipped layer (placed in the system temp dir).
-        The output layer will be reprojected to EPSG:4326 if needed.
+    :param theCellSize: cell size which the layer should be resampled to.
+        This argument will be ignored for vector layers and if not provided
+        for a raster layer, the native raster cell size will be used.
+    :type theCellSize:
 
-    Raises:
-        None
+    :param theExtraKeywords: Optional keywords dictionary to be added to
+        output layer.
+    :type theExtraKeywords:
 
+    :param theExplodeFlag: A bool specifying whether multipart features
+        should be 'exploded' into singleparts. **This parameter is ignored
+        for raster layer clipping.**
+    :type theExplodeFlag: bool
+
+    :param theHardClipFlag: A bool specifying whether line and polygon
+        features that extend beyond the extents should be clipped such that they
+        are reduced in size to the part of the geometry that intersects the
+        extent only. Default is False. **This parameter is ignored for raster
+        layer clipping.**
+    :type theHardClipFlag: bool
+
+    :param theExplodeAttribute: A str specifying to which attribute #1,
+        #2 and so on will be added in case of theExplodeFlag being true. The
+        attribute is modified only if there are at least 2 parts **This
+        parameter is ignored for raster layer clipping.**
+    :type theExplodeAttribute: str
+
+    :returns: Clipped layer (placed in the system temp dir). The output layer
+        will be reprojected to EPSG:4326 if needed.
     """
+
     if theLayer.type() == QgsMapLayer.VectorLayer:
         return _clipVectorLayer(theLayer,
                                 theExtent,
@@ -580,17 +586,15 @@ def extentToKml(theExtent):
 def extentToGeoArray(theExtent, theSourceCrs):
     """Convert the supplied extent to geographic and return as as array.
 
-    Args:
-        theExtent: QgsRectangle to be transformed to geocrs.
-        theSourceCrs: QgsCoordinateReferenceSystem representing the original
-            extent's CRS.
+    :param theExtent: QgsRectangle to be transformed to geocrs.
+    :type theExtent:
 
-    Returns:
-        list: Transformed extents in EPSG:4326 in the form
-              [xmin, ymin, xmix, ymax]
+    :param theSourceCrs: QgsCoordinateReferenceSystem representing the
+        original extent's CRS.
+    :type theSourceCrs:
 
-    Raises:
-        None
+    :returns: Transformed extents in EPSG:4326 in the form
+        [xmin, ymin, xmax, ymax]
     """
 
     myGeoCrs = QgsCoordinateReferenceSystem()

@@ -60,11 +60,13 @@ def tr(theText):
     """We define a tr() alias here since the utilities implementation below
     is not a class and does not inherit from QObject.
     .. note:: see http://tinyurl.com/pyqt-differences
-    Args:
-       theText - string to be translated
-    Returns:
-       Translated version of the given string if available, otherwise
-       the original string.
+
+    :param theText: String to be translated
+    :type theText: str
+
+    :returns: Translated version of the given string if available, otherwise
+        the original string.
+    :rtype: str
     """
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     return QCoreApplication.translate('@default', theText)
@@ -178,12 +180,10 @@ def htmlFooter():
 
 def qgisVersion():
     """Get the version of QGIS.
-   Args:
-       None
-    Returns:
-        QGIS Version where 10700 represents QGIS 1.7 etc.
-    Raises:
-       None
+
+    :returns: QGIS Version where 10700 represents QGIS 1.7 etc.
+
+    :rtype: int
     """
     try:
         myVersion = unicode(QGis.QGIS_VERSION_INT)
@@ -731,17 +731,21 @@ def getAbsolutePath(thePath, relativePath):
 
 
 def downloadWebUrl(theManager, theUrl, theOutPath, theProgressDlg=None):
-    """ Download file from theUrl.
-    Params:
-        * theManager - a QNetworkManager instance
-        * theUrl - url of file
-        * theOutPath - output path
-        * theProgressDlg - progress dialog widget
-    Returns:
-        True if success, otherwise return a tuple with format like this
+    """Download file from theUrl.
+
+    :param theManager: A QNetworkManager instance
+
+    :param theUrl: URL of file
+    :type theUrl: str
+
+    :param theOutPath: Output path
+    :type theOutPath: str
+
+    :param theProgressDlg: Progress dialog widget
+
+    :returns: True if success, otherwise returns a tuple with format like this
         (QNetworkReply.NetworkError, error_message)
-    Raises:
-        * IOError - when cannot create theOutPath
+    :raises: IOError - when cannot create theOutPath
     """
 
     # prepare output path

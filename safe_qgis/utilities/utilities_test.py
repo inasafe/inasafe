@@ -19,7 +19,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
 from qgis.gui import QgsMapCanvas
-from safe_qgis.tests.qgis_interface import QgisInterface
+from safe_qgis.test.qgis_interface import QgisInterface
 
 # For testing and demoing
 from safe_qgis.safe_interface import (
@@ -38,10 +38,10 @@ YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
-                              '../tests/test_data/test_files')
+                              '../test/test_data/test_files')
 
 SCENARIO_DIR = os.path.join(os.path.dirname(__file__),
-                            '../tests/test_data/test_scenario')
+                            '../test/test_data/test_scenarios')
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -55,7 +55,7 @@ GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 CONTROL_IMAGE_DIR = os.path.join(
     os.path.dirname(__file__),
-    '../tests/test_data/test_images')
+    '../test/test_data/test_images')
 
 
 def assertHashesForFile(theHashes, theFilename):
@@ -152,6 +152,7 @@ def unitTestDataPath(theSubdir=None):
 
     :type theSubdir: str
     :param theSubdir:
+
     .. note:: This is not the same thing as the SVN inasafe_data dir. Rather
        this is a new dataset where the test datasets are all tiny for fast
        testing and the datasets live in the same repo as the code.
@@ -278,15 +279,23 @@ def checkImages(theControlImage, theTestImagePath, theTolerance=1000):
     """Compare a test image against a collection of known good images.
 
     :param theTolerance: How many pixels may be different between the
-            two images.
+        two images.
+    :type theTolerance: int
+
     :param theTestImagePath: The Image being checked (must have same dimensions
-            as the control image). Must be full path to image.
-    :param theControlImage: str file names. Give only the basename +ext
-            as the test image path (CONTROL_IMAGE_DIR) will be prepended. e.g.
-            addClassToLegend.png
-    :returns (success or failure indicator, message providing analysis
-    comparison notes)
-    :rtype (bool, str)
+        as the control image). Must be full path to image.
+    :type theTestImagePath: str
+
+    :param theControlImage: The basename for the control image. The .png
+        extension will automatically be added and the test image path
+        (CONTROL_IMAGE_DIR) will be prepended. e.g.
+        addClassToLegend will cause the control image of
+        test\/test_data\/test_images\/addClassToLegend.png to be used.
+    :type theControlImage: str
+
+    :returns: Success or failure indicator, message providing analysis,
+        comparison notes
+    :rtype: bool, str
     """
     myMessages = ''
     myPlatform = platformName()

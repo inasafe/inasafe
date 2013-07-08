@@ -43,13 +43,11 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
     def __init__(self, theParent=None, theIface=None):
         """Constructor for import dialog.
 
-        Args:
-           * theParent - Optional widget to use as parent
-           * theIface - an instance of QGisInterface
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
+        :param theParent: Optional widget to use as parent
+        :type theParent:
+
+        :param theIface: An instance of QGisInterface
+        :type theIface:
         """
         QDialog.__init__(self, theParent)
         self.parent = theParent
@@ -195,11 +193,10 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             raise CanceledImportDialogError()
 
     def doImport(self):
-        """
-        Import shape files from Linfinti.
-        Raises:
-            * ImportDialogError - when network error occurred
-            * CanceledImportDialogError - when user press cancel button
+        """Import Shapefiles from Linfinti.
+
+        :raises: ImportDialogError - when network error occurred
+            CanceledImportDialogError - when user press cancel button
         """
 
         ## preparing necessary data
@@ -231,13 +228,15 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.progressDialog.done(QDialog.Accepted)
 
     def downloadShapeFile(self, theUrl, theOutput):
-        """
-        Download shape file from theUrl and write to theOutput.
-        Params:
-            * theUrl - URL of shape file
-            * theOutput - path of output file
-        Raises:
-            * ImportDialogError - when network error occurred
+        """Download shape file from theUrl and write to theOutput.
+
+        :param theUrl: URL of the Shapefile
+        :type theUrl: str
+
+        :param theOutput: Path of Output file
+        :type theOutput: str
+
+        :raises: ImportDialogError - when network error occurred
         """
 
         self.progressDialog.show()
@@ -258,13 +257,16 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             raise ImportDialogError(myErrorMessage)
 
     def extractZip(self, thePath, theOutDir):
-        """
-        Extract all content of zip file from thePath to theOutDir.
-        Args:
-           * thePath - the path of zip file
-           * theOutDir - output directory
-        Raises:
-            IOError - when cannot open thePath or theOutDir is not exist.
+        """Extract all content of a .zip file from thePath to theOutDir.
+
+        :param thePath: The path of the .zip file
+        :type thePath: str
+
+        :param theOutDir: Output directory
+        :type theOutDir: str
+
+        :raises: IOError - when not able to open thePath or theOutDir does not
+            exist.
         """
 
         import zipfile

@@ -28,8 +28,8 @@ class InvalidClipGeometryError(Exception):
     pass
 
 
-class QgisPathError(Exception):
-    """Custom exception for when qgispath.txt could not be read."""
+class FileNotFoundError(Exception):
+    """Custom exception for when a file could not be found."""
     pass
 
 

@@ -353,7 +353,7 @@ jenkins-realtime-test:
 	@echo "if you are going to run more than "
 	@echo "one InaSAFE Jenkins job, you should run each on a different"
 	@echo "display by changing the :100 option below to a different number"
-	@echo "Update: Above is taken care of by xvfb jenkins pluging now"
+	@echo "Update: Above is taken care of by xvfb jenkins plugin now"
 	@echo "---------------------------------------------------------------"
 	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \

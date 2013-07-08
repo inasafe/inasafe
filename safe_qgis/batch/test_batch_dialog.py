@@ -71,7 +71,7 @@ class BatchDialogTest(unittest.TestCase):
         assert myStatus == 'Report Ok'
 
     def test_runAllScenario(self):
-        """Test run single scenario
+        """Test run single scenario.
         """
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
         myDialog.cbDefaultOutputDir.setChecked(False)

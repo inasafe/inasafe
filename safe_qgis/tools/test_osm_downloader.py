@@ -35,7 +35,7 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__),
-                             '../tests/test_data/test_files')
+                             '../test/test_data/test_files')
 
 
 class FakeQNetworkReply(QObject):

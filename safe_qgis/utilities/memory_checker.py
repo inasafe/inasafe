@@ -51,7 +51,7 @@ def sendMessage(theMessage):
     """Send a message using the dispatcher.
 
     :param theMessage: A Message object
-    :return:
+    :returns:
     """
     dispatcher.send(
         signal=DYNAMIC_MESSAGE_SIGNAL,
@@ -61,24 +61,19 @@ def sendMessage(theMessage):
 
 def checkMemoryUsage(theBufferedGeoExtent, theCellSize):
     """Slot to check if analysis is feasible when extents change.
-
     For simplicity, we will do all our calcs in geocrs.
 
-    Args:
-        theHazardLayer,
-        theExposureLayer,
-        theBufferedGeoExtent,
-        theCellSize
+    :param theBufferedGeoExtent:
+    :type theBufferedGeoExtent:
 
-    Returns:
-        bool: True if it appears we have enough memory (or we cant compute it),
-            False if it appears we do not have enough.
+    :param theCellSize:
+    :type theCellSize:
 
-    Raises:
-        None
-        str: A Message containing notes about how much memory is needed
-            for a single raster and if this is likely to result in an
-            error.
+    :returns: True if it appears we have enough memory (or we can't compute
+        it), False if it appears we do not have enough.
+
+    :raises: A Message containing notes about how much memory is needed
+        for a single raster and if this is likely to result in an error.
 
     """
     myMessage = m.Message()

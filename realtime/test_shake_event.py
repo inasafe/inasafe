@@ -210,8 +210,8 @@ searchBoxes: None
             # fetch map of attributes
             myAttributes = myCitiesLayer.dataProvider().attributeIndexes()
             for myKey in myAttributes:
-                myStrings.append("%d: %s\n" % (myKey,
-                                               myFeature[myKey].toString()))
+                myStrings.append("%d: %s\n" % (
+                    myKey, myFeature[myKey].toString()))
             myStrings.append('------------------\n')
         LOGGER.debug('Mem table:\n %s' % myStrings)
         myFilePath = unique_filename(prefix='testLocalCities',
@@ -226,7 +226,7 @@ searchBoxes: None
         myExpectedString = myFile.readlines()
         myFile.close()
 
-        myDiff = difflib.unified_diff(myStrings, myExpectedString)
+        myDiff = difflib.unified_diff(myExpectedString, myStrings)
         myDiffList = list(myDiff)
         myDiffString = ''
         for _, myLine in enumerate(myDiffList):
@@ -334,30 +334,26 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myTable = myShakeEvent.sortedImpactedCities()
-        myExpectedResult = [
-            {'dir_from': 13.119078636169434, 'dir_to': -166.88092041015625,
-             'roman': 'II', 'dist_to': 3.036229133605957, 'mmi-int': 2.0,
-             'name': 'Manado', 'mmi': 1.809999942779541, 'id': 207,
-             'population': 451893},
-            {'dir_from': -61.620426177978516, 'dir_to': 118.37957000732422,
-             'roman': 'II', 'dist_to': 2.4977917671203613, 'mmi-int': 2.0,
-             'name': 'Gorontalo', 'mmi': 2.25, 'id': 282,
-             'population': 144195},
-            {'dir_from': -114.04046630859375, 'dir_to': 65.95953369140625,
-             'roman': 'II', 'dist_to': 3.3138768672943115, 'mmi-int': 2.0,
-             'name': 'Luwuk', 'mmi': 1.5299999713897705, 'id': 215,
-             'population': 47778},
-            {'dir_from': 16.94407844543457, 'dir_to': -163.05592346191406,
-             'roman': 'II', 'dist_to': 2.504295825958252, 'mmi-int': 2.0,
-             'name': 'Tondano', 'mmi': 1.909999966621399, 'id': 57,
-             'population': 33317},
-            {'dir_from': 14.14267635345459, 'dir_to': -165.85733032226562,
-             'roman': 'II', 'dist_to': 2.5372657775878906, 'mmi-int': 2.0,
-             'name': 'Tomohon', 'mmi': 1.690000057220459, 'id': 58,
-             'population': 27624}]
-        
-        for myCount, myItem in enumerate(myTable):
-            self.assertDictEqual(myExpectedResult[myCount], myItem)
+
+        myFilePath = unique_filename(
+            prefix='testSortedImpactedCities',
+            suffix='.txt',
+            dir=temp_dir('test'))
+        myFile = file(myFilePath, 'wt')
+        myFile.writelines(str(myTable))
+        myFile.close()
+        myTable = str(myTable).replace(', \'', ',\n\'')
+        myTable += '\n'
+
+        myFixturePath = os.path.join(
+            dataDir(), 'tests', 'testSortedImpactedCities.txt')
+        myFile = file(myFixturePath, 'rt')
+        myExpectedString = myFile.read()
+        myFile.close()
+        myExpectedString = myExpectedString.replace(', \'', ',\n\'')
+
+        self.maxDiff = None
+        self.assertEqual(myExpectedString, myTable)
 
     def testImpactedCitiesTable(self):
         """Test getting impacted cities table."""
@@ -370,10 +366,11 @@ searchBoxes: None
             '<td>Bitung</td><td>137</td><td>I</td>',
             '<td>Manado</td><td>451</td><td>I</td>',
             '<td>Gorontalo</td><td>144</td><td>II</td>']
-        myTable = myTable.toNewlineFreeString()
+        myTable = myTable.toNewlineFreeString().replace('   ', '')
         for myString in myExpectedStrings:
-            self.assertIn(myTable, myString)
+            self.assertIn(myString, myTable)
 
+        self.maxDiff = None
         myExpectedPath = (
             '/tmp/inasafe/realtime/shakemaps-extracted/'
             '20120726022003/affected-cities.html')
