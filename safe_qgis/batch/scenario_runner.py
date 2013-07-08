@@ -135,7 +135,7 @@ def setFunctionId(theFunctionId, theDock=None):
         return False
 
     for myCount in range(0, theDock.cboFunction.count()):
-        myFunctionId = theDock.getFunctionID(myCount)
+        myFunctionId = theDock.get_function_id(myCount)
         if myFunctionId == theFunctionId:
             theDock.cboFunction.setCurrentIndex(myCount)
             return True

@@ -821,7 +821,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                     'An error was encountered when saving the keywords:\n'
                     '%s' % myErrorMessage.to_html()))))
         if self.dock is not None:
-            self.dock.getLayers()
+            self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
 
     def applyPendingChanges(self):

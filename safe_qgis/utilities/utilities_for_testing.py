@@ -519,7 +519,7 @@ def getUiState(theDock):
     myHazard = str(theDock.cboHazard.currentText())
     myExposure = str(theDock.cboExposure.currentText())
     myImpactFunctionTitle = str(theDock.cboFunction.currentText())
-    myImpactFunctionId = theDock.getFunctionID()
+    myImpactFunctionId = theDock.get_function_id()
     myRunButton = theDock.pbnRunStop.isEnabled()
 
     return {'Hazard': myHazard,
@@ -588,7 +588,7 @@ def combosToString(theDock):
         else:
             myString += '   '
         myString += '%s (Function ID: %s)\n' % (
-            str(myItemText), theDock.getFunctionID(myCurrentId))
+            str(myItemText), theDock.get_function_id(myCurrentId))
 
     myString += '\n'
     myString += 'Aggregation Layers\n'
@@ -793,7 +793,7 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA,
             QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
     if theDock is not None:
-        theDock.getLayers()
+        theDock.get_layers()
 
     # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount

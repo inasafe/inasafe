@@ -633,7 +633,7 @@ class Plugin:
 
     def saveScenario(self):
         """Save current scenario to text file"""
-        self.dockWidget.saveCurrentScenario()
+        self.dockWidget.save_current_scenario()
 
     def resetDock(self):
         """Reset the dock to its default state.
@@ -650,7 +650,7 @@ class Plugin:
         Raises:
            no exceptions explicitly raised.
         """
-        self.dockWidget.getLayers()
+        self.dockWidget.get_layers()
 
     def layerChanged(self, theLayer):
         """Enable or disable the keywords editor icon.
@@ -671,7 +671,7 @@ class Plugin:
             self.actionKeywordsDialog.setEnabled(False)
         else:
             self.actionKeywordsDialog.setEnabled(True)
-        self.dockWidget.layerChanged(theLayer)
+        self.dockWidget.layer_changed(theLayer)
 
     def keyActionF7(self):
         '''Executed when user press F7'''
