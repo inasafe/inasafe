@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Options Dialog.**
 
@@ -21,23 +22,27 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from safe_qgis.ui.options_dialog_base import Ui_OptionsDialogBase
-from safe_qgis.help import Help
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import get_version
 from safe_qgis.safe_interface import DEFAULTS
 
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
-    """Options dialog for the InaSAFE plugin.
-    """
+    """Options dialog for the InaSAFE plugin."""
 
-    def __init__(self, parent, iface, theDock=None):
+    def __init__(self, iface, dock=None, parent=None):
         """Constructor for the dialog.
 
-        :param parent: Parent widget of this dialog
         :param iface: A Quantum GIS QGisAppInterface instance.
-        :param theDock: Optional dock widget instance that we can notify of
+        :type iface: QGisAppInterface
+
+        :param parent: Parent widget of this dialog
+        :type parent: QWidget
+
+        :param dock: Optional dock widget instance that we can notify of
             changes to the keywords.
+        :type dock: Dock
         """
 
         QtGui.QDialog.__init__(self, parent)
@@ -46,21 +51,21 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
-        self.dock = theDock
+        self.dock = dock
         self.helpDialog = None
         self.keywordIO = KeywordIO()
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.showHelp)
+                               self.show_help)
         self.grpNotImplemented.hide()
         self.adjustSize()
-        self.restoreState()
+        self.restore_state()
         # hack prevent showing use thread visible and set it false see #557
         self.cbxUseThread.setChecked(True)
         self.cbxUseThread.setVisible(False)
 
-    def restoreState(self):
+    def restore_state(self):
         """Reinstate the options based on the user's stored session info.
         """
         mySettings = QtCore.QSettings()
@@ -109,14 +114,14 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         myPath = mySettings.value(
             'inasafe/keywordCachePath',
-            self.keywordIO.defaultKeywordDbPath()).toString()
+            self.keywordIO.default_keyword_db_path()).toString()
         self.leKeywordCachePath.setText(myPath)
 
         myFlag = mySettings.value(
             'inasafe/devMode', False).toBool()
         self.cbxDevMode.setChecked(myFlag)
 
-    def saveState(self):
+    def save_state(self):
         """Store the options into the user's stored session info.
         """
         mySettings = QtCore.QSettings()
@@ -145,28 +150,24 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         mySettings.setValue('inasafe/devMode',
                             self.cbxDevMode.isChecked())
 
-    def showHelp(self):
-        """Load the help text for the options safe_qgis
-        """
-        if not self.helpDialog:
-            self.helpDialog = Help(self.iface.mainWindow(), 'options')
+    def show_help(self):
+        """Show context help for the options dialog."""
+        show_context_help('options')
 
     def accept(self):
-        """Method invoked when OK button is clicked.
-        """
-        self.saveState()
-        self.dock.readSettings()
+        """Method invoked when OK button is clicked."""
+        self.save_state()
+        self.dock.read_settings()
         self.close()
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolKeywordCachePath_clicked(self):
-        """Auto-connect slot activated when the selected cache file tool button
-        is clicked.
+        """Auto-connect slot activated when cache file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QtGui.QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
-            self.keywordIO.defaultKeywordDbPath(),
+            self.keywordIO.default_keyword_db_path(),
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(myFilename)

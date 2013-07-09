@@ -23,17 +23,16 @@ from qgis.core import QgsRectangle
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from safe_qgis.impact_statistics.zonal_stats import (
     calculateZonalStats, cellInfoForBBox)
-from safe_qgis.utilities.utilities_test import (
-    loadLayer,
-    getQgisTestApp)
+from safe_qgis.utilities.utilities_for_testing import (
+    load_layer, get_qgis_app)
 from safe_qgis.safe_interface import UNITDATA
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ZonalStatsTest(unittest.TestCase):
@@ -52,9 +51,9 @@ class ZonalStatsTest(unittest.TestCase):
 
     def test_zonal(self):
         """Test that zonal stats returns the expected output."""
-        myRasterLayer, _ = loadLayer(os.path.join(
+        myRasterLayer, _ = load_layer(os.path.join(
             UNITDATA, 'other', 'tenbytenraster.asc'))
-        myVectorLayer, _ = loadLayer(os.path.join(
+        myVectorLayer, _ = load_layer(os.path.join(
             UNITDATA, 'other', 'zonal_polygons.shp'))
         myResult = calculateZonalStats(
             theRasterLayer=myRasterLayer,
@@ -70,12 +69,12 @@ class ZonalStatsTest(unittest.TestCase):
 
     def test_zonal_with_exact_cell_boundaries(self):
         """Test that zonal stats returns the expected output."""
-        myRasterLayer, _ = loadLayer(os.path.join(
+        myRasterLayer, _ = load_layer(os.path.join(
             UNITDATA, 'other', 'tenbytenraster.asc'))
         # Note this is a matrix of 11x11 polys - one per cell
         # and one poly extending beyond to the right of each row
         # and one poly extending beyond the bottom of each col
-        myVectorLayer, _ = loadLayer(os.path.join(
+        myVectorLayer, _ = load_layer(os.path.join(
             UNITDATA, 'other', 'ten_by_ten_raster_as_polys.shp'))
         myResult = calculateZonalStats(
             theRasterLayer=myRasterLayer,

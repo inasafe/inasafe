@@ -22,10 +22,10 @@ from qgis.core import (
     QgsProviderRegistry,
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
-from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import EXPDATA
 
-QGISAPP = getQgisTestApp()
+QGISAPP = get_qgis_app()
 
 
 class QGISTest(unittest.TestCase):

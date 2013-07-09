@@ -25,12 +25,14 @@ from PyQt4.QtCore import Qt
 
 from safe_qgis.tools.shakemap_importer import ShakemapImporter
 from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
-from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakemapImporterTest(unittest.TestCase):
+    """Test class to facilitate importing shakemaps."""
+
     def test_initDialog(self):
         """Test for showing table in the first."""
         myDialog = ShakemapImporter(PARENT)

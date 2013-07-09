@@ -37,24 +37,27 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2)
 
 from safe_qgis.exceptions import StyleError
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
+def set_vector_graduated_style(vector_layer, style):
     """Set graduated QGIS vector style based on InaSAFE style dictionary.
 
     For **opaque** a value of **0** can be used. For **fully transparent**, a
     value of **100** can be used. The calling function should take care to
     scale the transparency level to between 0 and 100.
 
-    :param theQgisVectorLayer: QgsMapLayer
-    :param theStyle: Dictionary of the form as in the example below
+    :param vector_layer: A QGIS vector layer that will be styled.
+    :type vector_layer: QgsVectorLayer
 
-    :returns: None - Sets and saves style for theQgisVectorLayer
+    :param style: Dictionary of the form as in the example below
+    :type style: dict
 
-    Example::
+    :returns: None - Sets and saves style for vector_layer
+
+    Example style::
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
@@ -68,9 +71,9 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
     .. note:: The transparency and size keys are optional. Size applies
        to points only.
     """
-    myTargetField = theStyle['target_field']
-    myClasses = theStyle['style_classes']
-    myGeometryType = theQgisVectorLayer.geometryType()
+    myTargetField = style['target_field']
+    myClasses = style['style_classes']
+    myGeometryType = vector_layer.geometryType()
 
     myRangeList = []
     for myClass in myClasses:
@@ -152,21 +155,24 @@ def setVectorGraduatedStyle(theQgisVectorLayer, theStyle):
     myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
     myRenderer.setMode(QgsGraduatedSymbolRendererV2.EqualInterval)
     myRenderer.setClassAttribute(myTargetField)
-    theQgisVectorLayer.setRendererV2(myRenderer)
-    theQgisVectorLayer.saveDefaultStyle()
+    vector_layer.setRendererV2(myRenderer)
+    vector_layer.saveDefaultStyle()
 
 
-def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
+def set_vector_categorized_style(vector_layer, style):
     """Set categorized QGIS vector style based on InaSAFE style dictionary.
 
     For **opaque** a value of **0** can be used. For **fully transparent**, a
     value of **100** can be used. The calling function should take care to
     scale the transparency level to between 0 and 100.
 
-    :param theQgisVectorLayer: QgsMapLayer
-    :param theStyle: Dictionary of the form as in the example below
+    :param vector_layer: A QGIS vector layer that will be styled.
+    :type vector_layer: QgsVectorLayer
 
-    :returns: None - Sets and saves style for theQgisVectorLayer
+    :param style: Dictionary of the form as in the example below.
+    :type style: dict
+
+    :returns: None - Sets and saves style for vector_layer
 
     Example::
 
@@ -185,9 +191,9 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
     .. note:: We should change 'value' in style classes to something more
         meaningful e.g. discriminant value
     """
-    myTargetField = theStyle['target_field']
-    myClasses = theStyle['style_classes']
-    myGeometryType = theQgisVectorLayer.geometryType()
+    myTargetField = style['target_field']
+    myClasses = style['style_classes']
+    myGeometryType = vector_layer.geometryType()
 
     myCategoryList = []
     for myClass in myClasses:
@@ -256,19 +262,21 @@ def setVectorCategorizedStyle(theQgisVectorLayer, theStyle):
 
     myRenderer = QgsCategorizedSymbolRendererV2('', myCategoryList)
     myRenderer.setClassAttribute(myTargetField)
-    theQgisVectorLayer.setRendererV2(myRenderer)
-    theQgisVectorLayer.saveDefaultStyle()
+    vector_layer.setRendererV2(myRenderer)
+    vector_layer.saveDefaultStyle()
 
 
-def setRasterStyle(theQgsRasterLayer, theStyle):
+def setRasterStyle(raster_layer, style):
     """Set QGIS raster style based on InaSAFE style dictionary.
 
     This function will set both the colour map and the transparency
     for the passed in layer.
 
-    Args:
-        * theQgsRasterLayer: QgsRasterLayer
-        * style: dict - Dictionary of the form as in the example below.
+    :param raster_layer: A QGIS raster layer that will be styled.
+    :type raster_layer: QgsVectorLayer
+
+    :param style: Dictionary of the form as in the example below.
+    :type style: dict
 
     Example:
         style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
@@ -280,22 +288,21 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
                          dict(colour='#FF0000', quantity=200, transparency=24),
                          dict(colour='#7A0000', quantity=300, transparency=22)]
 
-    Returns:
-        list: RangeList
-        list: TransparencyList
+    :returns: A two tuple containing a range list and a transparency list.
+    :rtype: (list, list)
     """
-    myNewStyles = _addMinMaxToStyle(theStyle['style_classes'])
+    myNewStyles = add_extrema_to_style(style['style_classes'])
     # test if QGIS 1.8.0 or older
     # see issue #259
-    if qgisVersion() <= 10800:
+    if qgis_version() <= 10800:
         LOGGER.debug('Rendering raster using <= 1.8 styling')
-        return _setLegacyRasterStyle(theQgsRasterLayer, myNewStyles)
+        return set_legacy_raster_style(raster_layer, myNewStyles)
     else:
         LOGGER.debug('Rendering raster using 2+ styling')
-        return _setNewRasterStyle(theQgsRasterLayer, myNewStyles)
+        return set_new_raster_style(raster_layer, myNewStyles)
 
 
-def _addMinMaxToStyle(theStyle):
+def add_extrema_to_style(style):
     """Add a min and max to each style class in a style dictionary.
 
     When InaSAFE provides style classes they are specific values, not ranges.
@@ -307,15 +314,14 @@ def _addMinMaxToStyle(theStyle):
     classes , min shall constitute the smalles increment to a float that can
     meaningfully be made by python (as determined by numpy.nextafter()).
 
-    Args:
-        style: list - A list of dictionaries of the form as in the example
-            below.
+    :param style: A list of dictionaries of the form as per the example below.
+    :type style: list(dict)
 
-    Returns:
-        dict: A new dictionary list with min max attributes added to each
-            entry.
+    :returns: A new dictionary list with min max attributes added to each
+        entry.
+    :rtype: list(dict)
 
-    Example input:
+    Example input::
 
         style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
                          dict(colour='#38A800', quantity=5, transparency=50),
@@ -326,7 +332,7 @@ def _addMinMaxToStyle(theStyle):
                          dict(colour='#FF0000', quantity=200, transparency=24),
                          dict(colour='#7A0000', quantity=300, transparency=22)]
 
-    Example output:
+    Example output::
 
         style_classes = [dict(colour='#38A800', quantity=2, transparency=0,
                               min=0, max=2),
@@ -348,7 +354,7 @@ def _addMinMaxToStyle(theStyle):
     """
     myNewStyles = []
     myLastMax = 0.0
-    for myClass in theStyle:
+    for myClass in style:
         myQuantity = float(myClass['quantity'])
         myClass['min'] = myLastMax
         myClass['max'] = myQuantity
@@ -360,21 +366,19 @@ def _addMinMaxToStyle(theStyle):
     return myNewStyles
 
 
-def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
+def set_legacy_raster_style(raster_layer, style):
     """Set QGIS raster style based on InaSAFE style dictionary for QGIS < 2.0.
 
     This function will set both the colour map and the transparency
     for the passed in layer.
 
-    Args:
-        * theQgsRasterLayer: QgsRasterLayer.
-        * style: List - of the form as in the example below.
+    :param raster_layer: A QGIS raster layer that will be styled.
+    :type raster_layer: QgsVectorLayer
 
-    Returns:
-        * list: RangeList
-        * list: TransparencyList
+    :param style: Dictionary of the form as in the example below.
+    :type style: dict
 
-    Example:
+    Example::
 
         style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
                          dict(colour='#38A800', quantity=5, transparency=50),
@@ -390,9 +394,12 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
        consequently the opacity is of limited value and seems to
        only work effectively with integer values.
 
+    :returns: A two tuple containing a range list and a transparency list.
+    :rtype: (list, list)
+
     """
-    theQgsRasterLayer.setDrawingStyle(QgsRasterLayer.PalettedColor)
-    LOGGER.debug(theStyle)
+    raster_layer.setDrawingStyle(QgsRasterLayer.PalettedColor)
+    LOGGER.debug(style)
     myRangeList = []
     myTransparencyList = []
     # Always make 0 pixels transparent see issue #542
@@ -402,7 +409,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
     myPixel.percentTransparent = 100
     myTransparencyList.append(myPixel)
     myLastValue = 0
-    for myClass in theStyle:
+    for myClass in style:
         LOGGER.debug('Evaluating class:\n%s\n' % myClass)
         myMax = myClass['quantity']
         myColour = QtGui.QColor(myClass['colour'])
@@ -448,37 +455,36 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                     myTransparencyList.append(myPixel)
 
     # Apply the shading algorithm and design their ramp
-    theQgsRasterLayer.setColorShadingAlgorithm(
+    raster_layer.setColorShadingAlgorithm(
         QgsRasterLayer.ColorRampShader)
-    myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
+    myFunction = raster_layer.rasterShader().rasterShaderFunction()
     # Discrete will shade any cell between maxima of this break
     # and minima of previous break to the colour of this break
     myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
     myFunction.setColorRampItemList(myRangeList)
 
     # Now set the raster transparency
-    theQgsRasterLayer.rasterTransparency()\
+    raster_layer.rasterTransparency()\
         .setTransparentSingleValuePixelList(myTransparencyList)
 
-    theQgsRasterLayer.saveDefaultStyle()
+    raster_layer.saveDefaultStyle()
     return myRangeList, myTransparencyList
 
 
-def _setNewRasterStyle(theQgsRasterLayer, theClasses):
+def set_new_raster_style(raster_layer, style):
     """Set QGIS raster style based on InaSAFE style dictionary for QGIS >= 2.0.
 
     This function will set both the colour map and the transparency
     for the passed in layer.
 
-    Args:
-        * theQgsRasterLayer: QgsRasterLayer
-        * theClasses: List of the form as in the example below.
+    :param raster_layer: A QGIS raster layer that will be styled.
+    :type raster_layer: QgsVectorLayer
 
-    Returns:
-        * list: RangeList
-        * list: TransparencyList
+    :param style: Dictionary of the form as in the example below.
+    :type style: dict
 
-    Example:
+    Example::
+
         style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
                          dict(colour='#38A800', quantity=5, transparency=50),
                          dict(colour='#79C900', quantity=10, transparency=50),
@@ -487,6 +493,9 @@ def _setNewRasterStyle(theQgsRasterLayer, theClasses):
                          dict(colour='#FF6600', quantity=100, transparency=77),
                          dict(colour='#FF0000', quantity=200, transparency=24),
                          dict(colour='#7A0000', quantity=300, transparency=22)]
+
+    :returns: A two tuple containing a range list and a transparency list.
+    :rtype: (list, list)
 
     """
     # Note imports here to prevent importing on unsupported QGIS versions
@@ -504,8 +513,8 @@ def _setNewRasterStyle(theQgsRasterLayer, theClasses):
 
     myRampItemList = []
     myTransparencyList = []
-    LOGGER.debug(theClasses)
-    for myClass in theClasses:
+    LOGGER.debug(style)
+    for myClass in style:
 
         LOGGER.debug('Evaluating class:\n%s\n' % myClass)
 
@@ -557,15 +566,15 @@ def _setNewRasterStyle(theQgsRasterLayer, theClasses):
     myRasterShader.setRasterShaderFunction(myColorRampShader)
     LOGGER.debug('Setting up renderer')
     myRenderer = QgsSingleBandPseudoColorRenderer(
-        theQgsRasterLayer.dataProvider(),
+        raster_layer.dataProvider(),
         myBand,
         myRasterShader)
     LOGGER.debug('Assigning renderer to raster layer')
-    theQgsRasterLayer.setRenderer(myRenderer)
+    raster_layer.setRenderer(myRenderer)
 
     LOGGER.debug('Setting raster transparency list')
 
-    myRenderer = theQgsRasterLayer.renderer()
+    myRenderer = raster_layer.renderer()
     myTransparency = QgsRasterTransparency()
     myTransparency.setTransparentSingleValuePixelList(myTransparencyList)
     myRenderer.setRasterTransparency(myTransparency)
@@ -576,6 +585,6 @@ def _setNewRasterStyle(theQgsRasterLayer, theClasses):
     #       px.min, px.max, px.percentTransparent)
 
     LOGGER.debug('Saving style as default')
-    theQgsRasterLayer.saveDefaultStyle()
+    raster_layer.saveDefaultStyle()
     LOGGER.debug('Setting raster style done!')
     return myRampItemList, myTransparencyList

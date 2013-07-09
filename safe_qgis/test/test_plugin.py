@@ -29,11 +29,11 @@ from PyQt4.QtGui import QWidget
 
 from qgis.gui import QgsMapCanvas
 from safe_qgis.test.qgis_interface import QgisInterface
-from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.plugin import Plugin
 from safe_qgis.safe_interface import safeTr
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class PluginTest(unittest.TestCase):

@@ -21,16 +21,16 @@ import sys
 import unittest
 from PyQt4 import Qt
 from third_party.pydispatch import dispatcher
-from safe_qgis.message_viewer import MessageViewer
+from safe_qgis.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
-from safe_qgis.utilities.utilities import getErrorMessage
+from safe_qgis.utilities.utilities import get_error_message
 
 TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__), 'test_data/test_files')
+    os.path.dirname(__file__), '../../test/test_data/test_files')
 
 
 class MessageViewerTest(unittest.TestCase):
@@ -66,13 +66,13 @@ class MessageViewerTest(unittest.TestCase):
     def test_dynamic_message(self):
         """Test we can send dynamic messages to the message viewer."""
         self.message_viewer.dynamic_message_event(None, m.Message('Hi'))
-        text = self.message_viewer.pageToText()
+        text = self.message_viewer.page_to_text()
         self.assertEqual(text, 'Hi\n')
 
     def test_static_message(self):
         """Test we can send static messages to the message viewer."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
-        text = self.message_viewer.pageToText()
+        text = self.message_viewer.page_to_text()
         self.assertEqual(text, 'Hi\n')
 
     def fake_error(self):
@@ -83,9 +83,9 @@ class MessageViewerTest(unittest.TestCase):
         """
         e = Exception()
         context = 'Something went wrong'
-        message = getErrorMessage(e, theContext=context)
+        message = get_error_message(e, context=context)
         self.message_viewer.error_message_event(None, message)
-        text = self.message_viewer.pageToText().replace('\n', '')
+        text = self.message_viewer.page_to_text().replace('\n', '')
         return text
 
     def test_error_message(self):

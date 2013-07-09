@@ -40,16 +40,16 @@ from qgis.analysis import QgsZonalStatistics
 from safe_qgis.impact_statistics.zonal_stats import calculateZonalStats
 from third_party.odict import OrderedDict
 from third_party.pydispatch import dispatcher
-from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    isPolygonLayer,
-    getLayerAttributeNames,
-    copyInMemory,
-    getDefaults,
-    extentToGeoArray,
-    safeToQGISLayer)
-from safe_qgis.utilities.styling import setVectorGraduatedStyle
+    is_polygon_layer,
+    layer_attribute_names,
+    create_memory_layer,
+    defaults,
+    extent_to_geo_array,
+    safe_to_qgis_layer)
+from safe_qgis.utilities.styling import set_vector_graduated_style
 from safe_qgis.safe_interface import (
     temp_dir,
     safe_read_layer,
@@ -107,7 +107,7 @@ class Aggregator(QtCore.QObject):
 
         self.iface = iface
         self.keywordIO = KeywordIO()
-        self.defaults = getDefaults()
+        self.defaults = defaults()
         self.errorMessage = None
         self.targetField = None
         self.impactLayerAttributes = []
@@ -156,7 +156,7 @@ class Aggregator(QtCore.QObject):
         # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
         try:
-            myKeywords = self.keywordIO.readKeywords(self.layer)
+            myKeywords = self.keywordIO.read_keywords(self.layer)
         #discussed with Tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             myKeywords = {}
@@ -164,7 +164,7 @@ class Aggregator(QtCore.QObject):
         if self.aoiMode:
             myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
                 'Use default')
-            self.keywordIO.updateKeywords(self.layer, myKeywords)
+            self.keywordIO.update_keywords(self.layer, myKeywords)
             self.isValid = True
             return
         else:
@@ -193,7 +193,7 @@ class Aggregator(QtCore.QObject):
                 #set the default values by writing to the myKeywords
                 myKeywords['category'] = 'postprocessing'
 
-                myAttributes, _ = getLayerAttributeNames(
+                myAttributes, _ = layer_attribute_names(
                     self.layer,
                     [QtCore.QVariant.Int, QtCore.QVariant.String])
                 if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
@@ -208,7 +208,7 @@ class Aggregator(QtCore.QObject):
                     myKeywords[self.defaults['FEM_RATIO_KEY']] = \
                         self.defaults['FEM_RATIO']
 
-                self.keywordIO.updateKeywords(self.layer, myKeywords)
+                self.keywordIO.update_keywords(self.layer, myKeywords)
                 self.isValid = False
 
     def deintersect(self, theHazardLayer, theExposureLayer):
@@ -232,12 +232,12 @@ class Aggregator(QtCore.QObject):
             # This is a safe version of the aggregation layer
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
-            if isPolygonLayer(self.hazardLayer):
+            if is_polygon_layer(self.hazardLayer):
                 self.hazardLayer = self._preparePolygonLayer(self.hazardLayer)
 
-            if isPolygonLayer(self.exposureLayer):
+            if is_polygon_layer(self.exposureLayer):
                 # Find out the subcategory for this layer
-                mySubcategory = self.keywordIO.readKeywords(
+                mySubcategory = self.keywordIO.read_keywords(
                     self.exposureLayer, 'subcategory')
                 # We dont want to chop up buildings!
                 if mySubcategory != 'structure':
@@ -267,7 +267,7 @@ class Aggregator(QtCore.QObject):
                 ' by %1').arg(self.layer.name())))
         self._sendMessage(myMessage)
 
-        myQGISImpactLayer = safeToQGISLayer(theSafeImpactLayer)
+        myQGISImpactLayer = safe_to_qgis_layer(theSafeImpactLayer)
         if not myQGISImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             # noinspection PyExceptionInherit
@@ -300,11 +300,11 @@ class Aggregator(QtCore.QObject):
             LOGGER.debug(myMessage)
 
         del myUnneededAttributes, myProvider, myFields
-        self.keywordIO.updateKeywords(
+        self.keywordIO.update_keywords(
             self.layer, {'title': myLayerName})
 
         self.statisticsType, self.statisticsClasses = (
-            self.keywordIO.getStatisticsDetails(myQGISImpactLayer))
+            self.keywordIO.get_statistics(myQGISImpactLayer))
 
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
@@ -354,7 +354,7 @@ class Aggregator(QtCore.QObject):
 
                 myStyle = {'target_field': myAttr,
                            'style_classes': myClasses}
-                setVectorGraduatedStyle(self.layer, myStyle)
+                set_vector_graduated_style(self.layer, myStyle)
             else:
                 #make style of layer pretty much invisible
                 myProps = {'style': 'no',
@@ -382,7 +382,7 @@ class Aggregator(QtCore.QObject):
         myAggrFieldIndex = None
 
         try:
-            self.targetField = self.keywordIO.readKeywords(theQGISImpactLayer,
+            self.targetField = self.keywordIO.read_keywords(theQGISImpactLayer,
                                                            'target_field')
         except KeywordNotFoundError:
             myMessage = m.Paragraph(
@@ -768,24 +768,24 @@ class Aggregator(QtCore.QObject):
         else:
             # we use only the exposure extent, because both exposure and hazard
             # have the same extent at this point.
-            myGeoExtent = extentToGeoArray(
+            myGeoExtent = extent_to_geo_array(
                 self.exposureLayer.extent(),
                 self.exposureLayer.crs())
 
-            myAggrAttribute = self.keywordIO.readKeywords(
+            myAggrAttribute = self.keywordIO.read_keywords(
                 self.layer, self.defaults['AGGR_ATTR_KEY'])
 
-            myClippedLayer = clipLayer(
-                theLayer=self.layer,
-                theExtent=myGeoExtent,
-                theExplodeFlag=True,
-                theExplodeAttribute=myAggrAttribute)
+            myClippedLayer = clip_layer(
+                layer=self.layer,
+                extent=myGeoExtent,
+                explode_flag=True,
+                explode_attribute=myAggrAttribute)
 
             myName = '%s %s' % (self.layer.name(), self.tr('aggregation'))
             self.layer = myClippedLayer
             self.layer.setLayerName(myName)
             if self.showIntermediateLayers:
-                self.keywordIO.updateKeywords(self.layer, {'title': myName})
+                self.keywordIO.update_keywords(self.layer, {'title': myName})
                 QgsMapLayerRegistry.instance().addMapLayer(self.layer)
 
     def _countFieldName(self):
@@ -809,12 +809,12 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributes[self.defaults[
             'AGGR_ATTR_KEY']] = (
-                self.keywordIO.readKeywords(
+                self.keywordIO.read_keywords(
                     self.layer,
                     self.defaults['AGGR_ATTR_KEY']))
 
         myFemaleRatioKey = self.defaults['FEM_RATIO_ATTR_KEY']
-        myFemRatioAttr = self.keywordIO.readKeywords(
+        myFemRatioAttr = self.keywordIO.read_keywords(
             self.layer,
             myFemaleRatioKey)
         if ((myFemRatioAttr != self.tr('Don\'t use')) and
@@ -873,7 +873,7 @@ class Aggregator(QtCore.QObject):
         aggregationProvider.select([])
 
         # copy polygons to a memory layer
-        myQgisMemoryLayer = copyInMemory(theQgisLayer)
+        myQgisMemoryLayer = create_memory_layer(theQgisLayer)
 
         polygonsProvider = myQgisMemoryLayer.dataProvider()
         allPolygonAttrs = polygonsProvider.attributeIndexes()
@@ -886,7 +886,7 @@ class Aggregator(QtCore.QObject):
         myOutFilename = unique_filename(suffix='.shp',
                                         dir=myTempdir)
 
-        self.keywordIO.copyKeywords(theQgisLayer, myOutFilename)
+        self.keywordIO.copy_keywords(theQgisLayer, myOutFilename)
         mySHPWriter = QgsVectorFileWriter(myOutFilename,
                                           'UTF-8',
                                           fields,
@@ -1115,7 +1115,7 @@ class Aggregator(QtCore.QObject):
             raise Exception('Invalid qgis Layer')
 
         if self.showIntermediateLayers:
-            self.keywordIO.updateKeywords(myOutLayer, {'title': myName})
+            self.keywordIO.update_keywords(myOutLayer, {'title': myName})
             QgsMapLayerRegistry.instance().addMapLayer(myOutLayer)
 
         return myOutLayer
@@ -1163,7 +1163,7 @@ class Aggregator(QtCore.QObject):
         myRect = self.iface.mapCanvas().extent()
         myCrs = QgsCoordinateReferenceSystem()
         myCrs.createFromEpsg(4326)
-        myGeoExtent = extentToGeoArray(myRect, myCrs)
+        myGeoExtent = extent_to_geo_array(myRect, myCrs)
 
         if not self.layer.isValid():
             myMessage = self.tr(
@@ -1190,11 +1190,11 @@ class Aggregator(QtCore.QObject):
         self.layer.commitChanges()
 
         try:
-            self.keywordIO.updateKeywords(
+            self.keywordIO.update_keywords(
                 self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except InvalidParameterError:
-            self.keywordIO.writeKeywords(
+            self.keywordIO.write_keywords(
                 self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
         except KeywordDbError, e:

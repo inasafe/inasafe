@@ -36,11 +36,11 @@ from safe_qgis.exceptions import KeywordNotFoundError
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.report.map_legend import MapLegend
 from safe_qgis.utilities.utilities import (
-    setupPrinter,
-    pointsToMM,
-    mmToPoints,
-    dpiToMeters,
-    qgisVersion)
+    setup_printer,
+    points_to_mm,
+    mm_to_points,
+    dpi_to_meters,
+    qgis_version)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 LOGGER = logging.getLogger('InaSAFE')
@@ -156,8 +156,8 @@ class Map():
         myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
         myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
                                QtGui.QImage.Format_ARGB32)
-        myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
-        myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
+        myImage.setDotsPerMeterX(dpi_to_meters(self.pageDpi))
+        myImage.setDotsPerMeterY(dpi_to_meters(self.pageDpi))
 
         # Only works in Qt4.8
         #myImage.fill(QtGui.qRgb(255, 255, 255))
@@ -197,7 +197,7 @@ class Map():
             myMapPdfPath = str(theFilename)
 
         self.composeMap()
-        self.printer = setupPrinter(myMapPdfPath)
+        self.printer = setup_printer(myMapPdfPath)
         _, myImage, myRectangle = self.renderComposition()
         myPainter = QtGui.QPainter(self.printer)
         myPainter.drawImage(myRectangle, myImage, myRectangle)
@@ -217,7 +217,7 @@ class Map():
         myLogo = QgsComposerPicture(self.composition)
         myLogo.setPictureFile(':/plugins/inasafe/bnpb_logo.png')
         myLogo.setItemPosition(self.pageMargin, theTopOffset, 10, 10)
-        if qgisVersion() >= 10800:  # 1.8 or newer
+        if qgis_version() >= 10800:  # 1.8 or newer
             myLogo.setFrameEnabled(self.showFramesFlag)
         else:
             myLogo.setFrame(self.showFramesFlag)
@@ -603,8 +603,8 @@ class Map():
             prefix='legend', suffix='.png', dir='work')
         self.legend.save(myLegendFilePath, 'PNG')
         myPicture1.setPictureFile(myLegendFilePath)
-        myLegendHeight = pointsToMM(self.legend.height(), self.pageDpi)
-        myLegendWidth = pointsToMM(self.legend.width(), self.pageDpi)
+        myLegendHeight = points_to_mm(self.legend.height(), self.pageDpi)
+        myLegendWidth = points_to_mm(self.legend.width(), self.pageDpi)
         myPicture1.setItemPosition(self.pageMargin,
                                    theTopOffset,
                                    myLegendWidth,
@@ -635,7 +635,7 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map drawImage called')
         myDesiredWidthMM = theWidthMM  # mm
-        myDesiredWidthPX = mmToPoints(myDesiredWidthMM, self.pageDpi)
+        myDesiredWidthPX = mm_to_points(myDesiredWidthMM, self.pageDpi)
         myActualWidthPX = theImage.width()
         myScaleFactor = myDesiredWidthPX / myActualWidthPX
 
@@ -668,7 +668,7 @@ class Map():
         #time_stamp: 2012-10-13_23:10:31
         #myUser = self.keywordIO.readKeywords(self.layer, 'user')
         #myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
-        myDateTime = self.keywordIO.readKeywords(self.layer, 'time_stamp')
+        myDateTime = self.keywordIO.read_keywords(self.layer, 'time_stamp')
         myTokens = myDateTime.split('_')
         myDate = myTokens[0]
         myTime = myTokens[1]
@@ -753,7 +753,7 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map getMapTitle called')
         try:
-            myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
+            myTitle = self.keywordIO.read_keywords(self.layer, 'map_title')
             return myTitle
         except KeywordNotFoundError:
             return None
@@ -778,7 +778,7 @@ class Map():
         for myLegendAttribute in legendAttributes:
             try:
                 dictLegendAttributes[myLegendAttribute] = \
-                    self.keywordIO.readKeywords(self.layer, myLegendAttribute)
+                    self.keywordIO.read_keywords(self.layer, myLegendAttribute)
             except KeywordNotFoundError:
                 pass
             except Exception:
@@ -827,8 +827,8 @@ class Map():
         self.setupComposition()
 
         myResolution = self.composition.printResolution()
-        self.printer = setupPrinter(theOutputFilePath,
-                                    theResolution=myResolution)
+        self.printer = setup_printer(theOutputFilePath,
+                                    resolution=myResolution)
         if self.composition:
             myFile = QtCore.QFile(theTemplateFilePath)
             myDocument = QtXml.QDomDocument()

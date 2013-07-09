@@ -40,12 +40,12 @@ from safe_qgis.utilities.utilities_test import (getQgisTestApp,
                                       setJakartaGeoExtent,
                                       GEOCRS)
 
-from safe_qgis.dock import Dock
+from safe_qgis.widgets.dock import Dock
 
-from safe_qgis.utilities.utilities_test import (
-    loadStandardLayers,
-    setupScenario,
-    canvasList)
+from safe_qgis.utilities.utilities_for_testing import (
+    load_standard_layers,
+    setup_scenario,
+    canvas_list)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = Dock(IFACE)
@@ -61,7 +61,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
-        loadStandardLayers()
+        load_standard_layers()
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -79,14 +79,14 @@ class PostprocessorManagerTest(unittest.TestCase):
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart',
-            theOkButtonFlag=True)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            ok_button_flag=True)
         assert myResult, myMessage
 
         LOGGER.info("Registry list before:\n%s" %
@@ -117,7 +117,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         myExpectedCount += 2
         myAfterCount = len(CANVAS.layers())
 
-        LOGGER.info("Canvas list after:\n %s" % canvasList())
+        LOGGER.info("Canvas list after:\n %s" % canvas_list())
         myMessage = ('Expected %s items in canvas, got %s' %
                      (myExpectedCount, myAfterCount))
         # We expect two more since we enabled showing intermedate layers
@@ -129,13 +129,13 @@ class PostprocessorManagerTest(unittest.TestCase):
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theOkButtonFlag=True)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            ok_button_flag=True)
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)

@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Converter Dialog.**
@@ -21,15 +22,15 @@ __copyright__ += 'Disaster Reduction'
 import logging
 import os
 
-from PyQt4.QtCore import (QFileInfo, pyqtSignature, SIGNAL, QObject)
+from PyQt4.QtCore import QFileInfo, pyqtSignature, SIGNAL, QObject
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
-from qgis.core import (QgsRasterLayer, QgsMapLayerRegistry)
+from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
 from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
 from safe_qgis.safe_interface import get_version, convert_mmi_data
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
-from safe_qgis.utilities.utilities import htmlFooter, htmlHeader
+from safe_qgis.utilities.utilities import html_footer, html_header
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -37,22 +38,18 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
-    """Importer for shakemap grid.xml files.
-    """
-    def __init__(self, theParent=None):
+    """Importer for shakemap grid.xml files."""
+    def __init__(self, parent=None):
         """Constructor for the dialog.
 
-                This dialog will show the user converter dialog
+        Show the grid converter dialog.
 
-        Args:
-           * theParent - Optional widget to use as parent
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
+        :param parent: parent - widget to use as parent.
+        :type parent: QWidget
+
         """
-        QDialog.__init__(self, theParent)
-        self.parent = theParent
+        QDialog.__init__(self, parent)
+        self.parent = parent
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %1 Converter').arg(
             get_version()))
@@ -73,13 +70,12 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
                         SIGNAL('textChanged(QString)'),
                         self.on_leOutputPath_textChanged)
 
-        self.showInfo()
+        self.show_info()
 
-    def showInfo(self):
-        """Read the header and footer html snippets.
-        """
-        header = htmlHeader()
-        footer = htmlFooter()
+    def show_info(self):
+        """Show usage text to the user."""
+        header = html_header()
+        footer = html_footer()
         string = header
 
         heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
@@ -113,7 +109,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.webView.setHtml(string)
 
     def on_leOutputPath_textChanged(self):
-        """Action when output file name is changed
+        """Action when output file name is changed,
         """
         output_path = str(self.leOutputPath.text())
         output_not_xml_msg = str(self.tr('output file is not .tif'))
@@ -124,7 +120,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.update_warning()
 
     def on_leInputPath_textChanged(self):
-        """Action when input file name is changed
+        """Action when input file name is changed,
         """
         input_path = str(self.leInputPath.text())
         # input_not_exist_msg = str(self.tr('input file is not existed'))
@@ -140,14 +136,13 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.update_warning()
 
     def update_warning(self):
-        """Update warning message and enable/disable Ok button
-        """
+        """Update warning message and enable/disable Ok button."""
         if len(self.warning_text) == 0:
             self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(True)
             return
 
-        header = htmlHeader()
-        footer = htmlFooter()
+        header = html_header()
+        footer = html_footer()
         string = header
         heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
         tips = m.BulletedList()
@@ -163,8 +158,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.webView.setHtml(string)
 
     def get_output_from_input(self):
-        """Basically, it just get from input file location and
-        create default output location for it
+        """Create default output location based on input location.
         """
         my_input_path = str(self.leInputPath.text())
         if my_input_path.endswith('.xml'):
@@ -180,6 +174,8 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.leOutputPath.setText(my_output_path)
 
     def accept(self):
+        """Handler for when OK is clicked.
+        """
         input_path = str(self.leInputPath.text())
         output_path = str(self.leOutputPath.text())
         if not output_path.endswith('.tif'):
@@ -218,8 +214,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenInput_clicked(self):
-        """Autoconnect slot activated when the open input tool button is
-        clicked.
+        """Autoconnect slot activated when open input tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getOpenFileName(
@@ -229,8 +224,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_tBtnOpenOutput_clicked(self):
-        """Autoconnect slot activated when the open output tool button is
-        clicked.
+        """Autoconnect slot activated when open output tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getSaveFileName(

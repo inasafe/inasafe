@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Import Dialog.**
@@ -27,35 +28,31 @@ from safe_qgis.ui.osm_downloader_base import Ui_OsmDownloaderBase
 from safe_qgis.exceptions import CanceledImportDialogError, ImportDialogError
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.utilities import (
-    downloadWebUrl, htmlFooter, htmlHeader)
+    download_url, html_footer, html_header)
 from safe_qgis.safe_interface import styles
 
 INFO_STYLE = styles.INFO_STYLE
 
 
 class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
-    """
+    """Downloader for OSM data."""
 
-    :param theParent:
-    :param theIface:
-    """
-
-    def __init__(self, theParent=None, theIface=None):
+    def __init__(self, parent=None, iface=None):
         """Constructor for import dialog.
 
-        :param theParent: Optional widget to use as parent
-        :type theParent:
+        :param parent: Optional widget to use as parent
+        :type parent: QWidget
 
-        :param theIface: An instance of QGisInterface
-        :type theIface:
+        :param iface: An instance of QGisInterface
+        :type iface: QGisInterface
         """
-        QDialog.__init__(self, theParent)
-        self.parent = theParent
+        QDialog.__init__(self, parent)
+        self.parent = parent
         self.setupUi(self)
 
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
-        self.iface = theIface
+        self.iface = iface
         self.url = "http://osm.linfiniti.com/buildings-shp"
 
         # creating progress dialog for download
@@ -64,16 +61,17 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         myTitle = self.tr("InaSAFE OpenStreetMap Downloader")
         self.progressDialog.setWindowTitle(myTitle)
 
-        self.showInfo()
+        self.show_info()
 
-        self.nam = QNetworkAccessManager(self)
-        self.restoreState()
-        self.updateExtent()
+        self.network_manager = QNetworkAccessManager(self)
+        self.restore_state()
+        self.update_extent()
 
-    def showInfo(self):
+    def show_info(self):
+        """Show usage info to the user."""
         # Read the header and footer html snippets
-        header = htmlHeader()
-        footer = htmlFooter()
+        header = html_header()
+        footer = html_footer()
 
         string = header
 
@@ -114,17 +112,17 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         self.webView.setHtml(string)
 
-    def restoreState(self):
+    def restore_state(self):
         """ Read last state of GUI from configuration file."""
         mySetting = QSettings()
         self.outDir.setText(mySetting.value('directory').toString())
 
-    def saveState(self):
+    def save_state(self):
         """ Store current state of GUI to configuration file """
         mySetting = QSettings()
         mySetting.setValue('directory', self.outDir.text())
 
-    def updateExtent(self):
+    def update_extent(self):
         """ Update extent value in GUI based from value in map."""
         myExtent = self.iface.mapCanvas().extent()
         self.minLongitude.setText(str(myExtent.xMinimum()))
@@ -140,14 +138,14 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
             self, self.tr("Select download directory")))
 
     def accept(self):
-        """ Do import process """
+        """Do osm download and display it in QGIS."""
 
         try:
-            self.saveState()
+            self.save_state()
 
-            self.ensureDirExist()
-            self.doImport()
-            self.loadShapeFile()
+            self.require_directory()
+            self.download()
+            self.load_shapefile()
             self.done(QDialog.Accepted)
         except CanceledImportDialogError:
             # don't show anything because this exception raised
@@ -162,15 +160,14 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
             self.progressDialog.cancel()
 
-    def ensureDirExist(self):
-        """
-        Ensure directory path entered in dialog exist.
-        When the path is not exist, this function will
-        ask the user if he want to create it or not.
+    def require_directory(self):
+        """Ensure directory path entered in dialog exist.
 
-        Raises:
-            CanceledImportDialogError - when user choose 'No'
-                        in question dialog for creating directory.
+        When the path does not exist, this function will ask the user if he
+        want to create it or not.
+
+        :raises: CanceledImportDialogError - when user choose 'No' in
+            the question dialog for creating directory.
         """
 
         myDir = str(self.outDir.text())
@@ -192,11 +189,10 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         else:
             raise CanceledImportDialogError()
 
-    def doImport(self):
-        """Import Shapefiles from Linfinti.
+    def download(self):
+        """Download shapefiles from Linfinti server.
 
-        :raises: ImportDialogError - when network error occurred
-            CanceledImportDialogError - when user press cancel button
+        :raises: ImportDialogError, CanceledImportDialogError
         """
 
         ## preparing necessary data
@@ -220,21 +216,21 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         myFilePath = tempfile.mktemp('.shp.zip')
 
         # download and extract it
-        self.downloadShapeFile(myShapeUrl, myFilePath)
+        self.fetch_zip(myShapeUrl, myFilePath)
         print myFilePath
         print str(self.outDir.text())
-        self.extractZip(myFilePath, str(self.outDir.text()))
+        self.extract_zip(myFilePath, str(self.outDir.text()))
 
         self.progressDialog.done(QDialog.Accepted)
 
-    def downloadShapeFile(self, theUrl, theOutput):
-        """Download shape file from theUrl and write to theOutput.
+    def fetch_zip(self, url, output_path):
+        """Download zip containing shp file and write to output_path.
 
-        :param theUrl: URL of the Shapefile
-        :type theUrl: str
+        :param url: URL of the zip bundle.
+        :type url: str
 
-        :param theOutput: Path of Output file
-        :type theOutput: str
+        :param output_path: Path of output file,
+        :type output_path: str
 
         :raises: ImportDialogError - when network error occurred
         """
@@ -245,49 +241,49 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         # myLabelText = "Begin downloading shapefile from " \
         #               + "%1 ..."
-        # self.progressDialog.setLabelText(self.tr(myLabelText).arg(theUrl))
+        # self.progressDialog.setLabelText(self.tr(myLabelText).arg(url))
         myLabelText = self.tr("Downloading shapefile")
         self.progressDialog.setLabelText(myLabelText)
 
-        myResult = downloadWebUrl(self.nam, theUrl, theOutput,
-                                  self.progressDialog)
+        myResult = download_url(
+            self.network_manager, url, output_path,
+            self.progressDialog)
 
         if myResult is not True:
             _, myErrorMessage = myResult
             raise ImportDialogError(myErrorMessage)
 
-    def extractZip(self, thePath, theOutDir):
-        """Extract all content of a .zip file from thePath to theOutDir.
+    def extract_zip(self, path, output_dir):
+        """Extract all content of a .zip file from path to output_dir.
 
-        :param thePath: The path of the .zip file
-        :type thePath: str
+        :param path: The path of the .zip file
+        :type path: str
 
-        :param theOutDir: Output directory
-        :type theOutDir: str
+        :param output_dir: Output directory where the shp will be written to.
+        :type output_dir: str
 
-        :raises: IOError - when not able to open thePath or theOutDir does not
+        :raises: IOError - when not able to open path or output_dir does not
             exist.
         """
 
         import zipfile
 
         ## extract all files...
-        myHandle = open(thePath, 'rb')
+        myHandle = open(path, 'rb')
         myZip = zipfile.ZipFile(myHandle)
         for myName in myZip.namelist():
-            myOutPath = os.path.join(theOutDir, myName)
+            myOutPath = os.path.join(output_dir, myName)
             myOutFile = open(myOutPath, 'wb')
             myOutFile.write(myZip.read(myName))
             myOutFile.close()
 
         myHandle.close()
 
-    def loadShapeFile(self):
+    def load_shapefile(self):
         """
         Load downloaded shape file to QGIS Main Window.
 
-        Raises:
-            ImportDialogError - when buildings.shp not exist
+        :raises: ImportDialogError - when buildings.shp not exist
         """
 
         myDir = str(self.outDir.text())

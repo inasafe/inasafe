@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
 from safe import messaging as m
-from safe_qgis.utilities.utilities import htmlHeader, htmlFooter
+from safe_qgis.utilities.utilities import html_header, html_footer
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -65,7 +65,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         #add select all
         action = self.page().action(QtWebKit.QWebPage.SelectAll)
-        action.setEnabled(not self.pageToText() == '')
+        action.setEnabled(not self.page_to_text() == '')
         context_menu.addAction(action)
 
         #add copy
@@ -83,7 +83,7 @@ class MessageViewer(QtWebKit.QWebView):
             context_menu.addAction(
                 self.tr('log pageToText'),
                 self,
-                QtCore.SLOT(self._printPageToText()))
+                QtCore.SLOT(self.page_to_stdout()))
 
         #show the menu
         context_menu.setVisible(True)
@@ -148,7 +148,7 @@ class MessageViewer(QtWebKit.QWebView):
         # self.page().mainFrame().evaluateJavaScript(js)
         # self.scrollToDiv()
 
-    def scrollToDiv(self):
+    def scroll_to_div(self):
         """Scroll to the last added div.
 
         see resources/js/inasafe.js and also
@@ -161,7 +161,7 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        string = htmlHeader()
+        string = html_header()
         if self.static_message is not None:
             string += self.static_message.to_html()
 
@@ -176,11 +176,11 @@ class MessageViewer(QtWebKit.QWebView):
             if html is not None:
                 string += html
 
-        string += htmlFooter()
+        string += html_footer()
         self.setHtml(string)
-        self.scrollToDiv()
+        self.scroll_to_div()
 
-    def _toMessage(self):
+    def to_message(self):
         """Collate all message elements to a single message."""
         myMessage = m.Message()
         if self.static_message is not None:
@@ -189,16 +189,16 @@ class MessageViewer(QtWebKit.QWebView):
             myMessage.add(myDynamic)
         return myMessage
 
-    def pageToText(self):
+    def page_to_text(self):
         """Return the current page contents as plain text."""
-        myMessage = self._toMessage()
+        myMessage = self.to_message()
         return myMessage.to_text()
 
-    def pageToHtml(self):
+    def page_to_html(self):
         """Return the current page contents as html."""
-        myMessage = self._toMessage()
+        myMessage = self.to_message()
         return myMessage.to_html()
 
-    def _printPageToText(self):
+    def page_to_stdout(self):
         """Print to console the current page contents as plain text."""
-        print self.pageToText()
+        print self.page_to_text()

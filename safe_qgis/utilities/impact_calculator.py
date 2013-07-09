@@ -1,6 +1,6 @@
+# coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**ISImpactCalculator.**
+InaSAFE Disaster risk assessment tool developed by AusAid -**ImpactCalculator.**
 
 The module provides a high level interface for running SAFE scenarios.
 
@@ -24,8 +24,7 @@ from PyQt4.QtCore import QObject
 #Do not import any QGIS or SAFE modules in this module!
 from safe_qgis.utilities.impact_calculator_thread import ImpactCalculatorThread
 from safe_qgis.exceptions import InsufficientParametersError
-from safe_qgis.safe_interface import (
-    readSafeLayer, getSafeImpactFunctions)
+from safe_qgis.safe_interface import readSafeLayer, getSafeImpactFunctions
 
 
 class ImpactCalculator(QObject):
@@ -41,108 +40,85 @@ class ImpactCalculator(QObject):
         self._filename = None
         self._result = None
 
-    def exposureLayer(self):
+    def exposure_layer(self):
         """Accessor for the exposure layer.
 
-        Args:
-            None
-        Returns:
-            A QgsMapLayer or None depending on if the layer is set
-        Raises:
-            None
+        :returns: The exposure layer.
+        :rtype: read_layer
         """
         return self._exposureLayer
 
-    def setExposureLayer(self, theLayerPath):
-        """Mutator for Exposure layer property (e.g. buildings or
-        features that will be affected).
+    def set_exposure_layer(self, layer_path):
+        """Mutator for Exposure layer property.
 
-        Args:
-            theLayerPath - This should be a string representing a
-            path to a file which can be loaded as a SAFE readlayer instance.
-        Returns:
-            None
-        Raises:
-            None
+        e.g. buildings or features that will be affected.
+
+        :param layer_path: Path to a file which can be loaded as a SAFE
+            read_layer instance.
+        :type layer_path: str
         """
-        if theLayerPath is None:
+        if layer_path is None:
             self._exposureLayer = None
         else:
-            self._exposureLayer = str(theLayerPath)
+            self._exposureLayer = str(layer_path)
 
-    def hazardLayer(self):
+    def hazard_layer(self):
         """Accessor for the hazard layer.
 
-        Args:
-            None
-        Returns:
-            A QgsMapLayer or None depending on if the layer is set
-        Raises:
-            None
+        :returns: Path for the hazard layer.
+        :rtype: str
+
         """
         return self._hazardLayer
 
-    def setHazardLayer(self, theLayerPath):
-        """Mutator: hazard layer. Hazard layer property  (e.g. a flood depth
-        raster). This should be a SAFE readlayer instance.
+    def set_hazard_layer(self, layer_path):
+        """Mutator for hazard layer property.
 
-        Args:
-            theLayerPath - This should be a string representing a
-            path to a file which can be loaded as a SAFE readlayer instance.
-        Returns:
-            None
-        Raises:
-            None
+        e.g. buildings or features that will be affected.
+
+        :param layer_path: Path to a file which can be loaded as a SAFE
+            read_layer instance.
+        :type layer_path: str
         """
-        if theLayerPath is None:
+        if layer_path is None:
             self._hazardLayer = None
         else:
-            self._hazardLayer = str(theLayerPath)
+            self._hazardLayer = str(layer_path)
 
     def function(self):
-        """Accessor for the function layer.
+        """Accessor for the impact function.
 
-        Args:
-            None
-        Returns:
-            An inasafe function or None depending on if the layer is set
-        Raises:
-            None
+        :returns: An InaSAFE impact function or None depending on if it is set.
+        :rtype: FunctionProvider, None
         """
         return self._function
 
-    def setFunction(self, theFunctionName):
-        """Mutator: function layer. Function property (specifies which
-        inasafe function to use to process the hazard and exposure
-        layers with.
+    def set_function(self, function_id):
+        """Mutator for the impact function.
 
-        Args:
-            theFunctionName - This should be a string containing the name of a
-            valid SAFE impact_function.
-        Returns:
-            None
-        Raises:
-            None
+        The function property specifies which inasafe function to use to
+        process the hazard and exposure layers with.
+
+        :param function_id: The identifier of a valid SAFE impact_function.
+        :type function_id: str
+
         """
-        self._function = str(theFunctionName)
+        self._function = str(function_id)
 
-    def getRunner(self):
+    def get_runner(self):
         """ Factory to create a new runner thread.
-        Requires three parameters to be set before execution
-        can take place:
+
+        Requires three parameters to be set before execution can take place:
 
         * Hazard layer - a path to a raster (string)
         * Exposure layer - a path to a vector hazard layer (string).
         * Function - a function name that defines how the Hazard assessment
           will be computed (string).
 
-        Args:
-           None.
-        Returns:
-           None
-        Raises:
-           InsufficientParametersError if not all parameters are
-           set.
+        :returns: An impact calculator thread instance.
+        :rtype: ImpactCalculatorThread
+
+        :raises: InsufficientParametersError if not all parameters are set.
         """
         self._filename = None
         self._result = None
@@ -167,6 +143,7 @@ class ImpactCalculator(QObject):
 
         myFunctions = getSafeImpactFunctions(self._function)
         myFunction = myFunctions[0][self._function]
-        return ImpactCalculatorThread(myHazardLayer,
-                                      myExposureLayer,
-                                      myFunction)
+        return ImpactCalculatorThread(
+            myHazardLayer,
+            myExposureLayer,
+            myFunction)

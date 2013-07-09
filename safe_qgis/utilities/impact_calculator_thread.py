@@ -33,11 +33,13 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ImpactCalculatorThread(threading.Thread, QObject):
-    """A threaded class to compute an impact scenario. Under
-       python a thread can only be run once, so the instances
-       based on this class are designed to be short lived.
-       We inherit from QObject so that we can use Qt translation self.tr
-       calls and emit signals.
+    """A threaded class to compute an impact scenario.
+
+        Under python a thread can only be run once, so the instances
+        based on this class are designed to be short lived.
+
+        We inherit from QObject so that we can use Qt translation self.tr
+        calls and emit signals.
 
        .. todo:: implement this class using QThread as a base class since it
           supports thread termination which python threading doesnt seem to do.
@@ -64,59 +66,67 @@ class ImpactCalculatorThread(threading.Thread, QObject):
     """
     done = pyqtSignal()
 
-    def showMessage(self):
+    def show_message(self):
         """For testing only"""
         print 'hello'
 
-    def __init__(self, theHazardLayer, theExposureLayer, theFunction):
+    def __init__(self, hazard_layer, exposure_layer, function):
         """Constructor for the impact calculator thread.
 
-        Args:
-          * Hazard layer: InaSAFE read_layer object containing the Hazard data.
-          * Exposure layer: InaSAFE read_layer object containing the Exposure
+        :param hazard_layer: read_layer object containing the Hazard.
             data.
-          * Function: a InaSAFE function that defines how the Hazard assessment
+        :type hazard_layer: read_layer
+
+        :param exposure_layer: read_layer object containing the Exposure data.
+        :type exposure_layer: read_layer
+
+        :param function: Function that defines how the Hazard assessment
             will be computed.
+        :type function: FunctionProvider
 
-        Returns:
-           None
-        Raises:
-           InsufficientParametersError if not all parameters are
-           set.
-
-        Requires three parameters to be set before execution
-        can take place:
+        :raises: InsufficientParametersError if not all parameters are set.
         """
         threading.Thread.__init__(self)
         QObject.__init__(self)
-        self._hazardLayer = theHazardLayer
-        self._exposureLayer = theExposureLayer
-        self._function = theFunction
+        self._hazardLayer = hazard_layer
+        self._exposureLayer = exposure_layer
+        self._function = function
         self._impactLayer = None
         self._result = None
         self._exception = None
         self._traceback = None
 
-    def impactLayer(self):
-        """Return the InaSAFE layer instance which is the output from the
-        last run."""
+    def impact_layer(self):
+        """Get the impact output from the last run.
+
+        :returns: An impact layer.
+        :rtype: read_layer
+        """
         return self._impactLayer
 
     def result(self):
-        """Return the result of the last run."""
+        """Return the result of the last run.
+
+        :returns: A message containing the status info for the last run.
+        :rtype: str
+        """
         return self._result
 
     def lastException(self):
-        """Return any exception that may have been raised while running"""
+        """Get any exception that may have been raised while running.
+
+        :returns: An exception if any.
+        :rtype: Exception
+        """
         return self._exception
 
-    def lastTraceback(self):
-        """Return the strack trace for any exception that may of occurred
-        while running."""
+    def last_traceback(self):
+        """Get the stack trace for any exception occurring in the last run."""
         return self._traceback
 
     def run(self):
         """ Main function for hazard impact calculation thread.
+
         Requires three properties to be set before execution
         can take place:
 
@@ -141,13 +151,9 @@ class ImpactCalculatorThread(threading.Thread, QObject):
           myFilename = myRunner.filename()
 
 
-        Args:
-           None.
-        Returns:
-           None
-        Raises:
-           InsufficientParametersError
-           set.
+        :raises: InsufficientParametersError
+
+        .. note:: a done signal is emitted when the analysis is complete.
         """
         if (self._hazardLayer is None) or \
                 (self._exposureLayer is None) or \

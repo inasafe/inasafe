@@ -32,7 +32,7 @@ from safe_qgis.safe_interface import (
     verify,
     readKeywordsFromFile,
     writeKeywordsToFile)
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -57,109 +57,107 @@ class KeywordIO(QObject):
         QObject.__init__(self)
         # path to sqlite db path
         self.keywordDbPath = None
-        self.setupKeywordDbPath()
+        self.setup_keyword_db_path()
         self.connection = None
 
-    def setKeywordDbPath(self, thePath):
+    def set_keyword_db_path(self, path):
         """Set the path for the keyword database (sqlite).
 
         The file will be used to search for keywords for non local datasets.
 
-        Args:
-            thePath - a valid path to a sqlite database. The database does
+        :param path: A valid path to a sqlite database. The database does
             not need to exist already, but the user should be able to write
             to the path provided.
-        Returns:
-            None
-        Raises:
-            None
+        :type path: str
         """
-        self.keywordDbPath = str(thePath)
+        self.keywordDbPath = str(path)
 
-    def readKeywords(self, theLayer, theKeyword=None):
+    def read_keywords(self, layer, keyword=None):
         """Read keywords for a datasource and return them as a dictionary.
+
         This is a wrapper method that will 'do the right thing' to fetch
         keywords for the given datasource. In particular, if the datasource
         is remote (e.g. a database connection) it will fetch the keywords from
         the keywords store.
 
-        Args:
-            * theLayer - A QGIS QgsMapLayer instance.
-            * theKeyword - optional - will extract only the specified keyword
+        :param layer:  A QGIS QgsMapLayer instance that you want to obtain
+            the keywords for.
+        :type layer: QgsMapLayer
+
+        :param keyword: If set, will extract only the specified keyword
               from the keywords dict.
-        Returns:
-            A dict if theKeyword is omitted, otherwise the value for the
+        :type keyword: str
+
+        :returns: A dict if keyword is omitted, otherwise the value for the
             given key if it is present.
-        Raises:
-            Propogates any exception from the underlying reader delegate.
+        :rtype: dict or str
         """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
+        mySource = str(layer.source())
+        myFlag = self.are_keywords_file_based(layer)
 
         try:
             if myFlag:
-                myKeywords = readKeywordsFromFile(mySource, theKeyword)
+                myKeywords = readKeywordsFromFile(mySource, keyword)
             else:
-                myKeywords = self.readKeywordFromUri(mySource, theKeyword)
+                myKeywords = self.readKeywordFromUri(mySource, keyword)
             return myKeywords
         except (HashNotFoundError, Exception, OperationalError):
             raise
 
-    def writeKeywords(self, theLayer, theKeywords):
+    def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.
         This is a wrapper method that will 'do the right thing' to store
         keywords for the given datasource. In particular, if the datasource
         is remote (e.g. a database connection) it will write the keywords from
         the keywords store.
 
-        Args:
-            * theLayer - A QGIS QgsMapLayer instance.
-            * theKeywords - a dict containing all the keywords to be written
+        :param layer: A QGIS QgsMapLayer instance.
+        :type layer: QgsMapLayer
+
+        :param keywords: A dict containing all the keywords to be written
               for the layer.
-        Returns:
-            None.
-        Raises:
-            None
+        :type keywords: dict
         """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
+        mySource = str(layer.source())
+        myFlag = self.are_keywords_file_based(layer)
         try:
             if myFlag:
-                writeKeywordsToFile(mySource, theKeywords)
+                writeKeywordsToFile(mySource, keywords)
             else:
-                self.writeKeywordsForUri(mySource, theKeywords)
+                self.write_keywords_for_uri(mySource, keywords)
             return
         except:
             raise
 
-    def updateKeywords(self, theLayer, theKeywords):
+    def update_keywords(self, layer, keywords):
         """Write keywords for a datasource.
 
-        Args:
-            * theLayer - A QGIS QgsMapLayer instance.
-            * theKeywords - a dict containing all the keywords to be added
+
+        :param layer: A QGIS QgsMapLayer instance.
+        :type layer: QgsMapLayer
+
+        :param keywords: A dict containing all the keywords to be updated
               for the layer.
-        Returns:
-            None.
-        Raises:
-            None
+        :type keywords: dict
         """
         try:
-            myKeywords = self.readKeywords(theLayer)
+            myKeywords = self.read_keywords(layer)
         except (HashNotFoundError, OperationalError, InvalidParameterError):
             myKeywords = {}
-        myKeywords.update(theKeywords)
+        myKeywords.update(keywords)
         try:
-            self.writeKeywords(theLayer, myKeywords)
+            self.write_keywords(layer, myKeywords)
         except OperationalError, e:
             myMessage = self.tr('Keyword database path: ') + self\
                 .keywordDbPath
             raise KeywordDbError(str(e) + '\n' + myMessage)
 
-    def copyKeywords(self, theSourceLayer,
-                     theDestinationFile, theExtraKeywords=None):
-        """Helper to copy the keywords file from a source dataset
-        to a destination dataset.
+    def copy_keywords(
+            self,
+            source_layer,
+            destination_file,
+            extra_keywords=None):
+        """Helper to copy the keywords file from a source to a target dataset.
 
         e.g.::
 
@@ -173,129 +171,118 @@ class KeywordIO(QObject):
 
             copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
 
-        Args:
-            * theSourceLayer - A QGIS QgsMapLayer instance.
-            * theDestinationFile - the output filename that should be used
+        :param source_layer: A QGIS QgsMapLayer instance.
+        :type source_layer: QgsMapLayer
+
+        :param destination_file: The output filename that should be used
               to store the keywords in. It can be a .shp or a .keywords for
-              exampled since the suffix will always be replaced with .keywords.
-            * theExtraKeywords - a dict containing all the extra keywords to be
-              written for the layer. The written keywords will consist of any
-              original keywords from the source layer's keywords file and
-              and the extra keywords (which will replace the source layers
-              keywords if the key is identical).
-        Returns:
-            None.
-        Raises:
-            None
+              example since the suffix will always be replaced with .keywords.
+        :type destination_file: str
+
+        :param extra_keywords: A dict containing all the extra keywords
+            to be written for the layer. The written keywords will consist of
+            any original keywords from the source layer's keywords file and
+            and the extra keywords (which will replace the source layers
+            keywords if the key is identical).
+        :type extra_keywords: dict
+
         """
-        myKeywords = self.readKeywords(theSourceLayer)
-        if theExtraKeywords is None:
-            theExtraKeywords = {}
+        myKeywords = self.read_keywords(source_layer)
+        if extra_keywords is None:
+            extra_keywords = {}
         myMessage = self.tr('Expected extraKeywords to be a dictionary. Got '
-                            '%s' % str(type(theExtraKeywords))[1:-1])
-        verify(isinstance(theExtraKeywords, dict), myMessage)
+                            '%s' % str(type(extra_keywords))[1:-1])
+        verify(isinstance(extra_keywords, dict), myMessage)
         # compute the output keywords file name
-        myDestinationBase = os.path.splitext(theDestinationFile)[0]
+        myDestinationBase = os.path.splitext(destination_file)[0]
         myNewDestination = myDestinationBase + '.keywords'
         # write the extra keywords into the source dict
         try:
-            for key in theExtraKeywords:
-                myKeywords[key] = theExtraKeywords[key]
+            for key in extra_keywords:
+                myKeywords[key] = extra_keywords[key]
             writeKeywordsToFile(myNewDestination, myKeywords)
         except Exception, e:
             myMessage = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
-                theSourceLayer.source(), myNewDestination, str(e)))
+                source_layer.source(), myNewDestination, str(e)))
             raise Exception(myMessage)
         return
 
-    def clearKeywords(self, theLayer):
-        """convenience method to clear a files keywords
+    def clear_keywords(self, layer):
+        """Convenience method to clear a layer's keywords.
 
-        Args:
-            * theLayer - A QGIS QgsMapLayer instance.
-        Returns:
-            None.
-        Raises:
-            None
+        :param layer: A QGIS QgsMapLayer instance.
+        :type layer: QgsMapLayer
         """
 
-        self.writeKeywords(theLayer, dict())
+        self.write_keywords(layer, dict())
 
-    def deleteKeyword(self, theLayer, theKeyword):
-        """Read keywords for a datasource and return them as a dictionary.
+    def delete_keywords(self, layer, keyword):
+        """Delete the keyword for a given layer..
+
         This is a wrapper method that will 'do the right thing' to fetch
         keywords for the given datasource. In particular, if the datasource
         is remote (e.g. a database connection) it will fetch the keywords from
         the keywords store.
 
-        Args:
-            * theLayer - A QGIS QgsMapLayer instance.
-            * theKeyword - the specified keyword will be deleted
+        :param layer: - A QGIS QgsMapLayer instance.
+        :type layer: QgsMapLayer
+
+        :param keyword: The specified keyword will be deleted
               from the keywords dict.
-        Returns:
-            True if the keyword was sucessfully delete. False otherwise
-        Raises:
-            Propogates exception from the underlying reader delegate.
+        :type keyword: str
+
+        :returns: True if the keyword was sucessfully delete. False otherwise
+        :rtype: bool
         """
 
         try:
-            myKeywords = self.readKeywords(theLayer)
-            myKeywords.pop(theKeyword)
-            self.writeKeywords(theLayer, myKeywords)
+            myKeywords = self.read_keywords(layer)
+            myKeywords.pop(keyword)
+            self.write_keywords(layer, myKeywords)
             return True
         except (HashNotFoundError, KeyError):
             return False
 
 # methods below here should be considered private
 
-    def defaultKeywordDbPath(self):
-        """Helper to get the default path for the keywords file (which is
-        <plugin dir>/keywords.db)
+    def default_keyword_db_path(self):
+        """Helper to get the default path for the keywords file.
 
-        Args:
-            None
-        Returns:
-            A string representing the path to where the keywords file is to be.
-        Raises:
-            None
+        :returns: The path to where the default location of the keywords
+            database is. Maps to which is <plugin dir>/keywords.db
+        :rtype: str
         """
         myParentDir = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '../../'))
         return os.path.join(myParentDir, '../../keywords.db')
 
-    def setupKeywordDbPath(self):
-        """Helper to set the active path for the keywords. Called at init time,
-        you can override this path by calling setKeywordDbPath.
+    def setup_keyword_db_path(self):
+        """Helper to set the active path for the keywords.
 
-        Args:
-            None
-        Returns:
-            A string representing the path to where the keywords file is to be.
-            If the user has never specified what this path is, the
-            defaultKeywordDbPath is returned.
-        Raises:
-            None
+        Called at init time, you can override this path by calling
+        set_keyword_db_path.setKeywordDbPath.
+
+        :returns: The path to where the keywords file is. If the user has
+            never specified what this path is, the defaultKeywordDbPath is
+            returned.
+        :rtype: str
         """
         mySettings = QSettings()
         myPath = mySettings.value(
             'inasafe/keywordCachePath',
-            self.defaultKeywordDbPath()).toString()
+            self.default_keyword_db_path()).toString()
         self.keywordDbPath = str(myPath)
 
-    def openConnection(self):
+    def open_connection(self):
         """Open an sqlite connection to the keywords database.
+
         By default the keywords database will be used in the plugin dir,
         unless an explicit path has been set using setKeywordDbPath, or
         overridden in QSettings. If the db does not exist it will
         be created.
 
-        Args:
-            thePath - path to the desired sqlite db to use.
-        Returns:
-            None
-        Raises:
-            An sqlite.Error is raised if anything goes wrong
+        :raises: An sqlite.Error is raised if anything goes wrong
         """
         self.connection = None
         try:
@@ -304,36 +291,27 @@ class KeywordIO(QObject):
             LOGGER.exception('Failed to open keywords cache database.')
             raise
 
-    def closeConnection(self):
-        """Given an sqlite3 connection, close it.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
-        """
+    def close_connection(self):
+        """Close the active sqlite3 connection."""
         if self.connection is not None:
             self.connection.close()
             self.connection = None
 
-    def getCursor(self):
-        """Get a cursor for the active connection. The cursor can be used to
-        execute arbitrary queries against the database. This method also checks
-        that the keywords table exists in the schema, and if not, it creates
-        it.
+    def get_cursor(self):
+        """Get a cursor for the active connection.
 
-        Args:
-            theConnection - a valid, open sqlite3 database connection.
-        Returns:
-            a valid cursor opened against the connection.
-        Raises:
-            An sqlite.Error will be raised if anything goes wrong
+        The cursor can be used to execute arbitrary queries against the
+        database. This method also checks that the keywords table exists in
+        the schema, and if not, it creates it.
+
+        :returns: A valid cursor opened against the connection.
+        :rtype: sqlite.
+
+        :raises: An sqlite.Error will be raised if anything goes wrong.
         """
         if self.connection is None:
             try:
-                self.openConnection()
+                self.open_connection()
             except OperationalError:
                 raise
         try:
@@ -362,32 +340,30 @@ class KeywordIO(QObject):
             LOGGER.debug("Error %s:" % e.args[0])
             raise
 
-    def areKeywordsFileBased(self, theLayer):
-        """Find out if keywords should be read/written to file or our keywords
-          db.
+    def are_keywords_file_based(self, layer):
+        """Check if keywords should be read/written to file or our keywords db.
 
-        Args:
-            * theLayer - A QGIS QgsMapLayer instance.
 
-        Returns:
-            True if keywords are storedin a file next to the dataset,
+        :param layer: The layer which want to know how the keywords are stored.
+        :type layer: QgsMapLayer
+
+        :returns: True if keywords are stored in a file next to the dataset,
             else False if the dataset is remove e.g. a database.
-        Raises:
-            None
+        :rtype: bool
         """
         # determine which keyword lookup system to use (file base or cache db)
         # based on the layer's provider type. True indicates we should use the
         # datasource as a file and look for a keywords file, false and we look
         # in the keywords db.
         myProviderType = None
-        myVersion = qgisVersion()
+        myVersion = qgis_version()
         # check for old raster api with qgis < 1.8
         # ..todo:: Add test for plugin layers too
         if (myVersion < 10800 and
-                theLayer.type() == QgsMapLayer.RasterLayer):
-            myProviderType = str(theLayer.providerKey())
+                layer.type() == QgsMapLayer.RasterLayer):
+            myProviderType = str(layer.providerKey())
         else:
-            myProviderType = str(theLayer.providerType())
+            myProviderType = str(layer.providerType())
 
         myProviderDict = {'ogr': True,
                           'gdal': True,
@@ -401,45 +377,38 @@ class KeywordIO(QObject):
             myFileBasedKeywords = myProviderDict[myProviderType]
         return myFileBasedKeywords
 
-    def getHashForDatasource(self, theDataSource):
-        """Given a datasource, return its hash.
+    def hash_for_datasource(self, data_source):
+        """Given a data_source, return its hash.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        :param data_source: The data_source name from a layer.
+        :type data_source: str
+
+        :returns: An md5 hash for the data source name.
+        :rtype: str
         """
         import hashlib
         myHash = hashlib.md5()
-        myHash.update(theDataSource)
+        myHash.update(data_source)
         myHash = myHash.hexdigest()
         return myHash
 
-    def deleteKeywordsForUri(self, theUri):
+    def delete_keywords_for_uri(self, uri):
         """Delete keywords for a URI in the keywords database.
+
         A hash will be constructed from the supplied uri and a lookup made
         in a local SQLITE database for the keywords. If there is an existing
         record for the hash, the entire record will be erased.
 
-        .. seealso:: writeKeywordsForUri, readKeywordsForUri
+        .. seealso:: write_keywords_for_uri, read_keywords_for_uri
 
-        Args:
-
-           * theUri -  a str representing a layer uri as parameter.
-             .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
+        :param uri: A layer uri. e.g.
+            'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
-
-        Returns:
-           None
-
-        Raises:
-           None
+        :type uri: str
         """
-        myHash = self.getHashForDatasource(theUri)
+        myHash = self.hash_for_datasource(uri)
         try:
-            myCursor = self.getCursor()
+            myCursor = self.get_cursor()
             #now see if we have any data for our hash
             mySQL = 'delete from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
@@ -452,41 +421,40 @@ class KeywordIO(QObject):
             self.connection.rollback()
             raise
         finally:
-            self.closeConnection()
+            self.close_connection()
 
-    def writeKeywordsForUri(self, theUri, theKeywords):
+    def write_keywords_for_uri(self, uri, keywords):
         """Write keywords for a URI into the keywords database. All the
         keywords for the uri should be written in a single operation.
         A hash will be constructed from the supplied uri and a lookup made
         in a local SQLITE database for the keywords. If there is an existing
         record it will be updated, if not, a new one will be created.
 
-        .. seealso:: readKeywordFromUri, deleteKeywordsForUri
+        .. seealso:: read_keyword_from_uri, delete_keywords_for_uri
 
-        Args:
-
-           * theUri -  a str representing a layer uri as parameter.
-             .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
+        :param uri: A layer uri. e.g.
+            'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
-           * keywords - mandatory - the metadata keyword to retrieve e.g.
-             'title'
+        :type uri: str
 
-        Returns:
-           A string containing the retrieved value for the keyword if
-           the keyword argument is specified, otherwise the
-           complete keywords dictionary is returned.
+        :param keywords: The metadata keywords to write (which should be
+            provided as a dict of key value pairs).
+        :type keywords: dict
 
-        Raises:
-           KeywordNotFoundError if the keyword is not recognised.
+        :returns: The retrieved value for the keyword if the keyword argument
+            is specified, otherwise the complete keywords dictionary is
+            returned.
+
+        :raises: KeywordNotFoundError if the keyword is not recognised.
         """
-        myHash = self.getHashForDatasource(theUri)
+        myHash = self.hash_for_datasource(uri)
         try:
-            myCursor = self.getCursor()
+            myCursor = self.get_cursor()
             #now see if we have any data for our hash
             mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
             myData = myCursor.fetchone()
-            myPickle = pickle.dumps(theKeywords, pickle.HIGHEST_PROTOCOL)
+            myPickle = pickle.dumps(keywords, pickle.HIGHEST_PROTOCOL)
             if myData is None:
                 #insert a new rec
                 #myCursor.execute('insert into keyword(hash) values(:hash);',
@@ -509,24 +477,29 @@ class KeywordIO(QObject):
                 self.connection.rollback()
             raise
         finally:
-            self.closeConnection()
+            self.close_connection()
 
-    def readKeywordFromUri(self, theUri, theKeyword=None):
-        """Get metadata from the keywords file associated with a
-        non local layer (e.g. postgresql connection).
+    def readKeywordFromUri(self, uri, keyword=None):
+        """Get metadata from the keywords file associated with a URI.
+
+        This is used for layers that are non local layer (e.g. postgresql
+        connection) and so we need to retrieve the keywords from the sqlite
+        keywords db.
 
         A hash will be constructed from the supplied uri and a lookup made
         in a local SQLITE database for the keywords. If there is an existing
         record it will be returned, if not and error will be thrown.
 
-        .. seealso:: writeKeywordsForUri,deleteKeywordsForUri
+        .. seealso:: write_keywords_for_uri, delete_keywords_for_uri
 
-        Args:
-
-           * theUri -  a str representing a layer uri as parameter.
-             .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
+        :param uri: A layer uri. e.g.
+            'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
-           * keyword - optional - the metadata keyword to retrieve e.g. 'title'
+        :type uri: str
+
+        :param keyword: The metadata keyword to retrieve. If none,
+            all keywords are returned.
+        :type keyword: dict
 
         Returns:
            A string containing the retrieved value for the keyword if
@@ -536,13 +509,13 @@ class KeywordIO(QObject):
         Raises:
            KeywordNotFoundError if the keyword is not found.
         """
-        myHash = self.getHashForDatasource(theUri)
+        myHash = self.hash_for_datasource(uri)
         try:
-            self.openConnection()
+            self.open_connection()
         except OperationalError:
             raise
         try:
-            myCursor = self.getCursor()
+            myCursor = self.get_cursor()
             #now see if we have any data for our hash
             mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
@@ -552,13 +525,13 @@ class KeywordIO(QObject):
                 raise HashNotFoundError('No hash found for %s' % myHash)
             myData = myData[0]  # first field
             myDict = pickle.loads(str(myData))
-            if theKeyword is None:
+            if keyword is None:
                 return myDict
-            if theKeyword in myDict:
-                return myDict[theKeyword]
+            if keyword in myDict:
+                return myDict[keyword]
             else:
                 raise KeywordNotFoundError('Keyword "%s" not found in %s' % (
-                    theKeyword, myDict))
+                    keyword, myDict))
 
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])
@@ -566,15 +539,25 @@ class KeywordIO(QObject):
             LOGGER.debug("Error %s:" % e.args[0])
             raise
         finally:
-            self.closeConnection()
+            self.close_connection()
 
-    def getStatisticsDetails(self, theQGISImpactLayer):
+    def get_statistics(self, layer):
+        """Get the statistics related keywords from a layer.
+
+        :param layer: A QGIS layer that represents an impact.
+        :type layer: QgsMapLayer
+
+        :returns: A two-tuple containing the values for the keywords
+            'statistics_type' and 'statistics_classes'.
+        :rtype: tuple(str, str)
+
+        """
         #find needed statistics type
         try:
-            myStatisticsType = self.readKeywords(
-                theQGISImpactLayer, 'statistics_type')
-            myStatisticsClasses = self.readKeywords(
-                theQGISImpactLayer, 'statistics_classes')
+            myStatisticsType = self.read_keywords(
+                layer, 'statistics_type')
+            myStatisticsClasses = self.read_keywords(
+                layer, 'statistics_classes')
 
         except KeywordNotFoundError:
             #default to summing

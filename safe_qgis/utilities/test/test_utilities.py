@@ -7,29 +7,30 @@ from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from safe_qgis.utilities.utilities import (
-    getErrorMessage,
-    qgisVersion,
-    mmToPoints,
-    pointsToMM,
-    humaniseSeconds,
-    isPolygonLayer,
-    getLayerAttributeNames,
-    impactLayerAttribution,
-    dpiToMeters,
+    get_error_message,
+    qgis_version,
+    mm_to_points,
+    points_to_mm,
+    humanise_seconds,
+    is_polygon_layer,
+    layer_attribute_names,
+    impact_attribution,
+    dpi_to_meters,
     which,
-    getDefaults)
-from safe_qgis.utilities.utilities_test import getQgisTestApp
-from safe_qgis.tools.test_keywords_dialog import (
+    defaults)
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app, TEST_FILES_DIR)
+from safe_qgis.tools.test.test_keywords_dialog import (
     makePolygonLayer,
     makePadangLayer,
     makePointLayer)
 from safe_qgis.safe_interface import bbox_intersection
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class UtilitiesTest(unittest.TestCase):
@@ -53,24 +54,28 @@ class UtilitiesTest(unittest.TestCase):
         except Exception, e:
             # Display message and traceback
 
-            myMessage = getErrorMessage(e)
+            myMessage = get_error_message(e)
             #print myMessage
             myMessage = myMessage.to_text()
             self.assertIn(str(e), myMessage)
             self.assertIn('line', myMessage)
             self.assertIn('file', myMessage)
 
-            myMessage = getErrorMessage(e)
+            myMessage = get_error_message(e)
             myMessage = myMessage.to_html()
             assert str(e) in myMessage
-            self.assertIn('</i> Traceback</h5>', myMessage)
-            self.assertIn('line', myMessage)
-            self.assertIn('file', myMessage)
+
+            myMessage = myMessage.decode('string_escape')
+            myExpectedResult = open(
+                TEST_FILES_DIR +
+                '/test-stacktrace-html.txt', 'r').read().replace('\n', '')
+            self.assertIn(myExpectedResult, myMessage)
+
         # pylint: enable=W0703
 
     def test_getQgisVersion(self):
         """Test we can get the version of QGIS"""
-        myVersion = qgisVersion()
+        myVersion = qgis_version()
         myMessage = 'Got version %s of QGIS, but at least 107000 is needed'
         assert myVersion > 10700, myMessage
 
@@ -79,9 +84,9 @@ class UtilitiesTest(unittest.TestCase):
         myLayer = makePolygonLayer()
 
         #with good attribute name
-        myAttrs, myPos = getLayerAttributeNames(myLayer, [
+        myAttrs, myPos = layer_attribute_names(myLayer, [
             QVariant.Int, QVariant.String],
-            'TEST_STRIN')
+            'TEST_STRIN')  # Not a typo...
         myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         myExpectedPos = 2
         myMessage = 'myExpectedAttrs, got %s, expected %s' % (
@@ -92,7 +97,7 @@ class UtilitiesTest(unittest.TestCase):
         assert (myPos == myExpectedPos), myMessage
 
         #with inexistent attribute name
-        myAttrs, myPos = getLayerAttributeNames(
+        myAttrs, myPos = layer_attribute_names(
             myLayer,
             [QVariant.Int, QVariant.String],
             'MISSING_ATTR')
@@ -107,7 +112,7 @@ class UtilitiesTest(unittest.TestCase):
 
         #with raster layer
         myLayer = makePadangLayer()
-        myAttrs, myPos = getLayerAttributeNames(myLayer, [], '')
+        myAttrs, myPos = layer_attribute_names(myLayer, [], '')
         myMessage = 'Should return None, None for raster layer, got %s, %s' % (
             myAttrs, myPos)
         assert (myAttrs is None and myPos is None), myMessage
@@ -116,17 +121,18 @@ class UtilitiesTest(unittest.TestCase):
         """Test we can get the correct attributes back"""
         myLayer = makePolygonLayer()
         myMessage = 'isPolygonLayer, %s layer should be polygonal' % myLayer
-        assert isPolygonLayer(myLayer), myMessage
+        assert is_polygon_layer(myLayer), myMessage
 
         myLayer = makePointLayer()
         myMessage = '%s layer should be polygonal' % myLayer
-        assert not isPolygonLayer(myLayer), myMessage
+        assert not is_polygon_layer(myLayer), myMessage
 
         myLayer = makePadangLayer()
         myMessage = ('%s raster layer should not be polygonal' % myLayer)
-        assert not isPolygonLayer(myLayer), myMessage
+        assert not is_polygon_layer(myLayer), myMessage
 
     def test_getDefaults(self):
+        """Test defaults for post processing can be obtained properly."""
         myExpectedDefaults = {
             'FEM_RATIO_KEY': 'female ratio default',
             'YOUTH_RATIO': 0.263,
@@ -136,7 +142,7 @@ class UtilitiesTest(unittest.TestCase):
             'AGGR_ATTR_KEY': 'aggregation attribute',
             'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
             'ADULT_RATIO': 0.659}
-        myDefaults = getDefaults()
+        myDefaults = defaults()
         myMessage = 'Defaults: got %s, expected %s' % (
             myDefaults, myExpectedDefaults)
         assert (myDefaults == myExpectedDefaults), myMessage
@@ -147,20 +153,20 @@ class UtilitiesTest(unittest.TestCase):
         myDpi = 300
         myPixels = 300
         myMM = 25.4  # 1 inch
-        myResult = pointsToMM(myPixels, myDpi)
+        myResult = points_to_mm(myPixels, myDpi)
         myMessage = "Expected: %s\nGot: %s" % (myMM, myResult)
         assert myResult == myMM, myMessage
-        myResult = mmToPoints(myMM, myDpi)
+        myResult = mm_to_points(myMM, myDpi)
         myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
         assert myResult == myPixels, myMessage
 
     def test_humaniseSeconds(self):
         """Test that humanise seconds works."""
-        self.assertEqual(humaniseSeconds(5), '5 seconds')
-        self.assertEqual(humaniseSeconds(65), 'a minute')
-        self.assertEqual(humaniseSeconds(3605), 'over an hour')
-        self.assertEqual(humaniseSeconds(9000), '2 hours and 30 minutes')
-        self.assertEqual(humaniseSeconds(432232),
+        self.assertEqual(humanise_seconds(5), '5 seconds')
+        self.assertEqual(humanise_seconds(65), 'a minute')
+        self.assertEqual(humanise_seconds(3605), 'over an hour')
+        self.assertEqual(humanise_seconds(9000), '2 hours and 30 minutes')
+        self.assertEqual(humanise_seconds(432232),
                          '5 days, 0 hours and 3 minutes')
 
     def test_impactLayerAttribution(self):
@@ -169,7 +175,7 @@ class UtilitiesTest(unittest.TestCase):
                       'hazard_source': 'Sample Hazard Source',
                       'exposure_title': 'Sample Exposure Title',
                       'exposure_source': 'Sample Exposure Source'}
-        myAttribution = impactLayerAttribution(myKeywords)
+        myAttribution = impact_attribution(myKeywords)
         print myAttribution
         self.assertEqual(len(myAttribution.to_text()), 170)
 
@@ -181,14 +187,14 @@ class UtilitiesTest(unittest.TestCase):
                       'hazard_source': 'Sample Hazard Source',
                       'exposure_title': 'People in Jakarta',
                       'exposure_source': 'Sample Exposure Source'}
-        myHtml = impactLayerAttribution(myKeywords, True)
+        myHtml = impact_attribution(myKeywords, True)
         print myHtml
         assert myHtml == '11'
 
     def testDpiToMeters(self):
         """Test conversion from dpi to dpm."""
         myDpi = 300
-        myDpm = dpiToMeters(myDpi)
+        myDpm = dpi_to_meters(myDpi)
         myExpectedDpm = 11811.023622
         myMessage = ('Conversion from dpi to dpm failed\n'
                      ' Got: %s Expected: %s\n' %

@@ -23,36 +23,39 @@ import os
 from unittest import expectedFailure
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..//'))
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../../..///'))
 sys.path.append(pardir)
 
 import numpy
 
-from qgis.core import (QgsVectorLayer,
-                       QgsRasterLayer,
-                       QgsGeometry,
-                       QgsPoint)
+from qgis.core import (
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsGeometry,
+    QgsPoint)
 
-from safe_qgis.safe_interface import (readSafeLayer,
-                                      getOptimalExtent,
-                                      HAZDATA, TESTDATA, EXPDATA, UNITDATA,
-                                      GetDataError,
-                                      nanallclose)
+from safe_qgis.safe_interface import (
+    readSafeLayer,
+    getOptimalExtent,
+    HAZDATA, TESTDATA, EXPDATA, UNITDATA,
+    nanallclose,
+    GetDataError)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.utilities.clipper import (
-    clipLayer,
+    clip_layer,
     extentToKml,
     explodeMultiPartGeometry,
-    clipGeometry)
-from safe_qgis.utilities.utilities import qgisVersion
+    clip_geometry)
+from safe_qgis.utilities.utilities import qgis_version
 
-from safe_qgis.utilities.utilities_test import (
-    getQgisTestApp,
-    setCanvasCrs,
-    RedirectStdStreams,
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app,
+    set_canvas_crs,
+    RedirectStreams,
     DEVNULL,
     GEOCRS,
-    setJakartaGeoExtent)
+    set_jakarta_extent)
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -64,20 +67,22 @@ RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
 
 # Handle to common QGis test app
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ClipperTest(unittest.TestCase):
     """Test the InaSAFE clipper"""
 
     def setUp(self):
+        """Runs before each test."""
         pass
 
     def tearDown(self):
+        """Runs after each test."""
         pass
 
     def test_clipVector(self):
-        """Vector layers can be clipped
+        """Vector layers can be clipped.
         """
 
         # Create a vector layer
@@ -92,7 +97,7 @@ class ClipperTest(unittest.TestCase):
         myRect = [100.03, -1.14, 100.81, -0.73]
 
         # Clip the vector to the bbox
-        myResult = clipLayer(myVectorLayer, myRect)
+        myResult = clip_layer(myVectorLayer, myRect)
 
         # Check the output is valid
         assert(os.path.exists(myResult.source()))
@@ -113,14 +118,14 @@ class ClipperTest(unittest.TestCase):
         myRect = [97, -3, 104, 1]
 
         # Clip the vector to the bbox
-        myResult = clipLayer(myRasterLayer, myRect)
+        myResult = clip_layer(myRasterLayer, myRect)
 
         # Check the output is valid
         assert os.path.exists(myResult.source())
 
         # Clip and give a desired resolution for the output
         mySize = 0.05
-        myResult = clipLayer(myRasterLayer, myRect, mySize)
+        myResult = clip_layer(myRasterLayer, myRect, mySize)
         myNewRasterLayer = QgsRasterLayer(myResult.source(), myName)
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
 
@@ -142,7 +147,7 @@ class ClipperTest(unittest.TestCase):
 
         # Clip the raster to the bbox
         try:
-            _ = clipLayer(myRasterLayer, mySmallRect)
+            _ = clip_layer(myRasterLayer, mySmallRect)
         except CallGDALError:
             pass
         except Exception, e:
@@ -155,7 +160,7 @@ class ClipperTest(unittest.TestCase):
         myNotSmallRect = [100.3430, -0.9089, 101.3588, -1.9022]
 
         # Clip the raster to the bbox
-        myResult = clipLayer(myRasterLayer, myNotSmallRect)
+        myResult = clip_layer(myRasterLayer, myNotSmallRect)
         assert myResult is not None, 'Should be a success clipping'
 
     def test_invalidFilenamesCaught(self):
@@ -172,7 +177,7 @@ class ClipperTest(unittest.TestCase):
         myName = 'stnhaoeu_78oeukqjkrcgA'
         myPath = 'OEk_tnshoeu_439_kstnhoe'
 
-        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+        with RedirectStreams(stdout=DEVNULL, stderr=DEVNULL):
             myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
 
         myMessage = ('QgsVectorLayer reported "valid" for non '
@@ -181,7 +186,7 @@ class ClipperTest(unittest.TestCase):
         assert not myVectorLayer.isValid(), myMessage
 
         # Create a raster layer
-        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+        with RedirectStreams(stdout=DEVNULL, stderr=DEVNULL):
             myRasterLayer = QgsRasterLayer(myPath, myName)
         myMessage = ('QgsRasterLayer reported "valid" for non '
                      'existent path "%s" and name "%s".'
@@ -230,14 +235,14 @@ class ClipperTest(unittest.TestCase):
                                        myViewportGeoExtent)
 
         # Clip the vector to the bbox
-        myResult = clipLayer(myVectorLayer, myGeoExtent)
+        myResult = clip_layer(myVectorLayer, myGeoExtent)
 
         # Check the output is valid
         assert os.path.exists(myResult.source())
         readSafeLayer(myResult.source())
 
         # Clip the raster to the bbox
-        myResult = clipLayer(myRasterLayer, myGeoExtent)
+        myResult = clip_layer(myRasterLayer, myGeoExtent)
 
         # Check the output is valid
         assert os.path.exists(myResult.source())
@@ -247,8 +252,8 @@ class ClipperTest(unittest.TestCase):
         # Check the extra keywords option
         # -------------------------------
         # Clip the vector to the bbox
-        myResult = clipLayer(myVectorLayer, myGeoExtent,
-                             theExtraKeywords={'kermit': 'piggy'})
+        myResult = clip_layer(myVectorLayer, myGeoExtent,
+                             extra_keywords={'kermit': 'piggy'})
 
         # Check the output is valid
         assert os.path.exists(myResult.source())
@@ -259,8 +264,8 @@ class ClipperTest(unittest.TestCase):
         assert kwds['kermit'] == 'piggy'
 
         # Clip the raster to the bbox
-        myResult = clipLayer(myRasterLayer, myGeoExtent,
-                             theExtraKeywords={'zoot': 'animal'})
+        myResult = clip_layer(myRasterLayer, myGeoExtent,
+                             extra_keywords={'zoot': 'animal'})
 
         # Check the output is valid
         assert os.path.exists(myResult.source())
@@ -325,10 +330,10 @@ class ClipperTest(unittest.TestCase):
                 # Clip the raster to the bbox
                 myExtraKeywords = {'resolution': myNativeResolution}
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
-                myResult = clipLayer(myRasterLayer,
+                myResult = clip_layer(myRasterLayer,
                                      myBoundingBox,
                                      myResolution,
-                                     theExtraKeywords=myExtraKeywords)
+                                     extra_keywords=myExtraKeywords)
 
                 mySafeLayer = readSafeLayer(myResult.source())
                 myNativeData = mySafeLayer.get_data(scaling=False)
@@ -444,10 +449,10 @@ class ClipperTest(unittest.TestCase):
             myExtraKeywords = {'resolution': myNativeResolution}
             myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
             try:
-                clipLayer(myRasterLayer,
+                clip_layer(myRasterLayer,
                           myBoundingBox,
                           myResolution,
-                          theExtraKeywords=myExtraKeywords)
+                          extra_keywords=myExtraKeywords)
             except InvalidProjectionError:
                 pass
             else:
@@ -480,11 +485,11 @@ class ClipperTest(unittest.TestCase):
         myMessage = 'Failed to load osm buildings'
         assert myVectorLayer is not None, myMessage
         assert myVectorLayer.isValid()
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
         myClipRect = [106.52, -6.38, 107.14, -6.07]
         # Clip the vector to the bbox
-        myResult = clipLayer(myVectorLayer, myClipRect)
+        myResult = clip_layer(myVectorLayer, myClipRect)
         assert(os.path.exists(myResult.source()))
 
     def test_explodeMultiPolygonGeometry(self):
@@ -531,9 +536,9 @@ class ClipperTest(unittest.TestCase):
                                                   QgsPoint(30, 20),
                                                   QgsPoint(20, 20)]])
 
-        myResult = clipGeometry(myClipPolygon, myGeometry)
+        myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgisVersion() > 10800:
+        if qgis_version() > 10800:
             myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
         else:
             myExpectedWkt = ('LINESTRING(20.000000 20.000000, '
@@ -552,9 +557,9 @@ class ClipperTest(unittest.TestCase):
             '106.8212891 -6.1835559,106.8222566 -6.1835184,'
             '106.8227557 -6.1835076,106.8228588 -6.1851204,'
             '106.8216869 -6.1852067))')
-        myResult = clipGeometry(myClipPolygon, myGeometry)
+        myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgisVersion() > 10800:
+        if qgis_version() > 10800:
             myExpectedWkt = (
                 'POLYGON((106.82179833 -6.18353616,106.8222566 -6.1835184,'
                 '106.8227557 -6.1835076,106.82279996 -6.1842,'
@@ -571,9 +576,9 @@ class ClipperTest(unittest.TestCase):
         # Now point on poly test clip
 
         myGeometry = QgsGeometry.fromWkt('POINT(106.82241 -6.18369)')
-        myResult = clipGeometry(myClipPolygon, myGeometry)
+        myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgisVersion() > 10800:
+        if qgis_version() > 10800:
             myExpectedWkt = 'POINT(106.82241 -6.18369)'
         else:
             myExpectedWkt = 'POINT(106.822410 -6.183690)'
@@ -592,12 +597,12 @@ class ClipperTest(unittest.TestCase):
         myMessage = 'Failed to load osm buildings'
         assert myVectorLayer is not None, myMessage
         assert myVectorLayer.isValid()
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
         myClipRect = [106.8218, -6.1842, 106.8232, -6.1830]
 
         # Clip the vector to the bbox
-        myResult = clipLayer(myVectorLayer, myClipRect, theHardClipFlag=True)
+        myResult = clip_layer(myVectorLayer, myClipRect, hard_clip_flag=True)
 
         # Check the output is valid
         assert(os.path.exists(myResult.source()))

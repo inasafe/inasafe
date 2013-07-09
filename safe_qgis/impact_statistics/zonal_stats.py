@@ -25,8 +25,8 @@ from PyQt4.QtCore import QCoreApplication
 from qgis.core import QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
 
 from safe_qgis.utilities.utilities import (
-    isRasterLayer,
-    isPolygonLayer)
+    is_raster_layer,
+    is_polygon_layer)
 from safe_qgis.exceptions import InvalidParameterError
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -84,11 +84,11 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         layers are in the same CRS - we assume they are.
 
     """
-    if not isPolygonLayer(thePolygonLayer):
+    if not is_polygon_layer(thePolygonLayer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a polygon layer in order to compute '
             'statistics.'))
-    if not isRasterLayer(theRasterLayer):
+    if not is_raster_layer(theRasterLayer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a raster layer in order to compute statistics.'
         ))

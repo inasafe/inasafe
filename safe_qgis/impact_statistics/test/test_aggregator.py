@@ -41,25 +41,25 @@ from safe_qgis.safe_interface import (
     Vector,
     safe_read_layer)
 
-from safe_qgis.utilities.utilities_test import (
-    getQgisTestApp,
-    setCanvasCrs,
-    setJakartaGeoExtent,
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app,
+    set_canvas_crs,
+    set_jakarta_extent,
     GEOCRS)
 
-from safe_qgis.dock import Dock
+from safe_qgis.widgets.dock import Dock
 from safe_qgis.impact_statistics.aggregator import Aggregator
-from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    getDefaults, extentToGeoArray)
+    defaults, extent_to_geo_array)
 
-from safe_qgis.utilities.utilities_test import (
-    loadStandardLayers,
-    setupScenario,
-    loadLayers)
+from safe_qgis.utilities.utilities_for_testing import (
+    load_standard_layers,
+    setup_scenario,
+    load_layers)
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -76,7 +76,7 @@ class AggregatorTest(unittest.TestCase):
 
         os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
-        loadStandardLayers()
+        load_standard_layers()
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -86,10 +86,10 @@ class AggregatorTest(unittest.TestCase):
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
         DOCK.showIntermediateLayers = False
-        setJakartaGeoExtent()
+        set_jakarta_extent()
 
         self.keywordIO = KeywordIO()
-        self.defaults = getDefaults()
+        self.defaults = defaults()
 
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -106,18 +106,18 @@ class AggregatorTest(unittest.TestCase):
         """Aggregation attribute is chosen correctly when present
             in kezwords."""
         myRunButton = DOCK.pbnRunStop
-        myAttrKey = getDefaults('AGGR_ATTR_KEY')
+        myAttrKey = defaults('AGGR_ATTR_KEY')
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart',
-            theAggregationEnabledFlag=True)
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_enabled_flag=True)
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -134,18 +134,18 @@ class AggregatorTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
         #add additional layers
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
-        myAttrKey = getDefaults('AGGR_ATTR_KEY')
+        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
+        myAttrKey = defaults('AGGR_ATTR_KEY')
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart 1 good attr')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart 1 good attr')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -165,17 +165,17 @@ class AggregatorTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
         #add additional layers
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
-        myAttrKey = getDefaults('AGGR_ATTR_KEY')
+        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
+        myAttrKey = defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart 0 good attr')
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -193,17 +193,17 @@ class AggregatorTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
-        myAttrKey = getDefaults('AGGR_ATTR_KEY')
+        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
+        myAttrKey = defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregationLayer='kabupaten jakarta singlepart with None '
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart with None '
                                 'keyword')
         assert myResult, myMessage
         # Press RUN
@@ -224,25 +224,25 @@ class AggregatorTest(unittest.TestCase):
         # See qgis project in test data: vector_preprocessing_test.qgs
         #add additional layers
         myFileList = ['jakarta_crosskabupaten_polygons.shp']
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
         myFileList = ['kabupaten_jakarta.shp']
-        loadLayers(myFileList, theClearFlag=False, theDataDirectory=BOUNDDATA)
+        load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
 
         myRunButton = DOCK.pbnRunStop
 
-        myResult, myMessage = setupScenario(
+        myResult, myMessage = setup_scenario(
             DOCK,
-            theHazard='jakarta_crosskabupaten_polygons',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard',
-            theAggregationLayer='kabupaten jakarta',
-            theAggregationEnabledFlag=True)
+            hazard='jakarta_crosskabupaten_polygons',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function Vector Hazard',
+            aggregation_layer='kabupaten jakarta',
+            aggregation_enabled_flag=True)
         assert myResult, myMessage
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
         # Press RUN
         # noinspection PyTypeChecker,PyCallByClass
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
@@ -262,17 +262,17 @@ class AggregatorTest(unittest.TestCase):
             'test aggregation',
             'ogr')
         # create a copy of aggregation layer
-        myGeoExtent = extentToGeoArray(
+        myGeoExtent = extent_to_geo_array(
             myAggregationLayer.extent(),
             myAggregationLayer.crs())
 
-        myAggrAttribute = self.keywordIO.readKeywords(
+        myAggrAttribute = self.keywordIO.read_keywords(
             myAggregationLayer, self.defaults['AGGR_ATTR_KEY'])
-        myAggregationLayer = clipLayer(
-            theLayer=myAggregationLayer,
-            theExtent=myGeoExtent,
-            theExplodeFlag=True,
-            theExplodeAttribute=myAggrAttribute)
+        myAggregationLayer = clip_layer(
+            layer=myAggregationLayer,
+            extent=myGeoExtent,
+            explode_flag=True,
+            explode_attribute=myAggrAttribute)
 
         myAggregator = Aggregator(None, myAggregationLayer)
         # setting up

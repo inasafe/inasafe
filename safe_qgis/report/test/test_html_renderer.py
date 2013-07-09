@@ -20,19 +20,19 @@ import unittest
 import logging
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe_qgis.utilities.utilities_test import (getQgisTestApp,
-                                      loadLayer,
-                                      checkImages)
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app, load_layer, check_images)
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.utilities.keyword_io import KeywordIO
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class HtmlRendererTest(unittest.TestCase):
     """Test the InaSAFE Html Renderer"""
     def setUp(self):
+        """Runs before each test."""
         pass
 
     def sampleHtml(self, theLineCount=100):
@@ -104,7 +104,7 @@ class HtmlRendererTest(unittest.TestCase):
         """Test that we can render html from impact table keywords."""
         LOGGER.debug('InaSAFE HtmlRenderer testing printImpactTable')
         myFilename = 'test_floodimpact.tif'
-        myLayer, _ = loadLayer(myFilename)
+        myLayer, _ = load_layer(myFilename)
         myMessage = 'Layer is not valid: %s' % myFilename
         assert myLayer.isValid(), myMessage
         myPageDpi = 300
@@ -113,7 +113,7 @@ class HtmlRendererTest(unittest.TestCase):
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
         myKeywordIO = KeywordIO()
-        myKeywords = myKeywordIO.readKeywords(myLayer)
+        myKeywords = myKeywordIO.read_keywords(myLayer)
         myPath = myHtmlRenderer.printImpactTable(myKeywords,
                                                  theFilename=myPath)
         myMessage = 'Rendered output does not exist: %s' % myPath
@@ -152,7 +152,7 @@ class HtmlRendererTest(unittest.TestCase):
         assert os.path.exists(myPath), myMessage
 
         myTolerance = 1000  # to allow for version number changes in disclaimer
-        myFlag, myMessage = checkImages(
+        myFlag, myMessage = check_images(
             'renderHtmlToImage', myPath, myTolerance)
         assert myFlag, myMessage + '\n' + myPath
 

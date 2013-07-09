@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Minimum Needs Implementation.**
 
 .. tip:: Provides minimum needs assessment for a polygon layer containing
@@ -22,7 +23,7 @@ from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
 from safe_qgis.ui.minimum_needs_base import Ui_MinimumNeedsBase
 from safe_qgis.utilities.utilities import (
-    addComboItemInOrder, isPolygonLayer, isPointLayer, htmlFooter, htmlHeader)
+    add_ordered_combo_item, is_polygon_layer, is_point_layer, html_footer, html_header)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
 
@@ -31,28 +32,27 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
-    """Dialog implementation class for the InaSAFE keywords editor.
+    """Dialog implementation class for the InaSAFE minimumn needs dialog.
     """
 
-    def __init__(self, parent):
-        """Constructor for the dialog.
+    def __init__(self, parent=None):
+        """Constructor for the minimum needs dialog.
 
-        :param parent: parent widget of this dialog.
-        :param iface: a Quantum GIS QGisAppInterface instance.
+        :param parent: Parent widget of this dialog.
+        :type parent: QWidget
         """
 
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %1 Minimum Needs Tool').arg(get_version()))
-        self.polygonLayersToCombo()
-        self.showInfo()
+        self.polygon_layers_to_combo()
+        self.show_info()
 
-    def showInfo(self):
-        """Show basic usage instructions.
-        """
-        header = htmlHeader()
-        footer = htmlFooter()
+    def show_info(self):
+        """Show basic usage instructions."""
+        header = html_header()
+        footer = html_footer()
         string = header
 
         heading = m.Heading(self.tr('Minimum Needs Calculator'), **INFO_STYLE)
@@ -87,12 +87,17 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         self.webView.setHtml(string)
 
     def minimum_needs(self, input_layer, population_name):
-        """
-            :param input_layer: InaSAFE layer object assumed to contain
-                population counts
-            :param population_name: Attribute name that holds population count
+        """Compute minimum needs given a layer and a column containing pop.
 
-            :returns: Layer with attributes for minimum needs as per Perka 7
+        :param input_layer: InaSAFE layer object assumed to contain
+            population counts
+        :type input_layer: read_layer
+
+        :param population_name: Attribute name that holds population count
+        :type population_name: str
+
+        :returns: Layer with attributes for minimum needs as per Perka 7
+        :rtype: read_layer
         """
 
         needs_attributes = []
@@ -148,9 +153,8 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                               projection=input_layer.get_projection())
         return output_layer
 
-    def polygonLayersToCombo(self):
-        """Populate the combo with all polygon layers loaded in QGIS.
-        """
+    def polygon_layers_to_combo(self):
+        """Populate the combo with all polygon layers loaded in QGIS."""
 
         # noinspection PyArgumentList
         myRegistry = QgsMapLayerRegistry.instance()
@@ -160,9 +164,9 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             myName = myLayer.name()
             mySource = str(myLayer.id())
             #check if layer is a vector polygon layer
-            if isPolygonLayer(myLayer) or isPointLayer(myLayer):
+            if is_polygon_layer(myLayer) or is_point_layer(myLayer):
                 myFoundFlag = True
-                addComboItemInOrder(self.cboPolygonLayers, myName, mySource)
+                add_ordered_combo_item(self.cboPolygonLayers, myName, mySource)
         if myFoundFlag:
             self.cboPolygonLayers.setCurrentIndex(0)
 
@@ -180,12 +184,12 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         myFields = myLayer.dataProvider().fieldNameMap().keys()
         self.cboFields.clear()
         for myField in myFields:
-            addComboItemInOrder(self.cboFields, myField, myField)
+            add_ordered_combo_item(self.cboFields, myField, myField)
 
     def accept(self):
         """Process the layer and field and generate a new layer.
 
-        .. note:: This is called on ok click.
+        .. note:: This is called on OK click.
 
         """
         myIndex = self.cboFields.currentIndex()
