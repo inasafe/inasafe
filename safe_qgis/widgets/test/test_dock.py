@@ -681,9 +681,9 @@ class DockTest(unittest.TestCase):
         DOCK.prepare_aggregator()
         DOCK.aggregator.validateKeywords()
         DOCK.setup_calculator()
-        myRunner = DOCK.calculator.getRunner()
+        myRunner = DOCK.calculator.get_runner()
         myRunner.run()  # Run in same thread
-        myEngineImpactLayer = myRunner.impactLayer()
+        myEngineImpactLayer = myRunner.impact_layer()
         myQgisImpactLayer = readImpactLayer(myEngineImpactLayer)
         myStyle = myEngineImpactLayer.get_style_info()
         #print myStyle

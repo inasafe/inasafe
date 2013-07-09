@@ -220,44 +220,44 @@ class KeywordsDialogTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the hazard radio did not add a category '
                      'to the keywords list.')
-        assert myDialog.getValueForKey('category') == 'hazard', myMessage
+        assert myDialog.get_value_for_key('category') == 'hazard', myMessage
 
     def test_on_radPostprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
         myDefaults = getDefaults()
-        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
+        myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
         # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'category to the keywords list.')
-        assert myDialog.getValueForKey(
+        assert myDialog.get_value_for_key(
             'category') == 'postprocessing', myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add an '
                      'aggregation attribute to the keywords list.')
-        assert myDialog.getValueForKey(
+        assert myDialog.get_value_for_key(
             myDefaults['AGGR_ATTR_KEY']) == 'KAB_NAME', myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio attribute to the keywords list.')
 
-        assert myDialog.getValueForKey(
+        assert myDialog.get_value_for_key(
             myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Use default'), \
             myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio default value to the keywords list.')
-        assert float(myDialog.getValueForKey(
+        assert float(myDialog.get_value_for_key(
             myDefaults['FEM_RATIO_KEY'])) == myDefaults['FEM_RATIO'], myMessage
 
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
         myDefaults = getDefaults()
-        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
+        myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
         # noinspection PyArgumentList
@@ -273,7 +273,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not add it to the keywords list.')
-        assert myDialog.getValueForKey(
+        assert myDialog.get_value_for_key(
             myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Don\'t use'), \
             myMessage
 
@@ -284,7 +284,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not remove the keyword.')
-        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is None), \
+        assert (myDialog.get_value_for_key(myDefaults['FEM_RATIO']) is None), \
             myMessage
 
         #set to TEST_REAL
@@ -295,7 +295,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not add it to the keywords list.')
-        assert myDialog.getValueForKey(
+        assert myDialog.get_value_for_key(
             myDefaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
@@ -305,7 +305,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not remove the keyword.')
-        assert (myDialog.getValueForKey(myDefaults['FEM_RATIO']) is
+        assert (myDialog.get_value_for_key(myDefaults['FEM_RATIO']) is
                 None), myMessage
 
     def Xtest_on_radExposure_toggled(self):
@@ -319,7 +319,7 @@ class KeywordsDialogTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the exposure radio did not add a category '
                      'to the keywords list.')
-        assert myDialog.getValueForKey('category') == 'exposure', myMessage
+        assert myDialog.get_value_for_key('category') == 'exposure', myMessage
 
     def test_on_cboSubcategory_currentIndexChanged(self):
         """Test subcategory combo change event works"""
@@ -337,7 +337,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Changing the subcategory did not add '
                      'to the keywords list for %s' %
                      myCombo.currentText())
-        myKey = myDialog.getValueForKey('subcategory')
+        myKey = myDialog.get_value_for_key('subcategory')
 
         assert myKey is not None, myMessage
         assert myKey in str(myCombo.currentText()), myMessage
@@ -358,7 +358,7 @@ class KeywordsDialogTest(unittest.TestCase):
                             ('roads',
                              'roads')])
         mySelectedItem = 'building'
-        myDialog.setSubcategoryList(myList, mySelectedItem)
+        myDialog.set_subcategory_list(myList, mySelectedItem)
         myResult = str(myDialog.cboSubcategory.currentText())
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, mySelectedItem))
@@ -376,7 +376,7 @@ class KeywordsDialogTest(unittest.TestCase):
         # Work around for commented out line below
         myDialog.on_pbnAddToList1_clicked()
         #QTest.mouseClick(myDialog.pbnAddToList1, QtCore.Qt.LeftButton)
-        myResult = myDialog.getValueForKey('datatype')
+        myResult = myDialog.get_value_for_key('datatype')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
 
@@ -394,7 +394,7 @@ class KeywordsDialogTest(unittest.TestCase):
         # Work around for commented out line below
         myDialog.on_pbnAddToList2_clicked()
         #QTest.mouseClick(myDialog.pbnAddToList2, QtCore.Qt.LeftButton)
-        myResult = myDialog.getValueForKey('foo')
+        myResult = myDialog.get_value_for_key('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
         # print 'Dict', myDialog.getKeywords()
@@ -412,7 +412,7 @@ class KeywordsDialogTest(unittest.TestCase):
         #print 'Dict', myDialog.getKeywords()
         assert myResult == myExpectedResult, myMessage
 
-        myDialog.addListEntry('bar', 'foo')
+        myDialog.add_list_entry('bar', 'foo')
         myResult = myDialog.lstKeywords.count()
         myExpectedResult = 1
         myMessage = ('\nGot: %s\nExpected: %s\n' %
@@ -424,8 +424,8 @@ class KeywordsDialogTest(unittest.TestCase):
         """Test add entry to list works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
-        myDialog.addListEntry('bar', 'foo')
-        myResult = myDialog.getValueForKey('bar')
+        myDialog.add_list_entry('bar', 'foo')
+        myResult = myDialog.get_value_for_key('bar')
         myExpectedResult = 'foo'
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -436,8 +436,8 @@ class KeywordsDialogTest(unittest.TestCase):
         """Test add entry to list works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
-        myDialog.addListEntry('bar', 'fo:o')
-        myResult = myDialog.getValueForKey('bar')
+        myDialog.add_list_entry('bar', 'fo:o')
+        myResult = myDialog.get_value_for_key('bar')
         myExpectedResult = 'fo.o'
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -455,7 +455,7 @@ class KeywordsDialogTest(unittest.TestCase):
         #
         # Check the user gets a message if they put colons in the key
         #
-        myDialog.addListEntry('ba:r', 'foo')
+        myDialog.add_list_entry('ba:r', 'foo')
         myExpectedResult = 'Colons are not allowed, replaced with "."'
         myResult = str(myDialog.lblMessage.text())
         myMessage = ('lblMessage error \nGot: %s\nExpected: %s\n' %
@@ -467,9 +467,9 @@ class KeywordsDialogTest(unittest.TestCase):
         """Test set category works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
-        myDialog.setCategory('hazard')
+        myDialog.set_category('hazard')
         myExpectedResult = 'hazard'
-        myResult = myDialog.getValueForKey('category')
+        myResult = myDialog.get_value_for_key('category')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
         #print 'Dict', myDialog.getKeywords()
@@ -490,8 +490,8 @@ class KeywordsDialogTest(unittest.TestCase):
         """Test remove item by its key works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
-        myDialog.addListEntry('bar', 'foo')
-        myDialog.removeItemByKey('bar')
+        myDialog.add_list_entry('bar', 'foo')
+        myDialog.remove_item_by_key('bar')
         myResult = myDialog.lstKeywords.count()
         myExpectedResult = 0
         myMessage = ('\nGot: %s\nExpected: %s\n' %
@@ -503,9 +503,9 @@ class KeywordsDialogTest(unittest.TestCase):
         """Test remove item by its value works"""
         makePadangLayer()
         myDialog = KeywordsDialog(PARENT, IFACE)
-        myDialog.removeItemByValue('hazard')
+        myDialog.remove_item_by_value('hazard')
 
-        myKeywords = myDialog.getKeywords()
+        myKeywords = myDialog.get_keywords()
         myExpectedKeywords = {'source': 'USGS',
                               'title': 'An earthquake in Padang like in 2009',
                               'subcategory': 'earthquake',
@@ -520,7 +520,7 @@ class KeywordsDialogTest(unittest.TestCase):
         makePadangLayer()
         myDialog = KeywordsDialog(PARENT, IFACE)
         myExpectedValue = 'hazard'
-        myValue = myDialog.getValueForKey('category')
+        myValue = myDialog.get_value_for_key('category')
         myMessage = ('\nExpected key value of %s\nGot %s' %
                      (myExpectedValue, myValue))
         assert myValue == myExpectedValue, myMessage
@@ -530,8 +530,8 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myLayer = makePadangLayer()
         myDialog.layer = myLayer
-        myDialog.loadStateFromKeywords()
-        myKeywords = myDialog.getKeywords()
+        myDialog.load_state_from_keywords()
+        myKeywords = myDialog.get_keywords()
 
         myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
                               'category': 'hazard',
@@ -547,8 +547,8 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myLayer = makeKeywordLessLayer()
         myDialog.layer = myLayer
-        myDialog.loadStateFromKeywords()
-        myKeywords = myDialog.getKeywords()
+        myDialog.load_state_from_keywords()
+        myKeywords = myDialog.get_keywords()
         #check that a default title is given (see
         #https://github.com/AIFDR/inasafe/issues/111)
         myExpectedKeywords = {'title': 'Keywordless Layer'}
@@ -573,7 +573,7 @@ class KeywordsDialogTest(unittest.TestCase):
         # removeTempFile(myFile)
 
         myExpectedResult = 'bar'
-        myResult = myDialog.getValueForKey('foo')
+        myResult = myDialog.get_value_for_key('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
         assert myExpectedResult == myResult, myMessage

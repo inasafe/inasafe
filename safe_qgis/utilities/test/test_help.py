@@ -19,48 +19,18 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 # Needed though not used below
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
-from safe_qgis.utilities.help import Help
+from safe_qgis.utilities.help import show_context_help
 
 QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class HelpTest(unittest.TestCase):
-    """Test the InaSAFE help GUI
-    .. note:: Currently these tests will all fail unless you comment out the
-    APP.exec_() lines because the web view does not load content without
-    the main application event loop running.
-    """
-    def XtestDialogLoads(self):
-        """Basic test to ensure the keyword dialog has loaded"""
+    """Test that context help works."""
 
-        myHelp = Help(PARENT)
-        #myHelp.show()
-        #QGISAPP.exec_()
+    def test_keywords_help(self):
+        """Test help works with context set to 'keywords'"""
+        myHelp = show_context_help(context='keywords')
 
-        myText = myHelp.ui.webView.page().currentFrame().toPlainText()
-        myHelp.close()
-        myExpectedText = 'This is the project: InaSAFE - QGIS'
-        myMessage = ('Expected to find "%s" in \n\n"%s"'
-                     % (myExpectedText, myText))
-        assert myText.contains(myExpectedText), myMessage
-
-    def XtestDockHelp(self):
-        """Test help dialog works with context set to 'dock'"""
-        myHelp = Help(PARENT, theContext='dock')
-        myText = myHelp.ui.webView.page().currentFrame().toPlainText()
-        myExpectedText = 'Using the InaSAFE Plugin'
-        myMessage = ('Expected to find "%s" in \n\n"%s"'
-                     % (myExpectedText, myText))
-        assert myText.contains(myExpectedText), myMessage
-
-    def XtestKeywordsHelp(self):
-        """Test help dialog works with context set to 'keywords'"""
-        myHelp = Help(PARENT, theContext='keywords')
-        myText = myHelp.ui.webView.page().currentFrame().toPlainText()
-        myExpectedText = 'avoid using spaces'
-        myMessage = ('Expected to find "%s" in \n\n"%s"'
-                     % (myExpectedText, myText))
-        assert myText.contains(myExpectedText), myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(HelpTest, 'test')

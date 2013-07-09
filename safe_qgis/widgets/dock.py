@@ -35,7 +35,7 @@ from qgis.core import (
     QGis)
 from third_party.pydispatch import dispatcher
 from safe_qgis.ui.dock_base import Ui_DockBase
-from safe_qgis.utilities.help import Help
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
     get_error_message,
     getWGS84resolution,
@@ -71,7 +71,7 @@ from safe_qgis.safe_interface import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
@@ -175,7 +175,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.calculator = ImpactCalculator()
         self.keywordIO = KeywordIO()
         self.runner = None
-        self.helpDialog = None
         self.state = None
         self.lastUsedFunction = ''
         self.runInThreadFlag = False
@@ -937,13 +936,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # See if the inputs need further refinement for aggregations
         self.aggregator.deintersect(myHazardLayer, myExposureLayer)
         # Identify input layers
-        self.calculator.setHazardLayer(self.aggregator.hazardLayer.source())
-        self.calculator.setExposureLayer(
+        self.calculator.set_hazard_layer(self.aggregator.hazardLayer.source())
+        self.calculator.set_exposure_layer(
             self.aggregator.exposureLayer.source())
 
         # Use canonical function name to identify selected function
         myFunctionID = self.get_function_id()
-        self.calculator.setFunction(myFunctionID)
+        self.calculator.set_function(myFunctionID)
 
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""
@@ -1085,7 +1084,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.aggregator.isValid:
             self.run()
         else:
-            self.runtimeKeywordsDialog.setLayer(self.aggregator.layer)
+            self.runtimeKeywordsDialog.set_layer(self.aggregator.layer)
             #disable gui elements that should not be applicable for this
             self.runtimeKeywordsDialog.radExposure.setEnabled(False)
             self.runtimeKeywordsDialog.radHazard.setEnabled(False)
@@ -1174,7 +1173,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         try:
-            self.runner = self.calculator.getRunner()
+            self.runner = self.calculator.get_runner()
         except (InsufficientParametersError, ReadLayerError), e:
             self.analysis_error(
                 e,
@@ -1238,7 +1237,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Try to run completion code
         try:
-            myEngineImpactLayer = self.runner.impactLayer()
+            myEngineImpactLayer = self.runner.impact_layer()
 
             # Load impact layer into QGIS
             myQGISImpactLayer = readImpactLayer(myEngineImpactLayer)
@@ -1345,10 +1344,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def show_help(self):
         """Load the help text into the system browser."""
-        if self.helpDialog:
-            del self.helpDialog
-        self.helpDialog = Help(
-            theParent=self.iface.mainWindow(), theContext='dock')
+        show_context_help(context='dock')
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
@@ -1371,7 +1367,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Called on self.runner SIGNAL('done()') starts aggregation steps.
         """
         LOGGER.debug('Do aggregation')
-        if self.runner.impactLayer() is None:
+        if self.runner.impact_layer() is None:
             # Done was emitted, but no impact layer was calculated
             myResult = self.runner.result()
             myMessage = str(self.tr(
@@ -1416,7 +1412,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         try:
-            self.aggregator.aggregate(self.runner.impactLayer())
+            self.aggregator.aggregate(self.runner.impact_layer())
         except Exception, e:  # pylint: disable=W0703
             # noinspection PyPropertyAccess
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
@@ -1637,11 +1633,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             m.Paragraph(myDetail))
         self.show_dynamic_message(myMessage)
         try:
-            myClippedHazard = clipLayer(
-                theLayer=myHazardLayer,
-                theExtent=myBufferedGeoExtent,
-                theCellSize=myCellSize,
-                theHardClipFlag=self.clipHard)
+            myClippedHazard = clip_layer(
+                layer=myHazardLayer,
+                extent=myBufferedGeoExtent,
+                cell_size=myCellSize,
+                hard_clip_flag=self.clipHard)
         except CallGDALError, e:
             raise e
         except IOError, e:
@@ -1656,12 +1652,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             m.Paragraph(myDetail))
         self.show_dynamic_message(myMessage)
 
-        myClippedExposure = clipLayer(
-            theLayer=myExposureLayer,
-            theExtent=myGeoExtent,
-            theCellSize=myCellSize,
-            theExtraKeywords=myExtraExposureKeywords,
-            theHardClipFlag=self.clipHard)
+        myClippedExposure = clip_layer(
+            layer=myExposureLayer,
+            extent=myGeoExtent,
+            cell_size=myCellSize,
+            extra_keywords=myExtraExposureKeywords,
+            hard_clip_flag=self.clipHard)
         return myClippedHazard, myClippedExposure
 
     def show_impact_keywords(self, myKeywords):

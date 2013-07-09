@@ -56,9 +56,9 @@ class ImpactCalculatorTest(unittest.TestCase):
             TESTDATA, 'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
-        self.calculator.setHazardLayer(self.rasterShakePath)
-        self.calculator.setExposureLayer(self.vectorPath)
-        self.calculator.setFunction('Earthquake Building Impact Function')
+        self.calculator.set_hazard_layer(self.rasterShakePath)
+        self.calculator.set_exposure_layer(self.vectorPath)
+        self.calculator.set_function('Earthquake Building Impact Function')
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
@@ -68,11 +68,11 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test if the properties work as expected."""
 
         myMessage = 'Vector property incorrect.'
-        assert (self.calculator.exposureLayer() ==
+        assert (self.calculator.exposure_layer() ==
                 self.vectorPath), myMessage
 
         myMessage = 'Raster property incorrect.'
-        assert (self.calculator.hazardLayer() ==
+        assert (self.calculator.hazard_layer() ==
                 self.rasterShakePath), myMessage
 
         myMessage = 'Function property incorrect.'
@@ -82,11 +82,11 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_run(self):
         """Test that run works as expected in non threading mode"""
         try:
-            myRunner = self.calculator.getRunner()
+            myRunner = self.calculator.get_runner()
             # run non threaded
             myRunner.run()
             myMessage = myRunner.result()
-            myImpactLayer = myRunner.impactLayer()
+            myImpactLayer = myRunner.impact_layer()
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
@@ -97,12 +97,12 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_thread(self):
         """Test that starting it in a thread works as expected."""
         try:
-            myRunner = self.calculator.getRunner()
+            myRunner = self.calculator.get_runner()
             myRunner.start()
             # wait until the thread is done
             myRunner.join()
             myMessage = myRunner.result()
-            myImpactLayer = myRunner.impactLayer()
+            myImpactLayer = myRunner.impact_layer()
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
@@ -114,10 +114,10 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test that run raises an error properly when no parameters defined.
         """
         try:
-            self.calculator.setExposureLayer(None)
-            self.calculator.setHazardLayer(None)
+            self.calculator.set_exposure_layer(None)
+            self.calculator.set_hazard_layer(None)
             # Next line should raise an error
-            myRunner = self.calculator.getRunner()
+            myRunner = self.calculator.get_runner()
             myRunner.start()
         except RuntimeError, e:
             myMessage = 'Runtime error encountered: %s' % str(e)
@@ -132,9 +132,9 @@ class ImpactCalculatorTest(unittest.TestCase):
 
     def test_getKeywordFromImpactLayer(self):
         """Check that we can get keywords from a created impact layer."""
-        myRunner = self.calculator.getRunner()
+        myRunner = self.calculator.get_runner()
         myRunner.run()
-        myImpactLayer = myRunner.impactLayer()
+        myImpactLayer = myRunner.impact_layer()
         myKeyword = readKeywordsFromLayer(myImpactLayer,
                                           'impact_summary')
         myMessage = 'Keyword request returned an empty string'
@@ -158,15 +158,15 @@ class ImpactCalculatorTest(unittest.TestCase):
         # Verify relevant metada is ok
         #H = readSafeLayer(hazard_path)
         #E = readSafeLayer(exposure_path)
-        self.calculator.setHazardLayer(hazard_path)
-        self.calculator.setExposureLayer(exposure_path)
-        self.calculator.setFunction('Flood Building Impact Function')
+        self.calculator.set_hazard_layer(hazard_path)
+        self.calculator.set_exposure_layer(exposure_path)
+        self.calculator.set_function('Flood Building Impact Function')
         try:
-            myRunner = self.calculator.getRunner()
+            myRunner = self.calculator.get_runner()
             # Run non threaded
             myRunner.run()
             myMessage = myRunner.result()
-            myImpactLayer = myRunner.impactLayer()
+            myImpactLayer = myRunner.impact_layer()
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
@@ -178,10 +178,10 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test that we can get styleInfo data from a vector's keyword file
         """
 
-        myRunner = self.calculator.getRunner()
+        myRunner = self.calculator.get_runner()
         myRunner.start()
         myRunner.join()
-        myImpactLayer = myRunner.impactLayer()
+        myImpactLayer = myRunner.impact_layer()
 
         myMessage = ('Incorrect type returned from '
                      'myRunner.impactlayer(). Expected an impactlayer'

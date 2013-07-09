@@ -84,7 +84,7 @@ from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
 from safe_qgis.utilities.utilities import getWGS84resolution
-from safe_qgis.utilities.clipper import extentToGeoArray, clipLayer
+from safe_qgis.utilities.clipper import extentToGeoArray, clip_layer
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
@@ -1857,16 +1857,16 @@ class ShakeEvent(QObject):
 
         # The extents should already be correct but the cell size may need
         # resampling, so we pass the hazard layer to the clipper
-        myClippedHazard = clipLayer(
-            theLayer=myHazardLayer,
-            theExtent=myHazardGeoExtent,
-            theCellSize=myCellSize)
+        myClippedHazard = clip_layer(
+            layer=myHazardLayer,
+            extent=myHazardGeoExtent,
+            cell_size=myCellSize)
 
-        myClippedExposure = clipLayer(
-            theLayer=myExposureLayer,
-            theExtent=myHazardGeoExtent,
-            theCellSize=myCellSize,
-            theExtraKeywords=extraExposureKeywords)
+        myClippedExposure = clip_layer(
+            layer=myExposureLayer,
+            extent=myHazardGeoExtent,
+            cell_size=myCellSize,
+            extra_keywords=extraExposureKeywords)
 
         return myClippedHazard, myClippedExposure
 

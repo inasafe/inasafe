@@ -40,7 +40,7 @@ from qgis.analysis import QgsZonalStatistics
 from safe_qgis.impact_statistics.zonal_stats import calculateZonalStats
 from third_party.odict import OrderedDict
 from third_party.pydispatch import dispatcher
-from safe_qgis.utilities.clipper import clipLayer
+from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
     isPolygonLayer,
@@ -304,7 +304,7 @@ class Aggregator(QtCore.QObject):
             self.layer, {'title': myLayerName})
 
         self.statisticsType, self.statisticsClasses = (
-            self.keywordIO.getStatisticsDetails(myQGISImpactLayer))
+            self.keywordIO.get_statistics(myQGISImpactLayer))
 
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
@@ -775,11 +775,11 @@ class Aggregator(QtCore.QObject):
             myAggrAttribute = self.keywordIO.read_keywords(
                 self.layer, self.defaults['AGGR_ATTR_KEY'])
 
-            myClippedLayer = clipLayer(
-                theLayer=self.layer,
-                theExtent=myGeoExtent,
-                theExplodeFlag=True,
-                theExplodeAttribute=myAggrAttribute)
+            myClippedLayer = clip_layer(
+                layer=self.layer,
+                extent=myGeoExtent,
+                explode_flag=True,
+                explode_attribute=myAggrAttribute)
 
             myName = '%s %s' % (self.layer.name(), self.tr('aggregation'))
             self.layer = myClippedLayer
