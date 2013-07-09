@@ -444,7 +444,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 # NOTE(gigih):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
-                myImpactLayer = self.dock.runner.impactLayer()
+                myImpactLayer = self.dock.runner.impact_layer()
                 # Load impact layer into QGIS
                 myQGISImpactLayer = readImpactLayer(myImpactLayer)
 

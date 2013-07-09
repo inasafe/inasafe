@@ -109,7 +109,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         myPath = mySettings.value(
             'inasafe/keywordCachePath',
-            self.keywordIO.defaultKeywordDbPath()).toString()
+            self.keywordIO.default_keyword_db_path()).toString()
         self.leKeywordCachePath.setText(myPath)
 
         myFlag = mySettings.value(
@@ -167,6 +167,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         myFilename = QtGui.QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
-            self.keywordIO.defaultKeywordDbPath(),
+            self.keywordIO.default_keyword_db_path(),
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(myFilename)

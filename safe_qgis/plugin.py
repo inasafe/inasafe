@@ -82,7 +82,7 @@ class Plugin:
         self.actions = []  # list of all QActions we create for InaSAFE
         self.setupI18n()
         #print self.tr('InaSAFE')
-        custom_logging.setupLogger()
+        custom_logging.setup_logger()
 
     #noinspection PyArgumentList
     def setupI18n(self, thePreferredLocale=None):

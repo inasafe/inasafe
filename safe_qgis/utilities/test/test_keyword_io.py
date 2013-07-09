@@ -62,7 +62,7 @@ class KeywordIOTest(unittest.TestCase):
 
     def test_getHashForDatasource(self):
         """Test we can reliably get a hash for a uri"""
-        myHash = self.keywordIO.getHashForDatasource(PG_URI)
+        myHash = self.keywordIO.hash_for_datasource(PG_URI)
         myExpectedHash = '7cc153e1b119ca54a91ddb98a56ea95e'
         myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
         assert myHash == myExpectedHash, myMessage
@@ -85,13 +85,13 @@ class KeywordIOTest(unittest.TestCase):
         # SQL insert test
         # On first write schema is empty and there is no matching hash
         self.keywordIO.set_keyword_db_path(myFilename)
-        self.keywordIO.writeKeywordsForUri(PG_URI, myExpectedKeywords)
+        self.keywordIO.write_keywords_for_uri(PG_URI, myExpectedKeywords)
         # SQL Update test
         # On second write schema is populated and we update matching hash
         myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'OSM',  # <--note the change here!
                               'subcategory': 'building'}
-        self.keywordIO.writeKeywordsForUri(PG_URI, myExpectedKeywords)
+        self.keywordIO.write_keywords_for_uri(PG_URI, myExpectedKeywords)
         # Test getting all keywords
         myKeywords = self.keywordIO.readKeywordFromUri(PG_URI)
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
@@ -104,7 +104,7 @@ class KeywordIOTest(unittest.TestCase):
                     myKeyword, myExpectedKeyword, myFilename)
         assert myKeyword == myExpectedKeyword, myMessage
         # Test deleting keywords actually does delete
-        self.keywordIO.deleteKeywordsForUri(PG_URI)
+        self.keywordIO.delete_keywords_for_uri(PG_URI)
         try:
             myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype')
             #if the above didnt cause an exception then bad
@@ -117,9 +117,9 @@ class KeywordIOTest(unittest.TestCase):
     def test_areKeywordsFileBased(self):
         """Can we correctly determine if keywords should be written to file or
         to database?"""
-        assert not self.keywordIO.areKeywordsFileBased(self.sqliteLayer)
-        assert self.keywordIO.areKeywordsFileBased(self.fileRasterLayer)
-        assert self.keywordIO.areKeywordsFileBased(self.fileVectorLayer)
+        assert not self.keywordIO.are_keywords_file_based(self.sqliteLayer)
+        assert self.keywordIO.are_keywords_file_based(self.fileRasterLayer)
+        assert self.keywordIO.are_keywords_file_based(self.fileVectorLayer)
 
     def test_readRasterFileKeywords(self):
         """Can we read raster file keywords using generic readKeywords method

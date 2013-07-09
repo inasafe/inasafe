@@ -48,62 +48,56 @@ class QgsLogHandler(logging.Handler):
     def __init__(self, level=logging.NOTSET):
         logging.Handler.__init__(self)
 
-    def emit(self, theRecord):
+    def emit(self, record):
         """Try to log the message to QGIS if available, otherwise do nothing.
 
-        Args:
-            theRecord: logging record containing whatever info needs to be
+        :param record: logging record containing whatever info needs to be
                 logged.
-        Returns:
-            None
-        Raises:
-            None
         """
         try:
             #available from qgis 1.8
             from qgis.core import QgsMessageLog
             # Check logging.LogRecord properties for lots of other goodies
             # like line number etc. you can get from the log message.
-            QgsMessageLog.logMessage(theRecord.getMessage(), 'InaSAFE', 0)
+            QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
 
         except (MethodUnavailableError, ImportError):
             pass
 
 
-def addLoggingHanderOnce(theLogger, theHandler):
+def add_logging_handler_once(logger, handler):
     """A helper to add a handler to a logger, ensuring there are no duplicates.
 
-    Args:
-        * theLogger: logging.logger instance
-        * theHandler: logging.Handler instance to be added. It will not be
-            added if an instance of that Handler subclass already exists.
+    :param logger: Logger that should have a handler added.
+    :type logger: logging.logger
 
-    Returns:
-        bool: True if the logging handler was added
+    :param handler: Handler instance to be added. It will not be added if an
+        instance of that Handler subclass already exists.
+    :type handler: logging.Handler
 
-    Raises:
-        None
+    :returns: True if the logging handler was added, otherwise False.
+    :rtype: bool
     """
-    myClassName = theHandler.__class__.__name__
-    for myHandler in theLogger.handlers:
+    myClassName = handler.__class__.__name__
+    for myHandler in logger.handlers:
         if myHandler.__class__.__name__ == myClassName:
             return False
 
-    theLogger.addHandler(theHandler)
+    logger.addHandler(handler)
     return True
 
 
-def setupLogger(theLogFile=None, theSentryUrl=None):
-    """Run once when the module is loaded and enable logging
+def setup_logger(log_file=None, sentry_url=None):
+    """Run once when the module is loaded and enable logging.
 
-    :param theLogFile: Optional full path to a file to write logs to.
-    :type theLogFile: str
+    :param log_file: Optional full path to a file to write logs to.
+    :type log_file: str
 
-    :param theSentryUrl: Optional url to sentry api for remote
+    :param sentry_url: Optional url to sentry api for remote
         logging. Defaults to http://c64a83978732474ea751d432ab943a6b:
         d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5 which is the
         sentry project for InaSAFE desktop.
-    :type theSentryUrl: str
+    :type sentry_url: str
 
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
@@ -146,10 +140,10 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     # user's temporary working directory.
     myTempDir = temp_dir('logs')
     myFilename = os.path.join(myTempDir, 'inasafe.log')
-    if theLogFile is None:
+    if log_file is None:
         myFileHandler = logging.FileHandler(myFilename)
     else:
-        myFileHandler = logging.FileHandler(theLogFile)
+        myFileHandler = logging.FileHandler(log_file)
     myFileHandler.setLevel(myDefaultHanderLevel)
     # create console handler with a higher log level
     myConsoleHandler = logging.StreamHandler()
@@ -168,16 +162,16 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     mySettings = QtCore.QSettings()
     myFlag = mySettings.value('inasafe/useSentry', False).toBool()
     if 'INASAFE_SENTRY' in os.environ or myFlag:
-        if theSentryUrl is None:
+        if sentry_url is None:
             myClient = Client(
                 'http://c64a83978732474ea751d432ab943a6b'
                 ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
         else:
-            myClient = Client(theSentryUrl)
+            myClient = Client(sentry_url)
         mySentryHandler = SentryHandler(myClient)
         mySentryHandler.setFormatter(myFormatter)
         mySentryHandler.setLevel(logging.ERROR)
-        if addLoggingHanderOnce(myLogger, mySentryHandler):
+        if add_logging_handler_once(myLogger, mySentryHandler):
             myLogger.debug('Sentry logging enabled')
     else:
         myLogger.debug('Sentry logging disabled')
@@ -187,9 +181,9 @@ def setupLogger(theLogFile=None, theSentryUrl=None):
     myQGISHandler.setFormatter(myFormatter)
 
     # add the handlers to the logger
-    addLoggingHanderOnce(myLogger, myFileHandler)
-    addLoggingHanderOnce(myLogger, myConsoleHandler)
-    addLoggingHanderOnce(myLogger, myQGISHandler)
+    add_logging_handler_once(myLogger, myFileHandler)
+    add_logging_handler_once(myLogger, myConsoleHandler)
+    add_logging_handler_once(myLogger, myQGISHandler)
 
 
 def temp_dir(sub_dir='work'):
@@ -214,8 +208,7 @@ def temp_dir(sub_dir='work'):
     :type sub_dir: str
 
     :returns: Path to the output clipped layer (placed in the system temp dir).
-
-    :raises: Any errors from the underlying system calls.
+    :rtype: str
     """
     user = getpass.getuser().replace(' ', '_')
     current_date = date.today()

@@ -14,8 +14,8 @@ try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
-    from safe_qgis.utilities.custom_logging import setupLogger
-    setupLogger()
+    from safe_qgis.utilities.custom_logging import setup_logger
+    setup_logger()
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
