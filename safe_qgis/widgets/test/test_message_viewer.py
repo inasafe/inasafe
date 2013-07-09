@@ -83,7 +83,7 @@ class MessageViewerTest(unittest.TestCase):
         """
         e = Exception()
         context = 'Something went wrong'
-        message = get_error_message(e, theContext=context)
+        message = get_error_message(e, context=context)
         self.message_viewer.error_message_event(None, message)
         text = self.message_viewer.page_to_text().replace('\n', '')
         return text

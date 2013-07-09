@@ -24,10 +24,10 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe_qgis.tools.function_browser import FunctionBrowser
-from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def verifyColumn(table, col, strFilter, mode):
@@ -87,7 +87,7 @@ class FunctionBrowserTest(unittest.TestCase):
     def testInitShowTable(self):
         """Test for showing table in the first."""
         myDialog = FunctionBrowser(PARENT)
-        myStr = myDialog.if_table.toNewlineFreeString()
+        myStr = myDialog.table.toNewlineFreeString()
         assert len(myStr) > 1000, "Please check."
 
     def testFilterTable(self):
@@ -96,13 +96,13 @@ class FunctionBrowserTest(unittest.TestCase):
         list_category = myDialog.combo_box_content['category']
         for i in xrange(1, len(list_category)):
             myDialog.comboBox_category.setCurrentIndex(i)
-            verifyColumn(myDialog.if_table, 2, list_category[i], 'only')
+            verifyColumn(myDialog.table, 2, list_category[i], 'only')
 
         myDialog.comboBox_datatype.setCurrentIndex(3)
         myDatatype = myDialog.comboBox_datatype.currentText()
         # datatype is the 5th column
         if myDatatype == 'sigab':
-            verifyColumn(myDialog.if_table, 5, myDatatype, 'included')
+            verifyColumn(myDialog.table, 5, myDatatype, 'included')
 
     def testRestButton(self):
         """Test when reset button is pressed."""
@@ -111,14 +111,14 @@ class FunctionBrowserTest(unittest.TestCase):
         #pylint: disable=W0101
         raise SkipTest("This test hangs Jenkins.")
         myDialog = FunctionBrowser(PARENT)
-        expectedTable = myDialog.if_table.toNewlineFreeString()
+        expectedTable = myDialog.table.toNewlineFreeString()
         myDialog.comboBox_category.setCurrentIndex(1)
         myDialog.comboBox_subcategory.setCurrentIndex(1)
         resetButton = myDialog.myButtonBox.button(QDialogButtonBox.Reset)
-        realTableFilter = myDialog.if_table.toNewlineFreeString()
+        realTableFilter = myDialog.table.toNewlineFreeString()
         # noinspection PyArgumentList
         QTest.mouseClick(resetButton, Qt.LeftButton)
-        realTableReset = myDialog.if_table.toNewlineFreeString()
+        realTableReset = myDialog.table.toNewlineFreeString()
         msgFilter = 'It should be different table because it is filtered.'
         assert expectedTable != realTableFilter, msgFilter
         msgReset = ('It should be the same table because reset button '

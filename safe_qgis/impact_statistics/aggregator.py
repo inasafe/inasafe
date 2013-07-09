@@ -43,12 +43,12 @@ from third_party.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    isPolygonLayer,
-    getLayerAttributeNames,
-    copyInMemory,
-    getDefaults,
-    extentToGeoArray,
-    safeToQGISLayer)
+    is_polygon_layer,
+    layer_attribute_names,
+    create_memory_layer,
+    defaults,
+    extent_to_geo_array,
+    safe_to_qgis_layer)
 from safe_qgis.utilities.styling import set_vector_graduated_style
 from safe_qgis.safe_interface import (
     temp_dir,
@@ -107,7 +107,7 @@ class Aggregator(QtCore.QObject):
 
         self.iface = iface
         self.keywordIO = KeywordIO()
-        self.defaults = getDefaults()
+        self.defaults = defaults()
         self.errorMessage = None
         self.targetField = None
         self.impactLayerAttributes = []
@@ -193,7 +193,7 @@ class Aggregator(QtCore.QObject):
                 #set the default values by writing to the myKeywords
                 myKeywords['category'] = 'postprocessing'
 
-                myAttributes, _ = getLayerAttributeNames(
+                myAttributes, _ = layer_attribute_names(
                     self.layer,
                     [QtCore.QVariant.Int, QtCore.QVariant.String])
                 if self.defaults['AGGR_ATTR_KEY'] not in myKeywords:
@@ -232,10 +232,10 @@ class Aggregator(QtCore.QObject):
             # This is a safe version of the aggregation layer
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
-            if isPolygonLayer(self.hazardLayer):
+            if is_polygon_layer(self.hazardLayer):
                 self.hazardLayer = self._preparePolygonLayer(self.hazardLayer)
 
-            if isPolygonLayer(self.exposureLayer):
+            if is_polygon_layer(self.exposureLayer):
                 # Find out the subcategory for this layer
                 mySubcategory = self.keywordIO.read_keywords(
                     self.exposureLayer, 'subcategory')
@@ -267,7 +267,7 @@ class Aggregator(QtCore.QObject):
                 ' by %1').arg(self.layer.name())))
         self._sendMessage(myMessage)
 
-        myQGISImpactLayer = safeToQGISLayer(theSafeImpactLayer)
+        myQGISImpactLayer = safe_to_qgis_layer(theSafeImpactLayer)
         if not myQGISImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             # noinspection PyExceptionInherit
@@ -768,7 +768,7 @@ class Aggregator(QtCore.QObject):
         else:
             # we use only the exposure extent, because both exposure and hazard
             # have the same extent at this point.
-            myGeoExtent = extentToGeoArray(
+            myGeoExtent = extent_to_geo_array(
                 self.exposureLayer.extent(),
                 self.exposureLayer.crs())
 
@@ -873,7 +873,7 @@ class Aggregator(QtCore.QObject):
         aggregationProvider.select([])
 
         # copy polygons to a memory layer
-        myQgisMemoryLayer = copyInMemory(theQgisLayer)
+        myQgisMemoryLayer = create_memory_layer(theQgisLayer)
 
         polygonsProvider = myQgisMemoryLayer.dataProvider()
         allPolygonAttrs = polygonsProvider.attributeIndexes()
@@ -1163,7 +1163,7 @@ class Aggregator(QtCore.QObject):
         myRect = self.iface.mapCanvas().extent()
         myCrs = QgsCoordinateReferenceSystem()
         myCrs.createFromEpsg(4326)
-        myGeoExtent = extentToGeoArray(myRect, myCrs)
+        myGeoExtent = extent_to_geo_array(myRect, myCrs)
 
         if not self.layer.isValid():
             myMessage = self.tr(

@@ -32,7 +32,7 @@ from safe_qgis.safe_interface import (
     verify,
     readKeywordsFromFile,
     writeKeywordsToFile)
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -356,7 +356,7 @@ class KeywordIO(QObject):
         # datasource as a file and look for a keywords file, false and we look
         # in the keywords db.
         myProviderType = None
-        myVersion = qgisVersion()
+        myVersion = qgis_version()
         # check for old raster api with qgis < 1.8
         # ..todo:: Add test for plugin layers too
         if (myVersion < 10800 and

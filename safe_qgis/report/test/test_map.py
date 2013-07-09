@@ -31,7 +31,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     set_jakarta_extent,
     check_images)
 from safe_qgis.utilities.utilities import (
-    setupPrinter, dpiToMeters, qgisVersion)
+    setup_printer, dpi_to_meters, qgis_version)
 from safe_qgis.report.map import Map
 
 QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -177,12 +177,12 @@ class MapTest(unittest.TestCase):
             suffix='.pdf',
             dir=temp_dir('test'))
         myMap = Map(IFACE)
-        setupPrinter(myPath)
+        setup_printer(myPath)
         myMap.setupComposition()
 
         myImage = QtGui.QImage(10, 10, QtGui.QImage.Format_RGB32)
-        myImage.setDotsPerMeterX(dpiToMeters(300))
-        myImage.setDotsPerMeterY(dpiToMeters(300))
+        myImage.setDotsPerMeterX(dpi_to_meters(300))
+        myImage.setDotsPerMeterY(dpi_to_meters(300))
         #myImage.fill(QtGui.QColor(250, 250, 250))
         # Look at the output, you will see antialiasing issues around some
         # of the boxes drawn...
@@ -193,7 +193,7 @@ class MapTest(unittest.TestCase):
         for i in range(10, 190, 10):
             myPicture = QgsComposerPicture(myMap.composition)
             myPicture.setPictureFile(myFilename)
-            if qgisVersion() >= 10800:  # 1.8 or newer
+            if qgis_version() >= 10800:  # 1.8 or newer
                 myPicture.setFrameEnabled(False)
             else:
                 myPicture.setFrame(False)

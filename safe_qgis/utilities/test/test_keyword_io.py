@@ -15,7 +15,7 @@ from qgis.core import QgsDataSourceURI, QgsVectorLayer
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app, load_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundError
-from safe_qgis.tools.test_keywords_dialog import makePadangLayerClone
+from safe_qgis.tools.test.test_keywords_dialog import makePadangLayerClone
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
 
 QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
