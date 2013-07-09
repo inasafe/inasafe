@@ -174,7 +174,7 @@ def load_layer(layer_file, directory=TESTDATA):
     :type layer_file: str
     :param directory: Optional parent dir. If None, path name is assumed
         to be absolute.
-    :type directory: str
+    :type directory: str, None
 
     :returns: tuple containing layer and its category.
     :rtype: (QgsMapLayer, str)
@@ -844,7 +844,7 @@ def load_layers(
     # Now go ahead and load our layers
     myExposureLayerCount = 0
     myHazardLayerCount = 0
-
+    map_layer_list = []
     # Now create our new layers
     for myFile in layer_list:
 
@@ -855,12 +855,17 @@ def load_layers(
             myExposureLayerCount += 1
             # Add layer to the registry (that QGis knows about) a slot
         # in qgis_interface will also ensure it gets added to the canvas
-        if qgis_version() >= 10800:  # 1.8 or newer
+        if qgis_version() >= 10800:  # 1.8 or newer, defer loading
             # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayers([myLayer])
+            map_layer_list.append(myLayer)
         else:
             # noinspection PyArgumentList
             QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+
+    # Save time by loading all layers in one operation
+    if qgis_version() >= 10800:  # 1.8 or newer
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers(map_layer_list)
 
     if dock is not None:
         dock.get_layers()

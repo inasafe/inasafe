@@ -99,7 +99,10 @@ class MessageViewer(QtWebKit.QWebView):
         :param message: A message to show in the viewer.
         :type message: Message
         """
-        LOGGER.debug('Static message event')
+
+        if message == self.static_message:
+            return
+        LOGGER.debug('Static message event \n%s' % message.to_text())
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message

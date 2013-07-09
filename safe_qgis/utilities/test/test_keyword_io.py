@@ -38,24 +38,27 @@ class KeywordIOTest(unittest.TestCase):
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                           'spatialite')
         myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
-        self.fileRasterLayer, myType = load_layer(myHazardPath,
-                                                 directory=None)
+        self.fileRasterLayer, myType = load_layer(
+            myHazardPath, directory=None)
         del myType
         self.fileVectorLayer, myType = load_layer('Padang_WGS84.shp')
         del myType
-        self.expectedSqliteKeywords = {'category': 'exposure',
-                                       'datatype': 'OSM',
-                                       'subcategory': 'building'}
-        self.expectedVectorKeywords = {'category': 'exposure',
-                                       'datatype': 'itb',
-                                       'subcategory': 'structure',
-                                       'title': 'Padang WGS84'}
-        self.expectedRasterKeywords = {'category': 'hazard',
-                                       'source': 'USGS',
-                                       'subcategory': 'earthquake',
-                                       'unit': 'MMI',
-                                       'title': ('An earthquake in Padang '
-                                                 'like in 2009')}
+        self.expectedSqliteKeywords = {
+            'category': 'exposure',
+            'datatype': 'OSM',
+            'subcategory': 'building'}
+        self.expectedVectorKeywords = {
+            'category': 'exposure',
+            'datatype': 'itb',
+            'subcategory': 'structure',
+            'title': 'Padang WGS84'}
+        self.expectedRasterKeywords = {
+            'category': 'hazard',
+            'source': 'USGS',
+            'subcategory': 'earthquake',
+            'unit': 'MMI',
+            'title': ('An earthquake in Padang '
+            'like in 2009')}
 
     def tearDown(self):
         pass
@@ -132,8 +135,8 @@ class KeywordIOTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
     def test_readVectorFileKeywords(self):
-        """Can we read vector file keywords with the generic readKeywords
-        method """
+        """Test read vector file keywords with the generic readKeywords method.
+         """
         myKeywords = self.keywordIO.read_keywords(self.fileVectorLayer)
         myExpectedKeywords = self.expectedVectorKeywords
         mySource = self.fileVectorLayer.source()
@@ -149,19 +152,21 @@ class KeywordIOTest(unittest.TestCase):
         myKeywords = self.keywordIO.read_keywords(myLayer)
 
         for myKey, myValue in myNewKeywords.iteritems():
-            myMessage = ('Layer keywords misses appended key: %s\n'
-                         'Layer keywords:\n%s\n'
-                         'Appended keywords:\n%s\n' %
-                        (myKey,
-                         myKeywords,
-                         myNewKeywords))
+            myMessage = (
+                'Layer keywords misses appended key: %s\n'
+                'Layer keywords:\n%s\n'
+                'Appended keywords:\n%s\n' %
+                (myKey,
+                myKeywords,
+                myNewKeywords))
             assert myKey in myKeywords, myMessage
-            myMessage = ('Layer keywords misses appended value: %s\n'
-                         'Layer keywords:\n%s\n'
-                         'Appended keywords:\n%s\n' %
-                         (myValue,
-                          myKeywords,
-                          myNewKeywords))
+            myMessage = (
+                'Layer keywords misses appended value: %s\n'
+                'Layer keywords:\n%s\n'
+                'Appended keywords:\n%s\n' %
+                (myValue,
+                myKeywords,
+                myNewKeywords))
             assert myKeywords[myKey] == myValue, myMessage
 
     def test_readDBKeywords(self):

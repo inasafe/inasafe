@@ -61,8 +61,8 @@ class QgisInterface(QObject):
         """Handle layers being added to the registry so they show up in canvas.
 
         :param theLayers: list<QgsMapLayer> list of map layers that were added
-        .. note: The QgsInterface api does not include this method, it is added
-                 here as a helper to facilitate testing.
+        .. note:: The QgsInterface api does not include this method,
+            it is added here as a helper to facilitate testing.
         """
         #LOGGER.debug('addLayers called on qgis_interface')
         #LOGGER.debug('Number of layers being added: %s' % len(theLayers))
