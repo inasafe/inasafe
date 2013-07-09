@@ -1076,7 +1076,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # prompt for them. if a prompt is shown run method is called by the
         # accepted signal of the keywords dialog
         self.aggregator.validateKeywords()
-        if self.aggregator.aoiMode and self.aggregator.isValid:
+        if self.aggregator.isValid:
             self.run()
         else:
             self.runtimeKeywordsDialog.setLayer(self.aggregator.layer)
