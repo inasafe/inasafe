@@ -76,43 +76,60 @@ class FakeQNetworkReply(QObject):
 
 
 class FakeQNetworkAccessManager:
+    """Mock network manager for testing."""
     # pylint: disable=W0613
     def post(self, theRequest, theData=None):
+        """Mock handler for post requests.
+        :param theRequest: Requested url.
+        :param theData: Payload data (ignored).
+        """
+        _ = theData  # ignored
         return self.request(theRequest)
 
     # pylint: enable=W0613
 
     def get(self, theRequest):
+        """Mock handler for a get request.
+        :param theRequest: Url being requested.
+        """
         return self.request(theRequest)
 
     def request(self, theRequest):
+        """Mock handler for an http request.
+        :param theRequest: Url being requested.
+        """
         myUrl = str(theRequest.url().toString())
         myReply = FakeQNetworkReply()
 
         print myUrl
 
         if myUrl == 'http://hot-export.geofabrik.de/newjob':
-            myReply.content = readAll('test-importdlg-newjob.html')
+            myReply.content = read_all('test-importdlg-newjob.html')
         elif myUrl == 'http://hot-export.geofabrik.de/wizard_area':
-            myReply.content = readAll('test-importdlg-wizardarea.html')
+            myReply.content = read_all('test-importdlg-wizardarea.html')
         elif myUrl == 'http://hot-export.geofabrik.de/tagupload':
-            myReply.content = readAll('test-importdlg-job.html')
+            myReply.content = read_all('test-importdlg-job.html')
             myReply._url = 'http://hot-export.geofabrik.de/jobs/1990'
         elif myUrl == 'http://hot-export.geofabrik.de/jobs/1990':
-            myReply.content = readAll('test-importdlg-job.html')
+            myReply.content = read_all('test-importdlg-job.html')
         elif myUrl == ('http://osm.linfiniti.com/buildings-shp?'
                        'bbox=20.389938354492188,-34.10782492987083'
                        ',20.712661743164062,'
-                       '-34.008273470938335&obj=building'):
-            myReply.content = readAll("test-importdlg-extractzip.zip")
+                       '-34.008273470938335'):
+            myReply.content = read_all("test-importdlg-extractzip.zip")
 
         return myReply
 
 
-def readAll(thePath):
-    """ Helper function to load all content of thePath
-    in TEST_DATA_DIR folder """
-    myPath = os.path.join(TEST_DATA_DIR, thePath)
+def read_all(path):
+    """ Helper function to load all content of path in TEST_DATA_DIR folder.
+    :param path: File name to read in.
+    :type path: str
+
+    :returns: The file contents.
+    :rtype: str
+    """
+    myPath = os.path.join(TEST_DATA_DIR, path)
     myHandle = open(myPath, 'r')
     myContent = myHandle.read()
     myHandle.close()
@@ -129,7 +146,8 @@ class ImportDialogTest(unittest.TestCase):
         ## provide Fake QNetworkAccessManager for self.network_manager
         self.importDlg.network_manager = FakeQNetworkAccessManager()
 
-    def test_httpDownload(self):
+    def test_download_url(self):
+        """Test we can download a zip. Uses a mock network stack."""
         myManager = QNetworkAccessManager(PARENT)
 
         # NOTE(gigih):
