@@ -26,7 +26,6 @@ from qgis.core import QgsMapLayerRegistry, QgsRasterLayer, QgsVectorLayer
 from qgis.utils import iface
 
 from safe_qgis.exceptions import FileNotFoundError
-from safe_qgis.utilities.utilities import getAbsolutePath
 
 LOGGER = logging.getLogger('InaSAFE')
 STATUS_FLAG = False
@@ -70,7 +69,8 @@ def extractPath(theScenarioFilePath, thePath):
     """
     myFilename = os.path.split(thePath)[-1]  # In case path was absolute
     myBaseName, _ = os.path.splitext(myFilename)
-    myPath = getAbsolutePath(theScenarioFilePath, thePath)
+    theLongPath = os.path.join(theScenarioFilePath, thePath)
+    myPath = os.path.normpath(theLongPath)
     return myPath, myBaseName
 
 

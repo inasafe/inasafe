@@ -23,7 +23,7 @@ import shutil
 # noinspection PyPackageRequirements
 from nose import SkipTest
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..//'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
@@ -34,19 +34,19 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
-from safe_qgis.utilities.utilities_test import (
-    getQgisTestApp, unitTestDataPath)
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app, test_data_path)
 from safe_qgis.safe_interface import (
     readKeywordsFromFile,
     unique_filename,
     HAZDATA, TESTDATA)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
-from safe_qgis.utilities.utilities import getDefaults, qgisVersion
+from safe_qgis.utilities.utilities import defaults, qgis_version
 
 
 # Get QGis app handle
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def makePadangLayer():
@@ -56,7 +56,7 @@ def makePadangLayer():
     myTitle = readKeywordsFromFile(myPath, 'title')
     # myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
-    if qgisVersion() >= 10800:  # 1.8 or newer
+    if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
@@ -81,7 +81,7 @@ def makePadangLayerClone():
     myPath = os.path.join(HAZDATA, myFile)
     myTitle = readKeywordsFromFile(myPath, 'title')
     myLayer = QgsRasterLayer(myPath, myTitle)
-    if qgisVersion() >= 10800:  # 1.8 or newer
+    if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
@@ -99,7 +99,7 @@ def makePolygonLayer():
     except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
-    if qgisVersion() >= 10800:  # 1.8 or newer
+    if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
@@ -134,11 +134,11 @@ def removeTempFile(myFileName='temp_Shakemap_Padang_2009'):
 def makeKeywordLessLayer():
     """Helper function that returns a single predefined keywordless layer"""
     myFile = 'keywordless_layer.tif'
-    myBasePath = unitTestDataPath('hazard')
+    myBasePath = test_data_path('hazard')
     myPath = os.path.abspath(os.path.join(myBasePath, myFile))
     myTitle = 'Keywordless Layer'
     myLayer = QgsRasterLayer(myPath, myTitle)
-    if qgisVersion() >= 10800:  # 1.8 or newer
+    if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myLayer])
     else:
@@ -225,7 +225,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_radPostprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
-        myDefaults = getDefaults()
+        myDefaults = defaults()
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
@@ -256,7 +256,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
-        myDefaults = getDefaults()
+        myDefaults = defaults()
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)

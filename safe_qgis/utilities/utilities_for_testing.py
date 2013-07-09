@@ -31,7 +31,7 @@ from safe_qgis.safe_interface import (
 
 from safe_qgis.safe_interface import HAZDATA, EXPDATA
 
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgis_version
 
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
@@ -855,7 +855,7 @@ def load_layers(
             myExposureLayerCount += 1
             # Add layer to the registry (that QGis knows about) a slot
         # in qgis_interface will also ensure it gets added to the canvas
-        if qgisVersion() >= 10800:  # 1.8 or newer
+        if qgis_version() >= 10800:  # 1.8 or newer
             # noinspection PyArgumentList
             QgsMapLayerRegistry.instance().addMapLayers([myLayer])
         else:

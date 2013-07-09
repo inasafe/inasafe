@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Impact Functions Dialog.**
@@ -20,51 +21,60 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import (QtGui, QtCore, QtWebKit,)
 from safe_qgis.ui.function_browser_base import Ui_FunctionBrowserBase
-from safe_qgis.utilities.help import Help
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import (
     get_version,
     get_unique_values,
     get_plugins_as_table)
-from safe_qgis.utilities.utilities import htmlFooter, htmlHeader
+from safe_qgis.utilities.utilities import html_footer, html_header
 
 
 class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
     """ImpactFunctions Dialog for InaSAFE.
     """
 
-    def __init__(self, theParent=None, dict_filter=None):
+    def __init__(self, parent=None, dict_filter=None):
         """Constructor for the dialog.
 
-                This dialog will show the user impact function documentation.
+        This dialog will show the user impact function documentation.
 
-        Args:
-           * theParent - Optional widget to use as parent
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
+        :param parent: Optional widget to use as parent
+        :type parent: QWidget
+
+        :param dict_filter: Optional filter to use to limit which functions
+            are show to the user. See below.
+        :type dict_filter: dict
+
+        Example dict_filter::
+
+            {'id': [],
+             'title': [],
+             'category': [],
+             'subcategory': [],
+             'layertype': [],
+             'datatype': [],
+             'unit': []}
         """
-        QtGui.QDialog.__init__(self, theParent)
-        self.parent = theParent
-        self.header = None  # for storing html header template
-        self.footer = None  # for storing html footer template
+        QtGui.QDialog.__init__(self, parent=None)
+        self.parent = parent
         # Set up the user interface from Designer.
         self.setupUi(self)
         self.setWindowTitle(
             self.tr('InaSAFE %1 Impact Functions Browser').arg(get_version()))
         self.no_filter = self.tr('No Filter')
         if dict_filter is None:
-            dict_filter = {'id': [],
-                           'title': [],
-                           'category': [],
-                           'subcategory': [],
-                           'layertype': [],
-                           'datatype': [],
-                           'unit': []}
+            dict_filter = {
+                'id': [],
+                'title': [],
+                'category': [],
+                'subcategory': [],
+                'layertype': [],
+                'datatype': [],
+                'unit': []}
 
         self.dict_filter = dict_filter
-        self.if_table = None  # for storing impact functions table
-        self.showImpactFunctionsTable()
+        self.table = None  # for storing impact functions table
+        self.show_table()
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
         resetButton = self.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
@@ -72,45 +82,49 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
             resetButton,
             QtCore.SIGNAL('clicked()'), self.reset_button_clicked)
 
-        # Set up help dialog showing logic.
-        self.helpDialog = None
         helpButton = self.myButtonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
-                               self.showHelp)
+                               self.show_help)
         # Combo box change event
-        QtCore.QObject.connect(self.comboBox_id,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.update_table)
-        QtCore.QObject.connect(self.comboBox_title,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.update_table)
-        QtCore.QObject.connect(self.comboBox_category,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.update_table)
-        QtCore.QObject.connect(self.comboBox_subcategory,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.update_table)
-        QtCore.QObject.connect(self.comboBox_layertype,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.update_table)
-        QtCore.QObject.connect(self.comboBox_datatype,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.update_table)
-        QtCore.QObject.connect(self.comboBox_unit,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.update_table)
+        QtCore.QObject.connect(
+            self.comboBox_id,
+            QtCore.SIGNAL('currentIndexChanged(int)'),
+            self.update_table)
+        QtCore.QObject.connect(
+            self.comboBox_title,
+            QtCore.SIGNAL('currentIndexChanged(int)'),
+            self.update_table)
+        QtCore.QObject.connect(
+            self.comboBox_category,
+            QtCore.SIGNAL('currentIndexChanged(int)'),
+            self.update_table)
+        QtCore.QObject.connect(
+            self.comboBox_subcategory,
+            QtCore.SIGNAL('currentIndexChanged(int)'),
+            self.update_table)
+        QtCore.QObject.connect(
+            self.comboBox_layertype,
+            QtCore.SIGNAL('currentIndexChanged(int)'),
+            self.update_table)
+        QtCore.QObject.connect(
+            self.comboBox_datatype,
+            QtCore.SIGNAL('currentIndexChanged(int)'),
+            self.update_table)
+        QtCore.QObject.connect(
+            self.comboBox_unit,
+            QtCore.SIGNAL('currentIndexChanged(int)'),
+            self.update_table)
 
-    def showImpactFunctionsTable(self):
+    def show_table(self):
         """Show table of impact functions.
         """
-        self.if_table = get_plugins_as_table(self.dict_filter)
+        self.table = get_plugins_as_table(self.dict_filter)
         self.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
-        self.displayHtml(QtCore.QString(str(self.if_table)))
+        self.display_html(QtCore.QString(str(self.table)))
 
     def generate_combo_box_content(self):
-        """Generate list for each combo box's content.
-        """
+        """Generate list for each combo box's content."""
         unique_values = get_unique_values()
         for item in unique_values.itervalues():
             item.insert(0, self.no_filter)
@@ -118,8 +132,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         return unique_values
 
     def populate_combo_box(self):
-        """Populate item in each combo box.
-        """
+        """Populate item in each combo box."""
         if self.combo_box_content is None:
             self.combo_box_content = self.generate_combo_box_content()
 
@@ -134,8 +147,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         self.comboBox_unit.addItems(self.combo_box_content['unit'])
 
     def update_table(self):
-        """Updating table according to the filter.
-        """
+        """Updating table according to the filter."""
         # get filter
         self.dict_filter['title'] = [str(self.comboBox_title.currentText())]
         self.dict_filter['id'] = [str(self.comboBox_id.currentText())]
@@ -154,12 +166,13 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
                     self.dict_filter[key] = list()
                     break
         # update table
-        self.showImpactFunctionsTable()
+        self.show_table()
 
     def reset_button_clicked(self):
         """Function when reset button is clicked.
-            All combo box become No Filter.
-            Updating table according to the filter."""
+
+        All combo box become No Filter. Updating table according to the filter.
+        """
         self.comboBox_title.setCurrentIndex(0)
         self.comboBox_id.setCurrentIndex(0)
         self.comboBox_category.setCurrentIndex(0)
@@ -170,26 +183,19 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
 
         self.update_table()
 
-    def showHelp(self):
-        """Load the help text for the keywords safe_qgis"""
-        if self.helpDialog:
-            del self.helpDialog
-        self.helpDialog = Help(self, 'impact_functions')
+    def show_help(self):
+        """Load the help text for the impact functions dialog."""
+        show_context_help('impact_functions')
 
-    def htmlHeader(self):
-        """Get a standard html header for wrapping content in."""
-        if self.header is None:
-            self.header = htmlHeader()
-        return self.header
+    def display_html(self, message):
+        """Display rendered html output in the widget.
 
-    def htmlFooter(self):
-        """Get a standard html footer for wrapping content in."""
-        if self.footer is None:
-            self.footer = htmlFooter()
-        return self.footer
+        Given an html snippet, wrap it in a page header and footer
+        and display it in the wvResults widget.
 
-    def displayHtml(self, theMessage):
-        """Given an html snippet, wrap it in a page header and footer
-        and display it in the wvResults widget."""
-        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
+        :param message: An html snippet (typically a table in this context)
+            to display.
+        :type message: str
+        """
+        myHtml = html_header() + message + html_footer()
         self.webView.setHtml(myHtml)

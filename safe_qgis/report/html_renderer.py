@@ -21,12 +21,12 @@ import logging
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 from safe_qgis.utilities.utilities import (
-    htmlHeader,
-    htmlFooter,
-    mmToPoints,
-    dpiToMeters,
-    setupPrinter,
-    impactLayerAttribution)
+    html_header,
+    html_footer,
+    mm_to_points,
+    dpi_to_meters,
+    setup_printer,
+    impact_attribution)
 from safe_qgis.safe_interface import unique_filename, temp_dir
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -79,7 +79,7 @@ class HtmlRenderer():
         """
         LOGGER.debug('InaSAFE Map renderHtmlToImage called')
 
-        myWidthPx = mmToPoints(theWidthMM, self.pageDpi)
+        myWidthPx = mm_to_points(theWidthMM, self.pageDpi)
         self.loadAndWait(theHtmlSnippet=theHtml)
         myFrame = self.webView.page().mainFrame()
 
@@ -95,8 +95,8 @@ class HtmlRenderer():
         self.webView.page().setViewportSize(mySize)
 
         myImage = QtGui.QImage(mySize, QtGui.QImage.Format_RGB32)
-        myImage.setDotsPerMeterX(dpiToMeters(self.pageDpi))
-        myImage.setDotsPerMeterY(dpiToMeters(self.pageDpi))
+        myImage.setDotsPerMeterX(dpi_to_meters(self.pageDpi))
+        myImage.setDotsPerMeterY(dpi_to_meters(self.pageDpi))
         # Only works in Qt4.8
         #myImage.fill(QtGui.qRgb(255, 255, 255))
         # Works in older Qt4 versions
@@ -132,7 +132,7 @@ class HtmlRenderer():
             # We need to cast to python string in case we receive a QString
             myHtmlPdfPath = str(theFilename)
 
-        self.printer = setupPrinter(myHtmlPdfPath)
+        self.printer = setup_printer(myHtmlPdfPath)
         self.loadAndWait(theHtmlSnippet=theHtml)
         self.webView.print_(self.printer)
 
@@ -141,8 +141,8 @@ class HtmlRenderer():
     def loadAndWait(self, theHtmlPath=None, theHtmlSnippet=None):
         """Load some html to a web view and wait till it is done."""
         if theHtmlSnippet:
-            myHeader = htmlHeader()
-            myFooter = htmlFooter()
+            myHeader = html_header()
+            myFooter = html_footer()
             myHtml = myHeader + theHtmlSnippet + myFooter
         else:
             myFile = file(theHtmlPath, 'rt')
@@ -212,7 +212,7 @@ class HtmlRenderer():
         except KeyError:
             mySummaryTable = None
 
-        myAttributionTable = impactLayerAttribution(theKeywords)
+        myAttributionTable = impact_attribution(theKeywords)
 
         try:
             myFullTable = theKeywords['impact_table']

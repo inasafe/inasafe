@@ -26,16 +26,17 @@ from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
 from safe_qgis.tools.osm_downloader import OsmDownloader
-from safe_qgis.utilities.utilities import downloadWebUrl
-from safe_qgis.utilities.utilities_test import (
-    getQgisTestApp,
-    assertHashForFile)
+from safe_qgis.utilities.utilities import download_url
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app,
+    assert_hash_for_file)
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
-TEST_DATA_DIR = os.path.join(os.path.dirname(__file__),
-                             '../test/test_data/test_files')
+TEST_DATA_DIR = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__), '../../test/test_data/test_files'))
 
 
 class FakeQNetworkReply(QObject):
@@ -121,6 +122,12 @@ def readAll(thePath):
 class ImportDialogTest(unittest.TestCase):
     """Test Import Dialog widget
     """
+    def setUp(self):
+        """Runs before each test."""
+        self.importDlg = OsmDownloader(PARENT, IFACE)
+
+        ## provide Fake QNetworkAccessManager for self.network_manager
+        self.importDlg.network_manager = FakeQNetworkAccessManager()
 
     def test_httpDownload(self):
         myManager = QNetworkAccessManager(PARENT)
@@ -134,23 +141,18 @@ class ImportDialogTest(unittest.TestCase):
         myUrl = 'http://google.com'
         myTempFilePath = tempfile.mktemp()
 
-        downloadWebUrl(myManager, myUrl, myTempFilePath)
+        download_url(myManager, myUrl, myTempFilePath)
 
-        assertHashForFile(myHash, myTempFilePath)
+        assert_hash_for_file(myHash, myTempFilePath)
 
-    def setUp(self):
-        self.importDlg = OsmDownloader(PARENT, IFACE)
-
-        ## provide Fake QNetworkAccessManager for self.nam
-        self.importDlg.nam = FakeQNetworkAccessManager()
-
-    def test_downloadShapeFile(self):
+    def test_fetch_zip(self):
+        """Test fetch zip method."""
         myUrl = 'http://osm.linfiniti.com/buildings-shp?' + \
                 'bbox=20.389938354492188,-34.10782492987083' \
                 ',20.712661743164062,' + \
                 '-34.008273470938335&obj=building'
         myTempFilePath = tempfile.mktemp('shapefiles')
-        self.importDlg.downloadShapeFile(myUrl, myTempFilePath)
+        self.importDlg.fetch_zip(myUrl, myTempFilePath)
 
         myMessage = "file %s not exist" % myTempFilePath
         assert os.path.exists(myTempFilePath), myMessage
@@ -158,10 +160,12 @@ class ImportDialogTest(unittest.TestCase):
         # cleanup
         os.remove(myTempFilePath)
 
-    def test_extractZip(self):
+    def test_extract_zip(self):
+        """Test extract_zip method."""
         myOutDir = tempfile.mkdtemp()
-        myInput = os.path.join(TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
-        self.importDlg.extractZip(myInput, myOutDir)
+        myInput = os.path.abspath(os.path.join(
+            TEST_DATA_DIR, 'test-importdlg-extractzip.zip'))
+        self.importDlg.extract_zip(myInput, myOutDir)
 
         myMessage = "file {0} not exist"
 
@@ -180,33 +184,34 @@ class ImportDialogTest(unittest.TestCase):
         # remove temporary folder and all of its content
         shutil.rmtree(myOutDir)
 
-    def test_doImport(self):
+    def test_download(self):
+        """Test download method."""
         myOutDir = tempfile.mkdtemp()
         self.importDlg.outDir.setText(myOutDir)
         self.importDlg.minLongitude.setText('20.389938354492188')
         self.importDlg.minLatitude.setText('-34.10782492987083')
         self.importDlg.maxLongitude.setText('20.712661743164062')
         self.importDlg.maxLatitude.setText('-34.008273470938335')
-        self.importDlg.doImport()
+        self.importDlg.download()
 
         myResult = self.importDlg.progressDialog.result()
         myMessage = "result do not match. current result is %s " % myResult
         assert myResult == QDialog.Accepted, myMessage
 
-    def test_loadShapeFile(self):
-        """ test loading shape file to QGIS Main Window """
+    def test_load_shapefile(self):
+        """Test loading shape file to QGIS Main Window """
 
-        myInput = os.path.join(
-            TEST_DATA_DIR, 'test-importdlg-extractzip.zip')
+        myInput = os.path.abspath(os.path.join(
+            TEST_DATA_DIR, 'test-importdlg-extractzip.zip'))
         myOutDir = tempfile.mkdtemp()
 
-        self.importDlg.extractZip(myInput, myOutDir)
+        self.importDlg.extract_zip(myInput, myOutDir)
 
         # outDir must be set to myOutDir because loadShapeFile() use
         # that variable to determine the location of shape files.
         self.importDlg.outDir.setText(myOutDir)
 
-        self.importDlg.loadShapeFile()
+        self.importDlg.load_shapefile()
 
         #FIXME(gigih): need to check if layer is loaded to QGIS
 

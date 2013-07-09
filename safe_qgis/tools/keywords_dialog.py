@@ -31,9 +31,9 @@ from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
     get_error_message,
-    isPolygonLayer,
-    getLayerAttributeNames,
-    getDefaults)
+    is_polygon_layer,
+    layer_attribute_names,
+    defaults)
 
 from safe_qgis.exceptions import InvalidParameterError, HashNotFoundError
 
@@ -93,7 +93,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         QtCore.QObject.connect(self.lstKeywords,
                                QtCore.SIGNAL("itemClicked(QListWidgetItem *)"),
-                               self.makeKeyValueEditable)
+                               self.edit_key_value_pair)
 
         # Set up help dialog showing logic.
         self.helpDialog = None
@@ -102,7 +102,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                self.show_help)
 
         # set some inital ui state:
-        self.defaults = getDefaults()
+        self.defaults = defaults()
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
@@ -163,7 +163,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if visible_flag:
             currentKeyword = self.get_value_for_key(
                 self.defaults['AGGR_ATTR_KEY'])
-            fields, attributePosition = getLayerAttributeNames(
+            fields, attributePosition = layer_attribute_names(
                 self.layer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String],
                 currentKeyword)
@@ -190,7 +190,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if visible_flag:
             currentKeyword = self.get_value_for_key(
                 self.defaults['FEM_RATIO_ATTR_KEY'])
-            fields, attributePosition = getLayerAttributeNames(
+            fields, attributePosition = layer_attribute_names(
                 self.layer,
                 [QtCore.QVariant.Double],
                 currentKeyword)
@@ -239,8 +239,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param index: Not used but required for slot.
         """
         del index
-        self.add_list_entry(self.defaults['AGGR_ATTR_KEY'],
-                          self.cboAggregationAttribute.currentText())
+        self.add_list_entry(
+            self.defaults['AGGR_ATTR_KEY'],
+            self.cboAggregationAttribute.currentText())
 
     # prevents actions being handled twice
     @pyqtSignature('int')
@@ -256,8 +257,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             currentDefault = self.get_value_for_key(
                 self.defaults['FEM_RATIO_KEY'])
             if currentDefault is None:
-                self.add_list_entry(self.defaults['FEM_RATIO_KEY'],
-                                  self.dsbFemaleRatioDefault.value())
+                self.add_list_entry(
+                    self.defaults['FEM_RATIO_KEY'],
+                    self.dsbFemaleRatioDefault.value())
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
             self.remove_item_by_key(self.defaults['FEM_RATIO_KEY'])
@@ -271,10 +273,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         :param value: Not used but required for slot.
         """
         del value
-        theBox = self.dsbFemaleRatioDefault
-        if theBox.isEnabled():
-            self.add_list_entry(self.defaults['FEM_RATIO_KEY'],
-                              theBox.value())
+        box = self.dsbFemaleRatioDefault
+        if box.isEnabled():
+            self.add_list_entry(
+                self.defaults['FEM_RATIO_KEY'],
+                box.value())
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -690,7 +693,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.lblLayerName.setText('')
 
-        if not isPolygonLayer(self.layer):
+        if not is_polygon_layer(self.layer):
             self.radPostprocessing.setEnabled(False)
 
         #adapt gui if we are in postprocessing category
@@ -768,11 +771,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         It will write out the keywords for the layer that is active.
         """
-        self.applyPendingChanges()
+        self.apply_changes()
         myKeywords = self.get_keywords()
         try:
-            self.keywordIO.write_keywords(layer=self.layer,
-                                         keywords=myKeywords)
+            self.keywordIO.write_keywords(
+                layer=self.layer, keywords=myKeywords)
         except InaSAFEError, e:
             myErrorMessage = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
@@ -785,15 +788,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.dock.get_layers()
         self.done(QtGui.QDialog.Accepted)
 
-    def applyPendingChanges(self):
+    def apply_changes(self):
         """Apply any pending changes e.g. keywords entered without being added.
+
         See https://github.com/AIFDR/inasafe/issues/249
-
-        Args: None
-
-        Returns: None
-
-        Raises: None
         """
 
         if self.radPredefined.isChecked():
@@ -801,17 +799,15 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.on_pbnAddToList2_clicked()
 
-    def makeKeyValueEditable(self, theItem):
+    def edit_key_value_pair(self, item):
         """Set leKey and leValue to the clicked item in the lstKeywords.
 
-        Args: None
-
-        Returns: None
-
-        Raises: None
+        :param item: A Key Value pair expressed as a string where the first
+            colon in the string delimits the key from the value.
+        :type item: str
         """
-        myTempKey = theItem.text().split(':')[0]
-        myTempValue = theItem.text().split(':')[1]
+        myTempKey = item.text().split(':')[0]
+        myTempValue = item.text().split(':')[1]
         if myTempKey == 'category':
             return
         if self.radUserDefined.isChecked():

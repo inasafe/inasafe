@@ -46,7 +46,7 @@ from safe_qgis.utilities.clipper import (
     extentToKml,
     explodeMultiPartGeometry,
     clip_geometry)
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgis_version
 
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
@@ -537,7 +537,7 @@ class ClipperTest(unittest.TestCase):
 
         myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgisVersion() > 10800:
+        if qgis_version() > 10800:
             myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
         else:
             myExpectedWkt = ('LINESTRING(20.000000 20.000000, '
@@ -558,7 +558,7 @@ class ClipperTest(unittest.TestCase):
             '106.8216869 -6.1852067))')
         myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgisVersion() > 10800:
+        if qgis_version() > 10800:
             myExpectedWkt = (
                 'POLYGON((106.82179833 -6.18353616,106.8222566 -6.1835184,'
                 '106.8227557 -6.1835076,106.82279996 -6.1842,'
@@ -577,7 +577,7 @@ class ClipperTest(unittest.TestCase):
         myGeometry = QgsGeometry.fromWkt('POINT(106.82241 -6.18369)')
         myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgisVersion() > 10800:
+        if qgis_version() > 10800:
             myExpectedWkt = 'POINT(106.82241 -6.18369)'
         else:
             myExpectedWkt = 'POINT(106.822410 -6.183690)'

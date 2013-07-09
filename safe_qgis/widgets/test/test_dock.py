@@ -64,7 +64,7 @@ from safe_qgis.utilities.utilities_for_testing import (
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.styling import setRasterStyle
-from safe_qgis.utilities.utilities import qgisVersion, readImpactLayer
+from safe_qgis.utilities.utilities import qgis_version, read_impact_layer
 
 
 # Retired impact function for characterisation (Ole)
@@ -684,7 +684,7 @@ class DockTest(unittest.TestCase):
         myRunner = DOCK.calculator.get_runner()
         myRunner.run()  # Run in same thread
         myEngineImpactLayer = myRunner.impact_layer()
-        myQgisImpactLayer = readImpactLayer(myEngineImpactLayer)
+        myQgisImpactLayer = read_impact_layer(myEngineImpactLayer)
         myStyle = myEngineImpactLayer.get_style_info()
         #print myStyle
         setRasterStyle(myQgisImpactLayer, myStyle)
@@ -790,7 +790,7 @@ class DockTest(unittest.TestCase):
         """Test issue #71 in github - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
-        print 'Using QGIS: %s' % qgisVersion()
+        print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
@@ -854,7 +854,7 @@ class DockTest(unittest.TestCase):
                                 'multipart_polygons_osm_4326.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
-        print 'Using QGIS: %s' % qgisVersion()
+        print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run

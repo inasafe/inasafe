@@ -180,7 +180,7 @@ try:
     # for monkey patching safe.common.utilities with a replacement
     # get_defaults when safe_qgis initialises....Tim (June 2013)
     # noinspection PyUnresolvedReferences
-    from safe_qgis.utilities.utilities import getDefaults as get_qgis_defaults
+    from safe_qgis.utilities.utilities import defaults as get_qgis_defaults
 
     def get_defaults(default=None):
         return get_qgis_defaults(theDefault=default)

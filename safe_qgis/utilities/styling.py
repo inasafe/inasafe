@@ -37,7 +37,7 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2)
 
 from safe_qgis.exceptions import StyleError
-from safe_qgis.utilities.utilities import qgisVersion
+from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -294,7 +294,7 @@ def setRasterStyle(raster_layer, style):
     myNewStyles = add_extrema_to_style(style['style_classes'])
     # test if QGIS 1.8.0 or older
     # see issue #259
-    if qgisVersion() <= 10800:
+    if qgis_version() <= 10800:
         LOGGER.debug('Rendering raster using <= 1.8 styling')
         return set_legacy_raster_style(raster_layer, myNewStyles)
     else:

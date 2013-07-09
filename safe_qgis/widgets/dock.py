@@ -39,12 +39,12 @@ from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
     get_error_message,
     getWGS84resolution,
-    qgisVersion,
-    impactLayerAttribution,
-    addComboItemInOrder,
-    extentToGeoArray,
-    viewportGeoArray,
-    readImpactLayer)
+    qgis_version,
+    impact_attribution,
+    add_ordered_combo_item,
+    extent_to_geo_array,
+    viewport_geo_array,
+    read_impact_layer)
 from safe_qgis.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -323,7 +323,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         ..seealso:: disconnectLayerListener
         """
-        if qgisVersion() >= 10800:  # 1.8 or newer
+        if qgis_version() >= 10800:  # 1.8 or newer
             QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
                 self.layers_will_be_removed)
             QgsMapLayerRegistry.instance().layersAdded.connect(
@@ -777,13 +777,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 continue
 
             if myCategory == 'hazard':
-                addComboItemInOrder(self.cboHazard, myTitle, mySource)
+                add_ordered_combo_item(self.cboHazard, myTitle, mySource)
                 self.hazardLayers.append(myLayer)
             elif myCategory == 'exposure':
-                addComboItemInOrder(self.cboExposure, myTitle, mySource)
+                add_ordered_combo_item(self.cboExposure, myTitle, mySource)
                 self.exposureLayers.append(myLayer)
             elif myCategory == 'postprocessing':
-                addComboItemInOrder(self.cboAggregation, myTitle, mySource)
+                add_ordered_combo_item(self.cboAggregation, myTitle, mySource)
                 self.aggregationLayers.append(myLayer)
 
         #handle the cboAggregation combo
@@ -847,10 +847,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # Provide function title and ID to function combo:
                 # myFunctionTitle is the text displayed in the combo
                 # myFunctionID is the canonical identifier
-                addComboItemInOrder(
+                add_ordered_combo_item(
                     self.cboFunction,
                     myFunctionTitle,
-                    theItemData=myFunctionID)
+                    data=myFunctionID)
         except Exception, e:
             raise e
 
@@ -1225,7 +1225,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.restoreOverrideCursor()
         self.hide_busy()
         LOGGER.exception(theMessage)
-        myMessage = get_error_message(theException, theContext=theMessage)
+        myMessage = get_error_message(theException, context=theMessage)
         self.show_error_message(myMessage)
         self.analysisDone.emit(False)
 
@@ -1240,7 +1240,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myEngineImpactLayer = self.runner.impact_layer()
 
             # Load impact layer into QGIS
-            myQGISImpactLayer = readImpactLayer(myEngineImpactLayer)
+            myQGISImpactLayer = read_impact_layer(myEngineImpactLayer)
             self.layer_changed(myQGISImpactLayer)
             myReport = self.show_results(myQGISImpactLayer, myEngineImpactLayer)
         except Exception, e:  # pylint: disable=W0703
@@ -1285,7 +1285,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get tabular information from impact layer
         myReport = self.keywordIO.read_keywords(
             theQGISImpactLayer, 'impact_summary')
-        myReport += impactLayerAttribution(myKeywords).to_html(True)
+        myReport += impact_attribution(myKeywords).to_html(True)
 
         # Get requested style for impact layer of either kind
         myStyle = theEngineImpactLayer.get_style_info()
@@ -1406,7 +1406,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myContext = self.tr(
                     'An exception occurred when calculating the results. %1'
                 ).arg(self.runner.result())
-                myMessage = get_error_message(myException, theContext=myContext)
+                myMessage = get_error_message(myException, context=myContext)
             self.show_error_message(myMessage)
             self.analysisDone.emit(False)
             return
@@ -1470,13 +1470,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHazardLayer = self.get_hazard_layer()
         myExposureLayer = self.get_exposure_layer()
         # Get the current viewport extent as an array in EPSG:4326
-        myViewportGeoExtent = viewportGeoArray(self.iface.mapCanvas())
+        myViewportGeoExtent = viewport_geo_array(self.iface.mapCanvas())
         # Get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = extentToGeoArray(
+        myHazardGeoExtent = extent_to_geo_array(
             myHazardLayer.extent(),
             myHazardLayer.crs())
         # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = extentToGeoArray(
+        myExposureGeoExtent = extent_to_geo_array(
             myExposureLayer.extent(),
             myExposureLayer.crs())
 
@@ -1681,7 +1681,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport.add(m.Text(myKeywords['impact_summary']))
         if 'postprocessing_report' in myKeywords:
             myReport.add(myKeywords['postprocessing_report'])
-        myReport.add(impactLayerAttribution(myKeywords))
+        myReport.add(impact_attribution(myKeywords))
         self.pbnPrint.setEnabled(True)
         self.show_static_message(myReport)
         # also hide the question and show the show question button

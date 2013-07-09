@@ -21,7 +21,7 @@ import logging
 from PyQt4 import QtCore, QtGui
 from qgis.core import QgsMapLayer
 from safe_qgis.exceptions import LegendLayerError, KeywordNotFoundError
-from safe_qgis.utilities.utilities import qgisVersion, dpiToMeters
+from safe_qgis.utilities.utilities import qgis_version, dpi_to_meters
 from safe_qgis.utilities.keyword_io import KeywordIO
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -180,7 +180,7 @@ class MapLegend():
         LOGGER.debug('InaSAFE Map Legend getRasterLegend called')
         # test if QGIS 1.8.0 or older
         # see issue #259
-        if qgisVersion() <= 10800:
+        if qgis_version() <= 10800:
             myShader = self.layer.rasterShader().rasterShaderFunction()
             myRampItems = myShader.colorRampItemList()
             myLastValue = 0  # Making an assumption here...
@@ -365,8 +365,8 @@ class MapLegend():
 
             self.legendImage = QtGui.QImage(self.legendWidth, 95,
                                             QtGui.QImage.Format_RGB32)
-            self.legendImage.setDotsPerMeterX(dpiToMeters(self.dpi))
-            self.legendImage.setDotsPerMeterY(dpiToMeters(self.dpi))
+            self.legendImage.setDotsPerMeterX(dpi_to_meters(self.dpi))
+            self.legendImage.setDotsPerMeterY(dpi_to_meters(self.dpi))
 
             # Only works in Qt4.8
             #self.legendImage.fill(QtGui.QColor(255, 255, 255))
@@ -400,8 +400,8 @@ class MapLegend():
                 self.legendWidth,
                 self.legendImage.height() + self.legendIncrement,
                 QtGui.QImage.Format_RGB32)
-            myImage.setDotsPerMeterX(dpiToMeters(self.dpi))
-            myImage.setDotsPerMeterY(dpiToMeters(self.dpi))
+            myImage.setDotsPerMeterX(dpi_to_meters(self.dpi))
+            myImage.setDotsPerMeterY(dpi_to_meters(self.dpi))
             # Only works in Qt4.8
             #myImage.fill(QtGui.qRgb(255, 255, 255))
             # Works in older Qt4 versions

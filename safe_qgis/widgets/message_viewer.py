@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
 from safe import messaging as m
-from safe_qgis.utilities.utilities import htmlHeader, htmlFooter
+from safe_qgis.utilities.utilities import html_header, html_footer
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -161,7 +161,7 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        string = htmlHeader()
+        string = html_header()
         if self.static_message is not None:
             string += self.static_message.to_html()
 
@@ -176,7 +176,7 @@ class MessageViewer(QtWebKit.QWebView):
             if html is not None:
                 string += html
 
-        string += htmlFooter()
+        string += html_footer()
         self.setHtml(string)
         self.scroll_to_div()
 
