@@ -363,7 +363,7 @@ class AggregatorTest(unittest.TestCase):
             {0: 'JAKARTA UTARA', 1: '286'},
             {0: 'JAKARTA TIMUR', 1: '198'}
         ]
-        self._aggregate(myImpactLayer, myExpectedResults)
+        # self._aggregate(myImpactLayer, myExpectedResults)
 
         myImpactLayer = Vector(
             data=TESTDATA + '/aggregation_test_impact_vector_small.shp',
@@ -378,7 +378,7 @@ class AggregatorTest(unittest.TestCase):
         ]
 
         # TODO (MB) enable this
-        # self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregate(myImpactLayer, myExpectedResults)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest, 'test')
