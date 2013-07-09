@@ -22,7 +22,8 @@ from safe_qgis.utilities.utilities import (
     dpi_to_meters,
     which,
     defaults)
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app, TEST_FILES_DIR)
 from safe_qgis.tools.test.test_keywords_dialog import (
     makePolygonLayer,
     makePadangLayer,
@@ -63,9 +64,13 @@ class UtilitiesTest(unittest.TestCase):
             myMessage = get_error_message(e)
             myMessage = myMessage.to_html()
             assert str(e) in myMessage
-            self.assertIn('</i> Traceback</h5>', myMessage)
-            self.assertIn('line', myMessage)
-            self.assertIn('file', myMessage)
+
+            myMessage = myMessage.decode('string_escape')
+            myExpectedResult = open(
+                TEST_FILES_DIR +
+                '/test-stacktrace-html.txt', 'r').read().replace('\n', '')
+            self.assertIn(myExpectedResult, myMessage)
+
         # pylint: enable=W0703
 
     def test_getQgisVersion(self):
@@ -81,7 +86,7 @@ class UtilitiesTest(unittest.TestCase):
         #with good attribute name
         myAttrs, myPos = layer_attribute_names(myLayer, [
             QVariant.Int, QVariant.String],
-            'TEST_STRIN')
+            'TEST_STRIN')  # Not a typo...
         myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
         myExpectedPos = 2
         myMessage = 'myExpectedAttrs, got %s, expected %s' % (
@@ -127,6 +132,7 @@ class UtilitiesTest(unittest.TestCase):
         assert not is_polygon_layer(myLayer), myMessage
 
     def test_getDefaults(self):
+        """Test defaults for post processing can be obtained properly."""
         myExpectedDefaults = {
             'FEM_RATIO_KEY': 'female ratio default',
             'YOUTH_RATIO': 0.263,

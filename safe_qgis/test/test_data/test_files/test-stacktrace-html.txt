@@ -1,0 +1,1 @@
+in bbox_intersection raise BoundingBoxError(msg)
