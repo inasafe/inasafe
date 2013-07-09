@@ -39,7 +39,8 @@ from safe_qgis.safe_interface import (
     readSafeLayer,
     getOptimalExtent,
     HAZDATA, TESTDATA, EXPDATA, UNITDATA,
-    nanallclose)
+    nanallclose,
+    GetDataError)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.utilities.clipper import (
     clip_layer,
