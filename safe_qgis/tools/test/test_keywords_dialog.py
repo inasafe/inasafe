@@ -23,15 +23,17 @@ import shutil
 # noinspection PyPackageRequirements
 from nose import SkipTest
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 
-from qgis.core import (QgsRasterLayer,
-                       QgsVectorLayer,
-                       QgsMapLayerRegistry)
+from qgis.core import (
+    QgsRasterLayer,
+    QgsVectorLayer,
+    QgsMapLayerRegistry)
 
 from third_party.odict import OrderedDict
 from safe_qgis.utilities.utilities_for_testing import (
@@ -122,16 +124,18 @@ def makePointLayer():
     return myLayer
 
 
-def removeTempFile(myFileName='temp_Shakemap_Padang_2009'):
-    """Helper function that removes temp file that created during test"""
-    #myFileName = 'temp_Shakemap_Padang_2009'
+def remove_temp_file(file_name='temp_Shakemap_Padang_2009'):
+    """Helper function that removes temp file that created during test
+    :param file_name: File to remove.
+    """
+    #file_name = 'temp_Shakemap_Padang_2009'
     myExts = ['.asc', '.asc.aux.xml', '.keywords',
               '.lic', '.prj', '.qml', '.sld']
     for ext in myExts:
-        os.remove(os.path.join(HAZDATA, myFileName + ext))
+        os.remove(os.path.join(HAZDATA, file_name + ext))
 
 
-def makeKeywordLessLayer():
+def make_keywordless_layer():
     """Helper function that returns a single predefined keywordless layer"""
     myFile = 'keywordless_layer.tif'
     myBasePath = test_data_path('hazard')
@@ -542,16 +546,18 @@ class KeywordsDialogTest(unittest.TestCase):
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
 
-    def test_checkStateWhenKeywordsAbsent(self):
+    def test_layer_without_keywords(self):
         """Test load state from keywords works"""
         myDialog = KeywordsDialog(PARENT, IFACE)
-        myLayer = makeKeywordLessLayer()
+        myLayer = make_keywordless_layer()
         myDialog.layer = myLayer
         myDialog.load_state_from_keywords()
         myKeywords = myDialog.get_keywords()
         #check that a default title is given (see
         #https://github.com/AIFDR/inasafe/issues/111)
-        myExpectedKeywords = {'title': 'Keywordless Layer'}
+        myExpectedKeywords = {
+            'category': 'exposure',
+            'title': 'Keywordless Layer'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
