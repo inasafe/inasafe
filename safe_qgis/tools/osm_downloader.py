@@ -245,8 +245,9 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         myLabelText = self.tr("Downloading shapefile")
         self.progressDialog.setLabelText(myLabelText)
 
-        myResult = download_url(self.network_manager, url, output_path,
-                                  self.progressDialog)
+        myResult = download_url(
+            self.network_manager, url, output_path,
+            self.progressDialog)
 
         if myResult is not True:
             _, myErrorMessage = myResult
