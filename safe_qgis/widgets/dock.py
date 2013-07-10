@@ -693,20 +693,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def get_layers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate cboHazard,
-        cboExposure and cboAggregate on the dialog with a list of available
-        layers.
-        Only **singleband raster** layers will be added to the hazard layer
-        list,only **point vector** layers will be added to the exposure layer
-        list and Only **polygon vector** layers will be added to the aggregate
-        list
+        On invocation, this method will populate cboHazard, cboExposure and
+        cboAggregate on the dialog with a list of available layers.
 
-        Args:
-           None.
-        Returns:
-           None
-        Raises:
-           no
+        * Only **singleband raster** layers will be added to the hazard layer
+        list,
+        * Only **point vector** layers will be added to the exposure layer
+        list.
+        * Only **polygon vector** layers will be added to the aggregate
+        list.
         """
         self.disconnect_layer_listener()
         self.blockSignals(True)
