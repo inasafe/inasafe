@@ -187,7 +187,7 @@ def setup_logger(log_file=None, sentry_url=None):
 
 
 def temp_dir(sub_dir='work'):
-    """Obtain the temporary working directory for the operating system.
+    r"""Obtain the temporary working directory for the operating system.
 
     An inasafe subdirectory will automatically be created under this and
     if specified, a user subdirectory under that.

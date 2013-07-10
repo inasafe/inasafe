@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from unittest import TestCase
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
@@ -253,13 +252,12 @@ class DockTest(unittest.TestCase):
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
         myDict = get_ui_state(DOCK)
-        myExpectedDict = {'Hazard': PADANG2009_title,
-                          'Exposure': 'People',
-                          'Impact Function Id':
-                              'Earthquake Fatality Function',
-                          'Impact Function Title':
-                              'Earthquake Fatality Function',
-                          'Run Button Enabled': True}
+        myExpectedDict = {
+            'Hazard': PADANG2009_title,
+            'Exposure': 'People',
+            'Impact Function Id': 'Earthquake Fatality Function',
+            'Impact Function Title': 'Earthquake Fatality Function',
+            'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
             myDict, myExpectedDict, combos_to_string(DOCK))
         assert myDict == myExpectedDict, myMessage

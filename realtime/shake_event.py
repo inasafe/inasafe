@@ -76,7 +76,7 @@ from qgis.core import (
     QgsFields)
 # pylint: enable=E0611
 # pylint: enable=W0611
-from safe_qgis.utilities.utilities_test import getQgisTestApp
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.exceptions import TranslationLoadError
 from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins
@@ -99,7 +99,7 @@ from realtime.utils import setupLogger
 
 setupLogger()
 LOGGER = logging.getLogger('InaSAFE')
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakeEvent(QObject):

@@ -29,7 +29,10 @@ class HelpTest(unittest.TestCase):
 
     def test_keywords_help(self):
         """Test help works with context set to 'keywords'"""
-        myHelp = show_context_help(context='keywords')
+
+        # TODO this test is largely meaningless - try to come up with a
+        # better approach...
+        show_context_help(context='keywords')
 
 
 if __name__ == '__main__':

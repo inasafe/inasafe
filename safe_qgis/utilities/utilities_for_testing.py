@@ -73,16 +73,16 @@ def assert_hashes_for_file(hashes, filename):
     assert myHash in hashes, myMessage
 
 
-def assert_hash_for_file(hash, filename):
+def assert_hash_for_file(hash_string, filename):
     """Assert that a files has matches its expected hash
     :param filename:
-    :param hash:
+    :param hash_string:
     """
     myHash = hash_for_file(filename)
     myMessage = ('Unexpected hash'
                  '\nGot: %s'
-                 '\nExpected: %s' % (myHash, hash))
-    assert myHash == hash, myMessage
+                 '\nExpected: %s' % (myHash, hash_string))
+    assert myHash == hash_string, myMessage
 
 
 def hash_for_file(filename):
@@ -279,7 +279,7 @@ def set_geo_extent(bounding_box):
 
 
 def check_images(control_image, test_image_path, tolerance=1000):
-    """Compare a test image against a collection of known good images.
+    r"""Compare a test image against a collection of known good images.
 
     :param tolerance: How many pixels may be different between the
         two images.

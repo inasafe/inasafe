@@ -22,8 +22,6 @@ import logging
 
 from PyQt4 import (QtGui, QtCore)
 
-from safe_qgis.utilities.utilities import tr
-
 LOGGER = logging.getLogger('InaSAFE')
 
 

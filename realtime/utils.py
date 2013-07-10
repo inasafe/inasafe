@@ -116,7 +116,7 @@ def setupLogger():
     mySentryUrl = (
         'http://fda607badbe440be9a2fa6b22e759c72'
         ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
-    setupLoggerSQ(theSentryUrl=mySentryUrl, theLogFile=myLogFile)
+    setupLoggerSQ(log_file=myLogFile, sentry_url=mySentryUrl)
 
 
 def is_event_id(eventid):
