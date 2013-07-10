@@ -238,7 +238,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         dispatcher.send(
             signal=STATIC_MESSAGE_SIGNAL,
-            sender=None,
+            sender=self,
             message=message)
 
     def show_dynamic_message(self, message):
@@ -253,7 +253,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         dispatcher.send(
             signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=None,
+            sender=self,
             message=message)
 
     def show_error_message(self, error_message):
@@ -267,7 +267,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         dispatcher.send(
             signal=ERROR_MESSAGE_SIGNAL,
-            sender=None,
+            sender=self,
             message=error_message)
         self.hide_busy()
 
