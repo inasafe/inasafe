@@ -698,7 +698,12 @@ class Aggregator(QtCore.QObject):
         pyDuration = time.clock() - startTime
         print 'CPP duration: %ss' % (pyDuration)
 
-        print 'py to CPP: %s%%' % (pyDuration / cppDuration * 100)
+        try:
+            ratio = pyDuration / cppDuration
+        except ZeroDivisionError:
+            ratio = 1
+
+        print 'py to CPP: %s%%' % (ratio * 100)
         # FIXME (MB) remove this once fully implemented
         oldPrefix = self.prefix
 

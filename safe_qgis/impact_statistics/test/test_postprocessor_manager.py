@@ -35,10 +35,11 @@ from PyQt4.QtTest import QTest
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe_qgis.utilities.utilities_test import (getQgisTestApp,
-                                      setCanvasCrs,
-                                      setJakartaGeoExtent,
-                                      GEOCRS)
+from safe_qgis.utilities.utilities_for_testing import (
+    get_qgis_app,
+    set_canvas_crs,
+    set_jakarta_extent,
+    GEOCRS)
 
 from safe_qgis.widgets.dock import Dock
 
@@ -47,7 +48,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     canvas_list)
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -71,7 +72,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
         DOCK.showIntermediateLayers = False
-        setJakartaGeoExtent()
+        set_jakarta_extent()
 
     def test_checkPostProcessingLayersVisibility(self):
         """Generated layers are not added to the map registry."""
@@ -85,8 +86,7 @@ class PostprocessorManagerTest(unittest.TestCase):
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart',
-            ok_button_flag=True)
+            aggregation_layer='kabupaten jakarta singlepart')
         assert myResult, myMessage
 
         LOGGER.info("Registry list before:\n%s" %
@@ -134,12 +134,11 @@ class PostprocessorManagerTest(unittest.TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function',
-            ok_button_flag=True)
+            function_id='Flood Evacuation Function')
 
         # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
 
         assert myResult, myMessage
 
