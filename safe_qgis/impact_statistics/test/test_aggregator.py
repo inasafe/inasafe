@@ -268,6 +268,7 @@ class AggregatorTest(unittest.TestCase):
 
         myAggrAttribute = self.keywordIO.read_keywords(
             myAggregationLayer, self.defaults['AGGR_ATTR_KEY'])
+        # noinspection PyArgumentEqualDefault
         myAggregationLayer = clip_layer(
             layer=myAggregationLayer,
             extent=myGeoExtent,
@@ -292,17 +293,21 @@ class AggregatorTest(unittest.TestCase):
             myFeatureResults = {}
             myAtMap = myFeature.attributeMap()
             for (k, attr) in myAtMap.iteritems():
-                myFeatureResults[k] = attr.toString()
+                myFeatureResults[k] = str(attr.toString())
             myResults.append(myFeatureResults)
 
-        self.assertEqual(myResults, myExpectedResults)
+        self.assertEqual(myExpectedResults, myResults)
 
     def test_aggregate_raster_impact(self):
-        # created from loadStandardLayers.qgs with:
-        # - a flood in Jakarta like in 2007
-        # - Penduduk Jakarta
-        # - need evacuation
-        # - kabupaten_jakarta_singlepart.shp
+        """Check aggregation on raster impact.
+
+        Created from loadStandardLayers.qgs with:
+        - a flood in Jakarta like in 2007
+        - Penduduk Jakarta
+        - need evacuation
+        - kabupaten_jakarta_singlepart.shp
+
+        """
         myImpactLayer = Raster(
             data=os.path.join(TESTDATA, 'aggregation_test_impact_raster.tif'),
             name='test raster impact')
@@ -347,11 +352,13 @@ class AggregatorTest(unittest.TestCase):
         self._aggregate(myImpactLayer, myExpectedResults)
 
     def test_aggregate_vector_impact(self):
-         # created from loadStandardLayers.qgs with:
-        # - a flood in Jakarta like in 2007
-        # - Essential buildings
-        # - be flodded
-        # - kabupaten_jakarta_singlepart.shp
+        """Test aggregation results on a vector layer.
+        created from loadStandardLayers.qgs with:
+        - a flood in Jakarta like in 2007
+        - Essential buildings
+        - be flodded
+        - kabupaten_jakarta_singlepart.shp
+        """
         myImpactLayer = Vector(
             data=os.path.join(TESTDATA, 'aggregation_test_impact_vector.shp'),
             name='test vector impact')

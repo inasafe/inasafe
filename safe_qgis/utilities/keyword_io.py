@@ -90,7 +90,7 @@ class KeywordIO(QObject):
 
         :returns: A dict if keyword is omitted, otherwise the value for the
             given key if it is present.
-        :rtype: dict or str
+        :rtype: dict, str
         """
         mySource = str(layer.source())
         myFlag = self.are_keywords_file_based(layer)

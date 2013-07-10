@@ -101,7 +101,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -126,7 +126,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+        pydevd.settrace(stdoutToServer=True, stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -134,6 +134,61 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Ensure that all impact functions are loaded
         load_plugins()
         self.pbnShowQuestion.setVisible(False)
+        self.enable_messaging()
+
+        self.set_dock_title()
+
+        # Save reference to the QGIS interface
+        self.iface = iface
+
+        self.calculator = ImpactCalculator()
+        self.keywordIO = KeywordIO()
+        self.runner = None
+        self.state = None
+        self.lastUsedFunction = ''
+
+        self.runInThreadFlag = False
+        self.showOnlyVisibleLayersFlag = True
+        self.setLayerNameFromTitleFlag = True
+        self.zoomToImpactFlag = True
+        self.hideExposureFlag = True
+
+        self._update_settings()  # fix old names in settings
+        self.read_settings()  # get_layers called by this
+        self.aggregator = None
+        self.postprocessorManager = None
+
+        self.pbnPrint.setEnabled(False)
+        # used by configurable function options button
+        self.activeFunction = None
+        self.runtimeKeywordsDialog = None
+
+        self.setup_button_connectors()
+
+        myCanvas = self.iface.mapCanvas()
+
+        # Enable on the fly projection by default
+        myCanvas.mapRenderer().setProjectionsEnabled(True)
+        self.grpQuestion.setEnabled(False)
+        self.grpQuestion.setVisible(False)
+        self.set_ok_button_status()
+
+    def set_dock_title(self):
+        """Set the title of the dock using hte current version of InaSAFE."""
+        myLongVersion = get_version()
+        LOGGER.debug('Version: %s' % myLongVersion)
+        myTokens = myLongVersion.split('.')
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
+        try:
+            myVersionType = myTokens[3].split('2')[0]
+        except IndexError:
+            myVersionType = 'final'
+            # Allowed version names: ('alpha', 'beta', 'rc', 'final')
+        self.setWindowTitle(self.tr('InaSAFE %1 %2').arg(
+            myVersion, myVersionType))
+
+    def enable_messaging(self):
+        """Set up the dispatcher for messaging."""
         # Set up dispatcher for dynamic messages
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages
@@ -157,47 +212,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
-        myLongVersion = get_version()
-        LOGGER.debug('Version: %s' % myLongVersion)
-        myTokens = myLongVersion.split('.')
-        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
-        try:
-            myVersionType = myTokens[3].split('2')[0]
-        except IndexError:
-            myVersionType = 'final'
-        # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %1 %2').arg(
-            myVersion, myVersionType))
-        # Save reference to the QGIS interface
-        self.iface = iface
-        self.header = None  # for storing html header template
-        self.footer = None  # for storing html footer template
-        self.calculator = ImpactCalculator()
-        self.keywordIO = KeywordIO()
-        self.runner = None
-        self.state = None
-        self.lastUsedFunction = ''
-        self.runInThreadFlag = False
-        self.showOnlyVisibleLayersFlag = True
-        self.setLayerNameFromTitleFlag = True
-        self.zoomToImpactFlag = True
-        self.hideExposureFlag = True
-        self.hazardLayers = None  # array of all hazard layers
-        self.exposureLayers = None  # array of all exposure layers
-        self._update_settings()  # fix old names in settings
-        self.read_settings()  # getLayers called by this
-        self.set_ok_button_status()
-        self.aggregator = None
-        self.postprocessorManager = None
-        self.pbnPrint.setEnabled(False)
-        # used by configurable function options button
-        self.activeFunction = None
-        self.runtimeKeywordsDialog = None
-
+    def setup_button_connectors(self):
+        """Setup signal/slot mechanisms for dock buttons."""
         myButton = self.pbnHelp
         QtCore.QObject.connect(
             myButton, QtCore.SIGNAL('clicked()'), self.show_help)
-
         myButton = self.pbnPrint
         QtCore.QObject.connect(
             myButton, QtCore.SIGNAL('clicked()'), self.print_map)
@@ -205,56 +224,50 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myButton = self.pbnRunStop
         QtCore.QObject.connect(
             myButton, QtCore.SIGNAL('clicked()'), self.accept)
-        #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
-        #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
-        myCanvas = self.iface.mapCanvas()
-
-        # Enable on the fly projection by default
-        myCanvas.mapRenderer().setProjectionsEnabled(True)
-
-    def show_static_message(self, theMessage):
+    def show_static_message(self, message):
         """Send a static message to the message viewer.
 
         Static messages cause any previous content in the MessageViewer to be
         replaced with new content.
 
-        :param theMessage: Message - an instance of our rich message class.
+        :param message: An instance of our rich message class.
+        :type message: Message
 
         """
         dispatcher.send(
             signal=STATIC_MESSAGE_SIGNAL,
             sender=self,
-            message=theMessage)
+            message=message)
 
-    def show_dynamic_message(self, theMessage):
+    def show_dynamic_message(self, message):
         """Send a dynamic message to the message viewer.
 
         Dynamic messages are appended to any existing content in the
         MessageViewer.
 
-        :param theMessage: An instance of our rich message class.
-        :type theMessage: Message
+        :param message: An instance of our rich message class.
+        :type message: Message
 
         """
         dispatcher.send(
             signal=DYNAMIC_MESSAGE_SIGNAL,
             sender=self,
-            message=theMessage)
+            message=message)
 
-    def show_error_message(self, theErrorMessage):
+    def show_error_message(self, error_message):
         """Send an error message to the message viewer.
 
         Error messages cause any previous content in the MessageViewer to be
         replaced with new content.
 
-        :param theErrorMessage: An instance of our rich error message class.
-        :type theErrorMessage: ErrorMessage
+        :param error_message: An instance of our rich error message class.
+        :type error_message: ErrorMessage
         """
         dispatcher.send(
             signal=ERROR_MESSAGE_SIGNAL,
             sender=self,
-            message=theErrorMessage)
+            message=error_message)
         self.hide_busy()
 
     def read_settings(self):
@@ -305,8 +318,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/devMode', False).toBool()
         self.devMode = myFlag
 
-        self.get_layers()
-
     def _update_settings(self):
         """Update setting to new settings names."""
 
@@ -325,17 +336,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         if qgis_version() >= 10800:  # 1.8 or newer
             QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
-                self.layers_will_be_removed)
+                self.get_layers)
             QgsMapLayerRegistry.instance().layersAdded.connect(
-                self.layers_added)
+                self.get_layers)
         # All versions of QGIS
-        QtCore.QObject.connect(
-            self.iface.mapCanvas(),
-            QtCore.SIGNAL('layersChanged()'),
+        QgsMapLayerRegistry.instance().layerWasAdded.connect(
             self.get_layers)
-        QtCore.QObject.connect(
-            self.iface,
-            QtCore.SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+        QgsMapLayerRegistry.instance().layerWasAdded.connect(
+            self.get_layers)
+        self.iface.mapCanvas().layersChanged.connect(
+            self.get_layers)
+        self.iface.currentLayerChanged.connect(
             self.layer_changed)
 
     # pylint: disable=W0702
@@ -344,47 +355,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         ..seealso:: connectLayerListener
         """
-        # noinspection PyBroadException
-        try:
-            QtCore.QObject.disconnect(
-                QgsMapLayerRegistry.instance(),
-                QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+        if qgis_version() >= 10800:  # 1.8 or newer
+            QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(
                 self.get_layers)
-        except:
-            pass
-
-        # noinspection PyBroadException
-        try:
-            QtCore.QObject.disconnect(
-                QgsMapLayerRegistry.instance(),
-                QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+            QgsMapLayerRegistry.instance().layersAdded.disconnect(
                 self.get_layers)
-        except:
-            pass
-
-        # noinspection PyBroadException
-        try:
-            QgsMapLayerRegistry.instance().layers_will_be_removed.disconnect(
-                self.layers_will_be_removed)
-            QgsMapLayerRegistry.instance().layers_added.disconnect(
-                self.layers_added)
-        except:
-            pass
-
-        # noinspection PyBroadException
-        try:
-            QtCore.QObject.disconnect(
-                self.iface.mapCanvas(),
-                QtCore.SIGNAL('layersChanged()'),
-                self.get_layers)
-        except:
-            pass
-
-        QtCore.QObject.disconnect(
-            self.iface,
-            QtCore.SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+        # All versions of QGIS
+        QgsMapLayerRegistry.instance().layerWasAdded.disconnect(
+            self.get_layers)
+        QgsMapLayerRegistry.instance().layerWasAdded.disconnect(
+            self.get_layers)
+        self.iface.mapCanvas().layersChanged.disconnect(
+            self.get_layers)
+        self.iface.currentLayerChanged.disconnect(
             self.layer_changed)
-    # pylint: enable=W0702
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -516,6 +500,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.ready_message()
             return True, myMessage
 
+    @pyqtSlot(int)
     def on_cboHazard_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Hazard combo is changed.
 
@@ -523,7 +508,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         :param theIndex: The index number of the selected hazard layer.
 
-        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
         """
         # Add any other logic you might like here...
         del theIndex
@@ -531,31 +515,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
 
-    def on_cboExposure_currentIndexChanged(self, theIndex):
+    @pyqtSlot(int)
+    def on_cboExposure_currentIndexChanged(self, index):
         """Automatic slot executed when the Exposure combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
-        :param theIndex: The index number of the selected exposure layer.
+        :param index: The index number of the selected exposure layer.
 
-        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
         """
         # Add any other logic you might like here...
-        del theIndex
+        del index
         self.get_functions()
         self.toggle_aggregation_combo()
         self.set_ok_button_status()
 
-    @pyqtSlot(QtCore.QString)
-    def on_cboFunction_currentIndexChanged(self, theIndex):
+    @pyqtSlot(int)
+    def on_cboFunction_currentIndexChanged(self, index):
         """Automatic slot executed when the Function combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
 
-        :param theIndex: The index number of the selected function.
+        :param index: The index number of the selected function.
         """
         # Add any other logic you might like here...
-        if not theIndex.isNull or not theIndex == '':
+        if index > -1:
             myFunctionID = self.get_function_id()
 
             myFunctions = getSafeImpactFunctions(myFunctionID)
@@ -591,8 +575,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myButton = self.pbnRunStop
         myFlag, myMessage = self.validate()
+
         myButton.setEnabled(myFlag)
-        if myMessage is not '':
+        if myMessage is not None:
             self.show_static_message(myMessage)
 
     def set_function_options_status(self):
@@ -618,6 +603,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.activeFunction.parameters = myDialog.result()
             self.functionParams = self.activeFunction.parameters
 
+    @pyqtSlot()
     def canvas_layerset_changed(self):
         """A helper slot to update dock combos if canvas layerset changes.
 
@@ -629,89 +615,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.get_layers()
 
     @pyqtSlot()
-    def layers_will_be_removed(self):
-        """QGIS 1.8+ slot to notify us when a group of layers are removed.
-
-        This is optimal since if many layers are removed this slot gets called
-        only once. This slot simply delegates to getLayers and is only
-        implemented here to make the connections between the different signals
-        and slots clearer and better documented.
-
-        .. note:: Requires QGIS 1.8 and better api.
-
-        """
-        self.get_layers()
-
-    @pyqtSlot()
-    def layers_added(self, theLayers=None):
-        """QGIS 1.8+ slot to notify us when a group of layers are added.
-
-        Slot for the new (QGIS 1.8 and beyond api) to notify us when
-        a group of layers is are added. This is optimal since if many layers
-        are added this slot gets called only once. This slot simply
-        delegates to getLayers and is only implemented here to make the
-        connections between the different signals and slots clearer and
-        better documented.
-
-        :param theLayers: This paramters is ignored but required for the slot
-         signature.
-
-        .. note:: Requires QGIS 1.8 and better api.
-
-        """
-        del theLayers
-        self.get_layers()
-
-    @pyqtSlot()
-    def layer_will_be_removed(self):
-        """Slot for the old (pre QGIS 1.8 api) notifying a layer was removed.
-
-        This is suboptimal since if many layers are removed this slot gets
-        called multiple times. This slot simply delegates to getLayers and is
-        only implemented here to make the connections between the different
-        signals and slots clearer and better documented."""
-
-        self.get_layers()
-
-    @pyqtSlot()
-    def layer_was_added(self):
-        """QGIS <= 1.7.x slot to notify us when a layer was added.
-
-        Slot for the old (pre QGIS 1.8 api) to notify us when
-        a layer is added. This is suboptimal since if many layers are
-        added this slot gets called multiple times. This slot simply
-        delegates to getLayers and is only implemented here to make the
-        connections between the different signals and slots clearer and
-        better documented.
-
-        ..note :: see :func:`layersAdded` - this slot will be deprecated
-            eventually.
-
-        """
-        self.get_layers()
-
     def get_layers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
         On invocation, this method will populate cboHazard, cboExposure and
-        cboAggregate on the dialog with a list of available layers.
+        cboAggregation on the dialog with a list of available layers.
 
         * Only **singleband raster** layers will be added to the hazard layer
-        list,
+            list,
         * Only **point vector** layers will be added to the exposure layer
-        list.
+            list.
         * Only **polygon vector** layers will be added to the aggregate
-        list.
+            list.
         """
         self.disconnect_layer_listener()
-        self.blockSignals(True)
+        self.cboAggregation.blockSignals(True)
+        self.cboExposure.blockSignals(True)
+        self.cboHazard.blockSignals(True)
+
         self.save_state()
         self.cboHazard.clear()
         self.cboExposure.clear()
         self.cboAggregation.clear()
-        self.hazardLayers = []
-        self.exposureLayers = []
-        self.aggregationLayers = []
+
         # Map registry may be invalid if QGIS is shutting down
         # pylint: disable=W0702
         # noinspection PyBroadException
@@ -773,14 +699,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             if myCategory == 'hazard':
                 add_ordered_combo_item(self.cboHazard, myTitle, mySource)
-                self.hazardLayers.append(myLayer)
             elif myCategory == 'exposure':
                 add_ordered_combo_item(self.cboExposure, myTitle, mySource)
-                self.exposureLayers.append(myLayer)
             elif myCategory == 'postprocessing':
                 add_ordered_combo_item(self.cboAggregation, myTitle, mySource)
-                self.aggregationLayers.append(myLayer)
 
+        # Let the combos listen for event changes again...
+        self.cboAggregation.blockSignals(False)
+        self.cboExposure.blockSignals(False)
+        self.cboHazard.blockSignals(False)
         #handle the cboAggregation combo
         self.cboAggregation.insertItem(0, self.tr('Entire area'))
         self.cboAggregation.setCurrentIndex(0)
@@ -789,12 +716,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Now populate the functions list based on the layers loaded
         self.get_functions()
         self.restore_state()
-        self.set_ok_button_status()
+        self.grpQuestion.setEnabled(True)
+        self.grpQuestion.setVisible(True)
         # Note: Don't change the order of the next two lines otherwise there
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
-        self.blockSignals(False)
-        return
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.

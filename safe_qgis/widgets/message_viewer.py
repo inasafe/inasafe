@@ -28,6 +28,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class MessageViewer(QtWebKit.QWebView):
     """A simple message queue mockup."""
+    static_message_count = 0
+
     # noinspection PyOldStyleClasses
     def __init__(self, theParent):
         _ = theParent  # needed for promoted Qt widget in designer
@@ -100,9 +102,11 @@ class MessageViewer(QtWebKit.QWebView):
         :type message: Message
         """
 
+        self.static_message_count += 1
+
         if message == self.static_message:
             return
-        LOGGER.debug('Static message event \n%s' % message.to_text())
+        LOGGER.debug('Static message event %i' % self.static_message_count)
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
