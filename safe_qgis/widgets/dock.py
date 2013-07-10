@@ -169,12 +169,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Enable on the fly projection by default
         myCanvas.mapRenderer().setProjectionsEnabled(True)
+        self.connect_layer_listener()
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
 
     def set_dock_title(self):
-        """Set the title of the dock using hte current version of InaSAFE."""
+        """Set the title of the dock using the current version of InaSAFE."""
         myLongVersion = get_version()
         LOGGER.debug('Version: %s' % myLongVersion)
         myTokens = myLongVersion.split('.')
@@ -332,7 +333,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
 
-        ..seealso:: disconnectLayerListener
+        ..seealso:: disconnect_layer_listener
         """
         if qgis_version() >= 10800:  # 1.8 or newer
             QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
@@ -340,7 +341,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QgsMapLayerRegistry.instance().layersAdded.connect(
                 self.get_layers)
         # All versions of QGIS
-        QgsMapLayerRegistry.instance().layerWasAdded.connect(
+        QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(
             self.get_layers)
         QgsMapLayerRegistry.instance().layerWasAdded.connect(
             self.get_layers)
@@ -353,7 +354,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def disconnect_layer_listener(self):
         """Destroy the signal/slot to listen for layers loaded in QGIS.
 
-        ..seealso:: connectLayerListener
+        ..seealso:: connect_layer_listener
         """
         if qgis_version() >= 10800:  # 1.8 or newer
             QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(
@@ -361,7 +362,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             QgsMapLayerRegistry.instance().layersAdded.disconnect(
                 self.get_layers)
         # All versions of QGIS
-        QgsMapLayerRegistry.instance().layerWasAdded.disconnect(
+        QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(
             self.get_layers)
         QgsMapLayerRegistry.instance().layerWasAdded.disconnect(
             self.get_layers)

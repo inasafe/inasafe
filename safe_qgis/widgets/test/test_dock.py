@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from unittest import TestCase
 
 __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
@@ -255,9 +256,9 @@ class DockTest(unittest.TestCase):
         myExpectedDict = {'Hazard': PADANG2009_title,
                           'Exposure': 'People',
                           'Impact Function Id':
-                          'Earthquake Fatality Function',
+                              'Earthquake Fatality Function',
                           'Impact Function Title':
-                          'Earthquake Fatality Function',
+                              'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
             myDict, myExpectedDict, combos_to_string(DOCK))
@@ -692,7 +693,7 @@ class DockTest(unittest.TestCase):
         # later if needed.
         myMessage = ('Raster layer was not assigned a ColorRampShader'
                      ' as expected.')
-        assert myQgisImpactLayer.colorShadingAlgorithm() == QgsRasterLayer.\
+        assert myQgisImpactLayer.colorShadingAlgorithm() == QgsRasterLayer. \
             ColorRampShader, myMessage
 
         # Commenting out because we changed impact function to use floating
@@ -1268,7 +1269,14 @@ Click for Diagnostic Information:
                            '-6.3799999999999999, 107.3466666666666640, ' \
                            '-6.0700000000000003', 'Extent is not same'
 
+    def test_set_dock_title(self):
+        """Test the dock title gets set properly."""
+        DOCK.set_dock_title()
+        self.assertIn('InaSAFE', str(DOCK.windowTitle()))
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
+
+
