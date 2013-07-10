@@ -20,7 +20,7 @@ import os
 import tempfile
 import logging
 
-from PyQt4.QtCore import QCoreApplication, QProcess, QVariant
+from PyQt4.QtCore import QProcess, QVariant
 from qgis.core import (
     QGis,
     QgsCoordinateTransform,
@@ -33,9 +33,10 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer)
 
-from safe_qgis.safe_interface import (verify,
-                                      readKeywordsFromFile,
-                                      temp_dir)
+from safe_qgis.safe_interface import (
+    verify,
+    readKeywordsFromFile,
+    temp_dir)
 
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.exceptions import (
@@ -65,10 +66,12 @@ def clip_layer(
     :type layer:
 
     :param extent: Either an array representing the exposure layer extents
-        in the form [xmin, ymin, xmax, ymax]. It is assumed that the coordinates
-        are in EPSG:4326 although currently no checks are made to enforce this.
-        or: A QgsGeometry of type polygon. **Polygon clipping is currently
-        only supported for vector datasets.**
+        in the form [xmin, ymin, xmax, ymax]. It is assumed that the
+        coordinates are in EPSG:4326 although currently no checks are made to
+        enforce this.
+        or:
+        A QgsGeometry of type polygon.
+        **Polygon clipping is currently only supported for vector datasets.**
     :type extent: list(float, float, float, float)
 
     :param cell_size: cell size which the layer should be resampled to.
@@ -81,21 +84,21 @@ def clip_layer(
     :type extra_keywords: dict
 
     :param explode_flag: A bool specifying whether multipart features
-        should be 'exploded' into singleparts. **This parameter is ignored
-        for raster layer clipping.**
+        should be 'exploded' into singleparts.
+        **This parameter is ignored for raster layer clipping.**
     :type explode_flag: bool
 
     :param hard_clip_flag: A bool specifying whether line and polygon
-        features that extend beyond the extents should be clipped such that they
-        are reduced in size to the part of the geometry that intersects the
-        extent only. Default is False. **This parameter is ignored for raster
-        layer clipping.**
+        features that extend beyond the extents should be clipped such that
+        they are reduced in size to the part of the geometry that intersects
+        the extent only. Default is False.
+        **This parameter is ignored for raster layer clipping.**
     :type hard_clip_flag: bool
 
     :param explode_attribute: A str specifying to which attribute #1,
         #2 and so on will be added in case of explode_flag being true. The
-        attribute is modified only if there are at least 2 parts **This
-        parameter is ignored for raster layer clipping.**
+        attribute is modified only if there are at least 2 parts.
+        **This parameter is ignored for raster layer clipping.**
     :type explode_attribute: str
 
     :returns: Clipped layer (placed in the system temp dir). The output layer
@@ -104,16 +107,19 @@ def clip_layer(
     """
 
     if layer.type() == QgsMapLayer.VectorLayer:
-        return _clip_vector_layer(layer,
-                                extent,
-                                extra_keywords=extra_keywords,
-                                explode_flag=explode_flag,
-                                hard_clip_flag=hard_clip_flag,
-                                explode_attribute=explode_attribute)
+        return _clip_vector_layer(
+            layer,
+            extent,
+            extra_keywords=extra_keywords,
+            explode_flag=explode_flag,
+            hard_clip_flag=hard_clip_flag,
+            explode_attribute=explode_attribute)
     else:
         try:
             return _clipRasterLayer(
-                layer, extent, cell_size,
+                layer,
+                extent,
+                cell_size,
                 theExtraKeywords=extra_keywords)
         except CallGDALError, e:
             raise e
@@ -138,10 +144,12 @@ def _clip_vector_layer(
     :type layer:
 
     :param extent: Either an array representing the exposure layer extents
-        in the form [xmin, ymin, xmax, ymax]. It is assumed that the coordinates
-        are in EPSG:4326 although currently no checks are made to enforce this.
-        or: A QgsGeometry of type polygon. **Polygon clipping is currently
-        only supported for vector datasets.**
+        in the form [xmin, ymin, xmax, ymax]. It is assumed that the
+        coordinates are in EPSG:4326 although currently no checks are made to
+        enforce this.
+        or:
+        A QgsGeometry of type polygon.
+        **Polygon clipping is currently only supported for vector datasets.**
     :type extent: list(float, float, float, float)
 
     :param extra_keywords: Optional keywords dictionary to be added to
@@ -149,15 +157,15 @@ def _clip_vector_layer(
     :type extra_keywords: dict
 
     :param explode_flag: A bool specifying whether multipart features
-        should be 'exploded' into singleparts. **This parameter is ignored
-        for raster layer clipping.**
+        should be 'exploded' into singleparts.
+        **This parameter is ignored for raster layer clipping.**
     :type explode_flag: bool
 
     :param hard_clip_flag: A bool specifying whether line and polygon
-        features that extend beyond the extents should be clipped such that they
-        are reduced in size to the part of the geometry that intersects the
-        extent only. Default is False. **This parameter is ignored for raster
-        layer clipping.**
+        features that extend beyond the extents should be clipped such that
+        they are reduced in size to the part of the geometry that intersects
+        the extent only. Default is False.
+        **This parameter is ignored for raster layer clipping.**
     :type hard_clip_flag: bool
 
     :param explode_attribute: A str specifying to which attribute #1,
@@ -526,8 +534,8 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     # .. todo:: Check the result of the shell call is ok
     myKeywordIO = KeywordIO()
-    myKeywordIO.copy_keywords(theLayer, myFilename,
-                             extra_keywords=theExtraKeywords)
+    myKeywordIO.copy_keywords(
+        theLayer, myFilename, extra_keywords=theExtraKeywords)
     myBaseName = '%s clipped' % theLayer.name()
     myLayer = QgsRasterLayer(myFilename, myBaseName)
 

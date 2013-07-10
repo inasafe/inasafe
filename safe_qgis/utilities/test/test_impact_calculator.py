@@ -20,7 +20,8 @@ import sys
 import os
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 import unittest

@@ -6,7 +6,8 @@ import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer

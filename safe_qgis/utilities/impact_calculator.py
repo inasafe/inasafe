@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -**ImpactCalculator.**
+InaSAFE Disaster risk assessment tool by AusAid -**ImpactCalculator.**
 
 The module provides a high level interface for running SAFE scenarios.
 

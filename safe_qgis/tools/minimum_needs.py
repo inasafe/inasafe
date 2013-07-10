@@ -23,7 +23,11 @@ from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 from safe_qgis.safe_interface import get_version, safe_read_layer, Vector
 from safe_qgis.ui.minimum_needs_base import Ui_MinimumNeedsBase
 from safe_qgis.utilities.utilities import (
-    add_ordered_combo_item, is_polygon_layer, is_point_layer, html_footer, html_header)
+    add_ordered_combo_item,
+    is_polygon_layer,
+    is_point_layer,
+    html_footer,
+    html_header)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
 

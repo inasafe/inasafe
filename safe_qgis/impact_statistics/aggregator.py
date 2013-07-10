@@ -249,8 +249,8 @@ class Aggregator(QtCore.QObject):
 
         Performs Aggregation postprocessing step by
 
-            * creating a copy of the dataset clipped by the impactlayer bounding
-                box
+            * creating a copy of the dataset clipped by the impactlayer
+              bounding box
             * stripping all attributes beside the aggregation attribute
             * delegating to the appropriate aggregator for raster and vectors
 

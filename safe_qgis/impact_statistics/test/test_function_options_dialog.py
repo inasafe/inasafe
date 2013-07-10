@@ -23,7 +23,8 @@ import logging
 from PyQt4.QtGui import QLineEdit
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..///'))
+pardir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
 from safe_qgis.safe_interface import get_plugins

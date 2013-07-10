@@ -92,7 +92,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = check_images('getVectorLegend', myPath, myTolerance)
+        myFlag, myMessage = check_images(
+            'getVectorLegend', myPath, myTolerance)
         myMessage += ('\nWe want these images to match, if they do already '
                       'copy the test image generated to create a new control '
                       'image.')
@@ -114,7 +115,8 @@ class MapLegendTest(unittest.TestCase):
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = check_images('getRasterLegend', myPath, myTolerance)
+        myFlag, myMessage = check_images(
+            'getRasterLegend', myPath, myTolerance)
         myMessage += (
             '\nWe want these images to match, if they do already copy the test'
             ' image generated to create a new control image.')

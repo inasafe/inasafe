@@ -1154,7 +1154,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Load impact layer into QGIS
             myQGISImpactLayer = read_impact_layer(myEngineImpactLayer)
             self.layer_changed(myQGISImpactLayer)
-            myReport = self.show_results(myQGISImpactLayer, myEngineImpactLayer)
+            myReport = self.show_results(
+                myQGISImpactLayer, myEngineImpactLayer)
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
