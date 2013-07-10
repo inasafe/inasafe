@@ -185,7 +185,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         string += html_footer()
         self.setHtml(string)
-        self.scroll_to_div()
+        #self.scroll_to_div()
 
     def to_message(self):
         """Collate all message elements to a single message."""

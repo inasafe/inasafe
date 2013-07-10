@@ -55,7 +55,7 @@ def send_message(message):
     """
     dispatcher.send(
         signal=DYNAMIC_MESSAGE_SIGNAL,
-        sender=None,
+        sender=dispatcher.Anonymous,
         message=message)
 
 
@@ -77,6 +77,9 @@ def check_memory_usage(buffered_geo_extent, cell_size):
     :raises: A Message containing notes about how much memory is needed
         for a single raster and if this is likely to result in an error.
 
+    :returns: True if it is supposed that there is sufficient memory,
+        False if it is supposed that too little memory exists.
+    :rtype: bool
     """
     myMessage = m.Message()
     myCheckHeading = m.Heading(

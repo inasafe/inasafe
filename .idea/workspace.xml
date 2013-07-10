@@ -4,6 +4,8 @@
     <list default="true" id="b2c4725d-cc88-4f72-8d2b-190219af8ad6" name="Default" comment="">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_Keyword_Dialog.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/widgets/dock.py" afterPath="$PROJECT_DIR$/safe_qgis/widgets/dock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/utilities/memory_checker.py" afterPath="$PROJECT_DIR$/safe_qgis/utilities/memory_checker.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py" afterPath="$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/widgets/test/test_dock.py" afterPath="$PROJECT_DIR$/safe_qgis/widgets/test/test_dock.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
@@ -17,7 +19,7 @@
     <file path="/a.html" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1372757064250" ignored="false" />
     <file path="/a.js" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1372757071901" ignored="false" />
     <file path="/a.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1372757087344" ignored="false" />
-    <file path="/dock.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373491144975" ignored="false" />
+    <file path="/dock.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373493475482" ignored="false" />
     <file path="/utilities.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1372768213716" ignored="false" />
     <file path="/shake_event.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1372857086678" ignored="false" />
     <file path="/test_shake_event.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1372858237484" ignored="false" />
@@ -28,8 +30,10 @@
     <file path="$PROJECT_DIR$/../fabgis/docs/source/overview.rst" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373401795808" ignored="false" />
     <file path="/utilities_for_testing.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373404714226" ignored="false" />
     <file path="/test_keyword_io.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373402532010" ignored="false" />
-    <file path="/message_viewer.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373406376590" ignored="false" />
+    <file path="/message_viewer.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373493962340" ignored="false" />
     <file path="/test_dock.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373490503313" ignored="false" />
+    <file path="/memory_checker.py" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373492131994" ignored="false" />
+    <file path="/a.dummy" changelist="b2c4725d-cc88-4f72-8d2b-190219af8ad6" time="1373492837260" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,28 +54,55 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="test_keyword_io.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities/test/test_keyword_io.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="137" column="72" selection-start="6124" selection-end="6124" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="runmake-1.8.sh" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/runmake-1.8.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="dock.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/safe_qgis/widgets/dock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="911" column="0" selection-start="34329" selection-end="34329" vertical-scroll-proportion="0.36283186">
+            <state line="253" column="0" selection-start="8725" selection-end="8725" vertical-scroll-proportion="0.33274338">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dispatcher.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/third_party/pydispatch/dispatcher.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="348" column="0" selection-start="10933" selection-end="10933" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="robustapply.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/third_party/pydispatch/robustapply.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="46" column="0" selection-start="1679" selection-end="1679" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="safe_interface.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/safe_interface.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="121" column="21" selection-start="3377" selection-end="3377" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utilities.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities/utilities.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="807" column="4" selection-start="24674" selection-end="24674" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="memory_checker.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities/memory_checker.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="173" column="0" selection-start="6409" selection-end="6409" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -98,7 +129,7 @@
       <file leaf-file-name="message_viewer.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="109" column="39" selection-start="3804" selection-end="3804" vertical-scroll-proportion="0.0">
+            <state line="187" column="9" selection-start="6619" selection-end="6619" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -108,24 +139,6 @@
         <entry file="file://$PROJECT_DIR$/safe/messaging/message.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utilities_for_testing.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities/utilities_for_testing.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="867" column="52" selection-start="29591" selection-end="29591" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="qgis_interface.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/test/qgis_interface.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="24" selection-start="2335" selection-end="2335" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -161,9 +174,10 @@
         <option value="$PROJECT_DIR$/runmake1.8.sh" />
         <option value="$PROJECT_DIR$/safe_qgis/test/qgis_interface.py" />
         <option value="$PROJECT_DIR$/safe_qgis/utilities/utilities_for_testing.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py" />
         <option value="$PROJECT_DIR$/safe_qgis/widgets/test/test_dock.py" />
         <option value="$PROJECT_DIR$/safe_qgis/widgets/dock.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/utilities/memory_checker.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py" />
       </list>
     </option>
   </component>
@@ -796,10 +810,10 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32824427" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32723358" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23052295" sideWeight="0.6630786" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16915688" sideWeight="0.6630786" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33692142" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -885,41 +899,19 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/safe_qgis/widgets/dock.py</url>
-          <line>911</line>
-          <option name="timeStamp" value="4" />
+          <line>253</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py</url>
+          <line>163</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="5" />
+      <option name="time" value="19" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/realtime/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="109" column="11" selection-start="3222" selection-end="3222" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/make_map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="806" selection-end="1022" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1540" column="34" selection-start="60981" selection-end="60984" vertical-scroll-proportion="-6.04" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/fixtures/tests/testSortedImpactedCities.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="986" selection-start="986" selection-end="986" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="345" column="22" selection-start="13730" selection-end="13730" vertical-scroll-proportion="-8.32">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="76" column="12" selection-start="2582" selection-end="2582" vertical-scroll-proportion="0.45208332" />
@@ -960,13 +952,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="109" column="39" selection-start="3804" selection-end="3804" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/plugin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="652" column="24" selection-start="23003" selection-end="23003" vertical-scroll-proportion="0.0">
@@ -988,9 +973,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/safe_interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="121" column="21" selection-start="3377" selection-end="3377" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities/utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="807" column="4" selection-start="24674" selection-end="24674" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/third_party/pydispatch/dispatcher.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="348" column="0" selection-start="10933" selection-end="10933" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/third_party/pydispatch/robustapply.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="0" selection-start="1679" selection-end="1679" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/widgets/message_viewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="187" column="9" selection-start="6619" selection-end="6619" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities/memory_checker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="173" column="0" selection-start="6409" selection-end="6409" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/widgets/dock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="911" column="0" selection-start="34329" selection-end="34329" vertical-scroll-proportion="0.36283186">
+        <state line="253" column="0" selection-start="8725" selection-end="8725" vertical-scroll-proportion="0.33274338">
           <folding />
         </state>
       </provider>

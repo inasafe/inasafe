@@ -238,7 +238,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         dispatcher.send(
             signal=STATIC_MESSAGE_SIGNAL,
-            sender=self,
+            sender=None,
             message=message)
 
     def show_dynamic_message(self, message):
@@ -253,7 +253,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         dispatcher.send(
             signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=self,
+            sender=None,
             message=message)
 
     def show_error_message(self, error_message):
@@ -267,7 +267,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         dispatcher.send(
             signal=ERROR_MESSAGE_SIGNAL,
-            sender=self,
+            sender=None,
             message=error_message)
         self.hide_busy()
 
@@ -842,17 +842,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return myLayer
 
     def setup_calculator(self):
-        """Initialise ImpactCalculator based on the current state of the ui.
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            Propagates any error from :func:optimalClip()
-        """
+        """Initialise ImpactCalculator based on the current state of the ui."""
 
         myHazardLayer, myExposureLayer = self.optimal_clip()
         # See if the inputs need further refinement for aggregations
