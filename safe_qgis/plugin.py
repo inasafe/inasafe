@@ -1,6 +1,6 @@
+# coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-  **QGIS plugin implementation.**
+InaSAFE Disaster risk assessment tool by AusAid **QGIS plugin implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -51,7 +51,7 @@ except ImportError:
 
 
 class Plugin:
-    """The QGIS interface implementation for the Risk in a box plugin.
+    """The QGIS interface implementation for the InaSAFE plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
     It creates a toolbar and menubar entry and launches the InaSAFE user
@@ -65,14 +65,10 @@ class Plugin:
         of the QGIS iface object which will allow this plugin to access and
         manipulate the running QGIS instance that spawned it.
 
-        Args:
-            iface - a Quantum GIS QGisAppInterface instance. This instance
-                is automatically passed to the plugin by QGIS when it loads the
-                plugin.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
+        :param iface:Quantum GIS iface instance. This instance is
+            automatically passed to the plugin by QGIS when it loads the
+            plugin.
+        :type iface: QGisAppInterface
         """
 
         # Save reference to the QGIS interface
@@ -80,32 +76,29 @@ class Plugin:
         self.translator = None
         self.toolbar = None
         self.actions = []  # list of all QActions we create for InaSAFE
-        self.setupI18n()
+        self.setup_i18n()
         #print self.tr('InaSAFE')
         custom_logging.setup_logger()
 
     #noinspection PyArgumentList
-    def setupI18n(self, thePreferredLocale=None):
+    def setup_i18n(self, preferred_locale=None):
         """Setup internationalisation for the plugin.
 
         See if QGIS wants to override the system locale
         and then see if we can get a valid translation file
         for whatever locale is effectively being used.
 
-        Args:
-           thePreferredLocale - optional parameter which if set
-           will override any other way of determining locale..
-        Returns:
-           None.
-        Raises:
-           TranslationLoadException
+        :param preferred_locale: If set will override any other way of
+            determining locale.
+        :type preferred_locale: str, None
+        :raises: TranslationLoadException
         """
         myOverrideFlag = QSettings().value(
             'locale/overrideFlag',
             QVariant(False)).toBool()
 
-        if thePreferredLocale is not None:
-            myLocaleName = thePreferredLocale
+        if preferred_locale is not None:
+            myLocaleName = preferred_locale
         elif myOverrideFlag:
             myLocaleName = QSettings().value('locale/userLocale',
                                              QVariant('')).toString()
@@ -121,7 +114,7 @@ class Plugin:
         os.environ['LANG'] = str(myLocaleName)
 
         LOGGER.debug('%s %s %s %s' % (
-            thePreferredLocale,
+            preferred_locale,
             myOverrideFlag,
             QLocale.system().name(),
             os.environ['LANG']))
@@ -143,56 +136,46 @@ class Plugin:
             myTranslationPath,
             os.path.exists(myTranslationPath)))
 
-    def tr(self, theString):
-        """Get the translation for a string.
+    def tr(self, message):
+        """Get the translation for a string using Qt translation API.
 
-        We implement this ourself since we do not inherit QObject.
+        We implement this ourselves since we do not inherit QObject.
 
-        Args:
-           theString - string for translation.
-        Returns:
-           Translated version of theString.
-        Raises:
-           no exceptions explicitly raised.
+        :param message: String for translation.
+        :type message: str, QString
+
+        :returns: Translated version of message.
+        :rtype: QString
         """
-        return QCoreApplication.translate('Plugin', theString)
+        return QCoreApplication.translate('Plugin', message)
 
-    def addActionToGui(self, theAction, theToolBarFlag=True):
+    def add_action(self, action, add_to_toolbar=True):
         """Add a toolbar icon to the InaSAFE toolbar.
 
-        Args:
-            * theAction QAction - the action that should be added to the
-                toolbar.
-            * theToolBarFlag bool - whether the action should also be added
-                to the InaSAFE toolbar. Defaults to True
+        :param action: The action that should be added to the toolbar.
+        :type action: QAction
 
-        Returns:
-            None
+        :param add_to_toolbar: Flag indicating whether the action should also
+            be added to the InaSAFE toolbar. Defaults to True.
+        :type add_to_toolbar: bool
 
-        Raises:
-            None
         """
         # store in the class list of actions for easy plugin unloading
-        self.actions.append(theAction)
-        self.iface.addPluginToMenu(self.tr('InaSAFE'), theAction)
-        if theToolBarFlag:
-            self.toolbar.addAction(theAction)
+        self.actions.append(action)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'), action)
+        if add_to_toolbar:
+            self.toolbar.addAction(action)
 
     #noinspection PyCallByClass
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
 
+        .. note:: Don't change the name of this method from initGui!
+
         This method is called by QGIS and should be used to set up
         any graphical user interface elements that should appear in QGIS by
         default (i.e. before the user performs any explicit action with the
         plugin).
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
         """
         self.toolbar = self.iface.addToolBar('InaSAFE')
         self.toolbar.setObjectName('InaSAFEToolBar')
@@ -215,8 +198,8 @@ class Plugin:
         self.actionDock.setChecked(True)
         QObject.connect(
             self.actionDock, SIGNAL('triggered()'),
-            self.showHideDockWidget)
-        self.addActionToGui(self.actionDock)
+            self.toggle_dock_visibility)
+        self.add_action(self.actionDock)
 
         #--------------------------------------
         # Create action for keywords editor
@@ -233,9 +216,9 @@ class Plugin:
 
         QObject.connect(
             self.actionKeywordsDialog, SIGNAL('triggered()'),
-            self.showKeywordsEditor)
+            self.show_keywords_editor)
 
-        self.addActionToGui(self.actionKeywordsDialog)
+        self.add_action(self.actionKeywordsDialog)
 
         #--------------------------------------
         # Create action for reset icon
@@ -249,9 +232,9 @@ class Plugin:
             'Reset the InaSAFE Dock'))
         QObject.connect(
             self.actionResetDock, SIGNAL('triggered()'),
-            self.resetDock)
+            self.reset_dock)
 
-        self.addActionToGui(self.actionResetDock)
+        self.add_action(self.actionResetDock)
 
         #--------------------------------------
         # Create action for options dialog
@@ -265,9 +248,9 @@ class Plugin:
             'Open InaSAFE options dialog'))
         QObject.connect(
             self.actionOptions, SIGNAL('triggered()'),
-            self.showOptions)
+            self.show_options)
 
-        self.addActionToGui(self.actionOptions)
+        self.add_action(self.actionOptions)
 
         #--------------------------------------
         # Create action for impact functions doc dialog
@@ -282,15 +265,15 @@ class Plugin:
             'Open InaSAFE Impact Functions Browser'))
         QObject.connect(
             self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
-            self.showImpactFunctionsDoc)
+            self.show_function_browser)
 
-        self.addActionToGui(self.actionImpactFunctionsDoc)
+        self.add_action(self.actionImpactFunctionsDoc)
 
         # Short cut for Open Impact Functions Doc
         self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
         self.iface.registerMainWindowAction(self.keyAction, "F7")
         QObject.connect(self.keyAction, SIGNAL("triggered()"),
-                        self.keyActionF7)
+                        self.shortcut_f7)
 
         #---------------------------------------
         # Create action for minimum needs dialog
@@ -303,9 +286,9 @@ class Plugin:
         self.actionMinimumNeeds.setWhatsThis(self.tr(
             'Open InaSAFE minimum needs tool'))
         QObject.connect(self.actionMinimumNeeds, SIGNAL('triggered()'),
-                        self.showMinimumNeeds)
+                        self.show_minimum_needs)
 
-        self.addActionToGui(self.actionMinimumNeeds)
+        self.add_action(self.actionMinimumNeeds)
 
         #---------------------------------------
         # Create action for converter dialog
@@ -318,9 +301,9 @@ class Plugin:
         self.actionConverter.setWhatsThis(self.tr(
             'Open InaSAFE Converter'))
         QObject.connect(self.actionConverter, SIGNAL('triggered()'),
-                        self.showConverter)
+                        self.show_shakemap_importer)
 
-        self.addActionToGui(self.actionConverter)
+        self.add_action(self.actionConverter)
 
         #---------------------------------------
         # Create action for batch runner dialog
@@ -335,9 +318,9 @@ class Plugin:
         QObject.connect(
             self.actionBatchRunner,
             SIGNAL('triggered()'),
-            self.showScriptDialog)
+            self.show_batch_runner)
 
-        self.addActionToGui(self.actionBatchRunner)
+        self.add_action(self.actionBatchRunner)
 
         #---------------------------------------
         # Create action for batch runner dialog
@@ -349,9 +332,9 @@ class Plugin:
         myMessage = self.tr('Save current scenario to text file')
         self.actionSaveScenario.setStatusTip(myMessage)
         self.actionSaveScenario.setWhatsThis(myMessage)
-        self.actionSaveScenario.triggered.connect(self.saveScenario)
+        self.actionSaveScenario.triggered.connect(self.save_scenario)
 
-        self.addActionToGui(self.actionSaveScenario)
+        self.add_action(self.actionSaveScenario)
 
         #--------------------------------------
         # Create action for import OSM Dialog
@@ -366,9 +349,9 @@ class Plugin:
             'InaSAFE OpenStreetMap Downloader'))
         QObject.connect(
             self.actionImportDlg, SIGNAL('triggered()'),
-            self.showImportDlg)
+            self.show_osm_downloader)
 
-        self.addActionToGui(self.actionImportDlg)
+        self.add_action(self.actionImportDlg)
 
         #--------------------------------------
         # create dockwidget and tabify it with the legend
@@ -389,11 +372,11 @@ class Plugin:
         QObject.connect(
             self.dockWidget,
             SIGNAL("visibilityChanged (bool)"),
-            self.toggleActionDock)
+            self.toggle_inasafe_action)
 
         # pylint: disable=W0201
 
-    def clearModules(self):
+    def clear_modules(self):
         """Unload inasafe functions and try to return QIGS to before InaSAFE.
         """
         from safe.impact_functions import core
@@ -431,17 +414,12 @@ class Plugin:
         LOGGER.debug(sys.path)
 
     def unload(self):
-        """Gui breakdown procedure (for QGIS plugin api).
+        """GUI breakdown procedure (for QGIS plugin api).
+
+        .. note:: Don't change the name of this method from unload!
 
         This method is called by QGIS and should be used to *remove*
         any graphical user interface elements that should appear in QGIS.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
         for myAction in self.actions:
@@ -454,87 +432,41 @@ class Plugin:
         QObject.disconnect(
             self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
-            self.layerChanged)
+            self.layer_changed)
 
-        self.clearModules()
+        self.clear_modules()
 
-    def toggleActionDock(self, checked):
-        """check or uncheck the toggle inaSAFE toolbar button.
+    def toggle_inasafe_action(self, checked):
+        """Check or uncheck the toggle inaSAFE toolbar button.
 
         This slot is called when the user hides the inaSAFE panel using its
-        close button or using view->panels
+        close button or using view->panels.
 
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           checked - if actionDock has to be checked or not
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
+        :param checked: True if the dock should be shown, otherwise False.
+        :type checked: bool
         """
 
         self.actionDock.setChecked(checked)
 
     # Run method that performs all the real work
-    def showHideDockWidget(self):
-        """Show or hide the dock widget.
-
-        This slot is called when the user clicks the toolbar icon or
-        menu item associated with this plugin. It will hide or show
-        the dock depending on its current state.
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
-        """
+    def toggle_dock_visibility(self):
+        """Show or hide the dock widget."""
         if self.dockWidget.isVisible():
             self.dockWidget.setVisible(False)
         else:
             self.dockWidget.setVisible(True)
             self.dockWidget.raise_()
 
-    def showMinimumNeeds(self):
-        """Show the minimum needs dialog.
-
-        This slot is called when the user clicks the minimum needs toolbar
-        icon or menu item associated with this plugin.
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
-        """
+    def show_minimum_needs(self):
+        """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.minimum_needs import MinimumNeeds
 
         myDialog = MinimumNeeds(self.iface.mainWindow())
         myDialog.show()
 
-    def showOptions(self):
-        """Show the options dialog.
-
-        This slot is called when the user clicks the options toolbar
-        icon or menu item associated with this plugin
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
-        """
+    def show_options(self):
+        """Show the options dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.options_dialog import OptionsDialog
 
@@ -544,23 +476,8 @@ class Plugin:
             self.dockWidget)
         myDialog.show()
 
-    def showKeywordsEditor(self):
-        """Show the keywords editor.
-
-        This slot is called when the user clicks the keyword editor toolbar
-        icon or menu item associated with this plugin
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-
-        Returns:
-           None.
-
-        Raises:
-           no exceptions explicitly raised.
-        """
+    def show_keywords_editor(self):
+        """Show the keywords editor."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.keywords_dialog import KeywordsDialog
 
@@ -573,57 +490,32 @@ class Plugin:
         myDialog.setModal(True)
         myDialog.show()
 
-    def showImpactFunctionsDoc(self):
-        """Show the impact function doc
-
-        This slot is called when the user clicks the impact functions
-        toolbar icon or menu item associated with this plugin
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
-        """
+    def show_function_browser(self):
+        """Show the impact function browser tool."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.function_browser import FunctionBrowser
 
         myDialog = FunctionBrowser(self.iface.mainWindow())
         myDialog.show()
 
-    def showConverter(self):
-        """Show the converter dialog.
-
-        This slot is called when the user clicks the impact functions
-        toolbar icon or menu item associated with this plugin
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
-        """
+    def show_shakemap_importer(self):
+        """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.shakemap_importer import ShakemapImporter
 
         myDialog = ShakemapImporter(self.iface.mainWindow())
         myDialog.show()
 
-    def showImportDlg(self):
+    def show_osm_downloader(self):
+        """Show the OSM buildings downloader dialog."""
         from safe_qgis.tools.osm_downloader import OsmDownloader
 
         dlg = OsmDownloader(self.iface.mainWindow(), self.iface)
         dlg.setModal(True)
         dlg.show()
 
-    def showScriptDialog(self):
-        """Show Script Dialog"""
+    def show_batch_runner(self):
+        """Show the batch runner dialog."""
         from safe_qgis.batch.batch_dialog import BatchDialog
 
         myDialog = BatchDialog(
@@ -631,48 +523,25 @@ class Plugin:
         myDialog.setModal(True)
         myDialog.show()
 
-    def saveScenario(self):
-        """Save current scenario to text file"""
+    def save_scenario(self):
+        """Save current scenario to text file,"""
         self.dockWidget.save_current_scenario()
 
-    def resetDock(self):
-        """Reset the dock to its default state.
-
-        This slot is called when the user clicks the reset icon in the toolbar
-        or the reset menu item associated with this plugin
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
-        """
+    def reset_dock(self):
+        """Reset the dock to its default state."""
         self.dockWidget.get_layers()
 
-    def layerChanged(self, theLayer):
-        """Enable or disable the keywords editor icon.
-
-        This slot is called when the user clicks the keyword editor toolbar
-        icon or menu item associated with this plugin
-
-        .. see also:: :func:`Plugin.initGui`.
-
-        Args:
-           None.
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised.
+    def layer_changed(self, layer):
+        """Enable or disable keywords editor icon when active layer changes.
+        :param layer: The layer that is now active.
+        :type layer: QgsMapLayer
         """
-        if theLayer is None:
+        if layer is None:
             self.actionKeywordsDialog.setEnabled(False)
         else:
             self.actionKeywordsDialog.setEnabled(True)
-        self.dockWidget.layer_changed(theLayer)
+        self.dockWidget.layer_changed(layer)
 
-    def keyActionF7(self):
-        '''Executed when user press F7'''
-        self.showConverter()
+    def shortcut_f7(self):
+        '''Executed when user press F7 - will show the shakemap importer.'''
+        self.show_shakemap_importer()
