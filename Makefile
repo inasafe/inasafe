@@ -172,7 +172,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh fb8774032962412c37fcb9120a59a72e62313f06 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh b4db5177d1454ceeeac1b86fbc404d671d8305e5 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
