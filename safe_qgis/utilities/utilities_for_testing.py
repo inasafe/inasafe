@@ -356,9 +356,9 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
     :param control_image_path: The image representing expected output.
     :type control_image_path: str
 
-    :returns Two tuple consisting of success or failure indicator and a
+    :returns: Two tuple consisting of success or failure indicator and a
         message providing analysis comparison notes.
-    :rtype (bool, str)
+    :rtype: (bool, str)
     """
 
     try:
@@ -687,9 +687,9 @@ def setup_scenario(
     .. note:: Layers are not actually loaded - the calling function is
         responsible for that.
 
-    :returns Two tuple indicating if the setup was successful, and a message
+    :returns: Two tuple indicating if the setup was successful, and a message
         indicating why it may have failed.
-    :rtype (bool, str)
+    :rtype: (bool, str)
     """
     if hazard is not None:
         myIndex = dock.cboHazard.findText(hazard)

@@ -336,7 +336,7 @@ def clip_geometry(clip_polygon, geometry):
     Next we get the symmetrical difference between the input geometry and the
     combined geometry.
 
-    :param clip_polygon: - A Polygon or Polygon25D geometry to clip with.
+    :param clip_polygon: A Polygon or Polygon25D geometry to clip with.
         Multipart polygons are not supported so the client needs to take care
         of that.
     :type clip_polygon: QgsGeometry

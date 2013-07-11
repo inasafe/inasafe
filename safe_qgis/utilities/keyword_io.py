@@ -45,15 +45,7 @@ class KeywordIO(QObject):
     sqlite db used for supporting keywords for remote datasources."""
 
     def __init__(self):
-        """Constructor for the KeywordIO object.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
-        """
+        """Constructor for the KeywordIO object."""
         QObject.__init__(self)
         # path to sqlite db path
         self.keywordDbPath = None
@@ -99,13 +91,14 @@ class KeywordIO(QObject):
             if myFlag:
                 myKeywords = readKeywordsFromFile(mySource, keyword)
             else:
-                myKeywords = self.readKeywordFromUri(mySource, keyword)
+                myKeywords = self.read_keyword_from_uri(mySource, keyword)
             return myKeywords
         except (HashNotFoundError, Exception, OperationalError):
             raise
 
     def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.
+
         This is a wrapper method that will 'do the right thing' to store
         keywords for the given datasource. In particular, if the datasource
         is remote (e.g. a database connection) it will write the keywords from
@@ -130,8 +123,7 @@ class KeywordIO(QObject):
             raise
 
     def update_keywords(self, layer, keywords):
-        """Write keywords for a datasource.
-
+        """Update keywords for a datasource.
 
         :param layer: A QGIS QgsMapLayer instance.
         :type layer: QgsMapLayer
@@ -166,8 +158,7 @@ class KeywordIO(QObject):
         Will result in the foo.keywords file being copied to bar.keyword.
 
         Optional argument extraKeywords is a dictionary with additional
-        keywords that will be added to the destination file
-        e.g::
+        keywords that will be added to the destination file e.g::
 
             copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
 
@@ -225,14 +216,14 @@ class KeywordIO(QObject):
         is remote (e.g. a database connection) it will fetch the keywords from
         the keywords store.
 
-        :param layer: - A QGIS QgsMapLayer instance.
+        :param layer: A QGIS QgsMapLayer instance.
         :type layer: QgsMapLayer
 
         :param keyword: The specified keyword will be deleted
               from the keywords dict.
         :type keyword: str
 
-        :returns: True if the keyword was sucessfully delete. False otherwise
+        :returns: True if the keyword was sucessfully delete. False otherwise.
         :rtype: bool
         """
 
@@ -401,9 +392,10 @@ class KeywordIO(QObject):
 
         .. seealso:: write_keywords_for_uri, read_keywords_for_uri
 
-        :param uri: A layer uri. e.g.
-            'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
-             password=\'bar\' sslmode=disable key=\'id\' srid=4326
+        :param uri: A layer uri. e.g. ```dbname=\'osm\' host=localhost
+            port=5432 user=\'foo\'password=\'bar\' sslmode=disable key=\'id\'
+            srid=4326```
+
         :type uri: str
         """
         myHash = self.hash_for_datasource(uri)
@@ -432,9 +424,9 @@ class KeywordIO(QObject):
 
         .. seealso:: read_keyword_from_uri, delete_keywords_for_uri
 
-        :param uri: A layer uri. e.g.
-            'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
-             password=\'bar\' sslmode=disable key=\'id\' srid=4326
+        :param uri: A layer uri. e.g. ```dbname=\'osm\' host=localhost
+            port=5432 user=\'foo\' password=\'bar\' sslmode=disable
+            key=\'id\' srid=4326```
         :type uri: str
 
         :param keywords: The metadata keywords to write (which should be
@@ -479,7 +471,7 @@ class KeywordIO(QObject):
         finally:
             self.close_connection()
 
-    def readKeywordFromUri(self, uri, keyword=None):
+    def read_keyword_from_uri(self, uri, keyword=None):
         """Get metadata from the keywords file associated with a URI.
 
         This is used for layers that are non local layer (e.g. postgresql
@@ -492,22 +484,20 @@ class KeywordIO(QObject):
 
         .. seealso:: write_keywords_for_uri, delete_keywords_for_uri
 
-        :param uri: A layer uri. e.g.
-            'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
-             password=\'bar\' sslmode=disable key=\'id\' srid=4326
+        :param uri: A layer uri. e.g. ```dbname=\'osm\' host=localhost
+            port=5432 user=\'foo\' password=\'bar\' sslmode=disable
+            key=\'id\' srid=4326```
         :type uri: str
 
         :param keyword: The metadata keyword to retrieve. If none,
             all keywords are returned.
         :type keyword: dict
 
-        Returns:
-           A string containing the retrieved value for the keyword if
+        :returns: A string containing the retrieved value for the keyword if
            the keyword argument is specified, otherwise the
            complete keywords dictionary is returned.
 
-        Raises:
-           KeywordNotFoundError if the keyword is not found.
+        :raises: KeywordNotFoundError if the keyword is not found.
         """
         myHash = self.hash_for_datasource(uri)
         try:
