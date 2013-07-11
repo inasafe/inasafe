@@ -97,7 +97,19 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         # noinspection PyUnresolvedReferences
         self.leSourceDir.textChanged.connect(self.update_default_output_dir)
 
-        self.btnRunSelected.setEnabled(True)
+        # Setup run all button in button box (repurposes yes to all)
+        self.run_all_button = self.buttonBox.button(
+            QtGui.QDialogButtonBox.YesToAll)
+        self.run_all_button.setText(self.tr('Run all'))
+        self.run_all_button.clicked.connect(self.run_all_clicked)
+
+        # Setup run selected button in button box (repurposes yes button)
+        self.run_selected_button = self.buttonBox.button(
+            QtGui.QDialogButtonBox.Yes)
+        self.run_selected_button.setText(self.tr('Run selected'))
+        self.run_selected_button.clicked.connect(
+            self.run_selected_clicked)
+        self.run_selected_button.setEnabled(True)
 
     def restore_state(self):
         """Restore GUI state from configuration file"""
@@ -298,7 +310,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             myStatusItem.setText(self.tr(''))
 
     @pyqtSignature('')
-    def on_pbnRunAll_clicked(self):
+    def run_all_clicked(self):
         """Run all scenario when pbRunAll is clicked.
         """
         self.reset_status()
@@ -624,7 +636,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         QtGui.qApp.restoreOverrideCursor()
 
     @pyqtSignature('')
-    def on_btnRunSelected_clicked(self):
+    def run_selected_clicked(self):
         """Run the selected scenario. """
         self.enable_busy_cursor()
         myCurrentRow = self.tblScript.currentRow()
@@ -665,14 +677,14 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.tbOutputDir.setEnabled(not flag)
 
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_tbSourceDir_clicked(self):
+    def on_toolSourceDir_clicked(self):
         """Autoconnect slot activated when tbSourceDir is clicked """
 
         myTitle = self.tr('Set the source directory for script and scenario')
         self.choose_directory(self.leSourceDir, myTitle)
 
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_tbOutputDir_clicked(self):
+    def on_toolOutputDir_clicked(self):
         """Autoconnect slot activated when tbOutputDiris clicked """
 
         myTitle = self.tr('Set the output directory for pdf report files')
