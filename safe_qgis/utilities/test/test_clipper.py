@@ -44,8 +44,8 @@ from safe_qgis.safe_interface import (
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.utilities.clipper import (
     clip_layer,
-    extentToKml,
-    explodeMultiPartGeometry,
+    extent_to_kml,
+    explode_multipart_geometry,
     clip_geometry)
 from safe_qgis.utilities.utilities import qgis_version
 
@@ -462,7 +462,7 @@ class ClipperTest(unittest.TestCase):
     def test_extentToKml(self):
         """Test if extent to KML is working."""
         myExtent = [100.03, -1.14, 100.81, -0.73]
-        myKmlFilename = extentToKml(myExtent)
+        myKmlFilename = extent_to_kml(myExtent)
         assert os.path.exists(myKmlFilename)
         myFile = open(myKmlFilename)
         myKml = myFile.read()
@@ -499,7 +499,7 @@ class ClipperTest(unittest.TestCase):
             '-0.281133 0.555729,-0.092839 0.218369,-0.908780 0.035305,'
             '-0.966314 0.445890)),((-0.906164 0.003923,-0.077148 0.197447,'
             '0.043151 -0.074533,-0.882628 -0.296824,-0.906164 0.003923)))')
-        myCollection = explodeMultiPartGeometry(myGeometry)
+        myCollection = explode_multipart_geometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart polygon geometry'
         assert len(myCollection) == 2, myMessage
 
@@ -509,7 +509,7 @@ class ClipperTest(unittest.TestCase):
             'MULTILINESTRING((-0.974159 0.526961,'
             ' -0.291594 0.644645), (-0.411893 0.728331,'
             ' -0.160834 0.568804))')
-        myCollection = explodeMultiPartGeometry(myGeometry)
+        myCollection = explode_multipart_geometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart line geometry'
         assert len(myCollection) == 2, myMessage
 
@@ -518,7 +518,7 @@ class ClipperTest(unittest.TestCase):
         myGeometry = QgsGeometry.fromWkt(
             'MULTIPOINT((-0.966314 0.445890),'
             '(-0.281133 0.555729))')
-        myCollection = explodeMultiPartGeometry(myGeometry)
+        myCollection = explode_multipart_geometry(myGeometry)
         myMessage = 'Expected 2 parts from multipart point geometry'
         assert len(myCollection) == 2, myMessage
 

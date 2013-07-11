@@ -51,7 +51,6 @@ else
 
     # Store it for future sessions
     echo "export InaSAFEQGIS=$InaSAFEQGIS" >> ~/.bash_aliases
-    #echo 'alias risiko-activate="source $InaSAFE_HOME/riab_env/bin/activate;echo Risk In a Box virtual environment activated. Available commands are:; echo;echo risiko-test risiko-start risiko-stop risiko-clean risiko-upload risiko-populate risiko-uninstall;echo"' >> ~/.bash_aliases
     echo "Adding InaSAFEQGIS path to your ~/.bash_aliases"
  fi
 

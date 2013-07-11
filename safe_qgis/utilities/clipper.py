@@ -116,7 +116,7 @@ def clip_layer(
             explode_attribute=explode_attribute)
     else:
         try:
-            return _clipRasterLayer(
+            return _clip_raster_layer(
                 layer,
                 extent,
                 cell_size,
@@ -278,7 +278,7 @@ def _clip_vector_layer(
         # Loop through the parts adding them to the output file
         # we write out single part features unless explode_flag is False
         if explode_flag:
-            myGeometryList = explodeMultiPartGeometry(myGeometry)
+            myGeometryList = explode_multipart_geometry(myGeometry)
         else:
             myGeometryList = [myGeometry]
 
@@ -369,18 +369,17 @@ def clip_geometry(clip_polygon, geometry):
         return None
 
 
-def explodeMultiPartGeometry(theGeom):
-    """Convert a multipart geometry to a list of single parts. This method was
-    adapted from Carson Farmer's fTools doGeometry implementation in QGIS.
+def explode_multipart_geometry(theGeom):
+    """Convert a multipart geometry to a list of single parts.
 
-    Args:
-       theGeom - A geometry - if it is multipart it will be exploded.
+    This method was adapted from Carson Farmer's fTools doGeometry
+    implementation in QGIS.
 
-    Returns:
-        A list of single part geometries
+    :param theGeom: A geometry to be explided it it is multipart.
+    :type theGeom: QgsGeometry
 
-    Raises:
-       None
+    :returns: A list of single part geometries.
+    :rtype: list
 
     """
     myParts = []
@@ -408,35 +407,38 @@ def explodeMultiPartGeometry(theGeom):
     return myParts
 
 
-def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
-                     theExtraKeywords=None):
-    """Clip a Hazard or Exposure raster layer to the extents provided. The
-    layer must be a raster layer or an exception will be thrown.
+def _clip_raster_layer(
+        theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
+    """Clip a Hazard or Exposure raster layer to the extents provided.
+
+    The layer must be a raster layer or an exception will be thrown.
 
     .. note:: The extent *must* be in EPSG:4326.
 
     The output layer will always be in WGS84/Geographic.
 
-    Args:
+    :param theLayer: A valid QGIS raster layer in EPSG:4326
+    :type theLayer: QgsRasterLayer
 
-        * theLayer - a valid QGIS raster layer in EPSG:4326
-        * theExtent either: an array representing the exposure layer
+    :param theExtent:  An array representing the exposure layer
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
-                    or: A QgsGeometry of type polygon. **Polygon clipping is
-           currently only supported for vector datasets.**
-        * theCellSize - cell size (in GeoCRS) which the layer should
+           or:
+           A QgsGeometry of type polygon.
+           **Polygon clipping currently only supported for vector datasets.**
+    :type theExtent: list(float), QgsGeometry
+
+    :param theCellSize: Cell size (in GeoCRS) which the layer should
             be resampled to. If not provided for a raster layer (i.e.
             theCellSize=None), the native raster cell size will be used.
+    :type theCellSize: float
 
-    Returns:
-        QgsRasterLayer - the output clipped layer (placed in the
-        system temp dir).
+    :returns: Output clipped layer (placed in the system temp dir).
+    :rtype: QgsRasterLayer
 
-    Raises:
-       Exception if input layer is a density layer in projected coordinates -
-       see issue #123
+    :raises: InvalidProjectionError - if input layer is a density
+        layer in projected coordinates. See issue #123.
 
     """
     if not theLayer or not theExtent:
@@ -478,7 +480,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.
-    myClipKml = extentToKml(theExtent)
+    myClipKml = extent_to_kml(theExtent)
 
     # Create a filename for the clipped, resampled and reprojected layer
     myHandle, myFilename = tempfile.mkstemp('.tif', 'clip_',
@@ -542,14 +544,19 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     return myLayer
 
 
-def extentToKml(theExtent):
-    """A helper to get a little kml doc for an extent so that
-    we can use it with gdal warp for clipping."""
+def extent_to_kml(extent):
+    """A helper to get a little kml doc for an extent.
 
-    myBottomLeftCorner = '%f,%f' % (theExtent[0], theExtent[1])
-    myTopLeftCorner = '%f,%f' % (theExtent[0], theExtent[3])
-    myTopRightCorner = '%f,%f' % (theExtent[2], theExtent[3])
-    myBottomRightCorner = '%f,%f' % (theExtent[2], theExtent[1])
+    We can use the resulting kml with gdal warp for clipping.
+
+    :param extent: Extent in the form [xmin, ymin, xmax, ymax].
+    :type extent: list(float)
+    """
+
+    myBottomLeftCorner = '%f,%f' % (extent[0], extent[1])
+    myTopLeftCorner = '%f,%f' % (extent[0], extent[3])
+    myTopRightCorner = '%f,%f' % (extent[2], extent[3])
+    myBottomRightCorner = '%f,%f' % (extent[2], extent[1])
     myKml = ("""<?xml version="1.0" encoding="utf-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
@@ -581,15 +588,15 @@ def extentToKml(theExtent):
     return myFilename
 
 
-def extentToGeoArray(theExtent, theSourceCrs):
+def extent_to_geoarray(extent, source_crs):
     """Convert the supplied extent to geographic and return as as array.
 
-    :param theExtent: QgsRectangle to be transformed to geocrs.
-    :type theExtent:
+    :param extent: QgsRectangle to be transformed to geocrs.
+    :type extent:
 
-    :param theSourceCrs: QgsCoordinateReferenceSystem representing the
+    :param source_crs: QgsCoordinateReferenceSystem representing the
         original extent's CRS.
-    :type theSourceCrs:
+    :type source_crs:
 
     :returns: Transformed extents in EPSG:4326 in the form
         [xmin, ymin, xmax, ymax]
@@ -598,11 +605,11 @@ def extentToGeoArray(theExtent, theSourceCrs):
     myGeoCrs = QgsCoordinateReferenceSystem()
     myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(
-        theSourceCrs,
+        source_crs,
         myGeoCrs)
 
     # Get the clip area in the layer's crs
-    myTransformedExtent = myXForm.transformBoundingBox(theExtent)
+    myTransformedExtent = myXForm.transformBoundingBox(extent)
 
     myGeoExtent = [myTransformedExtent.xMinimum(),
                    myTransformedExtent.yMinimum(),

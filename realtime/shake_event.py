@@ -84,7 +84,7 @@ from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
 from safe_qgis.utilities.utilities import getWGS84resolution
-from safe_qgis.utilities.clipper import extentToGeoArray, clip_layer
+from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
@@ -1827,7 +1827,7 @@ class ShakeEvent(QObject):
         # from safe_qgis which takes care to ensure that the two layers
         # have coincidental coverage before clipping. The
         # clipper function will take care to null padd any missing data.
-        myHazardGeoExtent = extentToGeoArray(
+        myHazardGeoExtent = extent_to_geoarray(
             myHazardLayer.extent(),
             myHazardLayer.crs())
 
