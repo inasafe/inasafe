@@ -25,7 +25,7 @@ __copyright__ = ('Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
                  'geotux_tuxman@linuxmail.org')
 
 import logging
-from PyQt4.QtCore import QObject, SIGNAL, pyqtSlot
+from PyQt4.QtCore import QObject, SIGNAL, pyqtSlot, pyqtSignal
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvasLayer
 LOGGER = logging.getLogger('InaSAFE')
@@ -37,7 +37,7 @@ class QgisInterface(QObject):
     This class is here for enabling us to run unit tests only,
     so most methods are simply stubs.
     """
-
+    currentLayerChanged = pyqtSignal(QgsMapCanvasLayer)
     def __init__(self, canvas):
         """Constructor
         :param canvas:
@@ -171,3 +171,4 @@ class QgisInterface(QObject):
         :param area:
         """
         pass
+
