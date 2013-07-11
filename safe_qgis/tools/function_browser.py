@@ -55,12 +55,13 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
              'datatype': [],
              'unit': []}
         """
-        QtGui.QDialog.__init__(self, parent=None)
-        self.parent = parent
+        QtGui.QDialog.__init__(self, parent)
         # Set up the user interface from Designer.
         self.setupUi(self)
         self.setWindowTitle(
             self.tr('InaSAFE %1 Impact Functions Browser').arg(get_version()))
+        self.parent = parent
+
         self.no_filter = self.tr('No Filter')
         if dict_filter is None:
             dict_filter = {

@@ -496,6 +496,7 @@ class Plugin:
         from safe_qgis.tools.function_browser import FunctionBrowser
 
         myDialog = FunctionBrowser(self.iface.mainWindow())
+        myDialog.setModal(True)
         myDialog.show()
 
     def show_shakemap_importer(self):
@@ -510,9 +511,9 @@ class Plugin:
         """Show the OSM buildings downloader dialog."""
         from safe_qgis.tools.osm_downloader import OsmDownloader
 
-        dlg = OsmDownloader(self.iface.mainWindow(), self.iface)
-        dlg.setModal(True)
-        dlg.show()
+        dialog = OsmDownloader(self.iface.mainWindow(), self.iface)
+        dialog.setModal(True)
+        dialog.show()
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
