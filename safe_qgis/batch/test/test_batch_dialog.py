@@ -65,7 +65,7 @@ class BatchDialogTest(unittest.TestCase):
         myDialog.leOutputDir.setText(myOutputDir)
         myDialog.sboCount.setValue(1)
         myDialog.tblScript.selectRow(1)
-        myButton = myDialog.btnRunSelected
+        myButton = myDialog.run_selected_button
         # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myStatus = myDialog.tblScript.item(1, 1).text()
@@ -79,7 +79,7 @@ class BatchDialogTest(unittest.TestCase):
         myDialog.leSourceDir.setText(SCENARIO_DIR)
         myOutputDir = temp_dir()
         myDialog.leOutputDir.setText(myOutputDir)
-        myButton = myDialog.pbnRunAll
+        myButton = myDialog.run_all_button
         # noinspection PyArgumentList
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myStatus0 = myDialog.tblScript.item(0, 1).text()
