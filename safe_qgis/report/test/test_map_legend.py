@@ -23,7 +23,7 @@ import logging
 #sys.path.append(pardir)
 
 from PyQt4 import QtGui
-from qgis.core import QgsSymbol, QgsMapLayerRegistry
+from qgis.core import QgsMapLayerRegistry, QgsSymbol
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
@@ -50,7 +50,7 @@ class MapLegendTest(unittest.TestCase):
         myLayer, _ = load_layer('test_shakeimpact.shp')
         myMapLegend = MapLegend(myLayer)
         assert myMapLegend.layer is not None
-        myLegend = myMapLegend.getLegend()
+        myLegend = myMapLegend.get_legend()
         myPath = unique_filename(
             prefix='getLegend',
             suffix='.png',
@@ -78,9 +78,9 @@ class MapLegendTest(unittest.TestCase):
         myLayer, _ = load_layer('test_shakeimpact.shp')
         myMapLegend = MapLegend(
             myLayer,
-            theLegendNotes='Thousand separator represented by \',\'',
-            theLegendUnits='(people per cell)')
-        myImage = myMapLegend.getVectorLegend()
+            legend_notes='Thousand separator represented by \',\'',
+            legend_units='(people per cell)')
+        myImage = myMapLegend.vector_legend()
         myPath = unique_filename(
             prefix='getVectorLegend',
             suffix='.png',
@@ -103,7 +103,7 @@ class MapLegendTest(unittest.TestCase):
         """Getting a legend for a raster layer works."""
         myLayer, _ = load_layer('test_floodimpact.tif')
         myMapLegend = MapLegend(myLayer)
-        myImage = myMapLegend.getRasterLegend()
+        myImage = myMapLegend.raster_legend()
         myPath = unique_filename(
             prefix='getRasterLegend',
             suffix='.png',
@@ -128,28 +128,28 @@ class MapLegendTest(unittest.TestCase):
         myMapLegend = MapLegend(myLayer)
         mySymbol = QgsSymbol()
         mySymbol.setColor(QtGui.QColor(12, 34, 56))
-        myMapLegend.addSymbolToLegend(
+        myMapLegend.add_symbol(
             mySymbol,
-            theMin=0,
+            minimum=0,
             # expect 2.0303 in legend
-            theMax=2.02030,
-            theLabel='Foo')
+            maximum=2.02030,
+            label='Foo')
         myPath = unique_filename(
             prefix='addSymbolToLegend',
             suffix='.png',
             dir=temp_dir('test'))
-        myMapLegend.getLegend().save(myPath, 'PNG')
+        myMapLegend.get_legend().save(myPath, 'PNG')
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so myControlImages is a list
         # of 'known good' renders.
 
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = check_images('addSymbolToLegend', myPath,
-                                        myTolerance)
-        myMessage += ('\nWe want these images to match, if they do already '
-                      'copy the test image generated to create a new control '
-                      'image.')
+        myFlag, myMessage = check_images(
+            'addSymbolToLegend', myPath, myTolerance)
+        myMessage += (
+            '\nWe want these images to match, if they do already, copy the '
+            'test image generated to create a new control image.')
         assert myFlag, myMessage
 
     def test_addClassToLegend(self):
@@ -157,25 +157,25 @@ class MapLegendTest(unittest.TestCase):
         myLayer, _ = load_layer('test_shakeimpact.shp')
         myMapLegend = MapLegend(myLayer)
         myColour = QtGui.QColor(12, 34, 126)
-        myMapLegend.addClassToLegend(
+        myMapLegend.add_class(
             myColour,
-            theLabel='bar')
-        myMapLegend.addClassToLegend(
+            label='bar')
+        myMapLegend.add_class(
             myColour,
-            theLabel='foo')
+            label='foo')
         myPath = unique_filename(
             prefix='addClassToLegend',
             suffix='.png',
             dir=temp_dir('test'))
-        myMapLegend.getLegend().save(myPath, 'PNG')
+        myMapLegend.get_legend().save(myPath, 'PNG')
         LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so place any other possible
         # variants in the safe_qgis/test_data/test_images/ dir e.g.
         # addClassToLegend-variantUbuntu13.04.png
         myTolerance = 0  # to allow for version number changes in disclaimer
-        myFlag, myMessage = check_images('addClassToLegend', myPath,
-                                        myTolerance)
+        myFlag, myMessage = check_images(
+            'addClassToLegend', myPath, myTolerance)
         myMessage += (
             '\nWe want these images to match, if they do already copy the test'
             ' image generated to create a new control image.')

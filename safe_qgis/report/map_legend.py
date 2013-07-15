@@ -29,62 +29,65 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class MapLegend():
     """A class for creating a map legend."""
-    def __init__(self, theLayer, theDpi=300, theLegendTitle=None,
-                 theLegendNotes=None, theLegendUnits=None):
+    def __init__(
+            self,
+            layer,
+            dpi=300,
+            legend_title=None,
+            legend_notes=None,
+            legend_units=None):
         """Constructor for the Map Legend class.
 
-        Args:
-            * theLayer: QgsMapLayer object that the legend should be generated
-                for.
-            * theDpi: Optional DPI for generated legend image. Defaults to
-                300 if not specified.
-        Returns:
-            None
-        Raises:
-            Any exceptions raised will be propagated.
+        :param layer: Layer that the legend should be generated for.
+        :type layer: QgsMapLayer, QgsVectorLayer
+
+        :param dpi: DPI for the generated legend image. Defaults to 300 if
+            not specified.
+        :type dpi: int
+
+        :param legend_title: Title for the legend.
+        :type legend_title: str
+
+        :param legend_notes: Notes to display under the title.
+        :type legend_notes: str
+
+        :param legend_units: Units for the legend.
+        :type legend_units: str
         """
         LOGGER.debug('InaSAFE Map class initialised')
         self.legendImage = None
-        self.layer = theLayer
+        self.layer = layer
         # how high each row of the legend should be
         self.legendIncrement = 42
         self.keywordIO = KeywordIO()
         self.legendFontSize = 8
         self.legendWidth = 900
-        self.dpi = theDpi
-        if theLegendTitle is None:
+        self.dpi = dpi
+        if legend_title is None:
             self.legendTitle = self.tr('Legend')
         else:
-            self.legendTitle = theLegendTitle
-        self.legendNotes = theLegendNotes
-        self.legendUnits = theLegendUnits
+            self.legendTitle = legend_title
+        self.legendNotes = legend_notes
+        self.legendUnits = legend_units
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
 
-        Args:
-           theString - string for translation.
-        Returns:
-           Translated version of theString.
-        Raises:
-           no exceptions explicitly raised.
+        :param theString: String for translation.
+        :type theString: QString, str
+
+        :returns: Translated version of theString.
+        :rtype: QString
         """
         # noinspection PyCallByClass,PyTypeChecker
         return QtCore.QCoreApplication.translate('MapLegend', theString)
 
-    def getLegend(self):
-        """Examine the classes of the impact layer associated with this print
-        job.
+    def get_legend(self):
+        """Create a legend for the classes in the layer.
 
-        .. note: This is a wrapper for the rasterLegend and vectorLegend
-           methods.
+        .. note: This is a wrapper for raster_legend and vector_legend.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            An InvalidLegendLayer will be raised if a legend cannot be
+        :raises: InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
         LOGGER.debug('InaSAFE Map Legend getLegend called')
@@ -102,20 +105,18 @@ class MapLegend():
                                 '\nMessage: %s' % str(e))
             raise Exception(myMessage)
         if self.layer.type() == QgsMapLayer.VectorLayer:
-            return self.getVectorLegend()
+            return self.vector_legend()
         else:
-            return self.getRasterLegend()
+            return self.raster_legend()
 
-    def getVectorLegend(self):
+    def vector_legend(self):
         """Get the legend for this layer as a graphic.
 
-        Args:
-            None
-        Returns:
-            A QImage object.
-            self.legend is also populated with the image.
-        Raises:
-            An InvalidLegendLayer will be raised if a legend cannot be
+        :returns: An image of the legend. self.legend is also populated
+            with the image.
+        :rtype: QImage
+
+        :raises: InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
         LOGGER.debug('InaSAFE Map getVectorLegend called')
@@ -132,28 +133,28 @@ class MapLegend():
         if myType == "singleSymbol":
             LOGGER.debug('singleSymbol')
             mySymbol = myRenderer.symbol()
-            self.addSymbolToLegend(theLabel=self.layer.name(),
-                                   theSymbol=mySymbol,
-                                   theType=myType)
+            self.add_symbol(label=self.layer.name(),
+                                   symbol=mySymbol,
+                                   symbol_type=myType)
         elif myType == "categorizedSymbol":
             LOGGER.debug('categorizedSymbol')
             for myCategory in myRenderer.categories():
                 mySymbol = myCategory.symbol()
                 LOGGER.debug('theCategory' + myCategory.value().toString())
-                self.addSymbolToLegend(
-                    theCategory=myCategory.value().toString(),
-                    theLabel=myCategory.label(),
-                    theSymbol=mySymbol,
-                    theType=myType)
+                self.add_symbol(
+                    category=myCategory.value().toString(),
+                    label=myCategory.label(),
+                    symbol=mySymbol,
+                    symbol_type=myType)
         elif myType == "graduatedSymbol":
             LOGGER.debug('graduatedSymbol')
             for myRange in myRenderer.ranges():
                 mySymbol = myRange.symbol()
-                self.addSymbolToLegend(theMin=myRange.lowerValue(),
-                                       theMax=myRange.upperValue(),
-                                       theLabel=myRange.label(),
-                                       theSymbol=mySymbol,
-                                       theType=myType)
+                self.add_symbol(minimum=myRange.lowerValue(),
+                                       maximum=myRange.upperValue(),
+                                       label=myRange.label(),
+                                       symbol=mySymbol,
+                                       symbol_type=myType)
         else:
             LOGGER.debug('else')
             #type unknown
@@ -162,19 +163,17 @@ class MapLegend():
                                 'single symbol, categorised symbol or '
                                 'graduated symbol and then try again.')
             raise LegendLayerError(myMessage)
-        self.addLegendNotes()
+        self.add_notes()
         return self.legendImage
 
-    def getRasterLegend(self):
+    def raster_legend(self):
         """Get the legend for a raster layer as an image.
 
-        Args:
-            None
-        Returns:
-            An image representing the layer's legend.
-            self.legend is also populated
-        Raises:
-            An InvalidLegendLayer will be raised if a legend cannot be
+        :returns: An image representing the layer's legend. self.legend is
+            also populated.
+        :rtype: QImage
+
+        :Raises: InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
         LOGGER.debug('InaSAFE Map Legend getRasterLegend called')
@@ -189,91 +188,106 @@ class MapLegend():
                 myValue = myItem.value
                 myLabel = myItem.label
                 myColor = myItem.color
-                self.addClassToLegend(myColor,
-                                      theMin=myLastValue,
-                                      theMax=myValue,
-                                      theLabel=myLabel,
-                                      theType='rasterStyle')
+                self.add_class(myColor,
+                                      minimum=myLastValue,
+                                      maximum=myValue,
+                                      label=myLabel,
+                                      class_type='rasterStyle')
                 myLastValue = myValue
         else:
             #TODO implement QGIS2.0 variant
             #In master branch, use QgsRasterRenderer::rasterRenderer() to
             # get/set how a raster is displayed.
             pass
-        self.addLegendNotes()
+        self.add_notes()
         return self.legendImage
 
-    def addSymbolToLegend(self,
-                          theSymbol,
-                          theMin=None,
-                          theMax=None,
-                          theCategory=None,
-                          theLabel=None,
-                          theType=None):
-        """Add a class to the current legend. If the legend is not defined,
-        a new one will be created. A legend is just an image file with nicely
-        rendered classes in it.
+    def add_symbol(
+            self,
+            symbol,
+            minimum=None,
+            maximum=None,
+            category=None,
+            label=None,
+            symbol_type=None):
+        """Add a symbol to the current legend.
+
+        If the legend is not defined, a new one will be created. A legend is
+        just an image file with nicely rendered classes in it.
+
+        :param symbol: Symbol for the class as a QgsSymbol
+        :type symbol: QgsSymbol
+
+        :param minimum: Minimum value for the class.
+        :type minimum: float, int
+
+        :param maximum: Maximum value for the class.
+        :type maximum: float, int
+
+        :param category: Category name (will be used in lieu of min/max)
+        :type category: str
+
+        :param label: Text label for the class.
+        :type label: str
+
+        :param symbol_type: One of 'singleSymbol', 'categorizedSymbol',
+            'graduatedSymbol' or 'rasterStyle'
+        :type symbol_type: str
+
 
         .. note:: This method just extracts the colour from the symbol and then
            delegates to the addClassToLegend function.
-
-        Args:
-
-            * theSymbol - **Required** symbol for the class as a QgsSymbol
-            * theMin - Optional minimum value for the class
-            * theMax - Optional maximum value for the class\
-            * theCategory - Optional category name (will be used in lieu of
-                       min/max)
-            * theLabel - Optional text label for the class
-
-        Returns:
-            None
-        Raises:
-            Throws an exception if the class could not be added for
-            some reason..
         """
         LOGGER.debug('InaSAFE Map Legend addSymbolToLegend called')
-        myColour = theSymbol.color()
-        self.addClassToLegend(myColour,
-                              theMin=theMin,
-                              theMax=theMax,
-                              theCategory=theCategory,
-                              theLabel=theLabel,
-                              theType=theType)
+        myColour = symbol.color()
+        self.add_class(
+            myColour,
+            minimum=minimum,
+            maximum=maximum,
+            category=category,
+            label=label,
+            class_type=symbol_type)
 
-    def addClassToLegend(self,
-                         theColour,
-                         theMin=None,
-                         theMax=None,
-                         theCategory=None,
-                         theLabel='',
-                         theType=None):
-        """Add a class to the current legend. If the legend is not defined,
-        a new one will be created. A legend is just an image file with nicely
-        rendered classes in it.
+    def add_class(
+            self,
+            colour,
+            minimum=None,
+            maximum=None,
+            category=None,
+            label='',
+            class_type=None):
+        """Add a class to the current legend.
 
-        Args:
+        If the legend is not defined, a new one will be created. A legend is
+        just an image file with nicely rendered classes in it.
 
-            * theColour - **Required** colour for the class as a QColor
-            * theMin - Optional minimum value for the class
-            * theMax - Optional maximum value for the class\
-            * theCategory - Optional category name (will be used in lieu of
-                       min/max)
-            * theLabel - Optional text label for the class
+        :param colour: Colour for the class.
+        :type colour: QColor
 
-        Returns:
-            None
-        Raises:
-            Throws an exception if the class could not be added for
-            some reason..
+        :param minimum: Minimum value for the class.
+        :type minimum: float, int
+
+        :param maximum: Maximum value for the class.
+        :type maximum: float, int
+
+        :param category: Category name (will be used in lieu of min/max)
+        :type category: str
+
+        :param label: Text label for the class.
+        :type label: str
+
+        :param class_type: One of 'singleSymbol', 'categorizedSymbol',
+            'graduatedSymbol' or 'rasterStyle'
+        :type class_type: str
+
         """
         LOGGER.debug('InaSAFE Map Legend addClassToLegend called')
-        self.extendLegend()
+        self.grow_legend()
         myOffset = self.legendImage.height() - self.legendIncrement
         myPainter = QtGui.QPainter(self.legendImage)
-        myBrush = QtGui.QBrush(theColour)
+        myBrush = QtGui.QBrush(colour)
         myPainter.setBrush(myBrush)
-        myPainter.setPen(theColour)
+        myPainter.setPen(colour)
         myWhitespace = 2  # white space above and below each class icon
         mySquareSize = self.legendIncrement - (myWhitespace * 2)
         myLeftIndent = 10
@@ -294,47 +308,47 @@ class MapLegend():
         myExtraVerticalSpace = 8  # hack to get label centered on graphic
         myOffset += myCenterVerticalPadding + myExtraVerticalSpace
         myPainter.setFont(myFont)
-        LOGGER.debug('theLabel' + str(theLabel))
-        LOGGER.debug('theMin ' + str(theMin))
-        LOGGER.debug('theMax ' + str(theMax))
-        LOGGER.debug('theCategory ' + str(theCategory))
-        if theLabel is not None and theLabel != '':
+        LOGGER.debug('label' + str(label))
+        LOGGER.debug('minimum ' + str(minimum))
+        LOGGER.debug('maximum ' + str(maximum))
+        LOGGER.debug('category ' + str(category))
+        if label is not None and label != '':
             pass
         else:
         # branches for each style type
-            if theType == 'singleSymbol':
+            if class_type == 'singleSymbol':
                 LOGGER.debug('singleSymbol is not impelemented yet')
-            elif theType == 'categorizedSymbol':
-                if theCategory is not None or theCategory == '':
-                    theLabel = str(theCategory)
-            elif theType == 'graduatedSymbol' or theType == 'rasterStyle':
-                # can be a problem if the min and theMax is not found
-                if theMin is None or theMax is None:
-                    LOGGER.debug('Problem caused theMin or theMax is not '
+            elif class_type == 'categorizedSymbol':
+                if category is not None or category == '':
+                    label = str(category)
+            elif class_type == 'graduatedSymbol' or class_type == 'rasterStyle':
+                # can be a problem if the min and maximum is not found
+                if minimum is None or maximum is None:
+                    LOGGER.debug('Problem caused minimum or maximum is not '
                                  'found')
                     return
                 else:
-                    if float(theMin) - int(theMin) == 0.0:
-                        myMinString = '%i' % theMin
+                    if float(minimum) - int(minimum) == 0.0:
+                        myMinString = '%i' % minimum
                     else:
-                        myMinString = str(theMin)
-                    if float(theMax) - int(theMax) == 0.0:
-                        myMaxString = '%i' % theMax
+                        myMinString = str(minimum)
+                    if float(maximum) - int(maximum) == 0.0:
+                        myMaxString = '%i' % maximum
                     else:
-                        myMaxString = str(theMax)
-                    theLabel += '[' + myMinString + ', ' + myMaxString + ']'
-                if float(str(theMin)) == float(str(theMax)):
+                        myMaxString = str(maximum)
+                    label += '[' + myMinString + ', ' + myMaxString + ']'
+                if float(str(minimum)) == float(str(maximum)):
                     # pass because it's not needed
                     return
 
-        myPainter.drawText(myLabelX, myOffset + 25, theLabel)
+        myPainter.drawText(myLabelX, myOffset + 25, label)
 
-    def addLegendNotes(self):
-        """Add legend notes to the legend
+    def add_notes(self):
+        """Add legend notes to the legend.
         """
         LOGGER.debug('InaSAFE Map Legend addLegendNotes called')
         if self.legendNotes is not None:
-            self.extendLegend()
+            self.grow_legend()
             myOffset = self.legendImage.height() - 15
             myPainter = QtGui.QPainter(self.legendImage)
             myFontWeight = QtGui.QFont.StyleNormal
@@ -350,15 +364,8 @@ class MapLegend():
         else:
             LOGGER.debug('No notes')
 
-    def extendLegend(self):
+    def grow_legend(self):
         """Grow the legend pixmap enough to accommodate one more legend entry.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
         """
         LOGGER.debug('InaSAFE Map Legend extendLegend called')
         if self.legendImage is None:

@@ -597,7 +597,7 @@ class Map():
         LOGGER.debug(mapLegendAttributes)
         myLegend = MapLegend(self.layer, self.pageDpi, legendTitle,
                              legendNotes, legendUnits)
-        self.legend = myLegend.getLegend()
+        self.legend = myLegend.get_legend()
         myPicture1 = QgsComposerPicture(self.composition)
         myLegendFilePath = unique_filename(
             prefix='legend', suffix='.png', dir='work')
