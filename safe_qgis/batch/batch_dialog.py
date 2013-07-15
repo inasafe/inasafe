@@ -580,14 +580,14 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         myMap = Map(self.iface)
 
         # FIXME: check if impact_layer is the real impact layer...
-        myMap.setImpactLayer(impact_layer)
+        myMap.set_impact_layer(impact_layer)
 
         LOGGER.debug('Create Report: %s' % title)
         myMapPath, myTablePath = self.report_path(
             output_directory, title, count, index)
 
         # create map pdf
-        myMap.printToPdf(myMapPath)
+        myMap.make_pdf(myMapPath)
 
         # create table report pdf
         myHtmlRenderer = HtmlRenderer(myMap.pageDpi)

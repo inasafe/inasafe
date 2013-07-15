@@ -70,17 +70,17 @@ class MapLegend():
         self.legendNotes = legend_notes
         self.legendUnits = legend_units
 
-    def tr(self, theString):
+    def tr(self, string):
         """We implement this ourself since we do not inherit QObject.
 
-        :param theString: String for translation.
-        :type theString: QString, str
+        :param string: String for translation.
+        :type string: QString, str
 
-        :returns: Translated version of theString.
+        :returns: Translated version of string.
         :rtype: QString
         """
         # noinspection PyCallByClass,PyTypeChecker
-        return QtCore.QCoreApplication.translate('MapLegend', theString)
+        return QtCore.QCoreApplication.translate('MapLegend', string)
 
     def get_legend(self):
         """Create a legend for the classes in the layer.
@@ -133,9 +133,10 @@ class MapLegend():
         if myType == "singleSymbol":
             LOGGER.debug('singleSymbol')
             mySymbol = myRenderer.symbol()
-            self.add_symbol(label=self.layer.name(),
-                                   symbol=mySymbol,
-                                   symbol_type=myType)
+            self.add_symbol(
+                label=self.layer.name(),
+                symbol=mySymbol,
+                symbol_type=myType)
         elif myType == "categorizedSymbol":
             LOGGER.debug('categorizedSymbol')
             for myCategory in myRenderer.categories():
@@ -150,11 +151,12 @@ class MapLegend():
             LOGGER.debug('graduatedSymbol')
             for myRange in myRenderer.ranges():
                 mySymbol = myRange.symbol()
-                self.add_symbol(minimum=myRange.lowerValue(),
-                                       maximum=myRange.upperValue(),
-                                       label=myRange.label(),
-                                       symbol=mySymbol,
-                                       symbol_type=myType)
+                self.add_symbol(
+                    minimum=myRange.lowerValue(),
+                    maximum=myRange.upperValue(),
+                    label=myRange.label(),
+                    symbol=mySymbol,
+                    symbol_type=myType)
         else:
             LOGGER.debug('else')
             #type unknown
@@ -188,11 +190,12 @@ class MapLegend():
                 myValue = myItem.value
                 myLabel = myItem.label
                 myColor = myItem.color
-                self.add_class(myColor,
-                                      minimum=myLastValue,
-                                      maximum=myValue,
-                                      label=myLabel,
-                                      class_type='rasterStyle')
+                self.add_class(
+                    myColor,
+                    minimum=myLastValue,
+                    maximum=myValue,
+                    label=myLabel,
+                    class_type='rasterStyle')
                 myLastValue = myValue
         else:
             #TODO implement QGIS2.0 variant

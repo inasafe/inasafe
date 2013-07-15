@@ -48,19 +48,15 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class Map():
     """A class for creating a map."""
-    def __init__(self, theIface):
+    def __init__(self, iface):
         """Constructor for the Map class.
 
-        Args:
-            theIface - reference to the QGIS iface object
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :param iface: Reference to the QGIS iface object.
+        :type iface: QgsAppInterface
         """
         LOGGER.debug('InaSAFE Map class initialised')
-        self.iface = theIface
-        self.layer = theIface.activeLayer()
+        self.iface = iface
+        self.layer = iface.activeLayer()
         self.keywordIO = KeywordIO()
         self.printer = None
         self.composition = None
@@ -77,35 +73,28 @@ class Map():
         self.disclaimer = self.tr('InaSAFE has been jointly developed by'
                                   ' BNPB, AusAid & the World Bank')
 
-    def tr(self, theString):
+    def tr(self, string):
         """We implement this since we do not inherit QObject.
 
-        Args:
-           theString - string for translation.
-        Returns:
-           Translated version of theString.
-        Raises:
-           no exceptions explicitly raised.
+        :param string: String for translation.
+        :type string: QString, str
+
+        :returns: Translated version of theString.
+        :rtype: QString
         """
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        return QtCore.QCoreApplication.translate('Map', theString)
+        return QtCore.QCoreApplication.translate('Map', string)
 
-    def setImpactLayer(self, theLayer):
-        """Mutator for the impact layer that will be used for stats,
-        legend and reporting.
+    def set_impact_layer(self, layer):
+        """Set the layer that will be used for stats, legend and reporting.
 
-        Args:
-            theLayer - a valid QgsMapLayer
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :param layer: Layer that will be used for stats, legend and reporting.
+        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
         """
-        self.layer = theLayer
+        self.layer = layer
 
-    def setupComposition(self):
-        """Set up the composition ready for drawing elements onto it.
-        """
+    def setup_composition(self):
+        """Set up the composition ready for drawing elements onto it."""
         LOGGER.debug('InaSAFE Map setupComposition called')
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
@@ -115,40 +104,36 @@ class Map():
         self.composition.setPrintResolution(self.pageDpi)
         self.composition.setPrintAsRaster(True)
 
-    def composeMap(self):
-        """Place all elements on the map ready for printing.
-
-        :raises: Any exceptions raised will be propagated.
-        """
-        self.setupComposition()
+    def compose_map(self):
+        """Place all elements on the map ready for printing."""
+        self.setup_composition()
         # Keep track of our vertical positioning as we work our way down
         # the page placing elements on it.
         myTopOffset = self.pageMargin
-        self.drawLogo(myTopOffset)
-        myLabelHeight = self.drawTitle(myTopOffset)
+        self.draw_logo(myTopOffset)
+        myLabelHeight = self.draw_title(myTopOffset)
         # Update the map offset for the next row of content
         myTopOffset += myLabelHeight + self.verticalSpacing
-        myComposerMap = self.drawMap(myTopOffset)
-        self.drawScaleBar(myComposerMap, myTopOffset)
+        myComposerMap = self.draw_map(myTopOffset)
+        self.draw_scalebar(myComposerMap, myTopOffset)
         # Update the top offset for the next horizontal row of items
         myTopOffset += self.mapHeight + self.verticalSpacing - 1
-        myImpactTitleHeight = self.drawImpactTitle(myTopOffset)
+        myImpactTitleHeight = self.draw_impact_title(myTopOffset)
         # Update the top offset for the next horizontal row of items
         if myImpactTitleHeight:
             myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
-        self.drawLegend(myTopOffset)
-        self.drawHostAndTime(myTopOffset)
-        self.drawDisclaimer()
+        self.draw_legend(myTopOffset)
+        self.draw_host_and_time(myTopOffset)
+        self.draw_disclaimer()
 
-    def renderComposition(self):
+    def render(self):
         """Render the map composition to an image and save that to disk.
 
-        :returns:
-            tuple:
-                * str: myImagePath - absolute path to png of rendered map
-                * QImage: myImage - in memory copy of rendered map
-                * QRectF: myTargetArea - dimensions of rendered map
-        :rtype: str: Absolute file system path to the rendered image.
+        :returns: A three-tuple of:
+            * str: myImagePath - absolute path to png of rendered map
+            * QImage: myImage - in memory copy of rendered map
+            * QRectF: myTargetArea - dimensions of rendered map
+        :rtype: tuple
         """
         LOGGER.debug('InaSAFE Map renderComposition called')
         # NOTE: we ignore self.composition.printAsRaster() and always rasterise
@@ -175,48 +160,42 @@ class Map():
         myImage.save(myImagePath)
         return myImagePath, myImage, myTargetArea
 
-    def printToPdf(self, theFilename):
+    def make_pdf(self, filename):
         """Generate the printout for our final map.
 
-        Args:
-            theFilename: str - optional path on the file system to which the
-                pdf should be saved. If None, a generated file name will be
-                used.
-        Returns:
-            str: file name of the output file (equivalent to theFilename if
+        :param filename: Path on the file system to which the pdf should be
+            saved. If None, a generated file name will be used.
+        :type filename: str
+
+        :returns: File name of the output file (equivalent to filename if
                 provided).
-        Raises:
-            None
+        :rtype: str
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
-        if theFilename is None:
+        if filename is None:
             myMapPdfPath = unique_filename(
                 prefix='report', suffix='.pdf', dir=temp_dir('work'))
         else:
             # We need to cast to python string in case we receive a QString
-            myMapPdfPath = str(theFilename)
+            myMapPdfPath = str(filename)
 
-        self.composeMap()
+        self.compose_map()
         self.printer = setup_printer(myMapPdfPath)
-        _, myImage, myRectangle = self.renderComposition()
+        _, myImage, myRectangle = self.render()
         myPainter = QtGui.QPainter(self.printer)
         myPainter.drawImage(myRectangle, myImage, myRectangle)
         myPainter.end()
         return myMapPdfPath
 
-    def drawLogo(self, theTopOffset):
+    def draw_logo(self, top_offset):
         """Add a picture containing the logo to the map top left corner
 
-        Args:
-            theTopOffset - vertical offset at which the logo shoudl be drawn
-        Returns:
-            None
-        Raises:
-            None
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
         """
         myLogo = QgsComposerPicture(self.composition)
         myLogo.setPictureFile(':/plugins/inasafe/bnpb_logo.png')
-        myLogo.setItemPosition(self.pageMargin, theTopOffset, 10, 10)
+        myLogo.setItemPosition(self.pageMargin, top_offset, 10, 10)
         if qgis_version() >= 10800:  # 1.8 or newer
             myLogo.setFrameEnabled(self.showFramesFlag)
         else:
@@ -224,15 +203,14 @@ class Map():
         myLogo.setZValue(1)  # To ensure it overlays graticule markers
         self.composition.addItem(myLogo)
 
-    def drawTitle(self, theTopOffset):
+    def draw_title(self, top_offset):
         """Add a title to the composition.
 
-        Args:
-            theTopOffset - vertical offset at which the map should be drawn
-        Returns:
-            float - the height of the label as rendered
-        Raises:
-            None
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
+
+        :returns: The height of the label as rendered.
+        :rtype: float
         """
         LOGGER.debug('InaSAFE Map drawTitle called')
         myFontSize = 14
@@ -252,7 +230,7 @@ class Map():
         myLabelWidth = 170.0   # item - position and size...option
         myLeftOffset = self.pageWidth - self.pageMargin - myLabelWidth
         myLabel.setItemPosition(myLeftOffset,
-                                theTopOffset - 2,  # -2 to push it up a little
+                                top_offset - 2,  # -2 to push it up a little
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
@@ -260,21 +238,20 @@ class Map():
         self.composition.addItem(myLabel)
         return myLabelHeight
 
-    def drawMap(self, theTopOffset):
-        """Add a map to the composition and return the compsermap instance.
+    def draw_map(self, top_offset):
+        """Add a map to the composition and return the composer map instance.
 
-        Args:
-            theTopOffset - vertical offset at which the map should be drawn
-        Returns:
-            A QgsComposerMap instance is returned
-        Raises:
-            None
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
+
+        :returns: The composer map.
+        :rtype: QgsComposerMap
         """
         LOGGER.debug('InaSAFE Map drawMap called')
         myMapWidth = self.mapWidth
         myComposerMap = QgsComposerMap(self.composition,
                                        self.pageMargin,
-                                       theTopOffset,
+                                       top_offset,
                                        myMapWidth,
                                        self.mapHeight)
         #myExtent = self.iface.mapCanvas().extent()
@@ -329,24 +306,22 @@ class Map():
         myComposerMap.setGridAnnotationDirection(
             QgsComposerMap.BoundaryDirection)
         self.composition.addItem(myComposerMap)
-        self.drawGraticuleMask(theTopOffset)
+        self.draw_graticule_mask(top_offset)
         return myComposerMap
 
-    def drawGraticuleMask(self, theTopOffset):
-        """A helper function to mask out graticule labels on the right side
-           by over painting a white rectangle with white border on them.
+    def draw_graticule_mask(self, top_offset):
+        """A helper function to mask out graticule labels.
 
-        Args:
-            theTopOffset - vertical offset at which the map should be drawn
-        Returns:
-            None
-        Raises:
-            None
+         It will hide labels on the right side by over painting a white
+         rectangle with white border on them. **kludge**
+
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawGraticuleMask called')
         myLeftOffset = self.pageMargin + self.mapWidth
         myRect = QgsComposerShape(myLeftOffset + 0.5,
-                                  theTopOffset,
+                                  top_offset,
                                   self.pageWidth - myLeftOffset,
                                   self.mapHeight + 1,
                                   self.composition)
@@ -362,50 +337,47 @@ class Map():
         myRect.setBrush(myBrush)
         self.composition.addItem(myRect)
 
-    def drawNativeScaleBar(self, theComposerMap, theTopOffset):
-        """Draw a scale bar using QGIS' native drawing - in the case of
-        geographic maps, scale will be in degrees, not km.
+    def draw_native_scalebar(self, composer_map, top_offset):
+        """Draw a scale bar using QGIS' native drawing.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        In the case of geographic maps, scale will be in degrees, not km.
+
+        :param composer_map: Composer map on which to draw the scalebar.
+        :type composer_map: QgsComposerMap
+
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawNativeScaleBar called')
         myScaleBar = QgsComposerScaleBar(self.composition)
         myScaleBar.setStyle('Numeric')  # optionally modify the style
-        myScaleBar.setComposerMap(theComposerMap)
+        myScaleBar.setComposerMap(composer_map)
         myScaleBar.applyDefaultSize()
         myScaleBarHeight = myScaleBar.boundingRect().height()
         myScaleBarWidth = myScaleBar.boundingRect().width()
         # -1 to avoid overlapping the map border
         myScaleBar.setItemPosition(
             self.pageMargin + 1,
-            theTopOffset + self.mapHeight - (myScaleBarHeight * 2),
+            top_offset + self.mapHeight - (myScaleBarHeight * 2),
             myScaleBarWidth,
             myScaleBarHeight)
         myScaleBar.setFrame(self.showFramesFlag)
         # Disabled for now
         #self.composition.addItem(myScaleBar)
 
-    def drawScaleBar(self, theComposerMap, theTopOffset):
-        """Add a numeric scale to the bottom left of the map
+    def draw_scalebar(self, composer_map, top_offset):
+        """Add a numeric scale to the bottom left of the map.
 
         We draw the scale bar manually because QGIS does not yet support
-        rendering a scalebar for a geographic map in km.
+        rendering a scale bar for a geographic map in km.
 
         .. seealso:: :meth:`drawNativeScaleBar`
 
-        Args:
-            * theComposerMap - QgsComposerMap instance used as the basis
-              scale calculations.
-            * theTopOffset - vertical offset at which the map should be drawn
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :param composer_map: Composer map on which to draw the scalebar.
+        :type composer_map: QgsComposerMap
+
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawScaleBar called')
         myCanvas = self.iface.mapCanvas()
@@ -418,7 +390,7 @@ class Map():
         myDistanceArea.setProjectionsEnabled(True)
         # Determine how wide our map is in km/m
         # Starting point at BL corner
-        myComposerExtent = theComposerMap.extent()
+        myComposerExtent = composer_map.extent()
         myStartPoint = QgsPoint(myComposerExtent.xMinimum(),
                                 myComposerExtent.yMinimum())
         # Ending point at BR corner
@@ -466,7 +438,7 @@ class Map():
         myInsetDistance = 7  # how much to inset the scalebar into the map by
         myScaleBarX = self.pageMargin + myInsetDistance
         myScaleBarY = (
-            theTopOffset + self.mapHeight - myInsetDistance -
+            top_offset + self.mapHeight - myInsetDistance -
             myScaleBarHeight)  # mm
 
         # Draw an outer background box - shamelessly hardcoded buffer
@@ -545,18 +517,17 @@ class Map():
             myLabel.setFrame(self.showFramesFlag)
             self.composition.addItem(myLabel)
 
-    def drawImpactTitle(self, theTopOffset):
+    def draw_impact_title(self, top_offset):
         """Draw the map subtitle - obtained from the impact layer keywords.
 
-        Args:
-            theTopOffset - vertical offset at which to begin drawing
-        Returns:
-            float - the height of the label as rendered
-        Raises:
-            None
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
+
+        :returns: The height of the label as rendered.
+        :rtype: float
         """
         LOGGER.debug('InaSAFE Map drawImpactTitle called')
-        myTitle = self.getMapTitle()
+        myTitle = self.map_title()
         if myTitle is None:
             myTitle = ''
         myFontSize = 20
@@ -571,26 +542,22 @@ class Map():
         myLabelWidth = self.pageWidth - (self.pageMargin * 2)
         myLabelHeight = 12
         myLabel.setItemPosition(
-            self.pageMargin, theTopOffset, myLabelWidth, myLabelHeight)
+            self.pageMargin, top_offset, myLabelWidth, myLabelHeight)
         myLabel.setFrame(self.showFramesFlag)
         self.composition.addItem(myLabel)
         return myLabelHeight
 
-    def drawLegend(self, theTopOffset):
+    def draw_legend(self, top_offset):
         """Add a legend to the map using our custom legend renderer.
 
         .. note:: getLegend generates a pixmap in 150dpi so if you set
            the map to a higher dpi it will appear undersized.
 
-        Args:
-            theTopOffset - vertical offset at which to begin drawing
-        Returns:
-            None
-        Raises:
-            None
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawLegend called')
-        mapLegendAttributes = self.getMapLegendAtributes()
+        mapLegendAttributes = self.map_legend_attributes()
         legendNotes = mapLegendAttributes.get('legend_notes', None)
         legendUnits = mapLegendAttributes.get('legend_units', None)
         legendTitle = mapLegendAttributes.get('legend_title', None)
@@ -606,14 +573,14 @@ class Map():
         myLegendHeight = points_to_mm(self.legend.height(), self.pageDpi)
         myLegendWidth = points_to_mm(self.legend.width(), self.pageDpi)
         myPicture1.setItemPosition(self.pageMargin,
-                                   theTopOffset,
+                                   top_offset,
                                    myLegendWidth,
                                    myLegendHeight)
         myPicture1.setFrame(False)
         self.composition.addItem(myPicture1)
         os.remove(myLegendFilePath)
 
-    def drawImage(self, theImage, theWidthMM, theLeftOffset, theTopOffset):
+    def draw_image(self, theImage, theWidthMM, theLeftOffset, theTopOffset):
         """Helper to draw an image directly onto the QGraphicsScene.
         This is an alternative to using QgsComposerPicture which in
         some cases leaves artifacts under windows.
@@ -621,17 +588,20 @@ class Map():
         The Pixmap will have a transform applied to it so that
         it is rendered with the same resolution as the composition.
 
-        Args:
+        :param theImage: Image that will be rendered to the layout.
+        :type theImage: QImage
 
-            * theImage: QImage that will be rendered to the layout.
-            * theWidthMM: int - desired width in mm of output on page.
-            * theLeftOffset: int - offset from left of page.
-            * theTopOffset: int - offset from top of page.
+        :param theWidthMM: Desired width in mm of output on page.
+        :type theWidthMM: int
 
-        Returns:
-            QGraphicsSceneItem is returned
-        Raises:
-            None
+        :param theLeftOffset: Offset from left of page.
+        :type theLeftOffset: int
+
+        :param theTopOffset: Offset from top of page.
+        :type theTopOffset: int
+
+        :returns: Graphics scene item.
+        :rtype: QGraphicsSceneItem
         """
         LOGGER.debug('InaSAFE Map drawImage called')
         myDesiredWidthMM = theWidthMM  # mm
@@ -651,15 +621,11 @@ class Map():
                          theTopOffset / myScaleFactor)
         return myItem
 
-    def drawHostAndTime(self, theTopOffset):
-        """Add a disclaimer to the composition.
+    def draw_host_and_time(self, top_offset):
+        """Add a note with hostname and time to the composition.
 
-        Args:
-            theTopOffset - vertical offset at which to begin drawing
-        Returns:
-            None
-        Raises:
-            None
+        :param top_offset: Vertical offset at which the logo should be drawn.
+        :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawDisclaimer called')
         #elapsed_time: 11.612545
@@ -700,23 +666,15 @@ class Map():
         myLabelWidth = (self.pageWidth / 2) - self.pageMargin
         myLeftOffset = self.pageWidth / 2  # put in right half of page
         myLabel.setItemPosition(myLeftOffset,
-                                theTopOffset,
+                                top_offset,
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
         myLabel.setFrame(self.showFramesFlag)
         self.composition.addItem(myLabel)
 
-    def drawDisclaimer(self):
-        """Add a disclaimer to the composition.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
-        """
+    def draw_disclaimer(self):
+        """Add a disclaimer to the composition."""
         LOGGER.debug('InaSAFE Map drawDisclaimer called')
         myFontSize = 10
         myFontWeight = QtGui.QFont.Normal
@@ -741,15 +699,11 @@ class Map():
         myLabel.setFrame(self.showFramesFlag)
         self.composition.addItem(myLabel)
 
-    def getMapTitle(self):
+    def map_title(self):
         """Get the map title from the layer keywords if possible.
 
-        Args:
-            None
-        Returns:
-            None on error, otherwise the title
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :returns: None on error, otherwise the title.
+        :rtype: None, str
         """
         LOGGER.debug('InaSAFE Map getMapTitle called')
         try:
@@ -760,15 +714,11 @@ class Map():
         except Exception:
             return None
 
-    def getMapLegendAtributes(self):
+    def map_legend_attributes(self):
         """Get the map legend attribute from the layer keywords if possible.
 
-        Args:
-            None
-        Returns:
-            None on error, otherwise the attributes (notes and units)
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :returns: None on error, otherwise the attributes (notes and units).
+        :rtype: None, str
         """
         LOGGER.debug('InaSAFE Map getMapLegendAtributes called')
         legendAttributes = ['legend_notes',
@@ -786,55 +736,48 @@ class Map():
         return dictLegendAttributes
 
     def showComposer(self):
-        """Show the composition in a composer view so the user can tweak it
-        if they want to.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        """Show the composition in a composer view so the user can tweak it.
         """
         myView = QgsComposerView(self.iface.mainWindow())
         myView.show()
 
-    def writeTemplate(self, theTemplateFilePath):
-        """Write the current composition as a template that can be
-        re-used in QGIS."""
+    def write_template(self, template_path):
+        """Write current composition as a template that can be re-used in QGIS.
+
+        :param template_path: Path to which template should be written.
+        :type template_path: str
+        """
         myDocument = QtXml.QDomDocument()
         myElement = myDocument.createElement('Composer')
         myDocument.appendChild(myElement)
         self.composition.writeXML(myElement, myDocument)
         myXml = myDocument.toByteArray()
-        myFile = file(theTemplateFilePath, 'wb')
+        myFile = file(template_path, 'wb')
         myFile.write(myXml)
         myFile.close()
 
-    def renderTemplate(self, theTemplateFilePath, theOutputFilePath):
-        """Load a QgsComposer map from a template and render it
+    def render_template(self, template_path, output_path):
+        """Load a QgsComposer map from a template and render it.
 
         .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
 
-        Args:
-            theTemplateFilePath - path to the template that should be loaded.
-            theOutputFilePath - path for the output pdf
-        Returns:
-            None
-        Raises:
-            None
+        :param template_path:  Path to the template that should be loaded.
+        :type template_path: str
+
+        :param output_path: Path for the output pdf.
+        :type output_path: str
         """
-        self.setupComposition()
+        self.setup_composition()
 
         myResolution = self.composition.printResolution()
-        self.printer = setup_printer(theOutputFilePath,
-                                    resolution=myResolution)
+        self.printer = setup_printer(
+            output_path, resolution=myResolution)
         if self.composition:
-            myFile = QtCore.QFile(theTemplateFilePath)
+            myFile = QtCore.QFile(template_path)
             myDocument = QtXml.QDomDocument()
             myDocument.setContent(myFile, False)  # .. todo:: fix magic param
             myNodeList = myDocument.elementsByTagName('Composer')
             if myNodeList.size() > 0:
                 myElement = myNodeList.at(0).toElement()
                 self.composition.readXML(myElement, myDocument)
-        self.printToPdf(theOutputFilePath)
+        self.make_pdf(output_path)

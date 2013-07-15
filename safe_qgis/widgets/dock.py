@@ -1760,9 +1760,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
 
-        myMap.setImpactLayer(self.iface.activeLayer())
-        LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
-        myDefaultFileName = myMap.getMapTitle() + '.pdf'
+        myMap.set_impact_layer(self.iface.activeLayer())
+        LOGGER.debug('Map Title: %s' % myMap.map_title())
+        myDefaultFileName = myMap.map_title() + '.pdf'
         myDefaultFileName = myDefaultFileName.replace(' ', '_')
         # noinspection PyCallByClass,PyTypeChecker
         myMapPdfFilePath = QtGui.QFileDialog.getSaveFileName(
@@ -1785,7 +1785,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myKeywords, theFilename=myTableFilename)
 
         try:
-            myMap.printToPdf(myMapPdfFilePath)
+            myMap.make_pdf(myMapPdfFilePath)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
             myReport = get_error_message(e)

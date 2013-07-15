@@ -58,12 +58,12 @@ class MapTest(unittest.TestCase):
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
         myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
-        myMap.composeMap()
+        myMap.set_impact_layer(myLayer)
+        myMap.compose_map()
         myPath = unique_filename(prefix='mapPdfTest',
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
-        myMap.printToPdf(myPath)
+        myMap.make_pdf(myPath)
         LOGGER.debug(myPath)
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
@@ -95,9 +95,9 @@ class MapTest(unittest.TestCase):
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
         myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
-        myMap.composeMap()
-        myImagePath, myControlImage, myTargetArea = myMap.renderComposition()
+        myMap.set_impact_layer(myLayer)
+        myMap.compose_map()
+        myImagePath, myControlImage, myTargetArea = myMap.render()
         LOGGER.debug(myImagePath)
 
         assert myControlImage is not None
@@ -128,8 +128,8 @@ class MapTest(unittest.TestCase):
         """Getting the map title from the keywords"""
         myLayer, _ = load_layer('test_floodimpact.tif')
         myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
-        myTitle = myMap.getMapTitle()
+        myMap.set_impact_layer(myLayer)
+        myTitle = myMap.map_title()
         myExpectedTitle = 'Penduduk yang Mungkin dievakuasi'
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
@@ -141,8 +141,8 @@ class MapTest(unittest.TestCase):
         # that this test wasnt replicating well
         myLayer, _ = load_layer('population_padang_1.asc')
         myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
-        myTitle = myMap.getMapTitle()
+        myMap.set_impact_layer(myLayer)
+        myTitle = myMap.map_title()
         myExpectedTitle = None
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
@@ -158,13 +158,13 @@ class MapTest(unittest.TestCase):
         CANVAS.setLayerSet([myCanvasLayer])
         myMap = Map(IFACE)
         set_jakarta_extent()
-        myMap.setImpactLayer(myLayer)
+        myMap.set_impact_layer(myLayer)
         myPath = unique_filename(
             prefix='outTemplate',
             suffix='.pdf',
             dir=temp_dir('test'))
         LOGGER.debug(myPath)
-        myMap.renderTemplate(myInPath, myPath)
+        myMap.render_template(myInPath, myPath)
         assert os.path.exists(myPath)
         #os.remove(myPath)
 
@@ -178,7 +178,7 @@ class MapTest(unittest.TestCase):
             dir=temp_dir('test'))
         myMap = Map(IFACE)
         setup_printer(myPath)
-        myMap.setupComposition()
+        myMap.setup_composition()
 
         myImage = QtGui.QImage(10, 10, QtGui.QImage.Format_RGB32)
         myImage.setDotsPerMeterX(dpi_to_meters(300))
@@ -209,9 +209,9 @@ class MapTest(unittest.TestCase):
             myPixmapItem.setOffset(i, i + 20)
             # Same drawing using our drawImage Helper
             myWidthMM = 1
-            myMap.drawImage(myImage, myWidthMM, i, i + 40)
+            myMap.draw_image(myImage, myWidthMM, i, i + 40)
 
-        myImagePath, _, _ = myMap.renderComposition()
+        myImagePath, _, _ = myMap.render()
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
 
