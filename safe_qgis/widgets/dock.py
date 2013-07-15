@@ -992,7 +992,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown run method is called by the
         # accepted signal of the keywords dialog
-        self.aggregator.validateKeywords()
+        self.aggregator.validate_keywords()
         if self.aggregator.isValid:
             self.run()
         else:

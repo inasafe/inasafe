@@ -678,7 +678,7 @@ class DockTest(unittest.TestCase):
 
         # Run manually so we can get the output layer
         DOCK.prepare_aggregator()
-        DOCK.aggregator.validateKeywords()
+        DOCK.aggregator.validate_keywords()
         DOCK.setup_calculator()
         myRunner = DOCK.calculator.get_runner()
         myRunner.run()  # Run in same thread

@@ -80,19 +80,13 @@ class Aggregator(QtCore.QObject):
     """The aggregator class facilitates aggregation of impact function results.
     """
 
-    def __init__(
-            self,
-            iface,
-            theAggregationLayer):
+    def __init__(self, iface, aggregation_layer):
         """Director for aggregation based operations.
-        Args:
-          theAggregationLayer: QgsMapLayer representing clipped
-              aggregation. This will be converted to a memory layer inside
-              this class. see self.layer
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
+
+        :param aggregation_layer: Layer representing clipped aggregation
+            areas. This will be converted to a memory layer inside this class.
+            see self.layer
+        :type aggregation_layer: QgsVectorLayer
         """
 
         QtCore.QObject.__init__(self)
@@ -120,15 +114,15 @@ class Aggregator(QtCore.QObject):
 
         # This is used to hold an *in memory copy* of the aggregation layer
         # or None if the clip extents should be used.
-        if theAggregationLayer is None:
+        if aggregation_layer is None:
             self.aoiMode = True
             # Will be completed in _prepareLayer just before deintersect call
-            self.layer = self._createPolygonLayer()
+            self.layer = self._create_polygon_layer()
         else:
             self.aoiMode = False
-            self.layer = theAggregationLayer
+            self.layer = aggregation_layer
 
-    def validateKeywords(self):
+    def validate_keywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.
 
         This is only applicable in the case where were are not using the AOI
@@ -142,15 +136,6 @@ class Aggregator(QtCore.QObject):
         On completion of this method the self.isValid flag is set. If this
         flag is not True, then no aggregation or postprocessing work will be
         carried out (these methods will raise an InvalidAggregatorError).
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propogated
         """
 
         # Otherwise get the attributes for the aggregation layer.
@@ -174,7 +159,7 @@ class Aggregator(QtCore.QObject):
                 m.Paragraph(self.tr(
                     'Please select which attribute you want to use as ID for '
                     'the aggregated results')))
-            self._sendMessage(myMessage)
+            self._send_message(myMessage)
 
             #myKeywords are already complete
             category = myKeywords['category']
@@ -211,29 +196,33 @@ class Aggregator(QtCore.QObject):
                 self.keywordIO.update_keywords(self.layer, myKeywords)
                 self.isValid = False
 
-    def deintersect(self, theHazardLayer, theExposureLayer):
+    def deintersect(self, hazard_layer, exposure_layer):
         """Ensure there are no intersecting features with self.layer.
 
         This should only happen after initial checks have been made.
 
         Buildings are not split up by this method.
 
+        :type hazard_layer: QgsMapLayer
+        :type exposure_layer: QgsMapLayer
+        :param exposure_layer:
+        :param hazard_layer:
         """
 
         if not self.isValid:
             raise InvalidAggregatorError
 
         # These should have already been clipped to analysis extents
-        self.hazardLayer = theHazardLayer
-        self.exposureLayer = theExposureLayer
-        self._prepareLayer()
+        self.hazardLayer = hazard_layer
+        self.exposureLayer = exposure_layer
+        self._prepare_layer()
 
         if not self.aoiMode:
             # This is a safe version of the aggregation layer
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
             if is_polygon_layer(self.hazardLayer):
-                self.hazardLayer = self._preparePolygonLayer(self.hazardLayer)
+                self.hazardLayer = self._prepare_polygon_layer(self.hazardLayer)
 
             if is_polygon_layer(self.exposureLayer):
                 # Find out the subcategory for this layer
@@ -241,10 +230,10 @@ class Aggregator(QtCore.QObject):
                     self.exposureLayer, 'subcategory')
                 # We dont want to chop up buildings!
                 if mySubcategory != 'structure':
-                    self.exposureLayer = self._preparePolygonLayer(
+                    self.exposureLayer = self._prepare_polygon_layer(
                         self.exposureLayer)
 
-    def aggregate(self, theSafeImpactLayer):
+    def aggregate(self, safe_impact_layer):
         """Do any requested aggregation post processing.
 
         Performs Aggregation postprocessing step by
@@ -253,6 +242,9 @@ class Aggregator(QtCore.QObject):
               bounding box
             * stripping all attributes beside the aggregation attribute
             * delegating to the appropriate aggregator for raster and vectors
+
+        :param safe_impact_layer: The layer that will be aggregated.
+        :type safe_impact_layer: read_layer
 
         :raises: ReadLayerError
         """
@@ -265,9 +257,9 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
                 ' by %1').arg(self.layer.name())))
-        self._sendMessage(myMessage)
+        self._send_message(myMessage)
 
-        myQGISImpactLayer = safe_to_qgis_layer(theSafeImpactLayer)
+        myQGISImpactLayer = safe_to_qgis_layer(safe_impact_layer)
         if not myQGISImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             # noinspection PyExceptionInherit
@@ -280,7 +272,7 @@ class Aggregator(QtCore.QObject):
         myFields = myProvider.fields()
 
         #mark important attributes as needed
-        self._setPersistantAttributes()
+        self._set_persistant_attributes()
         myUnneededAttributes = []
 
         for i in myFields:
@@ -308,12 +300,12 @@ class Aggregator(QtCore.QObject):
 
         #call the correct aggregator
         if myQGISImpactLayer.type() == QgsMapLayer.VectorLayer:
-            self._aggregateVectorImpact(myQGISImpactLayer, theSafeImpactLayer)
+            self._aggregateVectorImpact(myQGISImpactLayer, safe_impact_layer)
         elif myQGISImpactLayer.type() == QgsMapLayer.RasterLayer:
-            self._aggregateRasterImpact(myQGISImpactLayer)
+            self._aggregate_raster_impact(myQGISImpactLayer)
         else:
-            myMessage = self.tr('%1 is %2 but it should be either vector or '
-                                'raster').\
+            myMessage = self.tr(
+                '%1 is %2 but it should be either vector or raster').\
                 arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
@@ -323,7 +315,7 @@ class Aggregator(QtCore.QObject):
             if self.statisticsType == 'sum':
                 #style layer if we are summing
                 myProvider = self.layer.dataProvider()
-                myAttr = self._sumFieldName()
+                myAttr = self._sum_field_name()
                 myAttrIndex = myProvider.fieldNameIndex(myAttr)
                 myProvider.select([myAttrIndex], QgsRectangle(), False)
                 myFeature = QgsFeature()
@@ -367,14 +359,19 @@ class Aggregator(QtCore.QObject):
                 self.layer.setRendererV2(myRenderer)
                 self.layer.saveDefaultStyle()
 
-    def _aggregateVectorImpact(self, theQGISImpactLayer, theSafeImpactLayer):
+    def _aggregateVectorImpact(self, impact_layer, safe_impact_layer):
         """Performs Aggregation postprocessing step on vector impact layers.
 
-        Args:
-            myQGISImpactLayer a valid QgsRasterLayer
+        :param impact_layer: A raster impact layer.
+        :type impact_layer: QgsRasterLayer
 
-        Returns:
-            None
+        TODO: Marco document this please!
+
+        :param safe_impact_layer:
+        :type safe_impact_layer: read_layer
+
+        TODO: Break this function up into smaller functions!
+
         """
         #TODO (MB) implement line aggregation
 
@@ -382,19 +379,19 @@ class Aggregator(QtCore.QObject):
         myAggrFieldIndex = None
 
         try:
-            self.targetField = self.keywordIO.read_keywords(theQGISImpactLayer,
-                                                           'target_field')
+            self.targetField = self.keywordIO.read_keywords(
+                impact_layer, 'target_field')
         except KeywordNotFoundError:
             myMessage = m.Paragraph(
                 self.tr(
                     'No "target_field" keyword found in the impact layer %1 '
                     'keywords. The impact function should define this.').arg(
-                        theQGISImpactLayer.name()))
+                        impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
             return
-        myImpactProvider = theQGISImpactLayer.dataProvider()
-        myTargetFieldIndex = theQGISImpactLayer.fieldNameIndex(
+        myImpactProvider = impact_layer.dataProvider()
+        myTargetFieldIndex = impact_layer.fieldNameIndex(
             self.targetField)
         #if a feature has no field called
         if myTargetFieldIndex == -1:
@@ -402,7 +399,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('No attribute "%1" was found in the attribute table '
                         'for layer "%2". The impact function must define this'
                         ' attribute for postprocessing to work.').arg(
-                            self.targetField, theQGISImpactLayer.name()))
+                            self.targetField, impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
             return
@@ -429,7 +426,7 @@ class Aggregator(QtCore.QObject):
 
         elif self.statisticsType == 'sum':
             #add the total field to the layer
-            myAggrField = self._sumFieldName()
+            myAggrField = self._sum_field_name()
             myAggregationProvider.addAttributes([QgsField(
                 myAggrField, QtCore.QVariant.Int)])
 
@@ -439,19 +436,19 @@ class Aggregator(QtCore.QObject):
 
         self.layer.startEditing()
 
-        myImpactGeoms = theSafeImpactLayer.get_geometry()
-        myImpactValues = theSafeImpactLayer.get_data()
+        myImpactGeoms = safe_impact_layer.get_geometry()
+        myImpactValues = safe_impact_layer.get_data()
 
         if not self.aoiMode:
             myAggregtionUnits = self.safeLayer.get_geometry()
 
-            if (theSafeImpactLayer.is_point_data or
-                    theSafeImpactLayer.is_polygon_data):
+            if (safe_impact_layer.is_point_data or
+                    safe_impact_layer.is_polygon_data):
                 LOGGER.debug('Doing point in polygon aggregation')
 
                 myRemainingValues = myImpactValues
 
-                if theSafeImpactLayer.is_polygon_data:
+                if safe_impact_layer.is_polygon_data:
                     # Using centroids to do polygon in polygon aggregation
                     # this is always ok because
                     # deintersect() took care of splitting
@@ -569,7 +566,7 @@ class Aggregator(QtCore.QObject):
                     # LOGGER.debug('Inside: ' + str(len(inside)))
                     # LOGGER.debug('Outside: ' + str(len(outside)))
 
-            elif theSafeImpactLayer.is_line_data:
+            elif safe_impact_layer.is_line_data:
                 LOGGER.debug('Doing line in polygon aggregation')
 
             else:
@@ -577,7 +574,7 @@ class Aggregator(QtCore.QObject):
                     self.tr(
                         'Aggregation on vector impact layers other than points'
                         ' or polygons not implemented yet not implemented yet.'
-                        ' Called on %1').arg(theQGISImpactLayer.name()))
+                        ' Called on %1').arg(impact_layer.name()))
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.errorMessage = myMessage
                 self.layer.commitChanges()
@@ -595,14 +592,13 @@ class Aggregator(QtCore.QObject):
                     try:
                         myResults[myKey] += 1
                     except KeyError:
-                        myError = ('StatisticsClasses %s does not '
-                                   'include the %s class which was '
-                                   'found in the data. This is a '
-                                   'problem in the %s '
-                                   'statistics_classes definition' %
-                                   (self.statisticsClasses,
-                                    myKey,
-                                    self.getFunctionID()))
+                        myError = (
+                            'StatisticsClasses %s does not include the %s '
+                            'class which was found in the data. This is a '
+                            'problem in the %s statistics_classes definition' %
+                            (self.statisticsClasses,
+                             myKey,
+                             self.getFunctionID()))
                         raise KeyError(myError)
 
                     self.impactLayerAttributes[0].append(myImpactValueList)
@@ -636,18 +632,15 @@ class Aggregator(QtCore.QObject):
         self.layer.commitChanges()
         return
 
-    def _aggregateRasterImpact(self, theQGISImpactLayer):
-        """
-        Performs Aggregation postprocessing step on raster impact layers by
-        calling QgsZonalStatistics
-        Args:
-            QgsMapLayer: theQGISImpactLayer a valid QgsVectorLayer
+    def _aggregate_raster_impact(self, impact_layer):
+        """Aggregate on a raster impact layer by using zonal statistics.
 
-        Returns: None
+        :param impact_layer: A raster impact layer.
+        :type impact_layer: QgsRasterLayer
         """
         myZonalStatistics = QgsZonalStatistics(
             self.layer,
-            theQGISImpactLayer.dataProvider().dataSourceUri(),
+            impact_layer.dataProvider().dataSourceUri(),
             self.prefix)
         myProgressDialog = QtGui.QProgressDialog(
             self.tr('Calculating zonal statistics'),
@@ -694,7 +687,7 @@ class Aggregator(QtCore.QObject):
         #   'sum': 11330910.488220215,
         #   'mean': 206.02404611477172}}
 
-        myZonalStatistics = calculateZonalStats(theQGISImpactLayer, self.layer)
+        myZonalStatistics = calculateZonalStats(impact_layer, self.layer)
         pyDuration = time.clock() - startTime
         print 'CPP duration: %ss' % (pyDuration)
 
@@ -715,16 +708,16 @@ class Aggregator(QtCore.QObject):
         # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
         #             QgsField(self._minFieldName(), QtCore.QVariant.Double),
         #             QgsField(self._maxFieldName(), QtCore.QVariant.Double)]
-        myFields = [QgsField(self._countFieldName(), QtCore.QVariant.Double),
-                    QgsField(self._sumFieldName(), QtCore.QVariant.Double),
-                    QgsField(self._meanFieldName(), QtCore.QVariant.Double)
+        myFields = [QgsField(self._count_field_name(), QtCore.QVariant.Double),
+                    QgsField(self._sum_field_name(), QtCore.QVariant.Double),
+                    QgsField(self._mean_field_name(), QtCore.QVariant.Double)
                     ]
         myProvider.addAttributes(myFields)
         self.layer.commitChanges()
 
-        sumIndex = myProvider.fieldNameIndex(self._sumFieldName())
-        countIndex = myProvider.fieldNameIndex(self._countFieldName())
-        meanIndex = myProvider.fieldNameIndex(self._meanFieldName())
+        sumIndex = myProvider.fieldNameIndex(self._sum_field_name())
+        countIndex = myProvider.fieldNameIndex(self._count_field_name())
+        meanIndex = myProvider.fieldNameIndex(self._mean_field_name())
         # minIndex = myProvider.fieldNameIndex(self._minFieldName())
         # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
 
@@ -749,7 +742,7 @@ class Aggregator(QtCore.QObject):
         self.prefix = oldPrefix
         return
 
-    def _prepareLayer(self):
+    def _prepare_layer(self):
         """Prepare the aggregation layer to match analysis extents."""
         myMessage = m.Message(
             m.Heading(
@@ -758,12 +751,12 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'We are clipping the aggregation layer to match the '
                 'intersection of the hazard and exposure layer extents.')))
-        self._sendMessage(myMessage)
+        self._send_message(myMessage)
 
         # This is used to hold an *in memory copy* of the aggregation layer
         # or a in memory layer with the clip extents as a feature.
         if self.aoiMode:
-            self.layer = self._extentsToLayer()
+            self.layer = self._extents_to_layer()
             # Area Of Interest (AOI) mode flag
         else:
             # we use only the exposure extent, because both exposure and hazard
@@ -788,23 +781,28 @@ class Aggregator(QtCore.QObject):
                 self.keywordIO.update_keywords(self.layer, {'title': myName})
                 QgsMapLayerRegistry.instance().addMapLayer(self.layer)
 
-    def _countFieldName(self):
+    def _count_field_name(self):
+        """Field name for the count column."""
         return (self.prefix + 'count')[:10]
 
-    def _meanFieldName(self):
+    def _mean_field_name(self):
+        """Field name for the mean column."""
         return (self.prefix + 'mean')[:10]
 
-    def _minFieldName(self):
+    def _min_field_name(self):
+        """Field name for the min column."""
         return (self.prefix + 'min')[:10]
 
-    def _maxFieldName(self):
+    def _max_field_name(self):
+        """Field name for the max column."""
         return (self.prefix + 'max')[:10]
 
-    def _sumFieldName(self):
+    def _sum_field_name(self):
+        """Field name for the sum column."""
         return (self.prefix + 'sum')[:10]
 
     # noinspection PyDictCreation
-    def _setPersistantAttributes(self):
+    def _set_persistant_attributes(self):
         """Mark any attributes that should remain in the self.layer table."""
         self.attributes = {}
         self.attributes[self.defaults[
@@ -822,7 +820,7 @@ class Aggregator(QtCore.QObject):
             self.attributes[myFemaleRatioKey] = \
                 myFemRatioAttr
 
-    def _preparePolygonLayer(self, theQgisLayer):
+    def _prepare_polygon_layer(self, layer):
         """Create a new layer with no intersecting features to self.layer.
 
         A helper function to align the polygons to the postprocLayer
@@ -833,13 +831,11 @@ class Aggregator(QtCore.QObject):
 
         The function assumes EPSG:4326 but no checks are enforced
 
-        Args:
-            theQgisLayer of the file to be processed
-        Returns:
-            QgisLayer of the processed file
+        :param layer: Layer to be processed.
+        :type layer: QgsMapLayer, QgsVectorLayer
 
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :returns: A processed layer.
+        :rtype: QgsMapLayer
         """
 #        import time
 #        startTime = time.clock()
@@ -849,10 +845,10 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'Modifying %1 to avoid intersections with the aggregation '
                 'layer'
-            ).arg(theQgisLayer.name())))
-        self._sendMessage(myMessage)
+            ).arg(layer.name())))
+        self._send_message(myMessage)
 
-        theLayerFilename = str(theQgisLayer.source())
+        theLayerFilename = str(layer.source())
         myPostprocPolygons = self.safeLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
         myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
@@ -873,7 +869,7 @@ class Aggregator(QtCore.QObject):
         aggregationProvider.select([])
 
         # copy polygons to a memory layer
-        myQgisMemoryLayer = create_memory_layer(theQgisLayer)
+        myQgisMemoryLayer = create_memory_layer(layer)
 
         polygonsProvider = myQgisMemoryLayer.dataProvider()
         allPolygonAttrs = polygonsProvider.attributeIndexes()
@@ -886,7 +882,7 @@ class Aggregator(QtCore.QObject):
         myOutFilename = unique_filename(suffix='.shp',
                                         dir=myTempdir)
 
-        self.keywordIO.copy_keywords(theQgisLayer, myOutFilename)
+        self.keywordIO.copy_keywords(layer, myOutFilename)
         mySHPWriter = QgsVectorFileWriter(myOutFilename,
                                           'UTF-8',
                                           fields,
@@ -1108,7 +1104,7 @@ class Aggregator(QtCore.QObject):
         del mySHPWriter
 #        LOGGER.debug('Created: %s' % self.preprocessedFeatureCount)
 
-        myName = '%s %s' % (theQgisLayer.name(), self.tr('preprocessed'))
+        myName = '%s %s' % (layer.name(), self.tr('preprocessed'))
         myOutLayer = QgsVectorLayer(myOutFilename, myName, 'ogr')
         if not myOutLayer.isValid():
             #TODO (MB) use a better exception
@@ -1120,8 +1116,18 @@ class Aggregator(QtCore.QObject):
 
         return myOutLayer
 
-    def _createPolygonLayer(self, crs=None, fields=None):
-        """Creates an empty shape file layer"""
+    def _create_polygon_layer(self, crs=None, fields=None):
+        """Creates an empty shape file layer.
+
+        :param crs: CRS to use for created layer.
+        :type crs: QgsCoordinateReferenceSystem
+
+        :param fields:
+        :type fields: dict
+
+
+
+        """
 
         if crs is None:
             crs = QgsCoordinateReferenceSystem()
@@ -1145,8 +1151,10 @@ class Aggregator(QtCore.QObject):
         LOGGER.debug('created' + myLayer.name())
         return myLayer
 
-    def _extentsToLayer(self):
-        """Memory layer for aggregation by using canvas extents as feature.
+    def _extents_to_layer(self):
+        """Create simple layer with a polygon sized to extents of self.layer.
+
+        Memory layer for aggregation by using canvas extents as feature.
 
         We do this because the user elected to use no aggregation layer so we
         make a 'dummy' one which covers the whole study area extent.
@@ -1154,8 +1162,8 @@ class Aggregator(QtCore.QObject):
         This layer is needed when postprocessing because we always want a
         vector layer to store aggregation information in.
 
-        Returns:
-            QgsMapLayer - a memory layer representing the extents of the clip.
+        :returns: A memory layer representing the extents of the clip.
+        :rtype: QgsVectorLayer
         """
 
         # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
@@ -1201,12 +1209,26 @@ class Aggregator(QtCore.QObject):
             raise e
         return self.layer
 
-    def _sendMessage(self, theMessage, dynamic=True):
-        theType = STATIC_MESSAGE_SIGNAL
+    def _send_message(self, message, dynamic=True):
+        """Send a message using the messaging system.
+
+
+        :param message: A message to display to the user.
+        :type message: Message
+
+        :param dynamic: Whether the message should be appended to the message
+            queue or replace it.
+        :type dynamic: bool
+
+        .. seealso::  https://github.com/AIFDR/inasafe/issues/577
+
+        """
+
+        myType = STATIC_MESSAGE_SIGNAL
         if dynamic:
-            theType = DYNAMIC_MESSAGE_SIGNAL
+            myType = DYNAMIC_MESSAGE_SIGNAL
 
         dispatcher.send(
-            signal=theType,
+            signal=myType,
             sender=self,
-            message=theMessage)
+            message=message)

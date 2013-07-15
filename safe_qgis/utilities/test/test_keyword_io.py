@@ -97,12 +97,12 @@ class KeywordIOTest(unittest.TestCase):
                               'subcategory': 'building'}
         self.keywordIO.write_keywords_for_uri(PG_URI, myExpectedKeywords)
         # Test getting all keywords
-        myKeywords = self.keywordIO.readKeywordFromUri(PG_URI)
+        myKeywords = self.keywordIO.read_keyword_from_uri(PG_URI)
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeywords, myExpectedKeywords, myFilename)
         assert myKeywords == myExpectedKeywords, myMessage
         # Test getting just a single keyword
-        myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype')
+        myKeyword = self.keywordIO.read_keyword_from_uri(PG_URI, 'datatype')
         myExpectedKeyword = 'OSM'
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeyword, myExpectedKeyword, myFilename)
@@ -110,7 +110,7 @@ class KeywordIOTest(unittest.TestCase):
         # Test deleting keywords actually does delete
         self.keywordIO.delete_keywords_for_uri(PG_URI)
         try:
-            myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype')
+            myKeyword = self.keywordIO.read_keyword_from_uri(PG_URI, 'datatype')
             #if the above didnt cause an exception then bad
             myMessage = 'Expected a HashNotFoundError to be raised'
             assert myMessage
