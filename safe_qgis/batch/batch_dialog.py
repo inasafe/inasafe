@@ -449,12 +449,11 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         :param status_item: Table task_item that holds the task status.
         :type status_item: QTableWidgetItem
 
-        :param count: Count of scenarios thats have been run.
+        :param count: Count of scenarios that have been run already.
         :type count:
 
-        :param index: integer for representing an index when run all
-        scenarios
-        :type index:
+        :param index: The index for the table item that will be run.
+        :type index: int
 
         :returns: Flag indicating if the task succeeded or not.
         :rtype: bool
