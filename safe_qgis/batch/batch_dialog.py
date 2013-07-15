@@ -674,7 +674,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         """
         if flag:
             self.leOutputDir.setText(self.leSourceDir.text())
-        self.tbOutputDir.setEnabled(not flag)
+        self.toolOutputDir.setEnabled(not flag)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolSourceDir_clicked(self):
