@@ -428,7 +428,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         myNotes = m.Paragraph(self.tr(
             'You can now proceed to run your model by clicking the'),
-            m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
+            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         myMessage = m.Message(LOGO_ELEMENT, myTitle, myNotes)
         return myMessage
