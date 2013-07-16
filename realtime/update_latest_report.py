@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Script for pushing new earthquake impact report**
@@ -23,7 +24,7 @@ import sys
 from utils import is_event_id
 import logging
 
-# The logger is intialised in utils.py by init
+# The logger is initialized in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
 try:
     earth_quake_source_path = os.environ['EQ_SOURCE_PATH']
@@ -37,6 +38,8 @@ except KeyError:
 def get_list_dir(path_dir, filter_function=None):
     """Return list of file or directory in path_dir
         with filter function filter_function.
+    :param path_dir:
+    :param filter_function:
     """
     list_dir = os.listdir(path_dir)
     print 'list_dir', len(list_dir)
@@ -53,6 +56,7 @@ def get_event_id(report_filename):
     """Custom function to return event id from a filename
     Thi is for filename format like:
     earthquake_impact_map_20120216181705.pdf
+    :param report_filename:
     """
     return report_filename[-18:-4]
 
@@ -61,6 +65,7 @@ def filter_zip_eq_event(zip_eq_event):
     """Return true if zip_eq_event in the following format:
         YYYYBBDDhhmmss.out.zip
         for example : 20130226211002.out.zip
+    :param zip_eq_event
     """
     expected_len = len('20130226211002.out.zip')
     if len(zip_eq_event) != expected_len:
@@ -74,10 +79,10 @@ def filter_zip_eq_event(zip_eq_event):
 
 def filter_eq_map(eq_map_path):
     """Return true if eq_map_path in the following format:
-        eartquake_impact_map_YYYYBBDDhhmmss.pdf
+        earthquake_impact_map_YYYYBBDDhhmmss.pdf
         for example : earthquake_impact_map_20120216181705.pdf
+    :param eq_map_path
     """
-    # my_regex = r'earthquake\_impact\_map\_[0-9]{14}\.pdf'
     expected_len = len('earthquake_impact_map_20120216181705.pdf')
     if len(eq_map_path) != expected_len:
         return False
@@ -96,6 +101,7 @@ def filter_eq_map(eq_map_path):
 
 def sort_event(my_events):
     """Sort list of event id my_event as list ascending
+    :param my_events:
     """
     try:
         sorted_events = sorted([int(x) for x in my_events])
@@ -106,6 +112,7 @@ def sort_event(my_events):
 
 def get_last_event_id(my_events):
     """Return last event id of my_events.
+    :param my_events:
     """
     sorted_events = sort_event(my_events)[-1]
     return sorted_events
@@ -114,6 +121,9 @@ def get_last_event_id(my_events):
 def update_report(my_source_path, my_public_path, last_event_id):
     """Copy latest report to my_public_path and make a copy with
     a latest_earthquake_impact_map.pdf and latest_earthquake_impact_map.png
+    :param my_source_path:
+    :param my_public_path:
+    :param last_event_id:
     """
     last_event_id = str(last_event_id)
 
