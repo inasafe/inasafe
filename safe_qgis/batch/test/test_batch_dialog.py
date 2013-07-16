@@ -47,13 +47,15 @@ class BatchDialogTest(unittest.TestCase):
         numberRow = myDialog.tblScript.rowCount()
         assert numberRow == 2, 'Num scenario is wrong. I got %s' % numberRow
         myOutputDir = myDialog.leOutputDir.text()
-        assert myOutputDir == SCENARIO_DIR, 'Ouput directory is ' + myOutputDir
+        assert myOutputDir == SCENARIO_DIR, 'Output directory is ' + \
+                                            myOutputDir
         myDialog.cbDefaultOutputDir.setChecked(False)
         myDialog.leOutputDir.setText('not a dir')
         myOutputDir = myDialog.leOutputDir.text()
         myDialog.leSourceDir.setText(SCENARIO_DIR + 'a')
         myDialog.leSourceDir.setText(SCENARIO_DIR)
-        assert myOutputDir != SCENARIO_DIR, 'Ouput directory is ' + myOutputDir
+        assert myOutputDir != SCENARIO_DIR, 'Output directory is ' + \
+                                            myOutputDir
 
     def test_runSingleScenario(self):
         """Test run single scenario

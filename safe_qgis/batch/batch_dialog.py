@@ -235,6 +235,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         """
         LOGGER.info('Run simple task' + str(theItem))
         scenarioDirectory = str(self.leSourceDir.text())
+        # dummy file
+        dummyScenarioFilePath = os.path.join(scenarioDirectory, 'dummy.txt')
 
         myPaths = []
         if 'hazard' in theItem:
@@ -248,11 +250,11 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.iface.newProject()
 
         try:
-            scenario_runner.addLayers(scenarioDirectory, myPaths)
+            scenario_runner.addLayers(dummyScenarioFilePath, myPaths)
         except FileNotFoundError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
-                scenarioDirectory, myPaths))
+                dummyScenarioFilePath, myPaths))
             return False
 
         # See if we have a preferred impact function
@@ -265,7 +267,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         if 'aggregation' in theItem:
             absAggregationPath = scenario_runner.extractPath(
-                scenarioDirectory, theItem['aggregation'])[0]
+                dummyScenarioFilePath, theItem['aggregation'])[0]
             myResult = scenario_runner.setAggregationLayer(
                 absAggregationPath, self.dock)
             if not myResult:
