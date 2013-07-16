@@ -1390,8 +1390,8 @@ class ShakeEvent(QObject):
     def sortedImpactedCities(self, theCount=5):
         """Return a data structure with place, mmi, pop sorted by mmi then pop.
 
-        :param theCount: int optional limit to how many rows should be returned.
-                Defaults to 5 if not specified.
+        :param theCount: int optional limit to how many rows should be
+                returned. Defaults to 5 if not specified.
         :returns
             list: An list of dicts containing the sorted cities and their
                 attributes. See below for example output.
@@ -1534,7 +1534,8 @@ class ShakeEvent(QObject):
 
     def impactedCitiesTable(self, theCount=5):
         """Return a table object of sorted impacted cities.
-        :param theCount:optional maximum number of cities to show. Default is 5.
+        :param theCount:optional maximum number of cities to show.
+                Default is 5.
 
         The cities will be listed in the order computed by sortedImpactedCities
         but will only list in the following format:
