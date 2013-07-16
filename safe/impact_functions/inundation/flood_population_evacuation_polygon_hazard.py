@@ -24,17 +24,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     :author AIFDR
     :rating 4
 
-    :param requires::
+    :param requires category=='hazard' and \
+                    subcategory in ['flood', 'tsunami'] and \
+                    layertype=='vector'
 
-      category=='hazard' and
-      subcategory in ['flood', 'tsunami'] and
-      layertype=='vector'
-
-    :param requires::
-
-      category=='exposure' and
-      subcategory=='population' and
-      layertype=='raster'
+    :param requires category=='exposure' and \
+                    subcategory=='population' and \
+                    layertype=='raster'
     """
 
     title = tr('Need evacuation')
