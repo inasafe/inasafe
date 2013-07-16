@@ -79,6 +79,8 @@ class Plugin:
         self.setup_i18n()
         #print self.tr('InaSAFE')
         custom_logging.setup_logger()
+        # For enable/disable the keyword editor icon
+        self.iface.currentLayerChanged.connect(self.layer_changed)
 
     #noinspection PyArgumentList
     def setup_i18n(self, preferred_locale=None):
