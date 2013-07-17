@@ -21,6 +21,8 @@ import sys
 import os
 import logging
 
+from numpy import testing
+
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -260,6 +262,27 @@ class AggregatorTest(unittest.TestCase):
                    myImpactLayer,
                    myExpectedResults,
                    useNativeZonalStats=False):
+        """Calculates aggregation. expected results is split into two lists
+        one list contains numeric attributes, the other strings. This is done
+        so that we can use numpy.testing.assert_allclose which doesn't work on
+        strings"""
+
+        myExpectedStringResults = []
+        myExpectedNumericResults = []
+
+        for item in myExpectedResults:
+            myItemNumResults = []
+            myItemStrResults = []
+            for field in item:
+                try:
+                    value = float(field)
+                    myItemNumResults.append(value)
+                except ValueError:
+                    myItemStrResults.append(str(field))
+
+            myExpectedNumericResults.append(myItemNumResults)
+            myExpectedStringResults.append(myItemStrResults)
+
         myAggregationLayer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
             'test aggregation',
@@ -291,16 +314,29 @@ class AggregatorTest(unittest.TestCase):
         myProvider = myAggregator.layer.dataProvider()
         myProvider.select(myProvider.attributeIndexes())
         myFeature = QgsFeature()
-        myResults = []
+        myNumericResults = []
+        myStringResults = []
 
         while myProvider.nextFeature(myFeature):
-            myFeatureResults = {}
+            myFeatureNumResults = []
+            myFeatureStrResults = []
             myAtMap = myFeature.attributeMap()
             for (k, attr) in myAtMap.iteritems():
-                myFeatureResults[k] = str(attr.toString())
-            myResults.append(myFeatureResults)
+                value, isFloat = attr.toFloat()
+                if isFloat:
+                    myFeatureNumResults.append(value)
+                else:
+                    myFeatureStrResults.append(str(attr.toString()))
 
-        self.assertEqual(myExpectedResults, myResults)
+            myNumericResults.append(myFeatureNumResults)
+            myStringResults.append(myFeatureStrResults)
+
+        # check string attributes
+        self.assertEqual(myExpectedStringResults, myStringResults)
+        # check numeric attributes with a 0.01% tolerance compared to the
+        # native QGIS stats
+        testing.assert_allclose(myExpectedNumericResults, myNumericResults,
+                                rtol=0.01)
 
     def test_aggregate_raster_impact_python(self):
         """Check aggregation on raster impact using python zonal stats"""
@@ -325,26 +361,26 @@ class AggregatorTest(unittest.TestCase):
             name='test raster impact')
 
         myExpectedResults = [
-            {0: 'JAKARTA BARAT',
-             1: '50540',
-             2: '12015061.8769531',
-             3: '237.733713433976'},
-            {0: 'JAKARTA PUSAT',
-             1: '19492',
-             2: '2943702.11401367',
-             3: '151.021040119725'},
-            {0: 'JAKARTA SELATAN',
-             1: '57367',
-             2: '1645498.26947021',
-             3: '28.6837078716024'},
-            {0: 'JAKARTA UTARA',
-             1: '55004',
-             2: '11332095.7334595',
-             3: '206.023120745027'},
-            {0: 'JAKARTA TIMUR',
-             1: '73949',
-             2: '10943934.3182373',
-             3: '147.992999475819'}]
+            ['JAKARTA BARAT',
+             '50540',
+             '12015061.8769531',
+             '237.733713433976'],
+            ['JAKARTA PUSAT',
+             '19492',
+             '2943702.11401367',
+             '151.021040119725'],
+            ['JAKARTA SELATAN',
+             '57367',
+             '1645498.26947021',
+             '28.6837078716024'],
+            ['JAKARTA UTARA',
+             '55004',
+             '11332095.7334595',
+             '206.023120745027'],
+            ['JAKARTA TIMUR',
+             '73949',
+             '10943934.3182373',
+             '147.992999475819']]
 
         self._aggregate(myImpactLayer, myExpectedResults, useNativeZonalStats)
 
@@ -361,11 +397,11 @@ class AggregatorTest(unittest.TestCase):
             name='test vector impact')
 
         myExpectedResults = [
-            {0: 'JAKARTA BARAT', 1: '87'},
-            {0: 'JAKARTA PUSAT', 1: '117'},
-            {0: 'JAKARTA SELATAN', 1: '22'},
-            {0: 'JAKARTA UTARA', 1: '286'},
-            {0: 'JAKARTA TIMUR', 1: '198'}
+            ['JAKARTA BARAT', '87'],
+            ['JAKARTA PUSAT', '117'],
+            ['JAKARTA SELATAN', '22'],
+            ['JAKARTA UTARA', '286'],
+            ['JAKARTA TIMUR', '198']
         ]
         # self._aggregate(myImpactLayer, myExpectedResults)
 
@@ -374,11 +410,11 @@ class AggregatorTest(unittest.TestCase):
             name='test vector impact')
 
         myExpectedResults = [
-            {0: 'JAKARTA BARAT', 1: '87'},
-            {0: 'JAKARTA PUSAT', 1: '117'},
-            {0: 'JAKARTA SELATAN', 1: '22'},
-            {0: 'JAKARTA UTARA', 1: '286'},
-            {0: 'JAKARTA TIMUR', 1: '198'}
+            ['JAKARTA BARAT', '87'],
+            ['JAKARTA PUSAT', '117'],
+            ['JAKARTA SELATAN', '22'],
+            ['JAKARTA UTARA', '286'],
+            ['JAKARTA TIMUR', '198']
         ]
 
         self._aggregate(myImpactLayer, myExpectedResults)
