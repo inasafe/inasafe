@@ -1651,10 +1651,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'you wish to use it as an impact or hazard layer in a '
                 'scenario, please use the keyword editor. You can open'
                 ' the keyword editor by clicking on the ')),
-            m.Image('qrc:/plugins/inasafe/show-keyword-editor.svg'),
+            m.Image('qrc:/plugins/inasafe/show-keyword-editor.svg',
+                    attributes='width=24 height=24'),
             m.Text(self.tr(
-                'icon in the toolbar, or choosing Plugins -> InaSAFE '
-                '-> Keyword Editor from the menus.')))
+                ' icon in the toolbar, or choosing Plugins -> InaSAFE '
+                '-> Keyword Editor from the menu bar.')))
         myReport.add(myContext)
         self.pbnPrint.setEnabled(False)
         self.show_static_message(myReport)
@@ -1685,8 +1686,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 InvalidParameterError), e:
             self.show_no_keywords_message()
             # Append the error message.
-            myErrorMessage = get_error_message(e)
-            self.show_error_message(myErrorMessage)
+            # myErrorMessage = get_error_message(e)
+            # self.show_error_message(myErrorMessage)
             return
         except Exception, e:
             myErrorMessage = get_error_message(e)

@@ -61,7 +61,7 @@ class Image(Text):
         Raises:
             Errors are propagated
         """
-        return '<img src="%s" title="%s" alt="%s"%s/>' % (
+        return '<img src="%s" title="%s" alt="%s" %s/>' % (
             self.uri,
             self.text,
             self.text,
