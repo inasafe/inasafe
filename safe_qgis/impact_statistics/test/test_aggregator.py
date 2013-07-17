@@ -21,7 +21,7 @@ import sys
 import os
 import logging
 
-from numpy import testing
+import numpy.testing
 
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
@@ -335,8 +335,9 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(myExpectedStringResults, myStringResults)
         # check numeric attributes with a 0.01% tolerance compared to the
         # native QGIS stats
-        testing.assert_allclose(myExpectedNumericResults, myNumericResults,
-                                rtol=0.01)
+        numpy.testing.assert_allclose(myExpectedNumericResults,
+                                      myNumericResults,
+                                      rtol=0.01)
 
     def test_aggregate_raster_impact_python(self):
         """Check aggregation on raster impact using python zonal stats"""
