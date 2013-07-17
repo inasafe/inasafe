@@ -256,7 +256,10 @@ class AggregatorTest(unittest.TestCase):
                          DOCK.aggregator.preprocessedFeatureCount,
                          myMessage)
 
-    def _aggregate(self, myImpactLayer, myExpectedResults):
+    def _aggregate(self,
+                   myImpactLayer,
+                   myExpectedResults,
+                   useNativeZonalStats=False):
         myAggregationLayer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
             'test aggregation',
@@ -282,6 +285,7 @@ class AggregatorTest(unittest.TestCase):
         myAggregator.safeLayer = safe_read_layer(
             str(myAggregator.layer.source()))
         myAggregator.aoiMode = False
+        myAggregator.useNativeZonalStats = useNativeZonalStats
         myAggregator.aggregate(myImpactLayer)
 
         myProvider = myAggregator.layer.dataProvider()
@@ -298,7 +302,15 @@ class AggregatorTest(unittest.TestCase):
 
         self.assertEqual(myExpectedResults, myResults)
 
-    def test_aggregate_raster_impact(self):
+    def test_aggregate_raster_impact_python(self):
+        """Check aggregation on raster impact using python zonal stats"""
+        self._aggregate_raster_impact()
+
+    def test_aggregate_raster_impact_native(self):
+        """Check aggregation on raster impact using native qgis zonal stats"""
+        self._aggregate_raster_impact(useNativeZonalStats=True)
+
+    def _aggregate_raster_impact(self, useNativeZonalStats=False):
         """Check aggregation on raster impact.
 
         Created from loadStandardLayers.qgs with:
@@ -349,7 +361,7 @@ class AggregatorTest(unittest.TestCase):
              5: '10945062.4354248',
              6: '148.018262947971'}]
 
-        self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregate(myImpactLayer, myExpectedResults, useNativeZonalStats)
 
     def test_aggregate_vector_impact(self):
         """Test aggregation results on a vector layer.
@@ -384,7 +396,6 @@ class AggregatorTest(unittest.TestCase):
             {0: 'JAKARTA TIMUR', 1: '198'}
         ]
 
-        # TODO (MB) enable this
         self._aggregate(myImpactLayer, myExpectedResults)
 
 if __name__ == '__main__':
