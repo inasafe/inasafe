@@ -825,7 +825,7 @@ def load_layers(
 
     :param data_directory: Path to where data should be loaded from. Defaults
         to TESTDATA directory.
-    :type data_directory: str
+    :type data_directory: str, None
 
     :param clear_flag: Whether to clear currently loaded layers before loading
         the new layers.

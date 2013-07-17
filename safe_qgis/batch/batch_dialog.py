@@ -97,13 +97,13 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         # noinspection PyUnresolvedReferences
         self.leSourceDir.textChanged.connect(self.update_default_output_dir)
 
-        # Setup run all button in button box (repurposes yes to all)
+        # Setup run all button in button box (re-purposes yes to all)
         self.run_all_button = self.buttonBox.button(
             QtGui.QDialogButtonBox.YesToAll)
         self.run_all_button.setText(self.tr('Run all'))
         self.run_all_button.clicked.connect(self.run_all_clicked)
 
-        # Setup run selected button in button box (repurposes yes button)
+        # Setup run selected button in button box (re-purposes yes button)
         self.run_selected_button = self.buttonBox.button(
             QtGui.QDialogButtonBox.Yes)
         self.run_selected_button.setText(self.tr('Run selected'))
@@ -183,7 +183,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             myAbsPath = os.path.join(myPath, myFile)
 
             if myExt == '.py':
-                append_row(self.tblScript, myFile, myAbsPath)
+                # noinspection PyTypeChecker
+                append_row(self.tblScript, str(myFile), myAbsPath)
             elif myExt == '.txt':
                 # insert scenarios from file into table widget
                 try:
@@ -363,7 +364,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         For convenience, the name will use current time.
 
         :param report: A list of each scenario and its status.
-        :type report: str
+        :type report: list
 
         :param pass_count: Number of passing scenarios.
         :type pass_count: int
@@ -506,7 +507,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
                     self.create_pdf(
-                        myTitle, myPath, myQGISImpactLayer, count, index)
+                        myTitle, myPath, myQGISImpactLayer, count, str(index))
                     status_item.setText(self.tr('Report Ok'))
                 except Exception:  # pylint: disable=W0703
                     LOGGER.exception('Unable to render map: "%s"' % myValue)

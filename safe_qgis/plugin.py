@@ -44,8 +44,10 @@ except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
     # yet.
+    # noinspection PyTypeChecker,PyArgumentList
     myWarning = QCoreApplication.translate(
         'Plugin', 'Please restart QGIS to use this plugin.')
+    # noinspection PyTypeChecker,PyArgumentList
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
 
@@ -132,6 +134,7 @@ class Plugin:
             if not myResult:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadError(myMessage)
+            # noinspection PyTypeChecker
             QCoreApplication.installTranslator(self.translator)
 
         LOGGER.debug('%s %s' % (
@@ -149,6 +152,7 @@ class Plugin:
         :returns: Translated version of message.
         :rtype: QString
         """
+        # noinspection PyTypeChecker,PyArgumentList
         return QCoreApplication.translate('Plugin', message)
 
     def add_action(self, action, add_to_toolbar=True):
@@ -334,6 +338,7 @@ class Plugin:
         myMessage = self.tr('Save current scenario to text file')
         self.actionSaveScenario.setStatusTip(myMessage)
         self.actionSaveScenario.setWhatsThis(myMessage)
+        # noinspection PyUnresolvedReferences
         self.actionSaveScenario.triggered.connect(self.save_scenario)
 
         self.add_action(self.actionSaveScenario)
@@ -379,7 +384,7 @@ class Plugin:
         # pylint: disable=W0201
 
     def clear_modules(self):
-        """Unload inasafe functions and try to return QIGS to before InaSAFE.
+        """Unload inasafe functions and try to return QGIS to before InaSAFE.
         """
         from safe.impact_functions import core
 
@@ -546,5 +551,5 @@ class Plugin:
         self.dockWidget.layer_changed(layer)
 
     def shortcut_f7(self):
-        '''Executed when user press F7 - will show the shakemap importer.'''
+        """Executed when user press F7 - will show the shakemap importer."""
         self.show_shakemap_importer()
