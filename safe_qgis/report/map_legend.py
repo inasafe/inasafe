@@ -324,7 +324,8 @@ class MapLegend():
             elif class_type == 'categorizedSymbol':
                 if category is not None or category == '':
                     label = str(category)
-            elif class_type == 'graduatedSymbol' or class_type == 'rasterStyle':
+            elif (class_type == 'graduatedSymbol'
+                  or class_type == 'rasterStyle'):
                 # can be a problem if the min and maximum is not found
                 if minimum is None or maximum is None:
                     LOGGER.debug('Problem caused minimum or maximum is not '

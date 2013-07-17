@@ -108,4 +108,3 @@ def _show_online_help(context=None):
         base_url += 'index.html'
     myUrl = QtCore.QUrl(base_url)
     QtGui.QDesktopServices.openUrl(myUrl)
-

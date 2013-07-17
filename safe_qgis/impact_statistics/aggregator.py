@@ -227,7 +227,8 @@ class Aggregator(QtCore.QObject):
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
             if is_polygon_layer(self.hazardLayer):
-                self.hazardLayer = self._prepare_polygon_layer(self.hazardLayer)
+                self.hazardLayer = self._prepare_polygon_layer(
+                    self.hazardLayer)
 
             if is_polygon_layer(self.exposureLayer):
                 # Find out the subcategory for this layer
@@ -701,11 +702,16 @@ class Aggregator(QtCore.QObject):
 
             # add fields for stats to aggregation layer
             # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
-            #             QgsField(self._minFieldName(), QtCore.QVariant.Double),
-            #             QgsField(self._maxFieldName(), QtCore.QVariant.Double)]
-            myFields = [QgsField(self._count_field_name(), QtCore.QVariant.Double),
-                        QgsField(self._sum_field_name(), QtCore.QVariant.Double),
-                        QgsField(self._mean_field_name(), QtCore.QVariant.Double)
+            #             QgsField(self._minFieldName(),
+            #                      QtCore.QVariant.Double),
+            #             QgsField(self._maxFieldName(),
+            #                      QtCore.QVariant.Double)]
+            myFields = [QgsField(self._count_field_name(),
+                                 QtCore.QVariant.Double),
+                        QgsField(self._sum_field_name(),
+                                 QtCore.QVariant.Double),
+                        QgsField(self._mean_field_name(),
+                                 QtCore.QVariant.Double)
                         ]
             myProvider.addAttributes(myFields)
             self.layer.commitChanges()

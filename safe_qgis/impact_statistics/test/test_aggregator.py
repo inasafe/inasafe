@@ -205,8 +205,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart with None '
-                                'keyword')
+            aggregation_layer='kabupaten jakarta singlepart with None keyword')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -321,7 +320,7 @@ class AggregatorTest(unittest.TestCase):
             myFeatureNumResults = []
             myFeatureStrResults = []
             myAtMap = myFeature.attributeMap()
-            for (k, attr) in myAtMap.iteritems():
+            for _, attr in myAtMap.iteritems():
                 value, isFloat = attr.toFloat()
                 if isFloat:
                     myFeatureNumResults.append(value)

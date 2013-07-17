@@ -110,7 +110,8 @@ class KeywordIOTest(unittest.TestCase):
         # Test deleting keywords actually does delete
         self.keywordIO.delete_keywords_for_uri(PG_URI)
         try:
-            myKeyword = self.keywordIO.read_keyword_from_uri(PG_URI, 'datatype')
+            myKeyword = self.keywordIO.read_keyword_from_uri(PG_URI,
+                                                             'datatype')
             #if the above didnt cause an exception then bad
             myMessage = 'Expected a HashNotFoundError to be raised'
             assert myMessage

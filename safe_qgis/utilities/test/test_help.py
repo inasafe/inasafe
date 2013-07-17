@@ -38,8 +38,7 @@ class HelpTest(unittest.TestCase):
             _show_local_help,
             context='idontexist')
 
-
-    def test_local_help(self):
+    def test_local_help_better(self):
         """Test local help returns no error if the file is not found."""
         # better approach...
         _show_local_help(context='keywords')
