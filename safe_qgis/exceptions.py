@@ -163,3 +163,8 @@ class InvalidAggregatorError(Exception):
 class AggregatioError(Exception):
     """Raised if aggregator state is not valid when trying to run it."""
     pass
+
+
+class HelpFileMissingError(Exception):
+    """Raised if a help file cannot be found."""
+    pass

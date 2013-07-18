@@ -19,7 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 # Needed though not used below
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
-from safe_qgis.utilities.help import show_context_help
+from safe_qgis.utilities.help import _show_local_help
+from safe_qgis.exceptions import HelpFileMissingError
 
 QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -27,12 +28,20 @@ QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 class HelpTest(unittest.TestCase):
     """Test that context help works."""
 
-    def test_keywords_help(self):
-        """Test help works with context set to 'keywords'"""
+    def test_local_help(self):
+        """Test local help returns an error if the file is not found."""
 
         # TODO this test is largely meaningless - try to come up with a
         # better approach...
-        show_context_help(context='keywords')
+        self.assertRaises(
+            HelpFileMissingError,
+            _show_local_help,
+            context='idontexist')
+
+    def test_local_help_better(self):
+        """Test local help returns no error if the file is not found."""
+        # better approach...
+        _show_local_help(context='keywords')
 
 
 if __name__ == '__main__':

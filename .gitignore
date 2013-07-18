@@ -1,7 +1,7 @@
 *.pyc
 *.*~
 *~
-docs/build/doctrees
+docs
 pydevpath.txt
 .coverage
 .noseids

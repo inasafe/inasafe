@@ -21,6 +21,8 @@ import sys
 import os
 import logging
 
+import numpy.testing
+
 from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -203,8 +205,7 @@ class AggregatorTest(unittest.TestCase):
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart with None '
-                                'keyword')
+            aggregation_layer='kabupaten jakarta singlepart with None keyword')
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
@@ -256,7 +257,31 @@ class AggregatorTest(unittest.TestCase):
                          DOCK.aggregator.preprocessedFeatureCount,
                          myMessage)
 
-    def _aggregate(self, myImpactLayer, myExpectedResults):
+    def _aggregate(self,
+                   myImpactLayer,
+                   myExpectedResults,
+                   useNativeZonalStats=False):
+        """Calculates aggregation. expected results is split into two lists
+        one list contains numeric attributes, the other strings. This is done
+        so that we can use numpy.testing.assert_allclose which doesn't work on
+        strings"""
+
+        myExpectedStringResults = []
+        myExpectedNumericResults = []
+
+        for item in myExpectedResults:
+            myItemNumResults = []
+            myItemStrResults = []
+            for field in item:
+                try:
+                    value = float(field)
+                    myItemNumResults.append(value)
+                except ValueError:
+                    myItemStrResults.append(str(field))
+
+            myExpectedNumericResults.append(myItemNumResults)
+            myExpectedStringResults.append(myItemStrResults)
+
         myAggregationLayer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
             'test aggregation',
@@ -282,23 +307,46 @@ class AggregatorTest(unittest.TestCase):
         myAggregator.safeLayer = safe_read_layer(
             str(myAggregator.layer.source()))
         myAggregator.aoiMode = False
+        myAggregator.useNativeZonalStats = useNativeZonalStats
         myAggregator.aggregate(myImpactLayer)
 
         myProvider = myAggregator.layer.dataProvider()
         myProvider.select(myProvider.attributeIndexes())
         myFeature = QgsFeature()
-        myResults = []
+        myNumericResults = []
+        myStringResults = []
 
         while myProvider.nextFeature(myFeature):
-            myFeatureResults = {}
+            myFeatureNumResults = []
+            myFeatureStrResults = []
             myAtMap = myFeature.attributeMap()
-            for (k, attr) in myAtMap.iteritems():
-                myFeatureResults[k] = str(attr.toString())
-            myResults.append(myFeatureResults)
+            for _, attr in myAtMap.iteritems():
+                value, isFloat = attr.toFloat()
+                if isFloat:
+                    myFeatureNumResults.append(value)
+                else:
+                    myFeatureStrResults.append(str(attr.toString()))
 
-        self.assertEqual(myExpectedResults, myResults)
+            myNumericResults.append(myFeatureNumResults)
+            myStringResults.append(myFeatureStrResults)
 
-    def test_aggregate_raster_impact(self):
+        # check string attributes
+        self.assertEqual(myExpectedStringResults, myStringResults)
+        # check numeric attributes with a 0.01% tolerance compared to the
+        # native QGIS stats
+        numpy.testing.assert_allclose(myExpectedNumericResults,
+                                      myNumericResults,
+                                      rtol=0.01)
+
+    def test_aggregate_raster_impact_python(self):
+        """Check aggregation on raster impact using python zonal stats"""
+        self._aggregate_raster_impact()
+
+    def test_aggregate_raster_impact_native(self):
+        """Check aggregation on raster impact using native qgis zonal stats"""
+        self._aggregate_raster_impact(useNativeZonalStats=True)
+
+    def _aggregate_raster_impact(self, useNativeZonalStats=False):
         """Check aggregation on raster impact.
 
         Created from loadStandardLayers.qgs with:
@@ -313,43 +361,28 @@ class AggregatorTest(unittest.TestCase):
             name='test raster impact')
 
         myExpectedResults = [
-            {0: 'JAKARTA BARAT',
-             1: '50540',
-             2: '12015061.8769531',
-             3: '237.733713433976',
-             4: '50539',
-             5: '12015061.8769531',
-             6: '237.738417399496'},
-            {0: 'JAKARTA PUSAT',
-             1: '19492',
-             2: '2943702.11401367',
-             3: '151.021040119725',
-             4: '19492',
-             5: '2945658.12207031',
-             6: '151.121389394126'},
-            {0: 'JAKARTA SELATAN',
-             1: '57367',
-             2: '1645498.26947021',
-             3: '28.6837078716024',
-             4: '57372',
-             5: '1643522.39849854',
-             6: '28.6467684323108'},
-            {0: 'JAKARTA UTARA',
-             1: '55004',
-             2: '11332095.7334595',
-             3: '206.023120745027',
-             4: '54998',
-             5: '11330910.4882202',
-             6: '206.024046114772'},
-            {0: 'JAKARTA TIMUR',
-             1: '73949',
-             2: '10943934.3182373',
-             3: '147.992999475819',
-             4: '73944',
-             5: '10945062.4354248',
-             6: '148.018262947971'}]
+            ['JAKARTA BARAT',
+             '50540',
+             '12015061.8769531',
+             '237.733713433976'],
+            ['JAKARTA PUSAT',
+             '19492',
+             '2943702.11401367',
+             '151.021040119725'],
+            ['JAKARTA SELATAN',
+             '57367',
+             '1645498.26947021',
+             '28.6837078716024'],
+            ['JAKARTA UTARA',
+             '55004',
+             '11332095.7334595',
+             '206.023120745027'],
+            ['JAKARTA TIMUR',
+             '73949',
+             '10943934.3182373',
+             '147.992999475819']]
 
-        self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregate(myImpactLayer, myExpectedResults, useNativeZonalStats)
 
     def test_aggregate_vector_impact(self):
         """Test aggregation results on a vector layer.
@@ -364,11 +397,11 @@ class AggregatorTest(unittest.TestCase):
             name='test vector impact')
 
         myExpectedResults = [
-            {0: 'JAKARTA BARAT', 1: '87'},
-            {0: 'JAKARTA PUSAT', 1: '117'},
-            {0: 'JAKARTA SELATAN', 1: '22'},
-            {0: 'JAKARTA UTARA', 1: '286'},
-            {0: 'JAKARTA TIMUR', 1: '198'}
+            ['JAKARTA BARAT', '87'],
+            ['JAKARTA PUSAT', '117'],
+            ['JAKARTA SELATAN', '22'],
+            ['JAKARTA UTARA', '286'],
+            ['JAKARTA TIMUR', '198']
         ]
         # self._aggregate(myImpactLayer, myExpectedResults)
 
@@ -377,14 +410,13 @@ class AggregatorTest(unittest.TestCase):
             name='test vector impact')
 
         myExpectedResults = [
-            {0: 'JAKARTA BARAT', 1: '87'},
-            {0: 'JAKARTA PUSAT', 1: '117'},
-            {0: 'JAKARTA SELATAN', 1: '22'},
-            {0: 'JAKARTA UTARA', 1: '286'},
-            {0: 'JAKARTA TIMUR', 1: '198'}
+            ['JAKARTA BARAT', '87'],
+            ['JAKARTA PUSAT', '117'],
+            ['JAKARTA SELATAN', '22'],
+            ['JAKARTA UTARA', '286'],
+            ['JAKARTA TIMUR', '198']
         ]
 
-        # TODO (MB) enable this
         self._aggregate(myImpactLayer, myExpectedResults)
 
 if __name__ == '__main__':

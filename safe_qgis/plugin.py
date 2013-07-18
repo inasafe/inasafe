@@ -478,9 +478,9 @@ class Plugin:
         from safe_qgis.tools.options_dialog import OptionsDialog
 
         myDialog = OptionsDialog(
-            self.iface.mainWindow(),
             self.iface,
-            self.dockWidget)
+            self.dockWidget,
+            self.iface.mainWindow())
         myDialog.show()
 
     def show_keywords_editor(self):

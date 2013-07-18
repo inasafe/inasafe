@@ -9,7 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -98,6 +98,11 @@ class Aggregator(QtCore.QObject):
         self.prefix = 'aggr_'
         self.attributes = {}
         self.attributeTitle = None
+
+        #use qgis or inasafe zonal stats
+        myFlag = QtCore.QSettings().value('inasafe/useNativeZonalStats',
+                                          False).toBool()
+        self.useNativeZonalStats = myFlag
 
         self.iface = iface
         self.keywordIO = KeywordIO()
@@ -222,7 +227,8 @@ class Aggregator(QtCore.QObject):
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
             if is_polygon_layer(self.hazardLayer):
-                self.hazardLayer = self._prepare_polygon_layer(self.hazardLayer)
+                self.hazardLayer = self._prepare_polygon_layer(
+                    self.hazardLayer)
 
             if is_polygon_layer(self.exposureLayer):
                 # Find out the subcategory for this layer
@@ -638,109 +644,100 @@ class Aggregator(QtCore.QObject):
         :param impact_layer: A raster impact layer.
         :type impact_layer: QgsRasterLayer
         """
-        myZonalStatistics = QgsZonalStatistics(
-            self.layer,
-            impact_layer.dataProvider().dataSourceUri(),
-            self.prefix)
-        myProgressDialog = QtGui.QProgressDialog(
-            self.tr('Calculating zonal statistics'),
-            self.tr('Abort...'),
-            0,
-            0)
-        startTime = time.clock()
-        myZonalStatistics.calculateStatistics(myProgressDialog)
-        if myProgressDialog.wasCanceled():
-            QtGui.QMessageBox.error(
-                self, self.tr('ZonalStats: Error'),
-                self.tr('You aborted aggregation, '
-                        'so there are no data for analysis. Exiting...'))
-        cppDuration = time.clock() - startTime
-        print 'CPP duration: %ss' % (cppDuration)
+        if self.useNativeZonalStats:
+            myZonalStatistics = QgsZonalStatistics(
+                self.layer,
+                impact_layer.dataProvider().dataSourceUri(),
+                self.prefix)
+            myProgressDialog = QtGui.QProgressDialog(
+                self.tr('Calculating zonal statistics'),
+                self.tr('Abort...'),
+                0,
+                0)
+            startTime = time.clock()
+            myZonalStatistics.calculateStatistics(myProgressDialog)
+            if myProgressDialog.wasCanceled():
+                QtGui.QMessageBox.error(
+                    self, self.tr('ZonalStats: Error'),
+                    self.tr('You aborted aggregation, '
+                            'so there are no data for analysis. Exiting...'))
+            cppDuration = time.clock() - startTime
+            LOGGER.debug('Native zonal stats duration: %ss' % cppDuration)
+        else:
+            # new way
+            # myZonalStatistics = {
+            # 0L: {'count': 50539,
+            #      'sum': 12015061.876953125,
+            #      'mean': 237.73841739949594},
+            # 1L: {
+            #   'count': 19492,
+            #   'sum': 2945658.1220703125,
+            #   'mean': 151.12138939412642},
+            # 2L: {
+            #   'count': 57372,
+            #   'sum': 1643522.3984985352, 'mean': 28.6467684323108},
+            # 3L: {
+            #   'count': 0.00013265823369700314,
+            #   'sum': 0.24983273179242008,
+            #   'mean': 1883.2810058593748},
+            # 4L: {
+            #   'count': 1.8158245316933218e-05,
+            #   'sum': 0.034197078505115275,
+            #   'mean': 1883.281005859375},
+            # 5L: {
+            #   'count': 73941,
+            #   'sum': 10945062.435424805,
+            #   'mean': 148.024268476553},
+            # 6L: {
+            #   'count': 54998,
+            #   'sum': 11330910.488220215,
+            #   'mean': 206.02404611477172}}
+            startTime = time.clock()
+            myZonalStatistics = calculateZonalStats(impact_layer, self.layer)
+            pyDuration = time.clock() - startTime
+            LOGGER.debug('Python zonal stats duration: %ss' % pyDuration)
 
-        startTime = time.clock()
-        # new way
-        # myZonalStatistics = {
-        # 0L: {'count': 50539,
-        #      'sum': 12015061.876953125,
-        #      'mean': 237.73841739949594},
-        # 1L: {
-        #   'count': 19492,
-        #   'sum': 2945658.1220703125,
-        #   'mean': 151.12138939412642},
-        # 2L: {
-        #   'count': 57372,
-        #   'sum': 1643522.3984985352, 'mean': 28.6467684323108},
-        # 3L: {
-        #   'count': 0.00013265823369700314,
-        #   'sum': 0.24983273179242008,
-        #   'mean': 1883.2810058593748},
-        # 4L: {
-        #   'count': 1.8158245316933218e-05,
-        #   'sum': 0.034197078505115275,
-        #   'mean': 1883.281005859375},
-        # 5L: {
-        #   'count': 73941,
-        #   'sum': 10945062.435424805,
-        #   'mean': 148.024268476553},
-        # 6L: {
-        #   'count': 54998,
-        #   'sum': 11330910.488220215,
-        #   'mean': 206.02404611477172}}
+            myProvider = self.layer.dataProvider()
+            self.layer.startEditing()
 
-        myZonalStatistics = calculateZonalStats(impact_layer, self.layer)
-        pyDuration = time.clock() - startTime
-        print 'CPP duration: %ss' % (pyDuration)
+            # add fields for stats to aggregation layer
+            # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
+            #             QgsField(self._minFieldName(),
+            #                      QtCore.QVariant.Double),
+            #             QgsField(self._maxFieldName(),
+            #                      QtCore.QVariant.Double)]
+            myFields = [QgsField(self._count_field_name(),
+                                 QtCore.QVariant.Double),
+                        QgsField(self._sum_field_name(),
+                                 QtCore.QVariant.Double),
+                        QgsField(self._mean_field_name(),
+                                 QtCore.QVariant.Double)
+                        ]
+            myProvider.addAttributes(myFields)
+            self.layer.commitChanges()
 
-        try:
-            ratio = pyDuration / cppDuration
-        except ZeroDivisionError:
-            ratio = 1
+            sumIndex = myProvider.fieldNameIndex(self._sum_field_name())
+            countIndex = myProvider.fieldNameIndex(self._count_field_name())
+            meanIndex = myProvider.fieldNameIndex(self._mean_field_name())
+            # minIndex = myProvider.fieldNameIndex(self._minFieldName())
+            # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
 
-        print 'py to CPP: %s%%' % (ratio * 100)
-        # FIXME (MB) remove this once fully implemented
-        oldPrefix = self.prefix
+            self.layer.startEditing()
+            allPolygonAttrs = myProvider.attributeIndexes()
+            myProvider.select(allPolygonAttrs)
+            myFeature = QgsFeature()
 
-        self.prefix = 'newAggr'
-        myProvider = self.layer.dataProvider()
-        self.layer.startEditing()
-
-        # add fields for stats to aggregation layer
-        # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
-        #             QgsField(self._minFieldName(), QtCore.QVariant.Double),
-        #             QgsField(self._maxFieldName(), QtCore.QVariant.Double)]
-        myFields = [QgsField(self._count_field_name(), QtCore.QVariant.Double),
-                    QgsField(self._sum_field_name(), QtCore.QVariant.Double),
-                    QgsField(self._mean_field_name(), QtCore.QVariant.Double)
-                    ]
-        myProvider.addAttributes(myFields)
-        self.layer.commitChanges()
-
-        sumIndex = myProvider.fieldNameIndex(self._sum_field_name())
-        countIndex = myProvider.fieldNameIndex(self._count_field_name())
-        meanIndex = myProvider.fieldNameIndex(self._mean_field_name())
-        # minIndex = myProvider.fieldNameIndex(self._minFieldName())
-        # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
-
-        self.layer.startEditing()
-        allPolygonAttrs = myProvider.attributeIndexes()
-        myProvider.select(allPolygonAttrs)
-        myFeature = QgsFeature()
-
-        while myProvider.nextFeature(myFeature):
-            myFid = myFeature.id()
-            myStats = myZonalStatistics[myFid]
-            #          minIndex: QtCore.QVariant(myStats['min']),
-            #          maxIndex: QtCore.QVariant(myStats['max'])}
-            attrs = {sumIndex: QtCore.QVariant(myStats['sum']),
-                     countIndex: QtCore.QVariant(myStats['count']),
-                     meanIndex: QtCore.QVariant(myStats['mean'])
-                     }
-            myProvider.changeAttributeValues({myFid: attrs})
-        self.layer.commitChanges()
-
-        # FIXME (MB) remove this once fully implemented
-        self.prefix = oldPrefix
-        return
+            while myProvider.nextFeature(myFeature):
+                myFid = myFeature.id()
+                myStats = myZonalStatistics[myFid]
+                #          minIndex: QtCore.QVariant(myStats['min']),
+                #          maxIndex: QtCore.QVariant(myStats['max'])}
+                attrs = {sumIndex: QtCore.QVariant(myStats['sum']),
+                         countIndex: QtCore.QVariant(myStats['count']),
+                         meanIndex: QtCore.QVariant(myStats['mean'])
+                         }
+                myProvider.changeAttributeValues({myFid: attrs})
+            self.layer.commitChanges()
 
     def _prepare_layer(self):
         """Prepare the aggregation layer to match analysis extents."""
