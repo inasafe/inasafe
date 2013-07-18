@@ -74,7 +74,7 @@ class MapTest(unittest.TestCase):
         mySize = os.stat(myPath).st_size
         myExpectedSizes = [
             441541,  # as rendered on ub 13.04 post 17 May 2013
-            441428,  # as rendered on ub 13.04 5 Jul 2013
+            441563,  # as rendered on ub 13.04 18 Jul 2013
             447217,  # Nadia Linux Mint 14
             447051,  # as rendered on Jenkins post 24 April 2013
             447138,  # Windows 7 SP1 AMD64
