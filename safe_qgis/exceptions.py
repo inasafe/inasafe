@@ -174,3 +174,8 @@ class AggregatioError(Exception):
 class HelpFileMissingError(Exception):
     """Raised if a help file cannot be found."""
     pass
+
+
+class InvalidGeometryError(Exception):
+    """Custom exception for when a feature geometry is invalid or none."""
+    pass

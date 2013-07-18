@@ -86,6 +86,7 @@ from safe_qgis.exceptions import (
     CallGDALError,
     NoFeaturesInExtentError,
     InvalidProjectionError,
+    InvalidGeometryError,
     AggregatioError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
@@ -1339,6 +1340,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             self.aggregator.aggregate(self.runner.impact_layer())
+        except InvalidGeometryError, e:
+            myMessage = get_error_message(e)
+            self.show_error_message(myMessage)
+            self.analysisDone.emit(False)
+            return
         except Exception, e:  # pylint: disable=W0703
             # noinspection PyPropertyAccess
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
