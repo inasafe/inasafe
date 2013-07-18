@@ -543,7 +543,6 @@ class Plugin:
             self.actionKeywordsDialog.setEnabled(False)
         else:
             self.actionKeywordsDialog.setEnabled(True)
-        self.dockWidget.layer_changed(layer)
 
     def shortcut_f7(self):
         '''Executed when user press F7 - will show the shakemap importer.'''

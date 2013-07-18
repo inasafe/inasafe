@@ -71,8 +71,14 @@ class StyleInfoNotFoundError(Exception):
 
 
 class InvalidParameterError(Exception):
-    """Custom exception for when an invalid parameter is
-    passed to a function."""
+    """Custom exception for when an invalid parameter is passed to a function.
+    """
+    pass
+
+
+class NoKeywordsFoundError(Exception):
+    """Custom exception for when no keywords exist for a layer.
+    """
     pass
 
 

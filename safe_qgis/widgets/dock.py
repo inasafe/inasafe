@@ -78,6 +78,7 @@ from safe_qgis.impact_statistics.postprocessor_manager import (
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     KeywordDbError,
+    NoKeywordsFoundError,
     InsufficientOverlapError,
     InvalidParameterError,
     InsufficientParametersError,
@@ -101,7 +102,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+# from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -126,7 +127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        #pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -436,10 +437,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def not_ready_message(self):
         """Help to create a message indicating inasafe is NOT ready.
 
+        .. note:: Assumes a valid hazard and exposure layer are loaded.
+
         :returns Message: A localised message indicating we are not ready.
         """
-        # What does this todo mean? TS
-        # TODO refactor impact_functions so it is accessible and user here
         #myHazardFilename = self.getHazardLayer().source()
         myHazardKeywords = QtCore.QString(str(
             self.keywordIO.read_keywords(self.get_hazard_layer())))
@@ -668,6 +669,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # noinspection PyBroadException
             try:
                 myTitle = self.keywordIO.read_keywords(myLayer, 'title')
+            except NoKeywordsFoundError:
+                # Skip if there are no keywords at all
+                continue
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
@@ -1660,6 +1664,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnPrint.setEnabled(False)
         self.show_static_message(myReport)
 
+    @pyqtSlot('QgsMapLayer')
     def layer_changed(self, theLayer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,

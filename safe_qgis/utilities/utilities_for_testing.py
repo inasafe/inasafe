@@ -23,7 +23,7 @@ from safe_qgis.test.qgis_interface import QgisInterface
 
 # For testing and demoing
 from safe_qgis.safe_interface import (
-    readKeywordsFromFile,
+    read_file_keywords,
     unique_filename,
     temp_dir,
     TESTDATA,
@@ -189,7 +189,7 @@ def load_layer(layer_file, directory=TESTDATA):
     myKeywordPath = myPath[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure
-    myKeywords = readKeywordsFromFile(myKeywordPath)
+    myKeywords = read_file_keywords(myKeywordPath)
     myCategory = 'undefined'
     if 'category' in myKeywords:
         myCategory = myKeywords['category']

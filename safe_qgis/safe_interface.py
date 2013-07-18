@@ -28,6 +28,10 @@ import logging
 
 # SAFE functionality - passed on to QGIS modules
 # pylint: disable=W0611
+
+# We want all these imports as they for part of the API wrapper used by other
+# modules in safe_qgis
+# noinspection PyUnresolvedReferences
 from safe.api import (
     load_plugins,
     get_admissible_plugins,
@@ -67,6 +71,7 @@ from safe.api import (
     ERROR_MESSAGE_SIGNAL,
     ErrorMessage,
     ZeroImpactException)
+# noinspection PyUnresolvedReferences
 from safe.api import styles
 # hack for excluding test-related import in builded package
 try:
@@ -78,10 +83,12 @@ except ImportError:
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication
-from safe_qgis.exceptions import (KeywordNotFoundError,
-                                  StyleInfoNotFoundError,
-                                  InvalidParameterError,
-                                  InsufficientOverlapError)
+from safe_qgis.exceptions import (
+    KeywordNotFoundError,
+    StyleInfoNotFoundError,
+    InvalidParameterError,
+    InsufficientOverlapError,
+    NoKeywordsFoundError)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -285,7 +292,7 @@ def readKeywordsFromLayer(theLayer, keyword):
     return myValue
 
 
-def readKeywordsFromFile(theLayerPath, theKeyword=None):
+def read_file_keywords(theLayerPath, theKeyword=None):
     """Get metadata from the keywords file associated with a local
      file in the file system.
 
@@ -308,6 +315,8 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
 
     Raises:
        KeywordNotFoundError if the keyword is not recognised.
+       NoKeywordsFoundError if no keyword file exists.
+       InvalidParameterError if the layer does not exist.
     """
     # check the source layer path is valid
     if not os.path.isfile(theLayerPath):
@@ -320,7 +329,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     myKeywordFilePath += '.keywords'
     if not os.path.isfile(myKeywordFilePath):
         myMessage = tr('No keywords file found for %s' % myKeywordFilePath)
-        raise InvalidParameterError(myMessage)
+        raise NoKeywordsFoundError(myMessage)
 
     # now get the requested keyword using the inasafe library
     myDictionary = None
