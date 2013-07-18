@@ -872,7 +872,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.aggregator.layer)
         except AttributeError:
             myOriginalKeywords = {}
-        except InvalidParameterError:
+        except NoKeywordsFoundError:
             #No kw file was found for layer - create an empty one.
             myOriginalKeywords = {}
             self.keywordIO.write_keywords(
@@ -1688,7 +1688,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         except (KeywordNotFoundError,
                 HashNotFoundError,
-                InvalidParameterError), e:
+                InvalidParameterError,
+                NoKeywordsFoundError), e:
             self.show_no_keywords_message()
             # Append the error message.
             # myErrorMessage = get_error_message(e)
