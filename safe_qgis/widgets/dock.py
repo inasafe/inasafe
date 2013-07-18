@@ -102,7 +102,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -127,7 +127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+        pydevd.settrace(stdoutToServer=True, stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -380,7 +380,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myMessage = m.Message()
         myMessage.add(LOGO_ELEMENT)
-        myMessage.add(m.Heading('Getting started -', **INFO_STYLE))
+        myMessage.add(m.Heading('Getting started', **INFO_STYLE))
         myNotes = m.Paragraph(
             self.tr(
                 'To use this tool you need to add some layers to your '
@@ -616,6 +616,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.showOnlyVisibleLayersFlag:
             self.get_layers()
 
+    def unblock_signals(self):
+        """Let the combos listen for event changes again."""
+        self.cboAggregation.blockSignals(False)
+        self.cboExposure.blockSignals(False)
+        self.cboHazard.blockSignals(False)
+
+    def block_signals(self):
+        """Prevent the combos and dock listening for event changes."""
+        self.disconnect_layer_listener()
+        self.cboAggregation.blockSignals(True)
+        self.cboExposure.blockSignals(True)
+        self.cboHazard.blockSignals(True)
+
     @pyqtSlot()
     def get_layers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
@@ -623,22 +636,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         On invocation, this method will populate cboHazard, cboExposure and
         cboAggregation on the dialog with a list of available layers.
 
-        * Only **singleband raster** layers will be added to the hazard layer
-            list,
-        * Only **point vector** layers will be added to the exposure layer
-            list.
-        * Only **polygon vector** layers will be added to the aggregate
-            list.
+        Only **polygon vector** layers will be added to the aggregate list.
         """
-        self.disconnect_layer_listener()
-        self.cboAggregation.blockSignals(True)
-        self.cboExposure.blockSignals(True)
-        self.cboHazard.blockSignals(True)
-
-        self.save_state()
-        self.cboHazard.clear()
-        self.cboExposure.clear()
-        self.cboAggregation.clear()
 
         # Map registry may be invalid if QGIS is shutting down
         # pylint: disable=W0702
@@ -650,9 +649,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # pylint: enable=W0702
 
         myCanvasLayers = self.iface.mapCanvas().layers()
-
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()
+
+        # For issue #618
+        if len(myLayers) == 0:
+            self.show_static_message(self.getting_started_message())
+            return
+
+        # Make sure this comes after the checks above to prevent signal
+        # disconnection without reconnection
+        self.block_signals()
+        self.save_state()
+        self.cboHazard.clear()
+        self.cboExposure.clear()
+        self.cboAggregation.clear()
+
         for myLayer in myLayers:
             if (self.showOnlyVisibleLayersFlag and
                     (myLayer not in myCanvasLayers)):
@@ -709,10 +721,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             elif myCategory == 'postprocessing':
                 add_ordered_combo_item(self.cboAggregation, myTitle, mySource)
 
-        # Let the combos listen for event changes again...
-        self.cboAggregation.blockSignals(False)
-        self.cboExposure.blockSignals(False)
-        self.cboHazard.blockSignals(False)
+        self.unblock_signals()
         #handle the cboAggregation combo
         self.cboAggregation.insertItem(0, self.tr('Entire area'))
         self.cboAggregation.setCurrentIndex(0)
