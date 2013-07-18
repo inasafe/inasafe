@@ -10,7 +10,7 @@ from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
-from core import get_documentation
+from core import get_metadata
 from utilities import pretty_string
 from safe.common.utilities import format_int
 # from safe.impact_functions.core import get_dict_doc_func
@@ -235,7 +235,7 @@ class Test_plugin_core(unittest.TestCase):
 
     def test_get_documentation(self):
         """Test get_documentation for a function"""
-        dict_doc = get_documentation('Basic Function')
+        dict_doc = get_metadata('Basic Function')
         myMsg = ('title should be Basic Function but found %s \n'
                  % (dict_doc['title']))
         myMsg += str(dict_doc)

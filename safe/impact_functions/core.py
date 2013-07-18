@@ -731,8 +731,8 @@ def get_unique_values():
     return dict_retval
 
 
-def get_documentation(func):
-    """Collect documentaion of a impact function and return it as a dictionary
+def get_metadata(func):
+    """Collect documentation of a impact function and return it as a dictionary
 
         Args:
             * func : name of function
