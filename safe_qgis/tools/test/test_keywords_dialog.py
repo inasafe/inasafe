@@ -552,15 +552,6 @@ class KeywordsDialogTest(unittest.TestCase):
         myLayer = make_keywordless_layer()
         myDialog.layer = myLayer
         myDialog.load_state_from_keywords()
-        myKeywords = myDialog.get_keywords()
-        #check that a default title is given (see
-        #https://github.com/AIFDR/inasafe/issues/111)
-        myExpectedKeywords = {
-            'category': 'exposure',
-            'title': 'Keywordless Layer'}
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myKeywords, myExpectedKeywords))
-        assert myKeywords == myExpectedKeywords, myMessage
 
     def test_addKeywordWhenPressOkButton(self):
         """Test add keyword when ok button is pressed."""
