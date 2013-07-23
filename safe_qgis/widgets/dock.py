@@ -222,7 +222,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def setup_button_connectors(self):
         """Setup signal/slot mechanisms for dock buttons."""
         self.pbnHelp.clicked.connect(self.show_help)
-        self.pbnPrint.clicked(self.print_map)
+        self.pbnPrint.clicked.connect(self.print_map)
         self.pbnRunStop.clicked.connect(self.accept)
 
     def show_static_message(self, message):
