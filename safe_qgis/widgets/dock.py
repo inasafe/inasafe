@@ -103,7 +103,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -128,7 +128,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+        pydevd.settrace(stdoutToServer=True, stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -148,6 +148,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.runner = None
         self.state = None
         self.lastUsedFunction = ''
+
+        # Flag used to revent recursion and allow bulk loads of layers to
+        # trigger a single event only
+        self.get_layers_lock = False
 
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
@@ -217,16 +221,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def setup_button_connectors(self):
         """Setup signal/slot mechanisms for dock buttons."""
-        myButton = self.pbnHelp
-        QtCore.QObject.connect(
-            myButton, QtCore.SIGNAL('clicked()'), self.show_help)
-        myButton = self.pbnPrint
-        QtCore.QObject.connect(
-            myButton, QtCore.SIGNAL('clicked()'), self.print_map)
-        #self.showHelp()
-        myButton = self.pbnRunStop
-        QtCore.QObject.connect(
-            myButton, QtCore.SIGNAL('clicked()'), self.accept)
+        self.pbnHelp.clicked.connect(self.show_help)
+        self.pbnPrint.clicked(self.print_map)
+        self.pbnRunStop.clicked.connect(self.accept)
 
     def show_static_message(self, message):
         """Send a static message to the message viewer.
@@ -337,20 +334,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         ..seealso:: disconnect_layer_listener
         """
+        registry = QgsMapLayerRegistry.instance()
         if qgis_version() >= 10800:  # 1.8 or newer
-            QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
-                self.get_layers)
-            QgsMapLayerRegistry.instance().layersAdded.connect(
-                self.get_layers)
-        # All versions of QGIS
-        QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(
-            self.get_layers)
-        QgsMapLayerRegistry.instance().layerWasAdded.connect(
-            self.get_layers)
-        self.iface.mapCanvas().layersChanged.connect(
-            self.get_layers)
-        self.iface.currentLayerChanged.connect(
-            self.layer_changed)
+            registry.layersWillBeRemoved.connect(self.get_layers)
+            registry.layersAdded.connect(self.get_layers)
+        else:
+            # All versions of QGIS
+            registry.layerWillBeRemoved.connect(self.get_layers)
+            registry.layerWasAdded.connect(self.get_layers)
+
+        self.iface.mapCanvas().layersChanged.connect(self.get_layers)
+        self.iface.currentLayerChanged.connect(self.layer_changed)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -358,20 +352,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         ..seealso:: connect_layer_listener
         """
+        registry = QgsMapLayerRegistry.instance()
         if qgis_version() >= 10800:  # 1.8 or newer
-            QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(
-                self.get_layers)
-            QgsMapLayerRegistry.instance().layersAdded.disconnect(
-                self.get_layers)
-        # All versions of QGIS
-        QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(
-            self.get_layers)
-        QgsMapLayerRegistry.instance().layerWasAdded.disconnect(
-            self.get_layers)
-        self.iface.mapCanvas().layersChanged.disconnect(
-            self.get_layers)
-        self.iface.currentLayerChanged.disconnect(
-            self.layer_changed)
+            registry.layersWillBeRemoved.disconnect(self.get_layers)
+            registry.layersAdded.disconnect(self.get_layers)
+        else:
+            # All versions of QGIS
+            registry.layerWillBeRemoved.disconnect(self.get_layers)
+            registry.layerWasAdded.disconnect(self.get_layers)
+
+        self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
+        self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -630,25 +621,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboExposure.blockSignals(True)
         self.cboHazard.blockSignals(True)
 
-    @pyqtSlot()
-    def get_layers(self):
+    @pyqtSlot('QgsMapLayer')
+    @pyqtSlot('QgsMapLayer')
+    def get_layers(self, *args):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
         On invocation, this method will populate cboHazard, cboExposure and
         cboAggregation on the dialog with a list of available layers.
 
         Only **polygon vector** layers will be added to the aggregate list.
+
+        :param args: Arguments that may have been passed to this slot.
+            Typically a list of layers, but depends on which slot or function
+            called this function.
+        :type args: list
+
+        ..note:: *args is only used for debugging purposes.
         """
 
-        # Map registry may be invalid if QGIS is shutting down
-        # pylint: disable=W0702
-        # noinspection PyBroadException
-        try:
-            myRegistry = QgsMapLayerRegistry.instance()
-        except:
+        # Prevent recursion
+        if self.get_layers_lock:
             return
-        # pylint: enable=W0702
 
+        for arg in args:
+            LOGGER.debug('get_layer argument: %s' % arg)
+        # Map registry may be invalid if QGIS is shutting down
+        myRegistry = QgsMapLayerRegistry.instance()
         myCanvasLayers = self.iface.mapCanvas().layers()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()
@@ -657,6 +655,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if len(myLayers) == 0:
             self.show_static_message(self.getting_started_message())
             return
+
+        self.get_layers_lock = True
 
         # Make sure this comes after the checks above to prevent signal
         # disconnection without reconnection
@@ -736,6 +736,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Note: Don't change the order of the next two lines otherwise there
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
+        self.get_layers_lock = False
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
@@ -895,13 +896,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.iface,
             self,
             self.aggregator.layer)
-        QtCore.QObject.connect(
-            self.runtimeKeywordsDialog,
-            QtCore.SIGNAL('accepted()'),
-            self.run)
-        QtCore.QObject.connect(
-            self.runtimeKeywordsDialog,
-            QtCore.SIGNAL('rejected()'),
+        self.runtimeKeywordsDialog.accepted.connect(self.run)
+        self.runtimeKeywordsDialog.rejected.connect(
             partial(self.accept_cancelled, myOriginalKeywords))
 
     def accept(self):
@@ -912,7 +908,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-
         myTitle = self.tr('Processing started')
         myDetails = self.tr(
             'Please wait - processing may take a while depending on your '
@@ -1107,8 +1102,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'An exception occurred when setting up the model runner.'))
             return
 
-        QtCore.QObject.connect(
-            self.runner, QtCore.SIGNAL('done()'), self.aggregate)
+        self.runner.done.connect(self.aggregate)
 
         self.show_busy()
 
@@ -1277,10 +1271,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            QtCore.QObject.disconnect(
-                self.runner,
-                QtCore.SIGNAL('done()'),
-                self.aggregate)
+            self.runner.done.disconnect(self.aggregate)
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
@@ -1689,6 +1680,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :type theLayer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 
         """
+        # Don't handle this event if we are already handling another layer
+        # addition or removal event.
+        if self.get_layers_lock:
+            return
+
         if theLayer is None:
             LOGGER.debug('Layer is None')
             return
