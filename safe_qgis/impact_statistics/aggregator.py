@@ -37,7 +37,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
 
-from safe_qgis.impact_statistics.zonal_stats import calculateZonalStats
+from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
 from third_party.odict import OrderedDict
 from third_party.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
@@ -693,7 +693,7 @@ class Aggregator(QtCore.QObject):
             #   'sum': 11330910.488220215,
             #   'mean': 206.02404611477172}}
             startTime = time.clock()
-            myZonalStatistics = calculateZonalStats(impact_layer, self.layer)
+            myZonalStatistics = calculate_zonal_stats(impact_layer, self.layer)
             pyDuration = time.clock() - startTime
             LOGGER.debug('Python zonal stats duration: %ss' % pyDuration)
 

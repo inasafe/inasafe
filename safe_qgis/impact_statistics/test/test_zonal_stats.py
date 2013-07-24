@@ -28,7 +28,7 @@ pardir = os.path.abspath(
 sys.path.append(pardir)
 
 from safe_qgis.impact_statistics.zonal_stats import (
-    calculateZonalStats, cellInfoForBBox)
+    calculate_zonal_stats, feature_box)
 from safe_qgis.utilities.utilities_for_testing import (
     load_layer, get_qgis_app)
 from safe_qgis.safe_interface import UNITDATA
@@ -56,9 +56,9 @@ class ZonalStatsTest(unittest.TestCase):
             UNITDATA, 'other', 'tenbytenraster.asc'))
         myVectorLayer, _ = load_layer(os.path.join(
             UNITDATA, 'other', 'zonal_polygons.shp'))
-        myResult = calculateZonalStats(
-            theRasterLayer=myRasterLayer,
-            thePolygonLayer=myVectorLayer)
+        myResult = calculate_zonal_stats(
+            raster_layer=myRasterLayer,
+            polygon_layer=myVectorLayer)
         myExpectedResult = {
             0L: {'count': 4, 'sum': 34.0, 'mean': 8.5},  # BR polygon
             1L: {'count': 9, 'sum': 36.0, 'mean': 4.0},  # center polygon
@@ -77,9 +77,9 @@ class ZonalStatsTest(unittest.TestCase):
         # and one poly extending beyond the bottom of each col
         myVectorLayer, _ = load_layer(os.path.join(
             UNITDATA, 'other', 'ten_by_ten_raster_as_polys.shp'))
-        myResult = calculateZonalStats(
-            theRasterLayer=myRasterLayer,
-            thePolygonLayer=myVectorLayer)
+        myResult = calculate_zonal_stats(
+            raster_layer=myRasterLayer,
+            polygon_layer=myVectorLayer)
         myExpectedResult = {
             0L: {'count': 1.0, 'sum': 0.0, 'mean': 0.0},  # TL polygon
             9L: {'count': 1.0, 'sum': 9.0, 'mean': 9.0},  # TR polygon
@@ -106,7 +106,7 @@ class ZonalStatsTest(unittest.TestCase):
         myOffsetY = 0
         myCellsX = myCellsY = 1
         myExpectedResult = myOffsetX, myOffsetY, myCellsX, myCellsY
-        myResult = cellInfoForBBox(
+        myResult = feature_box(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
         self.assertTupleEqual(myExpectedResult, myResult)
 
@@ -114,6 +114,6 @@ class ZonalStatsTest(unittest.TestCase):
         myCellsX = 2
         myExpectedResult = myOffsetX, myOffsetY, myCellsX, myCellsY
         myFeatureBox = QgsRectangle(1535455.0, 5083345.0, 1535470.0, 5083355.0)
-        myResult = cellInfoForBBox(
+        myResult = feature_box(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
         self.assertTupleEqual(myExpectedResult, myResult)
