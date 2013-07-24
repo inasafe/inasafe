@@ -262,16 +262,17 @@ class Aggregator(QtCore.QObject):
             m.Heading(self.tr('Aggregating results'), **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
-                ' by %1').arg(self.layer.name())))
+                ' by %s') % (self.layer.name())))
         self._send_message(myMessage)
 
         myQGISImpactLayer = safe_to_qgis_layer(safe_impact_layer)
         if not myQGISImpactLayer.isValid():
-            myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
+            myMessage = self.tr('Error when reading %s') % (
+                myQGISImpactLayer)
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
-        myLayerName = str(self.tr('%1 aggregated to %2').arg(
-            myQGISImpactLayer.name()).arg(self.layer.name()))
+        myLayerName = self.tr('%s aggregated to %s') % (
+            myQGISImpactLayer.name(), self.layer.name())
 
         #delete unwanted fields
         myProvider = self.layer.dataProvider()
@@ -311,8 +312,8 @@ class Aggregator(QtCore.QObject):
             self._aggregate_raster_impact(myQGISImpactLayer)
         else:
             myMessage = self.tr(
-                '%1 is %2 but it should be either vector or raster').\
-                arg(myQGISImpactLayer.name()).arg(myQGISImpactLayer.type())
+                '%s is %s but it should be either vector or raster') % (
+                    myQGISImpactLayer.name(), myQGISImpactLayer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
@@ -390,8 +391,8 @@ class Aggregator(QtCore.QObject):
         except KeywordNotFoundError:
             myMessage = m.Paragraph(
                 self.tr(
-                    'No "target_field" keyword found in the impact layer %1 '
-                    'keywords. The impact function should define this.').arg(
+                    'No "target_field" keyword found in the impact layer %s '
+                    'keywords. The impact function should define this.') % (
                         impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
@@ -402,9 +403,9 @@ class Aggregator(QtCore.QObject):
         #if a feature has no field called
         if myTargetFieldIndex == -1:
             myMessage = m.Paragraph(
-                self.tr('No attribute "%1" was found in the attribute table '
-                        'for layer "%2". The impact function must define this'
-                        ' attribute for postprocessing to work.').arg(
+                self.tr('No attribute "%s" was found in the attribute table '
+                        'for layer "%s". The impact function must define this'
+                        ' attribute for postprocessing to work.') % (
                             self.targetField, impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
@@ -580,7 +581,7 @@ class Aggregator(QtCore.QObject):
                     self.tr(
                         'Aggregation on vector impact layers other than points'
                         ' or polygons not implemented yet not implemented yet.'
-                        ' Called on %1').arg(impact_layer.name()))
+                        ' Called on %s') % (impact_layer.name()))
                 LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
                 self.errorMessage = myMessage
                 self.layer.commitChanges()
@@ -840,9 +841,9 @@ class Aggregator(QtCore.QObject):
         myMessage = m.Message(
             m.Heading(self.tr('Preclipping input data...')),
             m.Paragraph(self.tr(
-                'Modifying %1 to avoid intersections with the aggregation '
+                'Modifying %s to avoid intersections with the aggregation '
                 'layer'
-            ).arg(layer.name())))
+            ) % (layer.name())))
         self._send_message(myMessage)
 
         theLayerFilename = str(layer.source())

@@ -219,8 +219,8 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         myText = ''
         impactFunctionName = theFunctionID
-        myText += self.tr('Parameters for impact function "%1" that can be '
-                          'modified are:').arg(impactFunctionName)
+        myText += self.tr('Parameters for impact function "%s" that can be '
+                          'modified are:') % (impactFunctionName)
         myLabel = self.lblFunctionDescription
         myLabel.setText(myText)
 

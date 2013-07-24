@@ -522,10 +522,10 @@ def impact_attribution(keywords, inasafe_flag=False):
     if inasafe_flag:
         myReport.add(m.Heading(tr('Software notes'), **INFO_STYLE))
         myInaSAFEPhrase = tr(
-            'This report was created using InaSAFE version %1. Visit '
+            'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org to get your free copy of this software!'
             'InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR & the '
-            'World Bank').arg(get_version())
+            'World Bank') % (get_version())
 
         myReport.add(m.Paragraph(m.Text(myInaSAFEPhrase)))
     return myReport
@@ -704,8 +704,8 @@ def safe_to_qgis_layer(layer):
     """
 
     myMessage = tr(
-        'Input layer must be a InaSAFE spatial object. I got %1'
-    ).arg(str(type(layer)))
+        'Input layer must be a InaSAFE spatial object. I got %s'
+    ) % (str(type(layer)))
     if not hasattr(layer, 'is_inasafe_spatial_object'):
         raise Exception(myMessage)
     if not layer.is_inasafe_spatial_object:
@@ -726,7 +726,7 @@ def safe_to_qgis_layer(layer):
     if myQGISLayer.isValid():
         return myQGISLayer
     else:
-        myMessage = tr('Loaded impact layer "%1" is not valid').arg(myFilename)
+        myMessage = tr('Loaded impact layer "%s" is not valid') % (myFilename)
         raise Exception(myMessage)
 
 
@@ -842,7 +842,7 @@ def read_impact_layer(impact_layer):
     """
 
     myMessage = tr('Input layer must be a InaSAFE spatial object. '
-                   'I got %1').arg(str(type(impact_layer)))
+                   'I got %s') % (str(type(impact_layer)))
     if not hasattr(impact_layer, 'is_inasafe_spatial_object'):
         raise Exception(myMessage)
     if not impact_layer.is_inasafe_spatial_object:
@@ -864,5 +864,5 @@ def read_impact_layer(impact_layer):
         return myQGISLayer
     else:
         myMessage = tr(
-            'Loaded impact layer "%1" is not valid').arg(myFilename)
+            'Loaded impact layer "%s" is not valid') % (myFilename)
         raise Exception(myMessage)

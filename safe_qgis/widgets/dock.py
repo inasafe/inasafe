@@ -1226,8 +1226,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 setRasterStyle(theQGISImpactLayer, myStyle)
 
         else:
-            myMessage = self.tr('Impact layer %1 was neither a raster or a '
-                                'vector layer').arg(
+            myMessage = self.tr('Impact layer %s was neither a raster or a '
+                                'vector layer') % (
                                     theQGISImpactLayer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
@@ -1279,8 +1279,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Done was emitted, but no impact layer was calculated
             myResult = self.runner.result()
             myMessage = str(self.tr(
-                'No impact layer was calculated. Error message: %1\n'
-            ).arg(str(myResult)))
+                'No impact layer was calculated. Error message: %s\n'
+            ) % (str(myResult)))
             myException = self.runner.lastException()
             if isinstance(myException, ZeroImpactException):
                 myReport = m.Message()
@@ -1290,15 +1290,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myReport.add(m.Text(myException.message))
                 myReport.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
                 myReport.add(m.Text(self.tr(
-                    'It appears that no %1 are affected by %2. You may want '
-                    'to consider:').arg(
-                        self.cboExposure.currentText()).arg(
-                            self.cboHazard.currentText()
+                    'It appears that no %s are affected by %s. You may want '
+                    'to consider:') % (
+                        self.cboExposure.currentText(),
+                        self.cboHazard.currentText()
                         )))
                 myList = m.BulletedList()
                 myList.add(self.tr(
                     'Check that you are not zoomed in too much and thus '
-                    'excluding %1 from your analysis area.').arg(
+                    'excluding %s from your analysis area.') % (
                         self.cboExposure.currentText()))
                 myList.add(self.tr(
                     'Check that the exposure is not no-data or zero for the '
@@ -1312,8 +1312,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 return
             if myException is not None:
                 myContext = self.tr(
-                    'An exception occurred when calculating the results. %1'
-                ).arg(self.runner.result())
+                    'An exception occurred when calculating the results. %s'
+                ) % (self.runner.result())
                 myMessage = get_error_message(myException, context=myContext)
             self.show_error_message(myMessage)
             self.analysisDone.emit(False)

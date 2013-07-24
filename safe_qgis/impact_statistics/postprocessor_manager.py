@@ -132,7 +132,7 @@ class PostprocessorManager(QtCore.QObject):
             hasNoDataValues = False
             myTable = m.Table(
                 style_class='table table-condensed table-striped')
-            myTable.caption = self.tr('Detailed %1 report').arg(safeTr(
+            myTable.caption = self.tr('Detailed %s report') % (safeTr(
                 get_postprocessor_human_name(proc)).lower())
 
             myHeaderRow = m.Row()
@@ -156,9 +156,9 @@ class PostprocessorManager(QtCore.QObject):
             myMessage.add(myTable)
             if hasNoDataValues:
                 myMessage.add(m.EmphasizedText(self.tr(
-                    '* "%1" values mean that there where some problems while '
+                    '* "%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
-                    'values.').arg(self.aggregator.defaults['NO_DATA'])))
+                    'values.') % (self.aggregator.defaults['NO_DATA'])))
 
         try:
             if (self.keywordIO.read_keywords(
@@ -314,7 +314,7 @@ class PostprocessorManager(QtCore.QObject):
                 m.Paragraph(self.tr(
                     'Due to a problem while processing the results,'
                     ' the detailed postprocessing report is unavailable:'
-                    ' %1').arg(self.errorMessage)))
+                    ' %s') % (self.errorMessage)))
             return myMessage
 
         return self._generateTables()

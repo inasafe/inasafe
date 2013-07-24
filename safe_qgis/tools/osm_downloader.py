@@ -175,10 +175,10 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         if os.path.exists(myDir):
             return
 
-        myTitle = self.tr("Directory %1 not exist").arg(myDir)
+        myTitle = self.tr("Directory %s not exist") % (myDir)
         myQuestion = self.tr(
-            "Directory %1 not exist. Are you want to create it?"
-        ).arg(myDir)
+            "Directory %s not exist. Are you want to create it?"
+        ) % (myDir)
         # noinspection PyCallByClass,PyTypeChecker
         myAnswer = QMessageBox.question(
             self, myTitle,
@@ -240,8 +240,8 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.progressDialog.setValue(0)
 
         # myLabelText = "Begin downloading shapefile from " \
-        #               + "%1 ..."
-        # self.progressDialog.setLabelText(self.tr(myLabelText).arg(url))
+        #               + "%s ..."
+        # self.progressDialog.setLabelText(self.tr(myLabelText) % (url))
         myLabelText = self.tr("Downloading shapefile")
         self.progressDialog.setLabelText(myLabelText)
 

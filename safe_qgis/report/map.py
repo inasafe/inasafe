@@ -645,12 +645,12 @@ class Map():
         myTokens = myLongVersion.split('.')
         myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
         myLabelText = self.tr(
-            'Date and time of assessment: %1 %2\n'
+            'Date and time of assessment: %s %s\n'
             'Special note: This assessment is a guide - we strongly recommend '
             'that you ground truth the results shown here before deploying '
             'resources and / or personnel.\n'
-            'Assessment carried out using InaSAFE release %3 (QGIS '
-            'plugin version).').arg(myDate).arg(myTime).arg(myVersion)
+            'Assessment carried out using InaSAFE release %s (QGIS '
+            'plugin version).') % (myDate, myTime, myVersion)
         myFontSize = 6
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = True

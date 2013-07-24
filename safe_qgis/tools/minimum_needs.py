@@ -49,7 +49,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-            'InaSAFE %1 Minimum Needs Tool').arg(get_version()))
+            'InaSAFE %s Minimum Needs Tool') % (get_version()))
         self.polygon_layers_to_combo()
         self.show_info()
 

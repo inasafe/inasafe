@@ -125,7 +125,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     myProvider = polygon_layer.dataProvider()
     if myProvider is None:
         myMessage = tr(
-            'Could not obtain data provider from layer "%1"').arg(
+            'Could not obtain data provider from layer "%s"') % (
                 polygon_layer.source())
         raise Exception(myMessage)
 
@@ -137,7 +137,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         myGeometry = myFeature.geometry()
         if myGeometry is None:
             myMessage = tr(
-                'Feature %1 has no geometry or geometry is invalid').arg(
+                'Feature %d has no geometry or geometry is invalid') % (
                     myFeature.id())
             raise InvalidGeometryError(myMessage)
 
