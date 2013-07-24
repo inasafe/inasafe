@@ -35,7 +35,8 @@ from safe_qgis.utilities.utilities import (
     layer_attribute_names,
     defaults)
 
-from safe_qgis.exceptions import InvalidParameterError, HashNotFoundError
+from safe_qgis.exceptions import (
+    InvalidParameterError, HashNotFoundError, NoKeywordsFoundError)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -661,7 +662,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         try:
             # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.read_keywords(self.layer)
-        except (InvalidParameterError, HashNotFoundError):
+        except (InvalidParameterError, HashNotFoundError, NoKeywordsFoundError):
             pass
 
         myLayerName = self.layer.name()

@@ -202,9 +202,7 @@ class Plugin:
             'Show/hide InaSAFE dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
-        QObject.connect(
-            self.actionDock, SIGNAL('triggered()'),
-            self.toggle_dock_visibility)
+        self.actionDock.triggered.connect(self.toggle_dock_visibility)
         self.add_action(self.actionDock)
 
         #--------------------------------------
@@ -220,9 +218,7 @@ class Plugin:
             'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setEnabled(False)
 
-        QObject.connect(
-            self.actionKeywordsDialog, SIGNAL('triggered()'),
-            self.show_keywords_editor)
+        self.actionKeywordsDialog.triggered.connect(self.show_keywords_editor)
 
         self.add_action(self.actionKeywordsDialog)
 
@@ -236,9 +232,7 @@ class Plugin:
             'Reset the InaSAFE Dock'))
         self.actionResetDock.setWhatsThis(self.tr(
             'Reset the InaSAFE Dock'))
-        QObject.connect(
-            self.actionResetDock, SIGNAL('triggered()'),
-            self.reset_dock)
+        self.actionResetDock.triggered.connect(self.reset_dock)
 
         self.add_action(self.actionResetDock)
 
@@ -252,34 +246,30 @@ class Plugin:
             'Open InaSAFE options dialog'))
         self.actionOptions.setWhatsThis(self.tr(
             'Open InaSAFE options dialog'))
-        QObject.connect(
-            self.actionOptions, SIGNAL('triggered()'),
-            self.show_options)
+        self.actionOptions.triggered.connect(self.show_options)
 
         self.add_action(self.actionOptions)
 
         #--------------------------------------
         # Create action for impact functions doc dialog
         #--------------------------------------
-        self.actionImpactFunctionsDoc = QAction(
+        self.actionFunctionBrowser = QAction(
             QIcon(':/plugins/inasafe/show-impact-functions.svg'),
             self.tr('InaSAFE Impact Functions Browser'),
             self.iface.mainWindow())
-        self.actionImpactFunctionsDoc.setStatusTip(self.tr(
+        self.actionFunctionBrowser.setStatusTip(self.tr(
             'Open InaSAFE Impact Functions Browser'))
-        self.actionImpactFunctionsDoc.setWhatsThis(self.tr(
+        self.actionFunctionBrowser.setWhatsThis(self.tr(
             'Open InaSAFE Impact Functions Browser'))
-        QObject.connect(
-            self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
+        self.actionFunctionBrowser.triggered.connect(
             self.show_function_browser)
 
-        self.add_action(self.actionImpactFunctionsDoc)
+        self.add_action(self.actionFunctionBrowser)
 
         # Short cut for Open Impact Functions Doc
         self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
         self.iface.registerMainWindowAction(self.keyAction, "F7")
-        QObject.connect(self.keyAction, SIGNAL("triggered()"),
-                        self.shortcut_f7)
+        self.keyAction.triggered.connect(self.shortcut_f7)
 
         #---------------------------------------
         # Create action for minimum needs dialog
@@ -291,8 +281,7 @@ class Plugin:
             'Open InaSAFE minimum needs tool'))
         self.actionMinimumNeeds.setWhatsThis(self.tr(
             'Open InaSAFE minimum needs tool'))
-        QObject.connect(self.actionMinimumNeeds, SIGNAL('triggered()'),
-                        self.show_minimum_needs)
+        self.actionMinimumNeeds.triggered.connect(self.show_minimum_needs)
 
         self.add_action(self.actionMinimumNeeds)
 
@@ -306,8 +295,7 @@ class Plugin:
             'Open InaSAFE Converter'))
         self.actionConverter.setWhatsThis(self.tr(
             'Open InaSAFE Converter'))
-        QObject.connect(self.actionConverter, SIGNAL('triggered()'),
-                        self.show_shakemap_importer)
+        self.actionConverter.triggered.connect(self.show_shakemap_importer)
 
         self.add_action(self.actionConverter)
 
@@ -321,10 +309,7 @@ class Plugin:
             'Open InaSAFE Batch Runner'))
         self.actionBatchRunner.setWhatsThis(self.tr(
             'Open InaSAFE Batch Runner'))
-        QObject.connect(
-            self.actionBatchRunner,
-            SIGNAL('triggered()'),
-            self.show_batch_runner)
+        self.actionBatchRunner.triggered.connect(self.show_batch_runner)
 
         self.add_action(self.actionBatchRunner)
 
@@ -340,7 +325,6 @@ class Plugin:
         self.actionSaveScenario.setWhatsThis(myMessage)
         # noinspection PyUnresolvedReferences
         self.actionSaveScenario.triggered.connect(self.save_scenario)
-
         self.add_action(self.actionSaveScenario)
 
         #--------------------------------------
@@ -354,9 +338,7 @@ class Plugin:
             'InaSAFE OpenStreetMap Downloader'))
         self.actionImportDlg.setWhatsThis(self.tr(
             'InaSAFE OpenStreetMap Downloader'))
-        QObject.connect(
-            self.actionImportDlg, SIGNAL('triggered()'),
-            self.show_osm_downloader)
+        self.actionImportDlg.triggered.connect(self.show_osm_downloader)
 
         self.add_action(self.actionImportDlg)
 
@@ -376,10 +358,7 @@ class Plugin:
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
         #
-        QObject.connect(
-            self.dockWidget,
-            SIGNAL("visibilityChanged (bool)"),
-            self.toggle_inasafe_action)
+        self.dockWidget.visibilityChanged.connect(self.toggle_inasafe_action)
 
         # pylint: disable=W0201
 
@@ -436,10 +415,7 @@ class Plugin:
         self.iface.mainWindow().removeToolBar(self.toolbar)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
-        QObject.disconnect(
-            self.iface,
-            SIGNAL("currentLayerChanged(QgsMapLayer*)"),
-            self.layer_changed)
+        self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
         self.clear_modules()
 
@@ -548,7 +524,6 @@ class Plugin:
             self.actionKeywordsDialog.setEnabled(False)
         else:
             self.actionKeywordsDialog.setEnabled(True)
-        self.dockWidget.layer_changed(layer)
 
     def shortcut_f7(self):
         """Executed when user press F7 - will show the shakemap importer."""

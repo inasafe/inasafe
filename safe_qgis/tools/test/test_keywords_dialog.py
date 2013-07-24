@@ -39,7 +39,7 @@ from third_party.odict import OrderedDict
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, test_data_path)
 from safe_qgis.safe_interface import (
-    readKeywordsFromFile,
+    read_file_keywords,
     unique_filename,
     HAZDATA, TESTDATA)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
@@ -55,7 +55,7 @@ def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    myTitle = readKeywordsFromFile(myPath, 'title')
+    myTitle = read_file_keywords(myPath, 'title')
     # myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
     if qgis_version() >= 10800:  # 1.8 or newer
@@ -81,7 +81,7 @@ def makePadangLayerClone():
     # return a single predefined layer
     myFile = myFileName + '.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    myTitle = readKeywordsFromFile(myPath, 'title')
+    myTitle = read_file_keywords(myPath, 'title')
     myLayer = QgsRasterLayer(myPath, myTitle)
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
@@ -97,7 +97,7 @@ def makePolygonLayer():
     myFile = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
     myPath = os.path.join(TESTDATA, myFile)
     try:
-        myTitle = readKeywordsFromFile(myPath, 'title')
+        myTitle = read_file_keywords(myPath, 'title')
     except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
@@ -115,7 +115,7 @@ def makePointLayer():
     myFile = 'test_buildings.shp'
     myPath = os.path.join(TESTDATA, myFile)
     try:
-        myTitle = readKeywordsFromFile(myPath, 'title')
+        myTitle = read_file_keywords(myPath, 'title')
     except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
@@ -552,15 +552,6 @@ class KeywordsDialogTest(unittest.TestCase):
         myLayer = make_keywordless_layer()
         myDialog.layer = myLayer
         myDialog.load_state_from_keywords()
-        myKeywords = myDialog.get_keywords()
-        #check that a default title is given (see
-        #https://github.com/AIFDR/inasafe/issues/111)
-        myExpectedKeywords = {
-            'category': 'exposure',
-            'title': 'Keywordless Layer'}
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myKeywords, myExpectedKeywords))
-        assert myKeywords == myExpectedKeywords, myMessage
 
     def test_addKeywordWhenPressOkButton(self):
         """Test add keyword when ok button is pressed."""

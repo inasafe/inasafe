@@ -27,7 +27,7 @@ from qgis.core import QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
 from safe_qgis.utilities.utilities import (
     is_raster_layer,
     is_polygon_layer)
-from safe_qgis.exceptions import InvalidParameterError
+from safe_qgis.exceptions import InvalidParameterError, InvalidGeometryError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -62,10 +62,11 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         count of raster values for each polygonal area.
     :rtype: dict
 
-    :raises: InvalidParameterError
+    :raises: InvalidParameterError, InvalidGeometryError
 
     Note:
         * InvalidParameterError if incorrect inputs are received.
+        * InvalidGeometryError if none geometry is found during calculations.
         * Any other exceptions are propogated.
 
     Example of output data structure:
@@ -128,8 +129,16 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
 
     myFeature = QgsFeature()
     myCount = 0
+    myProvider.rewind()
+    myProvider.select()
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
+        if myGeometry is None:
+            myMessage = tr(
+                'Feature %1 has no geometry or geometry is invalid').arg(
+                    myFeature.id())
+            raise InvalidGeometryError(myMessage)
+
         myCount += 1
         myFeatureBox = myGeometry.boundingBox().intersect(myRasterBox)
         print 'NEW AGGR: %s' % myFeature.id()

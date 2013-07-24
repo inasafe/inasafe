@@ -35,7 +35,7 @@ from qgis.core import (
 
 from safe_qgis.safe_interface import (
     verify,
-    readKeywordsFromFile,
+    read_file_keywords,
     temp_dir)
 
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -465,7 +465,7 @@ def _clip_raster_layer(
     # FIXME (Ole): Need to deal with it - e.g. by automatically reprojecting
     # the layer at this point and setting the native resolution accordingly
     # in its keywords.
-    myKeywords = readKeywordsFromFile(myKeywordsPath)
+    myKeywords = read_file_keywords(myKeywordsPath)
     if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
         if str(theLayer.crs().authid()) != 'EPSG:4326':
 

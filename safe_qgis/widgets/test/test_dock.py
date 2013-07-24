@@ -729,7 +729,7 @@ class DockTest(unittest.TestCase):
         assert format_int(2366) in myResult, myMessage
 
     def test_issue45(self):
-        """Points near the edge of a raster hazard layer are interpolated OK"""
+        """Points near the edge of a raster hazard layer are interpolated."""
 
         myButton = DOCK.pbnRunStop
         set_canvas_crs(GEOCRS, True)

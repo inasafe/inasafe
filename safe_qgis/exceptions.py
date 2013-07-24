@@ -71,8 +71,14 @@ class StyleInfoNotFoundError(Exception):
 
 
 class InvalidParameterError(Exception):
-    """Custom exception for when an invalid parameter is
-    passed to a function."""
+    """Custom exception for when an invalid parameter is passed to a function.
+    """
+    pass
+
+
+class NoKeywordsFoundError(Exception):
+    """Custom exception for when no keywords exist for a layer.
+    """
     pass
 
 
@@ -167,4 +173,9 @@ class AggregatioError(Exception):
 
 class HelpFileMissingError(Exception):
     """Raised if a help file cannot be found."""
+    pass
+
+
+class InvalidGeometryError(Exception):
+    """Custom exception for when a feature geometry is invalid or none."""
     pass

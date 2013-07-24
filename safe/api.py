@@ -40,7 +40,7 @@ from safe.impact_functions import (
     get_function_title,
     get_admissible_plugins,
     is_function_enabled,
-    get_documentation)
+    get_metadata)
 from safe.impact_functions.core import (
     get_doc_string,
     get_unique_values,

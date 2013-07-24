@@ -731,20 +731,20 @@ def get_unique_values():
     return dict_retval
 
 
-def get_documentation(func):
-    """Collect documentaion of a impact function and return it as a dictionary
+def get_metadata(func):
+    """Collect metadata for an impact function and return it as a dictionary.
 
-        Args:
-            * func : name of function
-        Returns:
-            * Dictionary contains:
-                author : string (identified by :author)
-                synopsis : string (first line)
-                rating : integer (identified by :rating)
-                param_req : list of param (identified by :param requires)
-                detail : detail description (function properties)
-                citation : list of citation in string (function properties)
-                limitation : string (function properties)
+    :param func: Name of function.
+
+    :returns: A dictionary containing:
+        * author : string (identified by :author)
+        * synopsis : string (first line)
+        * rating : integer (identified by :rating)
+        * param_req : list of param (identified by :param requires)
+        * detail : detail description (function properties)
+        * citation : list of citation in string (function properties)
+        * limitation : string (function properties)
+    :rtype: dict
     """
     retval = OrderedDict()
     retval['unique_identifier'] = func

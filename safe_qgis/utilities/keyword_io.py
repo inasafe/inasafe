@@ -27,10 +27,11 @@ from safe_qgis.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
     KeywordDbError,
-    InvalidParameterError)
+    InvalidParameterError,
+    NoKeywordsFoundError)
 from safe_qgis.safe_interface import (
     verify,
-    readKeywordsFromFile,
+    read_file_keywords,
     writeKeywordsToFile)
 from safe_qgis.utilities.utilities import qgis_version
 
@@ -83,18 +84,28 @@ class KeywordIO(QObject):
         :returns: A dict if keyword is omitted, otherwise the value for the
             given key if it is present.
         :rtype: dict, str
+
+        TODO: Don't raise generic exceptions.
+
+        :raises: HashNotFoundError, Exception, OperationalError,
+            NoKeywordsFoundError, KeywordNotFoundError, InvalidParameterError
         """
         mySource = str(layer.source())
         myFlag = self.are_keywords_file_based(layer)
 
         try:
             if myFlag:
-                myKeywords = readKeywordsFromFile(mySource, keyword)
+                myKeywords = read_file_keywords(mySource, keyword)
             else:
                 myKeywords = self.read_keyword_from_uri(mySource, keyword)
             return myKeywords
-        except (HashNotFoundError, Exception, OperationalError):
-            raise
+        except (HashNotFoundError,
+                Exception,
+                OperationalError,
+                NoKeywordsFoundError,
+                KeywordNotFoundError,
+                InvalidParameterError):
+                    raise
 
     def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.
