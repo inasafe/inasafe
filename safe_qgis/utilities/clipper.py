@@ -492,14 +492,14 @@ def _clip_raster_layer(
     # Use the first matching gdalwarp found
     myBinary = myBinaryList[0]
     if theCellSize is None:
-        myCommand = ('%s -q -t_srs EPSG:4326 -r near '
+        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myBinary,
                                     myClipKml,
                                     myWorkingLayer,
                                     myFilename))
     else:
-        myCommand = ('%s -q -t_srs EPSG:4326 -r near -tr %f %f '
+        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near -tr %f %f '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myBinary,
                                     theCellSize,
@@ -521,7 +521,7 @@ def _clip_raster_layer(
             % (myCommand, myMessageDetail))
         raise CallGDALError(myMessage)
     elif myResult == -1:  # process crashed
-        myMessageDetail = tr('Process could not be started.')
+        myMessageDetail = tr('Process crashed.')
         myMessage = tr('<p>Error while executing the following shell command:'
                        '</p><pre>%s</pre><p>Error message: %s'
                        % (myCommand, myMessageDetail))

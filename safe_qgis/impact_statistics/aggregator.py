@@ -208,10 +208,12 @@ class Aggregator(QtCore.QObject):
 
         Buildings are not split up by this method.
 
+        :param hazard_layer: A hazard layer.
         :type hazard_layer: QgsMapLayer
+
+        :param exposure_layer: An exposure layer.
         :type exposure_layer: QgsMapLayer
-        :param exposure_layer:
-        :param hazard_layer:
+
         """
 
         if not self.isValid:
