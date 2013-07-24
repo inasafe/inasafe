@@ -10,8 +10,8 @@
 
 [general]
 name=InaSAFE
-qgisMinimumVersion=1.7
-qgisMaximumVersion=1.8
+qgisMinimumVersion=2.0
+qgisMaximumVersion=2.99.99
 description=InaSAFE Disaster Scenario Assessment for Emergencies tool developed by BNPB, AusAID, World Bank
 version=1.2.0-8
 # alpha, beta, rc or final
