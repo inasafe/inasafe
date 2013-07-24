@@ -358,7 +358,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         del index
         myItem = self.cboSubcategory.itemData(
-            self.cboSubcategory.currentIndex()).toString()
+            self.cboSubcategory.currentIndex())
         myText = str(myItem)
         # I found that myText is 'Not Set' for every language
         if myText == self.tr('Not Set') or myText == 'Not Set':
@@ -425,8 +425,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     def on_pbnAddToList1_clicked(self):
         """Automatic slot executed when the pbnAddToList1 button is pressed.
         """
-        if (not self.lePredefinedValue.text().isEmpty() and
-                not self.cboKeyword.currentText().isEmpty()):
+        if (self.lePredefinedValue.text() != "" and
+                self.cboKeyword.currentText() != ""):
             myCurrentKey = self.tr(self.cboKeyword.currentText())
             myCurrentValue = self.lePredefinedValue.text()
             self.add_list_entry(myCurrentKey, myCurrentValue)

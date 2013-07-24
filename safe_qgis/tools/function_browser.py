@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import QtGui, QtCore, QtWebKit
+from PyQt4 import QtGui, QtWebKit
 from safe_qgis.ui.function_browser_base import Ui_FunctionBrowserBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import (
@@ -98,7 +98,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         self.table = get_plugins_as_table(self.dict_filter)
         self.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
-        self.display_html(QtCore.QString(str(self.table)))
+        self.display_html(str(self.table))
 
     def generate_combo_box_content(self):
         """Generate list for each combo box's content."""

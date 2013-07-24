@@ -271,7 +271,7 @@ def defaults(theDefault=None):
 
     myDefaults['FEM_RATIO'] = mySettings.value(
         'inasafe/defaultFemaleRatio',
-        DEFAULTS['FEM_RATIO']).toDouble()[0]
+        DEFAULTS['FEM_RATIO'])
 
     if theDefault is None:
         return myDefaults

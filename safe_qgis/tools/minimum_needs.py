@@ -182,7 +182,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         :type theIndex: int
         """
         myLayerId = self.cboPolygonLayers.itemData(
-            theIndex, QtCore.Qt.UserRole).toString()
+            theIndex, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         myFields = myLayer.dataProvider().fieldNameMap().keys()
@@ -198,11 +198,11 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         """
         myIndex = self.cboFields.currentIndex()
         myFieldName = self.cboFields.itemData(
-            myIndex, QtCore.Qt.UserRole).toString()
+            myIndex, QtCore.Qt.UserRole)
 
         myIndex = self.cboPolygonLayers.currentIndex()
         myLayerId = self.cboPolygonLayers.itemData(
-            myIndex, QtCore.Qt.UserRole).toString()
+            myIndex, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 

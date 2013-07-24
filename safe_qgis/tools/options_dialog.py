@@ -69,59 +69,59 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """
         mySettings = QtCore.QSettings()
         # myFlag = mySettings.value(
-        #     'inasafe/useThreadingFlag', False).toBool()
+        #     'inasafe/useThreadingFlag', False)
         # hack set use thread to false see #557
         myFlag = False
         self.cbxUseThread.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/visibleLayersOnlyFlag', True).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/visibleLayersOnlyFlag', True))
         self.cbxVisibleLayersOnly.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/setLayerNameFromTitleFlag', True).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/setLayerNameFromTitleFlag', True))
         self.cbxSetLayerNameFromTitle.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/setZoomToImpactFlag', True).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/setZoomToImpactFlag', True))
         self.cbxZoomToImpact.setChecked(myFlag)
         # whether exposure layer should be hidden after model completes
-        myFlag = mySettings.value(
-            'inasafe/setHideExposureFlag', False).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/setHideExposureFlag', False))
         self.cbxHideExposure.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/clipToViewport', True))
         self.cbxClipToViewport.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/clipHard', False).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/clipHard', False))
         self.cbxClipHard.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/useSentry', False).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/useSentry', False))
         self.cbxUseSentry.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/showIntermediateLayers', False).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/showIntermediateLayers', False))
         self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
-        myRatio = mySettings.value(
+        myRatio = float(mySettings.value(
             'inasafe/defaultFemaleRatio',
-            DEFAULTS['FEM_RATIO']).toDouble()
-        self.dsbFemaleRatioDefault.setValue(myRatio[0])
+            DEFAULTS['FEM_RATIO']))
+        self.dsbFemaleRatioDefault.setValue(myRatio)
 
         myPath = mySettings.value(
             'inasafe/keywordCachePath',
-            self.keywordIO.default_keyword_db_path()).toString()
+            self.keywordIO.default_keyword_db_path())
         self.leKeywordCachePath.setText(myPath)
 
-        myFlag = mySettings.value(
-            'inasafe/devMode', False).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/devMode', False))
         self.cbxDevMode.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-            'inasafe/useNativeZonalStats', False).toBool()
+        myFlag = bool(mySettings.value(
+            'inasafe/useNativeZonalStats', False))
         self.cbxNativeZonalStats.setChecked(myFlag)
 
     def save_state(self):

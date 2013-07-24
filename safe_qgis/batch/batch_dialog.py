@@ -28,7 +28,7 @@ from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, QSettings, QVariant, Qt
+from PyQt4.QtCore import pyqtSignature, QSettings, Qt
 from PyQt4.QtGui import QDialog, QFileDialog, QTableWidgetItem
 
 from qgis.core import QgsRectangle
@@ -96,14 +96,14 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             self.update_default_output_dir)
 
         # Setup run all button in button box (repurposes yes to all)
-        self.run_all_button = self.button_box.button(
-            QtGui.QDialogbutton_box.YesToAll)
+        self.run_all_button = self.buttonBox.button(
+            QtGui.QDialogButtonBox.YesToAll)
         self.run_all_button.setText(self.tr('Run all'))
         self.run_all_button.clicked.connect(self.run_all_clicked)
 
         # Setup run selected button in button box (repurposes yes button)
-        self.run_selected_button = self.button_box.button(
-            QtGui.QDialogbutton_box.Yes)
+        self.run_selected_button = self.buttonBox.button(
+            QtGui.QDialogButtonBox.Yes)
         self.run_selected_button.setText(self.tr('Run selected'))
         self.run_selected_button.clicked.connect(self.run_selected_clicked)
         self.run_selected_button.setEnabled(True)
@@ -116,17 +116,17 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         # restore last source path
         myLastSourcePath = mySettings.value(
             'inasafe/lastSourceDir', self.default_directory)
-        self.source_directory.setText(myLastSourcePath.toString())
+        self.source_directory.setText(myLastSourcePath)
 
         # restore path pdf output
         myLastOutputDir = mySettings.value(
             'inasafe/lastOutputDir', self.default_directory)
-        self.output_directory.setText(myLastOutputDir.toString())
+        self.output_directory.setText(myLastOutputDir)
 
         # restore default output dir combo box
         myUseDefaultOutputDir = mySettings.value(
             'inasafe/useDefaultOutputDir', True)
-        self.scenario_directory_radio.setChecked(myUseDefaultOutputDir.toBool())
+        self.scenario_directory_radio.setChecked(myUseDefaultOutputDir)
 
     def save_state(self):
         """Save current state of GUI to configuration file"""
@@ -182,7 +182,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             myAbsPath = os.path.join(myPath, myFile)
 
             if myExt == '.py':
-                append_row(self.table, str(myFile), QVariant(myAbsPath))
+                append_row(self.table, str(myFile), myAbsPath)
             elif myExt == '.txt':
                 # insert scenarios from file into table widget
                 try:
@@ -720,7 +720,7 @@ def append_row(table, label, data):
     # http://stackoverflow.com/questions/9257422/
     # how-to-get-the-original-python-data-from-qvariant
     # Make the value immutable.
-    myVariant = QVariant((data,))
+    myVariant = (data,)
     # To retrieve it again you would need to do:
     #myValue = myVariant.toPyObject()[0]
     myItem.setData(Qt.UserRole, myVariant)

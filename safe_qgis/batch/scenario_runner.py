@@ -161,7 +161,7 @@ def setAggregationLayer(theAggregationLayer, theDock=None):
 
     for myCount in range(0, theDock.cboAggregation.count()):
         myLayerId = theDock.cboAggregation.itemData(
-            myCount, QtCore.Qt.UserRole).toString()
+            myCount, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
 

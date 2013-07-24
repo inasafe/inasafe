@@ -115,7 +115,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
     def restore_state(self):
         """ Read last state of GUI from configuration file."""
         mySetting = QSettings()
-        self.outDir.setText(mySetting.value('directory').toString())
+        self.outDir.setText(mySetting.value('directory'))
 
     def save_state(self):
         """ Store current state of GUI to configuration file """
