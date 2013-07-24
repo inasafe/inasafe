@@ -87,7 +87,8 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         self.comboBox_id.currentIndexChanged.connect(self.update_table)
         self.comboBox_title.currentIndexChanged.connect(self.update_table)
         self.comboBox_category.currentIndexChanged.connect(self.update_table)
-        self.comboBox_subcategory.currentIndexChanged.connect(self.update_table)
+        self.comboBox_subcategory.currentIndexChanged.connect(
+            self.update_table)
         self.comboBox_layertype.currentIndexChanged.connect(self.update_table)
         self.comboBox_datatype.currentIndexChanged.connect(self.update_table)
         self.comboBox_unit.currentIndexChanged.connect(self.update_table)

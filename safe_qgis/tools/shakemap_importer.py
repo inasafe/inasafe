@@ -60,7 +60,8 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.update_warning()
 
         # Event register
-        self.cBDefaultOutputLocation.toggled.connect(self.get_output_from_input)
+        self.cBDefaultOutputLocation.toggled.connect(
+            self.get_output_from_input)
         self.leInputPath.textChanged.connect(self.on_leInputPath_textChanged)
         self.leOutputPath.textChanged.connect(self.on_leOutputPath_textChanged)
 
