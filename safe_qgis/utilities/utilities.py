@@ -240,8 +240,8 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
         for f in myProvider:
             # show only int or string myFields to be chosen as aggregation
             # attribute other possible would be float
-            if myProvider[f].type() in allowed_types:
-                myCurrentFieldName = myProvider[f].name()
+            if f.type() in allowed_types:
+                myCurrentFieldName = f.name()
                 myFields.append(myCurrentFieldName)
                 if current_keyword == myCurrentFieldName:
                     mySelectedIndex = i
@@ -269,9 +269,9 @@ def defaults(theDefault=None):
     mySettings = QtCore.QSettings()
     myDefaults = DEFAULTS
 
-    myDefaults['FEM_RATIO'] = mySettings.value(
+    myDefaults['FEM_RATIO'] = float(mySettings.value(
         'inasafe/defaultFemaleRatio',
-        DEFAULTS['FEM_RATIO'])
+        DEFAULTS['FEM_RATIO']))
 
     if theDefault is None:
         return myDefaults
@@ -678,7 +678,7 @@ def extent_to_geo_array(extent, source_crs):
     """
 
     myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+    myGeoCrs.createFromSrid(4326)
     myXForm = QgsCoordinateTransform(source_crs, myGeoCrs)
 
     # Get the clip area in the layer's crs
@@ -826,7 +826,7 @@ def viewport_geo_array(map_canvas):
         # some code duplication from extentToGeoArray here
         # in favour of clarity of logic...
         myCrs = QgsCoordinateReferenceSystem()
-        myCrs.createFromEpsg(4326)
+        myCrs.createFromSrid(4326)
 
     return extent_to_geo_array(myRect, myCrs)
 

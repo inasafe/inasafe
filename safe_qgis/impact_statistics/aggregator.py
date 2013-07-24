@@ -100,8 +100,8 @@ class Aggregator(QtCore.QObject):
         self.attributeTitle = None
 
         #use qgis or inasafe zonal stats
-        myFlag = QtCore.QSettings().value('inasafe/useNativeZonalStats',
-                                          False).toBool()
+        myFlag = bool(QtCore.QSettings().value('inasafe/useNativeZonalStats',
+                                          False))
         self.useNativeZonalStats = myFlag
 
         self.iface = iface
