@@ -77,7 +77,7 @@ class MapTest(unittest.TestCase):
             441563,  # as rendered on ub 13.04 18 Jul 2013
             447217,  # Nadia Linux Mint 14
             447051,  # as rendered on Jenkins post 24 April 2013
-            447138,  # Windows 7 SP1 AMD64
+            447172,  # Windows 7 SP1 AMD64
             233989,  # OSX 10.8
         ]
         myMessage = '%s\nExpected rendered map pdf to be in %s, got %s' % (

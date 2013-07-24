@@ -128,6 +128,7 @@ class HtmlRendererTest(unittest.TestCase):
                            20605,  # as rendered on linux ub 13.04 64
                            21527,  # as rendered on Jenkins post 22 June 2013
                            377191,  # as rendered on OSX
+                           252699L,  # as rendered on Windows 7 64 bit
                            ]
         self.assertIn(mySize, myExpectedSizes)
 
