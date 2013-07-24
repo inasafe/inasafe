@@ -409,6 +409,9 @@ def rectangle_stats(
     width = endCol - startCol
     height = endRow - startRow
 
+    if width == 0 or height == 0:
+        return 0, 0
+
     myScanline = band.ReadRaster(
         startCol,
         startRow,
@@ -418,6 +421,8 @@ def rectangle_stats(
         height,
         gdal.GDT_Float32)
     myValues = struct.unpack('f' * height * width, myScanline)
+    if myValues is None:
+        return 0, 0
 
     myArray = numpy.array(myValues)
     myMaskedArray = numpy.ma.masked_where(myArray == no_data, myArray)
