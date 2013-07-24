@@ -54,15 +54,10 @@ class QgsLogHandler(logging.Handler):
         :param record: logging record containing whatever info needs to be
                 logged.
         """
-        try:
-            #available from qgis 1.8
-            from qgis.core import QgsMessageLog
-            # Check logging.LogRecord properties for lots of other goodies
-            # like line number etc. you can get from the log message.
-            QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
-
-        except (MethodUnavailableError, ImportError):
-            pass
+        from qgis.core import QgsMessageLog
+        # Check logging.LogRecord properties for lots of other goodies
+        # like line number etc. you can get from the log message.
+        QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
 
 
 def add_logging_handler_once(logger, handler):
@@ -160,7 +155,7 @@ def setup_logger(log_file=None, sentry_url=None):
     #    server' option in InaSAFE options dialog
     # before this will be enabled.
     mySettings = QtCore.QSettings()
-    myFlag = mySettings.value('inasafe/useSentry', False).toBool()
+    myFlag = mySettings.value('inasafe/useSentry', False)
     if 'INASAFE_SENTRY' in os.environ or myFlag:
         if sentry_url is None:
             myClient = Client(

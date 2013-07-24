@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 
-from PyQt4.QtCore import QCoreApplication, QString
+from PyQt4.QtCore import QCoreApplication
 
 from safe_qgis.safe_interface import get_free_memory
 from safe_qgis.safe_interface import messaging as m
@@ -137,12 +137,10 @@ def check_memory_usage(buffered_geo_extent, cell_size):
     # in memory copies of the layer are often made during processing.
     myWarningLimit = 10
     myUsageIndicator = (float(myRequirement) / float(myFreeMemory)) * 100
-    myCountsMessage = tr(QString(
-        'Memory requirement: about %1 mb per raster layer (%2 mb available)')
-        .arg(myRequirement).arg(myFreeMemory))
-    myUsageMessage = tr(QString(
-        'Memory used / available: %1/%2')
-        .arg(myUsageIndicator).arg(myWarningLimit))
+    myCountsMessage = tr('Memory requirement: about %d mb per raster layer ('
+                         '%d mb available)') % (myRequirement, myFreeMemory)
+    myUsageMessage = tr('Memory used / available: %d/%d') % (
+        myUsageIndicator, myWarningLimit)
     myMessage.add(myCountsMessage)
     myMessage.add(myUsageMessage)
 

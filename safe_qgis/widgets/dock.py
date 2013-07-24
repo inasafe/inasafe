@@ -191,7 +191,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except IndexError:
             myVersionType = 'final'
             # Allowed version names: ('alpha', 'beta', 'rc', 'final')
-        self.setWindowTitle(self.tr('InaSAFE %1 %2').arg(
+        self.setWindowTitle(self.tr('InaSAFE %s %s') % (
             myVersion, myVersionType))
 
     def enable_messaging(self):
@@ -278,44 +278,44 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         mySettings = QtCore.QSettings()
         myFlag = mySettings.value('inasafe/useThreadingFlag',
-                                  False).toBool()
+                                  False)
         self.runInThreadFlag = myFlag
 
         myFlag = mySettings.value(
-            'inasafe/visibleLayersOnlyFlag', True).toBool()
+            'inasafe/visibleLayersOnlyFlag', True)
         self.showOnlyVisibleLayersFlag = myFlag
 
         myFlag = mySettings.value(
-            'inasafe/setLayerNameFromTitleFlag', True).toBool()
+            'inasafe/setLayerNameFromTitleFlag', True)
         self.setLayerNameFromTitleFlag = myFlag
 
         myFlag = mySettings.value(
-            'inasafe/setZoomToImpactFlag', True).toBool()
+            'inasafe/setZoomToImpactFlag', True)
         self.zoomToImpactFlag = myFlag
         # whether exposure layer should be hidden after model completes
         myFlag = mySettings.value(
-            'inasafe/setHideExposureFlag', False).toBool()
+            'inasafe/setHideExposureFlag', False)
         self.hideExposureFlag = myFlag
 
         # whether to clip hazard and exposure layers to the viewport
         myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+            'inasafe/clipToViewport', True)
         self.clipToViewport = myFlag
 
         # whether to 'hard clip' layers (e.g. cut buildings in half if they
         # lie partially in the AOI
         myFlag = mySettings.value(
-            'inasafe/clipHard', False).toBool()
+            'inasafe/clipHard', False)
         self.clipHard = myFlag
 
         # whether to show or not postprocessing generated layers
         myFlag = mySettings.value(
-            'inasafe/showIntermediateLayers', False).toBool()
+            'inasafe/showIntermediateLayers', False)
         self.showIntermediateLayers = myFlag
 
         # whether to show or not dev only options
         myFlag = mySettings.value(
-            'inasafe/devMode', False).toBool()
+            'inasafe/devMode', False)
         self.devMode = myFlag
 
     def _update_settings(self):
@@ -323,7 +323,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         mySettings = QtCore.QSettings()
         myOldFlag = mySettings.value(
-            'inasafe/showPostProcLayers', False).toBool()
+            'inasafe/showPostProcLayers', False)
         mySettings.remove('inasafe/showPostProcLayers')
 
         if not mySettings.contains('inasafe/showIntermediateLayers'):
@@ -335,13 +335,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         ..seealso:: disconnect_layer_listener
         """
         registry = QgsMapLayerRegistry.instance()
-        if qgis_version() >= 10800:  # 1.8 or newer
-            registry.layersWillBeRemoved.connect(self.get_layers)
-            registry.layersAdded.connect(self.get_layers)
-        else:
-            # All versions of QGIS
-            registry.layerWillBeRemoved.connect(self.get_layers)
-            registry.layerWasAdded.connect(self.get_layers)
+        registry.layersWillBeRemoved.connect(self.get_layers)
+        registry.layersAdded.connect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
@@ -353,13 +348,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         ..seealso:: connect_layer_listener
         """
         registry = QgsMapLayerRegistry.instance()
-        if qgis_version() >= 10800:  # 1.8 or newer
-            registry.layersWillBeRemoved.disconnect(self.get_layers)
-            registry.layersAdded.disconnect(self.get_layers)
-        else:
-            # All versions of QGIS
-            registry.layerWillBeRemoved.disconnect(self.get_layers)
-            registry.layerWasAdded.disconnect(self.get_layers)
+        registry.layersWillBeRemoved.disconnect(self.get_layers)
+        registry.layersAdded.disconnect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
@@ -434,11 +424,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :returns Message: A localised message indicating we are not ready.
         """
         #myHazardFilename = self.getHazardLayer().source()
-        myHazardKeywords = QtCore.QString(str(
-            self.keywordIO.read_keywords(self.get_hazard_layer())))
+        myHazardKeywords = str(
+            self.keywordIO.read_keywords(self.get_hazard_layer()))
         #myExposureFilename = self.getExposureLayer().source()
-        myExposureKeywords = QtCore.QString(
-            str(self.keywordIO.read_keywords(self.get_exposure_layer())))
+        myExposureKeywords = str(
+            self.keywordIO.read_keywords(self.get_exposure_layer()))
         myHeading = m.Heading(
             self.tr('No valid functions:'), **WARNING_STYLE)
         myNotes = m.Paragraph(self.tr(
@@ -807,7 +797,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myIndex < 0:
             return None
         myLayerId = self.cboHazard.itemData(
-            myIndex, QtCore.Qt.UserRole).toString()
+            myIndex, QtCore.Qt.UserRole)
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
@@ -831,7 +821,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myIndex < 0:
             return None
         myLayerId = self.cboExposure.itemData(
-            myIndex, QtCore.Qt.UserRole).toString()
+            myIndex, QtCore.Qt.UserRole)
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
@@ -852,7 +842,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myIndex <= myNoSelectionValue:
             return None
         myLayerId = self.cboAggregation.itemData(
-            myIndex, QtCore.Qt.UserRole).toString()
+            myIndex, QtCore.Qt.UserRole)
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
@@ -1435,30 +1425,30 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myList = m.BulletedList()
             # We must use Qt string interpolators for tr to work properly
             myList.add(
-                self.tr('Hazard: %1').arg(
+                self.tr('Hazard: %s') % (
                     myHazardLayer.source()))
 
             myList.add(
-                self.tr('Exposure: %1').arg(
+                self.tr('Exposure: %s') % (
                     myExposureLayer.source()))
 
             myList.add(
-                self.tr('Viewable area Geo Extent: %1').arg(
-                    QtCore.QString(str(myViewportGeoExtent))))
+                self.tr('Viewable area Geo Extent: %s') % (
+                    str(myViewportGeoExtent)))
 
             myList.add(
-                self.tr('Hazard Geo Extent: %1').arg(
-                    QtCore.QString(str(myHazardGeoExtent))))
+                self.tr('Hazard Geo Extent: %s') % (
+                    str(myHazardGeoExtent)))
 
             myList.add(
-                self.tr('Exposure Geo Extent: %1').arg(
-                    QtCore.QString(str(myExposureGeoExtent))))
+                self.tr('Exposure Geo Extent: %s') % (
+                    str(myExposureGeoExtent)))
 
             myList.add(
-                self.tr('Viewable area clipping enabled: %1').arg(
-                    QtCore.QString(str(self.clipToViewport))))
+                self.tr('Viewable area clipping enabled: %s') % (
+                    str(self.clipToViewport)))
             myList.add(
-                self.tr('Details: %1').arg(
+                self.tr('Details: %1') % (
                     str(e)))
             myMessage.add(myList)
             raise InsufficientOverlapError(myMessage)
@@ -1851,7 +1841,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myIndex = theIndex
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
-        myFunctionID = str(myItemData.toString())
+        myFunctionID = str(myItemData)
         return myFunctionID
 
     def save_current_scenario(self, theScenarioFilePath=None):
@@ -1911,7 +1901,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # get last dir from setting
         mySettings = QSettings()
         lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
-        lastSaveDir = str(lastSaveDir.toString())
         if theScenarioFilePath is None:
             # noinspection PyCallByClass,PyTypeChecker
             myFileName = str(QFileDialog.getSaveFileName(

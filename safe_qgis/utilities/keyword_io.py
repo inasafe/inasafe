@@ -273,7 +273,7 @@ class KeywordIO(QObject):
         mySettings = QSettings()
         myPath = mySettings.value(
             'inasafe/keywordCachePath',
-            self.default_keyword_db_path()).toString()
+            self.default_keyword_db_path())
         self.keywordDbPath = str(myPath)
 
     def open_connection(self):

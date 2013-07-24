@@ -26,14 +26,11 @@ import os
 
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import (
-    QObject,
     QLocale,
     QTranslator,
-    SIGNAL,
     QCoreApplication,
     Qt,
-    QSettings,
-    QVariant)
+    QSettings)
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
 try:
     # When upgrading, using the plugin manager, you may get an error when
@@ -97,15 +94,12 @@ class Plugin:
         :type preferred_locale: str, None
         :raises: TranslationLoadException
         """
-        myOverrideFlag = QSettings().value(
-            'locale/overrideFlag',
-            QVariant(False)).toBool()
+        myOverrideFlag = QSettings().value('locale/overrideFlag', False)
 
         if preferred_locale is not None:
             myLocaleName = preferred_locale
         elif myOverrideFlag:
-            myLocaleName = QSettings().value('locale/userLocale',
-                                             QVariant('')).toString()
+            myLocaleName = QSettings().value('locale/userLocale', '')
         else:
             myLocaleName = QLocale.system().name()
             # NOTES: we split the locale name because we need the first two
