@@ -528,7 +528,7 @@ def _clip_raster_layer(
             % (myCommand, myMessageDetail))
         raise CallGDALError(myMessage)
     elif myResult == -1:  # process crashed
-        myMessageDetail = tr('Process could not be started.')
+        myMessageDetail = tr('Process crashed.')
         myMessage = tr('<p>Error while executing the following shell command:'
                        '</p><pre>%s</pre><p>Error message: %s'
                        % (myCommand, myMessageDetail))
