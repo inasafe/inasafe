@@ -56,8 +56,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.keywordIO = KeywordIO()
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.show_help)
+        myButton.clicked.connect(self.show_help)
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()

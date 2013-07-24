@@ -22,7 +22,7 @@ __copyright__ += 'Disaster Reduction'
 import logging
 import os
 
-from PyQt4.QtCore import QFileInfo, pyqtSignature, SIGNAL, QObject
+from PyQt4.QtCore import QFileInfo, pyqtSignature
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
@@ -60,15 +60,9 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.update_warning()
 
         # Event register
-        QObject.connect(self.cBDefaultOutputLocation,
-                        SIGNAL('toggled(bool)'),
-                        self.get_output_from_input)
-        QObject.connect(self.leInputPath,
-                        SIGNAL('textChanged(QString)'),
-                        self.on_leInputPath_textChanged)
-        QObject.connect(self.leOutputPath,
-                        SIGNAL('textChanged(QString)'),
-                        self.on_leOutputPath_textChanged)
+        self.cBDefaultOutputLocation.toggled.connect(self.get_output_from_input)
+        self.leInputPath.textChanged.connect(self.on_leInputPath_textChanged)
+        self.leOutputPath.textChanged.connect(self.on_leOutputPath_textChanged)
 
         self.show_info()
 

@@ -92,15 +92,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.parent = parent
         self.dock = dock
 
-        QtCore.QObject.connect(self.lstKeywords,
-                               QtCore.SIGNAL("itemClicked(QListWidgetItem *)"),
-                               self.edit_key_value_pair)
+        self.lstKeywords.itemClicked.connect(self.edit_key_value_pair)
 
         # Set up help dialog showing logic.
         self.helpDialog = None
-        myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.show_help)
+        helpButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        helpButton.clicked.connect(self.show_help)
 
         # set some inital ui state:
         self.defaults = defaults()
@@ -121,10 +118,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.load_state_from_keywords()
 
         #add a reload from keywords button
-        myButton = self.buttonBox.addButton(self.tr('Reload'),
+        reloadButton = self.buttonBox.addButton(self.tr('Reload'),
                                             QtGui.QDialogButtonBox.ActionRole)
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.load_state_from_keywords)
+        reloadButton.clicked.connect(self.load_state_from_keywords)
 
     def set_layer(self, layer):
         """Set the layer associated with the keyword editor.

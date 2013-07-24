@@ -25,7 +25,7 @@ __copyright__ = ('Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
                  'geotux_tuxman@linuxmail.org')
 
 import logging
-from PyQt4.QtCore import QObject, SIGNAL, pyqtSlot, pyqtSignal
+from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvasLayer
 LOGGER = logging.getLogger('InaSAFE')
@@ -49,13 +49,9 @@ class QgisInterface(QObject):
         # are added.
         LOGGER.debug('Initialising canvas...')
         # noinspection PyArgumentList
-        QObject.connect(QgsMapLayerRegistry.instance(),
-                        SIGNAL('layersAdded(QList<QgsMapLayer *>)'),
-                        self.addLayers)
+        QgsMapLayerRegistry.instance().layersAdded.connect(self.addLayers)
         # noinspection PyArgumentList
-        QObject.connect(QgsMapLayerRegistry.instance(),
-                        SIGNAL('layerWasAdded(QgsMapLayer *)'),
-                        self.addLayer)
+        QgsMapLayerRegistry.instance().layerWasAdded.connect(self.addLayer)
 
     @pyqtSlot('QStringList')
     def addLayers(self, theLayers):

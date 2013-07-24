@@ -79,42 +79,18 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
         resetButton = self.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
-        QtCore.QObject.connect(
-            resetButton,
-            QtCore.SIGNAL('clicked()'), self.reset_button_clicked)
+        resetButton.clicked.connect(self.reset_button_clicked)
 
         helpButton = self.myButtonBox.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
-                               self.show_help)
+        helpButton.clicked.connect(self.show_help)
         # Combo box change event
-        QtCore.QObject.connect(
-            self.comboBox_id,
-            QtCore.SIGNAL('currentIndexChanged(int)'),
-            self.update_table)
-        QtCore.QObject.connect(
-            self.comboBox_title,
-            QtCore.SIGNAL('currentIndexChanged(int)'),
-            self.update_table)
-        QtCore.QObject.connect(
-            self.comboBox_category,
-            QtCore.SIGNAL('currentIndexChanged(int)'),
-            self.update_table)
-        QtCore.QObject.connect(
-            self.comboBox_subcategory,
-            QtCore.SIGNAL('currentIndexChanged(int)'),
-            self.update_table)
-        QtCore.QObject.connect(
-            self.comboBox_layertype,
-            QtCore.SIGNAL('currentIndexChanged(int)'),
-            self.update_table)
-        QtCore.QObject.connect(
-            self.comboBox_datatype,
-            QtCore.SIGNAL('currentIndexChanged(int)'),
-            self.update_table)
-        QtCore.QObject.connect(
-            self.comboBox_unit,
-            QtCore.SIGNAL('currentIndexChanged(int)'),
-            self.update_table)
+        self.comboBox_id.currentIndexChanged.connect(self.update_table)
+        self.comboBox_title.currentIndexChanged.connect(self.update_table)
+        self.comboBox_category.currentIndexChanged.connect(self.update_table)
+        self.comboBox_subcategory.currentIndexChanged.connect(self.update_table)
+        self.comboBox_layertype.currentIndexChanged.connect(self.update_table)
+        self.comboBox_datatype.currentIndexChanged.connect(self.update_table)
+        self.comboBox_unit.currentIndexChanged.connect(self.update_table)
 
     def show_table(self):
         """Show table of impact functions.
