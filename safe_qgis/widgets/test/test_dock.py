@@ -22,6 +22,8 @@ import os
 import logging
 from os.path import join
 
+import qgis
+
 from safe_qgis.safe_interface import temp_dir, unique_filename
 
 # Add PARENT directory to path to make test aware of other modules

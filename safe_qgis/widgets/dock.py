@@ -24,6 +24,7 @@ from ConfigParser import ConfigParser
 from functools import partial
 
 import numpy
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QFileDialog
 from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
@@ -1448,7 +1449,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr('Viewable area clipping enabled: %s') % (
                     str(self.clipToViewport)))
             myList.add(
-                self.tr('Details: %1') % (
+                self.tr('Details: %s') % (
                     str(e)))
             myMessage.add(myList)
             raise InsufficientOverlapError(myMessage)
