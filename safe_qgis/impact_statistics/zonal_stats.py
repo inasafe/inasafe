@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import struct
 import logging
 
+import numpy
 from osgeo import gdal
 
 from PyQt4.QtCore import QCoreApplication
@@ -130,7 +131,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     myFeature = QgsFeature()
     myCount = 0
     myProvider.rewind()
-    myProvider.select()
+    myProvider.select([])
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
         if myGeometry is None:
@@ -161,18 +162,24 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         if (myOffsetY + myCellsY) > myRows:
             myCellsY = myRows - myOffsetY
 
-        mySum, myCount = statisticsFromMiddlePointTest(
-            myBand,
-            myGeometry,
-            myOffsetX,
-            myOffsetY,
-            myCellsX,
-            myCellsY,
-            myCellSizeX,
-            myCellSizeY,
-            myRasterBox,
-            myNoData)
+        #mySum, myCount = statisticsFromMiddlePointTest(
+        #    myBand,
+        #    myGeometry,
+        #    myOffsetX,
+        #    myOffsetY,
+        #    myCellsX,
+        #    myCellsY,
+        #    myCellSizeX,
+        #    myCellSizeY,
+        #    myRasterBox,
+        #    myNoData)
         #print 'Sum: %s count: %s' % (mySum, myCount)
+
+        mySum, myCount = statisticsForRectangle(
+            myBand,
+            myFeatureBox,
+            myGeoTransform,
+            myNoData)
 
         if myCount <= 1:
             # The cell resolution is probably larger than the polygon area.
@@ -219,7 +226,6 @@ def cellInfoForBBox(
 
     :param theRasterBox: Box defining the extents of the raster.
     :type theRasterBox: QgsRectangle
-
 
     :returns: Offsets in the x and y directions, and number of cells in the x
         and y directions.
@@ -362,6 +368,58 @@ def statisticsFromMiddlePointTest(
     return mySum, myCount
 
 
+def statisticsForRectangle(
+        theBand,
+        theGeometry,
+        theGeotransform,
+        theNoData):
+
+    """Calculate statistics for rectangle representing intersection between
+    polygon bbox and raster bbox
+
+    :param theBand: A valid band from a raster layer.
+    :type theBand: GDALRasterBand
+
+    :param theGeometry: A valid rectangle representing intersection between
+         geometry bbox and raster bbox.
+    :type theGeometry: QgsRectangle
+
+    :param theGeotransform: Georeferencing transform from raster metadata.
+    :type theGeotransform: list (six doubles)
+
+    :returns: Sum, Count - sum of the values of all pixels and the count of
+        pixels that intersect with the geometry.
+    :rtype: (float, int)
+    """
+    xMin = theGeometry.xMinimum()
+    xMax = theGeometry.xMaximum()
+    yMin = theGeometry.yMinimum()
+    yMax = theGeometry.yMaximum()
+
+    startCol, startRow = mapToPixel(xMin, yMax, theGeotransform)
+    endCol, endRow = mapToPixel(xMax, yMin, theGeotransform)
+
+    width = endCol - startCol
+    height = endRow - startRow
+
+    myScanline = theBand.ReadRaster(
+        startCol,
+        startRow,
+        width,
+        height,
+        width,
+        height,
+        gdal.GDT_Float32)
+    myValues = struct.unpack('f' * height * width, myScanline)
+
+    myArray = numpy.array(myValues)
+    myMaskedArray = numpy.ma.masked_where(myArray == theNoData, myArray)
+    mySum = float(numpy.sum(myMaskedArray))
+    myCount = myMaskedArray.size
+
+    return mySum, myCount
+
+
 def statisticsFromPreciseIntersection(
         theBand,
         theGeometry,
@@ -476,3 +534,101 @@ def statisticsFromPreciseIntersection(
             myCurrentX += theCellSizeY
         myCurrentY -= theCellsY
     return mySum, myCount
+
+
+def mapToPixel(mX, mY, geoTransform):
+    '''Convert map coordinates to pixel coordinates.
+
+    :param mX: Input map X coordinate.
+    :type mX: float
+
+    :param mY: Input map Y coordinate.
+    :type mY float
+
+    :param geoTransform: Georeferencing transform from raster metadata.
+    :type geoTransform: list (six floats)
+
+    :returns pX, pY - Output pixel coordinates
+    :rtype: (int, int)
+    '''
+    if geoTransform[2] + geoTransform[4] == 0:
+        pX = (mX - geoTransform[0]) / geoTransform[1]
+        pY = (mY - geoTransform[3]) / geoTransform[5]
+    else:
+        pX, pY = applyGeoTransform(mX, mY, invertGeoTransform(geoTransform))
+    return int(pX + 0.5), int(pY + 0.5)
+
+
+def pixelToMap(pX, pY, geoTransform):
+    '''Convert pixel coordinates to map coordinates.
+
+    :param pX: Input pixel X coordinate
+    :type pX: float
+
+    :param pY: Input pixel Y coordinate
+    :type pY: float
+
+    :param geoTransform: Georeferencing transform from raster metadata.
+    :type geoTransform: list (six floats)
+
+    :returns mX, mY - Output map coordinates
+    :rtype: (float, float)
+    '''
+    mX, mY = applyGeoTransform(pX, pY, geoTransform)
+    return mX, mY
+
+
+def applyGeoTransform(inX, inY, geoTransform):
+    '''Apply a geotransform to coordinates.
+
+    :param inX: Input X coordinate.
+    :type inX: float
+
+    :param inY: Input Y coordinate
+    :type inY: float
+
+    :param geoTransform: Georeferencing transform from raster metadata.
+    :type geoTransform: list (six floats)
+
+    :returns outX, outY - Transformed X and Y coordinates
+    :rtype: (float, float)
+    '''
+    outX = geoTransform[0] + inX * geoTransform[1] + inY * geoTransform[2]
+    outY = geoTransform[3] + inX * geoTransform[4] + inY * geoTransform[5]
+    return outX, outY
+
+
+def invertGeoTransform(geoTransform):
+    '''Invert standard 3x2 set of geotransform coefficients.
+
+    :param geoTransform: Georeferencing transform from raster metadata (
+        unaltered).
+    :type geoTransform: list (six floats)
+
+    :param geoTransform: Invert georeferencing transform (updated) on success,
+        empty list on failure.
+    :type geoTransform: list (six floats or empty)
+    '''
+    # we assume a 3rd row that is [1 0 0]
+    # compute determinate
+    det = geoTransform[1] * geoTransform[5] - geoTransform[2] * geoTransform[4]
+
+    if abs(det) < 0.000000000000001:
+        return []
+
+    invDet = 1.0 / det
+
+    # compute adjoint and divide by determinate
+    outGeoTransform = [0, 0, 0, 0, 0, 0]
+    outGeoTransform[1] = geoTransform[5] * invDet
+    outGeoTransform[4] = -geoTransform[4] * invDet
+
+    outGeoTransform[2] = -geoTransform[2] * invDet
+    outGeoTransform[5] = geoTransform[1] * invDet
+
+    outGeoTransform[0] = (geoTransform[2] * geoTransform[3] -
+                          geoTransform[0] * geoTransform[5]) * invDet
+    outGeoTransform[3] = (-geoTransform[1] * geoTransform[3] +
+                          geoTransform[0] * geoTransform[4]) * invDet
+
+    return outGeoTransform
