@@ -499,14 +499,14 @@ def _clip_raster_layer(
     # Use the first matching gdalwarp found
     myBinary = myBinaryList[0]
     if theCellSize is None:
-        myCommand = ('%s -q -t_srs EPSG:4326 -r near '
+        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myBinary,
                                     myClipKml,
                                     myWorkingLayer,
                                     myFilename))
     else:
-        myCommand = ('%s -q -t_srs EPSG:4326 -r near -tr %f %f '
+        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near -tr %f %f '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myBinary,
                                     theCellSize,
