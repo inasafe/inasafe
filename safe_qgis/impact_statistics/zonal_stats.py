@@ -131,7 +131,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     myFeature = QgsFeature()
     myCount = 0
     myProvider.rewind()
-    myProvider.select()
+    myProvider.select([])
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
         if myGeometry is None:
