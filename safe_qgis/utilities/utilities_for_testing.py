@@ -3,12 +3,14 @@
 """
 
 import os
+import re
 import sys
 import hashlib
 import logging
 import platform
 import glob
 from os.path import join
+from itertools import izip
 
 from PyQt4 import QtGui, QtCore
 from qgis.core import (
@@ -226,7 +228,7 @@ def set_canvas_crs(epsg_id, enable_projection=False):
 
     # Create CRS Instance
     myCrs = QgsCoordinateReferenceSystem()
-    myCrs.createFromId(epsg_id, QgsCoordinateReferenceSystem.EpsgCrsId)
+    myCrs.createFromSrid(epsg_id)
 
     # Reproject all layers to WGS84 geographic CRS
     CANVAS.mapRenderer().setDestinationCrs(myCrs)
@@ -851,22 +853,55 @@ def load_layers(
             myHazardLayerCount += 1
         elif myType == 'exposure':
             myExposureLayerCount += 1
-            # Add layer to the registry (that QGis knows about) a slot
-        # in qgis_interface will also ensure it gets added to the canvas
-        if qgis_version() >= 10800:  # 1.8 or newer, defer loading
-            # noinspection PyArgumentList
-            map_layer_list.append(myLayer)
-        else:
-            # noinspection PyArgumentList
-            QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
-    # Save time by loading all layers in one operation
-    if qgis_version() >= 10800:  # 1.8 or newer
+        # Add layer to the registry (that QGis knows about) a slot
+        # in qgis_interface will also ensure it gets added to the canvas
+
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers(map_layer_list)
+        map_layer_list.append(myLayer)
+
+    # noinspection PyArgumentList
+    QgsMapLayerRegistry.instance().addMapLayers(map_layer_list)
 
     if dock is not None:
         dock.get_layers()
 
     # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount
+
+
+def compareWkt(a, b, tol=0.000001):
+    """ Helper function to compare WKT geometries with given tolerance
+    Taken from QGIS test suite
+
+    :param a: Input WKT geometry
+    :type a: str
+
+    :param b: Expected WKT geometry
+    :type b: str
+
+    :param tol: compare tolerance
+    :type tol: float
+
+    :return: True on success, False on failure
+    :rtype bool
+    """
+    r = re.compile('-?\d+(?:\.\d+)?(?:[eE]\d+)?')
+
+    # compare the structure
+    a0 = r.sub("#", a)
+    b0 = r.sub("#", b)
+    if a0 != b0:
+        return False
+
+    # compare the numbers with given tolerance
+    a0 = r.findall(a)
+    b0 = r.findall(b)
+    if len(a0) != len(b0):
+        return False
+
+    for (a1, b1) in izip(a0, b0):
+        if abs(float(a1) - float(b1)) > tol:
+            return False
+
+    return True

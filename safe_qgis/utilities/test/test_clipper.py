@@ -55,7 +55,8 @@ from safe_qgis.utilities.utilities_for_testing import (
     RedirectStreams,
     DEVNULL,
     GEOCRS,
-    set_jakarta_extent)
+    set_jakarta_extent,
+    compareWkt)
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -131,8 +132,8 @@ class ClipperTest(unittest.TestCase):
 
         myMessage = ('Resampled raster has incorrect pixel size.'
                      'Expected: %f, Actual: %f' %
-                     (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
-        assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, myMessage
+                     (mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
+        assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, myMessage
 
     # See issue #349
     @expectedFailure
@@ -538,14 +539,10 @@ class ClipperTest(unittest.TestCase):
 
         myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgis_version() > 10800:
-            myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
-        else:
-            myExpectedWkt = ('LINESTRING(20.000000 20.000000, '
-                             '30.000000 30.000000)')
+        myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
         # There should only be one feature that intersects this clip
         # poly so this assertion should work.
-        self.assertEqual(myExpectedWkt, str(myResult.exportToWkt()))
+        assert compareWkt(myExpectedWkt, str(myResult.exportToWkt()))
 
         # Now poly on poly clip test
         myClipPolygon = QgsGeometry.fromWkt(
@@ -559,19 +556,13 @@ class ClipperTest(unittest.TestCase):
             '106.8216869 -6.1852067))')
         myResult = clip_geometry(myClipPolygon, myGeometry)
 
-        if qgis_version() > 10800:
-            myExpectedWkt = (
-                'POLYGON((106.82179833 -6.18353616,106.8222566 -6.1835184,'
-                '106.8227557 -6.1835076,106.82279996 -6.1842,'
-                '106.8218 -6.1842,106.82179833 -6.18353616))')
-        else:
-            myExpectedWkt = (
-                'POLYGON((106.821798 -6.183536,106.822257 -6.183518,'
-                '106.822756 -6.183508,106.822800 -6.184200,'
-                '106.821800 -6.184200,106.821798 -6.183536))')
+        myExpectedWkt = (
+            'POLYGON((106.82179833 -6.18353616,106.8222566 -6.1835184,'
+            '106.8227557 -6.1835076,106.82279996 -6.1842,'
+            '106.8218 -6.1842,106.82179833 -6.18353616))')
         # There should only be one feature that intersects this clip
         # poly so this assertion should work.
-        self.assertEqual(myExpectedWkt, str(myResult.exportToWkt()))
+        assert compareWkt(myExpectedWkt, str(myResult.exportToWkt()))
 
         # Now point on poly test clip
 
@@ -584,7 +575,7 @@ class ClipperTest(unittest.TestCase):
             myExpectedWkt = 'POINT(106.822410 -6.183690)'
             # There should only be one feature that intersects this clip
         # poly so this assertion should work.
-        self.assertEqual(myExpectedWkt, str(myResult.exportToWkt()))
+        assert compareWkt(myExpectedWkt, str(myResult.exportToWkt()))
 
     def test_clipVectorHard(self):
         """Vector layers can be hard clipped.

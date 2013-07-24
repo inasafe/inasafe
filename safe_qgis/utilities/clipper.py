@@ -20,7 +20,7 @@ import os
 import tempfile
 import logging
 
-from PyQt4.QtCore import QProcess, QVariant
+from PyQt4.QtCore import QProcess
 from qgis.core import (
     QGis,
     QgsCoordinateTransform,
@@ -28,6 +28,7 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayer,
     QgsFeature,
+    QgsFeatureRequest,
     QgsVectorFileWriter,
     QgsGeometry,
     QgsVectorLayer,
@@ -202,7 +203,7 @@ def _clip_vector_layer(
 
     # Get the clip extents in the layer's native CRS
     myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+    myGeoCrs.createFromSrid(4326)
     myXForm = QgsCoordinateTransform(myGeoCrs, layer.crs())
     myAllowedClipTypes = [QGis.WKBPolygon, QGis.WKBPolygon25D]
     if type(extent) is list:
@@ -234,14 +235,8 @@ def _clip_vector_layer(
     # .. todo:: FIXME - for different geometry types we should implement
     #    different clipping behaviour e.g. reject polygons that
     #    intersect the edge of the bbox. Tim
-    myAttributes = myProvider.attributeIndexes()
-    myFetchGeometryFlag = True
-    myUseIntersectFlag = True
-    myProvider.select(
-        myAttributes,
-        myProjectedExtent,
-        myFetchGeometryFlag,
-        myUseIntersectFlag)
+    myRequest = QgsFeatureRequest()
+    myRequest.setFlags(QgsFeatureRequest.ExactIntersect)
 
     myFieldList = myProvider.fields()
 
@@ -263,7 +258,6 @@ def _clip_vector_layer(
     # geometries from layer crs to geocrs.
     myXForm = QgsCoordinateTransform(layer.crs(), myGeoCrs)
     # Retrieve every feature with its geometry and attributes
-    myFeature = QgsFeature()
     myCount = 0
     myHasMultipart = False
 
@@ -271,10 +265,10 @@ def _clip_vector_layer(
         theExplodeAttributeIndex = myProvider.fieldNameIndex(
             explode_attribute)
 
-    while myProvider.nextFeature(myFeature):
+    for myFeature in myProvider.getFeatures(myRequest):
         myGeometry = myFeature.geometry()
         if explode_attribute is not None:
-            myAttrs = myFeature.attributeMap()
+            myAttrs = myFeature.attributes()
         # Loop through the parts adding them to the output file
         # we write out single part features unless explode_flag is False
         if explode_flag:
@@ -296,10 +290,9 @@ def _clip_vector_layer(
             # explode_attribute
             if myPartIndex > 0 and explode_attribute is not None:
                 myHasMultipart = True
-                myPartAttr = QVariant(
-                    '%s #%s' % (myAttrs[theExplodeAttributeIndex].toString(),
-                                myPartIndex))
-                myFeature.changeAttribute(theExplodeAttributeIndex, myPartAttr)
+                myPartAttr = '%s #%s' % (myAttrs[theExplodeAttributeIndex],
+                                         myPartIndex)
+                myFeature.setAttribute(theExplodeAttributeIndex, myPartAttr)
 
             myWriter.addFeature(myFeature)
         myCount += 1

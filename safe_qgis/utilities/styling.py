@@ -292,14 +292,8 @@ def setRasterStyle(raster_layer, style):
     :rtype: (list, list)
     """
     myNewStyles = add_extrema_to_style(style['style_classes'])
-    # test if QGIS 1.8.0 or older
-    # see issue #259
-    if qgis_version() <= 10800:
-        LOGGER.debug('Rendering raster using <= 1.8 styling')
-        return set_legacy_raster_style(raster_layer, myNewStyles)
-    else:
-        LOGGER.debug('Rendering raster using 2+ styling')
-        return set_new_raster_style(raster_layer, myNewStyles)
+    LOGGER.debug('Rendering raster using 2+ styling')
+    return set_new_raster_style(raster_layer, myNewStyles)
 
 
 def add_extrema_to_style(style):
@@ -366,6 +360,7 @@ def add_extrema_to_style(style):
     return myNewStyles
 
 
+# Should we drop this legacy code for QGIS < 2.0? (AB)
 def set_legacy_raster_style(raster_layer, style):
     """Set QGIS raster style based on InaSAFE style dictionary for QGIS < 2.0.
 
@@ -413,9 +408,9 @@ def set_legacy_raster_style(raster_layer, style):
         LOGGER.debug('Evaluating class:\n%s\n' % myClass)
         myMax = myClass['quantity']
         myColour = QtGui.QColor(myClass['colour'])
-        myLabel = QtCore.QString()
+        myLabel = ''
         if 'label' in myClass:
-            myLabel = QtCore.QString(myClass['label'])
+            myLabel = myClass['label']
         # noinspection PyCallingNonCallable
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
         myRangeList.append(myShader)
@@ -533,9 +528,9 @@ def set_new_raster_style(raster_layer, style):
             continue
 
         myColour = QtGui.QColor(myClass['colour'])
-        myLabel = QtCore.QString()
+        myLabel = ''
         if 'label' in myClass:
-            myLabel = QtCore.QString(myClass['label'])
+            myLabel = myClass['label']
         # noinspection PyCallingNonCallable
         myRampItem = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
         myRampItemList.append(myRampItem)

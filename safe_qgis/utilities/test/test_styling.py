@@ -74,8 +74,8 @@ class StylingTest(unittest.TestCase):
         # Now validate the transparency values were set to 255 because
         # they are floats and we cant specify pixel ranges to floats
         # Note we don't test on the exact interval because 464c6171dd55
-        myValue1 = myLayer.rasterTransparency().alphaValue(1.2)
-        myValue2 = myLayer.rasterTransparency().alphaValue(1.5)
+        myValue1 = myLayer.renderer().rasterTransparency().alphaValue(1.2)
+        myValue2 = myLayer.renderer().rasterTransparency().alphaValue(1.5)
         myMessage = ('Transparency should be ignored when style class'
                      ' quantities are floats')
         assert myValue1 == myValue2 == 255, myMessage
@@ -93,8 +93,8 @@ class StylingTest(unittest.TestCase):
             raise Exception(myMessage)
         # Now validate the transparency values were set to 255 because
         # they are floats and we cant specify pixel ranges to floats
-        myValue1 = myLayer.rasterTransparency().alphaValue(1)
-        myValue2 = myLayer.rasterTransparency().alphaValue(3)
+        myValue1 = myLayer.renderer().rasterTransparency().alphaValue(1)
+        myValue2 = myLayer.renderer().rasterTransparency().alphaValue(3)
         myMessage1 = myMessage + 'Expected 0 got %i' % myValue1
         myMessage2 = myMessage + 'Expected 255 got %i' % myValue2
         assert myValue1 == 0, myMessage1
@@ -151,7 +151,7 @@ class StylingTest(unittest.TestCase):
         #myMessage = ('Should get a single transparency class for first style '
         #             'class')
         myTransparencyList = (
-            myLayer.rasterTransparency().
+            myLayer.renderer().rasterTransparency().
             transparentSingleValuePixelList())
 
         self.assertEqual(len(myTransparencyList), 2)
@@ -177,21 +177,20 @@ class StylingTest(unittest.TestCase):
             raise Exception(myMessage)
         # Now validate the size values were set as expected
 
-        if myLayer.isUsingRendererV2():
-            # new symbology - subclass of QgsFeatureRendererV2 class
-            myRenderer = myLayer.rendererV2()
-            myType = myRenderer.type()
-            assert myType == 'graduatedSymbol'
-            mySize = 1
-            for myRange in myRenderer.ranges():
-                mySymbol = myRange.symbol()
-                mySymbolLayer = mySymbol.symbolLayer(0)
-                myActualSize = mySymbolLayer.size()
-                myMessage = (('Expected symbol layer 0 for range %s to have'
-                             ' a size of %s, got %s') %
-                             (mySize, mySize, myActualSize))
-                assert mySize == myActualSize, myMessage
-                mySize += 1
+        # new symbology - subclass of QgsFeatureRendererV2 class
+        myRenderer = myLayer.rendererV2()
+        myType = myRenderer.type()
+        assert myType == 'graduatedSymbol'
+        mySize = 1
+        for myRange in myRenderer.ranges():
+            mySymbol = myRange.symbol()
+            mySymbolLayer = mySymbol.symbolLayer(0)
+            myActualSize = mySymbolLayer.size()
+            myMessage = (('Expected symbol layer 0 for range %s to have'
+                          ' a size of %s, got %s') %
+                          (mySize, mySize, myActualSize))
+            assert mySize == myActualSize, myMessage
+            mySize += 1
 
     def test_issue157(self):
         """Verify that we get the error class name back - issue #157

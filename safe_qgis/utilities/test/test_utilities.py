@@ -3,6 +3,9 @@ import sys
 import os
 
 from unittest import expectedFailure
+
+import qgis
+
 from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules

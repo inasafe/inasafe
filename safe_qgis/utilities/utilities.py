@@ -139,18 +139,14 @@ def getWGS84resolution(layer):
         raise RuntimeError(msg)
 
     if layer.crs().authid() == 'EPSG:4326':
-        # If it is already in EPSG:4326, simply use the native resolution
-        if qgis_version() > 10800:
-            myCellSize = layer.rasterUnitsPerPixelX()
-        else:
-            myCellSize = layer.rasterUnitsPerPixel()
+        myCellSize = layer.rasterUnitsPerPixelX()
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
 
         # Reproject extent to EPSG:4326
         myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+        myGeoCrs.createFromSrid(4326)
         myXForm = QgsCoordinateTransform(layer.crs(), myGeoCrs)
         myExtent = layer.extent()
         myProjectedExtent = myXForm.transformBoundingBox(myExtent)
@@ -202,11 +198,7 @@ def qgis_version():
     :returns: QGIS Version where 10700 represents QGIS 1.7 etc.
     :rtype: int
     """
-    try:
-        myVersion = unicode(QGis.QGIS_VERSION_INT)
-    except AttributeError:
-        # noinspection PyUnresolvedReferences
-        myVersion = unicode(QGis.qgisVersion)[0]
+    myVersion = unicode(QGis.QGIS_VERSION_INT)
     myVersion = int(myVersion)
     return myVersion
 
@@ -318,7 +310,6 @@ def create_memory_layer(layer, new_name=''):
     memProvider = memLayer.dataProvider()
 
     provider = layer.dataProvider()
-    attribute_indexes = provider.attributeIndexes()
     vFields = provider.fields()
 
     fields = []
@@ -327,16 +318,8 @@ def create_memory_layer(layer, new_name=''):
 
     memProvider.addAttributes(fields)
 
-    provider.select(attribute_indexes)
-    ft = QgsFeature()
-    while provider.nextFeature(ft):
+    for ft in provider.getFeatures():
         memProvider.addFeatures([ft])
-
-    if qgis_version() <= 10800:
-        # Next two lines a workaround for a QGIS bug (lte 1.8)
-        # preventing mem layer attributes being saved to shp.
-        memLayer.startEditing()
-        memLayer.commitChanges()
 
     return memLayer
 
