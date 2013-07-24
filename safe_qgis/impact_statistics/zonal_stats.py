@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
  **Zonal Stats.**
@@ -47,17 +48,17 @@ def tr(theText):
         otherwise the original string.
     """
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    return QCoreApplication.translate('zonalstats', theText)
+    return QCoreApplication.translate('zonal_stats', theText)
 
 
-def calculateZonalStats(theRasterLayer, thePolygonLayer):
+def calculate_zonal_stats(raster_layer, polygon_layer):
     """Calculate zonal statics given two layers.
 
-    :param theRasterLayer: A QGIS raster layer.
-    :type theRasterLayer: QgsRasterLayer
+    :param raster_layer: A QGIS raster layer.
+    :type raster_layer: QgsRasterLayer
 
-    :param thePolygonLayer: A QGIS vector layer containing polygons.
-    :type thePolygonLayer: QgsVectorLayer
+    :param polygon_layer: A QGIS vector layer containing polygons.
+    :type polygon_layer: QgsVectorLayer
 
     :returns: A data structure containing sum, mean, min, max,
         count of raster values for each polygonal area.
@@ -68,7 +69,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
     Note:
         * InvalidParameterError if incorrect inputs are received.
         * InvalidGeometryError if none geometry is found during calculations.
-        * Any other exceptions are propogated.
+        * Any other exceptions are propagated.
 
     Example of output data structure:
 
@@ -86,19 +87,19 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         layers are in the same CRS - we assume they are.
 
     """
-    if not is_polygon_layer(thePolygonLayer):
+    if not is_polygon_layer(polygon_layer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a polygon layer in order to compute '
             'statistics.'))
-    if not is_raster_layer(theRasterLayer):
+    if not is_raster_layer(raster_layer):
         raise InvalidParameterError(tr(
             'Zonal stats needs a raster layer in order to compute statistics.'
         ))
     LOGGER.debug('Calculating zonal stats for:')
-    LOGGER.debug('Raster: %s' % theRasterLayer.source())
-    LOGGER.debug('Vector: %s' % thePolygonLayer.source())
+    LOGGER.debug('Raster: %s' % raster_layer.source())
+    LOGGER.debug('Vector: %s' % polygon_layer.source())
     myResults = {}
-    myRasterSource = theRasterLayer.source()
+    myRasterSource = raster_layer.source()
     myFid = gdal.Open(str(myRasterSource), gdal.GA_ReadOnly)
     myGeoTransform = myFid.GetGeoTransform()
     myColumns = myFid.RasterXSize
@@ -121,11 +122,11 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         myGeoTransform[3])
 
     # Get vector layer
-    myProvider = thePolygonLayer.dataProvider()
+    myProvider = polygon_layer.dataProvider()
     if myProvider is None:
         myMessage = tr(
             'Could not obtain data provider from layer "%1"').arg(
-                thePolygonLayer.source())
+                polygon_layer.source())
         raise Exception(myMessage)
 
     myFeature = QgsFeature()
@@ -147,7 +148,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         #print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
         #print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
 
-        myOffsetX, myOffsetY, myCellsX, myCellsY = cellInfoForBBox(
+        myOffsetX, myOffsetY, myCellsX, myCellsY = feature_box(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
 
         # If the poly does not intersect the raster just continue
@@ -175,7 +176,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         #    myNoData)
         #print 'Sum: %s count: %s' % (mySum, myCount)
 
-        mySum, myCount = statisticsForRectangle(
+        mySum, myCount = rectangle_stats(
             myBand,
             myFeatureBox,
             myGeoTransform,
@@ -184,7 +185,7 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
         if myCount <= 1:
             # The cell resolution is probably larger than the polygon area.
             # We switch to precise pixel - polygon intersection in this case
-            mySum, myCount = statisticsFromPreciseIntersection(
+            mySum, myCount = precise_stats(
                 myBand,
                 myGeometry,
                 myOffsetX,
@@ -207,25 +208,29 @@ def calculateZonalStats(theRasterLayer, thePolygonLayer):
             'count': myCount,
             'mean': myMean}
 
+    # noinspection PyUnusedLocal
     myFid = None  # Close
     return myResults
 
 
-def cellInfoForBBox(
-        theRasterBox,
-        theFeatureBox,
-        theCellSizeX,
-        theCellSizeY,):
+def feature_box(
+        raster_box,
+        feature_box,
+        cell_size_x,
+        cell_size_y):
     """Calculate cell offset and distances for the intersecting bbox.
 
-    :param theCellSizeX: Size in the x direction of a single cell.
-    :type theCellSizeX: float
+    :param raster_box: Box defining the extents of the raster.
+    :type raster_box: QgsRectangle
 
-    :param theCellSizeY: Size in the y direciton of a single cell.
-    :type theCellSizeY: float
+    :param feature_box: Bounding box for the feature.
+    :type feature_box: QgsRectangle
 
-    :param theRasterBox: Box defining the extents of the raster.
-    :type theRasterBox: QgsRectangle
+    :param cell_size_x: Size in the x direction of a single cell.
+    :type cell_size_x: float
+
+    :param cell_size_y: Size in the y direction of a single cell.
+    :type cell_size_y: float
 
     :returns: Offsets in the x and y directions, and number of cells in the x
         and y directions.
@@ -233,31 +238,31 @@ def cellInfoForBBox(
     """
 
     #get intersecting bbox
-    myIntersectedBox = theFeatureBox.intersect(theRasterBox)
+    myIntersectedBox = feature_box.intersect(raster_box)
     #print 'Intersected Box: %s' % myIntersectedBox.asWktCoordinates()
     if myIntersectedBox.isEmpty():
         return None, None, None, None
 
     #get offset in pixels in x- and y- direction
-    myOffsetX = myIntersectedBox.xMinimum() - theRasterBox.xMinimum()
-    myOffsetX /= theCellSizeX
+    myOffsetX = myIntersectedBox.xMinimum() - raster_box.xMinimum()
+    myOffsetX /= cell_size_x
     myOffsetX = int(myOffsetX)
-    myOffsetY = theRasterBox.yMaximum() - myIntersectedBox.yMaximum()
-    myOffsetY /= theCellSizeY
+    myOffsetY = raster_box.yMaximum() - myIntersectedBox.yMaximum()
+    myOffsetY /= cell_size_y
     myOffsetY = int(myOffsetY)
 
     ##### Checked to here....offsets calculate correctly ##########
 
-    myMaxColumn = myIntersectedBox.xMaximum() - theRasterBox.xMinimum()
-    myMaxColumn /= theCellSizeX
+    myMaxColumn = myIntersectedBox.xMaximum() - raster_box.xMinimum()
+    myMaxColumn /= cell_size_x
     # Round up to the next cell if the bbox is not on an exact pixel boundary
     if myMaxColumn > int(myMaxColumn):
         myMaxColumn = int(myMaxColumn) + 1
     else:
         myMaxColumn = int(myMaxColumn)
 
-    myMaxRow = theRasterBox.yMaximum() - myIntersectedBox.yMinimum()
-    myMaxRow /= theCellSizeY
+    myMaxRow = raster_box.yMaximum() - myIntersectedBox.yMinimum()
+    myMaxRow /= cell_size_y
     # Round up to the next cell if the bbox is not on an exact pixel boundary
     if myMaxRow > int(myMaxRow):
         myMaxRow = int(myMaxRow) + 1
@@ -274,67 +279,67 @@ def cellInfoForBBox(
     return myOffsetX, myOffsetY, myCellsX, myCellsY
 
 
-def statisticsFromMiddlePointTest(
-        theBand,
-        theGeometry,
-        thePixelOffsetX,
-        thePixelOffsetY,
-        theCellsX,
-        theCellsY,
-        theCellSizeX,
-        theCellSizeY,
-        theRasterBox,
-        theNoData):
+def centroid_intersection_stats(
+        band,
+        geometry,
+        pixel_offset_x,
+        pixel_offset_y,
+        cells_x,
+        cells_y,
+        cell_size_x,
+        cell_size_y,
+        raster_box,
+        no_data):
     """Stats where centroid of each cell must intersect the polygon.
 
-    :param theBand: A valid band from a raster layer.
-    :type theBand: GDALRasterBand
+    :param band: A valid band from a raster layer.
+    :type band: GDALRasterBand
 
-    :param theGeometry: A valid polygon geometry.
-    :type theGeometry: QgsGeometry
+    :param geometry: A valid polygon geometry.
+    :type geometry: QgsGeometry
 
-    :param thePixelOffsetX: Left offset for raster window.
-    :type thePixelOffsetX: int
+    :param pixel_offset_x: Left offset for raster window.
+    :type pixel_offset_x: int
 
-    :param thePixelOffsetY: Offset from bottom for raster window.
-    :type thePixelOffsetY: int
+    :param pixel_offset_y: Offset from bottom for raster window.
+    :type pixel_offset_y: int
 
-    :param theCellsX: Width of the raster window.
-    :type theCellsX: int
+    :param cells_x: Width of the raster window.
+    :type cells_x: int
 
-    :param theCellsY: Height of the raster window.
-    :type theCellsY: int
+    :param cells_y: Height of the raster window.
+    :type cells_y: int
 
-    :param theCellSizeX: Size in the x direction of a single cell.
-    :type theCellSizeX: float
+    :param cell_size_x: Size in the x direction of a single cell.
+    :type cell_size_x: float
 
-    :param theCellSizeY: Size in the y direciton of a single cell.
-    :type theCellSizeY: float
+    :param cell_size_y: Size in the y direction of a single cell.
+    :type cell_size_y: float
 
-    :param theRasterBox: Box defining the extents of the raster.
-    :type theRasterBox: QgsRectangle
+    :param raster_box: Box defining the extents of the raster.
+    :type raster_box: QgsRectangle
 
-    :param theNoData: Value for nodata in the raster.
-    :type theNoData: int, float
+    :param no_data: Value for no data in the raster.
+    :type no_data: int, float
 
     :returns: Sum, Count - sum of the values of all pixels and the count of
         pixels that intersect with the geometry.
     :rtype: (float, int)
     """
     myCellCenterX = (
-        theRasterBox.yMaximum() - thePixelOffsetY * theCellSizeY -
-        theCellSizeY / 2)
+        raster_box.yMaximum() - pixel_offset_y * cell_size_y -
+        cell_size_y / 2)
     myCount = 0
     mySum = 0
-    myBufferXSize = theCellsX
+    myBufferXSize = cells_x
     myBufferYSize = 1  # read in a single row at a time
-    myCellsToReadX = theCellsX
+    myCellsToReadX = cells_x
     myCellsToReadY = 1  # read in a single row at a time
 
-    for i in range(0, theCellsY):
-        myScanline = theBand.ReadRaster(
-            thePixelOffsetX,
-            thePixelOffsetY + i,
+    for i in range(0, cells_y):
+        myScanline = band.ReadRaster(
+            pixel_offset_x,
+            pixel_offset_y + i,
             myCellsToReadX,
             myCellsToReadY,
             myBufferXSize,
@@ -350,59 +355,61 @@ def statisticsFromMiddlePointTest(
             continue
 
         myCellCenterY = (
-            theRasterBox.xMinimum() +
-            thePixelOffsetX * theCellSizeX +
-            theCellSizeX / 2)
+            raster_box.xMinimum() +
+            pixel_offset_x * cell_size_x +
+            cell_size_x / 2)
 
-        for j in range(0, theCellsX):
+        for j in range(0, cells_x):
             myPoint = QgsPoint(myCellCenterY, myCellCenterX)
-            if theGeometry.contains(myPoint):
-                if myValues[j] != theNoData:
+            if geometry.contains(myPoint):
+                if myValues[j] != no_data:
                     mySum += myValues[j]
                     myCount += 1
 
-            myCellCenterY += theCellSizeX
+            myCellCenterY += cell_size_x
         # Move down one row
-        myCellCenterX -= theCellSizeY
+        myCellCenterX -= cell_size_y
 
     return mySum, myCount
 
 
-def statisticsForRectangle(
-        theBand,
-        theGeometry,
-        theGeotransform,
-        theNoData):
+def rectangle_stats(
+        band,
+        geometry,
+        geo_transform,
+        no_data):
 
-    """Calculate statistics for rectangle representing intersection between
-    polygon bbox and raster bbox
+    """Get stats for rect representing intersection of poly and raster bboxes.
 
-    :param theBand: A valid band from a raster layer.
-    :type theBand: GDALRasterBand
+    :param band: A valid band from a raster layer.
+    :type band: GDALRasterBand
 
-    :param theGeometry: A valid rectangle representing intersection between
+    :param geometry: A valid rectangle representing intersection between
          geometry bbox and raster bbox.
-    :type theGeometry: QgsRectangle
+    :type geometry: QgsRectangle
 
-    :param theGeotransform: Georeferencing transform from raster metadata.
-    :type theGeotransform: list (six doubles)
+    :param geo_transform: Georeferencing transform from raster metadata.
+    :type geo_transform: list (six doubles)
+
+    :param no_data: No data value for the raster.
+    :type no_data: float, int, None
 
     :returns: Sum, Count - sum of the values of all pixels and the count of
         pixels that intersect with the geometry.
     :rtype: (float, int)
     """
-    xMin = theGeometry.xMinimum()
-    xMax = theGeometry.xMaximum()
-    yMin = theGeometry.yMinimum()
-    yMax = theGeometry.yMaximum()
+    xMin = geometry.xMinimum()
+    xMax = geometry.xMaximum()
+    yMin = geometry.yMinimum()
+    yMax = geometry.yMaximum()
 
-    startCol, startRow = mapToPixel(xMin, yMax, theGeotransform)
-    endCol, endRow = mapToPixel(xMax, yMin, theGeotransform)
+    startCol, startRow = map_to_pixel(xMin, yMax, geo_transform)
+    endCol, endRow = map_to_pixel(xMax, yMin, geo_transform)
 
     width = endCol - startCol
     height = endRow - startRow
 
-    myScanline = theBand.ReadRaster(
+    myScanline = band.ReadRaster(
         startCol,
         startRow,
         width,
@@ -413,55 +420,56 @@ def statisticsForRectangle(
     myValues = struct.unpack('f' * height * width, myScanline)
 
     myArray = numpy.array(myValues)
-    myMaskedArray = numpy.ma.masked_where(myArray == theNoData, myArray)
+    myMaskedArray = numpy.ma.masked_where(myArray == no_data, myArray)
     mySum = float(numpy.sum(myMaskedArray))
     myCount = myMaskedArray.size
 
     return mySum, myCount
 
 
-def statisticsFromPreciseIntersection(
-        theBand,
-        theGeometry,
-        thePixelOffsetX,
-        thePixelOffsetY,
-        theCellsX,
-        theCellsY,
-        theCellSizeX,
-        theCellSizeY,
-        theRasterBox,
-        theNoData):
+# noinspection PyArgumentList
+def precise_stats(
+        band,
+        geometry,
+        pixel_offset_x,
+        pixel_offset_y,
+        cells_x,
+        cells_y,
+        cell_size_x,
+        cell_size_y,
+        raster_box,
+        no_data):
     """Weighted pixel sum for polygon based on only intersecting parts.
 
-    :param theBand: A valid band from a raster layer.
-    :type theBand: GDALRasterBand
+    :param band: A valid band from a raster layer.
+    :type band: GDALRasterBand
 
-    :param theGeometry: A valid polygon geometry.
-    :type theGeometry: QgsGeometry
+    :param geometry: A valid polygon geometry.
+    :type geometry: QgsGeometry
 
-    :param thePixelOffsetX: Left offset for raster window.
-    :type thePixelOffsetX: int
+    :param pixel_offset_x: Left offset for raster window.
+    :type pixel_offset_x: int
 
-    :param thePixelOffsetY: Offset from bottom for raster window.
-    :type thePixelOffsetY: int
+    :param pixel_offset_y: Offset from bottom for raster window.
+    :type pixel_offset_y: int
 
-    :param theCellsX: Width of the raster window.
-    :type theCellsX: int
+    :param cells_x: Width of the raster window.
+    :type cells_x: int
 
-    :param theCellsY: Height of the raster window.
-    :type theCellsY: int
+    :param cells_y: Height of the raster window.
+    :type cells_y: int
 
-    :param theCellSizeX: Size in the x direction of a single cell.
-    :type theCellSizeX: float
+    :param cell_size_x: Size in the x direction of a single cell.
+    :type cell_size_x: float
 
-    :param theCellSizeY: Size in the y direciton of a single cell.
-    :type theCellSizeY: float
+    :param cell_size_y: Size in the y direciton of a single cell.
+    :type cell_size_y: float
 
-    :param theRasterBox: Box defining the extents of the raster.
-    :type theRasterBox: QgsRectangle
+    :param raster_box: Box defining the extents of the raster.
+    :type raster_box: QgsRectangle
 
-    :param theNoData: Value for nodata in the raster.
-    :type theNoData: int, float
+    :param no_data: Value for nodata in the raster.
+    :type no_data: int, float
 
     :returns: Sum, Count - sum of the values of all pixels and the count of
         pixels that intersect with the geometry.
@@ -469,28 +477,28 @@ def statisticsFromPreciseIntersection(
     """
 
     myCurrentY = (
-        theRasterBox.yMaximum() - thePixelOffsetY *
-        theCellSizeY - theCellSizeY / 2)
+        raster_box.yMaximum() - pixel_offset_y * cell_size_y - cell_size_y / 2)
 
-    myHalfCellSizeX = theCellSizeX / 2.0
-    myHalfCellsSizeY = theCellSizeY / 2.0
-    myPixelArea = theCellSizeX * theCellSizeY
-    myCellsToReadX = theCellsX
+    myHalfCellSizeX = cell_size_x / 2.0
+    myHalfCellsSizeY = cell_size_y / 2.0
+    myPixelArea = cell_size_x * cell_size_y
+    myCellsToReadX = cells_x
     myCellsToReadY = 1  # read in a single row at a time
     myBufferXSize = 1
     myBufferYSize = 1
     myCount = 0
     mySum = 0.0
 
-    for row in range(0, theCellsY):
+    for row in range(0, cells_y):
         myCurrentX = (
-            theRasterBox.xMinimum() + theCellSizeX / 2.0 +
-            thePixelOffsetX * theCellSizeX)
-        for col in range(0, theCellsX):
+            raster_box.xMinimum() + cell_size_x / 2.0 +
+            pixel_offset_x * cell_size_x)
+        # noinspection PyArgumentList
+        for col in range(0, cells_x):
             # Read a single pixel
-            myScanline = theBand.ReadRaster(
-                thePixelOffsetX + col,
-                thePixelOffsetY + row,
+            myScanline = band.ReadRaster(
+                pixel_offset_x + col,
+                pixel_offset_y + row,
                 myCellsToReadX,
                 myCellsToReadY,
                 myBufferXSize,
@@ -500,17 +508,14 @@ def statisticsFromPreciseIntersection(
             # xsize*4 bytes of raw binary floating point data. This can be
             # converted to Python values using the struct module from the
             # standard library:
-            #print myScanline
             if myScanline != '':
                 myValues = struct.unpack('f', myScanline)  # tuple returned
                 myValue = myValues[0]
             else:
                 continue
 
-            if myValue == theNoData:
-                #print 'myValue is nodata (%s)' % theNoData
+            if myValue == no_data:
                 continue
-            #print 'Value of cell in precise intersection: %s' % myValue
             # noinspection PyCallByClass,PyTypeChecker
             myPixelGeometry = QgsGeometry.fromRect(
                 QgsRectangle(
@@ -520,98 +525,96 @@ def statisticsFromPreciseIntersection(
                     myCurrentY + myHalfCellsSizeY))
             if myPixelGeometry:
                 myIntersectionGeometry = myPixelGeometry.intersection(
-                    theGeometry)
+                    geometry)
                 if myIntersectionGeometry:
                     myIntersectionArea = myIntersectionGeometry.area()
-                    #print 'Intersection Area: %s' % myIntersectionArea
                     if myIntersectionArea >= 0.0:
                         myWeight = myIntersectionArea / myPixelArea
-                        #print 'Weight: %s' % myWeight
                         myCount += myWeight
-                        #print 'myCount: %s' % myCount
                         mySum += myValue * myWeight
-                        #print 'myValue: %s' % myValue
-            myCurrentX += theCellSizeY
-        myCurrentY -= theCellsY
+            myCurrentX += cell_size_y
+        myCurrentY -= cells_y
     return mySum, myCount
 
 
-def mapToPixel(mX, mY, geoTransform):
-    '''Convert map coordinates to pixel coordinates.
+def map_to_pixel(x_coordinate, y_coordinate, geo_transform):
+    """Convert map coordinates to pixel coordinates.
 
-    :param mX: Input map X coordinate.
-    :type mX: float
+    :param x_coordinate: Input map X coordinate.
+    :type x_coordinate: float
 
-    :param mY: Input map Y coordinate.
-    :type mY float
+    :param y_coordinate: Input map Y coordinate.
+    :type y_coordinate float
 
-    :param geoTransform: Georeferencing transform from raster metadata.
-    :type geoTransform: list (six floats)
+    :param geo_transform: Geo-referencing transform from raster metadata.
+    :type geo_transform: list (six floats)
 
     :returns pX, pY - Output pixel coordinates
     :rtype: (int, int)
-    '''
-    if geoTransform[2] + geoTransform[4] == 0:
-        pX = (mX - geoTransform[0]) / geoTransform[1]
-        pY = (mY - geoTransform[3]) / geoTransform[5]
+    """
+    if geo_transform[2] + geo_transform[4] == 0:
+        pX = (x_coordinate - geo_transform[0]) / geo_transform[1]
+        pY = (y_coordinate - geo_transform[3]) / geo_transform[5]
     else:
-        pX, pY = applyGeoTransform(mX, mY, invertGeoTransform(geoTransform))
+        pX, pY = transform(
+            x_coordinate, y_coordinate, inverse_transform(geo_transform))
     return int(pX + 0.5), int(pY + 0.5)
 
 
-def pixelToMap(pX, pY, geoTransform):
-    '''Convert pixel coordinates to map coordinates.
+def pixel_to_map(pixel_x, pixel_y, geo_transform):
+    """Convert pixel coordinates to map coordinates.
 
-    :param pX: Input pixel X coordinate
-    :type pX: float
+    :param pixel_x: Input pixel X coordinate
+    :type pixel_x: float
 
-    :param pY: Input pixel Y coordinate
-    :type pY: float
+    :param pixel_y: Input pixel Y coordinate
+    :type pixel_y: float
 
-    :param geoTransform: Georeferencing transform from raster metadata.
-    :type geoTransform: list (six floats)
+    :param geo_transform: Geo-referencing transform from raster metadata.
+    :type geo_transform: list (six floats)
 
     :returns mX, mY - Output map coordinates
     :rtype: (float, float)
-    '''
-    mX, mY = applyGeoTransform(pX, pY, geoTransform)
+    """
+    mX, mY = transform(pixel_x, pixel_y, geo_transform)
     return mX, mY
 
 
-def applyGeoTransform(inX, inY, geoTransform):
-    '''Apply a geotransform to coordinates.
+def transform(x, y, geo_transform):
+    """Apply a geo transform to coordinates.
 
-    :param inX: Input X coordinate.
-    :type inX: float
+    :param x: Input X coordinate.
+    :type x: float
 
-    :param inY: Input Y coordinate
-    :type inY: float
+    :param y: Input Y coordinate
+    :type y: float
 
-    :param geoTransform: Georeferencing transform from raster metadata.
-    :type geoTransform: list (six floats)
+    :param geo_transform: Geo-referencing transform from raster metadata.
+    :type geo_transform: list (six floats)
 
     :returns outX, outY - Transformed X and Y coordinates
     :rtype: (float, float)
-    '''
-    outX = geoTransform[0] + inX * geoTransform[1] + inY * geoTransform[2]
-    outY = geoTransform[3] + inX * geoTransform[4] + inY * geoTransform[5]
+    """
+    outX = geo_transform[0] + x * geo_transform[1] + y * geo_transform[2]
+    outY = geo_transform[3] + x * geo_transform[4] + y * geo_transform[5]
     return outX, outY
 
 
-def invertGeoTransform(geoTransform):
-    '''Invert standard 3x2 set of geotransform coefficients.
+def inverse_transform(geo_transform):
+    """Invert standard 3x2 set of geo-transform coefficients.
 
-    :param geoTransform: Georeferencing transform from raster metadata (
-        unaltered).
-    :type geoTransform: list (six floats)
+    :param geo_transform: Geo-referencing transform from raster metadata (
+        which is unaltered).
+    :type geo_transform: list (six floats)
 
-    :param geoTransform: Invert georeferencing transform (updated) on success,
-        empty list on failure.
-    :type geoTransform: list (six floats or empty)
-    '''
+    :param geo_transform: Invert geo-referencing transform (updated) on
+        success, empty list on failure.
+    :type geo_transform: list (six floats or empty)
+    """
     # we assume a 3rd row that is [1 0 0]
     # compute determinate
-    det = geoTransform[1] * geoTransform[5] - geoTransform[2] * geoTransform[4]
+    det = (geo_transform[1] * geo_transform[5] -
+           geo_transform[2] * geo_transform[4])
 
     if abs(det) < 0.000000000000001:
         return []
@@ -620,15 +623,15 @@ def invertGeoTransform(geoTransform):
 
     # compute adjoint and divide by determinate
     outGeoTransform = [0, 0, 0, 0, 0, 0]
-    outGeoTransform[1] = geoTransform[5] * invDet
-    outGeoTransform[4] = -geoTransform[4] * invDet
+    outGeoTransform[1] = geo_transform[5] * invDet
+    outGeoTransform[4] = -geo_transform[4] * invDet
 
-    outGeoTransform[2] = -geoTransform[2] * invDet
-    outGeoTransform[5] = geoTransform[1] * invDet
+    outGeoTransform[2] = -geo_transform[2] * invDet
+    outGeoTransform[5] = geo_transform[1] * invDet
 
-    outGeoTransform[0] = (geoTransform[2] * geoTransform[3] -
-                          geoTransform[0] * geoTransform[5]) * invDet
-    outGeoTransform[3] = (-geoTransform[1] * geoTransform[3] +
-                          geoTransform[0] * geoTransform[4]) * invDet
+    outGeoTransform[0] = (geo_transform[2] * geo_transform[3] -
+                          geo_transform[0] * geo_transform[5]) * invDet
+    outGeoTransform[3] = (-geo_transform[1] * geo_transform[3] +
+                          geo_transform[0] * geo_transform[4]) * invDet
 
     return outGeoTransform
