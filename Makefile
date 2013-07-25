@@ -214,7 +214,7 @@ dependency_test:
 	@# 1
 	@# See http://stackoverflow.com/questions/4761728/gives-an-error-in-makefile-not-in-bash-when-grep-output-is-empty why we need "|| true"
 
-	@grep -R PyQt4 $(NONGUI) || true
+	@grep -R PyQt4 $(NONGUI) | grep -v gui_example.py | grep -v message_element|| true
 	@grep -R qgis.core $(NONGUI) || true
 	@grep -R "import scipy" $(NONGUI) || true
 	@grep -R "from scipy import" $(NONGUI) || true

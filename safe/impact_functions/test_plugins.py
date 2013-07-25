@@ -1,3 +1,6 @@
+# coding=utf-8
+"""Tests for impact function plugins."""
+import os
 import numpy
 import unittest
 
@@ -39,6 +42,10 @@ class BasicFunction(FunctionProvider):
 
     @staticmethod
     def run():
+        """Dummy run implementation.
+
+        :return: None
+        """
         return None
 
 
@@ -83,7 +90,7 @@ class Test_plugins(unittest.TestCase):
 
     def test_get_plugins(self):
         """Plugins can be collected."""
-
+        os.environ['LANG'] = 'en'
         plugin_list = get_plugins()
         assert(len(plugin_list) > 0)
 
