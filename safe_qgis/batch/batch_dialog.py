@@ -82,8 +82,6 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             self.output_directory.setText(self.default_directory)
         self.populate_table(self.source_directory.text())
 
-        self.restore_state()
-
         # Setting this to False will suppress the popup of the results table
         self.show_results_popup = True
 
@@ -110,6 +108,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.run_selected_button.setText(self.tr('Run selected'))
         self.run_selected_button.clicked.connect(self.run_selected_clicked)
         self.run_selected_button.setEnabled(True)
+
+        self.restore_state()
 
     def restore_state(self):
         """Restore GUI state from configuration file"""
