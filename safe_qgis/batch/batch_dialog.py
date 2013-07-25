@@ -29,7 +29,12 @@ from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, QVariant, Qt
-from PyQt4.QtGui import QDialog, QFileDialog, QTableWidgetItem
+from PyQt4.QtGui import (
+    QDialog,
+    QFileDialog,
+    QTableWidgetItem,
+    QPushButton,
+    QDialogButtonBox)
 
 from qgis.core import QgsRectangle
 
@@ -62,10 +67,10 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         """
         QDialog.__init__(self, parent)
+        self.setupUi(self)
+        self.setWindowModality(Qt.ApplicationModal)
         self.iface = iface
         self.dock = dock
-
-        self.setupUi(self)
 
         myHeaderView = self.table.horizontalHeader()
         myHeaderView.setResizeMode(0, QtGui.QHeaderView.Stretch)
@@ -96,18 +101,17 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.source_directory.textChanged.connect(
             self.update_default_output_dir)
 
-        # Setup run all button in button box (repurposes yes to all)
-        self.run_all_button = self.button_box.button(
-            QtGui.QDialogButtonBox.YesToAll)
-        self.run_all_button.setText(self.tr('Run all'))
+        # Setup run all button in button box
+        self.run_all_button = QPushButton('Run all')
         self.run_all_button.clicked.connect(self.run_all_clicked)
+        self.button_box.addButton(
+            self.run_all_button, QDialogButtonBox.ActionRole)
 
-        # Setup run selected button in button box (repurposes yes button)
-        self.run_selected_button = self.button_box.button(
-            QtGui.QDialogButtonBox.Yes)
-        self.run_selected_button.setText(self.tr('Run selected'))
+        # Setup run selected button in button box
+        self.run_selected_button = QPushButton('Run selected')
         self.run_selected_button.clicked.connect(self.run_selected_clicked)
-        self.run_selected_button.setEnabled(True)
+        self.button_box.addButton(
+            self.run_selected_button, QDialogButtonBox.ActionRole)
 
         self.restore_state()
 
@@ -179,6 +183,10 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.table.setRowCount(0)
 
         myPath = str(scenario_directory)
+
+        if not os.path.exists(myPath):
+            LOGGER.info('Scenario directory does not exist: %s' % myPath)
+            return
 
         # only support .py and .txt files
         for myFile in os.listdir(myPath):
