@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 15:39+0200\n"
+"POT-Creation-Date: 2013-07-25 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,7 +200,7 @@ msgid ""
 msgstr ""
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:124
-#: safe/impact_functions/core.py:615
+#: safe/impact_functions/core.py:613
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:111
 msgid "Category"
 msgstr ""
@@ -891,7 +891,7 @@ msgid ""
 "message: %s"
 msgstr ""
 
-#: safe/impact_functions/core.py:373
+#: safe/impact_functions/core.py:371
 #, python-format
 msgid ""
 "In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
@@ -1018,18 +1018,18 @@ msgstr ""
 msgid "Population affected by flood prone areas"
 msgstr ""
 
-#: safe/impact_functions/core.py:615
+#: safe/impact_functions/core.py:613
 msgid "Title"
 msgstr ""
 
-#: safe/impact_functions/core.py:615
+#: safe/impact_functions/core.py:613
 msgid "ID"
 msgstr ""
 
 msgid "Requirements"
 msgstr ""
 
-#: safe/impact_functions/core.py:688
+#: safe/impact_functions/core.py:686
 msgid "Available Impact Functions"
 msgstr ""
 
@@ -1172,19 +1172,19 @@ msgid ""
 "transport them to here?"
 msgstr ""
 
-#: safe/impact_functions/core.py:616
+#: safe/impact_functions/core.py:614
 msgid "Sub Category"
 msgstr ""
 
-#: safe/impact_functions/core.py:616
+#: safe/impact_functions/core.py:614
 msgid "Layer type"
 msgstr ""
 
-#: safe/impact_functions/core.py:616
+#: safe/impact_functions/core.py:614
 msgid "Data type"
 msgstr ""
 
-#: safe/impact_functions/core.py:617
+#: safe/impact_functions/core.py:615
 msgid "Unit"
 msgstr ""
 

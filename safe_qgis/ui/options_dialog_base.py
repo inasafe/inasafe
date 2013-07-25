@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Wed Jul 17 19:05:06 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Thu Jul 25 16:52:05 2013
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,12 +12,21 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_OptionsDialogBase(object):
     def setupUi(self, OptionsDialogBase):
         OptionsDialogBase.setObjectName(_fromUtf8("OptionsDialogBase"))
-        OptionsDialogBase.resize(596, 301)
+        OptionsDialogBase.resize(596, 387)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         OptionsDialogBase.setWindowIcon(icon)
@@ -32,7 +41,7 @@ class Ui_OptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 560, 834))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, -3, 563, 845))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
@@ -212,38 +221,38 @@ class Ui_OptionsDialogBase(object):
         OptionsDialogBase.setTabOrder(self.buttonBox, self.scrollArea)
 
     def retranslateUi(self, OptionsDialogBase):
-        OptionsDialogBase.setWindowTitle(QtGui.QApplication.translate("OptionsDialogBase", "InaSAFE - Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxClipToViewport.setToolTip(QtGui.QApplication.translate("OptionsDialogBase", "Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxClipToViewport.setText(QtGui.QApplication.translate("OptionsDialogBase", "Clip datasets to visible extent before analysis", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblKeywordCache.setText(QtGui.QApplication.translate("OptionsDialogBase", "Keyword cache for remote datasources", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxZoomToImpact.setText(QtGui.QApplication.translate("OptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpNotImplemented.setTitle(QtGui.QApplication.translate("OptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxBubbleLayersUp.setText(QtGui.QApplication.translate("OptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("OptionsDialogBase", "Location for results", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("OptionsDialogBase", "Report template", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_2.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("OptionsDialogBase", "Logo for maps (must be x x y) ", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_3.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "Organisation name (for maps, reports etc.)", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("OptionsDialogBase", "DPI (Maps and reports)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxUseThread.setText(QtGui.QApplication.translate("OptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxSetLayerNameFromTitle.setText(QtGui.QApplication.translate("OptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
-        self.textBrowser.setHtml(QtGui.QApplication.translate("OptionsDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        OptionsDialogBase.setWindowTitle(_translate("OptionsDialogBase", "InaSAFE - Options", None))
+        self.cbxClipToViewport.setToolTip(_translate("OptionsDialogBase", "Turn on to clip hazard and exposure layers to the currently  visible extent on the map canvas", None))
+        self.cbxClipToViewport.setText(_translate("OptionsDialogBase", "Clip datasets to visible extent before analysis", None))
+        self.lblKeywordCache.setText(_translate("OptionsDialogBase", "Keyword cache for remote datasources", None))
+        self.cbxZoomToImpact.setText(_translate("OptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None))
+        self.grpNotImplemented.setTitle(_translate("OptionsDialogBase", "Not yet implemented", None))
+        self.cbxBubbleLayersUp.setText(_translate("OptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None))
+        self.label.setText(_translate("OptionsDialogBase", "Location for results", None))
+        self.toolButton.setText(_translate("OptionsDialogBase", "...", None))
+        self.label_2.setText(_translate("OptionsDialogBase", "Report template", None))
+        self.toolButton_2.setText(_translate("OptionsDialogBase", "...", None))
+        self.label_3.setText(_translate("OptionsDialogBase", "Logo for maps (must be x x y) ", None))
+        self.toolButton_3.setText(_translate("OptionsDialogBase", "...", None))
+        self.label_4.setText(_translate("OptionsDialogBase", "Organisation name (for maps, reports etc.)", None))
+        self.toolButton_4.setText(_translate("OptionsDialogBase", "...", None))
+        self.label_5.setText(_translate("OptionsDialogBase", "DPI (Maps and reports)", None))
+        self.cbxUseThread.setText(_translate("OptionsDialogBase", "Run analysis in a separate thread (experimental)", None))
+        self.cbxSetLayerNameFromTitle.setText(_translate("OptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None))
+        self.textBrowser.setHtml(_translate("OptionsDialogBase", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-weight:600; color:#f50000;\">Note:</span><span style=\" font-family:\'Cantarell\';\"> The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxUseSentry.setText(QtGui.QApplication.translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("OptionsDialogBase", "Female ratio default value", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolKeywordCachePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxDevMode.setText(QtGui.QApplication.translate("OptionsDialogBase", "Enable developer mode (needs restart)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxVisibleLayersOnly.setText(QtGui.QApplication.translate("OptionsDialogBase", "Only show visible layers in InaSAFE dock", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxClipHard.setText(QtGui.QApplication.translate("OptionsDialogBase", "When clipping, also clip features (e.g. will clip polygon smaller)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxShowPostprocessingLayers.setToolTip(QtGui.QApplication.translate("OptionsDialogBase", "Turn on to see the intermediate files generated by the postprocessing steps in the map canvas", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxShowPostprocessingLayers.setText(QtGui.QApplication.translate("OptionsDialogBase", "Show intermediate layers generated by postprocessing", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxHideExposure.setText(QtGui.QApplication.translate("OptionsDialogBase", "Hide exposure layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxNativeZonalStats.setText(QtGui.QApplication.translate("OptionsDialogBase", "Use QGIS zonal statistics (much faster but might have bugs)", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Cantarell\'; font-weight:600; color:#f50000;\">Note:</span><span style=\" font-family:\'Cantarell\';\"> The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.</span></p></body></html>", None))
+        self.cbxUseSentry.setText(_translate("OptionsDialogBase", "Help to improve InaSAFE by submitting errors to a remote server", None))
+        self.label_6.setText(_translate("OptionsDialogBase", "Female ratio default value", None))
+        self.toolKeywordCachePath.setText(_translate("OptionsDialogBase", "...", None))
+        self.cbxDevMode.setText(_translate("OptionsDialogBase", "Enable developer mode (needs restart)", None))
+        self.cbxVisibleLayersOnly.setText(_translate("OptionsDialogBase", "Only show visible layers in InaSAFE dock", None))
+        self.cbxClipHard.setText(_translate("OptionsDialogBase", "When clipping, also clip features (i.e. will clip polygon smaller)", None))
+        self.cbxShowPostprocessingLayers.setToolTip(_translate("OptionsDialogBase", "Turn on to see the intermediate files generated by the postprocessing steps in the map canvas", None))
+        self.cbxShowPostprocessingLayers.setText(_translate("OptionsDialogBase", "Show intermediate layers generated by postprocessing", None))
+        self.cbxHideExposure.setText(_translate("OptionsDialogBase", "Hide exposure layer on scenario estimate completion", None))
+        self.cbxNativeZonalStats.setText(_translate("OptionsDialogBase", "Use QGIS zonal statistics (not recommended for QGIS 1.8)", None))
 
 import resources_rc

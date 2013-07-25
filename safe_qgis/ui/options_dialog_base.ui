@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>596</width>
-    <height>301</height>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,9 +37,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>560</width>
-        <height>834</height>
+        <y>-3</y>
+        <width>563</width>
+        <height>845</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -356,7 +356,7 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="0">
         <widget class="QCheckBox" name="cbxClipHard">
          <property name="text">
-          <string>When clipping, also clip features (e.g. will clip polygon smaller)</string>
+          <string>When clipping, also clip features (i.e. will clip polygon smaller)</string>
          </property>
         </widget>
        </item>
@@ -383,7 +383,7 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="0">
         <widget class="QCheckBox" name="cbxNativeZonalStats">
          <property name="text">
-          <string>Use QGIS zonal statistics (much faster but might have bugs)</string>
+          <string>Use QGIS zonal statistics (not recommended for QGIS 1.8)</string>
          </property>
         </widget>
        </item>

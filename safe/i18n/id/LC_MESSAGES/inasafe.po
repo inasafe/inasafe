@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 15:38+0200\n"
+"POT-Creation-Date: 2013-07-25 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,7 +128,7 @@ msgid "Flooded"
 msgstr "Kebanjiran"
 
 #: safe/engine/impact_functions_for_testing/categorised_hazard_building_impact.py:124
-#: safe/impact_functions/core.py:615
+#: safe/impact_functions/core.py:613
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:111
 msgid "Category"
 msgstr "Kategori"
@@ -632,7 +632,7 @@ msgstr "Orang-orang di 50cm sampai 1m air: %i"
 msgid "People in 30cm to 50cm of water: %i"
 msgstr "Orang-orang di 30cm sampai 50cm air: %i"
 
-#: safe/impact_functions/core.py:373
+#: safe/impact_functions/core.py:371
 #, python-format
 msgid ""
 "In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
@@ -753,15 +753,15 @@ msgstr "Jumlah penduduk"
 msgid "Population affected by flood prone areas"
 msgstr "Penduduk terkena dampak daerah rawan banjir"
 
-#: safe/impact_functions/core.py:615
+#: safe/impact_functions/core.py:613
 msgid "Title"
 msgstr "Judul"
 
-#: safe/impact_functions/core.py:615
+#: safe/impact_functions/core.py:613
 msgid "ID"
 msgstr "ID"
 
-#: safe/impact_functions/core.py:688
+#: safe/impact_functions/core.py:686
 msgid "Available Impact Functions"
 msgstr "Fungsi Dampak Yang Tersedia"
 
@@ -906,19 +906,19 @@ msgstr ""
 "bagaimana membawanya ke sini?"
 
 # upa is the correct translation for 'sub', but it's not ver y popular
-#: safe/impact_functions/core.py:616
+#: safe/impact_functions/core.py:614
 msgid "Sub Category"
 msgstr "Sub kategori"
 
-#: safe/impact_functions/core.py:616
+#: safe/impact_functions/core.py:614
 msgid "Layer type"
 msgstr "Jenis lapisan"
 
-#: safe/impact_functions/core.py:616
+#: safe/impact_functions/core.py:614
 msgid "Data type"
 msgstr "Jenis data"
 
-#: safe/impact_functions/core.py:617
+#: safe/impact_functions/core.py:615
 msgid "Unit"
 msgstr "Satuan"
 
