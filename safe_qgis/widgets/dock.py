@@ -87,7 +87,8 @@ from safe_qgis.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
-    AggregatioError)
+    AggregatioError,
+    UnsupportedProviderError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -383,7 +384,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr(
                 'layer (e.g. structures) are available. When you are '
                 'ready, click the '),
-            m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
+            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button below.'))
         myMessage.add(myNotes)
         myMessage.add(m.Heading('Limitations', **WARNING_STYLE))
@@ -688,8 +689,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
-                self.keywordIO.update_keywords(myLayer, {'title': myName})
-                myTitle = myName
+                try:
+                    self.keywordIO.update_keywords(myLayer, {'title': myName})
+                    myTitle = myName
+                except UnsupportedProviderError:
+                    continue
             else:
                 # Lookup internationalised title if available
                 myTitle = safeTr(myTitle)
@@ -861,7 +865,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHazardLayer, myExposureLayer = self.optimal_clip()
         # See if the inputs need further refinement for aggregations
-        self.aggregator.deintersect(myHazardLayer, myExposureLayer)
+        try:
+            self.aggregator.deintersect(myHazardLayer, myExposureLayer)
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
         # Identify input layers
         self.calculator.set_hazard_layer(self.aggregator.hazardLayer.source())
         self.calculator.set_exposure_layer(
