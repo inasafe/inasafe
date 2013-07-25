@@ -30,9 +30,10 @@ sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
 
+import qgis
+
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
-
 
 from qgis.core import QgsVectorLayer, QgsFeature
 
@@ -313,21 +314,18 @@ class AggregatorTest(unittest.TestCase):
         myAggregator.aggregate(myImpactLayer)
 
         myProvider = myAggregator.layer.dataProvider()
-        myProvider.select(myProvider.attributeIndexes())
-        myFeature = QgsFeature()
         myNumericResults = []
         myStringResults = []
 
-        while myProvider.nextFeature(myFeature):
+        for myFeature in myProvider.getFeatures():
             myFeatureNumResults = []
             myFeatureStrResults = []
-            myAtMap = myFeature.attributeMap()
-            for _, attr in myAtMap.iteritems():
-                value, isFloat = attr.toFloat()
-                if isFloat:
-                    myFeatureNumResults.append(value)
+            myAttrs = myFeature.attributes()
+            for attr in myAttrs:
+                if isinstance(attr, (int, float)):
+                    myFeatureNumResults.append(attr)
                 else:
-                    myFeatureStrResults.append(str(attr.toString()))
+                    myFeatureStrResults.append(attr)
 
             myNumericResults.append(myFeatureNumResults)
             myStringResults.append(myFeatureStrResults)

@@ -304,7 +304,7 @@ def create_memory_layer(layer, new_name=''):
     else:
         raise MemoryLayerCreationError('Layer is not a VectorLayer')
 
-    crs = layer.crs().authid().toLower()
+    crs = layer.crs().authid().lower()
     myUUID = str(uuid.uuid4())
     uri = '%s?crs=%s&index=yes&uuid=%s' % (typeStr, crs, myUUID)
     memLayer = QgsVectorLayer(uri, new_name, 'memory')
@@ -315,7 +315,7 @@ def create_memory_layer(layer, new_name=''):
 
     fields = []
     for i in vFields:
-        fields.append(vFields[i])
+        fields.append(i)
 
     memProvider.addAttributes(fields)
 

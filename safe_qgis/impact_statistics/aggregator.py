@@ -26,9 +26,11 @@ from qgis.core import (
     QgsGeometry,
     QgsMapLayerRegistry,
     QgsFeature,
+    QgsFeatureRequest,
     QgsRectangle,
     QgsPoint,
     QgsField,
+    QgsFields,
     QgsVectorLayer,
     QgsVectorFileWriter,
     QGis,
@@ -103,7 +105,7 @@ class Aggregator(QtCore.QObject):
 
         #use qgis or inasafe zonal stats
         myFlag = bool(QtCore.QSettings().value('inasafe/useNativeZonalStats',
-                                          False))
+                                               False))
         self.useNativeZonalStats = myFlag
 
         self.iface = iface
@@ -289,16 +291,14 @@ class Aggregator(QtCore.QObject):
         self._set_persistant_attributes()
         myUnneededAttributes = []
 
-        for i in myFields:
+        for i in xrange(myFields.count()):
             if (myFields[i].name() not in
                     self.attributes.values()):
                 myUnneededAttributes.append(i)
         LOGGER.debug('Removing this attributes: ' + str(myUnneededAttributes))
         # noinspection PyBroadException
         try:
-            self.layer.startEditing()
             myProvider.deleteAttributes(myUnneededAttributes)
-            self.layer.commitChanges()
         # FIXME (Ole): Disable pylint check for the moment
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
@@ -331,14 +331,15 @@ class Aggregator(QtCore.QObject):
                 myProvider = self.layer.dataProvider()
                 myAttr = self._sum_field_name()
                 myAttrIndex = myProvider.fieldNameIndex(myAttr)
-                myProvider.select([myAttrIndex], QgsRectangle(), False)
-                myFeature = QgsFeature()
+                myRequest = QgsFeatureRequest()
+                myRequest.setFlags(QgsFeatureRequest.NoGeometry)
+                myRequest.setSubsetOfAttributes([myAttrIndex])
                 myHighestVal = 0
 
-                while myProvider.nextFeature(myFeature):
-                    myAttrMap = myFeature.attributeMap()
-                    myVal, ok = myAttrMap[myAttrIndex].toInt()
-                    if ok and myVal > myHighestVal:
+                for myFeature in myProvider.getFeatures(myRequest):
+                    myVal = myFeature[myAttrIndex]
+                    print "val", myVal
+                    if myVal is not None and myVal > myHighestVal:
                         myHighestVal = myVal
 
                 myClasses = []
@@ -420,11 +421,13 @@ class Aggregator(QtCore.QObject):
 
         # start data retreival: fetch no geometry and
         # 1 attr for each feature
-        myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
+        #myImpactRequest = QgsFeatureRequest()
+        #myImpactRequest.setFlags(QgsFeatureRequest.NoGeometry)
+        #myImpactRequest.setSubsetOfAttributes([myTargetFieldIndex])
+        #myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
         myTotal = 0
 
         myAggregationProvider = self.layer.dataProvider()
-        self.layer.startEditing()
 
         if self.statisticsType == 'class_count':
             #add the class count fields to the layer
@@ -432,7 +435,6 @@ class Aggregator(QtCore.QObject):
                                  QtCore.QVariant.String) for f in
                         self.statisticsClasses]
             myAggregationProvider.addAttributes(myFields)
-            self.layer.commitChanges()
 
             myTmpAggrFieldMap = myAggregationProvider.fieldNameMap()
             for k, v in myTmpAggrFieldMap.iteritems():
@@ -444,11 +446,8 @@ class Aggregator(QtCore.QObject):
             myAggregationProvider.addAttributes([QgsField(
                 myAggrField, QtCore.QVariant.Int)])
 
-            self.layer.commitChanges()
             myAggrFieldIndex = self.layer.fieldNameIndex(
                 myAggrField)
-
-        self.layer.startEditing()
 
         myImpactGeoms = safe_impact_layer.get_geometry()
         myImpactValues = safe_impact_layer.get_data()
@@ -539,7 +538,7 @@ class Aggregator(QtCore.QObject):
                             #shape files as internal format
                             myKey = myKey[:10]
                             myAggrFieldIndex = myAggrFieldMap[myKey]
-                            myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
+                            myAttrs[myAggrFieldIndex] = v
 
                     elif self.statisticsType == 'sum':
                         #by default summ attributes
@@ -554,7 +553,7 @@ class Aggregator(QtCore.QObject):
                             #add all attributes to the impactLayerAttributes
                             self.impactLayerAttributes[myPolygonIndex].append(
                                 myRemainingValues[i])
-                        myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+                        myAttrs = {myAggrFieldIndex: myTotal}
 
                     # Add features inside this polygon
                     myFID = myPolygonIndex
@@ -624,7 +623,7 @@ class Aggregator(QtCore.QObject):
                     #shape files as internal format
                     myKey = myKey[:10]
                     myAggrFieldIndex = myAggrFieldMap[myKey]
-                    myAttrs[myAggrFieldIndex] = QtCore.QVariant(v)
+                    myAttrs[myAggrFieldIndex] = v
 
             elif self.statisticsType == 'sum':
                 #loop over all features in impact layer
@@ -637,7 +636,7 @@ class Aggregator(QtCore.QObject):
                     except TypeError:
                         pass
                     self.impactLayerAttributes[0].append(myImpactValueList)
-                myAttrs = {myAggrFieldIndex: QtCore.QVariant(myTotal)}
+                myAttrs = {myAggrFieldIndex: myTotal}
 
             #apply to all area feature
             myFID = 0
@@ -706,7 +705,6 @@ class Aggregator(QtCore.QObject):
             LOGGER.debug('Python zonal stats duration: %ss' % pyDuration)
 
             myProvider = self.layer.dataProvider()
-            self.layer.startEditing()
 
             # add fields for stats to aggregation layer
             # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
@@ -722,7 +720,6 @@ class Aggregator(QtCore.QObject):
                                  QtCore.QVariant.Double)
                         ]
             myProvider.addAttributes(myFields)
-            self.layer.commitChanges()
 
             sumIndex = myProvider.fieldNameIndex(self._sum_field_name())
             countIndex = myProvider.fieldNameIndex(self._count_field_name())
@@ -730,22 +727,16 @@ class Aggregator(QtCore.QObject):
             # minIndex = myProvider.fieldNameIndex(self._minFieldName())
             # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
 
-            self.layer.startEditing()
-            allPolygonAttrs = myProvider.attributeIndexes()
-            myProvider.select(allPolygonAttrs)
-            myFeature = QgsFeature()
-
-            while myProvider.nextFeature(myFeature):
+            for myFeature in myProvider.getFeatures():
                 myFid = myFeature.id()
                 myStats = myZonalStatistics[myFid]
-                #          minIndex: QtCore.QVariant(myStats['min']),
-                #          maxIndex: QtCore.QVariant(myStats['max'])}
-                attrs = {sumIndex: QtCore.QVariant(myStats['sum']),
-                         countIndex: QtCore.QVariant(myStats['count']),
-                         meanIndex: QtCore.QVariant(myStats['mean'])
+                #          minIndex: myStats['min'],
+                #          maxIndex: myStats['max']}
+                attrs = {sumIndex: myStats['sum'],
+                         countIndex: myStats['count'],
+                         meanIndex: myStats['mean']
                          }
                 myProvider.changeAttributeValues({myFid: attrs})
-            self.layer.commitChanges()
 
     def _prepare_layer(self):
         """Prepare the aggregation layer to match analysis extents.
@@ -879,14 +870,14 @@ class Aggregator(QtCore.QObject):
         # FIXME (MB) maybe do raw geos without qgis
         #select all postproc polygons with no attributes
         aggregationProvider = self.layer.dataProvider()
-        aggregationProvider.select([])
+        aggregationRequest = QgsFeatureRequest()
+        aggregationRequest.setSubsetOfAttributes([])
 
         # copy polygons to a memory layer
         myQgisMemoryLayer = create_memory_layer(layer)
 
         polygonsProvider = myQgisMemoryLayer.dataProvider()
-        allPolygonAttrs = polygonsProvider.attributeIndexes()
-        polygonsProvider.select(allPolygonAttrs)
+        polygonsRequest = QgsFeatureRequest()
         myQgisPostprocPoly = QgsFeature()
         myQgisFeat = QgsFeature()
         myInsideFeat = QgsFeature()
@@ -909,8 +900,9 @@ class Aggregator(QtCore.QObject):
              myPostprocPolygon) in enumerate(myPostprocPolygons):
             LOGGER.debug('PostprocPolygon %s' % myPostprocPolygonIndex)
             myPolygonsCount = len(myRemainingPolygons)
-            aggregationProvider.featureAtId(
-                myPostprocPolygonIndex, myQgisPostprocPoly, True, [])
+            aggregationRequest.setFilterFid(myPostprocPolygonIndex)
+            myQgisPostprocPoly = aggregationProvider.getFeatures(
+                aggregationRequest).next()
             myQgisPostprocGeom = QgsGeometry(myQgisPostprocPoly.geometry())
 
             # myPostprocPolygon bounding box values
@@ -973,10 +965,9 @@ class Aggregator(QtCore.QObject):
                     # all vertices are inside -> polygon is inside
                     #ignore this polygon from further analysis
                     myInsidePolygons.append(myMappedIndex)
-                    polygonsProvider.featureAtId(myFeatId,
-                                                 myQgisFeat,
-                                                 True,
-                                                 allPolygonAttrs)
+                    polygonsRequest.setFilterFid(myFeatId)
+                    myQgisFeat = polygonsProvider.getFeatures(
+                        polygonsRequest).next()
                     mySHPWriter.addFeature(myQgisFeat)
                     self.preprocessedFeatureCount += 1
 #                    LOGGER.debug('Polygon %s is fully inside' %myMappedIndex)
@@ -1014,17 +1005,17 @@ class Aggregator(QtCore.QObject):
 #                    LOGGER.debug('Intersecting polygon %s' % myMappedIndex)
                     myIntersectingPolygons.append(myMappedIndex)
 
-                    ok = polygonsProvider.featureAtId(myFeatId,
-                                                      myQgisFeat,
-                                                      True,
-                                                      allPolygonAttrs)
-                    if not ok:
+                    polygonsRequest.setFilterFid(myFeatId)
+                    try:
+                        myQgisFeat = polygonsProvider.getFeatures(
+                            polygonsRequest).next()
+                    except StopIteration:
                         LOGGER.debug('Couldn\'t fetch feature: %s' % myFeatId)
                         LOGGER.debug([str(error) for error in
                                       polygonsProvider.errors()])
 
                     myQgisPolyGeom = QgsGeometry(myQgisFeat.geometry())
-                    myAtMap = myQgisFeat.attributeMap()
+                    myAtMap = myQgisFeat.attributes()
 #                    for (k, attr) in myAtMap.iteritems():
 #                        LOGGER.debug( "%d: %s" % (k, attr.toString()))
 
@@ -1052,7 +1043,7 @@ class Aggregator(QtCore.QObject):
                                             QGis.WKBMultiPolygon]
                         if myIntersecGeom.wkbType() in polygonTypesList:
                             myInsideFeat.setGeometry(myIntersecGeom)
-                            myInsideFeat.setAttributeMap(myAtMap)
+                            myInsideFeat.setAttributes(myAtMap)
                             mySHPWriter.addFeature(myInsideFeat)
                             self.preprocessedFeatureCount += 1
                         else:
@@ -1109,8 +1100,8 @@ class Aggregator(QtCore.QObject):
 
         for i in myOutsidePolygons:
             myFeatId = i + 1
-            polygonsProvider.featureAtId(myFeatId, myQgisFeat, True,
-                                         allPolygonAttrs)
+            polygonsRequest.setFilterFid(myFeatId)
+            myQgisFeat = polygonsProvider.getFeatures(polygonsRequest).next()
             mySHPWriter.addFeature(myQgisFeat)
             self.preprocessedFeatureCount += 1
 
@@ -1136,7 +1127,7 @@ class Aggregator(QtCore.QObject):
         :type crs: QgsCoordinateReferenceSystem
 
         :param fields:
-        :type fields: dict
+        :type fields: QgsFields
 
 
 
@@ -1144,10 +1135,10 @@ class Aggregator(QtCore.QObject):
 
         if crs is None:
             crs = QgsCoordinateReferenceSystem()
-            crs.createFromEpsg(4326)
+            crs.createFromSrid(4326)
 
         if fields is None:
-            fields = {}
+            fields = QgsFields()
 
         myTempdir = temp_dir(sub_dir='preprocess')
         myOutFilename = unique_filename(suffix='.shp',
@@ -1185,7 +1176,7 @@ class Aggregator(QtCore.QObject):
 
         myRect = self.iface.mapCanvas().extent()
         myCrs = QgsCoordinateReferenceSystem()
-        myCrs.createFromEpsg(4326)
+        myCrs.createFromSrid(4326)
         myGeoExtent = extent_to_geo_array(myRect, myCrs)
 
         if not self.layer.isValid():
@@ -1199,18 +1190,16 @@ class Aggregator(QtCore.QObject):
         myProvider.addAttributes(
             [QgsField(myAttrName, QtCore.QVariant.String)])
 
-        self.layer.startEditing()
         # add a feature the size of the impact layer bounding box
         myFeature = QgsFeature()
+        myFeature.setFields(myProvider.fields())
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         myFeature.setGeometry(QgsGeometry.fromRect(
             QgsRectangle(
                 QgsPoint(myGeoExtent[0], myGeoExtent[1]),
                 QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
-        myFeature.setAttributeMap({0: QtCore.QVariant(
-            self.tr('Entire area'))})
+        myFeature[myAttrName] = self.tr('Entire area')
         myProvider.addFeatures([myFeature])
-        self.layer.commitChanges()
 
         try:
             self.keywordIO.update_keywords(
