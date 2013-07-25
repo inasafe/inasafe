@@ -196,7 +196,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
 
         :param message: An html snippet (typically a table in this context)
             to display.
-        :type message: str
+        :type message: str or QString
         """
         myHtml = html_header() + message + html_footer()
         self.webView.setHtml(myHtml)
