@@ -179,3 +179,13 @@ class HelpFileMissingError(Exception):
 class InvalidGeometryError(Exception):
     """Custom exception for when a feature geometry is invalid or none."""
     pass
+
+
+class UnsupportedProviderError(Exception):
+    """For unsupported provider (e.g. openlayers plugin) encountered."""
+    pass
+
+
+class InvalidLayerError(Exception):
+    """For when an invalid layer is encountered."""
+    pass

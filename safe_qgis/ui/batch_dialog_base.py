@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'batch_dialog_base.ui'
 #
-# Created: Wed Jul 24 08:32:16 2013
+# Created: Thu Jul 25 10:18:28 2013
 #      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
@@ -75,15 +75,15 @@ class Ui_BatchDialogBase(object):
         self.horizontalLayout_2.addWidget(self.output_directory_chooser)
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
         self.gridLayout_3.addWidget(self.groupBox_3, 2, 0, 1, 1)
-        self.buttonBox = QtGui.QDialogButtonBox(BatchDialogBase)
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Close|QtGui.QDialogButtonBox.Yes|QtGui.QDialogButtonBox.YesToAll)
-        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
-        self.gridLayout_3.addWidget(self.buttonBox, 3, 0, 1, 1)
+        self.button_box = QtGui.QDialogButtonBox(BatchDialogBase)
+        self.button_box.setOrientation(QtCore.Qt.Horizontal)
+        self.button_box.setStandardButtons(QtGui.QDialogButtonBox.Close|QtGui.QDialogButtonBox.Yes|QtGui.QDialogButtonBox.YesToAll)
+        self.button_box.setObjectName(_fromUtf8("button_box"))
+        self.gridLayout_3.addWidget(self.button_box, 3, 0, 1, 1)
 
         self.retranslateUi(BatchDialogBase)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), BatchDialogBase.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), BatchDialogBase.reject)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("accepted()")), BatchDialogBase.accept)
+        QtCore.QObject.connect(self.button_box, QtCore.SIGNAL(_fromUtf8("rejected()")), BatchDialogBase.reject)
         QtCore.QMetaObject.connectSlotsByName(BatchDialogBase)
 
     def retranslateUi(self, BatchDialogBase):

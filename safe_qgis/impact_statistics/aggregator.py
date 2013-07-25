@@ -65,7 +65,9 @@ from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
     KeywordDbError,
-    InvalidAggregatorError)
+    InvalidAggregatorError,
+    UnsupportedProviderError,
+    InvalidLayerError)
 from safe_qgis.safe_interface import styles
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -222,7 +224,10 @@ class Aggregator(QtCore.QObject):
         # These should have already been clipped to analysis extents
         self.hazardLayer = hazard_layer
         self.exposureLayer = exposure_layer
-        self._prepare_layer()
+        try:
+            self._prepare_layer()
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
 
         if not self.aoiMode:
             # This is a safe version of the aggregation layer
@@ -743,7 +748,10 @@ class Aggregator(QtCore.QObject):
             self.layer.commitChanges()
 
     def _prepare_layer(self):
-        """Prepare the aggregation layer to match analysis extents."""
+        """Prepare the aggregation layer to match analysis extents.
+
+        :raises: InvalidLayerError, UnsupportedProviderError, KeywordDbError
+        """
         myMessage = m.Message(
             m.Heading(
                 self.tr('Preparing aggregation layer'),
@@ -756,8 +764,13 @@ class Aggregator(QtCore.QObject):
         # This is used to hold an *in memory copy* of the aggregation layer
         # or a in memory layer with the clip extents as a feature.
         if self.aoiMode:
-            self.layer = self._extents_to_layer()
-            # Area Of Interest (AOI) mode flag
+            try:
+                self.layer = self._extents_to_layer()
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
+        # Area Of Interest (AOI) mode flag is False
         else:
             # we use only the exposure extent, because both exposure and hazard
             # have the same extent at this point.
@@ -1164,6 +1177,8 @@ class Aggregator(QtCore.QObject):
 
         :returns: A memory layer representing the extents of the clip.
         :rtype: QgsVectorLayer
+
+        :raises: InvalidLayerError, UnsupportedProviderError, KeywordDbError
         """
 
         # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
@@ -1176,7 +1191,7 @@ class Aggregator(QtCore.QObject):
         if not self.layer.isValid():
             myMessage = self.tr(
                 'An exception occurred when creating the entire area layer.')
-            raise (Exception(myMessage))
+            raise (InvalidLayerError(myMessage))
 
         myProvider = self.layer.dataProvider()
 
@@ -1205,7 +1220,7 @@ class Aggregator(QtCore.QObject):
             self.keywordIO.write_keywords(
                 self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
-        except KeywordDbError, e:
+        except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
 
