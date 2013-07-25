@@ -1713,7 +1713,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
-                NoKeywordsFoundError), e:
+                NoKeywordsFoundError):
             self.show_no_keywords_message()
             # Append the error message.
             # myErrorMessage = get_error_message(e)
