@@ -82,8 +82,7 @@ class Test_plugins(unittest.TestCase):
             assert val in s, msg
 
     def test_get_plugins(self):
-        """Plugins can be collected
-        """
+        """Plugins can be collected."""
 
         plugin_list = get_plugins()
         assert(len(plugin_list) > 0)
