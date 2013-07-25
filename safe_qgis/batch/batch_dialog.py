@@ -28,8 +28,13 @@ from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, QSettings, Qt
-from PyQt4.QtGui import QDialog, QFileDialog, QTableWidgetItem
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, QVariant, Qt
+from PyQt4.QtGui import (
+    QDialog,
+    QFileDialog,
+    QTableWidgetItem,
+    QPushButton,
+    QDialogButtonBox)
 
 from qgis.core import QgsRectangle
 
@@ -62,10 +67,10 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         """
         QDialog.__init__(self, parent)
+        self.setupUi(self)
+        self.setWindowModality(Qt.ApplicationModal)
         self.iface = iface
         self.dock = dock
-
-        self.setupUi(self)
 
         myHeaderView = self.table.horizontalHeader()
         myHeaderView.setResizeMode(0, QtGui.QHeaderView.Stretch)
@@ -82,7 +87,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             self.output_directory.setText(self.default_directory)
         self.populate_table(self.source_directory.text())
 
-        self.restore_state()
+        # Setting this to False will suppress the popup of the results table
+        self.show_results_popup = True
 
         # connect signal to slot
         # noinspection PyUnresolvedReferences
@@ -95,18 +101,19 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.source_directory.textChanged.connect(
             self.update_default_output_dir)
 
-        # Setup run all button in button box (repurposes yes to all)
-        self.run_all_button = self.button_box.button(
-            QtGui.QDialogButtonBox.YesToAll)
-        self.run_all_button.setText(self.tr('Run all'))
+        # Setup run all button in button box
+        self.run_all_button = QPushButton('Run all')
         self.run_all_button.clicked.connect(self.run_all_clicked)
+        self.button_box.addButton(
+            self.run_all_button, QDialogButtonBox.ActionRole)
 
-        # Setup run selected button in button box (repurposes yes button)
-        self.run_selected_button = self.button_box.button(
-            QtGui.QDialogButtonBox.Yes)
-        self.run_selected_button.setText(self.tr('Run selected'))
+        # Setup run selected button in button box
+        self.run_selected_button = QPushButton('Run selected')
         self.run_selected_button.clicked.connect(self.run_selected_clicked)
-        self.run_selected_button.setEnabled(True)
+        self.button_box.addButton(
+            self.run_selected_button, QDialogButtonBox.ActionRole)
+
+        self.restore_state()
 
     def restore_state(self):
         """Restore GUI state from configuration file"""
@@ -159,6 +166,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         if myNewPath is not None and os.path.exists(myNewPath):
             line_edit.setText(myNewPath)
 
+    @pyqtSlot(str)
     def populate_table(self, scenario_directory):
         """ Populate table with files from scenario_directory directory.
 
@@ -167,14 +175,18 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         """
 
         LOGGER.info("populate_table from %s" % scenario_directory)
-        parsedFiles = []
-        unparsedFiles = []
+        parsed_files = []
+        unparsed_files = []
         self.table.clearContents()
 
         # NOTE(gigih): need this line to remove existing rows
         self.table.setRowCount(0)
 
         myPath = str(scenario_directory)
+
+        if not os.path.exists(myPath):
+            LOGGER.info('Scenario directory does not exist: %s' % myPath)
+            return
 
         # only support .py and .txt files
         for myFile in os.listdir(myPath):
@@ -189,11 +201,11 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                     for myKey, myValue\
                             in read_scenarios(myAbsPath).iteritems():
                         append_row(self.table, myKey, myValue)
-                    parsedFiles.append(myFile)
+                    parsed_files.append(myFile)
                 except ParsingError:
-                    unparsedFiles.append(myFile)
+                    unparsed_files.append(myFile)
 
-        LOGGER.info(self.show_parser_results(parsedFiles, unparsedFiles))
+        LOGGER.info(self.show_parser_results(parsed_files, unparsed_files))
 
     def run_script(self, filename):
         """ Run a python script in QGIS to exercise InaSAFE functionality.
@@ -408,9 +420,13 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         :param report_path: Path to the file of batch report.
         :type report_path: str
         """
-        myUrl = QtCore.QUrl('file:///' + report_path)
-        # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
-        QtGui.QDesktopServices.openUrl(myUrl)
+        if self.show_results_popup:
+            myUrl = QtCore.QUrl('file:///' + report_path)
+            # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
+            QtGui.QDesktopServices.openUrl(myUrl)
+        else:
+            report = open(report_path, 'rt').read()
+            LOGGER.info(report)
 
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.

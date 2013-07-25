@@ -22,6 +22,7 @@ import unittest
 import qgis
 
 from PyQt4 import QtCore
+from PyQt4.QtGui import QLineEdit
 from PyQt4.QtTest import QTest
 
 from safe_qgis.batch.batch_dialog import BatchDialog
@@ -37,15 +38,18 @@ DOCK = Dock(IFACE)
 
 
 class BatchDialogTest(unittest.TestCase):
-    """Test for the script/batch runner dialog
+    """Tests for the script/batch runner dialog.
     """
 
     def test_loadBatchDialog(self):
         """Definitely, this is a test. Test for BatchDialog behaviour
         """
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
+        myDialog.show_results_popup = False
         myDialog.scenario_directory_radio.setChecked(True)
         myDialog.source_directory.setText(SCENARIO_DIR)
+        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
+        print "Testing using : %s" % SCENARIO_DIR
         numberRow = myDialog.table.rowCount()
         assert numberRow == 2, 'Num scenario is wrong. I got %s' % numberRow
         myOutputDir = myDialog.output_directory.text()
@@ -63,8 +67,10 @@ class BatchDialogTest(unittest.TestCase):
         """Test run single scenario
         """
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
+        myDialog.show_results_popup = False
         myDialog.scenario_directory_radio.setChecked(False)
         myDialog.source_directory.setText(SCENARIO_DIR)
+        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
         myOutputDir = temp_dir()
         myDialog.output_directory.setText(myOutputDir)
         myDialog.table.selectRow(1)
@@ -78,8 +84,10 @@ class BatchDialogTest(unittest.TestCase):
         """Test run single scenario.
         """
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
+        myDialog.show_results_popup = False
         myDialog.scenario_directory_radio.setChecked(False)
         myDialog.source_directory.setText(SCENARIO_DIR)
+        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
         myOutputDir = temp_dir()
         myDialog.output_directory.setText(myOutputDir)
         myButton = myDialog.run_all_button

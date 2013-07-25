@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **IS Utilities implementation.**
@@ -125,7 +126,7 @@ def getWGS84resolution(layer):
     If not, work it out based on EPSG:4326 representations of its extent.
 
     :param layer: Raster layer
-    :type layer: QgsRasterLayer
+    :type layer: QgsRasterLayer or QgsMapLayer
 
     :returns: The resolution of the given layer.
     :rtype: float
@@ -140,7 +141,7 @@ def getWGS84resolution(layer):
 
     if layer.crs().authid() == 'EPSG:4326':
         myCellSize = layer.rasterUnitsPerPixelX()
-    else:
+
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
 

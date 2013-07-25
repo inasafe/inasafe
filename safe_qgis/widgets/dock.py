@@ -65,7 +65,8 @@ from safe_qgis.safe_interface import (
     ReadLayerError,
     get_postprocessors,
     get_postprocessor_human_name,
-    ZeroImpactException)
+    ZeroImpactException,
+    ErrorMessage)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -840,7 +841,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         :returns: None if no aggregation is selected or cboAggregation is
                 disabled, otherwise a polygon layer.
-        :rtype: QgsMapLayer or None
+        :rtype: QgsMapLayer, QgsVectorLayer or None
         """
 
         myNoSelectionValue = 0
@@ -1270,7 +1271,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            self.runner.done.disconnect(self.aggregate)
+            try:
+                self.runner.done.disconnect(self.aggregate)
+            except TypeError:
+                #happens when object is not connected - see #621
+                pass
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
@@ -1324,6 +1329,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'An exception occurred when calculating the results. %s'
                 ) % (self.runner.result())
                 myMessage = get_error_message(myException, context=myContext)
+            # noinspection PyTypeChecker
             self.show_error_message(myMessage)
             self.analysisDone.emit(False)
             return
@@ -1699,7 +1705,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
-                NoKeywordsFoundError), e:
+                NoKeywordsFoundError):
             self.show_no_keywords_message()
             # Append the error message.
             # myErrorMessage = get_error_message(e)

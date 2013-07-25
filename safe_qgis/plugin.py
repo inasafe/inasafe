@@ -440,7 +440,7 @@ class Plugin:
         from safe_qgis.tools.minimum_needs import MinimumNeeds
 
         myDialog = MinimumNeeds(self.iface.mainWindow())
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_options(self):
         """Show the options dialog."""
@@ -451,7 +451,7 @@ class Plugin:
             self.iface,
             self.dockWidget,
             self.iface.mainWindow())
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_keywords_editor(self):
         """Show the keywords editor."""
@@ -464,8 +464,7 @@ class Plugin:
             self.iface.mainWindow(),
             self.iface,
             self.dockWidget)
-        myDialog.setModal(True)
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_function_browser(self):
         """Show the impact function browser tool."""
@@ -473,8 +472,7 @@ class Plugin:
         from safe_qgis.tools.function_browser import FunctionBrowser
 
         myDialog = FunctionBrowser(self.iface.mainWindow())
-        myDialog.setModal(True)
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""
@@ -482,24 +480,24 @@ class Plugin:
         from safe_qgis.tools.shakemap_importer import ShakemapImporter
 
         myDialog = ShakemapImporter(self.iface.mainWindow())
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
         from safe_qgis.tools.osm_downloader import OsmDownloader
 
         dialog = OsmDownloader(self.iface.mainWindow(), self.iface)
-        dialog.setModal(True)
-        dialog.show()
+        dialog.exec_()  # modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
         from safe_qgis.batch.batch_dialog import BatchDialog
 
         myDialog = BatchDialog(
-            self.iface.mainWindow(), self.iface, self.dockWidget)
-        myDialog.setModal(True)
-        myDialog.show()
+            parent=self.iface.mainWindow(),
+            iface=self.iface,
+            dock=self.dockWidget)
+        myDialog.exec_()  # modal
 
     def save_scenario(self):
         """Save current scenario to text file,"""
