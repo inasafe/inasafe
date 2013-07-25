@@ -384,7 +384,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr(
                 'layer (e.g. structures) are available. When you are '
                 'ready, click the '),
-            m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
+            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button below.'))
         myMessage.add(myNotes)
         myMessage.add(m.Heading('Limitations', **WARNING_STYLE))
