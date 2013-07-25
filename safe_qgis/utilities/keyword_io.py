@@ -113,7 +113,7 @@ class KeywordIO(QObject):
                 KeywordNotFoundError,
                 InvalidParameterError,
                 UnsupportedProviderError):
-                    raise
+            raise
 
     def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.

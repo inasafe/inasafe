@@ -64,8 +64,7 @@ from safe_qgis.safe_interface import (
     ReadLayerError,
     get_postprocessors,
     get_postprocessor_human_name,
-    ZeroImpactException,
-    ErrorMessage)
+    ZeroImpactException)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,

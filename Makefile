@@ -194,8 +194,13 @@ unwanted_strings:
 	@echo "------------------------------"
 	@echo "Strings that should be deleted"
 	@echo "------------------------------"
-	@grep -R "settrace()" * | grep ".py:" | grep -v Makefile || true
-	@grep -R "assert " * | grep ".py:" | grep -v Makefile | grep -v test_ | grep -v utilities_test.py | grep -v odict.py || true
+
+	@grep -R "settrace()" * | grep ".py:" | grep -v Makefile | grep -v pydev || true
+
+	@grep -R "assert " * | grep ".py:" | grep -v Makefile | grep -v test_ | \
+	grep -v utilities_for_testing.py | grep -v odict.py | grep -v .pyc | \
+	grep -v gui_example.py | grep -v message_element.py | grep -v pydev | \
+	grep -v third_party || true
 
 dependency_test:
 	@echo

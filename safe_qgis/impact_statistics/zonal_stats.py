@@ -148,7 +148,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         #print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
         #print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
 
-        myOffsetX, myOffsetY, myCellsX, myCellsY = feature_box(
+        myOffsetX, myOffsetY, myCellsX, myCellsY = intersection_box(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
 
         # If the poly does not intersect the raster just continue
@@ -213,7 +213,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     return myResults
 
 
-def feature_box(
+def intersection_box(
         raster_box,
         feature_box,
         cell_size_x,

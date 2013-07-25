@@ -662,7 +662,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         try:
             # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.read_keywords(self.layer)
-        except (InvalidParameterError, HashNotFoundError, NoKeywordsFoundError):
+        except (InvalidParameterError,
+                HashNotFoundError,
+                NoKeywordsFoundError):
             pass
 
         myLayerName = self.layer.name()
