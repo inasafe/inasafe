@@ -64,7 +64,8 @@ from safe_qgis.safe_interface import (
     ReadLayerError,
     get_postprocessors,
     get_postprocessor_human_name,
-    ZeroImpactException)
+    ZeroImpactException,
+    ErrorMessage)
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -848,7 +849,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         :returns: None if no aggregation is selected or cboAggregation is
                 disabled, otherwise a polygon layer.
-        :rtype: QgsMapLayer or None
+        :rtype: QgsMapLayer, QgsVectorLayer or None
         """
 
         myNoSelectionValue = 0
@@ -1336,6 +1337,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'An exception occurred when calculating the results. %1'
                 ).arg(self.runner.result())
                 myMessage = get_error_message(myException, context=myContext)
+            # noinspection PyTypeChecker
             self.show_error_message(myMessage)
             self.analysisDone.emit(False)
             return
