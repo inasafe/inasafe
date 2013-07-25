@@ -271,7 +271,7 @@ class KeywordIO(QObject):
         """
 
         home = expanduser("~")
-        home = os.path.abspath(os.path.join(home, '.inasafe'))
+        home = os.path.abspath(os.path.join(home, '.inasafe', 'keywords.db'))
 
         return home
 
