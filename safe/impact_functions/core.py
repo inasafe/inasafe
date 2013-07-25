@@ -58,25 +58,23 @@ class FunctionProvider:
 def get_function_title(func):
     """Get title for impact function
 
-    Input
-        func: Impact function class
+    :param func: Impact function class
 
-    Output
-        it's title if available as an attribute in the class description,
-        otherwise what is returned by the function pretty_function_name.
+    :returns:  It's title if available as an attribute in the class
+        description, otherwise what is returned by the function
+        pretty_function_name.
+    :rtype: str
     """
-
-    myTitle = None
     if hasattr(func, 'title'):
-        myTitle = func.title
+        title = func.title
     else:
-        myTitle = pretty_function_name(func)
+        title = pretty_function_name(func)
 
-    return tr(myTitle)
+    return tr(title)
 
 
 def get_plugins(name=None):
-    """Retrieve a list of plugins that match the name you pass
+    """Retrieve a list of plugins that match the name you pass.
 
        Or all of them if no name is passed.
     """
@@ -89,8 +87,8 @@ def get_plugins(name=None):
 
     if isinstance(name, basestring):
         # Add the names
-        plugins_dict.update(dict([(p.__name__, p)
-                                  for p in FunctionProvider.plugins]))
+        plugins_dict.update(
+            dict([(p.__name__, p) for p in FunctionProvider.plugins]))
 
         msg = ('No plugin named "%s" was found. '
                'List of available plugins is: %s'
