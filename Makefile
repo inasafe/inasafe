@@ -128,6 +128,15 @@ test_suite: compile testdata
 	@#echo Expecting 1 test to fail in support of issue #3
 	@#echo Expecting 1 test to fail in support of issue #160
 
+# Run safe package tests only
+safe_test_suite: compile testdata
+	@echo
+	@echo "---------------------"
+	@echo "Safe Regression Test Suite"
+	@echo "---------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id \
+	--with-coverage --cover-package=safe safe  3>&1 1>&2 2>&3 3>&- || true
+
 # Run gui test suite only
 gui_test_suite: compile testdata
 	@echo
@@ -241,22 +250,6 @@ run_data_audit:
 	@echo "-----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/data_IP_audit.py
 
-gen_impact_function_doc:
-	@echo
-	@echo "-----------------------------------"
-	@echo "Generate impact functions' documentation"
-	@echo "-----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_impfunc_doc.py
-	@echo $(PYTHONPATH)
-
-gen_rst:
-	@echo
-	@echo "-----------------------------------"
-	@echo "Generate InaSAFE API documentation"
-	@echo "-----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_rst_script.py
-	@echo $(PYTHONPATH)
-
 pylint-count:
 	@echo
 	@echo "---------------------------"
@@ -293,6 +286,7 @@ indent:
 	@echo "---------------"
 	@# sudo apt-get install python2.7-examples for reindent script
 	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
+
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point
