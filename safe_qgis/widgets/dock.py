@@ -82,6 +82,7 @@ from safe_qgis.exceptions import (
     NoKeywordsFoundError,
     InsufficientOverlapError,
     InvalidParameterError,
+    InvalidLayerError,
     InsufficientParametersError,
     HashNotFoundError,
     CallGDALError,
