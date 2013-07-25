@@ -521,6 +521,7 @@ def impact_attribution(keywords, inasafe_flag=False):
 
     if inasafe_flag:
         myReport.add(m.Heading(tr('Software notes'), **INFO_STYLE))
+        # noinspection PyUnresolvedReferences
         myInaSAFEPhrase = tr(
             'This report was created using InaSAFE version %1. Visit '
             'http://inasafe.org to get your free copy of this software!'
@@ -616,7 +617,8 @@ def which(name, flags=os.X_OK):
 
     On newer versions of MS-Windows, the PATHEXT environment variable will be
     set to the list of file extensions for files considered executable. This
-    will normally include things like ".EXE". This fuction will also find files
+    will normally include things like ".EXE". This function will also find
+    files
     with the given name ending with any of these extensions.
 
     On MS-Windows the only flag that has any meaning is os.F_OK. Any other
@@ -703,6 +705,7 @@ def safe_to_qgis_layer(layer):
     :raises: Exception if layer is not valid.
     """
 
+    # noinspection PyUnresolvedReferences
     myMessage = tr(
         'Input layer must be a InaSAFE spatial object. I got %1'
     ).arg(str(type(layer)))
@@ -726,6 +729,7 @@ def safe_to_qgis_layer(layer):
     if myQGISLayer.isValid():
         return myQGISLayer
     else:
+        # noinspection PyUnresolvedReferences
         myMessage = tr('Loaded impact layer "%1" is not valid').arg(myFilename)
         raise Exception(myMessage)
 
@@ -841,6 +845,7 @@ def read_impact_layer(impact_layer):
     :rtype: None, QgsRasterLayer, QgsVectorLayer
     """
 
+    # noinspection PyUnresolvedReferences
     myMessage = tr('Input layer must be a InaSAFE spatial object. '
                    'I got %1').arg(str(type(impact_layer)))
     if not hasattr(impact_layer, 'is_inasafe_spatial_object'):
@@ -863,6 +868,7 @@ def read_impact_layer(impact_layer):
     if myQGISLayer.isValid():
         return myQGISLayer
     else:
+        # noinspection PyUnresolvedReferences
         myMessage = tr(
             'Loaded impact layer "%1" is not valid').arg(myFilename)
         raise Exception(myMessage)

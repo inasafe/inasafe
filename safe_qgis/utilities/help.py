@@ -51,12 +51,14 @@ def _show_local_help(context=None):
     :raises: HelpFileMissingError
     """
 
-    # First we try using local filesystm
+    # First we try using local filesystem
 
     base_url = os.path.abspath(os.path.join(
         __file__, os.path.pardir, os.path.pardir, os.path.pardir, 'docs'
     ))
 
+    # set default value for myLocale
+    myLocale = 'en'
     if 'LANG' in os.environ:
         myLocale = os.environ['LANG']
 
@@ -77,6 +79,7 @@ def _show_local_help(context=None):
     base_url = 'file://%s' % base_url
 
     myUrl = QtCore.QUrl(base_url)
+    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     QtGui.QDesktopServices.openUrl(myUrl)
 
 
@@ -88,10 +91,12 @@ def _show_online_help(context=None):
        user-docs subdirectory. e.g. 'keywords'
     """
 
-    # First we try using local filesystm
+    # First we try using local filesystem
 
     base_url = 'http://inasafe.linfiniti.com/'
 
+    # set default value for myLocale
+    myLocale = 'en'
     if 'LANG' in os.environ:
         myLocale = os.environ['LANG']
 
@@ -107,4 +112,5 @@ def _show_online_help(context=None):
     else:
         base_url += 'index.html'
     myUrl = QtCore.QUrl(base_url)
+    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     QtGui.QDesktopServices.openUrl(myUrl)
