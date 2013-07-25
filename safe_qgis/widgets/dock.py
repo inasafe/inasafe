@@ -1278,7 +1278,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            self.runner.done.disconnect(self.aggregate)
+            try:
+                self.runner.done.disconnect(self.aggregate)
+            except TypeError:
+                #happens when object is not connected - see #621
+                pass
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
