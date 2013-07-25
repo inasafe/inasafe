@@ -28,7 +28,7 @@ from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, QSettings, QVariant, Qt
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, QVariant, Qt
 from PyQt4.QtGui import QDialog, QFileDialog, QTableWidgetItem
 
 from qgis.core import QgsRectangle
@@ -83,6 +83,9 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.populate_table(self.source_directory.text())
 
         self.restore_state()
+
+        # Setting this to False will suppress the popup of the results table
+        self.show_results_popup = True
 
         # connect signal to slot
         # noinspection PyUnresolvedReferences
@@ -159,6 +162,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         if myNewPath is not None and os.path.exists(myNewPath):
             line_edit.setText(myNewPath)
 
+    @pyqtSlot(str)
     def populate_table(self, scenario_directory):
         """ Populate table with files from scenario_directory directory.
 
@@ -167,8 +171,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         """
 
         LOGGER.info("populate_table from %s" % scenario_directory)
-        parsedFiles = []
-        unparsedFiles = []
+        parsed_files = []
+        unparsed_files = []
         self.table.clearContents()
 
         # NOTE(gigih): need this line to remove existing rows
@@ -189,11 +193,11 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                     for myKey, myValue\
                             in read_scenarios(myAbsPath).iteritems():
                         append_row(self.table, myKey, myValue)
-                    parsedFiles.append(myFile)
+                    parsed_files.append(myFile)
                 except ParsingError:
-                    unparsedFiles.append(myFile)
+                    unparsed_files.append(myFile)
 
-        LOGGER.info(self.show_parser_results(parsedFiles, unparsedFiles))
+        LOGGER.info(self.show_parser_results(parsed_files, unparsed_files))
 
     def run_script(self, filename):
         """ Run a python script in QGIS to exercise InaSAFE functionality.
@@ -408,9 +412,13 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         :param report_path: Path to the file of batch report.
         :type report_path: str
         """
-        myUrl = QtCore.QUrl('file:///' + report_path)
-        # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
-        QtGui.QDesktopServices.openUrl(myUrl)
+        if self.show_results_popup:
+            myUrl = QtCore.QUrl('file:///' + report_path)
+            # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
+            QtGui.QDesktopServices.openUrl(myUrl)
+        else:
+            report = open(report_path, 'rt').read()
+            LOGGER.info(report)
 
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.
