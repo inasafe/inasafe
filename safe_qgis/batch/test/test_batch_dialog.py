@@ -19,6 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
+import qgis
+
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 

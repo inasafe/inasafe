@@ -96,13 +96,13 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
             self.update_default_output_dir)
 
         # Setup run all button in button box (repurposes yes to all)
-        self.run_all_button = self.buttonBox.button(
+        self.run_all_button = self.button_box.button(
             QtGui.QDialogButtonBox.YesToAll)
         self.run_all_button.setText(self.tr('Run all'))
         self.run_all_button.clicked.connect(self.run_all_clicked)
 
         # Setup run selected button in button box (repurposes yes button)
-        self.run_selected_button = self.buttonBox.button(
+        self.run_selected_button = self.button_box.button(
             QtGui.QDialogButtonBox.Yes)
         self.run_selected_button.setText(self.tr('Run selected'))
         self.run_selected_button.clicked.connect(self.run_selected_clicked)
@@ -124,8 +124,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.output_directory.setText(myLastOutputDir)
 
         # restore default output dir combo box
-        myUseDefaultOutputDir = mySettings.value(
-            'inasafe/useDefaultOutputDir', True)
+        myUseDefaultOutputDir = bool(mySettings.value(
+            'inasafe/useDefaultOutputDir', True))
         self.scenario_directory_radio.setChecked(myUseDefaultOutputDir)
 
     def save_state(self):
