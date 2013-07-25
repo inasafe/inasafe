@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **IS Utilities implementation.**
@@ -125,7 +126,7 @@ def getWGS84resolution(layer):
     If not, work it out based on EPSG:4326 representations of its extent.
 
     :param layer: Raster layer
-    :type layer: QgsRasterLayer
+    :type layer: QgsRasterLayer or QgsMapLayer
 
     :returns: The resolution of the given layer.
     :rtype: float
@@ -142,7 +143,8 @@ def getWGS84resolution(layer):
         # If it is already in EPSG:4326, simply use the native resolution
         if qgis_version() > 10800:
             myCellSize = layer.rasterUnitsPerPixelX()
-        else:
+        else:  # QGIS <= 1.8
+            # noinspection PyUnresolvedReferences
             myCellSize = layer.rasterUnitsPerPixel()
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
@@ -830,7 +832,7 @@ def viewport_geo_array(map_canvas):
         # some code duplication from extentToGeoArray here
         # in favour of clarity of logic...
         myCrs = QgsCoordinateReferenceSystem()
-        myCrs.createFromEpsg(4326)
+        myCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
     return extent_to_geo_array(myRect, myCrs)
 
