@@ -14,6 +14,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+from os.path import expanduser
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
@@ -28,7 +29,8 @@ from safe_qgis.exceptions import (
     KeywordNotFoundError,
     KeywordDbError,
     InvalidParameterError,
-    NoKeywordsFoundError)
+    NoKeywordsFoundError,
+    UnsupportedProviderError)
 from safe_qgis.safe_interface import (
     verify,
     read_file_keywords,
@@ -88,10 +90,15 @@ class KeywordIO(QObject):
         TODO: Don't raise generic exceptions.
 
         :raises: HashNotFoundError, Exception, OperationalError,
-            NoKeywordsFoundError, KeywordNotFoundError, InvalidParameterError
+            NoKeywordsFoundError, KeywordNotFoundError, InvalidParameterError,
+            UnsupportedProviderError
+
         """
         mySource = str(layer.source())
-        myFlag = self.are_keywords_file_based(layer)
+        try:
+            myFlag = self.are_keywords_file_based(layer)
+        except UnsupportedProviderError:
+            raise
 
         try:
             if myFlag:
@@ -104,7 +111,8 @@ class KeywordIO(QObject):
                 OperationalError,
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
-                InvalidParameterError):
+                InvalidParameterError,
+                UnsupportedProviderError):
                     raise
 
     def write_keywords(self, layer, keywords):
@@ -121,9 +129,15 @@ class KeywordIO(QObject):
         :param keywords: A dict containing all the keywords to be written
               for the layer.
         :type keywords: dict
+
+        :raises: UnsupportedProviderError
         """
+        try:
+            myFlag = self.are_keywords_file_based(layer)
+        except UnsupportedProviderError:
+            raise
+
         mySource = str(layer.source())
-        myFlag = self.are_keywords_file_based(layer)
         try:
             if myFlag:
                 writeKeywordsToFile(mySource, keywords)
@@ -252,12 +266,14 @@ class KeywordIO(QObject):
         """Helper to get the default path for the keywords file.
 
         :returns: The path to where the default location of the keywords
-            database is. Maps to which is <plugin dir>/keywords.db
+            database is. Maps to which is ~/.inasafe/keywords.db
         :rtype: str
         """
-        myParentDir = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '../../'))
-        return os.path.join(myParentDir, '../../keywords.db')
+
+        home = expanduser("~")
+        home = os.path.abspath(os.path.join(home, '.inasafe'))
+
+        return home
 
     def setup_keyword_db_path(self):
         """Helper to set the active path for the keywords.
@@ -287,6 +303,15 @@ class KeywordIO(QObject):
         :raises: An sqlite.Error is raised if anything goes wrong
         """
         self.connection = None
+        base_directory = os.path.basename(self.keywordDbPath)
+        if not os.path.exists(base_directory):
+            try:
+                os.mkdir(base_directory)
+            except IOError:
+                LOGGER.exception(
+                    'Could not create directory for keywords cache.')
+                raise
+
         try:
             self.connection = sqlite.connect(self.keywordDbPath)
         except (OperationalError, sqlite.Error):
@@ -345,6 +370,10 @@ class KeywordIO(QObject):
     def are_keywords_file_based(self, layer):
         """Check if keywords should be read/written to file or our keywords db.
 
+        Determine which keyword lookup system to use (file base or cache db)
+        based on the layer's provider type. True indicates we should use the
+        datasource as a file and look for a keywords file, False and we look
+        in the keywords db.
 
         :param layer: The layer which want to know how the keywords are stored.
         :type layer: QgsMapLayer
@@ -352,12 +381,10 @@ class KeywordIO(QObject):
         :returns: True if keywords are stored in a file next to the dataset,
             else False if the dataset is remove e.g. a database.
         :rtype: bool
+
+        :raises: UnsupportedProviderError
         """
-        # determine which keyword lookup system to use (file base or cache db)
-        # based on the layer's provider type. True indicates we should use the
-        # datasource as a file and look for a keywords file, false and we look
-        # in the keywords db.
-        myProviderType = None
+
         myVersion = qgis_version()
         # check for old raster api with qgis < 1.8
         # ..todo:: Add test for plugin layers too
@@ -365,15 +392,21 @@ class KeywordIO(QObject):
                 layer.type() == QgsMapLayer.RasterLayer):
             myProviderType = str(layer.providerKey())
         else:
-            myProviderType = str(layer.providerType())
+            try:
+                myProviderType = str(layer.providerType())
+            except AttributeError:
+                raise UnsupportedProviderError(
+                    'Could not determine type for provider: %s' %
+                    layer.__class__.__name__)
 
-        myProviderDict = {'ogr': True,
-                          'gdal': True,
-                          'gpx': False,
-                          'wms': False,
-                          'spatialite': False,
-                          'delimitedtext': True,
-                          'postgres': False}
+        myProviderDict = {
+            'ogr': True,
+            'gdal': True,
+            'gpx': False,
+            'wms': False,
+            'spatialite': False,
+            'delimitedtext': True,
+            'postgres': False}
         myFileBasedKeywords = False
         if myProviderType in myProviderDict:
             myFileBasedKeywords = myProviderDict[myProviderType]
