@@ -24,7 +24,12 @@ import numpy
 from osgeo import gdal
 
 from PyQt4.QtCore import QCoreApplication
-from qgis.core import QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
+from qgis.core import (
+    QgsRectangle,
+    QgsFeature,
+    QgsFeatureRequest,
+    QgsGeometry,
+    QgsPoint)
 
 from safe_qgis.utilities.utilities import (
     is_raster_layer,
@@ -129,11 +134,9 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
                 polygon_layer.source())
         raise Exception(myMessage)
 
-    myFeature = QgsFeature()
+    myRequest = QgsFeatureRequest()
     myCount = 0
-    myProvider.rewind()
-    myProvider.select([])
-    while myProvider.nextFeature(myFeature):
+    for myFeature in myProvider.getFeatures(myRequest):
         myGeometry = myFeature.geometry()
         if myGeometry is None:
             myMessage = tr(

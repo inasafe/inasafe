@@ -21,6 +21,7 @@ from PyQt4 import QtCore
 
 from qgis.core import (
     QgsFeature,
+    QgsFeatureRequest,
     QgsRectangle)
 
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -229,22 +230,18 @@ class PostprocessorManager(QtCore.QObject):
                     myFemaleRatio = self.aggregator.defaults['FEM_RATIO']
 
         #iterate zone features
+        myRequest = QgsFeatureRequest()
+        myRequest.setFlags(QgsFeatureRequest.NoGeometry)
         myProvider = self.aggregator.layer.dataProvider()
-        myAttributes = myProvider.attributeIndexes()
         # start data retreival: fetch no geometry and all attributes for each
         # feature
-        myProvider.select(myAttributes, QgsRectangle(), False)
-        myFeature = QgsFeature()
         myPolygonIndex = 0
-        while myProvider.nextFeature(myFeature):
-            #get all attributes of a feature
-            myAttributeMap = myFeature.attributeMap()
-
+        for myFeature in myProvider.getFeatures(myRequest):
             #if a feature has no field called
             if myNameFieldIndex == -1:
                 myZoneName = str(myFeature.id())
             else:
-                myZoneName = myAttributeMap[myNameFieldIndex].toString()
+                myZoneName = myFeature[myNameFieldIndex]
 
             #create dictionary of attributes to pass to postprocessor
             myGeneralParams = {'target_field': self.aggregator.targetField}
@@ -253,7 +250,7 @@ class PostprocessorManager(QtCore.QObject):
                 myGeneralParams['impact_classes'] = (
                     self.aggregator.statisticsClasses)
             elif self.aggregator.statisticsType == 'sum':
-                myImpactTotal, _ = myAttributeMap[mySumFieldIndex].toDouble()
+                myImpactTotal = myFeature[mySumFieldIndex]
                 myGeneralParams['impact_total'] = myImpactTotal
 
             try:
@@ -274,12 +271,11 @@ class PostprocessorManager(QtCore.QObject):
 
                 if myKey == 'Gender':
                     if myFemaleRatioIsVariable:
-                        myFemaleRatio, mySuccessFlag = myAttributeMap[
-                            myFemRatioFieldIndex].toDouble()
-                        if not mySuccessFlag:
+                        myFemaleRatio = myFeature[myFemRatioFieldIndex]
+                        if myFemaleRatio is None:
                             myFemaleRatio = self.aggregator.defaults[
                                 'FEM_RATIO']
-                        LOGGER.debug(mySuccessFlag)
+                        LOGGER.debug(myFemaleRatio)
                     myParameters['female_ratio'] = myFemaleRatio
 
                 myValue.setup(myParameters)

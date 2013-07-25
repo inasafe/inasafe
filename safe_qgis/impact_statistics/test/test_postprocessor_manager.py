@@ -30,6 +30,8 @@ sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
 
+import qgis
+
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
