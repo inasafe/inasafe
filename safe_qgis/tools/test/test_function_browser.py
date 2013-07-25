@@ -19,6 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from nose import SkipTest
+
+import qgis
+
 from PyQt4.QtTest import QTest
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QDialogButtonBox

@@ -22,6 +22,8 @@ import os
 import tempfile
 import shutil
 
+import qgis
+
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)
