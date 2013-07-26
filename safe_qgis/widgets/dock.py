@@ -154,6 +154,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Flag used to revent recursion and allow bulk loads of layers to
         # trigger a single event only
         self.get_layers_lock = False
+        # Flag so we can see if the dock is busy processing
+        self.busy = False
 
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
@@ -1054,6 +1056,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
         QtGui.qApp.processEvents()
+        self.busy = True
 
     def run(self):
         """Execute analysis when ok button on dock is clicked."""
@@ -1290,6 +1293,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.pbnRunStop.setEnabled(True)
         self.repaint()
         self.disable_busy_cursor()
+        self.busy = False
 
     def aggregate(self):
         """Run all post processing steps.
@@ -1812,8 +1816,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
         myKeywords = self.keywordIO.read_keywords(self.iface.activeLayer())
-        myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            myKeywords, theFilename=myTableFilename)
+        myHtmlPdfPath = myHtmlRenderer.print_impact_table(
+            myKeywords, filename=myTableFilename)
 
         try:
             myMap.make_pdf(myMapPdfFilePath)

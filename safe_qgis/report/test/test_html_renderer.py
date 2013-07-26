@@ -81,7 +81,7 @@ class HtmlRendererTest(unittest.TestCase):
                                  dir=temp_dir('test'))
         LOGGER.debug(myPath)
         # If it fails myNewPath will come back as None
-        myNewPath = myRenderer.printToPdf(myHtml, myPath)
+        myNewPath = myRenderer.to_pdf(myHtml, myPath)
         myMessage = 'Rendered output does not exist: %s' % myNewPath
         assert os.path.exists(myNewPath), myMessage
         # Also it should use our desired output file name
@@ -114,8 +114,8 @@ class HtmlRendererTest(unittest.TestCase):
                                  dir=temp_dir('test'))
         myKeywordIO = KeywordIO()
         myKeywords = myKeywordIO.read_keywords(myLayer)
-        myPath = myHtmlRenderer.printImpactTable(myKeywords,
-                                                 theFilename=myPath)
+        myPath = myHtmlRenderer.print_impact_table(myKeywords,
+                                                 filename=myPath)
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
         # pdf rendering is non deterministic so we can't do a hash check
@@ -145,7 +145,7 @@ class HtmlRendererTest(unittest.TestCase):
             dir=temp_dir('test'))
         LOGGER.debug(myPath)
         myWidth = 250
-        myPixmap = myRenderer.renderHtmlToImage(myHtml, myWidth)
+        myPixmap = myRenderer.html_to_image(myHtml, myWidth)
         assert not myPixmap.isNull()
         LOGGER.debug(myPixmap.__class__)
         myPixmap.save(myPath)

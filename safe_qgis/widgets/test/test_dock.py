@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+import time
 import logging
 from os.path import join
 
@@ -723,6 +724,14 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         DOCK.accept()
+
+        # Block until the analysis is done
+        mySleepPeriod = 1
+        while DOCK.busy:
+            time.sleep(mySleepPeriod)
+            # noinspection PyArgumentList
+            QtCore.QCoreApplication.processEvents()
+
         myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult

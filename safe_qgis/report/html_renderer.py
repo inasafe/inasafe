@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **InaSAFE map making module.**
@@ -36,12 +37,8 @@ class HtmlRenderer():
     def __init__(self, thePageDpi):
         """Constructor for the Map class.
 
-        Args:
-            thePageDpi: int - desired resolution for image rendered outputs.
-        Returns:
-            None
-        Raises:
-            Any exceptions will be propagated.
+        :param thePageDpi: Desired resolution for image rendered outputs.
+        :type thePageDpi: int
         """
         LOGGER.debug('InaSAFE HtmlRenderer class initialised')
 
@@ -50,37 +47,37 @@ class HtmlRenderer():
         self.webView = None
         self.htmlLoadedFlag = False
 
-    def tr(self, theString):
+    def tr(self, string):
         """We implement this since we do not inherit QObject.
 
-        Args:
-           theString - string for translation.
-        Returns:
-           Translated version of theString.
-        Raises:
-           no exceptions explicitly raised.
+        :param string: String for translation.
+        :type string: str
+
+        :returns: Translated version of string.
+        :rtype: str
         """
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        return QtCore.QCoreApplication.translate('HtmlRenderer', theString)
+        return QtCore.QCoreApplication.translate('HtmlRenderer', string)
 
-    def renderHtmlToImage(self, theHtml, theWidthMM):
+    def html_to_image(self, html, width_mm):
         """Render some HTML to a pixmap.
 
-        Args:
-            * theHtml - HTML to be rendered. It is assumed that the html
+        :param html: HTML to be rendered. It is assumed that the html
               is a snippet only, containing no body element - a standard
               header and footer will be appended.
-            * theWidthMM- width of the table in mm - will be converted to
+        :type html: str
+
+        :param width_mm: width of the table in mm - will be converted to
               points based on the resolution of our page.
-        Returns:
-            QImage
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propagated.
+        :type width_mm: int
+
+        :returns: An image containing the rendered html.
+        :rtype: QImage
         """
         LOGGER.debug('InaSAFE Map renderHtmlToImage called')
 
-        myWidthPx = mm_to_points(theWidthMM, self.pageDpi)
-        self.loadAndWait(theHtmlSnippet=theHtml)
+        myWidthPx = mm_to_points(width_mm, self.pageDpi)
+        self.load_and_wait(html_snippet=html)
         myFrame = self.webView.page().mainFrame()
 
         # Using 150dpi as the baseline, work out a standard text size
@@ -107,45 +104,56 @@ class HtmlRenderer():
         myImage.save('/tmp/test.png')
         return myImage
 
-    def printToPdf(self, theHtml, theFilename=None):
+    def to_pdf(self, html, filename=None):
         """Render an html snippet into the printer, paginating as needed.
 
-        Args:
-            * theHtml: str A string containing an html snippet. It will have a
-                header and footer appended to it in order to make it a valid
-                html document. The header will also apply the bootstrap theme
-                to the document.
-            * theFilename: str String containing a pdf file path that the
-                output will be written to.
-        Returns:
-            str: The file path of the output pdf (which is the same as the
-                theFilename parameter if it was specified.
+        :param html: A string containing an html snippet. It will have a
+            header and footer appended to it in order to make it a valid
+            html document. The header will also apply the bootstrap theme
+            to the document.
+        :type html: str
 
-        Raises:
-            None
+        :param filename: String containing a pdf file path that the
+            output will be written to. If no file name is given we will make
+            up one for you - nice eh?
+        :type filename: str
+
+        :returns: The file path of the output pdf (which is the same as the
+            filename parameter if it was specified).
+        :rtype: str
         """
         LOGGER.info('InaSAFE Map printToPdf called')
-        if theFilename is None:
+        if filename is None:
             myHtmlPdfPath = unique_filename(
                 prefix='table', suffix='.pdf', dir=temp_dir('work'))
         else:
             # We need to cast to python string in case we receive a QString
-            myHtmlPdfPath = str(theFilename)
+            myHtmlPdfPath = str(filename)
 
         self.printer = setup_printer(myHtmlPdfPath)
-        self.loadAndWait(theHtmlSnippet=theHtml)
+        self.load_and_wait(html_snippet=html)
         self.webView.print_(self.printer)
 
         return myHtmlPdfPath
 
-    def loadAndWait(self, theHtmlPath=None, theHtmlSnippet=None):
-        """Load some html to a web view and wait till it is done."""
-        if theHtmlSnippet:
+    def load_and_wait(self, html_path=None, html_snippet=None):
+        """Load some html to a web view and wait till it is done.
+
+        :param html_path: The path to an html document (file). This option
+            is mutually exclusive to html_snippet.
+        :type html_path: str
+
+        :param html_snippet: Some html you want rendered in the form of a
+            string. It will be 'topped and tailed' with with standard header
+            and footer. This option is mutually exclusive to html_path.
+        :type html_snippet: str
+        """
+        if html_snippet:
             myHeader = html_header()
             myFooter = html_footer()
-            myHtml = myHeader + theHtmlSnippet + myFooter
+            myHtml = myHeader + html_snippet + myFooter
         else:
-            myFile = file(theHtmlPath, 'rt')
+            myFile = file(html_path, 'rt')
             myHtml = myFile.readlines()
             myFile.close()
 
@@ -157,7 +165,7 @@ class HtmlRenderer():
                                    QtCore.Qt.ScrollBarAlwaysOff)
 
         # noinspection PyUnresolvedReferences
-        self.webView.loadFinished.connect(self.htmlLoadedSlot)
+        self.webView.loadFinished.connect(self.html_loaded_slot)
         self.webView.setHtml(myHtml)
         self.htmlLoadedFlag = False
         myTimeOut = 20
@@ -173,27 +181,26 @@ class HtmlRenderer():
         if not self.htmlLoadedFlag:
             LOGGER.error('Failed to load html')
 
-    def htmlLoadedSlot(self):
+    def html_loaded_slot(self):
         """Slot called when the page is loaded.
-
-        Args: None
-        Returns: None
-        Raises: None
         """
         self.htmlLoadedFlag = True
         LOGGER.debug('htmlLoadedSlot slot called')
-        QtCore.QObject.disconnect(self.webView,
-                                  QtCore.SIGNAL("loadFinished(bool)"),
-                                  self.htmlLoadedSlot)
+        # noinspection PyUnresolvedReferences
+        self.webView.loadFinished.disconnect(self.html_loaded_slot)
 
-    def printImpactTable(self, theKeywords, theFilename=None):
+    def print_impact_table(self, keywords, filename=None):
         """High level table generator to print layer keywords.
 
         It gets the summary and impact table from a QgsMapLayer's keywords and
         renders to pdf, returning the resulting PDF file path.
 
-        Args:
-            theKeywords: dic containing impact layer keywords (required)
+
+        :param keywords: Impact layer keywords (required).
+        :type keywords: dict
+
+        :param filename: Name of the pdf file to create.
+        :type filename: str
 
         Returns:
             str: Path to generated pdf file.
@@ -202,25 +209,25 @@ class HtmlRenderer():
             None
 
         """
-        myFilePath = theFilename
+        myFilePath = filename
 
-        if theFilename is None:
+        if filename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
 
         try:
-            mySummaryTable = theKeywords['impact_summary']
+            mySummaryTable = keywords['impact_summary']
         except KeyError:
             mySummaryTable = None
 
-        myAttributionTable = impact_attribution(theKeywords)
+        myAttributionTable = impact_attribution(keywords)
 
         try:
-            myFullTable = theKeywords['impact_table']
+            myFullTable = keywords['impact_table']
         except KeyError:
             myFullTable = None
 
         try:
-            myAggregationTable = theKeywords['postprocessing_report']
+            myAggregationTable = keywords['postprocessing_report']
         except KeyError:
             myAggregationTable = None
 
@@ -243,5 +250,5 @@ class HtmlRenderer():
                 myHtml += myAttributionTable.to_html()
 
         # myNewFilePath should be the same as myFilePath
-        myNewFilePath = self.printToPdf(myHtml, myFilePath)
+        myNewFilePath = self.to_pdf(myHtml, myFilePath)
         return myNewFilePath
