@@ -124,10 +124,11 @@ class Message(MessageElement):
         :param suppress_newlines: Whether to suppress any newlines in the
             output. If this option is enabled, the entire html output will be
             rendered on a single line.
-        :type suppress_newlines: Boolean
+        :type suppress_newlines: bool
+
         :param in_div_flag: Whether the message should be placed into an outer
             div element.
-        :type in_div_flag: Boolean
+        :type in_div_flag: bool
 
         :returns: HTML representation of the message.
         :rtype: str

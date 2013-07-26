@@ -1814,7 +1814,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
-        myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myHtmlRenderer = HtmlRenderer(page_dpi=myMap.pageDpi)
         myKeywords = self.keywordIO.read_keywords(self.iface.activeLayer())
         myHtmlPdfPath = myHtmlRenderer.print_impact_table(
             myKeywords, filename=myTableFilename)

@@ -34,15 +34,15 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class HtmlRenderer():
     """A class for creating a map."""
-    def __init__(self, thePageDpi):
+    def __init__(self, page_dpi):
         """Constructor for the Map class.
 
-        :param thePageDpi: Desired resolution for image rendered outputs.
-        :type thePageDpi: int
+        :param page_dpi: Desired resolution for image rendered outputs.
+        :type page_dpi: int, float
         """
         LOGGER.debug('InaSAFE HtmlRenderer class initialised')
 
-        self.pageDpi = thePageDpi
+        self.pageDpi = float(page_dpi)
         # Need to keep state here for loadCompleted signals
         self.webView = None
         self.htmlLoadedFlag = False
