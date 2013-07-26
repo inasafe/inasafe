@@ -994,11 +994,6 @@ class DockTest(unittest.TestCase):
 
     def test_fullRunResults(self):
         """Aggregation results are correct."""
-        myExpectedResult = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results.txt',
-            'r').read()
-
         myResult, myMessage = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1018,9 +1013,16 @@ class DockTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page_to_text()
-        myMessage = ('The aggregation report should be:\n%s\n\nFound:\n\n%s' %
-                     (myExpectedResult, myResult))
-        self.assertEqual(myResult, myExpectedResult, myMessage)
+
+        myExpectedResult = open(
+            TEST_FILES_DIR +
+            '/test-full-run-results.txt',
+            'r').readlines()
+        myResult = myResult.replace(
+            '</td> <td>', ' ').replace('</td><td>', ' ')
+        for line in myExpectedResult:
+            line = line.replace('\n', '')
+            self.assertIn(line, myResult)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
