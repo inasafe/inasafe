@@ -124,6 +124,12 @@ def padang_check_results(mmi, building_class):
 
 
 class Test_Engine(unittest.TestCase):
+    """Tests for engine module."""
+
+    def setUp(self):
+        """Run before each test."""
+        # ensure we are using english by default
+        os.environ['LANG'] = 'en'
 
     def test_earthquake_fatality_estimation_allen(self):
         """Fatalities from ground shaking can be computed correctly 1
@@ -482,8 +488,8 @@ class Test_Engine(unittest.TestCase):
 
         read_layer(impact_filename)  # Can read result
 
-        assert 'women displaced' in impact_layer.get_impact_summary()
-        assert 'pregnant' in impact_layer.get_impact_summary()
+        self.assertIn('women displaced', impact_layer.get_impact_summary())
+        self.assertIn('pregnant', impact_layer.get_impact_summary())
 
     test_earthquake_impact_on_women_example.slow = True
 
