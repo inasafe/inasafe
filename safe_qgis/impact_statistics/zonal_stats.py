@@ -21,7 +21,7 @@ import struct
 import logging
 
 import numpy
-from osgeo import gdal
+from osgeo import gdal, ogr
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
@@ -121,6 +121,8 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         myGeoTransform[0] + (myCellSizeX * myColumns),
         myGeoTransform[3])
 
+    rasterGeom = QgsGeometry.fromRect(myRasterBox)
+
     # Get vector layer
     myProvider = polygon_layer.dataProvider()
     if myProvider is None:
@@ -176,9 +178,16 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         #    myNoData)
         #print 'Sum: %s count: %s' % (mySum, myCount)
 
-        mySum, myCount = rectangle_stats(
+        #mySum, myCount = rectangle_stats(
+        #    myBand,
+        #    myFeatureBox,
+        #    myGeoTransform,
+        #    myNoData)
+
+        myIntersectedGeom = rasterGeom.intersection(myGeometry)
+        mySum, myCount = numpy_stats(
             myBand,
-            myFeatureBox,
+            myIntersectedGeom,
             myGeoTransform,
             myNoData)
 
@@ -640,3 +649,86 @@ def inverse_transform(geo_transform):
                           geo_transform[0] * geo_transform[4]) * invDet
 
     return outGeoTransform
+
+
+def bbox_to_pixel_offsets(gt, bbox):
+    originX = gt[0]
+    originY = gt[3]
+    pixel_width = gt[1]
+    pixel_height = gt[5]
+    x1 = int((bbox[0] - originX) / pixel_width)
+    x2 = int((bbox[1] - originX) / pixel_width) + 1
+
+    y1 = int((bbox[3] - originY) / pixel_height)
+    y2 = int((bbox[2] - originY) / pixel_height) + 1
+
+    xsize = x2 - x1
+    ysize = y2 - y1
+    return x1, y1, xsize, ysize
+
+
+def numpy_stats(band, geometry, geo_transform, no_data):
+    mem_drv = ogr.GetDriverByName('Memory')
+    driver = gdal.GetDriverByName('MEM')
+
+    geom = ogr.CreateGeometryFromWkt(str(geometry.exportToWkt()))
+
+    bbox = geometry.boundingBox()
+
+    xMin = bbox.xMinimum()
+    xMax = bbox.xMaximum()
+    yMin = bbox.yMinimum()
+    yMax = bbox.yMaximum()
+
+    startCol, startRow = map_to_pixel(xMin, yMax, geo_transform)
+    endCol, endRow = map_to_pixel(xMax, yMin, geo_transform)
+
+    width = endCol - startCol
+    height = endRow - startRow
+
+    if width == 0 or height == 0:
+        return 0, 0
+
+    src_offset = (startCol, startRow, width, height)
+
+    src_array = band.ReadAsArray(*src_offset)
+
+    new_geo_transform = (
+        (geo_transform[0] + (src_offset[0] * geo_transform[1])),
+        geo_transform[1],
+        0.0,
+        (geo_transform[3] + (src_offset[1] * geo_transform[5])),
+        0.0,
+        geo_transform[5]
+    )
+
+    # Create a temporary vector layer in memory
+    mem_ds = mem_drv.CreateDataSource('out')
+    mem_layer = mem_ds.CreateLayer('poly', None, ogr.wkbPolygon)
+
+    feat = ogr.Feature(mem_layer.GetLayerDefn())
+    feat.SetGeometry(geom)
+    mem_layer.CreateFeature(feat)
+    feat.Destroy()
+
+    # Rasterize it
+    rvds = driver.Create('', src_offset[2], src_offset[3], 1, gdal.GDT_Byte)
+    rvds.SetGeoTransform(new_geo_transform)
+    gdal.RasterizeLayer(rvds, [1], mem_layer, burn_values=[1])
+    rv_array = rvds.ReadAsArray()
+
+    # Mask the source data array with our current feature
+    # we take the logical_not to flip 0<->1 to get the correct mask effect
+    # we also mask out nodata values explictly
+    masked = numpy.ma.MaskedArray(
+        src_array,
+        mask=numpy.logical_or(
+            src_array == no_data,
+            numpy.logical_not(rv_array)
+        )
+    )
+
+    mySum = float(masked.sum())
+    myCount = int(masked.count())
+
+    return mySum, myCount
