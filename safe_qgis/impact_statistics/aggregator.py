@@ -60,7 +60,8 @@ from safe_qgis.safe_interface import (
     messaging as m)
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL)
+    STATIC_MESSAGE_SIGNAL,
+    PointsInputError)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
@@ -496,13 +497,17 @@ class Aggregator(QtCore.QObject):
                         outer_ring = myPolygon
                         inner_rings = None
 
-                    inside, outside = points_in_and_outside_polygon(
-                        myRemainingPoints,
-                        outer_ring,
-                        holes=inner_rings,
-                        closed=True,
-                        check_input=True)
-
+                    try:
+                        # noinspection PyArgumentEqualDefault
+                        inside, outside = points_in_and_outside_polygon(
+                            myRemainingPoints,
+                            outer_ring,
+                            holes=inner_rings,
+                            closed=True,
+                            check_input=True)
+                    except PointsInputError:  # too few points provided
+                        inside = []
+                        outside = []
                     #self.impactLayerAttributes is a list of list of dict
                     #[
                     #   [{...},{...},{...}],
@@ -519,14 +524,14 @@ class Aggregator(QtCore.QObject):
                             try:
                                 myResults[myKey] += 1
                             except KeyError:
-                                myError = ('StatisticsClasses %s does not '
-                                           'include the %s class which was '
-                                           'found in the data. This is a '
-                                           'problem in the %s '
-                                           'statistics_classes definition' %
-                                           (self.statisticsClasses,
-                                            myKey,
-                                            self.getFunctionID()))
+                                myError = (
+                                    'StatisticsClasses %s does not include '
+                                    'the %s class which was found in the '
+                                    'data. This is a problem in the %s '
+                                    'statistics_classes definition' %
+                                    (self.statisticsClasses,
+                                    myKey,
+                                    self.getFunctionID()))
                                 raise KeyError(myError)
 
                             self.impactLayerAttributes[myPolygonIndex].append(
@@ -561,8 +566,8 @@ class Aggregator(QtCore.QObject):
                         {myFID: myAttrs})
 
                     # make outside points the input to the next iteration
-                    # this could maybe be done quicklier using directly numpy
-                    # arrays like this:
+                    # this could maybe be done more quickly using directly
+                    # numpy arrays like this:
                     # myRemainingPoints = myRemainingPoints[outside]
                     # myRemainingValues =
                     # [myRemainingValues[i] for i in outside]
