@@ -706,8 +706,7 @@ class DockTest(unittest.TestCase):
         #assert (len(myTransparencyList) > 0)
 
     def test_issue47(self):
-        """Issue47: Problem when hazard & exposure data are in different
-        proj to viewport.
+        """Issue47: Hazard & exposure data are in different proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
         myResult, myMessage = setup_scenario(
@@ -724,13 +723,6 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         DOCK.accept()
-
-        # Block until the analysis is done
-        mySleepPeriod = 1
-        while DOCK.busy:
-            time.sleep(mySleepPeriod)
-            # noinspection PyArgumentList
-            QtCore.QCoreApplication.processEvents()
 
         myResult = DOCK.wvResults.page_to_text()
 

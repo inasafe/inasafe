@@ -736,11 +736,16 @@ class Aggregator(QtCore.QObject):
 
             self.layer.startEditing()
             allPolygonAttrs = myProvider.attributeIndexes()
+            myProvider.rewind()
+            myProvider.select([])
             myProvider.select(allPolygonAttrs)
             myFeature = QgsFeature()
 
             while myProvider.nextFeature(myFeature):
                 myFid = myFeature.id()
+                if myFid not in myZonalStatistics:
+                    # Blindly ignoring - @mbernasocchi can you review? TS
+                    continue
                 myStats = myZonalStatistics[myFid]
                 #          minIndex: QtCore.QVariant(myStats['min']),
                 #          maxIndex: QtCore.QVariant(myStats['max'])}
