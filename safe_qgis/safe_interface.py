@@ -70,7 +70,8 @@ from safe.api import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
     ErrorMessage,
-    ZeroImpactException)
+    ZeroImpactException,
+    PointsInputError)
 # noinspection PyUnresolvedReferences
 from safe.api import styles
 # hack for excluding test-related import in builded package
