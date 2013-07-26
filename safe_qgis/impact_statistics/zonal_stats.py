@@ -398,38 +398,38 @@ def rectangle_stats(
         pixels that intersect with the geometry.
     :rtype: (float, int)
     """
-    xMin = geometry.xMinimum()
-    xMax = geometry.xMaximum()
-    yMin = geometry.yMinimum()
-    yMax = geometry.yMaximum()
+    x_minimum = geometry.xMinimum()
+    x_maximum = geometry.xMaximum()
+    y_minimum = geometry.yMinimum()
+    y_maximum = geometry.yMaximum()
 
-    startCol, startRow = map_to_pixel(xMin, yMax, geo_transform)
-    endCol, endRow = map_to_pixel(xMax, yMin, geo_transform)
+    start_column, start_row = map_to_pixel(x_minimum, y_maximum, geo_transform)
+    end_column, end_row = map_to_pixel(x_maximum, y_minimum, geo_transform)
 
-    width = endCol - startCol
-    height = endRow - startRow
+    width = end_column - start_column
+    height = end_row - start_row
 
     if width == 0 or height == 0:
         return 0, 0
 
-    myScanline = band.ReadRaster(
-        startCol,
-        startRow,
+    scanline = band.ReadRaster(
+        start_column,
+        start_row,
         width,
         height,
         width,
         height,
         gdal.GDT_Float32)
-    myValues = struct.unpack('f' * height * width, myScanline)
-    if myValues is None:
+    values = struct.unpack('f' * height * width, scanline)
+    if values is None:
         return 0, 0
 
-    myArray = numpy.array(myValues)
-    myMaskedArray = numpy.ma.masked_where(myArray == no_data, myArray)
-    mySum = float(numpy.sum(myMaskedArray))
-    myCount = myMaskedArray.size
+    array = numpy.array(values)
+    masked_array = numpy.ma.masked_where(array == no_data, array)
+    array_sum = float(numpy.sum(masked_array))
+    array_count = masked_array.size
 
-    return mySum, myCount
+    return array_sum, array_count
 
 
 # noinspection PyArgumentList
