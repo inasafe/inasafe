@@ -77,7 +77,8 @@ class PostprocessorManagerTest(unittest.TestCase):
     def test_checkPostProcessingLayersVisibility(self):
         """Generated layers are not added to the map registry."""
         myRunButton = DOCK.pbnRunStop
-
+        # Explicitly disable showing intermediate layers
+        DOCK.showIntermediateLayers = False
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setup_scenario(
