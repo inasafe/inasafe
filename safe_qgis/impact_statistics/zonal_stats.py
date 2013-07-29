@@ -131,6 +131,9 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
                 polygon_layer.source())
         raise Exception(myMessage)
 
+    crs = osr.SpatialReference()
+    crs.ImportFromProj4(str(polygon_layer.crs().toProj4()))
+
     myFeature = QgsFeature()
     myCount = 0
     myProvider.rewind()
@@ -189,7 +192,8 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
             myBand,
             myIntersectedGeom,
             myGeoTransform,
-            myNoData)
+            myNoData,
+            crs)
 
         if myCount <= 1:
             # The cell resolution is probably larger than the polygon area.
@@ -651,7 +655,7 @@ def inverse_transform(geo_transform):
     return outGeoTransform
 
 
-def numpy_stats(band, geometry, geo_transform, no_data):
+def numpy_stats(band, geometry, geo_transform, no_data, crs):
     """
     :param band: A valid band from a raster layer.
     :type band: GDALRasterBand
@@ -664,6 +668,9 @@ def numpy_stats(band, geometry, geo_transform, no_data):
 
     :param no_data: Value for nodata in the raster.
     :type no_data: int, float
+
+    :param crs: Coordinate reference system of the vector layer.
+    :type crs: OGRSpatialReference
 
     :returns: Sum, Count - sum of the values of all pixels and the count of
         pixels that intersect with the geometry.
@@ -704,8 +711,6 @@ def numpy_stats(band, geometry, geo_transform, no_data):
     )
 
     # Create a temporary vector layer in memory
-    crs = osr.SpatialReference()
-    crs.ImportFromEPSG(4326)
     mem_ds = mem_drv.CreateDataSource('out')
     mem_layer = mem_ds.CreateLayer('poly', crs, ogr.wkbPolygon)
 
