@@ -1,43 +1,37 @@
-# ~/fabfile.py
-# A Fabric file for carrying out various administrative tasks with InaSAFE.
-# Tim Sutton, Jan 2013
+# coding=utf-8
+"""A Fabric file for carrying out various administrative tasks with InaSAFE.
+
+Usage for localhost commands::
+
+    fab -H localhost [command]
+    fab -H 188.40.123.80:8697 show_environment
+
+To run on a vagrant vhost do::
+
+    fab vagrant [command]
+
+e.g. ::
+
+    fab vagrant show_environment
+
+.. note:: Vagrant tasks will only run if they @task decorator is used on
+    the function. See show_environment function below.
+
+Tim Sutton, Jan 2013
+"""
 
 import os
-from fabric.api import *
 from datetime import datetime
+
+from fabric.api import *
 from fabric.contrib.files import contains, exists, append, sed
+
 import fabtools
 from fabtools import require
-from fabgis import fabgis
+
 # Don't remove even though its unused
+# noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
-
-# Usage for localhost commands:
-#
-# fab localhost [command]
-#
-#  e.g. fab localhost update
-#
-# To run remotely do
-#
-#  fab remote [command]
-#
-# e.g.
-#
-# fab -H 188.40.123.80:8697 show_environment
-#
-# To run on a vagrant vhost do
-#
-# fab vagrant show_environment
-#
-#  e.g. fab vagrant show_environment
-
-# Note: Vagrant tasks will only run if they @task decorator is used on
-#       the function. See show_environment function below.
-
-# Usage fab localhost [command]
-#    or fab remote [command]
-#  e.g. fab localhost initialise_qgis_plugin_repo
 
 # Global options
 env.env_set = False
@@ -122,15 +116,15 @@ def initialise_qgis_plugin_repo():
     with cd('/etc/apache2/sites-available/'):
         if exists('inasafe-test.conf'):
             sudo('a2dissite inasafe-test.conf')
-            fastprint('Removing old apache2 conf', False)
+            fastprint('Removing old apache2 conf')
             sudo('rm inasafe-test.conf')
 
         sudo('ln -s %s/inasafe-test.conf .' % local_path)
 
     # Add a hosts entry for local testing - only really useful for localhost
-    hosts = '/etc/hosts'
-    if not contains(hosts, 'inasafe-test'):
-        append(hosts, '127.0.0.1 %s' % env.repo_site_name, use_sudo=True)
+    repo_hosts = '/etc/hosts'
+    if not contains(repo_hosts, 'inasafe-test'):
+        append(repo_hosts, '127.0.0.1 %s' % env.repo_site_name, use_sudo=True)
 
     sudo('a2ensite inasafe-test.conf')
     sudo('service apache2 reload')
@@ -139,9 +133,9 @@ def initialise_qgis_plugin_repo():
 def update_git_checkout(branch='master'):
     """Make sure there is a read only git checkout.
 
-    Args:
-        branch: str - a string representing the name of the branch to build
-            from. Defaults to 'master'
+    :param branch: The name of the branch to build from. Defaults to 'master'.
+    :type branch: str
+
 
     To run e.g.::
 
@@ -188,9 +182,9 @@ def update_git_checkout(branch='master'):
 def build_test_package(branch='master'):
     """Create a test package and publish it in our repo.
 
-    Args:
-        branch: str - a string representing the name of the branch to build
-            from. Defaults to 'master'.
+    :param branch: The name of the branch to build from. Defaults to 'master'.
+    :type branch: str
+
 
     To run e.g.::
 
@@ -226,6 +220,7 @@ def build_test_package(branch='master'):
             if 'status=' in line:
                 line.replace('status=', '')
 
+        # noinspection PyUnboundLocalVariable
         run('scripts/release.sh %s' % plugin_version)
         package_name = '%s.%s.zip' % ('inasafe', plugin_version)
         source = '/tmp/%s' % package_name
@@ -251,7 +246,7 @@ def show_environment():
     fastprint('User: %s\n' % env.user)
     fastprint('Host: %s\n' % env.hostname)
     fastprint('Site Name: %s\n' % env.repo_site_name)
-    fastprint('Dest Path: %s\n' % env.plugin_repo_path)
+    fastprint('Destination Path: %s\n' % env.plugin_repo_path)
     fastprint('Home Path: %s\n' % env.home)
     fastprint('Repo Path: %s\n' % env.repo_path)
     fastprint('Git Url: %s\n' % env.git_url)
@@ -261,6 +256,7 @@ def show_environment():
 
 @task
 def setup_jenkins_jobs():
+    """Setup jenkins to run Continuous Integration Tests."""
     #fabgis.fabgis.initialise_jenkins_site()
     xvfb_config = "org.jenkinsci.plugins.xvfb.XvfbBuildWrapper.xml"
     job_dir = ['InaSAFE-master-QGIS1',
@@ -287,7 +283,7 @@ def setup_jenkins_jobs():
                     local_dir,
                     'scripts',
                     'jenkins_jobs',
-                    '%s.xml') % job)
+                    '%s.xml' % job))
                 sudo('mkdir /var/lib/jenkins/jobs/%s' % job)
                 put(local_job_file,
                     "/var/lib/jenkins/jobs/%s/config.xml" % job,
