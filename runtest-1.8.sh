@@ -2,8 +2,6 @@
 
 QGISPATH=/Applications/QGIS.app
 
-
-
 export QGIS_PREFIX_PATH=/usr/local/qgis-1.8
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python:${PYTHONPATH}
