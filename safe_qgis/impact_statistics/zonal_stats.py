@@ -21,7 +21,7 @@ import struct
 import logging
 
 import numpy
-from osgeo import gdal, ogr
+from osgeo import gdal, ogr, osr
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import QgsRectangle, QgsFeature, QgsGeometry, QgsPoint
@@ -704,8 +704,10 @@ def numpy_stats(band, geometry, geo_transform, no_data):
     )
 
     # Create a temporary vector layer in memory
+    crs = osr.SpatialReference()
+    crs.ImportFromEPSG(4326)
     mem_ds = mem_drv.CreateDataSource('out')
-    mem_layer = mem_ds.CreateLayer('poly', None, ogr.wkbPolygon)
+    mem_layer = mem_ds.CreateLayer('poly', crs, ogr.wkbPolygon)
 
     feat = ogr.Feature(mem_layer.GetLayerDefn())
     feat.SetGeometry(geom)
