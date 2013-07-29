@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **QGIS plugin test suite.**
@@ -59,8 +60,7 @@ class PluginTest(unittest.TestCase):
         # Import this late so that i18n setup is already in place
 
         # Test indonesian too
-        myParent = QWidget()
-        myCanvas = QgsMapCanvas(myParent)
+        myCanvas = QgsMapCanvas(PARENT)
         myIface = QgisInterface(myCanvas)
         myPlugin = Plugin(myIface)
         myPlugin.setup_i18n('id')  # indonesian

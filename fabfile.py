@@ -136,7 +136,6 @@ def update_git_checkout(branch='master'):
     :param branch: The name of the branch to build from. Defaults to 'master'.
     :type branch: str
 
-
     To run e.g.::
 
         fab -H 188.40.123.80:8697 remote update_git_checkout
