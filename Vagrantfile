@@ -12,9 +12,8 @@ Vagrant.configure("2") do |config|
   config.vm.box = "Ubuntu precise 64"
   config.vm.hostname = "inasafe"
   config.vm.network :public_network
-  config.vm.network :forwarded_port, guest: 80, host: 8199
+  config.vm.network :forwarded_port, guest: 80, host: 10000
   # For jenkins
   config.vm.network :forwarded_port, guest: 8080, host: 8198
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-
 end

@@ -52,7 +52,7 @@ def _all():
         'maps.linfiniti.com': 'inasafe-docs.linfiniti.com',
         'linfiniti': 'inasafe-docs.linfiniti.com',
         #vagrant instance
-        'precise64': 'inasafe-docs.vagrant.localhost',
+        'inasafe': 'inasafe-docs.vagrant.localhost',
         'shiva': 'docs.inasafe.org'}
     repo_site_names = {
         'waterfall': 'inasafe-test.localhost',
