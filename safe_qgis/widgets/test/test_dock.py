@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
@@ -19,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
-import time
 import logging
 from os.path import join
 
