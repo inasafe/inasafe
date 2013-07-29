@@ -128,6 +128,15 @@ test_suite: compile testdata
 	@#echo Expecting 1 test to fail in support of issue #3
 	@#echo Expecting 1 test to fail in support of issue #160
 
+# Run safe package tests only
+safe_test_suite: compile testdata
+	@echo
+	@echo "---------------------"
+	@echo "Safe Regression Test Suite"
+	@echo "---------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id \
+	--with-coverage --cover-package=safe safe  3>&1 1>&2 2>&3 3>&- || true
+
 # Run gui test suite only
 gui_test_suite: compile testdata
 	@echo
@@ -194,8 +203,13 @@ unwanted_strings:
 	@echo "------------------------------"
 	@echo "Strings that should be deleted"
 	@echo "------------------------------"
-	@grep -R "settrace()" * | grep ".py:" | grep -v Makefile || true
-	@grep -R "assert " * | grep ".py:" | grep -v Makefile | grep -v test_ | grep -v utilities_test.py | grep -v odict.py || true
+
+	@grep -R "settrace()" * | grep ".py:" | grep -v Makefile | grep -v pydev || true
+
+	@grep -R "assert " * | grep ".py:" | grep -v Makefile | grep -v test_ | \
+	grep -v utilities_for_testing.py | grep -v odict.py | grep -v .pyc | \
+	grep -v gui_example.py | grep -v message_element.py | grep -v pydev | \
+	grep -v third_party || true
 
 dependency_test:
 	@echo
@@ -209,7 +223,7 @@ dependency_test:
 	@# 1
 	@# See http://stackoverflow.com/questions/4761728/gives-an-error-in-makefile-not-in-bash-when-grep-output-is-empty why we need "|| true"
 
-	@grep -R PyQt4 $(NONGUI) || true
+	@grep -R PyQt4 $(NONGUI) | grep -v gui_example.py | grep -v message_element|| true
 	@grep -R qgis.core $(NONGUI) || true
 	@grep -R "import scipy" $(NONGUI) || true
 	@grep -R "from scipy import" $(NONGUI) || true
@@ -235,22 +249,6 @@ run_data_audit:
 	@echo "Audit of IP status for bundled data"
 	@echo "-----------------------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/data_IP_audit.py
-
-gen_impact_function_doc:
-	@echo
-	@echo "-----------------------------------"
-	@echo "Generate impact functions' documentation"
-	@echo "-----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_impfunc_doc.py
-	@echo $(PYTHONPATH)
-
-gen_rst:
-	@echo
-	@echo "-----------------------------------"
-	@echo "Generate InaSAFE API documentation"
-	@echo "-----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/gen_rst_script.py
-	@echo $(PYTHONPATH)
 
 pylint-count:
 	@echo
@@ -288,6 +286,7 @@ indent:
 	@echo "---------------"
 	@# sudo apt-get install python2.7-examples for reindent script
 	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
+
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point

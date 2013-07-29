@@ -36,6 +36,7 @@ try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
+    # noinspection PyUnresolvedReferences
     from safe_qgis.exceptions import TranslationLoadError
 except ImportError:
     # Note we use translate directly but the string may still not translate
@@ -49,6 +50,7 @@ except ImportError:
         None, 'InaSAFE', myWarning)
 
 
+# noinspection PyUnresolvedReferences
 class Plugin:
     """The QGIS interface implementation for the InaSAFE plugin.
 

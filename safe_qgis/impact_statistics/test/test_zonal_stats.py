@@ -28,7 +28,7 @@ pardir = os.path.abspath(
 sys.path.append(pardir)
 
 from safe_qgis.impact_statistics.zonal_stats import (
-    calculate_zonal_stats, feature_box)
+    calculate_zonal_stats, intersection_box)
 from safe_qgis.utilities.utilities_for_testing import (
     load_layer, get_qgis_app)
 from safe_qgis.safe_interface import UNITDATA
@@ -106,7 +106,7 @@ class ZonalStatsTest(unittest.TestCase):
         myOffsetY = 0
         myCellsX = myCellsY = 1
         myExpectedResult = myOffsetX, myOffsetY, myCellsX, myCellsY
-        myResult = feature_box(
+        myResult = intersection_box(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
         self.assertTupleEqual(myExpectedResult, myResult)
 
@@ -114,6 +114,6 @@ class ZonalStatsTest(unittest.TestCase):
         myCellsX = 2
         myExpectedResult = myOffsetX, myOffsetY, myCellsX, myCellsY
         myFeatureBox = QgsRectangle(1535455.0, 5083345.0, 1535470.0, 5083355.0)
-        myResult = feature_box(
+        myResult = intersection_box(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
         self.assertTupleEqual(myExpectedResult, myResult)

@@ -21,7 +21,7 @@ import struct
 import logging
 
 import numpy
-from osgeo import gdal
+from osgeo import gdal, ogr, osr
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (
@@ -126,6 +126,8 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         myGeoTransform[0] + (myCellSizeX * myColumns),
         myGeoTransform[3])
 
+    rasterGeom = QgsGeometry.fromRect(myRasterBox)
+
     # Get vector layer
     myProvider = polygon_layer.dataProvider()
     if myProvider is None:
@@ -151,7 +153,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         #print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
         #print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
 
-        myOffsetX, myOffsetY, myCellsX, myCellsY = feature_box(
+        myOffsetX, myOffsetY, myCellsX, myCellsY = intersection_box(
             myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
 
         # If the poly does not intersect the raster just continue
@@ -179,9 +181,16 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
         #    myNoData)
         #print 'Sum: %s count: %s' % (mySum, myCount)
 
-        mySum, myCount = rectangle_stats(
+        #mySum, myCount = rectangle_stats(
+        #    myBand,
+        #    myFeatureBox,
+        #    myGeoTransform,
+        #    myNoData)
+
+        myIntersectedGeom = rasterGeom.intersection(myGeometry)
+        mySum, myCount = numpy_stats(
             myBand,
-            myFeatureBox,
+            myIntersectedGeom,
             myGeoTransform,
             myNoData)
 
@@ -216,7 +225,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     return myResults
 
 
-def feature_box(
+def intersection_box(
         raster_box,
         feature_box,
         cell_size_x,
@@ -401,38 +410,38 @@ def rectangle_stats(
         pixels that intersect with the geometry.
     :rtype: (float, int)
     """
-    xMin = geometry.xMinimum()
-    xMax = geometry.xMaximum()
-    yMin = geometry.yMinimum()
-    yMax = geometry.yMaximum()
+    x_minimum = geometry.xMinimum()
+    x_maximum = geometry.xMaximum()
+    y_minimum = geometry.yMinimum()
+    y_maximum = geometry.yMaximum()
 
-    startCol, startRow = map_to_pixel(xMin, yMax, geo_transform)
-    endCol, endRow = map_to_pixel(xMax, yMin, geo_transform)
+    start_column, start_row = map_to_pixel(x_minimum, y_maximum, geo_transform)
+    end_column, end_row = map_to_pixel(x_maximum, y_minimum, geo_transform)
 
-    width = endCol - startCol
-    height = endRow - startRow
+    width = end_column - start_column
+    height = end_row - start_row
 
     if width == 0 or height == 0:
         return 0, 0
 
-    myScanline = band.ReadRaster(
-        startCol,
-        startRow,
+    scanline = band.ReadRaster(
+        start_column,
+        start_row,
         width,
         height,
         width,
         height,
         gdal.GDT_Float32)
-    myValues = struct.unpack('f' * height * width, myScanline)
-    if myValues is None:
+    values = struct.unpack('f' * height * width, scanline)
+    if values is None:
         return 0, 0
 
-    myArray = numpy.array(myValues)
-    myMaskedArray = numpy.ma.masked_where(myArray == no_data, myArray)
-    mySum = float(numpy.sum(myMaskedArray))
-    myCount = myMaskedArray.size
+    array = numpy.array(values)
+    masked_array = numpy.ma.masked_where(array == no_data, array)
+    array_sum = float(numpy.sum(masked_array))
+    array_count = masked_array.size
 
-    return mySum, myCount
+    return array_sum, array_count
 
 
 # noinspection PyArgumentList
@@ -643,3 +652,90 @@ def inverse_transform(geo_transform):
                           geo_transform[0] * geo_transform[4]) * invDet
 
     return outGeoTransform
+
+
+def numpy_stats(band, geometry, geo_transform, no_data):
+    """
+    :param band: A valid band from a raster layer.
+    :type band: GDALRasterBand
+
+    :param geometry: A polygon geometry used to calculate statistics.
+    :type geometry: QgsGeometry
+
+    :param geo_transform: Geo-referencing transform from raster metadata.
+    :type geo_transform: list (six floats)
+
+    :param no_data: Value for nodata in the raster.
+    :type no_data: int, float
+
+    :returns: Sum, Count - sum of the values of all pixels and the count of
+        pixels that intersect with the geometry.
+    :rtype: (float, int)
+    """
+    mem_drv = ogr.GetDriverByName('Memory')
+    driver = gdal.GetDriverByName('MEM')
+
+    geom = ogr.CreateGeometryFromWkt(str(geometry.exportToWkt()))
+
+    bbox = geometry.boundingBox()
+
+    x_min = bbox.xMinimum()
+    x_max = bbox.xMaximum()
+    y_min = bbox.yMinimum()
+    y_max = bbox.yMaximum()
+
+    start_column, start_row = map_to_pixel(x_min, y_max, geo_transform)
+    end_column, end_row = map_to_pixel(x_max, y_min, geo_transform)
+
+    width = end_column - start_column
+    height = end_row - start_row
+
+    if width == 0 or height == 0:
+        return 0, 0
+
+    src_offset = (start_column, start_row, width, height)
+
+    src_array = band.ReadAsArray(*src_offset)
+
+    new_geo_transform = (
+        (geo_transform[0] + (src_offset[0] * geo_transform[1])),
+        geo_transform[1],
+        0.0,
+        (geo_transform[3] + (src_offset[1] * geo_transform[5])),
+        0.0,
+        geo_transform[5]
+    )
+
+    # Create a temporary vector layer in memory
+    crs = osr.SpatialReference()
+    crs.ImportFromEPSG(4326)
+    mem_ds = mem_drv.CreateDataSource('out')
+    mem_layer = mem_ds.CreateLayer('poly', crs, ogr.wkbPolygon)
+
+    feat = ogr.Feature(mem_layer.GetLayerDefn())
+    feat.SetGeometry(geom)
+    mem_layer.CreateFeature(feat)
+    feat.Destroy()
+
+    # Rasterize it
+    rasterized_ds = driver.Create('', src_offset[2], src_offset[3], 1,
+                                  gdal.GDT_Byte)
+    rasterized_ds.SetGeoTransform(new_geo_transform)
+    gdal.RasterizeLayer(rasterized_ds, [1], mem_layer, burn_values=[1])
+    rv_array = rasterized_ds.ReadAsArray()
+
+    # Mask the source data array with our current feature
+    # we take the logical_not to flip 0<->1 to get the correct mask effect
+    # we also mask out nodata values explicitly
+    masked = numpy.ma.MaskedArray(
+        src_array,
+        mask=numpy.logical_or(
+            src_array == no_data,
+            numpy.logical_not(rv_array)
+        )
+    )
+
+    my_sum = float(masked.sum())
+    my_count = int(masked.count())
+
+    return my_sum, my_count

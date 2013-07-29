@@ -134,6 +134,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         myUseDefaultOutputDir = bool(mySettings.value(
             'inasafe/useDefaultOutputDir', True))
         self.scenario_directory_radio.setChecked(myUseDefaultOutputDir)
+            myUseDefaultOutputDir.toBool())
 
     def save_state(self):
         """Save current state of GUI to configuration file"""
@@ -579,7 +580,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         # create table report pdf
         myHtmlRenderer = HtmlRenderer(myMap.pageDpi)
         myKeywords = myMap.keywordIO.read_keywords(impact_layer)
-        myHtmlRenderer.printImpactTable(myKeywords, myTablePath)
+        myHtmlRenderer.print_impact_table(myKeywords, myTablePath)
         LOGGER.debug("Report done %s %s" % (myMapPath, myTablePath))
 
     def show_parser_results(self, parsed_list, unparsed_list):

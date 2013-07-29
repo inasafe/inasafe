@@ -52,6 +52,11 @@ class PolygonInputError(InaSAFEError):
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
+class PointsInputError(InaSAFEError):
+    """For invalid inputs to numeric point functions"""
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
+
+
 class BoundsError(InaSAFEError):
     """For points falling outside interpolation grid"""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'

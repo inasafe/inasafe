@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Keyword IO implementation.**
 
 .. tip:: Provides functionality for reading and writing keywords from within
@@ -113,7 +114,7 @@ class KeywordIO(QObject):
                 KeywordNotFoundError,
                 InvalidParameterError,
                 UnsupportedProviderError):
-                    raise
+            raise
 
     def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.
@@ -535,7 +536,7 @@ class KeywordIO(QObject):
 
         :param keyword: The metadata keyword to retrieve. If none,
             all keywords are returned.
-        :type keyword: dict
+        :type keyword: str
 
         :returns: A string containing the retrieved value for the keyword if
            the keyword argument is specified, otherwise the

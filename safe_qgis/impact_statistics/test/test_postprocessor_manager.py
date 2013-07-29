@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
@@ -35,7 +36,7 @@ import qgis
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 
-from qgis.core import QgsMapLayerRegistry
+#from qgis.core import QgsMapLayerRegistry
 
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
@@ -79,7 +80,8 @@ class PostprocessorManagerTest(unittest.TestCase):
     def test_checkPostProcessingLayersVisibility(self):
         """Generated layers are not added to the map registry."""
         myRunButton = DOCK.pbnRunStop
-
+        # Explicitly disable showing intermediate layers
+        DOCK.showIntermediateLayers = False
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setup_scenario(
@@ -91,8 +93,8 @@ class PostprocessorManagerTest(unittest.TestCase):
             aggregation_layer='kabupaten jakarta singlepart')
         assert myResult, myMessage
 
-        LOGGER.info("Registry list before:\n%s" %
-                    QgsMapLayerRegistry.instance().mapLayers())
+        #LOGGER.info("Registry list before:\n%s" %
+        #            QgsMapLayerRegistry.instance().mapLayers())
 
         #one layer (the impact) should have been added
         myExpectedCount = len(CANVAS.layers()) + 1
@@ -103,8 +105,8 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
 
         myAfterCount = len(CANVAS.layers())
-        LOGGER.info("Registry list after:\n%s" %
-                    QgsMapLayerRegistry.instance().mapLayers())
+        #LOGGER.info("Registry list after:\n%s" %
+        #            QgsMapLayerRegistry.instance().mapLayers())
         myMessage = ('Expected %s items in canvas, got %s' %
                      (myExpectedCount, myAfterCount))
         assert myExpectedCount == myAfterCount, myMessage
@@ -160,6 +162,6 @@ class PostprocessorManagerTest(unittest.TestCase):
                 assert mySum != 0, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(PostprocessorManagerTest, 'test')
+    suite = unittest.makeSuite(PostprocessorManagerTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

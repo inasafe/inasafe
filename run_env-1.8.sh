@@ -16,7 +16,10 @@ export INASAFE_WORK_DIR=/tmp/quake
 export INASAFE_POPULATION_PATH=`pwd`/realtime/fixtures/exposure/population.tif
 export INASAFE_LOCALE=id
 
-echo "Example $0 safe_qgis.test_dock:DockTest.test_InsufficientOverlapIssue372"
-
-nosetests $1
-
+echo "This script is intended to be sourced to set up your shell to"
+echo "use a QGIS 1.8 build in $QGIS_PREFIX_PATH"
+echo
+echo "To use it do:" 
+echo "source $0"
+echo
+echo "Then use the make file supplied here e.g. make guitest"

@@ -55,7 +55,8 @@ from safe.common.exceptions import (
     ReadLayerError,
     InaSAFEError,
     GetDataError,
-    ZeroImpactException)
+    ZeroImpactException,
+    PointsInputError)
 from safe.common.utilities import (
     VerificationError,
     temp_dir,

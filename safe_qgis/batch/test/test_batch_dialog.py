@@ -22,7 +22,6 @@ import unittest
 import qgis
 
 from PyQt4 import QtCore
-from PyQt4.QtGui import QLineEdit
 from PyQt4.QtTest import QTest
 
 from safe_qgis.batch.batch_dialog import BatchDialog
@@ -64,8 +63,7 @@ class BatchDialogTest(unittest.TestCase):
                                             myOutputDir
 
     def test_runSingleScenario(self):
-        """Test run single scenario
-        """
+        """Test run single scenario."""
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
         myDialog.show_results_popup = False
         myDialog.scenario_directory_radio.setChecked(False)

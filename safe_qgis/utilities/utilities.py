@@ -455,7 +455,7 @@ def impact_attribution(keywords, inasafe_flag=False):
     :returns: An html snippet containing attribution information for the impact
         layer. If no keywords are present or no appropriate keywords are
         present, None is returned.
-    :rtype: str
+    :rtype: safe.messaging.Message
     """
     if keywords is None:
         return None
