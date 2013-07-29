@@ -733,8 +733,6 @@ class Aggregator(QtCore.QObject):
             # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
 
             for myFeature in myProvider.getFeatures():
-            myProvider.rewind()
-            myProvider.select([])
                 myFid = myFeature.id()
                 if myFid not in myZonalStatistics:
                     # Blindly ignoring - @mbernasocchi can you review? TS
