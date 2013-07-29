@@ -72,11 +72,17 @@ class MapTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
+
+        # Note: You should replace, not append the numbers for a given
+        # platform. Also note that this test will break every time the
+        # version number of InaSAFE changes so we should ultimately come up
+        # with a lower maintenance test strategy.
+
         myExpectedSizes = [
             441541,  # as rendered on ub 13.04 post 17 May 2013
             441563,  # as rendered on ub 13.04 18 Jul 2013
             447217,  # Nadia Linux Mint 14
-            447051,  # as rendered on Jenkins post 24 April 2013
+            447144,  # as rendered on Jenkins post 29 July 2013
             447172,  # Windows 7 SP1 AMD64
             233989,  # OSX 10.8
         ]
