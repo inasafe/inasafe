@@ -651,23 +651,24 @@ def inverse_transform(geo_transform):
     return outGeoTransform
 
 
-def bbox_to_pixel_offsets(gt, bbox):
-    originX = gt[0]
-    originY = gt[3]
-    pixel_width = gt[1]
-    pixel_height = gt[5]
-    x1 = int((bbox[0] - originX) / pixel_width)
-    x2 = int((bbox[1] - originX) / pixel_width) + 1
-
-    y1 = int((bbox[3] - originY) / pixel_height)
-    y2 = int((bbox[2] - originY) / pixel_height) + 1
-
-    xsize = x2 - x1
-    ysize = y2 - y1
-    return x1, y1, xsize, ysize
-
-
 def numpy_stats(band, geometry, geo_transform, no_data):
+    """
+    :param band: A valid band from a raster layer.
+    :type band: GDALRasterBand
+
+    :param geometry: A polygon geometry used to calculate statistics.
+    :type geometry: QgsGeometry
+
+    :param geo_transform: Geo-referencing transform from raster metadata.
+    :type geo_transform: list (six floats)
+
+    :param no_data: Value for nodata in the raster.
+    :type no_data: int, float
+
+    :returns: Sum, Count - sum of the values of all pixels and the count of
+        pixels that intersect with the geometry.
+    :rtype: (float, int)
+    """
     mem_drv = ogr.GetDriverByName('Memory')
     driver = gdal.GetDriverByName('MEM')
 
@@ -675,21 +676,21 @@ def numpy_stats(band, geometry, geo_transform, no_data):
 
     bbox = geometry.boundingBox()
 
-    xMin = bbox.xMinimum()
-    xMax = bbox.xMaximum()
-    yMin = bbox.yMinimum()
-    yMax = bbox.yMaximum()
+    x_min = bbox.xMinimum()
+    x_max = bbox.xMaximum()
+    y_min = bbox.yMinimum()
+    y_max = bbox.yMaximum()
 
-    startCol, startRow = map_to_pixel(xMin, yMax, geo_transform)
-    endCol, endRow = map_to_pixel(xMax, yMin, geo_transform)
+    start_column, start_row = map_to_pixel(x_min, y_max, geo_transform)
+    end_column, end_row = map_to_pixel(x_max, y_min, geo_transform)
 
-    width = endCol - startCol
-    height = endRow - startRow
+    width = end_column - start_column
+    height = end_row - start_row
 
     if width == 0 or height == 0:
         return 0, 0
 
-    src_offset = (startCol, startRow, width, height)
+    src_offset = (start_column, start_row, width, height)
 
     src_array = band.ReadAsArray(*src_offset)
 
@@ -712,10 +713,11 @@ def numpy_stats(band, geometry, geo_transform, no_data):
     feat.Destroy()
 
     # Rasterize it
-    rvds = driver.Create('', src_offset[2], src_offset[3], 1, gdal.GDT_Byte)
-    rvds.SetGeoTransform(new_geo_transform)
-    gdal.RasterizeLayer(rvds, [1], mem_layer, burn_values=[1])
-    rv_array = rvds.ReadAsArray()
+    rasterized_ds = driver.Create('', src_offset[2], src_offset[3], 1,
+                                  gdal.GDT_Byte)
+    rasterized_ds.SetGeoTransform(new_geo_transform)
+    gdal.RasterizeLayer(rasterized_ds, [1], mem_layer, burn_values=[1])
+    rv_array = rasterized_ds.ReadAsArray()
 
     # Mask the source data array with our current feature
     # we take the logical_not to flip 0<->1 to get the correct mask effect
@@ -728,7 +730,7 @@ def numpy_stats(band, geometry, geo_transform, no_data):
         )
     )
 
-    mySum = float(masked.sum())
-    myCount = int(masked.count())
+    my_sum = float(masked.sum())
+    my_count = int(masked.count())
 
-    return mySum, myCount
+    return my_sum, my_count
