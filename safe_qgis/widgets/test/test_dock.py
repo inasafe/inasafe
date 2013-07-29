@@ -1011,7 +1011,6 @@ class DockTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page_to_text()
 
