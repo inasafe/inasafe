@@ -96,6 +96,7 @@ def _all():
 def initialise_qgis_plugin_repo():
     """Initialise a QGIS plugin repo where we host test builds."""
     _all()
+    sudo('apt-get update')
     fabtools.require.deb.package('libapache2-mod-wsgi')
     code_path = os.path.join(env.repo_path, env.repo_alias)
     local_path = '%s/scripts/test-build-repo' % code_path
