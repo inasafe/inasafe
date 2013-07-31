@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
@@ -19,11 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
-import time
 import logging
 from os.path import join
 
 import qgis
+
+from unittest import expectedFailure
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
 
@@ -978,11 +980,11 @@ class DockTest(unittest.TestCase):
         # noinspection PyTypeChecker,PyCallByClass
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
         myCurrentFunction = str(DOCK.cboFunction.currentText())
-        myMessage = ('Expected selected impact function to remain unchanged '
-                     'when choosing a different hazard of the same category:'
-                     ' %s\nExpected: %s\n%s' % (myExpectedFunction,
-                                                myCurrentFunction,
-                                                combos_to_string(DOCK)))
+        myMessage = (
+            'Expected selected impact function to remain unchanged when '
+            'choosing a different hazard of the same category:'
+            ' %s\nExpected: %s\n%s' % (
+                myExpectedFunction, myCurrentFunction, combos_to_string(DOCK)))
 
         assert myExpectedFunction == myCurrentFunction, myMessage
         # noinspection PyTypeChecker,PyCallByClass
@@ -995,8 +997,9 @@ class DockTest(unittest.TestCase):
         myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
         assert myFunction == myExpectation, myMessage
 
-    def test_fullRunResults(self):
-        """Aggregation results are correct."""
+    def test_full_run_pyzstats(self):
+        """Aggregation results correct using our own python zonal stats code.
+        """
         myResult, myMessage = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -1013,13 +1016,51 @@ class DockTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page_to_text()
 
         myExpectedResult = open(
             TEST_FILES_DIR +
             '/test-full-run-results.txt',
+            'r').readlines()
+        myResult = myResult.replace(
+            '</td> <td>', ' ').replace('</td><td>', ' ')
+        for line in myExpectedResult:
+            line = line.replace('\n', '')
+            self.assertIn(line, myResult)
+
+    @expectedFailure
+    def test_full_run_qgszstats(self):
+        """Aggregation results are correct using native QGIS zonal stats.
+
+        .. note:: We know this is going to fail (hence the decorator) as
+            QGIS1.8 zonal stats are broken. We expect this to pass when we
+            have ported to the QGIS 2.0 api at which time we can remove the
+            decorator. TS July 2013
+
+        """
+        myResult, myMessage = setup_scenario(
+            DOCK,
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_enabled_flag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
+        # Press RUN
+        # noinspection PyCallByClass,PyTypeChecker
+        DOCK.accept()
+
+        myResult = DOCK.wvResults.page_to_text()
+
+        myExpectedResult = open(
+            TEST_FILES_DIR +
+            '/test-full-run-results-qgis.txt',
             'r').readlines()
         myResult = myResult.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')

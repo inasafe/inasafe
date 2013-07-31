@@ -98,12 +98,11 @@ class PostprocessorManagerTest(unittest.TestCase):
 
         #one layer (the impact) should have been added
         myExpectedCount = len(CANVAS.layers()) + 1
-
-        # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
+        #
+        # # Press RUN
+        # # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKeywordsDialog.accept()
-
+        # no KW dialog will popuo due to complete keywords
         myAfterCount = len(CANVAS.layers())
         #LOGGER.info("Registry list after:\n%s" %
         #            QgsMapLayerRegistry.instance().mapLayers())
@@ -116,7 +115,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        DOCK.runtimeKeywordsDialog.accept()
+        # no KW dialog will popuo due to complete keywords
         #one layer (the impact) should have been added
         myExpectedCount += 2
         myAfterCount = len(CANVAS.layers())

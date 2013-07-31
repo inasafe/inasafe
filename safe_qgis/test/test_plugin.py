@@ -100,7 +100,7 @@ class PluginTest(unittest.TestCase):
         # this is the part that produces bad side effects
         for myMod in sys.modules.values():
             try:
-                if ('storage' in str(myMod) or 'impact' in str(myMod)):
+                if 'storage' in str(myMod) or 'impact' in str(myMod):
                     print 'Reloading:', str(myMod)
                     reload(myMod)
             except NameError:
