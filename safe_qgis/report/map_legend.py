@@ -224,8 +224,8 @@ class MapLegend():
         If the legend is not defined, a new one will be created. A legend is
         just an image file with nicely rendered classes in it.
 
-        :param symbol: Symbol for the class as a QgsSymbol
-        :type symbol: QgsSymbol
+        :param symbol: Symbol for the class as a QgsSymbolV2
+        :type symbol: QgsSymbolV2
 
         :param minimum: Minimum value for the class.
         :type minimum: float, int
