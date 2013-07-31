@@ -18,6 +18,8 @@ import logging
 #pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 #sys.path.append(pardir)
 
+import qgis
+
 from PyQt4 import QtGui
 from qgis.core import (
     QgsMapLayerRegistry,

@@ -137,8 +137,8 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map renderComposition called')
         # NOTE: we ignore self.composition.printAsRaster() and always rasterise
-        myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
-        myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
+        myWidth = int(self.pageDpi * self.pageWidth / 25.4)
+        myHeight = int(self.pageDpi * self.pageHeight / 25.4)
         myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
                                QtGui.QImage.Format_ARGB32)
         myImage.setDotsPerMeterX(dpi_to_meters(self.pageDpi))
@@ -196,10 +196,7 @@ class Map():
         myLogo = QgsComposerPicture(self.composition)
         myLogo.setPictureFile(':/plugins/inasafe/bnpb_logo.png')
         myLogo.setItemPosition(self.pageMargin, top_offset, 10, 10)
-        if qgis_version() >= 10800:  # 1.8 or newer
-            myLogo.setFrameEnabled(self.showFramesFlag)
-        else:
-            myLogo.setFrame(self.showFramesFlag)
+        myLogo.setFrameEnabled(self.showFramesFlag)
         myLogo.setZValue(1)  # To ensure it overlays graticule markers
         self.composition.addItem(myLogo)
 
@@ -234,7 +231,7 @@ class Map():
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
-        myLabel.setFrame(self.showFramesFlag)
+        myLabel.setFrameEnabled(self.showFramesFlag)
         self.composition.addItem(myLabel)
         return myLabelHeight
 
@@ -304,7 +301,7 @@ class Map():
         myComposerMap.setGridAnnotationPrecision(myPrecision)
         myComposerMap.setShowGridAnnotation(True)
         myComposerMap.setGridAnnotationDirection(
-            QgsComposerMap.BoundaryDirection)
+            QgsComposerMap.BoundaryDirection, QgsComposerMap.Top)
         self.composition.addItem(myComposerMap)
         self.draw_graticule_mask(top_offset)
         return myComposerMap
@@ -327,11 +324,17 @@ class Map():
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
-        myRect.setLineWidth(0.1)
-        myRect.setFrame(False)
-        myRect.setOutlineColor(QtGui.QColor(255, 255, 255))
-        myRect.setFillColor(QtGui.QColor(255, 255, 255))
-        myRect.setOpacity(100)
+        myPen = QtGui.QPen()
+        myPen.setColor(QtGui.QColor(0, 0, 0))
+        myPen.setWidthF(0.1)
+        myRect.setPen(myPen)
+        myRect.setBackgroundColor(QtGui.QColor(255, 255, 255))
+        myRect.setTransparency(100)
+        #myRect.setLineWidth(0.1)
+        #myRect.setFrameEnabled(False)
+        #myRect.setOutlineColor(QtGui.QColor(255, 255, 255))
+        #myRect.setFillColor(QtGui.QColor(255, 255, 255))
+        #myRect.setOpacity(100)
         # These two lines seem superfluous but are needed
         myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         myRect.setBrush(myBrush)
@@ -361,7 +364,7 @@ class Map():
             top_offset + self.mapHeight - (myScaleBarHeight * 2),
             myScaleBarWidth,
             myScaleBarHeight)
-        myScaleBar.setFrame(self.showFramesFlag)
+        myScaleBar.setFrameEnabled(self.showFramesFlag)
         # Disabled for now
         #self.composition.addItem(myScaleBar)
 
@@ -387,7 +390,7 @@ class Map():
         #
         myDistanceArea = QgsDistanceArea()
         myDistanceArea.setSourceCrs(myRenderer.destinationCrs().srsid())
-        myDistanceArea.setProjectionsEnabled(True)
+        myDistanceArea.setEllipsoidalMode(True)
         # Determine how wide our map is in km/m
         # Starting point at BL corner
         myComposerExtent = composer_map.extent()
@@ -449,8 +452,12 @@ class Map():
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
-        myRect.setLineWidth(myLineWidth)
-        myRect.setFrame(False)
+        myPen = QtGui.QPen()
+        myPen.setColor(QtGui.QColor(255, 255, 255))
+        myPen.setWidthF(myLineWidth)
+        myRect.setPen(myPen)
+        #myRect.setLineWidth(myLineWidth)
+        myRect.setFrameEnabled(False)
         myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         # workaround for missing setTransparentFill missing from python api
         myRect.setBrush(myBrush)
@@ -472,8 +479,12 @@ class Map():
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
-        myRect.setLineWidth(myLineWidth)
-        myRect.setFrame(False)
+        myPen = QtGui.QPen()
+        myPen.setColor(QtGui.QColor(255, 255, 255))
+        myPen.setWidthF(myLineWidth)
+        myRect.setPen(myPen)
+        #myRect.setLineWidth(myLineWidth)
+        myRect.setFrameEnabled(False)
         self.composition.addItem(myRect)
 
         # Now draw the scalebar ticks
@@ -501,8 +512,11 @@ class Map():
                 self.composition)
 
             myUpTickLine.setShapeType(QgsComposerShape.Rectangle)
-            myUpTickLine.setLineWidth(myLineWidth)
-            myUpTickLine.setFrame(False)
+            myPen = QtGui.QPen()
+            myPen.setWidthF(myLineWidth)
+            myUpTickLine.setPen(myPen)
+            #myUpTickLine.setLineWidth(myLineWidth)
+            myUpTickLine.setFrameEnabled(False)
             self.composition.addItem(myUpTickLine)
             #
             # Add a tick label
@@ -514,7 +528,7 @@ class Map():
             myLabel.setItemPosition(
                 myMMOffset - 3,
                 myScaleBarY - myTickHeight)
-            myLabel.setFrame(self.showFramesFlag)
+            myLabel.setFrameEnabled(self.showFramesFlag)
             self.composition.addItem(myLabel)
 
     def draw_impact_title(self, top_offset):
@@ -543,7 +557,7 @@ class Map():
         myLabelHeight = 12
         myLabel.setItemPosition(
             self.pageMargin, top_offset, myLabelWidth, myLabelHeight)
-        myLabel.setFrame(self.showFramesFlag)
+        myLabel.setFrameEnabled(self.showFramesFlag)
         self.composition.addItem(myLabel)
         return myLabelHeight
 
@@ -576,7 +590,7 @@ class Map():
                                    top_offset,
                                    myLegendWidth,
                                    myLegendHeight)
-        myPicture1.setFrame(False)
+        myPicture1.setFrameEnabled(False)
         self.composition.addItem(myPicture1)
         os.remove(myLegendFilePath)
 
@@ -670,7 +684,7 @@ class Map():
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
-        myLabel.setFrame(self.showFramesFlag)
+        myLabel.setFrameEnabled(self.showFramesFlag)
         self.composition.addItem(myLabel)
 
     def draw_disclaimer(self):
@@ -696,7 +710,7 @@ class Map():
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
-        myLabel.setFrame(self.showFramesFlag)
+        myLabel.setFrameEnabled(self.showFramesFlag)
         self.composition.addItem(myLabel)
 
     def map_title(self):
