@@ -120,12 +120,7 @@ class MapLegend():
             created from the layer.
         """
         LOGGER.debug('InaSAFE Map getVectorLegend called')
-        if not self.layer.isUsingRendererV2():
-            myMessage = self.tr('A legend can only be generated for '
-                                'vector layers that use the "new symbology" '
-                                'implementation in QGIS.')
-            raise LegendLayerError(myMessage)
-            # new symbology - subclass of QgsFeatureRendererV2 class
+        # new symbology - subclass of QgsFeatureRendererV2 class
         self.legendImage = None
         myRenderer = self.layer.rendererV2()
         myType = myRenderer.type()
@@ -141,9 +136,9 @@ class MapLegend():
             LOGGER.debug('categorizedSymbol')
             for myCategory in myRenderer.categories():
                 mySymbol = myCategory.symbol()
-                LOGGER.debug('theCategory' + myCategory.value().toString())
+                LOGGER.debug('theCategory' + myCategory.value())
                 self.add_symbol(
-                    category=myCategory.value().toString(),
+                    category=myCategory.value(),
                     label=myCategory.label(),
                     symbol=mySymbol,
                     symbol_type=myType)
@@ -198,10 +193,21 @@ class MapLegend():
                     class_type='rasterStyle')
                 myLastValue = myValue
         else:
-            #TODO implement QGIS2.0 variant
-            #In master branch, use QgsRasterRenderer::rasterRenderer() to
-            # get/set how a raster is displayed.
-            pass
+            myShader = self.layer.renderer().shader().rasterShaderFunction()
+            myRampItems = myShader.colorRampItemList()
+            myLastValue = 0  # Making an assumption here...
+            LOGGER.debug('Source: %s' % self.layer.source())
+            for myItem in myRampItems:
+                myValue = myItem.value
+                myLabel = myItem.label
+                myColor = myItem.color
+                self.add_class(
+                    myColor,
+                    minimum=myLastValue,
+                    maximum=myValue,
+                    label=myLabel,
+                    class_type='rasterStyle')
+                myLastValue = myValue
         self.add_notes()
         return self.legendImage
 
