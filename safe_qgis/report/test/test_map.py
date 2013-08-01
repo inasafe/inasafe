@@ -87,6 +87,7 @@ class MapTest(unittest.TestCase):
             447144,  # as rendered on Jenkins post 29 July 2013
             447172,  # Windows 7 SP1 AMD64
             233989,  # OSX 10.8
+            444421,  # Slackware64 14.0
         ]
         myMessage = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             myPath, myExpectedSizes, mySize)
