@@ -254,7 +254,7 @@ class ClipperTest(unittest.TestCase):
         # -------------------------------
         # Clip the vector to the bbox
         myResult = clip_layer(myVectorLayer, myGeoExtent,
-                             extra_keywords={'kermit': 'piggy'})
+                              extra_keywords={'kermit': 'piggy'})
 
         # Check the output is valid
         assert os.path.exists(myResult.source())
@@ -266,7 +266,7 @@ class ClipperTest(unittest.TestCase):
 
         # Clip the raster to the bbox
         myResult = clip_layer(myRasterLayer, myGeoExtent,
-                             extra_keywords={'zoot': 'animal'})
+                              extra_keywords={'zoot': 'animal'})
 
         # Check the output is valid
         assert os.path.exists(myResult.source())
@@ -332,9 +332,9 @@ class ClipperTest(unittest.TestCase):
                 myExtraKeywords = {'resolution': myNativeResolution}
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
                 myResult = clip_layer(myRasterLayer,
-                                     myBoundingBox,
-                                     myResolution,
-                                     extra_keywords=myExtraKeywords)
+                                      myBoundingBox,
+                                      myResolution,
+                                      extra_keywords=myExtraKeywords)
 
                 mySafeLayer = readSafeLayer(myResult.source())
                 myNativeData = mySafeLayer.get_data(scaling=False)
@@ -451,9 +451,9 @@ class ClipperTest(unittest.TestCase):
             myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
             try:
                 clip_layer(myRasterLayer,
-                          myBoundingBox,
-                          myResolution,
-                          extra_keywords=myExtraKeywords)
+                           myBoundingBox,
+                           myResolution,
+                           extra_keywords=myExtraKeywords)
             except InvalidProjectionError:
                 pass
             else:
