@@ -1205,7 +1205,8 @@ class Aggregator(QtCore.QObject):
 
         # add a feature the size of the impact layer bounding box
         myFeature = QgsFeature()
-        myFeature.setFields(myProvider.fields())
+        myFields = myProvider.fields()
+        myFeature.setFields(myFields)
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         myFeature.setGeometry(QgsGeometry.fromRect(
             QgsRectangle(

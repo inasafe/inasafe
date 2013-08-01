@@ -142,6 +142,7 @@ def getWGS84resolution(layer):
     if layer.crs().authid() == 'EPSG:4326':
         myCellSize = layer.rasterUnitsPerPixelX()
 
+    else:
         # Otherwise, work it out based on EPSG:4326 representations of
         # its extent
 

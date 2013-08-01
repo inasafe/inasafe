@@ -694,10 +694,12 @@ class DockTest(unittest.TestCase):
         setRasterStyle(myQgisImpactLayer, myStyle)
         # simple test for now - we could test explicity for style state
         # later if needed.
-        myMessage = ('Raster layer was not assigned a ColorRampShader'
-                     ' as expected.')
-        assert myQgisImpactLayer.colorShadingAlgorithm() == QgsRasterLayer. \
-            ColorRampShader, myMessage
+        myMessage = ('Raster layer was not assigned a Singleband pseudocolor'
+                     ' renderer as expected.')
+        #assert myQgisImpactLayer.colorShadingAlgorithm() == QgsRasterLayer. \
+        #    ColorRampShader, myMessage
+        assert myQgisImpactLayer.renderer().type() == "singlebandpseudocolor",\
+            myMessage
 
         # Commenting out because we changed impact function to use floating
         # point quantities. Revisit in QGIS 2.0 where range based transparency
