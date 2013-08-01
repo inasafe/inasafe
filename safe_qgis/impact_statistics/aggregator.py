@@ -306,6 +306,7 @@ class Aggregator(QtCore.QObject):
             myMessage = self.tr('Could not remove the unneeded fields')
             LOGGER.debug(myMessage)
 
+        self.layer.updateFields()
         del myUnneededAttributes, myProvider, myFields
         self.keywordIO.update_keywords(
             self.layer, {'title': myLayerName})
@@ -436,6 +437,7 @@ class Aggregator(QtCore.QObject):
                                  QtCore.QVariant.String) for f in
                         self.statisticsClasses]
             myAggregationProvider.addAttributes(myFields)
+            self.layer.updateFields()
 
             myTmpAggrFieldMap = myAggregationProvider.fieldNameMap()
             for k, v in myTmpAggrFieldMap.iteritems():
@@ -446,6 +448,7 @@ class Aggregator(QtCore.QObject):
             myAggrField = self._sum_field_name()
             myAggregationProvider.addAttributes([QgsField(
                 myAggrField, QtCore.QVariant.Int)])
+            self.layer.updateFields()
 
             myAggrFieldIndex = self.layer.fieldNameIndex(
                 myAggrField)
@@ -725,6 +728,7 @@ class Aggregator(QtCore.QObject):
                                  QtCore.QVariant.Double)
                         ]
             myProvider.addAttributes(myFields)
+            self.layer.updateFields()
 
             sumIndex = myProvider.fieldNameIndex(self._sum_field_name())
             countIndex = myProvider.fieldNameIndex(self._count_field_name())
@@ -1197,6 +1201,7 @@ class Aggregator(QtCore.QObject):
         myAttrName = self.tr('Area')
         myProvider.addAttributes(
             [QgsField(myAttrName, QtCore.QVariant.String)])
+        self.layer.updateFields()
 
         # add a feature the size of the impact layer bounding box
         myFeature = QgsFeature()
