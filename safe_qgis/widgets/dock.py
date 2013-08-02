@@ -1893,7 +1893,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myExtent = viewport_geo_array(self.iface.mapCanvas())
         # make it look like this:
         # 109.829170982, -8.13333290561, 111.005344795, -7.49226294379
-        myExtentStr = ', '.join(str(x) for x in myExtent)
+        myExtentStr = ', '.join(('%f' % x) for x in myExtent)
 
         # Checking f exposure and hazard layer is not None
         if myExposureLayer is None:
