@@ -23,7 +23,7 @@ from qgis.core import (
     QgsFeature,
     QgsRectangle)
 
-from safe.common.utilities import unhumanize_number
+from safe.common.utilities import unhumanize_number, format_int
 
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import (
@@ -107,8 +107,8 @@ class PostprocessorManager(QtCore.QObject):
         """
         myMessage = m.Message()
 
-        for proc, resList in self.postProcessingOutput.iteritems():
-            # resList is for example:
+        for proc, results_list in self.postProcessingOutput.iteritems():
+            # results_list is for example:
             # [
             #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
             #        (u'Total', {'value': 977536, 'metadata': {}}),
@@ -120,7 +120,7 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 #sorting using the first indicator of a postprocessor
                 sortedResList = sorted(
-                    resList,
+                    results_list,
                     key=self._sortNoData,
                     reverse=True)
 
@@ -163,16 +163,30 @@ class PostprocessorManager(QtCore.QObject):
         return myMessage
 
     def _consolidate_multipart_stats(self):
+        """Sums the values of multipart polygons together to display only one.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
         LOGGER.debug('Consolidating multipart postprocessing results')
 
-        #iterate postprocessors
+        # copy needed because of
+        # self.postProcessingOutput[proc].pop(corrected_index)
         postProcessingOutput = self.postProcessingOutput
-        for proc, results_list in postProcessingOutput.iteritems():
 
+        # iterate postprocessors
+        for proc, results_list in postProcessingOutput.iteritems():
+            #see self._generateTables to see details about results_list
             checked_polygon_names = {}
-            parts_deleted = 0
+            parts_to_delete = []
             polygon_index = 0
-            #iterate polygons
+            # iterate polygons
             for polygon_name, results in results_list:
                 if polygon_name in checked_polygon_names.keys():
                     LOGGER.debug('%s postprocessor found multipart polygon '
@@ -183,21 +197,23 @@ class PostprocessorManager(QtCore.QObject):
                             first_part_index]
                         first_part_results = first_part[1]
                         first_part_result = first_part_results[result_name]
-
                         new_result = (
                             unhumanize_number(first_part_result['value']) +
                             unhumanize_number(result['value']))
-                        first_part_result['value'] = str(new_result)
+                        first_part_result['value'] = format_int(new_result)
 
-                        corrected_index = polygon_index - parts_deleted
-                        self.postProcessingOutput[proc].pop(corrected_index)
-                        parts_deleted += 1
-
+                    parts_to_delete.append(polygon_index)
+                    
                 else:
-                    #add polygon to checked list
+                    # add polygon to checked list
                     checked_polygon_names[polygon_name] = polygon_index
 
                 polygon_index += 1
+            
+            for part_index in parts_to_delete:
+                print self.postProcessingOutput[proc][part_index]
+                # self.postProcessingOutput[proc].pop(corrected_index)
+
 
     def run(self):
         """Run any post processors requested by the impact function.
