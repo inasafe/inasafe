@@ -1183,7 +1183,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysis_error(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
-            self.show_dynamic_message(m.Message(str(myReport)))
+            self.show_static_message(m.Message(str(myReport)))
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
@@ -1200,14 +1200,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
-
-        myTitle = self.tr('Loading results...')
-        myDetail = self.tr(
-            'The impact assessment is complete - loading the results into '
-            'QGIS now...')
-        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
-        self.show_dynamic_message(myMessage)
-
         myKeywords = self.keywordIO.read_keywords(theQGISImpactLayer)
 
         #write postprocessing report to keyword
@@ -1217,9 +1209,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.keywordIO.write_keywords(theQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
-        myReport = self.keywordIO.read_keywords(
-            theQGISImpactLayer, 'impact_summary')
-        myReport += impact_attribution(myKeywords).to_html(True)
+        myReport = m.Message()
+        myReport.add(LOGO_ELEMENT)
+        myReport.add(m.Heading(self.tr(
+            'Analysis Results'), **INFO_STYLE))
+        myReport.add(self.keywordIO.read_keywords(
+            theQGISImpactLayer, 'impact_summary'))
+        myReport.add(impact_attribution(myKeywords).to_html(True))
 
         # Get requested style for impact layer of either kind
         myStyle = theEngineImpactLayer.get_style_info()
@@ -1249,9 +1245,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 setRasterStyle(theQGISImpactLayer, myStyle)
 
         else:
-            myMessage = self.tr('Impact layer %1 was neither a raster or a '
-                                'vector layer').arg(
-                                    theQGISImpactLayer.source())
+            myMessage = self.tr(
+                'Impact layer %1 was neither a raster or a vector layer').arg(
+                    theQGISImpactLayer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
@@ -1271,7 +1267,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.restore_state()
 
         #append postprocessing report
-        myReport += myOutput.to_html()
+        myReport.add(myOutput.to_html())
 
         # Return text to display in report panel
         return myReport
