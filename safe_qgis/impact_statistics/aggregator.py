@@ -46,7 +46,7 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
     create_memory_layer,
-    defaults,
+    breakdown_defaults,
     extent_to_geo_array,
     safe_to_qgis_layer)
 from safe_qgis.utilities.styling import set_vector_graduated_style
@@ -109,7 +109,7 @@ class Aggregator(QtCore.QObject):
 
         self.iface = iface
         self.keywordIO = KeywordIO()
-        self.defaults = defaults()
+        self.defaults = breakdown_defaults()
         self.errorMessage = None
         self.targetField = None
         self.impactLayerAttributes = []

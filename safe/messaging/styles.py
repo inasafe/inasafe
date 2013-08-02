@@ -61,10 +61,10 @@ TRACEBACK_STYLE = {
     'level': 5,
     'icon': 'icon-info-sign icon-white',
     'style_class': 'inverse',
-    'attributes': 'onclick="hideTracebacks();"'}
+    'attributes': 'onclick="toggleTracebacks();"'}
 
 TRACEBACK_ITEMS_STYLE = {
-    'style_class': 'traceback-detail hidden',
+    'style_class': 'traceback-detail',
 }
 
 # This is typically a text element or its derivatives
