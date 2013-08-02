@@ -253,8 +253,8 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
         return None, None
 
 
-def defaults(theDefault=None):
-    """Get a dictionary of default values to be used.
+def breakdown_defaults(theDefault=None):
+    """Get a dictionary of default values to be used for post processing.
 
     .. note: This method takes the DEFAULTS from safe and modifies them
         according to user preferences defined in QSettings.
