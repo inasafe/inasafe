@@ -203,16 +203,18 @@ class PostprocessorManager(QtCore.QObject):
                         first_part_result['value'] = format_int(new_result)
 
                     parts_to_delete.append(polygon_index)
-                    
+
                 else:
                     # add polygon to checked list
                     checked_polygon_names[polygon_name] = polygon_index
 
                 polygon_index += 1
-            
-            for part_index in parts_to_delete:
-                print self.postProcessingOutput[proc][part_index]
-                # self.postProcessingOutput[proc].pop(corrected_index)
+
+            # http://stackoverflow.com/questions/497426/
+            # deleting-multiple-elements-from-a-list
+            results_list = [res for j, res in enumerate(results_list)
+                            if j not in parts_to_delete]
+            self.postProcessingOutput[proc] = results_list
 
 
     def run(self):
