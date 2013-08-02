@@ -345,9 +345,12 @@ class AggregatorTest(unittest.TestCase):
         """Check aggregation on raster impact using python zonal stats"""
         self._aggregate_raster_impact()
 
-    @unittest.expectedFailure
     def test_aggregate_raster_impact_native(self):
-        """Check aggregation on raster impact using native qgis zonal stats"""
+        """Check aggregation on raster impact using native qgis zonal stats.
+
+        TODO: this failes on Tims machine but not on MB or Jenkins.
+
+        """
         self._aggregate_raster_impact(useNativeZonalStats=True)
 
     def _aggregate_raster_impact(self, useNativeZonalStats=False):
