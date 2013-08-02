@@ -1,7 +1,7 @@
 *.pyc
 *.*~
 *~
-docs
+docs/release-approval-docs
 pydevpath.txt
 .coverage
 .noseids
