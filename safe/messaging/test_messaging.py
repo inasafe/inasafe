@@ -307,9 +307,9 @@ class MessagingTest(unittest.TestCase):
             '\n</ul>\n<h5 class="problem"><i class="icon-list icon-white">'
             '</i> Details</h5>\n<p>These additional details were reported '
             'when the problem occurred.</p>\n<ul>\n<li>E0d</li>\n<li>E2d'
-            '</li>\n</ul>\n<h5 class="inverse" onclick="hideTracebacks();">'
+            '</li>\n</ul>\n<h5 class="inverse" onclick="toggleTracebacks();">'
             '<i class="icon-info-sign icon-white"></i> Diagnostics (click '
-            'for details)</h5>\n<ol class="traceback-detail hidden">\n<li>In '
+            'for details)</h5>\n<ol class="traceback-detail">\n<li>In '
             'file E0t</li>\n<li>In file E2t</li>\n</ol>\n')
 
         res = em1.to_html()
