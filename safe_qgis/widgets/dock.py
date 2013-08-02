@@ -1929,11 +1929,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         mySettings = QSettings()
         lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
         lastSaveDir = str(lastSaveDir.toString())
+        default_name = myTitle.replace(
+            ' ', '_').replace('(', '').replace(')', '')
         if theScenarioFilePath is None:
             # noinspection PyCallByClass,PyTypeChecker
             myFileName = str(QFileDialog.getSaveFileName(
                 self, myTitleDialog,
-                os.path.join(lastSaveDir, myTitle + '.txt'),
+                os.path.join(lastSaveDir, default_name + '.txt'),
                 "Text files (*.txt)"))
         else:
             myFileName = theScenarioFilePath
