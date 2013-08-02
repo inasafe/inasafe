@@ -98,8 +98,10 @@ class MessageViewer(QtWebKit.QWebView):
         themselves.
 
         :param sender: Unused - the object that sent the message.
+        :type sender: Object, None
+
         :param message: A message to show in the viewer.
-        :type message: Message
+        :type message: safe.messaging.message.Message
         """
 
         self.static_message_count += 1
@@ -119,6 +121,8 @@ class MessageViewer(QtWebKit.QWebView):
         message buffer.
 
         :param sender: The object that sent the message.
+        :type sender: Object, None
+
         :param message: A message to show in the viewer.
         :type message: Message
         """
@@ -131,6 +135,8 @@ class MessageViewer(QtWebKit.QWebView):
         Dynamic messages don't clear the message buffer.
 
         :param sender: Unused - the object that sent the message.
+        :type sender: Object, None
+
         :param message: A message to show in the viewer.
         :type message: Message
         """
