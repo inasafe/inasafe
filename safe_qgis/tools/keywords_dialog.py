@@ -33,7 +33,7 @@ from safe_qgis.utilities.utilities import (
     get_error_message,
     is_polygon_layer,
     layer_attribute_names,
-    defaults)
+    breakdown_defaults)
 
 from safe_qgis.exceptions import (
     InvalidParameterError, HashNotFoundError, NoKeywordsFoundError)
@@ -100,7 +100,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         helpButton.clicked.connect(self.show_help)
 
         # set some inital ui state:
-        self.defaults = defaults()
+        self.defaults = breakdown_defaults()
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)

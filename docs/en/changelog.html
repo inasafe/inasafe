@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Whats new? &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap-responsive.min.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="prev" title="Writing Documentation" href="writing_documentation.html" />
+
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("_static/img/logo.png");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 30px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = 'changelog.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+        // Make the search button pretty - issue 36
+        $(':submit').addClass('btn btn-warning btn-small');
+    })
+
+    
+    function gotoLang(lang) {
+        var currentPage = 'changelog.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+
+<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+
+  </head>
+  <body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="http://inasafe.org">InaSAFE Home</a></li>
+                        <li class="active"><a href="index.html">Documentation</a>
+                        </li>
+                        <li><a href="https://github.com/AIFDR/inasafe/issues">Report
+                            an issue</a>
+                        </li>
+                        <li><a href="https://github.com/AIFDR/inasafe">Get the code</a>
+                        </li>
+                        <li><a href="index.html/../irchat.html">Chat live!</a>
+                        </li>
+                        <li><div id="searchbox">
+                                <form class="navbar-form pull-right" id="search" action="index.html/../search.html" method="get">
+                                <input type="text" name="q" placeholder="Search"/>
+                                <input type="submit" value="Go" class="btn btn-warning btn-small"/>
+                                <input type="hidden" name="check_keywords" value="yes" />
+                                <input type="hidden" name="area" value="default" />
+                                </form>
+                            </div>
+                        <script type="text/javascript">$('#searchbox').show(0);</script>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                
+                
+                <li class="right"
+                style="margin-right: 10px" >
+                <a href="genindex.html"
+                   title="General Index"
+                   style="z-index:;"
+                accesskey="I">index</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="writing_documentation.html"
+                   title="Writing Documentation"
+                   style="z-index:;"
+                accesskey="P">previous</a>
+                </li>
+                
+
+                
+                <li class="first">
+                    <a style="z-index:100;" href="index.html"> InaSAFE Docs </a>
+                </li>
+                
+                
+                <li><a href="#">Whats new?</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <ul id="locales">
+                    <li id="flag_en"><a href="#" onclick="gotoLang('en');"><img
+                            src="_static/img/flags/gb.png"/></a>
+                    </li>
+                    <li id="flag_id"><a href="#" onclick="gotoLang('id');"><img
+                            src="_static/img/flags/id.png"/></a>
+                    </li>
+                </ul>
+                <span style="clear:both">&nbsp;</span>
+            </div>
+        </div>
+        <div class="span9">
+                
+  <div class="section" id="whats-new">
+<h1>Whats new?<a class="headerlink" href="#whats-new" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changelog-for-version-release">
+<span id="changelog"></span><h2>Changelog for version 1.2.0<a class="headerlink" href="#changelog-for-version-release" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Zero impact or &#8220;all is well&#8221; handling. See
+<a class="reference external" href="https://github.com/AIFDR/inasafe/issues/583">https://github.com/AIFDR/inasafe/issues/583</a></li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-1-1-0">
+<h2>Changelog for version 1.1.0<a class="headerlink" href="#changelog-for-version-1-1-0" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Flood assessment using polygons now generates evacuation totals based
+on percent of affected people (defaults to 1%).</li>
+<li>Improvements to error handling with more informative messages to user.</li>
+<li>Memory requirements prediction to try to warn a user when they might not
+have enough RAM. See <a class="reference external" href="https://github.com/AIFDR/inasafe/issues/476">https://github.com/AIFDR/inasafe/issues/476</a>.</li>
+<li>Remote logging support. This <strong>opt in</strong> feature lets you submit useful
+diagnostic information to our fault logger at <a class="reference external" href="http://sentry.linfiniti.com">http://sentry.linfiniti.com</a>.</li>
+<li>Support for automatic creation of packages in a test repository for
+early adopters to test with.</li>
+<li>Fix for 2D geometries - closes <a class="reference external" href="https://github.com/AIFDR/inasafe/issues/471">https://github.com/AIFDR/inasafe/issues/471</a></li>
+<li>Default dock panel to right of QGIS. Closes
+<a class="reference external" href="https://github.com/AIFDR/inasafe/issues/326">https://github.com/AIFDR/inasafe/issues/326</a></li>
+<li>Fix <a class="reference external" href="https://github.com/AIFDR/inasafe/issues/358">https://github.com/AIFDR/inasafe/issues/358</a></li>
+<li>Many small &#8216;under the hood&#8217; improvements.</li>
+<li>Realtime quake mapping support. This is available in source tree only
+and is a server side installable application. Indonesia specific.</li>
+<li>Realtime flood mapping support. This is available in source tree only
+and provides an experimental implementation for production of floodmaps.
+Jakarta specific.</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-1-0-1">
+<h2>Changelog for version 1.0.1<a class="headerlink" href="#changelog-for-version-1-0-1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fix <a class="reference external" href="https://github.com/AIFDR/inasafe/issues/374">https://github.com/AIFDR/inasafe/issues/374</a></li>
+<li>Fix <a class="reference external" href="https://github.com/AIFDR/inasafe/issues/375">https://github.com/AIFDR/inasafe/issues/375</a></li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-1-0-0">
+<h2>Changelog for version 1.0.0<a class="headerlink" href="#changelog-for-version-1-0-0" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added post processor infrastructure including gender and age specific
+indicators</li>
+<li>Added data source attribution</li>
+<li>Various GUI updates</li>
+<li>Added use of transparency in generated maps</li>
+<li>Added an earthquake impact function</li>
+<li>Documentation updates</li>
+<li>Many bugfixes and architectural improvements</li>
+<li>Better internationalisation support</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-0-5-2">
+<h2>Changelog for version 0.5.2<a class="headerlink" href="#changelog-for-version-0-5-2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This is a bugfix update to address some minor translation issues in the
+InaSAFE package.</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-0-5-1">
+<h2>Changelog for version 0.5.1<a class="headerlink" href="#changelog-for-version-0-5-1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>This is a bugfix update to reduce the size of the InaSAFE package.</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-0-5-0">
+<h2>Changelog for version 0.5.0<a class="headerlink" href="#changelog-for-version-0-5-0" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Better documentation. See <a class="reference external" href="http://inasafe.org/contents.html">http://inasafe.org/contents.html</a></li>
+<li>Time stamp and other metadata added to generated map PDF.</li>
+<li>Initial support for parameterisation of impact functions.</li>
+<li>Updated logging infrastructure including support for logging to the
+QGIS log panel.</li>
+<li>Fixed missing InaSAFE icon in QGIS plugin manager.</li>
+<li>Fixes for help system under windows.</li>
+<li>Multi-page support for generated report PDF (which is now created as a
+separate document).</li>
+<li>Ability to combine polygon hazard  (such as flood prone areas) with
+population density.</li>
+<li>Option to use entire intersection of hazard and exposure instead of clipping
+to the somewhat arbitrary viewport (the training revealed that this was a bit
+confusing)</li>
+<li>Aggregation of raster impact layers by arbitrary polygon layers (such as
+kelurahan boundaries)</li>
+<li>Limited support for runtime configuration of impact functions (e.g. by
+changing thresholds). This is an interim measure while the team is working
+on a GUI to manipulate impact functions more generally.</li>
+<li>More DRR actions added to impact function reports (such as how will warnings
+be disseminated, how will we reach stranded people etc.)</li>
+<li>Volcanic (zonal hazard) impact assessments on building and population</li>
+<li>New function table view that lists all the available impact functions and
+allows them to be filtered by different criteria.</li>
+<li>Lots of small improvements to error reporting, GUI, translations and code
+quality.</li>
+</ul>
+<div class="section" id="changelog-for-version-0-4-1">
+<h3>Changelog for version 0.4.1<a class="headerlink" href="#changelog-for-version-0-4-1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>This is a minor bugfix release with packaging and documentation related
+changes only so that InaSAFE can be deployed via the official QGIS
+repository.</li>
+<li>Added InaSAFE tutorial to sphinx documentation</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-0-4-0">
+<h3>Changelog for version 0.4.0<a class="headerlink" href="#changelog-for-version-0-4-0" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Ability to automatically handle multipart vector data:
+<a class="reference external" href="https://github.com/AIFDR/inasafe/issues/160">https://github.com/AIFDR/inasafe/issues/160</a></li>
+<li>Better error reporting:</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/170">https://github.com/AIFDR/inasafe/issues/170</a></li>
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/161">https://github.com/AIFDR/inasafe/issues/161</a></li>
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/157">https://github.com/AIFDR/inasafe/issues/157</a></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Bug fixing:</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/159">https://github.com/AIFDR/inasafe/issues/159</a></li>
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/156">https://github.com/AIFDR/inasafe/issues/156</a></li>
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/173">https://github.com/AIFDR/inasafe/issues/173</a></li>
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/166">https://github.com/AIFDR/inasafe/issues/166</a></li>
+<li><a class="reference external" href="https://github.com/AIFDR/inasafe/issues/162">https://github.com/AIFDR/inasafe/issues/162</a></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>InaSAFE APIs better defined: <a class="reference external" href="https://github.com/AIFDR/inasafe/issues/134">https://github.com/AIFDR/inasafe/issues/134</a></li>
+<li>Release procedure developed: <a class="reference external" href="https://github.com/AIFDR/inasafe/issues/109">https://github.com/AIFDR/inasafe/issues/109</a></li>
+<li>Added estimate of displaced people to earthquake fatality model:
+<a class="reference external" href="https://github.com/AIFDR/inasafe/commit/04f0e1d">https://github.com/AIFDR/inasafe/commit/04f0e1d</a></li>
+<li>Achieved 100% translation for Bahasa Indonesia</li>
+<li>Made bundled test and demo data public with associated license information</li>
+<li>Added AusAid and World Bank logos to dock</li>
+<li>Fixed bug with flood population evacuation reporting units</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-0-3-0">
+<h3>Changelog for version 0.3.0<a class="headerlink" href="#changelog-for-version-0-3-0" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Documentation updates - extended guides for using the InaSAFE dock and
+keyword editors.</li>
+<li>Support for remote layers in keywords editor and scenario modelling</li>
+<li>Added options dialog</li>
+<li>Support for using all layers in hazard and exposure combos, not just visible
+ones (configurable in options dialog)</li>
+<li>Support for displaying keywords title in QGIS layer list (configurable in
+options dialog)</li>
+<li>When selecting a hazard or exposure layer, its keywords are now displayed
+in the results area.</li>
+<li>Performance improvements when toggling layer visibility and adding and
+removing layers.</li>
+<li>Support for QGIS 1.8 when it is released</li>
+<li>Numerous other &#8216;under the hood&#8217; bug fixes and improvements</li>
+<li>Migrated code base from RIAB to InaSAFE and restructured the code base</li>
+<li>Added additional tests</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-0-2-1">
+<h3>Changelog for version 0.2.1:<a class="headerlink" href="#changelog-for-version-0-2-1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Correct translation of &#8216;run&#8217; in indonesian. Closes #128</li>
+<li>Updated so that version number is shown in dock</li>
+<li>Removed generated file from polygon test</li>
+<li>Removed the -dev designation from branch releases</li>
+<li>Fix indent error causing noise to show in qgis plugin manager</li>
+<li>Fixed typo - BNPD to <a class="reference external" href="http://www.bnpb.go.id/">BNPB</a></li>
+<li>Fixed bug where close button does not dispose of the help dialog</li>
+<li>Fixed an issue that prevented the use of earthquake functions when using
+keywords with lowercase mmi. Closes #142</li>
+<li>Fix for mac clipping issues - the plugin should work on OSX now. Closes #141.
+Note that OSX users should upgrade to GDAL 1.9 available here:
+<a class="reference external" href="http://www.kyngchaos.com/software/qgis">http://www.kyngchaos.com/software/qgis</a></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h3>Changelog for version 0.2.1:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Map printing support</li>
+<li>Improved translation support and Indonesian translation updates</li>
+<li>Rebranded from Risk in a Box to InaSAFE</li>
+<li>Documentation updates and documented windows developer procedures</li>
+<li>Support for generating documentation and running tests under Windows</li>
+<li>Scripts for semi-automatic packaging of a release</li>
+<li>Improvements to Impact calculator algorithms</li>
+</ul>
+</div>
+<div class="section" id="changelog-for-version-0-1-0">
+<h3>Changelog for version 0.1.0:<a class="headerlink" href="#changelog-for-version-0-1-0" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>First QGIS plugin implementation of InaSAFE.</li>
+<li>Migrated calculation engine from Risiko project.</li>
+<li>Implemented support for polygon hazard layers.</li>
+<li>Added dock widget for designing and executing a scenario model.</li>
+<li>Added the keyword editor for assigning metadata to input files.</li>
+<li>Added integrated context help tool.</li>
+<li>Removed django specific dependencies from the InaSAFE libs.</li>
+<li>removed dependency on SciPy</li>
+<li>Support for internationalisation.</li>
+<li>Comprehensive documentation system.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+        </div> 
+        <hr>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact
+            <a href="mailto:info@inasafe.org?subject=[inasafe-info]">
+            <b>info@inasafe.org</b></a> for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>

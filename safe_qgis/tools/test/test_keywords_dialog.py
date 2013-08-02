@@ -46,7 +46,7 @@ from safe_qgis.safe_interface import (
     HAZDATA, TESTDATA)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
-from safe_qgis.utilities.utilities import defaults, qgis_version
+from safe_qgis.utilities.utilities import breakdown_defaults, qgis_version
 
 
 # Get QGis app handle
@@ -231,7 +231,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_radPostprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
-        myDefaults = defaults()
+        myDefaults = breakdown_defaults()
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
@@ -262,7 +262,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
-        myDefaults = defaults()
+        myDefaults = breakdown_defaults()
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)

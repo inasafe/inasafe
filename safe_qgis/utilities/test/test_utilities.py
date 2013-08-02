@@ -25,7 +25,7 @@ from safe_qgis.utilities.utilities import (
     impact_attribution,
     dpi_to_meters,
     which,
-    defaults)
+    breakdown_defaults)
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, TEST_FILES_DIR)
 from safe_qgis.tools.test.test_keywords_dialog import (
@@ -146,7 +146,7 @@ class UtilitiesTest(unittest.TestCase):
             'AGGR_ATTR_KEY': 'aggregation attribute',
             'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
             'ADULT_RATIO': 0.659}
-        myDefaults = defaults()
+        myDefaults = breakdown_defaults()
         myMessage = 'Defaults: got %s, expected %s' % (
             myDefaults, myExpectedDefaults)
         assert (myDefaults == myExpectedDefaults), myMessage
