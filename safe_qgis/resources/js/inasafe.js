@@ -8,6 +8,6 @@
     }
 })(jQuery);
 
-function hideTracebacks() {
+function toggleTracebacks() {
   $('.traceback-detail').toggle();
 }
