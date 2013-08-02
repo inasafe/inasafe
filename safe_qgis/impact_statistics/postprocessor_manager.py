@@ -216,7 +216,6 @@ class PostprocessorManager(QtCore.QObject):
                             if j not in parts_to_delete]
             self.postProcessingOutput[proc] = results_list
 
-
     def run(self):
         """Run any post processors requested by the impact function.
 
@@ -361,7 +360,7 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 if (self.keywordIO.read_keywords(
                         self.aggregator.layer, 'HAD_MULTIPART_POLY')):
-                        self._consolidate_multipart_stats()
+                    self._consolidate_multipart_stats()
             except KeywordNotFoundError:
                 pass
 
