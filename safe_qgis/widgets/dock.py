@@ -485,6 +485,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             flag,myMessage = self.validate()
         """
+        if self.busy:
+            return False, None
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
