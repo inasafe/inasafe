@@ -406,18 +406,18 @@ class AggregatorTest(unittest.TestCase):
             ['JAKARTA UTARA', '286'],
             ['JAKARTA TIMUR', '198']
         ]
-        # self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregate(myImpactLayer, myExpectedResults)
 
         myImpactLayer = Vector(
             data=TESTDATA + '/aggregation_test_impact_vector_small.shp',
             name='test vector impact')
 
         myExpectedResults = [
-            ['JAKARTA BARAT', '87'],
-            ['JAKARTA PUSAT', '117'],
-            ['JAKARTA SELATAN', '22'],
-            ['JAKARTA UTARA', '286'],
-            ['JAKARTA TIMUR', '198']
+            ['JAKARTA BARAT', '2'],
+            ['JAKARTA PUSAT', '0'],
+            ['JAKARTA SELATAN', '0'],
+            ['JAKARTA UTARA', '1'],
+            ['JAKARTA TIMUR', '0']
         ]
 
         self._aggregate(myImpactLayer, myExpectedResults)
