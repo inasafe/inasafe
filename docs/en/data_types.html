@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Data Types &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap-responsive.min.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="next" title="Using QGIS" href="using-qgis.html" />
+    <link rel="prev" title="Post-processors" href="postprocessors.html" />
+
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("_static/img/logo.png");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 30px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = 'data_types.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+        // Make the search button pretty - issue 36
+        $(':submit').addClass('btn btn-warning btn-small');
+    })
+
+    
+    function gotoLang(lang) {
+        var currentPage = 'data_types.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+
+<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+
+  </head>
+  <body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li><a href="http://inasafe.org">InaSAFE Home</a></li>
+                        <li class="active"><a href="index.html">Documentation</a>
+                        </li>
+                        <li><a href="https://github.com/AIFDR/inasafe/issues">Report
+                            an issue</a>
+                        </li>
+                        <li><a href="https://github.com/AIFDR/inasafe">Get the code</a>
+                        </li>
+                        <li><a href="index.html/../irchat.html">Chat live!</a>
+                        </li>
+                        <li><div id="searchbox">
+                                <form class="navbar-form pull-right" id="search" action="index.html/../search.html" method="get">
+                                <input type="text" name="q" placeholder="Search"/>
+                                <input type="submit" value="Go" class="btn btn-warning btn-small"/>
+                                <input type="hidden" name="check_keywords" value="yes" />
+                                <input type="hidden" name="area" value="default" />
+                                </form>
+                            </div>
+                        <script type="text/javascript">$('#searchbox').show(0);</script>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                
+                
+                <li class="right"
+                style="margin-right: 10px" >
+                <a href="genindex.html"
+                   title="General Index"
+                   style="z-index:;"
+                accesskey="I">index</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="using-qgis.html"
+                   title="Using QGIS"
+                   style="z-index:;"
+                accesskey="N">next</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="postprocessors.html"
+                   title="Post-processors"
+                   style="z-index:;"
+                accesskey="P">previous</a>
+                </li>
+                
+
+                
+                <li class="first">
+                    <a style="z-index:100;" href="index.html"> InaSAFE Docs </a>
+                </li>
+                
+                
+                <li><a href="#">Data Types</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <ul id="locales">
+                    <li id="flag_en"><a href="#" onclick="gotoLang('en');"><img
+                            src="_static/img/flags/gb.png"/></a>
+                    </li>
+                    <li id="flag_id"><a href="#" onclick="gotoLang('id');"><img
+                            src="_static/img/flags/id.png"/></a>
+                    </li>
+                </ul>
+                <span style="clear:both">&nbsp;</span>
+            </div>
+        </div>
+        <div class="span9">
+                
+  <div class="section" id="data-types">
+<span id="id1"></span><h1>Data Types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h1>
+<p>The impact functions essentially combine spatial data in different formats
+through a common interpolation library. This essentially allows values from
+one data set to be assigned to another independent of their types.
+Given two layers H and E, say, the call:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">I</span> <span class="o">=</span> <span class="n">assign_hazard_values_to_exposure_data</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will produce a new layer with all values from H transferred to E in a manner
+appropriate for the data types of H and E. Generally, existing values in
+E will be also be carried over to I. Conceptually, the new layer I represents
+the values of H interpolated to E.</p>
+<p>The function takes a number of optional keyword arguments that pertain to
+certain type combinations. They are:</p>
+<ul class="simple">
+<li>layer_name: Optional name of returned layer. If None (default) the name of
+the exposure layer is used.</li>
+<li>attribute_name:<ul>
+<li>If hazard layer is of type raster, this is the name for new attribute in
+the result containing the hazard level. If None (default) the name of
+hazard is used</li>
+<li>If hazard layer is of type vector, it is the name of the attribute to
+transfer from the hazard layer into the result. If None (default) all
+attributes are transferred.</li>
+</ul>
+</li>
+<li>mode: Interpolation mode for raster to point interpolation only. Options
+are &#8216;linear&#8217; (default) or &#8216;constant&#8217;</li>
+</ul>
+<p>The following table shows allowed combinations and what interpolation means
+in each case.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="62%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">H</th>
+<th class="head">E</th>
+<th class="head">Methodology</th>
+<th class="head">Return value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Polygon</td>
+<td>Point</td>
+<td>Clip points to polygon and assign all attributes</td>
+<td>Point</td>
+</tr>
+<tr class="row-odd"><td>Polygon</td>
+<td>Line</td>
+<td>&nbsp;</td>
+<td>N/A</td>
+</tr>
+<tr class="row-even"><td>Polygon</td>
+<td>Polygon</td>
+<td>&nbsp;</td>
+<td>N/A</td>
+</tr>
+<tr class="row-odd"><td>Polygon</td>
+<td>Raster</td>
+<td>Convert to points and use Polygon-Point algorithm</td>
+<td>Point</td>
+</tr>
+<tr class="row-even"><td>Raster</td>
+<td>Point</td>
+<td>Bilinear or piecewise constant interpolation</td>
+<td>Point</td>
+</tr>
+<tr class="row-odd"><td>Raster</td>
+<td>Line</td>
+<td>&nbsp;</td>
+<td>N/A</td>
+</tr>
+<tr class="row-even"><td>Raster</td>
+<td>Polygon</td>
+<td>Convert to centroids and use Raster-Point algorithm</td>
+<td>Polygon</td>
+</tr>
+<tr class="row-odd"><td rowspan="2">Raster</td>
+<td rowspan="2">Raster</td>
+<td rowspan="2">Check that rasters are aligned and return E</td>
+<td rowspan="2">Raster</td>
+</tr>
+<tr class="row-even"></tr>
+</tbody>
+</table>
+<p>See <em class="xref std std-ref">writing_impact_functions</em> for more information and
+<a class="reference external" href="http://inasafe.org/api-docs/safe/engine/interpolation.html#safe.engine.interpolation.assign_hazard_values_to_exposure_data">assign_hazard_values_to_exposure_data</a>
+for the full documentation of this function.</p>
+</div>
+
+
+        </div> 
+        <hr>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact
+            <a href="mailto:info@inasafe.org?subject=[inasafe-info]">
+            <b>info@inasafe.org</b></a> for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>
