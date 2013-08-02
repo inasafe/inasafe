@@ -453,7 +453,7 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
 
         # .. see also:: :func:`appendRow` to understand the next 2 lines
         myVariant = task_item.data(QtCore.Qt.UserRole)
-        myValue = myVariant.toPyObject()[0]
+        myValue = myVariant[0]
 
         myResult = True
 
