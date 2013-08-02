@@ -296,10 +296,10 @@ def _clip_vector_layer(
             # explode_attribute
             if myPartIndex > 0 and explode_attribute is not None:
                 myHasMultipart = True
-                myPartAttr = QVariant(
-                    '%s #%s' % (myAttrs[theExplodeAttributeIndex].toString(),
-                                myPartIndex))
-                myFeature.changeAttribute(theExplodeAttributeIndex, myPartAttr)
+                # myPartAttr = QVariant(
+                #     '%s #%s' % (myAttrs[theExplodeAttributeIndex].toString(),
+                #                 myPartIndex))
+                # myFeature.changeAttribute(theExplodeAttributeIndex, myPartAttr)
 
             myWriter.addFeature(myFeature)
         myCount += 1

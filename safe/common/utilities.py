@@ -515,6 +515,19 @@ def unhumanize_class(my_classes):
     return my_result
 
 
+def unhumanize_number(number):
+    """Return number without formatting
+    @param number:
+    """
+    try:
+        number = number.replace(get_thousand_separator(), '')
+        number = int(float(number))
+    except AttributeError:
+        pass
+
+    return number
+
+
 def create_classes(my_list, num_classes):
     """Create classes from my_list. Classes will use linspace from numpy.
     It will extend from min and max of elements in my_list. If min == 0,
