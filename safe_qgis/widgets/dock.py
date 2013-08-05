@@ -1183,7 +1183,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysis_error(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
-            self.show_static_message(m.Message(str(myReport)))
+            self.show_static_message(m.Message(myReport))
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
