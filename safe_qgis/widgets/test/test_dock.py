@@ -690,14 +690,11 @@ class DockTest(unittest.TestCase):
         myEngineImpactLayer = myRunner.impact_layer()
         myQgisImpactLayer = read_impact_layer(myEngineImpactLayer)
         myStyle = myEngineImpactLayer.get_style_info()
-        #print myStyle
         setRasterStyle(myQgisImpactLayer, myStyle)
         # simple test for now - we could test explicity for style state
         # later if needed.
         myMessage = ('Raster layer was not assigned a Singleband pseudocolor'
                      ' renderer as expected.')
-        #assert myQgisImpactLayer.colorShadingAlgorithm() == QgsRasterLayer. \
-        #    ColorRampShader, myMessage
         assert myQgisImpactLayer.renderer().type() == "singlebandpseudocolor",\
             myMessage
 
