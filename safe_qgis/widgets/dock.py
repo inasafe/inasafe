@@ -1860,7 +1860,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myIndex = theIndex
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
-        myFunctionID = str(myItemData)
+        myFunctionID = '' if myItemData is None else str(myItemData)
         return myFunctionID
 
     def save_current_scenario(self, theScenarioFilePath=None):
