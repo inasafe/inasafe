@@ -341,6 +341,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         registry = QgsMapLayerRegistry.instance()
         registry.layersWillBeRemoved.connect(self.get_layers)
         registry.layersAdded.connect(self.get_layers)
+        registry.layersRemoved.connect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
