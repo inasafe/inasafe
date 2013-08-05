@@ -1311,9 +1311,9 @@ Click for Diagnostic Information:
             'jakarta_flood_category_123.asc'), 'Hazard is not the same'
         assert myFunction == 'function = Categorised Hazard Population ' \
                              'Impact Function', 'Impact function is not same'
-        assert myExtent == 'extent = 106.3133333333333326, ' \
-                           '-6.3799999999999999, 107.3466666666666640, ' \
-                           '-6.0700000000000003', 'Extent is not same'
+        myExpectedExtent = (
+            'extent = 106.313333, -6.380000, 107.346667, -6.070000')
+        self.assertEqual(myExpectedExtent, myExtent)
 
     def test_set_dock_title(self):
         """Test the dock title gets set properly."""

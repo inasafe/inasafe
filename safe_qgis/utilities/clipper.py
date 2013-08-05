@@ -262,14 +262,9 @@ def _clip_vector_layer(
     myCount = 0
     myHasMultipart = False
 
-    if explode_attribute is not None:
-        theExplodeAttributeIndex = myProvider.fieldNameIndex(
-            explode_attribute)
-
     for myFeature in myProvider.getFeatures(myRequest):
         myGeometry = myFeature.geometry()
-        if explode_attribute is not None:
-            myAttrs = myFeature.attributes()
+
         # Loop through the parts adding them to the output file
         # we write out single part features unless explode_flag is False
         if explode_flag:
@@ -291,9 +286,6 @@ def _clip_vector_layer(
             # explode_attribute
             if myPartIndex > 0 and explode_attribute is not None:
                 myHasMultipart = True
-                myPartAttr = '%s #%s' % (myAttrs[theExplodeAttributeIndex],
-                                         myPartIndex)
-                myFeature.setAttribute(theExplodeAttributeIndex, myPartAttr)
 
             myWriter.addFeature(myFeature)
         myCount += 1

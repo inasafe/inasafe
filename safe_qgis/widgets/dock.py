@@ -477,6 +477,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             flag,myMessage = self.validate()
         """
+        if self.busy:
+            return False, None
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
@@ -1880,11 +1882,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHazardLayer = self.get_hazard_layer()
         myAggregationLayer = self.get_aggregation_layer()
         myFunctionId = self.get_function_id(self.cboFunction.currentIndex())
-        myMapCanvas = self.iface.mapCanvas()
-        myExtent = myMapCanvas.extent()
-        myExtentStr = str(myExtent.toString())
-        myExtentStr = myExtentStr.replace(',', ', ')
-        myExtentStr = myExtentStr.replace(' : ', ', ')
+        myExtent = viewport_geo_array(self.iface.mapCanvas())
+        # make it look like this:
+        # 109.829170982, -8.13333290561, 111.005344795, -7.49226294379
+        myExtentStr = ', '.join(('%f' % x) for x in myExtent)
 
         # Checking f exposure and hazard layer is not None
         if myExposureLayer is None:

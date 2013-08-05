@@ -305,6 +305,8 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
                 return False
 
             # set the extent according the value
+            self.iface.mapCanvas().mapRenderer().setProjectionsEnabled(True)
+
             myExtent = QgsRectangle(*myCoordinate)
 
             myMessage = 'set layer extent to %s ' % myExtent.asWktCoordinates()
