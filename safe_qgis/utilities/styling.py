@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **IS Utilities implementation.**
@@ -22,7 +23,7 @@ import logging
 import math
 import numpy
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 
 from qgis.core import (
     QGis,
@@ -34,10 +35,11 @@ from qgis.core import (
     QgsSymbolLayerV2Registry,
     QgsColorRampShader,
     QgsRasterTransparency,
-    QgsCategorizedSymbolRendererV2)
+    QgsCategorizedSymbolRendererV2,
+    QgsSimpleMarkerSymbolLayerV2,
+    QgsSimpleFillSymbolLayerV2)
 
 from safe_qgis.exceptions import StyleError
-from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -109,30 +111,17 @@ def set_vector_graduated_style(vector_layer, style):
         myColour = QtGui.QColor(myColour)
         # noinspection PyArgumentList
         mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
-        myColourString = "%s, %s, %s" % (
-                         myColour.red(),
-                         myColour.green(),
-                         myColour.blue())
-        # Work around for the fact that QgsSimpleMarkerSymbolLayerV2
-        # python bindings are missing from the QGIS api.
-        # .. see:: http://hub.qgis.org/issues/4848
         # We need to create a custom symbol layer as
         # the border colour of a symbol can not be set otherwise
         # noinspection PyArgumentList
-        myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
-            myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
-            # note that you can get a list of available layer properties
-            # that you can set by doing e.g.
-            # QgsSimpleMarkerSymbolLayerV2.properties()
-            mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
-                                                          myColourString})
+            mySymbolLayer = QgsSimpleMarkerSymbolLayerV2()
+            mySymbolLayer.setBorderColor(myColour)
             mySymbolLayer.setSize(mySize)
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
-            myMetadata = myRegistry.symbolLayerMetadata('SimpleFill')
-            mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
-                                                          myColourString})
+            mySymbolLayer = QgsSimpleFillSymbolLayerV2()
+            mySymbolLayer.setBorderColor(myColour)
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
             # for lines we do nothing special as the property setting
@@ -220,30 +209,17 @@ def set_vector_categorized_style(vector_layer, style):
         myColour = QtGui.QColor(myColour)
         # noinspection PyArgumentList
         mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
-        myColourString = "%s, %s, %s" % (
-            myColour.red(),
-            myColour.green(),
-            myColour.blue())
-        # Work around for the fact that QgsSimpleMarkerSymbolLayerV2
-        # python bindings are missing from the QGIS api.
-        # .. see:: http://hub.qgis.org/issues/4848
         # We need to create a custom symbol layer as
         # the border colour of a symbol can not be set otherwise
         # noinspection PyArgumentList
-        myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
-            myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
-            # note that you can get a list of available layer properties
-            # that you can set by doing e.g.
-            # QgsSimpleMarkerSymbolLayerV2.properties()
-            mySymbolLayer = myMetadata.createSymbolLayer({
-                'color_border': myColourString})
+            mySymbolLayer = QgsSimpleMarkerSymbolLayerV2()
+            mySymbolLayer.setBorderColor(myColour)
             mySymbolLayer.setSize(mySize)
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
-            myMetadata = myRegistry.symbolLayerMetadata('SimpleFill')
-            mySymbolLayer = myMetadata.createSymbolLayer({
-                'color_border': myColourString})
+            mySymbolLayer = QgsSimpleFillSymbolLayerV2()
+            mySymbolLayer.setBorderColor(myColour)
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
             # for lines we do nothing special as the property setting
@@ -293,7 +269,7 @@ def setRasterStyle(raster_layer, style):
     """
     myNewStyles = add_extrema_to_style(style['style_classes'])
     LOGGER.debug('Rendering raster using 2+ styling')
-    return set_new_raster_style(raster_layer, myNewStyles)
+    return set_raster_style(raster_layer, myNewStyles)
 
 
 def add_extrema_to_style(style):
@@ -360,113 +336,7 @@ def add_extrema_to_style(style):
     return myNewStyles
 
 
-# Should we drop this legacy code for QGIS < 2.0? (AB)
-def set_legacy_raster_style(raster_layer, style):
-    """Set QGIS raster style based on InaSAFE style dictionary for QGIS < 2.0.
-
-    This function will set both the colour map and the transparency
-    for the passed in layer.
-
-    :param raster_layer: A QGIS raster layer that will be styled.
-    :type raster_layer: QgsVectorLayer
-
-    :param style: Dictionary of the form as in the example below.
-    :type style: dict
-
-    Example::
-
-        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
-                         dict(colour='#38A800', quantity=5, transparency=50),
-                         dict(colour='#79C900', quantity=10, transparency=50),
-                         dict(colour='#CEED00', quantity=20, transparency=50),
-                         dict(colour='#FFCC00', quantity=50, transparency=34),
-                         dict(colour='#FF6600', quantity=100, transparency=77),
-                         dict(colour='#FF0000', quantity=200, transparency=24),
-                         dict(colour='#7A0000', quantity=300, transparency=22)]
-
-    .. note:: There is currently a limitation in QGIS in that
-       pixel transparency values can not be specified in ranges and
-       consequently the opacity is of limited value and seems to
-       only work effectively with integer values.
-
-    :returns: A two tuple containing a range list and a transparency list.
-    :rtype: (list, list)
-
-    """
-    raster_layer.setDrawingStyle(QgsRasterLayer.PalettedColor)
-    LOGGER.debug(style)
-    myRangeList = []
-    myTransparencyList = []
-    # Always make 0 pixels transparent see issue #542
-    # noinspection PyCallingNonCallable
-    myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
-    myPixel.pixelValue = 0.0
-    myPixel.percentTransparent = 100
-    myTransparencyList.append(myPixel)
-    myLastValue = 0
-    for myClass in style:
-        LOGGER.debug('Evaluating class:\n%s\n' % myClass)
-        myMax = myClass['quantity']
-        myColour = QtGui.QColor(myClass['colour'])
-        myLabel = ''
-        if 'label' in myClass:
-            myLabel = myClass['label']
-        # noinspection PyCallingNonCallable
-        myShader = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
-        myRangeList.append(myShader)
-
-        if math.isnan(myMax):
-            LOGGER.debug('Skipping class.')
-            continue
-
-        # Create opacity entries for this range
-        myTransparencyPercent = 0
-        if 'transparency' in myClass:
-            myTransparencyPercent = int(myClass['transparency'])
-        if myTransparencyPercent > 0:
-            # Always assign the transparency to the class' specified quantity
-            # noinspection PyCallingNonCallable
-            myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
-            myPixel.pixelValue = myMax
-            myPixel.percentTransparent = myTransparencyPercent
-            myTransparencyList.append(myPixel)
-
-            # Check if range extrema are integers so we know if we can
-            # use them to calculate a value range
-            if (myLastValue == int(myLastValue)) and (myMax == int(myMax)):
-                # Ensure that they are integers
-                # (e.g 2.0 must become 2, see issue #126)
-                myLastValue = int(myLastValue)
-                myMax = int(myMax)
-
-                # Set transparencies
-                myRange = range(myLastValue, myMax)
-                for myValue in myRange:
-                    # noinspection PyCallingNonCallable
-                    myPixel = \
-                        QgsRasterTransparency.TransparentSingleValuePixel()
-                    myPixel.pixelValue = myValue
-                    myPixel.percentTransparent = myTransparencyPercent
-                    myTransparencyList.append(myPixel)
-
-    # Apply the shading algorithm and design their ramp
-    raster_layer.setColorShadingAlgorithm(
-        QgsRasterLayer.ColorRampShader)
-    myFunction = raster_layer.rasterShader().rasterShaderFunction()
-    # Discrete will shade any cell between maxima of this break
-    # and minima of previous break to the colour of this break
-    myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
-    myFunction.setColorRampItemList(myRangeList)
-
-    # Now set the raster transparency
-    raster_layer.rasterTransparency()\
-        .setTransparentSingleValuePixelList(myTransparencyList)
-
-    raster_layer.saveDefaultStyle()
-    return myRangeList, myTransparencyList
-
-
-def set_new_raster_style(raster_layer, style):
+def set_raster_style(raster_layer, style):
     """Set QGIS raster style based on InaSAFE style dictionary for QGIS >= 2.0.
 
     This function will set both the colour map and the transparency
