@@ -863,7 +863,8 @@ class Aggregator(QtCore.QObject):
 #        startTime = time.clock()
 
         myMessage = m.Message(
-            m.Heading(self.tr('Preclipping input data...')),
+            m.Heading(
+                self.tr('Preclipping input data...'), **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'Modifying %1 to avoid intersections with the aggregation '
                 'layer'
