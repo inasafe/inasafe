@@ -642,7 +642,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             called this function.
         :type args: list
 
-        ..note:: *args is only used for debugging purposes.
+        ..note:: \*args is only used for debugging purposes.
         """
 
         # Prevent recursion

@@ -562,7 +562,7 @@ def map_to_pixel(x_coordinate, y_coordinate, geo_transform):
     :type x_coordinate: float
 
     :param y_coordinate: Input map Y coordinate.
-    :type y_coordinate float
+    :type y_coordinate: float
 
     :param geo_transform: Geo-referencing transform from raster metadata.
     :type geo_transform: list (six floats)
