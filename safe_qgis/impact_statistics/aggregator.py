@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Aggregator.**
 
@@ -254,7 +255,7 @@ class Aggregator(QtCore.QObject):
 
         Performs Aggregation postprocessing step by
 
-            * creating a copy of the dataset clipped by the impactlayer
+            * creating a copy of the dataset clipped by the impact layer
               bounding box
             * stripping all attributes beside the aggregation attribute
             * delegating to the appropriate aggregator for raster and vectors
@@ -407,7 +408,6 @@ class Aggregator(QtCore.QObject):
             LOGGER.debug('Skipping postprocessing due to: %s' % myMessage)
             self.errorMessage = myMessage
             return
-        myImpactProvider = impact_layer.dataProvider()
         myTargetFieldIndex = impact_layer.fieldNameIndex(
             self.targetField)
         #if a feature has no field called
@@ -421,12 +421,7 @@ class Aggregator(QtCore.QObject):
             self.errorMessage = myMessage
             return
 
-        # start data retreival: fetch no geometry and
-        # 1 attr for each feature
-        #myImpactRequest = QgsFeatureRequest()
-        #myImpactRequest.setFlags(QgsFeatureRequest.NoGeometry)
-        #myImpactRequest.setSubsetOfAttributes([myTargetFieldIndex])
-        #myImpactProvider.select([myTargetFieldIndex], QgsRectangle(), False)
+        # start data retrieval
         myTotal = 0
 
         myAggregationProvider = self.layer.dataProvider()
@@ -842,8 +837,8 @@ class Aggregator(QtCore.QObject):
         A helper function to align the polygons to the postprocLayer
         polygons. If one input polygon is in two or more postprocLayer polygons
         then it is divided so that each part is within only one of the
-        postprocLayer polygons. this allows to aggregate in postrocessing using
-        centroid in polygon.
+        postprocLayer polygons. this allows to aggregate in postprocessing
+        using centroid in polygon.
 
         The function assumes EPSG:4326 but no checks are enforced
 
@@ -890,7 +885,6 @@ class Aggregator(QtCore.QObject):
 
         polygonsProvider = myQgisMemoryLayer.dataProvider()
         polygonsRequest = QgsFeatureRequest()
-        myQgisPostprocPoly = QgsFeature()
         myQgisFeat = QgsFeature()
         myInsideFeat = QgsFeature()
         fields = polygonsProvider.fields()
@@ -952,7 +946,7 @@ class Aggregator(QtCore.QObject):
             myBBVertices = numpy.array(myBBVertices)
             inside, _ = points_in_and_outside_polygon(myBBVertices,
                                                       myPostprocPolygon)
-            # make True if the vertice was in myPostprocPolygon
+            # make True if the vertex was in myPostprocPolygon
             myAreVerticesInside[inside] = True
 
             # myNextIterPolygons has the 0:count indexes
@@ -969,13 +963,13 @@ class Aggregator(QtCore.QObject):
                 # indexes
                 myFeatId = myMappedIndex + 1
                 doIntersection = False
-                # summ the isInside bool for each of the boundingbox vertices
-                # of each poygon. for example True + True + False + True is 3
+                # sum the isInside bool for each of the bounding box vertices
+                # of each polygon. for example True + True + False + True is 3
                 myPolygonLocation = numpy.sum(myAreVerticesInside[k:k + 4])
 
                 if myPolygonLocation == 4:
                     # all vertices are inside -> polygon is inside
-                    #ignore this polygon from further analysis
+                    # ignore this polygon from further analysis
                     myInsidePolygons.append(myMappedIndex)
                     polygonsRequest.setFilterFid(myFeatId)
                     myQgisFeat = polygonsProvider.getFeatures(
@@ -999,7 +993,7 @@ class Aggregator(QtCore.QObject):
                             (myPolyMaxx < myPostprocPolygonMinx) or
                             (myPolyMiny > myPostprocPolygonMaxy) or
                             (myPolyMaxy < myPostprocPolygonMiny)):
-                        #polygon is surely outside
+                        # polygon is surely outside
                         myOutsidePolygons.append(myMappedIndex)
                         # we need this polygon in the next iteration
                         myNextIterPolygons.append(i)
@@ -1012,7 +1006,7 @@ class Aggregator(QtCore.QObject):
                     # intersecting
                     doIntersection = True
 
-                #intersect using qgis
+                # intersect using qgis
                 if doIntersection:
 #                    LOGGER.debug('Intersecting polygon %s' % myMappedIndex)
                     myIntersectingPolygons.append(myMappedIndex)
@@ -1064,7 +1058,7 @@ class Aggregator(QtCore.QObject):
 #                                         'the two polygons either touch '
 #                                         'only or do not intersect. Not '
 #                                         'adding this to the inside list')
-                        #Part of the polygon that is outside the postprocpoly
+                        # Part of the polygon that is outside the postprocpoly
                         myOutside = myQgisPolyGeom.difference(myIntersecGeom)
 #                        if myOutside is not None:
                         myOutsideGeom = QgsGeometry(myOutside)
@@ -1085,8 +1079,8 @@ class Aggregator(QtCore.QObject):
 #            LOGGER.debug('Outside %s' % myOutsidePolygons)
 #            LOGGER.debug('Intersec %s' % myIntersectingPolygons)
             if len(myNextIterPolygons) > 0:
-                #some polygons are still completely outside of the postprocPoly
-                #so go on and reiterate using only these
+                # some polygons are still completely outside of the
+                # postprocPoly so go on and reiterate using only these
                 nextIterPolygonsIndex = numpy.array(myNextIterPolygons)
 
                 myRemainingPolygons = myRemainingPolygons[
@@ -1108,8 +1102,7 @@ class Aggregator(QtCore.QObject):
         LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
             myInsidePolygons, myIntersectingPolygons, myOutsidePolygons))
 
-        #add in- and outside polygons
-
+        # add in- and outside polygons
         for i in myOutsidePolygons:
             myFeatId = i + 1
             polygonsRequest.setFilterFid(myFeatId)
@@ -1140,9 +1133,6 @@ class Aggregator(QtCore.QObject):
 
         :param fields:
         :type fields: QgsFields
-
-
-
         """
 
         if crs is None:
@@ -1160,7 +1150,7 @@ class Aggregator(QtCore.QObject):
                                           fields,
                                           QGis.WKBPolygon,
                                           crs)
-        #flush the writer to write to file
+        # flush the writer to write to file
         del mySHPWriter
         myName = self.tr('Entire area')
         myLayer = QgsVectorLayer(myOutFilename, myName, 'ogr')

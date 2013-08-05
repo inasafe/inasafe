@@ -727,7 +727,7 @@ def append_row(table, label, data):
     :type label: str
 
     :param data: custom data associated with label value.
-    :type data: QVariant
+    :type data: str
     """
     myRow = table.rowCount()
     table.insertRow(table.rowCount())
