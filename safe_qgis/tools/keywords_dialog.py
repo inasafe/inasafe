@@ -117,9 +117,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if self.layer:
             self.load_state_from_keywords()
 
-        #add a reload from keywords button
-        reloadButton = self.buttonBox.addButton(self.tr('Reload'),
-                                            QtGui.QDialogButtonBox.ActionRole)
+        # add a reload from keywords button
+        reloadButton = self.buttonBox.addButton(
+            self.tr('Reload'), QtGui.QDialogButtonBox.ActionRole)
         reloadButton.clicked.connect(self.load_state_from_keywords)
 
     def set_layer(self, layer):
@@ -399,7 +399,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             This is optional.
         :type selected_item: str
         """
-        # To aoid triggering on_cboSubcategory_currentIndexChanged
+        # To avoid triggering on_cboSubcategory_currentIndexChanged
         # we block signals from the combo while updating it
         self.cboSubcategory.blockSignals(True)
         self.cboSubcategory.clear()
@@ -667,7 +667,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'title' not in myKeywords:
             self.leTitle.setText(myLayerName)
         self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
-        #if we have a category key, unpack it first so radio button etc get set
+        # if we have a category key, unpack it first
+        # so radio button etc get set
         if 'category' in myKeywords:
             self.set_category(myKeywords['category'])
             myKeywords.pop('category')
@@ -695,7 +696,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if not is_polygon_layer(self.layer):
             self.radPostprocessing.setEnabled(False)
 
-        #adapt gui if we are in postprocessing category
+        # adapt gui if we are in postprocessing category
         self.toggle_postprocessing_widgets()
 
         if self.radExposure.isChecked():
@@ -727,7 +728,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.resize_dialog()
 
     def resize_dialog(self):
-        """Resize the fialog to fit its contents."""
+        """Resize the dialog to fit its contents."""
         # noinspection PyArgumentList
         QtCore.QCoreApplication.processEvents()
         LOGGER.debug('adjust ing dialog size')

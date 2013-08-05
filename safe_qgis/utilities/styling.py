@@ -415,7 +415,7 @@ def set_raster_style(raster_layer, style):
             # noinspection PyCallingNonCallable
             myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
             myPixel.min = myMin
-            # We want it just a leeetle bit smaller than max
+            # We want it just a little bit smaller than max
             # so that ranges are discrete
             myPixel.max = myMax
             myPixel.percentTransparent = myTransparencyPercent

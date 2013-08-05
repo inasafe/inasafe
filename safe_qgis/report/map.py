@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **InaSAFE map making module.**
@@ -39,8 +40,8 @@ from safe_qgis.utilities.utilities import (
     setup_printer,
     points_to_mm,
     mm_to_points,
-    dpi_to_meters,
-    qgis_version)
+    dpi_to_meters)
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 LOGGER = logging.getLogger('InaSAFE')
@@ -279,7 +280,7 @@ class Map():
 
         myComposerMap.setGridEnabled(True)
         myNumberOfSplits = 5
-        # .. todo:: Write logic to adjust preciosn so that adjacent tick marks
+        # .. todo:: Write logic to adjust precision so that adjacent tick marks
         #    always have different displayed values
         myPrecision = 2
         myXInterval = myComposerExtent.width() / myNumberOfSplits

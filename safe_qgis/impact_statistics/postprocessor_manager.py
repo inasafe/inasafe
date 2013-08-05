@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid - **Postprocessor Manager**
 
@@ -153,7 +154,7 @@ class PostprocessorManager(QtCore.QObject):
                     myRow.add(myValue)
                 myTable.add(myRow)
 
-            #add table to message
+            # add table to message
             myMessage.add(myTable)
             if hasNoDataValues:
                 myMessage.add(m.EmphasizedText(self.tr(
@@ -255,7 +256,7 @@ class PostprocessorManager(QtCore.QObject):
         myFemaleRatio = None
 
         if 'Gender' in myPostProcessors:
-            #look if we need to look for a variable female ratio in a layer
+            # look if we need to look for a variable female ratio in a layer
             try:
                 myFemRatioField = self.aggregator.attributes[
                     self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
@@ -271,21 +272,21 @@ class PostprocessorManager(QtCore.QObject):
                 except KeywordNotFoundError:
                     myFemaleRatio = self.aggregator.defaults['FEM_RATIO']
 
-        #iterate zone features
+        # iterate zone features
         myRequest = QgsFeatureRequest()
         myRequest.setFlags(QgsFeatureRequest.NoGeometry)
         myProvider = self.aggregator.layer.dataProvider()
-        # start data retreival: fetch no geometry and all attributes for each
+        # start data retrieval: fetch no geometry and all attributes for each
         # feature
         myPolygonIndex = 0
         for myFeature in myProvider.getFeatures(myRequest):
-            #if a feature has no field called
+            # if a feature has no field called
             if myNameFieldIndex == -1:
                 myZoneName = str(myFeature.id())
             else:
                 myZoneName = myFeature[myNameFieldIndex]
 
-            #create dictionary of attributes to pass to postprocessor
+            # create dictionary of attributes to pass to postprocessor
             myGeneralParams = {'target_field': self.aggregator.targetField}
 
             if self.aggregator.statisticsType == 'class_count':
@@ -299,13 +300,13 @@ class PostprocessorManager(QtCore.QObject):
                 myGeneralParams['impact_attrs'] = (
                     self.aggregator.impactLayerAttributes[myPolygonIndex])
             except IndexError:
-                #rasters and attributeless vectors have no attributes
+                # rasters and attributeless vectors have no attributes
                 myGeneralParams['impact_attrs'] = None
 
             for myKey, myValue in myPostProcessors.iteritems():
                 myParameters = myGeneralParams
                 try:
-                    #look if params are available for this postprocessor
+                    # look if params are available for this postprocessor
                     myParameters.update(
                         self.functionParams['postprocessors'][myKey]['params'])
                 except KeyError:
@@ -332,7 +333,7 @@ class PostprocessorManager(QtCore.QObject):
                     self.postProcessingOutput[myKey] = []
                     self.postProcessingOutput[myKey].append(
                         (myZoneName, myResults))
-            #increment the index
+            # increment the index
             myPolygonIndex += 1
 
     def getOutput(self):
@@ -350,7 +351,7 @@ class PostprocessorManager(QtCore.QObject):
                 m.Paragraph(self.tr(
                     'Due to a problem while processing the results,'
                     ' the detailed postprocessing report is unavailable:'
-                    ' %s') % (self.errorMessage)))
+                    ' %s') % self.errorMessage))
             return myMessage
         else:
             try:

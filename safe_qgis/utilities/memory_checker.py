@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Memory Checker.**
 
@@ -35,14 +36,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def tr(string):
-    """We implement this ourself since we do not inherit QObject.
+    """We implement this ourselves since we do not inherit QObject.
 
 
     :param string: The string for translation.
     :type string: str
 
     :returns: Translated version of string.
-    :rtype: QString
+    :rtype: str
     """
     return QCoreApplication.translate('MemoryChecker', string)
 

@@ -175,10 +175,10 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         if os.path.exists(myDir):
             return
 
-        myTitle = self.tr("Directory %s not exist") % (myDir)
+        myTitle = self.tr("Directory %s not exist") % myDir
         myQuestion = self.tr(
             "Directory %s not exist. Are you want to create it?"
-        ) % (myDir)
+        ) % myDir
         # noinspection PyCallByClass,PyTypeChecker
         myAnswer = QMessageBox.question(
             self, myTitle,
@@ -268,7 +268,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         import zipfile
 
-        ## extract all files...
+        # extract all files...
         myHandle = open(path, 'rb')
         myZip = zipfile.ZipFile(myHandle)
         for myName in myZip.namelist():

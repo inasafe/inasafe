@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **Logging related code.**
@@ -170,7 +171,7 @@ def setup_logger(log_file=None, sentry_url=None):
             myLogger.debug('Sentry logging enabled')
     else:
         myLogger.debug('Sentry logging disabled')
-    #Set formatters
+    # Set formatters
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
     myQGISHandler.setFormatter(myFormatter)

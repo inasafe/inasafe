@@ -40,7 +40,6 @@ from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import (
     get_error_message,
     getWGS84resolution,
-    qgis_version,
     impact_attribution,
     add_ordered_combo_item,
     extent_to_geo_array,
@@ -90,8 +89,7 @@ from safe_qgis.exceptions import (
     InvalidProjectionError,
     InvalidGeometryError,
     AggregatioError,
-    UnsupportedProviderError,
-    InvalidLayerError)
+    UnsupportedProviderError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -153,7 +151,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.state = None
         self.lastUsedFunction = ''
 
-        # Flag used to revent recursion and allow bulk loads of layers to
+        # Flag used to prevent recursion and allow bulk loads of layers to
         # trigger a single event only
         self.get_layers_lock = False
         # Flag so we can see if the dock is busy processing
@@ -553,7 +551,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         selectedHazardLayer = self.get_hazard_layer()
         selectedExposureLayer = self.get_exposure_layer()
 
-        #more than 1 because No aggregation is always there
+        # more than 1 because No aggregation is always there
         if ((self.cboAggregation.count() > 1) and
                 (selectedHazardLayer is not None) and
                 (selectedExposureLayer is not None)):
@@ -578,7 +576,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         If there are function parameters to configure then enable it, otherwise
         disable it.
         """
-        # Check if functionParams intialized
+        # Check if functionParams initialized
         if self.functionParams is None:
             self.toolFunctionOptions.setEnabled(False)
         else:
@@ -724,7 +722,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 add_ordered_combo_item(self.cboAggregation, myTitle, mySource)
 
         self.unblock_signals()
-        #handle the cboAggregation combo
+        # handle the cboAggregation combo
         self.cboAggregation.insertItem(0, self.tr('Entire area'))
         self.cboAggregation.setCurrentIndex(0)
         self.toggle_aggregation_combo()
@@ -888,7 +886,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except AttributeError:
             myOriginalKeywords = {}
         except NoKeywordsFoundError:
-            #No kw file was found for layer - create an empty one.
+            # No kw file was found for layer - create an empty one.
             myOriginalKeywords = {}
             self.keywordIO.write_keywords(
                 self.aggregator.layer, myOriginalKeywords)
@@ -939,7 +937,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             m.Paragraph(myText))
 
         try:
-            #add which postprocessors will run when appropriated
+            # add which postprocessors will run when appropriated
             myRequestedPostProcessors = self.functionParams['postprocessors']
             myPostProcessors = get_postprocessors(myRequestedPostProcessors)
             myMessage.add(m.Paragraph(self.tr(
@@ -1010,7 +1008,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.run()
         else:
             self.runtimeKeywordsDialog.set_layer(self.aggregator.layer)
-            #disable gui elements that should not be applicable for this
+            # disable gui elements that should not be applicable for this
             self.runtimeKeywordsDialog.radExposure.setEnabled(False)
             self.runtimeKeywordsDialog.radHazard.setEnabled(False)
             self.runtimeKeywordsDialog.pbnAdvanced.setEnabled(False)
@@ -1031,7 +1029,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def check_for_state_change(self):
         """Clear aggregation layer category keyword on dock state change.
         """
-        #check and generate keywords for the aggregation layer
+        # check and generate keywords for the aggregation layer
         try:
             if ((self.get_aggregation_layer() is not None) and
                     (self.lastUsedFunction != self.get_function_id())):
@@ -1157,7 +1155,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def completed(self):
         """Slot activated when the process is done.
         """
-        #save the ID of the function that just ran
+        # save the ID of the function that just ran
         self.lastUsedFunction = self.get_function_id()
 
         # Try to run completion code
@@ -1202,7 +1200,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myKeywords = self.keywordIO.read_keywords(theQGISImpactLayer)
 
-        #write postprocessing report to keyword
+        # write postprocessing report to keyword
         myOutput = self.postprocessorManager.getOutput()
         myKeywords['postprocessing_report'] = myOutput.to_html(
             suppress_newlines=True)
@@ -1262,7 +1260,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myLegend.setLayerVisible(myExposureLayer, False)
         self.restore_state()
 
-        #append postprocessing report
+        # append postprocessing report
         myReport += myOutput.to_html()
 
         # Return text to display in report panel
@@ -1279,7 +1277,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             try:
                 self.runner.done.disconnect(self.aggregate)
             except TypeError:
-                #happens when object is not connected - see #621
+                # happens when object is not connected - see #621
                 pass
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
@@ -1313,8 +1311,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'It appears that no %s are affected by %s. You may want '
                     'to consider:') % (
                         self.cboExposure.currentText(),
-                        self.cboHazard.currentText()
-                        )))
+                        self.cboHazard.currentText())))
                 myList = m.BulletedList()
                 myList.add(self.tr(
                     'Check that you are not zoomed in too much and thus '

@@ -33,8 +33,6 @@ from safe_qgis.safe_interface import (
 
 from safe_qgis.safe_interface import HAZDATA, EXPDATA
 
-from safe_qgis.utilities.utilities import qgis_version
-
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
@@ -223,7 +221,7 @@ def set_canvas_crs(epsg_id, enable_projection=False):
     :type enable_projection: bool
 
     """
-        # Enable on-the-fly reprojection
+    # Enable on-the-fly reprojection
     CANVAS.mapRenderer().setProjectionsEnabled(enable_projection)
 
     # Create CRS Instance
@@ -424,7 +422,7 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
     LOGGER.debug('Saving difference image as: %s' % myDifferenceFilePath)
     myDifferenceImage.save(myDifferenceFilePath, "PNG")
 
-    #allow pixel deviation of 1 percent
+    # allow pixel deviation of 1 percent
     myPixelCount = myImageWidth * myImageHeight
     # FIXME (Ole): Use relative error i.e. mismatchcount/total pixels
     if myMismatchCount > tolerance:

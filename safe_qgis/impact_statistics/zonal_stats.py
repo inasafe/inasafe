@@ -109,7 +109,6 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     myGeoTransform = myFid.GetGeoTransform()
     myColumns = myFid.RasterXSize
     myRows = myFid.RasterYSize
-    #myBandCount = myFid.RasterCount
     # Get first band.
     myBand = myFid.GetRasterBand(1)
     myNoData = myBand.GetNoDataValue()
@@ -170,25 +169,6 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
 
         if (myOffsetY + myCellsY) > myRows:
             myCellsY = myRows - myOffsetY
-
-        #mySum, myCount = statisticsFromMiddlePointTest(
-        #    myBand,
-        #    myGeometry,
-        #    myOffsetX,
-        #    myOffsetY,
-        #    myCellsX,
-        #    myCellsY,
-        #    myCellSizeX,
-        #    myCellSizeY,
-        #    myRasterBox,
-        #    myNoData)
-        #print 'Sum: %s count: %s' % (mySum, myCount)
-
-        #mySum, myCount = rectangle_stats(
-        #    myBand,
-        #    myFeatureBox,
-        #    myGeoTransform,
-        #    myNoData)
 
         myIntersectedGeom = rasterGeom.intersection(myGeometry)
         mySum, myCount = numpy_stats(
@@ -387,65 +367,6 @@ def centroid_intersection_stats(
         myCellCenterX -= cell_size_y
 
     return mySum, myCount
-
-
-def rectangle_stats(
-        band,
-        geometry,
-        geo_transform,
-        no_data):
-
-    """Get stats for rect representing intersection of poly and raster bboxes.
-
-    :param band: A valid band from a raster layer.
-    :type band: GDALRasterBand
-
-    :param geometry: A valid rectangle representing intersection between
-         geometry bbox and raster bbox.
-    :type geometry: QgsRectangle
-
-    :param geo_transform: Georeferencing transform from raster metadata.
-    :type geo_transform: list (six doubles)
-
-    :param no_data: No data value for the raster.
-    :type no_data: float, int, None
-
-    :returns: Sum, Count - sum of the values of all pixels and the count of
-        pixels that intersect with the geometry.
-    :rtype: (float, int)
-    """
-    x_minimum = geometry.xMinimum()
-    x_maximum = geometry.xMaximum()
-    y_minimum = geometry.yMinimum()
-    y_maximum = geometry.yMaximum()
-
-    start_column, start_row = map_to_pixel(x_minimum, y_maximum, geo_transform)
-    end_column, end_row = map_to_pixel(x_maximum, y_minimum, geo_transform)
-
-    width = end_column - start_column
-    height = end_row - start_row
-
-    if width == 0 or height == 0:
-        return 0, 0
-
-    scanline = band.ReadRaster(
-        start_column,
-        start_row,
-        width,
-        height,
-        width,
-        height,
-        gdal.GDT_Float32)
-    values = struct.unpack('f' * height * width, scanline)
-    if values is None:
-        return 0, 0
-
-    array = numpy.array(values)
-    masked_array = numpy.ma.masked_where(array == no_data, array)
-    array_sum = float(numpy.sum(masked_array))
-    array_count = masked_array.size
-
-    return array_sum, array_count
 
 
 # noinspection PyArgumentList

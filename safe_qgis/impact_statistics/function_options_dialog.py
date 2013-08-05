@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Impact Functions Dialog.**
@@ -169,19 +170,20 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """Create a new form element dynamically based from theValue type.
         The element will be inserted to theFormLayout.
 
-        Args:
-            * theFormLayout: QFormLayout Mandatory a layout instance
-            * theName: str Mandatory string referencing the key in the
-                function configurable parameters dictionary.
-            * theValue: object Mandatory representing the value
-                referenced by the key.
+        :param theFormLayout: Mandatory a layout instance
+        :type theFormLayout: QFormLayout
 
-        Returns:
-            a function that return the value of widget
+        :param theName: Mandatory string referencing the key in the function
+        configurable parameters dictionary.
+        :type theName: str
 
-        Raises:
-            None
+        :param theValue: Mandatory representing the value referenced by the
+        key.
+        :type theValue: object
 
+        :returns a function that return the value of widget
+
+        :raises None
         """
 
         # create label
@@ -220,7 +222,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         myText = ''
         impactFunctionName = theFunctionID
         myText += self.tr('Parameters for impact function "%s" that can be '
-                          'modified are:') % (impactFunctionName)
+                          'modified are:') % impactFunctionName
         myLabel = self.lblFunctionDescription
         myLabel.setText(myText)
 

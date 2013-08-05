@@ -36,7 +36,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
-    """Dialog implementation class for the InaSAFE minimumn needs dialog.
+    """Dialog implementation class for the InaSAFE minimum needs dialog.
     """
 
     def __init__(self, parent=None):
@@ -167,7 +167,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         for myLayer in myLayers:
             myName = myLayer.name()
             mySource = str(myLayer.id())
-            #check if layer is a vector polygon layer
+            # check if layer is a vector polygon layer
             if is_polygon_layer(myLayer) or is_point_layer(myLayer):
                 myFoundFlag = True
                 add_ordered_combo_item(self.cboPolygonLayers, myName, mySource)

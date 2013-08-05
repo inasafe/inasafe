@@ -36,7 +36,6 @@ from safe_qgis.safe_interface import (
     verify,
     read_file_keywords,
     writeKeywordsToFile)
-from safe_qgis.utilities.utilities import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -45,8 +44,8 @@ class KeywordIO(QObject):
     """Class for doing keyword read/write operations.
 
     It abstracts away differences between using SAFE to get keywords from a
-    .keywords file and this plugins implemenation of keyword caching in a local
-    sqlite db used for supporting keywords for remote datasources."""
+    .keywords file and this plugins implementation of keyword caching in a
+    local sqlite db used for supporting keywords for remote datasources."""
 
     def __init__(self):
         """Constructor for the KeywordIO object."""
@@ -386,19 +385,12 @@ class KeywordIO(QObject):
         :raises: UnsupportedProviderError
         """
 
-        myVersion = qgis_version()
-        # check for old raster api with qgis < 1.8
-        # ..todo:: Add test for plugin layers too
-        if (myVersion < 10800 and
-                layer.type() == QgsMapLayer.RasterLayer):
-            myProviderType = str(layer.providerKey())
-        else:
-            try:
-                myProviderType = str(layer.providerType())
-            except AttributeError:
-                raise UnsupportedProviderError(
-                    'Could not determine type for provider: %s' %
-                    layer.__class__.__name__)
+        try:
+            myProviderType = str(layer.providerType())
+        except AttributeError:
+            raise UnsupportedProviderError(
+                'Could not determine type for provider: %s' %
+                layer.__class__.__name__)
 
         myProviderDict = {
             'ogr': True,
@@ -446,7 +438,7 @@ class KeywordIO(QObject):
         myHash = self.hash_for_datasource(uri)
         try:
             myCursor = self.get_cursor()
-            #now see if we have any data for our hash
+            # now see if we have any data for our hash
             mySQL = 'delete from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
             self.connection.commit()
@@ -464,7 +456,7 @@ class KeywordIO(QObject):
         """Write keywords for a URI into the keywords database. All the
         keywords for the uri should be written in a single operation.
         A hash will be constructed from the supplied uri and a lookup made
-        in a local SQLITE database for the keywords. If there is an existing
+        in a local SQLite database for the keywords. If there is an existing
         record it will be updated, if not, a new one will be created.
 
         .. seealso:: read_keyword_from_uri, delete_keywords_for_uri
@@ -487,13 +479,13 @@ class KeywordIO(QObject):
         myHash = self.hash_for_datasource(uri)
         try:
             myCursor = self.get_cursor()
-            #now see if we have any data for our hash
+            # now see if we have any data for our hash
             mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
             myData = myCursor.fetchone()
             myPickle = pickle.dumps(keywords, pickle.HIGHEST_PROTOCOL)
             if myData is None:
-                #insert a new rec
+                # insert a new rec
                 #myCursor.execute('insert into keyword(hash) values(:hash);',
                 #             {'hash': myHash})
                 myCursor.execute(
@@ -501,7 +493,7 @@ class KeywordIO(QObject):
                     {'hash': myHash, 'dict': sqlite.Binary(myPickle)})
                 self.connection.commit()
             else:
-                #update existing rec
+                # update existing rec
                 myCursor.execute(
                     'update keyword set dict=? where hash = ?;',
                     (sqlite.Binary(myPickle), myHash))
@@ -551,11 +543,11 @@ class KeywordIO(QObject):
             raise
         try:
             myCursor = self.get_cursor()
-            #now see if we have any data for our hash
+            # now see if we have any data for our hash
             mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
             myData = myCursor.fetchone()
-            #unpickle it to get our dict back
+            # unpickle it to get our dict back
             if myData is None:
                 raise HashNotFoundError('No hash found for %s' % myHash)
             myData = myData[0]  # first field
@@ -587,7 +579,7 @@ class KeywordIO(QObject):
         :rtype: tuple(str, str)
 
         """
-        #find needed statistics type
+        # find needed statistics type
         try:
             myStatisticsType = self.read_keywords(
                 layer, 'statistics_type')
@@ -595,7 +587,7 @@ class KeywordIO(QObject):
                 layer, 'statistics_classes')
 
         except KeywordNotFoundError:
-            #default to summing
+            # default to summing
             myStatisticsType = 'sum'
             myStatisticsClasses = {}
 

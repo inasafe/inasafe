@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **InaSAFE map legend module.**
@@ -154,7 +155,7 @@ class MapLegend():
                     symbol_type=myType)
         else:
             LOGGER.debug('else')
-            #type unknown
+            # type unknown
             myMessage = self.tr('Unrecognised renderer type found for the '
                                 'impact layer. Please use one of these: '
                                 'single symbol, categorised symbol or '
@@ -174,40 +175,21 @@ class MapLegend():
             created from the layer.
         """
         LOGGER.debug('InaSAFE Map Legend getRasterLegend called')
-        # test if QGIS 1.8.0 or older
-        # see issue #259
-        if qgis_version() <= 10800:
-            myShader = self.layer.rasterShader().rasterShaderFunction()
-            myRampItems = myShader.colorRampItemList()
-            myLastValue = 0  # Making an assumption here...
-            LOGGER.debug('Source: %s' % self.layer.source())
-            for myItem in myRampItems:
-                myValue = myItem.value
-                myLabel = myItem.label
-                myColor = myItem.color
-                self.add_class(
-                    myColor,
-                    minimum=myLastValue,
-                    maximum=myValue,
-                    label=myLabel,
-                    class_type='rasterStyle')
-                myLastValue = myValue
-        else:
-            myShader = self.layer.renderer().shader().rasterShaderFunction()
-            myRampItems = myShader.colorRampItemList()
-            myLastValue = 0  # Making an assumption here...
-            LOGGER.debug('Source: %s' % self.layer.source())
-            for myItem in myRampItems:
-                myValue = myItem.value
-                myLabel = myItem.label
-                myColor = myItem.color
-                self.add_class(
-                    myColor,
-                    minimum=myLastValue,
-                    maximum=myValue,
-                    label=myLabel,
-                    class_type='rasterStyle')
-                myLastValue = myValue
+        myShader = self.layer.renderer().shader().rasterShaderFunction()
+        myRampItems = myShader.colorRampItemList()
+        myLastValue = 0  # Making an assumption here...
+        LOGGER.debug('Source: %s' % self.layer.source())
+        for myItem in myRampItems:
+            myValue = myItem.value
+            myLabel = myItem.label
+            myColor = myItem.color
+            self.add_class(
+                myColor,
+                minimum=myLastValue,
+                maximum=myValue,
+                label=myLabel,
+                class_type='rasterStyle')
+            myLastValue = myValue
         self.add_notes()
         return self.legendImage
 

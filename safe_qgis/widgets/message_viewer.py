@@ -65,29 +65,29 @@ class MessageViewer(QtWebKit.QWebView):
 
         context_menu = QtGui.QMenu(self)
 
-        #add select all
+        # add select all
         action = self.page().action(QtWebKit.QWebPage.SelectAll)
         action.setEnabled(not self.page_to_text() == '')
         context_menu.addAction(action)
 
-        #add copy
+        # add copy
         action = self.page().action(QtWebKit.QWebPage.Copy)
         action.setEnabled(not self.selectedHtml().isEmpty())
         context_menu.addAction(action)
 
-        #add view source if in dev mode
+        # add view source if in dev mode
         if self.devMode:
             action = self.page().action(QtWebKit.QWebPage.InspectElement)
             action.setEnabled(True)
             context_menu.addAction(action)
 
-            #add view to_text if in dev mode
+            # add view to_text if in dev mode
             context_menu.addAction(
                 self.tr('log pageToText'),
                 self,
                 QtCore.SLOT(self.page_to_stdout()))
 
-        #show the menu
+        # show the menu
         context_menu.setVisible(True)
         context_menu.exec_(event.globalPos())
 

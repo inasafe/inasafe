@@ -1,3 +1,4 @@
+# coding=utf-8
 """InaSAFE Disaster risk assessment tool developed by AusAid -
   **ISClipper implementation.**
 
@@ -361,7 +362,7 @@ def explode_multipart_geometry(theGeom):
     This method was adapted from Carson Farmer's fTools doGeometry
     implementation in QGIS.
 
-    :param theGeom: A geometry to be explided it it is multipart.
+    :param theGeom: A geometry to be exploded it it is multipart.
     :type theGeom: QgsGeometry
 
     :returns: A list of single part geometries.

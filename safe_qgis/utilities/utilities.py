@@ -541,7 +541,7 @@ def add_ordered_combo_item(combo, text, data=None):
         if cmp(str(text).lower(), myItemText.lower()) < 0:
             combo.insertItem(myCount, text, data)
             return
-        #otherwise just add it to the end
+        # otherwise just add it to the end
     combo.insertItem(mySize, text, data)
 
 
@@ -715,7 +715,7 @@ def safe_to_qgis_layer(layer):
         return myQGISLayer
     else:
         # noinspection PyUnresolvedReferences
-        myMessage = tr('Loaded impact layer "%s" is not valid') % (myFilename)
+        myMessage = tr('Loaded impact layer "%s" is not valid') % myFilename
         raise Exception(myMessage)
 
 
@@ -855,5 +855,5 @@ def read_impact_layer(impact_layer):
     else:
         # noinspection PyUnresolvedReferences
         myMessage = tr(
-            'Loaded impact layer "%s" is not valid') % (myFilename)
+            'Loaded impact layer "%s" is not valid') % myFilename
         raise Exception(myMessage)

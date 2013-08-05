@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **SAFE Interface test suite.**
@@ -199,7 +200,7 @@ class SafeInterfaceTest(unittest.TestCase):
         # Test we get an exception if keyword is not found
         try:
             _ = read_file_keywords(self.rasterShakePath,
-                                     'boguskeyword')
+                                   'boguskeyword')
         except KeywordNotFoundError:
             pass  # this is good
         except Exception, e:
