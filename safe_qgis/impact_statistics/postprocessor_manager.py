@@ -23,6 +23,8 @@ from qgis.core import (
     QgsFeature,
     QgsRectangle)
 
+from safe.common.utilities import unhumanize_number, format_int
+
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.safe_interface import (
     safeTr,
@@ -90,9 +92,7 @@ class PostprocessorManager(QtCore.QObject):
             myPosition = -1
         else:
             myPosition = data[1][myValueKey]['value']
-            #FIXME MB this is to dehumanize the strings and have ints
-            myPosition = myPosition.replace(',', '')
-            myPosition = int(float(myPosition))
+            myPosition = unhumanize_number(myPosition)
 
         return myPosition
 
@@ -107,8 +107,8 @@ class PostprocessorManager(QtCore.QObject):
         """
         myMessage = m.Message()
 
-        for proc, resList in self.postProcessingOutput.iteritems():
-            # resList is for example:
+        for proc, results_list in self.postProcessingOutput.iteritems():
+            # results_list is for example:
             # [
             #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
             #        (u'Total', {'value': 977536, 'metadata': {}}),
@@ -120,7 +120,7 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 #sorting using the first indicator of a postprocessor
                 sortedResList = sorted(
-                    resList,
+                    results_list,
                     key=self._sortNoData,
                     reverse=True)
 
@@ -160,19 +160,61 @@ class PostprocessorManager(QtCore.QObject):
                     'calculating them. This did not affect the other '
                     'values.').arg(self.aggregator.defaults['NO_DATA'])))
 
-        try:
-            if (self.keywordIO.read_keywords(
-                    self.aggregator.layer, 'HAD_MULTIPART_POLY')):
-                myMessage.add(m.EmphasizedText(self.tr(
-                    'The aggregation layer had multipart polygons, these have '
-                    'been exploded and are now marked with a #. This has no '
-                    'influence on the calculation, just keep in mind that the '
-                    'attributes shown may represent the original multipart '
-                    'polygon and not the individual exploded polygon parts.')))
-        except Exception:  # pylint: disable=W0703
-            pass
-
         return myMessage
+
+    def _consolidate_multipart_stats(self):
+        """Sums the values of multipart polygons together to display only one.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
+        LOGGER.debug('Consolidating multipart postprocessing results')
+
+        # copy needed because of
+        # self.postProcessingOutput[proc].pop(corrected_index)
+        postProcessingOutput = self.postProcessingOutput
+
+        # iterate postprocessors
+        for proc, results_list in postProcessingOutput.iteritems():
+            #see self._generateTables to see details about results_list
+            checked_polygon_names = {}
+            parts_to_delete = []
+            polygon_index = 0
+            # iterate polygons
+            for polygon_name, results in results_list:
+                if polygon_name in checked_polygon_names.keys():
+                    LOGGER.debug('%s postprocessor found multipart polygon '
+                                 'with name %s' % (proc, polygon_name))
+                    for result_name, result in results.iteritems():
+                        first_part_index = checked_polygon_names[polygon_name]
+                        first_part = self.postProcessingOutput[proc][
+                            first_part_index]
+                        first_part_results = first_part[1]
+                        first_part_result = first_part_results[result_name]
+                        new_result = (
+                            unhumanize_number(first_part_result['value']) +
+                            unhumanize_number(result['value']))
+                        first_part_result['value'] = format_int(new_result)
+
+                    parts_to_delete.append(polygon_index)
+
+                else:
+                    # add polygon to checked list
+                    checked_polygon_names[polygon_name] = polygon_index
+
+                polygon_index += 1
+
+            # http://stackoverflow.com/questions/497426/
+            # deleting-multiple-elements-from-a-list
+            results_list = [res for j, res in enumerate(results_list)
+                            if j not in parts_to_delete]
+            self.postProcessingOutput[proc] = results_list
 
     def run(self):
         """Run any post processors requested by the impact function.
@@ -306,8 +348,6 @@ class PostprocessorManager(QtCore.QObject):
 
         Returns: str - a string containing the html in the requested format.
         """
-
-        # LOGGER.debug(self.postProcessingOutput)
         if self.errorMessage is not None:
             myMessage = m.Message(
                 m.Heading(self.tr('Postprocessing report skipped')),
@@ -316,5 +356,12 @@ class PostprocessorManager(QtCore.QObject):
                     ' the detailed postprocessing report is unavailable:'
                     ' %1').arg(self.errorMessage)))
             return myMessage
+        else:
+            try:
+                if (self.keywordIO.read_keywords(
+                        self.aggregator.layer, 'HAD_MULTIPART_POLY')):
+                    self._consolidate_multipart_stats()
+            except KeywordNotFoundError:
+                pass
 
-        return self._generateTables()
+            return self._generateTables()
