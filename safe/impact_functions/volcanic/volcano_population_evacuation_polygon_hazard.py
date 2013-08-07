@@ -194,7 +194,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evac
         evacuated = cum
 
-        needs = self._weekly_needs_of_evacuated_population(evacuated)
+        tot_needs = self._weekly_needs_of_evacuated_population(evacuated)
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -220,15 +220,18 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                            TableRow([tr('Needs per week'), tr('Total'),
                                      blank_cell],
                                     header=True),
-                           [tr('Rice [kg]'), format_int(needs['rice']),
+                           [tr('Rice [kg]'), format_int(tot_needs['rice']),
                             blank_cell],
                            [tr('Drinking Water [l]'),
-                            format_int(needs['drinking_water']), blank_cell],
-                           [tr('Clean Water [l]'), format_int(needs['water']),
+                            format_int(tot_needs['drinking_water']),
                             blank_cell],
-                           [tr('Family Kits'), format_int(needs['family_kits']),
+                           [tr('Clean Water [l]'),
+                            format_int(tot_needs['water']),
                             blank_cell],
-                           [tr('Toilets'), format_int(needs['toilets']),
+                           [tr('Family Kits'),
+                            format_int(tot_needs['family_kits']),
+                            blank_cell],
+                           [tr('Toilets'), format_int(tot_needs['toilets']),
                             blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 

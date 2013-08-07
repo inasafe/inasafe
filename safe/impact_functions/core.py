@@ -54,8 +54,10 @@ class FunctionProvider:
     target_field = 'DAMAGE'
     symbol_field = 'USE_MAJOR'
 
-    def _weekly_needs_of_evacuated_population(self, population):
-        """Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+    def _weekly_needs_of_evacuated_population(self, population,
+                                              minimum_needs=None):
+        """Calculate estimated needs default based on BNPB Perka 7/2008
+        minimum bantuan
 
         Input
             population - The number of affected population
@@ -70,11 +72,20 @@ class FunctionProvider:
         assume 5 people per family (not in perka)
         20 people per toilet
         """
-        weekly_needs = {'rice': int(population * 2.8),
-                        'drinking_water': int(population * 17.5),
-                        'water': int(population * 105),
-                        'family_kits': int(population / 5),
-                        'toilets': int(population / 20)}
+        if not minimum_needs:
+            minimum_needs = {'Rice': 2.8, 'Drinking Water': 17.5,
+                             'Water': 105, 'Family Kits': 0.2, 'Toilets': 20}
+
+        mn_rice = minimum_needs['Rice']
+        mn_drinking_water = minimum_needs['Drinking Water']
+        mn_water = minimum_needs['Water']
+        mn_family_kits = minimum_needs['Family Kits']
+        mn_toilets = minimum_needs['Toilets']
+        weekly_needs = {'rice': int(population * mn_rice),
+                        'drinking_water': int(population * mn_drinking_water),
+                        'water': int(population * mn_water),
+                        'family_kits': int(population * mn_family_kits),
+                        'toilets': int(population / mn_toilets)}
         return weekly_needs
 
 

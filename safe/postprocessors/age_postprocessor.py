@@ -152,7 +152,7 @@ class AgePostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Youth count')
+        myName = tr('Youth count (affected)')
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
@@ -179,7 +179,7 @@ class AgePostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Adult count')
+        myName = tr('Adult count (affected)')
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
@@ -206,7 +206,7 @@ class AgePostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
-        myName = tr('Elderly count')
+        myName = tr('Elderly count (affected)')
 
         #FIXME (MB) Shameless hack to deal with issue #368
         if self.impact_total > 8000000000 or self.impact_total < 0:
