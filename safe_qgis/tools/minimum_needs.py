@@ -28,6 +28,7 @@ from safe_qgis.utilities.utilities import (
     is_point_layer,
     html_footer,
     html_header)
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
 
@@ -52,6 +53,9 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             'InaSAFE %1 Minimum Needs Tool').arg(get_version()))
         self.polygon_layers_to_combo()
         self.show_info()
+        helpButton = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
+                               self.show_help)
 
     def show_info(self):
         """Show basic usage instructions."""
@@ -223,3 +227,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([myNewLayer])
         self.done(QtGui.QDialog.Accepted)
+
+    def show_help(self):
+        """Load the help text for the minimum needs dialog."""
+        show_context_help('minimum_needs')

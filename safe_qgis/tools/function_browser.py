@@ -87,6 +87,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
                                self.show_help)
         # Combo box change event
+        # TODO - change these to new style connects TS
         QtCore.QObject.connect(
             self.comboBox_id,
             QtCore.SIGNAL('currentIndexChanged(int)'),
