@@ -80,9 +80,10 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
         :param layers: List of layers expected to contain where two layers
             should be present.
+
             * my_hazard: Vector polygon layer of volcano impact zones
             * my_exposure: Raster layer of population data on the same grid as
-                my_hazard
+              my_hazard
 
         Counts number of people exposed to volcano event.
 
