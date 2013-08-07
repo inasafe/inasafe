@@ -5,7 +5,9 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    get_function_title)
+    get_function_title,
+    default_minimum_needs,
+    evacuated_population_weekly_needs)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -84,12 +86,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elder_ratio', defaults['ELDER_RATIO'])])})])),
-        ('minimum needs', OrderedDict([
-            ('Rice', 2.8),
-            ('Drinking Water', 17.5),
-            ('Water', 105),
-            ('Family Kits', 0.2),
-            ('Toilets', 0.05)]))
+        ('minimum needs', default_minimum_needs())
     ])
 
     def run(self, layers):
@@ -160,10 +157,11 @@ class FloodEvacuationFunction(FunctionProvider):
         # The default value of each logistic is based on BNPB Perka 7/2008
         # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
-        tot_needs = self.evacuated_population_weekly_needs(evacuated,
-                                                           minimum_needs)
+
+        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
+        # noinspection PyListCreation
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
@@ -177,7 +175,8 @@ class FloodEvacuationFunction(FunctionProvider):
                         'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
             [tr('Rice [kg]'), format_int(tot_needs['rice'])],
-            [tr('Drinking Water [l]'), format_int(tot_needs['drinking_water'])],
+            [tr('Drinking Water [l]'),
+             format_int(tot_needs['drinking_water'])],
             [tr('Clean Water [l]'), format_int(tot_needs['water'])],
             [tr('Family Kits'), format_int(tot_needs['family_kits'])],
             [tr('Toilets'), format_int(tot_needs['toilets'])]]

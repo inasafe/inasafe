@@ -29,6 +29,7 @@ from safe_qgis.utilities.utilities import (
     html_footer,
     html_header)
 from safe_qgis.utilities.help import show_context_help
+from safe_qgis.safe_interface import evacuated_population_weekly_needs
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
 
@@ -110,7 +111,7 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
         needs_attributes = []
         for attributes in input_layer.get_data():
-            attribute_dict = attributes
+            needs_attributes = attributes
 
             # Get population count
             population = attributes[population_name]
@@ -133,32 +134,23 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
 
             # Calculate estimated needs based on BNPB Perka 7/2008
             # minimum needs
-
-            # 400g per person per day
-            rice = int(displaced * 2.8)
-            # 2.5L per person per day
-            drinking_water = int(displaced * 17.5)
-            # 15L per person per day
-            water = int(displaced * 105)
-            # assume 5 people per family (not in perka)
-            family_kits = int(displaced / 5)
-            # 20 people per toilet
-            toilets = int(displaced / 20)
+            # weekly_needs = {
+            #     'rice': int(ceil(population * min_rice)),
+            #     'drinking_water': int(ceil(population * min_drinking_water)),
+            #     'water': int(ceil(population * min_water)),
+            #     'family_kits': int(ceil(population * min_family_kits)),
+            #     'toilets': int(ceil(population * min_toilets))}
 
             # Add to attributes
-
-            attribute_dict['Beras'] = rice
-            attribute_dict['Air minum'] = drinking_water
-            attribute_dict['Air bersih'] = water
-            attribute_dict['Kit keluarga'] = family_kits
-            attribute_dict['Jamban'] = toilets
+            weekly_needs = evacuated_population_weekly_needs(displaced)
 
             # Record attributes for this feature
-            needs_attributes.append(attribute_dict)
+            needs_attributes.append(weekly_needs)
 
-        output_layer = Vector(geometry=input_layer.get_geometry(),
-                              data=needs_attributes,
-                              projection=input_layer.get_projection())
+        output_layer = Vector(
+            geometry=input_layer.get_geometry(),
+            data=needs_attributes,
+            projection=input_layer.get_projection())
         return output_layer
 
     def polygon_layers_to_combo(self):

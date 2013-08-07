@@ -61,6 +61,7 @@ from safe.api import (
     format_int,
     get_unique_values,
     get_plugins_as_table,
+    evacuated_population_weekly_needs,
     Vector,
     Raster,
     nanallclose,
@@ -127,9 +128,10 @@ def verify(theStatement, theMessage=None):
         raise
 
 
-def getOptimalExtent(theHazardGeoExtent,
-                     theExposureGeoExtent,
-                     theViewportGeoExtent=None):
+def getOptimalExtent(
+        theHazardGeoExtent,
+        theExposureGeoExtent,
+        theViewportGeoExtent=None):
     """ A helper function to determine what the optimal extent is.
     Optimal extent should be considered as the intersection between
     the three inputs. The inasafe library will perform various checks

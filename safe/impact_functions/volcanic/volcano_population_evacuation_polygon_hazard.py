@@ -1,9 +1,27 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk tool by AusAid - **Volcano polygon evacuation.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+.. todo:: Check raster is single band
+
+"""
 import numpy
+from third_party.odict import OrderedDict
+
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
-    get_question)
+    get_question,
+    default_minimum_needs,
+    evacuated_population_weekly_needs)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -53,22 +71,25 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         'Vector layer contains population affected and the minimum needs '
         'based on the population affected.')
 
-    parameters = {'distance [km]': [3, 5, 10]}
+    parameters = OrderedDict([
+        ('distance [km]', [3, 5, 10]),
+        ('minimum needs', default_minimum_needs())])
 
     def run(self, layers):
         """Risk plugin for volcano population evacuation
 
-        Input
-          layers: List of layers expected to contain
-              my_hazard: Vector polygon layer of volcano impact zones
-              my_exposure: Raster layer of population data on the same grid as
-              my_hazard
+        :param layers: List of layers expected to contain where two layers
+            should be present.
+            * my_hazard: Vector polygon layer of volcano impact zones
+            * my_exposure: Raster layer of population data on the same grid as
+                my_hazard
 
         Counts number of people exposed to volcano event.
 
-        Return
-          Map of population exposed to the volcano hazard zone.
-          Table with number of people evacuated and supplies required.
+        :returns: Map of population exposed to the volcano hazard zone.
+            The returned dict will include a table with number of people
+            evacuated and supplies required.
+        :rtype: dict
         """
 
         # Identify hazard and exposure layers
@@ -135,6 +156,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         if not category_title in my_hazard.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (my_hazard.get_name(), category_title))
+            # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
         # Run interpolation function for polygon2raster
@@ -194,7 +216,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evac
         evacuated = cum
 
-        tot_needs = self.evacuated_population_weekly_needs(evacuated)
+        tot_needs = evacuated_population_weekly_needs(evacuated)
 
         # Generate impact report for the pdf map
         blank_cell = ''

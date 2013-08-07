@@ -20,7 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 from third_party.odict import OrderedDict
 from safe.impact_functions.core import (
-    FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layer,
+    get_question,
+    default_minimum_needs,
+    evacuated_population_weekly_needs)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -94,12 +99,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elder_ratio', defaults['ELDER_RATIO'])])})])),
-        ('minimum needs', OrderedDict([
-            ('Rice', 2.8),
-            ('Drinking Water', 17.5),
-            ('Water', 105),
-            ('Family Kits', 0.2),
-            ('Toilets', 0.05)]))
+        ('minimum needs', default_minimum_needs())
     ])
 
     def run(self, layers):
@@ -226,8 +226,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Calculate estimated minimum needs
         minimum_needs = self.parameters['minimum needs']
-        tot_needs = self.evacuated_population_weekly_needs(evacuated,
-                                                           minimum_needs)
+        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [question,

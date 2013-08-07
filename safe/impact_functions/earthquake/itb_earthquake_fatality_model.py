@@ -7,7 +7,9 @@ from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
-    get_question)
+    get_question,
+    default_minimum_needs,
+    evacuated_population_weekly_needs)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -141,6 +143,11 @@ class ITBFatalityFunction(FunctionProvider):
         'The coefficients used in the indonesian model are x=0.62275231, '
         'y=8.03314466, zeta=2.15')
     defaults = get_defaults()
+
+    # see https://github.com/AIFDR/inasafe/issues/628
+    default_needs = default_minimum_needs()
+    default_needs[tr('Water')] = 67
+
     parameters = OrderedDict([
         ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
         # Rates of people displaced for each MMI level
@@ -158,7 +165,8 @@ class ITBFatalityFunction(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})])),
+        ('minimum needs', default_needs)])
 
     def fatality_rate(self, mmi):
         """
@@ -291,11 +299,8 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         # FIXME: Refactor and share
-        rice = int(displaced * 2.8)
-        drinking_water = int(displaced * 17.5)
-        water = int(displaced * 67)
-        family_kits = int(displaced / 5)
-        toilets = int(displaced / 20)
+        minimum_needs = self.parameters['minimum needs']
+        needs = evacuated_population_weekly_needs(displaced, minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [question, TableRow([tr('Fatalities'),
@@ -308,11 +313,12 @@ class ITBFatalityFunction(FunctionProvider):
                                   'displaced population')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
-                      [tr('Rice [kg]'), format_int(rice)],
-                      [tr('Drinking Water [l]'), format_int(drinking_water)],
-                      [tr('Clean Water [l]'), format_int(water)],
-                      [tr('Family Kits'), format_int(family_kits)],
-                      [tr('Toilets'), format_int(toilets)],
+                      [tr('Rice [kg]'), format_int(needs['rice'])],
+                      [tr('Drinking Water [l]'),
+                       format_int(needs['drinking_water'])],
+                      [tr('Clean Water [l]'), format_int(needs['water'])],
+                      [tr('Family Kits'), format_int(needs[
+                          'family_kits'])],
                       TableRow(tr('Action Checklist:'), header=True)]
 
         if fatalities > 0:
