@@ -194,14 +194,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evac
         evacuated = cum
 
-        # Calculate estimated needs based on BNPB Perka
-        # 7/2008 minimum bantuan
-        # FIXME (Ole): Refactor into one function to be shared
-        rice = int(evacuated * 2.8)
-        drinking_water = int(evacuated * 17.5)
-        water = int(evacuated * 67)
-        family_kits = int(evacuated / 5)
-        toilets = int(evacuated / 20)
+        tot_needs = self.evacuated_population_weekly_needs(evacuated)
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -227,14 +220,18 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                            TableRow([tr('Needs per week'), tr('Total'),
                                      blank_cell],
                                     header=True),
-                           [tr('Rice [kg]'), format_int(rice), blank_cell],
+                           [tr('Rice [kg]'), format_int(tot_needs['rice']),
+                            blank_cell],
                            [tr('Drinking Water [l]'),
-                            format_int(drinking_water), blank_cell],
-                           [tr('Clean Water [l]'), format_int(water),
+                            format_int(tot_needs['drinking_water']),
                             blank_cell],
-                           [tr('Family Kits'), format_int(family_kits),
+                           [tr('Clean Water [l]'),
+                            format_int(tot_needs['water']),
                             blank_cell],
-                           [tr('Toilets'), format_int(toilets),
+                           [tr('Family Kits'),
+                            format_int(tot_needs['family_kits']),
+                            blank_cell],
+                           [tr('Toilets'), format_int(tot_needs['toilets']),
                             blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 
