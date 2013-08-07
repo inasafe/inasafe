@@ -109,17 +109,17 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
         :rtype: read_layer
         """
 
-        needs_attributes = []
+        all_attributes = []
         for attributes in input_layer.get_data():
-            needs_attributes = attributes
-
             # Get population count
             population = attributes[population_name]
             # Clean up and turn into integer
             if population in ['-', None]:
                 displaced = 0
             else:
-                population = str(population).replace(',', '')
+                if type(population) is basestring:
+                    population = str(population).replace(',', '')
+
                 try:
                     displaced = int(population)
                 except ValueError:
@@ -127,9 +127,10 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
                     QtGui.QMessageBox.information(
                         None,
                         self.tr('Format error'),
-                        self.tr('Please change the value of %s in '
-                                'attribute %s to integer format') %
-                        (population, population_name))
+                        self.tr(
+                            'Please change the value of %1 in attribute '
+                            '%1 to integer format').arg(population).arg(
+                                population_name))
                     raise ValueError
 
             # Calculate estimated needs based on BNPB Perka 7/2008
@@ -145,11 +146,11 @@ class MinimumNeeds(QtGui.QDialog, Ui_MinimumNeedsBase):
             weekly_needs = evacuated_population_weekly_needs(displaced)
 
             # Record attributes for this feature
-            needs_attributes.append(weekly_needs)
+            all_attributes.append(weekly_needs)
 
         output_layer = Vector(
             geometry=input_layer.get_geometry(),
-            data=needs_attributes,
+            data=all_attributes,
             projection=input_layer.get_projection())
         return output_layer
 
