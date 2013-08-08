@@ -177,7 +177,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         myTitle = self.tr("Directory %1 not exist").arg(myDir)
         myQuestion = self.tr(
-            "Directory %1 not exist. Are you want to create it?"
+            "Directory %1 not exist. Do you want to create it?"
         ).arg(myDir)
         # noinspection PyCallByClass,PyTypeChecker
         myAnswer = QMessageBox.question(
