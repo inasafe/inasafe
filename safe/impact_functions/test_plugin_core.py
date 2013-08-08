@@ -19,6 +19,7 @@ from safe.common.utilities import format_int
 LOGGER = logging.getLogger('InaSAFE')
 
 
+# noinspection PyUnresolvedReferences
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
 
@@ -33,6 +34,7 @@ class BasicFunction(FunctionProvider):
         return None
 
 
+# noinspection PyUnresolvedReferences
 class F1(FunctionProvider):
     """Risk plugin for testing
 

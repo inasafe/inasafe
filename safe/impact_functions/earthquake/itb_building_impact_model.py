@@ -1,4 +1,4 @@
-"""Impact function based on ITB vulnerability model
+"""Impact function based on ITB vulnerability model.
 
    This model was developed by Institut Teknologi Bandung (ITB) and
    implemented by Dr. Hyeuk Ryu, Geoscience Australia.
@@ -86,6 +86,8 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
     def run(self, layers):
         """Risk plugin for Padang building survey
+        :param layers: Hazard and exposure layers in a list
+        :type layers: list
         """
 
         # Extract data

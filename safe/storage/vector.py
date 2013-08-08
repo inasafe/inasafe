@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Vector Module**
 
 .. tip:: Provides functionality for manipulation of vector data. The data can
@@ -48,6 +49,7 @@ LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
 
 
+# noinspection PyExceptionInherit
 class Vector(Layer):
     """InaSAFE representation of vector data.
 
@@ -113,9 +115,16 @@ class Vector(Layer):
 
     """
 
-    def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None, name=None, keywords=None,
-                 style_info=None, sublayer=None):
+    def __init__(
+            self,
+            data=None,
+            projection=None,
+            geometry=None,
+            geometry_type=None,
+            name=None,
+            keywords=None,
+            style_info=None,
+            sublayer=None):
         """Initialise object with either geometry or filename
 
         NOTE: Doc strings in constructor are not harvested and exposed in
@@ -124,12 +133,13 @@ class Vector(Layer):
         """
 
         # Invoke common layer constructor
-        Layer.__init__(self,
-                       name=name,
-                       projection=projection,
-                       keywords=keywords,
-                       style_info=style_info,
-                       sublayer=sublayer)
+        Layer.__init__(
+            self,
+            name=name,
+            projection=projection,
+            keywords=keywords,
+            style_info=style_info,
+            sublayer=sublayer)
 
         # Input checks
         if data is None and geometry is None:
@@ -312,6 +322,7 @@ class Vector(Layer):
         else:
             msg = ('== not implemented for geometry type: %s'
                    % self.geometry_type)
+            # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
         # Check keys for attribute values
@@ -361,6 +372,7 @@ class Vector(Layer):
         # Vector layers are identical up to the specified tolerance
         return True
 
+    # noinspection PyExceptionInherit
     def read_from_file(self, filename):
         """Read and unpack vector data.
 
@@ -386,12 +398,17 @@ class Vector(Layer):
         http://resources.esri.com/help/9.3/ArcGISDesktop/com/Gp_ToolRef/
         geoprocessing_tool_reference/
         geoprocessing_considerations_for_shapefile_output.htm
+
+        :param filename: a fully qualified location to the file
+        :type filename: str
+
+        :raises: ReadLayerError
         """
 
-        basename = os.path.splitext(filename)[0]
+        base_name = os.path.splitext(filename)[0]
 
         # Look for any keywords
-        self.keywords = read_keywords(basename + '.keywords')
+        self.keywords = read_keywords(base_name + '.keywords')
 
         # FIXME (Ole): Should also look for style file to populate style_info
 
@@ -402,13 +419,13 @@ class Vector(Layer):
             # Lookup internationalised title if available
             title = safe_tr(title)
 
-            vectorname = title
+            vector_name = title
         else:
-            # Use basename without leading directories as name
-            vectorname = os.path.split(basename)[-1]
+            # Use base_name without leading directories as name
+            vector_name = os.path.split(base_name)[-1]
 
         if self.name is None:
-            self.name = vectorname
+            self.name = vector_name
         self.filename = filename
         self.geometry_type = None  # In case there are no features
 
@@ -521,10 +538,14 @@ class Vector(Layer):
     def write_to_file(self, filename, sublayer=None):
         """Save vector data to file
 
-        Args:
-            * filename: filename with extension .shp or .gml
-            * sublayer: Optional string for writing a sublayer. Ignored
-                  unless we are writing to an sqlite file.
+        :param filename: filename with extension .shp or .gml
+        :type filename: str
+
+        :param sublayer: Optional parameter for writing a sublayer. Ignored
+            unless we are writing to an sqlite file.
+        :type sublayer: str
+
+        :raises: WriteLayerError
 
         Note:
             Shp limitation, if attribute names are longer than 10
@@ -538,7 +559,7 @@ class Vector(Layer):
         """
 
         # Check file format
-        basename, extension = os.path.splitext(filename)
+        base_name, extension = os.path.splitext(filename)
 
         msg = ('Invalid file type for file %s. Only extensions '
                'sqlite, shp or gml allowed.' % filename)
@@ -552,11 +573,11 @@ class Vector(Layer):
                    'https://github.com/AIFDR/riab/issues/18')
             raise WriteLayerError(msg)
 
-        # Derive layername from filename (excluding preceding dirs)
+        # Derive layer_name from filename (excluding preceding dirs)
         if sublayer is None or extension == '.shp':
-            layername = os.path.split(basename)[-1]
+            layer_name = os.path.split(base_name)[-1]
         else:
-            layername = sublayer
+            layer_name = sublayer
 
         # Get vector data
         if self.is_polygon_data:
@@ -584,11 +605,11 @@ class Vector(Layer):
             msg = 'Creation of output file %s failed' % filename
             raise WriteLayerError(msg)
 
-        lyr = ds.CreateLayer(layername,
+        lyr = ds.CreateLayer(layer_name,
                              self.projection.spatial_reference,
                              self.geometry_type)
         if lyr is None:
-            msg = 'Could not create layer %s' % layername
+            msg = 'Could not create layer %s' % layer_name
             raise WriteLayerError(msg)
 
         # Define attributes if any
@@ -606,14 +627,14 @@ class Vector(Layer):
                     raise WriteLayerError(msg)
                 else:
                     # Establish OGR types for each element
-                    ogrtypes = {}
+                    ogr_types = {}
                     for name in fields:
                         att = data[0][name]
                         py_type = type(att)
                         msg = ('Unknown type for storing vector '
                                'data: %s, %s' % (name, str(py_type)[1:-1]))
                         verify(py_type in TYPE_MAP, msg)
-                        ogrtypes[name] = TYPE_MAP[py_type]
+                        ogr_types[name] = TYPE_MAP[py_type]
 
             else:
                 #msg = ('Input parameter "data" was specified '
@@ -624,7 +645,7 @@ class Vector(Layer):
             # Create attribute fields in layer
             store_attributes = True
             for name in fields:
-                fd = ogr.FieldDefn(name, ogrtypes[name])
+                fd = ogr.FieldDefn(name, ogr_types[name])
                 # FIXME (Ole): Trying to address issue #16
                 #              But it doesn't work and
                 #              somehow changes the values of MMI in test
@@ -656,21 +677,21 @@ class Vector(Layer):
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
             elif self.is_line_data:
-                geom = array2line(geometry[i],
-                                  geometry_type=ogr.wkbLineString)
+                geom = array2line(
+                    geometry[i], geometry_type=ogr.wkbLineString)
             elif self.is_polygon_data:
                 # Create polygon geometry
                 geom = ogr.Geometry(ogr.wkbPolygon)
 
                 # Add outer ring
-                linear_ring = array2line(geometry[i].outer_ring,
-                                         geometry_type=ogr.wkbLinearRing)
+                linear_ring = array2line(
+                    geometry[i].outer_ring, geometry_type=ogr.wkbLinearRing)
                 geom.AddGeometry(linear_ring)
 
                 # Add inner rings if any
                 for A in geometry[i].inner_rings:
-                    geom.AddGeometry(array2line(A,
-                                     geometry_type=ogr.wkbLinearRing))
+                    geom.AddGeometry(array2line(
+                        A, geometry_type=ogr.wkbLinearRing))
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise WriteLayerError(msg)
@@ -718,7 +739,7 @@ class Vector(Layer):
             feature.Destroy()
 
         # Write keywords if any
-        write_keywords(self.keywords, basename + '.keywords')
+        write_keywords(self.keywords, base_name + '.keywords')
 
         # FIXME (Ole): Maybe store style_info
 
@@ -748,6 +769,23 @@ class Vector(Layer):
 
     def get_data(self, attribute=None, index=None, copy=False):
         """Get vector attributes
+
+        :param attribute: Specify an attribute name of which to return data.
+        :type attribute: str
+
+        :param index: Indicates a specific value on which to call the
+        attribute. Ignored if no attribute is set.
+        :type index: int
+
+        :param copy: Indicate whether to return a pointer to the data,
+        or a copy of.
+        :type copy: bool
+
+        :raises: GetDataError
+
+        :returns: A list where each entry is a dictionary of attributes for one
+            feature.
+        :rtype: list,
 
         Note:
             Data is returned as a list where each entry is a dictionary of
@@ -822,6 +860,18 @@ class Vector(Layer):
         Optional boolean argument as_geometry_objects will change the return
         value to a list of geometry objects rather than a list of arrays.
         This currently only applies to polygon geometries
+
+        :param copy: Set to return a copy of the data rather than a pointer.
+        :type copy: bool
+
+        :param as_geometry_objects: Set to return geometry objects rather
+            than a list of arrays.
+        :type as_geometry_objects: bool
+
+        :raises: InaSAFEError
+
+        :returns: A list of geometry objects or arrays.
+        :rtype: list
         """
 
         if copy:
@@ -854,7 +904,13 @@ class Vector(Layer):
     def get_extrema(self, attribute=None):
         """Get min and max values from specified attribute
 
-        Return min, max
+        :param attribute: Specify an attribute name of which to return data.
+        :type attribute: str
+
+        :raises: InaSAFEError
+
+        :returns: minimum and maximum attribute values
+        :rtype:
         """
         if attribute is None:
             msg = ('Valid attribute name must be specified in get_extrema '
@@ -867,12 +923,13 @@ class Vector(Layer):
     def get_topN(self, attribute, N=10):
         """Get top N features
 
-        Args:
-            * attribute: The name of attribute where values are sought
-            * N: How many
+        :param attribute: The name of attribute where values are sought
+        :type attribute: str
 
-        Returns:
-            * layer: New vector layer with selected features
+        :param N: How many
+        :type N: int
+
+        :returns: New vector layer with selected features
         """
 
         # Input checks
@@ -904,21 +961,48 @@ class Vector(Layer):
 
     @property
     def is_point_data(self):
-        return self.is_vector and (self.geometry_type == ogr.wkbPoint or
-            self.geometry_type == ogr.wkbPoint25D)
+        """ Check whether this is a point
+
+        :return: Test result
+        :rtype: bool
+        """
+        return (
+            self.is_vector and (
+                self.geometry_type == ogr.wkbPoint or
+                self.geometry_type == ogr.wkbPoint25D))
 
     @property
     def is_line_data(self):
-        return self.is_vector and (self.geometry_type == ogr.wkbLineString or
-            self.geometry_type == ogr.wkbLineString25D)
+        """ Check whether this is a line
+
+        :return: Test result
+        :rtype: bool
+        """
+        return (
+            self.is_vector and (
+                self.geometry_type == ogr.wkbLineString or
+                self.geometry_type == ogr.wkbLineString25D))
 
     @property
     def is_polygon_data(self):
-        return self.is_vector and (self.geometry_type == ogr.wkbPolygon or
-            self.geometry_type == ogr.wkbPolygon25D)
+        """ Check whether this is a polygon
+
+        :return: Test result
+        :rtype: bool
+        """
+        return (
+            self.is_vector and (
+                self.geometry_type == ogr.wkbPolygon or
+                self.geometry_type == ogr.wkbPolygon25D))
 
     @property
     def is_multi_polygon_data(self):
+        """ Check whether this is multipolygon
+
+        :return: Test result
+        :rtype: bool
+        """
+
         return self.is_vector and self.geometry_type == ogr.wkbMultiPolygon
 
 
@@ -928,11 +1012,14 @@ class Vector(Layer):
 def convert_line_to_points(V, delta):
     """Convert line vector data to point vector data
 
-    Args:
-        * V: Vector layer with line data
-        * delta: Incremental step to find the points
-    Returns:
-        * Vector layer with point data and the same attributes as V
+    :param V: Vector layer with line data
+    :type V: Vector
+
+    :param delta: Incremental step to find the points
+    :type delta: float
+
+    :returns: Vector layer with point data and the same attributes as V
+    :rtype: Vector
     """
 
     msg = 'Input data %s must be line vector data' % V
@@ -966,11 +1053,11 @@ def convert_line_to_points(V, delta):
 def convert_polygons_to_centroids(V):
     """Convert polygon vector data to point vector data
 
-    Args:
-        * V: Vector layer with polygon data
+    :param V: Vector layer with polygon data
+    :type V: Vector
 
-    Returns:
-        * Vector layer with point data and the same attributes as V
+    :returns: Vector layer with point data and the same attributes as V
+    :rtype: Vector
     """
 
     msg = 'Input data %s must be polygon vector data' % V
