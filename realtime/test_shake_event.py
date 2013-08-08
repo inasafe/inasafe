@@ -119,23 +119,23 @@ day: 26
 month: 7
 year: 2012
 time: None
-timeZone: WIB
-xMinimum: 122.45
-xMaximum: 126.45
-yMinimum: -2.21
-yMaximum: 1.79
+time_zone: WIB
+x_minimum: 122.45
+x_maximum: 126.45
+y_minimum: -2.21
+y_maximum: 1.79
 rows: 161.0
 columns: 161.0
-mmiData: Populated
+mmi_data: Populated
 populationRasterPath: None
-impactFile: None
-impactKeywordsFile: None
-fatalityCounts: None
-displacedCounts: None
-affectedCounts: None
-extentWithCities: Not set
-zoomFactor: 1.25
-searchBoxes: None
+impact_file: None
+impact_keywords_file: None
+fatality_counts: None
+displaced_counts: None
+affected_counts: None
+extent_with_cities: Not set
+zoom_factor: 1.25
+search_boxes: None
 """
         myState = str(myShakeEvent)
         myMessage = (('Expected:\n----------------\n%s'

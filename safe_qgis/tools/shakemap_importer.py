@@ -195,8 +195,8 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             my_algorithm = 'invdist'
 
         fileName = convert_mmi_data(input_path, output_path,
-                                    the_algorithm=my_algorithm,
-                                    algorithm_name=False)
+                                    algorithm=my_algorithm,
+                                    algorithm_filename_flag=False)
         if self.cBLoadLayer.isChecked():
             fileInfo = QFileInfo(fileName)
             baseName = fileInfo.baseName()
