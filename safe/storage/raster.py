@@ -20,7 +20,7 @@ from projection import Projection
 from utilities import DRIVER_MAP
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import (geotransform2bbox, geotransform2resolution,
+from utilities import (geotransform_to_bbox, geotransform_to_resolution,
                        check_geotransform)
 
 
@@ -553,7 +553,7 @@ class Raster(Layer):
             Format is [West, South, East, North]
         """
 
-        return geotransform2bbox(self.geotransform, self.columns, self.rows)
+        return geotransform_to_bbox(self.geotransform, self.columns, self.rows)
 
     def get_resolution(self, isotropic=False, native=False):
         """Get raster resolution as a 2-tuple (resx, resy)
@@ -567,7 +567,7 @@ class Raster(Layer):
 
         # Get actual resolution first
         try:
-            res = geotransform2resolution(self.geotransform,
+            res = geotransform_to_resolution(self.geotransform,
                                           isotropic=isotropic)
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '

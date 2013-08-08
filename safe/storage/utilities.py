@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Utilities for storage module**
 """
 
@@ -122,20 +123,20 @@ def _keywords_to_string(keywords, sublayer=None):
 def write_keywords(keywords, filename, sublayer=None):
     """Write keywords dictonary to file
 
-    Args:
-        * keywords: Dictionary of keyword, value pairs
-        * filename: Name of keywords file. Extension expected to be .keywords
-        * sublayer: str Optional sublayer applicable only to multilayer formats
-             such as sqlite or netcdf which can potentially hold more than
-             one layer. The string should map to the layer group as per the
-             example below. **If the keywords file contains sublayer
-             definitions but no sublayer was defined, keywords file content
-             will be removed and replaced with only the keywords provided
-             here.**
+    :param keywords: Dictionary of keyword, value pairs
+    :type keywords: dict
 
-    Returns: None
+    :param filename: Name of keywords file. Extension expected to be .keywords
+    :type filename: str
 
-    Raises: None
+    :param sublayer: Optional sublayer applicable only to multilayer formats
+        such as sqlite or netcdf which can potentially hold more than
+        one layer. The string should map to the layer group as per the
+        example below. **If the keywords file contains sublayer
+        definitions but no sublayer was defined, keywords file content
+        will be removed and replaced with only the keywords provided
+        here.**
+    :type sublayer: str
 
     A keyword file with sublayers may look like this:
 
@@ -203,25 +204,26 @@ def write_keywords(keywords, filename, sublayer=None):
 def read_keywords(filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
-    Args:
-        * filename: Name of keywords file. Extension expected to be .keywords
-             The format of one line is expected to be either
-             string: string or string
-        * sublayer: str Optional sublayer applicable only to multilayer formats
-             such as sqlite or netcdf which can potentially hold more than
-             one layer. The string should map to the layer group as per the
-             example below. If the keywords file contains sublayer definitions
-             but no sublayer was defined, the first layer group will be
-             returned.
-        * all_blocks: bool Optional, defaults to False. If True will return
-            a dict of dicts, where the top level dict entries each represent
-            a sublayer, and the values of that dict will be dicts of keyword
-            entries.
+    :param filename: Name of keywords file. Extension expected to be .keywords
+        The format of one line is expected to be either
+        string: string or string
+    :type filename: str
 
-    Returns:
-        keywords: Dictionary of keyword, value pairs
+    :param sublayer: Optional sublayer applicable only to multilayer formats
+        such as sqlite or netcdf which can potentially hold more than
+        one layer. The string should map to the layer group as per the
+        example below. If the keywords file contains sublayer definitions
+        but no sublayer was defined, the first layer group will be
+        returned.
+    :type sublayer: str
 
-    Raises: None
+    :param all_blocks: Optional, defaults to False. If True will return
+        a dict of dicts, where the top level dict entries each represent
+        a sublayer, and the values of that dict will be dicts of keyword
+        entries.
+    :type all_blocks: bool
+
+    :returns: keywords: Dictionary of keyword, value pairs
 
     A keyword layer with sublayers may look like this:
 
@@ -336,16 +338,17 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
         return first_keywords
 
 
+# noinspection PyExceptionInherit
 def check_geotransform(geotransform):
     """Check that geotransform is valid
 
-    Args
-        * geotransform: GDAL geotransform (6-tuple).
-          (top left x, w-e pixel resolution, rotation,
-          top left y, rotation, n-s pixel resolution).
-          See e.g. http://www.gdal.org/gdal_tutorial.html
+    :param geotransform: GDAL geotransform (6-tuple).
+        (top left x, w-e pixel resolution, rotation,
+        top left y, rotation, n-s pixel resolution).
+        See e.g. http://www.gdal.org/gdal_tutorial.html
+    :type geotransform: tuple
 
-    Note
+    .. note::
        This assumes that the spatial reference uses geographic coordinates,
        so will not work for projected coordinate systems.
     """
@@ -380,22 +383,25 @@ def check_geotransform(geotransform):
     verify(geotransform[5] < 0, msg)
 
 
-def geotransform2bbox(geotransform, columns, rows):
+def geotransform_to_bbox(geotransform, columns, rows):
     """Convert geotransform to bounding box
 
-    Args :
-        * geotransform: GDAL geotransform (6-tuple).
-                        (top left x, w-e pixel resolution, rotation,
-                        top left y, rotation, n-s pixel resolution).
-                        See e.g. http://www.gdal.org/gdal_tutorial.html
-        * columns: Number of columns in grid
-        * rows: Number of rows in grid
+    :param geotransform: GDAL geotransform (6-tuple).
+        (top left x, w-e pixel resolution, rotation,
+        top left y, rotation, n-s pixel resolution).
+        See e.g. http://www.gdal.org/gdal_tutorial.html
+    :type geotransform: tuple
 
-    Returns:
-        * bbox: Bounding box as a list of geographic coordinates
-                [west, south, east, north]
+    :param columns: Number of columns in grid
+    :type columns: int
 
-    Note:
+    :param rows: Number of rows in grid
+    :type rows: int
+
+    :returns: bbox: Bounding box as a list of geographic coordinates
+        [west, south, east, north]
+
+    .. note::
         Rows and columns are needed to determine eastern and northern bounds.
         FIXME: Not sure if the pixel vs gridline registration issue is observed
         correctly here. Need to check against gdal > v1.7
@@ -408,52 +414,54 @@ def geotransform2bbox(geotransform, columns, rows):
     x_pix = columns
     y_pix = rows
 
-    minx = x_origin
-    maxx = x_origin + (x_pix * x_res)
-    miny = y_origin + (y_pix * y_res)
-    maxy = y_origin
+    min_x = x_origin
+    max_x = x_origin + (x_pix * x_res)
+    min_y = y_origin + (y_pix * y_res)
+    max_y = y_origin
 
-    return [minx, miny, maxx, maxy]
+    return [min_x, min_y, max_x, max_y]
 
 
-def geotransform2resolution(geotransform, isotropic=False):
+def geotransform_to_resolution(geotransform, isotropic=False):
     """Convert geotransform to resolution
 
-    Args:
-        * geotransform: GDAL geotransform (6-tuple).
-                        (top left x, w-e pixel resolution, rotation,
-                        top left y, rotation, n-s pixel resolution).
-                        See e.g. http://www.gdal.org/gdal_tutorial.html
-        * isotropic: If True, return the average (dx + dy) / 2
+    :param geotransform: GDAL geotransform (6-tuple).
+        (top left x, w-e pixel resolution, rotation,
+        top left y, rotation, n-s pixel resolution).
+        See e.g. http://www.gdal.org/gdal_tutorial.html
+    :type geotransform: tuple
 
-    Returns:
-        * resolution: grid spacing (resx, resy) in (positive) decimal
-                      degrees ordered as longitude first, then latitude.
-                      or (resx + resy) / 2 (if isotropic is True)
+    :param isotropic: If True, return the average (dx + dy) / 2
+    :type isotropic: bool
+
+    :returns: resolution: grid spacing (res_x, res_y) in (positive) decimal
+        degrees ordered as longitude first, then latitude.
+        or (res_x + res_y) / 2 (if isotropic is True)
     """
 
-    resx = geotransform[1]   # w-e pixel resolution
-    resy = -geotransform[5]  # n-s pixel resolution (always negative)
+    res_x = geotransform[1]   # w-e pixel resolution
+    res_y = -geotransform[5]  # n-s pixel resolution (always negative)
 
     if isotropic:
-        return (resx + resy) / 2
+        return (res_x + res_y) / 2
     else:
-        return resx, resy
+        return res_x, res_y
 
 
-def raster_geometry2geotransform(longitudes, latitudes):
+def raster_geometry_to_geotransform(longitudes, latitudes):
     """Convert vectors of longitudes and latitudes to geotransform
 
     Note:
         This is the inverse operation of Raster.get_geometry().
 
-    Args:
-       * longitudes, latitudes: Vectors of geographic coordinates
+    :param longitudes: Vectors of geographic coordinates
+    :type longitudes:
 
-    Returns:
-       * geotransform: 6-tuple (top left x, w-e pixel resolution, rotation,
-                                top left y, rotation, n-s pixel resolution)
+    :param latitudes: Vectors of geographic coordinates
+    :type latitudes:
 
+    :returns: geotransform: 6-tuple (top left x, w-e pixel resolution,
+        rotation, top left y, rotation, n-s pixel resolution)
     """
 
     nx = len(longitudes)
@@ -486,17 +494,15 @@ def raster_geometry2geotransform(longitudes, latitudes):
     return geotransform
 
 
+# noinspection PyExceptionInherit
 def bbox_intersection(*args):
     """Compute intersection between two or more bounding boxes
 
-    Args:
-        * args: two or more bounding boxes.
-              Each is assumed to be a list or a tuple with
-              four coordinates (W, S, E, N)
+    :param args: two or more bounding boxes.
+        Each is assumed to be a list or a tuple with
+        four coordinates (W, S, E, N)
 
-    Returns:
-        * result: The minimal common bounding box
-
+    :returns: The minimal common bounding box
     """
 
     msg = 'Function bbox_intersection must take at least 2 arguments.'
@@ -549,13 +555,16 @@ def bbox_intersection(*args):
 def minimal_bounding_box(bbox, min_res, eps=1.0e-6):
     """Grow bounding box to exceed specified resolution if needed
 
-    Args:
-        * bbox: Bounding box with format [W, S, E, N]
-        * min_res: Minimal acceptable resolution to exceed
-        * eps: Optional tolerance that will be applied to 'buffer' result
+    :param bbox: Bounding box with format [W, S, E, N]
+    :type bbox: list
 
-    Returns:
-        * Adjusted bounding box guaranteed to exceed specified resolution
+    :param min_res: Minimal acceptable resolution to exceed
+    :type min_res: float
+
+    :param eps: Optional tolerance that will be applied to 'buffer' result
+    :type eps: float
+
+    :returns: Adjusted bounding box guaranteed to exceed specified resolution
     """
 
     # FIXME (Ole): Probably obsolete now
@@ -590,14 +599,15 @@ def buffered_bounding_box(bbox, resolution):
         outside the domain (as defined by a tight bounding box) get assigned
         values.
 
-    Args:
-        * bbox: Bounding box with format [W, S, E, N]
-        * resolution: (resx, resy) - Raster resolution in each direction.
-                      res - Raster resolution in either direction
-                      If resolution is None bbox is returned unchanged.
+    :param bbox: Bounding box with format [W, S, E, N]
+    :type bbox: list
 
-    Returns:
-        * Adjusted bounding box
+    :param resolution: (resx, resy) - Raster resolution in each direction.
+        res - Raster resolution in either direction
+        If resolution is None bbox is returned unchanged.
+    :type resolution: tuple
+
+    :returns: Adjusted bounding box
 
     Note:
         Case in point: Interpolation point O would fall outside this domain
@@ -636,14 +646,15 @@ def buffered_bounding_box(bbox, resolution):
 def get_geometry_type(geometry, geometry_type):
     """Determine geometry type based on data
 
-    Args:
-        * geometry: A list of either point coordinates [lon, lat] or polygons
-                    which are assumed to be numpy arrays of coordinates
-        * geometry_type: Optional type - 'point', 'line', 'polygon' or None
+    :param geometry: A list of either point coordinates [lon, lat] or polygons
+        which are assumed to be numpy arrays of coordinates
+    :type geometry: list
 
-    Returns:
-        * geometry_type: Either ogr.wkbPoint, ogr.wkbLineString or
-                         ogr.wkbPolygon
+    :param geometry_type: Optional type - 'point', 'line', 'polygon' or None
+    :type geometry_type: str, None
+
+    :returns: geometry_type: Either ogr.wkbPoint, ogr.wkbLineString or
+        ogr.wkbPolygon
 
     Note:
         If geometry type cannot be determined an Exception is raised.
@@ -708,6 +719,12 @@ def get_geometry_type(geometry, geometry_type):
 def is_sequence(x):
     """Determine if x behaves like a true sequence but not a string
 
+    :param x: Sequence like object
+    :type x: object
+
+    :returns: Test result
+    :rtype: bool
+
     Note:
         This will for example return True for lists, tuples and numpy arrays
         but False for strings and dictionaries.
@@ -724,14 +741,16 @@ def is_sequence(x):
         return True
 
 
-def array2line(A, geometry_type=ogr.wkbLinearRing):
+def array_to_line(A, geometry_type=ogr.wkbLinearRing):
     """Convert coordinates to linear_ring
 
-    Args:
-        * A: Nx2 Array of coordinates representing either a polygon or a line.
-             A can be either a numpy array or a list of coordinates.
-        * geometry_type: A valid OGR geometry type. Default: ogr.wkbLinearRing
-             Other options include ogr.wkbLineString
+    :param A: Nx2 Array of coordinates representing either a polygon or a line.
+        A can be either a numpy array or a list of coordinates.
+    :type A: numpy.ndarray, list
+
+    :param geometry_type: A valid OGR geometry type.
+        Default type ogr.wkbLinearRing
+    :type geometry_type: ogr.wkbLinearRing, include ogr.wkbLineString
 
     Returns:
         * ring: OGR line geometry
@@ -766,8 +785,17 @@ def array2line(A, geometry_type=ogr.wkbLinearRing):
 def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
     """Compares to linear rings as numpy arrays
 
-    Args
-        * x, y: Nx2 numpy arrays
+    :param x: A 2d array of the first ring
+    :type x: numpy.ndarray
+
+    :param y: A 2d array of the second ring
+    :type y: numpy.ndarray
+
+    :param rtol: The relative tolerance parameter
+    :type rtol: float
+
+    :param atol: The relative tolerance parameter
+    :type rtol: float
 
     Returns:
         * True if x == y or x' == y (up to the specified tolerance)
@@ -787,7 +815,7 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
     verify(x.shape[1] == 2 and y.shape[1] == 2, msg)
 
     if (numpy.allclose(x, y, rtol=rtol, atol=atol) or
-        numpy.allclose(x, y[::-1], rtol=rtol, atol=atol)):
+            numpy.allclose(x, y[::-1], rtol=rtol, atol=atol)):
         return True
     else:
         return False
@@ -795,21 +823,21 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
 
 # FIXME (Ole): We can retire this messy function now
 #              Positive: Delete it :-)
-def array2wkt(A, geom_type='POLYGON'):
+def array_to_wkt(A, geom_type='POLYGON'):
     """Convert coordinates to wkt format
 
-    Args:
-        * A: Nx2 Array of coordinates representing either a polygon or a line.
-             A can be either a numpy array or a list of coordinates.
-        * geom_type: Determines output keyword 'POLYGON' or 'LINESTRING'
+    :param A: Nx2 Array of coordinates representing either a polygon or a line.
+        A can be either a numpy array or a list of coordinates.
+    :type A: numpy.array
 
-    Returns:
-        * wkt: geometry in the format known to ogr: Examples
+    :param geom_type: Determines output keyword 'POLYGON' or 'LINESTRING'
+    :type geom_type: str
+
+    :returns: wkt: geometry in the format known to ogr: Examples
 
     Note:
         POLYGON((1020 1030,1020 1045,1050 1045,1050 1030,1020 1030))
         LINESTRING(1000 1000, 1100 1050)
-
     """
 
     try:
@@ -869,8 +897,11 @@ geometry_type_map = {ogr.wkbPoint: 'Point',
                      ogr.wkbUnknown: 'Unknown'}
 
 
-def geometrytype2string(g_type):
+def geometry_type_to_string(g_type):
     """Provides string representation of numeric geometry types
+
+    :param g_type: geometry type:
+    :type g_type: ogr.wkb*, None
 
     FIXME (Ole): I can't find anything like this in ORG. Why?
     """
@@ -887,21 +918,22 @@ def geometrytype2string(g_type):
 def calculate_polygon_area(polygon, signed=False):
     """Calculate the signed area of non-self-intersecting polygon
 
-    Args:
-        * polygon: Numeric array of points (longitude, latitude). It is assumed
-                   to be closed, i.e. first and last points are identical
-        * signed: Optional flag deciding whether returned area retains its
-                  sign:
+    :param polygon: Numeric array of points (longitude, latitude). It is
+        assumed to be closed, i.e. first and last points are identical
+    :type polygon: numpy.ndarray
 
-                  If points are ordered counter clockwise, the signed area
-                  will be positive.
+    :param signed: Optional flag deciding whether returned area retains its
+        sign:
+            If points are ordered counter clockwise, the signed area
+            will be positive.
 
-                  If points are ordered clockwise, it will be negative
-                  Default is False which means that the area is always
-                  positive.
+            If points are ordered clockwise, it will be negative
+            Default is False which means that the area is always
+            positive.
+    :type signed: bool
 
-    Returns:
-        * area: Area of polygon (subject to the value of argument signed)
+    :returns: area: Area of polygon (subject to the value of argument signed)
+    :rtype: numpy.ndarray
 
     Note:
         Sources
@@ -934,14 +966,18 @@ def calculate_polygon_area(polygon, signed=False):
 def calculate_polygon_centroid(polygon):
     """Calculate the centroid of non-self-intersecting polygon
 
-    Args:
-        * polygon: Numeric array of points (longitude, latitude). It is assumed
-                 to be closed, i.e. first and last points are identical
+    :param polygon: Numeric array of points (longitude, latitude). It is
+        assumed to be closed, i.e. first and last points are identical
+    :type polygon: numpy.ndarray
 
-    Note:
+    :returns: calculated centroid
+    :rtype: numpy.ndarray
+
+    .. note::
         Sources
             http://paulbourke.net/geometry/polyarea/
             http://en.wikipedia.org/wiki/Centroid
+
     """
 
     # Make sure it is numeric
@@ -981,13 +1017,25 @@ def calculate_polygon_centroid(polygon):
 def points_between_points(point1, point2, delta):
     """Creates an array of points between two points given a delta
 
+    :param point1: The first point
+    :type point1: numpy.ndarray
+
+    :param point2: The second point
+    :type point2: numpy.ndarray
+
+    :param delta: The increment between inserted points
+    :type delta: float
+
+    :returns: Array of points.
+    :rtype: numpy.ndarray
+
     Note:
-       u = (x1-x0, y1-y0)/L, where
-       L=sqrt( (x1-x0)^2 + (y1-y0)^2).
-       If r is the resolution, then the
-       points will be given by
-       (x0, y0) + u * n * r for n = 1, 2, ....
-       while len(n*u*r) < L
+        u = (x1-x0, y1-y0)/L, where
+        L=sqrt( (x1-x0)^2 + (y1-y0)^2).
+        If r is the resolution, then the
+        points will be given by
+        (x0, y0) + u * n * r for n = 1, 2, ....
+        while len(n*u*r) < L
     """
     x0, y0 = point1
     x1, y1 = point2
@@ -1004,12 +1052,14 @@ def points_between_points(point1, point2, delta):
 def points_along_line(line, delta):
     """Calculate a list of points along a line with a given delta
 
-    Args:
-        * line: Numeric array of points (longitude, latitude).
-        * delta: Decimal number to be used as step
+    :param line: Numeric array of points (longitude, latitude).
+    :type line: numpy.ndarray
 
-    Returns:
-        * V: Numeric array of points (longitude, latitude).
+    :param delta: Decimal number to be used as step
+    :type delta: float
+
+    :returns: Numeric array of points (longitude, latitude).
+    :rtype: numpy.ndarray
 
     Note:
         Sources
@@ -1035,30 +1085,31 @@ def points_along_line(line, delta):
 def combine_polygon_and_point_layers(layers):
     """Combine polygon and point layers
 
-    Args:
-        layers: List of vector layers of type polygon or point
+    :param layers: List of vector layers of type polygon or point
+    :type layers: list
 
-    Returns:
-        One point layer with all input point layers and centroids from all
-        input polygon layers.
-    Raises:
-        IneSAFEError in case a0ttribute names are not the same.
+    :returns: One point layer with all input point layers and centroids from
+        all input polygon layers.
+    :rtype: numpy.ndarray
+    Raises: InaSAFEError (in case attribute names are not the same.)
     """
 
     # This is to implement issue #276
     print layers
 
 
-def get_ringdata(ring):
+def get_ring_data(ring):
     """Extract coordinates from OGR ring object
 
-    Args
-        * OGR ring object
-    Returns
-        * Nx2 numpy array of vertex coordinates (lon, lat)
+    :param ring: OGR ring object
+    :type ring:
+
+    :returns: Nx2 numpy array of vertex coordinates (lon, lat)
+    :rtype: numpy.array
     """
 
     N = ring.GetPointCount()
+    # noinspection PyTypeChecker
     A = numpy.zeros((N, 2), dtype='d')
 
     # FIXME (Ole): Is there any way to get the entire data vectors?
@@ -1069,7 +1120,7 @@ def get_ringdata(ring):
     return A
 
 
-def get_polygondata(G):
+def get_polygon_data(G):
     """Extract polygon data from OGR geometry
 
     :param G: OGR polygon geometry
@@ -1082,13 +1133,13 @@ def get_polygondata(G):
     number_of_rings = G.GetGeometryCount()
 
     # Get outer ring
-    outer_ring = get_ringdata(G.GetGeometryRef(0))
+    outer_ring = get_ring_data(G.GetGeometryRef(0))
 
     # Get inner rings if any
     inner_rings = []
     if number_of_rings > 1:
         for i in range(1, number_of_rings):
-            inner_ring = get_ringdata(G.GetGeometryRef(i))
+            inner_ring = get_ring_data(G.GetGeometryRef(i))
             inner_rings.append(inner_ring)
 
     # Return Polygon instance

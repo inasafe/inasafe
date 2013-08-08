@@ -38,11 +38,11 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
-from utilities import array2line
+from utilities import array_to_line
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
-from utilities import geometrytype2string
-from utilities import get_ringdata, get_polygondata
+from utilities import geometry_type_to_string
+from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -231,7 +231,7 @@ class Vector(Layer):
         """Render as name, number of features, geometry type
         """
 
-        g_type_str = geometrytype2string(self.geometry_type)
+        g_type_str = geometry_type_to_string(self.geometry_type)
         return ('Vector data set: %s, %i features, geometry type '
                 '%s (%s)' % (self.name,
                              len(self),
@@ -475,10 +475,10 @@ class Vector(Layer):
                 if self.is_point_data:
                     geometry.append((G.GetX(), G.GetY()))
                 elif self.is_line_data:
-                    ring = get_ringdata(G)
+                    ring = get_ring_data(G)
                     geometry.append(ring)
                 elif self.is_polygon_data:
-                    polygon = get_polygondata(G)
+                    polygon = get_polygon_data(G)
                     geometry.append(polygon)
                 elif self.is_multi_polygon_data:
                     try:
@@ -496,7 +496,7 @@ class Vector(Layer):
                     else:
                         # Read polygon data as single part
                         self.geometry_type = ogr.wkbPolygon
-                        polygon = get_polygondata(G)
+                        polygon = get_polygon_data(G)
                         geometry.append(polygon)
                 else:
                     msg = ('Only point, line and polygon geometries are '
@@ -677,20 +677,20 @@ class Vector(Layer):
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
             elif self.is_line_data:
-                geom = array2line(
+                geom = array_to_line(
                     geometry[i], geometry_type=ogr.wkbLineString)
             elif self.is_polygon_data:
                 # Create polygon geometry
                 geom = ogr.Geometry(ogr.wkbPolygon)
 
                 # Add outer ring
-                linear_ring = array2line(
+                linear_ring = array_to_line(
                     geometry[i].outer_ring, geometry_type=ogr.wkbLinearRing)
                 geom.AddGeometry(linear_ring)
 
                 # Add inner rings if any
                 for A in geometry[i].inner_rings:
-                    geom.AddGeometry(array2line(
+                    geom.AddGeometry(array_to_line(
                         A, geometry_type=ogr.wkbLinearRing))
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
@@ -842,7 +842,7 @@ class Vector(Layer):
     def get_geometry_name(self):
         """Return geometry name for vector layer
         """
-        return geometrytype2string(self.geometry_type)
+        return geometry_type_to_string(self.geometry_type)
 
     def get_geometry(self, copy=False, as_geometry_objects=False):
         """Return geometry for vector layer.
