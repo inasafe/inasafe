@@ -34,6 +34,7 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
 
     :param mode: Determines the interpolation order.
         Options are:
+        
             * 'constant' - piecewise constant nearest neighbour interpolation
             * 'linear' - bilinear interpolation using the two nearest \
               neighbours (default)
