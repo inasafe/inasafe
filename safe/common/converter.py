@@ -65,8 +65,8 @@ class ShakeEvent():
         :param output_basename: mmi file name without extention
         :type output_basename: str
 
-        :param algorithm_filename_flag: Flag whether to use the algorithm in the
-            output file's name
+        :param algorithm_filename_flag: Flag whether to use the algorithm in
+            the output file's name
         :type algorithm_filename_flag: bool
 
         :returns: Instance

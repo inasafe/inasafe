@@ -1658,7 +1658,8 @@ class ShakeEvent(QObject):
         :returns
             str: the path to the computed impact file.
                 The class members self.impact_file, self.fatality_counts,
-                self.displaced_counts and self.affected_counts will be populated.
+                self.displaced_counts and self.affected_counts will be
+                populated.
                 self.*Counts are dicts containing fatality / displaced /
                 affected counts for the shake events. Keys for the dict will be
                 MMI classes (I-X) and values will be count type for that class.
