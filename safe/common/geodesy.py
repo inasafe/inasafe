@@ -15,7 +15,7 @@ import numpy
 def acos(c):
     """acos -  Safe inverse cosine
 
-       :pram c: This value is shrunk to admissible interval
+       :param c: This value is shrunk to admissible interval
            to avoid case where a small rounding error causes
            a math domain error.
        :type c: float
@@ -113,7 +113,6 @@ class Point(object):
 
         :returns: distance
         :rtype: float
-        :
         """
         GCA = self.GCA(P)
         return self.R * GCA
