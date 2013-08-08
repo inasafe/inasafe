@@ -138,7 +138,7 @@ class ShakeEvent():
         """Extract the parts of a date given a timestamp as per below example.
 
         :param the_time_stamp: Is the 'event_timestamp' attribute from  grid
-        .xml.
+         .xml.
         :type the_time_stamp: str
 
         # now separate out its parts
