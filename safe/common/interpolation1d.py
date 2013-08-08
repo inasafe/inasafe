@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Module for 1D interpolation**
 
 This module:
@@ -16,25 +17,37 @@ import numpy
 # pylint: disable=W0105
 
 
+# noinspection PyArgumentEqualDefault,PyTypeChecker
 def interpolate1d(x, z, points, mode='linear', bounds_error=False):
-    """Fundamental 2D interpolation routine
+    """Fundamental 1D interpolation routine.
 
-    Args:
-        * x: 1D array of x-coordinates on which to interpolate
-        * z: 1D array of values for each x
-        * points: 1D array of coordinates where interpolated values are sought
-        * mode: Determines the interpolation order. Options are:
+    :param x: 1D array of x-coordinates on which to interpolate
+    :type x: numpy.ndarray
+
+    :param z: 1D array of values for each x
+    :type z: numpy.ndarray
+
+    :param points: 1D array of coordinates where interpolated values are sought
+    :type points: numpy.ndarray
+
+    :param mode: Determines the interpolation order.
+        Options are:
             * 'constant' - piecewise constant nearest neighbour interpolation
             * 'linear' - bilinear interpolation using the two nearest \
               neighbours (default)
-        * bounds_error: Boolean flag. If True (default) an exception will
-                        be raised when interpolated values are requested
-                        outside the domain of the input data. If False, nan
-                        is returned for those values
-    Returns:
-        * 1D array with same length as points with interpolated values
+    :type mode: str
 
-    Note:
+    :param bounds_error: Flag to indicate whether an exception will be raised
+        when interpolated values are requested outside the domain of the
+        input data. If False, nan is returned for those values.
+    :type bounds_error: bool
+
+    :returns: 1D array with same length as points with interpolated values
+    :rtype: numpy.ndarry
+
+    :raises: RuntimeError
+
+    ..note::
         Input coordinates x are assumed to be monotonically increasing,
         but need not be equidistantly spaced.
 
@@ -91,6 +104,7 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
     if len(zeta) > 0:
         mzeta = numpy.nanmax(zeta)
         mz = numpy.nanmax(z)
+        # noinspection PyStringFormat
         msg = ('Internal check failed. Max interpolated value %.15f '
                'exceeds max grid value %.15f ' % (mzeta, mz))
         if not(numpy.isnan(mzeta) or numpy.isnan(mz)):
@@ -108,6 +122,31 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
 
 def check_inputs(x, z, points, mode, bounds_error):
     """Check inputs for interpolate1d function
+
+    :param x: 1D array of x-coordinates on which to interpolate
+    :type x: numpy.ndarray
+
+    :param z: 1D array of values for each x
+    :type z: numpy.ndarray
+
+    :param points: 1D array of coordinates where interpolated values are sought
+    :type points: numpy.ndarray
+
+    :param mode: Determines the interpolation order.
+        Options are:
+            * 'constant' - piecewise constant nearest neighbour interpolation
+            * 'linear' - bilinear interpolation using the two nearest \
+              neighbours (default)
+    :type mode: str
+
+    :param bounds_error: Flag to indicate whether an exception will be raised
+        when interpolated values are requested outside the domain of the
+        input data. If False, nan is returned for those values.
+    :type bounds_error: bool
+
+    :returns: x, z and points
+
+    :raises: RuntimeError, Exception
     """
 
     msg = 'Only mode "linear" and "constant" are implemented. I got %s' % mode
@@ -164,6 +203,7 @@ def check_inputs(x, z, points, mode, bounds_error):
     return x, z, xi
 
 # Mathematical derivation of the interpolation formula used
+# noinspection PyStatementEffect
 """
 Bilinear interpolation is based on the standard 1D linear interpolation
 formula:
