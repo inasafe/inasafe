@@ -22,7 +22,6 @@ __copyright__ += 'Disaster Reduction'
 import logging
 import os
 
-from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature, SIGNAL, QObject
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
@@ -195,15 +194,9 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         else:
             my_algorithm = 'invdist'
 
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-
-        fileName = convert_mmi_data(
-            input_path, output_path,
-            algorithm=my_algorithm,
-            algorithm_filename_flag=False)
-
-        QtGui.qApp.restoreOverrideCursor()
-
+        fileName = convert_mmi_data(input_path, output_path,
+                                    algorithm=my_algorithm,
+                                    algorithm_filename_flag=False)
         if self.cBLoadLayer.isChecked():
             fileInfo = QFileInfo(fileName)
             baseName = fileInfo.baseName()
