@@ -9,7 +9,7 @@ from osgeo import gdal
 
 from safe.common.utilities import (verify,
                                    ugettext as safe_tr)
-from safe.common.numerics import nan_allclose, geotransform2axes, grid2points
+from safe.common.numerics import nan_allclose, geotransform_to_axes, grid_to_points
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -450,7 +450,7 @@ class Raster(Layer):
         ny = self.rows
 
         # Compute x and y axes
-        x, y = geotransform2axes(g, nx, ny)
+        x, y = geotransform_to_axes(g, nx, ny)
 
         # Return them
         return x, y
@@ -612,7 +612,7 @@ class Raster(Layer):
         # Convert grid data to point data
         A = self.get_data()
         x, y = self.get_geometry()
-        P, V = grid2points(A, x, y)
+        P, V = grid_to_points(A, x, y)
 
         return P, V
 
