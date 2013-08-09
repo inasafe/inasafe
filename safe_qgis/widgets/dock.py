@@ -621,7 +621,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     @pyqtSlot('QgsMapLayer')
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
-        """Helper function to obtain a list of layers currently loaded in QGIS.
+        r"""Obtain a list of layers currently loaded in QGIS.
 
         On invocation, this method will populate cboHazard, cboExposure and
         cboAggregation on the dialog with a list of available layers.
@@ -1206,7 +1206,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'Analysis Results'), **INFO_STYLE))
         myReport.add(self.keywordIO.read_keywords(
             theQGISImpactLayer, 'impact_summary'))
-        myReport.add(impact_attribution(myKeywords).to_html(True))
 
         # Get requested style for impact layer of either kind
         myStyle = theEngineImpactLayer.get_style_info()
@@ -1259,7 +1258,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # append postprocessing report
         myReport.add(myOutput.to_html())
-
+        # Layer attribution comes last
+        myReport.add(impact_attribution(myKeywords).to_html(True))
         # Return text to display in report panel
         return myReport
 

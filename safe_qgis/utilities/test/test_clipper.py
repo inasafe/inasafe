@@ -39,7 +39,7 @@ from safe_qgis.safe_interface import (
     readSafeLayer,
     getOptimalExtent,
     HAZDATA, TESTDATA, EXPDATA, UNITDATA,
-    nanallclose,
+    nan_allclose,
     GetDataError)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.utilities.clipper import (
@@ -371,13 +371,13 @@ class ClipperTest(unittest.TestCase):
 
                 # Compare elementwise
                 myMessage = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(myNativeData * mySigma, myScaledData,
+                assert nan_allclose(myNativeData * mySigma, myScaledData,
                                    rtol=1.0e-8, atol=1.0e-8), myMessage
 
                 # Check that it also works with manual scaling
                 myManualData = mySafeLayer.get_data(scaling=mySigma)
                 myMessage = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(myManualData, myScaledData,
+                assert nan_allclose(myManualData, myScaledData,
                                    rtol=1.0e-8, atol=1.0e-8), myMessage
 
                 # Check that an exception is raised for bad arguments
@@ -401,20 +401,20 @@ class ClipperTest(unittest.TestCase):
                 mySafeLayer.keywords['datatype'] = 'undefined'
                 myUnscaledData = mySafeLayer.get_data(scaling=None)
                 myMessage = 'Data should not have changed'
-                assert nanallclose(myNativeData, myUnscaledData,
+                assert nan_allclose(myNativeData, myUnscaledData,
                                    rtol=1.0e-12, atol=1.0e-12), myMessage
 
                 # Try with None and density keyword
                 mySafeLayer.keywords['datatype'] = 'density'
                 myUnscaledData = mySafeLayer.get_data(scaling=None)
                 myMessage = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(myScaledData, myUnscaledData,
+                assert nan_allclose(myScaledData, myUnscaledData,
                                    rtol=1.0e-12, atol=1.0e-12), myMessage
 
                 mySafeLayer.keywords['datatype'] = 'counts'
                 myUnscaledData = mySafeLayer.get_data(scaling=None)
                 myMessage = 'Data should not have changed'
-                assert nanallclose(myNativeData, myUnscaledData,
+                assert nan_allclose(myNativeData, myUnscaledData,
                                    rtol=1.0e-12, atol=1.0e-12), myMessage
 
     def testRasterScaling_projected(self):

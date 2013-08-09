@@ -191,7 +191,7 @@ class ShakeEvent(QObject):
         self.extentWithCities = None
         # How much to iteratively zoom out by when searching for cities
         self.zoomFactor = 1.25
-        # The search boxes used to find extentWithCities
+        # The search boxes used to find extent_with_cities
         # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
         self.searchBoxes = None
         # Stored as a dict with dir_to, dist_to,  dist_from etc e.g.
@@ -366,7 +366,7 @@ class ShakeEvent(QObject):
             myDataElement = myDataElement[0]
             myData = myDataElement.firstChild.nodeValue
 
-            # Extract the 1,2 and 5th (MMI) columns and populate mmiData
+            # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
             myLonColumn = 0
             myLatColumn = 1
             myMMIColumn = 4
@@ -412,11 +412,11 @@ class ShakeEvent(QObject):
         return myString
 
     def mmiDataToDelimitedFile(self, theForceFlag=True):
-        """Save the mmiData to a delimited text file suitable for processing
+        """Save the mmi_data to a delimited text file suitable for processing
         with gdal_grid.
 
         The output file will be of the same format as strings returned from
-        :func:`mmiDataToDelimitedText`.
+        :func:`mmi_to_delimited_text`.
 
         .. note:: An accompanying .csvt will be created which gdal uses to
            determine field types. The csvt will contain the following string:
@@ -433,7 +433,7 @@ class ShakeEvent(QObject):
 
         Raises: None
         """
-        LOGGER.debug('mmiDataToDelimitedText requested.')
+        LOGGER.debug('mmi_to_delimited_text requested.')
 
         myPath = os.path.join(shakemapExtractDir(),
                               self.eventId,
@@ -454,7 +454,7 @@ class ShakeEvent(QObject):
         return myPath
 
     def mmiDataToVrt(self, theForceFlag=True):
-        """Save the mmiData to an ogr vrt text file.
+        """Save the mmi_data to an ogr vrt text file.
 
         Args: theForceFlag bool (Optional). Whether to force the regeneration
             of the output file. Defaults to False.
@@ -464,7 +464,7 @@ class ShakeEvent(QObject):
         Raises: None
         """
         # Ensure the delimited mmi file exists
-        LOGGER.debug('mmiDataToVrt requested.')
+        LOGGER.debug('mmi_to_vrt requested.')
 
         myVrtPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
@@ -627,7 +627,7 @@ class ShakeEvent(QObject):
 
         Raises: None
         """
-        LOGGER.debug('mmiDataToRaster requested.')
+        LOGGER.debug('mmi_to_raster requested.')
 
         if theAlgorithm is None:
             theAlgorithm = 'nearest'
@@ -1135,13 +1135,13 @@ class ShakeEvent(QObject):
         It is a requirement that there will always be at least one city
         on the map for context so we will iteratively do a city selection,
         starting with the extents of the MMI dataset and then zooming
-        out by self.zoomFactor until we have some cities selected.
+        out by self.zoom_factor until we have some cities selected.
 
         After making a selection the extents used (taking into account the
         iterative scaling mentioned above) will be stored in the class
         attributes so that when producing a map it can be used to ensure
         the cities and the shake area are visible on the map. See
-        :samp:`self.extentWithCities` in :func:`__init__`.
+        :samp:`self.extent_with_cities` in :func:`__init__`.
 
         .. note:: We separate the logic of creating features from writing a
           layer so that we can write to any format we like whilst reusing the
@@ -1418,7 +1418,7 @@ class ShakeEvent(QObject):
          {'mmi': 10, 'name': 'c', 'pop': 14},
          {'mmi': 10, 'name': 'b', 'pop': 10}]
 
-        .. note:: self.mostAffectedCity will also be populated with
+        .. note:: self.most_affected_city will also be populated with
             the dictionary of details for the most affected city.
 
         .. note:: It is possible that there is no affected city! e.g. if
@@ -1657,8 +1657,9 @@ class ShakeEvent(QObject):
                 behaviour
         :returns
             str: the path to the computed impact file.
-                The class members self.impactFile, self.fatalityCounts,
-                self.displacedCounts and self.affectedCounts will be populated.
+                The class members self.impact_file, self.fatality_counts,
+                self.displaced_counts and self.affected_counts will be
+                populated.
                 self.*Counts are dicts containing fatality / displaced /
                 affected counts for the shake events. Keys for the dict will be
                 MMI classes (I-X) and values will be count type for that class.
@@ -2358,23 +2359,23 @@ class ShakeEvent(QObject):
                   'month': self.month,
                   'year': self.year,
                   'time': self.time,
-                  'timeZone': self.timeZone,
-                  'xMinimum': self.xMinimum,
-                  'xMaximum': self.xMaximum,
-                  'yMinimum': self.yMinimum,
-                  'yMaximum': self.yMaximum,
+                  'time_zone': self.timeZone,
+                  'x_minimum': self.xMinimum,
+                  'x_maximum': self.xMaximum,
+                  'y_minimum': self.yMinimum,
+                  'y_maximum': self.yMaximum,
                   'rows': self.rows,
                   'columns': self.columns,
-                  'mmiData': mmiData,
+                  'mmi_data': mmiData,
                   'populationRasterPath': self.populationRasterPath,
-                  'impactFile': self.impactFile,
-                  'impactKeywordsFile': self.impactKeywordsFile,
-                  'fatalityCounts': self.fatalityCounts,
-                  'displacedCounts': self.displacedCounts,
-                  'affectedCounts': self.affectedCounts,
-                  'extentWithCities': myExtentWithCities,
-                  'zoomFactor': self.zoomFactor,
-                  'searchBoxes': self.searchBoxes}
+                  'impact_file': self.impactFile,
+                  'impact_keywords_file': self.impactKeywordsFile,
+                  'fatality_counts': self.fatalityCounts,
+                  'displaced_counts': self.displacedCounts,
+                  'affected_counts': self.affectedCounts,
+                  'extent_with_cities': myExtentWithCities,
+                  'zoom_factor': self.zoomFactor,
+                  'search_boxes': self.searchBoxes}
 
         myString = (
             'latitude: %(latitude)s\n'
@@ -2388,23 +2389,23 @@ class ShakeEvent(QObject):
             'month: %(month)s\n'
             'year: %(year)s\n'
             'time: %(time)s\n'
-            'timeZone: %(timeZone)s\n'
-            'xMinimum: %(xMinimum)s\n'
-            'xMaximum: %(xMaximum)s\n'
-            'yMinimum: %(yMinimum)s\n'
-            'yMaximum: %(yMaximum)s\n'
+            'time_zone: %(time_zone)s\n'
+            'x_minimum: %(x_minimum)s\n'
+            'x_maximum: %(x_maximum)s\n'
+            'y_minimum: %(y_minimum)s\n'
+            'y_maximum: %(y_maximum)s\n'
             'rows: %(rows)s\n'
             'columns: %(columns)s\n'
-            'mmiData: %(mmiData)s\n'
+            'mmi_data: %(mmi_data)s\n'
             'populationRasterPath: %(populationRasterPath)s\n'
-            'impactFile: %(impactFile)s\n'
-            'impactKeywordsFile: %(impactKeywordsFile)s\n'
-            'fatalityCounts: %(fatalityCounts)s\n'
-            'displacedCounts: %(displacedCounts)s\n'
-            'affectedCounts: %(affectedCounts)s\n'
-            'extentWithCities: %(extentWithCities)s\n'
-            'zoomFactor: %(zoomFactor)s\n'
-            'searchBoxes: %(searchBoxes)s\n'
+            'impact_file: %(impact_file)s\n'
+            'impact_keywords_file: %(impact_keywords_file)s\n'
+            'fatality_counts: %(fatality_counts)s\n'
+            'displaced_counts: %(displaced_counts)s\n'
+            'affected_counts: %(affected_counts)s\n'
+            'extent_with_cities: %(extent_with_cities)s\n'
+            'zoom_factor: %(zoom_factor)s\n'
+            'search_boxes: %(search_boxes)s\n'
             % myDict)
         return myString
 

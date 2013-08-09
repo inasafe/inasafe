@@ -5,13 +5,13 @@ import numpy
 # NOTE (Ole): Those missing here are in fact tested elsewhere
 
 #from safe.common.numerics import ensure_numeric
-#from safe.common.numerics import nanallclose
+#from safe.common.numerics import nan_allclose
 #from safe.common.numerics import normal_cdf
-#from safe.common.numerics import lognormal_cdf
+#from safe.common.numerics import log_normal_cdf
 #from safe.common.numerics import erf
-from safe.common.numerics import axes2points
-from safe.common.numerics import grid2points
-#from safe.common.numerics import geotransform2axes
+from safe.common.numerics import axes_to_points
+from safe.common.numerics import grid_to_points
+#from safe.common.numerics import geotransform_to_axes
 
 
 class Test_Numerics(unittest.TestCase):
@@ -28,7 +28,7 @@ class Test_Numerics(unittest.TestCase):
         # Test 1
         x = numpy.linspace(1, 3, 3)
         y = numpy.linspace(10, 20, 2)
-        P = axes2points(x, y)
+        P = axes_to_points(x, y)
         assert numpy.allclose(P, [[1., 20.],
                                   [2., 20.],
                                   [3., 20.],
@@ -40,7 +40,7 @@ class Test_Numerics(unittest.TestCase):
         # Test 2
         x = numpy.linspace(1, 5, 11)
         y = numpy.linspace(10, 20, 5)
-        P = axes2points(x, y)
+        P = axes_to_points(x, y)
         assert numpy.allclose(P[12, :], [1.4, 17.5])
 
     def test_grid2points(self):
@@ -60,7 +60,7 @@ class Test_Numerics(unittest.TestCase):
         latitudes = numpy.linspace(-4, 0, M, endpoint=True)
 
         # Call function to be tested
-        P, V = grid2points(A, longitudes, latitudes)
+        P, V = grid_to_points(A, longitudes, latitudes)
 
         # Assert correctness
         assert P.shape[0] == L

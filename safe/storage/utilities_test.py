@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Utilities to to support test suite**
 """
 
@@ -33,9 +34,14 @@ def _same_API(X, Y, exclude=None):
 def same_API(X, Y, exclude=None):
     """Check that public methods of X and Y are the same.
 
-    Args:
-        * X, Y: Python objects
-        * exclude: List of names to exclude from comparison or None
+    :param X: Python objects to compare api
+    :type X: object
+
+    :param Y: Python objects to compare api
+    :type Y: object
+
+    :param exclude: List of names to exclude from comparison or None
+    :type exclude: list, None
     """
 
     _same_API(X, Y, exclude=exclude)

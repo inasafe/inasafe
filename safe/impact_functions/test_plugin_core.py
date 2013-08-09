@@ -11,6 +11,7 @@ from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
 from core import get_metadata
+from core import evacuated_population_weekly_needs
 from utilities import pretty_string
 from safe.common.utilities import format_int
 # from safe.impact_functions.core import get_dict_doc_func
@@ -18,6 +19,7 @@ from safe.common.utilities import format_int
 LOGGER = logging.getLogger('InaSAFE')
 
 
+# noinspection PyUnresolvedReferences
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
 
@@ -32,6 +34,7 @@ class BasicFunction(FunctionProvider):
         return None
 
 
+# noinspection PyUnresolvedReferences
 class F1(FunctionProvider):
     """Risk plugin for testing
 
@@ -268,6 +271,28 @@ class Test_plugin_core(unittest.TestCase):
         my_msg = 'Format integer %s is not valid' % my_formated_int
         assert (my_formated_int == expected_str or
                 my_formated_int == str(my_int)), my_msg
+
+    def test_default_weekly_needs(self):
+        """default calculated needs are as expected
+        """
+        # 20 Happens to be the smallest number at which integer rounding
+        # won't make a difference to the result
+        result = evacuated_population_weekly_needs(20)
+        assert (result['rice'] == 56 and result['drinking_water'] == 350
+                and result['water'] == 2100 and result['family_kits'] == 4
+                and result['toilets'] == 1)
+
+    def test_arbitrary_weekly_needs(self):
+        """custom need ratios calculated are as expected
+        """
+
+        minimum_needs = {'Rice': 4, 'Drinking Water': 3,
+                         'Water': 2, 'Family Kits': 1, 'Toilets': 0.2}
+        result = evacuated_population_weekly_needs(10, minimum_needs)
+        assert (result['rice'] == 40 and result['drinking_water'] == 30
+                and result['water'] == 20 and result['family_kits'] == 10
+                and result['toilets'] == 2)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

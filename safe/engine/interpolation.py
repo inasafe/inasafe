@@ -16,7 +16,7 @@ from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
 
 from safe.storage.vector import Vector, convert_polygons_to_centroids
-from safe.storage.utilities import geometrytype2string
+from safe.storage.utilities import geometry_type_to_string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.storage.geometry import Polygon
 
@@ -472,7 +472,7 @@ def interpolate_polygon_points(source, target,
 
     msg = ('Vector layer to interpolate to must be point geometry. '
            'I got OGR geometry type %s'
-           % geometrytype2string(target.geometry_type))
+           % geometry_type_to_string(target.geometry_type))
     verify(target.is_point_data, msg)
 
     msg = ('Name must be either a string or None. I got %s'

@@ -653,6 +653,7 @@ def numpy_stats(band, geometry, geo_transform, no_data, crs):
     # Mask the source data array with our current feature
     # we take the logical_not to flip 0<->1 to get the correct mask effect
     # we also mask out nodata values explicitly
+    src_array = numpy.nan_to_num(src_array)
     masked = numpy.ma.MaskedArray(
         src_array,
         mask=numpy.logical_or(

@@ -26,7 +26,7 @@ import numpy
 from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
-from safe.common.numerics import grid2points, geotransform2axes
+from safe.common.numerics import grid_to_points, geotransform_to_axes
 from safe.common.exceptions import (
     PolygonInputError, InaSAFEError, PointsInputError)
 
@@ -1293,7 +1293,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     .. note:: Grid points are considered to be pixel-registered which means
         that each point represents the center of its grid cell.
         The required half cell shifts are taken care of by the
-        function :func:`geotransform2axes`.
+        function :func:`geotransform_to_axes`.
 
         If multiple polygons overlap, the one first encountered will be used.
 
@@ -1301,8 +1301,8 @@ def clip_grid_by_polygons(A, geotransform, polygons):
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
     ny, nx = A.shape
-    x, y = geotransform2axes(geotransform, nx, ny)
-    points, values = grid2points(A, x, y)
+    x, y = geotransform_to_axes(geotransform, nx, ny)
+    points, values = grid_to_points(A, x, y)
 
     # Generate list of points and values that fall inside each polygon
     points_covered = []

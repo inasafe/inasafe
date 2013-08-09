@@ -9,7 +9,9 @@ from osgeo import gdal
 
 from safe.common.utilities import (verify,
                                    ugettext as safe_tr)
-from safe.common.numerics import nanallclose, geotransform2axes, grid2points
+from safe.common.numerics import (nan_allclose,
+                                  geotransform_to_axes,
+                                  grid_to_points)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -20,7 +22,7 @@ from projection import Projection
 from utilities import DRIVER_MAP
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import (geotransform2bbox, geotransform2resolution,
+from utilities import (geotransform_to_bbox, geotransform_to_resolution,
                        check_geotransform)
 
 
@@ -146,7 +148,7 @@ class Raster(Layer):
             return False
 
         # Check data
-        if not nanallclose(self.get_data(),
+        if not nan_allclose(self.get_data(),
                            other.get_data(),
                            rtol=rtol, atol=atol):
             return False
@@ -450,7 +452,7 @@ class Raster(Layer):
         ny = self.rows
 
         # Compute x and y axes
-        x, y = geotransform2axes(g, nx, ny)
+        x, y = geotransform_to_axes(g, nx, ny)
 
         # Return them
         return x, y
@@ -553,7 +555,7 @@ class Raster(Layer):
             Format is [West, South, East, North]
         """
 
-        return geotransform2bbox(self.geotransform, self.columns, self.rows)
+        return geotransform_to_bbox(self.geotransform, self.columns, self.rows)
 
     def get_resolution(self, isotropic=False, native=False):
         """Get raster resolution as a 2-tuple (resx, resy)
@@ -567,7 +569,7 @@ class Raster(Layer):
 
         # Get actual resolution first
         try:
-            res = geotransform2resolution(self.geotransform,
+            res = geotransform_to_resolution(self.geotransform,
                                           isotropic=isotropic)
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
@@ -612,7 +614,7 @@ class Raster(Layer):
         # Convert grid data to point data
         A = self.get_data()
         x, y = self.get_geometry()
-        P, V = grid2points(A, x, y)
+        P, V = grid_to_points(A, x, y)
 
         return P, V
 

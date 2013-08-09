@@ -1,3 +1,4 @@
+# coding=utf-8
 """point.py - Represents a generic point on a sphere as a Python object.
 
    See documentation of class Point for details.
@@ -6,27 +7,31 @@
 
 
 from math import cos, sin, pi
+from math import acos as unsafe_acos  # this may cause a domain error
+
 import numpy
 
 
 def acos(c):
     """acos -  Safe inverse cosine
 
-       Input argument c is shrunk to admissible interval
-       to avoid case where a small rounding error causes
-       a math domain error.
-    """
-    from math import acos as _acos
+       :param c: This value is shrunk to admissible interval
+           to avoid case where a small rounding error causes
+           a math domain error.
+       :type c: float
 
+       :returns: Arcos of the parameter c.
+       :rtype: float
+    """
     if c > 1:
         c = 1
     if c < -1:
         c = -1
 
-    return _acos(c)
+    return unsafe_acos(c)
 
 
-class Point:
+class Point(object):
     """Definition of a generic point on the sphere.
 
     Defines a point in terms of latitude and longitude
@@ -48,6 +53,18 @@ class Point:
     degrees2radians = pi / 180.0
 
     def __init__(self, latitude=None, longitude=None):
+        """ Point constructor.
+        :param latitude: The latitudinal position of the point
+        :type latitude: float
+
+        :param longitude: The longitudinal position of the point
+        :type longitude: float
+
+        :raises: Exception, AssertionError
+
+        :returns: a point instance
+        :rtype: Point
+        """
 
         if latitude is None:
             msg = 'Argument latitude must be specified to Point constructor'
@@ -58,10 +75,10 @@ class Point:
             raise Exception(msg)
 
         msg = 'Specified latitude %f was out of bounds' % latitude
-        assert(latitude >= -90 and latitude <= 90.0), msg
+        assert(-90 <= latitude <= 90.0), msg
 
         msg = 'Specified longitude %f was out of bounds' % longitude
-        assert(longitude >= -180 and longitude <= 180.0), msg
+        assert(-180 <= longitude <= 180.0), msg
 
         self.latitude = float(latitude)
         self.longitude = float(longitude)
@@ -77,17 +94,38 @@ class Point:
     # Public methods
     #---------------
     def bearing_to(self, P):
-        """Bearing (in degrees) to point P"""
+        """Bearing (in degrees) to point P.
+
+        :param P: A relative point
+        :type P: Point
+
+        :returns: bearing degrees
+        :rtype: int
+        """
         AZ = self.AZ(P)
         return int(round(AZ / self.degrees2radians))
 
     def distance_to(self, P):
-        """Distance to point P"""
+        """Distance to point P.
+
+        :param P: A relative point
+        :type P: Point
+
+        :returns: distance
+        :rtype: float
+        """
         GCA = self.GCA(P)
         return self.R * GCA
 
     def approximate_distance_to(self, P):
-        """Very cheap and rough approximation to distance"""
+        """Very cheap and rough approximation to distance.
+
+        :param P: A relative point
+        :type P: Point
+
+        :returns: distance
+        :rtype: float
+        """
 
         return max(abs(self.latitude - P.latitude),
                    abs(self.longitude - P.longitude))
@@ -96,7 +134,10 @@ class Point:
     # Internal methods
     #-----------------
     def __repr__(self):
-        """Readable representation of point
+        """Readable representation of point with two decimal places.
+
+        :returns: point in human readable format
+        :rtype: str
         """
         d = 2
         lat = round(self.latitude, d)
@@ -104,7 +145,13 @@ class Point:
         return ' (' + str(lat) + ', ' + str(lon) + ')'
 
     def GCA(self, P):
-        """Compute the Creat Circle Angle (GCA) between current point and P
+        """Compute the Creat Circle Angle (GCA) between current point and P.
+
+        :param P: A relative point
+        :type P: Point
+
+        :returns: angle in radians
+        :rtype: float
         """
 
         alpha = P.coslon * self.coslon + P.sinlon * self.sinlon
@@ -115,7 +162,13 @@ class Point:
         return acos(x)
 
     def AZ(self, P):
-        """Compute Azimuth bearing (AZ) from current point to P
+        """Compute Azimuth bearing (AZ) from current point to P.
+
+        :param P: A relative point
+        :type P: Point
+
+        :returns: bearing in radians
+        :rtype: float
         """
 
         # Compute cosine(AZ), where AZ is the azimuth angle
@@ -140,16 +193,18 @@ class Point:
     def generate_circle(self, radius, resolution=1):
         """Make a circle about this point.
 
-        Args:
-            * radius: The desired cirle radius [m]
-            * resolution (optional): Radial distance (degrees) between
+        :param radius: The desired cirle radius [m]
+        :type radius: float, int
+
+        :param resolution: Radial distance (degrees) between
               points on circle. Default is 1 making the circle consist
-              of 360 points
-        Returns:
-            list of lon, lat coordinates defining the circle
+              of 360 points. (optional)
+        :type resolution: int, float
 
+        :returns: list of lon, lat coordinates defining the circle
+        :rtype: list
 
-        Note:
+        ..note::
             The circle is defined in geographic coordinates so
             the distance in meters will be greater than the specified radius
             in the north south direction.

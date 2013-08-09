@@ -44,11 +44,12 @@ from safe.impact_functions import (
 from safe.impact_functions.core import (
     get_doc_string,
     get_unique_values,
-    get_plugins_as_table)
+    get_plugins_as_table,
+    evacuated_population_weekly_needs)
 
 from safe.engine.core import calculate_impact
 
-from safe.common.numerics import nanallclose
+from safe.common.numerics import nan_allclose
 from safe.common.exceptions import (
     InaSAFEError,
     BoundingBoxError,

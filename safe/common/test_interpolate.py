@@ -3,10 +3,10 @@ import unittest
 
 # Import InaSAFE modules
 from safe.common.interpolation2d import interpolate2d, interpolate_raster
-from safe.common.interpolation2d import BoundsError
+from safe.common.interpolation import BoundsError
 from safe.common.interpolation1d import interpolate1d
 from safe.common.testing import combine_coordinates
-from safe.common.numerics import nanallclose
+from safe.common.numerics import nan_allclose
 
 
 def linear_function(x, y):
@@ -165,7 +165,7 @@ class Test_interpolate(unittest.TestCase):
 
         vals = interpolate2d(x, y, A, points, mode='linear')
         refs = linear_function(points[:, 0], points[:, 1])
-        assert nanallclose(vals, refs, rtol=1e-12, atol=1e-12)
+        assert nan_allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
     def test_linear_interpolation_nan_array(self):
         """Interpolation library works (linear mode) with grid points being NaN
@@ -197,7 +197,7 @@ class Test_interpolate(unittest.TestCase):
             if (1.0 < xi <= 3.0) and (7.0 < eta <= 11.0):
                 refs[i] = numpy.nan
 
-        assert nanallclose(vals, refs, rtol=1e-12, atol=1e-12)
+        assert nan_allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
     def test_interpolation_random_array_and_nan(self):
         """Interpolation library (constant and linear) works with NaN
@@ -279,7 +279,7 @@ class Test_interpolate(unittest.TestCase):
                         raise Exception(msg)
 
                     #print i, j, xi, eta, alpha, beta, vals[k], ref
-                    assert nanallclose(vals[k], ref, rtol=1e-12, atol=1e-12)
+                    assert nan_allclose(vals[k], ref, rtol=1e-12, atol=1e-12)
 
     test_interpolation_random_array_and_nan.slow = True
 

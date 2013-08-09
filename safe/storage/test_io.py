@@ -17,19 +17,19 @@ from utilities import read_keywords
 from utilities import bbox_intersection
 from utilities import minimal_bounding_box
 from utilities import buffered_bounding_box
-from utilities import array2wkt
+from utilities import array_to_wkt
 from utilities import calculate_polygon_area
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
-from utilities import geotransform2bbox
-from utilities import geotransform2resolution
-from utilities import raster_geometry2geotransform
+from utilities import geotransform_to_bbox
+from utilities import geotransform_to_resolution
+from utilities import raster_geometry_to_geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
 from geometry import Polygon
-from safe.common.numerics import nanallclose
+from safe.common.numerics import nan_allclose
 from safe.common.testing import TESTDATA, HAZDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
@@ -993,7 +993,7 @@ class Test_IO(unittest.TestCase):
         msg = 'Latitudes not as expected: %s' % str(latitudes)
         assert numpy.allclose(latitudes, [5.5, 6.5, 7.5, 8.5, 9.5]), msg
 
-        gt = raster_geometry2geotransform(longitudes, latitudes)
+        gt = raster_geometry_to_geotransform(longitudes, latitudes)
         msg = ('Conversion from coordinates to geotransform failed: %s'
                % str(gt))
         assert numpy.allclose(gt, geotransform,
@@ -1035,7 +1035,7 @@ class Test_IO(unittest.TestCase):
         assert numpy.allclose(numpy.nanmax(A1), numpy.nanmax(A2))
 
         msg = 'Array values of written raster array were not as expected'
-        assert nanallclose(A1, A2), msg
+        assert nan_allclose(A1, A2), msg
 
         msg = 'Geotransforms were different'
         assert R1.get_geotransform() == R2.get_geotransform(), msg
@@ -1141,8 +1141,8 @@ class Test_IO(unittest.TestCase):
         assert str(R1.rows) in str(R1)
         assert str(R1.columns) in str(R1)
 
-        assert nanallclose(R1.get_data(), A1, rtol=1.0e-12)
-        assert nanallclose(R1.get_geotransform(), geotransform,
+        assert nan_allclose(R1.get_data(), A1, rtol=1.0e-12)
+        assert nan_allclose(R1.get_geotransform(), geotransform,
                            rtol=1.0e-12)
         assert 'DGN95' in R1.get_projection()
 
@@ -1172,7 +1172,7 @@ class Test_IO(unittest.TestCase):
             # Test conversion between geotransform and
             # geometry (longitudes and latitudes)
             longitudes, latitudes = R1.get_geometry()
-            gt = raster_geometry2geotransform(longitudes, latitudes)
+            gt = raster_geometry_to_geotransform(longitudes, latitudes)
             msg = ('Conversion from coordinates to geotransform failed: %s'
                    % str(gt))
             assert numpy.allclose(gt, R1.get_geotransform(),
@@ -1208,7 +1208,7 @@ class Test_IO(unittest.TestCase):
 
                 msg = ('Array values of written raster array were not as '
                        'expected')
-                assert nanallclose(A1, A2), msg
+                assert nan_allclose(A1, A2), msg
 
                 msg = 'Geotransforms were different'
                 assert R1.get_geotransform() == R2.get_geotransform(), msg
@@ -1513,7 +1513,7 @@ class Test_IO(unittest.TestCase):
 
         assert numpy.allclose(coordinates[:N, 0], longitudes)
         assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
-        assert nanallclose(A.flat[:], values)
+        assert nan_allclose(A.flat[:], values)
 
         # Generate vector layer
         V = R.to_vector_layer()
@@ -1563,7 +1563,7 @@ class Test_IO(unittest.TestCase):
 
         assert numpy.allclose(coordinates[:N, 0], longitudes)
         assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
-        assert nanallclose(A.flat[:], values)
+        assert nan_allclose(A.flat[:], values)
 
         # Generate vector layer
         V = R.to_vector_layer()
@@ -2126,7 +2126,7 @@ class Test_IO(unittest.TestCase):
         A = numpy.arange(10)
         A = A.reshape(5, 2)
 
-        wkt = array2wkt(A, geom_type='POLYGON')
+        wkt = array_to_wkt(A, geom_type='POLYGON')
         assert wkt.startswith('POLYGON((')
         fields = wkt[9:-2].split(',')
         for i, field in enumerate(fields):
@@ -2134,7 +2134,7 @@ class Test_IO(unittest.TestCase):
             assert numpy.allclose(A[i, :], [float(x), float(y)])
 
         # Then list
-        wkt = array2wkt(A.tolist(), geom_type='POLYGON')
+        wkt = array_to_wkt(A.tolist(), geom_type='POLYGON')
         assert wkt.startswith('POLYGON((')
         fields = wkt[9:-2].split(',')
         for i, field in enumerate(fields):
@@ -2142,7 +2142,7 @@ class Test_IO(unittest.TestCase):
             assert numpy.allclose(A[i, :], [float(x), float(y)])
 
         # Then a linestring example (note one less bracket)
-        wkt = array2wkt(A, geom_type='LINESTRING')
+        wkt = array_to_wkt(A, geom_type='LINESTRING')
         assert wkt.startswith('LINESTRING(')
         fields = wkt[11:-1].split(',')
         for i, field in enumerate(fields):
@@ -2322,7 +2322,7 @@ class Test_IO(unittest.TestCase):
         M = 5
         N = 10
         for gt in GEOTRANSFORMS:
-            bbox = geotransform2bbox(gt, M, N)
+            bbox = geotransform_to_bbox(gt, M, N)
 
             # FIXME: Need better tests here, but this is better than nothing
 
@@ -2337,12 +2337,12 @@ class Test_IO(unittest.TestCase):
         """
 
         for gt in GEOTRANSFORMS:
-            res = geotransform2resolution(gt, isotropic=False)
+            res = geotransform_to_resolution(gt, isotropic=False)
             assert len(res) == 2
             assert numpy.allclose(res[0], gt[1], rtol=0, atol=1.0e-12)
             assert numpy.allclose(res[1], - gt[5], rtol=0, atol=1.0e-12)
 
-            res = geotransform2resolution(gt, isotropic=True)
+            res = geotransform_to_resolution(gt, isotropic=True)
             assert numpy.allclose(res, gt[1], rtol=0, atol=1.0e-12)
             assert numpy.allclose(res, - gt[5], rtol=0, atol=1.0e-12)
 

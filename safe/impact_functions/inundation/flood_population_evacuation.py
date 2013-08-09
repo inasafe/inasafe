@@ -5,7 +5,9 @@ from safe.impact_functions.core import (
     get_hazard_layer,
     get_exposure_layer,
     get_question,
-    get_function_title)
+    get_function_title,
+    default_minimum_needs,
+    evacuated_population_weekly_needs)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     ugettext as tr,
@@ -84,12 +86,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elder_ratio', defaults['ELDER_RATIO'])])})])),
-        ('minimum needs', OrderedDict([
-            ('Rice', 2.8),
-            ('Drinking Water', 17.5),
-            ('Water', 105),
-            ('Family Kits', 0.2),
-            ('Toilets', 0.05)]))
+        ('minimum needs', default_minimum_needs())
     ])
 
     def run(self, layers):
@@ -160,33 +157,29 @@ class FloodEvacuationFunction(FunctionProvider):
         # The default value of each logistic is based on BNPB Perka 7/2008
         # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
-        mn_rice = minimum_needs['Rice']
-        mn_drinking_water = minimum_needs['Drinking Water']
-        mn_water = minimum_needs['Water']
-        mn_family_kits = minimum_needs['Family Kits']
-        mn_toilets = minimum_needs['Toilets']
 
-        rice = int(evacuated * mn_rice)
-        drinking_water = int(evacuated * mn_drinking_water)
-        water = int(evacuated * mn_water)
-        family_kits = int(evacuated * mn_family_kits)
-        toilets = int(evacuated * mn_toilets)
+        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
+        # noinspection PyListCreation
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s*' % format_int(evacuated)],
+                      '%s%s' % (format_int(evacuated), (
+                          '*' if evacuated >= 1000 else ''))],
                      header=True),
             TableRow(tr('* Number is rounded to the nearest 1000'),
                      header=False),
             TableRow(tr('Map shows population density needing evacuation')),
+            TableRow(tr('Table below shows the weekly minium needs for all '
+                        'evacuated people')),
             TableRow([tr('Needs per week'), tr('Total')], header=True),
-            [tr('Rice [kg]'), format_int(rice)],
-            [tr('Drinking Water [l]'), format_int(drinking_water)],
-            [tr('Clean Water [l]'), format_int(water)],
-            [tr('Family Kits'), format_int(family_kits)],
-            [tr('Toilets'), format_int(toilets)]]
+            [tr('Rice [kg]'), format_int(tot_needs['rice'])],
+            [tr('Drinking Water [l]'),
+             format_int(tot_needs['drinking_water'])],
+            [tr('Clean Water [l]'), format_int(tot_needs['water'])],
+            [tr('Family Kits'), format_int(tot_needs['family_kits'])],
+            [tr('Toilets'), format_int(tot_needs['toilets'])]]
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))

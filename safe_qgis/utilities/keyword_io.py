@@ -191,8 +191,8 @@ class KeywordIO(QObject):
         :type source_layer: QgsMapLayer
 
         :param destination_file: The output filename that should be used
-              to store the keywords in. It can be a .shp or a .keywords for
-              example since the suffix will always be replaced with .keywords.
+            to store the keywords in. It can be a .shp or a .keywords for
+            example since the suffix will always be replaced with .keywords.
         :type destination_file: str
 
         :param extra_keywords: A dict containing all the extra keywords
