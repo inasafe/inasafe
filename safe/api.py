@@ -49,7 +49,7 @@ from safe.impact_functions.core import (
 
 from safe.engine.core import calculate_impact
 
-from safe.common.numerics import nanallclose
+from safe.common.numerics import nan_allclose
 from safe.common.exceptions import (
     InaSAFEError,
     BoundingBoxError,

@@ -5,9 +5,9 @@ import numpy
 # NOTE (Ole): Those missing here are in fact tested elsewhere
 
 #from safe.common.numerics import ensure_numeric
-#from safe.common.numerics import nanallclose
+#from safe.common.numerics import nan_allclose
 #from safe.common.numerics import normal_cdf
-#from safe.common.numerics import lognormal_cdf
+#from safe.common.numerics import log_normal_cdf
 #from safe.common.numerics import erf
 from safe.common.numerics import axes2points
 from safe.common.numerics import grid2points

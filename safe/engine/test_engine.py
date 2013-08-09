@@ -24,8 +24,8 @@ from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from safe.common.polygon import line_dictionary_to_geometry
 from safe.common.interpolation2d import interpolate_raster
-from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
-from safe.common.numerics import nanallclose
+from safe.common.numerics import normal_cdf, log_normal_cdf, erf, ensure_numeric
+from safe.common.numerics import nan_allclose
 from safe.common.utilities import (VerificationError,
                                    unique_filename,
                                    format_int)
@@ -355,7 +355,7 @@ class Test_Engine(unittest.TestCase):
         msg = ('Calculated fatality map did not match expected result: '
                'I got %s\n'
                'Expected %s' % (calculated_result, fatality_result))
-        assert nanallclose(calculated_result, fatality_result,
+        assert nan_allclose(calculated_result, fatality_result,
                            rtol=1.0e-4), msg
 
         # Check for expected numbers (from Hadi Ghasemi) in keywords
@@ -2867,7 +2867,7 @@ class Test_Engine(unittest.TestCase):
                'I got %s\n'
                'Expected %s for bldg type: %s' % (calculated_damage,
                                                   ref_damage[i], bldg_class))
-            assert nanallclose(calculated_damage, ref_damage[i],
+            assert nan_allclose(calculated_damage, ref_damage[i],
                                # Reference data is single precision
                                atol=1.0e-6), msg
 
@@ -3010,24 +3010,24 @@ class Test_Engine(unittest.TestCase):
         old_numpy_setting = numpy.seterr(divide='ignore')
 
         # Simple tests
-        x = lognormal_cdf(0.0)
+        x = log_normal_cdf(0.0)
         r = normal_cdf(numpy.log(0.0))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
         numpy.seterr(**old_numpy_setting)
 
-        x = lognormal_cdf(0.5)
+        x = log_normal_cdf(0.5)
         r = normal_cdf(numpy.log(0.5))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
-        x = lognormal_cdf(3.50)
+        x = log_normal_cdf(3.50)
         r = normal_cdf(numpy.log(3.5))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
         # Out of bounds
-        x = lognormal_cdf(10)
+        x = log_normal_cdf(10)
         r = normal_cdf(numpy.log(10))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg

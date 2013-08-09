@@ -64,7 +64,7 @@ from safe.api import (
     evacuated_population_weekly_needs,
     Vector,
     Raster,
-    nanallclose,
+    nan_allclose,
     DEFAULTS,
     messaging,
     DYNAMIC_MESSAGE_SIGNAL,

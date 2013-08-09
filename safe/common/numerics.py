@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Numerical tools**
 """
 
@@ -8,20 +9,26 @@ from utilities import verify
 def ensure_numeric(A, typecode=None):
     """Ensure that sequence is a numeric array.
 
-    Args:
-        * A: Sequence. If A is already a numeric array it will be returned
-                       unaltered
-                       If not, an attempt is made to convert it to a numeric
-                       array
-        * A: Scalar.   Return 0-dimensional array containing that value. Note
-                       that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy.
-        * A: String.   Array of ASCII values (numpy can't handle this)
+    :param A: Is one of the following:
 
-        * typecode:    numeric type. If specified, use this in the conversion.
-                     If not, let numeric package decide.
-                     typecode will always be one of num.float, num.int, etc.
+        * Sequence. If A is already a numeric array it will be returned
+                    unaltered
+                    If not, an attempt is made to convert it to a numeric
+                    array
+        * Scalar.   Return 0-dimensional array containing that value. Note
+                    that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy.
+        * String.   Array of ASCII values (numpy can't handle this)
 
-    Note :
+    :param typecode: numeric type. If specified, use this in the conversion.
+                    If not, let numeric package decide.
+                    typecode will always be one of num.float, num.int, etc.
+
+    :raises: Exception
+
+    :returns: An array of A if it is found to be of a numeric type
+    :rtype: numpy.ndarray
+
+    .. note::
         that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to
         copy only when required.
 
@@ -43,14 +50,25 @@ def ensure_numeric(A, typecode=None):
         return numpy.array(A, dtype=typecode, copy=False)
 
 
-def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
-    """Numpy allclose function which allows NaN
+def nan_allclose(x, y, rtol=1.0e-5, atol=1.0e-8):
+    """Does element comparison within a tolerance, excludes overlapped NaN.
 
-    Args:
-        * x, y: Either scalars or numpy arrays
+    :param x: scalar or numpy array
+    :type x: numpy.ndarray, float
 
-    Returns:
-        * True or False
+    :param y: scalar or numpy array
+    :type y: numpy.ndarray, float
+
+    :param rtol: The relative tolerance parameter
+    :type rtol: float
+
+    :param atol: The absolute tolerance parameter
+    :type atol: float
+
+    :raises:
+
+    :returns: The result of the allclose on non NaN elments
+    :rtype: bool
 
     Note:
         Returns True if all non-nan elements pass.
@@ -79,13 +97,17 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 def normal_cdf(x, mu=0, sigma=1):
     r"""Cumulative Normal Distribution Function
 
-    Args:
-        * x: scalar or array of real numbers
-        * mu: Mean value. Default 0
-        * sigma: Standard deviation. Default 1
+    :param x: scalar or array of real numbers
+    :type x: numpy.ndarray, float
 
-    Returns:
-        * An approximation of the cdf of the normal
+    :param mu: Mean value. Default 0
+    :type mu: float
+
+    :param sigma: Standard deviation. Default 1
+    :type sigma: float
+
+    :returns: An approximation of the cdf of the normal
+    :rtype: numpy.ndarray
 
     Note:
         CDF of the normal distribution is defined as
@@ -100,18 +122,22 @@ def normal_cdf(x, mu=0, sigma=1):
     return res
 
 
-def lognormal_cdf(x, median=1, sigma=1):
+def log_normal_cdf(x, median=1, sigma=1):
     r"""Cumulative Log Normal Distribution Function
 
-    Args:
-        * x: scalar or array of real numbers
-        * mu: Median (exp(mean of log(x)). Default 1
-        * sigma: Log normal standard deviation. Default 1
+    :param x: scalar or array of real numbers
+    :type x: numpy.ndarray, float
 
-    Returns:
-        * An approximation of the cdf of the normal
+    :param median: Median (exp(mean of log(x)). Default 1
+    :type median: float
 
-    Note:
+    :param sigma: Log normal standard deviation. Default 1
+    :type sigma: float
+
+    :returns: An approximation of the cdf of the normal
+    :rtype: numpy.ndarray
+
+    .. note::
         CDF of the normal distribution is defined as
         \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
 
@@ -124,6 +150,11 @@ def lognormal_cdf(x, median=1, sigma=1):
 def erf(z):
     """Approximation to ERF
 
+    :param z: input array or scalar to perform erf on
+    :type z: numpy.ndarray, float
+
+
+    :returns: the 
     Note:
         from:
         http://www.cs.princeton.edu/introcs/21function/ErrorFunction.java.html

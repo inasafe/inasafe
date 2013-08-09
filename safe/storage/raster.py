@@ -9,7 +9,7 @@ from osgeo import gdal
 
 from safe.common.utilities import (verify,
                                    ugettext as safe_tr)
-from safe.common.numerics import nanallclose, geotransform2axes, grid2points
+from safe.common.numerics import nan_allclose, geotransform2axes, grid2points
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -146,7 +146,7 @@ class Raster(Layer):
             return False
 
         # Check data
-        if not nanallclose(self.get_data(),
+        if not nan_allclose(self.get_data(),
                            other.get_data(),
                            rtol=rtol, atol=atol):
             return False

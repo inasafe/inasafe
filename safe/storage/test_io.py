@@ -29,7 +29,7 @@ from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
 from geometry import Polygon
-from safe.common.numerics import nanallclose
+from safe.common.numerics import nan_allclose
 from safe.common.testing import TESTDATA, HAZDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
@@ -1035,7 +1035,7 @@ class Test_IO(unittest.TestCase):
         assert numpy.allclose(numpy.nanmax(A1), numpy.nanmax(A2))
 
         msg = 'Array values of written raster array were not as expected'
-        assert nanallclose(A1, A2), msg
+        assert nan_allclose(A1, A2), msg
 
         msg = 'Geotransforms were different'
         assert R1.get_geotransform() == R2.get_geotransform(), msg
@@ -1141,8 +1141,8 @@ class Test_IO(unittest.TestCase):
         assert str(R1.rows) in str(R1)
         assert str(R1.columns) in str(R1)
 
-        assert nanallclose(R1.get_data(), A1, rtol=1.0e-12)
-        assert nanallclose(R1.get_geotransform(), geotransform,
+        assert nan_allclose(R1.get_data(), A1, rtol=1.0e-12)
+        assert nan_allclose(R1.get_geotransform(), geotransform,
                            rtol=1.0e-12)
         assert 'DGN95' in R1.get_projection()
 
@@ -1208,7 +1208,7 @@ class Test_IO(unittest.TestCase):
 
                 msg = ('Array values of written raster array were not as '
                        'expected')
-                assert nanallclose(A1, A2), msg
+                assert nan_allclose(A1, A2), msg
 
                 msg = 'Geotransforms were different'
                 assert R1.get_geotransform() == R2.get_geotransform(), msg
@@ -1513,7 +1513,7 @@ class Test_IO(unittest.TestCase):
 
         assert numpy.allclose(coordinates[:N, 0], longitudes)
         assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
-        assert nanallclose(A.flat[:], values)
+        assert nan_allclose(A.flat[:], values)
 
         # Generate vector layer
         V = R.to_vector_layer()
@@ -1563,7 +1563,7 @@ class Test_IO(unittest.TestCase):
 
         assert numpy.allclose(coordinates[:N, 0], longitudes)
         assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
-        assert nanallclose(A.flat[:], values)
+        assert nan_allclose(A.flat[:], values)
 
         # Generate vector layer
         V = R.to_vector_layer()
