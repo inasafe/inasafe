@@ -144,10 +144,6 @@ class ITBFatalityFunction(FunctionProvider):
         'y=8.03314466, zeta=2.15')
     defaults = get_defaults()
 
-    # see https://github.com/AIFDR/inasafe/issues/628
-    default_needs = default_minimum_needs()
-    default_needs[tr('Water')] = 67
-
     parameters = OrderedDict([
         ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
         # Rates of people displaced for each MMI level
@@ -166,7 +162,7 @@ class ITBFatalityFunction(FunctionProvider):
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
                     ('elder_ratio', defaults['ELDER_RATIO'])])})])),
-        ('minimum needs', default_needs)])
+        ('minimum needs', default_minimum_needs())])
 
     def fatality_rate(self, mmi):
         """
