@@ -1269,6 +1269,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport.add(myOutput.to_html())
         # Layer attribution comes last
         myReport.add(impact_attribution(myKeywords).to_html(True))
+
         # Return text to display in report panel
         return myReport
 

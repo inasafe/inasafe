@@ -76,9 +76,9 @@ class KeywordIO(QObject):
         is remote (e.g. a database connection) it will fetch the keywords from
         the keywords store.
 
-        :param layer:  A QGIS QgsMapLayer instance that you want to obtain
+        :param layer:  A layer instance or layer path that you want to obtain
             the keywords for.
-        :type layer: QgsMapLayer
+        :type layer: QgsMapLayer, str
 
         :param keyword: If set, will extract only the specified keyword
               from the keywords dict.
@@ -95,11 +95,15 @@ class KeywordIO(QObject):
             UnsupportedProviderError
 
         """
-        mySource = str(layer.source())
-        try:
-            myFlag = self.are_keywords_file_based(layer)
-        except UnsupportedProviderError:
-            raise
+        if not isinstance(layer, str):
+            mySource = str(layer.source())
+            try:
+                myFlag = self.are_keywords_file_based(layer)
+            except UnsupportedProviderError:
+                raise
+        else:  # we have a path to a layer
+            mySource = layer
+            myFlag = True
 
         try:
             if myFlag:
@@ -124,8 +128,9 @@ class KeywordIO(QObject):
         is remote (e.g. a database connection) it will write the keywords from
         the keywords store.
 
-        :param layer: A QGIS QgsMapLayer instance.
-        :type layer: QgsMapLayer
+        :param layer: A QGIS layer instance or a string representing a path
+            to a layer.
+        :type layer: QgsMapLayer, str
 
         :param keywords: A dict containing all the keywords to be written
               for the layer.
@@ -133,12 +138,16 @@ class KeywordIO(QObject):
 
         :raises: UnsupportedProviderError
         """
-        try:
-            myFlag = self.are_keywords_file_based(layer)
-        except UnsupportedProviderError:
-            raise
+        if not isinstance(layer, str):
+            mySource = str(layer.source())
+            try:
+                myFlag = self.are_keywords_file_based(layer)
+            except UnsupportedProviderError:
+                raise
+        else:  # we have a path to a layer
+            mySource = layer
+            myFlag = True
 
-        mySource = str(layer.source())
         try:
             if myFlag:
                 writeKeywordsToFile(mySource, keywords)
@@ -151,8 +160,9 @@ class KeywordIO(QObject):
     def update_keywords(self, layer, keywords):
         """Update keywords for a datasource.
 
-        :param layer: A QGIS QgsMapLayer instance.
-        :type layer: QgsMapLayer
+        :param layer: A QGIS layer instance or a string representing a path
+            to a layer.
+        :type layer: QgsMapLayer, str
 
         :param keywords: A dict containing all the keywords to be updated
               for the layer.
