@@ -114,7 +114,7 @@ class Aggregator(QtCore.QObject):
         self.targetField = None
         self.impactLayerAttributes = []
         self.aoiMode = True
-        self.original_aggregation_layer = aggregation_layer
+
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
         self.isValid = False
@@ -772,10 +772,9 @@ class Aggregator(QtCore.QObject):
             title = self.tr('AOI')
             source = self.tr('analysis extent in QGIS')
         else:
-            title = self.keywordIO.read_keywords(
-                self.original_aggregation_layer, 'title')
-            source = self.keywordIO.read_keywords(
-                self.original_aggregation_layer, 'source')
+            filename = self.safeLayer.get_filename()
+            title = self.keywordIO.read_keywords(filename, 'title')
+            source = self.keywordIO.read_keywords(filename, 'source')
 
         filename = safe_impact_layer.get_filename()
         self.keywordIO.update_keywords(
