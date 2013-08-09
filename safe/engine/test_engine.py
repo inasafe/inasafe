@@ -24,7 +24,10 @@ from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from safe.common.polygon import line_dictionary_to_geometry
 from safe.common.interpolation2d import interpolate_raster
-from safe.common.numerics import normal_cdf, log_normal_cdf, erf, ensure_numeric
+from safe.common.numerics import (normal_cdf,
+                                  log_normal_cdf,
+                                  erf,
+                                  ensure_numeric)
 from safe.common.numerics import nan_allclose
 from safe.common.utilities import (VerificationError,
                                    unique_filename,

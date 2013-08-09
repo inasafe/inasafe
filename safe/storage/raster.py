@@ -9,7 +9,9 @@ from osgeo import gdal
 
 from safe.common.utilities import (verify,
                                    ugettext as safe_tr)
-from safe.common.numerics import nan_allclose, geotransform_to_axes, grid_to_points
+from safe.common.numerics import (nan_allclose,
+                                  geotransform_to_axes,
+                                  grid_to_points)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
