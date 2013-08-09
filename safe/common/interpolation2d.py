@@ -49,9 +49,11 @@ def interpolate2d(x, y, z, points, mode='linear', bounds_error=False):
 
     :param mode: Determines the interpolation order.
         Options are:
+
             * 'constant' - piecewise constant nearest neighbour interpolation
             * 'linear' - bilinear interpolation using the four
-                  nearest neighbours (default)
+              nearest neighbours (default)
+
     :type mode: str
 
     :param bounds_error: If True (default) a BoundsError exception
@@ -196,9 +198,11 @@ def interpolate_raster(x, y, z, points, mode='linear', bounds_error=False):
 
     :param mode: Determines the interpolation order.
         Options are:
+
             * 'constant' - piecewise constant nearest neighbour interpolation
             * 'linear' - bilinear interpolation using the four
-                  nearest neighbours (default)
+              nearest neighbours (default)
+
     :type mode: str
 
     :param bounds_error: If True (default) a BoundsError exception

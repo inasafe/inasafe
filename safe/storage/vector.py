@@ -774,11 +774,11 @@ class Vector(Layer):
         :type attribute: str
 
         :param index: Indicates a specific value on which to call the
-        attribute. Ignored if no attribute is set.
+         attribute. Ignored if no attribute is set.
         :type index: int
 
         :param copy: Indicate whether to return a pointer to the data,
-        or a copy of.
+         or a copy of.
         :type copy: bool
 
         :raises: GetDataError

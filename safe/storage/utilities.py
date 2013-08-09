@@ -923,13 +923,15 @@ def calculate_polygon_area(polygon, signed=False):
     :type polygon: numpy.ndarray
 
     :param signed: Optional flag deciding whether returned area retains its
-        sign:
+     sign:
+
             If points are ordered counter clockwise, the signed area
             will be positive.
 
             If points are ordered clockwise, it will be negative
             Default is False which means that the area is always
             positive.
+
     :type signed: bool
 
     :returns: area: Area of polygon (subject to the value of argument signed)
@@ -1091,7 +1093,7 @@ def combine_polygon_and_point_layers(layers):
     :returns: One point layer with all input point layers and centroids from
         all input polygon layers.
     :rtype: numpy.ndarray
-    Raises: InaSAFEError (in case attribute names are not the same.)
+    :raises: InaSAFEError (in case attribute names are not the same.)
     """
 
     # This is to implement issue #276
