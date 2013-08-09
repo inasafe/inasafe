@@ -485,9 +485,6 @@ def impact_attribution(keywords, inasafe_flag=False):
     myExposureDetails = tr('Exposure details')
     myExposureTitleKeyword = 'exposure_title'
     myExposureSourceKeyword = 'exposure_source'
-    myAggregationDetails = tr('Aggregation details')
-    myAggregationTitleKeyword = 'aggregation_title'
-    myAggregationSourceKeyword = 'aggregation_source'
 
     if myHazardTitleKeyword in keywords:
         # We use safe translation infrastructure for this one (rather than Qt)
@@ -511,18 +508,7 @@ def impact_attribution(keywords, inasafe_flag=False):
     else:
         myExposureSource = tr('an unknown source')
 
-    if myAggregationTitleKeyword in keywords:
-        myAggregationTitle = keywords[myAggregationTitleKeyword]
-    else:
-        myAggregationTitle = tr('Aggregation layer')
-
-    if myAggregationSourceKeyword in keywords:
-        myAggregationSource = keywords[myAggregationSourceKeyword]
-    else:
-        myAggregationSource = tr('an unknown source')
-
     myReport = m.Message()
-
     myReport.add(m.Heading(myHazardDetails, **INFO_STYLE))
     myReport.add(m.Paragraph(
         myHazardTitle,
@@ -534,12 +520,6 @@ def impact_attribution(keywords, inasafe_flag=False):
         myExposureTitle,
         myJoinWords,
         myExposureSource))
-
-    myReport.add(m.Heading(myAggregationDetails, **INFO_STYLE))
-    myReport.add(m.Paragraph(
-        myAggregationTitle,
-        myJoinWords,
-        myAggregationSource))
 
     if inasafe_flag:
         myReport.add(m.Heading(tr('Software notes'), **INFO_STYLE))

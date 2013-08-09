@@ -372,8 +372,6 @@ class Aggregator(QtCore.QObject):
                 myRenderer = QgsSingleSymbolRendererV2(mySymbol)
                 self.layer.setRendererV2(myRenderer)
                 self.layer.saveDefaultStyle()
-        # Write aggregation title and source to impact layer
-        self._update_impact_keywords(safe_impact_layer=safe_impact_layer)
 
     def _aggregateVectorImpact(self, impact_layer, safe_impact_layer):
         """Performs Aggregation postprocessing step on vector impact layers.
@@ -757,30 +755,6 @@ class Aggregator(QtCore.QObject):
                          }
                 myProvider.changeAttributeValues({myFid: attrs})
             self.layer.commitChanges()
-
-    def _update_impact_keywords(self, safe_impact_layer):
-        """Update the impact layer keywords with the aggregation layer details.
-
-        This function will add the title and source of the aggregation layer
-        to the impact layer for display in the final report. We will take the
-        keywords from self.layer.
-
-        :param safe_impact_layer: The layer that will be aggregated.
-        :type safe_impact_layer: read_layer
-        """
-        if self.aoiMode:
-            title = self.tr('AOI')
-            source = self.tr('analysis extent in QGIS')
-        else:
-            filename = self.safeLayer.get_filename()
-            title = self.keywordIO.read_keywords(filename, 'title')
-            source = self.keywordIO.read_keywords(filename, 'source')
-
-        filename = safe_impact_layer.get_filename()
-        self.keywordIO.update_keywords(
-            filename, {'aggregation_title': title})
-        self.keywordIO.update_keywords(
-            filename, {'aggregation_source': source})
 
     def _prepare_layer(self):
         """Prepare the aggregation layer to match analysis extents.
