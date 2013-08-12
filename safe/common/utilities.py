@@ -517,13 +517,19 @@ def unhumanize_class(my_classes):
 
 
 def unhumanize_number(number):
-    """Return number without formatting
+    """Return number without formatting.
+    if something goes wrong in the conversion just return the passed number
+    We catch AttributeError in case the number has no replace method which
+    means it is not a string but already an int or float
+    We catch ValueError if number is a sting but not parseable to a number
+    like the 'no data' case
+
     @param number:
     """
     try:
         number = number.replace(get_thousand_separator(), '')
         number = int(float(number))
-    except AttributeError:
+    except (AttributeError, ValueError):
         pass
 
     return number

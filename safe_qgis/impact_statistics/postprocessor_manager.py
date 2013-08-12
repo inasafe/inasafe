@@ -199,9 +199,30 @@ class PostprocessorManager(QtCore.QObject):
                             first_part_index]
                         first_part_results = first_part[1]
                         first_part_result = first_part_results[result_name]
-                        new_result = (
-                            unhumanize_number(first_part_result['value']) +
-                            unhumanize_number(result['value']))
+
+                        # FIXME one of the parts was 'No data',
+                        # see http://irclogs.geoapt.com/inasafe/
+                        # %23inasafe.2013-08-09.log (at 22.29)
+
+                        no_data = self.aggregator.defaults['NO_DATA']
+                        # both are No data
+                        if (first_part_result['value'] == no_data
+                                and result['value'] == no_data):
+                                    new_result = no_data
+                        else:
+                            # one is No data
+                            if (first_part_result['value'] == no_data
+                                    and result['value'] != no_data):
+                                        first_part_result['value'] = 0
+                            # the other is No data
+                            elif (first_part_result['value'] != no_data
+                                    and result['value'] == no_data):
+                                        result['value'] = 0
+                            #if we got here, none is No data
+                            new_result = (
+                                unhumanize_number(first_part_result['value']) +
+                                unhumanize_number(result['value']))
+
                         first_part_result['value'] = format_int(new_result)
 
                     parts_to_delete.append(polygon_index)
