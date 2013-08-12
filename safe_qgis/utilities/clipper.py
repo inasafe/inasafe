@@ -237,8 +237,9 @@ def _clip_vector_layer(
     #    different clipping behaviour e.g. reject polygons that
     #    intersect the edge of the bbox. Tim
     myRequest = QgsFeatureRequest()
-    myRequest.setFilterRect(myProjectedExtent)
-    myRequest.setFlags(QgsFeatureRequest.ExactIntersect)
+    if not myProjectedExtent.isEmpty():
+        myRequest.setFilterRect(myProjectedExtent)
+        myRequest.setFlags(QgsFeatureRequest.ExactIntersect)
 
     myFieldList = myProvider.fields()
 
