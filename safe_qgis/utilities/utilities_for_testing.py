@@ -764,8 +764,6 @@ def populate_dock(dock):
     load_standard_layers(dock)
     dock.cboHazard.setCurrentIndex(0)
     dock.cboExposure.setCurrentIndex(0)
-    #QTest.mouseClick(myHazardItem, Qt.LeftButton)
-    #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
 
 def load_standard_layers(dock=None):

@@ -19,7 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from nose import SkipTest
-from PyQt4.QtTest import QTest
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QDialogButtonBox
 
@@ -32,14 +31,21 @@ QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 def verifyColumn(table, col, strFilter, mode):
     """Helper function to verify the element in column.
-        Args:
-            * table = table to be verified
-            * col = (integer) column number
-            * strFilter = (string)
-            * mode = enum(only, included, excluded)
-        Returns:
+
+        :param table: Table to be verified.
+
+        :param col: Column number.
+        :type col: int
+
+        :param strFilter: A filter string.
+        :type strFilter: str
+
+        :param mode: Filter mode one of enum(only, included, excluded).
+
+        :returns: Tuple of bool, string where:
             * bool = True or False about the verify
             * string contains message
+        :rtype: (bool, str)
     """
     strFilter = str(strFilter)  # make sure it is a string
     retval = True
@@ -77,11 +83,13 @@ def verifyColumn(table, col, strFilter, mode):
 
 
 class FunctionBrowserTest(unittest.TestCase):
-
+    """Tests for the function browser gui."""
     def setUp(self):
+        """Setup."""
         pass
 
     def tearDown(self):
+        """Tear down."""
         pass
 
     def testInitShowTable(self):
@@ -116,8 +124,7 @@ class FunctionBrowserTest(unittest.TestCase):
         myDialog.comboBox_subcategory.setCurrentIndex(1)
         resetButton = myDialog.myButtonBox.button(QDialogButtonBox.Reset)
         realTableFilter = myDialog.table.toNewlineFreeString()
-        # noinspection PyArgumentList
-        QTest.mouseClick(resetButton, Qt.LeftButton)
+        resetButton.click()
         realTableReset = myDialog.table.toNewlineFreeString()
         msgFilter = 'It should be different table because it is filtered.'
         assert expectedTable != realTableFilter, msgFilter
@@ -134,8 +141,7 @@ class FunctionBrowserTest(unittest.TestCase):
         raise SkipTest("This test hangs Jenkins if docs dir not present.")
         myDialog = FunctionBrowser(PARENT)
         myButton = myDialog.buttonBox.button(QDialogButtonBox.Help)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, Qt.LeftButton)
+        myButton.click()
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
         #pylint: enable=W0101

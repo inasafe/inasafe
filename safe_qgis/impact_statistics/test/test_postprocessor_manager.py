@@ -31,9 +31,6 @@ sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
 
-from PyQt4 import QtCore
-from PyQt4.QtTest import QTest
-
 #from qgis.core import QgsMapLayerRegistry
 
 from safe_qgis.utilities.utilities_for_testing import (

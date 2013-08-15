@@ -28,7 +28,6 @@ pardir = os.path.abspath(
 sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtTest import QTest
 
 from qgis.core import (
     QgsRasterLayer,
@@ -182,8 +181,7 @@ class KeywordsDialogTest(unittest.TestCase):
         # noinspection PyUnreachableCode
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
         #pylint: enable=W0101
@@ -314,8 +312,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radExposure
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the exposure radio did not add a category '
                      'to the keywords list.')
         assert myDialog.get_value_for_key('category') == 'exposure', myMessage
@@ -368,9 +365,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.cboKeyword.setCurrentIndex(2)
         myExpectedResult = 'foo'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        # Work around for commented out line below
         myDialog.on_pbnAddToList1_clicked()
-        #QTest.mouseClick(myDialog.pbnAddToList1, QtCore.Qt.LeftButton)
         myResult = myDialog.get_value_for_key('datatype')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -386,9 +381,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.leValue.setText('bar')
         myExpectedResult = 'bar'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        # Work around for commented out line below
         myDialog.on_pbnAddToList2_clicked()
-        #QTest.mouseClick(myDialog.pbnAddToList2, QtCore.Qt.LeftButton)
         myResult = myDialog.get_value_for_key('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))

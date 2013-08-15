@@ -34,7 +34,6 @@ sys.path.append(pardir)
 #    print p + '\n'
 
 from PyQt4 import QtCore
-from PyQt4.QtTest import QTest
 
 from qgis.core import (
     QgsRasterLayer,
@@ -645,12 +644,12 @@ class DockTest(unittest.TestCase):
         # Press RUN
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         printButton = DOCK.pbnPrint
 
         try:
             # noinspection PyCallByClass,PyTypeChecker
-            QTest.mouseClick(printButton, QtCore.Qt.LeftButton)
+            printButton.click()
         except OSError:
             LOGGER.debug('OSError')
             # pass
