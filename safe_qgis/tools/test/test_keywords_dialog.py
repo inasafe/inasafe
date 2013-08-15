@@ -194,8 +194,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = False
         myMessage = ('Advanced options did not become visible when'
@@ -205,8 +204,7 @@ class KeywordsDialogTest(unittest.TestCase):
         assert myState == myExpectedState, myMessage
 
         # Now hide advanced again and test...
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = True
 
@@ -220,8 +218,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the hazard radio did not add a category '
                      'to the keywords list.')
         assert myDialog.get_value_for_key('category') == 'hazard', myMessage
@@ -233,8 +230,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'category to the keywords list.')
         assert myDialog.get_value_for_key(
@@ -264,8 +260,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myFemaleRatioAttrBox = myDialog.cboFemaleRatioAttribute
 
         #set to Don't use
@@ -331,13 +326,9 @@ class KeywordsDialogTest(unittest.TestCase):
         myButton = myDialog.radHazard
         myButton.setChecked(True)
         myButton = myDialog.radExposure
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myCombo = myDialog.cboSubcategory
-        # noinspection PyArgumentList
-        QTest.mouseClick(myCombo, QtCore.Qt.LeftButton)
-        QTest.keyClick(myCombo, QtCore.Qt.Key_Up)
-        QTest.keyClick(myCombo, QtCore.Qt.Key_Enter)
+        myCombo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
         myMessage = ('Changing the subcategory did not add '
                      'to the keywords list for %s' %
                      myCombo.currentText())
@@ -563,8 +554,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.leKey.setText('foo')
         myDialog.leValue.setText('bar')
         okButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
-        # noinspection PyArgumentList
-        QTest.mouseClick(okButton, QtCore.Qt.LeftButton)
+        okButton.click()
 
         # delete temp file
         # removeTempFile(myFile)
