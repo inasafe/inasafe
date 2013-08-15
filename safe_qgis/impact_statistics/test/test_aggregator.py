@@ -106,9 +106,8 @@ class AggregatorTest(unittest.TestCase):
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_checkAggregationAttributeInKW(self):
-        """Aggregation attribute is chosen correctly when present
-            in kezwords."""
-        myRunButton = DOCK.pbnRunStop
+        """Aggregation attribute is chosen correctly when present in keywords.
+        """
         myAttrKey = breakdown_defaults('AGGR_ATTR_KEY')
 
         # with KAB_NAME aggregation attribute defined in .keyword using
@@ -123,8 +122,7 @@ class AggregatorTest(unittest.TestCase):
             aggregation_enabled_flag=True)
         assert myResult, myMessage
         # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
@@ -134,7 +132,6 @@ class AggregatorTest(unittest.TestCase):
     def test_checkAggregationAttribute1Attr(self):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
-        myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
         #add additional layers
         load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
@@ -152,7 +149,7 @@ class AggregatorTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
         print myAttrKey
         print DOCK.aggregator.attributes
@@ -162,10 +159,8 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
     def test_checkAggregationAttributeNoAttr(self):
-        """Aggregation attribute is chosen correctly when there is no
-        attr available."""
+        """Aggregation attribute chosen correctly when no attr available."""
 
-        myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
         #add additional layers
         load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
@@ -181,8 +176,7 @@ class AggregatorTest(unittest.TestCase):
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         assert myResult, myMessage
         # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' %
@@ -190,10 +184,8 @@ class AggregatorTest(unittest.TestCase):
         assert myAttribute is None, myMessage
 
     def test_checkAggregationAttributeNoneAttr(self):
-        """Aggregation attribute is chosen correctly when there None in the
-            kezwords"""
+        """Aggregation attribute is chosen correctly when None in keywords."""
 
-        myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
         load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
@@ -209,8 +201,7 @@ class AggregatorTest(unittest.TestCase):
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         assert myResult, myMessage
         # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.aggregator.attributes[myAttrKey]
         myMessage = ('The aggregation should be None. Found: %s' % myAttribute)
@@ -230,8 +221,6 @@ class AggregatorTest(unittest.TestCase):
         myFileList = ['kabupaten_jakarta.shp']
         load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
 
-        myRunButton = DOCK.pbnRunStop
-
         myResult, myMessage = setup_scenario(
             DOCK,
             hazard='jakarta_crosskabupaten_polygons',
@@ -246,8 +235,7 @@ class AggregatorTest(unittest.TestCase):
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent()
         # Press RUN
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
 
         myExpectedFeatureCount = 20

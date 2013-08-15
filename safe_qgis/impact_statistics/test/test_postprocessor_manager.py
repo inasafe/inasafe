@@ -77,7 +77,6 @@ class PostprocessorManagerTest(unittest.TestCase):
 
     def test_checkPostProcessingLayersVisibility(self):
         """Generated layers are not added to the map registry."""
-        myRunButton = DOCK.pbnRunStop
         # Explicitly disable showing intermediate layers
         DOCK.showIntermediateLayers = False
         # with KAB_NAME aggregation attribute defined in .keyword using
@@ -98,8 +97,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         myExpectedCount = len(CANVAS.layers()) + 1
         #
         # # Press RUN
-        # # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         # no KW dialog will popuo due to complete keywords
         myAfterCount = len(CANVAS.layers())
         #LOGGER.info("Registry list after:\n%s" %
@@ -111,8 +109,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         # Now run again showing intermediate layers
         DOCK.showIntermediateLayers = True
         # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         # no KW dialog will popuo due to complete keywords
         #one layer (the impact) should have been added
         myExpectedCount += 2
@@ -126,7 +123,6 @@ class PostprocessorManagerTest(unittest.TestCase):
 
     def test_postProcessorOutput(self):
         """Check that the post processor does not add spurious report rows."""
-        myRunButton = DOCK.pbnRunStop
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
@@ -144,8 +140,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         assert myResult, myMessage
 
         # Press RUN
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        DOCK.accept()
         myMessage = 'Spurious 0 filled rows added to post processing report.'
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
         for line in myResult.split('\n'):
