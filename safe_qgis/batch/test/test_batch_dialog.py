@@ -71,8 +71,7 @@ class BatchDialogTest(unittest.TestCase):
         myDialog.output_directory.setText(myOutputDir)
         myDialog.table.selectRow(1)
         myButton = myDialog.run_selected_button
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myStatus = myDialog.table.item(1, 1).text()
         assert myStatus == 'Report Ok'
 
@@ -87,8 +86,7 @@ class BatchDialogTest(unittest.TestCase):
         myOutputDir = temp_dir()
         myDialog.output_directory.setText(myOutputDir)
         myButton = myDialog.run_all_button
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myStatus0 = myDialog.table.item(0, 1).text()
         myStatus1 = myDialog.table.item(1, 1).text()
         assert myStatus0 == 'Analysis Fail', myStatus0
