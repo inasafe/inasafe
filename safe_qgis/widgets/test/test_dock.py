@@ -953,12 +953,13 @@ class DockTest(unittest.TestCase):
             myFileList, data_directory=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
+        DOCK.cboFunction.setCurrentIndex(1)
         DOCK.cboHazard.setCurrentIndex(0)
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
+        DOCK.cboExposure.setCurrentIndex(0)
         myExpectedFunction = str(DOCK.cboFunction.currentText())
         # Now move down one hazard in the combo then verify
         # the function remains unchanged
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
+        DOCK.cboHazard.setCurrentIndex(1)
         myCurrentFunction = str(DOCK.cboFunction.currentText())
         myMessage = (
             'Expected selected impact function to remain unchanged when '
@@ -967,10 +968,7 @@ class DockTest(unittest.TestCase):
                 myExpectedFunction, myCurrentFunction, combos_to_string(DOCK)))
 
         assert myExpectedFunction == myCurrentFunction, myMessage
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        DOCK.cboHazard.setCurrentIndex(0)
         # Selected function should remain the same
         myExpectation = 'Need evacuation'
         myFunction = DOCK.cboFunction.currentText()

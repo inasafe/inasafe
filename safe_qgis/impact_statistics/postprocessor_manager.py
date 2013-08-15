@@ -206,7 +206,7 @@ class PostprocessorManager(QtCore.QObject):
                         # both are No data
                         if (first_part_result['value'] == no_data
                                 and result['value'] == no_data):
-                                    new_result = no_data
+                                new_result = no_data
                         else:
                             # one is No data
                             if (first_part_result['value'] == no_data
