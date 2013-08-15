@@ -409,8 +409,7 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -819,10 +818,8 @@ class DockTest(unittest.TestCase):
         myClearFlag = False
         _, _ = load_layers(myFileList, myClearFlag)
         # set exposure to : Population Density Estimate (5kmx5km)
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        # by moving one down
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         myDict = get_ui_state(DOCK)
         myExpectedDict = {'Run Button Enabled': False,
                           'Impact Function Id': '',
@@ -838,10 +835,7 @@ class DockTest(unittest.TestCase):
 
         # Now select again a valid layer and the run button
         # should be enabled
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() - 1)
         myMessage = ('Run button was not enabled when exposure set to \n%s' %
                      DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
@@ -931,20 +925,14 @@ class DockTest(unittest.TestCase):
         """Check if the save/restore state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         DOCK.save_state()
         myExpectedDict = get_ui_state(DOCK)
         #myState = DOCK.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         DOCK.restore_state()
         myResultDict = get_ui_state(DOCK)
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -966,17 +954,11 @@ class DockTest(unittest.TestCase):
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         DOCK.cboHazard.setCurrentIndex(0)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         myExpectedFunction = str(DOCK.cboFunction.currentText())
         # Now move down one hazard in the combo then verify
         # the function remains unchanged
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         myCurrentFunction = str(DOCK.cboFunction.currentText())
         myMessage = (
             'Expected selected impact function to remain unchanged when '
