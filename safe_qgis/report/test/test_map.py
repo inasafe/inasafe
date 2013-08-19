@@ -84,6 +84,7 @@ class MapTest(unittest.TestCase):
             447217,  # Nadia Linux Mint 14
             447144,  # as rendered on Jenkins post 29 July 2013
             447172,  # Windows 7 SP1 AMD64
+            446960,  # Windows 8 AMD64
             234138,  # OSX 10.8
             444421,  # Slackware64 14.0
         ]
