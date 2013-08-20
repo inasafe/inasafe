@@ -27,7 +27,7 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui
 
 from qgis.core import (
     QgsRasterLayer,

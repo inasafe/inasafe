@@ -21,12 +21,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 
-from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
+from qgis.core import QgsMapLayerRegistry
 
 from safe_qgis.safe_interface import safe_read_layer
 from safe_qgis.tools.minimum_needs import MinimumNeeds
 from safe_qgis.safe_interface import UNITDATA
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app, load_layer
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
 
 QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -66,17 +66,19 @@ class MinimumNeedsTest(unittest.TestCase):
             'water': 105000}
         self.assertDictEqual(attributes, new_layer.data[0])
 
-    def Xtest_accept(self):
-        """Test behaviour of the ok button.
-        """
-        #print shapefile_path
-        myLayer = QgsVectorLayer(
-            os.path.basename(shapefile_path),
-            os.path.dirname(shapefile_path),
-            'ogr')
-
-        dialog = MinimumNeeds(PARENT)
-        dialog.accept()
+    # def Xtest_accept(self):
+    #     """Test behaviour of the ok button.
+    #
+    #     TODO: Make this test useful - Tim
+    #     """
+    #     #print shapefile_path
+    #     myLayer = QgsVectorLayer(
+    #         os.path.basename(shapefile_path),
+    #         os.path.dirname(shapefile_path),
+    #         'ogr')
+    #     myLayer = None
+    #     dialog = MinimumNeeds(PARENT)
+    #     dialog.accept()
 
 
 if __name__ == "__main__":

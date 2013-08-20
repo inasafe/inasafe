@@ -204,22 +204,21 @@ class PostprocessorManager(QtCore.QObject):
 
                         no_data = self.aggregator.defaults['NO_DATA']
                         # both are No data
-                        if (first_part_result['value'] == no_data
-                                and result['value'] == no_data):
-                                new_result = no_data
+                        value = first_part_result['value']
+                        result_value = result['value']
+                        if value == no_data and result_value == no_data:
+                            new_result = no_data
                         else:
                             # one is No data
-                            if (first_part_result['value'] == no_data
-                                    and result['value'] != no_data):
-                                        first_part_result['value'] = 0
+                            if value == no_data and result_value != no_data:
+                                first_part_result['value'] = 0
                             # the other is No data
-                            elif (first_part_result['value'] != no_data
-                                    and result['value'] == no_data):
-                                        result['value'] = 0
+                            elif value != no_data and result_value == no_data:
+                                result['value'] = 0
                             #if we got here, none is No data
                             new_result = (
-                                unhumanize_number(first_part_result['value']) +
-                                unhumanize_number(result['value']))
+                                unhumanize_number(value) +
+                                unhumanize_number(result_value))
 
                         first_part_result['value'] = format_int(new_result)
 

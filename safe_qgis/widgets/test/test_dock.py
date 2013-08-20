@@ -32,9 +32,6 @@ pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
-
-from PyQt4 import QtCore
-
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
