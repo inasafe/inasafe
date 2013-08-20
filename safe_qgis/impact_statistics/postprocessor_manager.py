@@ -280,6 +280,12 @@ class PostprocessorManager(QtCore.QObject):
                     self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
                 myFemRatioFieldIndex = self.aggregator.layer.fieldNameIndex(
                     myFemRatioField)
+
+                # something went wrong finding the female ratio field,
+                # use defaults from below except block
+                if myFemRatioFieldIndex == -1:
+                    raise KeyError
+
                 myFemaleRatioIsVariable = True
 
             except KeyError:
