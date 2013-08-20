@@ -902,8 +902,8 @@ class Aggregator(QtCore.QObject):
         myInsideFeat = QgsFeature()
         fields = polygonsProvider.fields()
         myTempdir = temp_dir(sub_dir='preprocess')
-        myOutFilename = unique_filename(suffix='.shp',
-                                        dir=myTempdir)
+        myOutFilename = unique_filename(
+            suffix='.shp', dir=myTempdir)
 
         self.keywordIO.copy_keywords(layer, myOutFilename)
         mySHPWriter = QgsVectorFileWriter(myOutFilename,

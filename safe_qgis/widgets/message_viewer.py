@@ -108,7 +108,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         if message == self.static_message:
             return
-        LOGGER.debug('Static message event %i' % self.static_message_count)
+        #LOGGER.debug('Static message event %i' % self.static_message_count)
         _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
