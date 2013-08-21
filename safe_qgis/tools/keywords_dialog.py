@@ -589,6 +589,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.remove_item_by_key('subcategory')
         self.remove_item_by_key('datatype')
         self.remove_item_by_key('unit')
+        self.remove_item_by_key('source')
         if not primary_keywords_only:
             # Clear everything else too
             self.lstKeywords.clear()
