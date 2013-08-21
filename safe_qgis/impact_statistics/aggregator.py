@@ -874,7 +874,8 @@ class Aggregator(QtCore.QObject):
         theLayerFilename = str(layer.source())
         myPostprocPolygons = self.safeLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
-        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
+        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry(),
+                                          dtype=list)
 #        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
         myRemainingIndexes = numpy.array(range(len(myRemainingPolygons)))
 
