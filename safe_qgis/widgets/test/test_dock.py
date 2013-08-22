@@ -25,8 +25,10 @@ from os.path import join
 
 from unittest import expectedFailure, TestCase
 
+from PyQt4 import QtCore
+
 from safe_qgis.safe_interface import temp_dir, unique_filename
-from safe.common.testing import TESTDATA
+from safe.common.testing import TESTDATA, BOUNDDATA
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -975,13 +977,16 @@ class TestDock(TestCase):
     def test_full_run_pyzstats(self):
         """Aggregation results correct using our own python zonal stats code.
         """
+        myFileList = ['kabupaten_jakarta.shp']
+        load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
+
         myResult, myMessage = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
         assert myResult, myMessage
 
@@ -1004,7 +1009,6 @@ class TestDock(TestCase):
             line = line.replace('\n', '')
             self.assertIn(line, myResult)
 
-    @expectedFailure
     def test_full_run_qgszstats(self):
         """Aggregation results are correct using native QGIS zonal stats.
 
@@ -1014,13 +1018,18 @@ class TestDock(TestCase):
             decorator. TS July 2013
 
         """
+
+        # TODO check that the values are similar enough to the python stats
+        myFileList = ['kabupaten_jakarta.shp']
+        load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
+
         myResult, myMessage = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
         assert myResult, myMessage
 
@@ -1029,7 +1038,14 @@ class TestDock(TestCase):
         set_jakarta_extent()
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
+
+        # use QGIS zonal stats only in the test
+        useNativeZonalStatsFlag = QtCore.QSettings().value(
+            'inasafe/useNativeZonalStats', False).toBool()
+        QtCore.QSettings().setValue('inasafe/useNativeZonalStats', True)
         DOCK.accept()
+        QtCore.QSettings().setValue('inasafe/useNativeZonalStats',
+                                    useNativeZonalStatsFlag)
 
         myResult = DOCK.wvResults.page_to_text()
 
