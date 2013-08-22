@@ -312,7 +312,8 @@ class PostprocessorManager(QtCore.QObject):
                 myZoneName = myAttributeMap[myNameFieldIndex].toString()
 
             #create dictionary of attributes to pass to postprocessor
-            myGeneralParams = {'target_field': self.aggregator.targetField}
+            myGeneralParams = {'target_field': self.aggregator.targetField,
+                               'function_params': self.functionParams}
 
             if self.aggregator.statisticsType == 'class_count':
                 myGeneralParams['impact_classes'] = (

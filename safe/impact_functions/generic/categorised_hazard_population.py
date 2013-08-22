@@ -58,8 +58,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
-            ('MinimumNeeds', {'on': True})]))])
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard
