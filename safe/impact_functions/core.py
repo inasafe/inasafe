@@ -80,7 +80,9 @@ def default_minimum_needs():
     return minimum_needs
 
 
-def evacuated_population_weekly_needs(population, minimum_needs=False):
+def evacuated_population_weekly_needs(population,
+                                      minimum_needs=False,
+                                      human_names=False):
     """Calculate estimated needs using BNPB Perka 7/2008 minimum bantuan.
 
 
@@ -114,12 +116,28 @@ def evacuated_population_weekly_needs(population, minimum_needs=False):
     min_water = minimum_needs[water]
     min_family_kits = minimum_needs[family_kits]
     min_toilets = minimum_needs[toilets]
-    weekly_needs = {
-        'rice': int(ceil(population * min_rice)),
-        'drinking_water': int(ceil(population * min_drinking_water)),
-        'water': int(ceil(population * min_water)),
-        'family_kits': int(ceil(population * min_family_kits)),
-        'toilets': int(ceil(population * min_toilets))}
+
+    val_rice = int(ceil(population * min_rice))
+    val_drinking_water = int(ceil(population * min_drinking_water))
+    val_water = int(ceil(population * min_water))
+    val_family_kits = int(ceil(population * min_family_kits))
+    val_toilets = int(ceil(population * min_toilets))
+
+    if human_names:
+        weekly_needs = {
+            rice: val_rice,
+            drinking_water: val_drinking_water,
+            water: val_water,
+            family_kits: val_family_kits,
+            toilets: val_toilets}
+    else:
+        weekly_needs = {
+            'rice': val_rice,
+            'drinking_water': val_drinking_water,
+            'water': val_water,
+            'family_kits': val_family_kits,
+            'toilets': val_toilets}
+
     return weekly_needs
 
 
