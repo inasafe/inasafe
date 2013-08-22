@@ -14,6 +14,7 @@ __copyright__ += 'Disaster Reduction'
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
 from safe.common.utilities import (ugettext as tr)
+from safe.impact_functions.core import evacuated_population_weekly_needs
 
 
 class MinimumNeedsPostprocessor(AbstractPostprocessor):
@@ -31,7 +32,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.__init__(self)
         self.impact_total = None
-        self.minimum_needs = None
 
     def description(self):
         """Describe briefly what the post processor does.
@@ -59,11 +59,11 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.setup(self, None)
-        if self.impact_total is not None or self.minimum_needs is not None:
+        if self.impact_total is not None:
             self._raise_error('clear needs to be called before setup')
 
         self.impact_total = int(round(params['impact_total']))
-        self.minimum_needs = params['function_params']['minimum needs']
+        # print params
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
@@ -77,7 +77,7 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
             None
         """
         AbstractPostprocessor.process(self)
-        if self.impact_total is None or self.minimum_needs is None:
+        if self.impact_total is None:
             self._log_message('%s not all params have been correctly '
                               'initialized, setup needs to be called before '
                               'process. Skipping this postprocessor'
@@ -98,7 +98,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.clear(self)
         self.impact_total = None
-        self.minimum_needs = None
 
     def _calculate_needs(self):
         """Indicator that shows aggregated minimum needs.
@@ -112,10 +111,12 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         Raises:
             None
         """
+        myNeeds = evacuated_population_weekly_needs(self.impact_total,
+                                                    human_names=True)
 
-        for need, value in self.minimum_needs.iteritems():
+        for need, value in myNeeds.iteritems():
             try:
-                myResult = int(round(value * self.impact_total))
+                myResult = int(round(value))
             except ValueError:
                 myResult = self.NO_DATA_TEXT
 
