@@ -200,8 +200,7 @@ def build_test_package(branch='master'):
     update_git_checkout(branch)
     initialise_qgis_plugin_repo()
 
-    fabtools.require.deb.package('make')
-    fabtools.require.deb.package('gettext')
+    fabtools.require.deb.packages(['zip', 'make', 'gettext'])
 
     with cd(env.code_path):
         # Get git version and write it to a text file in case we need to cross
