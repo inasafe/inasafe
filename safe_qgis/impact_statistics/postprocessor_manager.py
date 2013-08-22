@@ -79,12 +79,11 @@ class PostprocessorManager(QtCore.QObject):
         Returns:
             returns -1 if the value is NO_DATA else the value
         """
-        #black magic to get the value of each postprocessor field
-        #get the first postprocessor just to discover the data structure
-        myFirsPostprocessor = self.postProcessingOutput.itervalues().next()
-        #get the key position of the value field
-        myValueKey = myFirsPostprocessor[0][1].keyAt(0)
 
+        myPostprocessor = self.postProcessingOutput[
+            self._currentOutputPostprocessor]
+        #get the key position of the value field
+        myValueKey = myPostprocessor[0][1].keyAt(0)
         #get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
@@ -108,6 +107,8 @@ class PostprocessorManager(QtCore.QObject):
         myMessage = m.Message()
 
         for proc, results_list in self.postProcessingOutput.iteritems():
+
+            self._currentOutputPostprocessor = proc
             # results_list is for example:
             # [
             #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
@@ -118,17 +119,11 @@ class PostprocessorManager(QtCore.QObject):
             #    ]))
             #]
 
-            sortedResList = results_list
-            try:
-                #sorting using the first indicator of a postprocessor
-                sortedResList = sorted(
-                    results_list,
-                    key=self._sortNoData,
-                    reverse=True)
-
-            except KeyError:
-                LOGGER.debug('Skipping sorting as the postprocessor did not '
-                             'have a "Total" field')
+            #sorting using the first indicator of a postprocessor
+            sortedResList = sorted(
+                results_list,
+                key=self._sortNoData,
+                reverse=True)
 
             #init table
             hasNoDataValues = False
