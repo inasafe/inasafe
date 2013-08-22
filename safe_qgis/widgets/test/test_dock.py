@@ -23,9 +23,10 @@ import os
 import logging
 from os.path import join
 
-from unittest import expectedFailure
+from unittest import expectedFailure, TestCase
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
+from safe.common.testing import TESTDATA
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
@@ -38,7 +39,7 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsRectangle)
 from safe_qgis.safe_interface import (
-    format_int, HAZDATA, TESTDATA, UNITDATA)
+    format_int, HAZDATA, UNITDATA)
 
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
@@ -94,8 +95,8 @@ TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
 
 
 #noinspection PyArgumentList
-class DockTest(unittest.TestCase):
-    """Test the InaSAFE GUI"""
+class TestDock(TestCase):
+    """Test the InaSAFE GUI."""
 
     def setUp(self):
         """Fixture run before all tests"""
@@ -1292,7 +1293,45 @@ Click for Diagnostic Information:
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
 
+    def test_scenario_layer_paths(self):
+        """Test we calculate the relative paths correctly when saving scenario.
+        """
+        myResult, myMessage = setup_scenario(
+            DOCK,
+            hazard='Flood in Jakarta',
+            exposure='Penduduk Jakarta',
+            function='Be impacted',
+            function_id='Categorised Hazard Population Impact Function')
+        assert myResult, myMessage
+        fake_dir = os.path.dirname(TESTDATA)
+        myScenarioFile = unique_filename(
+            prefix='scenarioTest', suffix='.txt', dir=fake_dir)
+        myExposureLayer = str(DOCK.get_exposure_layer().publicSource())
+        myHazardLayer = str(DOCK.get_hazard_layer().publicSource())
+
+        relative_exposure, relative_hazard = DOCK.scenario_layer_paths(
+            myExposureLayer,
+            myHazardLayer,
+            myScenarioFile)
+
+        if 'win32' in sys.platform:
+            # windows
+            self.assertEqual(
+                'test\\Population_Jakarta_geographic.asc',
+                relative_exposure)
+            self.assertEqual(
+                'hazard\\jakarta_flood_category_123.asc',
+                relative_hazard)
+
+        else:
+            self.assertEqual(
+                'test/Population_Jakarta_geographic.asc',
+                relative_exposure)
+            self.assertEqual(
+                'hazard/jakarta_flood_category_123.asc',
+                relative_hazard)
+
 if __name__ == '__main__':
-    suite = unittest.makeSuite(DockTest)
+    suite = unittest.makeSuite(TestDock)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
