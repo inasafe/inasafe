@@ -32,6 +32,7 @@ from fabtools import require
 # Don't remove even though its unused
 # noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
+from fabgis.system import harden
 
 # Global options
 env.env_set = False
@@ -50,6 +51,7 @@ def _all():
         'waterfall': 'inasafe-docs.localhost',
         'spur': 'inasafe-docs.localhost',
         'maps.linfiniti.com': 'inasafe-docs.linfiniti.com',
+        'linfiniti3': 'inasafe-docs.linfiniti.com',
         'linfiniti': 'inasafe-docs.linfiniti.com',
         #vagrant instance
         'inasafe': 'inasafe-docs.vagrant.localhost',
@@ -59,6 +61,7 @@ def _all():
         'spur': 'inasafe-test.localhost',
         'maps.linfiniti.com': 'inasafe-test.linfiniti.com',
         'linfiniti': 'inasafe-crisis.linfiniti.com',
+        'linfiniti3': 'experimental.inasafe.org',
         #vagrant instance
         'inasafe': 'experimental.vagrant.localhost',
         'shiva': 'experimental.inasafe.org'}
