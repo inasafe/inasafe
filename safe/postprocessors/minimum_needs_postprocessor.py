@@ -114,8 +114,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         myNeeds = evacuated_population_weekly_needs(self.impact_total,
                                                     human_names=True)
 
-        #FIXME (MB) workaround to avoid overiding the whole table
-        self._append_result('Total', self.impact_total)
         for need, value in myNeeds.iteritems():
             try:
                 myResult = int(round(value))

@@ -117,6 +117,8 @@ class PostprocessorManager(QtCore.QObject):
             #         'description': 'Females hygiene packs for weekly use'}})
             #    ]))
             #]
+
+            sortedResList = results_list
             try:
                 #sorting using the first indicator of a postprocessor
                 sortedResList = sorted(
