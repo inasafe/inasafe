@@ -23,7 +23,7 @@ import os
 import logging
 from os.path import join
 
-from unittest import expectedFailure, TestCase
+from unittest import TestCase
 
 from PyQt4 import QtCore
 
