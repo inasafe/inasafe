@@ -387,7 +387,7 @@ class PostprocessorManager(QtCore.QObject):
         else:
             try:
                 if (self.keywordIO.read_keywords(
-                        self.aggregator.layer, 'HAD_MULTIPART_POLY')):
+                        self.aggregator.layer, 'had multipart polygon')):
                     self._consolidate_multipart_stats()
             except KeywordNotFoundError:
                 pass
