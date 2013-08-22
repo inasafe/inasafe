@@ -39,7 +39,7 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsRectangle)
 from safe_qgis.safe_interface import (
-    format_int, HAZDATA, TESTDATA, UNITDATA)
+    format_int, HAZDATA, UNITDATA)
 
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
@@ -1313,12 +1313,23 @@ Click for Diagnostic Information:
             myExposureLayer,
             myHazardLayer,
             myScenarioFile)
-        self.assertEqual(
-            'test/Population_Jakarta_geographic.asc',
-            relative_exposure)
-        self.assertEqual(
-            'hazard/jakarta_flood_category_123.asc',
-            relative_hazard)
+
+        if 'win32' in sys.platform:
+            # windows
+            self.assertEqual(
+                'test\\Population_Jakarta_geographic.asc',
+                relative_exposure)
+            self.assertEqual(
+                'hazard\\jakarta_flood_category_123.asc',
+                relative_hazard)
+
+        else:
+            self.assertEqual(
+                'test/Population_Jakarta_geographic.asc',
+                relative_exposure)
+            self.assertEqual(
+                'hazard/jakarta_flood_category_123.asc',
+                relative_hazard)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDock)
