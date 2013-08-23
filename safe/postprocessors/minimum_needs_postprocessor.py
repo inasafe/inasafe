@@ -63,7 +63,6 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
             self._raise_error('clear needs to be called before setup')
 
         self.impact_total = int(round(params['impact_total']))
-        print params['function_params']
         self.minimum_needs = params['function_params']['minimum needs']
 
     def process(self):
