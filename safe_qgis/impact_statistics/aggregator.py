@@ -278,8 +278,12 @@ class Aggregator(QtCore.QObject):
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
+
+        myAggrName = self.layer.name()
+        if self.aoiMode:
+            myAggrName = myAggrName.toLower()
         myLayerName = str(self.tr('%1 aggregated to %2').arg(
-            myQGISImpactLayer.name()).arg(self.layer.name()))
+            myQGISImpactLayer.name()).arg(myAggrName))
 
         #delete unwanted fields
         myProvider = self.layer.dataProvider()
