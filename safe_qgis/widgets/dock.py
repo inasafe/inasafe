@@ -1797,7 +1797,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMapPdfFilePath is None or myMapPdfFilePath == '':
             self.show_dynamic_message(
                 m.Message(
-                    m.Heading(self.tr('Map Creator'), **ERROR_MESSAGE_SIGNAL),
+                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Printing cancelled!'))))
             return
 
@@ -1858,6 +1858,34 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = '' if myItemData is None else str(myItemData)
         return myFunctionID
+
+    def scenario_layer_paths(self, exposure_path, hazard_path, scenario_path):
+        """Calculate the paths for hazard and exposure relative to scenario.
+
+        :param exposure_path: Public path for exposure.
+        :type exposure_path: str
+
+        :param hazard_path: Public path for hazard.
+        :type hazard_path: str
+
+        :param scenario_path: Path to scenario file.
+        :type scenario_path: str
+
+        :return: Relative paths for exposure and hazard.
+        """
+        start_path = os.path.dirname(scenario_path)
+        try:
+            myRelExposurePath = os.path.relpath(exposure_path, start_path)
+        except ValueError, e:
+            LOGGER.info(e.message)
+            myRelExposurePath = exposure_path
+        try:
+            myRelHazardPath = os.path.relpath(hazard_path, start_path)
+        except ValueError, e:
+            LOGGER.info(e.message)
+            myRelHazardPath = hazard_path
+
+        return myRelExposurePath, myRelHazardPath
 
     def save_current_scenario(self, theScenarioFilePath=None):
         """Save current scenario to a text file.
@@ -1926,16 +1954,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myFileName = theScenarioFilePath
 
-        try:
-            myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
-        except ValueError:
-            myRelExposurePath = myExposurePath
-        try:
-            myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
-        except ValueError:
-            myRelHazardPath = myHazardPath
-
-        # write to file
+        myRelExposurePath, myRelHazardPath = self.scenario_layer_paths(
+            myExposurePath, myHazardPath, myFileName)
+        #  write to file
         myParser = ConfigParser()
         myParser.add_section(myTitle)
         myParser.set(myTitle, 'exposure', myRelExposurePath)

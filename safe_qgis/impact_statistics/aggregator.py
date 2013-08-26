@@ -282,8 +282,12 @@ class Aggregator(QtCore.QObject):
                 myQGISImpactLayer)
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
-        myLayerName = self.tr('%s aggregated to %s') % (
-            myQGISImpactLayer.name(), self.layer.name())
+
+        myAggrName = self.layer.name()
+        if self.aoiMode:
+            myAggrName = myAggrName.toLower()
+        myLayerName = str(self.tr('%s aggregated to %s') % (
+            myQGISImpactLayer.name(), myAggrName)
 
         #delete unwanted fields
         myProvider = self.layer.dataProvider()
@@ -863,7 +867,8 @@ class Aggregator(QtCore.QObject):
         theLayerFilename = str(layer.source())
         myPostprocPolygons = self.safeLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
-        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
+        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry(),
+                                          dtype=list)
 #        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
         myRemainingIndexes = numpy.array(range(len(myRemainingPolygons)))
 
@@ -890,8 +895,8 @@ class Aggregator(QtCore.QObject):
         myInsideFeat = QgsFeature()
         fields = polygonsProvider.fields()
         myTempdir = temp_dir(sub_dir='preprocess')
-        myOutFilename = unique_filename(suffix='.shp',
-                                        dir=myTempdir)
+        myOutFilename = unique_filename(
+            suffix='.shp', dir=myTempdir)
 
         self.keywordIO.copy_keywords(layer, myOutFilename)
         mySHPWriter = QgsVectorFileWriter(myOutFilename,

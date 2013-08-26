@@ -30,7 +30,8 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator)
+    get_thousand_separator,
+    get_defaults)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -53,6 +54,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
     title = tr('Need evacuation')
     target_field = 'population'
+    defaults = get_defaults()
     # Function documentation
     synopsis = tr('To assess the impacts of volcano eruption on population.')
     actions = tr(
@@ -73,7 +75,16 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
     parameters = OrderedDict([
         ('distance [km]', [3, 5, 10]),
-        ('minimum needs', default_minimum_needs())])
+        ('minimum needs', default_minimum_needs()),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
+            ('MinimumNeeds', {'on': True})]))])
 
     def run(self, layers):
         """Risk plugin for volcano population evacuation

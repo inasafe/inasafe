@@ -30,7 +30,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                               ('medium_threshold', 7),
                               ('high_threshold', 8),
                               ('postprocessors', OrderedDict([
-                              ('AggregationCategorical', {'on': False})]))
+                              ('AggregationCategorical', {'on': True})]))
                               ])
 
     def run(self, layers):

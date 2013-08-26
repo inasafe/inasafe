@@ -29,8 +29,7 @@ sys.path.append(pardir)
 
 import qgis
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtTest import QTest
+from PyQt4 import QtGui
 
 from qgis.core import (
     QgsRasterLayer,
@@ -184,8 +183,7 @@ class KeywordsDialogTest(unittest.TestCase):
         # noinspection PyUnreachableCode
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
         #pylint: enable=W0101
@@ -196,8 +194,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = False
         myMessage = ('Advanced options did not become visible when'
@@ -207,8 +204,7 @@ class KeywordsDialogTest(unittest.TestCase):
         assert myState == myExpectedState, myMessage
 
         # Now hide advanced again and test...
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = True
 
@@ -222,8 +218,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the hazard radio did not add a category '
                      'to the keywords list.')
         assert myDialog.get_value_for_key('category') == 'hazard', myMessage
@@ -235,8 +230,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'category to the keywords list.')
         assert myDialog.get_value_for_key(
@@ -266,8 +260,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myFemaleRatioAttrBox = myDialog.cboFemaleRatioAttribute
 
         #set to Don't use
@@ -321,8 +314,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radExposure
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the exposure radio did not add a category '
                      'to the keywords list.')
         assert myDialog.get_value_for_key('category') == 'exposure', myMessage
@@ -333,13 +325,9 @@ class KeywordsDialogTest(unittest.TestCase):
         myButton = myDialog.radHazard
         myButton.setChecked(True)
         myButton = myDialog.radExposure
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myCombo = myDialog.cboSubcategory
-        # noinspection PyArgumentList
-        QTest.mouseClick(myCombo, QtCore.Qt.LeftButton)
-        QTest.keyClick(myCombo, QtCore.Qt.Key_Up)
-        QTest.keyClick(myCombo, QtCore.Qt.Key_Enter)
+        myCombo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
         myMessage = ('Changing the subcategory did not add '
                      'to the keywords list for %s' %
                      myCombo.currentText())
@@ -379,9 +367,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.cboKeyword.setCurrentIndex(2)
         myExpectedResult = 'foo'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        # Work around for commented out line below
         myDialog.on_pbnAddToList1_clicked()
-        #QTest.mouseClick(myDialog.pbnAddToList1, QtCore.Qt.LeftButton)
         myResult = myDialog.get_value_for_key('datatype')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -397,9 +383,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.leValue.setText('bar')
         myExpectedResult = 'bar'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        # Work around for commented out line below
         myDialog.on_pbnAddToList2_clicked()
-        #QTest.mouseClick(myDialog.pbnAddToList2, QtCore.Qt.LeftButton)
         myResult = myDialog.get_value_for_key('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -565,8 +549,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.leKey.setText('foo')
         myDialog.leValue.setText('bar')
         okButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
-        # noinspection PyArgumentList
-        QTest.mouseClick(okButton, QtCore.Qt.LeftButton)
+        okButton.click()
 
         # delete temp file
         # removeTempFile(myFile)

@@ -156,7 +156,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         R = Raster(M,
                    projection=my_hazard.get_projection(),
                    geotransform=my_hazard.get_geotransform(),
-                   name=tr('Population which %s') % get_function_title(self),
+                   name=tr('Population which %s') % (
+                       get_function_title(self).lower()),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

@@ -166,6 +166,7 @@ class AbstractPostprocessor():
         Raises:
             None
         """
+
         if metadata is None:
             metadata = dict()
         LOGGER.debug('name : ' + str(name) + '\nresult : ' + str(result))

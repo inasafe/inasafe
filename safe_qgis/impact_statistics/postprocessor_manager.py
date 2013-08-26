@@ -81,12 +81,11 @@ class PostprocessorManager(QtCore.QObject):
         Returns:
             returns -1 if the value is NO_DATA else the value
         """
-        #black magic to get the value of each postprocessor field
-        #get the first postprocessor just to discover the data structure
-        myFirsPostprocessor = self.postProcessingOutput.itervalues().next()
-        #get the key position of the value field
-        myValueKey = myFirsPostprocessor[0][1].keyAt(0)
 
+        myPostprocessor = self.postProcessingOutput[
+            self._currentOutputPostprocessor]
+        #get the key position of the value field
+        myValueKey = myPostprocessor[0][1].keyAt(0)
         #get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
@@ -110,6 +109,8 @@ class PostprocessorManager(QtCore.QObject):
         myMessage = m.Message()
 
         for proc, results_list in self.postProcessingOutput.iteritems():
+
+            self._currentOutputPostprocessor = proc
             # results_list is for example:
             # [
             #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
@@ -119,16 +120,12 @@ class PostprocessorManager(QtCore.QObject):
             #         'description': 'Females hygiene packs for weekly use'}})
             #    ]))
             #]
-            try:
-                #sorting using the first indicator of a postprocessor
-                sortedResList = sorted(
-                    results_list,
-                    key=self._sortNoData,
-                    reverse=True)
 
-            except KeyError:
-                LOGGER.debug('Skipping sorting as the postprocessor did not '
-                             'have a "Total" field')
+            #sorting using the first indicator of a postprocessor
+            sortedResList = sorted(
+                results_list,
+                key=self._sortNoData,
+                reverse=True)
 
             #init table
             hasNoDataValues = False
@@ -206,22 +203,21 @@ class PostprocessorManager(QtCore.QObject):
 
                         no_data = self.aggregator.defaults['NO_DATA']
                         # both are No data
-                        if (first_part_result['value'] == no_data
-                                and result['value'] == no_data):
-                                    new_result = no_data
+                        value = first_part_result['value']
+                        result_value = result['value']
+                        if value == no_data and result_value == no_data:
+                            new_result = no_data
                         else:
                             # one is No data
-                            if (first_part_result['value'] == no_data
-                                    and result['value'] != no_data):
-                                        first_part_result['value'] = 0
+                            if value == no_data and result_value != no_data:
+                                first_part_result['value'] = 0
                             # the other is No data
-                            elif (first_part_result['value'] != no_data
-                                    and result['value'] == no_data):
-                                        result['value'] = 0
+                            elif value != no_data and result_value == no_data:
+                                result['value'] = 0
                             #if we got here, none is No data
                             new_result = (
-                                unhumanize_number(first_part_result['value']) +
-                                unhumanize_number(result['value']))
+                                unhumanize_number(value) +
+                                unhumanize_number(result_value))
 
                         first_part_result['value'] = format_int(new_result)
 
@@ -283,6 +279,12 @@ class PostprocessorManager(QtCore.QObject):
                     self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
                 myFemRatioFieldIndex = self.aggregator.layer.fieldNameIndex(
                     myFemRatioField)
+
+                # something went wrong finding the female ratio field,
+                # use defaults from below except block
+                if myFemRatioFieldIndex == -1:
+                    raise KeyError
+
                 myFemaleRatioIsVariable = True
 
             except KeyError:
@@ -308,7 +310,8 @@ class PostprocessorManager(QtCore.QObject):
                 myZoneName = myFeature[myNameFieldIndex]
 
             # create dictionary of attributes to pass to postprocessor
-            myGeneralParams = {'target_field': self.aggregator.targetField}
+            myGeneralParams = {'target_field': self.aggregator.targetField,
+                               'function_params': self.functionParams}
 
             if self.aggregator.statisticsType == 'class_count':
                 myGeneralParams['impact_classes'] = (
@@ -377,7 +380,7 @@ class PostprocessorManager(QtCore.QObject):
         else:
             try:
                 if (self.keywordIO.read_keywords(
-                        self.aggregator.layer, 'HAD_MULTIPART_POLY')):
+                        self.aggregator.layer, 'had multipart polygon')):
                     self._consolidate_multipart_stats()
             except KeywordNotFoundError:
                 pass

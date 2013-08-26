@@ -62,13 +62,15 @@ class PAGFatalityFunction(ITBFatalityFunction):
         # Threshold below which layer should be transparent
         ('tolerance', 0.01),
         ('calculate_displaced_people', True),
-        ('postprocessors', {
-            'Gender': {'on': True},
-            'Age': {'on': True,
-            'params': {
-                'youth_ratio': defaults['YOUTH_RATIO'],
-                'adult_ratio': defaults['ADULT_RATIO'],
-                'elder_ratio': defaults['ELDER_RATIO']}}}),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
+            ('MinimumNeeds', {'on': True})])),
         ('minimum needs', default_needs)])
 
     def fatality_rate(self, mmi):

@@ -24,6 +24,7 @@ from aggregation_postprocessor import AggregationPostprocessor
 from building_type_postprocessor import BuildingTypePostprocessor
 from aggregation_categorical_postprocessor import \
     AggregationCategoricalPostprocessor
+from minimum_needs_postprocessor import MinimumNeedsPostprocessor
 # pylint: enable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -34,7 +35,9 @@ AVAILABLE_POSTPTOCESSORS = {'Gender': 'Gender',
                             'Age': 'Age',
                             'Aggregation': 'Aggregation',
                             'BuildingType': 'Building type',
-                            'AggregationCategorical': 'Aggregation Categorical'
+                            'AggregationCategorical':
+                            'Aggregation categorical',
+                            'MinimumNeeds': 'Minimum needs'
                             }
 
 

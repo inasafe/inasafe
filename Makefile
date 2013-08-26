@@ -46,7 +46,7 @@ compile-translation-strings: compile
 	@#compile gettext messages binary
 	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@#Compile qt messages binary
-	cd safe_qgis; lrelease inasafe.pro; cd ..
+	cd safe_qgis; lrelease-qt4 inasafe.pro; cd ..
 
 test-translations:
 	@echo

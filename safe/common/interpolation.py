@@ -20,7 +20,6 @@ def validate_mode(mode):
             * 'constant' - piecewise constant nearest neighbour interpolation
             * 'linear' - bilinear interpolation using the two nearest \
               neighbours (default)
-              
     :type mode: str
 
     :raises: InaSAFEError

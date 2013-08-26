@@ -2468,7 +2468,7 @@ class Test_IO(unittest.TestCase):
 
         #must be after above
         indoout1 = tr('Hello!')  # translate as 'Hi'
-        indoexpected1 = 'Hi!'
+        indoexpected1 = 'Halo!'
         msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
         assert indoout1 == indoexpected1, msg
 

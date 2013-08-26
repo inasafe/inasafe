@@ -307,7 +307,7 @@ def _clip_vector_layer(
     myKeywordIO = KeywordIO()
     if extra_keywords is None:
         extra_keywords = {}
-    extra_keywords['HAD_MULTIPART_POLY'] = myHasMultipart
+    extra_keywords['had multipart polygon'] = myHasMultipart
     myKeywordIO.copy_keywords(
         layer, myFilename, extra_keywords=extra_keywords)
     myBaseName = '%s clipped' % layer.name()

@@ -85,7 +85,9 @@ class FloodEvacuationFunction(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])})])),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
+            ('MinimumNeeds', {'on': True}),
+        ])),
         ('minimum needs', default_minimum_needs())
     ])
 
@@ -267,7 +269,8 @@ class FloodEvacuationFunction(FunctionProvider):
         R = Raster(my_impact,
                    projection=my_hazard.get_projection(),
                    geotransform=my_hazard.get_geotransform(),
-                   name=tr('Population which %s') % get_function_title(self),
+                   name=tr('Population which %s') % (
+                       get_function_title(self).lower()),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title,
