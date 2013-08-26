@@ -58,8 +58,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
-            ('MinimumNeeds', {'on': True})]))])
+                    ('elder_ratio', defaults['ELDER_RATIO'])])})]))])
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard
@@ -157,7 +156,8 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         R = Raster(M,
                    projection=my_hazard.get_projection(),
                    geotransform=my_hazard.get_geotransform(),
-                   name=tr('Population which %s') % get_function_title(self),
+                   name=tr('Population which %s') % (
+                       get_function_title(self).lower()),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

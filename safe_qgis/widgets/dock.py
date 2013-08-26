@@ -1807,7 +1807,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMapPdfFilePath is None or myMapPdfFilePath == '':
             self.show_dynamic_message(
                 m.Message(
-                    m.Heading(self.tr('Map Creator'), **ERROR_MESSAGE_SIGNAL),
+                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Printing cancelled!'))))
             return
 
