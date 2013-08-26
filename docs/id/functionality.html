@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Data Types &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Functionality &mdash; InaSAFE Documentation 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
-    <link rel="next" title="Using QGIS" href="using-qgis.html" />
-    <link rel="prev" title="Post-processors" href="postprocessors.html" />
+    <link rel="next" title="Impact Functions Documentation" href="impact_functions_doc.html" />
+    <link rel="prev" title="OpenStreetMap Downloader" href="function_docs/openstreetmap_downloader.html" />
 
 <style>
     .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
@@ -59,7 +59,7 @@
 <script>
     // put a line below the current locale flag
     $(document).ready(function () {
-        var currentPage = 'data_types.html';
+        var currentPage = 'functionality.html';
         var currentLang = window.location.href.slice(
                 window.location.href.indexOf(currentPage) - 3,
                 window.location.href.indexOf(currentPage) - 1);
@@ -70,7 +70,7 @@
 
     
     function gotoLang(lang) {
-        var currentPage = 'data_types.html';
+        var currentPage = 'functionality.html';
         var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
         window.location.href = baseUrl + lang + '/' + currentPage;
     }
@@ -108,26 +108,9 @@
                 <a class="brand" href="#"></a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li><a href="http://inasafe.org">InaSAFE Home</a></li>
-                        <li class="active"><a href="index.html">Documentation</a>
-                        </li>
-                        <li><a href="https://github.com/AIFDR/inasafe/issues">Report
-                            an issue</a>
-                        </li>
-                        <li><a href="https://github.com/AIFDR/inasafe">Get the code</a>
-                        </li>
-                        <li><a href="index.html/../irchat.html">Chat live!</a>
-                        </li>
-                        <li><div id="searchbox">
-                                <form class="navbar-form pull-right" id="search" action="index.html/../search.html" method="get">
-                                <input type="text" name="q" placeholder="Search"/>
-                                <input type="submit" value="Go" class="btn btn-warning btn-small"/>
-                                <input type="hidden" name="check_keywords" value="yes" />
-                                <input type="hidden" name="area" value="default" />
-                                </form>
-                            </div>
-                        <script type="text/javascript">$('#searchbox').show(0);</script>
-                        </li>
+                        <font color="#333">
+                        <li><h1>Ina<b>SAFE</b></h1></li>
+                        </font>
                     </ul>
                 </div>
             </div>
@@ -147,16 +130,16 @@
                 
                 <li class="right"
                  >
-                <a href="using-qgis.html"
-                   title="Using QGIS"
+                <a href="impact_functions_doc.html"
+                   title="Impact Functions Documentation"
                    style="z-index:;"
                 accesskey="N">next</a>
                 </li>
                 
                 <li class="right"
                  >
-                <a href="postprocessors.html"
-                   title="Post-processors"
+                <a href="function_docs/openstreetmap_downloader.html"
+                   title="OpenStreetMap Downloader"
                    style="z-index:;"
                 accesskey="P">previous</a>
                 </li>
@@ -168,7 +151,7 @@
                 </li>
                 
                 
-                <li><a href="#">Data Types</a></li>
+                <li><a href="#">Functionality</a></li>
             </ul>
         </div>
     </div> 
@@ -178,114 +161,130 @@
     
 <div class="container">
     <div class="row">
-        <div class="span3">
-            <div class="well sidebar-nav">
-                <ul id="locales">
-                    <li id="flag_en"><a href="#" onclick="gotoLang('en');"><img
-                            src="_static/img/flags/gb.png"/></a>
-                    </li>
-                    <li id="flag_id"><a href="#" onclick="gotoLang('id');"><img
-                            src="_static/img/flags/id.png"/></a>
-                    </li>
-                </ul>
-                <span style="clear:both">&nbsp;</span>
-            </div>
-        </div>
-        <div class="span9">
+        <div class="span12">
                 
-  <div class="section" id="data-types">
-<span id="id1"></span><h1>Data Types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h1>
-<p>The impact functions essentially combine spatial data in different formats
-through a common interpolation library. This essentially allows values from
-one data set to be assigned to another independent of their types.
-Given two layers H and E, say, the call:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">I</span> <span class="o">=</span> <span class="n">assign_hazard_values_to_exposure_data</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>will produce a new layer with all values from H transferred to E in a manner
-appropriate for the data types of H and E. Generally, existing values in
-E will be also be carried over to I. Conceptually, the new layer I represents
-the values of H interpolated to E.</p>
-<p>The function takes a number of optional keyword arguments that pertain to
-certain type combinations. They are:</p>
-<ul class="simple">
-<li>layer_name: Optional name of returned layer. If None (default) the name of
-the exposure layer is used.</li>
-<li>attribute_name:<ul>
-<li>If hazard layer is of type raster, this is the name for new attribute in
-the result containing the hazard level. If None (default) the name of
-hazard is used</li>
-<li>If hazard layer is of type vector, it is the name of the attribute to
-transfer from the hazard layer into the result. If None (default) all
-attributes are transferred.</li>
-</ul>
-</li>
-<li>mode: Interpolation mode for raster to point interpolation only. Options
-are &#8216;linear&#8217; (default) or &#8216;constant&#8217;</li>
-</ul>
-<p>The following table shows allowed combinations and what interpolation means
-in each case.</p>
+  <div class="section" id="functionality">
+<span id="id1"></span><h1>Functionality<a class="headerlink" href="#functionality" title="Permalink to this headline">¶</a></h1>
+<p>This document describes InaSAFE&#8216;s functionality in regard to what
+inputs are needed to carry on an analysis.
+At the highest level InaSAFE will take a hazard layer (such as ground
+shaking, water depth or ash load) and an exposure layer (such as population
+density or building footprints) and combine them according to an impact
+function to produce an impact layer and a report.</p>
+<div class="section" id="hazard-layers">
+<h2>Hazard layers<a class="headerlink" href="#hazard-layers" title="Permalink to this headline">¶</a></h2>
+<p>The supported hazard layers are:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="11%" />
-<col width="11%" />
-<col width="62%" />
-<col width="17%" />
+<col width="12%" />
+<col width="14%" />
+<col width="21%" />
+<col width="16%" />
+<col width="22%" />
+<col width="15%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">H</th>
-<th class="head">E</th>
-<th class="head">Methodology</th>
-<th class="head">Return value</th>
+<tr class="row-odd"><th class="head">Hazard</th>
+<th class="head">Spatial type</th>
+<th class="head">Hazard type</th>
+<th class="head">Attribute name</th>
+<th class="head">Hazard units/fields</th>
+<th class="head">Parameters</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>Polygon</td>
-<td>Point</td>
-<td>Clip points to polygon and assign all attributes</td>
-<td>Point</td>
-</tr>
-<tr class="row-odd"><td>Polygon</td>
-<td>Line</td>
-<td>&nbsp;</td>
-<td>N/A</td>
-</tr>
-<tr class="row-even"><td>Polygon</td>
-<td>Polygon</td>
-<td>&nbsp;</td>
-<td>N/A</td>
-</tr>
-<tr class="row-odd"><td>Polygon</td>
+<tr class="row-even"><td>Volcano</td>
 <td>Raster</td>
-<td>Convert to points and use Polygon-Point algorithm</td>
-<td>Point</td>
-</tr>
-<tr class="row-even"><td>Raster</td>
-<td>Point</td>
-<td>Bilinear or piecewise constant interpolation</td>
-<td>Point</td>
-</tr>
-<tr class="row-odd"><td>Raster</td>
-<td>Line</td>
-<td>&nbsp;</td>
+<td>Ash load</td>
 <td>N/A</td>
+<td>kg/m^2</td>
+<td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td>Raster</td>
+<tr class="row-odd"><td>Volcano</td>
+<td>Point</td>
+<td>Distance from vent</td>
+<td>Name</td>
+<td>text</td>
+<td>Radius [km]</td>
+</tr>
+<tr class="row-even"><td>Volcano</td>
 <td>Polygon</td>
-<td>Convert to centroids and use Raster-Point algorithm</td>
+<td>Category</td>
+<td>KRB</td>
+<td>text</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>Earthquake</td>
+<td>Raster</td>
+<td>Shakemap</td>
+<td>N/A</td>
+<td>MMI</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>Flood</td>
+<td>Raster</td>
+<td>Depth</td>
+<td>N/A</td>
+<td>m</td>
+<td>Threshold [m]</td>
+</tr>
+<tr class="row-odd"><td>Flood</td>
 <td>Polygon</td>
+<td>Wet/Dry</td>
+<td>affected</td>
+<td>1/0</td>
+<td>Threshold [%]</td>
 </tr>
-<tr class="row-odd"><td rowspan="2">Raster</td>
-<td rowspan="2">Raster</td>
-<td rowspan="2">Check that rasters are aligned and return E</td>
-<td rowspan="2">Raster</td>
+<tr class="row-even"><td>Tsunami</td>
+<td>Raster</td>
+<td>Depth</td>
+<td>N/A</td>
+<td>m</td>
+<td>Threshold [m]</td>
 </tr>
-<tr class="row-even"></tr>
 </tbody>
 </table>
-<p>See <em class="xref std std-ref">writing_impact_functions</em> for more information and
-<a class="reference external" href="http://inasafe.org/api-docs/safe/engine/interpolation.html#safe.engine.interpolation.assign_hazard_values_to_exposure_data">assign_hazard_values_to_exposure_data</a>
-for the full documentation of this function.</p>
+</div>
+<div class="section" id="exposure-layers">
+<h2>Exposure layers<a class="headerlink" href="#exposure-layers" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="16%" />
+<col width="25%" />
+<col width="19%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Exposure</th>
+<th class="head">Spatial type</th>
+<th class="head">Exposure type</th>
+<th class="head">Attribute name</th>
+<th class="head">Hazard units/fields</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Population</td>
+<td>Raster</td>
+<td>Density</td>
+<td>N/A</td>
+<td>People per pixel</td>
+</tr>
+<tr class="row-odd"><td>Structures</td>
+<td>Point</td>
+<td>Structure type</td>
+<td>type</td>
+<td>text</td>
+</tr>
+<tr class="row-even"><td>Structures</td>
+<td>Polygon</td>
+<td>Structure type</td>
+<td>type</td>
+<td>text</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -303,7 +302,11 @@ for the full documentation of this function.</p>
             Source code available on
             <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
             Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
-            file a ticket</b></a> if you have discovered an issue.
+            file a ticket</b></a> if you have discovered an issue.<br>
+            This document is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
+            <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
+            Copyright 2013, BNPB/AusAID/World Bank.
         </div>
     </div>
 

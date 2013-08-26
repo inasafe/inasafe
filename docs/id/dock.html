@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Menggunakan InaSAFE &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap/css/bootstrap-responsive.min.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
+    <link rel="next" title="Sistem Kata kunci" href="keywords.html" />
+    <link rel="prev" title="Bantuan Aplikasi" href="index.html" />
+
+<style>
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+        padding-bottom : 0px;
+        padding-left   : 0px;
+        padding-right  : 0px;
+        padding-top    : 0px;
+    }
+
+    .navbar .brand
+    {
+        background-image  : url("_static/img/logo.png");
+        background-repeat : no-repeat;
+        height            : 42px;
+        padding-left      : 30px;
+    }
+
+    .navbar-inverse .navbar-inner
+    {
+        background-color : none;
+    }
+</style>
+
+<script>
+    // put a line below the current locale flag
+    $(document).ready(function () {
+        var currentPage = 'dock.html';
+        var currentLang = window.location.href.slice(
+                window.location.href.indexOf(currentPage) - 3,
+                window.location.href.indexOf(currentPage) - 1);
+        $('#flag_' + currentLang).css('background-color', '#cccccc');
+        // Make the search button pretty - issue 36
+        $(':submit').addClass('btn btn-warning btn-small');
+    })
+
+    
+    function gotoLang(lang) {
+        var currentPage = 'dock.html';
+        var baseUrl = window.location.href.slice(0, window.location.href.indexOf(currentPage) - 3); // -3 removes current locale
+        window.location.href = baseUrl + lang + '/' + currentPage;
+    }
+</script>
+
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+
+<link rel="shortcut icon" href="_static/img/favicon.ico">
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="_static/bootstrap/img/apple-touch-icon-114x114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="_static/bootstrap/img/apple-touch-icon-72x72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="57x57"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+<link rel="apple-touch-icon-precomposed"
+      href="_static/bootstrap/img/apple-touch-icon-57x57-precomposed.png">
+
+  </head>
+  <body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse"
+                   data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <font color="#333">
+                        <li><h1>Ina<b>SAFE</b></h1></li>
+                        </font>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="related">
+            <ul class="breadcrumb" id="breadcrumbs">
+                
+                
+                <li class="right"
+                style="margin-right: 10px" >
+                <a href="genindex.html"
+                   title="General Index"
+                   style="z-index:;"
+                accesskey="I">index</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="keywords.html"
+                   title="Sistem Kata kunci"
+                   style="z-index:;"
+                accesskey="N">next</a>
+                </li>
+                
+                <li class="right"
+                 >
+                <a href="index.html"
+                   title="Bantuan Aplikasi"
+                   style="z-index:;"
+                accesskey="P">previous</a>
+                </li>
+                
+
+                
+                <li class="first">
+                    <a style="z-index:100;" href="index.html"> InaSAFE Docs </a>
+                </li>
+                
+                
+                <li><a href="#">Menggunakan InaSAFE</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="span12">
+                
+  <div class="section" id="using-project-name">
+<span id="toolbar-dock"></span><h1>Menggunakan InaSAFE<a class="headerlink" href="#using-project-name" title="Permalink to this headline">¶</a></h1>
+<p>Dokumen ini menjelaskan penggunaan InaSAFE &#8216;dock panel&#8217; - yang merupakan tampilan utama untuk menjalankan skenario resiko di dalam lingkungan Quantum GIS.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Dalam penggunaan alat InaSAFE secara efektif, Anda seharusnya juga membaca dokumentasi <a class="reference internal" href="impact_functions.html"><em>Memahami Fungsi Dampak</em></a> dan <a class="reference internal" href="impact_functions.html"><em>Memahami Fungsi Dampak</em></a> sebelum Anda memulai.</p>
+</div>
+<p>Panel dek InaSAFE merupakan cara utama untuk berinteraksi dengan alat-alat yang telah disediakan dalam InaSAFE. Setelah anda menginstal plugin InaSAFE, panel dek akan termuat secara otomatis di QGIS dan muncul di suatu tempat di layar anda. Itu akan terlihat seperti ini:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/dock-panel.png"><img alt="Docking Panel" src="_images/dock-panel.png" style="width: 219.75px; height: 609.75px;" /></a>
+<p class="caption">Panel Dok</p>
+</div>
+<p>Anda dapat menyeret dan meletakkan panel dock untuk mengatur ulang posisinya pada user interface. Misalnya, Dengan menyeret panel ke margin kanan pada aplikasi QGIS akan membuat posisi dock berada pada sisi kanan layar.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/docked-right.png"><img alt="Dock on the right" src="_images/docked-right.png" style="width: 702.5px; height: 389.0px;" /></a>
+<p class="caption">Dok di sebelah kanan dengan Proyek yang dimuat</p>
+</div>
+<p>Terdapat 3 area utama pada panel:</p>
+<ul class="simple">
+<li>Area <em class="guilabel">Pertanyaan</em></li>
+<li>Area <em class="guilabel">Hasil</em></li>
+<li>Area the <em class="guilabel">Tombol</em></li>
+</ul>
+<p>Pada saat apa pun Anda dapat memperoleh bantuan di InaSAFE dengan mengklik pada tombol <em class="guilabel">bantuan</em> yang telah disediakan pada setiap dek dan dialog.</p>
+<div class="section" id="the-questions-area">
+<h2>Area Pertanyaan<a class="headerlink" href="#the-questions-area" title="Permalink to this headline">¶</a></h2>
+<p>Tujuan dari InaSAFE adalah untuk membuat analisis dampak Anda sangat sederhana dan mudah untuk dilakukan. Bagian Pertanyaan menyediakan cara yang mudah bagi Anda untuk merumuskan, apa itu yang Anda ingin cari? Semua pertanyaan yang ada dirumuskan dalam bentuk sebagai berikut:</p>
+<blockquote>
+<div>Apabila terjadi [<strong>hazard</strong>] berapa banyak [<strong>exposure</strong>] yang mungkin [<strong>impact</strong>].</div></blockquote>
+<p>Sebagai contoh:</p>
+<blockquote>
+<div>Jika <strong>terjadi banjir</strong> berapa banyak <strong>sekolah</strong> yang mungkin <strong>ditutup</strong>.</div></blockquote>
+<p>Untuk menjawab pertanyaan semacam itu, Pengembang InaSAFE telah membangun sejumlah <strong>fungsi dampak</strong> yang mencakup skenario risiko seperti banjir, tsunami, abu vulkanik, gempa dan sebagainya. Anda dapat membaca dokumentasi fungsi dampak untuk mengetahui lebih lanjut tentang <a class="reference internal" href="impact_functions.html"><em>Memahami Fungsi Dampak</em></a> yang telah diimplementasikan.</p>
+<p>Formulasi dari pertanyaan-pertanyaan ini akan diproses dengan memuat layer-layer yang merepresentasikan skenario baik <strong>ancaman</strong> maupun <strong>paparan</strong> di dalam QGIS.</p>
+<ul class="simple">
+<li><strong>Ancaman</strong> (<em class="guilabel">Pada kejadian</em>) dapat dipresentasikan sebagai, contoh, sebuah layer data jenis raster pada QGIS dimana setiap pixel pada data ini mempresentasikan kedalaman banjir saat ini mengikuti genangannya.</li>
+<li><strong>keterpaparan</strong> (<em class="guilabel">berapa banyak</em>) dapat direpresentasikan, contohnya, sebagai data vektor poligon yang mempresentasikan garis luar sebuah bangunan, atau garis luar dari data jenis raster dimana setiap pixel merepresentasikan jumlah permukiman penduduk pada sel itu.</li>
+</ul>
+<p><strong>fungsi dampak</strong> (<em class="guilabel">Mungkin</em>) akan menggabungkan dua input layer pada model matematika dalam rangka untuk mengartikan dampak bahaya seperti apa yang mengancam sesuai data keterpaparan infrastruktur atau jumlah penduduk.</p>
+<p>Dengan memilih kombinasi dari kotak combo <em class="guilabel">In the event of</em> dan <em class="guilabel">How many</em>, aturan sesuai dengan fungsi dampak yang akan dicantumkan di kotak combo <em class="guilabel">Might</em>.</p>
+<p>Anda mungkin membayangkan bagaimana plugin InaSAFE menentukan apakah sebuah layer harus dimasukkan pada <em class="guilabel">Dalam kejadian dari</em> atau <em class="guilabel">Berapa Banyak</em> kotak kombo? Plugin ini menngandalkan pada metadata kata kunci sederhana untuk berasosiasi dengan setiap layer.</p>
+<p>Sistem kata kunci ini dijelaskan secara detil di  <a class="reference internal" href="keywords.html"><em>Sistem Kata kunci</em></a>. Setiap layer memiliki sebuah kata kunci yang mengalokasikan <strong>kategori ** untuk **ancaman</strong> yang akan dicatat di <em class="guilabel">In the event of</em> combo. Sama halnya <strong>kategori</strong> dari <strong>keterpaparan</strong> di kata kunci untuk layer akan menghasilkan di dalam yang dicatata dibawah  <em class="guilabel">How many</em> combo.</p>
+<p>InaSAFE menggunakan kombinasi kata kunci <strong>kategori</strong>, <strong>subkategori</strong>, <strong>unit</strong>, dan <strong>jenis data</strong> untuk menentukan <strong>fungsi dampak</strong> yang akan dicantumkan pada combo <em class="guilabel">Might</em>.</p>
+<p>Fungsi dampak terpilih dapat diketahui (jika dapat diterapkan) dengan menekan tombol elips kecil (...) disebelah fungsi dampak yang dipilih.</p>
+<p>Ini menjelaskan detail yang lebih lanjut dibawah <a class="reference internal" href="#analysis-parameters"><em>Pengaturan Parameter Analisis</em></a></p>
+<p>As of InaSAFE 1.2, you can now also choose an aggregation layer for both
+raster and vector layers.</p>
+<p>Aggregation allows you to specify an additional layer when defining the
+analysis criteria. This layer will be used to provide a by-area breakdown of
+the results of the analysis. For example if you are carrying out an analysis
+for a city, you can use district areas within the city to provide per-area
+results. In the absence of an aggregation layer, the analysis extent is used
+as the aggregation unit. To use this option you need to load a polygon based
+layer into QGIS that represents the areas you wish to summarise by.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Setelah menjalankan analisis, area pertanyaan disembunyikan untuk memaksimalkan jumlah ruang alokasi untuk area hasil (lihat di bawah). Anda dapat membukan kembali area pertanyaan kapan saja dengan menekan tombol <em class="guilabel">Show question form</em></p>
+</div>
+</div>
+<div class="section" id="the-results-area">
+<h2>Area Hasil<a class="headerlink" href="#the-results-area" title="Permalink to this headline">¶</a></h2>
+<p>Area <em class="guilabel">hasil</em> digunakan untuk menampilkan berbagai item umpan balik yang berguna bagi pengguna. Karena skenario dampak telah dijalankan (lihat bagian selanjutnya di bawah), tabel ringkasan akan ditampilkan.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/scenario-results.png"><img alt="Scenario results" src="_images/scenario-results.png" style="width: 702.5px; height: 389.0px;" /></a>
+<p class="caption">Skenario yang telah diproses dengan hasil yang sudah dimuat dan ditampilkan</p>
+</div>
+<p>Jika Ana memilih <strong>layer dampak</strong> (yaitu layer yang dihasilkan menggunakan fungsi dampak InaSAFE), pada daftar layer QGIS, ringkasan ini juga akan ditampilkan dalam area hasil.</p>
+<p>Ketika Anda memilih layer <strong>ancaman</strong> atau <strong>keterpaparan</strong> pada daftar layer QGIS, kata kunci untuk layer tersebut akan ditampilkan dalam area <em class="guilabel">Results</em>, sehingga mudah untuk dipahami apakah metadata ada untuk layer tersebut.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/keywords-for-active-layer.png"><img alt="Dock on the right" src="_images/keywords-for-active-layer.png" style="width: 702.5px; height: 389.0px;" /></a>
+<p class="caption">Menampilkan kata kunci untuk layer aktif</p>
+</div>
+<p>Area <em class="guilabel">Results juga akan digunakan untuk menampilkan informasi status. Contohnya, ketika kombinasi **ancaman**  (:guilabel:`In the event of</em>), <strong>keterpaparan</strong> (<em class="guilabel">How many</em>) dan <strong>fungsi dampak</strong> (<em class="guilabel">In the event of</em>) yang cocok akan dipilih, area hasil akan diperbarui untuk mengindikasi bahwa Anda dapat memproses untuk menjalankan perhitungan skenario dampak. Tombol <em class="menuselection">Run</em> akan diaktifkan.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/status-ready.png"><img alt="Ready to run" src="_images/status-ready.png" style="width: 219.75px; height: 453.0px;" /></a>
+<p class="caption">Mengaktifkan Tombol Jalankan</p>
+</div>
+<p>Akhirnya, area <em class="guilabel">Results</em> juga digunakan untuk menampilkan pesan error sehingga pengguna diberitahu apa yang salah dan dimana. anda mungkin harus menggeser sedikit di kotak pesan.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/error-display.png"><img alt="Displaying Problems" src="_images/error-display.png" style="width: 219.75px; height: 474.0px;" /></a>
+<p class="caption">Menampilkan pesan error</p>
+</div>
+<p>Untuk mendapatkan ruang lebih untuk hasil yang tersedia pertanyaan anda akan otomatis tersembunyi untuk membuat area hasil seluas luasnya untuk menampilkan hasil. Jika anda ingin melihat kembali pertanyaan yang anda ajukan klik pada tombol <em class="guilabel">Show question form</em> di sebelah atas dari area hasil</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/show_question_form.png"><img alt="Show question form" src="_images/show_question_form.png" style="width: 219.75px; height: 474.0px;" /></a>
+<p class="caption">Tampilkan form pertanyaan</p>
+</div>
+<p>Jika anda ingin menyembunyikan pertanyaan kembali untuk mendapatkan ruang yang lebih untuk menampilkan hasilnya lagi. Pastikan layer yang anda baru hitung dengan InaSAFE kembali aktif di daftar QGIS <em class="guilabel">Layers</em></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Pada bagian bawah tampilan kesalahan Anda mungkin melihat tombol seperti berikut ini. Jika Anda mengklik pada tombol ini, maka akan muncul kotak yang berisi informasi diagnosis yang berguna yang dapat disampaikan sebagai bagian dari laporan bug jika Anda berpikir kesalahan tersebut adalah salah.</p>
+<a class="last reference internal image-reference" href="_images/toggle-traceback.png"><img alt="_images/toggle-traceback.png" src="_images/toggle-traceback.png" style="width: 211.5px; height: 56.25px;" /></a>
+</div>
+</div>
+<div class="section" id="the-buttons-area">
+<h2>Area Tombol<a class="headerlink" href="#the-buttons-area" title="Permalink to this headline">¶</a></h2>
+<p>Tombol area berisi tiga tombol:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/buttons.png"><img alt="Buttons area" src="_images/buttons.png" style="width: 218.25px; height: 39.75px;" /></a>
+<p class="caption">Area Tombol</p>
+</div>
+<ul class="simple">
+<li><em class="guilabel">Help</em> - klik pada ini jika Anda membutuhkan bantuan konteks, seperti dokumen yang Anda baca sekarang!</li>
+<li><em class="guilabel">Print...</em> - klik ini jika Anda ingin membuat sebuah pdf proyek skenario dampak Anda. Sebuah <strong>layer dampak</strong> harus aktif sebelum tombol <em class="guilabel">Print...</em> akan diaktifkan.</li>
+<li><em class="guilabel">Run - jika kombinasi pilihan pada kotak combo area :guilabel:`Questions</em> akan memungkinkan Anda untuk menjalankan skenario, tombol ini diaktifkan.</li>
+</ul>
+</div>
+<div class="section" id="data-conversions-when-running-a-scenario">
+<h2>Konversi data ketika menjalankan sebuah skenario<a class="headerlink" href="#data-conversions-when-running-a-scenario" title="Permalink to this headline">¶</a></h2>
+<p>Ketika menjalankan sebuah skenario, data yang digunakan harus diproses ke dalam bentuk dimana dapat digunakan oleh fungsi dampak. Secara khusus perlu dicatat bahwa:</p>
+<ul class="simple">
+<li>Remote dataset akan disalin secara lokal sebelum pengolahan.</li>
+<li>Semua dataset akan terpotong ke perpotongan layer <strong>ancaman</strong>, layer <strong>keterpaparan</strong> dan tampilan luasan saat ini.</li>
+<li>Semua dataset yang terpotong akan dikonversi (diproyeksi kembali) ke sistem referensi koordinat Geografi (EPSG:4326) sebelum analisis.</li>
+</ul>
+</div>
+<div class="section" id="setting-analysis-parameters">
+<span id="analysis-parameters"></span><h2>Pengaturan Parameter Analisis<a class="headerlink" href="#setting-analysis-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Tergantung dari fungsi dampak apa yang anda pilih anda memiliki pilihan berbeda untuk menyesuaikan parameter dari pertanyaan yang anda tanyakan. Beberapa fungsi dampak memiliki beberapa pilihan konfigurasi lebih dan beberapa yang lain kurang. Selalu tergantung pada fungsi dampak itu sendiri dan pertanyaan yang ingin anda tanyakan.</p>
+<p>Untuk membuka dialog konfigurasi fungsi dampak, anda butuh untuk klik pada tombol <em class="guilabel">...</em> di sebelah paragraf <em class="guilabel">Might</em> di dok InaSAFE.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/imp_func_conf1.png"><img alt="Impact Function Configurator" src="_images/imp_func_conf1.png" style="width: 212.25px; height: 159.75px;" /></a>
+<p class="caption">Buka Konfigurator Fungsi Dampak</p>
+</div>
+<p>Anda mungkin harus membuka 3 tab yang terlihat</p>
+<blockquote>
+<div><ul class="simple">
+<li><em class="guilabel">Options</em>: Depending in the Impact function you selected,
+you can influence the result of your question here (the Impact Function)
+by setting different initial values which are presented depending on the
+function you choose (Some Impact functions might now be able to be
+influenced).</li>
+<li><em class="guilabel">Postprocessors</em>: Takes the results from the impact function and
+calculates derivative indicators, for example if you have an affected
+population total, the Gender postprocessor will calculate gender specific
+indicators such as additional nutritional requirements for pregnant women</li>
+<li><em class="guilabel">Minimum Needs</em>: If it is something that effects for eg people it
+works out the minimum needs of the people affected by the impact scenario.
+To use that function you should have the necessary data available and
+calculate this by using the <a class="reference internal" href="minimum_needs.html#minimum-needs"><em>Alat kebutuhan minimum</em></a>.</li>
+</ul>
+</div></blockquote>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/imp_func_conf2.png"><img alt="Impact Function Configurator" src="_images/imp_func_conf2.png" style="width: 744.75px; height: 320.25px;" /></a>
+</div>
+</div>
+</div>
+
+
+        </div> 
+        <hr>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="alert alert-info centered">
+            Contact
+            <a href="mailto:info@inasafe.org?subject=[inasafe-info]">
+            <b>info@inasafe.org</b></a> for more information.
+            Source code available on
+            <a href="https://github.com/AIFDR/inasafe"><b>GitHub</b></a>!
+            Please <a href="https://github.com/AIFDR/inasafe/issues"><b>
+            file a ticket</b></a> if you have discovered an issue.<br>
+            This document is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB">Creative Commons Attribution 3.0 Australia License.</a><br>
+            <a href="http://creativecommons.org/licenses/by/3.0/au/deed.en_GB"><b>CCByA</b></a>,
+            Copyright 2013, BNPB/AusAID/World Bank.
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
+  </body>
+</html>

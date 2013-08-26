@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the Plugin &mdash; InaSAFE Documentation 1.2.0 documentation</title>
+    <title>Using InaSAFE &mdash; InaSAFE Documentation 1.2.0 documentation</title>
     
     <link rel="stylesheet" href="_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -30,8 +30,8 @@
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
-    <link rel="next" title="Functionality" href="functionality.html" />
-    <link rel="prev" title="Getting help" href="getting_help.html" />
+    <link rel="next" title="Keywords System" href="keywords.html" />
+    <link rel="prev" title="Application Help" href="index.html" />
 
 <style>
     .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
@@ -130,16 +130,16 @@
                 
                 <li class="right"
                  >
-                <a href="functionality.html"
-                   title="Functionality"
+                <a href="keywords.html"
+                   title="Keywords System"
                    style="z-index:;"
                 accesskey="N">next</a>
                 </li>
                 
                 <li class="right"
                  >
-                <a href="getting_help.html"
-                   title="Getting help"
+                <a href="index.html"
+                   title="Application Help"
                    style="z-index:;"
                 accesskey="P">previous</a>
                 </li>
@@ -151,7 +151,7 @@
                 </li>
                 
                 
-                <li><a href="#">Using the Plugin</a></li>
+                <li><a href="#">Using InaSAFE</a></li>
             </ul>
         </div>
     </div> 
@@ -163,8 +163,8 @@
     <div class="row">
         <div class="span12">
                 
-  <div class="section" id="using-the-plugin">
-<span id="id1"></span><h1>Using the Plugin<a class="headerlink" href="#using-the-plugin" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="using-project-name">
+<span id="toolbar-dock"></span><h1>Using InaSAFE<a class="headerlink" href="#using-project-name" title="Permalink to this headline">¶</a></h1>
 <p>This document describes the usage of the InaSAFE &#8216;dock panel&#8217; - which
 is the main interface for running risk scenarios within the Quantum GIS
 environment.</p>
@@ -233,15 +233,34 @@ be listed in the <em class="guilabel">Might</em> combo box.</p>
 <p>You may be wondering how the InaSAFE plugin determines whether a layer
 should be listed in the <em class="guilabel">In the event of</em> or <em class="guilabel">How many</em>
 combo boxes? The plugin relies on simple keyword metadata to be associated
-with each layer.
-The keyword system is described in detail in <a class="reference internal" href="keywords.html"><em>Keywords System</em></a>.
+with each layer.</p>
+<p>The keyword system is described in detail in <a class="reference internal" href="keywords.html"><em>Keywords System</em></a>.
 Each layer that has a keyword allocating it&#8217;s <strong>category</strong> to <strong>hazard</strong> will
 be listed in the <em class="guilabel">In the event of</em> combo.
-Similarly, a <strong>category</strong> of <strong>exposure</strong> in the keyw`ords for a layer will
+Similarly, a <strong>category</strong> of <strong>exposure</strong> in the keywords for a layer will
 result in it being listed under the <em class="guilabel">How many</em> combo.</p>
 <p>InaSAFE uses the combination of <strong>category</strong>, <strong>subcategory</strong>, <strong>units</strong>
 and <strong>datatype</strong> keywords to determine which <strong>impact functions</strong> will be
 listed in the <em class="guilabel">Might</em> combo.</p>
+<p>The chosen impact function can be configured (if applicable) by pressing the
+small ellipses (...) button next to the chosen impact function.</p>
+<p>This is explained in more detail below under <a class="reference internal" href="#analysis-parameters"><em>Setting Analysis Parameters</em></a></p>
+<p>As of InaSAFE 1.2, you can now also choose an aggregation layer for both
+raster and vector layers.</p>
+<p>Aggregation allows you to specify an additional layer when defining the
+analysis criteria. This layer will be used to provide a by-area breakdown of
+the results of the analysis. For example if you are carrying out an analysis
+for a city, you can use district areas within the city to provide per-area
+results. In the absence of an aggregation layer, the analysis extent is used
+as the aggregation unit. To use this option you need to load a polygon based
+layer into QGIS that represents the areas you wish to summarise by.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">After running an analysis, the question area is hidden to maximise
+the amount of space allocated to the results area (see below). You can
+re-open the question area at any time by pressing the <em class="guilabel">Show
+question form</em> button.</p>
+</div>
 </div>
 <div class="section" id="the-results-area">
 <h2>The Results Area<a class="headerlink" href="#the-results-area" title="Permalink to this headline">¶</a></h2>
@@ -345,16 +364,19 @@ InaSAFE dock.</p>
 <p>You might have up to 3 tabs visible.</p>
 <blockquote>
 <div><ul class="simple">
-<li>Options: Depending in the Impact function you selected,
+<li><em class="guilabel">Options</em>: Depending in the Impact function you selected,
 you can influence the result of your question here (the Impact Function)
 by setting different initial values which are presented depending on the
 function you choose (Some Impact functions might now be able to be
 influenced).</li>
-<li>Postprocessors: Breaks down the different values inside the</li>
-<li>Minimum Needs: If it is something that effects for eg people it works out
-the minimum needs of the people affected by the impact scenario. To use
-that function you should have the necessary data available and calculate
-this by using the <a class="reference internal" href="toolbar.html#minimum-needs-tool"><em>InaSAFE Minimum Needs Tool</em></a>.</li>
+<li><em class="guilabel">Postprocessors</em>: Takes the results from the impact function and
+calculates derivative indicators, for example if you have an affected
+population total, the Gender postprocessor will calculate gender specific
+indicators such as additional nutritional requirements for pregnant women</li>
+<li><em class="guilabel">Minimum Needs</em>: If it is something that effects for eg people it
+works out the minimum needs of the people affected by the impact scenario.
+To use that function you should have the necessary data available and
+calculate this by using the <a class="reference internal" href="minimum_needs.html#minimum-needs"><em>Minimum Needs Tool</em></a>.</li>
 </ul>
 </div></blockquote>
 <div class="figure align-center">

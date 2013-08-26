@@ -30,8 +30,8 @@
     <script type="text/javascript" src="_static/jQuery.equalHeights.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="InaSAFE Documentation 1.2.0 documentation" href="index.html" />
-    <link rel="next" title="Understand Impact Functions" href="impact_functions.html" />
-    <link rel="prev" title="Options" href="options.html" />
+    <link rel="next" title="Options" href="options.html" />
+    <link rel="prev" title="Using InaSAFE" href="dock.html" />
 
 <style>
     .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
@@ -130,16 +130,16 @@
                 
                 <li class="right"
                  >
-                <a href="impact_functions.html"
-                   title="Understand Impact Functions"
+                <a href="options.html"
+                   title="Options"
                    style="z-index:;"
                 accesskey="N">next</a>
                 </li>
                 
                 <li class="right"
                  >
-                <a href="options.html"
-                   title="Options"
+                <a href="dock.html"
+                   title="Using InaSAFE"
                    style="z-index:;"
                 accesskey="P">previous</a>
                 </li>
@@ -164,7 +164,7 @@
         <div class="span12">
                 
   <div class="section" id="keywords-system">
-<span id="id1"></span><h1>Keywords System<a class="headerlink" href="#keywords-system" title="Permalink to this headline">¶</a></h1>
+<span id="toolbar-keywords"></span><h1>Keywords System<a class="headerlink" href="#keywords-system" title="Permalink to this headline">¶</a></h1>
 <p>This document describes the purpose and usage of the InaSAFE <em>keywords</em>
 system.</p>
 <div class="section" id="purpose">
@@ -172,9 +172,8 @@ system.</p>
 <p>The keywords system is used by the <a class="reference internal" href="impact_functions.html#impact-functions"><em>Impact Functions</em></a>
 to determine the nature of the input layers that have been passed to them.</p>
 <p>Each input GIS dataset used by InaSAFE needs to have an accompanying
-keywords file.
-The purpose of the keywords file is to provide additional metadata needed by
-the impact functions.
+keywords file. The purpose of the keywords file is to provide additional
+metadata needed by the impact functions.
 For example, the keywords file will indicate whether a given dataset should
 be treated as a <em>hazard</em> or an <em>impact</em> layer.
 It is also used to indicate the context of the layer (e.g. &#8220;it&#8217;s a <em>flood</em>
@@ -419,6 +418,11 @@ colons will be replaced with a full stop character.</li>
 <li>All other Keywords and values that do not fit the above domain lists may be
 used but they may produce undesired results.</li>
 </ul>
+</div>
+<div class="section" id="translations">
+<h2>Translations<a class="headerlink" href="#translations" title="Permalink to this headline">¶</a></h2>
+<p>Although InaSAFE is available in different languages, the &#8216;key&#8217; in the
+keywords files should always be written in english.</p>
 </div>
 <div class="section" id="the-keywords-editor-graphical-user-interface">
 <h2>The keywords editor graphical user interface<a class="headerlink" href="#the-keywords-editor-graphical-user-interface" title="Permalink to this headline">¶</a></h2>
