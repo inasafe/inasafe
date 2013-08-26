@@ -82,7 +82,7 @@ class MapTest(unittest.TestCase):
             441541,  # as rendered on ub 13.04 post 17 May 2013
             441563,  # as rendered on ub 13.04 18 Jul 2013
             447217,  # Nadia Linux Mint 14
-            447144,  # as rendered on Jenkins post 29 July 2013
+            447181,  # as rendered on Jenkins post 26 Aug 2013
             447172,  # Windows 7 SP1 AMD64
             446960,  # Windows 8 AMD64
             234138,  # OSX 10.8
