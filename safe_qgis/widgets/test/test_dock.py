@@ -23,7 +23,7 @@ import os
 import logging
 from os.path import join
 
-from unittest import TestCase
+from unittest import TestCase, skipIf
 
 from PyQt4 import QtCore
 
@@ -1009,6 +1009,7 @@ class TestDock(TestCase):
             line = line.replace('\n', '')
             self.assertIn(line, myResult)
 
+    @skipIf(sys.platform == 'win32', "Test cannot run on Windows")
     def test_full_run_qgszstats(self):
         """Aggregation results are correct using native QGIS zonal stats.
 
