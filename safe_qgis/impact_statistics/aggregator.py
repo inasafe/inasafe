@@ -285,9 +285,9 @@ class Aggregator(QtCore.QObject):
 
         myAggrName = self.layer.name()
         if self.aoiMode:
-            myAggrName = myAggrName.toLower()
+            myAggrName = myAggrName.lower()
         myLayerName = str(self.tr('%s aggregated to %s') % (
-            myQGISImpactLayer.name(), myAggrName)
+            myQGISImpactLayer.name(), myAggrName))
 
         #delete unwanted fields
         myProvider = self.layer.dataProvider()

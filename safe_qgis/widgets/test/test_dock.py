@@ -1041,8 +1041,8 @@ class TestDock(TestCase):
         # noinspection PyCallByClass,PyTypeChecker
 
         # use QGIS zonal stats only in the test
-        useNativeZonalStatsFlag = QtCore.QSettings().value(
-            'inasafe/useNativeZonalStats', False).toBool()
+        useNativeZonalStatsFlag = bool(QtCore.QSettings().value(
+            'inasafe/useNativeZonalStats', False))
         QtCore.QSettings().setValue('inasafe/useNativeZonalStats', True)
         DOCK.accept()
         QtCore.QSettings().setValue('inasafe/useNativeZonalStats',
