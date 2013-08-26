@@ -45,6 +45,7 @@ from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.exceptions import FileNotFoundError
 from safe_qgis.safe_interface import temp_dir
 from safe_qgis.utilities.utilities import read_impact_layer
+from safe_qgis.utilities.help import show_context_help
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -113,6 +114,11 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         self.button_box.addButton(
             self.run_selected_button, QDialogButtonBox.ActionRole)
 
+        # Set up things for context help
+        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        QtCore.QObject.connect(
+            help_button, QtCore.SIGNAL('clicked()'), self.show_help)
+
         self.restore_state()
 
     def restore_state(self):
@@ -148,6 +154,10 @@ class BatchDialog(QDialog, Ui_BatchDialogBase):
         mySettings.setValue(
             'inasafe/useDefaultOutputDir',
             self.scenario_directory_radio.isChecked())
+
+    def show_help(self):
+        """Show context help for the batch dialog."""
+        show_context_help('batch_runner')
 
     def choose_directory(self, line_edit, title):
         """ Show a directory selection dialog.
