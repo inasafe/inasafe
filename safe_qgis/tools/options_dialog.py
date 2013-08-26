@@ -52,7 +52,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
-        self.helpDialog = None
         self.keywordIO = KeywordIO()
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)

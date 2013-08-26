@@ -15,8 +15,8 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
-    <widget class="QWebView" name="webView">
-     <property name="url">
+    <widget class="QWebView" name="webView" native="true">
+     <property name="url" stdset="0">
       <url>
        <string>about:blank</string>
       </url>
@@ -168,7 +168,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

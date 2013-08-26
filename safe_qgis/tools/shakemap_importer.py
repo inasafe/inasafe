@@ -31,6 +31,7 @@ from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
 from safe_qgis.safe_interface import get_version, convert_mmi_data
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import html_footer, html_header
 
 
@@ -70,8 +71,16 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         QObject.connect(self.leOutputPath,
                         SIGNAL('textChanged(QString)'),
                         self.on_leOutputPath_textChanged)
+        # Set up things for context help
+        help_button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        QtCore.QObject.connect(help_button, QtCore.SIGNAL('clicked()'),
+                               self.show_help)
 
         self.show_info()
+
+    def show_help(self):
+        """Show context help for the converter dialog."""
+        show_context_help('converter')
 
     def show_info(self):
         """Show usage text to the user."""
