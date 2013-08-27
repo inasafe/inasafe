@@ -78,6 +78,7 @@ from safe_qgis.impact_statistics.postprocessor_manager import (
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     KeywordDbError,
+    NoKeywordsFoundError,
     InsufficientOverlapError,
     InvalidParameterError,
     InsufficientParametersError,
@@ -85,7 +86,10 @@ from safe_qgis.exceptions import (
     CallGDALError,
     NoFeaturesInExtentError,
     InvalidProjectionError,
-    AggregatioError)
+    InvalidGeometryError,
+    AggregatioError,
+    UnsupportedProviderError,
+    InvalidLayerError)
 from safe_qgis.report.map import Map
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
@@ -101,7 +105,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-#from pydev import pydevd  # pylint: disable=F0401
+# from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -126,7 +130,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        #pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -146,6 +150,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.runner = None
         self.state = None
         self.lastUsedFunction = ''
+
+        # Flag used to revent recursion and allow bulk loads of layers to
+        # trigger a single event only
+        self.get_layers_lock = False
+        # Flag so we can see if the dock is busy processing
+        self.busy = False
 
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
@@ -215,16 +225,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def setup_button_connectors(self):
         """Setup signal/slot mechanisms for dock buttons."""
-        myButton = self.pbnHelp
-        QtCore.QObject.connect(
-            myButton, QtCore.SIGNAL('clicked()'), self.show_help)
-        myButton = self.pbnPrint
-        QtCore.QObject.connect(
-            myButton, QtCore.SIGNAL('clicked()'), self.print_map)
-        #self.showHelp()
-        myButton = self.pbnRunStop
-        QtCore.QObject.connect(
-            myButton, QtCore.SIGNAL('clicked()'), self.accept)
+        self.pbnHelp.clicked.connect(self.show_help)
+        self.pbnPrint.clicked.connect(self.print_map)
+        self.pbnRunStop.clicked.connect(self.accept)
 
     def show_static_message(self, message):
         """Send a static message to the message viewer.
@@ -335,20 +338,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         ..seealso:: disconnect_layer_listener
         """
+        registry = QgsMapLayerRegistry.instance()
         if qgis_version() >= 10800:  # 1.8 or newer
-            QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
-                self.get_layers)
-            QgsMapLayerRegistry.instance().layersAdded.connect(
-                self.get_layers)
-        # All versions of QGIS
-        QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(
-            self.get_layers)
-        QgsMapLayerRegistry.instance().layerWasAdded.connect(
-            self.get_layers)
-        self.iface.mapCanvas().layersChanged.connect(
-            self.get_layers)
-        self.iface.currentLayerChanged.connect(
-            self.layer_changed)
+            registry.layersWillBeRemoved.connect(self.get_layers)
+            registry.layersAdded.connect(self.get_layers)
+        else:
+            # All versions of QGIS
+            registry.layerWillBeRemoved.connect(self.get_layers)
+            registry.layerWasAdded.connect(self.get_layers)
+
+        self.iface.mapCanvas().layersChanged.connect(self.get_layers)
+        self.iface.currentLayerChanged.connect(self.layer_changed)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -356,20 +356,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         ..seealso:: connect_layer_listener
         """
+        registry = QgsMapLayerRegistry.instance()
         if qgis_version() >= 10800:  # 1.8 or newer
-            QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(
-                self.get_layers)
-            QgsMapLayerRegistry.instance().layersAdded.disconnect(
-                self.get_layers)
-        # All versions of QGIS
-        QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(
-            self.get_layers)
-        QgsMapLayerRegistry.instance().layerWasAdded.disconnect(
-            self.get_layers)
-        self.iface.mapCanvas().layersChanged.disconnect(
-            self.get_layers)
-        self.iface.currentLayerChanged.disconnect(
-            self.layer_changed)
+            registry.layersWillBeRemoved.disconnect(self.get_layers)
+            registry.layersAdded.disconnect(self.get_layers)
+        else:
+            # All versions of QGIS
+            registry.layerWillBeRemoved.disconnect(self.get_layers)
+            registry.layerWasAdded.disconnect(self.get_layers)
+
+        self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
+        self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
     def getting_started_message(self):
         """Generate a message for initial application state.
@@ -379,7 +376,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myMessage = m.Message()
         myMessage.add(LOGO_ELEMENT)
-        myMessage.add(m.Heading('Getting started -', **INFO_STYLE))
+        myMessage.add(m.Heading('Getting started', **INFO_STYLE))
         myNotes = m.Paragraph(
             self.tr(
                 'To use this tool you need to add some layers to your '
@@ -390,7 +387,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr(
                 'layer (e.g. structures) are available. When you are '
                 'ready, click the '),
-            m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
+            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button below.'))
         myMessage.add(myNotes)
         myMessage.add(m.Heading('Limitations', **WARNING_STYLE))
@@ -428,7 +425,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         myNotes = m.Paragraph(self.tr(
             'You can now proceed to run your model by clicking the'),
-            m.EmphasizedText(self.tr('run'), **KEYWORD_STYLE),
+            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         myMessage = m.Message(LOGO_ELEMENT, myTitle, myNotes)
         return myMessage
@@ -436,10 +433,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def not_ready_message(self):
         """Help to create a message indicating inasafe is NOT ready.
 
+        .. note:: Assumes a valid hazard and exposure layer are loaded.
+
         :returns Message: A localised message indicating we are not ready.
         """
-        # What does this todo mean? TS
-        # TODO refactor impact_functions so it is accessible and user here
         #myHazardFilename = self.getHazardLayer().source()
         myHazardKeywords = QtCore.QString(str(
             self.keywordIO.read_keywords(self.get_hazard_layer())))
@@ -488,6 +485,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             flag,myMessage = self.validate()
         """
+        if self.busy:
+            return False, None
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
@@ -615,43 +614,64 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.showOnlyVisibleLayersFlag:
             self.get_layers()
 
-    @pyqtSlot()
-    def get_layers(self):
-        """Helper function to obtain a list of layers currently loaded in QGIS.
+    def unblock_signals(self):
+        """Let the combos listen for event changes again."""
+        self.cboAggregation.blockSignals(False)
+        self.cboExposure.blockSignals(False)
+        self.cboHazard.blockSignals(False)
 
-        On invocation, this method will populate cboHazard, cboExposure and
-        cboAggregation on the dialog with a list of available layers.
-
-        * Only **singleband raster** layers will be added to the hazard layer
-            list,
-        * Only **point vector** layers will be added to the exposure layer
-            list.
-        * Only **polygon vector** layers will be added to the aggregate
-            list.
-        """
+    def block_signals(self):
+        """Prevent the combos and dock listening for event changes."""
         self.disconnect_layer_listener()
         self.cboAggregation.blockSignals(True)
         self.cboExposure.blockSignals(True)
         self.cboHazard.blockSignals(True)
 
+    @pyqtSlot('QgsMapLayer')
+    @pyqtSlot('QgsMapLayer')
+    def get_layers(self, *args):
+        r"""Obtain a list of layers currently loaded in QGIS.
+
+        On invocation, this method will populate cboHazard, cboExposure and
+        cboAggregation on the dialog with a list of available layers.
+
+        Only **polygon vector** layers will be added to the aggregate list.
+
+        :param args: Arguments that may have been passed to this slot.
+            Typically a list of layers, but depends on which slot or function
+            called this function.
+        :type args: list
+
+        ..note:: \*args is only used for debugging purposes.
+        """
+
+        # Prevent recursion
+        if self.get_layers_lock:
+            return
+
+        for arg in args:
+            LOGGER.debug('get_layer argument: %s' % arg)
+        # Map registry may be invalid if QGIS is shutting down
+        myRegistry = QgsMapLayerRegistry.instance()
+        myCanvasLayers = self.iface.mapCanvas().layers()
+        # MapLayers returns a QMap<QString id, QgsMapLayer layer>
+        myLayers = myRegistry.mapLayers().values()
+
+        # For issue #618
+        if len(myLayers) == 0:
+            self.show_static_message(self.getting_started_message())
+            return
+
+        self.get_layers_lock = True
+
+        # Make sure this comes after the checks above to prevent signal
+        # disconnection without reconnection
+        self.block_signals()
         self.save_state()
         self.cboHazard.clear()
         self.cboExposure.clear()
         self.cboAggregation.clear()
 
-        # Map registry may be invalid if QGIS is shutting down
-        # pylint: disable=W0702
-        # noinspection PyBroadException
-        try:
-            myRegistry = QgsMapLayerRegistry.instance()
-        except:
-            return
-        # pylint: enable=W0702
-
-        myCanvasLayers = self.iface.mapCanvas().layers()
-
-        # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        myLayers = myRegistry.mapLayers().values()
         for myLayer in myLayers:
             if (self.showOnlyVisibleLayersFlag and
                     (myLayer not in myCanvasLayers)):
@@ -668,11 +688,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # noinspection PyBroadException
             try:
                 myTitle = self.keywordIO.read_keywords(myLayer, 'title')
+            except NoKeywordsFoundError:
+                # Skip if there are no keywords at all
+                continue
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
-                self.keywordIO.update_keywords(myLayer, {'title': myName})
-                myTitle = myName
+                try:
+                    self.keywordIO.update_keywords(myLayer, {'title': myName})
+                    myTitle = myName
+                except UnsupportedProviderError:
+                    continue
             else:
                 # Lookup internationalised title if available
                 myTitle = safeTr(myTitle)
@@ -705,10 +731,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             elif myCategory == 'postprocessing':
                 add_ordered_combo_item(self.cboAggregation, myTitle, mySource)
 
-        # Let the combos listen for event changes again...
-        self.cboAggregation.blockSignals(False)
-        self.cboExposure.blockSignals(False)
-        self.cboHazard.blockSignals(False)
+        self.unblock_signals()
         #handle the cboAggregation combo
         self.cboAggregation.insertItem(0, self.tr('Entire area'))
         self.cboAggregation.setCurrentIndex(0)
@@ -722,6 +745,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Note: Don't change the order of the next two lines otherwise there
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
+        self.get_layers_lock = False
 
     def get_functions(self):
         """Obtain a list of impact functions from the impact calculator.
@@ -829,7 +853,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         :returns: None if no aggregation is selected or cboAggregation is
                 disabled, otherwise a polygon layer.
-        :rtype: QgsMapLayer or None
+        :rtype: QgsMapLayer, QgsVectorLayer or None
         """
 
         myNoSelectionValue = 0
@@ -846,7 +870,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         myHazardLayer, myExposureLayer = self.optimal_clip()
         # See if the inputs need further refinement for aggregations
-        self.aggregator.deintersect(myHazardLayer, myExposureLayer)
+        try:
+            self.aggregator.deintersect(myHazardLayer, myExposureLayer)
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
         # Identify input layers
         self.calculator.set_hazard_layer(self.aggregator.hazardLayer.source())
         self.calculator.set_exposure_layer(
@@ -868,7 +895,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.aggregator.layer)
         except AttributeError:
             myOriginalKeywords = {}
-        except InvalidParameterError:
+        except NoKeywordsFoundError:
             #No kw file was found for layer - create an empty one.
             myOriginalKeywords = {}
             self.keywordIO.write_keywords(
@@ -881,13 +908,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.iface,
             self,
             self.aggregator.layer)
-        QtCore.QObject.connect(
-            self.runtimeKeywordsDialog,
-            QtCore.SIGNAL('accepted()'),
-            self.run)
-        QtCore.QObject.connect(
-            self.runtimeKeywordsDialog,
-            QtCore.SIGNAL('rejected()'),
+        self.runtimeKeywordsDialog.accepted.connect(self.run)
+        self.runtimeKeywordsDialog.rejected.connect(
             partial(self.accept_cancelled, myOriginalKeywords))
 
     def accept(self):
@@ -898,7 +920,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-
         myTitle = self.tr('Processing started')
         myDetails = self.tr(
             'Please wait - processing may take a while depending on your '
@@ -1037,6 +1058,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
         QtGui.qApp.processEvents()
+        self.busy = True
 
     def run(self):
         """Execute analysis when ok button on dock is clicked."""
@@ -1093,8 +1115,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'An exception occurred when setting up the model runner.'))
             return
 
-        QtCore.QObject.connect(
-            self.runner, QtCore.SIGNAL('done()'), self.aggregate)
+        self.runner.done.connect(self.aggregate)
 
         self.show_busy()
 
@@ -1162,7 +1183,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.analysis_error(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
-            self.show_dynamic_message(m.Message(str(myReport)))
+            self.show_static_message(m.Message(myReport))
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)
@@ -1179,14 +1200,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
-
-        myTitle = self.tr('Loading results...')
-        myDetail = self.tr(
-            'The impact assessment is complete - loading the results into '
-            'QGIS now...')
-        myMessage = m.Message(m.Heading(myTitle, level=3), myDetail)
-        self.show_dynamic_message(myMessage)
-
         myKeywords = self.keywordIO.read_keywords(theQGISImpactLayer)
 
         #write postprocessing report to keyword
@@ -1196,9 +1209,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.keywordIO.write_keywords(theQGISImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
-        myReport = self.keywordIO.read_keywords(
-            theQGISImpactLayer, 'impact_summary')
-        myReport += impact_attribution(myKeywords).to_html(True)
+        myReport = m.Message()
+        myReport.add(LOGO_ELEMENT)
+        myReport.add(m.Heading(self.tr(
+            'Analysis Results'), **INFO_STYLE))
+        myReport.add(self.keywordIO.read_keywords(
+            theQGISImpactLayer, 'impact_summary'))
 
         # Get requested style for impact layer of either kind
         myStyle = theEngineImpactLayer.get_style_info()
@@ -1228,9 +1244,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 setRasterStyle(theQGISImpactLayer, myStyle)
 
         else:
-            myMessage = self.tr('Impact layer %1 was neither a raster or a '
-                                'vector layer').arg(
-                                    theQGISImpactLayer.source())
+            myMessage = self.tr(
+                'Impact layer %1 was neither a raster or a vector layer').arg(
+                    theQGISImpactLayer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
 
@@ -1250,8 +1266,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.restore_state()
 
         #append postprocessing report
-        myReport += myOutput.to_html()
-
+        myReport.add(myOutput.to_html())
+        # Layer attribution comes last
+        myReport.add(impact_attribution(myKeywords).to_html(True))
         # Return text to display in report panel
         return myReport
 
@@ -1263,16 +1280,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            QtCore.QObject.disconnect(
-                self.runner,
-                QtCore.SIGNAL('done()'),
-                self.aggregate)
+            try:
+                self.runner.done.disconnect(self.aggregate)
+            except TypeError:
+                #happens when object is not connected - see #621
+                pass
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
         self.pbnRunStop.setEnabled(True)
         self.repaint()
         self.disable_busy_cursor()
+        self.busy = False
 
     def aggregate(self):
         """Run all post processing steps.
@@ -1320,12 +1339,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'An exception occurred when calculating the results. %1'
                 ).arg(self.runner.result())
                 myMessage = get_error_message(myException, context=myContext)
+            # noinspection PyTypeChecker
             self.show_error_message(myMessage)
             self.analysisDone.emit(False)
             return
 
         try:
             self.aggregator.aggregate(self.runner.impact_layer())
+        except InvalidGeometryError, e:
+            myMessage = get_error_message(e)
+            self.show_error_message(myMessage)
+            self.analysisDone.emit(False)
+            return
         except Exception, e:  # pylint: disable=W0703
             # noinspection PyPropertyAccess
             e.args = (str(e.args[0]) + '\nAggregation error occurred',)
@@ -1651,14 +1676,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 'you wish to use it as an impact or hazard layer in a '
                 'scenario, please use the keyword editor. You can open'
                 ' the keyword editor by clicking on the ')),
-            m.Image('qrc:/plugins/inasafe/show-keyword-editor.svg'),
+            m.Image('qrc:/plugins/inasafe/show-keyword-editor.svg',
+                    attributes='width=24 height=24'),
             m.Text(self.tr(
-                'icon in the toolbar, or choosing Plugins -> InaSAFE '
-                '-> Keyword Editor from the menus.')))
+                ' icon in the toolbar, or choosing Plugins -> InaSAFE '
+                '-> Keyword Editor from the menu bar.')))
         myReport.add(myContext)
         self.pbnPrint.setEnabled(False)
         self.show_static_message(myReport)
 
+    @pyqtSlot('QgsMapLayer')
     def layer_changed(self, theLayer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,
@@ -1668,6 +1695,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :type theLayer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 
         """
+        # Don't handle this event if we are already handling another layer
+        # addition or removal event.
+        if self.get_layers_lock:
+            return
+
         if theLayer is None:
             LOGGER.debug('Layer is None')
             return
@@ -1682,11 +1714,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         except (KeywordNotFoundError,
                 HashNotFoundError,
-                InvalidParameterError), e:
+                InvalidParameterError,
+                NoKeywordsFoundError):
             self.show_no_keywords_message()
             # Append the error message.
-            myErrorMessage = get_error_message(e)
-            self.show_error_message(myErrorMessage)
+            # myErrorMessage = get_error_message(e)
+            # self.show_error_message(myErrorMessage)
             return
         except Exception, e:
             myErrorMessage = get_error_message(e)
@@ -1774,15 +1807,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMapPdfFilePath is None or myMapPdfFilePath == '':
             self.show_dynamic_message(
                 m.Message(
-                    m.Heading(self.tr('Map Creator'), **ERROR_MESSAGE_SIGNAL),
+                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Printing cancelled!'))))
             return
 
         myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
-        myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myHtmlRenderer = HtmlRenderer(page_dpi=myMap.pageDpi)
         myKeywords = self.keywordIO.read_keywords(self.iface.activeLayer())
-        myHtmlPdfPath = myHtmlRenderer.printImpactTable(
-            myKeywords, theFilename=myTableFilename)
+        myHtmlPdfPath = myHtmlRenderer.print_impact_table(
+            myKeywords, filename=myTableFilename)
 
         try:
             myMap.make_pdf(myMapPdfFilePath)
@@ -1836,6 +1869,34 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFunctionID = str(myItemData.toString())
         return myFunctionID
 
+    def scenario_layer_paths(self, exposure_path, hazard_path, scenario_path):
+        """Calculate the paths for hazard and exposure relative to scenario.
+
+        :param exposure_path: Public path for exposure.
+        :type exposure_path: str
+
+        :param hazard_path: Public path for hazard.
+        :type hazard_path: str
+
+        :param scenario_path: Path to scenario file.
+        :type scenario_path: str
+
+        :return: Relative paths for exposure and hazard.
+        """
+        start_path = os.path.dirname(scenario_path)
+        try:
+            myRelExposurePath = os.path.relpath(exposure_path, start_path)
+        except ValueError, e:
+            LOGGER.info(e.message)
+            myRelExposurePath = exposure_path
+        try:
+            myRelHazardPath = os.path.relpath(hazard_path, start_path)
+        except ValueError, e:
+            LOGGER.info(e.message)
+            myRelHazardPath = hazard_path
+
+        return myRelExposurePath, myRelHazardPath
+
     def save_current_scenario(self, theScenarioFilePath=None):
         """Save current scenario to a text file.
 
@@ -1853,11 +1914,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myHazardLayer = self.get_hazard_layer()
         myAggregationLayer = self.get_aggregation_layer()
         myFunctionId = self.get_function_id(self.cboFunction.currentIndex())
-        myMapCanvas = self.iface.mapCanvas()
-        myExtent = myMapCanvas.extent()
-        myExtentStr = str(myExtent.toString())
-        myExtentStr = myExtentStr.replace(',', ', ')
-        myExtentStr = myExtentStr.replace(' : ', ', ')
+        myExtent = viewport_geo_array(self.iface.mapCanvas())
+        # make it look like this:
+        # 109.829170982, -8.13333290561, 111.005344795, -7.49226294379
+        myExtentStr = ', '.join(('%f' % x) for x in myExtent)
 
         # Checking f exposure and hazard layer is not None
         if myExposureLayer is None:
@@ -1894,25 +1954,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         mySettings = QSettings()
         lastSaveDir = mySettings.value('inasafe/lastSourceDir', '.')
         lastSaveDir = str(lastSaveDir.toString())
+        default_name = myTitle.replace(
+            ' ', '_').replace('(', '').replace(')', '')
         if theScenarioFilePath is None:
             # noinspection PyCallByClass,PyTypeChecker
             myFileName = str(QFileDialog.getSaveFileName(
                 self, myTitleDialog,
-                os.path.join(lastSaveDir, myTitle + '.txt'),
+                os.path.join(lastSaveDir, default_name + '.txt'),
                 "Text files (*.txt)"))
         else:
             myFileName = theScenarioFilePath
 
-        try:
-            myRelExposurePath = os.path.relpath(myExposurePath, myFileName)
-        except ValueError:
-            myRelExposurePath = myExposurePath
-        try:
-            myRelHazardPath = os.path.relpath(myHazardPath, myFileName)
-        except ValueError:
-            myRelHazardPath = myHazardPath
-
-        # write to file
+        myRelExposurePath, myRelHazardPath = self.scenario_layer_paths(
+            myExposurePath, myHazardPath, myFileName)
+        #  write to file
         myParser = ConfigParser()
         myParser.add_section(myTitle)
         myParser.set(myTitle, 'exposure', myRelExposurePath)

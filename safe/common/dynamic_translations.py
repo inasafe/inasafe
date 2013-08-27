@@ -1,3 +1,4 @@
+# coding=utf-8
 """Lookup table mapping layer titles to translatable strings
 
 Layer titles are kept in the associated keywords files. However,
@@ -178,3 +179,6 @@ def dynamic_translations():
     tr('aggregation')
     tr('building type')
     tr('aggregation categorical')
+
+    # Aggregation
+    tr('Area')

@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import (QtGui, QtCore, QtWebKit,)
+from PyQt4 import QtGui, QtCore, QtWebKit
 from safe_qgis.ui.function_browser_base import Ui_FunctionBrowserBase
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import (
@@ -87,6 +87,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
         QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
                                self.show_help)
         # Combo box change event
+        # TODO - change these to new style connects TS
         QtCore.QObject.connect(
             self.comboBox_id,
             QtCore.SIGNAL('currentIndexChanged(int)'),
@@ -196,7 +197,7 @@ class FunctionBrowser(QtGui.QDialog, Ui_FunctionBrowserBase):
 
         :param message: An html snippet (typically a table in this context)
             to display.
-        :type message: str
+        :type message: str or QString
         """
         myHtml = html_header() + message + html_footer()
         self.webView.setHtml(myHtml)

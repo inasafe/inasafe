@@ -1,5 +1,5 @@
 """InaSAFE Disaster risk assessment tool developed by AusAid -
-  **ISClipper implementation.**
+  *SClipper implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -20,7 +20,7 @@ import os
 import tempfile
 import logging
 
-from PyQt4.QtCore import QProcess, QVariant
+from PyQt4.QtCore import QProcess
 from qgis.core import (
     QGis,
     QgsCoordinateTransform,
@@ -35,7 +35,7 @@ from qgis.core import (
 
 from safe_qgis.safe_interface import (
     verify,
-    readKeywordsFromFile,
+    read_file_keywords,
     temp_dir)
 
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -267,14 +267,9 @@ def _clip_vector_layer(
     myCount = 0
     myHasMultipart = False
 
-    if explode_attribute is not None:
-        theExplodeAttributeIndex = myProvider.fieldNameIndex(
-            explode_attribute)
-
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
-        if explode_attribute is not None:
-            myAttrs = myFeature.attributeMap()
+
         # Loop through the parts adding them to the output file
         # we write out single part features unless explode_flag is False
         if explode_flag:
@@ -296,10 +291,6 @@ def _clip_vector_layer(
             # explode_attribute
             if myPartIndex > 0 and explode_attribute is not None:
                 myHasMultipart = True
-                myPartAttr = QVariant(
-                    '%s #%s' % (myAttrs[theExplodeAttributeIndex].toString(),
-                                myPartIndex))
-                myFeature.changeAttribute(theExplodeAttributeIndex, myPartAttr)
 
             myWriter.addFeature(myFeature)
         myCount += 1
@@ -319,7 +310,7 @@ def _clip_vector_layer(
     myKeywordIO = KeywordIO()
     if extra_keywords is None:
         extra_keywords = {}
-    extra_keywords['HAD_MULTIPART_POLY'] = myHasMultipart
+    extra_keywords['had multipart polygon'] = myHasMultipart
     myKeywordIO.copy_keywords(
         layer, myFilename, extra_keywords=extra_keywords)
     myBaseName = '%s clipped' % layer.name()
@@ -465,7 +456,7 @@ def _clip_raster_layer(
     # FIXME (Ole): Need to deal with it - e.g. by automatically reprojecting
     # the layer at this point and setting the native resolution accordingly
     # in its keywords.
-    myKeywords = readKeywordsFromFile(myKeywordsPath)
+    myKeywords = read_file_keywords(myKeywordsPath)
     if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
         if str(theLayer.crs().authid()) != 'EPSG:4326':
 
@@ -499,14 +490,14 @@ def _clip_raster_layer(
     # Use the first matching gdalwarp found
     myBinary = myBinaryList[0]
     if theCellSize is None:
-        myCommand = ('%s -q -t_srs EPSG:4326 -r near '
+        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myBinary,
                                     myClipKml,
                                     myWorkingLayer,
                                     myFilename))
     else:
-        myCommand = ('%s -q -t_srs EPSG:4326 -r near -tr %f %f '
+        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near -tr %f %f '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myBinary,
                                     theCellSize,
@@ -528,7 +519,7 @@ def _clip_raster_layer(
             % (myCommand, myMessageDetail))
         raise CallGDALError(myMessage)
     elif myResult == -1:  # process crashed
-        myMessageDetail = tr('Process could not be started.')
+        myMessageDetail = tr('Process crashed.')
         myMessage = tr('<p>Error while executing the following shell command:'
                        '</p><pre>%s</pre><p>Error message: %s'
                        % (myCommand, myMessageDetail))

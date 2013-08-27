@@ -22,6 +22,7 @@ __copyright__ += 'Disaster Reduction'
 import logging
 import os
 
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature, SIGNAL, QObject
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
@@ -30,6 +31,7 @@ from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
 from safe_qgis.safe_interface import get_version, convert_mmi_data
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import html_footer, html_header
 
 
@@ -69,8 +71,17 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         QObject.connect(self.leOutputPath,
                         SIGNAL('textChanged(QString)'),
                         self.on_leOutputPath_textChanged)
+        # Set up things for context help
+        help_button = self.buttonBox.button(QDialogButtonBox.Help)
+        QObject.connect(help_button,
+                        SIGNAL('clicked()'),
+                        self.show_help)
 
         self.show_info()
+
+    def show_help(self):
+        """Show context help for the converter dialog."""
+        show_context_help('converter')
 
     def show_info(self):
         """Show usage text to the user."""
@@ -194,9 +205,15 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         else:
             my_algorithm = 'invdist'
 
-        fileName = convert_mmi_data(input_path, output_path,
-                                    the_algorithm=my_algorithm,
-                                    algorithm_name=False)
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
+        fileName = convert_mmi_data(
+            input_path, output_path,
+            algorithm=my_algorithm,
+            algorithm_filename_flag=False)
+
+        QtGui.qApp.restoreOverrideCursor()
+
         if self.cBLoadLayer.isChecked():
             fileInfo = QFileInfo(fileName)
             baseName = fileInfo.baseName()

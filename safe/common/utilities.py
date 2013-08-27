@@ -180,7 +180,8 @@ try:
     # for monkey patching safe.common.utilities with a replacement
     # get_defaults when safe_qgis initialises....Tim (June 2013)
     # noinspection PyUnresolvedReferences
-    from safe_qgis.utilities.utilities import defaults as get_qgis_defaults
+    from safe_qgis.utilities.utilities import (
+        breakdown_defaults as get_qgis_defaults)
 
     def get_defaults(default=None):
         return get_qgis_defaults(theDefault=default)
@@ -461,6 +462,7 @@ def get_significant_decimal(my_decimal):
 
 def humanize_class(my_classes):
     """Return humanize interval of an array
+    
     For example::
 
         Original Array:                     Result:
@@ -513,6 +515,25 @@ def unhumanize_class(my_classes):
                           format_decimal(interval, max_value)))
         min_value = max_value
     return my_result
+
+
+def unhumanize_number(number):
+    """Return number without formatting.
+    if something goes wrong in the conversion just return the passed number
+    We catch AttributeError in case the number has no replace method which
+    means it is not a string but already an int or float
+    We catch ValueError if number is a sting but not parseable to a number
+    like the 'no data' case
+
+    @param number:
+    """
+    try:
+        number = number.replace(get_thousand_separator(), '')
+        number = int(float(number))
+    except (AttributeError, ValueError):
+        pass
+
+    return number
 
 
 def create_classes(my_list, num_classes):

@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
@@ -22,24 +23,25 @@ import os
 import logging
 from os.path import join
 
+from unittest import TestCase, skipIf
+
+from PyQt4 import QtCore
+
 from safe_qgis.safe_interface import temp_dir, unique_filename
+from safe.common.testing import TESTDATA, BOUNDDATA
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
-
-from PyQt4 import QtCore
-from PyQt4.QtTest import QTest
-
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
     QgsMapLayerRegistry,
     QgsRectangle)
 from safe_qgis.safe_interface import (
-    format_int, HAZDATA, TESTDATA, UNITDATA)
+    format_int, HAZDATA, UNITDATA)
 
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
@@ -95,8 +97,8 @@ TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
 
 
 #noinspection PyArgumentList
-class DockTest(unittest.TestCase):
-    """Test the InaSAFE GUI"""
+class TestDock(TestCase):
+    """Test the InaSAFE GUI."""
 
     def setUp(self):
         """Fixture run before all tests"""
@@ -406,8 +408,7 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         myButton = DOCK.pbnRunStop
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
@@ -643,12 +644,12 @@ class DockTest(unittest.TestCase):
         # Press RUN
         myButton = DOCK.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         printButton = DOCK.pbnPrint
 
         try:
             # noinspection PyCallByClass,PyTypeChecker
-            QTest.mouseClick(printButton, QtCore.Qt.LeftButton)
+            printButton.click()
         except OSError:
             LOGGER.debug('OSError')
             # pass
@@ -705,8 +706,7 @@ class DockTest(unittest.TestCase):
         #assert (len(myTransparencyList) > 0)
 
     def test_issue47(self):
-        """Issue47: Problem when hazard & exposure data are in different
-        proj to viewport.
+        """Issue47: Hazard & exposure data are in different proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
         myResult, myMessage = setup_scenario(
@@ -723,13 +723,14 @@ class DockTest(unittest.TestCase):
 
         # Press RUN
         DOCK.accept()
+
         myResult = DOCK.wvResults.page_to_text()
 
         myMessage = 'Result not as expected: %s' % myResult
         assert format_int(2366) in myResult, myMessage
 
     def test_issue45(self):
-        """Points near the edge of a raster hazard layer are interpolated OK"""
+        """Points near the edge of a raster hazard layer are interpolated."""
 
         myButton = DOCK.pbnRunStop
         set_canvas_crs(GEOCRS, True)
@@ -816,10 +817,8 @@ class DockTest(unittest.TestCase):
         myClearFlag = False
         _, _ = load_layers(myFileList, myClearFlag)
         # set exposure to : Population Density Estimate (5kmx5km)
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        # by moving one down
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         myDict = get_ui_state(DOCK)
         myExpectedDict = {'Run Button Enabled': False,
                           'Impact Function Id': '',
@@ -835,10 +834,7 @@ class DockTest(unittest.TestCase):
 
         # Now select again a valid layer and the run button
         # should be enabled
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() - 1)
         myMessage = ('Run button was not enabled when exposure set to \n%s' %
                      DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
@@ -928,20 +924,14 @@ class DockTest(unittest.TestCase):
         """Check if the save/restore state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        # noinspection PyCallByClass,PyTypeChecker
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         DOCK.save_state()
         myExpectedDict = get_ui_state(DOCK)
         #myState = DOCK.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
         DOCK.restore_state()
         myResultDict = get_ui_state(DOCK)
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -962,42 +952,33 @@ class DockTest(unittest.TestCase):
             myFileList, data_directory=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
+        DOCK.cboFunction.setCurrentIndex(1)
         DOCK.cboHazard.setCurrentIndex(0)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
+        DOCK.cboExposure.setCurrentIndex(0)
         myExpectedFunction = str(DOCK.cboFunction.currentText())
         # Now move down one hazard in the combo then verify
         # the function remains unchanged
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        DOCK.cboHazard.setCurrentIndex(1)
         myCurrentFunction = str(DOCK.cboFunction.currentText())
-        myMessage = ('Expected selected impact function to remain unchanged '
-                     'when choosing a different hazard of the same category:'
-                     ' %s\nExpected: %s\n%s' % (myExpectedFunction,
-                                                myCurrentFunction,
-                                                combos_to_string(DOCK)))
+        myMessage = (
+            'Expected selected impact function to remain unchanged when '
+            'choosing a different hazard of the same category:'
+            ' %s\nExpected: %s\n%s' % (
+                myExpectedFunction, myCurrentFunction, combos_to_string(DOCK)))
 
         assert myExpectedFunction == myCurrentFunction, myMessage
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        # noinspection PyTypeChecker,PyCallByClass
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        DOCK.cboHazard.setCurrentIndex(0)
         # Selected function should remain the same
         myExpectation = 'Need evacuation'
         myFunction = DOCK.cboFunction.currentText()
         myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
         assert myFunction == myExpectation, myMessage
 
-    def test_fullRunResults(self):
-        """Aggregation results are correct."""
-        myExpectedResult = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results.txt',
-            'r').read()
+    def test_full_run_pyzstats(self):
+        """Aggregation results correct using our own python zonal stats code.
+        """
+        myFileList = ['kabupaten_jakarta.shp']
+        load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
 
         myResult, myMessage = setup_scenario(
             DOCK,
@@ -1005,7 +986,7 @@ class DockTest(unittest.TestCase):
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
         assert myResult, myMessage
 
@@ -1015,12 +996,69 @@ class DockTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        DOCK.runtimeKeywordsDialog.accept()
 
         myResult = DOCK.wvResults.page_to_text()
-        myMessage = ('The aggregation report should be:\n%s\n\nFound:\n\n%s' %
-                     (myExpectedResult, myResult))
-        self.assertEqual(myResult, myExpectedResult, myMessage)
+
+        myExpectedResult = open(
+            TEST_FILES_DIR +
+            '/test-full-run-results.txt',
+            'r').readlines()
+        myResult = myResult.replace(
+            '</td> <td>', ' ').replace('</td><td>', ' ')
+        for line in myExpectedResult:
+            line = line.replace('\n', '')
+            self.assertIn(line, myResult)
+
+    @skipIf(sys.platform == 'win32', "Test cannot run on Windows")
+    def test_full_run_qgszstats(self):
+        """Aggregation results are correct using native QGIS zonal stats.
+
+        .. note:: We know this is going to fail (hence the decorator) as
+            QGIS1.8 zonal stats are broken. We expect this to pass when we
+            have ported to the QGIS 2.0 api at which time we can remove the
+            decorator. TS July 2013
+
+        """
+
+        # TODO check that the values are similar enough to the python stats
+        myFileList = ['kabupaten_jakarta.shp']
+        load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
+
+        myResult, myMessage = setup_scenario(
+            DOCK,
+            hazard='A flood in Jakarta like in 2007',
+            exposure='People',
+            function='Need evacuation',
+            function_id='Flood Evacuation Function',
+            aggregation_layer='kabupaten jakarta',
+            aggregation_enabled_flag=True)
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        set_canvas_crs(GEOCRS, True)
+        set_jakarta_extent()
+        # Press RUN
+        # noinspection PyCallByClass,PyTypeChecker
+
+        # use QGIS zonal stats only in the test
+        useNativeZonalStatsFlag = QtCore.QSettings().value(
+            'inasafe/useNativeZonalStats', False).toBool()
+        QtCore.QSettings().setValue('inasafe/useNativeZonalStats', True)
+        DOCK.accept()
+        QtCore.QSettings().setValue('inasafe/useNativeZonalStats',
+                                    useNativeZonalStatsFlag)
+
+        myResult = DOCK.wvResults.page_to_text()
+
+        myExpectedResult = open(
+            TEST_FILES_DIR +
+            '/test-full-run-results-qgis.txt',
+            'r').readlines()
+        myResult = myResult.replace(
+            '</td> <td>', ' ').replace('</td><td>', ' ')
+        for line in myExpectedResult:
+            line = line.replace('\n', '')
+            self.assertIn(line, myResult)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
@@ -1263,16 +1301,54 @@ Click for Diagnostic Information:
             'jakarta_flood_category_123.asc'), 'Hazard is not the same'
         assert myFunction == 'function = Categorised Hazard Population ' \
                              'Impact Function', 'Impact function is not same'
-        assert myExtent == 'extent = 106.3133333333333326, ' \
-                           '-6.3799999999999999, 107.3466666666666640, ' \
-                           '-6.0700000000000003', 'Extent is not same'
+        myExpectedExtent = (
+            'extent = 106.313333, -6.380000, 107.346667, -6.070000')
+        self.assertEqual(myExpectedExtent, myExtent)
 
     def test_set_dock_title(self):
         """Test the dock title gets set properly."""
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
 
+    def test_scenario_layer_paths(self):
+        """Test we calculate the relative paths correctly when saving scenario.
+        """
+        myResult, myMessage = setup_scenario(
+            DOCK,
+            hazard='Flood in Jakarta',
+            exposure='Penduduk Jakarta',
+            function='Be impacted',
+            function_id='Categorised Hazard Population Impact Function')
+        assert myResult, myMessage
+        fake_dir = os.path.dirname(TESTDATA)
+        myScenarioFile = unique_filename(
+            prefix='scenarioTest', suffix='.txt', dir=fake_dir)
+        myExposureLayer = str(DOCK.get_exposure_layer().publicSource())
+        myHazardLayer = str(DOCK.get_hazard_layer().publicSource())
+
+        relative_exposure, relative_hazard = DOCK.scenario_layer_paths(
+            myExposureLayer,
+            myHazardLayer,
+            myScenarioFile)
+
+        if 'win32' in sys.platform:
+            # windows
+            self.assertEqual(
+                'test\\Population_Jakarta_geographic.asc',
+                relative_exposure)
+            self.assertEqual(
+                'hazard\\jakarta_flood_category_123.asc',
+                relative_hazard)
+
+        else:
+            self.assertEqual(
+                'test/Population_Jakarta_geographic.asc',
+                relative_exposure)
+            self.assertEqual(
+                'hazard/jakarta_flood_category_123.asc',
+                relative_hazard)
+
 if __name__ == '__main__':
-    suite = unittest.makeSuite(DockTest)
+    suite = unittest.makeSuite(TestDock)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

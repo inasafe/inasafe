@@ -1,4 +1,4 @@
-"""Impact function based on ITB vulnerability model
+"""Impact function based on ITB vulnerability model.
 
    This model was developed by Institut Teknologi Bandung (ITB) and
    implemented by Dr. Hyeuk Ryu, Geoscience Australia.
@@ -27,7 +27,7 @@ import os
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
-from safe.common.numerics import lognormal_cdf
+from safe.common.numerics import log_normal_cdf
 from safe.common.utilities import ugettext as tr
 from safe.common.utilities import verify
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -86,6 +86,8 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
     def run(self, layers):
         """Risk plugin for Padang building survey
+        :param layers: Hazard and exposure layers in a list
+        :type layers: list
         """
 
         # Extract data
@@ -133,7 +135,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
             msg = 'Invalid parameter value for ' + building_type
             verify(beta + median > 0.0, msg)
-            percent_damage = lognormal_cdf(mmi,
+            percent_damage = log_normal_cdf(mmi,
                                            median=median,
                                            sigma=beta) * 100
 

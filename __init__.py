@@ -48,7 +48,7 @@ def description():
 
 def version():
     """Version of the plugin."""
-    return 'Version 1.2.0-7'
+    return 'Version 1.2.0-9'
 
 
 def qgisMinimumVersion():
@@ -61,13 +61,8 @@ def icon():
     return 'icon.png'
 
 
+# noinspection PyDocstring
 def classFactory(iface):
-    """Load Plugin class from file Plugin"""
-
-    # Try loading the FunctionProvider
-    # from impact_functions.core import FunctionProvider
-    # FIXME (TD): reload doesn't seem to reload the plugins
-
-    #logger.debug("reload core 3")
+    """Load Plugin class from file Plugin."""
     from safe_qgis.plugin import Plugin
     return Plugin(iface)

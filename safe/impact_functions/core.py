@@ -6,14 +6,19 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-import numpy
+
 import logging
+from math import ceil
+
+import numpy
+from third_party.odict import OrderedDict
+
 import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string, remove_double_spaces
-from third_party.odict import OrderedDict
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -22,6 +27,7 @@ LOGGER = logging.getLogger('InaSAFE')
 # for managing the plugin system devised by Ted Dunstone
 # pylint: disable=W0613,C0203
 class PluginMount(type):
+    """Mount point for a plugin (impact function)."""
     def __init__(cls, name, bases, attrs):
         if not hasattr(cls, 'plugins'):
             # This branch only executes when processing the mount point itself.
@@ -55,28 +61,106 @@ class FunctionProvider:
     symbol_field = 'USE_MAJOR'
 
 
+def default_minimum_needs():
+    """Helper to get the default minimum needs.
+
+    .. note:: Key names will be translated.
+    """
+    rice = tr('Rice')
+    drinking_water = tr('Drinking Water')
+    water = tr('Water')
+    family_kits = tr('Family Kits')
+    toilets = tr('Toilets')
+    minimum_needs = OrderedDict([
+        (rice, 2.8),
+        (drinking_water, 17.5),
+        (water, 105),
+        (family_kits, 0.2),
+        (toilets, 0.05)])
+    return minimum_needs
+
+
+def evacuated_population_weekly_needs(population,
+                                      minimum_needs=False,
+                                      human_names=False):
+    """Calculate estimated needs using BNPB Perka 7/2008 minimum bantuan.
+
+
+    :param population: The number of evacuated population.
+    :type: int, float
+
+    :param minimum_needs: Ratios to use when calculating minimum needs.
+        Defaults to perka 7 as described in assumptions below.
+    :type minimum_needs: dict
+
+    :returns: The weekly needs for the evacuated population.
+    :rtype: dict
+
+    Assumptions:
+    * 400g rice per person per day
+    * 2.5L drinking water per person per day
+    * 15L clean water per person per day
+    * assume 5 people per family (not in perka - 0.2 people per family)
+    * 20 people per toilet (0.05 per person)
+    """
+    rice = tr('Rice')
+    drinking_water = tr('Drinking Water')
+    water = tr('Water')
+    family_kits = tr('Family Kits')
+    toilets = tr('Toilets')
+    if not minimum_needs:
+        minimum_needs = default_minimum_needs()
+
+    min_rice = minimum_needs[rice]
+    min_drinking_water = minimum_needs[drinking_water]
+    min_water = minimum_needs[water]
+    min_family_kits = minimum_needs[family_kits]
+    min_toilets = minimum_needs[toilets]
+
+    val_rice = int(ceil(population * min_rice))
+    val_drinking_water = int(ceil(population * min_drinking_water))
+    val_water = int(ceil(population * min_water))
+    val_family_kits = int(ceil(population * min_family_kits))
+    val_toilets = int(ceil(population * min_toilets))
+
+    if human_names:
+        weekly_needs = {
+            rice: val_rice,
+            drinking_water: val_drinking_water,
+            water: val_water,
+            family_kits: val_family_kits,
+            toilets: val_toilets}
+    else:
+        weekly_needs = {
+            'rice': val_rice,
+            'drinking_water': val_drinking_water,
+            'water': val_water,
+            'family_kits': val_family_kits,
+            'toilets': val_toilets}
+
+    return weekly_needs
+
+
 def get_function_title(func):
     """Get title for impact function
 
-    Input
-        func: Impact function class
+    :param func: Impact function class
 
-    Output
-        it's title if available as an attribute in the class description,
-        otherwise what is returned by the function pretty_function_name.
+    :returns:  It's title if available as an attribute in the class
+        description, otherwise what is returned by the function
+        pretty_function_name.
+    :rtype: str
     """
-
-    myTitle = None
     if hasattr(func, 'title'):
-        myTitle = func.title
+        title = func.title
     else:
-        myTitle = pretty_function_name(func)
+        title = pretty_function_name(func)
 
-    return tr(myTitle)
+    return tr(title)
 
 
 def get_plugins(name=None):
-    """Retrieve a list of plugins that match the name you pass
+    """Retrieve a list of plugins that match the name you pass.
 
        Or all of them if no name is passed.
     """
@@ -89,8 +173,8 @@ def get_plugins(name=None):
 
     if isinstance(name, basestring):
         # Add the names
-        plugins_dict.update(dict([(p.__name__, p)
-                                  for p in FunctionProvider.plugins]))
+        plugins_dict.update(
+            dict([(p.__name__, p) for p in FunctionProvider.plugins]))
 
         msg = ('No plugin named "%s" was found. '
                'List of available plugins is: %s'
@@ -731,20 +815,20 @@ def get_unique_values():
     return dict_retval
 
 
-def get_documentation(func):
-    """Collect documentaion of a impact function and return it as a dictionary
+def get_metadata(func):
+    """Collect metadata for an impact function and return it as a dictionary.
 
-        Args:
-            * func : name of function
-        Returns:
-            * Dictionary contains:
-                author : string (identified by :author)
-                synopsis : string (first line)
-                rating : integer (identified by :rating)
-                param_req : list of param (identified by :param requires)
-                detail : detail description (function properties)
-                citation : list of citation in string (function properties)
-                limitation : string (function properties)
+    :param func: Name of function.
+
+    :returns: A dictionary containing:
+        * author : string (identified by :author)
+        * synopsis : string (first line)
+        * rating : integer (identified by :rating)
+        * param_req : list of param (identified by :param requires)
+        * detail : detail description (function properties)
+        * citation : list of citation in string (function properties)
+        * limitation : string (function properties)
+    :rtype: dict
     """
     retval = OrderedDict()
     retval['unique_identifier'] = func

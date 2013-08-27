@@ -33,9 +33,10 @@ from safe_qgis.utilities.utilities import (
     get_error_message,
     is_polygon_layer,
     layer_attribute_names,
-    defaults)
+    breakdown_defaults)
 
-from safe_qgis.exceptions import InvalidParameterError, HashNotFoundError
+from safe_qgis.exceptions import (
+    InvalidParameterError, HashNotFoundError, NoKeywordsFoundError)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -102,7 +103,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                self.show_help)
 
         # set some inital ui state:
-        self.defaults = defaults()
+        self.defaults = breakdown_defaults()
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
@@ -588,6 +589,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.remove_item_by_key('subcategory')
         self.remove_item_by_key('datatype')
         self.remove_item_by_key('unit')
+        self.remove_item_by_key('source')
         if not primary_keywords_only:
             # Clear everything else too
             self.lstKeywords.clear()
@@ -661,7 +663,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         try:
             # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.read_keywords(self.layer)
-        except (InvalidParameterError, HashNotFoundError):
+        except (InvalidParameterError,
+                HashNotFoundError,
+                NoKeywordsFoundError):
             pass
 
         myLayerName = self.layer.name()

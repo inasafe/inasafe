@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import tempfile
 
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QSettings, pyqtSignature
 from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
 from PyQt4.QtNetwork import QNetworkAccessManager
@@ -29,6 +30,7 @@ from safe_qgis.exceptions import CanceledImportDialogError, ImportDialogError
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.utilities import (
     download_url, html_footer, html_header)
+from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
 
 INFO_STYLE = styles.INFO_STYLE
@@ -60,6 +62,10 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         self.progressDialog.setAutoClose(False)
         myTitle = self.tr("InaSAFE OpenStreetMap Downloader")
         self.progressDialog.setWindowTitle(myTitle)
+        # Set up context help
+        helpButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
+                               self.show_help)
 
         self.show_info()
 
@@ -122,6 +128,10 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
         mySetting = QSettings()
         mySetting.setValue('directory', self.outDir.text())
 
+    def show_help(self):
+        """Load the help text for the dialog."""
+        show_context_help('openstreetmap_downloader')
+
     def update_extent(self):
         """ Update extent value in GUI based from value in map."""
         myExtent = self.iface.mapCanvas().extent()
@@ -177,7 +187,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         myTitle = self.tr("Directory %1 not exist").arg(myDir)
         myQuestion = self.tr(
-            "Directory %1 not exist. Are you want to create it?"
+            "Directory %1 not exist. Do you want to create it?"
         ).arg(myDir)
         # noinspection PyCallByClass,PyTypeChecker
         myAnswer = QMessageBox.question(

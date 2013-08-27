@@ -75,8 +75,8 @@ done
 if [ $UPDATE == true ]
 # retrieve all python files in safe_qgis and realtime
 then
-  python_safe_qgis=`find safe_qgis/ -regex ".*\(ui\|py\)$"`
-  python_realtime=`find realtime/ -regex ".*\(ui\|py\)$"`
+  python_safe_qgis=`find safe_qgis/ -regex ".*\(ui\|py\)$" -type f`
+  python_realtime=`find realtime/ -regex ".*\(ui\|py\)$" -type f`
   # concat list of files
   python_all="$python_safe_qgis $python_realtime"
 
@@ -87,6 +87,7 @@ then
     echo "safe_qgis/i18n/inasafe_"$LOCALE".ts"
     # Note we don't use pylupdate with qt .pro file approach as it is flakey
     # about what is made available.
+    set -x
     pylupdate4 -noobsolete $python_all -ts safe_qgis/i18n/inasafe_${LOCALE}.ts
   done
 else

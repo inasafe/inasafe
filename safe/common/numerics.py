@@ -1,3 +1,4 @@
+# coding=utf-8
 """**Numerical tools**
 """
 
@@ -8,20 +9,26 @@ from utilities import verify
 def ensure_numeric(A, typecode=None):
     """Ensure that sequence is a numeric array.
 
-    Args:
-        * A: Sequence. If A is already a numeric array it will be returned
-                       unaltered
-                       If not, an attempt is made to convert it to a numeric
-                       array
-        * A: Scalar.   Return 0-dimensional array containing that value. Note
-                       that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy.
-        * A: String.   Array of ASCII values (numpy can't handle this)
+    :param A: Is one of the following:
 
-        * typecode:    numeric type. If specified, use this in the conversion.
-                     If not, let numeric package decide.
-                     typecode will always be one of num.float, num.int, etc.
+        * Sequence. If A is already a numeric array it will be returned
+                    unaltered
+                    If not, an attempt is made to convert it to a numeric
+                    array
+        * Scalar.   Return 0-dimensional array containing that value. Note
+                    that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy.
+        * String.   Array of ASCII values (numpy can't handle this)
 
-    Note :
+    :param typecode: numeric type. If specified, use this in the conversion.
+                    If not, let numeric package decide.
+                    typecode will always be one of num.float, num.int, etc.
+
+    :raises: Exception
+
+    :returns: An array of A if it is found to be of a numeric type
+    :rtype: numpy.ndarray
+
+    .. note::
         that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to
         copy only when required.
 
@@ -43,14 +50,25 @@ def ensure_numeric(A, typecode=None):
         return numpy.array(A, dtype=typecode, copy=False)
 
 
-def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
-    """Numpy allclose function which allows NaN
+def nan_allclose(x, y, rtol=1.0e-5, atol=1.0e-8):
+    """Does element comparison within a tolerance, excludes overlapped NaN.
 
-    Args:
-        * x, y: Either scalars or numpy arrays
+    :param x: scalar or numpy array
+    :type x: numpy.ndarray, float
 
-    Returns:
-        * True or False
+    :param y: scalar or numpy array
+    :type y: numpy.ndarray, float
+
+    :param rtol: The relative tolerance parameter
+    :type rtol: float
+
+    :param atol: The absolute tolerance parameter
+    :type atol: float
+
+    :raises:
+
+    :returns: The result of the allclose on non NaN elments
+    :rtype: bool
 
     Note:
         Returns True if all non-nan elements pass.
@@ -79,13 +97,17 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 def normal_cdf(x, mu=0, sigma=1):
     r"""Cumulative Normal Distribution Function
 
-    Args:
-        * x: scalar or array of real numbers
-        * mu: Mean value. Default 0
-        * sigma: Standard deviation. Default 1
+    :param x: scalar or array of real numbers
+    :type x: numpy.ndarray, float
 
-    Returns:
-        * An approximation of the cdf of the normal
+    :param mu: Mean value. Default 0
+    :type mu: float, numpy.ndarray
+
+    :param sigma: Standard deviation. Default 1
+    :type sigma: float
+
+    :returns: An approximation of the cdf of the normal
+    :rtype: numpy.ndarray
 
     Note:
         CDF of the normal distribution is defined as
@@ -100,18 +122,22 @@ def normal_cdf(x, mu=0, sigma=1):
     return res
 
 
-def lognormal_cdf(x, median=1, sigma=1):
+def log_normal_cdf(x, median=1, sigma=1):
     r"""Cumulative Log Normal Distribution Function
 
-    Args:
-        * x: scalar or array of real numbers
-        * mu: Median (exp(mean of log(x)). Default 1
-        * sigma: Log normal standard deviation. Default 1
+    :param x: scalar or array of real numbers
+    :type x: numpy.ndarray, float
 
-    Returns:
-        * An approximation of the cdf of the normal
+    :param median: Median (exp(mean of log(x)). Default 1
+    :type median: float
 
-    Note:
+    :param sigma: Log normal standard deviation. Default 1
+    :type sigma: float
+
+    :returns: An approximation of the cdf of the normal
+    :rtype: numpy.ndarray
+
+    .. note::
         CDF of the normal distribution is defined as
         \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
 
@@ -121,8 +147,15 @@ def lognormal_cdf(x, median=1, sigma=1):
     return normal_cdf(numpy.log(x), mu=numpy.log(median), sigma=sigma)
 
 
+# noinspection PyUnresolvedReferences
 def erf(z):
     """Approximation to ERF
+
+    :param z: input array or scalar to perform erf on
+    :type z: numpy.ndarray, float
+
+    :returns: the approximate error
+    :rtype: numpy.ndarray, float
 
     Note:
         from:
@@ -163,7 +196,7 @@ def erf(z):
                            t * (-1.13520398 +
                            t * (1.48851587 +
                            t * (-0.82215223 +
-                           t * (0.17087277))))))))))
+                           t * 0.17087277)))))))))
 
     neg = (z < 0.0)  # Mask for negative input values
     ans[neg] = -ans[neg]
@@ -174,14 +207,16 @@ def erf(z):
         return ans
 
 
-def axes2points(x, y):
+def axes_to_points(x, y):
     """Generate all combinations of grid point coordinates from x and y axes
 
-    Args:
-        * x: x coordinates (array)
-        * y: y coordinates (array)
+    :param x: x coordinates (array)
+    :type x: numpy.ndarray
 
-    Returns:
+    :param y: y coordinates (array)
+    :type y: numpy.ndarray
+
+    :returns:
         * P: Nx2 array consisting of coordinates for all
              grid points defined by x and y axes. The x coordinate
              will vary the fastest to match the way 2D numpy
@@ -207,6 +242,7 @@ def axes2points(x, y):
     y = numpy.flipud(y)
 
     # Repeat x coordinates for each y (fastest varying)
+    # noinspection PyTypeChecker
     X = numpy.kron(numpy.ones(len(y)), x)
 
     # Repeat y coordinates for each x (slowest varying)
@@ -225,13 +261,17 @@ def axes2points(x, y):
     return P
 
 
-def grid2points(A, x, y):
+def grid_to_points(A, x, y):
     """Convert grid data to point data
 
-    Args:
-        * A: Array of pixel values
-        * x: Longitudes corresponding to columns in A (west->east)
-        * y: Latitudes corresponding to rows in A (south->north)
+    :param A: Array of pixel values
+    :type A: numpy.ndarray
+
+    :param x: Longitudes corresponding to columns in A (west->east)
+    :type x: numpy.ndarray
+
+    :param y: Latitudes corresponding to rows in A (south->north)
+    :type y: numpy.ndarray
 
     Returns:
         * P: Nx2 array of point coordinates
@@ -246,7 +286,7 @@ def grid2points(A, x, y):
 
     # Create Nx2 array of x, y points corresponding to each
     # element in A.
-    points = axes2points(x, y)
+    points = axes_to_points(x, y)
 
     # Create flat 1D row-major view of A cast as
     # one column vector of length MxN where M, N = A.shape
@@ -257,30 +297,33 @@ def grid2points(A, x, y):
     return points, values
 
 
-def geotransform2axes(G, nx, ny):
+def geotransform_to_axes(G, nx, ny):
     """Convert geotransform to coordinate axes
 
-    Args:
-        * G: GDAL geotransform (6-tuple).
-             (top left x, w-e pixel resolution, rotation,
-              top left y, rotation, n-s pixel resolution).
-        * nx: Number of cells in the w-e direction
-        * ny: Number of cells in the n-s direction
+    :param G: GDAL geotransform (6-tuple).
+        (top left x, w-e pixel resolution, rotation,
+        top left y, rotation, n-s pixel resolution).
+    :type G: tuple
+
+    :param nx: Number of cells in the w-e direction
+    :type nx: int
+
+    :param ny: Number of cells in the n-s direction
+    :type nx: int
 
 
-    Returns:
-        * Return two vectors (longitudes and latitudes) representing the grid
-          defined by the geotransform.
+    :returns: Two vectors (longitudes and latitudes) representing the grid
+        defined by the geotransform.
 
-          The values are offset by half a pixel size to correspond to
-          pixel registration.
+        The values are offset by half a pixel size to correspond to
+        pixel registration.
 
-          I.e. If the grid origin (top left corner) is (105, 10) and the
-          resolution is 1 degrees in each direction, then the vectors will
-          take the form
+        I.e. If the grid origin (top left corner) is (105, 10) and the
+        resolution is 1 degrees in each direction, then the vectors will
+        take the form
 
-          longitudes = [100.5, 101.5, ..., 109.5]
-          latitudes = [0.5, 1.5, ..., 9.5]
+        longitudes = [100.5, 101.5, ..., 109.5]
+        latitudes = [0.5, 1.5, ..., 9.5]
     """
 
     lon_ul = float(G[0])  # Longitude of upper left corner

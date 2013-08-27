@@ -19,9 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
-from PyQt4 import QtCore
-from PyQt4.QtTest import QTest
-
 from safe_qgis.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, SCENARIO_DIR)
@@ -35,57 +32,60 @@ DOCK = Dock(IFACE)
 
 
 class BatchDialogTest(unittest.TestCase):
-    """Test for the script/batch runner dialog
+    """Tests for the script/batch runner dialog.
     """
 
     def test_loadBatchDialog(self):
         """Definitely, this is a test. Test for BatchDialog behaviour
         """
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
-        myDialog.cbDefaultOutputDir.setChecked(True)
-        myDialog.leSourceDir.setText(SCENARIO_DIR)
-        numberRow = myDialog.tblScript.rowCount()
+        myDialog.show_results_popup = False
+        myDialog.scenario_directory_radio.setChecked(True)
+        myDialog.source_directory.setText(SCENARIO_DIR)
+        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
+        print "Testing using : %s" % SCENARIO_DIR
+        numberRow = myDialog.table.rowCount()
         assert numberRow == 2, 'Num scenario is wrong. I got %s' % numberRow
-        myOutputDir = myDialog.leOutputDir.text()
+        myOutputDir = myDialog.output_directory.text()
         assert myOutputDir == SCENARIO_DIR, 'Output directory is ' + \
                                             myOutputDir
-        myDialog.cbDefaultOutputDir.setChecked(False)
-        myDialog.leOutputDir.setText('not a dir')
-        myOutputDir = myDialog.leOutputDir.text()
-        myDialog.leSourceDir.setText(SCENARIO_DIR + 'a')
-        myDialog.leSourceDir.setText(SCENARIO_DIR)
+        myDialog.scenario_directory_radio.setChecked(False)
+        myDialog.output_directory.setText('not a dir')
+        myOutputDir = myDialog.output_directory.text()
+        myDialog.scenario_directory_radio.setText(SCENARIO_DIR + 'a')
+        myDialog.scenario_directory_radio.setText(SCENARIO_DIR)
         assert myOutputDir != SCENARIO_DIR, 'Output directory is ' + \
                                             myOutputDir
 
     def test_runSingleScenario(self):
-        """Test run single scenario
-        """
+        """Test run single scenario."""
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
-        myDialog.cbDefaultOutputDir.setChecked(False)
-        myDialog.leSourceDir.setText(SCENARIO_DIR)
+        myDialog.show_results_popup = False
+        myDialog.scenario_directory_radio.setChecked(False)
+        myDialog.source_directory.setText(SCENARIO_DIR)
+        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
         myOutputDir = temp_dir()
-        myDialog.leOutputDir.setText(myOutputDir)
-        myDialog.sboCount.setValue(1)
-        myDialog.tblScript.selectRow(1)
+        myDialog.output_directory.setText(myOutputDir)
+        myDialog.table.selectRow(1)
         myButton = myDialog.run_selected_button
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myStatus = myDialog.tblScript.item(1, 1).text()
+        myButton.click()
+        myStatus = myDialog.table.item(1, 1).text()
         assert myStatus == 'Report Ok'
 
     def test_runAllScenario(self):
         """Test run single scenario.
         """
         myDialog = BatchDialog(PARENT, IFACE, DOCK)
-        myDialog.cbDefaultOutputDir.setChecked(False)
-        myDialog.leSourceDir.setText(SCENARIO_DIR)
+        myDialog.show_results_popup = False
+        myDialog.scenario_directory_radio.setChecked(False)
+        myDialog.source_directory.setText(SCENARIO_DIR)
+        myDialog.source_directory.textChanged.emit(SCENARIO_DIR)
         myOutputDir = temp_dir()
-        myDialog.leOutputDir.setText(myOutputDir)
+        myDialog.output_directory.setText(myOutputDir)
         myButton = myDialog.run_all_button
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myStatus0 = myDialog.tblScript.item(0, 1).text()
-        myStatus1 = myDialog.tblScript.item(1, 1).text()
+        myButton.click()
+        myStatus0 = myDialog.table.item(0, 1).text()
+        myStatus1 = myDialog.table.item(1, 1).text()
         assert myStatus0 == 'Analysis Fail', myStatus0
         assert myStatus1 == 'Report Ok', myStatus1
 

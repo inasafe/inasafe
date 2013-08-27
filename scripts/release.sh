@@ -19,20 +19,6 @@ make docs
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
 DIR='inasafe'
 
-# For some reason sphinx copies image resources both into build/_static and build/images
-# _static should hold just theme based resources
-# _images should contain all document referenced resources - sphinx flattens the dir structure
-# Normally we wouldn't care but we want to bundle this as documentation so we do care about size
-pushd .
-cd docs/build/html
-for FILE in `ls _images/`
-do
-  echo "Deleting $FILE from _static"
-  rm _static/${FILE}
-done
-rm -rf _static/screenshot*
-rm -rf _static/tutorial
-popd
 
 OUT="/tmp/${DIR}.${1}.zip"
 
@@ -64,20 +50,32 @@ find ${WORKDIR}/${DIR} -name *.ts -delete
 rpl "from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA" "" ${WORKDIR}/${DIR}/safe/api.py
 
 rm -rf ${WORKDIR}/${DIR}/*.bat
-mkdir -p ${WORKDIR}/${DIR}/docs/build
-cp -r docs/build/html ${WORKDIR}/${DIR}/docs/build/html
+mkdir -p ${WORKDIR}/${DIR}/docs/
+
+echo "Note: We assume that you have a working build environment for the docs."
+
+if [ ! -d ../inasafe-doc ]
+then
+  # check the repo out since it does not exist
+  pushd .
+  cd ..
+  git clone --depth 1 git://github.com/AIFDR/inasafe-doc.git inasafe-doc
+  cd inasafe-doc
+  scripts/post_translate_application_docs.sh
+  popd
+fi
+
+cp -r ../inasafe-doc/docs/output-app-docs/html/* ${WORKDIR}/${DIR}/docs/
+
+
+
+
 pushd .
 cd ${WORKDIR}
+find . -name test -exec /bin/rm -rf {} \;
 # The \* tells zip to ignore recursively
 rm ${OUT}
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
-              ${DIR}/docs/source\* \
-              ${DIR}/docs/*.odf\
-              ${DIR}/docs/*.odg\
-              ${DIR}/docs/build/doctrees\* \
-              ${DIR}/docs/build/html\.buildinfo\* \
-              ${DIR}/docs/cloud_sptheme\* \
-              ${DIR}/docs/Flyer_InaSafe_FINAL.pdf \
               ${DIR}/.git\* \
               ${DIR}/*.bat \
               ${DIR}/.gitattributes \
@@ -95,14 +93,14 @@ zip -r ${OUT} ${DIR} --exclude \*.pyc \
               ${DIR}/\*.*.orig \
               ${DIR}/\*.bat \
               ${DIR}/\*.xcf \
+              ${DIR}/\.tx\* \
+              ${DIR}/\*.sh \
+              ${DIR}/\Vagrantfile \
               ${DIR}/~
-              #${DIR}/docs/*.jpg\
-              #${DIR}/docs/*.jpeg\
-              #${DIR}/docs/*.png\
 
 popd
 
-rm -rf ${WORKDIR}
+#rm -rf ${WORKDIR}
 
 echo "Your plugin archive has been generated as"
 ls -lah ${OUT}

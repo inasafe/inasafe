@@ -72,13 +72,21 @@ class MapTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
+
+        # Note: You should replace, not append the numbers for a given
+        # platform. Also note that this test will break every time the
+        # version number of InaSAFE changes so we should ultimately come up
+        # with a lower maintenance test strategy.
+
         myExpectedSizes = [
             441541,  # as rendered on ub 13.04 post 17 May 2013
-            441428,  # as rendered on ub 13.04 5 Jul 2013
+            441563,  # as rendered on ub 13.04 18 Jul 2013
             447217,  # Nadia Linux Mint 14
-            447051,  # as rendered on Jenkins post 24 April 2013
-            447138,  # Windows 7 SP1 AMD64
-            233989,  # OSX 10.8
+            447181,  # as rendered on Jenkins post 26 Aug 2013
+            447172,  # Windows 7 SP1 AMD64
+            446960,  # Windows 8 AMD64
+            234138,  # OSX 10.8
+            444421,  # Slackware64 14.0
         ]
         myMessage = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             myPath, myExpectedSizes, mySize)

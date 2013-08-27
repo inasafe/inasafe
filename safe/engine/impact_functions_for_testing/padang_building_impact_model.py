@@ -27,7 +27,7 @@ from safe.impact_functions.core import (FunctionProvider,
 from safe.storage.vector import Vector
 from safe.common.utilities import (ugettext as tr,
                                    format_int)
-from safe.common.numerics import lognormal_cdf
+from safe.common.numerics import log_normal_cdf
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.mappings import osm2padang, sigab2padang
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -102,7 +102,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             damage_params = damage_curves[building_type]
             beta = damage_params['beta']
             median = damage_params['median']
-            percent_damage = lognormal_cdf(mmi,
+            percent_damage = log_normal_cdf(mmi,
                                            median=median,
                                            sigma=beta) * 100
 

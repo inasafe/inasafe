@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **Exception Classes.**
@@ -49,6 +50,11 @@ class VerificationError(InaSAFEError):
 
 class PolygonInputError(InaSAFEError):
     """For invalid inputs to numeric polygon functions"""
+    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
+
+
+class PointsInputError(InaSAFEError):
+    """For invalid inputs to numeric point functions"""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 

@@ -71,8 +71,14 @@ class StyleInfoNotFoundError(Exception):
 
 
 class InvalidParameterError(Exception):
-    """Custom exception for when an invalid parameter is
-    passed to a function."""
+    """Custom exception for when an invalid parameter is passed to a function.
+    """
+    pass
+
+
+class NoKeywordsFoundError(Exception):
+    """Custom exception for when no keywords exist for a layer.
+    """
     pass
 
 
@@ -162,4 +168,24 @@ class InvalidAggregatorError(Exception):
 
 class AggregatioError(Exception):
     """Raised if aggregator state is not valid when trying to run it."""
+    pass
+
+
+class HelpFileMissingError(Exception):
+    """Raised if a help file cannot be found."""
+    pass
+
+
+class InvalidGeometryError(Exception):
+    """Custom exception for when a feature geometry is invalid or none."""
+    pass
+
+
+class UnsupportedProviderError(Exception):
+    """For unsupported provider (e.g. openlayers plugin) encountered."""
+    pass
+
+
+class InvalidLayerError(Exception):
+    """For when an invalid layer is encountered."""
     pass

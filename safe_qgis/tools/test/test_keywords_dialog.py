@@ -27,8 +27,7 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtTest import QTest
+from PyQt4 import QtGui
 
 from qgis.core import (
     QgsRasterLayer,
@@ -39,12 +38,12 @@ from third_party.odict import OrderedDict
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, test_data_path)
 from safe_qgis.safe_interface import (
-    readKeywordsFromFile,
+    read_file_keywords,
     unique_filename,
     HAZDATA, TESTDATA)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
-from safe_qgis.utilities.utilities import defaults, qgis_version
+from safe_qgis.utilities.utilities import breakdown_defaults, qgis_version
 
 
 # Get QGis app handle
@@ -55,7 +54,7 @@ def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    myTitle = readKeywordsFromFile(myPath, 'title')
+    myTitle = read_file_keywords(myPath, 'title')
     # myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
     if qgis_version() >= 10800:  # 1.8 or newer
@@ -81,7 +80,7 @@ def makePadangLayerClone():
     # return a single predefined layer
     myFile = myFileName + '.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    myTitle = readKeywordsFromFile(myPath, 'title')
+    myTitle = read_file_keywords(myPath, 'title')
     myLayer = QgsRasterLayer(myPath, myTitle)
     if qgis_version() >= 10800:  # 1.8 or newer
         # noinspection PyArgumentList
@@ -97,7 +96,7 @@ def makePolygonLayer():
     myFile = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
     myPath = os.path.join(TESTDATA, myFile)
     try:
-        myTitle = readKeywordsFromFile(myPath, 'title')
+        myTitle = read_file_keywords(myPath, 'title')
     except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
@@ -115,7 +114,7 @@ def makePointLayer():
     myFile = 'test_buildings.shp'
     myPath = os.path.join(TESTDATA, myFile)
     try:
-        myTitle = readKeywordsFromFile(myPath, 'title')
+        myTitle = read_file_keywords(myPath, 'title')
     except KeywordNotFoundError:
         myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
@@ -182,8 +181,7 @@ class KeywordsDialogTest(unittest.TestCase):
         # noinspection PyUnreachableCode
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
         #pylint: enable=W0101
@@ -194,8 +192,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = False
         myMessage = ('Advanced options did not become visible when'
@@ -205,8 +202,7 @@ class KeywordsDialogTest(unittest.TestCase):
         assert myState == myExpectedState, myMessage
 
         # Now hide advanced again and test...
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myState = myDialog.grpAdvanced.isHidden()
         myExpectedState = True
 
@@ -220,8 +216,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the hazard radio did not add a category '
                      'to the keywords list.')
         assert myDialog.get_value_for_key('category') == 'hazard', myMessage
@@ -229,12 +224,11 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_radPostprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
-        myDefaults = defaults()
+        myDefaults = breakdown_defaults()
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'category to the keywords list.')
         assert myDialog.get_value_for_key(
@@ -260,12 +254,11 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
         myLayer = makePolygonLayer()
-        myDefaults = defaults()
+        myDefaults = breakdown_defaults()
         myDialog = KeywordsDialog(PARENT, IFACE, layer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myFemaleRatioAttrBox = myDialog.cboFemaleRatioAttribute
 
         #set to Don't use
@@ -319,8 +312,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radExposure
         myButton.setChecked(False)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myMessage = ('Toggling the exposure radio did not add a category '
                      'to the keywords list.')
         assert myDialog.get_value_for_key('category') == 'exposure', myMessage
@@ -331,13 +323,9 @@ class KeywordsDialogTest(unittest.TestCase):
         myButton = myDialog.radHazard
         myButton.setChecked(True)
         myButton = myDialog.radExposure
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myButton.click()
         myCombo = myDialog.cboSubcategory
-        # noinspection PyArgumentList
-        QTest.mouseClick(myCombo, QtCore.Qt.LeftButton)
-        QTest.keyClick(myCombo, QtCore.Qt.Key_Up)
-        QTest.keyClick(myCombo, QtCore.Qt.Key_Enter)
+        myCombo.setCurrentIndex(1)  # change from 'Not set' to 'structure'
         myMessage = ('Changing the subcategory did not add '
                      'to the keywords list for %s' %
                      myCombo.currentText())
@@ -377,9 +365,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.cboKeyword.setCurrentIndex(2)
         myExpectedResult = 'foo'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        # Work around for commented out line below
         myDialog.on_pbnAddToList1_clicked()
-        #QTest.mouseClick(myDialog.pbnAddToList1, QtCore.Qt.LeftButton)
         myResult = myDialog.get_value_for_key('datatype')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -395,9 +381,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.leValue.setText('bar')
         myExpectedResult = 'bar'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        # Work around for commented out line below
         myDialog.on_pbnAddToList2_clicked()
-        #QTest.mouseClick(myDialog.pbnAddToList2, QtCore.Qt.LeftButton)
         myResult = myDialog.get_value_for_key('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -552,15 +536,6 @@ class KeywordsDialogTest(unittest.TestCase):
         myLayer = make_keywordless_layer()
         myDialog.layer = myLayer
         myDialog.load_state_from_keywords()
-        myKeywords = myDialog.get_keywords()
-        #check that a default title is given (see
-        #https://github.com/AIFDR/inasafe/issues/111)
-        myExpectedKeywords = {
-            'category': 'exposure',
-            'title': 'Keywordless Layer'}
-        myMessage = ('\nGot: %s\nExpected: %s\n' %
-                     (myKeywords, myExpectedKeywords))
-        assert myKeywords == myExpectedKeywords, myMessage
 
     def test_addKeywordWhenPressOkButton(self):
         """Test add keyword when ok button is pressed."""
@@ -572,8 +547,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myDialog.leKey.setText('foo')
         myDialog.leValue.setText('bar')
         okButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
-        # noinspection PyArgumentList
-        QTest.mouseClick(okButton, QtCore.Qt.LeftButton)
+        okButton.click()
 
         # delete temp file
         # removeTempFile(myFile)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
+"""**Functionality related to convert format file.**
+
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Functionality related to convert format file.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -33,28 +33,46 @@ from safe.common.exceptions import (GridXmlFileNotFoundError,
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def dataDir():
-    """Return the path to the standard data dir for e.g. geonames data"""
-    myDir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                         'converter_data'))
-    return myDir
+def data_dir():
+    """Return the path to the standard data dir for e.g. geonames data
+
+    :returns: Returns the default data directory.
+    :rtype: str
+    """
+    my_dir = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), 'converter_data'))
+    return my_dir
 
 
 class ShakeEvent():
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, gridXMLPath, outputDir=None, outputBasename=None,
-                 algorithm_name=True):
+    def __init__(
+            self,
+            grid_xml_path,
+            output_dir=None,
+            output_basename=None,
+            algorithm_filename_flag=True):
         """Constructor for the shake event class.
 
-        Args:
-            * theForceFlag: bool Whether to force retrieval of the data set
-            from the ftp server.
+        :param grid_xml_path: Path to grid XML file
+        :type grid_xml_path:str
 
-        Returns: Instance
+        :param output_dir: mmi output directory
+        :type output_dir: str
 
-        Raises: EventXmlParseError
+        :param output_basename: mmi file name without extention
+        :type output_basename: str
+
+        :param algorithm_filename_flag: Flag whether to use the algorithm in
+            the output file's name
+        :type algorithm_filename_flag: bool
+
+        :returns: Instance
+        :rtype: ShakeEvent
+
+        :raises: EventXmlParseError
         """
         self.latitude = None
         self.longitude = None
@@ -66,34 +84,34 @@ class ShakeEvent():
         self.month = None
         self.year = None
         self.time = None
-        self.timeZone = None
-        self.xMinimum = None
-        self.xMaximum = None
-        self.yMinimum = None
-        self.yMaximum = None
+        self.time_zone = None
+        self.x_minimum = None
+        self.x_maximum = None
+        self.y_minimum = None
+        self.y_maximum = None
         self.rows = None
         self.columns = None
-        self.mmiData = None
+        self.mmi_data = None
         # Path to tif of impact result - probably we wont even use it
-        self.impactFile = None
+        self.impact_file = None
         # Path to impact keywords file - this is GOLD here!
-        self.impactKeywordsFile = None
+        self.impact_keywords_file = None
         # number of people killed per mmi band
-        self.fatalityCounts = None
+        self.fatality_counts = None
         # Total number of predicted fatalities
-        self.fatalityTotal = 0
+        self.fatality_total = 0
         # number of people displaced per mmi band
-        self.displacedCounts = None
+        self.displaced_counts = None
         # number of people affected per mmi band
-        self.affectedCounts = None
+        self.affected_counts = None
         # After selecting affected cities near the event, the bbox of
         # shake map + cities
-        self.extentWithCities = None
+        self.extent_with_cities = None
         # How much to iteratively zoom out by when searching for cities
-        self.zoomFactor = 1.25
-        # The search boxes used to find extentWithCities
+        self.zoom_factor = 1.25
+        # The search boxes used to find extent_with_cities
         # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
-        self.searchBoxes = None
+        self.search_boxes = None
         # Stored as a dict with dir_to, dist_to,  dist_from etc e.g.
         #{'dir_from': 16.94407844543457,
         #'dir_to': -163.05592346191406,
@@ -103,31 +121,25 @@ class ShakeEvent():
         #'name': 'Tondano',
         #'id': 57,
         #'population': 33317}
-        self.mostAffectedCity = None
-        if outputDir is None:
-            self.outputDir = os.path.dirname(gridXMLPath)
+        self.most_affected_city = None
+        if output_dir is None:
+            self.output_dir = os.path.dirname(grid_xml_path)
         else:
-            self.outputDir = outputDir
-        if outputBasename is None:
-            self.outputBasename = "mmi"
+            self.output_dir = output_dir
+        if output_basename is None:
+            self.output_basename = "mmi"
         else:
-            self.outputBasename = outputBasename
-        self.algorithm_name = algorithm_name
-        self.gridXmlPath = gridXMLPath
-        self.parseGridXml()
+            self.output_basename = output_basename
+        self.algorithm_name = algorithm_filename_flag
+        self.grid_xml_path = grid_xml_path
+        self.parse_grid_xml()
 
-    def extractDateTime(self, theTimeStamp):
+    def extract_date_time(self, the_time_stamp):
         """Extract the parts of a date given a timestamp as per below example.
 
-        Args:
-            theTimeStamp: str - as provided by the 'event_timestamp'
-                attribute in the grid.xml.
-
-        Returns:
-            None
-
-        Raises:
-            None
+        :param the_time_stamp: Is the 'event_timestamp' attribute from  grid
+         .xml.
+        :type the_time_stamp: str
 
         # now separate out its parts
         # >>> e = "2012-08-07T01:55:12WIB"
@@ -138,17 +150,19 @@ class ShakeEvent():
         #>>> e[-3:]
         #'WIB'   (WIB = Western Indonesian Time)
         """
-        myDateTokens = theTimeStamp[0:10].split('-')
-        self.year = int(myDateTokens[0])
-        self.month = int(myDateTokens[1])
-        self.day = int(myDateTokens[2])
-        myTimeTokens = theTimeStamp[11:-3].split(':')
-        self.hour = int(myTimeTokens[0])
-        self.minute = int(myTimeTokens[1])
-        self.second = int(myTimeTokens[2])
+        my_date_tokens = the_time_stamp[0:10].split('-')
+        self.year = int(my_date_tokens[0])
+        self.month = int(my_date_tokens[1])
+        self.day = int(my_date_tokens[2])
+        my_time_tokens = the_time_stamp[11:-3].split(':')
+        self.hour = int(my_time_tokens[0])
+        self.minute = int(my_time_tokens[1])
+        self.second = int(my_time_tokens[2])
 
-    def parseGridXml(self):
+    def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
+
+        :raises: GridXmlParseError
 
         The grid xyz dataset looks like this::
 
@@ -192,85 +206,89 @@ class ShakeEvent():
            contains clear and unequivical metadata describing the various
            fields and attributes. Also it provides all the data we need in a
            single file.
-
-
-        Args: None
-
-        Returns: None
-
-        Raises: GridXmlParseError
         """
         LOGGER.debug('ParseGridXml requested.')
-        myPath = self.gridFilePath()
+        my_path = self.grid_file_path()
         try:
-            myDocument = minidom.parse(myPath)
-            myEventElement = myDocument.getElementsByTagName('event')
-            myEventElement = myEventElement[0]
-            self.magnitude = float(myEventElement.attributes[
+            my_document = minidom.parse(my_path)
+            my_event_element = my_document.getElementsByTagName('event')
+            my_event_element = my_event_element[0]
+            self.magnitude = float(my_event_element.attributes[
                 'magnitude'].nodeValue)
-            self.longitude = float(myEventElement.attributes[
+            self.longitude = float(my_event_element.attributes[
                 'lon'].nodeValue)
-            self.latitude = float(myEventElement.attributes[
+            self.latitude = float(my_event_element.attributes[
                 'lat'].nodeValue)
-            self.location = myEventElement.attributes[
+            self.location = my_event_element.attributes[
                 'event_description'].nodeValue.strip()
-            self.depth = float(myEventElement.attributes['depth'].nodeValue)
+            self.depth = float(my_event_element.attributes['depth'].nodeValue)
             # Get the date - its going to look something like this:
             # 2012-08-07T01:55:12WIB
-            myTimeStamp = myEventElement.attributes[
+            my_time_stamp = my_event_element.attributes[
                 'event_timestamp'].nodeValue
-            self.extractDateTime(myTimeStamp)
+            self.extract_date_time(my_time_stamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
-            self.timeZone = myTimeStamp[-3:]
+            self.time_zone = my_time_stamp[-3:]
 
-            mySpecificationElement = myDocument.getElementsByTagName(
+            my_specification_element = my_document.getElementsByTagName(
                 'grid_specification')
-            mySpecificationElement = mySpecificationElement[0]
-            self.xMinimum = float(mySpecificationElement.attributes[
+            my_specification_element = my_specification_element[0]
+            self.x_minimum = float(my_specification_element.attributes[
                 'lon_min'].nodeValue)
-            self.xMaximum = float(mySpecificationElement.attributes[
+            self.x_maximum = float(my_specification_element.attributes[
                 'lon_max'].nodeValue)
-            self.yMinimum = float(mySpecificationElement.attributes[
+            self.y_minimum = float(my_specification_element.attributes[
                 'lat_min'].nodeValue)
-            self.yMaximum = float(mySpecificationElement.attributes[
+            self.y_maximum = float(my_specification_element.attributes[
                 'lat_max'].nodeValue)
-            self.rows = float(mySpecificationElement.attributes[
+            self.rows = float(my_specification_element.attributes[
                 'nlat'].nodeValue)
-            self.columns = float(mySpecificationElement.attributes[
+            self.columns = float(my_specification_element.attributes[
                 'nlon'].nodeValue)
-            myDataElement = myDocument.getElementsByTagName(
+            my_data_element = my_document.getElementsByTagName(
                 'grid_data')
-            myDataElement = myDataElement[0]
-            myData = myDataElement.firstChild.nodeValue
-            # Extract the 1,2 and 5th (MMI) columns and populate mmiData
-            myLonColumn = 0
-            myLatColumn = 1
-            myMMIColumn = 4
-            self.mmiData = []
-            for myLine in myData.split('\n'):
-                if not myLine:
+            my_data_element = my_data_element[0]
+            my_data = my_data_element.firstChild.nodeValue
+            # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
+            my_lonitude_column = 0
+            my_latitude_column = 1
+            my_mmi_column = 4
+            self.mmi_data = []
+            for my_line in my_data.split('\n'):
+                if not my_line:
                     continue
-                myTokens = myLine.split(' ')
-                myLon = myTokens[myLonColumn]
-                myLat = myTokens[myLatColumn]
-                myMMI = myTokens[myMMIColumn]
-                myTuple = (myLon, myLat, myMMI)
-                self.mmiData.append(myTuple)
+                my_tokens = my_line.split(' ')
+                my_longitude = my_tokens[my_lonitude_column]
+                my_latitude = my_tokens[my_latitude_column]
+                my_mmi = my_tokens[my_mmi_column]
+                my_tuple = (my_longitude, my_latitude, my_mmi)
+                self.mmi_data.append(my_tuple)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
             raise GridXmlParseError('Failed to parse grid file.\n%s\n%s'
                                     % (e.__class__, str(e)))
 
-    def gridFilePath(self):
-        if os.path.isfile(self.gridXmlPath):
-            return self.gridXmlPath
+    def grid_file_path(self):
+        """ Validate that grid file path points to a file.
+
+        :raises: GridXmlFileNotFoundError
+
+        :return: grid xml file path
+        :rtype: str
+        """
+        if os.path.isfile(self.grid_xml_path):
+            return self.grid_xml_path
         else:
             raise GridXmlFileNotFoundError
 
-    def mmiDataToDelimitedText(self):
+    def mmi_to_delimited_text(self):
         """Return the mmi data as a delimited test string.
+
+        :returns: a delimited text string that can easily be written to disk
+            for e.g. use by gdal_grid.
+        :rtype: str
 
         The returned string will look like this::
 
@@ -279,26 +297,24 @@ class ShakeEvent():
            123.1250,01.7900,1.15
            123.1500,01.7900,1.16
            etc...
-
-        Args: None
-
-        Returns: str - a delimited text string that can easily be written to
-            disk for e.g. use by gdal_grid.
-
-        Raises: None
-
         """
-        myString = 'lon,lat,mmi\n'
-        for myRow in self.mmiData:
-            myString += '%s,%s,%s\n' % (myRow[0], myRow[1], myRow[2])
-        return myString
+        my_string = 'lon,lat,mmi\n'
+        for my_row in self.mmi_data:
+            my_string += '%s,%s,%s\n' % (my_row[0], my_row[1], my_row[2])
+        return my_string
 
-    def mmiDataToDelimitedFile(self, theForceFlag=True):
-        """Save the mmiData to a delimited text file suitable for processing
-        with gdal_grid.
+    def mmi_to_delimited_file(self, force_flag=True):
+        """Save mmi_data to delimited text file suitable for gdal_grid.
 
         The output file will be of the same format as strings returned from
-        :func:`mmiDataToDelimitedText`.
+        :func:`mmi_to_delimited_text`.
+
+        :param force_flag: Whether to force the regeneration of the output
+            file. Defaults to False.
+        :type force_flag: bool
+
+        :returns: The absolute file system path to the delimited text file.
+        :rtype: str
 
         .. note:: An accompanying .csvt will be created which gdal uses to
            determine field types. The csvt will contain the following string:
@@ -306,127 +322,121 @@ class ShakeEvent():
            operations. For example to convert the csv to a shp you would do::
 
               ogr2ogr -select mmi -a_srs EPSG:4326 mmi.shp mmi.vrt mmi
-
-        Args: theForceFlag bool (Optional). Whether to force the regeneration
-            of the output file. Defaults to False.
-
-        Returns: str The absolute file system path to the delimited text
-            file.
-
-        Raises: None
         """
-        LOGGER.debug('mmiDataToDelimitedText requested.')
+        LOGGER.debug('mmi_to_delimited_text requested.')
 
         # TODO(Sunni): I'm not sure how this 'mmi' will work
-        myPath = os.path.join(self.outputDir,
-                              'mmi.csv')
+        my_path = os.path.join(self.output_dir, 'mmi.csv')
         # TODO(Sunni): I'm not sure how this 'mmi' will work
         #short circuit if the csv is already created.
-        if os.path.exists(myPath) and theForceFlag is not True:
-            return myPath
-        myFile = file(myPath, 'wt')
-        myFile.write(self.mmiDataToDelimitedText())
-        myFile.close()
+        if os.path.exists(my_path) and force_flag is not True:
+            return my_path
+        my_file = file(my_path, 'wt')
+        my_file.write(self.mmi_to_delimited_text())
+        my_file.close()
 
         # Also write the .csv which contains metadata about field types
-        myCsvPath = os.path.join(self.outputDir,
-                                 self.outputBasename + '.csvt')
-        myFile = file(myCsvPath, 'wt')
-        myFile.write('"Real","Real","Real"')
-        myFile.close()
-        return myPath
+        my_csv_path = os.path.join(
+            self.output_dir, self.output_basename + '.csvt')
+        my_file = file(my_csv_path, 'wt')
+        my_file.write('"Real","Real","Real"')
+        my_file.close()
+        return my_path
 
-    def mmiDataToVrt(self, theForceFlag=True):
-        """Save the mmiData to an ogr vrt text file.
+    def mmi_to_vrt(self, force_flag=True):
+        """Save the mmi_data to an ogr vrt text file.
 
-        Args: theForceFlag bool (Optional). Whether to force the regeneration
-            of the output file. Defaults to False.
+        :param force_flag: Whether to force the regeneration of the output
+            file. Defaults to False.
+        :type force_flag: bool
 
-        Returns: str The absolute file system path to the .vrt text file.
+
+        :returns: The absolute file system path to the .vrt text file.
+        :rtype: str
 
         Raises: None
         """
         # Ensure the delimited mmi file exists
-        LOGGER.debug('mmiDataToVrt requested.')
+        LOGGER.debug('mmi_to_vrt requested.')
 
-        myVrtPath = os.path.join(self.outputDir,
-                                 self.outputBasename + '.vrt')
+        my_vrt_path = os.path.join(
+            self.output_dir,
+            self.output_basename + '.vrt')
 
         #short circuit if the vrt is already created.
-        if os.path.exists(myVrtPath) and theForceFlag is not True:
-            return myVrtPath
+        if os.path.exists(my_vrt_path) and force_flag is not True:
+            return my_vrt_path
 
-        myCsvPath = self.mmiDataToDelimitedFile(True)
+        my_csv_path = self.mmi_to_delimited_file(True)
 
-        myVrtString = ('<OGRVRTDataSource>'
-                       '  <OGRVRTLayer name="mmi">'
-                       '    <SrcDataSource>%s</SrcDataSource>'
-                       '    <GeometryType>wkbPoint</GeometryType>'
-                       '    <GeometryField encoding="PointFromColumns"'
-                       '                      x="lon" y="lat" z="mmi"/>'
-                       '  </OGRVRTLayer>'
-                       '</OGRVRTDataSource>' % myCsvPath)
-        myFile = file(myVrtPath, 'wt')
-        myFile.write(myVrtString)
-        myFile.close()
-        return myVrtPath
+        my_vrt_string = (
+            '<OGRVRTDataSource>'
+            '  <OGRVRTLayer name="mmi">'
+            '    <SrcDataSource>%s</SrcDataSource>'
+            '    <GeometryType>wkbPoint</GeometryType>'
+            '    <GeometryField encoding="PointFromColumns"'
+            '                      x="lon" y="lat" z="mmi"/>'
+            '  </OGRVRTLayer>'
+            '</OGRVRTDataSource>' % my_csv_path)
+        my_file = file(my_vrt_path, 'wt')
+        my_file.write(my_vrt_string)
+        my_file.close()
+        return my_vrt_path
 
-    def _addExecutablePrefix(self, theCommand):
+    def _add_executable_prefix(self, command):
         """Add the executable prefix for gdal binaries.
 
         This is primarily needed for OSX where gdal tools are tucked away in
         the Library path.
 
-        Args: theCommand str - Required. A string containing the command to
-            which the prefix will be prepended.
+        :param command: The command to which the prefix will be prepended.
+        :type command: str
 
-        Returns: str - A copy of the command with the prefix added.
-
-        Raises: None
+        :returns: A copy of the command with the prefix added.
+        :rtype: str
         """
 
-        myExecutablePrefix = ''
+        my_executable_prefix = ''
         if sys.platform == 'darwin':  # Mac OS X
             # .. todo:: FIXME - softcode gdal version in this path
-            myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
-                                  'Versions/1.9/Programs/')
-        theCommand = myExecutablePrefix + theCommand
-        return theCommand
+            my_executable_prefix = (
+                '/Library/Frameworks/GDAL.framework/Versions/1.9/Programs/')
+        command = my_executable_prefix + command
+        return command
 
-    def _runCommand(self, theCommand):
+    def _run_command(self, command):
         """Run a command and raise any error as needed.
 
         This is a simple runner for executing gdal commands.
 
-        Args: theCommand str - Required. A command string to be run.
+        :param command: A command string to be run.
+        :type command: str
 
-        Returns: None
-
-        Raises: Any exceptions will be propagated.
+        :raises: Any exceptions will be propagated.
         """
 
-        myCommand = self._addExecutablePrefix(theCommand)
+        my_command = self._add_executable_prefix(command)
 
         try:
-            myResult = call(myCommand, shell=True)
-            del myResult
+            my_result = call(my_command, shell=True)
+            del my_result
         except CalledProcessError, e:
-            LOGGER.exception('Running command failed %s' % myCommand)
-            myMessage = ('Error while executing the following shell '
-                         'command: %s\nError message: %s'
-                         % (myCommand, str(e)))
+            LOGGER.exception('Running command failed %s' % my_command)
+            my_message = (
+                'Error while executing the following shell '
+                'command: %s\nError message: %s' % (my_command, str(e)))
             # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
             if sys.platform == 'darwin':  # Mac OS X
                 if 'Errno 4' in str(e):
                     # continue as the error seems to be non critical
                     pass
                 else:
-                    raise Exception(myMessage)
+                    raise Exception(my_message)
             else:
-                raise Exception(myMessage)
+                raise Exception(my_message)
 
-    def mmiDataToRaster(self, theForceFlag=False,
-                        theAlgorithm='nearest'):
+    def mmi_to_raster(
+            self, force_flag=False, algorithm='nearest'):
         """Convert the grid.xml' s mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -444,18 +454,20 @@ class ShakeEvent():
 
         .. note:: It is assumed that gdal_grid is in your path.
 
-        Args:
-          theForceFlag bool (Optional). Whether to force the regeneration
-            of the output file. Defaults to False.
-          theAlgorithm str (Optional). Which re-sampling algorithm to use.
+        :param force_flag: Whether to force the regeneration of the output
+            file. Defaults to False.
+        :type force_flag: bool
+
+        :param algorithm: Which re-sampling algorithm to use.
             valid options are 'nearest' (for nearest neighbour), 'invdist'
             (for inverse distance), 'average' (for moving average). Defaults
             to 'nearest' if not specified. Note that passing re-sampling alg
             parameters is currently not supported. If None is passed it will
             be replaced with 'nearest'.
+        :type algorithm: str
 
-
-        Return: str Path to the resulting tif file.
+        :returns: Path to the resulting tif file.
+        :rtype: str
 
         .. note:: For interest you can also make quite beautiful smoothed
           raster using this:
@@ -464,98 +476,126 @@ class ShakeEvent():
           -a invdist:power=2.0:smoothing=1.0 -txe 122.45 126.45
           -tye -2.21 1.79 -outsize 400 400 -of GTiff
           -ot Float16 -l mmi mmi.vrt mmi-trippy.tif
-
-        Raises: None
         """
-        LOGGER.debug('mmiDataToRaster requested.')
 
-        if theAlgorithm is None:
-            theAlgorithm = 'nearest'
+        LOGGER.debug('mmi_to_raster requested.')
+
+        if algorithm is None:
+            algorithm = 'nearest'
 
         if self.algorithm_name:
-            myTifPath = os.path.join(self.outputDir,
-                                     '%s-%s.tif' % (
-                                         self.outputBasename, theAlgorithm))
+            my_tif_path = os.path.join(
+                self.output_dir, '%s-%s.tif' % (
+                    self.output_basename, algorithm))
         else:
-            myTifPath = os.path.join(self.outputDir,
-                                     '%s.tif' % self.outputBasename)
+            my_tif_path = os.path.join(
+                self.output_dir, '%s.tif' % self.output_basename)
         #short circuit if the tif is already created.
-        if os.path.exists(myTifPath) and theForceFlag is not True:
-            return myTifPath
+        if os.path.exists(my_tif_path) and force_flag is not True:
+            return my_tif_path
 
         # Ensure the vrt mmi file exists (it will generate csv too if needed)
-        myVrtPath = self.mmiDataToVrt(theForceFlag)
+        my_vrt_path = self.mmi_to_vrt(force_flag)
 
         # now generate the tif using default nearest neighbour interpolation
         # options. This gives us the same output as the mi.grd generated by
         # the earthquake server.
 
-        if 'invdist' in theAlgorithm:
+        if 'invdist' in algorithm:
             myAlgorithm = 'invdist:power=2.0:smoothing=1.0'
         else:
-            myAlgorithm = theAlgorithm
+            myAlgorithm = algorithm
 
         # TODO(Sunni): I'm not sure how this 'mmi' will work
-        myCommand = (('gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
-                      '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
-                      '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
-                      '%(vrt)s %(tif)s') %
-                     {
-                         'alg': myAlgorithm,
-                         'xMin': self.xMinimum,
-                         'xMax': self.xMaximum,
-                         'yMin': self.yMinimum,
-                         'yMax': self.yMaximum,
-                         'dimX': self.columns,
-                         'dimY': self.rows,
-                         'vrt': myVrtPath,
-                         'tif': myTifPath
-                     })
+        my_command = ((
+            'gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
+            '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
+            '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
+            '%(vrt)s %(tif)s') %
+            {
+                'alg': myAlgorithm,
+                'xMin': self.x_minimum,
+                'xMax': self.x_maximum,
+                'yMin': self.y_minimum,
+                'yMax': self.y_maximum,
+                'dimX': self.columns,
+                'dimY': self.rows,
+                'vrt': my_vrt_path,
+                'tif': my_tif_path
+            })
 
-        LOGGER.info('Created this gdal command:\n%s' % myCommand)
+        LOGGER.info('Created this gdal command:\n%s' % my_command)
         # Now run GDAL warp scottie...
-        self._runCommand(myCommand)
+        self._run_command(my_command)
 
         # copy the keywords file from fixtures for this layer
-        self.create_keyword_file(theAlgorithm)
+        self.create_keyword_file(algorithm)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         if self.algorithm_name:
-            myQmlPath = os.path.join(self.outputDir,
-                                     '%s-%s.qml'
-                                     % (self.outputBasename, theAlgorithm))
+            my_qml_path = os.path.join(
+                self.output_dir, '%s-%s.qml' % (
+                    self.output_basename, algorithm))
         else:
-            myQmlPath = os.path.join(self.outputDir,
-                                     '%s.qml' % self.outputBasename)
-        mySourceQml = os.path.join(dataDir(), 'mmi.qml')
-        shutil.copyfile(mySourceQml, myQmlPath)
-        return myTifPath
+            my_qml_path = os.path.join(
+                self.output_dir, '%s.qml' % self.output_basename)
+        my_source_qml = os.path.join(data_dir(), 'mmi.qml')
+        shutil.copyfile(my_source_qml, my_qml_path)
+        return my_tif_path
 
-    def create_keyword_file(self, theAlgorithm):
-        """Create keyword file for the raster file created
+    def create_keyword_file(self, algorithm):
+        """Create keyword file for the raster file created.
+
         Basically copy a template from keyword file in converter data
         and add extra keyword (usually a title)
+
+        :param algorithm: Which re-sampling algorithm to use.
+            valid options are 'nearest' (for nearest neighbour), 'invdist'
+            (for inverse distance), 'average' (for moving average). Defaults
+            to 'nearest' if not specified. Note that passing re-sampling alg
+            parameters is currently not supported. If None is passed it will
+            be replaced with 'nearest'.
+        :type algorithm: str
         """
         if self.algorithm_name:
-            myKeywordPath = os.path.join(self.outputDir,
-                                         '%s-%s.keywords'
-                                         % (self.outputBasename, theAlgorithm))
+            myKeywordPath = os.path.join(
+                self.output_dir, '%s-%s.keywords' % (
+                    self.output_basename, algorithm))
         else:
-            myKeywordPath = os.path.join(self.outputDir,
-                                         '%s.keywords' % self.outputBasename)
-        mySourceKeywords = os.path.join(dataDir(), 'mmi.keywords')
+            myKeywordPath = os.path.join(
+                self.output_dir, '%s.keywords' % self.output_basename)
+        mySourceKeywords = os.path.join(data_dir(), 'mmi.keywords')
         shutil.copyfile(mySourceKeywords, myKeywordPath)
         # append title to the keywords file
         with open(myKeywordPath, 'a') as my_file:
-            my_file.write('title: ' + self.outputBasename)
+            my_file.write('title: ' + self.output_basename)
 
 
-def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None,
-                     algorithm_name=True):
+def convert_mmi_data(
+        grid_xml_path,
+        output_path=None,
+        algorithm=None,
+        algorithm_filename_flag=True):
     """This is static interface function for converter
-    Use this function.
+
+    :param grid_xml_path: Path to the xml file
+    :type grid_xml_path: str
+
+    :param output_path: Specify which path to use as an alternative to the
+        default.
+    :type output_path: str
+
+    :param algorithm: Type of algorithm to be used.
+    :type algorithm: str
+
+    :param algorithm_filename_flag: Flag whether to use the algorithm in the
+        output file's name
+    :type algorithm_filename_flag: bool
+
+    :returns: A path to the resulting raster file
+    :rtype: str
     """
-    LOGGER.debug(gridXMLPath)
+    LOGGER.debug(grid_xml_path)
     LOGGER.debug(output_path)
     if output_path is not None:
         my_output_dir, my_output_basename = os.path.split(output_path)
@@ -565,7 +605,7 @@ def convert_mmi_data(gridXMLPath, output_path=None, the_algorithm=None,
     else:
         my_output_dir = output_path
         my_output_basename = None
-    myShakeEvent = ShakeEvent(gridXMLPath, my_output_dir, my_output_basename,
-                              algorithm_name)
-    return myShakeEvent.mmiDataToRaster(theForceFlag=True,
-                                        theAlgorithm=the_algorithm)
+    myShakeEvent = ShakeEvent(
+        grid_xml_path, my_output_dir, my_output_basename,
+        algorithm_filename_flag)
+    return myShakeEvent.mmi_to_raster(force_flag=True, algorithm=algorithm)

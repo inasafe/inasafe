@@ -23,7 +23,7 @@ from safe_qgis.test.qgis_interface import QgisInterface
 
 # For testing and demoing
 from safe_qgis.safe_interface import (
-    readKeywordsFromFile,
+    read_file_keywords,
     unique_filename,
     temp_dir,
     TESTDATA,
@@ -37,11 +37,11 @@ from safe_qgis.utilities.utilities import qgis_version
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
 
-TEST_FILES_DIR = os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_files')
+TEST_FILES_DIR = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '../test/test_data/test_files'))
 
-SCENARIO_DIR = os.path.join(
-    os.path.dirname(__file__), '../test/test_data/test_scenarios')
+SCENARIO_DIR = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '../test/test_data/test_scenarios'))
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -189,7 +189,7 @@ def load_layer(layer_file, directory=TESTDATA):
     myKeywordPath = myPath[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure
-    myKeywords = readKeywordsFromFile(myKeywordPath)
+    myKeywords = read_file_keywords(myKeywordPath)
     myCategory = 'undefined'
     if 'category' in myKeywords:
         myCategory = myKeywords['category']
@@ -764,8 +764,6 @@ def populate_dock(dock):
     load_standard_layers(dock)
     dock.cboHazard.setCurrentIndex(0)
     dock.cboExposure.setCurrentIndex(0)
-    #QTest.mouseClick(myHazardItem, Qt.LeftButton)
-    #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
 
 def load_standard_layers(dock=None):
@@ -825,7 +823,7 @@ def load_layers(
 
     :param data_directory: Path to where data should be loaded from. Defaults
         to TESTDATA directory.
-    :type data_directory: str
+    :type data_directory: str, None
 
     :param clear_flag: Whether to clear currently loaded layers before loading
         the new layers.

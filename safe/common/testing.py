@@ -4,7 +4,7 @@
 import numpy
 import os
 
-from numerics import axes2points
+from numerics import axes_to_points
 from numpy.testing import Tester
 from safe.common.version import get_version
 
@@ -65,7 +65,7 @@ def combine_coordinates(x, y):
     """Make list of all combinations of points for x and y coordinates
     """
 
-    return axes2points(x, y)
+    return axes_to_points(x, y)
 
 
 # For polygon testing

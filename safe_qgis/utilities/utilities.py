@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
   **IS Utilities implementation.**
@@ -125,7 +126,7 @@ def getWGS84resolution(layer):
     If not, work it out based on EPSG:4326 representations of its extent.
 
     :param layer: Raster layer
-    :type layer: QgsRasterLayer
+    :type layer: QgsRasterLayer or QgsMapLayer
 
     :returns: The resolution of the given layer.
     :rtype: float
@@ -142,7 +143,8 @@ def getWGS84resolution(layer):
         # If it is already in EPSG:4326, simply use the native resolution
         if qgis_version() > 10800:
             myCellSize = layer.rasterUnitsPerPixelX()
-        else:
+        else:  # QGIS <= 1.8
+            # noinspection PyUnresolvedReferences
             myCellSize = layer.rasterUnitsPerPixel()
     else:
         # Otherwise, work it out based on EPSG:4326 representations of
@@ -251,8 +253,8 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
         return None, None
 
 
-def defaults(theDefault=None):
-    """Get a dictionary of default values to be used.
+def breakdown_defaults(theDefault=None):
+    """Get a dictionary of default values to be used for post processing.
 
     .. note: This method takes the DEFAULTS from safe and modifies them
         according to user preferences defined in QSettings.
@@ -471,7 +473,7 @@ def impact_attribution(keywords, inasafe_flag=False):
     :returns: An html snippet containing attribution information for the impact
         layer. If no keywords are present or no appropriate keywords are
         present, None is returned.
-    :rtype: str
+    :rtype: safe.messaging.Message
     """
     if keywords is None:
         return None
@@ -521,6 +523,7 @@ def impact_attribution(keywords, inasafe_flag=False):
 
     if inasafe_flag:
         myReport.add(m.Heading(tr('Software notes'), **INFO_STYLE))
+        # noinspection PyUnresolvedReferences
         myInaSAFEPhrase = tr(
             'This report was created using InaSAFE version %1. Visit '
             'http://inasafe.org to get your free copy of this software!'
@@ -616,7 +619,8 @@ def which(name, flags=os.X_OK):
 
     On newer versions of MS-Windows, the PATHEXT environment variable will be
     set to the list of file extensions for files considered executable. This
-    will normally include things like ".EXE". This fuction will also find files
+    will normally include things like ".EXE". This function will also find
+    files
     with the given name ending with any of these extensions.
 
     On MS-Windows the only flag that has any meaning is os.F_OK. Any other
@@ -703,6 +707,7 @@ def safe_to_qgis_layer(layer):
     :raises: Exception if layer is not valid.
     """
 
+    # noinspection PyUnresolvedReferences
     myMessage = tr(
         'Input layer must be a InaSAFE spatial object. I got %1'
     ).arg(str(type(layer)))
@@ -726,6 +731,7 @@ def safe_to_qgis_layer(layer):
     if myQGISLayer.isValid():
         return myQGISLayer
     else:
+        # noinspection PyUnresolvedReferences
         myMessage = tr('Loaded impact layer "%1" is not valid').arg(myFilename)
         raise Exception(myMessage)
 
@@ -826,7 +832,7 @@ def viewport_geo_array(map_canvas):
         # some code duplication from extentToGeoArray here
         # in favour of clarity of logic...
         myCrs = QgsCoordinateReferenceSystem()
-        myCrs.createFromEpsg(4326)
+        myCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
     return extent_to_geo_array(myRect, myCrs)
 
@@ -841,6 +847,7 @@ def read_impact_layer(impact_layer):
     :rtype: None, QgsRasterLayer, QgsVectorLayer
     """
 
+    # noinspection PyUnresolvedReferences
     myMessage = tr('Input layer must be a InaSAFE spatial object. '
                    'I got %1').arg(str(type(impact_layer)))
     if not hasattr(impact_layer, 'is_inasafe_spatial_object'):
@@ -863,6 +870,7 @@ def read_impact_layer(impact_layer):
     if myQGISLayer.isValid():
         return myQGISLayer
     else:
+        # noinspection PyUnresolvedReferences
         myMessage = tr(
             'Loaded impact layer "%1" is not valid').arg(myFilename)
         raise Exception(myMessage)

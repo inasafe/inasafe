@@ -58,6 +58,11 @@ class FunctionOptionsDialogTest(unittest.TestCase):
     def test_buildForm(self):
         """Test that we can build a form by passing it a function and params.
         """
+        # noinspection PyUnresolvedReferences
+        # pylint: disable=W0612
+        from safe.engine.impact_functions_for_testing import \
+            itb_fatality_model_configurable
+        # pylint: enable=W0612
         myFunctionId = 'I T B Fatality Function Configurable'
         myFunctionList = get_plugins(myFunctionId)
         assert len(myFunctionList) == 1

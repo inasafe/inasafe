@@ -19,9 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 
-from PyQt4.QtTest import QTest
 from PyQt4.QtGui import QDialogButtonBox
-from PyQt4.QtCore import Qt
 
 from safe_qgis.tools.shakemap_importer import ShakemapImporter
 from safe_qgis.safe_interface import TESTDATA, unique_filename, temp_dir
@@ -75,8 +73,7 @@ class ShakemapImporterTest(unittest.TestCase):
         myDialog.leInputPath.setText(my_grid_path)
         myDialog.leOutputPath.setText(my_output_raster)
         myButton = myDialog.buttonBox.button(QDialogButtonBox.Ok)
-        # noinspection PyArgumentList
-        QTest.mouseClick(myButton, Qt.LeftButton)
+        myButton.click()
         assert os.path.exists(my_output_raster), 'Raster is not created'
 
 

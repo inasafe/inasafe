@@ -1,9 +1,27 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk tool by AusAid - **Volcano polygon evacuation.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+.. todo:: Check raster is single band
+
+"""
 import numpy
+from third_party.odict import OrderedDict
+
 from safe.impact_functions.core import (
     FunctionProvider,
     get_hazard_layer,
     get_exposure_layer,
-    get_question)
+    get_question,
+    default_minimum_needs,
+    evacuated_population_weekly_needs)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -12,7 +30,8 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator)
+    get_thousand_separator,
+    get_defaults)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data, make_circular_polygon)
@@ -35,6 +54,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
 
     title = tr('Need evacuation')
     target_field = 'population'
+    defaults = get_defaults()
     # Function documentation
     synopsis = tr('To assess the impacts of volcano eruption on population.')
     actions = tr(
@@ -53,22 +73,35 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         'Vector layer contains population affected and the minimum needs '
         'based on the population affected.')
 
-    parameters = {'distance [km]': [3, 5, 10]}
+    parameters = OrderedDict([
+        ('distance [km]', [3, 5, 10]),
+        ('minimum needs', default_minimum_needs()),
+        ('postprocessors', OrderedDict([
+            ('Gender', {'on': True}),
+            ('Age', {
+                'on': True,
+                'params': OrderedDict([
+                    ('youth_ratio', defaults['YOUTH_RATIO']),
+                    ('adult_ratio', defaults['ADULT_RATIO']),
+                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
+            ('MinimumNeeds', {'on': True})]))])
 
     def run(self, layers):
         """Risk plugin for volcano population evacuation
 
-        Input
-          layers: List of layers expected to contain
-              my_hazard: Vector polygon layer of volcano impact zones
-              my_exposure: Raster layer of population data on the same grid as
+        :param layers: List of layers expected to contain where two layers
+            should be present.
+
+            * my_hazard: Vector polygon layer of volcano impact zones
+            * my_exposure: Raster layer of population data on the same grid as
               my_hazard
 
         Counts number of people exposed to volcano event.
 
-        Return
-          Map of population exposed to the volcano hazard zone.
-          Table with number of people evacuated and supplies required.
+        :returns: Map of population exposed to the volcano hazard zone.
+            The returned dict will include a table with number of people
+            evacuated and supplies required.
+        :rtype: dict
         """
 
         # Identify hazard and exposure layers
@@ -135,6 +168,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         if not category_title in my_hazard.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
                    'attribute %s ' % (my_hazard.get_name(), category_title))
+            # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
         # Run interpolation function for polygon2raster
@@ -194,14 +228,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
         # Use final accumulation as total number needing evac
         evacuated = cum
 
-        # Calculate estimated needs based on BNPB Perka
-        # 7/2008 minimum bantuan
-        # FIXME (Ole): Refactor into one function to be shared
-        rice = int(evacuated * 2.8)
-        drinking_water = int(evacuated * 17.5)
-        water = int(evacuated * 67)
-        family_kits = int(evacuated / 5)
-        toilets = int(evacuated / 20)
+        tot_needs = evacuated_population_weekly_needs(evacuated)
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -227,14 +254,18 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                            TableRow([tr('Needs per week'), tr('Total'),
                                      blank_cell],
                                     header=True),
-                           [tr('Rice [kg]'), format_int(rice), blank_cell],
+                           [tr('Rice [kg]'), format_int(tot_needs['rice']),
+                            blank_cell],
                            [tr('Drinking Water [l]'),
-                            format_int(drinking_water), blank_cell],
-                           [tr('Clean Water [l]'), format_int(water),
+                            format_int(tot_needs['drinking_water']),
                             blank_cell],
-                           [tr('Family Kits'), format_int(family_kits),
+                           [tr('Clean Water [l]'),
+                            format_int(tot_needs['water']),
                             blank_cell],
-                           [tr('Toilets'), format_int(toilets),
+                           [tr('Family Kits'),
+                            format_int(tot_needs['family_kits']),
+                            blank_cell],
+                           [tr('Toilets'), format_int(tot_needs['toilets']),
                             blank_cell]])
         impact_table = Table(table_body).toNewlineFreeString()
 

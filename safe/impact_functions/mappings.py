@@ -1,3 +1,4 @@
+# coding=utf-8
 """Collection of mappings for standard vulnerability classes
 """
 import numpy

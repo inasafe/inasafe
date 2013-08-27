@@ -26,10 +26,8 @@ import os
 
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import (
-    QObject,
     QLocale,
     QTranslator,
-    SIGNAL,
     QCoreApplication,
     Qt,
     QSettings,
@@ -39,17 +37,21 @@ try:
     # When upgrading, using the plugin manager, you may get an error when
     # doing the following import, so we wrap it in a try except
     # block and then display a friendly message to restart QGIS
+    # noinspection PyUnresolvedReferences
     from safe_qgis.exceptions import TranslationLoadError
 except ImportError:
     # Note we use translate directly but the string may still not translate
     # at this early stage since the i18n setup routines have not been called
     # yet.
+    # noinspection PyTypeChecker,PyArgumentList
     myWarning = QCoreApplication.translate(
         'Plugin', 'Please restart QGIS to use this plugin.')
+    # noinspection PyTypeChecker,PyArgumentList
     QMessageBox.warning(
         None, 'InaSAFE', myWarning)
 
 
+# noinspection PyUnresolvedReferences
 class Plugin:
     """The QGIS interface implementation for the InaSAFE plugin.
 
@@ -132,6 +134,7 @@ class Plugin:
             if not myResult:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadError(myMessage)
+            # noinspection PyTypeChecker
             QCoreApplication.installTranslator(self.translator)
 
         LOGGER.debug('%s %s' % (
@@ -149,6 +152,7 @@ class Plugin:
         :returns: Translated version of message.
         :rtype: QString
         """
+        # noinspection PyTypeChecker,PyArgumentList
         return QCoreApplication.translate('Plugin', message)
 
     def add_action(self, action, add_to_toolbar=True):
@@ -198,9 +202,7 @@ class Plugin:
             'Show/hide InaSAFE dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
-        QObject.connect(
-            self.actionDock, SIGNAL('triggered()'),
-            self.toggle_dock_visibility)
+        self.actionDock.triggered.connect(self.toggle_dock_visibility)
         self.add_action(self.actionDock)
 
         #--------------------------------------
@@ -216,9 +218,7 @@ class Plugin:
             'Open InaSAFE keywords editor'))
         self.actionKeywordsDialog.setEnabled(False)
 
-        QObject.connect(
-            self.actionKeywordsDialog, SIGNAL('triggered()'),
-            self.show_keywords_editor)
+        self.actionKeywordsDialog.triggered.connect(self.show_keywords_editor)
 
         self.add_action(self.actionKeywordsDialog)
 
@@ -232,9 +232,7 @@ class Plugin:
             'Reset the InaSAFE Dock'))
         self.actionResetDock.setWhatsThis(self.tr(
             'Reset the InaSAFE Dock'))
-        QObject.connect(
-            self.actionResetDock, SIGNAL('triggered()'),
-            self.reset_dock)
+        self.actionResetDock.triggered.connect(self.reset_dock)
 
         self.add_action(self.actionResetDock)
 
@@ -248,34 +246,30 @@ class Plugin:
             'Open InaSAFE options dialog'))
         self.actionOptions.setWhatsThis(self.tr(
             'Open InaSAFE options dialog'))
-        QObject.connect(
-            self.actionOptions, SIGNAL('triggered()'),
-            self.show_options)
+        self.actionOptions.triggered.connect(self.show_options)
 
         self.add_action(self.actionOptions)
 
         #--------------------------------------
         # Create action for impact functions doc dialog
         #--------------------------------------
-        self.actionImpactFunctionsDoc = QAction(
+        self.actionFunctionBrowser = QAction(
             QIcon(':/plugins/inasafe/show-impact-functions.svg'),
             self.tr('InaSAFE Impact Functions Browser'),
             self.iface.mainWindow())
-        self.actionImpactFunctionsDoc.setStatusTip(self.tr(
+        self.actionFunctionBrowser.setStatusTip(self.tr(
             'Open InaSAFE Impact Functions Browser'))
-        self.actionImpactFunctionsDoc.setWhatsThis(self.tr(
+        self.actionFunctionBrowser.setWhatsThis(self.tr(
             'Open InaSAFE Impact Functions Browser'))
-        QObject.connect(
-            self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
+        self.actionFunctionBrowser.triggered.connect(
             self.show_function_browser)
 
-        self.add_action(self.actionImpactFunctionsDoc)
+        self.add_action(self.actionFunctionBrowser)
 
         # Short cut for Open Impact Functions Doc
         self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
         self.iface.registerMainWindowAction(self.keyAction, "F7")
-        QObject.connect(self.keyAction, SIGNAL("triggered()"),
-                        self.shortcut_f7)
+        self.keyAction.triggered.connect(self.shortcut_f7)
 
         #---------------------------------------
         # Create action for minimum needs dialog
@@ -287,8 +281,7 @@ class Plugin:
             'Open InaSAFE minimum needs tool'))
         self.actionMinimumNeeds.setWhatsThis(self.tr(
             'Open InaSAFE minimum needs tool'))
-        QObject.connect(self.actionMinimumNeeds, SIGNAL('triggered()'),
-                        self.show_minimum_needs)
+        self.actionMinimumNeeds.triggered.connect(self.show_minimum_needs)
 
         self.add_action(self.actionMinimumNeeds)
 
@@ -302,8 +295,7 @@ class Plugin:
             'Open InaSAFE Converter'))
         self.actionConverter.setWhatsThis(self.tr(
             'Open InaSAFE Converter'))
-        QObject.connect(self.actionConverter, SIGNAL('triggered()'),
-                        self.show_shakemap_importer)
+        self.actionConverter.triggered.connect(self.show_shakemap_importer)
 
         self.add_action(self.actionConverter)
 
@@ -317,10 +309,7 @@ class Plugin:
             'Open InaSAFE Batch Runner'))
         self.actionBatchRunner.setWhatsThis(self.tr(
             'Open InaSAFE Batch Runner'))
-        QObject.connect(
-            self.actionBatchRunner,
-            SIGNAL('triggered()'),
-            self.show_batch_runner)
+        self.actionBatchRunner.triggered.connect(self.show_batch_runner)
 
         self.add_action(self.actionBatchRunner)
 
@@ -334,8 +323,8 @@ class Plugin:
         myMessage = self.tr('Save current scenario to text file')
         self.actionSaveScenario.setStatusTip(myMessage)
         self.actionSaveScenario.setWhatsThis(myMessage)
+        # noinspection PyUnresolvedReferences
         self.actionSaveScenario.triggered.connect(self.save_scenario)
-
         self.add_action(self.actionSaveScenario)
 
         #--------------------------------------
@@ -349,9 +338,7 @@ class Plugin:
             'InaSAFE OpenStreetMap Downloader'))
         self.actionImportDlg.setWhatsThis(self.tr(
             'InaSAFE OpenStreetMap Downloader'))
-        QObject.connect(
-            self.actionImportDlg, SIGNAL('triggered()'),
-            self.show_osm_downloader)
+        self.actionImportDlg.triggered.connect(self.show_osm_downloader)
 
         self.add_action(self.actionImportDlg)
 
@@ -371,15 +358,12 @@ class Plugin:
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
         #
-        QObject.connect(
-            self.dockWidget,
-            SIGNAL("visibilityChanged (bool)"),
-            self.toggle_inasafe_action)
+        self.dockWidget.visibilityChanged.connect(self.toggle_inasafe_action)
 
         # pylint: disable=W0201
 
     def clear_modules(self):
-        """Unload inasafe functions and try to return QIGS to before InaSAFE.
+        """Unload inasafe functions and try to return QGIS to before InaSAFE.
         """
         from safe.impact_functions import core
 
@@ -431,10 +415,7 @@ class Plugin:
         self.iface.mainWindow().removeToolBar(self.toolbar)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
-        QObject.disconnect(
-            self.iface,
-            SIGNAL("currentLayerChanged(QgsMapLayer*)"),
-            self.layer_changed)
+        self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
         self.clear_modules()
 
@@ -465,7 +446,7 @@ class Plugin:
         from safe_qgis.tools.minimum_needs import MinimumNeeds
 
         myDialog = MinimumNeeds(self.iface.mainWindow())
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_options(self):
         """Show the options dialog."""
@@ -473,10 +454,10 @@ class Plugin:
         from safe_qgis.tools.options_dialog import OptionsDialog
 
         myDialog = OptionsDialog(
-            self.iface.mainWindow(),
             self.iface,
-            self.dockWidget)
-        myDialog.show()
+            self.dockWidget,
+            self.iface.mainWindow())
+        myDialog.exec_()  # modal
 
     def show_keywords_editor(self):
         """Show the keywords editor."""
@@ -489,8 +470,7 @@ class Plugin:
             self.iface.mainWindow(),
             self.iface,
             self.dockWidget)
-        myDialog.setModal(True)
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_function_browser(self):
         """Show the impact function browser tool."""
@@ -498,8 +478,7 @@ class Plugin:
         from safe_qgis.tools.function_browser import FunctionBrowser
 
         myDialog = FunctionBrowser(self.iface.mainWindow())
-        myDialog.setModal(True)
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""
@@ -507,24 +486,24 @@ class Plugin:
         from safe_qgis.tools.shakemap_importer import ShakemapImporter
 
         myDialog = ShakemapImporter(self.iface.mainWindow())
-        myDialog.show()
+        myDialog.exec_()  # modal
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
         from safe_qgis.tools.osm_downloader import OsmDownloader
 
         dialog = OsmDownloader(self.iface.mainWindow(), self.iface)
-        dialog.setModal(True)
-        dialog.show()
+        dialog.exec_()  # modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
         from safe_qgis.batch.batch_dialog import BatchDialog
 
         myDialog = BatchDialog(
-            self.iface.mainWindow(), self.iface, self.dockWidget)
-        myDialog.setModal(True)
-        myDialog.show()
+            parent=self.iface.mainWindow(),
+            iface=self.iface,
+            dock=self.dockWidget)
+        myDialog.exec_()  # modal
 
     def save_scenario(self):
         """Save current scenario to text file,"""
@@ -543,8 +522,7 @@ class Plugin:
             self.actionKeywordsDialog.setEnabled(False)
         else:
             self.actionKeywordsDialog.setEnabled(True)
-        self.dockWidget.layer_changed(layer)
 
     def shortcut_f7(self):
-        '''Executed when user press F7 - will show the shakemap importer.'''
+        """Executed when user press F7 - will show the shakemap importer."""
         self.show_shakemap_importer()

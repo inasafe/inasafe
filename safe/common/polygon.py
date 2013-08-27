@@ -26,17 +26,19 @@ import numpy
 from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
-from safe.common.numerics import grid2points, geotransform2axes
-from safe.common.exceptions import PolygonInputError, InaSAFEError
+from safe.common.numerics import grid_to_points, geotransform_to_axes
+from safe.common.exceptions import (
+    PolygonInputError, InaSAFEError, PointsInputError)
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def separate_points_by_polygon(points, polygon,
-                               polygon_bbox=None,
-                               closed=True,
-                               check_input=True,
-                               use_numpy=True):
+def separate_points_by_polygon(
+        points, polygon,
+        polygon_bbox=None,
+        closed=True,
+        check_input=True,
+        use_numpy=True):
     """Determine whether points are inside or outside a polygon.
 
     Args:
@@ -116,7 +118,10 @@ def separate_points_by_polygon(points, polygon,
 
         if len(points.shape) == 1:
             # Only one point was passed in. Convert to array of points.
-            points = numpy.reshape(points, (1, 2))
+            try:
+                points = numpy.reshape(points, (1, 2))
+            except ValueError, e:
+                raise PointsInputError(e.message)
 
         msg = ('Point array must have two columns (x,y), '
                'I got points.shape[1]=%d' % points.shape[0])
@@ -164,9 +169,8 @@ def separate_points_by_polygon(points, polygon,
     else:
         func = _separate_points_by_polygon_python
 
-    local_indices_inside, local_indices_outside = func(candidate_points,
-                                                       polygon,
-                                                       closed=closed)
+    local_indices_inside, local_indices_outside = func(
+        candidate_points, polygon, closed=closed)
 
     # Map local indices from candidate points to global indices of all points
     indices_outside_box = numpy.where(outside_box)[0]
@@ -466,22 +470,24 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8,
         return result
 
 
-def in_and_outside_polygon(points, polygon,
-                           closed=True,
-                           holes=None,
-                           check_input=True):
+def in_and_outside_polygon(
+        points, polygon,
+        closed=True,
+        holes=None,
+        check_input=True):
     """Separate a list of points into two sets inside and outside a polygon
 
-    Input:
-      points: (tuple, list or array) of coordinates
+    :param points: (tuple, list or array) of coordinates
 
-      polygon: list or Nx2 array of polygon vertices
+    :param polygon: list or Nx2 array of polygon vertices
 
-      closed: Set to True if points on boundary are considered
+    :param closed: Set to True if points on boundary are considered
       to be 'inside' polygon
 
-      holes: list of polygons representing holes. Points inside either of
+    :param holes: list of polygons representing holes. Points inside either of
       these are considered outside polygon
+
+    :param check_input: Allows faster execution if set to False
 
     Output:
       inside: Indices of points inside the polygon
@@ -1287,7 +1293,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     .. note:: Grid points are considered to be pixel-registered which means
         that each point represents the center of its grid cell.
         The required half cell shifts are taken care of by the
-        function :func:`geotransform2axes`.
+        function :func:`geotransform_to_axes`.
 
         If multiple polygons overlap, the one first encountered will be used.
 
@@ -1295,8 +1301,8 @@ def clip_grid_by_polygons(A, geotransform, polygons):
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
     ny, nx = A.shape
-    x, y = geotransform2axes(geotransform, nx, ny)
-    points, values = grid2points(A, x, y)
+    x, y = geotransform_to_axes(geotransform, nx, ny)
+    points, values = grid_to_points(A, x, y)
 
     # Generate list of points and values that fall inside each polygon
     points_covered = []

@@ -22,7 +22,7 @@ import unittest
 from safe_qgis.safe_interface import (
     getOptimalExtent,
     availableFunctions,
-    readKeywordsFromFile,
+    read_file_keywords,
     readSafeLayer,
     TESTDATA, HAZDATA, EXPDATA,
     BoundingBoxError)
@@ -176,8 +176,8 @@ class SafeInterfaceTest(unittest.TestCase):
         # Also test if it works when we give it two layers
         # to see if we can determine which functions will
         # work for them.
-        myKeywords1 = readKeywordsFromFile(self.rasterShakePath)
-        myKeywords2 = readKeywordsFromFile(self.vectorPath)
+        myKeywords1 = read_file_keywords(self.rasterShakePath)
+        myKeywords2 = read_file_keywords(self.vectorPath)
         # We need to explicitly add the layer type to each keyword list
         myKeywords1['layertype'] = 'raster'
         myKeywords2['layertype'] = 'vector'
@@ -190,7 +190,7 @@ class SafeInterfaceTest(unittest.TestCase):
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""
 
-        myKeyword = readKeywordsFromFile(self.rasterShakePath, 'category')
+        myKeyword = read_file_keywords(self.rasterShakePath, 'category')
         myExpectedKeyword = 'hazard'
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeyword, myExpectedKeyword, self.rasterShakePath)
@@ -198,7 +198,7 @@ class SafeInterfaceTest(unittest.TestCase):
 
         # Test we get an exception if keyword is not found
         try:
-            _ = readKeywordsFromFile(self.rasterShakePath,
+            _ = read_file_keywords(self.rasterShakePath,
                                      'boguskeyword')
         except KeywordNotFoundError:
             pass  # this is good
@@ -207,7 +207,7 @@ class SafeInterfaceTest(unittest.TestCase):
                          'exception type: \n %s') % str(e)
             assert(), myMessage
 
-        myKeywords = readKeywordsFromFile(self.rasterShakePath)
+        myKeywords = read_file_keywords(self.rasterShakePath)
 
         myExpectedKeywords = {'category': 'hazard',
                               'subcategory': 'earthquake',
@@ -218,7 +218,7 @@ class SafeInterfaceTest(unittest.TestCase):
                                                    myKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
-        myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
+        myKeywords = read_file_keywords(self.rasterPopulationPath)
         myExpectedKeywords = {'category': 'exposure',
                               'source': ('Center for International Earth '
                                          'Science Information Network '
@@ -230,7 +230,7 @@ class SafeInterfaceTest(unittest.TestCase):
                                                    myKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
-        myKeywords = readKeywordsFromFile(self.vectorPath)
+        myKeywords = read_file_keywords(self.vectorPath)
         myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'itb',
                               'subcategory': 'structure',
@@ -240,7 +240,7 @@ class SafeInterfaceTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
         #  tsunami example (one layer is UTM)
-        myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)
+        myKeywords = read_file_keywords(self.rasterTsunamiPath)
         myExpectedKeywords = {'title': 'Tsunami Max Inundation',
                               'category': 'hazard',
                               'subcategory': 'tsunami',
@@ -249,7 +249,7 @@ class SafeInterfaceTest(unittest.TestCase):
                                                    myKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
-        myKeywords = readKeywordsFromFile(self.rasterExposurePath)
+        myKeywords = read_file_keywords(self.rasterExposurePath)
         myExpectedKeywords = {'category': 'exposure',
                               'subcategory': 'structure',
                               'title': 'Tsunami Building Exposure'}

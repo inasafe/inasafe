@@ -10,7 +10,7 @@ import numpy
 from Scientific.IO.NetCDF import NetCDFFile
 
 from safe.storage.raster import Raster
-from safe.storage.utilities import raster_geometry2geotransform
+from safe.storage.utilities import raster_geometry_to_geotransform
 
 
 # FIXME (Ole): Write test using
@@ -102,7 +102,7 @@ def convert_netcdf2tif(filename, n, verbose=False, output_dir=None):
         total_max = numpy.max(A[:])
         #print i, numpy.max(B[:]), total_max
 
-    geotransform = raster_geometry2geotransform(x, y)
+    geotransform = raster_geometry_to_geotransform(x, y)
 
     # Write result to tif file
     # NOTE: This assumes a default projection (WGS 84, geographic)

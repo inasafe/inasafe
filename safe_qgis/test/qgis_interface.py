@@ -38,6 +38,7 @@ class QgisInterface(QObject):
     so most methods are simply stubs.
     """
     currentLayerChanged = pyqtSignal(QgsMapCanvasLayer)
+
     def __init__(self, canvas):
         """Constructor
         :param canvas:
@@ -171,4 +172,3 @@ class QgisInterface(QObject):
         :param area:
         """
         pass
-

@@ -9,7 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -37,7 +37,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem)
 from qgis.analysis import QgsZonalStatistics
 
-from safe_qgis.impact_statistics.zonal_stats import calculateZonalStats
+from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
 from third_party.odict import OrderedDict
 from third_party.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
@@ -46,7 +46,7 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
     create_memory_layer,
-    defaults,
+    breakdown_defaults,
     extent_to_geo_array,
     safe_to_qgis_layer)
 from safe_qgis.utilities.styling import set_vector_graduated_style
@@ -60,12 +60,15 @@ from safe_qgis.safe_interface import (
     messaging as m)
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL)
+    STATIC_MESSAGE_SIGNAL,
+    PointsInputError)
 from safe_qgis.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
     KeywordDbError,
-    InvalidAggregatorError)
+    InvalidAggregatorError,
+    UnsupportedProviderError,
+    InvalidLayerError)
 from safe_qgis.safe_interface import styles
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -99,9 +102,14 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributeTitle = None
 
+        #use qgis or inasafe zonal stats
+        myFlag = QtCore.QSettings().value('inasafe/useNativeZonalStats',
+                                          False).toBool()
+        self.useNativeZonalStats = myFlag
+
         self.iface = iface
         self.keywordIO = KeywordIO()
-        self.defaults = defaults()
+        self.defaults = breakdown_defaults()
         self.errorMessage = None
         self.targetField = None
         self.impactLayerAttributes = []
@@ -203,10 +211,12 @@ class Aggregator(QtCore.QObject):
 
         Buildings are not split up by this method.
 
+        :param hazard_layer: A hazard layer.
         :type hazard_layer: QgsMapLayer
+
+        :param exposure_layer: An exposure layer.
         :type exposure_layer: QgsMapLayer
-        :param exposure_layer:
-        :param hazard_layer:
+
         """
 
         if not self.isValid:
@@ -215,14 +225,18 @@ class Aggregator(QtCore.QObject):
         # These should have already been clipped to analysis extents
         self.hazardLayer = hazard_layer
         self.exposureLayer = exposure_layer
-        self._prepare_layer()
+        try:
+            self._prepare_layer()
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
 
         if not self.aoiMode:
             # This is a safe version of the aggregation layer
             self.safeLayer = safe_read_layer(str(self.layer.source()))
 
             if is_polygon_layer(self.hazardLayer):
-                self.hazardLayer = self._prepare_polygon_layer(self.hazardLayer)
+                self.hazardLayer = self._prepare_polygon_layer(
+                    self.hazardLayer)
 
             if is_polygon_layer(self.exposureLayer):
                 # Find out the subcategory for this layer
@@ -264,8 +278,12 @@ class Aggregator(QtCore.QObject):
             myMessage = self.tr('Error when reading %1').arg(myQGISImpactLayer)
             # noinspection PyExceptionInherit
             raise ReadLayerError(myMessage)
+
+        myAggrName = self.layer.name()
+        if self.aoiMode:
+            myAggrName = myAggrName.toLower()
         myLayerName = str(self.tr('%1 aggregated to %2').arg(
-            myQGISImpactLayer.name()).arg(self.layer.name()))
+            myQGISImpactLayer.name()).arg(myAggrName))
 
         #delete unwanted fields
         myProvider = self.layer.dataProvider()
@@ -483,13 +501,17 @@ class Aggregator(QtCore.QObject):
                         outer_ring = myPolygon
                         inner_rings = None
 
-                    inside, outside = points_in_and_outside_polygon(
-                        myRemainingPoints,
-                        outer_ring,
-                        holes=inner_rings,
-                        closed=True,
-                        check_input=True)
-
+                    try:
+                        # noinspection PyArgumentEqualDefault
+                        inside, outside = points_in_and_outside_polygon(
+                            myRemainingPoints,
+                            outer_ring,
+                            holes=inner_rings,
+                            closed=True,
+                            check_input=True)
+                    except PointsInputError:  # too few points provided
+                        inside = []
+                        outside = []
                     #self.impactLayerAttributes is a list of list of dict
                     #[
                     #   [{...},{...},{...}],
@@ -506,14 +528,14 @@ class Aggregator(QtCore.QObject):
                             try:
                                 myResults[myKey] += 1
                             except KeyError:
-                                myError = ('StatisticsClasses %s does not '
-                                           'include the %s class which was '
-                                           'found in the data. This is a '
-                                           'problem in the %s '
-                                           'statistics_classes definition' %
-                                           (self.statisticsClasses,
-                                            myKey,
-                                            self.getFunctionID()))
+                                myError = (
+                                    'StatisticsClasses %s does not include '
+                                    'the %s class which was found in the '
+                                    'data. This is a problem in the %s '
+                                    'statistics_classes definition' %
+                                    (self.statisticsClasses,
+                                    myKey,
+                                    self.getFunctionID()))
                                 raise KeyError(myError)
 
                             self.impactLayerAttributes[myPolygonIndex].append(
@@ -548,8 +570,8 @@ class Aggregator(QtCore.QObject):
                         {myFID: myAttrs})
 
                     # make outside points the input to the next iteration
-                    # this could maybe be done quicklier using directly numpy
-                    # arrays like this:
+                    # this could maybe be done more quickly using directly
+                    # numpy arrays like this:
                     # myRemainingPoints = myRemainingPoints[outside]
                     # myRemainingValues =
                     # [myRemainingValues[i] for i in outside]
@@ -638,112 +660,111 @@ class Aggregator(QtCore.QObject):
         :param impact_layer: A raster impact layer.
         :type impact_layer: QgsRasterLayer
         """
-        myZonalStatistics = QgsZonalStatistics(
-            self.layer,
-            impact_layer.dataProvider().dataSourceUri(),
-            self.prefix)
-        myProgressDialog = QtGui.QProgressDialog(
-            self.tr('Calculating zonal statistics'),
-            self.tr('Abort...'),
-            0,
-            0)
-        startTime = time.clock()
-        myZonalStatistics.calculateStatistics(myProgressDialog)
-        if myProgressDialog.wasCanceled():
-            QtGui.QMessageBox.error(
-                self, self.tr('ZonalStats: Error'),
-                self.tr('You aborted aggregation, '
-                        'so there are no data for analysis. Exiting...'))
-        cppDuration = time.clock() - startTime
-        print 'CPP duration: %ss' % (cppDuration)
+        if self.useNativeZonalStats:
+            myZonalStatistics = QgsZonalStatistics(
+                self.layer,
+                impact_layer.dataProvider().dataSourceUri(),
+                self.prefix)
+            myProgressDialog = QtGui.QProgressDialog(
+                self.tr('Calculating zonal statistics'),
+                self.tr('Abort...'),
+                0,
+                0)
+            startTime = time.clock()
+            myZonalStatistics.calculateStatistics(myProgressDialog)
+            if myProgressDialog.wasCanceled():
+                QtGui.QMessageBox.error(
+                    self, self.tr('ZonalStats: Error'),
+                    self.tr('You aborted aggregation, '
+                            'so there are no data for analysis. Exiting...'))
+            cppDuration = time.clock() - startTime
+            LOGGER.debug('Native zonal stats duration: %ss' % cppDuration)
+        else:
+            # new way
+            # myZonalStatistics = {
+            # 0L: {'count': 50539,
+            #      'sum': 12015061.876953125,
+            #      'mean': 237.73841739949594},
+            # 1L: {
+            #   'count': 19492,
+            #   'sum': 2945658.1220703125,
+            #   'mean': 151.12138939412642},
+            # 2L: {
+            #   'count': 57372,
+            #   'sum': 1643522.3984985352, 'mean': 28.6467684323108},
+            # 3L: {
+            #   'count': 0.00013265823369700314,
+            #   'sum': 0.24983273179242008,
+            #   'mean': 1883.2810058593748},
+            # 4L: {
+            #   'count': 1.8158245316933218e-05,
+            #   'sum': 0.034197078505115275,
+            #   'mean': 1883.281005859375},
+            # 5L: {
+            #   'count': 73941,
+            #   'sum': 10945062.435424805,
+            #   'mean': 148.024268476553},
+            # 6L: {
+            #   'count': 54998,
+            #   'sum': 11330910.488220215,
+            #   'mean': 206.02404611477172}}
+            startTime = time.clock()
+            myZonalStatistics = calculate_zonal_stats(impact_layer, self.layer)
+            pyDuration = time.clock() - startTime
+            LOGGER.debug('Python zonal stats duration: %ss' % pyDuration)
 
-        startTime = time.clock()
-        # new way
-        # myZonalStatistics = {
-        # 0L: {'count': 50539,
-        #      'sum': 12015061.876953125,
-        #      'mean': 237.73841739949594},
-        # 1L: {
-        #   'count': 19492,
-        #   'sum': 2945658.1220703125,
-        #   'mean': 151.12138939412642},
-        # 2L: {
-        #   'count': 57372,
-        #   'sum': 1643522.3984985352, 'mean': 28.6467684323108},
-        # 3L: {
-        #   'count': 0.00013265823369700314,
-        #   'sum': 0.24983273179242008,
-        #   'mean': 1883.2810058593748},
-        # 4L: {
-        #   'count': 1.8158245316933218e-05,
-        #   'sum': 0.034197078505115275,
-        #   'mean': 1883.281005859375},
-        # 5L: {
-        #   'count': 73941,
-        #   'sum': 10945062.435424805,
-        #   'mean': 148.024268476553},
-        # 6L: {
-        #   'count': 54998,
-        #   'sum': 11330910.488220215,
-        #   'mean': 206.02404611477172}}
+            myProvider = self.layer.dataProvider()
+            self.layer.startEditing()
 
-        myZonalStatistics = calculateZonalStats(impact_layer, self.layer)
-        pyDuration = time.clock() - startTime
-        print 'CPP duration: %ss' % (pyDuration)
+            # add fields for stats to aggregation layer
+            # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
+            #             QgsField(self._minFieldName(),
+            #                      QtCore.QVariant.Double),
+            #             QgsField(self._maxFieldName(),
+            #                      QtCore.QVariant.Double)]
+            myFields = [QgsField(self._count_field_name(),
+                                 QtCore.QVariant.Double),
+                        QgsField(self._sum_field_name(),
+                                 QtCore.QVariant.Double),
+                        QgsField(self._mean_field_name(),
+                                 QtCore.QVariant.Double)
+                        ]
+            myProvider.addAttributes(myFields)
+            self.layer.commitChanges()
 
-        try:
-            ratio = pyDuration / cppDuration
-        except ZeroDivisionError:
-            ratio = 1
+            sumIndex = myProvider.fieldNameIndex(self._sum_field_name())
+            countIndex = myProvider.fieldNameIndex(self._count_field_name())
+            meanIndex = myProvider.fieldNameIndex(self._mean_field_name())
+            # minIndex = myProvider.fieldNameIndex(self._minFieldName())
+            # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
 
-        print 'py to CPP: %s%%' % (ratio * 100)
-        # FIXME (MB) remove this once fully implemented
-        oldPrefix = self.prefix
+            self.layer.startEditing()
+            allPolygonAttrs = myProvider.attributeIndexes()
+            myProvider.rewind()
+            myProvider.select([])
+            myProvider.select(allPolygonAttrs)
+            myFeature = QgsFeature()
 
-        self.prefix = 'newAggr'
-        myProvider = self.layer.dataProvider()
-        self.layer.startEditing()
-
-        # add fields for stats to aggregation layer
-        # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
-        #             QgsField(self._minFieldName(), QtCore.QVariant.Double),
-        #             QgsField(self._maxFieldName(), QtCore.QVariant.Double)]
-        myFields = [QgsField(self._count_field_name(), QtCore.QVariant.Double),
-                    QgsField(self._sum_field_name(), QtCore.QVariant.Double),
-                    QgsField(self._mean_field_name(), QtCore.QVariant.Double)
-                    ]
-        myProvider.addAttributes(myFields)
-        self.layer.commitChanges()
-
-        sumIndex = myProvider.fieldNameIndex(self._sum_field_name())
-        countIndex = myProvider.fieldNameIndex(self._count_field_name())
-        meanIndex = myProvider.fieldNameIndex(self._mean_field_name())
-        # minIndex = myProvider.fieldNameIndex(self._minFieldName())
-        # maxIndex = myProvider.fieldNameIndex(self._maxFieldName())
-
-        self.layer.startEditing()
-        allPolygonAttrs = myProvider.attributeIndexes()
-        myProvider.select(allPolygonAttrs)
-        myFeature = QgsFeature()
-
-        while myProvider.nextFeature(myFeature):
-            myFid = myFeature.id()
-            myStats = myZonalStatistics[myFid]
-            #          minIndex: QtCore.QVariant(myStats['min']),
-            #          maxIndex: QtCore.QVariant(myStats['max'])}
-            attrs = {sumIndex: QtCore.QVariant(myStats['sum']),
-                     countIndex: QtCore.QVariant(myStats['count']),
-                     meanIndex: QtCore.QVariant(myStats['mean'])
-                     }
-            myProvider.changeAttributeValues({myFid: attrs})
-        self.layer.commitChanges()
-
-        # FIXME (MB) remove this once fully implemented
-        self.prefix = oldPrefix
-        return
+            while myProvider.nextFeature(myFeature):
+                myFid = myFeature.id()
+                if myFid not in myZonalStatistics:
+                    # Blindly ignoring - @mbernasocchi can you review? TS
+                    continue
+                myStats = myZonalStatistics[myFid]
+                #          minIndex: QtCore.QVariant(myStats['min']),
+                #          maxIndex: QtCore.QVariant(myStats['max'])}
+                attrs = {sumIndex: QtCore.QVariant(myStats['sum']),
+                         countIndex: QtCore.QVariant(myStats['count']),
+                         meanIndex: QtCore.QVariant(myStats['mean'])
+                         }
+                myProvider.changeAttributeValues({myFid: attrs})
+            self.layer.commitChanges()
 
     def _prepare_layer(self):
-        """Prepare the aggregation layer to match analysis extents."""
+        """Prepare the aggregation layer to match analysis extents.
+
+        :raises: InvalidLayerError, UnsupportedProviderError, KeywordDbError
+        """
         myMessage = m.Message(
             m.Heading(
                 self.tr('Preparing aggregation layer'),
@@ -756,8 +777,13 @@ class Aggregator(QtCore.QObject):
         # This is used to hold an *in memory copy* of the aggregation layer
         # or a in memory layer with the clip extents as a feature.
         if self.aoiMode:
-            self.layer = self._extents_to_layer()
-            # Area Of Interest (AOI) mode flag
+            try:
+                self.layer = self._extents_to_layer()
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
+        # Area Of Interest (AOI) mode flag is False
         else:
             # we use only the exposure extent, because both exposure and hazard
             # have the same extent at this point.
@@ -841,7 +867,8 @@ class Aggregator(QtCore.QObject):
 #        startTime = time.clock()
 
         myMessage = m.Message(
-            m.Heading(self.tr('Preclipping input data...')),
+            m.Heading(
+                self.tr('Preclipping input data...'), **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'Modifying %1 to avoid intersections with the aggregation '
                 'layer'
@@ -851,7 +878,8 @@ class Aggregator(QtCore.QObject):
         theLayerFilename = str(layer.source())
         myPostprocPolygons = self.safeLayer.get_geometry()
         myPolygonsLayer = safe_read_layer(theLayerFilename)
-        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry())
+        myRemainingPolygons = numpy.array(myPolygonsLayer.get_geometry(),
+                                          dtype=list)
 #        myRemainingAttributes = numpy.array(myPolygonsLayer.get_data())
         myRemainingIndexes = numpy.array(range(len(myRemainingPolygons)))
 
@@ -879,8 +907,8 @@ class Aggregator(QtCore.QObject):
         myInsideFeat = QgsFeature()
         fields = polygonsProvider.fields()
         myTempdir = temp_dir(sub_dir='preprocess')
-        myOutFilename = unique_filename(suffix='.shp',
-                                        dir=myTempdir)
+        myOutFilename = unique_filename(
+            suffix='.shp', dir=myTempdir)
 
         self.keywordIO.copy_keywords(layer, myOutFilename)
         mySHPWriter = QgsVectorFileWriter(myOutFilename,
@@ -1164,6 +1192,8 @@ class Aggregator(QtCore.QObject):
 
         :returns: A memory layer representing the extents of the clip.
         :rtype: QgsVectorLayer
+
+        :raises: InvalidLayerError, UnsupportedProviderError, KeywordDbError
         """
 
         # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
@@ -1176,7 +1206,7 @@ class Aggregator(QtCore.QObject):
         if not self.layer.isValid():
             myMessage = self.tr(
                 'An exception occurred when creating the entire area layer.')
-            raise (Exception(myMessage))
+            raise (InvalidLayerError(myMessage))
 
         myProvider = self.layer.dataProvider()
 
@@ -1205,7 +1235,7 @@ class Aggregator(QtCore.QObject):
             self.keywordIO.write_keywords(
                 self.layer,
                 {self.defaults['AGGR_ATTR_KEY']: myAttrName})
-        except KeywordDbError, e:
+        except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
 

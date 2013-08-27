@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Paragraph.**
 
@@ -42,9 +43,11 @@ class MessagingTest(unittest.TestCase):
     """
 
     def setUp(self):
+        """Run before each test."""
         os.environ['LANG'] = 'en'
 
     def tearDown(self):
+        """Run after each test."""
         pass
 
     def test_text(self):
@@ -277,10 +280,10 @@ class MessagingTest(unittest.TestCase):
             ' text</strong> <a href="http://google.ch">google link</a>\n'
             '<p>text for paragraph <img src="'
             'http://www.google.ch/images/srpr/logo4w.png" title="Google logo" '
-            'alt="Google logo"/> <em>this is an emphasized paragraph text'
+            'alt="Google logo" /> <em>this is an emphasized paragraph text'
             '</em> <img src="http://www.google.ch/images/srpr/NoText.png" '
             'title="" '
-            'alt=""/></p>\n')
+            'alt="" /></p>\n')
         res = m.to_html()
         self.assertEqual(expected_res, res)
 
@@ -293,8 +296,9 @@ class MessagingTest(unittest.TestCase):
 
         em1.append(em2)
         em1.prepend(em0)
+        self.maxDiff = None
         expected_res = (
-            '<h5 class="warning"><i class="icon-remove-sign icon-white"></i> '
+            u'<h5 class="warning"><i class="icon-remove-sign icon-white"></i> '
             'Problem</h5>\n<p>The following problem(s) were encountered '
             'whilst running the analysis.</p>\n<ul>\n<li>E2p</li>\n<li>'
             'E1p</li>\n<li>E0p</li>\n</ul>\n<h5 class="suggestion"><i '
@@ -303,9 +307,10 @@ class MessagingTest(unittest.TestCase):
             '\n</ul>\n<h5 class="problem"><i class="icon-list icon-white">'
             '</i> Details</h5>\n<p>These additional details were reported '
             'when the problem occurred.</p>\n<ul>\n<li>E0d</li>\n<li>E2d'
-            '</li>\n</ul>\n<h5 class="inverse" ><i class="icon-info-sign '
-            'icon-white"></i> Diagnostics (click for details)</h5>\n<ol>'
-            '\n<li>In file E0t</li>\n<li>In file E2t</li>\n</ol>\n')
+            '</li>\n</ul>\n<h5 class="inverse" onclick="toggleTracebacks();">'
+            '<i class="icon-info-sign icon-white"></i> Diagnostics (click '
+            'for details)</h5>\n<ol class="traceback-detail">\n<li>In '
+            'file E0t</li>\n<li>In file E2t</li>\n</ol>\n')
 
         res = em1.to_html()
         self.assertEqual(expected_res, res)

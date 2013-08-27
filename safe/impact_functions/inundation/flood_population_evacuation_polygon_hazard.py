@@ -1,7 +1,31 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid - **Flood polygon evacuation.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+.. todo:: Check raster is single band
+
+"""
+__author__ = 'Ole Nielson'
+__revision__ = '$Format:%H$'
+__date__ = '10/01/2011'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 import numpy
 from third_party.odict import OrderedDict
 from safe.impact_functions.core import (
-    FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
+    FunctionProvider,
+    get_hazard_layer,
+    get_exposure_layer,
+    get_question,
+    default_minimum_needs,
+    evacuated_population_weekly_needs)
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     ugettext as tr,
@@ -13,6 +37,7 @@ from safe.common.utilities import (
     create_label)
 from safe.common.tables import Table, TableRow, TableCell
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+
 
 import logging
 LOGGER = logging.getLogger('InaSAFE')
@@ -73,13 +98,10 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'params': OrderedDict([
                     ('youth_ratio', defaults['YOUTH_RATIO']),
                     ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elder_ratio', defaults['ELDER_RATIO'])])})])),
-        ('minimum needs', OrderedDict([
-            ('Rice', 2.8),
-            ('Drinking Water', 17.5),
-            ('Water', 105),
-            ('Family Kits', 0.2),
-            ('Toilets', 0.05)]))
+                    ('elder_ratio', defaults['ELDER_RATIO'])])}),
+            ('MinimumNeeds', {'on': True}),
+        ])),
+        ('minimum needs', default_minimum_needs())
     ])
 
     def run(self, layers):
@@ -205,28 +227,19 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         evacuated = round_thousand(evacuated)
 
         # Calculate estimated minimum needs
-        # The default value of each logistic is based on BNPB Perka 7/2008
-        # minimum bantuan
         minimum_needs = self.parameters['minimum needs']
-        mn_rice = minimum_needs['Rice']
-        mn_drinking_water = minimum_needs['Drinking Water']
-        mn_water = minimum_needs['Water']
-        mn_family_kits = minimum_needs['Family Kits']
-        mn_toilets = minimum_needs['Toilets']
-
-        rice = int(evacuated * mn_rice)
-        drinking_water = int(evacuated * mn_drinking_water)
-        water = int(evacuated * mn_water)
-        family_kits = int(evacuated * mn_family_kits)
-        toilets = int(evacuated / mn_toilets)
+        tot_needs = evacuated_population_weekly_needs(evacuated, minimum_needs)
 
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([tr('People affected'),
-                                '%s*' % format_int(int(affected_population))],
+                                '%s%s' % (format_int(int(affected_population)),
+                                          ('*' if affected_population >= 1000
+                                           else ''))],
                                header=True),
                       TableRow([tr('People needing evacuation'),
-                                '%s*' % format_int(int(evacuated))],
+                                '%s%s' % (format_int(int(evacuated)),
+                                          ('*' if evacuated >= 1000 else ''))],
                                header=True),
                       TableRow([
                           TableCell(
@@ -238,15 +251,18 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                                     self.parameters['evacuation_percentage'])],
                                header=True),
                       TableRow(tr('Map shows population affected in each flood'
-                                  ' prone area ')),
+                                  ' prone area')),
+                      TableRow(tr('Table below shows the weekly minium needs '
+                                  'for all evacuated people')),
                       TableRow([tr('Needs per week'), tr('Total')],
                                header=True),
-                      [tr('Rice [kg]'), format_int(int(rice))],
+                      [tr('Rice [kg]'), format_int(tot_needs['rice'])],
                       [tr('Drinking Water [l]'),
-                       format_int(int(drinking_water))],
-                      [tr('Clean Water [l]'), format_int(int(water))],
-                      [tr('Family Kits'), format_int(int(family_kits))],
-                      [tr('Toilets'), format_int(int(toilets))]]
+                       format_int(tot_needs['drinking_water'])],
+                      [tr('Clean Water [l]'), format_int(tot_needs['water'])],
+                      [tr('Family Kits'), format_int(tot_needs[
+                          'family_kits'])],
+                      [tr('Toilets'), format_int(tot_needs['toilets'])]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))

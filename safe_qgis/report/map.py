@@ -249,13 +249,14 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map drawMap called')
         myMapWidth = self.mapWidth
-        myComposerMap = QgsComposerMap(self.composition,
-                                       self.pageMargin,
-                                       top_offset,
-                                       myMapWidth,
-                                       self.mapHeight)
+        myComposerMap = QgsComposerMap(
+            self.composition,
+            self.pageMargin,
+            top_offset,
+            myMapWidth,
+            self.mapHeight)
         #myExtent = self.iface.mapCanvas().extent()
-        # The dimensions of the map canvas and the print compser map may
+        # The dimensions of the map canvas and the print composer map may
         # differ. So we set the map composer extent using the canvas and
         # then defer to the map canvas's map extents thereafter
         # Update: disabled as it results in a rectangular rather than
@@ -296,10 +297,11 @@ class Map():
         myFontSize = 6
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = False
-        myFont = QtGui.QFont('verdana',
-                             myFontSize,
-                             myFontWeight,
-                             myItalicsFlag)
+        myFont = QtGui.QFont(
+            'verdana',
+            myFontSize,
+            myFontWeight,
+            myItalicsFlag)
         myComposerMap.setGridAnnotationFont(myFont)
         myComposerMap.setGridAnnotationPrecision(myPrecision)
         myComposerMap.setShowGridAnnotation(True)

@@ -52,7 +52,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
-        self.helpDialog = None
         self.keywordIO = KeywordIO()
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
@@ -121,6 +120,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/devMode', False).toBool()
         self.cbxDevMode.setChecked(myFlag)
 
+        myFlag = mySettings.value(
+            'inasafe/useNativeZonalStats', False).toBool()
+        self.cbxNativeZonalStats.setChecked(myFlag)
+
     def save_state(self):
         """Store the options into the user's stored session info.
         """
@@ -149,6 +152,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.leKeywordCachePath.text())
         mySettings.setValue('inasafe/devMode',
                             self.cbxDevMode.isChecked())
+        mySettings.setValue('inasafe/useNativeZonalStats',
+                            self.cbxNativeZonalStats.isChecked())
 
     def show_help(self):
         """Show context help for the options dialog."""
