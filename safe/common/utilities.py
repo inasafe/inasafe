@@ -461,8 +461,8 @@ def get_significant_decimal(my_decimal):
 
 
 def humanize_class(my_classes):
-    """Return humanize interval of an array
-    
+    """Return humanized interval of an array.
+
     For example::
 
         Original Array:                     Result:
