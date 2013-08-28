@@ -34,7 +34,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                               ])
 
     def run(self, layers):
-        """Earthquake impact to buildings (e.g. from Open Street Map)
+        """Earthquake impact to buildings (e.g. from OpenStreetMap)
         """
 
         LOGGER.debug('Running earthquake building impact')
