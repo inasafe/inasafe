@@ -23,7 +23,6 @@ import cPickle as pickle
 
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QSettings
-from qgis.core import QgsMapLayer
 
 from safe_qgis.exceptions import (
     HashNotFoundError,

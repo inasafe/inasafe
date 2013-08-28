@@ -58,7 +58,7 @@ class TestInit(unittest.TestCase):
         for md in myRequiredMetadata:
             myMessage = 'Cannot find myMetadata "%s" '\
                         'in myMetadata source (%s).' % (md, myFilePath)
-            assert md in dict(myMetadata) or dict(myMetadata)[md],\
+            assert md in dict(myMetadata) or dict(myMetadata)[md], \
                 myMessage
 
 if __name__ == '__main__':

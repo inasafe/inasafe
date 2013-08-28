@@ -27,14 +27,10 @@ from PyQt4 import QtGui
 
 from qgis.core import (
     QGis,
-    QgsRasterLayer,
     QgsGraduatedSymbolRendererV2,
     QgsSymbolV2,
     QgsRendererRangeV2,
     QgsRendererCategoryV2,
-    QgsSymbolLayerV2Registry,
-    QgsColorRampShader,
-    QgsRasterTransparency,
     QgsCategorizedSymbolRendererV2,
     QgsSimpleMarkerSymbolLayerV2,
     QgsSimpleFillSymbolLayerV2)

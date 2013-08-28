@@ -33,7 +33,7 @@ sys.path.append(pardir)
 
 import qgis
 
-from qgis.core import QgsVectorLayer, QgsFeature
+from qgis.core import QgsVectorLayer
 
 from safe_qgis.safe_interface import (
     TESTDATA,

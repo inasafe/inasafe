@@ -27,8 +27,6 @@ from tempfile import mkstemp
 
 from PyQt4 import QtCore
 
-from safe_qgis.exceptions import MethodUnavailableError
-
 myDir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../', 'third_party'))
 if myDir not in sys.path:

@@ -34,8 +34,7 @@ from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
-    QgsVectorLayer,
-    QgsFeature)
+    QgsVectorLayer)
 
 from safe_qgis.exceptions import MemoryLayerCreationError
 

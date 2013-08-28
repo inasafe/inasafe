@@ -28,7 +28,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsMapLayer,
-    QgsFeature,
     QgsFeatureRequest,
     QgsVectorFileWriter,
     QgsGeometry,

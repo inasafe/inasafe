@@ -38,7 +38,6 @@ sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
 from qgis.core import (
-    QgsRasterLayer,
     QgsVectorLayer,
     QgsMapLayerRegistry,
     QgsRectangle)
@@ -693,8 +692,8 @@ class TestDock(TestCase):
         # later if needed.
         myMessage = ('Raster layer was not assigned a Singleband pseudocolor'
                      ' renderer as expected.')
-        assert myQgisImpactLayer.renderer().type() == "singlebandpseudocolor",\
-            myMessage
+        assert myQgisImpactLayer.renderer().type() == \
+            'singlebandpseudocolor', myMessage
 
         # Commenting out because we changed impact function to use floating
         # point quantities. Revisit in QGIS 2.0 where range based transparency

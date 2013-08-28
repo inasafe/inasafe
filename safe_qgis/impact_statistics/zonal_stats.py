@@ -26,7 +26,6 @@ from osgeo import gdal, ogr, osr
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (
     QgsRectangle,
-    QgsFeature,
     QgsFeatureRequest,
     QgsGeometry,
     QgsPoint)
