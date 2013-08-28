@@ -68,9 +68,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.leOutputPath.textChanged.connect(self.on_leOutputPath_textChanged)
         # Set up things for context help
         help_button = self.buttonBox.button(QDialogButtonBox.Help)
-        QObject.connect(help_button,
-                        SIGNAL('clicked()'),
-                        self.show_help)
+        help_button.clicked.connect(self.show_help)
 
         self.show_info()
 
