@@ -17,6 +17,7 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys
 import os
 import logging
 
@@ -76,7 +77,14 @@ def _show_local_help(context=None):
     if not os.path.exists(base_url):
         raise HelpFileMissingError('Help file not found: %s' % base_url)
 
-    base_url = 'file://%s' % base_url
+    # Even on windows we need to use / for urls
+    if 'win32' in sys.platform:
+        drive, path = os.path.splitdrive(base_url)
+        base_url = path.replace(os.path.sep, '/')
+        base_url = drive + base_url
+        base_url = 'file:///%s' % base_url
+    else:
+        base_url = 'file://%s' % base_url
 
     myUrl = QtCore.QUrl(base_url)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
