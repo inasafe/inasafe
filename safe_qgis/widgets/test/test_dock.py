@@ -25,7 +25,8 @@ from os.path import join
 
 from unittest import TestCase, skipIf
 
-import qgis
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
 
 from PyQt4 import QtCore
 

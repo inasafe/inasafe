@@ -18,7 +18,8 @@ import logging
 #pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 #sys.path.append(pardir)
 
-import qgis
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
 
 from PyQt4 import QtGui
 from qgis.core import (

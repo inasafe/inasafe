@@ -31,7 +31,8 @@ sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
 
-import qgis
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
 
 from qgis.core import QgsVectorLayer
 

@@ -22,7 +22,8 @@ import os
 import tempfile
 import shutil
 
-import qgis
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
 
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
