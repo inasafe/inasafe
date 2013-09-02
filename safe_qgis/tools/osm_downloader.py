@@ -29,7 +29,7 @@ from safe_qgis.ui.osm_downloader_base import Ui_OsmDownloaderBase
 from safe_qgis.exceptions import CanceledImportDialogError, ImportDialogError
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.utilities.utilities import (
-    download_url, html_footer, html_header)
+    download_url, html_footer, html_header, viewport_geo_array)
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
 
@@ -134,11 +134,12 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
     def update_extent(self):
         """ Update extent value in GUI based from value in map."""
-        myExtent = self.iface.mapCanvas().extent()
-        self.minLongitude.setText(str(myExtent.xMinimum()))
-        self.minLatitude.setText(str(myExtent.yMinimum()))
-        self.maxLongitude.setText(str(myExtent.xMaximum()))
-        self.maxLatitude.setText(str(myExtent.yMaximum()))
+        # Get the extent as [xmin, ymin, xmax, ymax]
+        myExtent = viewport_geo_array(self.iface.mapCanvas())
+        self.minLongitude.setText(str(myExtent[0]))
+        self.minLatitude.setText(str(myExtent[1]))
+        self.maxLongitude.setText(str(myExtent[2]))
+        self.maxLatitude.setText(str(myExtent[3]))
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pBtnDir_clicked(self):
