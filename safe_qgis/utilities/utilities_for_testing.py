@@ -867,7 +867,7 @@ def load_layers(
 
 
 def compareWkt(a, b, tol=0.000001):
-    """ Helper function to compare WKT geometries with given tolerance
+    """Helper function to compare WKT geometries with given tolerance
     Taken from QGIS test suite
 
     :param a: Input WKT geometry
@@ -880,7 +880,7 @@ def compareWkt(a, b, tol=0.000001):
     :type tol: float
 
     :return: True on success, False on failure
-    :rtype bool
+    :rtype: bool
     """
     r = re.compile('-?\d+(?:\.\d+)?(?:[eE]\d+)?')
 
