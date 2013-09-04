@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Fri Jul  5 14:31:32 2013
+# Created: Wed Sep  4 23:19:40 2013
 #      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
@@ -137,7 +137,7 @@ class Ui_DockBase(object):
         self.horizontalLayout_2.addItem(spacerItem1)
         self.label = QtGui.QLabel(self.dockWidgetContents)
         self.label.setText(_fromUtf8(""))
-        self.label.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/wb-logo-small.png")))
+        self.label.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/gfdrr_wb_logo-small.png")))
         self.label.setObjectName(_fromUtf8("label"))
         self.horizontalLayout_2.addWidget(self.label)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
