@@ -273,7 +273,7 @@
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="../resources/resources.qrc">:/plugins/inasafe/wb-logo-small.png</pixmap>
+               <pixmap resource="../resources/resources.qrc">:/plugins/inasafe/gfdrr_wb_logo-small.png</pixmap>
               </property>
              </widget>
             </item>
