@@ -174,16 +174,16 @@ class FunctionOptionsDialog(QtGui.QDialog,
         :type theFormLayout: QFormLayout
 
         :param theName: Mandatory string referencing the key in the function
-        configurable parameters dictionary.
+         configurable parameters dictionary.
         :type theName: str
 
         :param theValue: Mandatory representing the value referenced by the
-        key.
+         key.
         :type theValue: object
 
-        :returns a function that return the value of widget
+        :returns: a function that return the value of widget
 
-        :raises None
+        :raises: None
         """
 
         # create label

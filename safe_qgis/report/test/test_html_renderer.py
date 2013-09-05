@@ -132,6 +132,7 @@ class HtmlRendererTest(unittest.TestCase):
                            251782L,  # as rendered on Windows 8 64 bit amd
                            21491,  # as rendered on Slackware64 14.0
                            ]
+        print 'Output pdf to %s' % myPath
         self.assertIn(mySize, myExpectedSizes)
 
     def test_renderHtmlToImage(self):
