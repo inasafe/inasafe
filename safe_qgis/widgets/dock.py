@@ -712,7 +712,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # if isPolygonLayer(myLayer):
             #     addComboItemInOrder(self.cboAggregation, myTitle,
             #                         mySource)
-            #     self.aggregationLayers.append(myLayer)
+            #     self.aggregatorLayers.append(myLayer)
 
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
