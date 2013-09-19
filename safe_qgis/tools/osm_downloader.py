@@ -32,6 +32,7 @@ from safe_qgis.utilities.utilities import (
     download_url, html_footer, html_header, viewport_geo_array)
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
+from safe_qgis.utilities.proxy import get_proxy
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -69,7 +70,11 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         self.show_info()
 
+        # Set Proxy in webpage
+        proxy = get_proxy()
         self.network_manager = QNetworkAccessManager(self)
+        if not proxy is None:
+            self.network_manager.setProxy(proxy)
         self.restore_state()
         self.update_extent()
 

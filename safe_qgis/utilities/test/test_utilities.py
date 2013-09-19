@@ -43,9 +43,11 @@ class UtilitiesTest(unittest.TestCase):
     """
 
     def setUp(self):
+        """Test setup."""
         os.environ['LANG'] = 'en'
 
     def tearDown(self):
+        """Test tear down."""
         pass
 
     def test_stacktrace_html(self):
