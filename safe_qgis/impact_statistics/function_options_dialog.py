@@ -68,7 +68,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         :returns: The property value of theObject
         """
-        return lambda: theType(theObject.property(theProperty).toPyObject())
+        return lambda: theType(theObject.property(theProperty))
 
     def buildForm(self, theParams):
         """we build a form from impact functions parameter
