@@ -33,7 +33,7 @@ from qgis.core import (
     QgsRectangle)
 from qgis.gui import QgsComposerView
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundError
+from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.report.map_legend import MapLegend
 from safe_qgis.utilities.utilities import (
@@ -62,17 +62,21 @@ class Map():
         self.printer = None
         self.composition = None
         self.legend = None
-        self.pageWidth = 210  # width in mm
-        self.pageHeight = 297  # height in mm
+        self.logo = ':/plugins/inasafe/bnpb_logo.png'
+        self.template = ':/plugins/inasafe/inasafe.qpt'
+        #self.pageWidth = 210  # width in mm
+        #self.pageHeight = 297  # height in mm
+        self.pageWidth = 0  # width in mm
+        self.pageHeight = 0  # height in mm
         self.pageDpi = 300.0
-        self.pageMargin = 10  # margin in mm
-        self.verticalSpacing = 1  # vertical spacing between elements
+        #self.pageMargin = 10  # margin in mm
+        #self.verticalSpacing = 1  # vertical spacing between elements
         self.showFramesFlag = False  # intended for debugging use only
         # make a square map where width = height = page width
-        self.mapHeight = self.pageWidth - (self.pageMargin * 2)
-        self.mapWidth = self.mapHeight
-        self.disclaimer = self.tr('InaSAFE has been jointly developed by'
-                                  ' BNPB, AusAid & the World Bank')
+        #self.mapHeight = self.pageWidth - (self.pageMargin * 2)
+        #self.mapWidth = self.mapHeight
+        #self.disclaimer = self.tr('InaSAFE has been jointly developed by'
+        #                          ' BNPB, AusAid & the World Bank')
 
     def tr(self, string):
         """We implement this since we do not inherit QObject.
@@ -94,6 +98,22 @@ class Map():
         """
         self.layer = layer
 
+    def set_logo(self, logo):
+        """
+
+        :param logo: Path to image that will be used as logo in report
+        :type logo: str
+        """
+        self.logo = logo
+
+    def set_template(self, template):
+        """
+
+        :param template: Path to composer template that will be used for report
+        :type template: str
+        """
+        self.template = template
+
     def setup_composition(self):
         """Set up the composition ready for drawing elements onto it."""
         LOGGER.debug('InaSAFE Map setupComposition called')
@@ -101,7 +121,7 @@ class Map():
         myRenderer = myCanvas.mapRenderer()
         self.composition = QgsComposition(myRenderer)
         self.composition.setPlotStyle(QgsComposition.Print)  # or preview
-        self.composition.setPaperSize(self.pageWidth, self.pageHeight)
+        #self.composition.setPaperSize(self.pageWidth, self.pageHeight)
         self.composition.setPrintResolution(self.pageDpi)
         self.composition.setPrintAsRaster(True)
 
@@ -180,12 +200,14 @@ class Map():
             # We need to cast to python string in case we receive a QString
             myMapPdfPath = str(filename)
 
-        self.compose_map()
-        self.printer = setup_printer(myMapPdfPath)
-        _, myImage, myRectangle = self.render()
-        myPainter = QtGui.QPainter(self.printer)
-        myPainter.drawImage(myRectangle, myImage, myRectangle)
-        myPainter.end()
+        self.load_template()
+
+        resolution = self.composition.printResolution()
+        self.printer = setup_printer(myMapPdfPath, resolution=resolution)
+        _, image, rectangle = self.render()
+        painter = QtGui.QPainter(self.printer)
+        painter.drawImage(rectangle, image, rectangle)
+        painter.end()
         return myMapPdfPath
 
     def draw_logo(self, top_offset):
@@ -773,28 +795,102 @@ class Map():
         myFile.write(myXml)
         myFile.close()
 
-    def render_template(self, template_path, output_path):
+    def load_template(self):
         """Load a QgsComposer map from a template and render it.
 
-        .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
-
-        :param template_path:  Path to the template that should be loaded.
-        :type template_path: str
-
-        :param output_path: Path for the output pdf.
-        :type output_path: str
+        .. note:: THIS METHOD IS EXPERIMENTAL
         """
         self.setup_composition()
 
-        myResolution = self.composition.printResolution()
-        self.printer = setup_printer(
-            output_path, resolution=myResolution)
-        if self.composition:
-            myFile = QtCore.QFile(template_path)
-            myDocument = QtXml.QDomDocument()
-            myDocument.setContent(myFile, False)  # .. todo:: fix magic param
-            myNodeList = myDocument.elementsByTagName('Composer')
-            if myNodeList.size() > 0:
-                myElement = myNodeList.at(0).toElement()
-                self.composition.readXML(myElement, myDocument)
-        self.make_pdf(output_path)
+        template_file = QtCore.QFile(self.template)
+        template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
+        template_content = template_file.readAll()
+        template_file.close()
+
+        document = QtXml.QDomDocument()
+        document.setContent(template_content)
+
+        # get information for substitutions
+        # date, time and plugin version
+        myDateTime = self.keywordIO.read_keywords(self.layer, 'time_stamp')
+        myTokens = myDateTime.split('_')
+        myDate = myTokens[0]
+        myTime = myTokens[1]
+        myLongVersion = get_version()
+        myTokens = myLongVersion.split('.')
+        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
+
+        # map title
+        LOGGER.debug('InaSAFE Map getMapTitle called')
+        try:
+            myTitle = self.keywordIO.read_keywords(self.layer, 'map_title')
+        except KeywordNotFoundError:
+            myTitle = None
+        except Exception:
+            myTitle = None
+
+        if not myTitle:
+            myTitle = ''
+
+        substitution_map = {
+            'impact-title': myTitle,
+            'date': myDate,
+            'time': myTime,
+            'safe-version': myVersion
+        }
+        LOGGER.debug(substitution_map)
+        load_ok = self.composition.loadFromTemplate(document,
+                                                    substitution_map)
+        if not load_ok:
+            raise ReportCreationError(self.tr('Error loading template %s') %
+                                      self.template)
+
+        self.pageWidth = self.composition.paperWidth()
+        self.pageHeight = self.composition.paperHeight()
+
+        # set logo
+        myImage = self.composition.getComposerItemById('safe-logo')
+        myImage.setPictureFile(self.logo)
+
+        # Get the main map canvas on the composition and set
+        # its extents to the event.
+        myMap = self.composition.getComposerItemById('impact-map')
+        if myMap is not None:
+            # Recenter the composer map on the center of the canvas
+            # Note that since the composer map is square and the canvas may be
+            # arbitrarily shaped, we center based on the longest edge
+            canvasExtent = self.iface.mapCanvas().extent()
+            myWidth = canvasExtent.width()
+            myHeight = canvasExtent.height()
+            myLongestLength = myWidth
+            if myWidth < myHeight:
+                myLongestLength = myHeight
+            myHalfLength = myLongestLength / 2
+            myCenter = canvasExtent.center()
+            myMinX = myCenter.x() - myHalfLength
+            myMaxX = myCenter.x() + myHalfLength
+            myMinY = myCenter.y() - myHalfLength
+            myMaxY = myCenter.y() + myHalfLength
+            mySquareExtent = QgsRectangle(myMinX, myMinY, myMaxX, myMaxY)
+            myMap.setNewExtent(mySquareExtent)
+
+            # calculate intervals for grid
+            myNumberOfSplits = 5
+            myXInterval = mySquareExtent.width() / myNumberOfSplits
+            myMap.setGridIntervalX(myXInterval)
+            myYInterval = mySquareExtent.height() / myNumberOfSplits
+            myMap.setGridIntervalY(myYInterval)
+        else:
+            raise ReportCreationError(self.tr('Map "impact-map" could not be '
+                                              'found'))
+
+        myLegend = self.composition.getComposerItemById('impact-legend')
+        legend_attributes = self.map_legend_attributes()
+        LOGGER.debug(legend_attributes)
+        #legend_notes = mapLegendAttributes.get('legend_notes', None)
+        #legend_units = mapLegendAttributes.get('legend_units', None)
+        legend_title = legend_attributes.get('legend_title', None)
+        if legend_title is None:
+            legend_title = ""
+        myLegend.setTitle(legend_title)
+        myLegend.updateLegend()

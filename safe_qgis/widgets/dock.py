@@ -1784,6 +1784,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 m.Text(self.tr('Preparing map and report'))))
 
         myMap.set_impact_layer(self.iface.activeLayer())
+
+        settings = QSettings()
+        logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
+        report_path = settings.value('inasafe/reportTemplatePath', '', type=str)
+        if logo_path != '':
+            myMap.set_logo(logo_path)
+        if report_path != '':
+            myMap.set_template()
+
         LOGGER.debug('Map Title: %s' % myMap.map_title())
         myDefaultFileName = myMap.map_title() + '.pdf'
         myDefaultFileName = myDefaultFileName.replace(' ', '_')

@@ -115,6 +115,16 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keywordIO.default_keyword_db_path())
         self.leKeywordCachePath.setText(myPath)
 
+        myPath = mySettings.value(
+            'inasafe/mapsLogoPath',
+            '')
+        self.leMapsLogoPath.setText(myPath)
+
+        myPath = mySettings.value(
+            'inasafe/reportTemplatePath',
+            '')
+        self.leReportTemplatePath.setText(myPath)
+
         myFlag = bool(mySettings.value(
             'inasafe/devMode', False))
         self.cbxDevMode.setChecked(myFlag)
@@ -149,6 +159,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.dsbFemaleRatioDefault.value())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
+        mySettings.setValue('inasafe/mapsLogoPath',
+                            self.leMapsLogoPath.text())
+        mySettings.setValue('inasafe/reportTemplatePath',
+                            self.leReportTemplatePath.text())
         mySettings.setValue('inasafe/devMode',
                             self.cbxDevMode.isChecked())
         mySettings.setValue('inasafe/useNativeZonalStats',
@@ -175,3 +189,27 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             self.keywordIO.default_keyword_db_path(),
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(myFilename)
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_toolMapsLogoPath_clicked(self):
+        """Auto-connect slot activated when logo file tool button is clicked.
+        """
+        # noinspection PyCallByClass,PyTypeChecker
+        myFilename = QtGui.QFileDialog.getOpenFileName(
+            self,
+            self.tr('Set map logo file'),
+            '',
+            self.tr('Portable Network Graphics files (*.png *.PNG)'))
+        self.leMapsLogoPath.setText(myFilename)
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_toolReportTemplatePath_clicked(self):
+        """Auto-connect slot activated when report file tool button is clicked.
+        """
+        # noinspection PyCallByClass,PyTypeChecker
+        myFilename = QtGui.QFileDialog.getOpenFileName(
+            self,
+            self.tr('Set report template'),
+            '',
+            self.tr('QGIS Composer templates (*.qpt *.QPT)'))
+        self.leReportTemplatePath.setText(myFilename)
