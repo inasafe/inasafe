@@ -23,7 +23,8 @@ Tim Sutton, Jan 2013
 import os
 from datetime import datetime
 
-from fabric.api import *
+from fabric.api import fastprint, env, run, hide, sudo, cd, task, get, put
+from fabric.colors import blue, red, green
 from fabric.contrib.files import contains, exists, append, sed
 
 import fabtools
@@ -41,7 +42,7 @@ env.env_set = False
 def _all():
     """Things to do regardless of whether command is local or remote."""
     if env.env_set:
-        fastprint('Environment already set!\n')
+        fastprint(green('Environment already set!\n'))
         return
 
     fastprint('Setting environment!\n')
@@ -89,7 +90,7 @@ def _all():
             env.code_path = os.path.join(env.repo_path, env.repo_alias)
 
     env.env_set = True
-    fastprint('env.env_set = %s' % env.env_set)
+    fastprint(blue('env.env_set = %s\n' % env.env_set))
 
 ###############################################################################
 # Next section contains helper methods tasks
@@ -147,6 +148,8 @@ def update_git_checkout(branch='master'):
     """
     _all()
     fabtools.require.deb.package('git')
+    fastprint(green('Updating git checkout in %s\n' % env.repo_path))
+    fastprint(green('Using branch: %s\n' % branch))
     if not exists(env.code_path):
         fastprint('Repo checkout does not exist, creating.')
         run('mkdir -p %s' % env.repo_path)
@@ -191,15 +194,16 @@ def build_test_package(branch='master'):
 
     To run e.g.::
 
-        fab -H 188.40.123.80:8697 build_test_package
+        fab -H 176.9.37.173:8697 build_test_package
 
         or to package up a specific branch (in this case minimum_needs)
 
-        fab -H 88.198.36.154:8697 build_test_package:minimum_needs
+        fab -H 176.9.37.173:8697 build_test_package:minimum_needs
 
     .. note:: Using the branch option will not work for branches older than 1.1
     """
     _all()
+    show_environment()
     update_git_checkout(branch)
     initialise_qgis_plugin_repo()
 
@@ -226,10 +230,14 @@ def build_test_package(branch='master'):
         run('scripts/release.sh %s' % plugin_version)
         package_name = '%s.%s.zip' % ('inasafe', plugin_version)
         source = '/tmp/%s' % package_name
-        fastprint('Source: %s' % source)
+        fastprint(blue('Source: %s\n' % source))
         run('cp %s %s' % (source, env.plugin_repo_path))
 
+        source = os.path.join('scripts', 'test-build-repo', 'plugins.xml')
         plugins_xml = os.path.join(env.plugin_repo_path, 'plugins.xml')
+        fastprint(blue('Source: %s\n' % source))
+        run('cp %s %s' % (source, plugins_xml))
+
         sed(plugins_xml, '\[VERSION\]', plugin_version)
         sed(plugins_xml, '\[FILE_NAME\]', package_name)
         sed(plugins_xml, '\[URL\]', 'http://%s/%s' %
