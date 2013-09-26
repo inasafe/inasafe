@@ -6,7 +6,7 @@
           Emergencies tool developed by BNPB, AusAID, World Bank]]>
         </description>
         <version>[VERSION]</version>
-        <qgis_minimum_version>1.7</qgis_minimum_version>
+        <qgis_minimum_version>2.0</qgis_minimum_version>
         <homepage>http://www.inasafe.org/</homepage>
         <file_name>[FILE_NAME]</file_name>
         <icon>icon.png</icon>
