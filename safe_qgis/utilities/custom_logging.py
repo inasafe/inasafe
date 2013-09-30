@@ -53,11 +53,13 @@ class QgsLogHandler(logging.Handler):
         :param record: logging record containing whatever info needs to be
                 logged.
         """
-        from qgis.core import QgsMessageLog
-        # Check logging.LogRecord properties for lots of other goodies
-        # like line number etc. you can get from the log message.
-        QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
-
+        try:
+            from qgis.core import QgsMessageLog
+            # Check logging.LogRecord properties for lots of other goodies
+            # like line number etc. you can get from the log message.
+            QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
+        except:
+            pass
 
 def add_logging_handler_once(logger, handler):
     """A helper to add a handler to a logger, ensuring there are no duplicates.
