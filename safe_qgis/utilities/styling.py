@@ -477,9 +477,6 @@ def mmi_ramp(raster_layer):
         raster_layer.dataProvider(),
         band,
         raster_shader)
-    #raster_layer.renderer().setGrayBand(1)
-    #raster_layer.setDrawingStyle(QgsRasterLayer.SingleBandPseudoColor)
-    #raster_layer.setColorShadingAlgorithm(QgsRasterLayer.PseudoColorShader)
     raster_layer.setRenderer(renderer)
 
 
