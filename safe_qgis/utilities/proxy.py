@@ -18,7 +18,7 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import QSettings, QVariant, QT_VERSION
+from PyQt4.QtCore import QSettings, QT_VERSION
 from PyQt4.QtNetwork import QNetworkProxy
 
 
@@ -26,10 +26,9 @@ def get_proxy():
     """Adaption by source of Plugin Installer - Version 1.0.10"""
     settings = QSettings()
     settings.beginGroup("proxy")
-    #if settings.value("/proxyEnabled").toBool():
-    if settings.value("/proxyEnabled", False):
+    if settings.value("/proxyEnabled", False, type=bool):
         proxy = QNetworkProxy()
-        proxyType = settings.value("/proxyType", 0)
+        proxyType = settings.value("/proxyType", 0, type=int)
         if proxyType in ["1", "Socks5Proxy"]:
             proxy.setType(QNetworkProxy.Socks5Proxy)
         elif proxyType in ["2", "NoProxy"]:
@@ -43,7 +42,7 @@ def get_proxy():
         else:
             proxy.setType(QNetworkProxy.DefaultProxy)
         proxy.setHostName(settings.value("/proxyHost"))
-        proxy.setPort(settings.value("/proxyPort")[0])
+        proxy.setPort(settings.value("/proxyPort", type=int))
         proxy.setUser(settings.value("/proxyUser"))
         proxy.setPassword(settings.value("/proxyPassword"))
         settings.endGroup()
