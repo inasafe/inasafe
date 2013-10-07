@@ -25,7 +25,7 @@ import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
-from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
+from qgis.core import QgsRasterLayer, QgsMapLayerRegistry, QgsPseudoColorShader
 
 from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
 from safe_qgis.safe_interface import get_version, convert_mmi_data
@@ -211,9 +211,9 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             fileInfo = QFileInfo(fileName)
             baseName = fileInfo.baseName()
             layer = QgsRasterLayer(fileName, baseName)
-            layer.setGrayBandName(layer.bandName(1))
+            layer.renderer().setGrayBand(1)
             layer.setDrawingStyle(QgsRasterLayer.SingleBandPseudoColor)
-            layer.setColorShadingAlgorithm(QgsRasterLayer.PseudoColorShader)
+            layer.renderer().setShader(QgsPseudoColorShader())
             layer.saveDefaultStyle()
             if not layer.isValid():
                 LOGGER.debug("Failed to load")

@@ -72,7 +72,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         # add copy
         action = self.page().action(QtWebKit.QWebPage.Copy)
-        action.setEnabled(not self.selectedHtml().isEmpty())
+        action.setEnabled(not self.selectedHtml() == '')
         context_menu.addAction(action)
 
         # add view source if in dev mode
