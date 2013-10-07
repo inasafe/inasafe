@@ -314,21 +314,6 @@ search_boxes: None
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
-    def testMmiColour(self):
-        """Test that we can get a colour given an mmi number."""
-        myShakeId = '20120726022003'
-        myShakeEvent = ShakeEvent(myShakeId)
-
-        myValues = range(0, 12)
-        myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
-                            '#55ffff', '#aaffff', '#fff000', '#ffa800',
-                            '#ff7000', '#ff0000', '#D00', '#800']
-        myResult = []
-        for myValue in myValues:
-            myResult.append(myShakeEvent.mmiColour(myValue))
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
-        assert myResult == myExpectedResult, myMessage
-
     def testSortedImpactedCities(self):
         """Test getting impacted cities sorted by mmi then population."""
         myShakeId = '20120726022003'

@@ -25,7 +25,9 @@ import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
-from qgis.core import QgsRasterLayer, QgsMapLayerRegistry, QgsPseudoColorShader
+from qgis.core import (
+    QgsRasterLayer,
+    QgsMapLayerRegistry)
 
 from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
 from safe_qgis.safe_interface import get_version, convert_mmi_data
@@ -33,6 +35,7 @@ from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.utilities.utilities import html_footer, html_header
+from safe_qgis.utilities.styling import mmi_ramp
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -123,6 +126,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             self.warning_text.remove(output_not_xml_msg)
         self.update_warning()
 
+    #noinspection PyPep8Naming
     def on_leInputPath_textChanged(self):
         """Action when input file name is changed,
         """
@@ -200,7 +204,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
 
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
-        fileName = convert_mmi_data(
+        file_name = convert_mmi_data(
             input_path, output_path,
             algorithm=my_algorithm,
             algorithm_filename_flag=False)
@@ -208,12 +212,10 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         QtGui.qApp.restoreOverrideCursor()
 
         if self.cBLoadLayer.isChecked():
-            fileInfo = QFileInfo(fileName)
-            baseName = fileInfo.baseName()
-            layer = QgsRasterLayer(fileName, baseName)
-            layer.renderer().setGrayBand(1)
-            layer.setDrawingStyle(QgsRasterLayer.SingleBandPseudoColor)
-            layer.renderer().setShader(QgsPseudoColorShader())
+            file_info = QFileInfo(file_name)
+            base_name = file_info.baseName()
+            layer = QgsRasterLayer(file_name, base_name)
+            mmi_ramp(layer)
             layer.saveDefaultStyle()
             if not layer.isValid():
                 LOGGER.debug("Failed to load")
