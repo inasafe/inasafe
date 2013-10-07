@@ -458,7 +458,15 @@ def set_raster_style(raster_layer, style):
 def mmi_ramp(raster_layer):
     """Generate an mmi ramp using standardised range of 1-12
 
-    :param raster_layer:
+    A standarised range is used so that two shakemaps of different
+    intensities can be properly compared visually with colours stretched
+    accross the same range.
+
+    The colours used are the 'standard' colours commonly shown for the
+    mercalli scale e.g. on wikipedia and other sources.
+
+    :param raster_layer: A raster layer that will have an mmi style applied.
+    :type raster_layer: QgsRasterLayer
     """
     raster_shader = QgsRasterShader()
     ramp_shader = QgsColorRampShader()
