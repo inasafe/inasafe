@@ -39,10 +39,10 @@ class TestShakeMap(unittest.TestCase):
         myOutFile = '20120726022003.out.zip'
         myInpFile = '20120726022003.inp.zip'
         myOutPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                 'fixtures',
+                                                 '../fixtures',
                                                  myOutFile))
         myInpPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                 'fixtures',
+                                                 '../fixtures',
                                                  myInpFile))
         shutil.copyfile(myOutPath, os.path.join(shakemapZipDir(), myOutFile))
         shutil.copyfile(myInpPath, os.path.join(shakemapZipDir(), myInpFile))

@@ -15,8 +15,8 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
-    <widget class="QWebView" name="webView" native="true">
-     <property name="url" stdset="0">
+    <widget class="QWebView" name="webView">
+     <property name="url">
       <url>
        <string>about:blank</string>
       </url>
@@ -55,14 +55,14 @@
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLineEdit" name="leInputPath">
+         <widget class="QLineEdit" name="input_path">
           <property name="enabled">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="tBtnOpenInput">
+         <widget class="QToolButton" name="open_input_tool">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -85,14 +85,14 @@
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLineEdit" name="leOutputPath">
+         <widget class="QLineEdit" name="output_path">
           <property name="enabled">
            <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="tBtnOpenOutput">
+         <widget class="QToolButton" name="open_output_tool">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -111,7 +111,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QCheckBox" name="cBDefaultOutputLocation">
+       <widget class="QCheckBox" name="use_output_default">
         <property name="text">
          <string>Same directory as input file</string>
         </property>
@@ -121,7 +121,7 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QCheckBox" name="cBLoadLayer">
+       <widget class="QCheckBox" name="load_result">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -143,7 +143,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radNearest">
+       <widget class="QRadioButton" name="nearest_mode">
         <property name="text">
          <string>Nearest neighbour</string>
         </property>
@@ -153,7 +153,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QRadioButton" name="radInvDist">
+       <widget class="QRadioButton" name="inverse_distance_mode">
         <property name="text">
          <string>Inverse Distance</string>
         </property>
@@ -163,7 +163,7 @@
     </widget>
    </item>
    <item row="4" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="button_box">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -184,7 +184,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>accepted()</signal>
    <receiver>ShakemapImporterBase</receiver>
    <slot>accept()</slot>
@@ -200,7 +200,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>rejected()</signal>
    <receiver>ShakemapImporterBase</receiver>
    <slot>reject()</slot>
@@ -216,9 +216,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>cBDefaultOutputLocation</sender>
+   <sender>use_output_default</sender>
    <signal>toggled(bool)</signal>
-   <receiver>leOutputPath</receiver>
+   <receiver>output_path</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -232,9 +232,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>cBDefaultOutputLocation</sender>
+   <sender>use_output_default</sender>
    <signal>toggled(bool)</signal>
-   <receiver>tBtnOpenOutput</receiver>
+   <receiver>open_output_tool</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
