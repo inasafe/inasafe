@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+import shutil
 from unittest import expectedFailure
 
 # Add PARENT directory to path to make test aware of other modules
@@ -40,7 +41,8 @@ from safe_qgis.safe_interface import (
     getOptimalExtent,
     HAZDATA, TESTDATA, EXPDATA, UNITDATA,
     nan_allclose,
-    GetDataError)
+    GetDataError,
+    unique_filename)
 from safe_qgis.exceptions import InvalidProjectionError, CallGDALError
 from safe_qgis.utilities.clipper import (
     clip_layer,
@@ -56,7 +58,8 @@ from safe_qgis.utilities.utilities_for_testing import (
     DEVNULL,
     GEOCRS,
     set_jakarta_extent,
-    compareWkt)
+    compareWkt,
+    load_layer)
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -134,6 +137,29 @@ class ClipperTest(unittest.TestCase):
                      'Expected: %f, Actual: %f' %
                      (mySize, myNewRasterLayer.rasterUnitsPerPixelX()))
         assert myNewRasterLayer.rasterUnitsPerPixelX() == mySize, myMessage
+
+    def test_clip_raster_with_no_extension(self):
+        """Test we can clip a raster with no extension - see #659."""
+        # Create a raster layer
+        source_file = os.path.join(UNITDATA, 'other', 'tenbytenraster.asc')
+        test_file = unique_filename(prefix='tenbytenraster-')
+        shutil.copyfile(source_file, test_file)
+
+        # Create a keywords file
+        source_file = os.path.join(
+            UNITDATA, 'other', 'tenbytenraster.keywords')
+        keywords_file = test_file + '.keywords'
+        shutil.copyfile(source_file, keywords_file)
+
+        # Test the raster layer
+        raster_layer = QgsRasterLayer(test_file, 'ten by ten')
+        # Create a bounding box
+        rectangle = [1535380, 5083260, 1535380+40, 5083260+40]
+        # Clip the vector to the bounding box
+        result = clip_layer(raster_layer, rectangle)
+        # Check the output is valid
+        assert os.path.exists(result.source())
+
 
     # See issue #349
     @expectedFailure
