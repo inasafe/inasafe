@@ -58,17 +58,20 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
             get_version()))
 
         self.warning_text = set()
-        self.on_leInputPath_textChanged()
-        self.on_leOutputPath_textChanged()
+        self.on_input_path_textChanged()
+        self.on_output_path_textChanged()
         self.update_warning()
 
         # Event register
-        self.cBDefaultOutputLocation.toggled.connect(
+        #noinspection PyUnresolvedReferences
+        self.use_output_default.toggled.connect(
             self.get_output_from_input)
-        self.leInputPath.textChanged.connect(self.on_leInputPath_textChanged)
-        self.leOutputPath.textChanged.connect(self.on_leOutputPath_textChanged)
+        #noinspection PyUnresolvedReferences
+        self.input_path.textChanged.connect(self.on_input_path_textChanged)
+        #noinspection PyUnresolvedReferences
+        self.output_path.textChanged.connect(self.on_output_path_textChanged)
         # Set up things for context help
-        help_button = self.buttonBox.button(QDialogButtonBox.Help)
+        help_button = self.button_box.button(QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
         self.show_info()
@@ -113,10 +116,10 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
 
         self.webView.setHtml(string)
 
-    def on_leOutputPath_textChanged(self):
-        """Action when output file name is changed,
+    def on_output_path_textChanged(self):
+        """Action when output file name is changed.
         """
-        output_path = str(self.leOutputPath.text())
+        output_path = str(self.output_path.text())
         output_not_xml_msg = str(self.tr('output file is not .tif'))
         if not output_path.endswith('.tif'):
             self.warning_text.add(output_not_xml_msg)
@@ -125,10 +128,10 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.update_warning()
 
     #noinspection PyPep8Naming
-    def on_leInputPath_textChanged(self):
-        """Action when input file name is changed,
+    def on_input_path_textChanged(self):
+        """Action when input file name is changed.
         """
-        input_path = str(self.leInputPath.text())
+        input_path = str(self.input_path.text())
         # input_not_exist_msg = str(self.tr('input file is not existed'))
         input_not_grid_msg = str(self.tr('input file is not .xml'))
 
@@ -137,14 +140,14 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         elif input_not_grid_msg in self.warning_text:
             self.warning_text.remove(input_not_grid_msg)
 
-        if self.cBDefaultOutputLocation.isChecked():
+        if self.use_output_default.isChecked():
             self.get_output_from_input()
         self.update_warning()
 
     def update_warning(self):
         """Update warning message and enable/disable Ok button."""
         if len(self.warning_text) == 0:
-            self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(True)
+            self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
             return
 
         header = html_header()
@@ -152,7 +155,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         string = header
         heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
         tips = m.BulletedList()
-        self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
+        self.button_box.button(QDialogButtonBox.Ok).setEnabled(False)
         message = m.Message()
         message.add(heading)
         for warning in self.warning_text:
@@ -166,7 +169,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
     def get_output_from_input(self):
         """Create default output location based on input location.
         """
-        my_input_path = str(self.leInputPath.text())
+        my_input_path = str(self.input_path.text())
         if my_input_path.endswith('.xml'):
             my_output_path = my_input_path[:-3] + 'tif'
         elif my_input_path == '':
@@ -177,13 +180,13 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
                 my_output_path = ''
             else:
                 my_output_path = my_input_path[:last_dot + 1] + 'tif'
-        self.leOutputPath.setText(my_output_path)
+        self.output_path.setText(my_output_path)
 
     def accept(self):
         """Handler for when OK is clicked.
         """
-        input_path = str(self.leInputPath.text())
-        output_path = str(self.leOutputPath.text())
+        input_path = str(self.input_path.text())
+        output_path = str(self.output_path.text())
         if not output_path.endswith('.tif'):
             # noinspection PyArgumentList
             QMessageBox.warning(
@@ -195,7 +198,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
                 self.parent, self.tr('InaSAFE'),
                 (self.tr('Input file is not exist')))
             return
-        if self.radNearest.isChecked():
+        if self.nearest_mode.isChecked():
             my_algorithm = 'nearest'
         else:
             my_algorithm = 'invdist'
@@ -209,7 +212,7 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
 
         QtGui.qApp.restoreOverrideCursor()
 
-        if self.cBLoadLayer.isChecked():
+        if self.load_result.isChecked():
             file_info = QFileInfo(file_name)
             base_name = file_info.baseName()
             layer = QgsRasterLayer(file_name, base_name)
@@ -223,21 +226,21 @@ class ShakemapImporter(QDialog, Ui_ShakemapImporterBase):
         self.done(self.Accepted)
 
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_tBtnOpenInput_clicked(self):
+    def on_open_input_tool_clicked(self):
         """Autoconnect slot activated when open input tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getOpenFileName(
             self, self.tr('Input file'), 'grid.xml',
             self.tr('Raw grid file(*.xml)'))
-        self.leInputPath.setText(myFilename)
+        self.input_path.setText(myFilename)
 
     @pyqtSignature('')  # prevents actions being handled twice
-    def on_tBtnOpenOutput_clicked(self):
+    def on_open_output_tool_clicked(self):
         """Autoconnect slot activated when open output tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         myFilename = QFileDialog.getSaveFileName(
             self, self.tr('Output file'), 'grid.tif',
             self.tr('Raster file(*.tif)'))
-        self.leOutputPath.setText(myFilename)
+        self.output_path.setText(myFilename)
