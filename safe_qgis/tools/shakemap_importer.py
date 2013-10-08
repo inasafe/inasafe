@@ -25,9 +25,7 @@ import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
-from qgis.core import (
-    QgsRasterLayer,
-    QgsMapLayerRegistry)
+from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 
 from safe_qgis.ui.shakemap_importer_base import Ui_ShakemapImporterBase
 from safe_qgis.safe_interface import get_version, convert_mmi_data
