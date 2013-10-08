@@ -468,15 +468,16 @@ def mmi_ramp(raster_layer):
     :param raster_layer: A raster layer that will have an mmi style applied.
     :type raster_layer: QgsRasterLayer
     """
-    raster_shader = QgsRasterShader()
-    ramp_shader = QgsColorRampShader()
+
     items = []
-    for class_max in range(1,13):
+    for class_max in range(1, 13):
         colour = QtGui.QColor(mmi_colour(class_max))
         label = '%i' % class_max
         ramp_item = QgsColorRampShader.ColorRampItem(class_max, colour, label)
         items.append(ramp_item)
 
+    raster_shader = QgsRasterShader()
+    ramp_shader = QgsColorRampShader()
     ramp_shader.setColorRampType(QgsColorRampShader.INTERPOLATED)
     ramp_shader.setColorRampItemList(items)
     raster_shader.setRasterShaderFunction(ramp_shader)
@@ -495,9 +496,8 @@ def mmi_colour(mmi_value):
     :returns str: html hex code colour for the value
     """
 
-    myRGBList = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff', '#55ffff',
-                 '#aaffff',
-                 '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00',
-                 '#800', '#400']
-    myRGB = myRGBList[int(mmi_value)]
-    return myRGB
+    rgb_list = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff', '#55ffff',
+                '#aaffff', '#fff000', '#ffa800', '#ff7000', '#ff0000',
+                '#D00', '#800', '#400']
+    rgb = rgb_list[int(mmi_value)]
+    return rgb
