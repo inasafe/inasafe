@@ -105,7 +105,7 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 LOGO_ELEMENT = m.Image('qrc:/plugins/inasafe/inasafe-logo.svg', 'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
-# from pydev import pydevd  # pylint: disable=F0401
+#from pydev import pydevd  # pylint: disable=F0401
 
 
 #noinspection PyArgumentList
@@ -130,7 +130,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
         """
         # Enable remote debugging - should normally be commented out.
-        # pydevd.settrace(stdoutToServer=True, stderrToServer=True)
+        #pydevd.settrace('localhost', port=5678, stdoutToServer=True,
+        #               stderrToServer=True)
 
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
@@ -280,47 +281,47 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Do this on init and after changing options in the options dialog.
         """
 
-        mySettings = QtCore.QSettings()
-        myFlag = mySettings.value('inasafe/useThreadingFlag',
-                                  False)
-        self.runInThreadFlag = myFlag
+        settings = QtCore.QSettings()
+        flag = settings.value('inasafe/useThreadingFlag',
+                                  False, type=bool)
+        self.runInThreadFlag = flag
 
-        myFlag = mySettings.value(
-            'inasafe/visibleLayersOnlyFlag', True)
-        self.showOnlyVisibleLayersFlag = myFlag
+        flag = settings.value(
+            'inasafe/visibleLayersOnlyFlag', True, type=bool)
+        self.showOnlyVisibleLayersFlag = flag
 
-        myFlag = mySettings.value(
-            'inasafe/setLayerNameFromTitleFlag', True)
-        self.setLayerNameFromTitleFlag = myFlag
+        flag = settings.value(
+            'inasafe/setLayerNameFromTitleFlag', True, type=bool)
+        self.setLayerNameFromTitleFlag = flag
 
-        myFlag = mySettings.value(
-            'inasafe/setZoomToImpactFlag', True)
-        self.zoomToImpactFlag = myFlag
+        flag = settings.value(
+            'inasafe/setZoomToImpactFlag', True, type=bool)
+        self.zoomToImpactFlag = flag
         # whether exposure layer should be hidden after model completes
-        myFlag = mySettings.value(
-            'inasafe/setHideExposureFlag', False)
-        self.hideExposureFlag = myFlag
+        flag = settings.value(
+            'inasafe/setHideExposureFlag', False, type=bool)
+        self.hideExposureFlag = flag
 
         # whether to clip hazard and exposure layers to the viewport
-        myFlag = mySettings.value(
-            'inasafe/clipToViewport', True)
-        self.clipToViewport = myFlag
+        flag = settings.value(
+            'inasafe/clipToViewport', True, type=bool)
+        self.clipToViewport = flag
 
         # whether to 'hard clip' layers (e.g. cut buildings in half if they
         # lie partially in the AOI
-        myFlag = mySettings.value(
-            'inasafe/clipHard', False)
-        self.clipHard = myFlag
+        flag = settings.value(
+            'inasafe/clipHard', False, type=bool)
+        self.clipHard = flag
 
         # whether to show or not postprocessing generated layers
-        myFlag = mySettings.value(
-            'inasafe/showIntermediateLayers', False)
-        self.showIntermediateLayers = myFlag
+        flag = settings.value(
+            'inasafe/showIntermediateLayers', False, type=bool)
+        self.showIntermediateLayers = flag
 
         # whether to show or not dev only options
-        myFlag = mySettings.value(
-            'inasafe/devMode', False)
-        self.devMode = myFlag
+        flag = settings.value(
+            'inasafe/devMode', False, type=bool)
+        self.devMode = flag
 
     def _update_settings(self):
         """Update setting to new settings names."""
