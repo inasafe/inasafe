@@ -121,7 +121,7 @@ def clip_layer(
                 layer,
                 extent,
                 cell_size,
-                theExtraKeywords=extra_keywords)
+                extra_keywords=extra_keywords)
         except CallGDALError, e:
             raise e
         except IOError, e:
@@ -395,7 +395,7 @@ def explode_multipart_geometry(theGeom):
 
 
 def _clip_raster_layer(
-        theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
+        layer, extent, cell_size=None, extra_keywords=None):
     """Clip a Hazard or Exposure raster layer to the extents provided.
 
     The layer must be a raster layer or an exception will be thrown.
@@ -404,22 +404,22 @@ def _clip_raster_layer(
 
     The output layer will always be in WGS84/Geographic.
 
-    :param theLayer: A valid QGIS raster layer in EPSG:4326
-    :type theLayer: QgsRasterLayer
+    :param layer: A valid QGIS raster layer in EPSG:4326
+    :type layer: QgsRasterLayer
 
-    :param theExtent:  An array representing the exposure layer
+    :param extent:  An array representing the exposure layer
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
            or:
            A QgsGeometry of type polygon.
            **Polygon clipping currently only supported for vector datasets.**
-    :type theExtent: list(float), QgsGeometry
+    :type extent: list(float), QgsGeometry
 
-    :param theCellSize: Cell size (in GeoCRS) which the layer should
+    :param cell_size: Cell size (in GeoCRS) which the layer should
             be resampled to. If not provided for a raster layer (i.e.
             theCellSize=None), the native raster cell size will be used.
-    :type theCellSize: float
+    :type cell_size: float
 
     :returns: Output clipped layer (placed in the system temp dir).
     :rtype: QgsRasterLayer
@@ -428,107 +428,112 @@ def _clip_raster_layer(
         layer in projected coordinates. See issue #123.
 
     """
-    if not theLayer or not theExtent:
-        myMessage = tr('Layer or Extent passed to clip is None.')
-        raise InvalidParameterError(myMessage)
+    if not layer or not extent:
+        message = tr('Layer or Extent passed to clip is None.')
+        raise InvalidParameterError(message)
 
-    if theLayer.type() != QgsMapLayer.RasterLayer:
-        myMessage = tr(
+    if layer.type() != QgsMapLayer.RasterLayer:
+        message = tr(
             'Expected a raster layer but received a %s.' %
-            str(theLayer.type()))
-        raise InvalidParameterError(myMessage)
+            str(layer.type()))
+        raise InvalidParameterError(message)
 
-    myWorkingLayer = str(theLayer.source())
+    working_layer = str(layer.source())
 
     # Check for existence of keywords file
-    myKeywordsPath = myWorkingLayer[:-4] + '.keywords'
-    myMessage = tr(
+    base, _ = os.path.splitext(working_layer)
+    keywords_path = base + '.keywords'
+    message = tr(
         'Input file to be clipped "%s" does not have the '
         'expected keywords file %s' % (
-            myWorkingLayer, myKeywordsPath))
-    verify(os.path.isfile(myKeywordsPath), myMessage)
+            working_layer,
+            keywords_path
+        ))
+    verify(os.path.isfile(keywords_path), message)
 
     # Raise exception if layer is projected and refers to density (issue #123)
     # FIXME (Ole): Need to deal with it - e.g. by automatically reprojecting
     # the layer at this point and setting the native resolution accordingly
     # in its keywords.
-    myKeywords = read_file_keywords(myKeywordsPath)
-    if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
-        if str(theLayer.crs().authid()) != 'EPSG:4326':
+    keywords = read_file_keywords(keywords_path)
+    if 'datatype' in keywords and keywords['datatype'] == 'density':
+        if str(layer.crs().authid()) != 'EPSG:4326':
 
             # This layer is not WGS84 geographic
-            myMessage = ('Layer %s represents density but has spatial '
-                         'reference "%s". Density layers must be given in '
-                         'WGS84 geographic coordinates, so please reproject '
-                         'and try again. For more information, see issue '
-                         'https://github.com/AIFDR/inasafe/issues/123'
-                         % (myWorkingLayer, theLayer.crs().toProj4()))
-            raise InvalidProjectionError(myMessage)
+            message = (
+                'Layer %s represents density but has spatial reference "%s". '
+                'Density layers must be given in WGS84 geographic coordinates, '
+                'so please reproject and try again. For more information, '
+                'see issue https://github.com/AIFDR/inasafe/issues/123' % (
+                    working_layer,
+                    layer.crs().toProj4()
+                ))
+            raise InvalidProjectionError(message)
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.
-    myClipKml = extent_to_kml(theExtent)
+    clip_kml = extent_to_kml(extent)
 
     # Create a filename for the clipped, resampled and reprojected layer
-    myHandle, myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                            temp_dir())
-    os.close(myHandle)
-    os.remove(myFilename)
+    handle, filename = tempfile.mkstemp('.tif', 'clip_', temp_dir())
+    os.close(handle)
+    os.remove(filename)
 
     # If no cell size is specified, we need to run gdalwarp without
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
-    myBinaryList = which('gdalwarp')
-    LOGGER.debug('Path for gdalwarp: %s' % myBinaryList)
-    if len(myBinaryList) < 1:
+    binary_list = which('gdalwarp')
+    LOGGER.debug('Path for gdalwarp: %s' % binary_list)
+    if len(binary_list) < 1:
         raise CallGDALError(
             tr('gdalwarp could not be found on your computer'))
     # Use the first matching gdalwarp found
-    myBinary = myBinaryList[0]
-    if theCellSize is None:
-        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near '
-                     '-cutline %s -crop_to_cutline -of GTiff '
-                     '"%s" "%s"' % (myBinary,
-                                    myClipKml,
-                                    myWorkingLayer,
-                                    myFilename))
+    binary = binary_list[0]
+    if cell_size is None:
+        command = (
+            '"%s" -q -t_srs EPSG:4326 -r near -cutline %s -crop_to_cutline '
+            '-of GTiff "%s" "%s"' % (
+                binary,
+                clip_kml,
+                working_layer,
+                filename))
     else:
-        myCommand = ('"%s" -q -t_srs EPSG:4326 -r near -tr %f %f '
-                     '-cutline %s -crop_to_cutline -of GTiff '
-                     '"%s" "%s"' % (myBinary,
-                                    theCellSize,
-                                    theCellSize,
-                                    myClipKml,
-                                    myWorkingLayer,
-                                    myFilename))
+        command = (
+            '"%s" -q -t_srs EPSG:4326 -r near -tr %f %f -cutline %s '
+            '-crop_to_cutline -of GTiff "%s" "%s"' % (
+                binary,
+                cell_size,
+                cell_size,
+                clip_kml,
+                working_layer,
+                filename))
 
-    LOGGER.debug(myCommand)
-    myResult = QProcess().execute(myCommand)
+    LOGGER.debug(command)
+    result = QProcess().execute(command)
 
     # For QProcess exit codes see
     # http://qt-project.org/doc/qt-4.8/qprocess.html#execute
-    if myResult == -2:  # cannot be started
-        myMessageDetail = tr('Process could not be started.')
-        myMessage = tr(
+    if result == -2:  # cannot be started
+        message_detail = tr('Process could not be started.')
+        message = tr(
             '<p>Error while executing the following shell command:'
             '</p><pre>%s</pre><p>Error message: %s'
-            % (myCommand, myMessageDetail))
-        raise CallGDALError(myMessage)
-    elif myResult == -1:  # process crashed
-        myMessageDetail = tr('Process crashed.')
-        myMessage = tr('<p>Error while executing the following shell command:'
-                       '</p><pre>%s</pre><p>Error message: %s'
-                       % (myCommand, myMessageDetail))
-        raise CallGDALError(myMessage)
+            % (command, message_detail))
+        raise CallGDALError(message)
+    elif result == -1:  # process crashed
+        message_detail = tr('Process crashed.')
+        message = tr('<p>Error while executing the following shell command:</p>'
+                     '<pre>%s</pre><p>Error message: %s' %
+                     (command, message_detail))
+        raise CallGDALError(message)
 
     # .. todo:: Check the result of the shell call is ok
-    myKeywordIO = KeywordIO()
-    myKeywordIO.copy_keywords(
-        theLayer, myFilename, extra_keywords=theExtraKeywords)
-    myBaseName = '%s clipped' % theLayer.name()
-    myLayer = QgsRasterLayer(myFilename, myBaseName)
+    keyword_io = KeywordIO()
+    keyword_io.copy_keywords(layer, filename, extra_keywords=extra_keywords)
+    base_name = '%s clipped' % layer.name()
+    layer = QgsRasterLayer(filename, base_name)
 
-    return myLayer
+    return layer
 
 
 def extent_to_kml(extent):
