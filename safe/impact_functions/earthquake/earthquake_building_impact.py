@@ -1,3 +1,6 @@
+# coding=utf-8
+"""Earthquake Impact Function on Building."""
+
 from third_party.odict import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -22,6 +25,10 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     layertype=='vector'
     """
 
+    def __init__(self):
+        """Constructor."""
+        FunctionProvider.__init__(self)
+
     target_field = 'Shake_cls'
     statistics_type = 'class_count'
     statistics_classes = [0, 1, 2, 3]
@@ -35,6 +42,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)
+        :param layers: All the input layers (Hazard Layer and Exposure Layer)
         """
 
         LOGGER.debug('Running earthquake building impact')
@@ -48,9 +56,11 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         t1 = self.parameters['medium_threshold']
         t2 = self.parameters['high_threshold']
 
-        class_1 = tr('Low')
-        class_2 = tr('Medium')
-        class_3 = tr('High')
+        # Class Attribute and Label
+
+        class_1 = {'label': tr('Low'), 'class': 1}
+        class_2 = {'label': tr('Medium'), 'class': 2}
+        class_3 = {'label': tr('High'), 'class': 3}
 
         # Extract data
         my_hazard = get_hazard_layer(layers)    # Depth
@@ -68,9 +78,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         if ('FLOOR_AREA' in attribute_names and
             'BUILDING_C' in attribute_names and
                 'CONTENTS_C' in attribute_names):
-            is_NEXIS = True
+            is_nexis = True
         else:
-            is_NEXIS = False
+            is_nexis = False
 
         # Interpolate hazard level to building locations
         my_interpolate_result = assign_hazard_values_to_exposure_data(
@@ -80,7 +90,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         #attribute_names = my_interpolate_result.get_attribute_names()
         attributes = my_interpolate_result.get_data()
 
-        N = len(my_interpolate_result)
+        interpolate_size = len(my_interpolate_result)
 
         # Calculate building impact
         lo = 0
@@ -91,11 +101,11 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         for key in range(4):
             building_values[key] = 0
             contents_values[key] = 0
-        for i in range(N):
+        for i in range(interpolate_size):
             # Classify building according to shake level
             # and calculate dollar losses
 
-            if is_NEXIS:
+            if is_nexis:
                 try:
                     area = float(attributes[i]['FLOOR_AREA'])
                 except (ValueError, KeyError):
@@ -136,18 +146,18 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
             attributes[i][self.target_field] = cls
 
-            if is_NEXIS:
+            if is_nexis:
                 # Accumulate values in 1M dollar units
                 building_values[cls] += building_value
                 contents_values[cls] += contents_value
 
-        if is_NEXIS:
+        if is_nexis:
             # Convert to units of one million dollars
             for key in range(4):
                 building_values[key] = int(building_values[key] / 1000000)
                 contents_values[key] = int(contents_values[key] / 1000000)
 
-        if is_NEXIS:
+        if is_nexis:
             # Generate simple impact report for NEXIS type buildings
             table_body = [question,
                           TableRow([tr('Hazard Level'),
@@ -155,13 +165,13 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                                     tr('Buildings value ($M)'),
                                     tr('Contents value ($M)')],
                                    header=True),
-                          TableRow([class_1, format_int(lo),
+                          TableRow([class_1['label'], format_int(lo),
                                     format_int(building_values[1]),
                                     format_int(contents_values[1])]),
-                          TableRow([class_2, format_int(me),
+                          TableRow([class_2['label'], format_int(me),
                                     format_int(building_values[2]),
                                     format_int(contents_values[2])]),
-                          TableRow([class_3, format_int(hi),
+                          TableRow([class_3['label'], format_int(hi),
                                     format_int(building_values[3]),
                                     format_int(contents_values[3])])]
         else:
@@ -170,9 +180,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                           TableRow([tr('Hazard Level'),
                                     tr('Buildings Affected')],
                           header=True),
-                          TableRow([class_1, format_int(lo)]),
-                          TableRow([class_2, format_int(me)]),
-                          TableRow([class_3, format_int(hi)])]
+                          TableRow([class_1['label'], format_int(lo)]),
+                          TableRow([class_2['label'], format_int(me)]),
+                          TableRow([class_3['label'], format_int(hi)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('High hazard is defined as shake levels greater '
@@ -181,7 +191,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                              'between %i and %i on the MMI scale.') % (t1, t2))
         table_body.append(tr('Low hazard is defined as shake levels '
                              'between %i and %i on the MMI scale.') % (t0, t1))
-        if is_NEXIS:
+        if is_nexis:
             table_body.append(tr('Values are in units of 1 million Australian '
                                  'Dollars'))
 
@@ -189,11 +199,11 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         impact_table = impact_summary
 
         # Create style
-        style_classes = [dict(label=class_1, value=t0,
+        style_classes = [dict(label=class_1['label'], value=class_1['class'],
                               colour='#ffff00', transparency=1),
-                         dict(label=class_2, value=t1,
+                         dict(label=class_2['label'], value=class_2['class'],
                               colour='#ffaa00', transparency=1),
-                         dict(label=class_3, value=t2,
+                         dict(label=class_3['label'], value=class_3['class'],
                               colour='#ff0000', transparency=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
@@ -207,20 +217,21 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         legend_title = tr('Impact level')
 
         # Create vector layer and return
-        V = Vector(data=attributes,
-                   projection=my_interpolate_result.get_projection(),
-                   geometry=my_interpolate_result.get_geometry(),
-                   name=tr('Estimated buildings affected'),
-                   keywords={'impact_summary': impact_summary,
-                             'impact_table': impact_table,
-                             'map_title': map_title,
-                             'legend_notes': legend_notes,
-                             'legend_units': legend_units,
-                             'legend_title': legend_title,
-                             'target_field': self.target_field,
-                             'statistics_type': self.statistics_type,
-                             'statistics_classes': self.statistics_classes},
-                   style_info=style_info)
+        result_layer = Vector(data=attributes,
+                              projection=my_interpolate_result.get_projection(),
+                              geometry=my_interpolate_result.get_geometry(),
+                              name=tr('Estimated buildings affected'),
+                              keywords={'impact_summary': impact_summary,
+                                        'impact_table': impact_table,
+                                        'map_title': map_title,
+                                        'legend_notes': legend_notes,
+                                        'legend_units': legend_units,
+                                        'legend_title': legend_title,
+                                        'target_field': self.target_field,
+                                        'statistics_type': self.statistics_type,
+                                        'statistics_classes': self
+                                        .statistics_classes},
+                              style_info=style_info)
 
-        LOGGER.debug('Created vector layer  %s' % str(V))
-        return V
+        LOGGER.debug('Created vector layer  %s' % str(result_layer))
+        return result_layer
