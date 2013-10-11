@@ -88,7 +88,7 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
     z1 = z[idx]
 
     # Coefficient for weighting between lower and upper bounds
-    alpha = (xi - x0).astype(float) / (x1 - x0)
+    alpha = (xi - x0) / (x1 - x0)
 
     if mode == 'linear':
         # Bilinear interpolation formula
