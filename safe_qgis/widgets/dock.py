@@ -1805,11 +1805,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     m.Text(self.tr('Printing cancelled!'))))
             return
 
+<<<<<<< HEAD
         table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
         html_renderer = HtmlRenderer(page_dpi=print_map.page_dpi)
         keywords = self.keyword_io.read_keywords(self.iface.activeLayer())
         html_pdf_path = html_renderer.print_impact_table(
             keywords, filename=table_file_name)
+=======
+        myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
+        myHtmlRenderer = HtmlRenderer(page_dpi=myMap.page_dpi)
+        myKeywords = self.keywordIO.read_keywords(self.iface.activeLayer())
+        myHtmlPdfPath = myHtmlRenderer.print_impact_table(
+            myKeywords, filename=myTableFilename)
+>>>>>>> Refactored map class to be more consistent with coding conventions.
 
         try:
             print_map.make_pdf(map_pdf_path)
