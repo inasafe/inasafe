@@ -1478,17 +1478,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
-                myExposureGeoCellSize = getWGS84resolution(exposure_layer)
+                exposure_geo_cell_size = getWGS84resolution(exposure_layer)
 
-                if hazard_geo_cell_size < myExposureGeoCellSize:
+                if hazard_geo_cell_size < exposure_geo_cell_size:
                     cell_size = hazard_geo_cell_size
                 else:
-                    cell_size = myExposureGeoCellSize
+                    cell_size = exposure_geo_cell_size
 
                 # Record native resolution to allow rescaling of exposure data
-                if not numpy.allclose(cell_size, myExposureGeoCellSize):
+                if not numpy.allclose(cell_size, exposure_geo_cell_size):
                     extra_exposure_keywords['resolution'] = \
-                        myExposureGeoCellSize
+                        exposure_geo_cell_size
             else:
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
@@ -1496,8 +1496,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # resolution to be available
                 if exposure_layer.type() != QgsMapLayer.VectorLayer:
                     raise RuntimeError
-                buffered_geoextent = getBufferedExtent(geo_extent,
-                                                        hazard_geo_cell_size)
+                buffered_geoextent = getBufferedExtent(
+                    geo_extent,
+                    hazard_geo_cell_size)
         else:
             # Hazard layer is vector
 
@@ -1538,8 +1539,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         try:
-            (myExtraExposureKeywords, myBufferedGeoExtent, myCellSize,
-             exposure_layer, myGeoExtent, hazard_layer) = \
+            (extra_exposure_keywords, buffered_geo_extent, cell_size,
+             exposure_layer, geo_extent, hazard_layer) = \
                 self.get_clip_parameters()
         except:
             raise
@@ -1547,18 +1548,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
         title = self.tr('Preparing hazard data')
-        myDetail = self.tr(
+        detail = self.tr(
             'We are resampling and clipping the hazard layer to match the '
             'intersection of the exposure layer and the current view extents.')
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(myDetail))
+            m.Paragraph(detail))
         self.show_dynamic_message(message)
         try:
-            myClippedHazard = clip_layer(
+            clipped_hazard = clip_layer(
                 layer=hazard_layer,
-                extent=myBufferedGeoExtent,
-                cell_size=myCellSize,
+                extent=buffered_geo_extent,
+                cell_size=cell_size,
                 hard_clip_flag=self.clip_hard)
         except CallGDALError, e:
             raise e
@@ -1566,83 +1567,83 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise e
 
         title = self.tr('Preparing exposure data')
-        myDetail = self.tr(
+        detail = self.tr(
             'We are resampling and clipping the exposure layer to match the '
             'intersection of the hazard layer and the current view extents.')
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(myDetail))
+            m.Paragraph(detail))
         self.show_dynamic_message(message)
 
-        myClippedExposure = clip_layer(
+        clipped_exposure = clip_layer(
             layer=exposure_layer,
-            extent=myGeoExtent,
-            cell_size=myCellSize,
-            extra_keywords=myExtraExposureKeywords,
+            extent=geo_extent,
+            cell_size=cell_size,
+            extra_keywords=extra_exposure_keywords,
             hard_clip_flag=self.clip_hard)
-        return myClippedHazard, myClippedExposure
+        return clipped_hazard, clipped_exposure
 
-    def show_impact_keywords(self, myKeywords):
+    def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.
 
         .. note:: The print button will be enabled if this method is called.
             Also, the question group box will be hidden and the 'show
             question' button will be shown.
 
-        :param myKeywords: A keywords dictionary.
-        :type myKeywords: dict
+        :param keywords: A keywords dictionary.
+        :type keywords: dict
         """
         LOGGER.debug('Showing Impact Keywords')
-        if 'impact_summary' not in myKeywords:
+        if 'impact_summary' not in keywords:
             return
 
-        myReport = m.Message()
-        myReport.add(LOGO_ELEMENT)
-        myReport.add(m.Heading(self.tr(
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr(
             'Analysis Results'), **INFO_STYLE))
-        myReport.add(m.Text(myKeywords['impact_summary']))
-        if 'postprocessing_report' in myKeywords:
-            myReport.add(myKeywords['postprocessing_report'])
-        myReport.add(impact_attribution(myKeywords))
+        report.add(m.Text(keywords['impact_summary']))
+        if 'postprocessing_report' in keywords:
+            report.add(keywords['postprocessing_report'])
+        report.add(impact_attribution(keywords))
         self.pbnPrint.setEnabled(True)
-        self.show_static_message(myReport)
+        self.show_static_message(report)
         # also hide the question and show the show question button
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
 
-    def show_generic_keywords(self, myKeywords):
+    def show_generic_keywords(self, keywords):
         """Show the keywords defined for the active layer.
 
         .. note:: The print button will be disabled if this method is called.
 
-        :param myKeywords: A keywords dictionary.
-        :type myKeywords: dict
+        :param keywords: A keywords dictionary.
+        :type keywords: dict
         """
         LOGGER.debug('Showing Generic Keywords')
-        myReport = m.Message()
-        myReport.add(LOGO_ELEMENT)
-        myReport.add(m.Heading(self.tr(
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr(
             'Layer keywords:'), **INFO_STYLE))
-        myReport.add(m.Text(self.tr(
+        report.add(m.Text(self.tr(
             'The following keywords are defined for the active layer:')))
         self.pbnPrint.setEnabled(False)
-        myList = m.BulletedList()
-        for myKeyword in myKeywords:
-            myValue = myKeywords[myKeyword]
+        keywords_list = m.BulletedList()
+        for myKeyword in keywords:
+            value = keywords[myKeyword]
 
             # Translate titles explicitly if possible
             if myKeyword == 'title':
-                myValue = safeTr(myValue)
+                value = safeTr(value)
                 # Add this keyword to report
-            myKey = m.ImportantText(
+            key = m.ImportantText(
                 self.tr(myKeyword.capitalize()))
-            myValue = str(myValue)
-            myList.add(m.Text(myKey, myValue))
+            value = str(value)
+            keywords_list.add(m.Text(key, value))
 
-        myReport.add(myList)
+        report.add(keywords_list)
         self.pbnPrint.setEnabled(False)
-        self.show_static_message(myReport)
+        self.show_static_message(report)
 
     def show_no_keywords_message(self):
         """Show a message indicating that no keywords are defined.
@@ -1650,11 +1651,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         .. note:: The print button will be disabled if this method is called.
         """
         LOGGER.debug('Showing No Keywords Message')
-        myReport = m.Message()
-        myReport.add(LOGO_ELEMENT)
-        myReport.add(m.Heading(self.tr(
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr(
             'Layer keywords missing:'), **WARNING_STYLE))
-        myContext = m.Message(
+        context = m.Message(
             m.Text(self.tr(
                 'No keywords have been defined for this layer yet. If '
                 'you wish to use it as an impact or hazard layer in a '
@@ -1665,18 +1666,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             m.Text(self.tr(
                 ' icon in the toolbar, or choosing Plugins -> InaSAFE '
                 '-> Keyword Editor from the menu bar.')))
-        myReport.add(myContext)
+        report.add(context)
         self.pbnPrint.setEnabled(False)
-        self.show_static_message(myReport)
+        self.show_static_message(report)
 
     @pyqtSlot('QgsMapLayer')
-    def layer_changed(self, theLayer):
+    def layer_changed(self, layer):
         """Handler for when the QGIS active layer is changed.
         If the active layer is changed and it has keywords and a report,
         show the report.
 
-        :param theLayer: QgsMapLayer instance that is now active
-        :type theLayer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+        :param layer: QgsMapLayer instance that is now active
+        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 
         """
         # Don't handle this event if we are already handling another layer
@@ -1684,17 +1685,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.get_layers_lock:
             return
 
-        if theLayer is None:
+        if layer is None:
             LOGGER.debug('Layer is None')
             return
 
         try:
-            myKeywords = self.keyword_io.read_keywords(theLayer)
+            keywords = self.keyword_io.read_keywords(layer)
 
-            if 'impact_summary' in myKeywords:
-                self.show_impact_keywords(myKeywords)
+            if 'impact_summary' in keywords:
+                self.show_impact_keywords(keywords)
             else:
-                self.show_generic_keywords(myKeywords)
+                self.show_generic_keywords(keywords)
 
         except (KeywordNotFoundError,
                 HashNotFoundError,
@@ -1702,12 +1703,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 NoKeywordsFoundError):
             self.show_no_keywords_message()
             # Append the error message.
-            # myErrorMessage = get_error_message(e)
-            # self.show_error_message(myErrorMessage)
+            # error_message = get_error_message(e)
+            # self.show_error_message(error_message)
             return
         except Exception, e:
-            myErrorMessage = get_error_message(e)
-            self.show_error_message(myErrorMessage)
+            error_message = get_error_message(e)
+            self.show_error_message(error_message)
             return
 
     def save_state(self):
@@ -1716,48 +1717,48 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         The saved state can be restored again easily using
         :func:`restore_state`
         """
-        myStateDict = {
+        state = {
             'hazard': self.cboHazard.currentText(),
             'exposure': self.cboExposure.currentText(),
             'function': self.cboFunction.currentText(),
             'aggregation': self.cboAggregation.currentText(),
             'report': self.wvResults.page().currentFrame().toHtml()}
-        self.state = myStateDict
+        self.state = state
 
     def restore_state(self):
         """Restore the state of the dock to the last known state."""
         if self.state is None:
             return
         for myCount in range(0, self.cboExposure.count()):
-            myItemText = self.cboExposure.itemText(myCount)
-            if myItemText == self.state['exposure']:
+            item_text = self.cboExposure.itemText(myCount)
+            if item_text == self.state['exposure']:
                 self.cboExposure.setCurrentIndex(myCount)
                 break
         for myCount in range(0, self.cboHazard.count()):
-            myItemText = self.cboHazard.itemText(myCount)
-            if myItemText == self.state['hazard']:
+            item_text = self.cboHazard.itemText(myCount)
+            if item_text == self.state['hazard']:
                 self.cboHazard.setCurrentIndex(myCount)
                 break
         for myCount in range(0, self.cboAggregation.count()):
-            myItemText = self.cboAggregation.itemText(myCount)
-            if myItemText == self.state['aggregation']:
+            item_text = self.cboAggregation.itemText(myCount)
+            if item_text == self.state['aggregation']:
                 self.cboAggregation.setCurrentIndex(myCount)
                 break
         self.restore_function_state(self.state['function'])
         self.wvResults.setHtml(self.state['report'])
 
-    def restore_function_state(self, theOriginalFunction):
+    def restore_function_state(self, original_function):
         """Restore the function combo to a known state.
 
-        :param theOriginalFunction: Name of function that should be selected.
-        :type theOriginalFunction: str
+        :param original_function: Name of function that should be selected.
+        :type original_function: str
 
         """
         # Restore previous state of combo
-        for myCount in range(0, self.cboFunction.count()):
-            myItemText = self.cboFunction.itemText(myCount)
-            if myItemText == theOriginalFunction:
-                self.cboFunction.setCurrentIndex(myCount)
+        for count in range(0, self.cboFunction.count()):
+            item_text = self.cboFunction.itemText(count)
+            if item_text == original_function:
+                self.cboFunction.setCurrentIndex(count)
                 break
 
     def print_map(self):
@@ -1841,28 +1842,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.show_dynamic_message(status)
         self.hide_busy()
 
-    def get_function_id(self, theIndex=None):
+    def get_function_id(self, index=None):
         """Get the canonical impact function ID for the currently selected
            function (or the specified combo entry if theIndex is supplied.
 
-        :param theIndex: Optional index position in the combo that you
+        :param index: Optional index position in the combo that you
             want the function id for. Defaults to None. If not set / None
             the currently selected combo item's function id will be
             returned.
-        :type theIndex: int
+        :type index: int
 
         :returns: Id of the currently selected function.
         :rtype: str
         """
-        if theIndex is None:
-            myIndex = self.cboFunction.currentIndex()
-        else:
-            myIndex = theIndex
-        myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
-        myFunctionID = '' if myItemData is None else str(myItemData)
-        return myFunctionID
+        if index is None:
+            index = self.cboFunction.currentIndex()
+        item_data = self.cboFunction.itemData(index, QtCore.Qt.UserRole)
+        function_id = '' if item_data is None else str(item_data)
+        return function_id
 
-    def scenario_layer_paths(self, exposure_path, hazard_path, scenario_path):
+    @staticmethod
+    def scenario_layer_paths(exposure_path, hazard_path, scenario_path):
         """Calculate the paths for hazard and exposure relative to scenario.
 
         :param exposure_path: Public path for exposure.
@@ -1874,7 +1874,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         :param scenario_path: Path to scenario file.
         :type scenario_path: str
 
-        :return: Relative paths for exposure and hazard.
+        :return: Tuple of relative paths for exposure and hazard.
+        :rtype: (str, str)
         """
         start_path = os.path.dirname(scenario_path)
         try:
@@ -1900,40 +1901,40 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         """
         LOGGER.info('saveCurrentScenario')
-        warningTitle = self.tr('InaSAFE Save Scenario Warning')
+        warning_title = self.tr('InaSAFE Save Scenario Warning')
         # get data layer
         # get absolute path of exposure & hazard layer, or the contents
         exposure_layer = self.get_exposure_layer()
         hazard_layer = self.get_hazard_layer()
-        myAggregationLayer = self.get_aggregation_layer()
-        myFunctionId = self.get_function_id(self.cboFunction.currentIndex())
-        myExtent = viewport_geo_array(self.iface.mapCanvas())
+        aggregation_layer = self.get_aggregation_layer()
+        function_id = self.get_function_id(self.cboFunction.currentIndex())
+        extent = viewport_geo_array(self.iface.mapCanvas())
         # make it look like this:
         # 109.829170982, -8.13333290561, 111.005344795, -7.49226294379
-        myExtentStr = ', '.join(('%f' % x) for x in myExtent)
+        extent_string = ', '.join(('%f' % x) for x in extent)
 
         # Checking f exposure and hazard layer is not None
         if exposure_layer is None:
-            warningMessage = self.tr(
+            warning_message = self.tr(
                 'Exposure layer is not found, can not save scenario. Please '
                 'add exposure layer to do so.')
             # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
+            QtGui.QMessageBox.warning(self, warning_title, warning_message)
             return
         if hazard_layer is None:
-            warningMessage = self.tr(
+            warning_message = self.tr(
                 'Hazard layer is not found, can not save scenario. Please add '
                 'hazard layer to do so.')
             # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.warning(self, warningTitle, warningMessage)
+            QtGui.QMessageBox.warning(self, warning_title, warning_message)
             return
 
         # Checking if function id is not None
-        if myFunctionId == '' or myFunctionId is None:
-            warningMessage = self.tr(
+        if function_id == '' or function_id is None:
+            warning_message = self.tr(
                 'The impact function is empty, can not save scenario')
             # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.question(self, warningTitle, warningMessage)
+            QtGui.QMessageBox.question(self, warning_title, warning_message)
             return
 
         exposure_path = str(exposure_layer.publicSource())
@@ -1965,11 +1966,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         parser.add_section(title)
         parser.set(title, 'exposure', relative_exposure_path)
         parser.set(title, 'hazard', relative_hazard_path)
-        parser.set(title, 'function', myFunctionId)
-        parser.set(title, 'extent', myExtentStr)
+        parser.set(title, 'function', function_id)
+        parser.set(title, 'extent', extent_string)
 
-        if myAggregationLayer is not None:
-            aggregation_path = str(myAggregationLayer.publicSource())
+        if aggregation_layer is not None:
+            aggregation_path = str(aggregation_layer.publicSource())
             relative_aggregation_path = os.path.relpath(
                 aggregation_path, file_name)
             parser.set(title, 'aggregation', relative_aggregation_path)

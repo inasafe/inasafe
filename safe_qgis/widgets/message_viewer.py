@@ -41,7 +41,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         # whether to show or not dev only options
         self.devMode = QtCore.QSettings().value(
-            'inasafe/devMode', False)
+            'inasafe/developer_mode', False)
 
         if self.devMode:
             self.settings().globalSettings().setAttribute(

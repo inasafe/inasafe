@@ -78,7 +78,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxVisibleLayersOnly.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/setLayerNameFromTitleFlag', True))
+            'inasafe/set_layer_from_title_flag', True))
         self.cbxSetLayerNameFromTitle.setChecked(flag)
 
         flag = bool(settings.value(
@@ -90,11 +90,11 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxHideExposure.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clipToViewport', True))
+            'inasafe/clip_to_viewport', True))
         self.cbxClipToViewport.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clipHard', False))
+            'inasafe/clip_hard', False))
         self.cbxClipHard.setChecked(flag)
 
         flag = bool(settings.value(
@@ -102,7 +102,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxUseSentry.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/showIntermediateLayers', False))
+            'inasafe/show_intermediate_layers', False))
         self.cbxShowPostprocessingLayers.setChecked(flag)
 
         ratio = float(settings.value(
@@ -126,7 +126,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.leReportTemplatePath.setText(path)
 
         flag = bool(settings.value(
-            'inasafe/devMode', False))
+            'inasafe/developer_mode', False))
         self.cbxDevMode.setChecked(flag)
 
         flag = bool(settings.value(
@@ -143,7 +143,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/visibleLayersOnlyFlag',
             self.cbxVisibleLayersOnly.isChecked())
         settings.setValue(
-            'inasafe/setLayerNameFromTitleFlag',
+            'inasafe/set_layer_from_title_flag',
             self.cbxSetLayerNameFromTitle.isChecked())
         settings.setValue(
             'inasafe/setZoomToImpactFlag',
@@ -152,16 +152,16 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/setHideExposureFlag',
             self.cbxHideExposure.isChecked())
         settings.setValue(
-            'inasafe/clipToViewport',
+            'inasafe/clip_to_viewport',
             self.cbxClipToViewport.isChecked())
         settings.setValue(
-            'inasafe/clipHard',
+            'inasafe/clip_hard',
             self.cbxClipHard.isChecked())
         settings.setValue(
             'inasafe/useSentry',
             self.cbxUseSentry.isChecked())
         settings.setValue(
-            'inasafe/showIntermediateLayers',
+            'inasafe/show_intermediate_layers',
             self.cbxShowPostprocessingLayers.isChecked())
         settings.setValue(
             'inasafe/defaultFemaleRatio',
@@ -176,7 +176,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
             'inasafe/reportTemplatePath',
             self.leReportTemplatePath.text())
         settings.setValue(
-            'inasafe/devMode',
+            'inasafe/developer_mode',
             self.cbxDevMode.isChecked())
         settings.setValue(
             'inasafe/useNativeZonalStats',

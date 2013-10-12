@@ -249,7 +249,7 @@ class PostprocessorManager(QtCore.QObject):
             myRequestedPostProcessors = self.functionParams['postprocessors']
             myPostProcessors = get_postprocessors(myRequestedPostProcessors)
         except (TypeError, KeyError):
-            # TypeError is for when functionParams is none
+            # TypeError is for when function_parameters is none
             # KeyError is for when ['postprocessors'] is unavailable
             myPostProcessors = {}
         LOGGER.debug('Running this postprocessors: ' + str(myPostProcessors))

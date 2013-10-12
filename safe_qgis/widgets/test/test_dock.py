@@ -105,17 +105,17 @@ class TestDock(TestCase):
     def setUp(self):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
-        DOCK.showOnlyVisibleLayersFlag = True
+        DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
-        DOCK.runInThreadFlag = False
-        DOCK.showOnlyVisibleLayersFlag = False
-        DOCK.setLayerNameFromTitleFlag = False
-        DOCK.zoomToImpactFlag = False
-        DOCK.hideExposureFlag = False
-        DOCK.showIntermediateLayers = False
+        DOCK.run_in_thread_flag = False
+        DOCK.show_only_visible_layers_flag = False
+        DOCK.set_layer_from_title_flag = False
+        DOCK.zoom_to_impact_flag = False
+        DOCK.hide_exposure_flag = False
+        DOCK.show_intermediate_layers = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -1127,7 +1127,7 @@ class TestDock(TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        #        DOCK.runtimeKeywordsDialog.accept()
+        #        DOCK.runtime_keywords_dialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:
@@ -1157,7 +1157,7 @@ Click for Diagnostic Information:
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        #        DOCK.runtimeKeywordsDialog.accept()
+        #        DOCK.runtime_keywords_dialog.accept()
         myExpectedResult = """Error:
 An exception occurred when calculating the results
 Problem:
