@@ -52,32 +52,32 @@ class ShakemapImporterTest(unittest.TestCase):
         """Test behaviour of elements in the dialog
         """
         myDialog = ShakemapImporter(PARENT)
-        myDialog.cBDefaultOutputLocation.setEnabled(True)
+        myDialog.use_output_default.setEnabled(True)
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
-        myDialog.leInputPath.setText(my_grid_path)
-        input_path = myDialog.leInputPath.text()
-        output_path = myDialog.leOutputPath.text()
+        myDialog.input_path.setText(my_grid_path)
+        input_path = myDialog.input_path.text()
+        output_path = myDialog.output_path.text()
         assert myDialog.isEnabled(), 'Output location should be disabled'
         expected_output_path = input_path[:-3] + 'tif'
         assert output_path == expected_output_path, \
             'Expected %s got %s' % (expected_output_path, output_path)
 
-    def Xtest_Converting(self):
-        """Test converting a file
+    def test_converting(self):
+        """Test converting a file.
         """
-        myDialog = ShakemapImporter(PARENT)
-        myDialog.test_mode = True
-        myDialog.cBDefaultOutputLocation.setEnabled(False)
-        my_grid_path = os.path.join(TESTDATA, 'grid.xml')
-        my_output_raster = unique_filename(prefix='result_grid',
-                                           suffix='.tif',
-                                           dir=temp_dir('test'))
-        myDialog.cBLoadLayer.setEnabled(True)
-        myDialog.leInputPath.setText(my_grid_path)
-        myDialog.leOutputPath.setText(my_output_raster)
-        myButton = myDialog.buttonBox.button(QDialogButtonBox.Ok)
-        myButton.click()
-        assert os.path.exists(my_output_raster), 'Raster is not created'
+        dialog = ShakemapImporter(PARENT)
+        dialog.use_output_default.setEnabled(False)
+        grid_path = os.path.join(TESTDATA, 'grid.xml')
+        output_raster = unique_filename(
+            prefix='result_grid',
+            suffix='.tif',
+            dir=temp_dir('test'))
+        dialog.load_result.setEnabled(True)
+        dialog.input_path.setText(grid_path)
+        dialog.output_path.setText(output_raster)
+        button = dialog.button_box.button(QDialogButtonBox.Ok)
+        button.click()
+        assert os.path.exists(output_raster), 'Raster is not created'
 
 
 if __name__ == "__main__":

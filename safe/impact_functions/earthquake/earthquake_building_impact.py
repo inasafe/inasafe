@@ -26,15 +26,17 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     statistics_type = 'class_count'
     statistics_classes = [0, 1, 2, 3]
     title = tr('Be affected')
-    parameters = OrderedDict([('low_threshold', 6),
-                              ('medium_threshold', 7),
-                              ('high_threshold', 8),
-                              ('postprocessors', OrderedDict([
-                              ('AggregationCategorical', {'on': True})]))
-                              ])
+    parameters = OrderedDict(
+        [('low_threshold', 6),
+         ('medium_threshold', 7),
+         ('high_threshold', 8),
+         ('postprocessors', OrderedDict([
+         ('AggregationCategorical', {'on': True})]))
+         ])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)
+        :param layers: A list of layers to use for the impact assessment.
         """
 
         LOGGER.debug('Running earthquake building impact')

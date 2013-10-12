@@ -1791,7 +1791,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if logo_path != '':
             print_map.set_logo(logo_path)
         if report_path != '':
-            print_map.set_template()
+            print_map.set_template(report_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         default_file_name = print_map.map_title() + '.pdf'
