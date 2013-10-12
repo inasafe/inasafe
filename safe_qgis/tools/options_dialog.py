@@ -52,10 +52,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = dock
-        self.keywordIO = KeywordIO()
+        self.keyword_io = KeywordIO()
         # Set up things for context help
-        myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        myButton.clicked.connect(self.show_help)
+        button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        button.clicked.connect(self.show_help)
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()
@@ -66,107 +66,121 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
     def restore_state(self):
         """Reinstate the options based on the user's stored session info.
         """
-        mySettings = QtCore.QSettings()
-        # myFlag = mySettings.value(
+        settings = QtCore.QSettings()
+        # flag = settings.value(
         #     'inasafe/useThreadingFlag', False)
         # hack set use thread to false see #557
-        myFlag = False
-        self.cbxUseThread.setChecked(myFlag)
+        flag = False
+        self.cbxUseThread.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/visibleLayersOnlyFlag', True))
-        self.cbxVisibleLayersOnly.setChecked(myFlag)
+        self.cbxVisibleLayersOnly.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/setLayerNameFromTitleFlag', True))
-        self.cbxSetLayerNameFromTitle.setChecked(myFlag)
+        self.cbxSetLayerNameFromTitle.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/setZoomToImpactFlag', True))
-        self.cbxZoomToImpact.setChecked(myFlag)
+        self.cbxZoomToImpact.setChecked(flag)
         # whether exposure layer should be hidden after model completes
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/setHideExposureFlag', False))
-        self.cbxHideExposure.setChecked(myFlag)
+        self.cbxHideExposure.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/clipToViewport', True))
-        self.cbxClipToViewport.setChecked(myFlag)
+        self.cbxClipToViewport.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/clipHard', False))
-        self.cbxClipHard.setChecked(myFlag)
+        self.cbxClipHard.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/useSentry', False))
-        self.cbxUseSentry.setChecked(myFlag)
+        self.cbxUseSentry.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/showIntermediateLayers', False))
-        self.cbxShowPostprocessingLayers.setChecked(myFlag)
+        self.cbxShowPostprocessingLayers.setChecked(flag)
 
-        myRatio = float(mySettings.value(
+        ratio = float(settings.value(
             'inasafe/defaultFemaleRatio',
             DEFAULTS['FEM_RATIO']))
-        self.dsbFemaleRatioDefault.setValue(myRatio)
+        self.dsbFemaleRatioDefault.setValue(ratio)
 
-        myPath = mySettings.value(
+        path = settings.value(
             'inasafe/keywordCachePath',
-            self.keywordIO.default_keyword_db_path())
-        self.leKeywordCachePath.setText(myPath)
+            self.keyword_io.default_keyword_db_path())
+        self.leKeywordCachePath.setText(path)
 
-        myPath = mySettings.value(
+        path = settings.value(
             'inasafe/mapsLogoPath',
             '')
-        self.leMapsLogoPath.setText(myPath)
+        self.leMapsLogoPath.setText(path)
 
-        myPath = mySettings.value(
+        path = settings.value(
             'inasafe/reportTemplatePath',
             '')
-        self.leReportTemplatePath.setText(myPath)
+        self.leReportTemplatePath.setText(path)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/devMode', False))
-        self.cbxDevMode.setChecked(myFlag)
+        self.cbxDevMode.setChecked(flag)
 
-        myFlag = bool(mySettings.value(
+        flag = bool(settings.value(
             'inasafe/useNativeZonalStats', False))
-        self.cbxNativeZonalStats.setChecked(myFlag)
+        self.cbxNativeZonalStats.setChecked(flag)
 
     def save_state(self):
         """Store the options into the user's stored session info.
         """
-        mySettings = QtCore.QSettings()
-        mySettings.setValue('inasafe/useThreadingFlag',
-                            False)
-        mySettings.setValue('inasafe/visibleLayersOnlyFlag',
-                            self.cbxVisibleLayersOnly.isChecked())
-        mySettings.setValue('inasafe/setLayerNameFromTitleFlag',
-                            self.cbxSetLayerNameFromTitle.isChecked())
-        mySettings.setValue('inasafe/setZoomToImpactFlag',
-                            self.cbxZoomToImpact.isChecked())
-        mySettings.setValue('inasafe/setHideExposureFlag',
-                            self.cbxHideExposure.isChecked())
-        mySettings.setValue('inasafe/clipToViewport',
-                            self.cbxClipToViewport.isChecked())
-        mySettings.setValue('inasafe/clipHard',
-                            self.cbxClipHard.isChecked())
-        mySettings.setValue('inasafe/useSentry',
-                            self.cbxUseSentry.isChecked())
-        mySettings.setValue('inasafe/showIntermediateLayers',
-                            self.cbxShowPostprocessingLayers.isChecked())
-        mySettings.setValue('inasafe/defaultFemaleRatio',
-                            self.dsbFemaleRatioDefault.value())
-        mySettings.setValue('inasafe/keywordCachePath',
-                            self.leKeywordCachePath.text())
-        mySettings.setValue('inasafe/mapsLogoPath',
-                            self.leMapsLogoPath.text())
-        mySettings.setValue('inasafe/reportTemplatePath',
-                            self.leReportTemplatePath.text())
-        mySettings.setValue('inasafe/devMode',
-                            self.cbxDevMode.isChecked())
-        mySettings.setValue('inasafe/useNativeZonalStats',
-                            self.cbxNativeZonalStats.isChecked())
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/useThreadingFlag', False)
+        settings.setValue(
+            'inasafe/visibleLayersOnlyFlag',
+            self.cbxVisibleLayersOnly.isChecked())
+        settings.setValue(
+            'inasafe/setLayerNameFromTitleFlag',
+            self.cbxSetLayerNameFromTitle.isChecked())
+        settings.setValue(
+            'inasafe/setZoomToImpactFlag',
+            self.cbxZoomToImpact.isChecked())
+        settings.setValue(
+            'inasafe/setHideExposureFlag',
+            self.cbxHideExposure.isChecked())
+        settings.setValue(
+            'inasafe/clipToViewport',
+            self.cbxClipToViewport.isChecked())
+        settings.setValue(
+            'inasafe/clipHard',
+            self.cbxClipHard.isChecked())
+        settings.setValue(
+            'inasafe/useSentry',
+            self.cbxUseSentry.isChecked())
+        settings.setValue(
+            'inasafe/showIntermediateLayers',
+            self.cbxShowPostprocessingLayers.isChecked())
+        settings.setValue(
+            'inasafe/defaultFemaleRatio',
+            self.dsbFemaleRatioDefault.value())
+        settings.setValue(
+            'inasafe/keywordCachePath',
+            self.leKeywordCachePath.text())
+        settings.setValue(
+            'inasafe/mapsLogoPath',
+            self.leMapsLogoPath.text())
+        settings.setValue(
+            'inasafe/reportTemplatePath',
+            self.leReportTemplatePath.text())
+        settings.setValue(
+            'inasafe/devMode',
+            self.cbxDevMode.isChecked())
+        settings.setValue(
+            'inasafe/useNativeZonalStats',
+            self.cbxNativeZonalStats.isChecked())
 
     def show_help(self):
         """Show context help for the options dialog."""
@@ -183,33 +197,33 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """Auto-connect slot activated when cache file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        myFilename = QtGui.QFileDialog.getSaveFileName(
+        file_name = QtGui.QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
-            self.keywordIO.default_keyword_db_path(),
+            self.keyword_io.default_keyword_db_path(),
             self.tr('Sqlite DB File (*.db)'))
-        self.leKeywordCachePath.setText(myFilename)
+        self.leKeywordCachePath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolMapsLogoPath_clicked(self):
         """Auto-connect slot activated when logo file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        myFilename = QtGui.QFileDialog.getOpenFileName(
+        file_name = QtGui.QFileDialog.getOpenFileName(
             self,
             self.tr('Set map logo file'),
             '',
             self.tr('Portable Network Graphics files (*.png *.PNG)'))
-        self.leMapsLogoPath.setText(myFilename)
+        self.leMapsLogoPath.setText(file_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolReportTemplatePath_clicked(self):
         """Auto-connect slot activated when report file tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        myFilename = QtGui.QFileDialog.getOpenFileName(
+        file_name = QtGui.QFileDialog.getOpenFileName(
             self,
             self.tr('Set report template'),
             '',
             self.tr('QGIS Composer templates (*.qpt *.QPT)'))
-        self.leReportTemplatePath.setText(myFilename)
+        self.leReportTemplatePath.setText(file_name)
