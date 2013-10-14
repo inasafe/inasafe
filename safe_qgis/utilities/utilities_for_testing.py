@@ -882,7 +882,7 @@ def compareWkt(a, b, tol=0.000001):
     :return: True on success, False on failure
     :rtype: bool
     """
-    r = re.compile('-?\d+(?:\.\d+)?(?:[eE]\d+)?')
+    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
 
     # compare the structure
     a0 = r.sub("#", a)
