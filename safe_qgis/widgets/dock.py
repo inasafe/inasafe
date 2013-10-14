@@ -183,10 +183,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
         self.set_ok_button_status()
-        self.clip_to_viewport = flag
-        self.clip_hard = flag
-        self.show_intermediate_layers = flag
-        self.developer_mode = flag
+        self.clip_to_viewport = True
+        self.clip_hard = False
+        self.show_intermediate_layers = False
+        self.developer_mode = False
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -1299,18 +1299,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'to consider:') % (
                         self.cboExposure.currentText(),
                         self.cboHazard.currentText())))
-                list = m.BulletedList()
-                list.add(self.tr(
+                check_list = m.BulletedList()
+                check_list.add(self.tr(
                     'Check that you are not zoomed in too much and thus '
                     'excluding %s from your analysis area.') % (
                         self.cboExposure.currentText()))
-                list.add(self.tr(
+                check_list.add(self.tr(
                     'Check that the exposure is not no-data or zero for the '
                     'entire area of your analysis.'))
-                list.add(self.tr(
+                check_list.add(self.tr(
                     'Check that your impact function thresholds do not '
                     'exclude all features unintentionally.'))
-                report.add(list)
+                report.add(check_list)
                 self.show_static_message(report)
                 self.hide_busy()
                 return
@@ -1805,19 +1805,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     m.Text(self.tr('Printing cancelled!'))))
             return
 
-<<<<<<< HEAD
         table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
         html_renderer = HtmlRenderer(page_dpi=print_map.page_dpi)
         keywords = self.keyword_io.read_keywords(self.iface.activeLayer())
         html_pdf_path = html_renderer.print_impact_table(
             keywords, filename=table_file_name)
-=======
-        myTableFilename = os.path.splitext(myMapPdfFilePath)[0] + '_table.pdf'
-        myHtmlRenderer = HtmlRenderer(page_dpi=myMap.page_dpi)
-        myKeywords = self.keywordIO.read_keywords(self.iface.activeLayer())
-        myHtmlPdfPath = myHtmlRenderer.print_impact_table(
-            myKeywords, filename=myTableFilename)
->>>>>>> Refactored map class to be more consistent with coding conventions.
 
         try:
             print_map.make_pdf(map_pdf_path)
