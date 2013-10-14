@@ -154,12 +154,11 @@ class ClipperTest(unittest.TestCase):
         # Test the raster layer
         raster_layer = QgsRasterLayer(test_file, 'ten by ten')
         # Create a bounding box
-        rectangle = [1535380, 5083260, 1535380+40, 5083260+40]
+        rectangle = [1535380, 5083260, 1535380 + 40, 5083260 + 40]
         # Clip the vector to the bounding box
         result = clip_layer(raster_layer, rectangle)
         # Check the output is valid
         assert os.path.exists(result.source())
-
 
     # See issue #349
     @expectedFailure
