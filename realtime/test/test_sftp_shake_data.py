@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Ftp Client Test Cases.**
@@ -17,7 +18,7 @@ __date__ = '10/01/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
-from sftp_shake_data import SftpShakeData
+from realtime.sftp_shake_data import SftpShakeData
 import os
 
 sftp_data = SftpShakeData()

@@ -24,7 +24,6 @@ import math
 import numpy
 
 from PyQt4 import QtGui
-from PyQt4.QtCore import Qt
 from qgis.core import (
     QGis,
     QgsGraduatedSymbolRendererV2,

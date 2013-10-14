@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Ftp Client Test Cases.**
@@ -19,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import re
-from ftp_client import FtpClient
+from realtime.ftp_client import FtpClient
 
 
 class FtpClientTest(unittest.TestCase):

@@ -1,6 +1,6 @@
+# coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
- **ISClipper test suite.**
+InaSAFE Disaster risk assessment tool by AusAid - **Clipper test suite.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -58,8 +58,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     DEVNULL,
     GEOCRS,
     set_jakarta_extent,
-    compareWkt,
-    load_layer)
+    compareWkt)
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')

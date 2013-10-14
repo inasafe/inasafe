@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Tests Shake Data functionality related to shakemaps.**
@@ -21,10 +22,8 @@ import os
 import shutil
 import unittest
 
-from shake_data import ShakeData
-from utils import (shakemapZipDir,
-                   shakemapExtractDir,
-                   purgeWorkingData)
+from realtime.shake_data import ShakeData
+from realtime.utils import shakemapZipDir, purgeWorkingData, shakemapExtractDir
 
 # Clear away working dirs so we can be sure they are
 # actually created

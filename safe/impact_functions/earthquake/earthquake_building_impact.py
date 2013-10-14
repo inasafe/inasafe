@@ -25,10 +25,6 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                     layertype=='vector'
     """
 
-    def __init__(self):
-        """Constructor."""
-        FunctionProvider.__init__(self)
-
     target_field = 'Shake_cls'
     statistics_type = 'class_count'
     statistics_classes = [0, 1, 2, 3]
