@@ -217,21 +217,23 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
         legend_title = tr('Impact level')
 
         # Create vector layer and return
-        result_layer = Vector(data=attributes,
-                              projection=my_interpolate_result.get_projection(),
-                              geometry=my_interpolate_result.get_geometry(),
-                              name=tr('Estimated buildings affected'),
-                              keywords={'impact_summary': impact_summary,
-                                        'impact_table': impact_table,
-                                        'map_title': map_title,
-                                        'legend_notes': legend_notes,
-                                        'legend_units': legend_units,
-                                        'legend_title': legend_title,
-                                        'target_field': self.target_field,
-                                        'statistics_type': self.statistics_type,
-                                        'statistics_classes': self
-                                        .statistics_classes},
-                              style_info=style_info)
+        result_layer = Vector(
+            data=attributes,
+            projection=my_interpolate_result.get_projection(),
+            geometry=my_interpolate_result.get_geometry(),
+            name=tr('Estimated buildings affected'),
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'target_field': self.target_field,
+                'statistics_type': self.statistics_type,
+                'statistics_classes': self
+                .statistics_classes},
+            style_info=style_info)
 
         LOGGER.debug('Created vector layer  %s' % str(result_layer))
         return result_layer
