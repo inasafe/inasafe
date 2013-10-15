@@ -17,7 +17,6 @@ __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
 import logging
 
 from PyQt4 import QtCore, QtGui, QtXml
@@ -215,11 +214,22 @@ class Map():
         return legend_attribute_dict
 
     def load_template(self):
-        """Load a QgsComposer map from a template and render it.
-
-        .. note:: THIS METHOD IS EXPERIMENTAL
+        """Load a QgsComposer map from a template.
         """
         self.setup_composition()
+
+        file_info = QtCore.QFileInfo(self.template)
+        template_path = file_info.absoluteDir().absolutePath()
+        template_basename = file_info.baseName()
+        system_locale = QtCore.QLocale.system().name()[:2]
+        # if template name doesn't contains locale name, try to find
+        # localized version of this template in same directory and use
+        # it for report generation
+        if system_locale.lower() not in template_basename.lower():
+            localized_template = '%s/%s-%s.qpt' % (
+                template_path, template_basename, system_locale)
+            if QtCore.QFileInfo(localized_template).exists():
+                self.template = localized_template
 
         template_file = QtCore.QFile(self.template)
         template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
@@ -262,7 +272,11 @@ class Map():
 
         # set logo
         image = self.composition.getComposerItemById('safe-logo')
-        image.setPictureFile(self.logo)
+        if image is not None:
+            image.setPictureFile(self.logo)
+        else:
+            raise ReportCreationError(self.tr(
+                'Image "safe-logo" could not be found'))
 
         # Get the main map canvas on the composition and set
         # its extents to the event.

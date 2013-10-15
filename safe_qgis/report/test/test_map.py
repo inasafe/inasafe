@@ -38,7 +38,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class MapTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
 
-    def setup(self):
+    def setUp(self):
         """Setup fixture run before each tests"""
         # noinspection PyArgumentList
         layer_registry = QgsMapLayerRegistry.instance()
@@ -69,7 +69,7 @@ class MapTest(unittest.TestCase):
 
     def test_default_template(self):
         """Test that loading default template works"""
-        LOGGER.info('Testing defaultTemplate')
+        LOGGER.info('Testing default_template')
         layer, _ = load_layer('test_shakeimpact.shp')
         canvas_layer = QgsMapCanvasLayer(layer)
         CANVAS.setLayerSet([canvas_layer])
@@ -104,7 +104,7 @@ class MapTest(unittest.TestCase):
 
     def test_custom_logo(self):
         """Test that setting user-defined logo works"""
-        LOGGER.info('Testing defaultTemplate')
+        LOGGER.info('Testing custom_logo')
         layer, _ = load_layer('test_shakeimpact.shp')
         canvas_layer = QgsMapCanvasLayer(layer)
         CANVAS.setLayerSet([canvas_layer])
