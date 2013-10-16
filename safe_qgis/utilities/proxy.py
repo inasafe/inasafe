@@ -51,7 +51,11 @@ def get_proxy():
             proxy.setType(QNetworkProxy.DefaultProxy)
         proxy.setHostName(settings.value('/proxyHost'))
         proxy.setPort(settings.value('/proxyPort', type=int))
-        proxy.setUser(settings.value('/proxyUser'))
-        proxy.setPassword(settings.value('/proxyPassword'))
+        user = settings.value('/proxyUser', type=str)
+        password = settings.value('/proxyPassword', type=str)
+        if user is not None:
+            proxy.setUser(user)
+        if password is not None and user is not None:
+            proxy.setPassword(password)
         settings.endGroup()
         return proxy
