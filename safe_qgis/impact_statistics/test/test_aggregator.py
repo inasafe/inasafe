@@ -292,12 +292,12 @@ class AggregatorTest(unittest.TestCase):
 
         myAggregator = Aggregator(None, myAggregationLayer)
         # setting up
-        myAggregator.isValid = True
+        myAggregator.is_valid = True
         myAggregator.layer = myAggregationLayer
-        myAggregator.safeLayer = safe_read_layer(
+        myAggregator.safe_layer = safe_read_layer(
             str(myAggregator.layer.source()))
-        myAggregator.aoiMode = False
-        myAggregator.useNativeZonalStats = useNativeZonalStats
+        myAggregator.aoi_mode = False
+        myAggregator.use_native_zonal_stats = useNativeZonalStats
         myAggregator.aggregate(myImpactLayer)
 
         myProvider = myAggregator.layer.dataProvider()

@@ -649,13 +649,13 @@ class Map():
         #user: timlinux
         #host_name: ultrabook
         #time_stamp: 2012-10-13_23:10:31
-        #myUser = self.keywordIO.readKeywords(self.layer, 'user')
-        #myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
+        #myUser = self.keyword_io.readKeywords(self.layer, 'user')
+        #myHost = self.keyword_io.readKeywords(self.layer, 'host_name')
         myDateTime = self.keywordIO.read_keywords(self.layer, 'time_stamp')
         myTokens = myDateTime.split('_')
         myDate = myTokens[0]
         myTime = myTokens[1]
-        #myElapsedTime = self.keywordIO.readKeywords(self.layer,
+        #myElapsedTime = self.keyword_io.readKeywords(self.layer,
         #                                            'elapsed_time')
         #myElapsedTime = humaniseSeconds(myElapsedTime)
         myLongVersion = get_version()

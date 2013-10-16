@@ -41,74 +41,68 @@ class PostprocessorManager(QtCore.QObject):
     """A manager for post processing of impact function results.
     """
 
-    def __init__(
-            self,
-            theAggregator):
+    def __init__(self, aggregator):
         """Director for aggregation based operations.
-        Args:
-          theAggregationLayer: QgsMapLayer representing clipped
-              aggregation. This will be converted to a memory layer inside
-              this class. see self.aggregator.layer
-        Returns:
-           not applicable
-        Raises:
-           no exceptions explicitly raised
+
+        :param aggregator: Aggregator
+        :type aggregator: safe_qgis.impact_statistics.aggregator
         """
 
         super(PostprocessorManager, self).__init__()
 
         # Aggregation / post processing related items
-        self.postProcessingOutput = {}
-        self.keywordIO = KeywordIO()
-        self.errorMessage = None
+        self.output = {}
+        self.keyword_io = KeywordIO()
+        self.error_message = None
 
-        self.aggregator = theAggregator
+        self.aggregator = aggregator
+        self.current_output_postprocessor = None
+        self.attribute_title = None
 
-    def _sumFieldName(self):
+    def _sum_field_name(self):
         return self.aggregator.prefix + 'sum'
 
-    def _sortNoData(self, data):
+    def _sort_no_data(self, data):
         """Check if the value field of the postprocessor is NO_DATA.
 
-        this is used for sorting, it returns -1 if the value is NO_DATA, so
+        This is used for sorting, it returns -1 if the value is NO_DATA, so
         that no data items can be put at the end of a list
 
-        Args:
-            list - data
+        :param data: Value to be checked.
+        :type data: list
 
-        Returns:
-            returns -1 if the value is NO_DATA else the value
+        :returns: -1 if the value is NO_DATA else the value
+        :rtype: int, float
         """
 
-        myPostprocessor = self.postProcessingOutput[
-            self._currentOutputPostprocessor]
+        post_processor = self.output[self.current_output_postprocessor]
         #get the key position of the value field
-        myValueKey = myPostprocessor[0][1].keyAt(0)
+        key = post_processor[0][1].keyAt(0)
         #get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
-        if data[1][myValueKey]['value'] == self.aggregator.defaults['NO_DATA']:
-            myPosition = -1
+        if data[1][key]['value'] == self.aggregator.defaults['NO_DATA']:
+            position = -1
         else:
-            myPosition = data[1][myValueKey]['value']
-            myPosition = unhumanize_number(myPosition)
+            position = data[1][key]['value']
+            position = unhumanize_number(position)
 
-        return myPosition
+        return position
 
-    def _generateTables(self):
+    def _generate_tables(self):
         """Parses the postprocessing output as one table per postprocessor.
 
-        Args:
-            None
+        TODO: This should rather return json and then have a helper method to
+        make html from the JSON.
 
-        Returns:
-            str - a string containing the html
+        :returns: The html.
+        :rtype: str
         """
-        myMessage = m.Message()
+        message = m.Message()
 
-        for proc, results_list in self.postProcessingOutput.iteritems():
+        for proc, results_list in self.output.iteritems():
 
-            self._currentOutputPostprocessor = proc
+            self.current_output_postprocessor = proc
             # results_list is for example:
             # [
             #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
@@ -120,65 +114,56 @@ class PostprocessorManager(QtCore.QObject):
             #]
 
             #sorting using the first indicator of a postprocessor
-            sortedResList = sorted(
+            sorted_results = sorted(
                 results_list,
-                key=self._sortNoData,
+                key=self._sort_no_data,
                 reverse=True)
 
             #init table
-            hasNoDataValues = False
-            myTable = m.Table(
+            has_no_data = False
+            table = m.Table(
                 style_class='table table-condensed table-striped')
-            myTable.caption = self.tr('Detailed %s report') % (safeTr(
+            table.caption = self.tr('Detailed %s report') % (safeTr(
                 get_postprocessor_human_name(proc)).lower())
 
-            myHeaderRow = m.Row()
-            myHeaderRow.add(str(self.attributeTitle).capitalize())
-            for calculationName in sortedResList[0][1]:
-                myHeaderRow.add(self.tr(calculationName))
-            myTable.add(myHeaderRow)
+            header = m.Row()
+            header.add(str(self.attribute_title).capitalize())
+            for calculation_name in sorted_results[0][1]:
+                header.add(self.tr(calculation_name))
+            table.add(header)
 
-            for zoneName, calc in sortedResList:
-                myRow = m.Row(zoneName)
+            for zone_name, calc in sorted_results:
+                row = m.Row(zone_name)
 
-                for _, calculationData in calc.iteritems():
-                    myValue = calculationData['value']
-                    if myValue == self.aggregator.defaults['NO_DATA']:
-                        hasNoDataValues = True
-                        myValue += ' *'
-                    myRow.add(myValue)
-                myTable.add(myRow)
+                for _, calculation_data in calc.iteritems():
+                    value = calculation_data['value']
+                    if value == self.aggregator.defaults['NO_DATA']:
+                        has_no_data = True
+                        value += ' *'
+                    row.add(value)
+                table.add(row)
 
             # add table to message
-            myMessage.add(myTable)
-            if hasNoDataValues:
-                myMessage.add(m.EmphasizedText(self.tr(
+            message.add(table)
+            if has_no_data:
+                message.add(m.EmphasizedText(self.tr(
                     '* "%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
                     'values.') % (self.aggregator.defaults['NO_DATA'])))
 
-        return myMessage
+        return message
 
     def _consolidate_multipart_stats(self):
         """Sums the values of multipart polygons together to display only one.
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            None
         """
         LOGGER.debug('Consolidating multipart postprocessing results')
 
         # copy needed because of
-        # self.postProcessingOutput[proc].pop(corrected_index)
-        postProcessingOutput = self.postProcessingOutput
+        # self.output[postprocessor].pop(corrected_index)
+        output = self.output
 
         # iterate postprocessors
-        for proc, results_list in postProcessingOutput.iteritems():
+        for postprocessor, results_list in output.iteritems():
             #see self._generateTables to see details about results_list
             checked_polygon_names = {}
             parts_to_delete = []
@@ -187,10 +172,10 @@ class PostprocessorManager(QtCore.QObject):
             for polygon_name, results in results_list:
                 if polygon_name in checked_polygon_names.keys():
                     LOGGER.debug('%s postprocessor found multipart polygon '
-                                 'with name %s' % (proc, polygon_name))
+                                 'with name %s' % (postprocessor, polygon_name))
                     for result_name, result in results.iteritems():
                         first_part_index = checked_polygon_names[polygon_name]
-                        first_part = self.postProcessingOutput[proc][
+                        first_part = self.output[postprocessor][
                             first_part_index]
                         first_part_results = first_part[1]
                         first_part_result = first_part_results[result_name]
@@ -231,156 +216,144 @@ class PostprocessorManager(QtCore.QObject):
             # deleting-multiple-elements-from-a-list
             results_list = [res for j, res in enumerate(results_list)
                             if j not in parts_to_delete]
-            self.postProcessingOutput[proc] = results_list
+            self.output[postprocessor] = results_list
 
     def run(self):
         """Run any post processors requested by the impact function.
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            None
         """
         try:
-            myRequestedPostProcessors = self.functionParams['postprocessors']
-            myPostProcessors = get_postprocessors(myRequestedPostProcessors)
+            requested_postprocessors = self.functionParams['postprocessors']
+            postprocessors = get_postprocessors(requested_postprocessors)
         except (TypeError, KeyError):
             # TypeError is for when functionParams is none
             # KeyError is for when ['postprocessors'] is unavailable
-            myPostProcessors = {}
-        LOGGER.debug('Running this postprocessors: ' + str(myPostProcessors))
+            postprocessors = {}
+        LOGGER.debug('Running this postprocessors: ' + str(postprocessors))
 
-        myFeatureNameAttribute = self.aggregator.attributes[
+        feature_names_attribute = self.aggregator.attributes[
             self.aggregator.defaults['AGGR_ATTR_KEY']]
-        if myFeatureNameAttribute is None:
-            self.attributeTitle = self.tr('Aggregation unit')
+        if feature_names_attribute is None:
+            self.attribute_title = self.tr('Aggregation unit')
         else:
-            self.attributeTitle = myFeatureNameAttribute
+            self.attribute_title = feature_names_attribute
 
-        myNameFieldIndex = self.aggregator.layer.fieldNameIndex(
-            self.attributeTitle)
-        mySumFieldIndex = self.aggregator.layer.fieldNameIndex(
-            self._sumFieldName())
+        name_filed_index = self.aggregator.layer.fieldNameIndex(
+            self.attribute_title)
+        sum_field_index = self.aggregator.layer.fieldNameIndex(
+            self._sum_field_name())
 
-        myFemaleRatioIsVariable = False
-        myFemRatioFieldIndex = None
-        myFemaleRatio = None
+        user_defined_female_ratio = False
+        female_ratio_field_index = None
+        female_ratio = None
 
-        if 'Gender' in myPostProcessors:
+        if 'Gender' in postprocessors:
             # look if we need to look for a variable female ratio in a layer
             try:
-                myFemRatioField = self.aggregator.attributes[
+                female_ration_field = self.aggregator.attributes[
                     self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
-                myFemRatioFieldIndex = self.aggregator.layer.fieldNameIndex(
-                    myFemRatioField)
+                female_ratio_field_index = self.aggregator.layer.fieldNameIndex(
+                    female_ration_field)
 
                 # something went wrong finding the female ratio field,
                 # use defaults from below except block
-                if myFemRatioFieldIndex == -1:
+                if female_ratio_field_index == -1:
                     raise KeyError
 
-                myFemaleRatioIsVariable = True
+                user_defined_female_ratio = True
 
             except KeyError:
                 try:
-                    myFemaleRatio = self.keywordIO.read_keywords(
+                    female_ratio = self.keyword_io.read_keywords(
                         self.aggregator.layer,
                         self.aggregator.defaults['FEM_RATIO_KEY'])
                 except KeywordNotFoundError:
-                    myFemaleRatio = self.aggregator.defaults['FEM_RATIO']
+                    female_ratio = self.aggregator.defaults['FEM_RATIO']
 
         # iterate zone features
-        myRequest = QgsFeatureRequest()
-        myRequest.setFlags(QgsFeatureRequest.NoGeometry)
-        myProvider = self.aggregator.layer.dataProvider()
+        request = QgsFeatureRequest()
+        request.setFlags(QgsFeatureRequest.NoGeometry)
+        provider = self.aggregator.layer.dataProvider()
         # start data retrieval: fetch no geometry and all attributes for each
         # feature
-        myPolygonIndex = 0
-        for myFeature in myProvider.getFeatures(myRequest):
+        polygon_index = 0
+        for feature in provider.getFeatures(request):
             # if a feature has no field called
-            if myNameFieldIndex == -1:
-                myZoneName = str(myFeature.id())
+            if name_filed_index == -1:
+                zone_name = str(feature.id())
             else:
-                myZoneName = myFeature[myNameFieldIndex]
+                zone_name = feature[name_filed_index]
 
             # create dictionary of attributes to pass to postprocessor
-            myGeneralParams = {'target_field': self.aggregator.targetField,
-                               'function_params': self.functionParams}
+            general_params = {
+                'target_field': self.aggregator.targetField,
+                'function_params': self.functionParams}
 
             if self.aggregator.statisticsType == 'class_count':
-                myGeneralParams['impact_classes'] = (
+                general_params['impact_classes'] = (
                     self.aggregator.statisticsClasses)
             elif self.aggregator.statisticsType == 'sum':
-                myImpactTotal = myFeature[mySumFieldIndex]
-                myGeneralParams['impact_total'] = myImpactTotal
+                impact_total = feature[sum_field_index]
+                general_params['impact_total'] = impact_total
 
             try:
-                myGeneralParams['impact_attrs'] = (
-                    self.aggregator.impactLayerAttributes[myPolygonIndex])
+                general_params['impact_attrs'] = (
+                    self.aggregator.impactLayerAttributes[polygon_index])
             except IndexError:
                 # rasters and attributeless vectors have no attributes
-                myGeneralParams['impact_attrs'] = None
+                general_params['impact_attrs'] = None
 
-            for myKey, myValue in myPostProcessors.iteritems():
-                myParameters = myGeneralParams
+            for key, value in postprocessors.iteritems():
+                parameters = general_params
                 try:
                     # look if params are available for this postprocessor
-                    myParameters.update(
-                        self.functionParams['postprocessors'][myKey]['params'])
+                    parameters.update(
+                        self.functionParams['postprocessors'][key]['params'])
                 except KeyError:
                     pass
 
-                if myKey == 'Gender':
-                    if myFemaleRatioIsVariable:
-                        myFemaleRatio = myFeature[myFemRatioFieldIndex]
-                        if myFemaleRatio is None:
-                            myFemaleRatio = self.aggregator.defaults[
+                if key == 'Gender':
+                    if user_defined_female_ratio:
+                        female_ratio = feature[female_ratio_field_index]
+                        if female_ratio is None:
+                            female_ratio = self.aggregator.defaults[
                                 'FEM_RATIO']
-                        LOGGER.debug(myFemaleRatio)
-                    myParameters['female_ratio'] = myFemaleRatio
+                        LOGGER.debug(female_ratio)
+                    parameters['female_ratio'] = female_ratio
 
-                myValue.setup(myParameters)
-                myValue.process()
-                myResults = myValue.results()
-                myValue.clear()
-#                LOGGER.debug(myResults)
+                value.setup(parameters)
+                value.process()
+                results = value.results()
+                value.clear()
+#                LOGGER.debug(results)
                 try:
-                    self.postProcessingOutput[myKey].append(
-                        (myZoneName, myResults))
+                    self.output[key].append(
+                        (zone_name, results))
                 except KeyError:
-                    self.postProcessingOutput[myKey] = []
-                    self.postProcessingOutput[myKey].append(
-                        (myZoneName, myResults))
+                    self.output[key] = []
+                    self.output[key].append(
+                        (zone_name, results))
             # increment the index
-            myPolygonIndex += 1
+            polygon_index += 1
 
-    def getOutput(self):
+    def get_output(self):
         """Returns the results of the post processing as a table.
 
-        Args:
-            theSingleTableFlag - bool indicating if result should be rendered
-                as a single table. Default False.
-
-        Returns: str - a string containing the html in the requested format.
+        :returns: str - a string containing the html in the requested format.
         """
-        if self.errorMessage is not None:
-            myMessage = m.Message(
+        if self.error_message is not None:
+            message = m.Message(
                 m.Heading(self.tr('Postprocessing report skipped')),
                 m.Paragraph(self.tr(
                     'Due to a problem while processing the results,'
                     ' the detailed postprocessing report is unavailable:'
-                    ' %s') % self.errorMessage))
-            return myMessage
+                    ' %s') % self.error_message))
+            return message
         else:
             try:
-                if (self.keywordIO.read_keywords(
+                if (self.keyword_io.read_keywords(
                         self.aggregator.layer, 'had multipart polygon')):
                     self._consolidate_multipart_stats()
             except KeywordNotFoundError:
                 pass
 
-            return self._generateTables()
+            return self._generate_tables()

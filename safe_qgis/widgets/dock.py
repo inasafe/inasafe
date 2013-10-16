@@ -315,7 +315,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to show or not postprocessing generated layers
         flag = settings.value(
-            'inasafe/showIntermediateLayers', False, type=bool)
+            'inasafe/show_intermediate_layers', False, type=bool)
         self.showIntermediateLayers = flag
 
         # whether to show or not dev only options
@@ -331,8 +331,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'inasafe/showPostProcLayers', False)
         mySettings.remove('inasafe/showPostProcLayers')
 
-        if not mySettings.contains('inasafe/showIntermediateLayers'):
-            mySettings.setValue('inasafe/showIntermediateLayers', myOldFlag)
+        if not mySettings.contains('inasafe/show_intermediate_layers'):
+            mySettings.setValue('inasafe/show_intermediate_layers', myOldFlag)
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -867,9 +867,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
             raise
         # Identify input layers
-        self.calculator.set_hazard_layer(self.aggregator.hazardLayer.source())
+        self.calculator.set_hazard_layer(self.aggregator.hazard_layer.source())
         self.calculator.set_exposure_layer(
-            self.aggregator.exposureLayer.source())
+            self.aggregator.exposure_layer.source())
 
         # Use canonical function name to identify selected function
         myFunctionID = self.get_function_id()
@@ -880,7 +880,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.aggregator = Aggregator(
             self.iface,
             self.get_aggregation_layer())
-        self.aggregator.showIntermediateLayers = self.showIntermediateLayers
+        self.aggregator.show_intermediate_layers = self.showIntermediateLayers
         # Buffer aggregation keywords in case user presses cancel on kw dialog
         try:
             myOriginalKeywords = self.keywordIO.read_keywords(
@@ -894,7 +894,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.aggregator.layer, myOriginalKeywords)
         LOGGER.debug('my pre dialog keywords' + str(myOriginalKeywords))
         LOGGER.debug(
-            'AOImode: %s' % str(self.aggregator.aoiMode))
+            'AOImode: %s' % str(self.aggregator.aoi_mode))
         self.runtimeKeywordsDialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
@@ -1006,7 +1006,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # prompt for them. if a prompt is shown run method is called by the
         # accepted signal of the keywords dialog
         self.aggregator.validate_keywords()
-        if self.aggregator.isValid:
+        if self.aggregator.is_valid:
             self.run()
         else:
             self.runtimeKeywordsDialog.set_layer(self.aggregator.layer)
@@ -1195,7 +1195,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myKeywords = self.keywordIO.read_keywords(theQGISImpactLayer)
 
         # write postprocessing report to keyword
-        myOutput = self.postprocessorManager.getOutput()
+        myOutput = self.postprocessorManager.get_output()
         myKeywords['postprocessing_report'] = myOutput.to_html(
             suppress_newlines=True)
         self.keywordIO.write_keywords(theQGISImpactLayer, myKeywords)
@@ -1348,10 +1348,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise
 
         #TODO (MB) do we really want this check?
-        if self.aggregator.errorMessage is None:
+        if self.aggregator.error_message is None:
             self.post_process()
         else:
-            myContext = self.aggregator.errorMessage
+            myContext = self.aggregator.error_message
             myException = AggregatioError(self.tr(
                 'Aggregation error occurred.'))
             self.analysis_error(myException, myContext)

@@ -102,7 +102,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxUseSentry.setChecked(myFlag)
 
         myFlag = bool(mySettings.value(
-            'inasafe/showIntermediateLayers', False))
+            'inasafe/show_intermediate_layers', False))
         self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
         myRatio = float(mySettings.value(
@@ -120,7 +120,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxDevMode.setChecked(myFlag)
 
         myFlag = bool(mySettings.value(
-            'inasafe/useNativeZonalStats', False))
+            'inasafe/use_native_zonal_stats', False))
         self.cbxNativeZonalStats.setChecked(myFlag)
 
     def save_state(self):
@@ -143,7 +143,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxClipHard.isChecked())
         mySettings.setValue('inasafe/useSentry',
                             self.cbxUseSentry.isChecked())
-        mySettings.setValue('inasafe/showIntermediateLayers',
+        mySettings.setValue('inasafe/show_intermediate_layers',
                             self.cbxShowPostprocessingLayers.isChecked())
         mySettings.setValue('inasafe/defaultFemaleRatio',
                             self.dsbFemaleRatioDefault.value())
@@ -151,7 +151,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.leKeywordCachePath.text())
         mySettings.setValue('inasafe/devMode',
                             self.cbxDevMode.isChecked())
-        mySettings.setValue('inasafe/useNativeZonalStats',
+        mySettings.setValue('inasafe/use_native_zonal_stats',
                             self.cbxNativeZonalStats.isChecked())
 
     def show_help(self):
