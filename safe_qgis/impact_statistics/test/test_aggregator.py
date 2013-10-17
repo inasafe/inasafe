@@ -111,7 +111,7 @@ class AggregatorTest(unittest.TestCase):
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
-        myResult, message = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
@@ -119,92 +119,92 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
-        assert myResult, message
+        assert result, message
         # Press RUN
         DOCK.accept()
-        DOCK.runtimeKeywordsDialog.accept()
-        myAttribute = DOCK.aggregator.attributes[attribute_key]
+        DOCK.runtime_keywords_dialog.accept()
+        attribute = DOCK.aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' %
-                     myAttribute)
-        self.assertEqual(myAttribute, 'KAB_NAME', message)
+                     attribute)
+        self.assertEqual(attribute, 'KAB_NAME', message)
 
     def test_checkAggregationAttribute1Attr(self):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
-        myFileList = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
+        file_list = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
         #add additional layers
-        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
-        myAttrKey = breakdown_defaults('AGGR_ATTR_KEY')
+        load_layers(file_list, clear_flag=False, data_directory=TESTDATA)
+        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
-        myResult, message = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
-        assert myResult, message
+        assert result, message
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
-        print myAttrKey
+        print attribute_key
         print DOCK.aggregator.attributes
-        myAttribute = DOCK.aggregator.attributes[myAttrKey]
+        attribute = DOCK.aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' %
-                     myAttribute)
-        self.assertEqual(myAttribute, 'KAB_NAME', message)
+                     attribute)
+        self.assertEqual(attribute, 'KAB_NAME', message)
 
     def test_checkAggregationAttributeNoAttr(self):
         """Aggregation attribute chosen correctly when no attr available."""
 
-        myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
+        file_list = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
         #add additional layers
-        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
-        myAttrKey = breakdown_defaults('AGGR_ATTR_KEY')
+        load_layers(file_list, clear_flag=False, data_directory=TESTDATA)
+        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
-        myResult, message = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
-        assert myResult, message
+        assert result, message
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
-        myAttribute = DOCK.aggregator.attributes[myAttrKey]
+        attribute = DOCK.aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' %
-                     myAttribute)
-        assert myAttribute is None, message
+                     attribute)
+        assert attribute is None, message
 
     def test_checkAggregationAttributeNoneAttr(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
 
-        myFileList = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
+        file_list = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
-        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
-        myAttrKey = breakdown_defaults('AGGR_ATTR_KEY')
+        load_layers(file_list, clear_flag=False, data_directory=TESTDATA)
+        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
-        myResult, message = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
-        assert myResult, message
+        assert result, message
         # Press RUN
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
-        myAttribute = DOCK.aggregator.attributes[myAttrKey]
-        message = ('The aggregation should be None. Found: %s' % myAttribute)
-        assert myAttribute is None, message
+        attribute = DOCK.aggregator.attributes[attribute_key]
+        message = ('The aggregation should be None. Found: %s' % attribute)
+        assert attribute is None, message
 
     def test_preprocessing(self):
         """Preprocessing results are correct.
@@ -215,12 +215,12 @@ class AggregatorTest(unittest.TestCase):
 
         # See qgis project in test data: vector_preprocessing_test.qgs
         #add additional layers
-        myFileList = ['jakarta_crosskabupaten_polygons.shp']
-        load_layers(myFileList, clear_flag=False, data_directory=TESTDATA)
-        myFileList = ['kabupaten_jakarta.shp']
-        load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
+        file_list = ['jakarta_crosskabupaten_polygons.shp']
+        load_layers(file_list, clear_flag=False)
+        file_list = ['kabupaten_jakarta.shp']
+        load_layers(file_list, clear_flag=False, data_directory=BOUNDDATA)
 
-        myResult, message = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='jakarta_crosskabupaten_polygons',
             exposure='People',
@@ -228,7 +228,7 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function Vector Hazard',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
-        assert myResult, message
+        assert result, message
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
@@ -237,18 +237,21 @@ class AggregatorTest(unittest.TestCase):
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
 
-        myExpectedFeatureCount = 20
-        message = ('The preprocessing should have generated %s features, '
-                     'found %s' % (myExpectedFeatureCount,
-                                   DOCK.aggregator.preprocessedFeatureCount))
-        self.assertEqual(myExpectedFeatureCount,
-                         DOCK.aggregator.preprocessedFeatureCount,
-                         message)
+        expected_feature_count = 20
+        message = (
+            'The preprocessing should have generated %s features, '
+            'found %s' % (
+                expected_feature_count,
+                DOCK.aggregator.preprocessedFeatureCount))
+        self.assertEqual(
+            expected_feature_count,
+            DOCK.aggregator.preprocessedFeatureCount,
+            message)
 
     def _aggregate(self,
-                   myImpactLayer,
-                   myExpectedResults,
-                   useNativeZonalStats=False):
+                   impact_layer,
+                   expected_results,
+                   use_native_zonal_stats=False):
         """Helper to calculate aggregation.
 
         Expected results is split into two lists - one list contains numeric
@@ -256,73 +259,73 @@ class AggregatorTest(unittest.TestCase):
         .testing.assert_allclose which doesn't work on strings
         """
 
-        myExpectedStringResults = []
-        myExpectedNumericResults = []
+        expected_string_results = []
+        expected_numeric_results = []
 
-        for item in myExpectedResults:
-            myItemNumResults = []
-            myItemStrResults = []
+        for item in expected_results:
+            string_results = []
+            numeric_results = []
             for field in item:
                 try:
                     value = float(field)
-                    myItemNumResults.append(value)
+                    numeric_results.append(value)
                 except ValueError:
-                    myItemStrResults.append(str(field))
+                    string_results.append(str(field))
 
-            myExpectedNumericResults.append(myItemNumResults)
-            myExpectedStringResults.append(myItemStrResults)
+            expected_numeric_results.append(numeric_results)
+            expected_string_results.append(string_results)
 
-        myAggregationLayer = QgsVectorLayer(
+        aggregation_layer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
             'test aggregation',
             'ogr')
         # create a copy of aggregation layer
-        myGeoExtent = extent_to_geo_array(
-            myAggregationLayer.extent(),
-            myAggregationLayer.crs())
+        geo_extent = extent_to_geo_array(
+            aggregation_layer.extent(),
+            aggregation_layer.crs())
 
-        myAggrAttribute = self.keywordIO.read_keywords(
-            myAggregationLayer, self.defaults['AGGR_ATTR_KEY'])
+        aggregation_attribute = self.keywordIO.read_keywords(
+            aggregation_layer, self.defaults['AGGR_ATTR_KEY'])
         # noinspection PyArgumentEqualDefault
-        myAggregationLayer = clip_layer(
-            layer=myAggregationLayer,
-            extent=myGeoExtent,
+        aggregation_layer = clip_layer(
+            layer=aggregation_layer,
+            extent=geo_extent,
             explode_flag=True,
-            explode_attribute=myAggrAttribute)
+            explode_attribute=aggregation_attribute)
 
-        myAggregator = Aggregator(None, myAggregationLayer)
+        aggregator = Aggregator(None, aggregation_layer)
         # setting up
-        myAggregator.is_valid = True
-        myAggregator.layer = myAggregationLayer
-        myAggregator.safe_layer = safe_read_layer(
-            str(myAggregator.layer.source()))
-        myAggregator.aoi_mode = False
-        myAggregator.use_native_zonal_stats = useNativeZonalStats
-        myAggregator.aggregate(myImpactLayer)
+        aggregator.is_valid = True
+        aggregator.layer = aggregation_layer
+        aggregator.safe_layer = safe_read_layer(
+            str(aggregator.layer.source()))
+        aggregator.aoi_mode = False
+        aggregator.use_native_zonal_stats = use_native_zonal_stats
+        aggregator.aggregate(impact_layer)
 
-        myProvider = myAggregator.layer.dataProvider()
-        myNumericResults = []
-        myStringResults = []
+        provider = aggregator.layer.dataProvider()
+        string_results = []
+        numeric_results = []
 
-        for myFeature in myProvider.getFeatures():
-            myFeatureNumResults = []
-            myFeatureStrResults = []
-            myAttrs = myFeature.attributes()
+        for feature in provider.getFeatures():
+            feature_string_results = []
+            feature_numeric_results = []
+            myAttrs = feature.attributes()
             for attr in myAttrs:
                 if isinstance(attr, (int, float)):
-                    myFeatureNumResults.append(attr)
+                    feature_numeric_results.append(attr)
                 else:
-                    myFeatureStrResults.append(attr)
+                    feature_string_results.append(attr)
 
-            myNumericResults.append(myFeatureNumResults)
-            myStringResults.append(myFeatureStrResults)
+            numeric_results.append(feature_numeric_results)
+            string_results.append(feature_string_results)
 
         # check string attributes
-        self.assertEqual(myExpectedStringResults, myStringResults)
+        self.assertEqual(expected_string_results, string_results)
         # check numeric attributes with a 0.01% tolerance compared to the
         # native QGIS stats
-        numpy.testing.assert_allclose(myExpectedNumericResults,
-                                      myNumericResults,
+        numpy.testing.assert_allclose(expected_numeric_results,
+                                      numeric_results,
                                       rtol=0.01)
 
     def test_aggregate_raster_impact_python(self):
