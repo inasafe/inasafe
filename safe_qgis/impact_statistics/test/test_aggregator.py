@@ -100,18 +100,18 @@ class AggregatorTest(unittest.TestCase):
         currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(
             DOCK.cboAggregation.count())]
 
-        myMessage = ('The aggregation combobox should have:\n %s \nFound: %s'
+        message = ('The aggregation combobox should have:\n %s \nFound: %s'
                      % (myLayerList, currentLayers))
-        self.assertEquals(currentLayers, myLayerList, myMessage)
+        self.assertEquals(currentLayers, myLayerList, message)
 
-    def test_checkAggregationAttributeInKW(self):
+    def test_aggregation_attribute_in_keywords(self):
         """Aggregation attribute is chosen correctly when present in keywords.
         """
-        myAttrKey = breakdown_defaults('AGGR_ATTR_KEY')
+        attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setup_scenario(
+        myResult, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
@@ -119,14 +119,14 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
-        assert myResult, myMessage
+        assert myResult, message
         # Press RUN
         DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
-        myAttribute = DOCK.aggregator.attributes[myAttrKey]
-        myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
+        myAttribute = DOCK.aggregator.attributes[attribute_key]
+        message = ('The aggregation should be KAB_NAME. Found: %s' %
                      myAttribute)
-        self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
+        self.assertEqual(myAttribute, 'KAB_NAME', message)
 
     def test_checkAggregationAttribute1Attr(self):
         """Aggregation attribute is chosen correctly when there is only
@@ -138,14 +138,14 @@ class AggregatorTest(unittest.TestCase):
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
-        myResult, myMessage = setup_scenario(
+        myResult, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
-        assert myResult, myMessage
+        assert myResult, message
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
@@ -153,9 +153,9 @@ class AggregatorTest(unittest.TestCase):
         print myAttrKey
         print DOCK.aggregator.attributes
         myAttribute = DOCK.aggregator.attributes[myAttrKey]
-        myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
+        message = ('The aggregation should be KAB_NAME. Found: %s' %
                      myAttribute)
-        self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
+        self.assertEqual(myAttribute, 'KAB_NAME', message)
 
     def test_checkAggregationAttributeNoAttr(self):
         """Aggregation attribute chosen correctly when no attr available."""
@@ -166,21 +166,21 @@ class AggregatorTest(unittest.TestCase):
         myAttrKey = breakdown_defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
-        myResult, myMessage = setup_scenario(
+        myResult, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
-        assert myResult, myMessage
+        assert myResult, message
         # Press RUN
         DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.aggregator.attributes[myAttrKey]
-        myMessage = ('The aggregation should be None. Found: %s' %
+        message = ('The aggregation should be None. Found: %s' %
                      myAttribute)
-        assert myAttribute is None, myMessage
+        assert myAttribute is None, message
 
     def test_checkAggregationAttributeNoneAttr(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
@@ -191,20 +191,20 @@ class AggregatorTest(unittest.TestCase):
         myAttrKey = breakdown_defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
-        myResult, myMessage = setup_scenario(
+        myResult, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
-        assert myResult, myMessage
+        assert myResult, message
         # Press RUN
         DOCK.accept()
         DOCK.runtimeKeywordsDialog.accept()
         myAttribute = DOCK.aggregator.attributes[myAttrKey]
-        myMessage = ('The aggregation should be None. Found: %s' % myAttribute)
-        assert myAttribute is None, myMessage
+        message = ('The aggregation should be None. Found: %s' % myAttribute)
+        assert myAttribute is None, message
 
     def test_preprocessing(self):
         """Preprocessing results are correct.
@@ -220,7 +220,7 @@ class AggregatorTest(unittest.TestCase):
         myFileList = ['kabupaten_jakarta.shp']
         load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
 
-        myResult, myMessage = setup_scenario(
+        myResult, message = setup_scenario(
             DOCK,
             hazard='jakarta_crosskabupaten_polygons',
             exposure='People',
@@ -228,7 +228,7 @@ class AggregatorTest(unittest.TestCase):
             function_id='Flood Evacuation Function Vector Hazard',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
-        assert myResult, myMessage
+        assert myResult, message
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
@@ -238,12 +238,12 @@ class AggregatorTest(unittest.TestCase):
         DOCK.runtimeKeywordsDialog.accept()
 
         myExpectedFeatureCount = 20
-        myMessage = ('The preprocessing should have generated %s features, '
+        message = ('The preprocessing should have generated %s features, '
                      'found %s' % (myExpectedFeatureCount,
                                    DOCK.aggregator.preprocessedFeatureCount))
         self.assertEqual(myExpectedFeatureCount,
                          DOCK.aggregator.preprocessedFeatureCount,
-                         myMessage)
+                         message)
 
     def _aggregate(self,
                    myImpactLayer,
