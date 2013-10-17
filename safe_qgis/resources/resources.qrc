@@ -32,5 +32,6 @@
         <file alias="footer.html">footer.html</file>
 	<!-- composer templates -->
         <file alias="basic.qpt">qgis-composer-templates/basic.qpt</file>
+        <file alias="inasafe.qpt">qgis-composer-templates/inasafe.qpt</file>
     </qresource>
 </RCC>
