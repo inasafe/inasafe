@@ -49,7 +49,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     canvas_list)
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')

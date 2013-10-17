@@ -33,7 +33,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     load_layer, get_qgis_app)
 from safe_qgis.safe_interface import UNITDATA
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ZonalStatsTest(unittest.TestCase):

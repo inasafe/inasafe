@@ -99,7 +99,7 @@ from realtime.utils import setupLogger
 
 setupLogger()
 LOGGER = logging.getLogger('InaSAFE')
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakeEvent(QObject):

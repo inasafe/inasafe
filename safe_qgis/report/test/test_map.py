@@ -37,7 +37,7 @@ from safe_qgis.utilities.utilities import (
     setup_printer, dpi_to_meters, qgis_version)
 from safe_qgis.report.map import Map
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

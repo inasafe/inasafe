@@ -58,7 +58,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     DEVNULL,
     GEOCRS,
     set_jakarta_extent,
-    compareWkt)
+    compare_wkt)
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -70,7 +70,7 @@ RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
 
 # Handle to common QGis test app
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ClipperTest(unittest.TestCase):
@@ -566,7 +566,7 @@ class ClipperTest(unittest.TestCase):
         myExpectedWkt = 'LINESTRING(20.0 20.0, 30.0 30.0)'
         # There should only be one feature that intersects this clip
         # poly so this assertion should work.
-        assert compareWkt(myExpectedWkt, str(myResult.exportToWkt()))
+        assert compare_wkt(myExpectedWkt, str(myResult.exportToWkt()))
 
         # Now poly on poly clip test
         myClipPolygon = QgsGeometry.fromWkt(
@@ -586,7 +586,7 @@ class ClipperTest(unittest.TestCase):
             '106.8218 -6.1842,106.82179833 -6.18353616))')
         # There should only be one feature that intersects this clip
         # poly so this assertion should work.
-        assert compareWkt(myExpectedWkt, str(myResult.exportToWkt()))
+        assert compare_wkt(myExpectedWkt, str(myResult.exportToWkt()))
 
         # Now point on poly test clip
 
@@ -599,7 +599,7 @@ class ClipperTest(unittest.TestCase):
             myExpectedWkt = 'POINT(106.822410 -6.183690)'
             # There should only be one feature that intersects this clip
         # poly so this assertion should work.
-        assert compareWkt(myExpectedWkt, str(myResult.exportToWkt()))
+        assert compare_wkt(myExpectedWkt, str(myResult.exportToWkt()))
 
     def test_clipVectorHard(self):
         """Vector layers can be hard clipped.

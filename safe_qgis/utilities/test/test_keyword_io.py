@@ -19,7 +19,7 @@ from safe_qgis.exceptions import HashNotFoundError
 from safe_qgis.tools.test.test_keywords_dialog import makePadangLayerClone
 from safe_qgis.safe_interface import temp_dir, HAZDATA, TESTDATA
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Don't change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'

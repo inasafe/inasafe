@@ -88,7 +88,7 @@ from safe.engine.impact_functions_for_testing import \
 
 LOGGER = logging.getLogger('InaSAFE')
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
