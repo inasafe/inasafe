@@ -28,10 +28,9 @@ from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
-#for p in sys.path:
-#    print p + '\n'
 
 # this import required to enable PyQt API v2
+#noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 from qgis.core import QgsVectorLayer
@@ -71,6 +70,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class AggregatorTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
+    #noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
 
@@ -93,16 +93,18 @@ class AggregatorTest(unittest.TestCase):
         self.keywordIO = KeywordIO()
         self.defaults = breakdown_defaults()
 
-    def test_cboAggregationLoadedProject(self):
+    def test_combo_aggregation_loaded_project(self):
         """Aggregation combo changes properly according loaded layers"""
-        myLayerList = [DOCK.tr('Entire area'),
-                       DOCK.tr('kabupaten jakarta singlepart')]
-        currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(
+        layer_list = [
+            DOCK.tr('Entire area'),
+            DOCK.tr('kabupaten jakarta singlepart')]
+        current_layers = [DOCK.cboAggregation.itemText(i) for i in range(
             DOCK.cboAggregation.count())]
 
-        message = ('The aggregation combobox should have:\n %s \nFound: %s'
-                     % (myLayerList, currentLayers))
-        self.assertEquals(currentLayers, myLayerList, message)
+        message = (
+            'The aggregation combobox should have:\n %s \nFound: %s'
+            % (layer_list, current_layers))
+        self.assertEquals(current_layers, layer_list, message)
 
     def test_aggregation_attribute_in_keywords(self):
         """Aggregation attribute is chosen correctly when present in keywords.
@@ -124,16 +126,15 @@ class AggregatorTest(unittest.TestCase):
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
         attribute = DOCK.aggregator.attributes[attribute_key]
-        message = ('The aggregation should be KAB_NAME. Found: %s' %
-                     attribute)
+        message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    def test_checkAggregationAttribute1Attr(self):
+    def test_check_aggregation_single_attribute(self):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
         file_list = ['kabupaten_jakarta_singlepart_1_good_attr.shp']
         #add additional layers
-        load_layers(file_list, clear_flag=False, data_directory=TESTDATA)
+        load_layers(file_list, clear_flag=False)
         attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
 
         # with 1 good aggregation attribute using
@@ -153,16 +154,17 @@ class AggregatorTest(unittest.TestCase):
         print attribute_key
         print DOCK.aggregator.attributes
         attribute = DOCK.aggregator.attributes[attribute_key]
-        message = ('The aggregation should be KAB_NAME. Found: %s' %
-                     attribute)
+        message = (
+            'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    def test_checkAggregationAttributeNoAttr(self):
+    #noinspection PyMethodMayBeStatic
+    def test_check_aggregation_no_attributes(self):
         """Aggregation attribute chosen correctly when no attr available."""
 
         file_list = ['kabupaten_jakarta_singlepart_0_good_attr.shp']
         #add additional layers
-        load_layers(file_list, clear_flag=False, data_directory=TESTDATA)
+        load_layers(file_list, clear_flag=False)
         attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
@@ -178,16 +180,17 @@ class AggregatorTest(unittest.TestCase):
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
         attribute = DOCK.aggregator.attributes[attribute_key]
-        message = ('The aggregation should be None. Found: %s' %
-                     attribute)
+        message = (
+            'The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
 
-    def test_checkAggregationAttributeNoneAttr(self):
+    #noinspection PyMethodMayBeStatic
+    def test_check_aggregation_none_in_keywords(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
 
         file_list = ['kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
-        load_layers(file_list, clear_flag=False, data_directory=TESTDATA)
+        load_layers(file_list, clear_flag=False)
         attribute_key = breakdown_defaults('AGGR_ATTR_KEY')
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
@@ -310,8 +313,8 @@ class AggregatorTest(unittest.TestCase):
         for feature in provider.getFeatures():
             feature_string_results = []
             feature_numeric_results = []
-            myAttrs = feature.attributes()
-            for attr in myAttrs:
+            attributes = feature.attributes()
+            for attr in attributes:
                 if isinstance(attr, (int, float)):
                     feature_numeric_results.append(attr)
                 else:
@@ -335,13 +338,15 @@ class AggregatorTest(unittest.TestCase):
     def test_aggregate_raster_impact_native(self):
         """Check aggregation on raster impact using native qgis zonal stats.
 
-        TODO: this failes on Tims machine but not on MB or Jenkins.
+        TODO: this fails on Tim's machine but not on MB or Jenkins.
 
         """
-        self._aggregate_raster_impact(useNativeZonalStats=True)
+        self._aggregate_raster_impact(use_native_zonal_stats=True)
 
-    def _aggregate_raster_impact(self, useNativeZonalStats=False):
+    def _aggregate_raster_impact(self, use_native_zonal_stats=False):
         """Check aggregation on raster impact.
+
+        :param use_native_zonal_stats:
 
         Created from loadStandardLayers.qgs with:
         - a flood in Jakarta like in 2007
@@ -350,11 +355,11 @@ class AggregatorTest(unittest.TestCase):
         - kabupaten_jakarta_singlepart.shp
 
         """
-        myImpactLayer = Raster(
+        impact_layer = Raster(
             data=os.path.join(TESTDATA, 'aggregation_test_impact_raster.tif'),
             name='test raster impact')
 
-        myExpectedResults = [
+        expected_results = [
             ['JAKARTA BARAT',
              '50540',
              '12015061.8769531',
@@ -376,34 +381,34 @@ class AggregatorTest(unittest.TestCase):
              '10943934.3182373',
              '147.992999475819']]
 
-        self._aggregate(myImpactLayer, myExpectedResults, useNativeZonalStats)
+        self._aggregate(impact_layer, expected_results, use_native_zonal_stats)
 
     def test_aggregate_vector_impact(self):
         """Test aggregation results on a vector layer.
         created from loadStandardLayers.qgs with:
         - a flood in Jakarta like in 2007
         - Essential buildings
-        - be flodded
+        - be flooded
         - kabupaten_jakarta_singlepart.shp
         """
-        myImpactLayer = Vector(
+        impact_layer = Vector(
             data=os.path.join(TESTDATA, 'aggregation_test_impact_vector.shp'),
             name='test vector impact')
 
-        myExpectedResults = [
+        expected_results = [
             ['JAKARTA BARAT', '87'],
             ['JAKARTA PUSAT', '117'],
             ['JAKARTA SELATAN', '22'],
             ['JAKARTA UTARA', '286'],
             ['JAKARTA TIMUR', '198']
         ]
-        self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregate(impact_layer, expected_results)
 
-        myImpactLayer = Vector(
+        impact_layer = Vector(
             data=TESTDATA + '/aggregation_test_impact_vector_small.shp',
             name='test vector impact')
 
-        myExpectedResults = [
+        expected_results = [
             ['JAKARTA BARAT', '2'],
             ['JAKARTA PUSAT', '0'],
             ['JAKARTA SELATAN', '0'],
@@ -411,9 +416,9 @@ class AggregatorTest(unittest.TestCase):
             ['JAKARTA TIMUR', '0']
         ]
 
-        self._aggregate(myImpactLayer, myExpectedResults)
+        self._aggregate(impact_layer, expected_results)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(AggregatorTest, 'test')
+    suite = unittest.makeSuite(AggregatorTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
