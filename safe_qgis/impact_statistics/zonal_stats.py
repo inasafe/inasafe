@@ -62,7 +62,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     :type raster_layer: QgsRasterLayer
 
     :param polygon_layer: A QGIS vector layer containing polygons.
-    :type polygon_layer: QgsVectorLayer
+    :type polygon_layer: QgsVectorLayer, QgsMapLayer
 
     :returns: A data structure containing sum, mean, min, max,
         count of raster values for each polygonal area.

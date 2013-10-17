@@ -468,6 +468,9 @@ class Aggregator(QtCore.QObject):
         impact_geometries = safe_impact_layer.get_geometry()
         impact_values = safe_impact_layer.get_data()
 
+        attributes = None
+        # TODO: Woooow dude - these if blocks are too massive - refactor
+        # the code inside them into smaller testable functions!
         if not self.aoi_mode:
             aggregation_units = self.safe_layer.get_geometry()
 
@@ -561,7 +564,7 @@ class Aggregator(QtCore.QObject):
                             attributes[field_index] = v
 
                     elif self.statistics_type == 'sum':
-                        #by default summ attributes
+                        #by default sum attributes
                         total = 0
                         for i in inside:
                             try:
@@ -776,6 +779,7 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'We are clipping the aggregation layer to match the '
                 'intersection of the hazard and exposure layer extents.')))
+        #noinspection PyTypeChecker
         self._send_message(message)
 
         # This is used to hold an *in memory copy* of the aggregation layer
@@ -855,13 +859,13 @@ class Aggregator(QtCore.QObject):
     def _prepare_polygon_layer(self, layer):
         """Create a new layer with no intersecting features to self.layer.
 
-        A helper function to align the polygons to the postprocLayer
-        polygons. If one input polygon is in two or more postprocLayer polygons
-        then it is divided so that each part is within only one of the
-        postprocLayer polygons. this allows to aggregate in postprocessing
-        using centroid in polygon.
+        A helper function to align the polygons to the post processing layer
+        polygons. If one input polygon is in two or more post processing Layer
+        polygons then it is divided so that each part is within only one of the
+        post processing layer polygons. this allows to aggregate in
+        postprocessing using centroid in polygon.
 
-        The function assumes EPSG:4326 but no checks are enforced
+        The function assumes EPSG:4326 but no checks are enforced.
 
         :param layer: Layer to be processed.
         :type layer: QgsMapLayer, QgsVectorLayer
@@ -874,31 +878,33 @@ class Aggregator(QtCore.QObject):
 
         message = m.Message(
             m.Heading(
-                self.tr('Preclipping input data...'), **PROGRESS_UPDATE_STYLE),
+                self.tr('Pre-clipping input data...'),
+                **PROGRESS_UPDATE_STYLE),
             m.Paragraph(self.tr(
                 'Modifying %s to avoid intersections with the aggregation '
                 'layer'
             ) % (layer.name())))
+        #noinspection PyTypeChecker
         self._send_message(message)
 
         layer_filename = str(layer.source())
         postprocessing_polygons = self.safe_layer.get_geometry()
         polygons_layer = safe_read_layer(layer_filename)
-        remaining_polygons = numpy.array(polygons_layer.get_geometry(),
-                                          dtype=list)
+        remaining_polygons = numpy.array(
+            polygons_layer.get_geometry(), dtype=list)
 #        myRemainingAttributes = numpy.array(polygons_layer.get_data())
         remaining_indexes = numpy.array(range(len(remaining_polygons)))
 
         #used for unit tests only
         self.preprocessed_feature_count = 0
 
-        # FIXME (MB) the intersecting array is used only for debugging and
+        # TODO (MB) the intersecting array is used only for debugging and
         # could be safely removed
         intersecting_polygons = []
         inside_polygons = []
 
-        # FIXME (MB) maybe do raw geos without qgis
-        #select all postproc polygons with no attributes
+        # TODO (MB) maybe do raw geos without qgis
+        #select all post processing polygons with no attributes
         aggregation_provider = self.layer.dataProvider()
         aggregation_request = QgsFeatureRequest()
         aggregation_request.setSubsetOfAttributes([])
@@ -911,9 +917,8 @@ class Aggregator(QtCore.QObject):
         qgis_feature = QgsFeature()
         inside_feature = QgsFeature()
         fields = polygons_provider.fields()
-        temporary_dir = temp_dir(sub_dir='preprocess')
-        out_filename = unique_filename(
-            suffix='.shp', dir=temporary_dir)
+        temporary_dir = temp_dir(sub_dir='pre-process')
+        out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
         self.keyword_io.copy_keywords(layer, out_filename)
         shape_writer = QgsVectorFileWriter(
@@ -924,25 +929,25 @@ class Aggregator(QtCore.QObject):
             polygons_provider.crs())
         if shape_writer.hasError():
             raise InvalidParameterError(shape_writer.errorMessage())
-        # end FIXME
+        # end TODO
 
-        for (polygon_index,
-             polygon) in enumerate(postprocessing_polygons):
-            LOGGER.debug('PostprocPolygon %s' % polygon_index)
+        for (polygon_index, postprocessing_polygon) in enumerate(
+                postprocessing_polygons):
+            LOGGER.debug('Post Processing Polygon %s' % polygon_index)
             polygon_count = len(remaining_polygons)
             aggregation_request.setFilterFid(polygon_index)
-            myQgisPostprocPoly = aggregation_provider.getFeatures(
+            aggregation_polygon = aggregation_provider.getFeatures(
                 aggregation_request).next()
-            geometry = QgsGeometry(myQgisPostprocPoly.geometry())
+            geometry = QgsGeometry(aggregation_polygon.geometry())
 
             # polygon bounding box values
-            array = numpy.array(polygon)
+            array = numpy.array(postprocessing_polygon)
             minx = miny = sys.maxint
             maxx = maxy = -minx
-            myPostprocPolygonMinx = min(minx, min(array[:, 0]))
-            myPostprocPolygonMaxx = max(maxx, max(array[:, 0]))
-            myPostprocPolygonMiny = min(miny, min(array[:, 1]))
-            myPostprocPolygonMaxy = max(maxy, max(array[:, 1]))
+            postprocessing_minimum_x = min(minx, min(array[:, 0]))
+            postprocessing_maximum_x = max(maxx, max(array[:, 0]))
+            postprocessing_minimum_y = min(miny, min(array[:, 1]))
+            postprocessing_maximum_y = max(maxy, max(array[:, 1]))
 
             # create an array full of False to store if a BB vertex is inside
             # or outside the polygon
@@ -951,32 +956,33 @@ class Aggregator(QtCore.QObject):
             # Create Nx2 vector of vertices of bounding boxes
             bounding_vertices = []
             # Compute bounding box for each geometry type
-            for myPoly in remaining_polygons:
+            for remaining_polygon in remaining_polygons:
                 minx = miny = sys.maxint
                 maxx = maxy = -minx
                 # Do outer ring only as the BB is outside anyway
-                array = numpy.array(myPoly)
+                array = numpy.array(remaining_polygon)
                 minx = min(minx, numpy.min(array[:, 0]))
                 maxx = max(maxx, numpy.max(array[:, 0]))
                 miny = min(miny, numpy.min(array[:, 1]))
                 maxy = max(maxy, numpy.max(array[:, 1]))
-                bounding_vertices.extend([(minx, miny),
-                                    (minx, maxy),
-                                    (maxx, maxy),
-                                    (maxx, miny)])
+                bounding_vertices.extend([
+                    (minx, miny),
+                    (minx, maxy),
+                    (maxx, maxy),
+                    (maxx, miny)])
 
             # see if BB vertices are in polygon
             bounding_vertices = numpy.array(bounding_vertices)
-            inside, _ = points_in_and_outside_polygon(bounding_vertices,
-                                                      polygon)
+            inside, _ = points_in_and_outside_polygon(
+                bounding_vertices, postprocessing_polygon)
             # make True if the vertex was in polygon
             inside_vertices[inside] = True
 
-            # myNextIterPolygons has the 0:count indexes
+            # next_iteration_polygons has the 0:count indexes
             # outside_polygons has the mapped to original indexes
             # and is overwritten at every iteration because we care only of
             # the outside polygons remaining after the last iteration
-            myNextIterPolygons = []
+            next_iteration_polygons = []
             outside_polygons = []
 
             for i in range(polygon_count):
@@ -984,17 +990,17 @@ class Aggregator(QtCore.QObject):
                 mapped_index = remaining_indexes[i]
                 # memory layers counting starts at 1 instead of 0 as in our
                 # indexes
-                myFeatId = mapped_index + 1
-                doIntersection = False
+                feature_id = mapped_index + 1
+                do_intersection = False
                 # sum the isInside bool for each of the bounding box vertices
                 # of each polygon. for example True + True + False + True is 3
-                myPolygonLocation = numpy.sum(inside_vertices[k:k + 4])
+                polygon_location = numpy.sum(inside_vertices[k:k + 4])
 
-                if myPolygonLocation == 4:
+                if polygon_location == 4:
                     # all vertices are inside -> polygon is inside
                     # ignore this polygon from further analysis
                     inside_polygons.append(mapped_index)
-                    polygons_request.setFilterFid(myFeatId)
+                    polygons_request.setFilterFid(feature_id)
                     qgis_feature = polygons_provider.getFeatures(
                         polygons_request).next()
                     shape_writer.addFeature(qgis_feature)
@@ -1002,151 +1008,160 @@ class Aggregator(QtCore.QObject):
 #                    LOGGER.debug('Polygon %s is fully inside' %mapped_index)
 #                    tmpWriter.addFeature(qgis_feature)
 
-                elif myPolygonLocation == 0:
+                elif polygon_location == 0:
                     # all vertices are outside
                     # check if the polygon BB is completely outside of the
                     # polygon BB.
-                    myPolyMinx = numpy.min(bounding_vertices[k:k + 4, 0])
-                    myPolyMaxx = numpy.max(bounding_vertices[k:k + 4, 0])
-                    myPolyMiny = numpy.min(bounding_vertices[k:k + 4, 1])
-                    myPolyMaxy = numpy.max(bounding_vertices[k:k + 4, 1])
+                    polygon_min_x = numpy.min(bounding_vertices[k:k + 4, 0])
+                    polygon_max_x = numpy.max(bounding_vertices[k:k + 4, 0])
+                    polygon_min_y = numpy.min(bounding_vertices[k:k + 4, 1])
+                    polygon_max_y = numpy.max(bounding_vertices[k:k + 4, 1])
 
-                    # check if myPoly is all E,W,N,S of polygon
-                    if ((myPolyMinx > myPostprocPolygonMaxx) or
-                            (myPolyMaxx < myPostprocPolygonMinx) or
-                            (myPolyMiny > myPostprocPolygonMaxy) or
-                            (myPolyMaxy < myPostprocPolygonMiny)):
+                    # check if remaining_polygon is all E,W,N,S of polygon
+                    if ((polygon_min_x > postprocessing_maximum_x) or
+                            (polygon_max_x < postprocessing_minimum_x) or
+                            (polygon_min_y > postprocessing_maximum_y) or
+                            (polygon_max_y < postprocessing_minimum_y)):
                         # polygon is surely outside
                         outside_polygons.append(mapped_index)
                         # we need this polygon in the next iteration
-                        myNextIterPolygons.append(i)
+                        next_iteration_polygons.append(i)
                     else:
                         # polygon might be outside or intersecting. consider
                         # it intersecting so it goes into further analysis
-                        doIntersection = True
+                        do_intersection = True
                 else:
                     # some vertices are outside some inside -> polygon is
                     # intersecting
-                    doIntersection = True
+                    do_intersection = True
 
                 # intersect using qgis
-                if doIntersection:
+                if do_intersection:
 #                    LOGGER.debug('Intersecting polygon %s' % mapped_index)
                     intersecting_polygons.append(mapped_index)
 
-                    polygons_request.setFilterFid(myFeatId)
+                    polygons_request.setFilterFid(feature_id)
                     try:
                         qgis_feature = polygons_provider.getFeatures(
                             polygons_request).next()
                     except StopIteration:
-                        LOGGER.debug('Couldn\'t fetch feature: %s' % myFeatId)
+                        LOGGER.debug(
+                            'Could not fetch feature: %s' % feature_id)
                         LOGGER.debug([str(error) for error in
                                       polygons_provider.errors()])
 
-                    myQgisPolyGeom = QgsGeometry(qgis_feature.geometry())
-                    myAtMap = qgis_feature.attributes()
-#                    for (k, attr) in myAtMap.iteritems():
+                    qgis_polygon_geometry = QgsGeometry(
+                        qgis_feature.geometry())
+                    attribute_map = qgis_feature.attributes()
+#                    for (k, attr) in attribute_map.iteritems():
 #                        LOGGER.debug( "%d: %s" % (k, attr.toString()))
 
-                    # make intersection of the qgis_feature and the postprocPoly
+                    # make intersection of the qgis_feature and the
+                    # post processing polygon
                     # write the inside part to a shp file and the outside part
                     # back to the original QGIS layer
                     try:
-                        myIntersec = geometry.intersection(
-                            myQgisPolyGeom)
-#                        if myIntersec is not None:
-                        myIntersecGeom = QgsGeometry(myIntersec)
+                        intersection = geometry.intersection(
+                            qgis_polygon_geometry)
+#                        if intersection is not None:
+                        intersection_geometry = QgsGeometry(intersection)
 
                         #from ftools
-                        myUnknownGeomType = 0
-                        if myIntersecGeom.wkbType() == myUnknownGeomType:
+                        unknown_geometry_type = 0
+                        geometry_type = intersection_geometry.wkbType()
+                        if geometry_type == unknown_geometry_type:
                             int_com = geometry.combine(
-                                myQgisPolyGeom)
+                                qgis_polygon_geometry)
                             int_sym = geometry.symDifference(
-                                myQgisPolyGeom)
-                            myIntersecGeom = QgsGeometry(
+                                qgis_polygon_geometry)
+                            intersection_geometry = QgsGeometry(
                                 int_com.difference(int_sym))
-#                        LOGGER.debug('wkbType type of intersection: %s' %
-# myIntersecGeom.wkbType())
-                        polygonTypesList = [QGis.WKBPolygon,
-                                            QGis.WKBMultiPolygon]
-                        if myIntersecGeom.wkbType() in polygonTypesList:
-                            inside_feature.setGeometry(myIntersecGeom)
-                            inside_feature.setAttributes(myAtMap)
+                        #LOGGER.debug('wkbType type of intersection: %s' %
+                        #   intersection_geometry.wkbType())
+                        polygon_types = [QGis.WKBPolygon, QGis.WKBMultiPolygon]
+                        if intersection_geometry.wkbType() in polygon_types:
+                            inside_feature.setGeometry(intersection_geometry)
+                            inside_feature.setAttributes(attribute_map)
                             shape_writer.addFeature(inside_feature)
                             self.preprocessed_feature_count += 1
                         else:
+                            #LOGGER.debug(
+                            #    'Intersection not a polygon so the two '
+                            #    'polygons either touch only or do not '
+                            #    'intersect. Not adding this to the inside '
+                            #    'list')
                             pass
-#                            LOGGER.debug('Intersection not a polygon so '
-#                                         'the two polygons either touch '
-#                                         'only or do not intersect. Not '
-#                                         'adding this to the inside list')
-                        # Part of the polygon that is outside the postprocpoly
-                        myOutside = myQgisPolyGeom.difference(myIntersecGeom)
-#                        if myOutside is not None:
-                        myOutsideGeom = QgsGeometry(myOutside)
+                        # Part of the polygon that is outside the post
+                        # processing polygon
+                        outside = qgis_polygon_geometry.difference(
+                            intersection_geometry)
+#                        if outside is not None:
+                        outside_geometry = QgsGeometry(outside)
 
-                        if myOutsideGeom.wkbType() in polygonTypesList:
-                            # modifiy the original geometry to the part
-                            # outside of the postproc polygon
+                        if outside_geometry.wkbType() in polygon_types:
+                            # modify the original geometry to the part
+                            # outside of the post processing polygon
                             polygons_provider.changeGeometryValues(
-                                {myFeatId: myOutsideGeom})
+                                {feature_id: outside_geometry})
                             # we need this polygon in the next iteration
                             outside_polygons.append(mapped_index)
-                            myNextIterPolygons.append(i)
+                            next_iteration_polygons.append(i)
 
                     except TypeError:
                         LOGGER.debug('ERROR with FID %s', mapped_index)
 
-#            LOGGER.debug('Inside %s' % inside_polygons)
-#            LOGGER.debug('Outside %s' % outside_polygons)
-#            LOGGER.debug('Intersec %s' % intersecting_polygons)
-            if len(myNextIterPolygons) > 0:
+            #LOGGER.debug('Inside %s' % inside_polygons)
+            #LOGGER.debug('Outside %s' % outside_polygons)
+            #LOGGER.debug('Intersection %s' % intersecting_polygons)
+            if len(next_iteration_polygons) > 0:
                 # some polygons are still completely outside of the
-                # postprocPoly so go on and reiterate using only these
-                nextIterPolygonsIndex = numpy.array(myNextIterPolygons)
+                # post processing polygon so go on and reiterate using only
+                # these
+                next_iteration_index = numpy.array(next_iteration_polygons)
 
                 remaining_polygons = remaining_polygons[
-                    nextIterPolygonsIndex]
-#                myRemainingAttributes = myRemainingAttributes[
-#                                        nextIterPolygonsIndex]
-                remaining_indexes = remaining_indexes[nextIterPolygonsIndex]
+                    next_iteration_index]
+                #myRemainingAttributes = myRemainingAttributes[
+                #                        next_iteration_index]
+                remaining_indexes = remaining_indexes[next_iteration_index]
                 LOGGER.debug('Remaining: %s' % len(remaining_polygons))
             else:
                 print 'no more polygons to be checked'
                 break
-#            del tmpWriter
+            #del tmpWriter
 
         # here the full polygon set is represented by:
-        # inside_polygons + intersecting_polygons + myNextIterPolygons
-        # the a polygon intersecting multiple postproc polygons appears
+        # inside_polygons + intersecting_polygons + next_iteration_polygons
+        # the a polygon intersecting multiple post processing polygons appears
         # multiple times in the array
         # noinspection PyUnboundLocalVariable
         LOGGER.debug('Results:\nInside: %s\nIntersect: %s\nOutside: %s' % (
             inside_polygons, intersecting_polygons, outside_polygons))
 
-        # add in- and outside polygons
+        # add in-and outside polygons
         for i in outside_polygons:
-            myFeatId = i + 1
-            polygons_request.setFilterFid(myFeatId)
-            qgis_feature = polygons_provider.getFeatures(polygons_request).next()
+            feature_id = i + 1
+            polygons_request.setFilterFid(feature_id)
+            qgis_feature = polygons_provider.getFeatures(
+                polygons_request).next()
             shape_writer.addFeature(qgis_feature)
             self.preprocessed_feature_count += 1
 
         del shape_writer
 #        LOGGER.debug('Created: %s' % self.preprocessed_feature_count)
 
-        myName = '%s %s' % (layer.name(), self.tr('preprocessed'))
-        myOutLayer = QgsVectorLayer(out_filename, myName, 'ogr')
-        if not myOutLayer.isValid():
+        name = '%s %s' % (layer.name(), self.tr('preprocessed'))
+        output_layer = QgsVectorLayer(out_filename, name, 'ogr')
+        if not output_layer.isValid():
             #TODO (MB) use a better exception
             raise Exception('Invalid qgis Layer')
 
         if self.show_intermediate_layers:
-            self.keyword_io.update_keywords(myOutLayer, {'title': myName})
-            QgsMapLayerRegistry.instance().addMapLayer(myOutLayer)
+            self.keyword_io.update_keywords(output_layer, {'title': name})
+            #noinspection PyArgumentList
+            QgsMapLayerRegistry.instance().addMapLayer(output_layer)
 
-        return myOutLayer
+        return output_layer
 
     def _create_polygon_layer(self, crs=None, fields=None):
         """Creates an empty shape file layer.
@@ -1165,20 +1180,17 @@ class Aggregator(QtCore.QObject):
         if fields is None:
             fields = QgsFields()
 
-        myTempdir = temp_dir(sub_dir='preprocess')
-        myOutFilename = unique_filename(suffix='.shp',
-                                        dir=myTempdir)
-        mySHPWriter = QgsVectorFileWriter(myOutFilename,
-                                          'UTF-8',
-                                          fields,
-                                          QGis.WKBPolygon,
-                                          crs)
+        output_directory = temp_dir(sub_dir='pre-process')
+        output_filename = unique_filename(
+            suffix='.shp', dir=output_directory)
+        shape_writer = QgsVectorFileWriter(
+            output_filename, 'UTF-8', fields, QGis.WKBPolygon, crs)
         # flush the writer to write to file
-        del mySHPWriter
-        myName = self.tr('Entire area')
-        myLayer = QgsVectorLayer(myOutFilename, myName, 'ogr')
-        LOGGER.debug('created' + myLayer.name())
-        return myLayer
+        del shape_writer
+        name = self.tr('Entire area')
+        layer = QgsVectorLayer(output_filename, name, 'ogr')
+        LOGGER.debug('created' + layer.name())
+        return layer
 
     def _extents_to_layer(self):
         """Create simple layer with a polygon sized to extents of self.layer.
@@ -1199,43 +1211,43 @@ class Aggregator(QtCore.QObject):
 
         # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
 
-        myRect = self.iface.mapCanvas().extent()
-        myCrs = QgsCoordinateReferenceSystem()
-        myCrs.createFromSrid(4326)
-        myGeoExtent = extent_to_geo_array(myRect, myCrs)
+        rectangle = self.iface.mapCanvas().extent()
+        crs = QgsCoordinateReferenceSystem()
+        crs.createFromSrid(4326)
+        geo_extent = extent_to_geo_array(rectangle, crs)
 
         if not self.layer.isValid():
-            myMessage = self.tr(
+            message = self.tr(
                 'An exception occurred when creating the entire area layer.')
-            raise (InvalidLayerError(myMessage))
+            raise (InvalidLayerError(message))
 
-        myProvider = self.layer.dataProvider()
+        provider = self.layer.dataProvider()
 
-        myAttrName = self.tr('Area')
-        myProvider.addAttributes(
-            [QgsField(myAttrName, QtCore.QVariant.String)])
+        attribute_name = self.tr('Area')
+        provider.addAttributes(
+            [QgsField(attribute_name, QtCore.QVariant.String)])
         self.layer.updateFields()
 
         # add a feature the size of the impact layer bounding box
-        myFeature = QgsFeature()
-        myFields = myProvider.fields()
-        myFeature.setFields(myFields)
+        feature = QgsFeature()
+        fields = provider.fields()
+        feature.setFields(fields)
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        myFeature.setGeometry(QgsGeometry.fromRect(
+        feature.setGeometry(QgsGeometry.fromRect(
             QgsRectangle(
-                QgsPoint(myGeoExtent[0], myGeoExtent[1]),
-                QgsPoint(myGeoExtent[2], myGeoExtent[3]))))
-        myFeature[myAttrName] = self.tr('Entire area')
-        myProvider.addFeatures([myFeature])
+                QgsPoint(geo_extent[0], geo_extent[1]),
+                QgsPoint(geo_extent[2], geo_extent[3]))))
+        feature[attribute_name] = self.tr('Entire area')
+        provider.addFeatures([feature])
 
         try:
             self.keyword_io.update_keywords(
                 self.layer,
-                {self.defaults['AGGR_ATTR_KEY']: myAttrName})
+                {self.defaults['AGGR_ATTR_KEY']: attribute_name})
         except InvalidParameterError:
             self.keyword_io.write_keywords(
                 self.layer,
-                {self.defaults['AGGR_ATTR_KEY']: myAttrName})
+                {self.defaults['AGGR_ATTR_KEY']: attribute_name})
         except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
@@ -1255,11 +1267,11 @@ class Aggregator(QtCore.QObject):
 
         """
 
-        myType = STATIC_MESSAGE_SIGNAL
+        message_type = STATIC_MESSAGE_SIGNAL
         if dynamic:
-            myType = DYNAMIC_MESSAGE_SIGNAL
+            message_type = DYNAMIC_MESSAGE_SIGNAL
 
         dispatcher.send(
-            signal=myType,
+            signal=message_type,
             sender=self,
             message=message)

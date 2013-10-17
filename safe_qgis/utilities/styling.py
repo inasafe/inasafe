@@ -50,7 +50,7 @@ def set_vector_graduated_style(vector_layer, style):
     scale the transparency level to between 0 and 100.
 
     :param vector_layer: A QGIS vector layer that will be styled.
-    :type vector_layer: QgsVectorLayer
+    :type vector_layer: QgsVectorLayer, QgsMapLayer
 
     :param style: Dictionary of the form as in the example below
     :type style: dict
