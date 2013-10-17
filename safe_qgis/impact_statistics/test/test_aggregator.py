@@ -245,10 +245,10 @@ class AggregatorTest(unittest.TestCase):
             'The preprocessing should have generated %s features, '
             'found %s' % (
                 expected_feature_count,
-                DOCK.aggregator.preprocessedFeatureCount))
+                DOCK.aggregator.preprocessed_feature_count))
         self.assertEqual(
             expected_feature_count,
-            DOCK.aggregator.preprocessedFeatureCount,
+            DOCK.aggregator.preprocessed_feature_count,
             message)
 
     def _aggregate(self,

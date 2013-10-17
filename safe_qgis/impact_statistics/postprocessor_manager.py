@@ -44,8 +44,9 @@ class PostprocessorManager(QtCore.QObject):
     def __init__(self, aggregator):
         """Director for aggregation based operations.
 
-        :param aggregator: Aggregator
-        :type aggregator: safe_qgis.impact_statistics.aggregator
+        :param aggregator: Aggregator that will be used in conjunction with
+            postprocessors.
+        :type aggregator: Aggregator
         """
 
         super(PostprocessorManager, self).__init__()
@@ -100,9 +101,9 @@ class PostprocessorManager(QtCore.QObject):
         """
         message = m.Message()
 
-        for proc, results_list in self.output.iteritems():
+        for processor, results_list in self.output.iteritems():
 
-            self.current_output_postprocessor = proc
+            self.current_output_postprocessor = processor
             # results_list is for example:
             # [
             #    (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
@@ -124,7 +125,7 @@ class PostprocessorManager(QtCore.QObject):
             table = m.Table(
                 style_class='table table-condensed table-striped')
             table.caption = self.tr('Detailed %s report') % (safeTr(
-                get_postprocessor_human_name(proc)).lower())
+                get_postprocessor_human_name(processor)).lower())
 
             header = m.Row()
             header.add(str(self.attribute_title).capitalize())
@@ -285,19 +286,19 @@ class PostprocessorManager(QtCore.QObject):
 
             # create dictionary of attributes to pass to postprocessor
             general_params = {
-                'target_field': self.aggregator.targetField,
+                'target_field': self.aggregator.target_field,
                 'function_params': self.functionParams}
 
-            if self.aggregator.statisticsType == 'class_count':
+            if self.aggregator.statistics_type == 'class_count':
                 general_params['impact_classes'] = (
-                    self.aggregator.statisticsClasses)
-            elif self.aggregator.statisticsType == 'sum':
+                    self.aggregator.statistics_classes)
+            elif self.aggregator.statistics_type == 'sum':
                 impact_total = feature[sum_field_index]
                 general_params['impact_total'] = impact_total
 
             try:
                 general_params['impact_attrs'] = (
-                    self.aggregator.impactLayerAttributes[polygon_index])
+                    self.aggregator.impact_layer_attributes[polygon_index])
             except IndexError:
                 # rasters and attributeless vectors have no attributes
                 general_params['impact_attrs'] = None
