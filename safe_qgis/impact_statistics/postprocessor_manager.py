@@ -172,8 +172,6 @@ class PostprocessorManager(QtCore.QObject):
             # iterate polygons
             for polygon_name, results in results_list:
                 if polygon_name in checked_polygon_names.keys():
-                    LOGGER.debug('%s postprocessor found multipart polygon '
-                                 'with name %s' % (postprocessor, polygon_name))
                     for result_name, result in results.iteritems():
                         first_part_index = checked_polygon_names[polygon_name]
                         first_part = self.output[postprocessor][
