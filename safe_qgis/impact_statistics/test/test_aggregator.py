@@ -251,10 +251,11 @@ class AggregatorTest(unittest.TestCase):
             DOCK.aggregator.preprocessed_feature_count,
             message)
 
-    def _aggregate(self,
-                   impact_layer,
-                   expected_results,
-                   use_native_zonal_stats=False):
+    def _aggregate(
+            self,
+            impact_layer,
+            expected_results,
+            use_native_zonal_stats=False):
         """Helper to calculate aggregation.
 
         Expected results is split into two lists - one list contains numeric
