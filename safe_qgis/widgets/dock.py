@@ -577,8 +577,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def on_toolFunctionOptions_clicked(self):
         """Automatic slot executed when toolFunctionOptions is clicked."""
         dialog = FunctionOptionsDialog(self)
-        dialog.setDialogInfo(self.get_function_id())
-        dialog.buildForm(self.function_parameters)
+        dialog.set_dialog_info(self.get_function_id())
+        dialog.build_form(self.function_parameters)
 
         if dialog.exec_():
             self.active_function.parameters = dialog.result()

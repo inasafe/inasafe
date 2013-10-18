@@ -70,7 +70,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
         return lambda: theType(theObject.property(theProperty))
 
-    def buildForm(self, theParams):
+    def build_form(self, theParams):
         """we build a form from impact functions parameter
 
         .. note:: see http://tinyurl.com/pyqt-differences
@@ -78,95 +78,95 @@ class FunctionOptionsDialog(QtGui.QDialog,
         :param theParams: Parameters to be edited
         """
 
-        for myKey, myValue in theParams.items():
-            if myKey == 'postprocessors':
-                self.buildPostProcessorForm(myValue)
-            elif myKey == 'minimum needs':
-                self.buildMinimumNeedsForm(myValue)
+        for key, value in theParams.items():
+            if key == 'postprocessors':
+                self.build_post_processor_form(value)
+            elif key == 'minimum needs':
+                self.build_minimum_needs_form(value)
             else:
-                self.values[myKey] = self.buildWidget(
+                self.values[key] = self.build_widget(
                     self.configLayout,
-                    myKey,
-                    myValue)
+                    key,
+                    value)
 
-    def buildMinimumNeedsForm(self, theParams):
+    def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab
 
-        :param theParams: A Dictionary containing element of form
+        :param parameters: A Dictionary containing element of form
         """
         # create minimum needs tab
-        myTab = QWidget()
-        myFormLayout = QFormLayout(myTab)
-        myFormLayout.setLabelAlignment(Qt.AlignLeft)
-        self.tabWidget.addTab(myTab, self.tr('Minimum Needs'))
+        tab = QWidget()
+        form_layout = QFormLayout(tab)
+        form_layout.setLabelAlignment(Qt.AlignLeft)
+        self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
 
-        myWidget = QWidget()
-        myLayout = QFormLayout(myWidget)
-        myWidget.setLayout(myLayout)
+        widget = QWidget()
+        layout = QFormLayout(widget)
+        widget.setLayout(layout)
 
-        myValues = OrderedDict()
-        for myLabel, myValue in theParams.items():
-            myValues[myLabel] = self.buildWidget(
-                myLayout, myLabel, myValue)
+        values = OrderedDict()
+        for myLabel, myValue in parameters.items():
+            values[myLabel] = self.build_widget(
+                layout, myLabel, myValue)
 
-        myFormLayout.addRow(myWidget, None)
-        self.values['minimum needs'] = myValues
+        form_layout.addRow(widget, None)
+        self.values['minimum needs'] = values
 
-    def buildPostProcessorForm(self, theParams):
+    def build_post_processor_form(self, parameters):
         """Build Post Processor Tab
 
-        :param  theParams: A Dictionary containing element of form
+        :param  parameters: A Dictionary containing element of form
         """
 
         # create postprocessors tab
-        myTab = QWidget()
-        myFormLayout = QFormLayout(myTab)
-        myFormLayout.setLabelAlignment(Qt.AlignLeft)
-        self.tabWidget.addTab(myTab, self.tr('Postprocessors'))
+        tab = QWidget()
+        form_layout = QFormLayout(tab)
+        form_layout.setLabelAlignment(Qt.AlignLeft)
+        self.tabWidget.addTab(tab, self.tr('Postprocessors'))
         self.tabWidget.tabBar().setVisible(True)
 
         # create element for the tab
-        myValues = OrderedDict()
-        for myLabel, myOptions in theParams.items():
-            myInputValues = OrderedDict()
+        values = OrderedDict()
+        for myLabel, options in parameters.items():
+            input_values = OrderedDict()
 
             # NOTE (gigih) : 'params' is assumed as dictionary
-            if 'params' in myOptions:
-                myGroupBox = QGroupBox()
-                myGroupBox.setCheckable(True)
-                myGroupBox.setTitle(get_postprocessor_human_name(myLabel))
+            if 'params' in options:
+                group_box = QGroupBox()
+                group_box.setCheckable(True)
+                group_box.setTitle(get_postprocessor_human_name(myLabel))
 
                 # NOTE (gigih): is 'on' always exist??
-                myGroupBox.setChecked(myOptions.get('on'))
-                myInputValues['on'] = self.bind(myGroupBox, 'checked', bool)
+                group_box.setChecked(options.get('on'))
+                input_values['on'] = self.bind(group_box, 'checked', bool)
 
-                myLayout = QFormLayout(myGroupBox)
-                myGroupBox.setLayout(myLayout)
+                layout = QFormLayout(group_box)
+                group_box.setLayout(layout)
 
                 # create widget element from 'params'
-                myInputValues['params'] = OrderedDict()
-                for myKey, myValue in myOptions['params'].items():
-                    myInputValues['params'][myKey] = self.buildWidget(
-                        myLayout, myKey, myValue)
+                input_values['params'] = OrderedDict()
+                for key, value in options['params'].items():
+                    input_values['params'][key] = self.build_widget(
+                        layout, key, value)
 
-                myFormLayout.addRow(myGroupBox, None)
+                form_layout.addRow(group_box, None)
 
-            elif 'on' in myOptions:
-                myCheckBox = QCheckBox()
-                myCheckBox.setText(get_postprocessor_human_name(myLabel))
-                myCheckBox.setChecked(myOptions['on'])
+            elif 'on' in options:
+                checkbox = QCheckBox()
+                checkbox.setText(get_postprocessor_human_name(myLabel))
+                checkbox.setChecked(options['on'])
 
-                myInputValues['on'] = self.bind(myCheckBox, 'checked', bool)
-                myFormLayout.addRow(myCheckBox, None)
+                input_values['on'] = self.bind(checkbox, 'checked', bool)
+                form_layout.addRow(checkbox, None)
             else:
                 raise NotImplementedError('This case is not handled for now')
 
-            myValues[myLabel] = myInputValues
+            values[myLabel] = input_values
 
-        self.values['postprocessors'] = myValues
+        self.values['postprocessors'] = values
 
-    def buildWidget(self, theFormLayout, theName, theValue):
+    def build_widget(self, theFormLayout, theName, theValue):
         """Create a new form element dynamically based from theValue type.
         The element will be inserted to theFormLayout.
 
@@ -188,48 +188,51 @@ class FunctionOptionsDialog(QtGui.QDialog,
 
         # create label
         if isinstance(theName, str):
-            myLabel = QLabel()
-            myLabel.setObjectName(_fromUtf8(theName + "Label"))
-            myLabelText = theName.replace('_', ' ').capitalize()
-            myLabel.setText(safeTr(myLabelText))
-            myLabel.setToolTip(str(type(theValue)))
+            label = QLabel()
+            label.setObjectName(_fromUtf8(theName + "Label"))
+            label_text = theName.replace('_', ' ').capitalize()
+            label.setText(safeTr(label_text))
+            label.setToolTip(str(type(theValue)))
         else:
-            myLabel = theName
+            label = theName
 
         # create widget based on the type of theValue variable
         if isinstance(theValue, list):
-            myWidget = QLineEdit()
-            myValue = ', '.join([str(x) for x in theValue])
+            widget = QLineEdit()
+            value = ', '.join([str(x) for x in theValue])
             # NOTE: we assume that all element in list have same type
-            myType = type(theValue[0])
-            myFunc = lambda x: [myType(y) for y in str(x).split(',')]
+            value_type = type(theValue[0])
+            function = lambda x: [value_type(y) for y in str(x).split(',')]
         elif isinstance(theValue, dict):
-            myWidget = QLineEdit()
-            myValue = str(theValue)
-            myFunc = lambda x: ast.literal_eval(str(x))
+            widget = QLineEdit()
+            value = str(theValue)
+            function = lambda x: ast.literal_eval(str(x))
         else:
-            myWidget = QLineEdit()
-            myValue = str(theValue)
-            myFunc = type(theValue)
+            widget = QLineEdit()
+            value = str(theValue)
+            function = type(theValue)
 
-        myWidget.setText(myValue)
-        theFormLayout.addRow(myLabel, myWidget)
+        widget.setText(value)
+        theFormLayout.addRow(label, widget)
 
-        return self.bind(myWidget, 'text', myFunc)
+        return self.bind(widget, 'text', function)
 
-    def setDialogInfo(self, theFunctionID):
+    def set_dialog_info(self, function_id):
+        """Show help text in dialog.
 
-        myText = ''
-        impactFunctionName = theFunctionID
-        myText += self.tr('Parameters for impact function "%s" that can be '
-                          'modified are:') % impactFunctionName
-        myLabel = self.lblFunctionDescription
-        myLabel.setText(myText)
+        :param function_id:
+        """
+        text = self.tr(
+            'Parameters for impact function "%s" that can be modified are:'
+        ) % function_id
+        label = self.lblFunctionDescription
+        label.setText(text)
 
-    def parseInput(self, theInput):
+    def parse_input(self, input):
         """Parse the input value of widget.
 
-        :param theInput: Dictionary that holds all values of element
+        :param input: Dictionary that holds all values of element.
+        :type input: dict
 
         :returns: Dictionary that can be consumed for impact functions.
 
@@ -238,34 +241,34 @@ class FunctionOptionsDialog(QtGui.QDialog,
                            to suitable type.
         """
 
-        myResult = OrderedDict()
-        for myName, myValue in theInput.items():
-            if hasattr(myValue, '__call__'):
-                myResult[myName] = myValue()
-            elif isinstance(myValue, dict):
-                myResult[myName] = self.parseInput(myValue)
+        result = OrderedDict()
+        for name, value in input.items():
+            if hasattr(value, '__call__'):
+                result[name] = value()
+            elif isinstance(value, dict):
+                result[name] = self.parse_input(value)
             else:
-                myResult[myName] = myValue
+                result[name] = value
 
-        return myResult
+        return result
 
     def accept(self):
         """Override the default accept function
 
         .. note:: see http://tinyurl.com/pyqt-differences
-
-        Args:
-
-        Returns:
-           not applicable
         """
 
         try:
-            self._result = self.parseInput(self.values)
+            self._result = self.parse_input(self.values)
             self.done(QDialog.Accepted)
         except (SyntaxError, ValueError) as myEx:
-            myText = self.tr("Unexpected error: %s " % myEx)
-            self.lblErrorMessage.setText(myText)
+            text = self.tr("Unexpected error: %s " % myEx)
+            self.lblErrorMessage.setText(text)
 
     def result(self):
+        """Get the result.
+
+        :return:
+        :rtype:
+        """
         return self._result
