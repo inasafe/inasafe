@@ -180,6 +180,7 @@ class PostprocessorManager(QtCore.QObject):
                         first_part_result = first_part_results[result_name]
 
                         # FIXME one of the parts was 'No data',
+                        # is it matematically correct to do no_data = 0?
                         # see http://irclogs.geoapt.com/inasafe/
                         # %23inasafe.2013-08-09.log (at 22.29)
 
@@ -191,12 +192,12 @@ class PostprocessorManager(QtCore.QObject):
                             new_result = no_data
                         else:
                             # one is No data
-                            if value == no_data and result_value != no_data:
-                                first_part_result['value'] = 0
+                            if value == no_data:
+                                value = 0
                             # the other is No data
-                            elif value != no_data and result_value == no_data:
-                                result['value'] = 0
-                            #if we got here, none is No data
+                            elif result_value == no_data:
+                                result_value = 0
+                            # here none is No data
                             new_result = (
                                 unhumanize_number(value) +
                                 unhumanize_number(result_value))
