@@ -23,6 +23,8 @@ from PyQt4 import QtCore
 from qgis.core import (
     QgsFeatureRequest)
 
+from third_party.odict import OrderedDict
+
 from safe.common.utilities import unhumanize_number, format_int
 
 from safe_qgis.utilities.keyword_io import KeywordIO
@@ -133,16 +135,34 @@ class PostprocessorManager(QtCore.QObject):
                 header.add(self.tr(calculation_name))
             table.add(header)
 
+            # used to calculate the totals row as per issue #690
+            postprocessor_totals = OrderedDict()
+
             for zone_name, calc in sorted_results:
                 row = m.Row(zone_name)
 
-                for _, calculation_data in calc.iteritems():
+                for indicator, calculation_data in calc.iteritems():
                     value = calculation_data['value']
                     if value == self.aggregator.defaults['NO_DATA']:
                         has_no_data = True
                         value += ' *'
+                        try:
+                            postprocessor_totals[indicator] += 0
+                        except KeyError:
+                            postprocessor_totals[indicator] = 0
+                    else:
+                        try:
+                            postprocessor_totals[indicator] += int(value)
+                        except KeyError:
+                            postprocessor_totals[indicator] = int(value)
                     row.add(value)
                 table.add(row)
+
+            # add the totals row
+            row = m.Row(self.tr('Total in aggregation areas'))
+            for _, total in postprocessor_totals.iteritems():
+                row.add(str(total))
+            table.add(row)
 
             # add table to message
             message.add(table)
