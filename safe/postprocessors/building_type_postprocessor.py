@@ -34,7 +34,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_attrs = None
         self.target_field = None
         self.type_field = None
-        self.valid_type_fields = ['amenity', 'type']
+        self.valid_type_fields = ['AMENITY', 'TYPE']
         self.types = {'Hospitals': ['medical', 'clinic', 'hospital'],
                       'Places of worship': ['place_of_worship'],
                       'Schools': ['school']}
