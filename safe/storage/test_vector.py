@@ -15,7 +15,7 @@ import unittest
 from safe.common.testing import UNITDATA
 from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
-from safe.storage.vector import Vector
+from safe.storage.vector import Vector, qgis_imported
 
 LOGGER = logging.getLogger('InaSAFE')
 KEYWORD_PATH = os.path.abspath(
@@ -65,3 +65,18 @@ class VectorTest(unittest.TestCase):
         test_file = unique_filename(suffix='.sqlite', dir=test_dir)
         layer.write_to_file(test_file, sublayer='foo')
     testSqliteWriting.slow = True
+
+    def testQgsVectorLayerLoadig(self):
+        keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
+        if qgis_imported:
+            # create QgsVectorLayer for testing
+            from qgis.core import QgsVectorLayer  # FIXME (DK):
+                                                  # Should I import it there?
+            qgis_layer = QgsVectorLayer(SHP_BASE + '.shp', 'test', 'ogr')
+
+            layer = Vector(data=qgis_layer, keywords=keywords)
+            msg = ('Expected layer to be a polygon layer, got a %s' %
+                        layer.geometry_type)
+            assert layer.is_polygon_data, msg
+            count = len(layer)
+            assert count == 250, 'Expected 250 features, got %s' % count

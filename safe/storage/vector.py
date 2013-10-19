@@ -23,6 +23,12 @@ import sys
 import numpy
 import logging
 
+qgis_imported = True
+try:
+    from qgis.core import QgsVectorLayer, QgsVectorFileWriter
+except ImportError:
+    qgis_imported = False
+
 import copy as copy_module
 from osgeo import ogr, gdal
 from safe.common.utilities import (verify,
@@ -44,6 +50,7 @@ from utilities import points_along_line
 from utilities import geometry_type_to_string
 from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
+from safe.common.utilities import unique_filename
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
@@ -59,6 +66,7 @@ class Vector(Layer):
                 * A filename of a vector file format known to GDAL.
                 * List of dictionaries of field names and attribute values
                   associated with each point coordinate.
+                * A QgsVectorLayer associated with geometry and data.
                 * None
             * projection: Geospatial reference in WKT format.
                 Only used if geometry is provided as a numeric array,
@@ -150,6 +158,8 @@ class Vector(Layer):
 
         if isinstance(data, basestring):
             self.read_from_file(data)
+        elif isinstance(data, QgsVectorLayer):
+            self.read_from_qgis_native(data)
         else:
             # Assume that data is provided as sequences provided as
             # arguments to the Vector constructor
@@ -534,6 +544,37 @@ class Vector(Layer):
         # Store geometry coordinates as a compact numeric array
         self.geometry = geometry
         self.data = data
+
+    def read_from_qgis_native(self, qgis_layer):
+        """Read and unpack vector data from qgis layer QgsVectorLayer.
+
+            A stub is used now:
+                save all data in a file,
+                then call safe.read_from_file
+
+            Raises:
+                * TypeError         if qgis is not avialable
+                * IOError           if can't store temporary file
+        """
+        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
+            msg = ('Used data is QgsVectorLayer instance, '
+                   'but QGIS is not avialable.')
+            raise TypeError(msg)
+
+        temp_name = unique_filename() + '.shp'
+        error = QgsVectorFileWriter.writeAsVectorFormat(
+            qgis_layer,
+            temp_name,
+            "UTF8",
+            qgis_layer.crs(),
+            "ESRI Shapefile"
+        )
+        if error != QgsVectorFileWriter.NoError:
+            # FIXME (DK): this branch isn't covered by test
+            msg = ('Can not save data in temporary file.')
+            raise IOError(msg)
+
+        self.read_from_file(temp_name)
 
     def write_to_file(self, filename, sublayer=None):
         """Save vector data to file
