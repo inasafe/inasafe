@@ -1342,7 +1342,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.aggregator.error_message is None:
             self.post_process()
         else:
-            content = self.aggregator.errorMessage
+            content = self.aggregator.error_message
             exception = AggregatioError(self.tr(
                 'Aggregation error occurred.'))
             self.analysis_error(exception, content)
