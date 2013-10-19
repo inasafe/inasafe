@@ -5,8 +5,7 @@ from qgis.core import (
     QgsField,
     QgsVectorLayer,
     QgsFeature,
-    QgsVectorFileWriter,
-    QgsCoordinateReferenceSystem
+    QgsVectorFileWriter
 )
 
 from safe.impact_functions.core import FunctionProvider
@@ -54,8 +53,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
 
         # Extract data
 
-        # TODO: Add QgsMapLayer to Layer class definition
-        # as possible layer type.
         H = get_hazard_layer(layers)    # Flood
         E = get_exposure_layer(layers)  # Roads
 
@@ -63,11 +60,7 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                                 E.get_name(),
                                 self)
 
-        # FIXME: use QgsVectorLayer directly.
-        # (Transformation safelayer to QgsVectorLayer is used as a stub)
-        temp_name = os.path.join(temp_dir(), 'exposure_tmp.shp')
-        E = E.write_to_file(temp_name)
-        E = QgsVectorLayer(temp_name, "exposure_tmp", "ogr")
+        E = E.as_qgis_native()
         e_provider = E.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
@@ -83,7 +76,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         #  for f in layer.getFeatures(request):
         #    ...
 
-        # TODO: call new inasafe Vector class, set type = QgsMapLayer
+        # TODO: Implement intersecting H & E
+        # A stub is used now: return copy of E, set target_field=1
         V = QgsVectorLayer('LineString', 'impact_lines', 'memory')
         v_provider = V.dataProvider()
 
@@ -109,17 +103,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
 
         V.updateExtents()
 
-        # TODO: use QgsVectorLayer directly.
-        # (Transformation QgsVectorLayer -> safelayer is used as a stub)
-        temp_name = os.path.join(temp_dir(), 'impact_tmp.shp')
-        error = QgsVectorFileWriter.writeAsVectorFormat(
-            V,
-            temp_name,
-            "UTF8",
-            E.crs(),
-            "ESRI Shapefile")
-        if error != QgsVectorFileWriter.NoError:
-            raise IOError
         # Generate simple impact report
         N = 100         # Jast a stub
         count = N/2     # Jast a stub
@@ -140,10 +123,9 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # Create vector layer and return
-        V = Vector(data=temp_name,
-                   projection=H.get_projection(),
-                   name=tr('Flooder roads'),
+        # Convert QgsVectorLayer to inasafe layer and return it
+        V = Vector(data=V,
+                   name=tr('Flooded roads'),
                    keywords={'impact_summary': impact_summary,
                              'map_title': map_title,
                              'target_field': self.target_field},
