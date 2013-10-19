@@ -29,7 +29,7 @@ from safe_qgis.safe_interface import UNITDATA
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 shapefile_path = os.path.join(UNITDATA, 'other', 'minimum_needs.shp')
 result_path_base = os.path.join(UNITDATA, 'other', 'minimum_needs_perka7')
 

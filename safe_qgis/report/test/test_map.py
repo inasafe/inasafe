@@ -37,7 +37,7 @@ from safe_qgis.utilities.utilities import (
     setup_printer, dpi_to_meters, qgis_version)
 from safe_qgis.report.map import Map
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -178,6 +178,79 @@ class MapTest(unittest.TestCase):
         myMap.render_template(myInPath, myPath)
         assert os.path.exists(myPath)
         #os.remove(myPath)
+
+    def test_defaultTemplate(self):
+        """Test that loading default template works"""
+        LOGGER.info('Testing defaultTemplate')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
+        myCanvasLayer = QgsMapCanvasLayer(myLayer)
+        CANVAS.setLayerSet([myCanvasLayer])
+        myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
+        CANVAS.setExtent(myRect)
+        CANVAS.refresh()
+        myMap = Map(IFACE)
+        myMap.set_impact_layer(myLayer)
+        myPath = unique_filename(prefix='mapDefaultTemplateTest',
+                                 suffix='.pdf',
+                                 dir=temp_dir('test'))
+        myMap.make_pdf(myPath)
+        LOGGER.debug(myPath)
+        myMessage = 'Rendered output does not exist: %s' % myPath
+        assert os.path.exists(myPath), myMessage
+        # pdf rendering is non deterministic so we can't do a hash check
+        # test_renderComposition renders just the image instead of pdf
+        # so we hash check there and here we just do a basic minimum file
+        # size check.
+        mySize = os.stat(myPath).st_size
+
+        # Note: You should replace, not append the numbers for a given
+        # platform. Also note that this test will break every time the
+        # version number of InaSAFE changes so we should ultimately come up
+        # with a lower maintenance test strategy.
+
+        myExpectedSizes = [
+            400350,  # Slackware64 14.0
+        ]
+        myMessage = '%s\nExpected rendered map pdf to be in %s, got %s' % (
+            myPath, myExpectedSizes, mySize)
+        self.assertIn(mySize, myExpectedSizes, myMessage)
+
+    def test_customLogo(self):
+        """Test that setting user-defined logo works"""
+        LOGGER.info('Testing defaultTemplate')
+        myLayer, _ = load_layer('test_shakeimpact.shp')
+        myCanvasLayer = QgsMapCanvasLayer(myLayer)
+        CANVAS.setLayerSet([myCanvasLayer])
+        myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
+        CANVAS.setExtent(myRect)
+        CANVAS.refresh()
+        myMap = Map(IFACE)
+        myMap.set_impact_layer(myLayer)
+        myMap.set_logo(":/plugins/inasafe/logo-flower.png")
+        myPath = unique_filename(prefix='mapCustomLogoTest',
+                                 suffix='.pdf',
+                                 dir=temp_dir('test'))
+        myMap.make_pdf(myPath)
+        LOGGER.debug(myPath)
+        myMessage = 'Rendered output does not exist: %s' % myPath
+        assert os.path.exists(myPath), myMessage
+        # pdf rendering is non deterministic so we can't do a hash check
+        # test_renderComposition renders just the image instead of pdf
+        # so we hash check there and here we just do a basic minimum file
+        # size check.
+        mySize = os.stat(myPath).st_size
+
+        # Note: You should replace, not append the numbers for a given
+        # platform. Also note that this test will break every time the
+        # version number of InaSAFE changes so we should ultimately come up
+        # with a lower maintenance test strategy.
+
+        myExpectedSizes = [
+            397575,  # Slackware64 14.0
+        ]
+        myMessage = '%s\nExpected rendered map pdf to be in %s, got %s' % (
+            myPath, myExpectedSizes, mySize)
+        self.assertIn(mySize, myExpectedSizes, myMessage)
 
     def test_windowsDrawingArtifacts(self):
         """Test that windows rendering does not make artifacts"""

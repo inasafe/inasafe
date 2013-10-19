@@ -33,9 +33,9 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_total = None
         self.impact_attrs = None
         self.target_field = None
-        self.type_field = None
-        self.valid_type_fields = ['amenity', 'type']
-        self.types = {'Hospitals': ['medical', 'clinic', 'hospital'],
+        self.type_fields = None
+        self.valid_type_fields = ['AMENITY', 'TYPE']
+        self.fields_values = {'Hospitals': ['medical', 'clinic', 'hospital'],
                       'Places of worship': ['place_of_worship'],
                       'Schools': ['school']}
 
@@ -68,7 +68,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         if (self.impact_total is not None or
            self.impact_attrs is not None or
            self.target_field is not None or
-           self.type_field is not None):
+           self.type_fields is not None):
             self._raise_error('clear needs to be called before setup')
 
         self.impact_total = params['impact_total']
@@ -76,13 +76,16 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.target_field = params['target_field']
 
         #find which attribute field has to be used
+        self.type_fields = []
         try:
             for key in self.impact_attrs[0].iterkeys():
                 if key in self.valid_type_fields:
-                    self.type_field = key
-                    break
+                    self.type_fields.append(key)
         except IndexError:
             pass
+
+        if len(self.type_fields) == 0:
+            self.type_fields = None
 
         #there are no features in this postprocessing polygon
         if self.impact_attrs == []:
@@ -114,8 +117,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                               % self.__class__.__name__)
         else:
             self._calculate_total()
-            for title, types in self.types.iteritems():
-                self._calculate_type(title, types)
+            for title, field_values in self.fields_values.iteritems():
+                self._calculate_type(title, field_values)
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
@@ -132,7 +135,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_total = None
         self.impact_attrs = None
         self.target_field = None
-        self.type_field = None
+        self.type_fields = None
 
     def _calculate_total(self):
         """Indicator that shows total population.
@@ -158,10 +161,15 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             myResult = self.NO_DATA_TEXT
         self._append_result(myName, myResult)
 
-    def _calculate_type(self, title, types):
+    def _calculate_type(self, title, fields_values):
         """Indicator that shows total population.
 
-        this indicator reports the total population
+        this indicator reports the building by type. the logic is:
+        - look for the fields that occurs with a name included in
+        self.valid_type_fields
+        - look in those fields for any of the values of self.fields_values
+        - if a record has one of the valid fields with one of the valid
+        fields_values then it is considered affected
 
         Args:
             None
@@ -175,11 +183,13 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
             myName = '%s %s' % (myName, tr(self.target_field).lower())
 
         myResult = 0
-        if self.type_field is not None:
+        if self.type_fields is not None:
             try:
                 for building in self.impact_attrs:
-                    if building[self.type_field] in types:
-                        myResult += building[self.target_field]
+                    for type_field in self.type_fields:
+                        if building[type_field] in fields_values:
+                            myResult += building[self.target_field]
+                            break
 
                 myResult = int(round(myResult))
             except (ValueError, KeyError):

@@ -38,7 +38,7 @@ from safe_qgis.utilities.utilities_for_testing import (
 from safe_qgis.exceptions import StyleError
 from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class StylingTest(unittest.TestCase):

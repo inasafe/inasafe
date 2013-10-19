@@ -51,12 +51,8 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         """concrete implementation it takes care of the needed parameters being
          initialized
 
-        Args:
-            params: dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
+        :param params: Parameters to pass to the post processor.
+        :type params: dict
         """
         AbstractPostprocessor.setup(self, None)
         if self.impact_total is not None or self.minimum_needs is not None:

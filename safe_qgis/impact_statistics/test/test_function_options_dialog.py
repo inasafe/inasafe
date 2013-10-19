@@ -36,7 +36,7 @@ from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 # pylint: disable=W0611
 # pylint: enable=W0611
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

@@ -30,7 +30,7 @@ from safe_qgis.widgets.dock import Dock
 
 
 # Get QGis app handle
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 

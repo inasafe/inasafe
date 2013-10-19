@@ -26,7 +26,7 @@ from qgis.core import (
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import EXPDATA
 
-QGISAPP = get_qgis_app()
+QGIS_APP = get_qgis_app()
 
 
 class QGISTest(unittest.TestCase):

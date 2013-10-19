@@ -22,7 +22,7 @@ from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.utilities.help import _show_local_help
 from safe_qgis.exceptions import HelpFileMissingError
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class HelpTest(unittest.TestCase):

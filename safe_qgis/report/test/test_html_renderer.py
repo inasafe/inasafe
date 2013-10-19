@@ -25,7 +25,7 @@ from safe_qgis.utilities.utilities_for_testing import (
 from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.utilities.keyword_io import KeywordIO
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

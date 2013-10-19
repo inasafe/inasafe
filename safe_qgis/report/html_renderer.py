@@ -84,7 +84,7 @@ class HtmlRenderer():
         # multiplier so that page renders equally well at different print
         # resolutions.
         #myBaselineDpi = 150
-        #myFactor = float(self.pageDpi) / myBaselineDpi
+        #myFactor = float(self.page_dpi) / myBaselineDpi
         #myFrame.setTextSizeMultiplier(myFactor)
 
         mySize = myFrame.contentsSize()

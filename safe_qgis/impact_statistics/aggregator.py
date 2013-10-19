@@ -92,7 +92,7 @@ class Aggregator(QtCore.QObject):
         :param aggregation_layer: Layer representing clipped aggregation
             areas. This will be converted to a memory layer inside this class.
             see self.layer
-        :type aggregation_layer: QgsVectorLayer
+        :type aggregation_layer: QgsVectorLayer, QgsMapLayer
         """
 
         QtCore.QObject.__init__(self)
