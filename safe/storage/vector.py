@@ -26,7 +26,9 @@ import logging
 qgis_imported = True
 try:
     from qgis.core import QgsVectorLayer, QgsVectorFileWriter
+    import safe_qgis
 except ImportError:
+    #raise
     qgis_imported = False
 
 import copy as copy_module
@@ -575,6 +577,27 @@ class Vector(Layer):
             raise IOError(msg)
 
         self.read_from_file(temp_name)
+
+    def as_qgis_native(self):
+        """Return vector layer data as qgis QgsVectorLayer.
+
+            A stub is used now:
+                save all data in a file,
+                then create QgsVectorLayer from the file.
+
+            Raises:
+                * TypeError         if qgis is not avialable
+        """
+        if not qgis_imported:   # FIXME (DK): this branch isn't covered by test
+            msg = ('Tried to convert layer to QgsVectorLayer instance, '
+                   'but QGIS is not avialable.')
+            raise TypeError(msg)
+
+        # FIXME (DK): ? move code from safe_to_qgis_layer to this method
+        #           and call layer.as_qgis_native from safe_to_qgis_layer ?
+
+        qgis_layer = safe_qgis.utilities.utilities.safe_to_qgis_layer(self)
+        return qgis_layer
 
     def write_to_file(self, filename, sublayer=None):
         """Save vector data to file

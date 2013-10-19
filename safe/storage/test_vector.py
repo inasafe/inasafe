@@ -67,6 +67,7 @@ class VectorTest(unittest.TestCase):
     testSqliteWriting.slow = True
 
     def testQgsVectorLayerLoadig(self):
+        """Test that reading from QgsVectorLayer works."""
         keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
         if qgis_imported:
             # create QgsVectorLayer for testing
@@ -76,7 +77,19 @@ class VectorTest(unittest.TestCase):
 
             layer = Vector(data=qgis_layer, keywords=keywords)
             msg = ('Expected layer to be a polygon layer, got a %s' %
-                        layer.geometry_type)
+                   layer.geometry_type)
             assert layer.is_polygon_data, msg
             count = len(layer)
             assert count == 250, 'Expected 250 features, got %s' % count
+
+    def testConvertToQgsVectorLayer(self):
+        """Test that converting to QgsVectorLayer works."""
+        # Create vector layer
+        keywords = read_keywords(SHP_BASE + '.keywords')
+        layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
+
+        # Convert to QgsVectorLayer
+        qgis_layer = layer.as_qgis_native()
+        provider = qgis_layer.dataProvider()
+        count = provider.featureCount()
+        assert count == 250, 'Expected 250 features, got %s' % count
