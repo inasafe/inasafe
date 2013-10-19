@@ -15,6 +15,7 @@ __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+import os
 import logging
 from safe import messaging as m
 from safe_qgis.utilities.utilities import html_header, html_footer
@@ -82,10 +83,18 @@ class MessageViewer(QtWebKit.QWebView):
             context_menu.addAction(action)
 
             # add view to_text if in dev mode
+            # FIXME (MB) this executes as soon as the right click is
+            # triggered
             context_menu.addAction(
                 self.tr('log pageToText'),
                 self,
                 QtCore.SLOT(self.page_to_stdout()))
+
+            # add view to_text if in dev mode
+            context_menu.addAction(
+                self.tr('dump page to file'),
+                self,
+                QtCore.SLOT(self.page_html_file('/tmp/file.html')))
 
         # show the menu
         context_menu.setVisible(True)
@@ -215,3 +224,13 @@ class MessageViewer(QtWebKit.QWebView):
     def page_to_stdout(self):
         """Print to console the current page contents as plain text."""
         print self.page_to_text()
+
+    def page_html_file(self, path):
+        html = self.page().mainFrame().toHtml()
+        res_path = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'resources'))
+        with open('%s.qrc.html' % path, 'w') as f:
+            f.write(html)
+        html = html.replace('qrc:/plugins/inasafe', 'file://%s' % res_path)
+        with open(path, 'w') as f:
+            f.write(html)
