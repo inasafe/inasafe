@@ -46,7 +46,8 @@ SCENARIO_DIR = os.path.abspath(os.path.join(
 
 LOGGER = logging.getLogger('InaSAFE')
 
-QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
+QGIS_APP = None  # Static variable used to hold hand to running QGis
+# app
 CANVAS = None
 PARENT = None
 IFACE = None
@@ -63,14 +64,15 @@ def assert_hashes_for_file(hashes, filename):
     :param filename: the filename
     :param hashes: the hash of the file
     """
-    myHash = hash_for_file(filename)
-    myMessage = ('Unexpected hash'
-                 '\nGot: %s'
-                 '\nExpected: %s'
-                 '\nPlease check graphics %s visually '
-                 'and add to list of expected hashes '
-                 'if it is OK on this platform.' % (myHash, hashes, filename))
-    assert myHash in hashes, myMessage
+    hash = hash_for_file(filename)
+    message = (
+        'Unexpected hash'
+        '\nGot: %s'
+        '\nExpected: %s'
+        '\nPlease check graphics %s visually '
+        'and add to list of expected hashes '
+        'if it is OK on this platform.' % (hash, hashes, filename))
+    assert hash in hashes, message
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -78,23 +80,24 @@ def assert_hash_for_file(hash_string, filename):
     :param filename:
     :param hash_string:
     """
-    myHash = hash_for_file(filename)
-    myMessage = ('Unexpected hash'
-                 '\nGot: %s'
-                 '\nExpected: %s' % (myHash, hash_string))
-    assert myHash == hash_string, myMessage
+    file_hash = hash_for_file(filename)
+    message = (
+        'Unexpected hash'
+        '\nGot: %s'
+        '\nExpected: %s' % (file_hash, hash_string))
+    assert file_hash == hash_string, message
 
 
 def hash_for_file(filename):
     """Return an md5 checksum for a file
     :param filename:
     """
-    myPath = filename
-    myData = file(myPath, 'rb').read()
-    myHash = hashlib.md5()
-    myHash.update(myData)
-    myHash = myHash.hexdigest()
-    return myHash
+    path = filename
+    data = file(path, 'rb').read()
+    data_hash = hashlib.md5()
+    data_hash.update(data)
+    data_hash = data_hash.hexdigest()
+    return data_hash
 
 
 def get_qgis_app():
@@ -110,39 +113,43 @@ def get_qgis_app():
     If QGis is already running the handle to that app will be returned
     """
 
-    global QGISAPP  # pylint: disable=W0603
+    global QGIS_APP  # pylint: disable=W0603
 
-    if QGISAPP is None:
-        myGuiFlag = True  # All test will run qgis in safe_qgis mode
-        QGISAPP = QgsApplication(sys.argv, myGuiFlag)
+    if QGIS_APP is None:
+        gui_flag = True  # All test will run qgis in safe_qgis mode
+        #noinspection PyPep8Naming
+        QGIS_APP = QgsApplication(sys.argv, gui_flag)
 
         # Note: This block is not needed for  QGIS > 1.8 which will
         # automatically check the QGIS_PREFIX_PATH var so it is here
         # for backwards compatibility only
         if 'QGIS_PREFIX_PATH' in os.environ:
-            myPath = os.environ['QGIS_PREFIX_PATH']
-            myUseDefaultPathFlag = True
-            QGISAPP.setPrefixPath(myPath, myUseDefaultPathFlag)
+            path = os.environ['QGIS_PREFIX_PATH']
+            use_default_path_flag = True
+            QGIS_APP.setPrefixPath(path, use_default_path_flag)
 
-        QGISAPP.initQgis()
-        s = QGISAPP.showSettings()
+        QGIS_APP.initQgis()
+        s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
     global PARENT  # pylint: disable=W0603
     if PARENT is None:
+        #noinspection PyPep8Naming
         PARENT = QtGui.QWidget()
 
     global CANVAS  # pylint: disable=W0603
     if CANVAS is None:
+        #noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
 
     global IFACE  # pylint: disable=W0603
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
+        #noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
 
-    return QGISAPP, CANVAS, IFACE, PARENT
+    return QGIS_APP, CANVAS, IFACE, PARENT
 
 
 def test_data_path(subdirectory=None):
@@ -157,12 +164,11 @@ def test_data_path(subdirectory=None):
        testing and the datasets live in the same repo as the code.
 
     """
-    myPath = UNITDATA
+    path = UNITDATA
 
     if subdirectory is not None:
-        myPath = os.path.abspath(os.path.join(myPath,
-                                              subdirectory))
-    return myPath
+        path = os.path.abspath(os.path.join(path, subdirectory))
+    return path
 
 
 def load_layer(layer_file, directory=TESTDATA):
@@ -180,34 +186,34 @@ def load_layer(layer_file, directory=TESTDATA):
     """
 
     # Extract basename and absolute path
-    myFilename = os.path.split(layer_file)[-1]  # In case path was absolute
-    myBaseName, myExt = os.path.splitext(myFilename)
+    file_path = os.path.split(layer_file)[-1]  # In case path was absolute
+    base_name, extension = os.path.splitext(file_path)
     if directory is None:
-        myPath = layer_file
+        path = layer_file
     else:
-        myPath = os.path.join(directory, layer_file)
-    myKeywordPath = myPath[:-4] + '.keywords'
+        path = os.path.join(directory, layer_file)
+    keyword_path = path[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure
-    myKeywords = read_file_keywords(myKeywordPath)
-    myCategory = 'undefined'
-    if 'category' in myKeywords:
-        myCategory = myKeywords['category']
-    myMessage = 'Could not read %s' % myKeywordPath
-    assert myKeywords is not None, myMessage
+    keywords = read_file_keywords(keyword_path)
+    category = 'undefined'
+    if 'category' in keywords:
+        category = keywords['category']
+    message = 'Could not read %s' % keyword_path
+    assert keywords is not None, message
 
     # Create QGis Layer Instance
-    if myExt in ['.asc', '.tif']:
-        myLayer = QgsRasterLayer(myPath, myBaseName)
-    elif myExt in ['.shp']:
-        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+    if extension in ['.asc', '.tif']:
+        layer = QgsRasterLayer(path, base_name)
+    elif extension in ['.shp']:
+        layer = QgsVectorLayer(path, base_name, 'ogr')
     else:
-        myMessage = 'File %s had illegal extension' % myPath
-        raise Exception(myMessage)
+        message = 'File %s had illegal extension' % path
+        raise Exception(message)
 
-    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
-    assert myLayer.isValid(), myMessage
-    return myLayer, myCategory
+    message = 'Layer "%s" is not valid' % str(layer.source())
+    assert layer.isValid(), message
+    return layer, category
 
 
 def set_canvas_crs(epsg_id, enable_projection=False):
@@ -225,47 +231,47 @@ def set_canvas_crs(epsg_id, enable_projection=False):
     CANVAS.mapRenderer().setProjectionsEnabled(enable_projection)
 
     # Create CRS Instance
-    myCrs = QgsCoordinateReferenceSystem()
-    myCrs.createFromSrid(epsg_id)
+    crs = QgsCoordinateReferenceSystem()
+    crs.createFromSrid(epsg_id)
 
     # Reproject all layers to WGS84 geographic CRS
-    CANVAS.mapRenderer().setDestinationCrs(myCrs)
+    CANVAS.mapRenderer().setDestinationCrs(crs)
 
 
 def set_padang_extent():
     """Zoom to an area occupied by both both Padang layers."""
-    myRect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
-    CANVAS.setExtent(myRect)
+    rect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
+    CANVAS.setExtent(rect)
 
 
 def set_jakarta_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
-    myRect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
-    CANVAS.setExtent(myRect)
+    rect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
+    CANVAS.setExtent(rect)
 
 
 def set_jakarta_google_extent():
     """Zoom to an area occupied by both Jakarta layers in 900913 crs."""
-    myRect = QgsRectangle(11873524, -695798, 11913804, -675295)
-    CANVAS.setExtent(myRect)
+    rect = QgsRectangle(11873524, -695798, 11913804, -675295)
+    CANVAS.setExtent(rect)
 
 
 def set_batemans_bay_extent():
     """Zoom to an area occupied by both Batemans Bay layers in geo crs."""
-    myRect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
-    CANVAS.setExtent(myRect)
+    rect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
+    CANVAS.setExtent(rect)
 
 
 def set_yogya_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
-    myRect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
-    CANVAS.setExtent(myRect)
+    rect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
+    CANVAS.setExtent(rect)
 
 
 def set_small_jakarta_extent():
     """Zoom to an area occupied by both Jakarta layers in Geo."""
-    myRect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
-    CANVAS.setExtent(myRect)
+    rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
+    CANVAS.setExtent(rect)
 
 
 def set_geo_extent(bounding_box):
@@ -274,8 +280,8 @@ def set_geo_extent(bounding_box):
     :param bounding_box: List containing [xmin, ymin, xmax, ymax]
     :type bounding_box: list
     """
-    myRect = QgsRectangle(*bounding_box)
-    CANVAS.setExtent(myRect)
+    rect = QgsRectangle(*bounding_box)
+    CANVAS.setExtent(rect)
 
 
 def check_images(control_image, test_image_path, tolerance=1000):
@@ -300,47 +306,47 @@ def check_images(control_image, test_image_path, tolerance=1000):
         comparison notes
     :rtype: bool, str
     """
-    myMessages = ''
-    myPlatform = platform_name()
-    myBase, myExt = os.path.splitext(control_image)
-    myPlatformImage = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s.png' % (
-        myBase, myPlatform, myExt))
-    myMessages += 'Checking for platform specific variant...\n'
-    myMessages += test_image_path + '\n'
-    myMessages += myPlatformImage + '\n'
+    messages = ''
+    platform = platform_name()
+    base_name, extension = os.path.splitext(control_image)
+    platform_image = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s.png' % (
+        base_name, platform, extension))
+    messages += 'Checking for platform specific variant...\n'
+    messages += test_image_path + '\n'
+    messages += platform_image + '\n'
     # It the platform image exists, we should test only that!
-    if os.path.exists(myPlatformImage):
-        myFlag, myMessage = check_image(
-            myPlatformImage, test_image_path, tolerance)
-        myMessages += myMessage + '\n'
-        return myFlag, myMessages
+    if os.path.exists(platform_image):
+        flag, message = check_image(
+            platform_image, test_image_path, tolerance)
+        messages += message + '\n'
+        return flag, messages
 
-    myMessages += (
+    messages += (
         '\nNo platform specific control image could be found,\n'
         'testing against all control images. Try adding %s in\n '
         'the file name if you want it to be detected for this\n'
         'platform which will speed up image comparison tests.\n' %
-        myPlatform)
+        platform)
 
     # Ok there is no specific platform match so go ahead and match to any of
     # the control image and its variants...
-    myControlImages = glob.glob('%s/%s*%s' % (
-        CONTROL_IMAGE_DIR, myBase, myExt))
-    myFlag = False
+    control_images = glob.glob('%s/%s*%s' % (
+        CONTROL_IMAGE_DIR, base_name, extension))
+    flag = False
 
-    for myControlImage in myControlImages:
-        myFullPath = os.path.join(
-            CONTROL_IMAGE_DIR, myControlImage)
-        myFlag, myMessage = check_image(
-            myFullPath, test_image_path, tolerance)
-        myMessages += myMessage
+    for control_image in control_images:
+        full_path = os.path.join(
+            CONTROL_IMAGE_DIR, control_image)
+        flag, message = check_image(
+            full_path, test_image_path, tolerance)
+        messages += message
         # As soon as one passes we are done!
-        if myFlag:
-            print 'match with: ', myControlImage
+        if flag:
+            print 'match with: ', control_image
             break
-        LOGGER.debug('No match for control image %s' % myControlImage)
+        LOGGER.debug('No match for control image %s' % control_image)
 
-    return myFlag, myMessages
+    return flag, messages
 
 
 def check_image(control_image_path, test_image_path, tolerance=1000):
@@ -366,83 +372,88 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
             LOGGER.debug('checkImage: Test image does not exist:\n%s' %
                          test_image_path)
             raise OSError
-        myTestImage = QtGui.QImage(test_image_path)
+        test_image = QtGui.QImage(test_image_path)
     except OSError:
-        myMessage = 'Test image:\n{0:s}\ncould not be loaded'.format(
+        message = 'Test image:\n{0:s}\ncould not be loaded'.format(
             test_image_path)
-        return False, myMessage
+        return False, message
 
     try:
         if not os.path.exists(control_image_path):
             LOGGER.debug('checkImage: Control image does not exist:\n%s' %
                          control_image_path)
             raise OSError
-        myControlImage = QtGui.QImage(control_image_path)
+        control_image = QtGui.QImage(control_image_path)
     except OSError:
-        myMessage = 'Control image:\n{0:s}\ncould not be loaded.\n'
-        return False, myMessage
+        message = 'Control image:\n{0:s}\ncould not be loaded.\n'
+        return False, message
 
-    if (myControlImage.width() != myTestImage.width()
-            or myControlImage.height() != myTestImage.height()):
-        myMessage = ('Control and test images are different sizes.\n'
-                     'Control image   : %s (%i x %i)\n'
-                     'Test image      : %s (%i x %i)\n'
-                     'If this test has failed look at the above images '
-                     'to try to determine what may have change or '
-                     'adjust the tolerance if needed.' %
-                     (control_image_path,
-                      myControlImage.width(),
-                      myControlImage.height(),
-                      test_image_path,
-                      myTestImage.width(),
-                      myTestImage.height()))
-        LOGGER.debug(myMessage)
-        return False, myMessage
+    if (control_image.width() != test_image.width()
+            or control_image.height() != test_image.height()):
+        message = (
+            'Control and test images are different sizes.\n'
+            'Control image   : %s (%i x %i)\n'
+            'Test image      : %s (%i x %i)\n'
+            'If this test has failed look at the above images '
+            'to try to determine what may have change or '
+            'adjust the tolerance if needed.' %
+            (
+                control_image_path,
+                control_image.width(),
+                control_image.height(),
+                test_image_path,
+                test_image.width(),
+                test_image.height()))
+        LOGGER.debug(message)
+        return False, message
 
-    myImageWidth = myControlImage.width()
-    myImageHeight = myControlImage.height()
-    myMismatchCount = 0
+    image_width = control_image.width()
+    image_height = control_image.height()
+    mismatch_count = 0
 
-    myDifferenceImage = QtGui.QImage(myImageWidth,
-                                     myImageHeight,
-                                     QtGui.QImage.Format_ARGB32_Premultiplied)
-    myDifferenceImage.fill(152 + 219 * 256 + 249 * 256 * 256)
+    difference_image = QtGui.QImage(
+        image_width,
+        image_height,
+        QtGui.QImage.Format_ARGB32_Premultiplied)
+    difference_image.fill(152 + 219 * 256 + 249 * 256 * 256)
 
-    for myY in range(myImageHeight):
-        for myX in range(myImageWidth):
-            myControlPixel = myControlImage.pixel(myX, myY)
-            myTestPixel = myTestImage.pixel(myX, myY)
-            if myControlPixel != myTestPixel:
-                myMismatchCount += 1
-                myDifferenceImage.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
-    myDifferenceFilePath = unique_filename(
+    for myY in range(image_height):
+        for myX in range(image_width):
+            control_pixel = control_image.pixel(myX, myY)
+            test_pixel = test_image.pixel(myX, myY)
+            if control_pixel != test_pixel:
+                mismatch_count += 1
+                difference_image.setPixel(myX, myY, QtGui.qRgb(255, 0, 0))
+    difference_path = unique_filename(
         prefix='difference-%s' % os.path.basename(control_image_path),
         suffix='.png',
         dir=temp_dir('test'))
-    LOGGER.debug('Saving difference image as: %s' % myDifferenceFilePath)
-    myDifferenceImage.save(myDifferenceFilePath, "PNG")
+    LOGGER.debug('Saving difference image as: %s' % difference_path)
+    difference_image.save(difference_path, "PNG")
 
     # allow pixel deviation of 1 percent
-    myPixelCount = myImageWidth * myImageHeight
-    # FIXME (Ole): Use relative error i.e. mismatchcount/total pixels
-    if myMismatchCount > tolerance:
-        mySuccessFlag = False
+    pixel_count = image_width * image_height
+    # TODO (Ole): Use relative error i.e. mismatch count/total pixels
+    if mismatch_count > tolerance:
+        success_flag = False
     else:
-        mySuccessFlag = True
-    myMessage = ('%i of %i pixels are mismatched. Tolerance is %i.\n'
-                 'Control image   : %s\n'
-                 'Test image      : %s\n'
-                 'Difference image: %s\n'
-                 'If this test has failed look at the above images '
-                 'to try to determine what may have change or '
-                 'adjust the tolerance if needed.' %
-                 (myMismatchCount,
-                  myPixelCount,
-                  tolerance,
-                  control_image_path,
-                  test_image_path,
-                  myDifferenceFilePath))
-    return mySuccessFlag, myMessage
+        success_flag = True
+    message = (
+        '%i of %i pixels are mismatched. Tolerance is %i.\n'
+        'Control image   : %s\n'
+        'Test image      : %s\n'
+        'Difference image: %s\n'
+        'If this test has failed look at the above images '
+        'to try to determine what may have change or '
+        'adjust the tolerance if needed.' %
+        (
+            mismatch_count,
+            pixel_count,
+            tolerance,
+            control_image_path,
+            test_image_path,
+            difference_path))
+    return success_flag, message
 
 
 class RedirectStreams(object):
@@ -475,6 +486,8 @@ class RedirectStreams(object):
         """
         self._stdout = stdout or sys.stdout
         self._stderr = stderr or sys.stderr
+        self.old_stdout = None
+        self.old_stderr = None
 
     def __enter__(self):
         self.old_stdout, self.old_stderr = sys.stdout, sys.stderr
@@ -499,19 +512,19 @@ def platform_name():
     """
     my_platform_system = platform.system()
     if my_platform_system == 'Darwin':
-        myName = 'OSX'
-        myName += '.'.join(platform.mac_ver()[0].split('.')[0:2])
-        return myName
+        name = 'OSX'
+        name += '.'.join(platform.mac_ver()[0].split('.')[0:2])
+        return name
     elif my_platform_system == 'Linux':
-        myName = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
-        return myName
+        name = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
+        return name
     elif my_platform_system == 'Windows':
-        myName = 'Windows'
-        myWin32Version = platform.win32_ver()
-        myPlatformMachine = platform.machine()
-        myName += myWin32Version[0] + '-' + myWin32Version[2]
-        myName += '-' + myPlatformMachine
-        return myName
+        name = 'Windows'
+        win32_version = platform.win32_ver()
+        platform_machine = platform.machine()
+        name += win32_version[0] + '-' + win32_version[2]
+        name += '-' + platform_machine
+        return name
     else:
         return None
 
@@ -538,17 +551,17 @@ def get_ui_state(dock):
 
     """
 
-    myHazard = str(dock.cboHazard.currentText())
-    myExposure = str(dock.cboExposure.currentText())
-    myImpactFunctionTitle = str(dock.cboFunction.currentText())
-    myImpactFunctionId = dock.get_function_id()
-    myRunButton = dock.pbnRunStop.isEnabled()
+    hazard = str(dock.cboHazard.currentText())
+    exposure = str(dock.cboExposure.currentText())
+    impact_function_title = str(dock.cboFunction.currentText())
+    impact_function_id = dock.get_function_id()
+    run_button = dock.pbnRunStop.isEnabled()
 
-    return {'Hazard': myHazard,
-            'Exposure': myExposure,
-            'Impact Function Title': myImpactFunctionTitle,
-            'Impact Function Id': myImpactFunctionId,
-            'Run Button Enabled': myRunButton}
+    return {'Hazard': hazard,
+            'Exposure': exposure,
+            'Impact Function Title': impact_function_title,
+            'Impact Function Id': impact_function_id,
+            'Run Button Enabled': run_button}
 
 
 def formatted_list(layer_list):
@@ -561,10 +574,10 @@ def formatted_list(layer_list):
         formatted with line breaks between each entry.
     :rtype: str
     """
-    myListString = ''
-    for myItem in layer_list:
-        myListString += myItem + '\n'
-    return myListString
+    list_string = ''
+    for item in layer_list:
+        list_string += item + '\n'
+    return list_string
 
 
 def canvas_list():
@@ -574,10 +587,10 @@ def canvas_list():
         formatted with line breaks between each entry.
     :rtype: str
     """
-    myListString = ''
-    for myLayer in CANVAS.layers():
-        myListString += str(myLayer.name()) + '\n'
-    return myListString
+    list_string = ''
+    for layer in CANVAS.layers():
+        list_string += str(layer.name()) + '\n'
+    return list_string
 
 
 def combos_to_string(dock):
@@ -591,55 +604,55 @@ def combos_to_string(dock):
     :rtype: str
     """
 
-    myString = 'Hazard Layers\n'
-    myString += '-------------------------\n'
-    myCurrentId = dock.cboHazard.currentIndex()
-    for myCount in range(0, dock.cboHazard.count()):
-        myItemText = dock.cboHazard.itemText(myCount)
-        if myCount == myCurrentId:
-            myString += '>> '
+    string = 'Hazard Layers\n'
+    string += '-------------------------\n'
+    current_id = dock.cboHazard.currentIndex()
+    for count in range(0, dock.cboHazard.count()):
+        item_text = dock.cboHazard.itemText(count)
+        if count == current_id:
+            string += '>> '
         else:
-            myString += '   '
-        myString += str(myItemText) + '\n'
-    myString += '\n'
-    myString += 'Exposure Layers\n'
-    myString += '-------------------------\n'
-    myCurrentId = dock.cboExposure.currentIndex()
-    for myCount in range(0, dock.cboExposure.count()):
-        myItemText = dock.cboExposure.itemText(myCount)
-        if myCount == myCurrentId:
-            myString += '>> '
+            string += '   '
+        string += str(item_text) + '\n'
+    string += '\n'
+    string += 'Exposure Layers\n'
+    string += '-------------------------\n'
+    current_id = dock.cboExposure.currentIndex()
+    for count in range(0, dock.cboExposure.count()):
+        item_text = dock.cboExposure.itemText(count)
+        if count == current_id:
+            string += '>> '
         else:
-            myString += '   '
-        myString += str(myItemText) + '\n'
+            string += '   '
+        string += str(item_text) + '\n'
 
-    myString += '\n'
-    myString += 'Functions\n'
-    myString += '-------------------------\n'
-    myCurrentId = dock.cboFunction.currentIndex()
-    for myCount in range(0, dock.cboFunction.count()):
-        myItemText = dock.cboFunction.itemText(myCount)
-        if myCount == myCurrentId:
-            myString += '>> '
+    string += '\n'
+    string += 'Functions\n'
+    string += '-------------------------\n'
+    current_id = dock.cboFunction.currentIndex()
+    for count in range(0, dock.cboFunction.count()):
+        item_text = dock.cboFunction.itemText(count)
+        if count == current_id:
+            string += '>> '
         else:
-            myString += '   '
-        myString += '%s (Function ID: %s)\n' % (
-            str(myItemText), dock.get_function_id(myCurrentId))
+            string += '   '
+        string += '%s (Function ID: %s)\n' % (
+            str(item_text), dock.get_function_id(current_id))
 
-    myString += '\n'
-    myString += 'Aggregation Layers\n'
-    myString += '-------------------------\n'
-    myCurrentId = dock.cboAggregation.currentIndex()
-    for myCount in range(0, dock.cboAggregation.count()):
-        myItemText = dock.cboAggregation.itemText(myCount)
-        if myCount == myCurrentId:
-            myString += '>> '
+    string += '\n'
+    string += 'Aggregation Layers\n'
+    string += '-------------------------\n'
+    current_id = dock.cboAggregation.currentIndex()
+    for count in range(0, dock.cboAggregation.count()):
+        item_text = dock.cboAggregation.itemText(count)
+        if count == current_id:
+            string += '>> '
         else:
-            myString += '   '
-        myString += str(myItemText) + '\n'
+            string += '   '
+        string += str(item_text) + '\n'
 
-    myString += '\n\n >> means combo item is selected'
-    return myString
+    string += '\n\n >> means combo item is selected'
+    return string
 
 
 def setup_scenario(
@@ -692,65 +705,65 @@ def setup_scenario(
     :rtype: (bool, str)
     """
     if hazard is not None:
-        myIndex = dock.cboHazard.findText(hazard)
-        myMessage = ('\nHazard Layer Not Found: %s\n Combo State:\n%s' %
-                     (hazard, combos_to_string(dock)))
-        if myIndex == -1:
-            return False, myMessage
-        dock.cboHazard.setCurrentIndex(myIndex)
+        index = dock.cboHazard.findText(hazard)
+        message = ('\nHazard Layer Not Found: %s\n Combo State:\n%s' %
+                   (hazard, combos_to_string(dock)))
+        if index == -1:
+            return False, message
+        dock.cboHazard.setCurrentIndex(index)
 
     if exposure is not None:
-        myIndex = dock.cboExposure.findText(exposure)
-        myMessage = ('\nExposure Layer Not Found: %s\n Combo State:\n%s' %
-                     (exposure, combos_to_string(dock)))
-        if myIndex == -1:
-            return False, myMessage
-        dock.cboExposure.setCurrentIndex(myIndex)
+        index = dock.cboExposure.findText(exposure)
+        message = ('\nExposure Layer Not Found: %s\n Combo State:\n%s' %
+                   (exposure, combos_to_string(dock)))
+        if index == -1:
+            return False, message
+        dock.cboExposure.setCurrentIndex(index)
 
     if function is not None:
-        myIndex = dock.cboFunction.findText(function)
-        myMessage = ('\nImpact Function Not Found: %s\n Combo State:\n%s' %
-                     (function, combos_to_string(dock)))
-        if myIndex == -1:
-            return False, myMessage
-        dock.cboFunction.setCurrentIndex(myIndex)
+        index = dock.cboFunction.findText(function)
+        message = ('\nImpact Function Not Found: %s\n Combo State:\n%s' %
+                   (function, combos_to_string(dock)))
+        if index == -1:
+            return False, message
+        dock.cboFunction.setCurrentIndex(index)
 
     if aggregation_layer is not None:
-        myIndex = dock.cboAggregation.findText(aggregation_layer)
-        myMessage = ('Aggregation layer Not Found: %s\n Combo State:\n%s' %
-                     (aggregation_layer, combos_to_string(dock)))
-        if myIndex == -1:
-            return False, myMessage
-        dock.cboAggregation.setCurrentIndex(myIndex)
+        index = dock.cboAggregation.findText(aggregation_layer)
+        message = ('Aggregation layer Not Found: %s\n Combo State:\n%s' %
+                   (aggregation_layer, combos_to_string(dock)))
+        if index == -1:
+            return False, message
+        dock.cboAggregation.setCurrentIndex(index)
 
     if aggregation_enabled_flag is not None:
         if dock.cboAggregation.isEnabled() != aggregation_enabled_flag:
-            myMessage = (
+            message = (
                 'The aggregation combobox should be %s' %
                 ('enabled' if aggregation_enabled_flag else 'disabled'))
-            return False, myMessage
+            return False, message
 
     # Check that layers and impact function are correct
-    myDict = get_ui_state(dock)
+    state = get_ui_state(dock)
 
-    myExpectedDict = {'Run Button Enabled': ok_button_flag,
+    expected_state = {'Run Button Enabled': ok_button_flag,
                       'Impact Function Title': function,
                       'Impact Function Id': function_id,
                       'Hazard': hazard,
                       'Exposure': exposure}
 
-    myMessage = 'Expected versus Actual State\n'
-    myMessage += '--------------------------------------------------------\n'
+    message = 'Expected versus Actual State\n'
+    message += '--------------------------------------------------------\n'
 
-    for myKey in myExpectedDict.keys():
-        myMessage += 'Expected %s: %s\n' % (myKey, myExpectedDict[myKey])
-        myMessage += 'Actual   %s: %s\n' % (myKey, myDict[myKey])
-        myMessage += '----\n'
-    myMessage += '--------------------------------------------------------\n'
-    myMessage += combos_to_string(dock)
+    for key in expected_state.keys():
+        message += 'Expected %s: %s\n' % (key, expected_state[key])
+        message += 'Actual   %s: %s\n' % (key, state[key])
+        message += '----\n'
+    message += '--------------------------------------------------------\n'
+    message += combos_to_string(dock)
 
-    if myDict != myExpectedDict:
-        return False, myMessage
+    if state != expected_state:
+        return False, message
 
     return True, 'Matched ok.'
 
@@ -784,31 +797,32 @@ def load_standard_layers(dock=None):
     # to also use find instead of relative position. (Tim)
     #
     # WARNING: Please keep test_data/test/loadStandardLayers.qgs in sync with
-    # myFileList
-    myFileList = [join(TESTDATA, 'Padang_WGS84.shp'),
-                  join(EXPDATA, 'glp10ag.asc'),
-                  join(HAZDATA, 'Shakemap_Padang_2009.asc'),
-                  join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
-                  join(TESTDATA, 'tsunami_building_exposure.shp'),
-                  join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
-                  join(TESTDATA, 'Population_Jakarta_geographic.asc'),
-                  join(HAZDATA, 'eq_yogya_2006.asc'),
-                  join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
-                  join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
-                  join(EXPDATA, 'DKI_buildings.shp'),
-                  join(HAZDATA, 'jakarta_flood_category_123.asc'),
-                  join(TESTDATA, 'roads_Maumere.shp'),
-                  join(TESTDATA, 'donut.shp'),
-                  join(TESTDATA, 'Merapi_alert.shp'),
-                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
-    myHazardLayerCount, myExposureLayerCount = load_layers(
-        myFileList, data_directory=None, dock=dock)
+    # file_list
+    file_list = [
+        join(TESTDATA, 'Padang_WGS84.shp'),
+        join(EXPDATA, 'glp10ag.asc'),
+        join(HAZDATA, 'Shakemap_Padang_2009.asc'),
+        join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
+        join(TESTDATA, 'tsunami_building_exposure.shp'),
+        join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
+        join(TESTDATA, 'Population_Jakarta_geographic.asc'),
+        join(HAZDATA, 'eq_yogya_2006.asc'),
+        join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
+        join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
+        join(EXPDATA, 'DKI_buildings.shp'),
+        join(HAZDATA, 'jakarta_flood_category_123.asc'),
+        join(TESTDATA, 'roads_Maumere.shp'),
+        join(TESTDATA, 'donut.shp'),
+        join(TESTDATA, 'Merapi_alert.shp'),
+        join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
+    hazard_layer_count, exposure_layer_count = load_layers(
+        file_list, data_directory=None, dock=dock)
     #FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
-    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
+    assert hazard_layer_count + exposure_layer_count == len(file_list) - 1
 
-    return myHazardLayerCount, myExposureLayerCount
+    return hazard_layer_count, exposure_layer_count
 
 
 def load_layers(
@@ -838,23 +852,23 @@ def load_layers(
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
     # Now go ahead and load our layers
-    myExposureLayerCount = 0
-    myHazardLayerCount = 0
+    exposure_layer_count = 0
+    hazard_layer_count = 0
     map_layer_list = []
     # Now create our new layers
-    for myFile in layer_list:
+    for layer_file in layer_list:
 
-        myLayer, myType = load_layer(myFile, data_directory)
-        if myType == 'hazard':
-            myHazardLayerCount += 1
-        elif myType == 'exposure':
-            myExposureLayerCount += 1
+        layer, layer_type = load_layer(layer_file, data_directory)
+        if layer_type == 'hazard':
+            hazard_layer_count += 1
+        elif layer_type == 'exposure':
+            exposure_layer_count += 1
 
         # Add layer to the registry (that QGis knows about) a slot
         # in qgis_interface will also ensure it gets added to the canvas
 
         # noinspection PyArgumentList
-        map_layer_list.append(myLayer)
+        map_layer_list.append(layer)
 
     # noinspection PyArgumentList
     QgsMapLayerRegistry.instance().addMapLayers(map_layer_list)
@@ -863,10 +877,10 @@ def load_layers(
         dock.get_layers()
 
     # Add MCL's to the CANVAS
-    return myHazardLayerCount, myExposureLayerCount
+    return hazard_layer_count, exposure_layer_count
 
 
-def compareWkt(a, b, tol=0.000001):
+def compare_wkt(a, b, tol=0.000001):
     """Helper function to compare WKT geometries with given tolerance
     Taken from QGIS test suite
 
@@ -882,7 +896,7 @@ def compareWkt(a, b, tol=0.000001):
     :return: True on success, False on failure
     :rtype: bool
     """
-    r = re.compile('-?\d+(?:\.\d+)?(?:[eE]\d+)?')
+    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
 
     # compare the structure
     a0 = r.sub("#", a)

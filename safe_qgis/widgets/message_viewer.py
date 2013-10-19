@@ -41,7 +41,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         # whether to show or not dev only options
         self.devMode = QtCore.QSettings().value(
-            'inasafe/devMode', False)
+            'inasafe/developer_mode', False)
 
         if self.devMode:
             self.settings().globalSettings().setAttribute(
@@ -72,7 +72,7 @@ class MessageViewer(QtWebKit.QWebView):
 
         # add copy
         action = self.page().action(QtWebKit.QWebPage.Copy)
-        action.setEnabled(not self.selectedHtml().isEmpty())
+        action.setEnabled(not self.selectedHtml() == '')
         context_menu.addAction(action)
 
         # add view source if in dev mode

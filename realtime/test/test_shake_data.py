@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Tests Shake Data functionality related to shakemaps.**
@@ -21,10 +22,8 @@ import os
 import shutil
 import unittest
 
-from shake_data import ShakeData
-from utils import (shakemapZipDir,
-                   shakemapExtractDir,
-                   purgeWorkingData)
+from realtime.shake_data import ShakeData
+from realtime.utils import shakemapZipDir, purgeWorkingData, shakemapExtractDir
 
 # Clear away working dirs so we can be sure they are
 # actually created
@@ -39,10 +38,10 @@ class TestShakeMap(unittest.TestCase):
         myOutFile = '20120726022003.out.zip'
         myInpFile = '20120726022003.inp.zip'
         myOutPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                 'fixtures',
+                                                 '../fixtures',
                                                  myOutFile))
         myInpPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                 'fixtures',
+                                                 '../fixtures',
                                                  myInpFile))
         shutil.copyfile(myOutPath, os.path.join(shakemapZipDir(), myOutFile))
         shutil.copyfile(myInpPath, os.path.join(shakemapZipDir(), myInpFile))

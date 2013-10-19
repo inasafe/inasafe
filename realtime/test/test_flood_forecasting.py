@@ -1,9 +1,13 @@
-__author__ = 'nielso'
+# coding=utf-8
+"""Tests for the flood forecasting functions."""
 
 import unittest
 import numpy
 import os
+import sys
 
+# We can't install scipy on OSX easily so disable import check
+#pylint: disable=F0401
 from netcdf_utilities import convert_netcdf2tif
 from safe.storage.core import read_layer
 from safe.storage.vector import Vector
@@ -14,11 +18,13 @@ from safe.common.polygon import is_inside_polygon
 from safe.common.utilities import verify
 
 
+@unittest.skipIf(sys.platform in ('win32', 'darwin'), 'OSX, Win not supported')
 class Test_flood_forecasting_functionality(unittest.TestCase):
     """Specific tests of flood forecasting functionality
     """
     def setUp(self):
-        self.nc_filename = os.path.join(TESTDATA,
+        self.nc_filename = os.path.join(
+            TESTDATA,
             '201211120500_Jakarta_200m_Sobek_Forecast_CCAM.nc')
 
     def test_convert_netcdf2tif(self):

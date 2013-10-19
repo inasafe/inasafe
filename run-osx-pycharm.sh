@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# To use this file do
-#
-# source runshell-osx.sh
+# Launcher to PyCharm with QGIS libs available to python
 #
 # Tim Sutton, June 2013
 
@@ -22,4 +20,4 @@ export INASAFE_LOCALE=id
 
 echo "PYTHON PATH: $PYTHONPATH"
 
-
+/Applications/PyCharm.app/Contents/MacOS/pycharm

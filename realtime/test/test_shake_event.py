@@ -33,11 +33,11 @@ from qgis.core import QgsFeatureRequest
 # pylint: enable=W0611
 from safe.api import unique_filename, temp_dir
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
-from utils import shakemapExtractDir, shakemapZipDir, dataDir
-from shake_event import ShakeEvent
+from realtime.utils import shakemapExtractDir, shakemapZipDir, dataDir
+from realtime.shake_event import ShakeEvent
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE')
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestShakeEvent(unittest.TestCase):
@@ -48,10 +48,10 @@ class TestShakeEvent(unittest.TestCase):
         myOutFile = '20120726022003.out.zip'
         myInpFile = '20120726022003.inp.zip'
         myOutPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                 'fixtures',
+                                                 '../fixtures',
                                                  myOutFile))
         myInpPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                 'fixtures',
+                                                 '../fixtures',
                                                  myInpFile))
         shutil.copyfile(myOutPath, os.path.join(shakemapZipDir(), myOutFile))
         shutil.copyfile(myInpPath, os.path.join(shakemapZipDir(), myInpFile))
@@ -257,7 +257,7 @@ search_boxes: None
 
     def testCalculateFatalities(self):
         """Test that we can calculate fatalities."""
-        LOGGER.debug(QGISAPP.showSettings())
+        LOGGER.debug(QGIS_APP.showSettings())
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myResult, myFatalitiesHtml = myShakeEvent.calculateImpacts()
@@ -311,21 +311,6 @@ search_boxes: None
         myResult = []
         for myValue in myValues:
             myResult.append(myShakeEvent.romanize(myValue))
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
-        assert myResult == myExpectedResult, myMessage
-
-    def testMmiColour(self):
-        """Test that we can get a colour given an mmi number."""
-        myShakeId = '20120726022003'
-        myShakeEvent = ShakeEvent(myShakeId)
-
-        myValues = range(0, 12)
-        myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
-                            '#55ffff', '#aaffff', '#fff000', '#ffa800',
-                            '#ff7000', '#ff0000', '#D00', '#800']
-        myResult = []
-        for myValue in myValues:
-            myResult.append(myShakeEvent.mmiColour(myValue))
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 

@@ -67,7 +67,7 @@ def nan_allclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 
     :raises:
 
-    :returns: The result of the allclose on non NaN elments
+    :returns: The result of the allclose on non NaN elements
     :rtype: bool
 
     Note:

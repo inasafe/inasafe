@@ -169,7 +169,7 @@ class AbstractPostprocessor():
 
         if metadata is None:
             metadata = dict()
-        LOGGER.debug('name : ' + str(name) + '\nresult : ' + str(result))
+        # LOGGER.debug('name : ' + str(name) + '\nresult : ' + str(result))
         if result is not None and result != self.NO_DATA_TEXT:
             try:
                 result = format_int(result)

@@ -18,33 +18,44 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import QSettings, QVariant, QT_VERSION
+from PyQt4.QtCore import QSettings, QT_VERSION
 from PyQt4.QtNetwork import QNetworkProxy
 
 
 def get_proxy():
     """Adaption by source of Plugin Installer - Version 1.0.10"""
     settings = QSettings()
-    settings.beginGroup("proxy")
-    #if settings.value("/proxyEnabled").toBool():
-    if settings.value("/proxyEnabled", False):
+    settings.beginGroup('proxy')
+    if settings.value('/proxyEnabled', False, type=bool):
         proxy = QNetworkProxy()
-        proxyType = settings.value("/proxyType", 0)
-        if proxyType in ["1", "Socks5Proxy"]:
+        try:
+            proxy_type = settings.value('/proxyType', 0, type=int)
+        except TypeError:
+            # Catch for this:
+            # TypeError: unable to convert a QVariant of type 10 to a
+            # QMetaType of type 2
+            # TODO: can we do anything to handle this more gracefully? TS
+            settings.setValue('/proxyType', 0)
+            return proxy
+        if proxy_type in ['1', 'Socks5Proxy']:
             proxy.setType(QNetworkProxy.Socks5Proxy)
-        elif proxyType in ["2", "NoProxy"]:
+        elif proxy_type in ['2', 'NoProxy']:
             proxy.setType(QNetworkProxy.NoProxy)
-        elif proxyType in ["3", "HttpProxy"]:
+        elif proxy_type in ['3', 'HttpProxy']:
             proxy.setType(QNetworkProxy.HttpProxy)
-        elif proxyType in ["4", "HttpCachingProxy"] and QT_VERSION >= 0X040400:
+        elif proxy_type in ['4', 'HttpCachingProxy'] and QT_VERSION >= 0X040400:
             proxy.setType(QNetworkProxy.HttpCachingProxy)
-        elif proxyType in ["5", "FtpCachingProxy"] and QT_VERSION >= 0X040400:
+        elif proxy_type in ['5', 'FtpCachingProxy'] and QT_VERSION >= 0X040400:
             proxy.setType(QNetworkProxy.FtpCachingProxy)
         else:
             proxy.setType(QNetworkProxy.DefaultProxy)
-        proxy.setHostName(settings.value("/proxyHost"))
-        proxy.setPort(settings.value("/proxyPort")[0])
-        proxy.setUser(settings.value("/proxyUser"))
-        proxy.setPassword(settings.value("/proxyPassword"))
+        proxy.setHostName(settings.value('/proxyHost'))
+        proxy.setPort(settings.value('/proxyPort', type=int))
+        user = settings.value('/proxyUser', type=str)
+        password = settings.value('/proxyPassword', type=str)
+        if user is not None:
+            proxy.setUser(user)
+        if password is not None and user is not None:
+            proxy.setPassword(password)
         settings.endGroup()
         return proxy

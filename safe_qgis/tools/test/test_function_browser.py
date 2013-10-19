@@ -29,7 +29,7 @@ from safe_qgis.tools.function_browser import FunctionBrowser
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def verifyColumn(table, col, strFilter, mode):

@@ -33,7 +33,7 @@ from qgis.core import (
     QgsRectangle)
 from qgis.gui import QgsComposerView
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
-from safe_qgis.exceptions import KeywordNotFoundError
+from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.report.map_legend import MapLegend
 from safe_qgis.utilities.utilities import (
@@ -58,23 +58,32 @@ class Map():
         LOGGER.debug('InaSAFE Map class initialised')
         self.iface = iface
         self.layer = iface.activeLayer()
-        self.keywordIO = KeywordIO()
+        self.keyword_io = KeywordIO()
         self.printer = None
         self.composition = None
         self.legend = None
-        self.pageWidth = 210  # width in mm
-        self.pageHeight = 297  # height in mm
-        self.pageDpi = 300.0
-        self.pageMargin = 10  # margin in mm
-        self.verticalSpacing = 1  # vertical spacing between elements
-        self.showFramesFlag = False  # intended for debugging use only
+        self.logo = ':/plugins/inasafe/bnpb_logo.png'
+        self.template = ':/plugins/inasafe/inasafe.qpt'
+        #self.page_width = 210  # width in mm
+        #self.page_height = 297  # height in mm
+        self.page_width = 0  # width in mm
+        self.page_height = 0  # height in mm
+        self.page_dpi = 300.0
+        #self.page_margin = 10  # margin in mm
+        self.show_frames = False  # intended for debugging use only
+        self.page_margin = None
+        #vertical spacing between elements
+        self.vertical_spacing = None
+        self.map_height = None
+        self.mapWidth = None
         # make a square map where width = height = page width
-        self.mapHeight = self.pageWidth - (self.pageMargin * 2)
-        self.mapWidth = self.mapHeight
-        self.disclaimer = self.tr('InaSAFE has been jointly developed by'
-                                  ' BNPB, AusAid & the World Bank')
+        #self.map_height = self.page_width - (self.page_margin * 2)
+        #self.mapWidth = self.map_height
+        #self.disclaimer = self.tr('InaSAFE has been jointly developed by'
+        #                          ' BNPB, AusAid & the World Bank')
 
-    def tr(self, string):
+    @staticmethod
+    def tr(string):
         """We implement this since we do not inherit QObject.
 
         :param string: String for translation.
@@ -94,15 +103,31 @@ class Map():
         """
         self.layer = layer
 
+    def set_logo(self, logo):
+        """
+
+        :param logo: Path to image that will be used as logo in report
+        :type logo: str
+        """
+        self.logo = logo
+
+    def set_template(self, template):
+        """
+
+        :param template: Path to composer template that will be used for report
+        :type template: str
+        """
+        self.template = template
+
     def setup_composition(self):
         """Set up the composition ready for drawing elements onto it."""
         LOGGER.debug('InaSAFE Map setupComposition called')
-        myCanvas = self.iface.mapCanvas()
-        myRenderer = myCanvas.mapRenderer()
-        self.composition = QgsComposition(myRenderer)
+        canvas = self.iface.mapCanvas()
+        renderer = canvas.mapRenderer()
+        self.composition = QgsComposition(renderer)
         self.composition.setPlotStyle(QgsComposition.Print)  # or preview
-        self.composition.setPaperSize(self.pageWidth, self.pageHeight)
-        self.composition.setPrintResolution(self.pageDpi)
+        #self.composition.setPaperSize(self.page_width, self.page_height)
+        self.composition.setPrintResolution(self.page_dpi)
         self.composition.setPrintAsRaster(True)
 
     def compose_map(self):
@@ -110,56 +135,59 @@ class Map():
         self.setup_composition()
         # Keep track of our vertical positioning as we work our way down
         # the page placing elements on it.
-        myTopOffset = self.pageMargin
-        self.draw_logo(myTopOffset)
-        myLabelHeight = self.draw_title(myTopOffset)
+        top_offset = self.page_margin
+        self.draw_logo(top_offset)
+        label_height = self.draw_title(top_offset)
         # Update the map offset for the next row of content
-        myTopOffset += myLabelHeight + self.verticalSpacing
-        myComposerMap = self.draw_map(myTopOffset)
-        self.draw_scalebar(myComposerMap, myTopOffset)
+        top_offset += label_height + self.vertical_spacing
+        composer_map = self.draw_map(top_offset)
+        self.draw_scalebar(composer_map, top_offset)
         # Update the top offset for the next horizontal row of items
-        myTopOffset += self.mapHeight + self.verticalSpacing - 1
-        myImpactTitleHeight = self.draw_impact_title(myTopOffset)
+        top_offset += self.map_height + self.vertical_spacing - 1
+        impact_title_height = self.draw_impact_title(top_offset)
         # Update the top offset for the next horizontal row of items
-        if myImpactTitleHeight:
-            myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
-        self.draw_legend(myTopOffset)
-        self.draw_host_and_time(myTopOffset)
+        if impact_title_height:
+            top_offset += impact_title_height + self.vertical_spacing + 2
+        self.draw_legend(top_offset)
+        self.draw_host_and_time(top_offset)
         self.draw_disclaimer()
 
     def render(self):
         """Render the map composition to an image and save that to disk.
 
         :returns: A three-tuple of:
-            * str: myImagePath - absolute path to png of rendered map
-            * QImage: myImage - in memory copy of rendered map
-            * QRectF: myTargetArea - dimensions of rendered map
+            * str: image_path - absolute path to png of rendered map
+            * QImage: image - in memory copy of rendered map
+            * QRectF: target_area - dimensions of rendered map
         :rtype: tuple
         """
         LOGGER.debug('InaSAFE Map renderComposition called')
         # NOTE: we ignore self.composition.printAsRaster() and always rasterise
-        myWidth = int(self.pageDpi * self.pageWidth / 25.4)
-        myHeight = int(self.pageDpi * self.pageHeight / 25.4)
-        myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
-                               QtGui.QImage.Format_ARGB32)
-        myImage.setDotsPerMeterX(dpi_to_meters(self.pageDpi))
-        myImage.setDotsPerMeterY(dpi_to_meters(self.pageDpi))
+        width = int(self.page_dpi * self.page_width / 25.4)
+        height = int(self.page_dpi * self.page_height / 25.4)
+        image = QtGui.QImage(
+            QtCore.QSize(width, height),
+            QtGui.QImage.Format_ARGB32)
+        image.setDotsPerMeterX(dpi_to_meters(self.page_dpi))
+        image.setDotsPerMeterY(dpi_to_meters(self.page_dpi))
 
         # Only works in Qt4.8
-        #myImage.fill(QtGui.qRgb(255, 255, 255))
+        #image.fill(QtGui.qRgb(255, 255, 255))
         # Works in older Qt4 versions
-        myImage.fill(55 + 255 * 256 + 255 * 256 * 256)
-        myImagePainter = QtGui.QPainter(myImage)
-        mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
-                                     self.pageHeight)
-        myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
-        self.composition.render(myImagePainter, myTargetArea, mySourceArea)
-        myImagePainter.end()
-        myImagePath = unique_filename(prefix='mapRender_',
-                                      suffix='.png',
-                                      dir=temp_dir())
-        myImage.save(myImagePath)
-        return myImagePath, myImage, myTargetArea
+        image.fill(55 + 255 * 256 + 255 * 256 * 256)
+        image_painter = QtGui.QPainter(image)
+        source_area = QtCore.QRectF(
+            0, 0, self.page_width,
+            self.page_height)
+        target_area = QtCore.QRectF(0, 0, width, height)
+        self.composition.render(image_painter, target_area, source_area)
+        image_painter.end()
+        image_path = unique_filename(
+            prefix='mapRender_',
+            suffix='.png',
+            dir=temp_dir())
+        image.save(image_path)
+        return image_path, image, target_area
 
     def make_pdf(self, filename):
         """Generate the printout for our final map.
@@ -174,19 +202,21 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map printToPdf called')
         if filename is None:
-            myMapPdfPath = unique_filename(
-                prefix='report', suffix='.pdf', dir=temp_dir('work'))
+            map_pdf_path = unique_filename(
+                prefix='report', suffix='.pdf', dir=temp_dir())
         else:
             # We need to cast to python string in case we receive a QString
-            myMapPdfPath = str(filename)
+            map_pdf_path = str(filename)
 
-        self.compose_map()
-        self.printer = setup_printer(myMapPdfPath)
-        _, myImage, myRectangle = self.render()
-        myPainter = QtGui.QPainter(self.printer)
-        myPainter.drawImage(myRectangle, myImage, myRectangle)
-        myPainter.end()
-        return myMapPdfPath
+        self.load_template()
+
+        resolution = self.composition.printResolution()
+        self.printer = setup_printer(map_pdf_path, resolution=resolution)
+        _, image, rectangle = self.render()
+        painter = QtGui.QPainter(self.printer)
+        painter.drawImage(rectangle, image, rectangle)
+        painter.end()
+        return map_pdf_path
 
     def draw_logo(self, top_offset):
         """Add a picture containing the logo to the map top left corner
@@ -194,12 +224,12 @@ class Map():
         :param top_offset: Vertical offset at which the logo should be drawn.
         :type top_offset: int
         """
-        myLogo = QgsComposerPicture(self.composition)
-        myLogo.setPictureFile(':/plugins/inasafe/bnpb_logo.png')
-        myLogo.setItemPosition(self.pageMargin, top_offset, 10, 10)
-        myLogo.setFrameEnabled(self.showFramesFlag)
-        myLogo.setZValue(1)  # To ensure it overlays graticule markers
-        self.composition.addItem(myLogo)
+        logo = QgsComposerPicture(self.composition)
+        logo.setPictureFile(':/plugins/inasafe/bnpb_logo.png')
+        logo.setItemPosition(self.page_margin, top_offset, 10, 10)
+        logo.setFrameEnabled(self.show_frames)
+        logo.setZValue(1)  # To ensure it overlays graticule markers
+        self.composition.addItem(logo)
 
     def draw_title(self, top_offset):
         """Add a title to the composition.
@@ -211,30 +241,31 @@ class Map():
         :rtype: float
         """
         LOGGER.debug('InaSAFE Map drawTitle called')
-        myFontSize = 14
-        myFontWeight = QtGui.QFont.Bold
-        myItalicsFlag = False
-        myFont = QtGui.QFont('verdana',
-                             myFontSize,
-                             myFontWeight,
-                             myItalicsFlag)
-        myLabel = QgsComposerLabel(self.composition)
-        myLabel.setFont(myFont)
-        myHeading = self.tr('InaSAFE - Indonesia Scenario Assessment'
-                            ' for Emergencies')
-        myLabel.setText(myHeading)
-        myLabel.adjustSizeToText()
-        myLabelHeight = 10.0  # determined using qgis map composer
-        myLabelWidth = 170.0   # item - position and size...option
-        myLeftOffset = self.pageWidth - self.pageMargin - myLabelWidth
-        myLabel.setItemPosition(myLeftOffset,
-                                top_offset - 2,  # -2 to push it up a little
-                                myLabelWidth,
-                                myLabelHeight,
-                                )
-        myLabel.setFrameEnabled(self.showFramesFlag)
-        self.composition.addItem(myLabel)
-        return myLabelHeight
+        font_size = 14
+        font_weight = QtGui.QFont.Bold
+        italics_flag = False
+        font = QtGui.QFont(
+            'verdana',
+            font_size,
+            font_weight,
+            italics_flag)
+        label = QgsComposerLabel(self.composition)
+        label.setFont(font)
+        heading = self.tr(
+            'InaSAFE - Indonesia Scenario Assessment for Emergencies')
+        label.setText(heading)
+        label.adjustSizeToText()
+        label_height = 10.0  # determined using qgis map composer
+        label_width = 170.0   # item - position and size...option
+        left_offset = self.page_width - self.page_margin - label_width
+        label.setItemPosition(
+            left_offset,
+            top_offset - 2,  # -2 to push it up a little
+            label_width,
+            label_height)
+        label.setFrameEnabled(self.show_frames)
+        self.composition.addItem(label)
+        return label_height
 
     def draw_map(self, top_offset):
         """Add a map to the composition and return the composer map instance.
@@ -246,68 +277,68 @@ class Map():
         :rtype: QgsComposerMap
         """
         LOGGER.debug('InaSAFE Map drawMap called')
-        myMapWidth = self.mapWidth
-        myComposerMap = QgsComposerMap(
+        map_width = self.mapWidth
+        composer_map = QgsComposerMap(
             self.composition,
-            self.pageMargin,
+            self.page_margin,
             top_offset,
-            myMapWidth,
-            self.mapHeight)
+            map_width,
+            self.map_height)
         #myExtent = self.iface.mapCanvas().extent()
         # The dimensions of the map canvas and the print composer map may
         # differ. So we set the map composer extent using the canvas and
         # then defer to the map canvas's map extents thereafter
         # Update: disabled as it results in a rectangular rather than
         # square map
-        #myComposerMap.setNewExtent(myExtent)
-        myComposerExtent = myComposerMap.extent()
+        #composer_map.setNewExtent(myExtent)
+        composer_extent = composer_map.extent()
         # Recenter the composer map on the center of the canvas
         # Note that since the composer map is square and the canvas may be
         # arbitrarily shaped, we center based on the longest edge
-        myCanvasExtent = self.iface.mapCanvas().extent()
-        myWidth = myCanvasExtent.width()
-        myHeight = myCanvasExtent.height()
-        myLongestLength = myWidth
-        if myWidth < myHeight:
-            myLongestLength = myHeight
-        myHalfLength = myLongestLength / 2
-        myCenter = myCanvasExtent.center()
-        myMinX = myCenter.x() - myHalfLength
-        myMaxX = myCenter.x() + myHalfLength
-        myMinY = myCenter.y() - myHalfLength
-        myMaxY = myCenter.y() + myHalfLength
-        mySquareExtent = QgsRectangle(myMinX, myMinY, myMaxX, myMaxY)
-        myComposerMap.setNewExtent(mySquareExtent)
+        canvas_extent = self.iface.mapCanvas().extent()
+        width = canvas_extent.width()
+        height = canvas_extent.height()
+        longest_length = width
+        if width < height:
+            longest_length = height
+        half_length = longest_length / 2
+        center = canvas_extent.center()
+        min_x = center.x() - half_length
+        max_x = center.x() + half_length
+        min_y = center.y() - half_length
+        max_y = center.y() + half_length
+        square_extent = QgsRectangle(min_x, min_y, max_x, max_y)
+        composer_map.setNewExtent(square_extent)
 
-        myComposerMap.setGridEnabled(True)
-        myNumberOfSplits = 5
+        composer_map.setGridEnabled(True)
+        split_count = 5
         # .. todo:: Write logic to adjust precision so that adjacent tick marks
         #    always have different displayed values
-        myPrecision = 2
-        myXInterval = myComposerExtent.width() / myNumberOfSplits
-        myComposerMap.setGridIntervalX(myXInterval)
-        myYInterval = myComposerExtent.height() / myNumberOfSplits
-        myComposerMap.setGridIntervalY(myYInterval)
-        myComposerMap.setGridStyle(QgsComposerMap.Cross)
-        myCrossLengthMM = 1
-        myComposerMap.setCrossLength(myCrossLengthMM)
-        myComposerMap.setZValue(0)  # To ensure it does not overlay logo
-        myFontSize = 6
-        myFontWeight = QtGui.QFont.Normal
-        myItalicsFlag = False
-        myFont = QtGui.QFont(
+        precision = 2
+        x_interval = composer_extent.width() / split_count
+        composer_map.setGridIntervalX(x_interval)
+        y_interval = composer_extent.height() / split_count
+        composer_map.setGridIntervalY(y_interval)
+        composer_map.setGridStyle(QgsComposerMap.Cross)
+        cross_length_mm = 1
+        composer_map.setCrossLength(cross_length_mm)
+        composer_map.setZValue(0)  # To ensure it does not overlay logo
+        font_size = 6
+        font_weight = QtGui.QFont.Normal
+        italics_flag = False
+        font = QtGui.QFont(
             'verdana',
-            myFontSize,
-            myFontWeight,
-            myItalicsFlag)
-        myComposerMap.setGridAnnotationFont(myFont)
-        myComposerMap.setGridAnnotationPrecision(myPrecision)
-        myComposerMap.setShowGridAnnotation(True)
-        myComposerMap.setGridAnnotationDirection(
+            font_size,
+            font_weight,
+            italics_flag)
+        composer_map.setGridAnnotationFont(font)
+        composer_map.setGridAnnotationPrecision(precision)
+        composer_map.setShowGridAnnotation(True)
+        composer_map.setGridAnnotationDirection(
             QgsComposerMap.BoundaryDirection, QgsComposerMap.Top)
-        self.composition.addItem(myComposerMap)
+        self.composition.addItem(composer_map)
         self.draw_graticule_mask(top_offset)
-        return myComposerMap
+        return composer_map
 
     def draw_graticule_mask(self, top_offset):
         """A helper function to mask out graticule labels.
@@ -319,29 +350,30 @@ class Map():
         :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawGraticuleMask called')
-        myLeftOffset = self.pageMargin + self.mapWidth
-        myRect = QgsComposerShape(myLeftOffset + 0.5,
-                                  top_offset,
-                                  self.pageWidth - myLeftOffset,
-                                  self.mapHeight + 1,
-                                  self.composition)
+        left_offset = self.page_margin + self.mapWidth
+        rect = QgsComposerShape(
+            left_offset + 0.5,
+            top_offset,
+            self.page_width - left_offset,
+            self.map_height + 1,
+            self.composition)
 
-        myRect.setShapeType(QgsComposerShape.Rectangle)
-        myPen = QtGui.QPen()
-        myPen.setColor(QtGui.QColor(0, 0, 0))
-        myPen.setWidthF(0.1)
-        myRect.setPen(myPen)
-        myRect.setBackgroundColor(QtGui.QColor(255, 255, 255))
-        myRect.setTransparency(100)
-        #myRect.setLineWidth(0.1)
-        #myRect.setFrameEnabled(False)
-        #myRect.setOutlineColor(QtGui.QColor(255, 255, 255))
-        #myRect.setFillColor(QtGui.QColor(255, 255, 255))
-        #myRect.setOpacity(100)
+        rect.setShapeType(QgsComposerShape.Rectangle)
+        pen = QtGui.QPen()
+        pen.setColor(QtGui.QColor(0, 0, 0))
+        pen.setWidthF(0.1)
+        rect.setPen(pen)
+        rect.setBackgroundColor(QtGui.QColor(255, 255, 255))
+        rect.setTransparency(100)
+        #rect.setLineWidth(0.1)
+        #rect.setFrameEnabled(False)
+        #rect.setOutlineColor(QtGui.QColor(255, 255, 255))
+        #rect.setFillColor(QtGui.QColor(255, 255, 255))
+        #rect.setOpacity(100)
         # These two lines seem superfluous but are needed
-        myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        myRect.setBrush(myBrush)
-        self.composition.addItem(myRect)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        rect.setBrush(brush)
+        self.composition.addItem(rect)
 
     def draw_native_scalebar(self, composer_map, top_offset):
         """Draw a scale bar using QGIS' native drawing.
@@ -355,21 +387,21 @@ class Map():
         :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawNativeScaleBar called')
-        myScaleBar = QgsComposerScaleBar(self.composition)
-        myScaleBar.setStyle('Numeric')  # optionally modify the style
-        myScaleBar.setComposerMap(composer_map)
-        myScaleBar.applyDefaultSize()
-        myScaleBarHeight = myScaleBar.boundingRect().height()
-        myScaleBarWidth = myScaleBar.boundingRect().width()
+        scale_bar = QgsComposerScaleBar(self.composition)
+        scale_bar.setStyle('Numeric')  # optionally modify the style
+        scale_bar.setComposerMap(composer_map)
+        scale_bar.applyDefaultSize()
+        scale_bar_height = scale_bar.boundingRect().height()
+        scale_bar_width = scale_bar.boundingRect().width()
         # -1 to avoid overlapping the map border
-        myScaleBar.setItemPosition(
-            self.pageMargin + 1,
-            top_offset + self.mapHeight - (myScaleBarHeight * 2),
-            myScaleBarWidth,
-            myScaleBarHeight)
-        myScaleBar.setFrameEnabled(self.showFramesFlag)
+        scale_bar.setItemPosition(
+            self.page_margin + 1,
+            top_offset + self.map_height - (scale_bar_height * 2),
+            scale_bar_width,
+            scale_bar_height)
+        scale_bar.setFrameEnabled(self.show_frames)
         # Disabled for now
-        #self.composition.addItem(myScaleBar)
+        #self.composition.addItem(scale_bar)
 
     def draw_scalebar(self, composer_map, top_offset):
         """Add a numeric scale to the bottom left of the map.
@@ -386,153 +418,159 @@ class Map():
         :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawScaleBar called')
-        myCanvas = self.iface.mapCanvas()
-        myRenderer = myCanvas.mapRenderer()
+        canvas = self.iface.mapCanvas()
+        renderer = canvas.mapRenderer()
         #
         # Add a linear map scale
         #
-        myDistanceArea = QgsDistanceArea()
-        myDistanceArea.setSourceCrs(myRenderer.destinationCrs().srsid())
-        myDistanceArea.setEllipsoidalMode(True)
+        distance_area = QgsDistanceArea()
+        distance_area.setSourceCrs(renderer.destinationCrs().srsid())
+        distance_area.setEllipsoidalMode(True)
         # Determine how wide our map is in km/m
         # Starting point at BL corner
-        myComposerExtent = composer_map.extent()
-        myStartPoint = QgsPoint(myComposerExtent.xMinimum(),
-                                myComposerExtent.yMinimum())
+        composer_extent = composer_map.extent()
+        start_point = QgsPoint(
+            composer_extent.xMinimum(),
+            composer_extent.yMinimum())
         # Ending point at BR corner
-        myEndPoint = QgsPoint(myComposerExtent.xMaximum(),
-                              myComposerExtent.yMinimum())
-        myGroundDistance = myDistanceArea.measureLine(myStartPoint, myEndPoint)
+        end_point = QgsPoint(
+            composer_extent.xMaximum(),
+            composer_extent.yMinimum())
+        ground_distance = distance_area.measureLine(start_point, end_point)
         # Get the equivalent map distance per page mm
-        myMapWidth = self.mapWidth
+        map_width = self.mapWidth
         # How far is 1mm on map on the ground in meters?
-        myMMToGroundDistance = myGroundDistance / myMapWidth
+        mm_to_ground = ground_distance / map_width
         #print 'MM:', myMMDistance
         # How long we want the scale bar to be in relation to the map
-        myScaleBarToMapRatio = 0.5
+        scalebar_to_map_ratio = 0.5
         # How many divisions the scale bar should have
-        myTickCount = 5
-        myScaleBarWidthMM = myMapWidth * myScaleBarToMapRatio
-        myPrintSegmentWidthMM = myScaleBarWidthMM / myTickCount
+        tick_count = 5
+        scale_bar_width_mm = map_width * scalebar_to_map_ratio
+        print_segment_width_mm = scale_bar_width_mm / tick_count
         # Segment width in real world (m)
         # We apply some logic here so that segments are displayed in meters
         # if each segment is less that 1000m otherwise km. Also the segment
         # lengths are rounded down to human looking numbers e.g. 1km not 1.1km
-        myUnits = ''
-        myGroundSegmentWidth = myPrintSegmentWidthMM * myMMToGroundDistance
-        if myGroundSegmentWidth < 1000:
-            myUnits = 'm'
-            myGroundSegmentWidth = round(myGroundSegmentWidth)
+        units = ''
+        ground_segment_width = print_segment_width_mm * mm_to_ground
+        if ground_segment_width < 1000:
+            units = 'm'
+            ground_segment_width = round(ground_segment_width)
             # adjust the segment width now to account for rounding
-            myPrintSegmentWidthMM = myGroundSegmentWidth / myMMToGroundDistance
+            print_segment_width_mm = ground_segment_width / mm_to_ground
         else:
-            myUnits = 'km'
+            units = 'km'
             # Segment with in real world (km)
-            myGroundSegmentWidth = round(myGroundSegmentWidth / 1000)
-            myPrintSegmentWidthMM = ((myGroundSegmentWidth * 1000) /
-                                     myMMToGroundDistance)
+            ground_segment_width = round(ground_segment_width / 1000)
+            print_segment_width_mm = (
+                (ground_segment_width * 1000) / mm_to_ground)
         # Now adjust the scalebar width to account for rounding
-        myScaleBarWidthMM = myTickCount * myPrintSegmentWidthMM
+        scale_bar_width_mm = tick_count * print_segment_width_mm
 
-        #print "SBWMM:", myScaleBarWidthMM
-        #print "SWMM:", myPrintSegmentWidthMM
+        #print "SBWMM:", scale_bar_width_mm
+        #print "SWMM:", print_segment_width_mm
         #print "SWM:", myGroundSegmentWidthM
         #print "SWKM:", myGroundSegmentWidthKM
         # start drawing in line segments
-        myScaleBarHeight = 5  # mm
-        myLineWidth = 0.3  # mm
-        myInsetDistance = 7  # how much to inset the scalebar into the map by
-        myScaleBarX = self.pageMargin + myInsetDistance
-        myScaleBarY = (
-            top_offset + self.mapHeight - myInsetDistance -
-            myScaleBarHeight)  # mm
+        scalebar_height = 5  # mm
+        line_width = 0.3  # mm
+        inset_distance = 7  # how much to inset the scalebar into the map by
+        scalebar_x = self.page_margin + inset_distance
+        scalebar_y = (
+            top_offset + self.map_height - inset_distance -
+            scalebar_height)  # mm
 
         # Draw an outer background box - shamelessly hardcoded buffer
-        myRect = QgsComposerShape(myScaleBarX - 4,  # left edge
-                                  myScaleBarY - 3,  # top edge
-                                  myScaleBarWidthMM + 13,  # right edge
-                                  myScaleBarHeight + 6,  # bottom edge
-                                  self.composition)
+        rectangle = QgsComposerShape(
+            scalebar_x - 4,  # left edge
+            scalebar_y - 3,  # top edge
+            scale_bar_width_mm + 13,  # right edge
+            scalebar_height + 6,  # bottom edge
+            self.composition)
 
-        myRect.setShapeType(QgsComposerShape.Rectangle)
-        myPen = QtGui.QPen()
-        myPen.setColor(QtGui.QColor(255, 255, 255))
-        myPen.setWidthF(myLineWidth)
-        myRect.setPen(myPen)
-        #myRect.setLineWidth(myLineWidth)
-        myRect.setFrameEnabled(False)
-        myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        rectangle.setShapeType(QgsComposerShape.Rectangle)
+        pen = QtGui.QPen()
+        pen.setColor(QtGui.QColor(255, 255, 255))
+        pen.setWidthF(line_width)
+        rectangle.setPen(pen)
+        #rectangle.setLineWidth(line_width)
+        rectangle.setFrameEnabled(False)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         # workaround for missing setTransparentFill missing from python api
-        myRect.setBrush(myBrush)
-        self.composition.addItem(myRect)
+        rectangle.setBrush(brush)
+        self.composition.addItem(rectangle)
         # Set up the tick label font
-        myFontWeight = QtGui.QFont.Normal
-        myFontSize = 6
-        myItalicsFlag = False
-        myFont = QtGui.QFont('verdana',
-                             myFontSize,
-                             myFontWeight,
-                             myItalicsFlag)
+        font_weight = QtGui.QFont.Normal
+        font_size = 6
+        italics_flag = False
+        font = QtGui.QFont(
+            'verdana',
+            font_size,
+            font_weight,
+            italics_flag)
         # Draw the bottom line
-        myUpshift = 0.3  # shift the bottom line up for better rendering
-        myRect = QgsComposerShape(myScaleBarX,
-                                  myScaleBarY + myScaleBarHeight - myUpshift,
-                                  myScaleBarWidthMM,
-                                  0.1,
-                                  self.composition)
+        up_shift = 0.3  # shift the bottom line up for better rendering
+        rectangle = QgsComposerShape(
+            scalebar_x,
+            scalebar_y + scalebar_height - up_shift,
+            scale_bar_width_mm,
+            0.1,
+            self.composition)
 
-        myRect.setShapeType(QgsComposerShape.Rectangle)
-        myPen = QtGui.QPen()
-        myPen.setColor(QtGui.QColor(255, 255, 255))
-        myPen.setWidthF(myLineWidth)
-        myRect.setPen(myPen)
-        #myRect.setLineWidth(myLineWidth)
-        myRect.setFrameEnabled(False)
-        self.composition.addItem(myRect)
+        rectangle.setShapeType(QgsComposerShape.Rectangle)
+        pen = QtGui.QPen()
+        pen.setColor(QtGui.QColor(255, 255, 255))
+        pen.setWidthF(line_width)
+        rectangle.setPen(pen)
+        #rectangle.setLineWidth(line_width)
+        rectangle.setFrameEnabled(False)
+        self.composition.addItem(rectangle)
 
         # Now draw the scalebar ticks
-        for myTickCountIterator in range(0, myTickCount + 1):
-            myDistanceSuffix = ''
-            if myTickCountIterator == myTickCount:
-                myDistanceSuffix = ' ' + myUnits
-            myRealWorldDistance = ('%.0f%s' %
-                                   (myTickCountIterator *
-                                    myGroundSegmentWidth,
-                                    myDistanceSuffix))
+        for tick_counter in range(0, tick_count + 1):
+            distance_suffix = ''
+            if tick_counter == tick_count:
+                distance_suffix = ' ' + units
+            real_world_distance = (
+                '%.0f%s' %
+                (tick_counter *
+                ground_segment_width,
+                distance_suffix))
             #print 'RW:', myRealWorldDistance
-            myMMOffset = myScaleBarX + (myTickCountIterator *
-                                        myPrintSegmentWidthMM)
-            #print 'MM:', myMMOffset
-            myTickHeight = myScaleBarHeight / 2
+            mm_offset = scalebar_x + (
+                tick_counter * print_segment_width_mm)
+            #print 'MM:', mm_offset
+            tick_height = scalebar_height / 2
             # Lines are not exposed by the api yet so we
             # bodge drawing lines using rectangles with 1px height or width
-            myTickWidth = 0.1  # width or rectangle to be drawn
-            myUpTickLine = QgsComposerShape(
-                myMMOffset,
-                myScaleBarY + myScaleBarHeight - myTickHeight,
-                myTickWidth,
-                myTickHeight,
+            tick_width = 0.1  # width or rectangle to be drawn
+            uptick_line = QgsComposerShape(
+                mm_offset,
+                scalebar_y + scalebar_height - tick_height,
+                tick_width,
+                tick_height,
                 self.composition)
 
-            myUpTickLine.setShapeType(QgsComposerShape.Rectangle)
-            myPen = QtGui.QPen()
-            myPen.setWidthF(myLineWidth)
-            myUpTickLine.setPen(myPen)
-            #myUpTickLine.setLineWidth(myLineWidth)
-            myUpTickLine.setFrameEnabled(False)
-            self.composition.addItem(myUpTickLine)
+            uptick_line.setShapeType(QgsComposerShape.Rectangle)
+            pen = QtGui.QPen()
+            pen.setWidthF(line_width)
+            uptick_line.setPen(pen)
+            #uptick_line.setLineWidth(line_width)
+            uptick_line.setFrameEnabled(False)
+            self.composition.addItem(uptick_line)
             #
             # Add a tick label
             #
-            myLabel = QgsComposerLabel(self.composition)
-            myLabel.setFont(myFont)
-            myLabel.setText(myRealWorldDistance)
-            myLabel.adjustSizeToText()
-            myLabel.setItemPosition(
-                myMMOffset - 3,
-                myScaleBarY - myTickHeight)
-            myLabel.setFrameEnabled(self.showFramesFlag)
-            self.composition.addItem(myLabel)
+            label = QgsComposerLabel(self.composition)
+            label.setFont(font)
+            label.setText(real_world_distance)
+            label.adjustSizeToText()
+            label.setItemPosition(
+                mm_offset - 3,
+                scalebar_y - tick_height)
+            label.setFrameEnabled(self.show_frames)
+            self.composition.addItem(label)
 
     def draw_impact_title(self, top_offset):
         """Draw the map subtitle - obtained from the impact layer keywords.
@@ -544,25 +582,25 @@ class Map():
         :rtype: float
         """
         LOGGER.debug('InaSAFE Map drawImpactTitle called')
-        myTitle = self.map_title()
-        if myTitle is None:
-            myTitle = ''
-        myFontSize = 20
-        myFontWeight = QtGui.QFont.Bold
-        myItalicsFlag = False
-        myFont = QtGui.QFont(
-            'verdana', myFontSize, myFontWeight, myItalicsFlag)
-        myLabel = QgsComposerLabel(self.composition)
-        myLabel.setFont(myFont)
-        myHeading = myTitle
-        myLabel.setText(myHeading)
-        myLabelWidth = self.pageWidth - (self.pageMargin * 2)
-        myLabelHeight = 12
-        myLabel.setItemPosition(
-            self.pageMargin, top_offset, myLabelWidth, myLabelHeight)
-        myLabel.setFrameEnabled(self.showFramesFlag)
-        self.composition.addItem(myLabel)
-        return myLabelHeight
+        title = self.map_title()
+        if title is None:
+            title = ''
+        font_size = 20
+        font_weight = QtGui.QFont.Bold
+        italics_flag = False
+        font = QtGui.QFont(
+            'verdana', font_size, font_weight, italics_flag)
+        label = QgsComposerLabel(self.composition)
+        label.setFont(font)
+        heading = title
+        label.setText(heading)
+        label_width = self.page_width - (self.page_margin * 2)
+        label_height = 12
+        label.setItemPosition(
+            self.page_margin, top_offset, label_width, label_height)
+        label.setFrameEnabled(self.show_frames)
+        self.composition.addItem(label)
+        return label_height
 
     def draw_legend(self, top_offset):
         """Add a legend to the map using our custom legend renderer.
@@ -574,30 +612,35 @@ class Map():
         :type top_offset: int
         """
         LOGGER.debug('InaSAFE Map drawLegend called')
-        mapLegendAttributes = self.map_legend_attributes()
-        legendNotes = mapLegendAttributes.get('legend_notes', None)
-        legendUnits = mapLegendAttributes.get('legend_units', None)
-        legendTitle = mapLegendAttributes.get('legend_title', None)
-        LOGGER.debug(mapLegendAttributes)
-        myLegend = MapLegend(self.layer, self.pageDpi, legendTitle,
-                             legendNotes, legendUnits)
-        self.legend = myLegend.get_legend()
-        myPicture1 = QgsComposerPicture(self.composition)
-        myLegendFilePath = unique_filename(
+        legend_attributes = self.map_legend_attributes()
+        legend_notes = legend_attributes.get('legend_notes', None)
+        legend_units = legend_attributes.get('legend_units', None)
+        legend_title = legend_attributes.get('legend_title', None)
+        LOGGER.debug(legend_attributes)
+        legend = MapLegend(
+            self.layer,
+            self.page_dpi,
+            legend_title,
+            legend_notes,
+            legend_units)
+        self.legend = legend.get_legend()
+        picture1 = QgsComposerPicture(self.composition)
+        legend_file_path = unique_filename(
             prefix='legend', suffix='.png', dir='work')
-        self.legend.save(myLegendFilePath, 'PNG')
-        myPicture1.setPictureFile(myLegendFilePath)
-        myLegendHeight = points_to_mm(self.legend.height(), self.pageDpi)
-        myLegendWidth = points_to_mm(self.legend.width(), self.pageDpi)
-        myPicture1.setItemPosition(self.pageMargin,
-                                   top_offset,
-                                   myLegendWidth,
-                                   myLegendHeight)
-        myPicture1.setFrameEnabled(False)
-        self.composition.addItem(myPicture1)
-        os.remove(myLegendFilePath)
+        self.legend.save(legend_file_path, 'PNG')
+        picture1.setPictureFile(legend_file_path)
+        legend_height = points_to_mm(self.legend.height(), self.page_dpi)
+        legend_width = points_to_mm(self.legend.width(), self.page_dpi)
+        picture1.setItemPosition(
+            self.page_margin,
+            top_offset,
+            legend_width,
+            legend_height)
+        picture1.setFrameEnabled(False)
+        self.composition.addItem(picture1)
+        os.remove(legend_file_path)
 
-    def draw_image(self, theImage, theWidthMM, theLeftOffset, theTopOffset):
+    def draw_image(self, image, width_mm, left_offset, top_offset):
         """Helper to draw an image directly onto the QGraphicsScene.
         This is an alternative to using QgsComposerPicture which in
         some cases leaves artifacts under windows.
@@ -605,38 +648,38 @@ class Map():
         The Pixmap will have a transform applied to it so that
         it is rendered with the same resolution as the composition.
 
-        :param theImage: Image that will be rendered to the layout.
-        :type theImage: QImage
+        :param image: Image that will be rendered to the layout.
+        :type image: QImage
 
-        :param theWidthMM: Desired width in mm of output on page.
-        :type theWidthMM: int
+        :param width_mm: Desired width in mm of output on page.
+        :type width_mm: int
 
-        :param theLeftOffset: Offset from left of page.
-        :type theLeftOffset: int
+        :param left_offset: Offset from left of page.
+        :type left_offset: int
 
-        :param theTopOffset: Offset from top of page.
-        :type theTopOffset: int
+        :param top_offset: Offset from top of page.
+        :type top_offset: int
 
         :returns: Graphics scene item.
         :rtype: QGraphicsSceneItem
         """
         LOGGER.debug('InaSAFE Map drawImage called')
-        myDesiredWidthMM = theWidthMM  # mm
-        myDesiredWidthPX = mm_to_points(myDesiredWidthMM, self.pageDpi)
-        myActualWidthPX = theImage.width()
-        myScaleFactor = myDesiredWidthPX / myActualWidthPX
+        desired_width_mm = width_mm  # mm
+        desired_width_px = mm_to_points(desired_width_mm, self.page_dpi)
+        actual_width_px = image.width()
+        scale_factor = desired_width_px / actual_width_px
 
         LOGGER.debug('%s %s %s' % (
-            myScaleFactor, myActualWidthPX, myDesiredWidthPX))
-        myTransform = QtGui.QTransform()
-        myTransform.scale(myScaleFactor, myScaleFactor)
-        myTransform.rotate(0.5)
+            scale_factor, actual_width_px, desired_width_px))
+        transform = QtGui.QTransform()
+        transform.scale(scale_factor, scale_factor)
+        transform.rotate(0.5)
         # noinspection PyArgumentList
-        myItem = self.composition.addPixmap(QtGui.QPixmap.fromImage(theImage))
-        myItem.setTransform(myTransform)
-        myItem.setOffset(theLeftOffset / myScaleFactor,
-                         theTopOffset / myScaleFactor)
-        return myItem
+        item = self.composition.addPixmap(QtGui.QPixmap.fromImage(image))
+        item.setTransform(transform)
+        item.setOffset(
+            left_offset / scale_factor, top_offset / scale_factor)
+        return item
 
     def draw_host_and_time(self, top_offset):
         """Add a note with hostname and time to the composition.
@@ -649,72 +692,74 @@ class Map():
         #user: timlinux
         #host_name: ultrabook
         #time_stamp: 2012-10-13_23:10:31
-        #myUser = self.keywordIO.readKeywords(self.layer, 'user')
-        #myHost = self.keywordIO.readKeywords(self.layer, 'host_name')
-        myDateTime = self.keywordIO.read_keywords(self.layer, 'time_stamp')
-        myTokens = myDateTime.split('_')
-        myDate = myTokens[0]
-        myTime = myTokens[1]
-        #myElapsedTime = self.keywordIO.readKeywords(self.layer,
+        #myUser = self.keyword_io.readKeywords(self.layer, 'user')
+        #myHost = self.keyword_io.readKeywords(self.layer, 'host_name')
+        date_time = self.keyword_io.read_keywords(self.layer, 'time_stamp')
+        tokens = date_time.split('_')
+        date = tokens[0]
+        time = tokens[1]
+        #myElapsedTime = self.keyword_io.readKeywords(self.layer,
         #                                            'elapsed_time')
         #myElapsedTime = humaniseSeconds(myElapsedTime)
-        myLongVersion = get_version()
-        myTokens = myLongVersion.split('.')
-        myVersion = '%s.%s.%s' % (myTokens[0], myTokens[1], myTokens[2])
-        myLabelText = self.tr(
+        long_version = get_version()
+        tokens = long_version.split('.')
+        version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
+        label_text = self.tr(
             'Date and time of assessment: %s %s\n'
             'Special note: This assessment is a guide - we strongly recommend '
             'that you ground truth the results shown here before deploying '
             'resources and / or personnel.\n'
             'Assessment carried out using InaSAFE release %s (QGIS '
-            'plugin version).') % (myDate, myTime, myVersion)
-        myFontSize = 6
-        myFontWeight = QtGui.QFont.Normal
-        myItalicsFlag = True
-        myFont = QtGui.QFont('verdana',
-                             myFontSize,
-                             myFontWeight,
-                             myItalicsFlag)
-        myLabel = QgsComposerLabel(self.composition)
-        myLabel.setFont(myFont)
-        myLabel.setText(myLabelText)
-        myLabel.adjustSizeToText()
-        myLabelHeight = 50.0  # mm determined using qgis map composer
-        myLabelWidth = (self.pageWidth / 2) - self.pageMargin
-        myLeftOffset = self.pageWidth / 2  # put in right half of page
-        myLabel.setItemPosition(myLeftOffset,
-                                top_offset,
-                                myLabelWidth,
-                                myLabelHeight,
-                                )
-        myLabel.setFrameEnabled(self.showFramesFlag)
-        self.composition.addItem(myLabel)
+            'plugin version).') % (date, time, version)
+        font_size = 6
+        font_weight = QtGui.QFont.Normal
+        italics_flag = True
+        font = QtGui.QFont(
+            'verdana',
+            font_size,
+            font_weight,
+            italics_flag)
+        label = QgsComposerLabel(self.composition)
+        label.setFont(font)
+        label.setText(label_text)
+        label.adjustSizeToText()
+        label_height = 50.0  # mm determined using qgis map composer
+        label_width = (self.page_width / 2) - self.page_margin
+        left_offset = self.page_width / 2  # put in right half of page
+        label.setItemPosition(
+            left_offset,
+            top_offset,
+            label_width,
+            label_height,)
+        label.setFrameEnabled(self.show_frames)
+        self.composition.addItem(label)
 
     def draw_disclaimer(self):
         """Add a disclaimer to the composition."""
         LOGGER.debug('InaSAFE Map drawDisclaimer called')
-        myFontSize = 10
-        myFontWeight = QtGui.QFont.Normal
-        myItalicsFlag = True
-        myFont = QtGui.QFont('verdana',
-                             myFontSize,
-                             myFontWeight,
-                             myItalicsFlag)
-        myLabel = QgsComposerLabel(self.composition)
-        myLabel.setFont(myFont)
-        myLabel.setText(self.disclaimer)
-        myLabel.adjustSizeToText()
-        myLabelHeight = 7.0  # mm determined using qgis map composer
-        myLabelWidth = self.pageWidth   # item - position and size...option
-        myLeftOffset = self.pageMargin
-        myTopOffset = self.pageHeight - self.pageMargin
-        myLabel.setItemPosition(myLeftOffset,
-                                myTopOffset,
-                                myLabelWidth,
-                                myLabelHeight,
-                                )
-        myLabel.setFrameEnabled(self.showFramesFlag)
-        self.composition.addItem(myLabel)
+        font_size = 10
+        font_weight = QtGui.QFont.Normal
+        italics_flag = True
+        font = QtGui.QFont(
+            'verdana',
+            font_size,
+            font_weight,
+            italics_flag)
+        label = QgsComposerLabel(self.composition)
+        label.setFont(font)
+        label.setText(self.disclaimer)
+        label.adjustSizeToText()
+        label_height = 7.0  # mm determined using qgis map composer
+        label_width = self.page_width   # item - position and size...option
+        left_offset = self.page_margin
+        top_offset = self.page_height - self.page_margin
+        label.setItemPosition(
+            left_offset,
+            top_offset,
+            label_width,
+            label_height,)
+        label.setFrameEnabled(self.show_frames)
+        self.composition.addItem(label)
 
     def map_title(self):
         """Get the map title from the layer keywords if possible.
@@ -724,8 +769,8 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map getMapTitle called')
         try:
-            myTitle = self.keywordIO.read_keywords(self.layer, 'map_title')
-            return myTitle
+            title = self.keyword_io.read_keywords(self.layer, 'map_title')
+            return title
         except KeywordNotFoundError:
             return None
         except Exception:
@@ -738,25 +783,27 @@ class Map():
         :rtype: None, str
         """
         LOGGER.debug('InaSAFE Map getMapLegendAtributes called')
-        legendAttributes = ['legend_notes',
-                            'legend_units',
-                            'legend_title']
-        dictLegendAttributes = {}
-        for myLegendAttribute in legendAttributes:
+        legend_attribute_list = [
+            'legend_notes',
+            'legend_units',
+            'legend_title']
+        legend_attribute_dict = {}
+        for myLegendAttribute in legend_attribute_list:
             try:
-                dictLegendAttributes[myLegendAttribute] = \
-                    self.keywordIO.read_keywords(self.layer, myLegendAttribute)
+                legend_attribute_dict[myLegendAttribute] = \
+                    self.keyword_io.read_keywords(
+                        self.layer, myLegendAttribute)
             except KeywordNotFoundError:
                 pass
             except Exception:
                 pass
-        return dictLegendAttributes
+        return legend_attribute_dict
 
-    def showComposer(self):
+    def show_composer(self):
         """Show the composition in a composer view so the user can tweak it.
         """
-        myView = QgsComposerView(self.iface.mainWindow())
-        myView.show()
+        view = QgsComposerView(self.iface.mainWindow())
+        view.show()
 
     def write_template(self, template_path):
         """Write current composition as a template that can be re-used in QGIS.
@@ -764,37 +811,112 @@ class Map():
         :param template_path: Path to which template should be written.
         :type template_path: str
         """
-        myDocument = QtXml.QDomDocument()
-        myElement = myDocument.createElement('Composer')
-        myDocument.appendChild(myElement)
-        self.composition.writeXML(myElement, myDocument)
-        myXml = myDocument.toByteArray()
-        myFile = file(template_path, 'wb')
-        myFile.write(myXml)
-        myFile.close()
+        document = QtXml.QDomDocument()
+        element = document.createElement('Composer')
+        document.appendChild(element)
+        self.composition.writeXML(element, document)
+        xml = document.toByteArray()
+        template_file = file(template_path, 'wb')
+        template_file.write(xml)
+        template_file.close()
 
-    def render_template(self, template_path, output_path):
+    def load_template(self):
         """Load a QgsComposer map from a template and render it.
 
-        .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
-
-        :param template_path:  Path to the template that should be loaded.
-        :type template_path: str
-
-        :param output_path: Path for the output pdf.
-        :type output_path: str
+        .. note:: THIS METHOD IS EXPERIMENTAL
         """
         self.setup_composition()
 
-        myResolution = self.composition.printResolution()
-        self.printer = setup_printer(
-            output_path, resolution=myResolution)
-        if self.composition:
-            myFile = QtCore.QFile(template_path)
-            myDocument = QtXml.QDomDocument()
-            myDocument.setContent(myFile, False)  # .. todo:: fix magic param
-            myNodeList = myDocument.elementsByTagName('Composer')
-            if myNodeList.size() > 0:
-                myElement = myNodeList.at(0).toElement()
-                self.composition.readXML(myElement, myDocument)
-        self.make_pdf(output_path)
+        template_file = QtCore.QFile(self.template)
+        template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
+        template_content = template_file.readAll()
+        template_file.close()
+
+        document = QtXml.QDomDocument()
+        document.setContent(template_content)
+
+        # get information for substitutions
+        # date, time and plugin version
+        date_time = self.keyword_io.read_keywords(self.layer, 'time_stamp')
+        tokens = date_time.split('_')
+        date = tokens[0]
+        time = tokens[1]
+        long_version = get_version()
+        tokens = long_version.split('.')
+        version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
+
+        # map title
+        LOGGER.debug('InaSAFE Map getMapTitle called')
+        try:
+            title = self.keyword_io.read_keywords(self.layer, 'map_title')
+        except KeywordNotFoundError:
+            title = None
+        except Exception:
+            title = None
+
+        if not title:
+            title = ''
+
+        substitution_map = {
+            'impact-title': title,
+            'date': date,
+            'time': time,
+            'safe-version': version
+        }
+        LOGGER.debug(substitution_map)
+        load_ok = self.composition.loadFromTemplate(document,
+                                                    substitution_map)
+        if not load_ok:
+            raise ReportCreationError(
+                self.tr('Error loading template %s') %
+                self.template)
+
+        self.page_width = self.composition.paperWidth()
+        self.page_height = self.composition.paperHeight()
+
+        # set logo
+        image = self.composition.getComposerItemById('safe-logo')
+        image.setPictureFile(self.logo)
+
+        # Get the main map canvas on the composition and set
+        # its extents to the event.
+        map = self.composition.getComposerItemById('impact-map')
+        if map is not None:
+            # Recenter the composer map on the center of the canvas
+            # Note that since the composer map is square and the canvas may be
+            # arbitrarily shaped, we center based on the longest edge
+            canvas_extent = self.iface.mapCanvas().extent()
+            width = canvas_extent.width()
+            height = canvas_extent.height()
+            longest_width = width
+            if width < height:
+                longest_width = height
+            half_length = longest_width / 2
+            center = canvas_extent.center()
+            min_x = center.x() - half_length
+            max_x = center.x() + half_length
+            min_y = center.y() - half_length
+            max_y = center.y() + half_length
+            square_extent = QgsRectangle(min_x, min_y, max_x, max_y)
+            map.setNewExtent(square_extent)
+
+            # calculate intervals for grid
+            split_count = 5
+            x_interval = square_extent.width() / split_count
+            map.setGridIntervalX(x_interval)
+            y_interval = square_extent.height() / split_count
+            map.setGridIntervalY(y_interval)
+        else:
+            raise ReportCreationError(self.tr(
+                'Map "impact-map" could not be found'))
+
+        legend = self.composition.getComposerItemById('impact-legend')
+        legend_attributes = self.map_legend_attributes()
+        LOGGER.debug(legend_attributes)
+        #legend_notes = mapLegendAttributes.get('legend_notes', None)
+        #legend_units = mapLegendAttributes.get('legend_units', None)
+        legend_title = legend_attributes.get('legend_title', None)
+        if legend_title is None:
+            legend_title = ""
+        legend.setTitle(legend_title)
+        legend.updateLegend()

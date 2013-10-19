@@ -50,7 +50,7 @@ from safe_qgis.utilities.utilities import breakdown_defaults, qgis_version
 
 
 # Get QGis app handle
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def makePadangLayer():

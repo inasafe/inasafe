@@ -25,9 +25,9 @@ test_safe = SafeTester().test
 # Assuming test data three lvls up
 pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
     __file__)),
-      '..',
-      '..',
-      '..'))
+    '..',
+    '..',
+    '..'))
 
 # Location of test data
 DATANAME = 'inasafe_data'

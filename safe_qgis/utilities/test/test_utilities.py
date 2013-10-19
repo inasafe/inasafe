@@ -35,7 +35,7 @@ from safe_qgis.tools.test.test_keywords_dialog import (
     makePointLayer)
 from safe_qgis.safe_interface import bbox_intersection
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class UtilitiesTest(unittest.TestCase):

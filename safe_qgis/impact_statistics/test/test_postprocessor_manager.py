@@ -49,7 +49,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     setup_scenario,
     canvas_list)
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -62,23 +62,23 @@ class PostprocessorManagerTest(unittest.TestCase):
     def setUp(self):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
-        DOCK.showOnlyVisibleLayersFlag = True
+        DOCK.show_only_visible_layers_flag = True
         load_standard_layers()
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
-        DOCK.runInThreadFlag = False
-        DOCK.showOnlyVisibleLayersFlag = False
-        DOCK.setLayerNameFromTitleFlag = False
-        DOCK.zoomToImpactFlag = False
-        DOCK.hideExposureFlag = False
-        DOCK.showIntermediateLayers = False
+        DOCK.run_in_thread_flag = False
+        DOCK.show_only_visible_layers_flag = False
+        DOCK.set_layer_from_title_flag = False
+        DOCK.zoom_to_impact_flag = False
+        DOCK.hide_exposure_flag = False
+        DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
     def test_checkPostProcessingLayersVisibility(self):
         """Generated layers are not added to the map registry."""
         # Explicitly disable showing intermediate layers
-        DOCK.showIntermediateLayers = False
+        DOCK.show_intermediate_layers = False
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setup_scenario(
@@ -107,7 +107,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         assert myExpectedCount == myAfterCount, myMessage
 
         # Now run again showing intermediate layers
-        DOCK.showIntermediateLayers = True
+        DOCK.show_intermediate_layers = True
         # Press RUN
         DOCK.accept()
         # no KW dialog will popuo due to complete keywords

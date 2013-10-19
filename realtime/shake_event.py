@@ -61,7 +61,6 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRaster,
     QgsRasterLayer,
-    QgsRasterDataProvider,
     QgsRectangle,
     QgsDataSourceURI,
     QgsVectorFileWriter,
@@ -72,8 +71,7 @@ from qgis.core import (
     QgsMapRenderer,
     QgsPalLabeling,
     QgsProviderRegistry,
-    QgsFeatureRequest,
-    QgsFields)
+    QgsFeatureRequest)
 # pylint: enable=E0611
 # pylint: enable=W0611
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
@@ -85,21 +83,23 @@ from safe.api import calculate_impact as safe_calculate_impact
 from safe.api import Table, TableCell, TableRow
 from safe_qgis.utilities.utilities import getWGS84resolution
 from safe_qgis.utilities.clipper import extent_to_geoarray, clip_layer
+from safe_qgis.utilities.styling import mmi_colour
 from utils import shakemapExtractDir, dataDir
-from rt_exceptions import (GridXmlFileNotFoundError,
-                           GridXmlParseError,
-                           ContourCreationError,
-                           InvalidLayerError,
-                           ShapefileCreationError,
-                           CityMemoryLayerCreationError,
-                           FileNotFoundError,
-                           MapComposerError)
+from rt_exceptions import (
+    GridXmlFileNotFoundError,
+    GridXmlParseError,
+    ContourCreationError,
+    InvalidLayerError,
+    ShapefileCreationError,
+    CityMemoryLayerCreationError,
+    FileNotFoundError,
+    MapComposerError)
 from realtime.utils import setupLogger
 # from shake_data import ShakeData
 
 setupLogger()
 LOGGER = logging.getLogger('InaSAFE')
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakeEvent(QObject):
@@ -836,20 +836,6 @@ class ShakeEvent(QObject):
             return None
         return myRoman
 
-    def mmiColour(self, theMMIValue):
-        """Return the colour for an mmi value.
-
-        :param theMMIValue: float or int required.
-        :returns str: html hex code colour for the value
-        """
-
-        myRGBList = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff', '#55ffff',
-                     '#aaffff',
-                     '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00',
-                     '#800', '#400']
-        myRGB = myRGBList[int(theMMIValue)]
-        return myRGB
-
     def mmiShaking(self, theMMIValue):
         """Return the perceived shaking for an mmi value as translated string.
         :param theMMIValue: float or int required.
@@ -943,7 +929,7 @@ class ShakeEvent(QObject):
             #    myAttributes[myMMIIndex].toString(), myRoman))
 
             # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
-            myRGB = self.mmiColour(myMMIValue)
+            myRGB = mmi_colour(myMMIValue)
 
             # Now update the feature
             myId = myFeature.id()
@@ -1295,7 +1281,7 @@ class ShakeEvent(QObject):
                 QVariant(myDirectionTo),
                 QVariant(myDirectionFrom),
                 QVariant(myRoman),
-                QVariant(self.mmiColour(myMmi))]
+                QVariant(mmi_colour(myMmi))]
             myNewFeature.setAttributes(myAttributes)
             myCities.append(myNewFeature)
         return myCities
@@ -1569,7 +1555,7 @@ class ShakeEvent(QObject):
             myIntensity = myRowData['roman']
             myName = myRowData['name']
             myPopulation = int(round(myRowData['population'] / 1000))
-            myColour = self.mmiColour(myRowData['mmi'])
+            myColour = mmi_colour(myRowData['mmi'])
             myColourBox = ('<div style="width: 16px; height: 16px;'
                            'background-color: %s"></div>' % myColour)
             myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])

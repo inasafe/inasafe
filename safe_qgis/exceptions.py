@@ -190,3 +190,8 @@ class UnsupportedProviderError(Exception):
 class InvalidLayerError(Exception):
     """For when an invalid layer is encountered."""
     pass
+
+
+class ReportCreationError(Exception):
+    """Raised when error occurs during report generation."""
+    pass

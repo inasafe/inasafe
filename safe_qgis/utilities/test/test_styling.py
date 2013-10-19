@@ -28,7 +28,8 @@ sys.path.append(pardir)
 from safe_qgis.utilities.styling import (
     set_vector_graduated_style,
     setRasterStyle,
-    add_extrema_to_style)
+    add_extrema_to_style,
+    mmi_colour)
 from safe_qgis.utilities.utilities import get_error_message
 from safe_qgis.utilities.utilities_for_testing import (
     test_data_path,
@@ -37,7 +38,7 @@ from safe_qgis.utilities.utilities_for_testing import (
 from safe_qgis.exceptions import StyleError
 from safe_qgis.safe_interface import BoundingBoxError, bbox_intersection
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class StylingTest(unittest.TestCase):
@@ -186,9 +187,10 @@ class StylingTest(unittest.TestCase):
             mySymbol = myRange.symbol()
             mySymbolLayer = mySymbol.symbolLayer(0)
             myActualSize = mySymbolLayer.size()
-            myMessage = (('Expected symbol layer 0 for range %s to have'
-                          ' a size of %s, got %s') %
-                          (mySize, mySize, myActualSize))
+            myMessage = ((
+                'Expected symbol layer 0 for range %s to have'
+                ' a size of %s, got %s') %
+                (mySize, mySize, myActualSize))
             assert mySize == myActualSize, myMessage
             mySize += 1
 
@@ -305,6 +307,17 @@ class StylingTest(unittest.TestCase):
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
 
+    def testMmiColour(self):
+        """Test that we can get a colour given an mmi number."""
+        myValues = range(0, 12)
+        myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
+                            '#55ffff', '#aaffff', '#fff000', '#ffa800',
+                            '#ff7000', '#ff0000', '#D00', '#800']
+        myResult = []
+        for myValue in myValues:
+            myResult.append(mmi_colour(myValue))
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
+        assert myResult == myExpectedResult, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(StylingTest, 'test')

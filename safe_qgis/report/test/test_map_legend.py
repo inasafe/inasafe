@@ -31,7 +31,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     load_layer)
 from safe_qgis.report.map import MapLegend
 
-QGISAPP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 

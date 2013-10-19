@@ -7,7 +7,10 @@ import numpy
 # To query netcdf files with ncdump also install netcdf-bin
 # The package libnetcdf-dev is also required but is automatically
 # installed as a dependency on python-scientific
+# Disabling this check because on OSX and Windows we probably don't have scipy
+#pylint: disable=F0401
 from Scientific.IO.NetCDF import NetCDFFile
+#pylint: enable=F0401
 
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry_to_geotransform

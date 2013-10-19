@@ -24,7 +24,6 @@ import math
 import numpy
 
 from PyQt4 import QtGui
-
 from qgis.core import (
     QGis,
     QgsGraduatedSymbolRendererV2,
@@ -33,7 +32,10 @@ from qgis.core import (
     QgsRendererCategoryV2,
     QgsCategorizedSymbolRendererV2,
     QgsSimpleMarkerSymbolLayerV2,
-    QgsSimpleFillSymbolLayerV2)
+    QgsSimpleFillSymbolLayerV2,
+    QgsRasterShader,
+    QgsColorRampShader,
+    QgsSingleBandPseudoColorRenderer)
 
 from safe_qgis.exceptions import StyleError
 
@@ -48,7 +50,7 @@ def set_vector_graduated_style(vector_layer, style):
     scale the transparency level to between 0 and 100.
 
     :param vector_layer: A QGIS vector layer that will be styled.
-    :type vector_layer: QgsVectorLayer
+    :type vector_layer: QgsVectorLayer, QgsMapLayer
 
     :param style: Dictionary of the form as in the example below
     :type style: dict
@@ -178,9 +180,9 @@ def set_vector_categorized_style(vector_layer, style):
     """
     myTargetField = style['target_field']
     myClasses = style['style_classes']
-    myGeometryType = vector_layer.geometryType()
+    geometry_type = vector_layer.geometryType()
 
-    myCategoryList = []
+    category_list = []
     for myClass in myClasses:
         # Transparency 100: transparent
         # Transparency 0: opaque
@@ -200,41 +202,41 @@ def set_vector_categorized_style(vector_layer, style):
             raise StyleError(
                 'Value should be a number. I got %s' % myClass['value'])
 
-        myColour = myClass['colour']
-        myLabel = myClass['label']
-        myColour = QtGui.QColor(myColour)
+        colour = myClass['colour']
+        label = myClass['label']
+        colour = QtGui.QColor(colour)
         # noinspection PyArgumentList
-        mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
+        symbol = QgsSymbolV2.defaultSymbol(geometry_type)
         # We need to create a custom symbol layer as
         # the border colour of a symbol can not be set otherwise
         # noinspection PyArgumentList
-        if myGeometryType == QGis.Point:
-            mySymbolLayer = QgsSimpleMarkerSymbolLayerV2()
-            mySymbolLayer.setBorderColor(myColour)
-            mySymbolLayer.setSize(mySize)
-            mySymbol.changeSymbolLayer(0, mySymbolLayer)
-        elif myGeometryType == QGis.Polygon:
-            mySymbolLayer = QgsSimpleFillSymbolLayerV2()
-            mySymbolLayer.setBorderColor(myColour)
-            mySymbol.changeSymbolLayer(0, mySymbolLayer)
+        if geometry_type == QGis.Point:
+            symbol_layer = QgsSimpleMarkerSymbolLayerV2()
+            symbol_layer.setBorderColor(colour)
+            symbol_layer.setSize(mySize)
+            symbol.changeSymbolLayer(0, symbol_layer)
+        elif geometry_type == QGis.Polygon:
+            symbol_layer = QgsSimpleFillSymbolLayerV2()
+            symbol_layer.setBorderColor(colour)
+            symbol.changeSymbolLayer(0, symbol_layer)
         else:
             # for lines we do nothing special as the property setting
             # below should give us what we require.
             pass
 
-        mySymbol.setColor(myColour)
+        symbol.setColor(colour)
         # .. todo:: Check that vectors use alpha as % otherwise scale TS
         # Convert transparency % to opacity
         # alpha = 0: transparent
         # alpha = 1: opaque
         alpha = 1 - myTransparencyPercent / 100.0
-        mySymbol.setAlpha(alpha)
-        myCategory = QgsRendererCategoryV2(myValue, mySymbol, myLabel)
-        myCategoryList.append(myCategory)
+        symbol.setAlpha(alpha)
+        category = QgsRendererCategoryV2(myValue, symbol, label)
+        category_list.append(category)
 
-    myRenderer = QgsCategorizedSymbolRendererV2('', myCategoryList)
-    myRenderer.setClassAttribute(myTargetField)
-    vector_layer.setRendererV2(myRenderer)
+    renderer = QgsCategorizedSymbolRendererV2('', category_list)
+    renderer.setClassAttribute(myTargetField)
+    vector_layer.setRendererV2(renderer)
     vector_layer.saveDefaultStyle()
 
 
@@ -263,9 +265,9 @@ def setRasterStyle(raster_layer, style):
     :returns: A two tuple containing a range list and a transparency list.
     :rtype: (list, list)
     """
-    myNewStyles = add_extrema_to_style(style['style_classes'])
+    new_styles = add_extrema_to_style(style['style_classes'])
     LOGGER.debug('Rendering raster using 2+ styling')
-    return set_raster_style(raster_layer, myNewStyles)
+    return set_raster_style(raster_layer, new_styles)
 
 
 def add_extrema_to_style(style):
@@ -318,18 +320,18 @@ def add_extrema_to_style(style):
                          dict(colour='#7A0000', quantity=300, transparency=22,
                               min=200.0000000000002, max=300),)]
     """
-    myNewStyles = []
-    myLastMax = 0.0
-    for myClass in style:
-        myQuantity = float(myClass['quantity'])
-        myClass['min'] = myLastMax
-        myClass['max'] = myQuantity
-        if myQuantity == myLastMax and myQuantity != 0:
+    new_styles = []
+    last_max = 0.0
+    for style_class in style:
+        quantity = float(style_class['quantity'])
+        style_class['min'] = last_max
+        style_class['max'] = quantity
+        if quantity == last_max and quantity != 0:
             # skip it as it does not represent a class increment
             continue
-        myLastMax = numpy.nextafter(myQuantity, sys.float_info.max)
-        myNewStyles.append(myClass)
-    return myNewStyles
+        last_max = numpy.nextafter(quantity, sys.float_info.max)
+        new_styles.append(style_class)
+    return new_styles
 
 
 def set_raster_style(raster_layer, style):
@@ -372,73 +374,74 @@ def set_raster_style(raster_layer, style):
     # pylint: enable=W0621
     # pylint: enable=W0404
 
-    myRampItemList = []
-    myTransparencyList = []
+    ramp_item_list = []
+    transparency_list = []
     LOGGER.debug(style)
-    for myClass in style:
+    for style_class in style:
 
-        LOGGER.debug('Evaluating class:\n%s\n' % myClass)
+        LOGGER.debug('Evaluating class:\n%s\n' % style_class)
 
-        if 'quantity' not in myClass:
+        if 'quantity' not in style_class:
             LOGGER.exception('Class has no quantity attribute')
             continue
 
-        myMax = myClass['max']
-        if math.isnan(myMax):
+        class_max = style_class['max']
+        if math.isnan(class_max):
             LOGGER.debug('Skipping class - max is nan.')
             continue
 
-        myMin = myClass['min']
-        if math.isnan(myMin):
+        class_min = style_class['min']
+        if math.isnan(class_min):
             LOGGER.debug('Skipping class - min is nan.')
             continue
 
-        myColour = QtGui.QColor(myClass['colour'])
-        myLabel = ''
-        if 'label' in myClass:
-            myLabel = myClass['label']
+        colour = QtGui.QColor(style_class['colour'])
+        label = ''
+        if 'label' in style_class:
+            label = style_class['label']
         # noinspection PyCallingNonCallable
-        myRampItem = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
-        myRampItemList.append(myRampItem)
+        ramp_item = QgsColorRampShader.ColorRampItem(class_max, colour, label)
+        ramp_item_list.append(ramp_item)
 
         # Create opacity entries for this range
-        myTransparencyPercent = 0
-        if 'transparency' in myClass:
-            myTransparencyPercent = int(myClass['transparency'])
-        if myTransparencyPercent > 0:
+        transparency_percent = 0
+        if 'transparency' in style_class:
+            transparency_percent = int(style_class['transparency'])
+        if transparency_percent > 0:
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
             # noinspection PyCallingNonCallable
-            myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
-            myPixel.min = myMin
+            pixel = QgsRasterTransparency.TransparentSingleValuePixel()
+            pixel.min = class_min
             # We want it just a little bit smaller than max
             # so that ranges are discrete
-            myPixel.max = myMax
-            myPixel.percentTransparent = myTransparencyPercent
-            myTransparencyList.append(myPixel)
+            pixel.max = class_max
+            #noinspection PyPep8Naming
+            pixel.percentTransparent = transparency_percent
+            transparency_list.append(pixel)
 
-    myBand = 1  # gdal counts bands from base 1
+    band = 1  # gdal counts bands from base 1
     LOGGER.debug('Setting colour ramp list')
-    myRasterShader = QgsRasterShader()
-    myColorRampShader = QgsColorRampShader()
-    myColorRampShader.setColorRampType(QgsColorRampShader.INTERPOLATED)
-    myColorRampShader.setColorRampItemList(myRampItemList)
+    raster_shader = QgsRasterShader()
+    color_ramp_shader = QgsColorRampShader()
+    color_ramp_shader.setColorRampType(QgsColorRampShader.INTERPOLATED)
+    color_ramp_shader.setColorRampItemList(ramp_item_list)
     LOGGER.debug('Setting shader function')
-    myRasterShader.setRasterShaderFunction(myColorRampShader)
+    raster_shader.setRasterShaderFunction(color_ramp_shader)
     LOGGER.debug('Setting up renderer')
-    myRenderer = QgsSingleBandPseudoColorRenderer(
+    renderer = QgsSingleBandPseudoColorRenderer(
         raster_layer.dataProvider(),
-        myBand,
-        myRasterShader)
+        band,
+        raster_shader)
     LOGGER.debug('Assigning renderer to raster layer')
-    raster_layer.setRenderer(myRenderer)
+    raster_layer.setRenderer(renderer)
 
     LOGGER.debug('Setting raster transparency list')
 
-    myRenderer = raster_layer.renderer()
-    myTransparency = QgsRasterTransparency()
-    myTransparency.setTransparentSingleValuePixelList(myTransparencyList)
-    myRenderer.setRasterTransparency(myTransparency)
+    renderer = raster_layer.renderer()
+    transparency = QgsRasterTransparency()
+    transparency.setTransparentSingleValuePixelList(transparency_list)
+    renderer.setRasterTransparency(transparency)
     # For interest you can also view the list like this:
     #pix = t.transparentSingleValuePixelList()
     #for px in pix:
@@ -448,4 +451,52 @@ def set_raster_style(raster_layer, style):
     LOGGER.debug('Saving style as default')
     raster_layer.saveDefaultStyle()
     LOGGER.debug('Setting raster style done!')
-    return myRampItemList, myTransparencyList
+    return ramp_item_list, transparency_list
+
+
+def mmi_ramp(raster_layer):
+    """Generate an mmi ramp using standardised range of 1-12
+
+    A standarised range is used so that two shakemaps of different
+    intensities can be properly compared visually with colours stretched
+    accross the same range.
+
+    The colours used are the 'standard' colours commonly shown for the
+    mercalli scale e.g. on wikipedia and other sources.
+
+    :param raster_layer: A raster layer that will have an mmi style applied.
+    :type raster_layer: QgsRasterLayer
+    """
+
+    items = []
+    for class_max in range(1, 13):
+        colour = QtGui.QColor(mmi_colour(class_max))
+        label = '%i' % class_max
+        ramp_item = QgsColorRampShader.ColorRampItem(class_max, colour, label)
+        items.append(ramp_item)
+
+    raster_shader = QgsRasterShader()
+    ramp_shader = QgsColorRampShader()
+    ramp_shader.setColorRampType(QgsColorRampShader.INTERPOLATED)
+    ramp_shader.setColorRampItemList(items)
+    raster_shader.setRasterShaderFunction(ramp_shader)
+    band = 1
+    renderer = QgsSingleBandPseudoColorRenderer(
+        raster_layer.dataProvider(),
+        band,
+        raster_shader)
+    raster_layer.setRenderer(renderer)
+
+
+def mmi_colour(mmi_value):
+    """Return the colour for an mmi value.
+
+    :param mmi_value: float or int required.
+    :returns str: html hex code colour for the value
+    """
+
+    rgb_list = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff', '#55ffff',
+                '#aaffff', '#fff000', '#ffa800', '#ff7000', '#ff0000',
+                '#D00', '#800', '#400']
+    rgb = rgb_list[int(mmi_value)]
+    return rgb
