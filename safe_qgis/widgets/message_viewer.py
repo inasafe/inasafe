@@ -62,7 +62,7 @@ class MessageViewer(QtWebKit.QWebView):
         self.dynamic_messages = []
         #self.show()
 
-        self.qrc_resources = None
+        self.impact_path = None
 
         #base_dir = os.path.dirname(__file__)
         #self.header = header.replace('PATH', base_dir)
@@ -88,7 +88,8 @@ class MessageViewer(QtWebKit.QWebView):
         action_page_to_html_file = QtGui.QAction(self.tr('Open in web '
                                                          'browser'), None)
         action_page_to_html_file.triggered.connect(
-            lambda: self.page_to_html_file(unique_filename(suffix='.html')))
+            #we use lambda to ignore the parameter coming from triggered
+            lambda: self.page_to_html_file(open_browser=True))
         context_menu.addAction(action_page_to_html_file)
 
         # add view source if in dev mode
@@ -232,14 +233,26 @@ class MessageViewer(QtWebKit.QWebView):
         """Print to console the current page contents as plain text."""
         print self.page_to_text()
 
-    def page_to_html_file(self, file_path):
+    def page_to_html_file(self, file_path=None, open_browser=False):
         """Save the current html viewer to an html file adapting the paths.
+
+        if a file_path is passed, it is used, if not self.impact_path is used.
+        if both are None, then a unique_filename is generated.
 
         qrc:/..../ paths gets converted to file:///..../
 
         :param file_path: the path for the html output file.
         :type file_path: str
         """
+        if file_path is None:
+            print "file_path is None"
+            if self.impact_path is None:
+                print "self.impact_path is None"
+                file_path = unique_filename(suffix='.html')
+            else:
+                print "self.impact_path is %s" % self.impact_path
+                file_path = '%s.html' % self.impact_path
+        print file_path
         html = self.page().mainFrame().toHtml()
         file_dir = os.path.dirname(file_path)
         reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
@@ -248,5 +261,5 @@ class MessageViewer(QtWebKit.QWebView):
 
         with open(file_path, 'w') as f:
             f.write(html)
-
-        webbrowser.open('file://%s' % file_path)
+        if open_browser:
+            webbrowser.open('file://%s' % file_path)
