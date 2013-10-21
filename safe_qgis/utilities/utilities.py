@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
-
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -27,6 +25,7 @@ import uuid
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
+from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from qgis.core import (
     QGis,
@@ -826,3 +825,46 @@ def read_impact_layer(impact_layer):
         myMessage = tr(
             'Loaded impact layer "%s" is not valid') % myFilename
         raise Exception(myMessage)
+
+
+def map_qrc_to_file(match, res_copy_dir):
+        """map a qrc:/ path to its correspondent file:/// and creates it
+
+        for example qrc:/plugins/inasafe/ajax-loader.gif
+        is converted to file:////home/marco/.qgis2/python/plugins/
+        inasafe-master/safe_qgis/resources/img/ajax-loader.gif
+
+        if the qrc asset is non file based (i.e. is compiled in resources_rc
+        .pc) then a copy of is extracted to res_copy_dir
+
+        :param match: the qrc path to be mapped matched from a regular
+        expression such as re.compile('qrc:/plugins/inasafe/([-./ \w]*)').
+        :type match: re.match object
+
+        :param res_copy_dir: the path to copy non file based qrc assets.
+        :type res_copy_dir: str
+
+        :returns: a file path to the resource or None if the resource could
+        not be created
+        :rtype: None, str
+        """
+
+        resources_path = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'resources'))
+        res_alias = match.group(1)
+        res_path = '%s/%s' % (resources_path, res_alias)
+        if not os.path.isfile(res_path):
+            res_path = os.path.join(res_copy_dir, res_alias)
+            print res_path
+            # file might be here due to a previous copy
+            if not os.path.isfile(res_path):
+                if not os.path.exists(res_copy_dir):
+                    os.makedirs(res_copy_dir)
+                # copy from qrc to filesystem
+                copy_successful = QFile.copy(':/plugins/inasafe/%s' %
+                                             res_alias, res_path)
+                if not copy_successful:
+                    #copy somehow failed
+                    res_path = None
+
+        return res_path

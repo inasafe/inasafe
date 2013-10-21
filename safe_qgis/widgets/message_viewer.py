@@ -15,11 +15,15 @@ __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import os
 import logging
 import re
+
 from safe import messaging as m
-from safe_qgis.utilities.utilities import html_header, html_footer
+from safe_qgis.safe_interface import unique_filename
+from safe_qgis.utilities.utilities import (
+    html_header,
+    html_footer,
+    map_qrc_to_file)
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -97,7 +101,8 @@ class MessageViewer(QtWebKit.QWebView):
             context_menu.addAction(
                 self.tr('dump page to file'),
                 self,
-                QtCore.SLOT(self.page_to_html_file('/tmp/file.html')))
+                QtCore.SLOT(self.page_to_html_file(
+                    unique_filename(suffix='.html'))))
 
         # show the menu
         context_menu.setVisible(True)
@@ -239,67 +244,8 @@ class MessageViewer(QtWebKit.QWebView):
         html = self.page().mainFrame().toHtml()
 
         reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
-        html = reg_exp.sub(self.map_qrc_to_file, html)
+        html = reg_exp.sub(lambda match: map_qrc_to_file(match, '/tmp/res'),
+                           html)
 
         with open(file_path, 'w') as f:
             f.write(html)
-
-    # TODO (MB) this methods could be moved to utilities or so
-    def map_qrc_to_file(self, match):
-        """map a qrc:/..../ path to its correspondent file:///..../
-
-        for example qrc:/plugins/inasafe/inasafe-logo.svg
-        is converted to file:////home/marco/.qgis2/python/plugins/
-        inasafe-master/safe_qgis/resources/img/logos/inasafe-logo.svg
-
-        :param match: the path for the html output file.
-        :type match: re.match object
-        """
-
-        res_file_path = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', 'resources'))
-        res_alias = match.group(1)
-        res_path = '%s/%s' % (res_file_path,
-                              self.find_resource_path(res_alias))
-        return res_path
-
-    def find_resource_path(self, resource_alias):
-        """look for a real path of a qrc alias in teh resources.qrc file.
-
-        for example:
-        finds img/logos/inasafe-logo.svg if given inasafe-logo.svg as defined:
-        <file alias="inasafe-logo.svg">img/logos/inasafe-logo.svg</file>
-
-        :param resource_alias: the alias in the resources.qrc file.
-        :type resource_alias: str
-        """
-        resources = self.parse_resource_file()
-        try:
-            return resources[resource_alias]
-        except KeyError:
-            return False
-
-    def parse_resource_file(self):
-        """Parse and store the resource.qrc file into a dict of alias:realpath.
-
-        the resource.qrc file is parsed only once and then storet to allow
-        faster access
-        """
-        if self.qrc_resources is not None:
-            return self.qrc_resources
-
-        resources = {}
-        resources_file = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', 'resources', 'resources.qrc'))
-        reg_exp = re.compile('<file alias="([-./ \w]*)">([-./ \w]*)</file>')
-
-        f = open(resources_file)
-        for line in iter(f):
-            match = reg_exp.match(line.strip())
-            if match is not None:
-                alias = match.group(1)
-                path = match.group(2)
-                resources[alias] = path
-        f.close()
-        self.qrc_resources = resources
-        return resources
