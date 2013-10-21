@@ -16,6 +16,7 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
+import os
 import re
 
 from safe import messaging as m
@@ -242,9 +243,9 @@ class MessageViewer(QtWebKit.QWebView):
         :type file_path: str
         """
         html = self.page().mainFrame().toHtml()
-
+        file_dir = os.path.dirname(file_path)
         reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
-        html = reg_exp.sub(lambda match: map_qrc_to_file(match, '/tmp/res'),
+        html = reg_exp.sub(lambda match: map_qrc_to_file(match, file_dir),
                            html)
 
         with open(file_path, 'w') as f:

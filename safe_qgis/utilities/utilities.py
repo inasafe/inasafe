@@ -855,7 +855,6 @@ def map_qrc_to_file(match, res_copy_dir):
         res_path = '%s/%s' % (resources_path, res_alias)
         if not os.path.isfile(res_path):
             res_path = os.path.join(res_copy_dir, res_alias)
-            print res_path
             # file might be here due to a previous copy
             if not os.path.isfile(res_path):
                 if not os.path.exists(res_copy_dir):
