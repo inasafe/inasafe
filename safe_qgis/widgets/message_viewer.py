@@ -85,6 +85,12 @@ class MessageViewer(QtWebKit.QWebView):
         action.setEnabled(not self.selectedHtml() == '')
         context_menu.addAction(action)
 
+        action_page_to_html_file = QtGui.QAction(self.tr('Open in web '
+                                                         'browser'), None)
+        action_page_to_html_file.triggered.connect(
+            lambda: self.page_to_html_file(unique_filename(suffix='.html')))
+        context_menu.addAction(action_page_to_html_file)
+
         # add view source if in dev mode
         if self.dev_mode:
             action = self.page().action(QtWebKit.QWebPage.InspectElement)
@@ -92,19 +98,10 @@ class MessageViewer(QtWebKit.QWebView):
             context_menu.addAction(action)
 
             # add view to_text if in dev mode
-            # FIXME (MB) this executes as soon as the right click is
-            # triggered
-            context_menu.addAction(
-                self.tr('log pageToText'),
-                self,
-                QtCore.SLOT(self.page_to_stdout()))
-
-            # add view to_text if in dev mode
-            context_menu.addAction(
-                self.tr('dump page to file'),
-                self,
-                QtCore.SLOT(self.page_to_html_file(
-                    unique_filename(suffix='.html'))))
+            action_page_to_stdout = QtGui.QAction(self.tr('log pageToText'),
+                                                  None)
+            action_page_to_stdout.triggered.connect(self.page_to_stdout)
+            context_menu.addAction(action_page_to_stdout)
 
         # show the menu
         context_menu.setVisible(True)
