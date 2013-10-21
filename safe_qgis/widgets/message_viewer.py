@@ -279,7 +279,7 @@ class MessageViewer(QtWebKit.QWebView):
 
     def save_log_to_html(self):
         with open(self.log_path, 'w') as f:
-            f.write('How do I get the processing log')
+            f.write('Timlinux How do I get the processing log?')
 
     def show_report(self):
         self.action_show_report.setEnabled(False)
@@ -292,7 +292,6 @@ class MessageViewer(QtWebKit.QWebView):
         self.load_html_file(self.log_path)
 
     def open_current_in_browser(self):
-        # TODO (MB) opening log or report should not generate a new file
         if self.impact_path is None:
             html = self.page().mainFrame().toHtml()
             html_to_file(html, open_browser=True)
