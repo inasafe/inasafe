@@ -74,35 +74,35 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxUseThread.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/visibleLayersOnlyFlag', True))
+            'inasafe/visibleLayersOnlyFlag', True, type=bool))
         self.cbxVisibleLayersOnly.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/set_layer_from_title_flag', True))
+            'inasafe/set_layer_from_title_flag', True, type=bool))
         self.cbxSetLayerNameFromTitle.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/setZoomToImpactFlag', True))
+            'inasafe/setZoomToImpactFlag', True, type=bool))
         self.cbxZoomToImpact.setChecked(flag)
         # whether exposure layer should be hidden after model completes
         flag = bool(settings.value(
-            'inasafe/setHideExposureFlag', False))
+            'inasafe/setHideExposureFlag', False, type=bool))
         self.cbxHideExposure.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clip_to_viewport', True))
+            'inasafe/clip_to_viewport', True, type=bool))
         self.cbxClipToViewport.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clip_hard', False))
+            'inasafe/clip_hard', False, type=bool))
         self.cbxClipHard.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/useSentry', False))
+            'inasafe/useSentry', False, type=bool))
         self.cbxUseSentry.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/show_intermediate_layers', False))
+            'inasafe/show_intermediate_layers', False, type=bool))
         self.cbxShowPostprocessingLayers.setChecked(flag)
 
         ratio = float(settings.value(
@@ -112,25 +112,21 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         path = settings.value(
             'inasafe/keywordCachePath',
-            self.keyword_io.default_keyword_db_path())
+            self.keyword_io.default_keyword_db_path(), type=str)
         self.leKeywordCachePath.setText(path)
 
-        path = settings.value(
-            'inasafe/mapsLogoPath',
-            '')
+        path = settings.value('inasafe/mapsLogoPath', '', type=str)
         self.leMapsLogoPath.setText(path)
 
-        path = settings.value(
-            'inasafe/reportTemplatePath',
-            '')
+        path = settings.value('inasafe/reportTemplatePath', '', type=str)
         self.leReportTemplatePath.setText(path)
 
-        flag = bool(settings.value(
-            'inasafe/developer_mode', False))
+        flag = bool(
+            settings.value('inasafe/developer_mode', False,  type=bool))
         self.cbxDevMode.setChecked(flag)
 
-        flag = bool(settings.value(
-            'inasafe/use_native_zonal_stats', False))
+        flag = bool(
+            settings.value('inasafe/use_native_zonal_stats', False, type=bool))
         self.cbxNativeZonalStats.setChecked(flag)
 
     def save_state(self):
