@@ -58,6 +58,7 @@ class MessageViewer(QtWebKit.QWebView):
         # Always get appended until the next static message is called,
         # then cleared
         self.dynamic_messages = []
+        self.dynamic_messages_log = []
         #self.show()
 
         self.action_show_log = QtGui.QAction(self.tr('Show log'), None)
@@ -196,6 +197,7 @@ class MessageViewer(QtWebKit.QWebView):
         LOGGER.debug('Dynamic message event')
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
+        self.dynamic_messages_log.append(message)
         # Old way (works but causes full page refresh)
         self.show_messages()
         return
@@ -213,6 +215,9 @@ class MessageViewer(QtWebKit.QWebView):
         # LOGGER.debug('JAVASCRIPT: %s' % js)
         # self.page().mainFrame().evaluateJavaScript(js)
         # self.scrollToDiv()
+
+    def clear_dynamic_messages_log(self):
+        self.dynamic_messages_log = []
 
     def scroll_to_div(self):
         """Scroll to the last added div.
@@ -278,8 +283,9 @@ class MessageViewer(QtWebKit.QWebView):
             raise InvalidParameterError(msg)
 
     def save_log_to_html(self):
-        with open(self.log_path, 'w') as f:
-            f.write('Timlinux How do I get the processing log?')
+        with open(self.log_path, 'w') as file:
+            for item in self.dynamic_messages_log:
+                file.write("%s\n" % item)
 
     def show_report(self):
         self.action_show_report.setEnabled(False)
