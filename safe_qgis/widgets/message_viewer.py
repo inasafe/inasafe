@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
 import logging
+import re
 from safe import messaging as m
 from safe_qgis.utilities.utilities import html_header, html_footer
 
@@ -32,8 +33,8 @@ class MessageViewer(QtWebKit.QWebView):
     static_message_count = 0
 
     # noinspection PyOldStyleClasses
-    def __init__(self, theParent):
-        _ = theParent  # needed for promoted Qt widget in designer
+    def __init__(self, the_parent):
+        _ = the_parent  # needed for promoted Qt widget in designer
         super(MessageViewer, self).__init__()
         self.setWindowTitle('Message Viewer')
         # We use this var to keep track of the last allocated div id
@@ -41,10 +42,10 @@ class MessageViewer(QtWebKit.QWebView):
         self.last_id = 0
 
         # whether to show or not dev only options
-        self.devMode = QtCore.QSettings().value(
+        self.dev_mode = QtCore.QSettings().value(
             'inasafe/developer_mode', False)
 
-        if self.devMode:
+        if self.dev_mode:
             self.settings().globalSettings().setAttribute(
                 QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
 
@@ -54,6 +55,8 @@ class MessageViewer(QtWebKit.QWebView):
         # then cleared
         self.dynamic_messages = []
         #self.show()
+
+        self.qrc_resources = None
 
         #base_dir = os.path.dirname(__file__)
         #self.header = header.replace('PATH', base_dir)
@@ -77,7 +80,7 @@ class MessageViewer(QtWebKit.QWebView):
         context_menu.addAction(action)
 
         # add view source if in dev mode
-        if self.devMode:
+        if self.dev_mode:
             action = self.page().action(QtWebKit.QWebPage.InspectElement)
             action.setEnabled(True)
             context_menu.addAction(action)
@@ -94,7 +97,7 @@ class MessageViewer(QtWebKit.QWebView):
             context_menu.addAction(
                 self.tr('dump page to file'),
                 self,
-                QtCore.SLOT(self.page_html_file('/tmp/file.html')))
+                QtCore.SLOT(self.page_to_html_file('/tmp/file.html')))
 
         # show the menu
         context_menu.setVisible(True)
@@ -204,33 +207,99 @@ class MessageViewer(QtWebKit.QWebView):
 
     def to_message(self):
         """Collate all message elements to a single message."""
-        myMessage = m.Message()
+        my_message = m.Message()
         if self.static_message is not None:
-            myMessage.add(self.static_message)
+            my_message.add(self.static_message)
         for myDynamic in self.dynamic_messages:
-            myMessage.add(myDynamic)
-        return myMessage
+            my_message.add(myDynamic)
+        return my_message
 
     def page_to_text(self):
         """Return the current page contents as plain text."""
-        myMessage = self.to_message()
-        return myMessage.to_text()
+        my_message = self.to_message()
+        return my_message.to_text()
 
     def page_to_html(self):
         """Return the current page contents as html."""
-        myMessage = self.to_message()
-        return myMessage.to_html()
+        my_message = self.to_message()
+        return my_message.to_html()
 
     def page_to_stdout(self):
         """Print to console the current page contents as plain text."""
         print self.page_to_text()
 
-    def page_html_file(self, path):
+    def page_to_html_file(self, file_path):
+        """Save the current html viewer to an html file adapting the paths.
+
+        qrc:/..../ paths gets converted to file:///..../
+
+        :param file_path: the path for the html output file.
+        :type file_path: str
+        """
         html = self.page().mainFrame().toHtml()
-        res_path = os.path.abspath(os.path.join(
+
+        reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
+        html = reg_exp.sub(self.map_qrc_to_file, html)
+
+        with open(file_path, 'w') as f:
+            f.write(html)
+
+    # TODO (MB) this methods could be moved to utilities or so
+    def map_qrc_to_file(self, match):
+        """map a qrc:/..../ path to its correspondent file:///..../
+
+        for example qrc:/plugins/inasafe/inasafe-logo.svg
+        is converted to file:////home/marco/.qgis2/python/plugins/
+        inasafe-master/safe_qgis/resources/img/logos/inasafe-logo.svg
+
+        :param match: the path for the html output file.
+        :type match: re.match object
+        """
+
+        res_file_path = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', 'resources'))
-        with open('%s.qrc.html' % path, 'w') as f:
-            f.write(html)
-        html = html.replace('qrc:/plugins/inasafe', 'file://%s' % res_path)
-        with open(path, 'w') as f:
-            f.write(html)
+        res_alias = match.group(1)
+        res_path = '%s/%s' % (res_file_path,
+                              self.find_resource_path(res_alias))
+        return res_path
+
+    def find_resource_path(self, resource_alias):
+        """look for a real path of a qrc alias in teh resources.qrc file.
+
+        for example:
+        finds img/logos/inasafe-logo.svg if given inasafe-logo.svg as defined:
+        <file alias="inasafe-logo.svg">img/logos/inasafe-logo.svg</file>
+
+        :param resource_alias: the alias in the resources.qrc file.
+        :type resource_alias: str
+        """
+        resources = self.parse_resource_file()
+        try:
+            return resources[resource_alias]
+        except KeyError:
+            return False
+
+    def parse_resource_file(self):
+        """Parse and store the resource.qrc file into a dict of alias:realpath.
+
+        the resource.qrc file is parsed only once and then storet to allow
+        faster access
+        """
+        if self.qrc_resources is not None:
+            return self.qrc_resources
+
+        resources = {}
+        resources_file = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'resources', 'resources.qrc'))
+        reg_exp = re.compile('<file alias="([-./ \w]*)">([-./ \w]*)</file>')
+
+        f = open(resources_file)
+        for line in iter(f):
+            match = reg_exp.match(line.strip())
+            if match is not None:
+                alias = match.group(1)
+                path = match.group(2)
+                resources[alias] = path
+        f.close()
+        self.qrc_resources = resources
+        return resources
