@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import logging
 import os
 import re
+import webbrowser
 
 from safe import messaging as m
 from safe_qgis.safe_interface import unique_filename
@@ -250,3 +251,5 @@ class MessageViewer(QtWebKit.QWebView):
 
         with open(file_path, 'w') as f:
             f.write(html)
+
+        webbrowser.open('file://%s' % file_path)
