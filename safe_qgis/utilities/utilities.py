@@ -18,10 +18,12 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import re
 import sys
 import traceback
 import logging
 import uuid
+import webbrowser
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl
@@ -41,6 +43,7 @@ from safe_qgis.safe_interface import (
     ErrorMessage,
     safeTr,
     get_version,
+    unique_filename,
     messaging as m,
     styles)
 
@@ -867,3 +870,40 @@ def map_qrc_to_file(match, res_copy_dir):
                     res_path = None
 
         return res_path
+
+
+def open_in_browser(file_path):
+    webbrowser.open('file://%s' % file_path)
+
+
+def html_to_file(html, file_path=None, open_browser=False):
+    """Save the html to an html file adapting the paths to the filesystem
+
+    if a file_path is passed, it is used, if not a unique_filename is
+    generated.
+
+    qrc:/..../ paths gets converted to file:///..../
+
+    :param html: the html for the output file.
+    :type html: str
+
+    :param file_path: the path for the html output file.
+    :type file_path: str
+
+    :param open_browser: if true open the generated html in an external
+    browser
+    :type open_browser: bool
+    """
+    if file_path is None:
+        file_path = unique_filename(suffix='.html')
+
+    file_dir = os.path.dirname(file_path)
+    reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
+    html = reg_exp.sub(lambda match: map_qrc_to_file(match, file_dir),
+                       html)
+
+    with open(file_path, 'w') as f:
+        f.write(html)
+
+    if open_browser:
+        open_in_browser(file_path)

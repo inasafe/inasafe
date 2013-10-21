@@ -1166,13 +1166,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             # On success, display generated report
             impact_path = qgis_impact_layer.source()
-            self.wvResults.impact_path = impact_path
-            self.wvResults.page_to_html_file()
             message = m.Message(report)
-            message.add(m.Heading(self.tr('View report as HTML'),
-                                  **INFO_STYLE))
-            message.add(m.Link('file://%s.html' % impact_path))
+            #message.add(m.Heading(self.tr('View processing log as HTML'),
+            #                      **INFO_STYLE))
+            #message.add(m.Link('file://%s' % self.wvResults.log_path))
             self.show_static_message(message)
+            self.wvResults.impact_path = impact_path
         self.save_state()
         self.hide_busy()
         self.analysisDone.emit(True)

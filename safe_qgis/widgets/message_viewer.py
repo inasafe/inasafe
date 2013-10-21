@@ -16,16 +16,14 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
-import os
-import re
-import webbrowser
 
 from safe import messaging as m
-from safe_qgis.safe_interface import unique_filename
+from safe_qgis.safe_interface import InvalidParameterError
 from safe_qgis.utilities.utilities import (
     html_header,
     html_footer,
-    map_qrc_to_file)
+    html_to_file,
+    open_in_browser)
 
 from PyQt4 import QtCore, QtGui, QtWebKit
 
@@ -62,10 +60,43 @@ class MessageViewer(QtWebKit.QWebView):
         self.dynamic_messages = []
         #self.show()
 
-        self.impact_path = None
+        self.action_show_log = QtGui.QAction(self.tr('Show log'), None)
+        self.action_show_log.setEnabled(False)
+        self.action_show_log.triggered.connect(self.show_log)
+
+        self.action_show_report = QtGui.QAction(self.tr('Show report'), None)
+        self.action_show_report.setEnabled(False)
+        self.action_show_report.triggered.connect(self.show_report)
+
+        self.log_path = None
+        self.report_path = None
+        self._impact_path = None
 
         #base_dir = os.path.dirname(__file__)
         #self.header = header.replace('PATH', base_dir)
+
+    @property
+    def impact_path(self):
+        return self._impact_path
+
+    @impact_path.setter
+    def impact_path(self, value):
+        print "setter %s" % value
+        self._impact_path = value
+        if value is None:
+            self.action_show_report.setEnabled(False)
+            self.action_show_log.setEnabled(False)
+            self.report_path = None
+            self.log_path = None
+        else:
+            self.action_show_report.setEnabled(True)
+            self.action_show_log.setEnabled(True)
+            self.log_path = '%s.log.html' % self.impact_path
+            self.report_path = '%s.report.html' % self.impact_path
+
+        self.save_report_to_html()
+        self.save_log_to_html()
+        self.show_report()
 
     def contextMenuEvent(self, event):
         """Slot automatically called by Qt on right click on the WebView.
@@ -76,27 +107,32 @@ class MessageViewer(QtWebKit.QWebView):
         context_menu = QtGui.QMenu(self)
 
         # add select all
-        action = self.page().action(QtWebKit.QWebPage.SelectAll)
-        action.setEnabled(not self.page_to_text() == '')
-        context_menu.addAction(action)
+        action_select_all = self.page().action(QtWebKit.QWebPage.SelectAll)
+        action_select_all.setEnabled(not self.page_to_text() == '')
+        context_menu.addAction(action_select_all)
 
         # add copy
-        action = self.page().action(QtWebKit.QWebPage.Copy)
-        action.setEnabled(not self.selectedHtml() == '')
-        context_menu.addAction(action)
+        action_copy = self.page().action(QtWebKit.QWebPage.Copy)
+        action_copy.setEnabled(not self.selectedHtml() == '')
+        context_menu.addAction(action_copy)
 
-        action_page_to_html_file = QtGui.QAction(self.tr('Open in web '
-                                                         'browser'), None)
-        action_page_to_html_file.triggered.connect(
-            #we use lambda to ignore the parameter coming from triggered
-            lambda: self.page_to_html_file(open_browser=True))
+        # add show in browser
+        action_page_to_html_file = QtGui.QAction(
+            self.tr('Open in web browser'), None)
+        action_page_to_html_file.triggered.connect(self.open_current_in_browser)
         context_menu.addAction(action_page_to_html_file)
+
+        # add load report
+        context_menu.addAction(self.action_show_report)
+
+        # add load log
+        context_menu.addAction(self.action_show_log)
 
         # add view source if in dev mode
         if self.dev_mode:
-            action = self.page().action(QtWebKit.QWebPage.InspectElement)
-            action.setEnabled(True)
-            context_menu.addAction(action)
+            action_copy = self.page().action(QtWebKit.QWebPage.InspectElement)
+            action_copy.setEnabled(True)
+            context_menu.addAction(action_copy)
 
             # add view to_text if in dev mode
             action_page_to_stdout = QtGui.QAction(self.tr('log pageToText'),
@@ -233,30 +269,40 @@ class MessageViewer(QtWebKit.QWebView):
         """Print to console the current page contents as plain text."""
         print self.page_to_text()
 
-    def page_to_html_file(self, file_path=None, open_browser=False):
-        """Save the current html viewer to an html file adapting the paths.
-
-        if a file_path is passed, it is used, if not self.impact_path is used.
-        if both are None, then a unique_filename is generated.
-
-        qrc:/..../ paths gets converted to file:///..../
-
-        :param file_path: the path for the html output file.
-        :type file_path: str
-        """
-        if file_path is None:
-            if self.impact_path is None:
-                file_path = unique_filename(suffix='.html')
-            else:
-                file_path = '%s.html' % self.impact_path
+    def save_report_to_html(self):
         html = self.page().mainFrame().toHtml()
-        file_dir = os.path.dirname(file_path)
-        reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
-        html = reg_exp.sub(lambda match: map_qrc_to_file(match, file_dir),
-                           html)
+        if self.report_path is not None:
+            html_to_file(html, self.report_path)
+        else:
+            msg = self.tr('report_path is not set')
+            raise InvalidParameterError(msg)
 
-        with open(file_path, 'w') as f:
-            f.write(html)
+    def save_log_to_html(self):
+        with open(self.log_path, 'w') as f:
+            f.write('How do I get the processing log')
 
-        if open_browser:
-            webbrowser.open('file://%s' % file_path)
+    def show_report(self):
+        self.action_show_report.setEnabled(False)
+        self.action_show_log.setEnabled(True)
+        self.load_html_file(self.report_path)
+
+    def show_log(self):
+        self.action_show_report.setEnabled(True)
+        self.action_show_log.setEnabled(False)
+        self.load_html_file(self.log_path)
+
+    def open_current_in_browser(self):
+        # TODO (MB) opening log or report should not generate a new file
+        if self.impact_path is None:
+            html = self.page().mainFrame().toHtml()
+            html_to_file(html, open_browser=True)
+        else:
+            if self.action_show_report.isEnabled():
+                # if show report is enable, we are looking at a log
+                open_in_browser(self.log_path)
+            else:
+                open_in_browser(self.report_path)
+
+    def load_html_file(self, file_path):
+        print 'loading %s' % file_path
+        self.setUrl(QtCore.QUrl.fromLocalFile(file_path))
