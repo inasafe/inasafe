@@ -245,14 +245,10 @@ class MessageViewer(QtWebKit.QWebView):
         :type file_path: str
         """
         if file_path is None:
-            print "file_path is None"
             if self.impact_path is None:
-                print "self.impact_path is None"
                 file_path = unique_filename(suffix='.html')
             else:
-                print "self.impact_path is %s" % self.impact_path
                 file_path = '%s.html' % self.impact_path
-        print file_path
         html = self.page().mainFrame().toHtml()
         file_dir = os.path.dirname(file_path)
         reg_exp = re.compile('qrc:/plugins/inasafe/([-./ \w]*)')
@@ -261,5 +257,6 @@ class MessageViewer(QtWebKit.QWebView):
 
         with open(file_path, 'w') as f:
             f.write(html)
+
         if open_browser:
             webbrowser.open('file://%s' % file_path)
