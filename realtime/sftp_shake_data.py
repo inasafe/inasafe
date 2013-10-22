@@ -35,7 +35,7 @@ from utils import shakemapCacheDir, shakemapExtractDir, mkDir
 defaultHost = '118.97.83.243'
 defUserName = 'geospasial'
 defPassword = os.environ['QUAKE_SERVER_PASSWORD']
-defWorkDir = 'shakemaps'
+defWorkDir = 'shakedata'
 
 
 class SftpShakeData:
