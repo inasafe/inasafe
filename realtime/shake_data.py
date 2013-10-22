@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '30/07/2012'
@@ -18,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import shutil
+from datetime import datetime
 from zipfile import ZipFile
 # The logger is intiailsed in utils.py by init
 import logging
@@ -113,9 +115,20 @@ class ShakeData:
         myFtpClient = FtpClient()
         try:
             myList = myFtpClient.getListing()
+            myList.sort(key=lambda x: x.lower())
         except NetworkError:
             raise
-        myEventId = myList[-1].split('/')[-1].split('.')[0]
+        now = datetime.now()
+        now = int(
+            '%04d%02d%02d%02d%02d%02d' % (
+                now.year, now.month, now.day, now.hour, now.minute, now.second
+            ))
+        myEventId = now + 1
+        while int(myEventId) > now:
+            if len(myList) < 1:
+                raise EventIdError('Latest Event Id could not be obtained')
+            myEventId = myList.pop().split('/')[-1].split('.')[0]
+
         if myEventId is None:
             raise EventIdError('Latest Event Id could not be obtained')
         self.eventId = myEventId

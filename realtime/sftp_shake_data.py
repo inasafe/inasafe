@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import shutil
+from datetime import datetime
 from rt_exceptions import (FileNotFoundError,
                            EventIdError,
                            NetworkError,
@@ -35,7 +36,7 @@ from utils import shakemapCacheDir, shakemapExtractDir, mkDir
 defaultHost = '118.97.83.243'
 defUserName = 'geospasial'
 defPassword = os.environ['QUAKE_SERVER_PASSWORD']
-defWorkDir = 'shakedata'
+defWorkDir = 'shakemaps'
 
 
 class SftpShakeData:
@@ -209,11 +210,23 @@ class SftpShakeData:
         """
         event_ids = self.get_list_event_ids()
         latest_event_id = None
+
+        now = datetime.now()
+        now = int(
+            '%04d%02d%02d%02d%02d%02d' % (
+                now.year, now.month, now.day, now.hour, now.minute,
+                now.second
+            ))
+
         if event_ids is not None:
             event_ids.sort()
-            latest_event_id = event_ids[-1]
-        if latest_event_id is None:
-            raise EventIdError('Latest Event Id could not be obtained')
+
+        latest_event_id = now + 1
+        while int(latest_event_id) > now:
+            if len(event_ids) < 1:
+                raise EventIdError('Latest Event Id could not be obtained')
+            latest_event_id = event_ids.pop()
+
         self.eventId = latest_event_id
         return self.eventId
 
