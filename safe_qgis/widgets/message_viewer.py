@@ -283,8 +283,8 @@ class MessageViewer(QtWebKit.QWebView):
 
     def save_log_to_html(self):
         html = html_header()
-        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo'
-                 '.svg"title="InaSAFE Logo" alt="InaSAFE Logo" />')
+        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo.svg" '
+                 'title="InaSAFE Logo" alt="InaSAFE Logo" />')
         html += ('<h5 class="info"><i class="icon-info-sign icon-white"></i> '
                  '%s</h5>' % self.tr('Analysis log'))
         for item in self.dynamic_messages_log:
