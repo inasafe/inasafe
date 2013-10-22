@@ -464,6 +464,32 @@ def getSafeImpactFunctions(theFunction=None):
         raise
 
 
+def getSafeImpactFunctionType(function_id):
+    """
+    Args:
+        function_id - str giving a specific plugins name that should be fetched.
+    Returns:
+        A str type of safe impact function is returned:
+            'old-style' is "classic" safe impact function
+            'qgis2.0'   is impact function with native qgis layers support
+    Raises:
+        Any exceptions are propogated
+    """
+    try:
+        # Get an instance of the impact function and get the type
+        my_function = getSafeImpactFunctions(function_id)[0][function_id]
+        my_function = my_function()
+
+        try:
+            fun_type = my_function.get_function_type()
+        except AttributeError:
+            fun_type = 'old-style'
+    except:
+        raise
+
+    return fun_type
+
+
 def calculateSafeImpact(theLayers, theFunction):
     """Thin wrapper around the safe calculate_impact function.
 
