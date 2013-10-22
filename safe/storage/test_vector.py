@@ -17,6 +17,10 @@ from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
 from safe.storage.vector import Vector, qgis_imported
 
+if qgis_imported:   # Import QgsVectorLayer if qgis is avialable
+    from qgis.core import QgsVectorLayer
+
+
 LOGGER = logging.getLogger('InaSAFE')
 KEYWORD_PATH = os.path.abspath(
     os.path.join(UNITDATA, 'exposure', 'exposure.keywords'))
@@ -70,9 +74,6 @@ class VectorTest(unittest.TestCase):
         """Test that reading from QgsVectorLayer works."""
         keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
         if qgis_imported:
-            # create QgsVectorLayer for testing
-            from qgis.core import QgsVectorLayer  # FIXME (DK):
-                                                  # Should I import it there?
             qgis_layer = QgsVectorLayer(SHP_BASE + '.shp', 'test', 'ogr')
 
             layer = Vector(data=qgis_layer, keywords=keywords)
