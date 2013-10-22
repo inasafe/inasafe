@@ -28,7 +28,6 @@ try:
     from qgis.core import QgsVectorLayer, QgsVectorFileWriter
     import safe_qgis
 except ImportError:
-    #raise
     qgis_imported = False
 
 import copy as copy_module
@@ -563,10 +562,11 @@ class Vector(Layer):
                    'but QGIS is not avialable.')
             raise TypeError(msg)
 
-        temp_name = unique_filename() + '.shp'
+        base_name = unique_filename()
+        file_name = base_name + '.shp'
         error = QgsVectorFileWriter.writeAsVectorFormat(
             qgis_layer,
-            temp_name,
+            file_name,
             "UTF8",
             qgis_layer.crs(),
             "ESRI Shapefile"
@@ -576,7 +576,9 @@ class Vector(Layer):
             msg = ('Can not save data in temporary file.')
             raise IOError(msg)
 
-        self.read_from_file(temp_name)
+        # Write keywords if any
+        write_keywords(self.keywords, base_name + '.keywords')
+        self.read_from_file(file_name)
 
     def as_qgis_native(self):
         """Return vector layer data as qgis QgsVectorLayer.
