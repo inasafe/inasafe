@@ -82,7 +82,6 @@ class MessageViewer(QtWebKit.QWebView):
 
     @impact_path.setter
     def impact_path(self, value):
-        print "setter %s" % value
         self._impact_path = value
         if value is None:
             self.action_show_report.setEnabled(False)
@@ -283,9 +282,19 @@ class MessageViewer(QtWebKit.QWebView):
             raise InvalidParameterError(msg)
 
     def save_log_to_html(self):
-        with open(self.log_path, 'w') as file:
-            for item in self.dynamic_messages_log:
-                file.write("%s\n" % item)
+        html = html_header()
+        html += ('<img src="qrc:/plugins/inasafe/inasafe-logo'
+                 '.svg"title="InaSAFE Logo" alt="InaSAFE Logo" />')
+        html += ('<h5 class="info"><i class="icon-info-sign icon-white"></i> '
+                 '%s</h5>' % self.tr('Analysis log'))
+        for item in self.dynamic_messages_log:
+            html += "%s\n" % item.to_html()
+        html += html_footer()
+        if self.log_path is not None:
+            html_to_file(html, self.log_path)
+        else:
+            msg = self.tr('log_path is not set')
+            raise InvalidParameterError(msg)
 
     def show_report(self):
         self.action_show_report.setEnabled(False)
@@ -309,5 +318,4 @@ class MessageViewer(QtWebKit.QWebView):
                 open_in_browser(self.report_path)
 
     def load_html_file(self, file_path):
-        print 'loading %s' % file_path
         self.setUrl(QtCore.QUrl.fromLocalFile(file_path))
