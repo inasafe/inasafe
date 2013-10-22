@@ -38,28 +38,28 @@ from safe_qgis.exceptions import InvalidParameterError, InvalidGeometryError
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def tr(theText):
+def tr(text):
     """We define a tr() alias here since the utilities implementation.
 
      The code below is not a class and does not inherit from QObject.
 
     .. note:: see http://tinyurl.com/pyqt-differences
 
-    :param theText: String to be translated
-    :type theText: str
+    :param text: String to be translated
+    :type text: str
 
     :returns: Translated version of the given string if available,
         otherwise the original string.
     """
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    return QCoreApplication.translate('zonal_stats', theText)
+    return QCoreApplication.translate('zonal_stats', text)
 
 
 def calculate_zonal_stats(raster_layer, polygon_layer):
     """Calculate zonal statics given two layers.
 
     :param raster_layer: A QGIS raster layer.
-    :type raster_layer: QgsRasterLayer
+:type raster_layer: QgsRasterLayer, QgsMapLayer
 
     :param polygon_layer: A QGIS vector layer containing polygons.
     :type polygon_layer: QgsVectorLayer, QgsMapLayer
@@ -102,110 +102,111 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     LOGGER.debug('Calculating zonal stats for:')
     LOGGER.debug('Raster: %s' % raster_layer.source())
     LOGGER.debug('Vector: %s' % polygon_layer.source())
-    myResults = {}
-    myRasterSource = raster_layer.source()
-    myFid = gdal.Open(str(myRasterSource), gdal.GA_ReadOnly)
-    myGeoTransform = myFid.GetGeoTransform()
-    myColumns = myFid.RasterXSize
-    myRows = myFid.RasterYSize
+    results = {}
+    raster_source = raster_layer.source()
+    feature_id = gdal.Open(str(raster_source), gdal.GA_ReadOnly)
+    geo_transform = feature_id.GetGeoTransform()
+    columns = feature_id.RasterXSize
+    rows = feature_id.RasterYSize
     # Get first band.
-    myBand = myFid.GetRasterBand(1)
-    myNoData = myBand.GetNoDataValue()
-    #print 'No data %s' % myNoData
-    myCellSizeX = myGeoTransform[1]
-    if myCellSizeX < 0:
-        myCellSizeX = -myCellSizeX
-    myCellSizeY = myGeoTransform[5]
-    if myCellSizeY < 0:
-        myCellSizeY = -myCellSizeY
-    myRasterBox = QgsRectangle(
-        myGeoTransform[0],
-        myGeoTransform[3] - (myCellSizeY * myRows),
-        myGeoTransform[0] + (myCellSizeX * myColumns),
-        myGeoTransform[3])
+    band = feature_id.GetRasterBand(1)
+    no_data = band.GetNoDataValue()
+    #print 'No data %s' % no_data
+    cell_size_x = geo_transform[1]
+    if cell_size_x < 0:
+        cell_size_x = -cell_size_x
+    cell_size_y = geo_transform[5]
+    if cell_size_y < 0:
+        cell_size_y = -cell_size_y
+    raster_box = QgsRectangle(
+        geo_transform[0],
+        geo_transform[3] - (cell_size_y * rows),
+        geo_transform[0] + (cell_size_x * columns),
+        geo_transform[3])
 
-    rasterGeom = QgsGeometry.fromRect(myRasterBox)
+    #noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+    raster_geometry = QgsGeometry.fromRect(raster_box)
 
     # Get vector layer
-    myProvider = polygon_layer.dataProvider()
-    if myProvider is None:
-        myMessage = tr(
+    provider = polygon_layer.dataProvider()
+    if provider is None:
+        message = tr(
             'Could not obtain data provider from layer "%s"') % (
                 polygon_layer.source())
-        raise Exception(myMessage)
+        raise Exception(message)
 
-    myRequest = QgsFeatureRequest()
+    request = QgsFeatureRequest()
     crs = osr.SpatialReference()
     crs.ImportFromProj4(str(polygon_layer.crs().toProj4()))
 
-    myCount = 0
-    for myFeature in myProvider.getFeatures(myRequest):
-        myGeometry = myFeature.geometry()
-        if myGeometry is None:
-            myMessage = tr(
+    count = 0
+    for myFeature in provider.getFeatures(request):
+        geometry = myFeature.geometry()
+        if geometry is None:
+            message = tr(
                 'Feature %d has no geometry or geometry is invalid') % (
                     myFeature.id())
-            raise InvalidGeometryError(myMessage)
+            raise InvalidGeometryError(message)
 
-        myCount += 1
-        myFeatureBox = myGeometry.boundingBox().intersect(myRasterBox)
+        count += 1
+        feature_box = geometry.boundingBox().intersect(raster_box)
         print 'NEW AGGR: %s' % myFeature.id()
 
-        #print 'Raster Box: %s' % myRasterBox.asWktCoordinates()
-        #print 'Feature Box: %s' % myFeatureBox.asWktCoordinates()
+        #print 'Raster Box: %s' % raster_box.asWktCoordinates()
+        #print 'Feature Box: %s' % feature_box.asWktCoordinates()
 
-        myOffsetX, myOffsetY, myCellsX, myCellsY = intersection_box(
-            myRasterBox, myFeatureBox, myCellSizeX, myCellSizeY)
+        offset_x, offset_y, cells_x, cells_y = intersection_box(
+            raster_box, feature_box, cell_size_x, cell_size_y)
 
         # If the poly does not intersect the raster just continue
-        if None in [myOffsetX, myOffsetY, myCellsX, myCellsY]:
+        if None in [offset_x, offset_y, cells_x, cells_y]:
             continue
 
         # avoid access to cells outside of the raster (may occur because of
         # rounding)
-        if (myOffsetX + myCellsX) > myColumns:
-            myOffsetX = myColumns - myOffsetX
+        if (offset_x + cells_x) > columns:
+            offset_x = columns - offset_x
 
-        if (myOffsetY + myCellsY) > myRows:
-            myCellsY = myRows - myOffsetY
+        if (offset_y + cells_y) > rows:
+            cells_y = rows - offset_y
 
-        myIntersectedGeom = rasterGeom.intersection(myGeometry)
-        mySum, myCount = numpy_stats(
-            myBand,
-            myIntersectedGeom,
-            myGeoTransform,
-            myNoData,
+        intersected_geometry = raster_geometry.intersection(geometry)
+        geometry_sum, count = numpy_stats(
+            band,
+            intersected_geometry,
+            geo_transform,
+            no_data,
             crs)
 
-        if myCount <= 1:
+        if count <= 1:
             # The cell resolution is probably larger than the polygon area.
             # We switch to precise pixel - polygon intersection in this case
-            mySum, myCount = precise_stats(
-                myBand,
-                myGeometry,
-                myOffsetX,
-                myOffsetY,
-                myCellsX,
-                myCellsY,
-                myCellSizeX,
-                myCellSizeY,
-                myRasterBox,
-                myNoData)
-            #print mySum, myCount
+            geometry_sum, count = precise_stats(
+                band,
+                geometry,
+                offset_x,
+                offset_y,
+                cells_x,
+                cells_y,
+                cell_size_x,
+                cell_size_y,
+                raster_box,
+                no_data)
+            #print geometry_sum, count
 
-        if myCount == 0:
-            myMean = 0
+        if count == 0:
+            mean = 0
         else:
-            myMean = mySum / myCount
+            mean = geometry_sum / count
 
-        myResults[myFeature.id()] = {
-            'sum': mySum,
-            'count': myCount,
-            'mean': myMean}
+        results[myFeature.id()] = {
+            'sum': geometry_sum,
+            'count': count,
+            'mean': mean}
 
     # noinspection PyUnusedLocal
-    myFid = None  # Close
-    return myResults
+    feature_id = None  # Close
+    return results
 
 
 def intersection_box(
@@ -233,45 +234,45 @@ def intersection_box(
     """
 
     #get intersecting bbox
-    myIntersectedBox = feature_box.intersect(raster_box)
-    #print 'Intersected Box: %s' % myIntersectedBox.asWktCoordinates()
-    if myIntersectedBox.isEmpty():
+    intersected_box = feature_box.intersect(raster_box)
+    #print 'Intersected Box: %s' % intersected_box.asWktCoordinates()
+    if intersected_box.isEmpty():
         return None, None, None, None
 
     #get offset in pixels in x- and y- direction
-    myOffsetX = myIntersectedBox.xMinimum() - raster_box.xMinimum()
-    myOffsetX /= cell_size_x
-    myOffsetX = int(myOffsetX)
-    myOffsetY = raster_box.yMaximum() - myIntersectedBox.yMaximum()
-    myOffsetY /= cell_size_y
-    myOffsetY = int(myOffsetY)
+    offset_x = intersected_box.xMinimum() - raster_box.xMinimum()
+    offset_x /= cell_size_x
+    offset_x = int(offset_x)
+    offset_y = raster_box.yMaximum() - intersected_box.yMaximum()
+    offset_y /= cell_size_y
+    offset_y = int(offset_y)
 
     ##### Checked to here....offsets calculate correctly ##########
 
-    myMaxColumn = myIntersectedBox.xMaximum() - raster_box.xMinimum()
-    myMaxColumn /= cell_size_x
+    max_column = intersected_box.xMaximum() - raster_box.xMinimum()
+    max_column /= cell_size_x
     # Round up to the next cell if the bbox is not on an exact pixel boundary
-    if myMaxColumn > int(myMaxColumn):
-        myMaxColumn = int(myMaxColumn) + 1
+    if max_column > int(max_column):
+        max_column = int(max_column) + 1
     else:
-        myMaxColumn = int(myMaxColumn)
+        max_column = int(max_column)
 
-    myMaxRow = raster_box.yMaximum() - myIntersectedBox.yMinimum()
-    myMaxRow /= cell_size_y
+    max_row = raster_box.yMaximum() - intersected_box.yMinimum()
+    max_row /= cell_size_y
     # Round up to the next cell if the bbox is not on an exact pixel boundary
-    if myMaxRow > int(myMaxRow):
-        myMaxRow = int(myMaxRow) + 1
+    if max_row > int(max_row):
+        max_row = int(max_row) + 1
     else:
-        myMaxRow = int(myMaxRow)
+        max_row = int(max_row)
 
-    myCellsX = myMaxColumn - myOffsetX
-    myCellsY = myMaxRow - myOffsetY
+    cells_x = max_column - offset_x
+    cells_y = max_row - offset_y
 
     LOGGER.debug(
         'Pixel box: W: %s H: %s Offset Left: %s Offset Bottom: %s' % (
-            myCellsX, myCellsY, myOffsetX, myOffsetY
+            cells_x, cells_y, offset_x, offset_y
         ))
-    return myOffsetX, myOffsetY, myCellsX, myCellsY
+    return offset_x, offset_y, cells_x, cells_y
 
 
 def centroid_intersection_stats(
@@ -321,51 +322,51 @@ def centroid_intersection_stats(
         pixels that intersect with the geometry.
     :rtype: (float, int)
     """
-    myCellCenterX = (
+    cell_center_x = (
         raster_box.yMaximum() - pixel_offset_y * cell_size_y -
         cell_size_y / 2)
-    myCount = 0
-    mySum = 0
-    myBufferXSize = cells_x
-    myBufferYSize = 1  # read in a single row at a time
-    myCellsToReadX = cells_x
-    myCellsToReadY = 1  # read in a single row at a time
+    count = 0
+    geometry_sum = 0
+    buffer_x_size = cells_x
+    buffer_y_size = 1  # read in a single row at a time
+    cells_to_read_x = cells_x
+    cells_to_read_y = 1  # read in a single row at a time
 
     for i in range(0, cells_y):
-        myScanline = band.ReadRaster(
+        scanline = band.ReadRaster(
             pixel_offset_x,
             pixel_offset_y + i,
-            myCellsToReadX,
-            myCellsToReadY,
-            myBufferXSize,
-            myBufferYSize,
+            cells_to_read_x,
+            cells_to_read_y,
+            buffer_x_size,
+            buffer_y_size,
             gdal.GDT_Float32)
         # Note that the returned scanline is of type string, and contains
         # xsize*4 bytes of raw binary floating point data. This can be
         # converted to Python values using the struct module from the standard
         # library:
-        myValues = struct.unpack('f' * myCellsToReadX, myScanline)
-        #print myValues
-        if myValues is None:
+        values = struct.unpack('f' * cells_to_read_x, scanline)
+        #print values
+        if values is None:
             continue
 
-        myCellCenterY = (
+        cell_center_y = (
             raster_box.xMinimum() +
             pixel_offset_x * cell_size_x +
             cell_size_x / 2)
 
         for j in range(0, cells_x):
-            myPoint = QgsPoint(myCellCenterY, myCellCenterX)
-            if geometry.contains(myPoint):
-                if myValues[j] != no_data:
-                    mySum += myValues[j]
-                    myCount += 1
+            point = QgsPoint(cell_center_y, cell_center_x)
+            if geometry.contains(point):
+                if values[j] != no_data:
+                    geometry_sum += values[j]
+                    count += 1
 
-            myCellCenterY += cell_size_x
+            cell_center_y += cell_size_x
         # Move down one row
-        myCellCenterX -= cell_size_y
+        cell_center_x -= cell_size_y
 
-    return mySum, myCount
+    return geometry_sum, count
 
 
 # noinspection PyArgumentList
@@ -403,13 +404,13 @@ def precise_stats(
     :param cell_size_x: Size in the x direction of a single cell.
     :type cell_size_x: float
 
-    :param cell_size_y: Size in the y direciton of a single cell.
+    :param cell_size_y: Size in the y direction of a single cell.
     :type cell_size_y: float
 
     :param raster_box: Box defining the extents of the raster.
     :type raster_box: QgsRectangle
 
-    :param no_data: Value for nodata in the raster.
+    :param no_data: Value for no data in the raster.
     :type no_data: int, float
 
     :returns: Sum, Count - sum of the values of all pixels and the count of
@@ -417,65 +418,65 @@ def precise_stats(
     :rtype: (float, int)
     """
 
-    myCurrentY = (
+    current_y = (
         raster_box.yMaximum() - pixel_offset_y * cell_size_y - cell_size_y / 2)
 
-    myHalfCellSizeX = cell_size_x / 2.0
-    myHalfCellsSizeY = cell_size_y / 2.0
-    myPixelArea = cell_size_x * cell_size_y
-    myCellsToReadX = cells_x
-    myCellsToReadY = 1  # read in a single row at a time
-    myBufferXSize = 1
-    myBufferYSize = 1
-    myCount = 0
-    mySum = 0.0
+    half_cell_size_x = cell_size_x / 2.0
+    half_cell_size_y = cell_size_y / 2.0
+    pixel_area = cell_size_x * cell_size_y
+    cells_to_read_x = cells_x
+    cells_to_read_y = 1  # read in a single row at a time
+    buffer_size_x = 1
+    buffer_size_y = 1
+    count = 0
+    geometry_sum = 0.0
 
     for row in range(0, cells_y):
-        myCurrentX = (
+        current_x = (
             raster_box.xMinimum() + cell_size_x / 2.0 +
             pixel_offset_x * cell_size_x)
         # noinspection PyArgumentList
         for col in range(0, cells_x):
             # Read a single pixel
-            myScanline = band.ReadRaster(
+            scanline = band.ReadRaster(
                 pixel_offset_x + col,
                 pixel_offset_y + row,
-                myCellsToReadX,
-                myCellsToReadY,
-                myBufferXSize,
-                myBufferYSize,
+                cells_to_read_x,
+                cells_to_read_y,
+                buffer_size_x,
+                buffer_size_y,
                 gdal.GDT_Float32)
             # Note that the returned scanline is of type string, and contains
             # xsize*4 bytes of raw binary floating point data. This can be
             # converted to Python values using the struct module from the
             # standard library:
-            if myScanline != '':
-                myValues = struct.unpack('f', myScanline)  # tuple returned
-                myValue = myValues[0]
+            if scanline != '':
+                values = struct.unpack('f', scanline)  # tuple returned
+                value = values[0]
             else:
                 continue
 
-            if myValue == no_data:
+            if value == no_data:
                 continue
             # noinspection PyCallByClass,PyTypeChecker
-            myPixelGeometry = QgsGeometry.fromRect(
+            pixel_geometry = QgsGeometry.fromRect(
                 QgsRectangle(
-                    myCurrentX - myHalfCellSizeX,
-                    myCurrentY - myHalfCellsSizeY,
-                    myCurrentX + myHalfCellSizeX,
-                    myCurrentY + myHalfCellsSizeY))
-            if myPixelGeometry:
-                myIntersectionGeometry = myPixelGeometry.intersection(
+                    current_x - half_cell_size_x,
+                    current_y - half_cell_size_y,
+                    current_x + half_cell_size_x,
+                    current_y + half_cell_size_y))
+            if pixel_geometry:
+                intersection_geometry = pixel_geometry.intersection(
                     geometry)
-                if myIntersectionGeometry:
-                    myIntersectionArea = myIntersectionGeometry.area()
-                    if myIntersectionArea >= 0.0:
-                        myWeight = myIntersectionArea / myPixelArea
-                        myCount += myWeight
-                        mySum += myValue * myWeight
-            myCurrentX += cell_size_y
-        myCurrentY -= cells_y
-    return mySum, myCount
+                if intersection_geometry:
+                    intersection_area = intersection_geometry.area()
+                    if intersection_area >= 0.0:
+                        weight = intersection_area / pixel_area
+                        count += weight
+                        geometry_sum += value * weight
+            current_x += cell_size_y
+        current_y -= cells_y
+    return geometry_sum, count
 
 
 def map_to_pixel(x_coordinate, y_coordinate, geo_transform):
@@ -490,16 +491,16 @@ def map_to_pixel(x_coordinate, y_coordinate, geo_transform):
     :param geo_transform: Geo-referencing transform from raster metadata.
     :type geo_transform: list (six floats)
 
-    :returns pX, pY - Output pixel coordinates
+    :returns pixel_x, pixel_y - Output pixel coordinates
     :rtype: (int, int)
     """
     if geo_transform[2] + geo_transform[4] == 0:
-        pX = (x_coordinate - geo_transform[0]) / geo_transform[1]
-        pY = (y_coordinate - geo_transform[3]) / geo_transform[5]
+        pixel_x = (x_coordinate - geo_transform[0]) / geo_transform[1]
+        pixel_y = (y_coordinate - geo_transform[3]) / geo_transform[5]
     else:
-        pX, pY = transform(
+        pixel_x, pixel_y = transform(
             x_coordinate, y_coordinate, inverse_transform(geo_transform))
-    return int(pX + 0.5), int(pY + 0.5)
+    return int(pixel_x + 0.5), int(pixel_y + 0.5)
 
 
 def pixel_to_map(pixel_x, pixel_y, geo_transform):
@@ -514,11 +515,11 @@ def pixel_to_map(pixel_x, pixel_y, geo_transform):
     :param geo_transform: Geo-referencing transform from raster metadata.
     :type geo_transform: list (six floats)
 
-    :returns mX, mY - Output map coordinates
+    :returns map_x, map_y - Output map coordinates
     :rtype: (float, float)
     """
-    mX, mY = transform(pixel_x, pixel_y, geo_transform)
-    return mX, mY
+    map_x, map_y = transform(pixel_x, pixel_y, geo_transform)
+    return map_x, map_y
 
 
 def transform(x, y, geo_transform):
@@ -533,12 +534,12 @@ def transform(x, y, geo_transform):
     :param geo_transform: Geo-referencing transform from raster metadata.
     :type geo_transform: list (six floats)
 
-    :returns outX, outY - Transformed X and Y coordinates
+    :returns output_x, output_y - Transformed X and Y coordinates
     :rtype: (float, float)
     """
-    outX = geo_transform[0] + x * geo_transform[1] + y * geo_transform[2]
-    outY = geo_transform[3] + x * geo_transform[4] + y * geo_transform[5]
-    return outX, outY
+    output_x = geo_transform[0] + x * geo_transform[1] + y * geo_transform[2]
+    output_y = geo_transform[3] + x * geo_transform[4] + y * geo_transform[5]
+    return output_x, output_y
 
 
 def inverse_transform(geo_transform):
@@ -560,22 +561,24 @@ def inverse_transform(geo_transform):
     if abs(det) < 0.000000000000001:
         return []
 
-    invDet = 1.0 / det
+    inverse_det = 1.0 / det
 
     # compute adjoint and divide by determinate
-    outGeoTransform = [0, 0, 0, 0, 0, 0]
-    outGeoTransform[1] = geo_transform[5] * invDet
-    outGeoTransform[4] = -geo_transform[4] * invDet
+    output_geo_transform = [0, 0, 0, 0, 0, 0]
+    output_geo_transform[1] = geo_transform[5] * inverse_det
+    output_geo_transform[4] = -geo_transform[4] * inverse_det
 
-    outGeoTransform[2] = -geo_transform[2] * invDet
-    outGeoTransform[5] = geo_transform[1] * invDet
+    output_geo_transform[2] = -geo_transform[2] * inverse_det
+    output_geo_transform[5] = geo_transform[1] * inverse_det
 
-    outGeoTransform[0] = (geo_transform[2] * geo_transform[3] -
-                          geo_transform[0] * geo_transform[5]) * invDet
-    outGeoTransform[3] = (-geo_transform[1] * geo_transform[3] +
-                          geo_transform[0] * geo_transform[4]) * invDet
+    output_geo_transform[0] = (
+        geo_transform[2] * geo_transform[3] -
+        geo_transform[0] * geo_transform[5]) * inverse_det
+    output_geo_transform[3] = (
+        -geo_transform[1] * geo_transform[3] +
+        geo_transform[0] * geo_transform[4]) * inverse_det
 
-    return outGeoTransform
+    return output_geo_transform
 
 
 def numpy_stats(band, geometry, geo_transform, no_data, crs):
@@ -589,7 +592,7 @@ def numpy_stats(band, geometry, geo_transform, no_data, crs):
     :param geo_transform: Geo-referencing transform from raster metadata.
     :type geo_transform: list (six floats)
 
-    :param no_data: Value for nodata in the raster.
+    :param no_data: Value for no data in the raster.
     :type no_data: int, float
 
     :param crs: Coordinate reference system of the vector layer.
@@ -651,7 +654,7 @@ def numpy_stats(band, geometry, geo_transform, no_data, crs):
 
     # Mask the source data array with our current feature
     # we take the logical_not to flip 0<->1 to get the correct mask effect
-    # we also mask out nodata values explicitly
+    # we also mask out no data values explicitly
     src_array = numpy.nan_to_num(src_array)
     masked = numpy.ma.MaskedArray(
         src_array,

@@ -32,6 +32,7 @@ sys.path.append(pardir)
 #    print p + '\n'
 
 # this import required to enable PyQt API v2
+#noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
 
 #from qgis.core import QgsMapLayerRegistry
@@ -59,6 +60,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class PostprocessorManagerTest(unittest.TestCase):
     """Test the postprocessor manager"""
 
+    #noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
@@ -75,58 +77,62 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
-    def test_checkPostProcessingLayersVisibility(self):
+    #noinspection PyMethodMayBeStatic
+    def test_check_postprocessing_layers_visibility(self):
         """Generated layers are not added to the map registry."""
         # Explicitly disable showing intermediate layers
         DOCK.show_intermediate_layers = False
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta singlepart')
-        assert myResult, myMessage
+        assert result, message
 
         #LOGGER.info("Registry list before:\n%s" %
         #            QgsMapLayerRegistry.instance().mapLayers())
 
         #one layer (the impact) should have been added
-        myExpectedCount = len(CANVAS.layers()) + 1
+        expected_count = len(CANVAS.layers()) + 1
         #
         # # Press RUN
         DOCK.accept()
         # no KW dialog will popuo due to complete keywords
-        myAfterCount = len(CANVAS.layers())
+        after_count = len(CANVAS.layers())
         #LOGGER.info("Registry list after:\n%s" %
         #            QgsMapLayerRegistry.instance().mapLayers())
-        myMessage = ('Expected %s items in canvas, got %s' %
-                     (myExpectedCount, myAfterCount))
-        assert myExpectedCount == myAfterCount, myMessage
+        message = (
+            'Expected %s items in canvas, got %s' %
+            (expected_count, after_count))
+        assert expected_count == after_count, message
 
         # Now run again showing intermediate layers
         DOCK.show_intermediate_layers = True
         # Press RUN
         DOCK.accept()
-        # no KW dialog will popuo due to complete keywords
+        # no KW dialog will popup due to complete keywords
         #one layer (the impact) should have been added
-        myExpectedCount += 2
-        myAfterCount = len(CANVAS.layers())
+        expected_count += 2
+        after_count = len(CANVAS.layers())
 
         LOGGER.info("Canvas list after:\n %s" % canvas_list())
-        myMessage = ('Expected %s items in canvas, got %s' %
-                     (myExpectedCount, myAfterCount))
-        # We expect two more since we enabled showing intermedate layers
-        assert myExpectedCount == myAfterCount, myMessage
+        message = (
+            'Expected %s items in canvas, got %s' %
+            (expected_count, after_count))
+        # We expect two more since we enabled showing intermediate layers
+        assert expected_count == after_count, message
 
-    def test_postProcessorOutput(self):
+    #noinspection PyMethodMayBeStatic
+    def test_post_processor_output(self):
         """Check that the post processor does not add spurious report rows."""
 
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
@@ -137,21 +143,21 @@ class PostprocessorManagerTest(unittest.TestCase):
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent()
 
-        assert myResult, myMessage
+        assert result, message
 
         # Press RUN
         DOCK.accept()
-        myMessage = 'Spurious 0 filled rows added to post processing report.'
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
-        for line in myResult.split('\n'):
+        message = 'Spurious 0 filled rows added to post processing report.'
+        result = DOCK.wvResults.page().currentFrame().toPlainText()
+        for line in result.split('\n'):
             if 'Entire area' in line:
-                myTokens = str(line).split('\t')
-                myTokens = myTokens[1:]
-                mySum = 0
-                for myToken in myTokens:
-                    mySum += float(myToken.replace(',', '.'))
+                tokens = str(line).split('\t')
+                tokens = tokens[1:]
+                total = 0
+                for token in tokens:
+                    total += float(token.replace(',', '.'))
 
-                assert mySum != 0, myMessage
+                assert total != 0, message
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(PostprocessorManagerTest)

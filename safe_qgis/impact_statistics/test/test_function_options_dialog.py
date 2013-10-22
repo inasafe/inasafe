@@ -80,7 +80,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         'elder_ratio': 0.078,
                         'adult_ratio': 0.659}}}}
 
-        myDialog.buildForm(myParameters)
+        myDialog.build_form(myParameters)
 
         assert myDialog.tabWidget.count() == 2
 
@@ -107,7 +107,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         'elder_ratio': 0.078,
                         'adult_ratio': 0.659}}}}
 
-        myDialog.buildForm(myParameters)
+        myDialog.build_form(myParameters)
 
         assert myDialog.tabWidget.count() == 2
 
@@ -116,7 +116,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
     def test_buildWidget(self):
         myDialog = FunctionOptionsDialog(None)
-        myValue = myDialog.buildWidget(myDialog.configLayout, 'foo', [2.3])
+        myValue = myDialog.build_widget(myDialog.configLayout, 'foo', [2.3])
         myWidget = myDialog.findChild(QLineEdit)
 
         # initial value must be same with default
@@ -151,7 +151,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                         'adult_ratio': lambda: 0.659}}}}
 
         myDialog = FunctionOptionsDialog(None)
-        myResult = myDialog.parseInput(myInput)
+        myResult = myDialog.parse_input(myInput)
         print myResult
         assert myResult == OrderedDict([
             ('thresholds', [1.0]),
