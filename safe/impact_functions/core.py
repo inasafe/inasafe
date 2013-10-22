@@ -66,7 +66,8 @@ def default_minimum_needs():
 
     .. note:: Key names will be translated.
     """
-    rice = tr('Rice')
+    rice = tr(
+        'Rice')
     drinking_water = tr('Drinking Water')
     water = tr('Water')
     family_kits = tr('Family Kits')
@@ -103,11 +104,11 @@ def evacuated_population_weekly_needs(population,
     * assume 5 people per family (not in perka - 0.2 people per family)
     * 20 people per toilet (0.05 per person)
     """
-    rice = tr('Rice')
-    drinking_water = tr('Drinking Water')
-    water = tr('Water')
-    family_kits = tr('Family Kits')
-    toilets = tr('Toilets')
+    rice = 'Rice'
+    drinking_water = 'Drinking Water'
+    water = 'Water'
+    family_kits = 'Family Kits'
+    toilets = 'Toilets'
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
