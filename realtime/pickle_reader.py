@@ -26,6 +26,8 @@ def create_index(shakemap_dir):
 
     header_html_file = open(os.path.join(os.path.dirname(__file__),
                                          'fixtures',
+                                         'web',
+                                         'resource',
                                          'header.html'), 'r')
 
     header_html = header_html_file.read()
@@ -33,10 +35,12 @@ def create_index(shakemap_dir):
 
     footer_html_file = open(os.path.join(os.path.dirname(__file__),
                                          'fixtures',
+                                         'web',
+                                         'resource',
                                          'footer.html'), 'r')
     footer_html = footer_html_file.read()
     footer_html_file.close()
-    
+
     table_html = '\t<table class="table table-bordered table-hover ' \
                  'table-condensed">\n'
     table_html += '\t\t<thead> ' \
