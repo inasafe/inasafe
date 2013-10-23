@@ -46,7 +46,7 @@ class TestPickleReader(unittest.TestCase):
 
     def test_create_index(self):
         """Test we can generate index.html file."""
-        result = create_index(shakemap_dir=self.shakemap_dir)
+        result = create_index(shakemap_dir=self.shakemap_dir, locale='en')
         index_file = file(result, 'r')
         result = index_file.read()
         print result
