@@ -24,7 +24,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QSettings, pyqtSignature
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
-from safe_qgis.ui.impact_merge_base import Ui_ImpactMergeBase
+from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
 from safe_qgis.exceptions import CanceledImportDialogError
 from safe_qgis.safe_interface import messaging as m
@@ -35,11 +35,11 @@ from safe_qgis.safe_interface import styles
 INFO_STYLE = styles.INFO_STYLE
 
 
-class ImpactMerge(QDialog, Ui_ImpactMergeBase):
+class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     """Downloader for OSM data."""
 
     def __init__(self, parent=None, iface=None):
-        """Constructor for import dialog.
+        """Constructor for dialog.
 
         :param parent: Optional widget to use as parent
         :type parent: QWidget
