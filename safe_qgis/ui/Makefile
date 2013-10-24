@@ -23,7 +23,7 @@
 UI_FILES = batch_dialog_base.ui \
 	dock_base.ui \
 	function_options_dialog_base.ui \
-	impact_merge_base.ui \
+	impact_merge_dialog_base.ui \
 	keywords_dialog_base.ui	\
 	minimum_needs_base.ui \
 	options_dialog_base.ui \

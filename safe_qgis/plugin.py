@@ -463,9 +463,9 @@ class Plugin:
     def show_impact_merge(self):
         """Show the impact layer merge dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.tools.impact_merge_dialog import ImpactMerge
+        from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
 
-        dialog = ImpactMerge(self.iface.mainWindow())
+        dialog = ImpactMergeDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_options(self):
