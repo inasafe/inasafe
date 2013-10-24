@@ -609,7 +609,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.cboHazard.blockSignals(True)
 
     @pyqtSlot('QgsMapLayer')
-    @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
         r"""Obtain a list of layers currently loaded in QGIS.
 

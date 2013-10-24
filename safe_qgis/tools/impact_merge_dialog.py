@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+from xml.dom import minidom
 
 #noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
@@ -24,13 +25,20 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QSettings, pyqtSignature
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
+from qgis.core import QgsMapLayerRegistry
+
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
 
-from safe_qgis.exceptions import CanceledImportDialogError
+from safe_qgis.exceptions import (
+    CanceledImportDialogError, NoKeywordsFoundError, KeywordNotFoundError)
 from safe_qgis.safe_interface import messaging as m
-from safe_qgis.utilities.utilities import html_footer, html_header
+from safe_qgis.utilities.utilities import (
+    html_footer, html_header, add_ordered_combo_item)
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
+from safe_qgis.utilities.keyword_io import KeywordIO
+
+from pydev import pydevd  # pylint: disable=F0401
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -54,6 +62,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.setWindowTitle(self.tr('InaSAFE Impact Layer Merge Tool'))
 
         self.iface = iface
+        self.keyword_io = KeywordIO()
 
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
@@ -67,6 +76,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
         self.show_info()
         self.restore_state()
+        # Enable remote debugging - should normally be commented out.
+        pydevd.settrace(
+            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        self.get_layers()
 
     def show_info(self):
         """Show usage info to the user."""
@@ -132,25 +145,37 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
     def accept(self):
         """Do osm download and display it in QGIS."""
 
-        try:
-            self.save_state()
-
-            self.require_directory()
-            self.download()
-            self.load_shapefile()
-            self.done(QDialog.Accepted)
-        except CanceledImportDialogError:
-            # don't show anything because this exception raised
-            # when user canceling the import process directly
-            pass
-        except Exception as myEx:
-            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+        self.save_state()
+        self.require_directory()
+        if not self.validate():
+            #noinspection PyCallByClass,PyArgumentList,PyTypeChecker
             QMessageBox.warning(
                 self,
-                self.tr("InaSAFE OpenStreetMap downloader error"),
-                str(myEx))
+                self.tr('InaSAFE error'),
+                self.tr(
+                    'Please choose two different impact layers to continue.'))
+            return
+        self.process()
+        self.done(QDialog.Accepted)
 
-            self.progress_dialog.cancel()
+    def validate(self):
+        """Verify that there are two layers and they are different."""
+
+        if self.first_layer.currentIndex() < 0:
+            return False
+
+        if self.second_layer.currentIndex() < 0:
+            return False
+
+        first_layer = self.first_layer.itemData(
+            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
+        second_layer = self.second_layer.itemData(
+            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
+
+        if first_layer.id() == second_layer.id():
+            return False
+
+        return True
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -180,3 +205,58 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             os.makedirs(path)
         else:
             raise CanceledImportDialogError()
+
+    def process(self):
+        """Process the postprocessing_report from each impact."""
+        first_layer = self.first_layer.itemData(
+            self.first_layer.currentIndex(), QtCore.Qt.UserRole)
+        second_layer = self.second_layer.itemData(
+            self.second_layer.currentIndex(), QtCore.Qt.UserRole)
+        try:
+            first_report = self.keyword_io.read_keywords(
+                first_layer, 'postprocessing_report')
+            second_report = self.keyword_io.read_keywords(
+                second_layer, 'postprocessing_report')
+        except (NoKeywordsFoundError, KeywordNotFoundError):
+            # Skip if there are no keywords at all
+            # Skip if the impact_summary keyword is missing
+            raise
+
+        # Ensure there is always only a single root element or minidom moans
+        first_report = '<body>' + first_report + '</body>'
+        second_report = '<body>' + second_report + '</body>'
+        # Now create a dom document for each
+        first_document = minidom.parseString(first_report)
+        second_document = minidom.parseString(second_report)
+        tables = first_document.getElementsByTagName('table')
+        tables += second_document.getElementsByTagName('table')
+        for table in tables:
+            rows = table.getElementsByTagName('tr')
+            print '----------------------'
+            print rows
+
+    def get_layers(self):
+        """Obtain a list of impact layers currently loaded in QGIS.
+        """
+
+        registry = QgsMapLayerRegistry.instance()
+        # MapLayers returns a QMap<QString id, QgsMapLayer layer>
+        layers = registry.mapLayers().values()
+
+        # For issue #618
+        if len(layers) == 0:
+            return
+
+        self.first_layer.clear()
+        self.second_layer.clear()
+
+        for layer in layers:
+            try:
+                self.keyword_io.read_keywords(layer, 'impact_summary')
+            except (NoKeywordsFoundError, KeywordNotFoundError):
+                # Skip if there are no keywords at all
+                # Skip if the impact_summary keyword is missing
+                continue
+
+            add_ordered_combo_item(self.first_layer, layer.name(), layer)
+            add_ordered_combo_item(self.second_layer, layer.name(), layer)

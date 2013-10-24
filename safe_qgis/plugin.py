@@ -465,7 +465,7 @@ class Plugin:
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
 
-        dialog = ImpactMergeDialog(self.iface.mainWindow())
+        dialog = ImpactMergeDialog(self.iface.mainWindow(), self.iface)
         dialog.exec_()  # modal
 
     def show_options(self):

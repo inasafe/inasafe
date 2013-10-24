@@ -25,18 +25,18 @@ import tempfile
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=W0611
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 #noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
-from safe_qgis.utilities.utilities_for_testing import get_qgis_app
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app, load_layer
+from safe_qgis.safe_interface import UNITDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
-
-TEST_DATA_DIR = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__), '../../test/test_data/test_files'))
+shapefile_path = os.path.join(UNITDATA, 'impact', 'impact_merge_1.shp')
+tif_path = os.path.join(UNITDATA, 'impact', 'impact_merge_2.tif')
 
 
 class ImpactMergeDialogTest(unittest.TestCase):
@@ -52,6 +52,14 @@ class ImpactMergeDialogTest(unittest.TestCase):
         output_directory = tempfile.mkdtemp()
         self.impact_dialog.output_directory.setText(output_directory)
 
+        impact_layer_1 = QgsVectorLayer(
+            shapefile_path,
+            os.path.basename(shapefile_path),
+            'ogr')
+        impact_layer_2 = QgsRasterLayer(
+            tif_path,
+            os.path.basename(tif_path),
+            'ogr')
         self.assertIsNotNone(self.impact_dialog.output_directory.text())
 
 if __name__ == '__main__':
