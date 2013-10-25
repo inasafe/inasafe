@@ -230,10 +230,28 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         second_document = minidom.parseString(second_report)
         tables = first_document.getElementsByTagName('table')
         tables += second_document.getElementsByTagName('table')
+        merged_report_dict = {}
         for table in tables:
+            caption = table.getElementsByTagName('caption')[0].firstChild.data
             rows = table.getElementsByTagName('tr')
-            print '----------------------'
-            print rows
+            header = rows[0]
+            contains = rows[1:]
+            for contain in contains:
+                data = contain.getElementsByTagName('td')
+                aggregation_area = data[0].firstChild.nodeValue
+                report_type_dict = {}
+                if aggregation_area in merged_report_dict:
+                    report_type_dict = merged_report_dict[aggregation_area]
+                data_contain = data[1:]
+                data_dict = {}
+                for datum in data_contain:
+                    index_datum = data.index(datum)
+                    data_dict[header.getElementsByTagName('td')[index_datum]
+                    .firstChild.nodeValue] = datum.firstChild.nodeValue
+                report_type_dict[caption] = data_dict
+                merged_report_dict[aggregation_area] = report_type_dict
+
+        print merged_report_dict
 
     def get_layers(self):
         """Obtain a list of impact layers currently loaded in QGIS.
