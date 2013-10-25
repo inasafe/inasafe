@@ -77,8 +77,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.show_info()
         self.restore_state()
         # Enable remote debugging - should normally be commented out.
-        pydevd.settrace(
-            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        #pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         self.get_layers()
 
     def show_info(self):
