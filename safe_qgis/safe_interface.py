@@ -447,6 +447,26 @@ def readSafeLayer(thePath):
         raise
 
 
+def convertToSafeLayer(qgis_layer):
+    """Thin wrapper around the safe read_layer function.
+
+    Args:
+        qgis_layer - QgsMapLayer.
+    Returns:
+        A safe readSafeLayer object is returned.
+    Raises:
+        Any exceptions are propogated
+    """
+    # FIXME (DK): it is a stub now.
+    #   Do not call readSafeLayer, but write function
+    #     safe.storage.core.convert_layer to convert QgsMapLayer to SAFE layer
+
+    try:
+        return readSafeLayer(qgis_layer.source())
+    except:
+        raise
+
+
 def getSafeImpactFunctions(theFunction=None):
     """Thin wrapper around the safe impact_functions function.
 
