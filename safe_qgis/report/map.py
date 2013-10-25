@@ -218,19 +218,6 @@ class Map():
         """
         self.setup_composition()
 
-        file_info = QtCore.QFileInfo(self.template)
-        template_path = file_info.absoluteDir().absolutePath()
-        template_basename = file_info.baseName()
-        system_locale = QtCore.QLocale.system().name()[:2]
-        # if template name doesn't contains locale name, try to find
-        # localized version of this template in same directory and use
-        # it for report generation
-        if system_locale.lower() not in template_basename.lower():
-            localized_template = '%s/%s-%s.qpt' % (
-                template_path, template_basename, system_locale)
-            if QtCore.QFileInfo(localized_template).exists():
-                self.template = localized_template
-
         template_file = QtCore.QFile(self.template)
         template_file.open(QtCore.QIODevice.ReadOnly | QtCore.QIODevice.Text)
         template_content = template_file.readAll()
