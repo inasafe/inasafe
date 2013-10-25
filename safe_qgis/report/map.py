@@ -28,11 +28,8 @@ from qgis.core import (
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.report.map_legend import MapLegend
 from safe_qgis.utilities.utilities import (
     setup_printer,
-    points_to_mm,
-    mm_to_points,
     dpi_to_meters)
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -307,3 +304,10 @@ class Map():
             legend_title = ""
         legend.setTitle(legend_title)
         legend.updateLegend()
+
+    def show_composer(self):
+        """Show the composition in a composer view so the user can tweak it.
+        """
+        self.load_template()
+        composer = self.iface.createNewComposer()
+        composer.setComposition(self.composition)
