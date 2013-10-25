@@ -37,6 +37,7 @@ from safe_qgis.utilities.utilities import (
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.report.html_renderer import HtmlRenderer
 
 from pydev import pydevd  # pylint: disable=F0401
 
@@ -250,8 +251,42 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     .firstChild.nodeValue] = datum.firstChild.nodeValue
                 report_type_dict[caption] = data_dict
                 merged_report_dict[aggregation_area] = report_type_dict
+        print 'tes'
+        report_images = self.generate_png_from_merged_report(merged_report_dict)
+        # Save to located:
+        for report_image in report_images:
+            aggregation_area = str(report_image[0]).replace(' ','')
+            image = report_image[1]
+            path = '/home/gumbia/Documents/%s.png' % aggregation_area
+            #image.save(path)
 
-        print merged_report_dict
+    def generate_png_from_merged_report(self, merged_report):
+        """Generate all of agregaition unit report from a dictionary
+        representing smerged report.
+
+        :param merged_report: a dictionary of merged report
+        :type merged_report: dict
+        """
+        report_images = []
+        html_renderer = HtmlRenderer(256)
+        for aggregation_area_key in merged_report:
+            html = ''
+            html += '<table class="table table-condensed table-striped">'
+            html += '<caption>%s</caption>' % aggregation_area_key
+            type_reports = merged_report[aggregation_area_key]
+            for type_report in type_reports:
+                type_report_contain = type_reports[type_report]
+                html += '<thead>%s</thead>' % type_report
+                for data in type_report_contain:
+                    html += ('<tr><td>%s</td><td>%s</td></tr>') % (
+                        data,
+                        type_report_contain[data])
+            html += '</table>'
+            report_image = html_renderer.html_to_image(html, 10)
+            report = (aggregation_area_key, report_image)
+            report_images.append(report)
+
+        return report_images
 
     def get_layers(self):
         """Obtain a list of impact layers currently loaded in QGIS.
