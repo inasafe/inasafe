@@ -306,7 +306,8 @@ class Map():
         legend.updateLegend()
 
     def show_composer(self):
-        """Show the composition in a composer view so the user can tweak it.
+        """Prepare report and show it in a composer view so the
+        user can tweak it.
         """
         self.load_template()
         composer = self.iface.createNewComposer()
