@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ImpactReportDialogBase</class>
+ <widget class="QDialog" name="ImpactReportDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -24,6 +24,9 @@
        <widget class="QRadioButton" name="analysis_extent_radio">
         <property name="text">
          <string>Analysis extent</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -68,7 +71,7 @@
       <item>
        <widget class="QRadioButton" name="show_composer_radio">
         <property name="text">
-         <string>Show in composed</string>
+         <string>Show in composer</string>
         </property>
        </widget>
       </item>
@@ -99,7 +102,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>ImpactReportDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -115,7 +118,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>ImpactReportDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
