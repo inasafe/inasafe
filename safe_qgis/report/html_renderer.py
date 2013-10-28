@@ -101,7 +101,7 @@ class HtmlRenderer():
         myPainter = QtGui.QPainter(myImage)
         myFrame.render(myPainter)
         myPainter.end()
-        myImage.save('/tmp/test.png')
+        #myImage.save('/tmp/test.png')
         return myImage
 
     def to_pdf(self, html, filename=None):

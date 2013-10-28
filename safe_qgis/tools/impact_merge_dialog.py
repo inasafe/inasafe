@@ -226,11 +226,24 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Ensure there is always only a single root element or minidom moans
         first_report = '<body>' + first_report + '</body>'
         second_report = '<body>' + second_report + '</body>'
+
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
         second_document = minidom.parseString(second_report)
         tables = first_document.getElementsByTagName('table')
         tables += second_document.getElementsByTagName('table')
+
+        # Now create dictionary report from DOM
+        # Dictionary Structure: {Aggregation_Area:{Exposure Type:{Exposure
+        # Detail}}}
+        # Example:
+        #   {"Jakarta Barat":
+        #       {"Buildings":
+        #           {"Total":150,
+        #            "Places of Worship: No data
+        #           }
+        #       }
+        #   }
         merged_report_dict = {}
         for table in tables:
             caption = table.getElementsByTagName('caption')[0].firstChild.data
@@ -240,58 +253,67 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             for contain in contains:
                 data = contain.getElementsByTagName('td')
                 aggregation_area = data[0].firstChild.nodeValue
-                report_type_dict = {}
+                exposure_dict = {}
                 if aggregation_area in merged_report_dict:
-                    report_type_dict = merged_report_dict[aggregation_area]
+                    exposure_dict = merged_report_dict[aggregation_area]
                 data_contain = data[1:]
-                data_dict = {}
+                exposure_detail_dict = {}
                 for datum in data_contain:
                     index_datum = data.index(datum)
-                    data_dict[header.getElementsByTagName('td')[index_datum]
-                    .firstChild.nodeValue] = datum.firstChild.nodeValue
-                report_type_dict[caption] = data_dict
-                merged_report_dict[aggregation_area] = report_type_dict
-        print 'tes'
-        report_images = self.generate_png_from_merged_report(merged_report_dict)
-        # Save to located:
-        for report_image in report_images:
-            aggregation_area = str(report_image[0]).replace(' ','')
-            image = report_image[1]
-            path = '/home/gumbia/Documents/%s.png' % aggregation_area
-            #image.save(path)
+                    datum_header = \
+                        header.getElementsByTagName('td')[index_datum]
+                    datum_caption = datum_header.firstChild.nodeValue
+                    exposure_detail_dict[datum_caption] = \
+                        datum.firstChild.nodeValue
+                exposure_dict[caption] = exposure_detail_dict
+                merged_report_dict[aggregation_area] = exposure_dict
 
-    def generate_png_from_merged_report(self, merged_report):
-        """Generate all of agregaition unit report from a dictionary
-        representing smerged report.
+        # Generate html reports from merged dictionary
+        html_reports = self.generate_html_from_merged_report(merged_report_dict)
 
-        :param merged_report: a dictionary of merged report
-        :type merged_report: dict
+        # Now Generate image from html reports. Each image will be generated
+        # for each html report
+        html_renderer = HtmlRenderer(300)
+        for html_report in html_reports:
+            aggregation_area = html_report[0]
+            html = html_report[1]
+            image_report = html_renderer.html_to_image(html, 100)
+            path = '/tmp/%s.png' % aggregation_area
+            image_report.save(path)
+
+    def generate_html_from_merged_report(self, merged_report_dict):
+        """Generate html format of all aggregation units from a dictionary
+        representing merged report.
+
+        :param merged_report_dict: a dictionary of merged report
+        :type merged_report_dict: dict
+
+        :return: HTML for each aggregation unit report
+        :rtype: list
         """
-        report_images = []
-        html_renderer = HtmlRenderer(256)
-        for aggregation_area_key in merged_report:
+        html_reports = []
+        for aggregation_area in merged_report_dict:
             html = ''
             html += '<table class="table table-condensed table-striped">'
-            html += '<caption>%s</caption>' % aggregation_area_key
-            type_reports = merged_report[aggregation_area_key]
-            for type_report in type_reports:
-                type_report_contain = type_reports[type_report]
-                html += '<thead>%s</thead>' % type_report
-                for data in type_report_contain:
-                    html += ('<tr><td>%s</td><td>%s</td></tr>') % (
-                        data,
-                        type_report_contain[data])
+            html += '<caption>%s</caption>' % aggregation_area
+            exposure_report_dict = merged_report_dict[aggregation_area]
+            for exposure in exposure_report_dict:
+                exposure_detail_dict = exposure_report_dict[exposure]
+                html += '<tr><th>%s</th></tr>' % exposure
+                for data in exposure_detail_dict:
+                    html += ('<tr>'
+                             '<td>%s</td>'
+                             '<td>%s</td>'
+                             '</tr>') % (data, exposure_detail_dict[data])
             html += '</table>'
-            report_image = html_renderer.html_to_image(html, 10)
-            report = (aggregation_area_key, report_image)
-            report_images.append(report)
+            html_report = (aggregation_area, html)
+            html_reports.append(html_report)
 
-        return report_images
+        return html_reports
 
     def get_layers(self):
         """Obtain a list of impact layers currently loaded in QGIS.
         """
-
         registry = QgsMapLayerRegistry.instance()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = registry.mapLayers().values()
