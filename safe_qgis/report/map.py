@@ -51,7 +51,7 @@ class Map():
         self.keyword_io = KeywordIO()
         self.printer = None
         self.composition = None
-        self.legend = None
+        self.extent = iface.mapCanvas().extent()
         self.logo = ':/plugins/inasafe/bnpb_logo.png'
         self.template = ':/plugins/inasafe/inasafe.qpt'
         self.page_width = 0  # width in mm
@@ -95,6 +95,15 @@ class Map():
         :type template: str
         """
         self.template = template
+
+    def set_extent(self, extent):
+        """Set extent or the report map
+
+        :param extent: Extent of the report map
+        :type extent: QgsRectangle
+
+        """
+        self.extent = extent
 
     def setup_composition(self):
         """Set up the composition ready for drawing elements onto it."""
@@ -266,10 +275,10 @@ class Map():
         # its extents to the event.
         composer_map = self.composition.getComposerItemById('impact-map')
         if composer_map is not None:
-            # Recenter the composer map on the center of the canvas
+            # Recenter the composer map on the center of the extent
             # Note that since the composer map is square and the canvas may be
             # arbitrarily shaped, we center based on the longest edge
-            canvas_extent = self.iface.mapCanvas().extent()
+            canvas_extent = self.extent
             width = canvas_extent.width()
             height = canvas_extent.height()
             longest_width = width

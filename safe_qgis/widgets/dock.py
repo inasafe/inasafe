@@ -95,6 +95,7 @@ from safe_qgis.report.html_renderer import HtmlRenderer
 from safe_qgis.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
+from safe_qgis.tools.impact_report_dialog import ImpactReportDialog
 from safe_qgis.safe_interface import styles
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -1765,7 +1766,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 break
 
     def print_map(self):
-        """Slot to print map when print map button pressed."""
+        """Slot to open impact report dialog that used to tune report
+        when print map button pressed
+        ."""
+        dlg = ImpactReportDialog(self.iface)
+        if not dlg.exec_() == QtGui.QDialog.Accepted:
+            self.show_dynamic_message(
+                m.Message(
+                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
+                    m.Text(self.tr('Report generation cancelled!'))))
+            return
+
+        use_full_extent = dlg.analysis_extent_radio.isChecked()
+        create_pdf = dlg.create_pdf_radio.isChecked()
+
         print_map = Map(self.iface)
         if self.iface.activeLayer() is None:
             # noinspection PyCallByClass,PyTypeChecker
@@ -1782,68 +1796,77 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 m.Text(self.tr('Preparing map and report'))))
 
         print_map.set_impact_layer(self.iface.activeLayer())
+        if use_full_extent:
+            print_map.set_extent(self.iface.activeLayer().extent())
+        else:
+            print_map.set_extent(self.iface.mapCanvas().extent())
 
         settings = QSettings()
         logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
-        report_path = settings.value(
             'inasafe/reportTemplatePath', '', type=str)
         if logo_path != '':
             print_map.set_logo(logo_path)
-        if report_path != '':
-            print_map.set_template(report_path)
+
+        # TODO: set correct template here
+        print_map.set_template(dlg.template_combo.itemData(
+                               dlg.template_combo.currentIndex()))
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
-        default_file_name = print_map.map_title() + '.pdf'
-        default_file_name = default_file_name.replace(' ', '_')
-        # noinspection PyCallByClass,PyTypeChecker
-        map_pdf_path = QtGui.QFileDialog.getSaveFileName(
-            self, self.tr('Write to PDF'),
-            os.path.join(temp_dir(), default_file_name),
-            self.tr('Pdf File (*.pdf)'))
-        map_pdf_path = str(map_pdf_path)
+        if create_pdf:
+            default_file_name = print_map.map_title() + '.pdf'
+            default_file_name = default_file_name.replace(' ', '_')
+            # noinspection PyCallByClass,PyTypeChecker
+            map_pdf_path = QtGui.QFileDialog.getSaveFileName(
+                self, self.tr('Write to PDF'),
+                os.path.join(temp_dir(), default_file_name),
+                self.tr('Pdf File (*.pdf)'))
+            map_pdf_path = str(map_pdf_path)
 
-        if map_pdf_path is None or map_pdf_path == '':
-            self.show_dynamic_message(
-                m.Message(
-                    m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
-                    m.Text(self.tr('Printing cancelled!'))))
-            return
+            if map_pdf_path is None or map_pdf_path == '':
+                self.show_dynamic_message(
+                    m.Message(
+                        m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
+                        m.Text(self.tr('Printing cancelled!'))))
+                return
 
-        table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
-        html_renderer = HtmlRenderer(page_dpi=print_map.page_dpi)
-        keywords = self.keyword_io.read_keywords(self.iface.activeLayer())
-        html_pdf_path = html_renderer.print_impact_table(
-            keywords, filename=table_file_name)
+            table_file_name = os.path.splitext(map_pdf_path)[0] + '_table.pdf'
+            html_renderer = HtmlRenderer(page_dpi=print_map.page_dpi)
+            keywords = self.keyword_io.read_keywords(self.iface.activeLayer())
+            html_pdf_path = html_renderer.print_impact_table(
+                keywords, filename=table_file_name)
 
-        try:
-            print_map.make_pdf(map_pdf_path)
-        except Exception, e:  # pylint: disable=W0703
-            # FIXME (Ole): This branch is not covered by the tests
-            report = get_error_message(e)
-            self.show_error_message(report)
+            try:
+                print_map.make_pdf(map_pdf_path)
+            except Exception, e:  # pylint: disable=W0703
+                # FIXME (Ole): This branch is not covered by the tests
+                report = get_error_message(e)
+                self.show_error_message(report)
 
-        # Make sure the file paths can wrap nicely:
-        wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        wrapped_html_path = html_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        status = m.Message(
-            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
-            m.Paragraph(self.tr(
-                'Your PDF was created....opening using the default PDF viewer '
-                'on your system. The generated pdfs were saved as:')),
-            m.Paragraph(wrapped_map_path),
-            m.Paragraph(self.tr('and')),
-            m.Paragraph(wrapped_html_path))
+            # Make sure the file paths can wrap nicely:
+            wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+            wrapped_html_path = html_pdf_path.replace(os.sep, '<wbr>' + os.sep)
+            status = m.Message(
+                m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+                m.Paragraph(self.tr(
+                    'Your PDF was created....opening using the default PDF '
+                    'viewer on your system. The generated pdfs were saved '
+                    'as:')),
+                m.Paragraph(wrapped_map_path),
+                m.Paragraph(self.tr('and')),
+                m.Paragraph(wrapped_html_path))
 
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl('file:///' + html_pdf_path,
-                        QtCore.QUrl.TolerantMode))
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl('file:///' + map_pdf_path,
-                        QtCore.QUrl.TolerantMode))
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl('file:///' + html_pdf_path,
+                            QtCore.QUrl.TolerantMode))
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl('file:///' + map_pdf_path,
+                            QtCore.QUrl.TolerantMode))
+            self.show_dynamic_message(status)
+        else:
+            print_map.show_composer()
 
-        self.show_dynamic_message(status)
         self.hide_busy()
 
     def get_function_id(self, index=None):

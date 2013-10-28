@@ -50,6 +50,29 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
         button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         button.clicked.connect(self.show_help)
 
+        # Load templates from resources...
+        templates_dir = QtCore.QDir(':/plugins/inasafe')
+        templates_dir.setFilter(QtCore.QDir.Files | QtCore.QDir.NoSymLinks |
+                                QtCore.QDir.NoDotAndDotDot)
+        templates_dir.setNameFilters(['*.qpt', '*.QPT'])
+        report_files = templates_dir.entryList()
+        for f in report_files:
+            self.template_combo.addItem(QtCore.QFileInfo(f).baseName(),
+                                        ':/plugins/inasafe/' + f)
+        #  ...and user directory
+        settings = QtCore.QSettings()
+        path = settings.value('inasafe/reportTemplatePath', '', type=str)
+        if path != '':
+            templates_dir = QtCore.QDir(path)
+            templates_dir.setFilter(QtCore.QDir.Files |
+                                    QtCore.QDir.NoSymLinks |
+                                    QtCore.QDir.NoDotAndDotDot)
+            templates_dir.setNameFilters(['*.qpt', '*.QPT'])
+            report_files = templates_dir.entryList()
+            for f in report_files:
+                self.template_combo.addItem(QtCore.QFileInfo(f).baseName(),
+                                            path + '/' + f)
+
         self.restore_state()
 
     def restore_state(self):
