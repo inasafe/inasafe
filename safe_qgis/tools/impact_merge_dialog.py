@@ -302,11 +302,21 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             for exposure in exposure_report_dict:
                 exposure_detail_dict = exposure_report_dict[exposure]
                 html += '<tr><th>%s</th></tr>' % exposure
-                for data in exposure_detail_dict:
-                    html += ('<tr>'
-                             '<td>%s</td>'
-                             '<td>%s</td>'
-                             '</tr>') % (data, exposure_detail_dict[data])
+                # Print rows containing 'total'
+                for datum in exposure_detail_dict:
+                    if 'total' in str(datum).lower():
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % (datum, exposure_detail_dict[datum])
+                # Print rows other than above
+                for datum in exposure_detail_dict:
+                    if 'total' not in str(datum).lower():
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % (datum, exposure_detail_dict[datum])
+
             html += '</table>'
             html_report = (aggregation_area, html)
             html_reports.append(html_report)
