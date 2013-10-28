@@ -104,8 +104,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         V.updateExtents()
 
         # Generate simple impact report
-        N = 100         # Jast a stub
-        count = N/2     # Jast a stub
+        N = 100         # Just a stub
+        count = N/2     # Just a stub
         table_body = [question,
                       TableRow([tr('Road Type'),
                                 tr('Temporarily closed'),
