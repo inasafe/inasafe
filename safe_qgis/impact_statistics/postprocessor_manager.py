@@ -32,8 +32,7 @@ from safe_qgis.safe_interface import (
     safeTr,
     get_postprocessors,
     get_postprocessor_human_name,
-    messaging as m,
-    get_thousand_separator)
+    messaging as m)
 from safe_qgis.exceptions import KeywordNotFoundError
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -148,7 +147,7 @@ class PostprocessorManager(QtCore.QObject):
 
                 for indicator, calculation_data in calc.iteritems():
                     value = calculation_data['value']
-                    value = value.replace(get_thousand_separator(), '')
+                    value = str(unhumanize_number(value))
                     if value == self.aggregator.defaults['NO_DATA']:
                         has_no_data = True
                         value += ' *'
