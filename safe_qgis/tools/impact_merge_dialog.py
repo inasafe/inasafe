@@ -24,7 +24,7 @@ from PyQt4 import QtGui, QtCore
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature
 #noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
+from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog
 from qgis.core import QgsMapLayerRegistry
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
@@ -65,11 +65,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.iface = iface
         self.keyword_io = KeywordIO()
 
-        # creating progress dialog for download
-        self.progress_dialog = QProgressDialog(self)
-        self.progress_dialog.setAutoClose(False)
-        title = self.tr("InaSAFE Impact Layer Merge Tool")
-        self.progress_dialog.setWindowTitle(title)
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(
@@ -154,9 +149,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                     self,
                     self.tr('InaSAFE error'),
                     self.tr(
-                        'Please choose two different impact layers to continue.'))
+                        'Please choose two different impact layers to continue.'
+                    ))
                 return
-            self.process()
+            self.merge()
             self.done(QDialog.Accepted)
         except CanceledImportDialogError:
             # don't show anything because this exception raised
@@ -224,8 +220,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             else:
                 raise CanceledImportDialogError()
 
-    def process(self):
-        """Process the postprocessing_report from each impact."""
+    def merge(self):
+        """Merge the postprocessing_report from each impact."""
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
         first_layer = self.first_layer.itemData(
             self.first_layer.currentIndex(), QtCore.Qt.UserRole)
         second_layer = self.second_layer.itemData(
@@ -251,18 +249,59 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         tables += second_document.getElementsByTagName('table')
 
         # Now create dictionary report from DOM
-        # Dictionary Structure: {Aggregation_Area:{Exposure Type:{Exposure
-        # Detail}}}
-        # Example:
-        #   {"Jakarta Barat":
-        #       {"Buildings":
-        #           {"Total":150,
-        #            "Places of Worship: No data
-        #           }
-        #       }
-        #   }
+        merged_report_dict = self.generate_report_dictionary_from_dom(tables)
+
+        # Generate html reports from merged dictionary
+        html_reports = self.generate_html_from_merged_report(merged_report_dict)
+
+        # Now Generate image from html reports. Each image will be generated
+        # for each html report
+        html_renderer = HtmlRenderer(300)
+        for html_report in html_reports:
+            aggregation_area = html_report[0]
+            html = html_report[1]
+            image_report = html_renderer.html_to_image(html, 100)
+            path = '%s/%s.png' % (
+                str(self.output_directory.text()),
+                aggregation_area)
+            image_report.save(path)
+
+        QtGui.qApp.restoreOverrideCursor()
+
+        # Give user success information
+        # noinspection PyCallByClass,PyTypeChecker
+        QMessageBox.information(
+            self,
+            self.tr('InaSAFE Information'),
+            self.tr(
+                'Reports from merging two impact layers is generated '
+                'successfully.'))
+
+    @staticmethod
+    def generate_report_dictionary_from_dom(html_dom):
+        """Generate dictionary representing report from html dom.
+
+        :param html_dom: Input representing document dom as report from each
+        impact layer report.
+        :type html_dom: str
+        :return: Dictionary representing html_dom
+        :rtype: dict
+
+        # DICT STRUCTURE:
+         { Aggregation_Area:
+            {Exposure Type:{
+                Exposure Detail}}}
+        # EXAMPLE
+           {"Jakarta Barat":
+               {"Buildings":
+                   {"Total":150,
+                    "Places of Worship: No data
+                   }
+               }
+           }
+        """
         merged_report_dict = {}
-        for table in tables:
+        for table in html_dom:
             caption = table.getElementsByTagName('caption')[0].firstChild.data
             rows = table.getElementsByTagName('tr')
             header = rows[0]
@@ -284,23 +323,10 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
                         datum.firstChild.nodeValue
                 exposure_dict[caption] = exposure_detail_dict
                 merged_report_dict[aggregation_area] = exposure_dict
+        return merged_report_dict
 
-        # Generate html reports from merged dictionary
-        html_reports = self.generate_html_from_merged_report(merged_report_dict)
-
-        # Now Generate image from html reports. Each image will be generated
-        # for each html report
-        html_renderer = HtmlRenderer(300)
-        for html_report in html_reports:
-            aggregation_area = html_report[0]
-            html = html_report[1]
-            image_report = html_renderer.html_to_image(html, 100)
-            path = '%s/%s.png' % (
-                str(self.output_directory.text()),
-                aggregation_area)
-            image_report.save(path)
-
-    def generate_html_from_merged_report(self, merged_report_dict):
+    @staticmethod
+    def generate_html_from_merged_report(merged_report_dict):
         """Generate html format of all aggregation units from a dictionary
         representing merged report.
 
