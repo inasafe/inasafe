@@ -144,7 +144,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self, self.tr("Select output directory")))
 
     def accept(self):
-        """Do osm download and display it in QGIS."""
+        """Do merging two impact layers."""
 
         self.save_state()
         self.require_directory()
@@ -278,7 +278,9 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             aggregation_area = html_report[0]
             html = html_report[1]
             image_report = html_renderer.html_to_image(html, 100)
-            path = '/tmp/%s.png' % aggregation_area
+            path = '%s/%s.png' % (
+                str(self.output_directory.text()),
+                aggregation_area)
             image_report.save(path)
 
     def generate_html_from_merged_report(self, merged_report_dict):
