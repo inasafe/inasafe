@@ -39,7 +39,7 @@ from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.report.html_renderer import HtmlRenderer
 
-from pydev import pydevd  # pylint: disable=F0401
+#from pydev import pydevd  # pylint: disable=F0401
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -78,8 +78,8 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.show_info()
         self.restore_state()
         # Enable remote debugging - should normally be commented out.
-        pydevd.settrace(
-            'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        #pydevd.settrace(
+        #    'localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         self.get_layers()
 
     def show_info(self):
@@ -145,19 +145,29 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
 
     def accept(self):
         """Do merging two impact layers."""
-
-        self.save_state()
-        self.require_directory()
-        if not self.validate():
-            #noinspection PyCallByClass,PyArgumentList,PyTypeChecker
+        try:
+            self.save_state()
+            self.require_directory()
+            if not self.validate():
+                #noinspection PyCallByClass,PyArgumentList,PyTypeChecker
+                QMessageBox.warning(
+                    self,
+                    self.tr('InaSAFE error'),
+                    self.tr(
+                        'Please choose two different impact layers to continue.'))
+                return
+            self.process()
+            self.done(QDialog.Accepted)
+        except CanceledImportDialogError:
+            # don't show anything because this exception raised
+            # when user canceling the import process directly
+            pass
+        except Exception as myEx:
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 self,
-                self.tr('InaSAFE error'),
-                self.tr(
-                    'Please choose two different impact layers to continue.'))
-            return
-        self.process()
-        self.done(QDialog.Accepted)
+                self.tr("InaSAFE Merge Impact Tools error"),
+                str(myEx))
 
     def validate(self):
         """Verify that there are two layers and they are different."""
@@ -187,25 +197,32 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         :raises: CanceledImportDialogError - when user choose 'No' in
             the question dialog for creating directory.
         """
-
         path = str(self.output_directory.text())
 
-        if os.path.exists(path):
-            return
-
-        title = self.tr("Directory %s not exist") % path
-        question = self.tr(
-            "Directory %s not exist. Do you want to create it?"
-        ) % path
-        # noinspection PyCallByClass,PyTypeChecker
-        answer = QMessageBox.question(
-            self, title,
-            question, QMessageBox.Yes | QMessageBox.No)
-
-        if answer == QMessageBox.Yes:
-            os.makedirs(path)
+        if len(path) == 0:
+            # noinspection PyCallByClass,PyTypeChecker
+            QMessageBox.warning(
+                self,
+                self.tr('InaSAFE error'),
+                self.tr(
+                    'You have not specified the output directory.'))
         else:
-            raise CanceledImportDialogError()
+            if os.path.exists(path):
+                return
+
+            title = self.tr("Directory %s not exist") % path
+            question = self.tr(
+                "Directory %s not exist. Do you want to create it?"
+            ) % path
+            # noinspection PyCallByClass,PyTypeChecker
+            answer = QMessageBox.question(
+                self, title,
+                question, QMessageBox.Yes | QMessageBox.No)
+
+            if answer == QMessageBox.Yes:
+                os.makedirs(path)
+            else:
+                raise CanceledImportDialogError()
 
     def process(self):
         """Process the postprocessing_report from each impact."""
