@@ -93,11 +93,15 @@ class PostprocessorManager(QtCore.QObject):
 
         return position
 
-    def _generate_tables(self):
+    def _generate_tables(self, aoi_mode=True):
         """Parses the postprocessing output as one table per postprocessor.
 
         TODO: This should rather return json and then have a helper method to
         make html from the JSON.
+
+        :param aoi_mode: adds a Total in aggregation areas
+        row to the calculated table
+        :type aoi_mode: bool
 
         :returns: The html.
         :rtype: str
@@ -160,11 +164,12 @@ class PostprocessorManager(QtCore.QObject):
                     row.add(value)
                 table.add(row)
 
-            # add the totals row
-            row = m.Row(self.tr('Total in aggregation areas'))
-            for _, total in postprocessor_totals.iteritems():
-                row.add(str(total))
-            table.add(row)
+            if not aoi_mode:
+                # add the totals row
+                row = m.Row(self.tr('Total in aggregation areas'))
+                for _, total in postprocessor_totals.iteritems():
+                    row.add(str(total))
+                table.add(row)
 
             # add table to message
             message.add(table)
@@ -357,8 +362,11 @@ class PostprocessorManager(QtCore.QObject):
             # increment the index
             polygon_index += 1
 
-    def get_output(self):
+    def get_output(self, aoi_mode):
         """Returns the results of the post processing as a table.
+
+        :param aoi_mode: aoi mode of the aggregator.
+        :type aoi_mode: bool
 
         :returns: str - a string containing the html in the requested format.
         """
@@ -378,4 +386,4 @@ class PostprocessorManager(QtCore.QObject):
             except KeywordNotFoundError:
                 pass
 
-            return self._generate_tables()
+            return self._generate_tables(aoi_mode)
