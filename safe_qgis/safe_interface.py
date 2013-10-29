@@ -63,6 +63,7 @@ from safe.api import (
     get_unique_values,
     get_plugins_as_table,
     evacuated_population_weekly_needs,
+    Layer,
     Vector,
     Raster,
     nan_allclose,
@@ -447,11 +448,11 @@ def readSafeLayer(thePath):
         raise
 
 
-def convertToSafeLayer(qgis_layer):
+def convertToSafeLayer(layer):
     """Thin wrapper around the safe read_layer function.
 
     Args:
-        qgis_layer - QgsMapLayer.
+        layer - QgsMapLayer or Safe layer.
     Returns:
         A safe readSafeLayer object is returned.
     Raises:
@@ -461,8 +462,10 @@ def convertToSafeLayer(qgis_layer):
     #   Do not call readSafeLayer, but write function
     #     safe.storage.core.convert_layer to convert QgsMapLayer to SAFE layer
 
+    if isinstance(layer, Layer):
+        return layer
     try:
-        return readSafeLayer(qgis_layer.source())
+        return readSafeLayer(layer.source())
     except:
         raise
 

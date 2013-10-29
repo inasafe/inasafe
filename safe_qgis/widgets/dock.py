@@ -849,6 +849,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def setup_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
 
+        # Use canonical function name to identify selected function
+        function_id = self.get_function_id()
+        self.calculator.set_function(function_id)
+
         hazard_layer, exposure_layer = self.optimal_clip()
         # See if the inputs need further refinement for aggregations
         try:
@@ -856,13 +860,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
             raise
         # Identify input layers
-        self.calculator.set_hazard_layer(self.aggregator.hazard_layer.source())
-        self.calculator.set_exposure_layer(
-            self.aggregator.exposure_layer.source())
-
-        # Use canonical function name to identify selected function
-        function_id = self.get_function_id()
-        self.calculator.set_function(function_id)
+        self.calculator.set_hazard_layer(self.aggregator.hazard_layer)
+        self.calculator.set_exposure_layer(self.aggregator.exposure_layer)
 
     def prepare_aggregator(self):
         """Create an aggregator for this analysis run."""

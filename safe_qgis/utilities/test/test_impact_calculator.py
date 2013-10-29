@@ -32,7 +32,8 @@ from safe_qgis.exceptions import (
     StyleInfoNotFoundError)
 
 from safe_qgis.safe_interface import (
-    readKeywordsFromLayer, getStyleInfo, HAZDATA, EXPDATA, TESTDATA)
+    readKeywordsFromLayer, getStyleInfo, readSafeLayer,
+    HAZDATA, EXPDATA, TESTDATA)
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)
@@ -47,8 +48,10 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Create shared resources that all tests can use"""
         self.calculator = ImpactCalculator()
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+        self.vectorLayer = readSafeLayer(self.vectorPath)
         self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')
+        self.rasterShake = readSafeLayer(self.rasterShakePath)
         # UTM projected layer
 
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
@@ -57,8 +60,8 @@ class ImpactCalculatorTest(unittest.TestCase):
             TESTDATA, 'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
-        self.calculator.set_hazard_layer(self.rasterShakePath)
-        self.calculator.set_exposure_layer(self.vectorPath)
+        self.calculator.set_hazard_layer(self.rasterShake)
+        self.calculator.set_exposure_layer(self.vectorLayer)
         self.calculator.set_function('Earthquake Building Impact Function')
 
     def tearDown(self):
@@ -70,11 +73,11 @@ class ImpactCalculatorTest(unittest.TestCase):
 
         myMessage = 'Vector property incorrect.'
         assert (self.calculator.exposure_layer() ==
-                self.vectorPath), myMessage
+                self.vectorLayer), myMessage
 
         myMessage = 'Raster property incorrect.'
         assert (self.calculator.hazard_layer() ==
-                self.rasterShakePath), myMessage
+                self.rasterShake), myMessage
 
         myMessage = 'Function property incorrect.'
         assert (self.calculator.function() ==
@@ -157,10 +160,10 @@ class ImpactCalculatorTest(unittest.TestCase):
         hazard_path = os.path.join(
             HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc')
         # Verify relevant metada is ok
-        #H = readSafeLayer(hazard_path)
-        #E = readSafeLayer(exposure_path)
-        self.calculator.set_hazard_layer(hazard_path)
-        self.calculator.set_exposure_layer(exposure_path)
+        H = readSafeLayer(hazard_path)
+        E = readSafeLayer(exposure_path)
+        self.calculator.set_hazard_layer(H)
+        self.calculator.set_exposure_layer(E)
         self.calculator.set_function('Flood Building Impact Function')
         try:
             myRunner = self.calculator.get_runner()

@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # pylint: disable=W0611
+from safe.storage.vector import Layer
 from safe.storage.vector import Vector
 from safe.storage.raster import Raster
 from safe.defaults import DEFAULTS
