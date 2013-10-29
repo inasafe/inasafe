@@ -24,7 +24,7 @@ from PyQt4 import QtGui, QtCore
 #noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature
 #noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog, QProgressDialog, QMessageBox, QFileDialog
+from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog
 from qgis.core import QgsMapLayerRegistry
 
 from safe_qgis.ui.impact_merge_dialog_base import Ui_ImpactMergeDialogBase
@@ -37,8 +37,9 @@ from safe_qgis.utilities.utilities import (
 from safe_qgis.utilities.help import show_context_help
 from safe_qgis.safe_interface import styles
 from safe_qgis.utilities.keyword_io import KeywordIO
+from safe_qgis.report.html_renderer import HtmlRenderer
 
-from pydev import pydevd  # pylint: disable=F0401
+#from pydev import pydevd  # pylint: disable=F0401
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -64,11 +65,6 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         self.iface = iface
         self.keyword_io = KeywordIO()
 
-        # creating progress dialog for download
-        self.progress_dialog = QProgressDialog(self)
-        self.progress_dialog.setAutoClose(False)
-        title = self.tr("InaSAFE Impact Layer Merge Tool")
-        self.progress_dialog.setWindowTitle(title)
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(
@@ -143,20 +139,31 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             self, self.tr("Select output directory")))
 
     def accept(self):
-        """Do osm download and display it in QGIS."""
-
-        self.save_state()
-        self.require_directory()
-        if not self.validate():
-            #noinspection PyCallByClass,PyArgumentList,PyTypeChecker
+        """Do merging two impact layers."""
+        try:
+            self.save_state()
+            self.require_directory()
+            if not self.validate():
+                #noinspection PyCallByClass,PyArgumentList,PyTypeChecker
+                QMessageBox.warning(
+                    self,
+                    self.tr('InaSAFE error'),
+                    self.tr(
+                        'Please choose two different impact layers to continue.'
+                    ))
+                return
+            self.merge()
+            self.done(QDialog.Accepted)
+        except CanceledImportDialogError:
+            # don't show anything because this exception raised
+            # when user canceling the import process directly
+            pass
+        except Exception as myEx:
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
                 self,
-                self.tr('InaSAFE error'),
-                self.tr(
-                    'Please choose two different impact layers to continue.'))
-            return
-        self.process()
-        self.done(QDialog.Accepted)
+                self.tr("InaSAFE Merge Impact Tools error"),
+                str(myEx))
 
     def validate(self):
         """Verify that there are two layers and they are different."""
@@ -186,28 +193,37 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         :raises: CanceledImportDialogError - when user choose 'No' in
             the question dialog for creating directory.
         """
-
         path = str(self.output_directory.text())
 
-        if os.path.exists(path):
-            return
-
-        title = self.tr("Directory %s not exist") % path
-        question = self.tr(
-            "Directory %s not exist. Do you want to create it?"
-        ) % path
-        # noinspection PyCallByClass,PyTypeChecker
-        answer = QMessageBox.question(
-            self, title,
-            question, QMessageBox.Yes | QMessageBox.No)
-
-        if answer == QMessageBox.Yes:
-            os.makedirs(path)
+        if len(path) == 0:
+            # noinspection PyCallByClass,PyTypeChecker
+            QMessageBox.warning(
+                self,
+                self.tr('InaSAFE error'),
+                self.tr(
+                    'You have not specified the output directory.'))
         else:
-            raise CanceledImportDialogError()
+            if os.path.exists(path):
+                return
 
-    def process(self):
-        """Process the postprocessing_report from each impact."""
+            title = self.tr("Directory %s not exist") % path
+            question = self.tr(
+                "Directory %s not exist. Do you want to create it?"
+            ) % path
+            # noinspection PyCallByClass,PyTypeChecker
+            answer = QMessageBox.question(
+                self, title,
+                question, QMessageBox.Yes | QMessageBox.No)
+
+            if answer == QMessageBox.Yes:
+                os.makedirs(path)
+            else:
+                raise CanceledImportDialogError()
+
+    def merge(self):
+        """Merge the postprocessing_report from each impact."""
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
         first_layer = self.first_layer.itemData(
             self.first_layer.currentIndex(), QtCore.Qt.UserRole)
         second_layer = self.second_layer.itemData(
@@ -225,20 +241,134 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
         # Ensure there is always only a single root element or minidom moans
         first_report = '<body>' + first_report + '</body>'
         second_report = '<body>' + second_report + '</body>'
+
         # Now create a dom document for each
         first_document = minidom.parseString(first_report)
         second_document = minidom.parseString(second_report)
         tables = first_document.getElementsByTagName('table')
         tables += second_document.getElementsByTagName('table')
-        for table in tables:
+
+        # Now create dictionary report from DOM
+        merged_report_dict = self.generate_report_dictionary_from_dom(tables)
+
+        # Generate html reports from merged dictionary
+        html_reports = self.generate_html_from_merged_report(merged_report_dict)
+
+        # Now Generate image from html reports. Each image will be generated
+        # for each html report
+        html_renderer = HtmlRenderer(300)
+        for html_report in html_reports:
+            aggregation_area = html_report[0]
+            html = html_report[1]
+            image_report = html_renderer.html_to_image(html, 100)
+            path = '%s/%s.png' % (
+                str(self.output_directory.text()),
+                aggregation_area)
+            image_report.save(path)
+
+        QtGui.qApp.restoreOverrideCursor()
+
+        # Give user success information
+        # noinspection PyCallByClass,PyTypeChecker
+        QMessageBox.information(
+            self,
+            self.tr('InaSAFE Information'),
+            self.tr(
+                'Reports from merging two impact layers is generated '
+                'successfully.'))
+
+    @staticmethod
+    def generate_report_dictionary_from_dom(html_dom):
+        """Generate dictionary representing report from html dom.
+
+        :param html_dom: Input representing document dom as report from each
+        impact layer report.
+        :type html_dom: str
+        :return: Dictionary representing html_dom
+        :rtype: dict
+
+        # DICT STRUCTURE:
+         { Aggregation_Area:
+            {Exposure Type:{
+                Exposure Detail}}}
+        # EXAMPLE
+           {"Jakarta Barat":
+               {"Buildings":
+                   {"Total":150,
+                    "Places of Worship: No data
+                   }
+               }
+           }
+        """
+        merged_report_dict = {}
+        for table in html_dom:
+            caption = table.getElementsByTagName('caption')[0].firstChild.data
             rows = table.getElementsByTagName('tr')
-            print '----------------------'
-            print rows
+            header = rows[0]
+            contains = rows[1:]
+            for contain in contains:
+                data = contain.getElementsByTagName('td')
+                aggregation_area = data[0].firstChild.nodeValue
+                exposure_dict = {}
+                if aggregation_area in merged_report_dict:
+                    exposure_dict = merged_report_dict[aggregation_area]
+                data_contain = data[1:]
+                exposure_detail_dict = {}
+                for datum in data_contain:
+                    index_datum = data.index(datum)
+                    datum_header = \
+                        header.getElementsByTagName('td')[index_datum]
+                    datum_caption = datum_header.firstChild.nodeValue
+                    exposure_detail_dict[datum_caption] = \
+                        datum.firstChild.nodeValue
+                exposure_dict[caption] = exposure_detail_dict
+                merged_report_dict[aggregation_area] = exposure_dict
+        return merged_report_dict
+
+    @staticmethod
+    def generate_html_from_merged_report(merged_report_dict):
+        """Generate html format of all aggregation units from a dictionary
+        representing merged report.
+
+        :param merged_report_dict: a dictionary of merged report
+        :type merged_report_dict: dict
+
+        :return: HTML for each aggregation unit report
+        :rtype: list
+        """
+        html_reports = []
+        for aggregation_area in merged_report_dict:
+            html = ''
+            html += '<table class="table table-condensed table-striped">'
+            html += '<caption>%s</caption>' % aggregation_area
+            exposure_report_dict = merged_report_dict[aggregation_area]
+            for exposure in exposure_report_dict:
+                exposure_detail_dict = exposure_report_dict[exposure]
+                html += '<tr><th>%s</th></tr>' % exposure
+                # Print rows containing 'total'
+                for datum in exposure_detail_dict:
+                    if 'total' in str(datum).lower():
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % (datum, exposure_detail_dict[datum])
+                # Print rows other than above
+                for datum in exposure_detail_dict:
+                    if 'total' not in str(datum).lower():
+                        html += ('<tr>'
+                                 '<td>%s</td>'
+                                 '<td>%s</td>'
+                                 '</tr>') % (datum, exposure_detail_dict[datum])
+
+            html += '</table>'
+            html_report = (aggregation_area, html)
+            html_reports.append(html_report)
+
+        return html_reports
 
     def get_layers(self):
         """Obtain a list of impact layers currently loaded in QGIS.
         """
-
         registry = QgsMapLayerRegistry.instance()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = registry.mapLayers().values()
