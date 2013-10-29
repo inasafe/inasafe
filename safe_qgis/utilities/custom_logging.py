@@ -24,7 +24,6 @@ import logging
 from datetime import date
 import getpass
 from tempfile import mkstemp
-from utilities import tr
 
 from PyQt4 import QtCore
 
@@ -40,6 +39,8 @@ from raven.handlers.logging import SentryHandler
 from raven import Client
 # pylint: enable=F0401
 LOGGER = logging.getLogger('InaSAFE')
+
+from safe_qgis.utilities.utilities import tr
 
 
 class QgsLogHandler(logging.Handler):
