@@ -25,7 +25,6 @@ def create_index(shakemap_dir, locale):
     if locale == 'en':
         index_path = os.path.join(shakemap_dir, 'index-en.html')
         path_list = glob(os.path.join(shakemap_dir, '*en.pickle'))
-        print path_list
         header_html_file_path = os.path.join(os.path.dirname(__file__),
                                              'fixtures',
                                              'web',
@@ -43,15 +42,17 @@ def create_index(shakemap_dir, locale):
     else:
         raise logging.exception(
             'Locale ID other than id and en is not supported!')
-
+    # Check if index_path is exist. Remove if it's exist
     if os.path.exists(index_path):
         os.remove(index_path)
     path_list.reverse()
 
+    # Prepare header of the html file
     header_html_file = open(header_html_file_path)
     header_html = header_html_file.read()
     header_html_file.close()
 
+    # Prepare footer of the html file
     footer_html_file = open(os.path.join(os.path.dirname(__file__),
                                          'fixtures',
                                          'web',
@@ -60,37 +61,37 @@ def create_index(shakemap_dir, locale):
     footer_html = footer_html_file.read()
     footer_html_file.close()
 
-    table_html = '\t<table class="table table-bordered table-hover ' \
-                 'table-condensed">\n'
-    table_html += '\t\t<thead> ' \
-                  '\n\t\t\t<tr> ' \
-                  '\n\t\t\t\t<th>Max MMI</th> ' \
-                  '\n\t\t\t\t<th>Time</th> ' \
-                  '\n\t\t\t\t<th>Location</th>' \
-                  '\n\t\t\t\t<th>Magnitude</th> ' \
-                  '\n\t\t\t\t<th>Report</th> ' \
-                  '\n\t\t\t</tr> ' \
-                  '\n\t</thead> ' \
-                  '\n\t<tbody>\n'
+    # Generate Table HTML for all of the pickle_path
+    table_html = ('\t'
+                  '<table class="table table-bordered table-hover>\n'
+                  '\t\t<thead>'
+                  '\n\t\t\t<tr>'
+                  '\n\t\t\t\t<th>Max MMI</th>'
+                  '\n\t\t\t\t<th>Time</th>'
+                  '\n\t\t\t\t<th>Location</th>'
+                  '\n\t\t\t\t<th>Magnitude</th>'
+                  '\n\t\t\t\t<th>Report</th>'
+                  '\n\t\t\t</tr>'
+                  '\n\t</thead>'
+                  '\n\t<tbody>\n')
 
     for pickle_path in path_list:
         pickle_file = file(pickle_path, 'rb')
         metadata = pickle.load(pickle_file)
-        mmi_class = 'mmi-2'  # FIXME
-        table_html += '\t\t<tr>' \
-                      '\n\t\t\t<td class="%s">%s</td>' \
-                      '\n\t\t\t<td>%s</td>' \
-                      '\n\t\t\t<td>%s</td>' \
-                      '\n\t\t\t<td>%s</td>' \
-                      '\n\t\t\t<td>%s</td>' \
-                      '\n\t\t</tr>\n' % (
-                          mmi_class,
-                          metadata['mmi'],
-                          metadata['formatted-date-time'],
-                          metadata['place-name'],
-                          metadata['mmi'],
-                          metadata['place-name'])
-    table_html += '\t</tbody> \n</table>'
+        mmi_class = 'mmi-2'  # TODO
+        table_html += ('\t\t<tr>'
+                       '\n\t\t\t<td class="%s">%s</td>'
+                       '\n\t\t\t<td>%s</td>'
+                       '\n\t\t\t<td>%s</td>'
+                       '\n\t\t\t<td>%s</td>'
+                       '\n\t\t\t<td>%s</td>'
+                       '\n\t\t</tr>\n' % (mmi_class,
+                                          metadata['mmi'],
+                                          metadata['formatted-date-time'],
+                                          metadata['place-name'],
+                                          metadata['mmi'],
+                                          metadata['place-name']))
+    table_html += ('\t</tbody> \n</table>')
 
     index_file = file(index_path, 'wt')
     index_file.write(header_html + table_html + footer_html)
@@ -123,10 +124,10 @@ def publish_pages(shakemap_dir):
     # Move to /home/web/quake/public/
     public_dir = '/home/web/quake/public/'
     testdir = os.path.join(os.path.dirname(__file__),
-                       os.pardir,
-                       'realtime',
-                       'fixtures',
-                       'tests')
+                           os.pardir,
+                           'realtime',
+                           'fixtures',
+                           'tests')
     shutil.move(en_index_path, os.path.join(testdir, 'index-en.html'))
     shutil.move(id_index_path, os.path.join(testdir, 'index-id.html'))
 
