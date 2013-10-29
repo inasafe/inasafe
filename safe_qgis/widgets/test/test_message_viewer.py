@@ -19,8 +19,10 @@ __author__ = 'timlinux'
 import os
 import sys
 import unittest
-from PyQt4 import Qt
+import qgis
+from PyQt4.Qt import QApplication
 from third_party.pydispatch import dispatcher
+import safe.common.utilities
 from safe_qgis.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
@@ -36,11 +38,13 @@ TEST_FILES_DIR = os.path.join(
 class MessageViewerTest(unittest.TestCase):
     """Test cases for message viewer module."""
 
+    APPLICATION = QApplication(sys.argv)
+
     def setUp(self):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
-        self.app = Qt.QApplication(sys.argv)
         self.message_viewer = MessageViewer(None)
+        self.message_viewer.show()
         # Set up dispatcher for dynamic messages
         # Dynamic messages will not clear the message queue so will be appended
         # to existing user messages
@@ -61,13 +65,34 @@ class MessageViewerTest(unittest.TestCase):
     def tearDown(self):
         """Fixture run after each test"""
         self.message_viewer = None
-        self.app = None
 
     def test_dynamic_message(self):
         """Test we can send dynamic messages to the message viewer."""
         self.message_viewer.dynamic_message_event(None, m.Message('Hi'))
         text = self.message_viewer.page_to_text()
         self.assertEqual(text, 'Hi\n')
+
+    def test_log(self):
+        """Test we see a correct log from the message viewer."""
+        self._simulate_run()
+        self.message_viewer.show_log()
+        text = self.message_viewer.page().currentFrame().toHtml()
+        self.assertEqual(text, 'Dyn 1\nDyn 2\n')
+
+    def test_report(self):
+        """Test we see a correct report from the message viewer."""
+        self._simulate_run()
+        self.message_viewer.show_report()
+        self.message_viewer.open_current_in_browser()
+        text = self.message_viewer.page().mainFrame().toHtml()
+        self.assertEqual(text, 'Result\n')
+
+    def _simulate_run(self):
+        self.message_viewer.dynamic_message_event(None, m.Message('Dyn 1'))
+        self.message_viewer.dynamic_message_event(None, m.Message('Dyn 2'))
+        self.message_viewer.static_message_event(None, m.Message('Result'))
+        self.message_viewer.impact_path = '/tmp/lalala1.shp'
+
 
     #Enabling this test causes a segfault for me TS
     def Xtest_static_message(self):
@@ -93,22 +118,22 @@ class MessageViewerTest(unittest.TestCase):
     def Xtest_error_message(self):
         """Test we can send error messages to the message viewer."""
         text = self.fake_error()
-        myExpectedResult = open(
+        my_expected_result = open(
             TEST_FILES_DIR +
             '/test-error-message.txt',
             'r').read().replace('\n', '')
-        self.assertEqual(text, myExpectedResult)
+        self.assertEqual(text, my_expected_result)
 
     #Enabling this test causes a segfault for me TS
     def Xtest_static_and_error(self):
         """Test error message works when there is a static message in place."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.fake_error()
-        myExpectedResult = open(
+        my_expected_result = open(
             TEST_FILES_DIR +
             '/test-static-error-message.txt',
             'r').read().replace('\n', '')
-        self.assertEqual(text, myExpectedResult)
+        self.assertEqual(text, my_expected_result)
 
 if __name__ == '__main__':
     unittest.main()

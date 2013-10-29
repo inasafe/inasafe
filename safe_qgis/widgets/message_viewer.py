@@ -17,6 +17,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
 
+from PyQt4.QtCore import QUrl
+
 from safe import messaging as m
 from safe_qgis.safe_interface import InvalidParameterError
 from safe_qgis.utilities.utilities import (
@@ -33,7 +35,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class MessageViewer(QtWebKit.QWebView):
-    """A simple message queue mockup."""
+    """A simple message queue"""
     static_message_count = 0
 
     # noinspection PyOldStyleClasses
@@ -247,7 +249,11 @@ class MessageViewer(QtWebKit.QWebView):
                 string += html
 
         string += html_footer()
+        print "#######HTML string#####"
+        print string
         self.setHtml(string)
+        print "#######HTML result#####"
+        print self.page().mainFrame().toHtml()
         #self.scroll_to_div()
 
     def to_message(self):
@@ -318,4 +324,8 @@ class MessageViewer(QtWebKit.QWebView):
                 open_in_browser(self.report_path)
 
     def load_html_file(self, file_path):
-        self.setUrl(QtCore.QUrl.fromLocalFile(file_path))
+        # FIXME (MB) this call as all setHtml calls do not work as expected
+        # in the test suite.
+        # see the prints in show_messages and
+        # https://gist.github.com/mbernasocchi/7219398
+        self.setUrl(QUrl.fromLocalFile(file_path))
