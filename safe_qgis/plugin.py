@@ -82,6 +82,7 @@ class Plugin:
         custom_logging.setup_logger()
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
+        self.action_impact_merge_dlg = None
 
     #noinspection PyArgumentList
     def setup_i18n(self, preferred_locale=None):
@@ -339,6 +340,21 @@ class Plugin:
         self.add_action(self.actionImportDlg)
 
         #--------------------------------------
+        # Create action for impact layer merge Dialog
+        #--------------------------------------
+        self.action_impact_merge_dlg = QAction(
+            QIcon(':/plugins/inasafe/show-impact-merge.svg'),
+            self.tr('InaSAFE Impact Layer Merge'),
+            self.iface.mainWindow())
+        self.action_impact_merge_dlg.setStatusTip(self.tr(
+            'InaSAFE Impact Layer Merge'))
+        self.action_impact_merge_dlg.setWhatsThis(self.tr(
+            'InaSAFE Impact Layer Merge'))
+        self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
+
+        self.add_action(self.action_impact_merge_dlg)
+
+        #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = Dock(self.iface)
@@ -441,19 +457,27 @@ class Plugin:
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.minimum_needs import MinimumNeeds
 
-        myDialog = MinimumNeeds(self.iface.mainWindow())
-        myDialog.exec_()  # modal
+        dialog = MinimumNeeds(self.iface.mainWindow())
+        dialog.exec_()  # modal
+
+    def show_impact_merge(self):
+        """Show the impact layer merge dialog."""
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
+
+        dialog = ImpactMergeDialog(self.iface.mainWindow())
+        dialog.exec_()  # modal
 
     def show_options(self):
         """Show the options dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.options_dialog import OptionsDialog
 
-        myDialog = OptionsDialog(
+        dialog = OptionsDialog(
             self.iface,
             self.dockWidget,
             self.iface.mainWindow())
-        myDialog.exec_()  # modal
+        dialog.exec_()  # modal
 
     def show_keywords_editor(self):
         """Show the keywords editor."""
@@ -462,27 +486,27 @@ class Plugin:
 
         if self.iface.activeLayer() is None:
             return
-        myDialog = KeywordsDialog(
+        dialog = KeywordsDialog(
             self.iface.mainWindow(),
             self.iface,
             self.dockWidget)
-        myDialog.exec_()  # modal
+        dialog.exec_()  # modal
 
     def show_function_browser(self):
         """Show the impact function browser tool."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.function_browser import FunctionBrowser
 
-        myDialog = FunctionBrowser(self.iface.mainWindow())
-        myDialog.exec_()  # modal
+        dialog = FunctionBrowser(self.iface.mainWindow())
+        dialog.exec_()  # modal
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
         from safe_qgis.tools.shakemap_importer import ShakemapImporter
 
-        myDialog = ShakemapImporter(self.iface.mainWindow())
-        myDialog.exec_()  # modal
+        dialog = ShakemapImporter(self.iface.mainWindow())
+        dialog.exec_()  # modal
 
     def show_osm_downloader(self):
         """Show the OSM buildings downloader dialog."""
@@ -495,11 +519,11 @@ class Plugin:
         """Show the batch runner dialog."""
         from safe_qgis.batch.batch_dialog import BatchDialog
 
-        myDialog = BatchDialog(
+        dialog = BatchDialog(
             parent=self.iface.mainWindow(),
             iface=self.iface,
             dock=self.dockWidget)
-        myDialog.exec_()  # modal
+        dialog.exec_()  # modal
 
     def save_scenario(self):
         """Save current scenario to text file,"""

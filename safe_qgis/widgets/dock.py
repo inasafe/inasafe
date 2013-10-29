@@ -1184,7 +1184,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
 
         # write postprocessing report to keyword
-        output = self.postprocessor_manager.get_output()
+        output = self.postprocessor_manager.get_output(self.aggregator.aoi_mode)
         keywords['postprocessing_report'] = output.to_html(
             suppress_newlines=True)
         self.keyword_io.write_keywords(qgis_impact_layer, keywords)

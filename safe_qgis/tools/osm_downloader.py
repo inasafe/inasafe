@@ -257,7 +257,7 @@ class OsmDownloader(QDialog, Ui_OsmDownloaderBase):
 
         # myLabelText = "Begin downloading shapefile from " \
         #               + "%s ..."
-        # self.progressDialog.setLabelText(self.tr(myLabelText) % (url))
+        # self.progress_dialog.setLabelText(self.tr(myLabelText) % (url))
         myLabelText = self.tr("Downloading shapefile")
         self.progressDialog.setLabelText(myLabelText)
 

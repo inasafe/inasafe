@@ -15,6 +15,7 @@ Authors ordered by date of first contribution:
 * Oscar Kurniawan <misugijunz@gmail.com>
 * Trevor Dhu <Trevor.Dhu@ausaid.gov.au>
 * Gigih Aji Ibrahim <bungcip@gmail.com>
+* Akbar Gumbira <akbargumbira@gmail.com>
 
 
 Other contributors who have provided input, testing, translations etc.

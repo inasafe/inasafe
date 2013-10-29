@@ -3,7 +3,7 @@
 export QGIS_DEBUG=1
 export QGIS_LOG_FILE=/tmp/inasafe/realtime/logs/qgis.log
 
-export QGIS_PREFIX_PATH=/usr/local/qgis-master/
+export QGIS_PREFIX_PATH=/usr/local/qgis-2.0
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:`pwd`
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 
