@@ -30,7 +30,9 @@ from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL)
+    ERROR_MESSAGE_SIGNAL,
+    unique_filename,
+    temp_dir)
 from safe_qgis.utilities.utilities import get_error_message
 
 TEST_FILES_DIR = os.path.join(
@@ -85,7 +87,6 @@ class MessageViewerTest(unittest.TestCase):
     def test_report(self):
         """Test we see a correct report from the message viewer."""
         self._simulate_run()
-        self.message_viewer.show_report()
         text = self.message_viewer.page().currentFrame().toHtml()
         expected_result = 'Result'
         self.assertIn(expected_result, text)
@@ -94,7 +95,9 @@ class MessageViewerTest(unittest.TestCase):
         self.message_viewer.dynamic_message_event(None, m.Message('Dyn 1'))
         self.message_viewer.dynamic_message_event(None, m.Message('Dyn 2'))
         self.message_viewer.static_message_event(None, m.Message('Result'))
-        self.message_viewer.impact_path = '/tmp/lalala1.shp'
+        tempdir = temp_dir(sub_dir='test')
+        filename = unique_filename(suffix='.shp', dir=tempdir)
+        self.message_viewer.impact_path = filename
 
     def test_static_message(self):
         """Test we can send static messages to the message viewer."""
