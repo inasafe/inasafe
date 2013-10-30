@@ -193,3 +193,29 @@ class ImpactCalculator(QObject):
             myHazardLayer,
             myExposureLayer,
             myFunction)
+
+    def need_clip(self):
+        """Check to clip or not to clip layers.
+
+        If self._function is a 'new-style' impact function, then
+            return False -- clipping is unnecessary, else return True
+
+        :returns:   To clip or not to clip.
+        :rtype:     bool
+
+        :raises: InsufficientParametersError if function parameter is not set.
+                 InvalidParameterError if the function has unknown style.
+        """
+        f = self.function()
+        if f is None:
+            myMessage = self.tr('Error: Function is not provided.')
+            raise InsufficientParametersError(myMessage)
+
+        style = getSafeImpactFunctionType(f)
+        if style == 'old-style':
+            return True
+        elif style == 'qgis2.0':
+            return False
+        else:
+            myMessage = self.tr('Error: Function has unknown style.')
+            raise InvalidParameterError(myMessage)

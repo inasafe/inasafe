@@ -207,6 +207,16 @@ class ImpactCalculatorTest(unittest.TestCase):
                          ' exception type: \n %s') % str(e)
             raise StyleInfoNotFoundError(myMessage)
 
+    def test_need_clip(self):
+        """Test if need_clip method work as expected."""
+        # 'Old-style' impact function
+
+        myMessage = 'True expected, but False returned'
+        assert self.calculator.need_clip(), myMessage
+
+        self.calculator.set_function('Flood Vector Roads Experimental Function')
+        myMessage = 'False expected, but True returned'
+        assert not self.calculator.need_clip(), myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')
