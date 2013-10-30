@@ -90,7 +90,7 @@ class AggregatorTest(unittest.TestCase):
         DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
-        self.keywordIO = KeywordIO()
+        self._keywordIO = KeywordIO()
         self._defaults = breakdown_defaults()
 
     def test_combo_aggregation_loaded_project(self):
