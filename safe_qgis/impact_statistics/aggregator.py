@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe_qgis import breakdown_defaults
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -49,7 +50,6 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
     create_memory_layer,
-    breakdown_defaults,
     extent_to_geo_array,
     safe_to_qgis_layer)
 from safe_qgis.utilities.styling import set_vector_graduated_style

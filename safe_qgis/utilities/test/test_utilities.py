@@ -11,10 +11,12 @@ from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
+
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
+from safe_qgis.utilities.defaults import breakdown_defaults
 from safe_qgis.utilities.utilities import (
     get_error_message,
     qgis_version,
@@ -25,8 +27,7 @@ from safe_qgis.utilities.utilities import (
     layer_attribute_names,
     impact_attribution,
     dpi_to_meters,
-    which,
-    breakdown_defaults)
+    which )
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, TEST_FILES_DIR)
 from safe_qgis.tools.test.test_keywords_dialog import (

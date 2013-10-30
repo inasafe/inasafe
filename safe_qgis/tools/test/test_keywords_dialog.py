@@ -46,7 +46,8 @@ from safe_qgis.safe_interface import (
     HAZDATA, TESTDATA)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
-from safe_qgis.utilities.utilities import breakdown_defaults, qgis_version
+from safe_qgis.utilities.utilities import qgis_version
+from safe_qgis.utilities.defaults import breakdown_defaults
 
 
 # Get QGis app handle

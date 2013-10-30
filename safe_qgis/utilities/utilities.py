@@ -40,11 +40,11 @@ from safe_qgis.exceptions import MemoryLayerCreationError
 
 from safe_qgis.safe_interface import (
     ErrorMessage,
-    DEFAULTS,
     safeTr,
     get_version,
-    messaging as m)
-from safe_qgis.safe_interface import styles
+    messaging as m,
+    styles)
+
 INFO_STYLE = styles.INFO_STYLE
 
 #do not remove this even if it is marked as unused by your IDE
@@ -242,36 +242,6 @@ def layer_attribute_names(layer, allowed_types, current_keyword=None):
         return myFields, mySelectedIndex
     else:
         return None, None
-
-
-def breakdown_defaults(theDefault=None):
-    """Get a dictionary of default values to be used for post processing.
-
-    .. note: This method takes the DEFAULTS from safe and modifies them
-        according to user preferences defined in QSettings.
-
-    :param theDefault: A key of the defaults dictionary. Use this to
-        optionally retrieve only a specific default.
-    :type theDefault: str
-
-    :returns: A dictionary of defaults values to be used or the default
-        value if a key is passed. None if the requested default value is not
-        valid.
-    :rtype: dict, str, None
-    """
-    mySettings = QtCore.QSettings()
-    myDefaults = DEFAULTS
-
-    myDefaults['FEM_RATIO'] = float(mySettings.value(
-        'inasafe/defaultFemaleRatio',
-        DEFAULTS['FEM_RATIO']))
-
-    if theDefault is None:
-        return myDefaults
-    elif theDefault in myDefaults:
-        return myDefaults[theDefault]
-    else:
-        return None
 
 
 def create_memory_layer(layer, new_name=''):
