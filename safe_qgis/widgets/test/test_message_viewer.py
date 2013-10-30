@@ -19,10 +19,12 @@ __author__ = 'timlinux'
 import os
 import sys
 import unittest
-import qgis
+
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
+
 from PyQt4.Qt import QApplication
 from third_party.pydispatch import dispatcher
-import safe.common.utilities
 from safe_qgis.widgets.message_viewer import MessageViewer
 from safe_qgis.safe_interface import messaging as m
 from safe_qgis.safe_interface import (
@@ -77,15 +79,16 @@ class MessageViewerTest(unittest.TestCase):
         self._simulate_run()
         self.message_viewer.show_log()
         text = self.message_viewer.page().currentFrame().toHtml()
-        self.assertEqual(text, 'Dyn 1\nDyn 2\n')
+        expected_result = 'Analysis log</h5>Dyn 1\nDyn 2'
+        self.assertIn(expected_result, text)
 
     def test_report(self):
         """Test we see a correct report from the message viewer."""
         self._simulate_run()
         self.message_viewer.show_report()
-        self.message_viewer.open_current_in_browser()
-        text = self.message_viewer.page().mainFrame().toHtml()
-        self.assertEqual(text, 'Result\n')
+        text = self.message_viewer.page().currentFrame().toHtml()
+        expected_result = 'Result'
+        self.assertIn(expected_result, text)
 
     def _simulate_run(self):
         self.message_viewer.dynamic_message_event(None, m.Message('Dyn 1'))
@@ -93,9 +96,7 @@ class MessageViewerTest(unittest.TestCase):
         self.message_viewer.static_message_event(None, m.Message('Result'))
         self.message_viewer.impact_path = '/tmp/lalala1.shp'
 
-
-    #Enabling this test causes a segfault for me TS
-    def Xtest_static_message(self):
+    def test_static_message(self):
         """Test we can send static messages to the message viewer."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.message_viewer.page_to_text()
@@ -114,8 +115,7 @@ class MessageViewerTest(unittest.TestCase):
         text = self.message_viewer.page_to_text().replace('\n', '')
         return text
 
-    #Enabling this test causes a segfault for me TS
-    def Xtest_error_message(self):
+    def test_error_message(self):
         """Test we can send error messages to the message viewer."""
         text = self.fake_error()
         my_expected_result = open(
@@ -124,8 +124,7 @@ class MessageViewerTest(unittest.TestCase):
             'r').read().replace('\n', '')
         self.assertEqual(text, my_expected_result)
 
-    #Enabling this test causes a segfault for me TS
-    def Xtest_static_and_error(self):
+    def test_static_and_error(self):
         """Test error message works when there is a static message in place."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.fake_error()
