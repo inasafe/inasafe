@@ -1779,6 +1779,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         use_full_extent = dlg.analysis_extent_radio.isChecked()
         create_pdf = dlg.create_pdf_radio.isChecked()
+        if dlg.default_template_radio.isChecked():
+            template_path = dlg.template_combo.itemData(
+                dlg.template_combo.currentIndex())
+        else:
+            template_path = dlg.template_path.text()
 
         print_map = Map(self.iface)
         if self.iface.activeLayer() is None:
@@ -1808,8 +1813,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print_map.set_logo(logo_path)
 
         # TODO: set correct template here
-        print_map.set_template(dlg.template_combo.itemData(
-                               dlg.template_combo.currentIndex()))
+        print_map.set_template(template_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
         if create_pdf:
