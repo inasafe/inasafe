@@ -91,7 +91,7 @@ class AggregatorTest(unittest.TestCase):
         set_jakarta_extent()
 
         self.keywordIO = KeywordIO()
-        self.defaults = breakdown_defaults()
+        self._defaults = breakdown_defaults()
 
     def test_combo_aggregation_loaded_project(self):
         """Aggregation combo changes properly according loaded layers"""
@@ -289,7 +289,7 @@ class AggregatorTest(unittest.TestCase):
             aggregation_layer.crs())
 
         aggregation_attribute = self.keywordIO.read_keywords(
-            aggregation_layer, self.defaults['AGGR_ATTR_KEY'])
+            aggregation_layer, self._defaults['AGGR_ATTR_KEY'])
         # noinspection PyArgumentEqualDefault
         aggregation_layer = clip_layer(
             layer=aggregation_layer,

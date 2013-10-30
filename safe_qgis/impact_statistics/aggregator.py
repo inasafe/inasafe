@@ -112,7 +112,7 @@ class Aggregator(QtCore.QObject):
 
         self.iface = iface
         self.keyword_io = KeywordIO()
-        self.defaults = breakdown_defaults()
+        self._defaults = breakdown_defaults()
         self.error_message = None
         self.target_field = None
         self.impact_layer_attributes = []
@@ -137,6 +137,24 @@ class Aggregator(QtCore.QObject):
         self.statistics_type = None
         self.statistics_classes = None
         self.preprocessed_feature_count = None
+
+    def get_default_keyword(self, keyword):
+        """It is a wrapper around self._defaults.
+        Returns default attribute keyword.
+
+        :param keyword: A string containing the keyword to be returned
+              for the layer.
+        :type keyword: str
+
+        :returns: The value for the given key if it is present.
+        :rtype: str
+
+        :raises:  All exceptions are propagated.
+        """
+        try:
+            return self._defaults[keyword]
+        except:
+            raise
 
     def validate_keywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.
@@ -163,7 +181,7 @@ class Aggregator(QtCore.QObject):
             keywords = {}
 
         if self.aoi_mode:
-            keywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+            keywords[self.get_default_keyword('FEM_RATIO_ATTR_KEY')] = self.tr(
                 'Use default')
             self.keyword_io.update_keywords(self.layer, keywords)
             self.is_valid = True
@@ -180,9 +198,9 @@ class Aggregator(QtCore.QObject):
 
             #keywords are already complete
             category = keywords['category']
-            aggregation_attribute = self.defaults['AGGR_ATTR_KEY']
-            female_ratio = self.defaults['FEM_RATIO_ATTR_KEY']
-            female_ratio_key = self.defaults['FEM_RATIO_KEY']
+            aggregation_attribute = self.get_default_keyword('AGGR_ATTR_KEY')
+            female_ratio = self.get_default_keyword('FEM_RATIO_ATTR_KEY')
+            female_ratio_key = self.get_default_keyword('FEM_RATIO_KEY')
             if ('category' in keywords and
                 category == 'postprocessing' and
                 aggregation_attribute in keywords and
@@ -199,17 +217,17 @@ class Aggregator(QtCore.QObject):
                 my_attributes, _ = layer_attribute_names(
                     self.layer,
                     [QtCore.QVariant.Int, QtCore.QVariant.String])
-                if self.defaults['AGGR_ATTR_KEY'] not in keywords:
-                    keywords[self.defaults['AGGR_ATTR_KEY']] = \
+                if self.get_default_keyword('AGGR_ATTR_KEY') not in keywords:
+                    keywords[self.get_default_keyword('AGGR_ATTR_KEY')] = \
                         my_attributes[0]
 
-                if self.defaults['FEM_RATIO_ATTR_KEY'] not in keywords:
-                    keywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+                if self.get_default_keyword('FEM_RATIO_ATTR_KEY') not in keywords:
+                    keywords[self.get_default_keyword('FEM_RATIO_ATTR_KEY')] = self.tr(
                         'Use default')
 
-                if self.defaults['FEM_RATIO_KEY'] not in keywords:
-                    keywords[self.defaults['FEM_RATIO_KEY']] = \
-                        self.defaults['FEM_RATIO']
+                if self.get_default_keyword('FEM_RATIO_KEY') not in keywords:
+                    keywords[self.get_default_keyword('FEM_RATIO_KEY')] = \
+                        self.get_default_keyword('FEM_RATIO')
 
                 self.keyword_io.update_keywords(self.layer, keywords)
                 self.is_valid = False
@@ -800,7 +818,7 @@ class Aggregator(QtCore.QObject):
                 self.exposure_layer.crs())
 
             aggregation_attribute = self.keyword_io.read_keywords(
-                self.layer, self.defaults['AGGR_ATTR_KEY'])
+                self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
 
             #noinspection PyArgumentEqualDefault
             clipped_layer = clip_layer(
@@ -841,13 +859,13 @@ class Aggregator(QtCore.QObject):
     def _set_persistant_attributes(self):
         """Mark any attributes that should remain in the self.layer table."""
         self.attributes = {}
-        self.attributes[self.defaults[
-            'AGGR_ATTR_KEY']] = (
+        self.attributes[self.get_default_keyword(
+            'AGGR_ATTR_KEY')] = (
                 self.keyword_io.read_keywords(
                     self.layer,
-                    self.defaults['AGGR_ATTR_KEY']))
+                    self.get_default_keyword('AGGR_ATTR_KEY')))
 
-        female_ratio_key = self.defaults['FEM_RATIO_ATTR_KEY']
+        female_ratio_key = self.get_default_keyword('FEM_RATIO_ATTR_KEY')
         female_ration_attribute = self.keyword_io.read_keywords(
             self.layer,
             female_ratio_key)
@@ -1243,11 +1261,11 @@ class Aggregator(QtCore.QObject):
         try:
             self.keyword_io.update_keywords(
                 self.layer,
-                {self.defaults['AGGR_ATTR_KEY']: attribute_name})
+                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
         except InvalidParameterError:
             self.keyword_io.write_keywords(
                 self.layer,
-                {self.defaults['AGGR_ATTR_KEY']: attribute_name})
+                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
         except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
