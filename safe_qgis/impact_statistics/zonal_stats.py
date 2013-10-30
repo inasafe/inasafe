@@ -59,13 +59,14 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     """Calculate zonal statics given two layers.
 
     :param raster_layer: A QGIS raster layer.
-:type raster_layer: QgsRasterLayer, QgsMapLayer
+    :type raster_layer: QgsRasterLayer, QgsMapLayer
 
     :param polygon_layer: A QGIS vector layer containing polygons.
     :type polygon_layer: QgsVectorLayer, QgsMapLayer
 
     :returns: A data structure containing sum, mean, min, max,
         count of raster values for each polygonal area.
+    
     :rtype: dict
 
     :raises: InvalidParameterError, InvalidGeometryError

@@ -24,7 +24,6 @@ import logging
 from datetime import date
 import getpass
 from tempfile import mkstemp
-from utilities import tr
 
 from PyQt4 import QtCore
 
@@ -41,6 +40,8 @@ from raven import Client
 # pylint: enable=F0401
 LOGGER = logging.getLogger('InaSAFE')
 
+from safe_qgis.utilities.utilities import tr
+
 
 class QgsLogHandler(logging.Handler):
     """A logging handler that will log messages to the QGIS logging console."""
@@ -54,17 +55,19 @@ class QgsLogHandler(logging.Handler):
         :param record: logging record containing whatever info needs to be
                 logged.
         """
-        from qgis.core import QgsMessageLog
-        # Check logging.LogRecord properties for lots of other goodies
-        # like line number etc. you can get from the log message.
         try:
+            from qgis.core import QgsMessageLog
+            # Check logging.LogRecord properties for lots of other goodies
+            # like line number etc. you can get from the log message.
             QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
+        #Make sure it doesn't crash if using Safe without QGIS
+        except ImportError:
+            pass
         except MemoryError:
             msg = tr('Due to memory limitations on this machine, InaSAFE can '
                      'not handle the full log')
             print msg
             QgsMessageLog.logMessage(msg, 'InaSAFE', 0)
-
 
 def add_logging_handler_once(logger, handler):
     """A helper to add a handler to a logger, ensuring there are no duplicates.
