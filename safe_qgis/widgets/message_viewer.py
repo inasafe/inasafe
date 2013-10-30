@@ -16,6 +16,7 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import logging
+import time
 
 from PyQt4.QtCore import QUrl
 
@@ -74,6 +75,8 @@ class MessageViewer(QtWebKit.QWebView):
         self.log_path = None
         self.report_path = None
         self._impact_path = None
+
+        self._html_loaded_flag = False
 
         #base_dir = os.path.dirname(__file__)
         #self.header = header.replace('PATH', base_dir)
@@ -249,11 +252,7 @@ class MessageViewer(QtWebKit.QWebView):
                 string += html
 
         string += html_footer()
-        print "#######HTML string#####"
-        print string
         self.setHtml(string)
-        print "#######HTML result#####"
-        print self.page().mainFrame().toHtml()
         #self.scroll_to_div()
 
     def to_message(self):
@@ -305,12 +304,12 @@ class MessageViewer(QtWebKit.QWebView):
     def show_report(self):
         self.action_show_report.setEnabled(False)
         self.action_show_log.setEnabled(True)
-        self.load_html_file(self.report_path)
+        self.load_and_wait_html_file(self.report_path)
 
     def show_log(self):
         self.action_show_report.setEnabled(True)
         self.action_show_log.setEnabled(False)
-        self.load_html_file(self.log_path)
+        self.load_and_wait_html_file(self.log_path)
 
     def open_current_in_browser(self):
         if self.impact_path is None:
@@ -323,9 +322,31 @@ class MessageViewer(QtWebKit.QWebView):
             else:
                 open_in_browser(self.report_path)
 
-    def load_html_file(self, file_path):
-        # FIXME (MB) this call as all setHtml calls do not work as expected
-        # in the test suite.
-        # see the prints in show_messages and
-        # https://gist.github.com/mbernasocchi/7219398
+    def load_and_wait_html_file(self, file_path):
+        # noinspection PyUnresolvedReferences
+        self._html_loaded_flag = False
+        self.loadFinished.connect(self.html_loaded_slot)
+        print "loading %s" % file_path
         self.setUrl(QUrl.fromLocalFile(file_path))
+        my_counter = 0
+        my_sleep_period = 0.1  # sec
+        my_timeout = 10  # sec
+        while not self._html_loaded_flag and my_counter < my_timeout:
+            # Block until the event loop is done printing the page
+            my_counter += my_sleep_period
+            time.sleep(my_sleep_period)
+            # noinspection PyArgumentList
+            QtCore.QCoreApplication.processEvents()
+
+        if not self._html_loaded_flag:
+            LOGGER.error('Failed to load html')
+
+        # noinspection PyUnresolvedReferences
+        self.loadFinished.disconnect(self.html_loaded_slot)
+
+    def html_loaded_slot(self, ok):
+        """Slot called when the page is loaded.
+        """
+        print "html_loaded_slot set to %s" % ok
+        self._html_loaded_flag = ok
+        LOGGER.debug('html_loaded_slot slot called')
