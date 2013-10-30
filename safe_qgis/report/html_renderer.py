@@ -165,9 +165,9 @@ class HtmlRenderer():
                                    QtCore.Qt.ScrollBarAlwaysOff)
 
         # noinspection PyUnresolvedReferences
+        self.htmlLoadedFlag = False
         self.webView.loadFinished.connect(self.html_loaded_slot)
         self.webView.setHtml(myHtml)
-        self.htmlLoadedFlag = False
         myTimeOut = 20
         myCounter = 0
         mySleepPeriod = 1
