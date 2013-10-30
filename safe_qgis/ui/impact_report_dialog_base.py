@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'safe_qgis/ui/impact_report_dialog_base.ui'
 #
-# Created: Mon Oct 28 11:21:27 2013
+# Created: Wed Oct 30 10:54:59 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -37,14 +37,25 @@ class Ui_ImpactReportDialogBase(object):
         self.gridLayout = QtGui.QGridLayout(self.groupBox_2)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.template_path = QtGui.QLineEdit(self.groupBox_2)
+        self.template_path.setEnabled(False)
         self.template_path.setObjectName(_fromUtf8("template_path"))
-        self.gridLayout.addWidget(self.template_path, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.template_path, 1, 1, 1, 1)
+        self.default_template_radio = QtGui.QRadioButton(self.groupBox_2)
+        self.default_template_radio.setText(_fromUtf8(""))
+        self.default_template_radio.setChecked(True)
+        self.default_template_radio.setObjectName(_fromUtf8("default_template_radio"))
+        self.gridLayout.addWidget(self.default_template_radio, 0, 0, 1, 1)
         self.template_chooser = QtGui.QToolButton(self.groupBox_2)
+        self.template_chooser.setEnabled(False)
         self.template_chooser.setObjectName(_fromUtf8("template_chooser"))
-        self.gridLayout.addWidget(self.template_chooser, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.template_chooser, 1, 2, 1, 1)
         self.template_combo = QtGui.QComboBox(self.groupBox_2)
         self.template_combo.setObjectName(_fromUtf8("template_combo"))
-        self.gridLayout.addWidget(self.template_combo, 1, 0, 1, 2)
+        self.gridLayout.addWidget(self.template_combo, 0, 1, 1, 2)
+        self.custom_template_radio = QtGui.QRadioButton(self.groupBox_2)
+        self.custom_template_radio.setText(_fromUtf8(""))
+        self.custom_template_radio.setObjectName(_fromUtf8("custom_template_radio"))
+        self.gridLayout.addWidget(self.custom_template_radio, 1, 0, 1, 1)
         self.verticalLayout.addWidget(self.groupBox_2)
         self.groupBox_3 = QtGui.QGroupBox(ImpactReportDialogBase)
         self.groupBox_3.setObjectName(_fromUtf8("groupBox_3"))

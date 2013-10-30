@@ -47,6 +47,9 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
         self.parent = parent
         self.dock = dock
 
+        self.default_template_radio.toggled.connect(
+            self.toggle_template_selectors)
+
         button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         button.clicked.connect(self.show_help)
 
@@ -90,6 +93,11 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
         self.show_composer_radio.setChecked(flag)
         self.create_pdf_radio.setChecked(not flag)
 
+        flag = bool(settings.value(
+            'inasafe/useDefaultTemplates', True, type=bool))
+        self.default_template_radio.setChecked(flag)
+        self.custom_template_radio.setChecked(not flag)
+
         path = settings.value('inasafe/lastTemplate', '', type=str)
         self.template_combo.setCurrentIndex(
             self.template_combo.findData(path))
@@ -107,6 +115,9 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
             'inasafe/showComposerFlag',
             self.show_composer_radio.isChecked())
         settings.setValue(
+            'inasafe/useDefaultTemplates',
+            self.default_template_radio.isChecked())
+        settings.setValue(
             'inasafe/lastTemplate',
             self.template_combo.itemData(self.template_combo.currentIndex()))
         settings.setValue(
@@ -119,7 +130,7 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
-        self.close()
+        QtGui.QDialog.accept(self)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_template_chooser_clicked(self):
@@ -132,3 +143,13 @@ class ImpactReportDialog(QtGui.QDialog, Ui_ImpactReportDialogBase):
             '',
             self.tr('QGIS composer templates (*.qpt *.QPT)'))
         self.template_path.setText(file_name)
+
+    def toggle_template_selectors(self, checked):
+        if checked:
+            self.template_combo.setEnabled(True)
+            self.template_path.setEnabled(False)
+            self.template_chooser.setEnabled(False)
+        else:
+            self.template_combo.setEnabled(False)
+            self.template_path.setEnabled(True)
+            self.template_chooser.setEnabled(True)
