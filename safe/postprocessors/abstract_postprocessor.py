@@ -16,7 +16,7 @@ from third_party.odict import OrderedDict
 
 from safe.defaults import get_defaults
 from safe.common.exceptions import PostProcessorError
-from safe.common.utilities import ( format_int)
+from safe.common.utilities import (format_int)
 
 LOGGER = logging.getLogger('InaSAFE')
 

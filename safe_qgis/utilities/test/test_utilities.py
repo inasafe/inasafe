@@ -27,7 +27,7 @@ from safe_qgis.utilities.utilities import (
     layer_attribute_names,
     impact_attribution,
     dpi_to_meters,
-    which )
+    which)
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, TEST_FILES_DIR)
 from safe_qgis.tools.test.test_keywords_dialog import (

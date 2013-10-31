@@ -1185,7 +1185,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
 
         # write postprocessing report to keyword
-        output = self.postprocessor_manager.get_output(self.aggregator.aoi_mode)
+        output = self.postprocessor_manager.get_output(
+            self.aggregator.aoi_mode)
         keywords['postprocessing_report'] = output.to_html(
             suppress_newlines=True)
         self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -1784,7 +1785,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         settings = QSettings()
         logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
-        report_path = settings.value('inasafe/reportTemplatePath', '', type=str)
+        report_path = settings.value(
+            'inasafe/reportTemplatePath', '', type=str)
         if logo_path != '':
             print_map.set_logo(logo_path)
         if report_path != '':
@@ -1881,7 +1883,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         start_path = os.path.dirname(scenario_path)
         try:
-            relative_expsosure_path = os.path.relpath(exposure_path, start_path)
+            relative_expsosure_path = os.path.relpath(
+                exposure_path, start_path)
         except ValueError, e:
             LOGGER.info(e.message)
             relative_expsosure_path = exposure_path
