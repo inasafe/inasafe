@@ -1212,8 +1212,11 @@ class Aggregator(QtCore.QObject):
         # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
 
         rectangle = self.iface.mapCanvas().extent()
-        crs = QgsCoordinateReferenceSystem()
-        crs.createFromSrid(4326)
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        else:
+            crs = QgsCoordinateReferenceSystem()
+            crs.createFromSrid(4326)
         geo_extent = extent_to_geo_array(rectangle, crs)
 
         if not self.layer.isValid():
