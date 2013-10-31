@@ -19,7 +19,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 import re
+
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
+
+from PyQt4.QtCore import QCoreApplication, QTranslator
+from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import safeTr, get_function_title, get_plugins
+
+QGIS_APP = get_qgis_app()
 
 
 class SafeTranslationsTest(unittest.TestCase):
@@ -35,15 +43,15 @@ class SafeTranslationsTest(unittest.TestCase):
         if 'LANG' in os.environ.iterkeys():
             os.environ.__delitem__('LANG')
 
-    def testDynamicTranslationFunctionTitle(self):
+    def test_dynamic_translation_function_title(self):
         """Test for dynamic translations for function title
         """
 
         plugins_dict = get_plugins()
-        myPluginName = 'Volcano Building Impact'
-        myMessage = '%s not found in %s' % (myPluginName, str(plugins_dict))
-        assert myPluginName in plugins_dict, myMessage
-        func = plugins_dict[myPluginName]
+        plugin_name = 'Volcano Building Impact'
+        message = '%s not found in %s' % (plugin_name, str(plugins_dict))
+        assert plugin_name in plugins_dict, message
+        func = plugins_dict[plugin_name]
 
         # English
         func_title = get_function_title(func)
@@ -59,7 +67,7 @@ class SafeTranslationsTest(unittest.TestCase):
                % (expected_title, func_title, os.environ['LANG']))
         assert expected_title == func_title, msg
 
-    def testDynamicTranslation(self):
+    def test_dynamic_translation(self):
         """Test for dynamic translations for a string
         """
 
@@ -76,58 +84,76 @@ class SafeTranslationsTest(unittest.TestCase):
         msg = 'expected %s but got %s' % (expected_title, real_title)
         assert expected_title == real_title, msg
 
-    def testImpactSummaryWords(self):
+    def test_impact_summary_words(self):
         """Test specific words from impact summary info shown in doc see #348.
         """
         os.environ['LANG'] = 'id'
-        myPhraseList = []
-        myMessage = 'Specific words checked for translation:\n'
-        for myPhrase in myPhraseList:
+        phrase_list = []
+        message = 'Specific words checked for translation:\n'
+        for myPhrase in phrase_list:
             if myPhrase == safeTr(myPhrase):
-                myMessage += 'FAIL: %s' % myPhrase
+                message += 'FAIL: %s' % myPhrase
             else:
-                myMessage += 'PASS: %s' % myPhrase
-        self.assertNotIn('FAIL', myMessage, myMessage)
+                message += 'PASS: %s' % myPhrase
+        self.assertNotIn('FAIL', message, message)
 
     def testAllDynamicTranslatons(self):
         """Test all the phrases defined in dynamic_translations translate."""
-        myParentPath = os.path.join(__file__, os.path.pardir, os.path.pardir)
-        myDirPath = os.path.abspath(myParentPath)
-        myFilePath = os.path.join(myDirPath,
-                                  '../safe',
-                                  'common',
-                                  'dynamic_translations.py')
-        myFile = file(myFilePath, 'rt')
-        myFailureList = []
+        parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)
+        dir_path = os.path.abspath(parent_path)
+        file_path = os.path.join(dir_path,
+                                 '../safe',
+                                 'common',
+                                 'dynamic_translations.py')
+        translations_file = file(file_path, 'rt')
+        failure_list = []
         os.environ['LANG'] = 'id'
-        myLineCount = 0
+        line_count = 0
         # exception_words is a list of words that has the same form in both
         # English and Indonesian. For example hotel, bank
         exception_words = ['hotel', 'bank']
-        for myLine in myFile.readlines():
-            myLineCount += 1
-            if 'tr(' in myLine:
-                myMatch = re.search(r'\(\'(.*)\'\)', myLine, re.M | re.I)
-                if myMatch:
-                    myGroup = myMatch.group()
-                    myCleanedLine = myGroup[2:-2]
-                    if myCleanedLine in exception_words:
+        for line in translations_file.readlines():
+            line_count += 1
+            if 'tr(' in line:
+                match = re.search(r'\(\'(.*)\'\)', line, re.M | re.I)
+                if match:
+                    group = match.group()
+                    cleaned_line = group[2:-2]
+                    if cleaned_line in exception_words:
                         continue
-                    myTranslation = safeTr(myCleanedLine)
-                    print myTranslation, myCleanedLine
-                    if myCleanedLine == myTranslation:
-                        myFailureList.append(myCleanedLine)
+                    translation = safeTr(cleaned_line)
+                    print translation, cleaned_line
+                    if cleaned_line == translation:
+                        failure_list.append(cleaned_line)
 
-        myMessage = ('Translations not found for:\n %s\n%i '
-                     'of %i untranslated\n' % (
-                     str(myFailureList).replace(',', '\n'),
-                     len(myFailureList),
-                     myLineCount))
-        myMessage += ('If you think the Indonesian word for the failed '
-                      'translations is the same form in English, i.'
-                      'e. "hotel", you can add it in exception_words in '
-                      'safe_qgis/test_safe_translations.py')
-        assert len(myFailureList) == 0, myMessage
+        message = ('Translations not found for:\n %s\n%i '
+                   'of %i untranslated\n' % (
+                   str(failure_list).replace(',', '\n'),
+                   len(failure_list),
+                   line_count))
+        message += ('If you think the Indonesian word for the failed '
+                    'translations is the same form in English, i.'
+                    'e. "hotel", you can add it in exception_words in '
+                    'safe_qgis/test_safe_translations.py')
+        assert len(failure_list) == 0, message
+
+    def test_qgis_translations(self):
+        parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)
+        dir_path = os.path.abspath(parent_path)
+        file_path = os.path.join(dir_path,
+                                 'i18n',
+                                 'inasafe_id.qm')
+        translator = QTranslator()
+        translator.load(file_path)
+        QCoreApplication.installTranslator(translator)
+
+        expected_msg = 'Tidak ada informasi gaya ditemukan pada lapisan ' \
+                       'myLayer'
+        real_msg = QCoreApplication.translate(
+            "@default", 'No styleInfo was found for layer %s') % 'myLayer'
+        msg = 'expected %s but got %s' % (expected_msg, real_msg)
+        assert expected_msg == real_msg, msg
+
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(SafeTranslationsTest, 'test')

@@ -17,6 +17,9 @@ __date__ = '29/10/2013'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
+
 from PyQt4 import QtCore
 
 # This call needs to be made directly to safe.defaults and not over
@@ -48,7 +51,7 @@ def breakdown_defaults(theDefault=None):
     myDefaults = DEFAULTS
 
     settings_value = mySettings.value('inasafe/defaultFemaleRatio',
-                                      DEFAULTS['FEM_RATIO'])
+                                      DEFAULTS['FEM_RATIO'], type=float)
     myDefaults['FEM_RATIO'] = float(settings_value)
 
     if theDefault is None:
