@@ -38,7 +38,8 @@ def get_proxy():
             proxy.setType(QNetworkProxy.NoProxy)
         elif proxy_type in ['3', 'HttpProxy']:
             proxy.setType(QNetworkProxy.HttpProxy)
-        elif proxy_type in ['4', 'HttpCachingProxy'] and QT_VERSION >= 0X040400:
+        elif proxy_type in ['4', 'HttpCachingProxy'] \
+            and QT_VERSION >= 0X040400:
             proxy.setType(QNetworkProxy.HttpCachingProxy)
         elif proxy_type in ['5', 'FtpCachingProxy'] and QT_VERSION >= 0X040400:
             proxy.setType(QNetworkProxy.FtpCachingProxy)

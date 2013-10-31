@@ -277,8 +277,8 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 female_ration_field = self.aggregator.attributes[
                     self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
-                female_ratio_field_index = self.aggregator.layer.fieldNameIndex(
-                    female_ration_field)
+                female_ratio_field_index = \
+                    self.aggregator.layer.fieldNameIndex(female_ration_field)
 
                 # something went wrong finding the female ratio field,
                 # use defaults from below except block

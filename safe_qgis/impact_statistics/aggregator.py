@@ -329,7 +329,8 @@ class Aggregator(QtCore.QObject):
 
         #call the correct aggregator
         if qgis_impact_layer.type() == QgsMapLayer.VectorLayer:
-            self._aggregrate_vector_impact(qgis_impact_layer, safe_impact_layer)
+            self._aggregrate_vector_impact(
+                qgis_impact_layer, safe_impact_layer)
         elif qgis_impact_layer.type() == QgsMapLayer.RasterLayer:
             self._aggregate_raster_impact(qgis_impact_layer)
         else:

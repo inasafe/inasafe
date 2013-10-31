@@ -69,6 +69,7 @@ class QgsLogHandler(logging.Handler):
             print msg
             QgsMessageLog.logMessage(msg, 'InaSAFE', 0)
 
+
 def add_logging_handler_once(logger, handler):
     """A helper to add a handler to a logger, ensuring there are no duplicates.
 
