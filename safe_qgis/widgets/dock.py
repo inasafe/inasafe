@@ -1808,11 +1808,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         settings = QSettings()
         logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
-            'inasafe/reportTemplatePath', '', type=str)
         if logo_path != '':
             print_map.set_logo(logo_path)
 
-        # TODO: set correct template here
         print_map.set_template(template_path)
 
         LOGGER.debug('Map Title: %s' % print_map.map_title())
