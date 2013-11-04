@@ -10,7 +10,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
-from unittest import expectedFailure
 import os
 import logging
 

@@ -15,7 +15,7 @@ if myDir not in sys.path:
 # see safe_qgis.utilities.defaults for more details
 import safe.defaults
 from safe_qgis.utilities.defaults import breakdown_defaults
-safe.defaults.get_defaults = lambda the_default=None: breakdown_defaults(
+safe.defaults.get_defaults = lambda the_default = None: breakdown_defaults(
     the_default)
 
 try:
