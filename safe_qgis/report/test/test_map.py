@@ -17,9 +17,6 @@ import logging
 #pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 #sys.path.append(pardir)
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsRectangle)

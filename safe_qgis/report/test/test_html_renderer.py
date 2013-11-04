@@ -18,8 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 import logging
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import (

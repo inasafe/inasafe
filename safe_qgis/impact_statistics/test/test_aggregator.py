@@ -30,10 +30,6 @@ from os.path import join
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-# this import required to enable PyQt API v2
-#noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 from qgis.core import QgsVectorLayer
 
 from safe_qgis.safe_interface import (

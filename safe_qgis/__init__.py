@@ -2,7 +2,11 @@
 
 import os
 import sys
+
 # Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
+
 from PyQt4.QtCore import QCoreApplication
 from PyQt4.QtGui import QMessageBox
 
