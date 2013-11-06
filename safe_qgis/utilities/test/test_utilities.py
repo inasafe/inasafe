@@ -4,9 +4,6 @@ import os
 
 from unittest import expectedFailure
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from PyQt4.QtCore import QVariant
 
 # Add parent directory to path to make test aware of other modules

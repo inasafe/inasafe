@@ -20,9 +20,6 @@ import unittest
 import os
 import re
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from PyQt4.QtCore import QCoreApplication, QTranslator
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 from safe_qgis.safe_interface import safeTr, get_function_title, get_plugins

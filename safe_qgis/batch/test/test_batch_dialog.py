@@ -19,9 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from safe_qgis.batch.batch_dialog import BatchDialog
 from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app, SCENARIO_DIR)

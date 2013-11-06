@@ -2,7 +2,11 @@
 
 import os
 import sys
+
 # Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
+
 from PyQt4.QtCore import QCoreApplication
 from PyQt4.QtGui import QMessageBox
 
@@ -15,7 +19,7 @@ if myDir not in sys.path:
 # see safe_qgis.utilities.defaults for more details
 import safe.defaults
 from safe_qgis.utilities.defaults import breakdown_defaults
-safe.defaults.get_defaults = lambda the_default=None: breakdown_defaults(
+safe.defaults.get_defaults = lambda the_default = None: breakdown_defaults(
     the_default)
 
 try:

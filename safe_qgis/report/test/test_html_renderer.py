@@ -18,8 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 import logging
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities.utilities_for_testing import (
@@ -95,7 +93,7 @@ class HtmlRendererTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myNewPath).st_size
-        myExpectedSize = 18449  # as rendered on linux ub 11.04-64
+        myExpectedSize = 16600  # as rendered on linux ub 13.04-64 (MB)
         myMessage = ('Expected rendered map pdf to be at least %s, got %s. '
                      'Please update myExpectedSize if the rendered output '
                      'is acceptible on your system.'
@@ -128,6 +126,7 @@ class HtmlRendererTest(unittest.TestCase):
         myExpectedSizes = [20936,  # as rendered on linux ub 12.04 64
                            21523,  # as rendered on linux ub 12.10 64
                            20605,  # as rendered on linux ub 13.04 64
+                           14220,  # as rendered on linux ub 13.04 64 MB
                            21527,  # as rendered on Jenkins post 22 June 2013
                            377191,  # as rendered on OSX
                            252699L,  # as rendered on Windows 7 64 bit

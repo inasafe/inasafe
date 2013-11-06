@@ -22,8 +22,6 @@ import logging
 from PyQt4 import QtCore, QtGui, QtXml
 from qgis.core import (
     QgsComposition,
-    QgsComposerMap,
-    QgsPoint,
     QgsRectangle)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError

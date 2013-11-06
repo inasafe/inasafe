@@ -122,7 +122,7 @@ def publish_pages(shakemap_dir):
     en_index_path, id_index_path = generate_pages(shakemap_dir)
 
     # Move to /home/web/quake/public/
-    public_dir = '/home/web/quake/public/'
+    # public_dir = '/home/web/quake/public/'
     testdir = os.path.join(os.path.dirname(__file__),
                            os.pardir,
                            'realtime',
