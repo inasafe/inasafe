@@ -92,7 +92,7 @@ class MapTest(unittest.TestCase):
         # version number of InaSAFE changes so we should ultimately come up
         # with a lower maintenance test strategy.
         expected_sizes = [
-            400498,  # Slackware64 14.0
+            407451,  # Slackware64 14.0
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -129,7 +129,7 @@ class MapTest(unittest.TestCase):
         # with a lower maintenance test strategy.
 
         expected_sizes = [
-            397723,  # Slackware64 14.0
+            404676,  # Slackware64 14.0
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
