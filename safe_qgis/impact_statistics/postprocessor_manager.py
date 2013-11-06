@@ -156,18 +156,19 @@ class PostprocessorManager(QtCore.QObject):
                         except KeyError:
                             postprocessor_totals[indicator] = 0
                     else:
+                        value = int(value)
                         try:
-                            postprocessor_totals[indicator] += int(value)
+                            postprocessor_totals[indicator] += value
                         except KeyError:
-                            postprocessor_totals[indicator] = int(value)
-                    row.add(value)
+                            postprocessor_totals[indicator] = value
+                    row.add(format_int(value))
                 table.add(row)
 
             if not aoi_mode:
                 # add the totals row
                 row = m.Row(self.tr('Total in aggregation areas'))
                 for _, total in postprocessor_totals.iteritems():
-                    row.add(str(total))
+                    row.add(format_int(total))
                 table.add(row)
 
             # add table to message
