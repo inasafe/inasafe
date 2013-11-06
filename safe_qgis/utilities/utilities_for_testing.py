@@ -64,15 +64,15 @@ def assert_hashes_for_file(hashes, filename):
     :param filename: the filename
     :param hashes: the hash of the file
     """
-    hash = hash_for_file(filename)
+    file_hash = hash_for_file(filename)
     message = (
         'Unexpected hash'
         '\nGot: %s'
         '\nExpected: %s'
         '\nPlease check graphics %s visually '
         'and add to list of expected hashes '
-        'if it is OK on this platform.' % (hash, hashes, filename))
-    assert hash in hashes, message
+        'if it is OK on this platform.' % (file_hash, hashes, filename))
+    assert file_hash in hashes, message
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -307,10 +307,10 @@ def check_images(control_image, test_image_path, tolerance=1000):
     :rtype: bool, str
     """
     messages = ''
-    platform = platform_name()
+    platform_name = get_platform_name()
     base_name, extension = os.path.splitext(control_image)
     platform_image = os.path.join(CONTROL_IMAGE_DIR, '%s-variant%s%s.png' % (
-        base_name, platform, extension))
+        base_name, platform_name, extension))
     messages += 'Checking for platform specific variant...\n'
     messages += test_image_path + '\n'
     messages += platform_image + '\n'
@@ -326,7 +326,7 @@ def check_images(control_image, test_image_path, tolerance=1000):
         'testing against all control images. Try adding %s in\n '
         'the file name if you want it to be detected for this\n'
         'platform which will speed up image comparison tests.\n' %
-        platform)
+        platform_name)
 
     # Ok there is no specific platform match so go ahead and match to any of
     # the control image and its variants...
@@ -503,7 +503,7 @@ class RedirectStreams(object):
         sys.stderr = self.old_stderr
 
 
-def platform_name():
+def get_platform_name():
     """Get a platform name for this host.
 
         e.g OSX10.8

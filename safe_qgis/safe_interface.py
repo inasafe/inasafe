@@ -33,6 +33,7 @@ import logging
 # We want all these imports as they for part of the API wrapper used by other
 # modules in safe_qgis
 # noinspection PyUnresolvedReferences
+
 from safe.api import (
     load_plugins,
     get_admissible_plugins,
@@ -76,10 +77,11 @@ from safe.api import (
     ZeroImpactException,
     PointsInputError,
     get_decimal_separator,
-    get_thousand_separator)
+    get_thousand_separator,
+    styles)
 # noinspection PyUnresolvedReferences
-from safe.api import styles
 # hack for excluding test-related import in builded package
+
 try:
     from safe.api import (
         HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA)

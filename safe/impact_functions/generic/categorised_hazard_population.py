@@ -1,4 +1,6 @@
 import numpy
+from third_party.odict import OrderedDict
+from safe.defaults import get_defaults
 from safe.impact_functions.core import (FunctionProvider,
                                         get_hazard_layer,
                                         get_exposure_layer,
@@ -8,10 +10,8 @@ from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import (ugettext as tr,
                                    format_int,
-                                   get_defaults,
                                    round_thousand)
 from safe.common.tables import Table, TableRow
-from third_party.odict import OrderedDict
 
 
 class CategorisedHazardPopulationImpactFunction(FunctionProvider):

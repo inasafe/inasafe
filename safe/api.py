@@ -1,3 +1,4 @@
+# coding=utf-8
 """**SAFE (Scenario Assessment For Emergencies) - API**
 
 The purpose of the module is to provide a well defined public API

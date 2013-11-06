@@ -277,9 +277,9 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 female_ration_field = self.aggregator.attributes[
                     self.aggregator.get_default_keyword('FEM_RATIO_ATTR_KEY')]
-                female_ratio_field_index = self.aggregator.layer.fieldNameIndex(
-                    female_ration_field)
-
+                female_ratio_field_index = \
+                    self.aggregator.layer.fieldNameIndex(female_ration_field)
+                    
                 # something went wrong finding the female ratio field,
                 # use defaults from below except block
                 if female_ratio_field_index == -1:
@@ -341,8 +341,8 @@ class PostprocessorManager(QtCore.QObject):
                     if user_defined_female_ratio:
                         female_ratio = feature[female_ratio_field_index]
                         if female_ratio is None:
-                            female_ratio = self.aggregator.get_default_keyword(
-                                'FEM_RATIO')
+                            female_ratio = self.aggregator.defaults[
+                                'FEM_RATIO']
                         LOGGER.debug(female_ratio)
                     parameters['female_ratio'] = female_ratio
 

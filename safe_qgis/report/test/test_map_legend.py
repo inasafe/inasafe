@@ -29,7 +29,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
     check_images,
     load_layer)
-from safe_qgis.report.map import MapLegend
+from safe_qgis.report.map_legend import MapLegend
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')

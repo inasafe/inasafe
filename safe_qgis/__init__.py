@@ -1,7 +1,12 @@
 """Package safe_qgis."""
+
 import os
 import sys
+
 # Import the PyQt and QGIS libraries
+# this import required to enable PyQt API v2
+import qgis  # pylint: disable=W0611
+
 from PyQt4.QtCore import QCoreApplication
 from PyQt4.QtGui import QMessageBox
 
@@ -9,6 +14,13 @@ from PyQt4.QtGui import QMessageBox
 myDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if myDir not in sys.path:
     sys.path.append(myDir)
+
+# MONKEYPATCHING safe.defaults.get_defaults to use breakdown_defaults
+# see safe_qgis.utilities.defaults for more details
+import safe.defaults
+from safe_qgis.utilities.defaults import breakdown_defaults
+safe.defaults.get_defaults = lambda the_default = None: breakdown_defaults(
+    the_default)
 
 try:
     # When upgrading, using the plugin manager, you may get an error when

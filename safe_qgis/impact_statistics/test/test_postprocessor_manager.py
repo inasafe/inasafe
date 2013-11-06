@@ -31,10 +31,6 @@ sys.path.append(pardir)
 #for p in sys.path:
 #    print p + '\n'
 
-# this import required to enable PyQt API v2
-#noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 #from qgis.core import QgsMapLayerRegistry
 
 from safe_qgis.utilities.utilities_for_testing import (

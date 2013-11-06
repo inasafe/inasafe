@@ -19,9 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe_qgis.tools.shakemap_importer import ShakemapImporter

@@ -27,9 +27,6 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from PyQt4 import QtGui
 
 from qgis.core import (
@@ -46,7 +43,8 @@ from safe_qgis.safe_interface import (
     HAZDATA, TESTDATA)
 from safe_qgis.tools.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundError
-from safe_qgis.utilities.utilities import breakdown_defaults, qgis_version
+from safe_qgis.utilities.utilities import qgis_version
+from safe_qgis.utilities.defaults import breakdown_defaults
 
 
 # Get QGis app handle

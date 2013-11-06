@@ -22,17 +22,12 @@ import logging
 from PyQt4 import QtCore, QtGui, QtXml
 from qgis.core import (
     QgsComposition,
-    QgsComposerMap,
-    QgsPoint,
     QgsRectangle)
 from safe_qgis.safe_interface import temp_dir, unique_filename, get_version
 from safe_qgis.exceptions import KeywordNotFoundError, ReportCreationError
 from safe_qgis.utilities.keyword_io import KeywordIO
-from safe_qgis.report.map_legend import MapLegend
 from safe_qgis.utilities.utilities import (
     setup_printer,
-    points_to_mm,
-    mm_to_points,
     dpi_to_meters)
 
 # Don't remove this even if it is flagged as unused by your ide

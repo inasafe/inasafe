@@ -66,7 +66,6 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
 
     :returns: A data structure containing sum, mean, min, max,
         count of raster values for each polygonal area.
-    
     :rtype: dict
 
     :raises: InvalidParameterError, InvalidGeometryError
