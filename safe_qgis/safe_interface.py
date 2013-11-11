@@ -517,19 +517,20 @@ def getSafeImpactFunctionType(function_id):
     return fun_type
 
 
-def calculateSafeImpact(theLayers, theFunction):
+def calculateSafeImpact(theLayers, theFunction, theExtent=None):
     """Thin wrapper around the safe calculate_impact function.
 
     Args:
         * theLayers - a list of layers to be used. They should be ordered
           with hazard layer first and exposure layer second.
         * theFunction - SAFE impact function instance to be used
+        * theExtent - List of [xmin, ymin, xmax, ymax] - the coordinates of the bounding box.
     Returns:
         A safe impact function is returned
     Raises:
         Any exceptions are propogated
     """
     try:
-        return safe_calculate_impact(theLayers, theFunction)
+        return safe_calculate_impact(theLayers, theFunction, extent=theExtent)
     except:
         raise

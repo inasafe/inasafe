@@ -71,7 +71,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """For testing only"""
         print 'hello'
 
-    def __init__(self, hazard_layer, exposure_layer, function):
+    def __init__(self, hazard_layer, exposure_layer, function, extent = None):
         """Constructor for the impact calculator thread.
 
         :param hazard_layer: read_layer object containing the Hazard.
@@ -85,6 +85,9 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             will be computed.
         :type function: FunctionProvider
 
+        :param extent: Bounding box [xmin, ymin, xmax, ymax] of the working region.
+        :type extent: list
+
         :raises: InsufficientParametersError if not all parameters are set.
         """
         threading.Thread.__init__(self)
@@ -92,6 +95,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         self._hazardLayer = hazard_layer
         self._exposureLayer = exposure_layer
         self._function = function
+        self._extent = extent
         self._impactLayer = None
         self._result = None
         self._exception = None
@@ -166,7 +170,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculateSafeImpact(
-                theLayers=myLayers, theFunction=self._function)
+                theLayers=myLayers, theFunction=self._function,
+                theExtent=self._extent)
         except MemoryError, e:
             myMessage = self.tr(
                 'An error occurred because it appears that your system does '

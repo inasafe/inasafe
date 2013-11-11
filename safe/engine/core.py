@@ -20,13 +20,15 @@ import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def calculate_impact(layers, impact_fcn):
+def calculate_impact(layers, impact_fcn, extent=None):
     """Calculate impact levels as a function of list of input layers
 
     Input
         layers: List of Raster and Vector layer objects to be used for analysis
 
         impact_fcn: Function of the form f(layers)
+
+        extent:     List of [xmin, ymin, xmax, ymax] - the coordinates of the bounding box.
 
     Output
         filename of resulting impact layer (GML). Comment is embedded as
@@ -49,6 +51,9 @@ def calculate_impact(layers, impact_fcn):
 
     # Get an instance of the passed impact_fcn
     impact_function = impact_fcn()
+    # Set extent if it is provided
+    if not extent is None:
+        impact_function.set_extent(extent)
 
     # Start time
     start_time = datetime.now()

@@ -878,8 +878,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             exposure_layer = self.aggregator.exposure_layer
         else:
             # It is a 'new-style' impact function,
-            # clipping doesn't needed,
+            # clipping doesn't needed, but we neet to set up extent
             self.aggregator.set_layers(hazard_layer, exposure_layer)
+            self.calculator.set_extent(buffered_geo_extent)
 
         # Identify input layers
         self.calculator.set_hazard_layer(hazard_layer)

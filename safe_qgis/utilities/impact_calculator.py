@@ -36,11 +36,7 @@ class ImpactCalculator(QObject):
     """A class to compute an impact scenario. We inherit from QObject
     so that we can use Qt translation self.tr calls."""
 
-    # DK: I think it should be only one module that uses information about function style:
-    #  ImpactCalculator
-    #     gets layers
-    #     checks style of the impact function
-    #     clips layers if the function is old-style
+    # DK: I think it should be only one module that uses direct information about function style
 
 
     def __init__(self):
@@ -51,6 +47,7 @@ class ImpactCalculator(QObject):
         self._function = None
         self._filename = None
         self._result = None
+        self._extent = None
 
     def _convert_layer(self, layer):
         """Analyze style of self._function and return appropriate
@@ -189,10 +186,12 @@ class ImpactCalculator(QObject):
 
         myFunctions = getSafeImpactFunctions(self._function)
         myFunction = myFunctions[0][self._function]
+
         return ImpactCalculatorThread(
             myHazardLayer,
             myExposureLayer,
-            myFunction)
+            myFunction,
+            extent=self.extent())
 
     def need_clip(self):
         """Check to clip or not to clip layers.
@@ -219,3 +218,22 @@ class ImpactCalculator(QObject):
         else:
             myMessage = self.tr('Error: Function has unknown style.')
             raise InvalidParameterError(myMessage)
+
+    def set_extent(self, extent):
+        """Mutator for the extent property.
+
+        Set extent that can be used as bounding box of the calculator's working region.
+
+        :param extent:  Bounding box [xmin, ymin, xmax, ymax] of the working region.
+        :type extent: list
+
+        """
+        self._extent = extent
+
+    def extent(self):
+        """Accessor for the extent property.
+
+        :returns: Bounding box [xmin, ymin, xmax, ymax] of the working region.
+        :rtype: list, None
+        """
+        return self._extent
