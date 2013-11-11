@@ -288,6 +288,23 @@ class Aggregator(QtCore.QObject):
                 self.update_keywords(self.layer, keywords)
                 self.is_valid = False
 
+    def set_layers(self, hazard_layer, exposure_layer):
+        """Set up aggregator layers
+
+        :param hazard_layer: A hazard layer.
+        :type hazard_layer: QgsMapLayer
+
+        :param exposure_layer: An exposure layer.
+        :type exposure_layer: QgsMapLayer
+
+        """
+        self.hazard_layer = hazard_layer
+        self.exposure_layer = exposure_layer
+        try:
+            self._prepare_layer()
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
+
     def deintersect(self, hazard_layer, exposure_layer):
         """Ensure there are no intersecting features with self.layer.
 
@@ -307,12 +324,7 @@ class Aggregator(QtCore.QObject):
             raise InvalidAggregatorError
 
         # These should have already been clipped to analysis extents
-        self.hazard_layer = hazard_layer
-        self.exposure_layer = exposure_layer
-        try:
-            self._prepare_layer()
-        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
-            raise
+        self.set_layers(hazard_layer, exposure_layer)
 
         if not self.aoi_mode:
             # This is a safe version of the aggregation layer
