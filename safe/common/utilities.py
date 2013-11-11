@@ -174,29 +174,6 @@ def unique_filename(**kwargs):
         pass
     return filename
 
-try:
-    # hmmm this is not so nice - would be nicer to find a way to make
-    # to make safe unaware of safe_qgis - perhaps this is a good case
-    # for monkey patching safe.common.utilities with a replacement
-    # get_defaults when safe_qgis initialises....Tim (June 2013)
-    # noinspection PyUnresolvedReferences
-    from safe_qgis.utilities.utilities import (
-        breakdown_defaults as get_qgis_defaults)
-
-    def get_defaults(default=None):
-        return get_qgis_defaults(theDefault=default)
-except ImportError:
-    #this is used when we are in safe without access to qgis (e.g. web )
-    from safe.defaults import DEFAULTS
-
-    def get_defaults(default=None):
-        if default is None:
-            return DEFAULTS
-        elif default in DEFAULTS:
-            return DEFAULTS[default]
-        else:
-            return None
-
 
 def zip_shp(shp_path, extra_ext=None, remove_file=False):
     """Zip shape file and its gang (.shx, .dbf, .prj).

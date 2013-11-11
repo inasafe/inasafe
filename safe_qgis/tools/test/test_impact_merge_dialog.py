@@ -22,12 +22,7 @@ import logging
 import os
 import tempfile
 
-# this import required to enable PyQt API v2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 #noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog
 from safe_qgis.tools.impact_merge_dialog import ImpactMergeDialog
 from safe_qgis.utilities.utilities_for_testing import get_qgis_app
 

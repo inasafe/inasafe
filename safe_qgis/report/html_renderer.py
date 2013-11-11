@@ -165,29 +165,31 @@ class HtmlRenderer():
                                    QtCore.Qt.ScrollBarAlwaysOff)
 
         # noinspection PyUnresolvedReferences
+        self.htmlLoadedFlag = False
         self.webView.loadFinished.connect(self.html_loaded_slot)
         self.webView.setHtml(myHtml)
-        self.htmlLoadedFlag = False
-        myTimeOut = 20
-        myCounter = 0
-        mySleepPeriod = 1
-        while not self.htmlLoadedFlag and myCounter < myTimeOut:
+        my_counter = 0
+        my_sleep_period = 0.1  # sec
+        my_timeout = 20  # sec
+        while not self.htmlLoadedFlag and my_counter < my_timeout:
             # Block until the event loop is done printing the page
-            myCounter += 1
-            time.sleep(mySleepPeriod)
+            my_counter += my_sleep_period
+            time.sleep(my_sleep_period)
             # noinspection PyArgumentList
             QtCore.QCoreApplication.processEvents()
 
         if not self.htmlLoadedFlag:
             LOGGER.error('Failed to load html')
 
-    def html_loaded_slot(self):
-        """Slot called when the page is loaded.
-        """
-        self.htmlLoadedFlag = True
-        LOGGER.debug('htmlLoadedSlot slot called')
         # noinspection PyUnresolvedReferences
         self.webView.loadFinished.disconnect(self.html_loaded_slot)
+
+    def html_loaded_slot(self, ok):
+        """Slot called when the page is loaded.
+        """
+        self.htmlLoadedFlag = ok
+        LOGGER.debug('htmlLoadedSlot slot called')
+        # noinspection PyUnresolvedReferences
 
     def print_impact_table(self, keywords, filename=None):
         """High level table generator to print layer keywords.

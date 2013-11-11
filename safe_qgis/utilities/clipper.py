@@ -462,9 +462,10 @@ def _clip_raster_layer(
             # This layer is not WGS84 geographic
             message = (
                 'Layer %s represents density but has spatial reference "%s". '
-                'Density layers must be given in WGS84 geographic coordinates, '
-                'so please reproject and try again. For more information, '
-                'see issue https://github.com/AIFDR/inasafe/issues/123' % (
+                'Density layers must be given in WGS84 geographic '
+                'coordinates, so please reproject and try again. For more '
+                'information, see issue '
+                'https://github.com/AIFDR/inasafe/issues/123' % (
                     working_layer,
                     layer.crs().toProj4()
                 ))
@@ -522,9 +523,9 @@ def _clip_raster_layer(
         raise CallGDALError(message)
     elif result == -1:  # process crashed
         message_detail = tr('Process crashed.')
-        message = tr('<p>Error while executing the following shell command:</p>'
-                     '<pre>%s</pre><p>Error message: %s' %
-                     (command, message_detail))
+        message = tr(
+            '<p>Error while executing the following shell command:</p>'
+            '<pre>%s</pre><p>Error message: %s' % (command, message_detail))
         raise CallGDALError(message)
 
     # .. todo:: Check the result of the shell call is ok

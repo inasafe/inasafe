@@ -156,18 +156,19 @@ class PostprocessorManager(QtCore.QObject):
                         except KeyError:
                             postprocessor_totals[indicator] = 0
                     else:
+                        value = int(value)
                         try:
-                            postprocessor_totals[indicator] += int(value)
+                            postprocessor_totals[indicator] += value
                         except KeyError:
-                            postprocessor_totals[indicator] = int(value)
-                    row.add(value)
+                            postprocessor_totals[indicator] = value
+                    row.add(format_int(value))
                 table.add(row)
 
             if not aoi_mode:
                 # add the totals row
                 row = m.Row(self.tr('Total in aggregation areas'))
                 for _, total in postprocessor_totals.iteritems():
-                    row.add(str(total))
+                    row.add(format_int(total))
                 table.add(row)
 
             # add table to message
@@ -277,8 +278,8 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 female_ration_field = self.aggregator.attributes[
                     self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
-                female_ratio_field_index = self.aggregator.layer.fieldNameIndex(
-                    female_ration_field)
+                female_ratio_field_index = \
+                    self.aggregator.layer.fieldNameIndex(female_ration_field)
 
                 # something went wrong finding the female ratio field,
                 # use defaults from below except block

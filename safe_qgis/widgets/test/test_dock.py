@@ -25,9 +25,6 @@ from os.path import join
 
 from unittest import TestCase, skipIf
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from PyQt4 import QtCore
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
@@ -1285,7 +1282,7 @@ Click for Diagnostic Information:
         # create unique file
         myScenarioFile = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=temp_dir('test'))
-        DOCK.save_current_scenario(theScenarioFilePath=myScenarioFile)
+        DOCK.save_current_scenario(scenario_file_path=myScenarioFile)
         with open(myScenarioFile, 'rt') as f:
             data = f.readlines()
         myTitle = data[0][:-1]

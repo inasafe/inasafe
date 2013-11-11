@@ -1,9 +1,9 @@
+from safe.defaults import get_defaults
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.raster import Raster
-from safe.common.utilities import (ugettext as tr,
-                                   get_defaults)
+from safe.common.utilities import (ugettext as tr)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 from third_party.odict import OrderedDict

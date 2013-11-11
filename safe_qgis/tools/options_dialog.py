@@ -122,7 +122,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.leReportTemplatePath.setText(path)
 
         flag = bool(
-            settings.value('inasafe/developer_mode', False,  type=bool))
+            settings.value('inasafe/developer_mode', False, type=bool))
         self.cbxDevMode.setChecked(flag)
 
         flag = bool(

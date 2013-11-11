@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_qgis import breakdown_defaults
 
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
@@ -28,10 +29,6 @@ from os.path import join
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
-
-# this import required to enable PyQt API v2
-#noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 
 from qgis.core import QgsVectorLayer
 
@@ -53,7 +50,7 @@ from safe_qgis.impact_statistics.aggregator import Aggregator
 from safe_qgis.utilities.clipper import clip_layer
 from safe_qgis.utilities.keyword_io import KeywordIO
 from safe_qgis.utilities.utilities import (
-    breakdown_defaults, extent_to_geo_array)
+    extent_to_geo_array)
 
 from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
