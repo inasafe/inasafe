@@ -42,6 +42,7 @@ from qgis.core import (
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
+from safe_qgis.exceptions import InsufficientParametersError
 from third_party.odict import OrderedDict
 from third_party.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
@@ -305,7 +306,11 @@ class Aggregator(QtCore.QObject):
         except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
             raise
 
-    def deintersect(self, hazard_layer, exposure_layer):
+        if not self.aoi_mode:
+            # This is a safe version of the aggregation layer
+            self.safe_layer = safe_read_layer(str(self.layer.source()))
+
+    def deintersect(self):
         """Ensure there are no intersecting features with self.layer.
 
         This should only happen after initial checks have been made.
@@ -318,18 +323,22 @@ class Aggregator(QtCore.QObject):
         :param exposure_layer: An exposure layer.
         :type exposure_layer: QgsMapLayer
 
+        :raises: InsufficientParametersError if hazard_layer or exposure_layer  is not set.
+
         """
 
         if not self.is_valid:
             raise InvalidAggregatorError
 
-        # These should have already been clipped to analysis extents
-        self.set_layers(hazard_layer, exposure_layer)
+        if self.hazard_layer is None:
+            myMessage = self.tr('Error: hazard layer is not provided.')
+            raise InsufficientParametersError(myMessage)
+
+        if self.exposure_layer is None:
+            myMessage = self.tr('Error: exposure layer is not provided.')
+            raise InsufficientParametersError(myMessage)
 
         if not self.aoi_mode:
-            # This is a safe version of the aggregation layer
-            self.safe_layer = safe_read_layer(str(self.layer.source()))
-
             if is_polygon_layer(self.hazard_layer):
                 self.hazard_layer = self._prepare_polygon_layer(
                     self.hazard_layer)
