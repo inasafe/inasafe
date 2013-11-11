@@ -865,11 +865,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             hazard_layer, exposure_layer = self.optimal_clip(
                 extra_exposure_keywords, buffered_geo_extent, cell_size,
                 exposure_layer, geo_extent, hazard_layer)
+
+            self.aggregator.set_layers(hazard_layer, exposure_layer)
+
             # See if the inputs need further refinement for aggregations
             try:
-                self.aggregator.deintersect(hazard_layer, exposure_layer)
+                self.aggregator.deintersect()
             except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
                 raise
+            # Get clipped layers
             hazard_layer = self.aggregator.hazard_layer
             exposure_layer = self.aggregator.exposure_layer
         else:
