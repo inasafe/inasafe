@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Wed Jun 26 13:57:36 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Tue Nov 12 14:26:13 2013
+#      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_KeywordsDialogBase(object):
     def setupUi(self, KeywordsDialogBase):
         KeywordsDialogBase.setObjectName(_fromUtf8("KeywordsDialogBase"))
-        KeywordsDialogBase.resize(515, 697)
+        KeywordsDialogBase.resize(515, 865)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -102,6 +102,42 @@ class Ui_KeywordsDialogBase(object):
         self.dsbFemaleRatioDefault.setProperty("value", 0.0)
         self.dsbFemaleRatioDefault.setObjectName(_fromUtf8("dsbFemaleRatioDefault"))
         self.gridLayout_3.addWidget(self.dsbFemaleRatioDefault, 5, 1, 1, 1)
+        self.lblYouthRatioAttribute = QtGui.QLabel(self.grpSimple)
+        self.lblYouthRatioAttribute.setObjectName(_fromUtf8("lblYouthRatioAttribute"))
+        self.gridLayout_3.addWidget(self.lblYouthRatioAttribute, 6, 0, 1, 1)
+        self.lblAdultRatioAttribute = QtGui.QLabel(self.grpSimple)
+        self.lblAdultRatioAttribute.setObjectName(_fromUtf8("lblAdultRatioAttribute"))
+        self.gridLayout_3.addWidget(self.lblAdultRatioAttribute, 8, 0, 1, 1)
+        self.lblYouthRatioDefault = QtGui.QLabel(self.grpSimple)
+        self.lblYouthRatioDefault.setObjectName(_fromUtf8("lblYouthRatioDefault"))
+        self.gridLayout_3.addWidget(self.lblYouthRatioDefault, 7, 0, 1, 1)
+        self.lblAdultRatioDefault = QtGui.QLabel(self.grpSimple)
+        self.lblAdultRatioDefault.setObjectName(_fromUtf8("lblAdultRatioDefault"))
+        self.gridLayout_3.addWidget(self.lblAdultRatioDefault, 9, 0, 1, 1)
+        self.lblElderlyRatioAttribute = QtGui.QLabel(self.grpSimple)
+        self.lblElderlyRatioAttribute.setObjectName(_fromUtf8("lblElderlyRatioAttribute"))
+        self.gridLayout_3.addWidget(self.lblElderlyRatioAttribute, 10, 0, 1, 1)
+        self.lblRatioDefautl = QtGui.QLabel(self.grpSimple)
+        self.lblRatioDefautl.setObjectName(_fromUtf8("lblRatioDefautl"))
+        self.gridLayout_3.addWidget(self.lblRatioDefautl, 11, 0, 1, 1)
+        self.cboYouthRatioAttribute = QtGui.QComboBox(self.grpSimple)
+        self.cboYouthRatioAttribute.setObjectName(_fromUtf8("cboYouthRatioAttribute"))
+        self.gridLayout_3.addWidget(self.cboYouthRatioAttribute, 6, 1, 1, 1)
+        self.cboAdultRatioAttribute = QtGui.QComboBox(self.grpSimple)
+        self.cboAdultRatioAttribute.setObjectName(_fromUtf8("cboAdultRatioAttribute"))
+        self.gridLayout_3.addWidget(self.cboAdultRatioAttribute, 8, 1, 1, 1)
+        self.cboElderlyRatioAttribute = QtGui.QComboBox(self.grpSimple)
+        self.cboElderlyRatioAttribute.setObjectName(_fromUtf8("cboElderlyRatioAttribute"))
+        self.gridLayout_3.addWidget(self.cboElderlyRatioAttribute, 10, 1, 1, 1)
+        self.dsbAdultRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
+        self.dsbAdultRatioDefault.setObjectName(_fromUtf8("dsbAdultRatioDefault"))
+        self.gridLayout_3.addWidget(self.dsbAdultRatioDefault, 9, 1, 1, 1)
+        self.dsbYouthRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
+        self.dsbYouthRatioDefault.setObjectName(_fromUtf8("dsbYouthRatioDefault"))
+        self.gridLayout_3.addWidget(self.dsbYouthRatioDefault, 7, 1, 1, 1)
+        self.dsbElderlyRatioDefault = QtGui.QDoubleSpinBox(self.grpSimple)
+        self.dsbElderlyRatioDefault.setObjectName(_fromUtf8("dsbElderlyRatioDefault"))
+        self.gridLayout_3.addWidget(self.dsbElderlyRatioDefault, 11, 1, 1, 1)
         self.verticalLayout.addWidget(self.grpSimple)
         self.pbnAdvanced = QtGui.QPushButton(KeywordsDialogBase)
         self.pbnAdvanced.setCheckable(True)
@@ -246,6 +282,12 @@ class Ui_KeywordsDialogBase(object):
         self.lblTitle.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
         self.lblFemaleRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Female ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
         self.lblFemaleRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Female ratio default", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblYouthRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Youth ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblAdultRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Adult ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblYouthRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Youth ratio default", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblAdultRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Adult ratio default", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblElderlyRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elderly ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblRatioDefautl.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elderly ratio default", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnAdvanced.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Show advanced editor", None, QtGui.QApplication.UnicodeUTF8))
         self.grpAdvanced.setTitle(QtGui.QApplication.translate("KeywordsDialogBase", "Advanced editor", None, QtGui.QApplication.UnicodeUTF8))
         self.radPredefined.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Predefined", None, QtGui.QApplication.UnicodeUTF8))

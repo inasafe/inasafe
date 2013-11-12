@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>515</width>
-    <height>697</height>
+    <height>865</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -171,6 +171,66 @@
          <double>0.000000000000000</double>
         </property>
        </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="lblYouthRatioAttribute">
+        <property name="text">
+         <string>Youth ratio attribute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="lblAdultRatioAttribute">
+        <property name="text">
+         <string>Adult ratio attribute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="lblYouthRatioDefault">
+        <property name="text">
+         <string>Youth ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="lblAdultRatioDefault">
+        <property name="text">
+         <string>Adult ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="lblElderlyRatioAttribute">
+        <property name="text">
+         <string>Elderly ratio attribute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="lblRatioDefautl">
+        <property name="text">
+         <string>Elderly ratio default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QComboBox" name="cboYouthRatioAttribute"/>
+      </item>
+      <item row="8" column="1">
+       <widget class="QComboBox" name="cboAdultRatioAttribute"/>
+      </item>
+      <item row="10" column="1">
+       <widget class="QComboBox" name="cboElderlyRatioAttribute"/>
+      </item>
+      <item row="9" column="1">
+       <widget class="QDoubleSpinBox" name="dsbAdultRatioDefault"/>
+      </item>
+      <item row="7" column="1">
+       <widget class="QDoubleSpinBox" name="dsbYouthRatioDefault"/>
+      </item>
+      <item row="11" column="1">
+       <widget class="QDoubleSpinBox" name="dsbElderlyRatioDefault"/>
       </item>
      </layout>
     </widget>
