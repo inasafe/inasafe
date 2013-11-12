@@ -106,10 +106,43 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
+
         self.dsbFemaleRatioDefault.blockSignals(True)
         self.dsbFemaleRatioDefault.setValue(self.defaults[
             'FEMALE_RATIO'])
         self.dsbFemaleRatioDefault.blockSignals(False)
+        self.dsbFemaleRatioDefault.valueChanged.connect(
+            lambda: self._ratio_default_changed('FEMALE_RATIO'))
+        self.cboFemaleRatioAttribute.currentIndexChanged.connect(
+            lambda: self._ratio_attribute_changed('FEMALE_RATIO'))
+
+        self.dsbYouthRatioDefault.blockSignals(True)
+        self.dsbYouthRatioDefault.setValue(self.defaults[
+            'YOUTH_RATIO'])
+        self.dsbYouthRatioDefault.blockSignals(False)
+        self.dsbYouthRatioDefault.valueChanged.connect(
+            lambda: self._ratio_default_changed('YOUTH_RATIO'))
+        self.cboYouthRatioAttribute.currentIndexChanged.connect(
+            lambda: self._ratio_attribute_changed('YOUTH_RATIO'))
+
+        self.dsbAdultRatioDefault.blockSignals(True)
+        self.dsbAdultRatioDefault.setValue(self.defaults[
+            'ADULT_RATIO'])
+        self.dsbAdultRatioDefault.blockSignals(False)
+        self.dsbAdultRatioDefault.valueChanged.connect(
+            lambda: self._ratio_default_changed('ADULT_RATIO'))
+        self.cboAdultRatioAttribute.currentIndexChanged.connect(
+            lambda: self._ratio_attribute_changed('ADULT_RATIO'))
+
+        self.dsbElderlyRatioDefault.blockSignals(True)
+        self.dsbElderlyRatioDefault.setValue(self.defaults[
+            'ELDERLY_RATIO'])
+        self.dsbElderlyRatioDefault.blockSignals(False)
+        self.dsbElderlyRatioDefault.valueChanged.connect(
+            lambda: self._ratio_default_changed('ELDERLY_RATIO'))
+        self.cboElderlyRatioAttribute.currentIndexChanged.connect(
+            lambda: self._ratio_attribute_changed('ELDERLY_RATIO'))
+
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
         if layer is None:
@@ -145,14 +178,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.cboSubcategory.setVisible(not isPostprocessingOn)
         self.lblSubcategory.setVisible(not isPostprocessingOn)
         self.show_aggregation_attribute(isPostprocessingOn)
-        #self._show_ratio_attribute(self.cboFemaleRatioAttribute,
-        #                          self.lblFemaleRatioAttribute,
-        #                          isPostprocessingOn,
-        #                          'FEMALE_RATIO_ATTR_KEY')
-        #self._show_ratio_default(self.dsbFemaleRatioDefault,
-        #                         self.lblFemaleRatioDefault,
-        #                         isPostprocessingOn, 'FEMALE_RATIO_KEY',
-        #                         'FEMALE_RATIO')
         self.toggle_ratio('FEMALE_RATIO', isPostprocessingOn)
         self.toggle_ratio('YOUTH_RATIO', isPostprocessingOn)
         self.toggle_ratio('ADULT_RATIO', isPostprocessingOn)
@@ -185,17 +210,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.setVisible(visible_flag)
         self.lblAggregationAttribute.setVisible(visible_flag)
 
-    def toggle_ratio(self, ratio_name, visible_flag):
-
+    def _get_ratio_elements(self, ratio_name):
         # create key names
         ratio_attr_key = ratio_name + '_ATTR_KEY'
         ratio_key = ratio_name + '_KEY'
-        ratio = ratio_name
-
         # convert FEMALE_RATIO to FemaleRatio
         ratio_name = string.capwords(ratio_name, '_')
         ratio_name = string.replace(ratio_name, '_', '')
-
         # get the widget from UI
         attribute_widget_name = 'cbo%sAttribute' % ratio_name
         attribute_widget = self.findChild(QtGui.QComboBox,
@@ -207,22 +228,29 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                         default_widget_name)
         default_label_name = 'lbl%sDefault' % ratio_name
         default_label = self.findChild(QtGui.QLabel, default_label_name)
+        return {'attr_label': attribute_label,
+                'attr_widget': attribute_widget,
+                'def_label': default_label,
+                'def_widget': default_widget,
+                'attr_key': ratio_attr_key,
+                'ratio_key': ratio_key}
+
+    def toggle_ratio(self, ratio_name, visible_flag):
+
+        elements = self._get_ratio_elements(ratio_name)
 
         # toggle the widgets
-        self._show_ratio_attribute(attribute_widget,
-                                   attribute_label,
-                                   visible_flag,
-                                   ratio_attr_key)
-        self._show_ratio_default(default_widget,
-                                 default_label,
-                                 visible_flag,
-                                 ratio_key,
-                                 ratio)
+        self._show_ratio_attribute(visible_flag,
+                                   elements['attr_widget'],
+                                   elements['attr_label'],
+                                   elements['attr_key'])
+        self._show_ratio_default(visible_flag,
+                                 elements['def_widget'],
+                                 elements['def_label'],
+                                 elements['ratio_key'],
+                                 ratio_name)
 
-    def _show_ratio_attribute(self,
-                              widget,
-                              label,
-                              visible_flag,
+    def _show_ratio_attribute(self, visible_flag, widget, label,
                               ratio_attr_key):
         """Hide or show the ratio attribute in the dialog.
 
@@ -257,7 +285,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         widget.setVisible(visible_flag)
         label.setVisible(visible_flag)
 
-    def _show_ratio_default(self, widget, label, visible_flag, ratio_key,
+    def _show_ratio_default(self, visible_flag, widget, label, ratio_key,
                             ratio):
         """Hide or show the a ratio default attribute in the dialog.
 
@@ -289,40 +317,40 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.defaults['AGGR_ATTR_KEY'],
             self.cboAggregationAttribute.currentText())
 
-    # prevents actions being handled twice
-    @pyqtSignature('int')
-    def on_cboFemaleRatioAttribute_currentIndexChanged(self, index=None):
-        """Handler for female ratio attribute change.
+    def _ratio_attribute_changed(self, ratio_name):
+        """Handler for a ratio attribute change.
 
-        :param index: Not used but required for slot.
         """
-        del index
-        text = self.cboFemaleRatioAttribute.currentText()
+        elements = self._get_ratio_elements(ratio_name)
+        text = elements['attr_widget'].currentText()
+        def_widget = elements['def_widget']
+        ratio_key = elements['ratio_key']
+        ratio_attr_key = elements['attr_key']
+
         if text == self.tr('Use default'):
-            self.dsbFemaleRatioDefault.setEnabled(True)
+            def_widget.setEnabled(True)
             currentDefault = self.get_value_for_key(
-                self.defaults['FEMALE_RATIO_KEY'])
+                self.defaults[ratio_key])
             if currentDefault is None:
                 self.add_list_entry(
-                    self.defaults['FEMALE_RATIO_KEY'],
-                    self.dsbFemaleRatioDefault.value())
+                    self.defaults[ratio_key],
+                    def_widget.value())
         else:
-            self.dsbFemaleRatioDefault.setEnabled(False)
-            self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
-        self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], text)
+            def_widget.setEnabled(False)
+            self.remove_item_by_key(self.defaults[ratio_key])
 
-    # prevents actions being handled twice
-    @pyqtSignature('double')
-    def on_dsbFemaleRatioDefault_valueChanged(self, value):
+        self.add_list_entry(self.defaults[ratio_attr_key], text)
+
+    def _ratio_default_changed(self, ratio_name):
         """Handler for female ration default value changing.
 
         :param value: Not used but required for slot.
         """
-        del value
-        box = self.dsbFemaleRatioDefault
+        elements = self._get_ratio_elements(ratio_name)
+        box = elements['def_widget']
         if box.isEnabled():
             self.add_list_entry(
-                self.defaults['FEMALE_RATIO_KEY'],
+                self.defaults[elements['ratio_key']],
                 box.value())
 
     # prevents actions being handled twice
