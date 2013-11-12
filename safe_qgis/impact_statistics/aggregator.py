@@ -163,7 +163,7 @@ class Aggregator(QtCore.QObject):
             keywords = {}
 
         if self.aoi_mode:
-            keywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+            keywords[self.defaults['FEMALE_RATIO_ATTR_KEY']] = self.tr(
                 'Use default')
             self.keyword_io.update_keywords(self.layer, keywords)
             self.is_valid = True
@@ -181,8 +181,8 @@ class Aggregator(QtCore.QObject):
             #keywords are already complete
             category = keywords['category']
             aggregation_attribute = self.defaults['AGGR_ATTR_KEY']
-            female_ratio = self.defaults['FEM_RATIO_ATTR_KEY']
-            female_ratio_key = self.defaults['FEM_RATIO_KEY']
+            female_ratio = self.defaults['FEMALE_RATIO_ATTR_KEY']
+            female_ratio_key = self.defaults['FEMALE_RATIO_KEY']
             if ('category' in keywords and
                 category == 'postprocessing' and
                 aggregation_attribute in keywords and
@@ -203,13 +203,13 @@ class Aggregator(QtCore.QObject):
                     keywords[self.defaults['AGGR_ATTR_KEY']] = \
                         my_attributes[0]
 
-                if self.defaults['FEM_RATIO_ATTR_KEY'] not in keywords:
-                    keywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+                if self.defaults['FEMALE_RATIO_ATTR_KEY'] not in keywords:
+                    keywords[self.defaults['FEMALE_RATIO_ATTR_KEY']] = self.tr(
                         'Use default')
 
-                if self.defaults['FEM_RATIO_KEY'] not in keywords:
-                    keywords[self.defaults['FEM_RATIO_KEY']] = \
-                        self.defaults['FEM_RATIO']
+                if self.defaults['FEMALE_RATIO_KEY'] not in keywords:
+                    keywords[self.defaults['FEMALE_RATIO_KEY']] = \
+                        self.defaults['FEMALE_RATIO']
 
                 self.keyword_io.update_keywords(self.layer, keywords)
                 self.is_valid = False
@@ -848,7 +848,7 @@ class Aggregator(QtCore.QObject):
                     self.layer,
                     self.defaults['AGGR_ATTR_KEY']))
 
-        female_ratio_key = self.defaults['FEM_RATIO_ATTR_KEY']
+        female_ratio_key = self.defaults['FEMALE_RATIO_ATTR_KEY']
         female_ration_attribute = self.keyword_io.read_keywords(
             self.layer,
             female_ratio_key)

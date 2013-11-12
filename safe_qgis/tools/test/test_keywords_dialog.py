@@ -15,7 +15,7 @@ __author__ = 'tim@linfiniti.com'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
+import qgis
 import unittest
 import sys
 import os
@@ -244,13 +244,13 @@ class KeywordsDialogTest(unittest.TestCase):
                      'female ratio attribute to the keywords list.')
 
         assert myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Use default'), \
+            myDefaults['FEMALE_RATIO_ATTR_KEY']) == myDialog.tr('Use default'), \
             myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio default value to the keywords list.')
         assert float(myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_KEY'])) == myDefaults['FEM_RATIO'], myMessage
+            myDefaults['FEMALE_RATIO_KEY'])) == myDefaults['FEMALE_RATIO'], myMessage
 
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
@@ -272,7 +272,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not add it to the keywords list.')
         assert myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_ATTR_KEY']) == myDialog.tr('Don\'t use'), \
+            myDefaults['FEMALE_RATIO_ATTR_KEY']) == myDialog.tr('Don\'t use'), \
             myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to'
@@ -282,7 +282,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not remove the keyword.')
-        assert (myDialog.get_value_for_key(myDefaults['FEM_RATIO']) is None), \
+        assert (myDialog.get_value_for_key(myDefaults['FEMALE_RATIO']) is None), \
             myMessage
 
         #set to TEST_REAL
@@ -294,7 +294,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not add it to the keywords list.')
         assert myDialog.get_value_for_key(
-            myDefaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
+            myDefaults['FEMALE_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not disable dsbFemaleRatioDefault.')
@@ -303,7 +303,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not remove the keyword.')
-        assert (myDialog.get_value_for_key(myDefaults['FEM_RATIO']) is
+        assert (myDialog.get_value_for_key(myDefaults['FEMALE_RATIO']) is
                 None), myMessage
 
     def Xtest_on_radExposure_toggled(self):

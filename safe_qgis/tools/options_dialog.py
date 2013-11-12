@@ -107,7 +107,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
 
         ratio = float(settings.value(
             'inasafe/defaultFemaleRatio',
-            DEFAULTS['FEM_RATIO']))
+            DEFAULTS['FEMALE_RATIO']))
         self.dsbFemaleRatioDefault.setValue(ratio)
 
         path = settings.value(

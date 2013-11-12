@@ -277,7 +277,7 @@ class PostprocessorManager(QtCore.QObject):
             # look if we need to look for a variable female ratio in a layer
             try:
                 female_ration_field = self.aggregator.attributes[
-                    self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
+                    self.aggregator.defaults['FEMALE_RATIO_ATTR_KEY']]
                 female_ratio_field_index = \
                     self.aggregator.layer.fieldNameIndex(female_ration_field)
 
@@ -292,9 +292,9 @@ class PostprocessorManager(QtCore.QObject):
                 try:
                     female_ratio = self.keyword_io.read_keywords(
                         self.aggregator.layer,
-                        self.aggregator.defaults['FEM_RATIO_KEY'])
+                        self.aggregator.defaults['FEMALE_RATIO_KEY'])
                 except KeywordNotFoundError:
-                    female_ratio = self.aggregator.defaults['FEM_RATIO']
+                    female_ratio = self.aggregator.defaults['FEMALE_RATIO']
 
         # iterate zone features
         request = QgsFeatureRequest()
@@ -343,7 +343,7 @@ class PostprocessorManager(QtCore.QObject):
                         female_ratio = feature[female_ratio_field_index]
                         if female_ratio is None:
                             female_ratio = self.aggregator.defaults[
-                                'FEM_RATIO']
+                                'FEMALE_RATIO']
                         LOGGER.debug(female_ratio)
                     parameters['female_ratio'] = female_ratio
 

@@ -13,12 +13,14 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+
 __author__ = 'tim@linfiniti.com'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import string
 import logging
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
@@ -106,7 +108,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.radPredefined.setChecked(True)
         self.dsbFemaleRatioDefault.blockSignals(True)
         self.dsbFemaleRatioDefault.setValue(self.defaults[
-            'FEM_RATIO'])
+            'FEMALE_RATIO'])
         self.dsbFemaleRatioDefault.blockSignals(False)
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
@@ -143,16 +145,15 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.cboSubcategory.setVisible(not isPostprocessingOn)
         self.lblSubcategory.setVisible(not isPostprocessingOn)
         self.show_aggregation_attribute(isPostprocessingOn)
-        self.show_ratio_attribute(self.cboFemaleRatioAttribute,
-                                  self.lblFemaleRatioAttribute,
-                                  isPostprocessingOn,
-                                  'FEM_RATIO_ATTR_KEY')
-        self.show_ratio_default(isPostprocessingOn,
-                                self.dsbFemaleRatioDefault,
-                                self.lblFemaleRatioDefault,
-                                'FEM_RATIO_KEY',
-                                'FEM_RATIO')
-
+        #self._show_ratio_attribute(self.cboFemaleRatioAttribute,
+        #                          self.lblFemaleRatioAttribute,
+        #                          isPostprocessingOn,
+        #                          'FEMALE_RATIO_ATTR_KEY')
+        #self._show_ratio_default(self.dsbFemaleRatioDefault,
+        #                         self.lblFemaleRatioDefault,
+        #                         isPostprocessingOn, 'FEMALE_RATIO_KEY',
+        #                         'FEMALE_RATIO')
+        self.toggle_ratio('FEMALE_RATIO', isPostprocessingOn)
 
     def show_aggregation_attribute(self, visible_flag):
         """Hide or show the aggregation attribute in the keyword editor dialog.
@@ -181,7 +182,44 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.setVisible(visible_flag)
         self.lblAggregationAttribute.setVisible(visible_flag)
 
-    def show_ratio_attribute(self, widget, label, visible_flag, ratio_attr_key):
+    def toggle_ratio(self, ratio_name, visible_flag):
+
+        # create key names
+        ratio_attr_key = ratio_name + '_ATTR_KEY'
+        ratio_key = ratio_name + '_KEY'
+
+        # convert FEMALE_RATIO to FemaleRatio
+        ratio_name = string.capwords(ratio_name, '_')
+        ratio_name = string.replace(ratio_name, '_', '')
+
+        # get the widget from UI
+        attribute_widget_name = 'cbo%sAttribute' % ratio_name
+        attribute_widget = self.findChild(QtGui.QComboBox,
+                                          attribute_widget_name)
+        attribute_label_name = 'lbl%sAttribute' % ratio_name
+        attribute_label = self.findChild(QtGui.QLabel, attribute_label_name)
+        default_widget_name = 'dsb%sDefault' % ratio_name
+        default_widget = self.findChild(QtGui.QDoubleSpinBox,
+                                        default_widget_name)
+        default_label_name = 'lbl%sDefault' % ratio_name
+        default_label = self.findChild(QtGui.QLabel, default_label_name)
+
+        # toggle the widgets
+        self._show_ratio_attribute(attribute_widget,
+                                   attribute_label,
+                                   visible_flag,
+                                   ratio_attr_key)
+        self._show_ratio_default(default_widget,
+                                 default_label,
+                                 visible_flag,
+                                 ratio_key,
+                                 ratio_name)
+
+    def _show_ratio_attribute(self,
+                              widget,
+                              label,
+                              visible_flag,
+                              ratio_attr_key):
         """Hide or show the ratio attribute in the dialog.
 
         :param visible_flag: Flag indicating if the female ratio attribute
@@ -215,8 +253,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         widget.setVisible(visible_flag)
         label.setVisible(visible_flag)
 
-    def show_ratio_default(self, visible_flag, widget, label, ratio_key,
-                           ratio):
+    def _show_ratio_default(self, widget, label, visible_flag, ratio_key,
+                            ratio):
         """Hide or show the a ratio default attribute in the dialog.
 
         :param visible_flag: Flag indicating if the ratio
@@ -259,15 +297,15 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if text == self.tr('Use default'):
             self.dsbFemaleRatioDefault.setEnabled(True)
             currentDefault = self.get_value_for_key(
-                self.defaults['FEM_RATIO_KEY'])
+                self.defaults['FEMALE_RATIO_KEY'])
             if currentDefault is None:
                 self.add_list_entry(
-                    self.defaults['FEM_RATIO_KEY'],
+                    self.defaults['FEMALE_RATIO_KEY'],
                     self.dsbFemaleRatioDefault.value())
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
-            self.remove_item_by_key(self.defaults['FEM_RATIO_KEY'])
-        self.add_list_entry(self.defaults['FEM_RATIO_ATTR_KEY'], text)
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
+        self.add_list_entry(self.defaults['FEMALE_RATIO_ATTR_KEY'], text)
 
     # prevents actions being handled twice
     @pyqtSignature('double')
@@ -280,7 +318,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         box = self.dsbFemaleRatioDefault
         if box.isEnabled():
             self.add_list_entry(
-                self.defaults['FEM_RATIO_KEY'],
+                self.defaults['FEMALE_RATIO_KEY'],
                 box.value())
 
     # prevents actions being handled twice
@@ -346,8 +384,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         if not flag:
             self.remove_item_by_key(self.defaults['AGGR_ATTR_KEY'])
-            self.remove_item_by_key(self.defaults['FEM_RATIO_ATTR_KEY'])
-            self.remove_item_by_key(self.defaults['FEM_RATIO_KEY'])
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_ATTR_KEY'])
+            self.remove_item_by_key(self.defaults['FEMALE_RATIO_KEY'])
             return
         self.set_category('postprocessing')
         self.update_controls_from_list()

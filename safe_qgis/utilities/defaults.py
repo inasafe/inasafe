@@ -48,8 +48,8 @@ def breakdown_defaults(theDefault=None):
     myDefaults = DEFAULTS
 
     settings_value = mySettings.value('inasafe/defaultFemaleRatio',
-                                      DEFAULTS['FEM_RATIO'], type=float)
-    myDefaults['FEM_RATIO'] = float(settings_value)
+                                      DEFAULTS['FEMALE_RATIO'], type=float)
+    myDefaults['FEMALE_RATIO'] = float(settings_value)
 
     if theDefault is None:
         return myDefaults

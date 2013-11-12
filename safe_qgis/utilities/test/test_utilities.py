@@ -139,13 +139,13 @@ class UtilitiesTest(unittest.TestCase):
     def test_getDefaults(self):
         """Test defaults for post processing can be obtained properly."""
         myExpectedDefaults = {
-            'FEM_RATIO_KEY': 'female ratio default',
+            'FEMALE_RATIO_KEY': 'female ratio default',
             'YOUTH_RATIO': 0.263,
             'ELDER_RATIO': 0.078,
             'NO_DATA': 'No data',
-            'FEM_RATIO': 0.5,
+            'FEMALE_RATIO': 0.5,
             'AGGR_ATTR_KEY': 'aggregation attribute',
-            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
+            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
             'ADULT_RATIO': 0.659}
         myDefaults = breakdown_defaults()
         myMessage = 'Defaults: got %s, expected %s' % (
