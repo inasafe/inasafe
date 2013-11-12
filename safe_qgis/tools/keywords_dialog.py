@@ -143,8 +143,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.cboSubcategory.setVisible(not isPostprocessingOn)
         self.lblSubcategory.setVisible(not isPostprocessingOn)
         self.show_aggregation_attribute(isPostprocessingOn)
-        self.show_female_ratio_attribute(isPostprocessingOn)
-        self.show_female_ratio_default(isPostprocessingOn)
+        self.show_ratio_attribute(self.cboFemaleRatioAttribute,
+                                  self.lblFemaleRatioAttribute,
+                                  isPostprocessingOn,
+                                  'FEM_RATIO_ATTR_KEY')
+        self.show_ratio_default(isPostprocessingOn,
+                                self.dsbFemaleRatioDefault,
+                                self.lblFemaleRatioDefault,
+                                'FEM_RATIO_KEY',
+                                'FEM_RATIO')
+
 
     def show_aggregation_attribute(self, visible_flag):
         """Hide or show the aggregation attribute in the keyword editor dialog.
@@ -173,60 +181,59 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.setVisible(visible_flag)
         self.lblAggregationAttribute.setVisible(visible_flag)
 
-    def show_female_ratio_attribute(self, visible_flag):
-        """Hide or show the female ratio attribute in the dialog.
+    def show_ratio_attribute(self, widget, label, visible_flag, ratio_attr_key):
+        """Hide or show the ratio attribute in the dialog.
 
         :param visible_flag: Flag indicating if the female ratio attribute
             should be hidden or shown.
         :type visible_flag: bool
         """
-        theBox = self.cboFemaleRatioAttribute
-        theBox.blockSignals(True)
-        theBox.clear()
-        theBox.blockSignals(False)
+        widget.blockSignals(True)
+        widget.clear()
+        widget.blockSignals(False)
         if visible_flag:
             currentKeyword = self.get_value_for_key(
-                self.defaults['FEM_RATIO_ATTR_KEY'])
+                self.defaults[ratio_attr_key])
             fields, attributePosition = layer_attribute_names(
                 self.layer,
                 [QtCore.QVariant.Double],
                 currentKeyword)
             fields.insert(0, self.tr('Use default'))
             fields.insert(1, self.tr('Don\'t use'))
-            theBox.addItems(fields)
+            widget.addItems(fields)
             if currentKeyword == self.tr('Use default'):
-                theBox.setCurrentIndex(0)
+                widget.setCurrentIndex(0)
             elif currentKeyword == self.tr('Don\'t use'):
-                theBox.setCurrentIndex(1)
+                widget.setCurrentIndex(1)
             elif attributePosition is None:
                 # currentKeyword was not found in the attribute table.
                 # Use default
-                theBox.setCurrentIndex(0)
+                widget.setCurrentIndex(0)
             else:
                 # + 2 is because we add use defaults and don't use
-                theBox.setCurrentIndex(attributePosition + 2)
-        theBox.setVisible(visible_flag)
-        self.lblFemaleRatioAttribute.setVisible(visible_flag)
+                widget.setCurrentIndex(attributePosition + 2)
+        widget.setVisible(visible_flag)
+        label.setVisible(visible_flag)
 
-    def show_female_ratio_default(self, visible_flag):
-        """Hide or show the female ratio default attribute in the dialog.
+    def show_ratio_default(self, visible_flag, widget, label, ratio_key,
+                           ratio):
+        """Hide or show the a ratio default attribute in the dialog.
 
-        :param visible_flag: Flag indicating if the female ratio
+        :param visible_flag: Flag indicating if the ratio
             default attribute should be hidden or shown.
         :type visible_flag: bool
         """
-        theBox = self.dsbFemaleRatioDefault
         if visible_flag:
             currentValue = self.get_value_for_key(
-                self.defaults['FEM_RATIO_KEY'])
+                self.defaults[ratio_key])
             if currentValue is None:
-                val = self.defaults['FEM_RATIO']
+                val = self.defaults[ratio]
             else:
                 val = float(currentValue)
-            theBox.setValue(val)
+            widget.setValue(val)
 
-        theBox.setVisible(visible_flag)
-        self.lblFemaleRatioDefault.setVisible(visible_flag)
+        widget.setVisible(visible_flag)
+        label.setVisible(visible_flag)
 
     # prevents actions being handled twice
     @pyqtSignature('int')
