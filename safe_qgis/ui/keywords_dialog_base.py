@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Tue Nov 12 14:26:13 2013
+# Created: Tue Nov 12 16:20:58 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -117,9 +117,9 @@ class Ui_KeywordsDialogBase(object):
         self.lblElderlyRatioAttribute = QtGui.QLabel(self.grpSimple)
         self.lblElderlyRatioAttribute.setObjectName(_fromUtf8("lblElderlyRatioAttribute"))
         self.gridLayout_3.addWidget(self.lblElderlyRatioAttribute, 10, 0, 1, 1)
-        self.lblRatioDefautl = QtGui.QLabel(self.grpSimple)
-        self.lblRatioDefautl.setObjectName(_fromUtf8("lblRatioDefautl"))
-        self.gridLayout_3.addWidget(self.lblRatioDefautl, 11, 0, 1, 1)
+        self.lblElderlyRatioDefault = QtGui.QLabel(self.grpSimple)
+        self.lblElderlyRatioDefault.setObjectName(_fromUtf8("lblElderlyRatioDefault"))
+        self.gridLayout_3.addWidget(self.lblElderlyRatioDefault, 11, 0, 1, 1)
         self.cboYouthRatioAttribute = QtGui.QComboBox(self.grpSimple)
         self.cboYouthRatioAttribute.setObjectName(_fromUtf8("cboYouthRatioAttribute"))
         self.gridLayout_3.addWidget(self.cboYouthRatioAttribute, 6, 1, 1, 1)
@@ -287,7 +287,7 @@ class Ui_KeywordsDialogBase(object):
         self.lblYouthRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Youth ratio default", None, QtGui.QApplication.UnicodeUTF8))
         self.lblAdultRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Adult ratio default", None, QtGui.QApplication.UnicodeUTF8))
         self.lblElderlyRatioAttribute.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elderly ratio attribute", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblRatioDefautl.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elderly ratio default", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblElderlyRatioDefault.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Elderly ratio default", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnAdvanced.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Show advanced editor", None, QtGui.QApplication.UnicodeUTF8))
         self.grpAdvanced.setTitle(QtGui.QApplication.translate("KeywordsDialogBase", "Advanced editor", None, QtGui.QApplication.UnicodeUTF8))
         self.radPredefined.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Predefined", None, QtGui.QApplication.UnicodeUTF8))

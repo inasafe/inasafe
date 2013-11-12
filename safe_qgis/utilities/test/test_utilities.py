@@ -141,7 +141,7 @@ class UtilitiesTest(unittest.TestCase):
         myExpectedDefaults = {
             'FEMALE_RATIO_KEY': 'female ratio default',
             'YOUTH_RATIO': 0.263,
-            'ELDER_RATIO': 0.078,
+            'ELDERLY_RATIO': 0.078,
             'NO_DATA': 'No data',
             'FEMALE_RATIO': 0.5,
             'AGGR_ATTR_KEY': 'aggregation attribute',

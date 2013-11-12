@@ -154,6 +154,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         #                         isPostprocessingOn, 'FEMALE_RATIO_KEY',
         #                         'FEMALE_RATIO')
         self.toggle_ratio('FEMALE_RATIO', isPostprocessingOn)
+        self.toggle_ratio('YOUTH_RATIO', isPostprocessingOn)
+        self.toggle_ratio('ADULT_RATIO', isPostprocessingOn)
+        self.toggle_ratio('ELDERLY_RATIO', isPostprocessingOn)
 
     def show_aggregation_attribute(self, visible_flag):
         """Hide or show the aggregation attribute in the keyword editor dialog.
@@ -187,6 +190,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # create key names
         ratio_attr_key = ratio_name + '_ATTR_KEY'
         ratio_key = ratio_name + '_KEY'
+        ratio = ratio_name
 
         # convert FEMALE_RATIO to FemaleRatio
         ratio_name = string.capwords(ratio_name, '_')
@@ -213,7 +217,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                  default_label,
                                  visible_flag,
                                  ratio_key,
-                                 ratio_name)
+                                 ratio)
 
     def _show_ratio_attribute(self,
                               widget,

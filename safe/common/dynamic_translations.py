@@ -157,7 +157,7 @@ def dynamic_translations():
     tr('BuildingType')
     tr('Youth ratio')
     tr('Adult ratio')
-    tr('Elder ratio')
+    tr('Elderly ratio')
     tr('AggregationCategorical')
     tr('Displacement rate')
     tr('Mmi range')
