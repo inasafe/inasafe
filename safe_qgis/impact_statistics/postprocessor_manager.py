@@ -304,8 +304,6 @@ class PostprocessorManager(QtCore.QObject):
 
         if 'Age' in postprocessors:
             # look if we need to look for a variable age ratio in a layer
-            print "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-            print self.aggregator.attributes
             try:
                 youth_ratio_field = self.aggregator.attributes[
                     self.aggregator.defaults['YOUTH_RATIO_ATTR_KEY']]
