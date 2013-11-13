@@ -165,9 +165,16 @@ class Aggregator(QtCore.QObject):
         if self.aoi_mode:
             keywords[self.defaults['FEMALE_RATIO_ATTR_KEY']] = self.tr(
                 'Use default')
+            keywords[self.defaults['YOUTH_RATIO_ATTR_KEY']] = self.tr(
+                'Use default')
+            keywords[self.defaults['ADULT_RATIO_ATTR_KEY']] = self.tr(
+                'Use default')
+            keywords[self.defaults['ELDERLY_RATIO_ATTR_KEY']] = self.tr(
+                'Use default')
             self.keyword_io.update_keywords(self.layer, keywords)
             self.is_valid = True
             return
+
         else:
             message = m.Message(
                 m.Heading(
@@ -183,12 +190,29 @@ class Aggregator(QtCore.QObject):
             aggregation_attribute = self.defaults['AGGR_ATTR_KEY']
             female_ratio = self.defaults['FEMALE_RATIO_ATTR_KEY']
             female_ratio_key = self.defaults['FEMALE_RATIO_KEY']
-            if ('category' in keywords and
-                category == 'postprocessing' and
-                aggregation_attribute in keywords and
-                female_ratio in keywords and
-                (female_ratio != self.tr('Use default') or
-                 female_ratio_key in keywords)):
+            youth_ratio = self.defaults['YOUTH_RATIO_ATTR_KEY']
+            youth_ratio_key = self.defaults['YOUTH_RATIO_KEY']
+            adult_ratio = self.defaults['ADULT_RATIO_ATTR_KEY']
+            adult_ratio_key = self.defaults['ADULT_RATIO_KEY']
+            elderly_ratio = self.defaults['ELDERLY_RATIO_ATTR_KEY']
+            elderly_ratio_key = self.defaults['ELDERLY_RATIO_KEY']
+
+            if (aggregation_attribute in keywords
+                and ('category' in keywords and
+                        category == 'postprocessing')
+                and (female_ratio in keywords and
+                         (female_ratio != self.tr('Use default') or
+                          female_ratio_key in keywords))
+                and (youth_ratio in keywords and
+                         (youth_ratio != self.tr('Use default') or
+                          youth_ratio_key in keywords))
+                and (adult_ratio in keywords and
+                         (adult_ratio != self.tr('Use default') or
+                          adult_ratio_key in keywords))
+                and (elderly_ratio in keywords and
+                         (elderly_ratio != self.tr('Use default') or
+                          elderly_ratio_key in keywords))
+            ):
                 self.is_valid = True
             #some keywords are needed
             else:
@@ -210,6 +234,30 @@ class Aggregator(QtCore.QObject):
                 if self.defaults['FEMALE_RATIO_KEY'] not in keywords:
                     keywords[self.defaults['FEMALE_RATIO_KEY']] = \
                         self.defaults['FEMALE_RATIO']
+
+                if self.defaults['YOUTH_RATIO_ATTR_KEY'] not in keywords:
+                    keywords[self.defaults['YOUTH_RATIO_ATTR_KEY']] = self.tr(
+                        'Use default')
+
+                if self.defaults['YOUTH_RATIO_KEY'] not in keywords:
+                    keywords[self.defaults['YOUTH_RATIO_KEY']] = \
+                        self.defaults['YOUTH_RATIO']
+
+                if self.defaults['ADULT_RATIO_ATTR_KEY'] not in keywords:
+                    keywords[self.defaults['ADULT_RATIO_ATTR_KEY']] = self.tr(
+                        'Use default')
+
+                if self.defaults['ADULT_RATIO_KEY'] not in keywords:
+                    keywords[self.defaults['ADULT_RATIO_KEY']] = \
+                        self.defaults['ADULT_RATIO']
+
+                if self.defaults['ELDERLY_RATIO_ATTR_KEY'] not in keywords:
+                    keywords[self.defaults['ELDERLY_RATIO_ATTR_KEY']] = self.tr(
+                        'Use default')
+
+                if self.defaults['ELDERLY_RATIO_KEY'] not in keywords:
+                    keywords[self.defaults['ELDERLY_RATIO_KEY']] = \
+                        self.defaults['ELDERLY_RATIO']
 
                 self.keyword_io.update_keywords(self.layer, keywords)
                 self.is_valid = False
@@ -849,13 +897,40 @@ class Aggregator(QtCore.QObject):
                     self.defaults['AGGR_ATTR_KEY']))
 
         female_ratio_key = self.defaults['FEMALE_RATIO_ATTR_KEY']
-        female_ration_attribute = self.keyword_io.read_keywords(
+        female_ratio_attribute = self.keyword_io.read_keywords(
             self.layer,
             female_ratio_key)
-        if ((female_ration_attribute != self.tr('Don\'t use')) and
-                (female_ration_attribute != self.tr('Use default'))):
+        if ((female_ratio_attribute != self.tr('Don\'t use')) and
+                (female_ratio_attribute != self.tr('Use default'))):
             self.attributes[female_ratio_key] = \
-                female_ration_attribute
+                female_ratio_attribute
+
+        youth_ratio_key = self.defaults['YOUTH_RATIO_ATTR_KEY']
+        youth_ratio_attribute = self.keyword_io.read_keywords(
+            self.layer,
+            youth_ratio_key)
+        if ((youth_ratio_attribute != self.tr('Don\'t use')) and
+                (youth_ratio_attribute != self.tr('Use default'))):
+            self.attributes[youth_ratio_key] = \
+                youth_ratio_attribute
+
+        adult_ratio_key = self.defaults['ADULT_RATIO_ATTR_KEY']
+        adult_ratio_attribute = self.keyword_io.read_keywords(
+            self.layer,
+            adult_ratio_key)
+        if ((adult_ratio_attribute != self.tr('Don\'t use')) and
+                (adult_ratio_attribute != self.tr('Use default'))):
+            self.attributes[adult_ratio_key] = \
+                adult_ratio_attribute
+            
+        elderly_ratio_key = self.defaults['ELDERLY_RATIO_ATTR_KEY']
+        elderly_ratio_attribute = self.keyword_io.read_keywords(
+            self.layer,
+            elderly_ratio_key)
+        if ((elderly_ratio_attribute != self.tr('Don\'t use')) and
+                (elderly_ratio_attribute != self.tr('Use default'))):
+            self.attributes[elderly_ratio_key] = \
+                elderly_ratio_attribute
 
     def _prepare_polygon_layer(self, layer):
         """Create a new layer with no intersecting features to self.layer.
