@@ -107,7 +107,7 @@ class ErrorMessage(MessageElement):
         """
         if element is None:
             return None
-        elif isinstance(element, basestring) or self._is_qstring(element):
+        elif self._is_stringable(element) or self._is_qstring(element):
             return Text(element)
         elif isinstance(element, MessageElement):
             return element
