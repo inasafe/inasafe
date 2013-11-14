@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe_qgis import breakdown_defaults
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -49,7 +50,6 @@ from safe_qgis.utilities.utilities import (
     is_polygon_layer,
     layer_attribute_names,
     create_memory_layer,
-    breakdown_defaults,
     extent_to_geo_array,
     safe_to_qgis_layer)
 from safe_qgis.utilities.styling import set_vector_graduated_style
@@ -329,7 +329,8 @@ class Aggregator(QtCore.QObject):
 
         #call the correct aggregator
         if qgis_impact_layer.type() == QgsMapLayer.VectorLayer:
-            self._aggregrate_vector_impact(qgis_impact_layer, safe_impact_layer)
+            self._aggregrate_vector_impact(
+                qgis_impact_layer, safe_impact_layer)
         elif qgis_impact_layer.type() == QgsMapLayer.RasterLayer:
             self._aggregate_raster_impact(qgis_impact_layer)
         else:
@@ -1212,8 +1213,11 @@ class Aggregator(QtCore.QObject):
         # Note: this code duplicates from Dock.viewportGeoArray - make DRY. TS
 
         rectangle = self.iface.mapCanvas().extent()
-        crs = QgsCoordinateReferenceSystem()
-        crs.createFromSrid(4326)
+        if self.iface.mapCanvas().hasCrsTransformEnabled():
+            crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        else:
+            crs = QgsCoordinateReferenceSystem()
+            crs.createFromSrid(4326)
         geo_extent = extent_to_geo_array(rectangle, crs)
 
         if not self.layer.isValid():

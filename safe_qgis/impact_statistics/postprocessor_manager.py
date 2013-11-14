@@ -92,11 +92,15 @@ class PostprocessorManager(QtCore.QObject):
 
         return position
 
-    def _generate_tables(self):
+    def _generate_tables(self, aoi_mode=True):
         """Parses the postprocessing output as one table per postprocessor.
 
         TODO: This should rather return json and then have a helper method to
         make html from the JSON.
+
+        :param aoi_mode: adds a Total in aggregation areas
+        row to the calculated table
+        :type aoi_mode: bool
 
         :returns: The html.
         :rtype: str
@@ -143,6 +147,7 @@ class PostprocessorManager(QtCore.QObject):
 
                 for indicator, calculation_data in calc.iteritems():
                     value = calculation_data['value']
+                    value = str(unhumanize_number(value))
                     if value == self.aggregator.defaults['NO_DATA']:
                         has_no_data = True
                         value += ' *'
@@ -151,18 +156,20 @@ class PostprocessorManager(QtCore.QObject):
                         except KeyError:
                             postprocessor_totals[indicator] = 0
                     else:
+                        value = int(value)
                         try:
-                            postprocessor_totals[indicator] += int(value)
+                            postprocessor_totals[indicator] += value
                         except KeyError:
-                            postprocessor_totals[indicator] = int(value)
-                    row.add(value)
+                            postprocessor_totals[indicator] = value
+                    row.add(format_int(value))
                 table.add(row)
 
-            # add the totals row
-            row = m.Row(self.tr('Total in aggregation areas'))
-            for _, total in postprocessor_totals.iteritems():
-                row.add(str(total))
-            table.add(row)
+            if not aoi_mode:
+                # add the totals row
+                row = m.Row(self.tr('Total in aggregation areas'))
+                for _, total in postprocessor_totals.iteritems():
+                    row.add(format_int(total))
+                table.add(row)
 
             # add table to message
             message.add(table)
@@ -271,8 +278,8 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 female_ration_field = self.aggregator.attributes[
                     self.aggregator.defaults['FEM_RATIO_ATTR_KEY']]
-                female_ratio_field_index = self.aggregator.layer.fieldNameIndex(
-                    female_ration_field)
+                female_ratio_field_index = \
+                    self.aggregator.layer.fieldNameIndex(female_ration_field)
 
                 # something went wrong finding the female ratio field,
                 # use defaults from below except block
@@ -355,8 +362,11 @@ class PostprocessorManager(QtCore.QObject):
             # increment the index
             polygon_index += 1
 
-    def get_output(self):
+    def get_output(self, aoi_mode):
         """Returns the results of the post processing as a table.
+
+        :param aoi_mode: aoi mode of the aggregator.
+        :type aoi_mode: bool
 
         :returns: str - a string containing the html in the requested format.
         """
@@ -376,4 +386,4 @@ class PostprocessorManager(QtCore.QObject):
             except KeywordNotFoundError:
                 pass
 
-            return self._generate_tables()
+            return self._generate_tables(aoi_mode)

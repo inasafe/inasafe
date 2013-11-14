@@ -22,10 +22,6 @@ import os
 import tempfile
 import shutil
 
-# this import required to enable PyQt API v2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant
 from PyQt4.QtGui import (QDialog)
 from PyQt4.QtNetwork import (QNetworkAccessManager, QNetworkReply)

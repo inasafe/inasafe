@@ -58,7 +58,10 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         if self.impact_total is not None or self.minimum_needs is not None:
             self._raise_error('clear needs to be called before setup')
 
-        self.impact_total = int(round(params['impact_total']))
+        try:
+            self.impact_total = int(round(params['impact_total']))
+        except (ValueError, TypeError):
+            self.impact_total = self.NO_DATA_TEXT
         self.minimum_needs = params['function_params']['minimum needs']
 
     def process(self):
@@ -112,7 +115,7 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         for need, value in self.minimum_needs.iteritems():
             try:
                 myResult = int(round(value * self.impact_total))
-            except ValueError:
+            except (ValueError, TypeError):
                 myResult = self.NO_DATA_TEXT
 
             self._append_result(need, myResult)

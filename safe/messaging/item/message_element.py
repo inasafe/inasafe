@@ -55,7 +55,8 @@ class MessageElement(object):
     def __str__(self):
         return self.__unicode__()
 
-    def _is_qstring(self, message):
+    @staticmethod
+    def _is_qstring(message):
         """Check if its a QString without adding any dep to PyQt4."""
         my_class = str(message.__class__)
         my_class_name = my_class.replace('<class \'', '').replace('\'>', '')
@@ -63,6 +64,12 @@ class MessageElement(object):
             return True
 
         return False
+
+    @staticmethod
+    def _is_stringable(message):
+        return (isinstance(message, basestring)
+                or isinstance(message, int)
+                or isinstance(message, float))
 
     def to_html(self):
         """Render a MessageElement queue as html

@@ -82,7 +82,6 @@ class Plugin:
         custom_logging.setup_logger()
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.action_impact_merge_dlg = None
 
     #noinspection PyArgumentList
     def setup_i18n(self, preferred_locale=None):

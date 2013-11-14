@@ -756,12 +756,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             exposure_keywords['layertype'] = 'raster'
 
         # Find out which functions can be used with these layers
-        list = [hazard_keywords, exposure_keywords]
+        func_list = [hazard_keywords, exposure_keywords]
         try:
-            dict = availableFunctions(list)
+            func_dict = availableFunctions(func_list)
             # Populate the hazard combo with the available functions
-            for myFunctionID in dict:
-                function = dict[myFunctionID]
+            for myFunctionID in func_dict:
+                function = func_dict[myFunctionID]
                 function_title = get_function_title(function)
 
                 # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
@@ -915,7 +915,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if self.get_aggregation_layer() is not None:
             text.add(m.Text(
-                self.tr('and list the results'),
+                self.tr('and bullet_list the results'),
                 m.ImportantText(self.tr('aggregated by')),
                 m.EmphasizedText(self.get_aggregation_layer().name()))
             )
@@ -934,13 +934,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             message.add(m.Paragraph(self.tr(
                 'The following postprocessors will be used:')))
 
-            list = m.BulletedList()
+            bullet_list = m.BulletedList()
 
             for name, post_processor in post_processors.iteritems():
-                list.add('%s: %s' % (
+                bullet_list.add('%s: %s' % (
                     get_postprocessor_human_name(name),
                     post_processor.description()))
-            message.add(list)
+            message.add(bullet_list)
 
         except (TypeError, KeyError):
             # TypeError is for when function_parameters is none
@@ -1184,7 +1184,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
 
         # write postprocessing report to keyword
-        output = self.postprocessor_manager.get_output()
+        output = self.postprocessor_manager.get_output(
+            self.aggregator.aoi_mode)
         keywords['postprocessing_report'] = output.to_html(
             suppress_newlines=True)
         self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -1783,7 +1784,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         settings = QSettings()
         logo_path = settings.value('inasafe/mapsLogoPath', '', type=str)
-        report_path = settings.value('inasafe/reportTemplatePath', '', type=str)
+        report_path = settings.value(
+            'inasafe/reportTemplatePath', '', type=str)
         if logo_path != '':
             print_map.set_logo(logo_path)
         if report_path != '':
@@ -1880,7 +1882,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         start_path = os.path.dirname(scenario_path)
         try:
-            relative_expsosure_path = os.path.relpath(exposure_path, start_path)
+            relative_expsosure_path = os.path.relpath(
+                exposure_path, start_path)
         except ValueError, e:
             LOGGER.info(e.message)
             relative_expsosure_path = exposure_path

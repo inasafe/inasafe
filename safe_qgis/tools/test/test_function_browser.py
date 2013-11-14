@@ -20,9 +20,6 @@ import unittest
 
 from nose import SkipTest
 
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from PyQt4.QtGui import QDialogButtonBox
 
 from safe_qgis.tools.function_browser import FunctionBrowser

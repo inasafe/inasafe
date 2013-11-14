@@ -228,11 +228,11 @@ class FunctionOptionsDialog(QtGui.QDialog,
         label = self.lblFunctionDescription
         label.setText(text)
 
-    def parse_input(self, input):
+    def parse_input(self, input_dict):
         """Parse the input value of widget.
 
-        :param input: Dictionary that holds all values of element.
-        :type input: dict
+        :param input_dict: Dictionary that holds all values of element.
+        :type input_dict: dict
 
         :returns: Dictionary that can be consumed for impact functions.
 
@@ -242,7 +242,7 @@ class FunctionOptionsDialog(QtGui.QDialog,
         """
 
         result = OrderedDict()
-        for name, value in input.items():
+        for name, value in input_dict.items():
             if hasattr(value, '__call__'):
                 result[name] = value()
             elif isinstance(value, dict):

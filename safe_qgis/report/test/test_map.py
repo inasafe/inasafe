@@ -10,16 +10,12 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
-from unittest import expectedFailure
 import os
 import logging
 
 # Add PARENT directory to path to make test aware of other modules
 #pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 #sys.path.append(pardir)
-
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
 
 from qgis.core import (
     QgsMapLayerRegistry,
@@ -96,7 +92,7 @@ class MapTest(unittest.TestCase):
         # version number of InaSAFE changes so we should ultimately come up
         # with a lower maintenance test strategy.
         expected_sizes = [
-            400498,  # Slackware64 14.0
+            405359,  # Ubuntu 13.04_64
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)
@@ -133,7 +129,7 @@ class MapTest(unittest.TestCase):
         # with a lower maintenance test strategy.
 
         expected_sizes = [
-            397723,  # Slackware64 14.0
+            402083,  # Ubuntu 13.04_64
         ]
         message = '%s\nExpected rendered map pdf to be in %s, got %s' % (
             out_path, expected_sizes, out_size)

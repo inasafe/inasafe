@@ -24,10 +24,6 @@ import logging
 from os.path import join
 
 from unittest import TestCase, skipIf
-
-# this import required to enable PyQt API v2
-import qgis  # pylint: disable=W0611
-
 from PyQt4 import QtCore
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
@@ -706,29 +702,37 @@ class TestDock(TestCase):
         #print "Transparency list:" + str(myTransparencyList)
         #assert (len(myTransparencyList) > 0)
 
-    def test_issue47(self):
+    def test_issue47_and_issue306(self):
         """Issue47: Hazard & exposure data are in different proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
-        myResult, myMessage = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='HKVtest',
             function_id='HKVtest')
-        assert myResult, myMessage
+        assert result, message
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent()
+        before_count = len(CANVAS.layers())
 
         # Press RUN
         DOCK.accept()
 
-        myResult = DOCK.wvResults.page_to_text()
+        result = DOCK.wvResults.page_to_text()
 
-        myMessage = 'Result not as expected: %s' % myResult
-        assert format_int(2366) in myResult, myMessage
+        message = 'Result not as expected: %s' % result
+        assert format_int(2366) in result, message
+
+        # test issue #306
+        after_count = len(CANVAS.layers())
+        LOGGER.info("Canvas list after:\n%s" % canvas_list())
+        message = ('Layer was not added to canvas (%s before, %s after)' % (
+            before_count, after_count))
+        assert before_count == after_count - 1, message
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated."""
@@ -1285,7 +1289,7 @@ Click for Diagnostic Information:
         # create unique file
         myScenarioFile = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=temp_dir('test'))
-        DOCK.save_current_scenario(theScenarioFilePath=myScenarioFile)
+        DOCK.save_current_scenario(scenario_file_path=myScenarioFile)
         with open(myScenarioFile, 'rt') as f:
             data = f.readlines()
         myTitle = data[0][:-1]

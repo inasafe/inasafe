@@ -11,10 +11,9 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
+from safe.defaults import get_defaults
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-
-from safe.common.utilities import (get_defaults,
-                                   ugettext as tr)
+from safe.common.utilities import (ugettext as tr)
 
 
 class AgePostprocessor(AbstractPostprocessor):

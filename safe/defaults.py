@@ -47,3 +47,16 @@ DEFAULTS['FEM_RATIO_ATTR_KEY'] = 'female ratio attribute'
 DEFAULTS['FEM_RATIO_KEY'] = 'female ratio default'
 DEFAULTS['AGGR_ATTR_KEY'] = 'aggregation attribute'
 DEFAULTS['NO_DATA'] = tr('No data')
+
+
+# noinspection PyUnresolvedReferences
+# this is used when we are in safe without access to qgis (e.g. web ) and is
+# monkey patched in safe_qgis.__init__
+def get_defaults(default=None):
+    print "SAFE defaults CALL. If in QGIS this is a WRONG CALL"
+    if default is None:
+        return DEFAULTS
+    elif default in DEFAULTS:
+        return DEFAULTS[default]
+    else:
+        return None

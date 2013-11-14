@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import shutil
+import cPickle as pickle
 from xml.dom import minidom
 import math
 from subprocess import call, CalledProcessError
@@ -1853,6 +1854,10 @@ class ShakeEvent(QObject):
                                             self.eventId,
                                             '%s-thumb-%s.png' % (
                                             self.eventId, self.locale))
+        pickle_path = os.path.join(
+            shakemapExtractDir(),
+            self.eventId,
+            '%s-metadata-%s.pickle' % (self.eventId, self.locale))
 
         if not theForceFlag:
             # Check if the images already exist and if so
@@ -1946,6 +1951,11 @@ class ShakeEvent(QObject):
                              'version': self.version()}
         mySubstitutionMap.update(self.eventDict())
         LOGGER.debug(mySubstitutionMap)
+
+        pickle_file = file(pickle_path, 'w')
+        pickle.dump(mySubstitutionMap, pickle_file)
+        pickle_file.close()
+
         myResult = myComposition.loadFromTemplate(myDocument,
                                                   mySubstitutionMap)
         if not myResult:
