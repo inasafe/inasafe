@@ -20,7 +20,6 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import string
 import logging
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
@@ -215,8 +214,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         ratio_attr_key = ratio_name + '_ATTR_KEY'
         ratio_key = ratio_name + '_KEY'
         # convert FEMALE_RATIO to FemaleRatio
-        ratio_name = string.capwords(ratio_name, '_')
-        ratio_name = string.replace(ratio_name, '_', '')
+        ratio_name = ratio_name.lower().split('_')
+        ratio_name = ''.join([r.capitalize() for r in ratio_name])
+        ratio_name = ratio_name.replace('_', '')
         # get the widget from UI
         attribute_widget_name = 'cbo%sAttribute' % ratio_name
         attribute_widget = self.findChild(QtGui.QComboBox,

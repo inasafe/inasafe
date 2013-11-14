@@ -252,8 +252,8 @@ class Aggregator(QtCore.QObject):
                         self.defaults['ADULT_RATIO']
 
                 if self.defaults['ELDERLY_RATIO_ATTR_KEY'] not in keywords:
-                    keywords[self.defaults['ELDERLY_RATIO_ATTR_KEY']] = self.tr(
-                        'Use default')
+                    keywords[self.defaults['ELDERLY_RATIO_ATTR_KEY']] = \
+                        self.tr('Use default')
 
                 if self.defaults['ELDERLY_RATIO_KEY'] not in keywords:
                     keywords[self.defaults['ELDERLY_RATIO_KEY']] = \
@@ -922,7 +922,7 @@ class Aggregator(QtCore.QObject):
                 (adult_ratio_attribute != self.tr('Use default'))):
             self.attributes[adult_ratio_key] = \
                 adult_ratio_attribute
-            
+
         elderly_ratio_key = self.defaults['ELDERLY_RATIO_ATTR_KEY']
         elderly_ratio_attribute = self.keyword_io.read_keywords(
             self.layer,

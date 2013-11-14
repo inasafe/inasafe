@@ -59,6 +59,7 @@ LOGGER = logging.getLogger('InaSAFE')
 TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
                               '../../test/test_data/test_files')
 
+
 #noinspection PyArgumentList
 class PostprocessorManagerTest(unittest.TestCase):
     """Test the postprocessor manager"""
@@ -172,9 +173,7 @@ class PostprocessorManagerTest(unittest.TestCase):
             join(TESTDATA, 'data_driven_aggr.shp'),
             join(TESTDATA, 'data_driven_haz.tif'),
             join(TESTDATA, 'data_driven_exp.tif')]
-        hazard_layer_count, exposure_layer_count = load_layers(
-        file_list, data_directory=None, dock=DOCK)
-
+        load_layers(file_list, data_directory=None, dock=DOCK)
 
         result, message = setup_scenario(
             DOCK,

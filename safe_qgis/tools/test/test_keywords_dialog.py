@@ -244,13 +244,14 @@ class KeywordsDialogTest(unittest.TestCase):
                      'female ratio attribute to the keywords list.')
 
         assert myDialog.get_value_for_key(
-            myDefaults['FEMALE_RATIO_ATTR_KEY']) == myDialog.tr('Use default'), \
-            myMessage
+            myDefaults['FEMALE_RATIO_ATTR_KEY']) == \
+               myDialog.tr('Use default'), myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio default value to the keywords list.')
         assert float(myDialog.get_value_for_key(
-            myDefaults['FEMALE_RATIO_KEY'])) == myDefaults['FEMALE_RATIO'], myMessage
+            myDefaults['FEMALE_RATIO_KEY'])) == \
+               myDefaults['FEMALE_RATIO'], myMessage
 
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
@@ -272,8 +273,8 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not add it to the keywords list.')
         assert myDialog.get_value_for_key(
-            myDefaults['FEMALE_RATIO_ATTR_KEY']) == myDialog.tr('Don\'t use'), \
-            myMessage
+            myDefaults['FEMALE_RATIO_ATTR_KEY']) == \
+               myDialog.tr('Don\'t use'), myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not disable dsbFemaleRatioDefault.')
@@ -282,8 +283,8 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not remove the keyword.')
-        assert (myDialog.get_value_for_key(myDefaults['FEMALE_RATIO']) is None), \
-            myMessage
+        assert (myDialog.get_value_for_key(myDefaults['FEMALE_RATIO'])
+                is None), myMessage
 
         #set to TEST_REAL
         myIndex = myFemaleRatioAttrBox.findText('TEST_REAL')

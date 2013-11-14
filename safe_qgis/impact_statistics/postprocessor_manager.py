@@ -394,7 +394,7 @@ class PostprocessorManager(QtCore.QObject):
                             LOGGER.warning('Data Driven Female ratio '
                                            'incomplete, using defaults for'
                                            ' aggregation unit'
-                                           ' %s') % feature.id
+                                           ' %s' % feature.id)
 
                     parameters['female_ratio'] = female_ratio
 
@@ -415,7 +415,7 @@ class PostprocessorManager(QtCore.QObject):
                             LOGGER.warning('Data Driven Age ratios '
                                            'incomplete, using defaults for'
                                            ' aggregation unit'
-                                           ' %s') % feature.id
+                                           ' %s' % feature.id)
 
                     parameters['youth_ratio'] = youth_ratio
                     parameters['adult_ratio'] = adult_ratio
