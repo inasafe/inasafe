@@ -16,7 +16,7 @@ __author__ = 'tim@linfiniti.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
+import qgis
 import unittest
 import sys
 import os
@@ -60,7 +60,8 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_ui_state,
     setup_scenario,
     load_layers,
-    canvas_list)
+    canvas_list,
+    compare_result_to_expected_file)
 
 from safe_qgis.widgets.dock import Dock
 from safe_qgis.utilities.styling import setRasterStyle
@@ -1002,17 +1003,10 @@ class TestDock(TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
 
-        myResult = DOCK.wvResults.page_to_text()
-
-        myExpectedResult = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results.txt',
-            'r').readlines()
-        myResult = myResult.replace(
-            '</td> <td>', ' ').replace('</td><td>', ' ')
-        for line in myExpectedResult:
-            line = line.replace('\n', '')
-            self.assertIn(line, myResult)
+        result = DOCK.wvResults.page_to_text()
+        expected_result_file = (TEST_FILES_DIR +
+                                '/test-full-run-results.txt')
+        compare_result_to_expected_file(result, expected_result_file)
 
     @skipIf(sys.platform == 'win32', "Test cannot run on Windows")
     def test_full_run_qgszstats(self):
@@ -1026,10 +1020,10 @@ class TestDock(TestCase):
         """
 
         # TODO check that the values are similar enough to the python stats
-        myFileList = ['kabupaten_jakarta.shp']
-        load_layers(myFileList, clear_flag=False, data_directory=BOUNDDATA)
+        file_list = ['kabupaten_jakarta.shp']
+        load_layers(file_list, clear_flag=False, data_directory=BOUNDDATA)
 
-        myResult, myMessage = setup_scenario(
+        result, message = setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
@@ -1037,7 +1031,7 @@ class TestDock(TestCase):
             function_id='Flood Evacuation Function',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
-        assert myResult, myMessage
+        assert result, message
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
@@ -1046,24 +1040,17 @@ class TestDock(TestCase):
         # noinspection PyCallByClass,PyTypeChecker
 
         # use QGIS zonal stats only in the test
-        useNativeZonalStatsFlag = bool(QtCore.QSettings().value(
+        use_native_zonal_stats_flag = bool(QtCore.QSettings().value(
             'inasafe/use_native_zonal_stats', False))
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats', True)
         DOCK.accept()
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats',
-                                    useNativeZonalStatsFlag)
+                                    use_native_zonal_stats_flag)
 
-        myResult = DOCK.wvResults.page_to_text()
-
-        myExpectedResult = open(
-            TEST_FILES_DIR +
-            '/test-full-run-results-qgis.txt',
-            'r').readlines()
-        myResult = myResult.replace(
-            '</td> <td>', ' ').replace('</td><td>', ' ')
-        for line in myExpectedResult:
-            line = line.replace('\n', '')
-            self.assertIn(line, myResult)
+        result = DOCK.wvResults.page_to_text()
+        expected_result_file = (TEST_FILES_DIR +
+                                '/test-full-run-results-qgis.txt')
+        compare_result_to_expected_file(result, expected_result_file)
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different

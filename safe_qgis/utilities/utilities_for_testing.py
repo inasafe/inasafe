@@ -249,7 +249,6 @@ def set_jakarta_extent():
     rect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
     CANVAS.setExtent(rect)
 
-
 def set_jakarta_google_extent():
     """Zoom to an area occupied by both Jakarta layers in 900913 crs."""
     rect = QgsRectangle(11873524, -695798, 11913804, -675295)
@@ -273,6 +272,10 @@ def set_small_jakarta_extent():
     rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
     CANVAS.setExtent(rect)
 
+def set_manila_extent():
+    """Zoom to an area occupied by both Manila layers in Geo."""
+    rect = QgsRectangle(120.866995, 14.403305, 121.193824, 14.784944)
+    CANVAS.setExtent(rect)
 
 def set_geo_extent(bounding_box):
     """Zoom to an area specified given bounding box.
@@ -915,3 +918,14 @@ def compare_wkt(a, b, tol=0.000001):
             return False
 
     return True
+
+
+def compare_result_to_expected_file(result, expected_result_file):
+        expected_result = open(
+            expected_result_file,
+            'r').readlines()
+        result = result.replace(
+            '</td> <td>', ' ').replace('</td><td>', ' ')
+        for line in expected_result:
+            line = line.replace('\n', '')
+            assert line in result
