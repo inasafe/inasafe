@@ -200,8 +200,7 @@ class ImpactMergeDialog(QDialog, Ui_ImpactMergeDialogBase):
             QMessageBox.warning(
                 self,
                 self.tr('InaSAFE error'),
-                self.tr(
-                    'You have not specified the output directory.'))
+                self.tr('You have not specified the output directory.'))
         else:
             if os.path.exists(path):
                 return
