@@ -37,6 +37,7 @@ from safe_qgis.utilities.utilities_for_testing import (
     get_qgis_app,
     set_canvas_crs,
     set_jakarta_extent,
+    set_manila_extent,
     GEOCRS)
 
 from safe_qgis.widgets.dock import Dock
@@ -45,7 +46,8 @@ from safe_qgis.utilities.utilities_for_testing import (
     load_standard_layers,
     load_layers,
     setup_scenario,
-    canvas_list)
+    canvas_list,
+    compare_result_to_expected_file)
 
 from safe_qgis.safe_interface import TESTDATA
 
@@ -54,6 +56,8 @@ DOCK = Dock(IFACE)
 
 LOGGER = logging.getLogger('InaSAFE')
 
+TEST_FILES_DIR = os.path.join(os.path.dirname(__file__),
+                              '../../test/test_data/test_files')
 
 #noinspection PyArgumentList
 class PostprocessorManagerTest(unittest.TestCase):
@@ -168,7 +172,6 @@ class PostprocessorManagerTest(unittest.TestCase):
             join(TESTDATA, 'data_driven_aggr.shp'),
             join(TESTDATA, 'data_driven_haz.tif'),
             join(TESTDATA, 'data_driven_exp.tif')]
-        print file_list
         hazard_layer_count, exposure_layer_count = load_layers(
         file_list, data_directory=None, dock=DOCK)
 
@@ -183,12 +186,17 @@ class PostprocessorManagerTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent()
+        set_manila_extent()
 
         assert result, message
 
         # Press RUN
         DOCK.accept()
+        result = DOCK.wvResults.page_to_text()
+        expected_result_file = (TEST_FILES_DIR +
+                                '/test-data-driven-run-results.txt')
+        compare_result_to_expected_file(result, expected_result_file)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(PostprocessorManagerTest)
