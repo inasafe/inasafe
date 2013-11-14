@@ -307,17 +307,14 @@ class PostprocessorManager(QtCore.QObject):
             try:
                 youth_ratio_field = self.aggregator.attributes[
                     self.aggregator.defaults['YOUTH_RATIO_ATTR_KEY']]
-                print 'working?'
                 youth_ratio_field_index = \
                     self.aggregator.layer.fieldNameIndex(youth_ratio_field)
                 adult_ratio_field = self.aggregator.attributes[
                     self.aggregator.defaults['ADULT_RATIO_ATTR_KEY']]
-                print 'working??'
                 adult_ratio_field_index = \
                     self.aggregator.layer.fieldNameIndex(adult_ratio_field)
                 elderly_ratio_field = self.aggregator.attributes[
                     self.aggregator.defaults['ELDERLY_RATIO_ATTR_KEY']]
-                print 'working???'
                 elderly_ratio_field_index = \
                     self.aggregator.layer.fieldNameIndex(elderly_ratio_field)
                 # something went wrong finding the youth ratio field,
@@ -391,7 +388,6 @@ class PostprocessorManager(QtCore.QObject):
                 if key == 'Gender':
                     if user_defined_female_ratio:
                         female_ratio = feature[female_ratio_field_index]
-                        print 'wo?'
                         if female_ratio is None:
                             female_ratio = self.aggregator.defaults[
                                 'FEMALE_RATIO']
@@ -407,7 +403,6 @@ class PostprocessorManager(QtCore.QObject):
                         youth_ratio = feature[youth_ratio_field_index]
                         adult_ratio = feature[adult_ratio_field_index]
                         elderly_ratio = feature[elderly_ratio_field_index]
-                        print 'w?'
                         if (youth_ratio is None or
                                     adult_ratio is None or
                                     elderly_ratio is None):
