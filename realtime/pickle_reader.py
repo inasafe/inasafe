@@ -2,7 +2,6 @@
 """The implementation of pickle reader."""
 
 import os
-import shutil
 import sys
 from glob import glob
 #noinspection PyPep8Naming
@@ -13,7 +12,9 @@ import logging
 def create_index(shakemap_dir, locale):
     """Pass dictionary from pickle to index.html.
 
-    :param shakemap_dir: Directory containing pickle shakemap metadata.
+    :param shakemap_dir: Directory containing pickle shakemap metadata. For
+    real use based on current environment, this would be a published directory
+    either public/en or public/id.
     :type shakemap_dir: str
 
     :returns: Path to index file.
@@ -22,8 +23,8 @@ def create_index(shakemap_dir, locale):
     :param locale: Language of output index.html. id = Bahasa, en = English
     :type locale: str
     """
+    index_path = os.path.join(shakemap_dir, 'index.html')
     if locale == 'en':
-        index_path = os.path.join(shakemap_dir, 'index-en.html')
         path_list = glob(os.path.join(shakemap_dir, '*en.pickle'))
         header_html_file_path = os.path.join(os.path.dirname(__file__),
                                              'fixtures',
@@ -32,7 +33,6 @@ def create_index(shakemap_dir, locale):
                                              'header.html')
 
     elif locale == 'id':
-        index_path = os.path.join(shakemap_dir, 'index-id.html')
         path_list = glob(os.path.join(shakemap_dir, '*id.pickle'))
         header_html_file_path = os.path.join(os.path.dirname(__file__),
                                              'fixtures',
@@ -42,6 +42,7 @@ def create_index(shakemap_dir, locale):
     else:
         raise logging.exception(
             'Locale ID other than id and en is not supported!')
+
     # Check if index_path is exist. Remove if it's exist
     if os.path.exists(index_path):
         os.remove(index_path)
@@ -91,7 +92,8 @@ def create_index(shakemap_dir, locale):
                                           metadata['place-name'],
                                           metadata['mmi'],
                                           metadata['place-name']))
-    table_html += ('\t</tbody> \n</table>')
+    table_html += ('\t</tbody>'
+                   '\n</table>')
 
     index_file = file(index_path, 'wt')
     index_file.write(header_html + table_html + footer_html)
@@ -99,37 +101,27 @@ def create_index(shakemap_dir, locale):
     return index_path
 
 
-def generate_pages(shakemap_dir):
-    """Generate index.html for en and id and return the path to them.
+def generate_pages(shakemap_dir_en, shakemap_dir_id):
+    """Generate index.html, currently for both en and id and return the path to
+    them.
 
-    :param shakemap_dir: Shakemap directory where pickles are located.
-    :type shakemap_dir: str
+    :param shakemap_dir_en: Shakemap directory for en locale where pickles are
+    located. For real use based on current environment, this would be a
+    published directory public/en
+    :type shakemap_dir_en: str
+
+    :param shakemap_dir_id: Shakemap directory for id locale where pickles are
+    located. For real use based on current environment, this would be a
+    published directory public/id
+    :type shakemap_dir_id: str
 
     :returns: en_index_path, id_index_path
     :rtype: str, str
     """
-    en_index_path = create_index(shakemap_dir, 'en')
-    id_index_path = create_index(shakemap_dir, 'id')
+    en_index_path = create_index(shakemap_dir_en, 'en')
+    id_index_path = create_index(shakemap_dir_id, 'id')
 
     return en_index_path, id_index_path
-
-
-def publish_pages(shakemap_dir):
-    """Publish index.html to both en/index.html and id/index.html.
-
-    :param shakemap_dir:Shakemap directory where pickles are located
-    """
-    en_index_path, id_index_path = generate_pages(shakemap_dir)
-
-    # Move to /home/web/quake/public/
-    # public_dir = '/home/web/quake/public/'
-    testdir = os.path.join(os.path.dirname(__file__),
-                           os.pardir,
-                           'realtime',
-                           'fixtures',
-                           'tests')
-    shutil.move(en_index_path, os.path.join(testdir, 'index-en.html'))
-    shutil.move(id_index_path, os.path.join(testdir, 'index-id.html'))
 
 
 if __name__ == '__main__':
@@ -138,5 +130,7 @@ if __name__ == '__main__':
         print 'To use: python pickle_reader.py <shakemap_directory>'
         print 'The shakemap directory should contain one or more pickle files.'
     elif len(sys.argv) == 2:
-        publish_pages(sys.argv[1])
+        en_path, id_path = generate_pages(sys.argv[1])
+        print 'en_index is generated and saved in: %s' % en_path
+        print 'id_index is generated and saved in: %s' % id_path
         exit()
