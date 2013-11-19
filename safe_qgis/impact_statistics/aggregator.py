@@ -42,6 +42,7 @@ from qgis.core import (
 from qgis.analysis import QgsZonalStatistics
 
 from safe_qgis.impact_statistics.zonal_stats import calculate_zonal_stats
+from safe_qgis.exceptions import InsufficientParametersError
 from third_party.odict import OrderedDict
 from third_party.pydispatch import dispatcher
 from safe_qgis.utilities.clipper import clip_layer
@@ -111,8 +112,8 @@ class Aggregator(QtCore.QObject):
         self.use_native_zonal_stats = flag
 
         self.iface = iface
-        self.keyword_io = KeywordIO()
-        self.defaults = breakdown_defaults()
+        self._keyword_io = KeywordIO()
+        self._defaults = breakdown_defaults()
         self.error_message = None
         self.target_field = None
         self.impact_layer_attributes = []
@@ -138,6 +139,80 @@ class Aggregator(QtCore.QObject):
         self.statistics_classes = None
         self.preprocessed_feature_count = None
 
+    def read_keywords(self, layer, keyword=None):
+        """It is a wrapper around self._keyword_io.read_keywords
+
+        :returns:   KeywordIO.read_keywords object
+        :rtype:     KeywordIO.read_keywords
+
+        :raises:  All exceptions are propagated.
+        """
+        try:
+            return self._keyword_io.read_keywords(layer, keyword=keyword)
+        except:
+            raise
+
+    def update_keywords(self, layer, keywords):
+        """It is a wrapper around self._keyword_io.update_keywords
+
+        :raises:  All exceptions are propagated.
+        """
+        try:
+            self._keyword_io.update_keywords(layer, keywords=keywords)
+        except:
+            raise
+
+    def get_statistics(self, layer):
+        """It is a wrapper around self._keyword_io.read_keywords
+
+        :returns:   KeywordIO.get_statistics object
+        :rtype:     KeywordIO.get_statistics
+
+        :raises:  All exceptions are propagated.
+        """
+        try:
+            return self._keyword_io.get_statistics(layer)
+        except:
+            raise
+
+    def copy_keywords(self, layer, out_filename):
+        """It is a wrapper around self._keyword_io.copy_keywords
+
+        :raises:  All exceptions are propagated.
+        """
+        try:
+           self._keyword_io.copy_keywords(layer, out_filename)
+        except:
+            raise
+
+    def write_keywords(self, layer, keywords):
+        """It is a wrapper around self._keyword_io.write_keywords
+
+        :raises:  All exceptions are propagated.
+        """
+        try:
+           self._keyword_io.write_keywords(layer, keywords)
+        except:
+            raise
+
+    def get_default_keyword(self, keyword):
+        """It is a wrapper around self._defaults.
+        Returns default attribute keyword.
+
+        :param keyword: A string containing the keyword to be returned
+              for the layer.
+        :type keyword: str
+
+        :returns: The value for the given key if it is present.
+        :rtype: str
+
+        :raises:  All exceptions are propagated.
+        """
+        try:
+            return self._defaults[keyword]
+        except:
+            raise
+
     def validate_keywords(self):
         """Check if the postprocessing layer has all needed attribute keywords.
 
@@ -157,15 +232,15 @@ class Aggregator(QtCore.QObject):
         # Otherwise get the attributes for the aggregation layer.
         # noinspection PyBroadException
         try:
-            keywords = self.keyword_io.read_keywords(self.layer)
+            keywords = self.read_keywords(self.layer)
         #discussed with Tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             keywords = {}
 
         if self.aoi_mode:
-            keywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+            keywords[self.get_default_keyword('FEM_RATIO_ATTR_KEY')] = self.tr(
                 'Use default')
-            self.keyword_io.update_keywords(self.layer, keywords)
+            self.update_keywords(self.layer, keywords)
             self.is_valid = True
             return
         else:
@@ -180,9 +255,9 @@ class Aggregator(QtCore.QObject):
 
             #keywords are already complete
             category = keywords['category']
-            aggregation_attribute = self.defaults['AGGR_ATTR_KEY']
-            female_ratio = self.defaults['FEM_RATIO_ATTR_KEY']
-            female_ratio_key = self.defaults['FEM_RATIO_KEY']
+            aggregation_attribute = self.get_default_keyword('AGGR_ATTR_KEY')
+            female_ratio = self.get_default_keyword('FEM_RATIO_ATTR_KEY')
+            female_ratio_key = self.get_default_keyword('FEM_RATIO_KEY')
             if ('category' in keywords and
                 category == 'postprocessing' and
                 aggregation_attribute in keywords and
@@ -199,22 +274,43 @@ class Aggregator(QtCore.QObject):
                 my_attributes, _ = layer_attribute_names(
                     self.layer,
                     [QtCore.QVariant.Int, QtCore.QVariant.String])
-                if self.defaults['AGGR_ATTR_KEY'] not in keywords:
-                    keywords[self.defaults['AGGR_ATTR_KEY']] = \
+                if self.get_default_keyword('AGGR_ATTR_KEY') not in keywords:
+                    keywords[self.get_default_keyword('AGGR_ATTR_KEY')] = \
                         my_attributes[0]
 
-                if self.defaults['FEM_RATIO_ATTR_KEY'] not in keywords:
-                    keywords[self.defaults['FEM_RATIO_ATTR_KEY']] = self.tr(
+                if self.get_default_keyword('FEM_RATIO_ATTR_KEY') not in keywords:
+                    keywords[self.get_default_keyword('FEM_RATIO_ATTR_KEY')] = self.tr(
                         'Use default')
 
-                if self.defaults['FEM_RATIO_KEY'] not in keywords:
-                    keywords[self.defaults['FEM_RATIO_KEY']] = \
-                        self.defaults['FEM_RATIO']
+                if self.get_default_keyword('FEM_RATIO_KEY') not in keywords:
+                    keywords[self.get_default_keyword('FEM_RATIO_KEY')] = \
+                        self.get_default_keyword('FEM_RATIO')
 
-                self.keyword_io.update_keywords(self.layer, keywords)
+                self.update_keywords(self.layer, keywords)
                 self.is_valid = False
 
-    def deintersect(self, hazard_layer, exposure_layer):
+    def set_layers(self, hazard_layer, exposure_layer):
+        """Set up aggregator layers
+
+        :param hazard_layer: A hazard layer.
+        :type hazard_layer: QgsMapLayer
+
+        :param exposure_layer: An exposure layer.
+        :type exposure_layer: QgsMapLayer
+
+        """
+        self.hazard_layer = hazard_layer
+        self.exposure_layer = exposure_layer
+        try:
+            self._prepare_layer()
+        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
+            raise
+
+        if not self.aoi_mode:
+            # This is a safe version of the aggregation layer
+            self.safe_layer = safe_read_layer(str(self.layer.source()))
+
+    def deintersect(self):
         """Ensure there are no intersecting features with self.layer.
 
         This should only happen after initial checks have been made.
@@ -227,30 +323,29 @@ class Aggregator(QtCore.QObject):
         :param exposure_layer: An exposure layer.
         :type exposure_layer: QgsMapLayer
 
+        :raises: InsufficientParametersError if hazard_layer or exposure_layer  is not set.
+
         """
 
         if not self.is_valid:
             raise InvalidAggregatorError
 
-        # These should have already been clipped to analysis extents
-        self.hazard_layer = hazard_layer
-        self.exposure_layer = exposure_layer
-        try:
-            self._prepare_layer()
-        except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
-            raise
+        if self.hazard_layer is None:
+            myMessage = self.tr('Error: hazard layer is not provided.')
+            raise InsufficientParametersError(myMessage)
+
+        if self.exposure_layer is None:
+            myMessage = self.tr('Error: exposure layer is not provided.')
+            raise InsufficientParametersError(myMessage)
 
         if not self.aoi_mode:
-            # This is a safe version of the aggregation layer
-            self.safe_layer = safe_read_layer(str(self.layer.source()))
-
             if is_polygon_layer(self.hazard_layer):
                 self.hazard_layer = self._prepare_polygon_layer(
                     self.hazard_layer)
 
             if is_polygon_layer(self.exposure_layer):
                 # Find out the subcategory for this layer
-                subcategory = self.keyword_io.read_keywords(
+                subcategory = self.read_keywords(
                     self.exposure_layer, 'subcategory')
                 # We don't want to chop up buildings!
                 if subcategory != 'structure':
@@ -321,11 +416,11 @@ class Aggregator(QtCore.QObject):
 
         self.layer.updateFields()
         del unneeded_attributes, provider, fields
-        self.keyword_io.update_keywords(
+        self.update_keywords(
             self.layer, {'title': later_name})
 
         self.statistics_type, self.statistics_classes = (
-            self.keyword_io.get_statistics(qgis_impact_layer))
+            self.get_statistics(qgis_impact_layer))
 
         #call the correct aggregator
         if qgis_impact_layer.type() == QgsMapLayer.VectorLayer:
@@ -412,7 +507,7 @@ class Aggregator(QtCore.QObject):
         field_index = None
 
         try:
-            self.target_field = self.keyword_io.read_keywords(
+            self.target_field = self.read_keywords(
                 impact_layer, 'target_field')
         except KeywordNotFoundError:
             message = m.Paragraph(
@@ -800,8 +895,8 @@ class Aggregator(QtCore.QObject):
                 self.exposure_layer.extent(),
                 self.exposure_layer.crs())
 
-            aggregation_attribute = self.keyword_io.read_keywords(
-                self.layer, self.defaults['AGGR_ATTR_KEY'])
+            aggregation_attribute = self.read_keywords(
+                self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
 
             #noinspection PyArgumentEqualDefault
             clipped_layer = clip_layer(
@@ -814,7 +909,7 @@ class Aggregator(QtCore.QObject):
             self.layer = clipped_layer
             self.layer.setLayerName(name)
             if self.show_intermediate_layers:
-                self.keyword_io.update_keywords(self.layer, {'title': name})
+                self.update_keywords(self.layer, {'title': name})
                 #noinspection PyArgumentList
                 QgsMapLayerRegistry.instance().addMapLayer(self.layer)
 
@@ -842,14 +937,14 @@ class Aggregator(QtCore.QObject):
     def _set_persistant_attributes(self):
         """Mark any attributes that should remain in the self.layer table."""
         self.attributes = {}
-        self.attributes[self.defaults[
-            'AGGR_ATTR_KEY']] = (
-                self.keyword_io.read_keywords(
+        self.attributes[self.get_default_keyword(
+            'AGGR_ATTR_KEY')] = (
+                self.read_keywords(
                     self.layer,
-                    self.defaults['AGGR_ATTR_KEY']))
+                    self.get_default_keyword('AGGR_ATTR_KEY')))
 
-        female_ratio_key = self.defaults['FEM_RATIO_ATTR_KEY']
-        female_ration_attribute = self.keyword_io.read_keywords(
+        female_ratio_key = self.get_default_keyword('FEM_RATIO_ATTR_KEY')
+        female_ration_attribute = self.read_keywords(
             self.layer,
             female_ratio_key)
         if ((female_ration_attribute != self.tr('Don\'t use')) and
@@ -921,7 +1016,7 @@ class Aggregator(QtCore.QObject):
         temporary_dir = temp_dir(sub_dir='pre-process')
         out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
-        self.keyword_io.copy_keywords(layer, out_filename)
+        self.copy_keywords(layer, out_filename)
         shape_writer = QgsVectorFileWriter(
             out_filename,
             'UTF-8',
@@ -1158,7 +1253,7 @@ class Aggregator(QtCore.QObject):
             raise Exception('Invalid qgis Layer')
 
         if self.show_intermediate_layers:
-            self.keyword_io.update_keywords(output_layer, {'title': name})
+            self.update_keywords(output_layer, {'title': name})
             #noinspection PyArgumentList
             QgsMapLayerRegistry.instance().addMapLayer(output_layer)
 
@@ -1245,13 +1340,13 @@ class Aggregator(QtCore.QObject):
         provider.addFeatures([feature])
 
         try:
-            self.keyword_io.update_keywords(
+            self.update_keywords(
                 self.layer,
-                {self.defaults['AGGR_ATTR_KEY']: attribute_name})
+                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
         except InvalidParameterError:
-            self.keyword_io.write_keywords(
+            self.write_keywords(
                 self.layer,
-                {self.defaults['AGGR_ATTR_KEY']: attribute_name})
+                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
         except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
