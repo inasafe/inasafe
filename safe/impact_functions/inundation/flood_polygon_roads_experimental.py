@@ -1,11 +1,15 @@
-import os.path
+import math
 
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QSettings
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
     QgsFeature,
-    QgsVectorFileWriter
+    QgsRectangle,
+    QgsFeatureRequest,
+    QgsGeometry,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform
 )
 
 from safe.impact_functions.core import FunctionProvider
@@ -41,7 +45,25 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         """
         return 'qgis2.0'
 
-    def run(self, layers, extent=None):
+    def set_extent(self, extent):
+        """
+        Set up the extent of area of interest ([xmin, ymin, xmax, ymax]).
+
+        Mandatory method.
+        """
+        self.extent = extent
+
+    def get_utm_zone(self, longitude):
+        return int((math.floor((longitude + 180.0) / 6.0) + 1) % 60)
+
+    def get_epsg(self, longitude, latitude):
+        epsg = 32600
+        if latitude < 0.0:
+            epsg += 100
+        epsg += self.get_utm_zone(longitude)
+        return epsg
+
+    def run(self, layers):
         """
         Experimental impact function
 
@@ -61,6 +83,8 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                                 self)
 
         E = E.as_qgis_native()
+        H = H.as_qgis_native()
+        srs = E.crs().toWkt()
         e_provider = E.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
@@ -70,48 +94,82 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
         target_field_index = e_provider.fieldNameIndex(self.target_field)
         fields = e_provider.fields()
 
-        # TODO: use extent to set area of interest like
-        #request=QgsFeatureRequest()
-        #request.setFilterRect(extent)
-        #  for f in layer.getFeatures(request):
-        #    ...
+        # Create layer for store the lines from E and extent
+        line_layer = QgsVectorLayer('LineString?crs=' + srs, 'impact_lines', 'memory')
+        line_provider = line_layer.dataProvider()
 
-        # TODO: Implement intersecting H & E
-        # A stub is used now: return copy of E, set target_field=1
-        V = QgsVectorLayer('LineString', 'impact_lines', 'memory')
-        v_provider = V.dataProvider()
+        # Set attributes
+        line_provider.addAttributes(fields.toList())
+        line_layer.startEditing()
+        line_layer.commitChanges()
 
-        # Copy attributes
-        v_provider.addAttributes(fields.toList())
-        V.startEditing()
-        V.commitChanges()
+        # Filter geometry and data using the extent
+        extent = QgsRectangle(*self.extent)
+        request=QgsFeatureRequest()
+        request.setFilterRect(extent)
 
-        # Copy geometry and data
-        e_data = E.getFeatures()
+        # Split line_layer by H and save as result
+        h_data = H.getFeatures(request)
+        hazard_poly = None
+        for mpolygon in h_data:
+            if hazard_poly is None:
+                hazard_poly = QgsGeometry(mpolygon.geometry())
+            else:
+                hazard_poly = hazard_poly.combine(mpolygon.geometry())
+
+        e_data = E.getFeatures(request)
         for feat in e_data:
-            geom = feat.geometry()
+            line_geom = feat.geometry()
             attrs = feat.attributes()
+            if hazard_poly.intersects(line_geom):
+                # Check intersection
+                int_geom = QgsGeometry(line_geom.intersection(hazard_poly)).asGeometryCollection()
+                for g in int_geom:
+                    if g.type() == 1:   # Linestring
+                        l_feat = QgsFeature()
+                        l_feat.setGeometry(g)
+                        l_feat.setAttributes(attrs)
+                        l_feat.setAttribute(target_field_index, 1)
+                        (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
 
-            # TODO: check intersection E & H
-            v_feat = QgsFeature()
-            v_feat.setGeometry(geom)
-            v_feat.setAttributes(attrs)
-            v_feat.setAttribute(target_field_index, 1)
-            (res, out_feat) = V.dataProvider().addFeatures([v_feat])
-            fid = out_feat[0].id()
-            v_provider.changeAttributeValues({fid: {target_field_index: 1}})
-
-        V.updateExtents()
+                # Check difference
+                diff_geom = QgsGeometry(line_geom.symDifference(hazard_poly)).asGeometryCollection()
+                for g in diff_geom:
+                    if g.type() == 1:   # Linestring
+                        l_feat = QgsFeature()
+                        l_feat.setGeometry(g)
+                        l_feat.setAttributes(attrs)
+                        l_feat.setAttribute(target_field_index, 0)
+                        (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
+            else:
+                l_feat = QgsFeature()
+                l_feat.setGeometry(line_geom)
+                l_feat.setAttributes(attrs)
+                l_feat.setAttribute(target_field_index, 0)
+                (res, out_feat) = line_layer.dataProvider().addFeatures([l_feat])
+        line_layer.updateExtents()
 
         # Generate simple impact report
-        N = 100         # Just a stub
-        count = N/2     # Just a stub
+        epsg = self.get_epsg(self.extent[0], self.extent[1])
+        crs_dest = QgsCoordinateReferenceSystem(epsg)
+        transform = QgsCoordinateTransform(E.crs(), crs_dest)
+        road_len = flooded_len = 0
+        roads_data = line_layer.getFeatures()
+        for road in roads_data:
+            attrs = road.attributes()
+            geom = road.geometry()
+            geom.transform(transform)
+            length = geom.length()
+            road_len += length
+            if attrs[target_field_index] == 1:
+                flooded_len += length
+
         table_body = [question,
                       TableRow([tr('Road Type'),
-                                tr('Temporarily closed'),
-                                tr('Total')],
+                                tr('Temporarily closed (m)'),
+                                tr('Total (m)')],
                                header=True),
-                      TableRow([tr('All'), count, N])]
+                      TableRow([tr('All'), int(flooded_len), int(road_len)])]
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Roads inundated')
 
@@ -124,10 +182,10 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        V = Vector(data=V,
+        line_layer = Vector(data=line_layer,
                    name=tr('Flooded roads'),
                    keywords={'impact_summary': impact_summary,
                              'map_title': map_title,
                              'target_field': self.target_field},
                    style_info=style_info)
-        return V
+        return line_layer
