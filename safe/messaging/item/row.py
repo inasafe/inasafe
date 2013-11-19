@@ -65,7 +65,7 @@ class Row(MessageElement):
             Errors are propagated
         """
 
-        if isinstance(item, basestring) or self._is_qstring(item):
+        if self._is_stringable(item) or self._is_qstring(item):
             self.cells.append(Cell(item))
         elif isinstance(item, Cell):
             self.cells.append(item)

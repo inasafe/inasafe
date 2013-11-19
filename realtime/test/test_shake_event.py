@@ -344,7 +344,7 @@ search_boxes: None
         """Test getting impacted cities table."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
-        myTable, myPath = myShakeEvent.impactedCitiesTable()
+        myTable, myPath = myShakeEvent.impacted_cities_table()
         myExpectedStrings = [
             '<td>Tondano</td><td>33</td><td>I</td>',
             '<td>Luwuk</td><td>47</td><td>I</td>',
@@ -367,7 +367,7 @@ search_boxes: None
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myShakeEvent.calculateImpacts()
-        myResult = myShakeEvent.impactTable()
+        myResult = myShakeEvent.impact_table()
         # TODO compare actual content of impact table...
         myExpectedResult = (
             '/tmp/inasafe/realtime/shakemaps-extracted/'
@@ -489,7 +489,7 @@ search_boxes: None
         """See if internationalisation is working."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId, theLocale='id')
-        myShaking = myShakeEvent.mmiShaking(5)
+        myShaking = myShakeEvent.mmi_shaking(5)
         myExpectedShaking = 'Sedang'
         self.assertEqual(myExpectedShaking, myShaking)
 

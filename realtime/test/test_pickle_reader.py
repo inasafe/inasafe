@@ -24,7 +24,7 @@ from glob import glob
 
 #from safe.api import temp_dir
 
-from realtime.pickle_reader import create_index
+from realtime.pickle_reader import create_index, generate_pages
 
 
 class TestPickleReader(unittest.TestCase):
@@ -32,7 +32,8 @@ class TestPickleReader(unittest.TestCase):
 
     def setUp(self):
         """Copy our cached dataset from the fixture dir to the cache dir"""
-        self.shakemap_dir = '/tmp/'
+        self.shakemap_dir_en = '/tmp/en/'
+        self.shakemap_dir_id = '/tmp/id/'
 
         pickle_path_list = glob(os.path.join(
             os.path.dirname(__file__),
@@ -42,14 +43,28 @@ class TestPickleReader(unittest.TestCase):
             '*.pickle'))
 
         for pickle_path in pickle_path_list:
-            shutil.copy(pickle_path, self.shakemap_dir)
+            shutil.copy(pickle_path, self.shakemap_dir_en)
+            shutil.copy(pickle_path, self.shakemap_dir_id)
 
     def test_create_index(self):
         """Test we can generate index.html file."""
-        result = create_index(shakemap_dir=self.shakemap_dir, locale='en')
+        result = create_index(shakemap_dir=self.shakemap_dir_en, locale='en')
         index_file = file(result, 'r')
         result = index_file.read()
-        print result
         index_file.close()
-
         self.assertIn('Banda Aceh', result)
+
+        # Test if locale is other than en or id:
+        with self.assertRaises(BaseException):
+            create_index(shakemap_dir=self.shakemap_dir_en,
+                         locale='ens')
+
+    def test_generate_pages(self):
+        """Test we can generate index.html for both en and id."""
+        en_path, id_path = generate_pages(
+            shakemap_dir_en=self.shakemap_dir_en,
+            shakemap_dir_id=self.shakemap_dir_id)
+        expected_en_path = self.shakemap_dir_en + 'index.html'
+        expected_id_path = self.shakemap_dir_id + 'index.html'
+        self.assertEqual(expected_id_path, id_path)
+        self.assertEqual(expected_en_path, en_path)
