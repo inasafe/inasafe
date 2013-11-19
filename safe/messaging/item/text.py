@@ -68,7 +68,7 @@ class Text(MessageElement):
         Raises:
             Errors are propagated
         """
-        if isinstance(text, basestring) or self._is_qstring(text):
+        if self._is_stringable(text) or self._is_qstring(text):
             self.text.append(PlainText(text))
         elif isinstance(text, Text):
             self.text.append(text)

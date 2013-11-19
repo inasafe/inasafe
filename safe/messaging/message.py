@@ -69,7 +69,7 @@ class Message(MessageElement):
         :type message: Message, MessageElement, str
 
         """
-        if isinstance(message, basestring) or self._is_qstring(message):
+        if self._is_stringable(message) or self._is_qstring(message):
             self.message.append(Text(message))
         elif isinstance(message, MessageElement):
             self.message.append(message)
