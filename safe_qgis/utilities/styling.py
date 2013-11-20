@@ -112,14 +112,19 @@ def set_vector_graduated_style(vector_layer, style):
         # We need to create a custom symbol layer as
         # the border colour of a symbol can not be set otherwise
         # noinspection PyArgumentList
+        try:
+            border_color = QtGui.QColor(myClass['border_color'])
+        except KeyError:
+            border_color = myColour
+
         if myGeometryType == QGis.Point:
             mySymbolLayer = QgsSimpleMarkerSymbolLayerV2()
-            mySymbolLayer.setBorderColor(myColour)
+            mySymbolLayer.setBorderColor(border_color)
             mySymbolLayer.setSize(mySize)
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
             mySymbolLayer = QgsSimpleFillSymbolLayerV2()
-            mySymbolLayer.setBorderColor(myColour)
+            mySymbolLayer.setBorderColor(border_color)
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
             # for lines we do nothing special as the property setting
@@ -205,6 +210,10 @@ def set_vector_categorized_style(vector_layer, style):
         colour = myClass['colour']
         label = myClass['label']
         colour = QtGui.QColor(colour)
+        try:
+            border_color = QtGui.QColor(myClass['border_color'])
+        except KeyError:
+            border_color = colour
         # noinspection PyArgumentList
         symbol = QgsSymbolV2.defaultSymbol(geometry_type)
         # We need to create a custom symbol layer as
@@ -212,12 +221,12 @@ def set_vector_categorized_style(vector_layer, style):
         # noinspection PyArgumentList
         if geometry_type == QGis.Point:
             symbol_layer = QgsSimpleMarkerSymbolLayerV2()
-            symbol_layer.setBorderColor(colour)
+            symbol_layer.setBorderColor(border_color)
             symbol_layer.setSize(mySize)
             symbol.changeSymbolLayer(0, symbol_layer)
         elif geometry_type == QGis.Polygon:
             symbol_layer = QgsSimpleFillSymbolLayerV2()
-            symbol_layer.setBorderColor(colour)
+            symbol_layer.setBorderColor(border_color)
             symbol.changeSymbolLayer(0, symbol_layer)
         else:
             # for lines we do nothing special as the property setting
