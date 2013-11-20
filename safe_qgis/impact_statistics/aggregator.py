@@ -546,11 +546,10 @@ class Aggregator(QtCore.QObject):
                                 error = (
                                     'StatisticsClasses %s does not include '
                                     'the %s class which was found in the '
-                                    'data. This is a problem in the %s '
-                                    'statistics_classes definition' %
+                                    'data. This is a problem in the impact '
+                                    'function statistics_classes definition' %
                                     (self.statistics_classes,
-                                    key,
-                                    self.getFunctionID()))
+                                    key))
                                 raise KeyError(error)
 
                             self.impact_layer_attributes[polygon_index].append(
@@ -632,10 +631,10 @@ class Aggregator(QtCore.QObject):
                         error = (
                             'StatisticsClasses %s does not include the %s '
                             'class which was found in the data. This is a '
-                            'problem in the %s statistics_classes definition' %
+                            'problem in the impact function '
+                            'statistics_classes definition' %
                             (self.statistics_classes,
-                             key,
-                             self.getFunctionID()))
+                             key))
                         raise KeyError(error)
 
                     self.impact_layer_attributes[0].append(myImpactValueList)
