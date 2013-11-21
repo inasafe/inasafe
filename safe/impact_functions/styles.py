@@ -89,39 +89,63 @@ def categorical_style(target_field,
                       no_data_label,
                       data_defined_saturation_field=None,
                       max_impact_value=None):
-        # Create style
-        style_classes = []
-        colors = generate_categorical_color_ramp(len(categories))
+    """Style with equidistant hue and optional data defined saturation
+    :param target_field: field name that needs to be classified
+    :type: target_field, str
 
-        for index, category in enumerate(categories):
-            hsv = colors['hsv'][index]
-            if category == no_data_value:
-                label = no_data_label
-            else:
-                label = '%s %s' % (tr('Category'), category)
-            style_class = dict(
-                label=label,
-                value=category,
-                colour=colors['hex'][index],
-                border_color=colors['hex'][index],
-                border_width=0.8,
-                transparency=0,
-                size=1)
+    :param categories: values of target_field
+    :type: categories, list
 
-            if data_defined_saturation_field is not None:
-                # expr is like 'color_hsv(270.0, "pop"/9807.0*100, 70.0)'
-                expr = 'color_hsv(%s, "%s"/%s*100, %s)' % (
-                    hsv[0] * 360,
-                    data_defined_saturation_field,
-                    max_impact_value,
-                    hsv[2]*100)
-                style_class.update({'data_defined': {'color': expr}})
-            style_classes.append(style_class)
+    :param no_data_value: value for no data
+    :type: no_data_value, int, str
 
-        style_info = dict(target_field=target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
-        return style_info
+    :param no_data_label: label for the no data category
+    :type: no_data_label, str
+
+    :param data_defined_saturation_field: field for saturation for the
+        generated colors.
+    :type: data_defined_saturation_field, None, str
+
+    :param max_impact_value: maximum value in data_defined_saturation_field,
+        used to normalize saturation values for the generated colors.
+    :type: max_impact_value, int, float
+
+    :returns: a dict with target_field, style_classes and style_type
+    :rtype: dict
+    """
+    # Create style
+    classes = []
+    colors = generate_categorical_color_ramp(len(categories))
+
+    for index, category in enumerate(categories):
+        hsv = colors['hsv'][index]
+        if category == no_data_value:
+            label = no_data_label
+        else:
+            label = '%s %s' % (tr('Category'), category)
+        style_class = dict(
+            label=label,
+            value=category,
+            colour=colors['hex'][index],
+            border_color=colors['hex'][index],
+            border_width=0.8,
+            transparency=0,
+            size=1)
+
+        if data_defined_saturation_field is not None:
+            # expr is like 'color_hsv(270.0, "pop"/9807.0*100, 70.0)'
+            expr = 'color_hsv(%s, "%s"/%s*100, %s)' % (
+                hsv[0] * 360,
+                data_defined_saturation_field,
+                max_impact_value,
+                hsv[2]*100)
+            style_class.update({'data_defined': {'color': expr}})
+        classes.append(style_class)
+
+    style_info = dict(target_field=target_field,
+                      style_classes=classes,
+                      style_type='categorizedSymbol')
+    return style_info
 
 
 def generate_categorical_color_ramp(class_count,
