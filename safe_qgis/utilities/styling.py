@@ -269,7 +269,6 @@ def set_vector_categorized_style(vector_layer, style):
             pass
 
         # set data defined properties
-        print style_class['data_defined']
         try:
             for prop, expr in style_class['data_defined'].iteritems():
                 symbol_layer.setDataDefinedProperty(prop, expr)
